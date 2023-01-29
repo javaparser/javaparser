@@ -20,6 +20,7 @@ package org.apache.commons.math3.optim.nonlinear.scalar.gradient;
 /**
  * This interface represents a preconditioner for differentiable scalar
  * objective function optimizers.
+ *
  * @since 2.0
  */
 public interface Preconditioner {
@@ -36,8 +37,9 @@ public interface Preconditioner {
      * means the current point is far from the optimum and preconditioning will
      * not be efficient anyway in this case.
      * </p>
+     *
      * @param point current point at which the search direction was computed
-     * @param r raw search direction (i.e. opposite of the gradient)
+     * @param r     raw search direction (i.e. opposite of the gradient)
      * @return approximation of H<sup>-1</sup>r where H is the objective function hessian
      */
     double[] precondition(double[] point, double[] r);

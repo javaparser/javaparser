@@ -12,8 +12,8 @@
 // 
 
 public class MyClass {
-    static final int  a = 13;
+    static final int a = 13;
     static final char b = MyClass.c;
     static final char c = 'c';
-    static int        d = 4711;
+    static int d = 4711;
 }

@@ -4,11 +4,11 @@ import java.security.KeyPair;
 
 //@ non_null_by_default
 public class Test {
-	
-	
-	public void m(KeyPair o) {
-		BigInteger a = ((DHPublicKey)o.getPublic()).getY();
-	}	
+
+
+    public void m(KeyPair o) {
+        BigInteger a = ((DHPublicKey) o.getPublic()).getY();
+    }
 }
 
 // This bug report causes a crash, but not when DHPublicKey is fully qualified 

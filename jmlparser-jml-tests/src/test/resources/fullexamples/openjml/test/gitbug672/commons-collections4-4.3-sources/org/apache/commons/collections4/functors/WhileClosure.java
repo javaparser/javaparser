@@ -32,20 +32,26 @@ import org.apache.commons.collections4.Predicate;
  */
 public class WhileClosure<E> implements Closure<E> {
 
-    /** The test condition */
+    /**
+     * The test condition
+     */
     private final Predicate<? super E> iPredicate;
-    /** The closure to call */
+    /**
+     * The closure to call
+     */
     private final Closure<? super E> iClosure;
-    /** The flag, true is a do loop, false is a while */
+    /**
+     * The flag, true is a do loop, false is a while
+     */
     private final boolean iDoLoop;
 
     /**
      * Factory method that performs validation.
      *
-     * @param <E> the type that the closure acts on
-     * @param predicate  the predicate used to evaluate when the loop terminates, not null
-     * @param closure  the closure the execute, not null
-     * @param doLoop  true to act as a do-while loop, always executing the closure once
+     * @param <E>       the type that the closure acts on
+     * @param predicate the predicate used to evaluate when the loop terminates, not null
+     * @param closure   the closure the execute, not null
+     * @param doLoop    true to act as a do-while loop, always executing the closure once
      * @return the <code>while</code> closure
      * @throws NullPointerException if the predicate or closure is null
      */
@@ -64,9 +70,9 @@ public class WhileClosure<E> implements Closure<E> {
      * Constructor that performs no validation.
      * Use <code>whileClosure</code> if you want that.
      *
-     * @param predicate  the predicate used to evaluate when the loop terminates, not null
-     * @param closure  the closure the execute, not null
-     * @param doLoop  true to act as a do-while loop, always executing the closure once
+     * @param predicate the predicate used to evaluate when the loop terminates, not null
+     * @param closure   the closure the execute, not null
+     * @param doLoop    true to act as a do-while loop, always executing the closure once
      */
     public WhileClosure(final Predicate<? super E> predicate, final Closure<? super E> closure, final boolean doLoop) {
         super();
@@ -78,7 +84,7 @@ public class WhileClosure<E> implements Closure<E> {
     /**
      * Executes the closure until the predicate is false.
      *
-     * @param input  the input object
+     * @param input the input object
      */
     @Override
     public void execute(final E input) {

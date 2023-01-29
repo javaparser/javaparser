@@ -27,10 +27,10 @@ public final class Tree {
       @ measured_by height;
     */
     //@ strictly_pure
-    int max () {
+    int max() {
         int res = value;
         if (left != null) {
-            res = maxHelper(res,left.max(),right.max());
+            res = maxHelper(res, left.max(), right.max());
         }
         return res;
     }
@@ -44,7 +44,7 @@ public final class Tree {
 
     //@ strictly_pure helper
     int maxHelper(int x, int y, int z) {
-        if (x > y) return (x > z? x: z);
-        else return (y > z? y: z);
+        if (x > y) return (x > z ? x : z);
+        else return (y > z ? y : z);
     }
 }

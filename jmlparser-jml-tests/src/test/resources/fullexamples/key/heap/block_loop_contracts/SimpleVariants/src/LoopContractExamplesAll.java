@@ -1,4 +1,3 @@
-
 public class LoopContractExamplesAll {
 
     /*@ normal_behavior

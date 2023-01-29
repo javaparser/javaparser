@@ -34,8 +34,8 @@ public class ReflectionTypeSolver extends ClassLoaderTypeSolver {
 
     /**
      * @param jreOnly if true, will only resolve types from the java or javax packages.
-     * This is an easy way to say "I need a JRE to solve classes, and the one that is currently running is fine."
-     * If false, will resolve any kind of type.
+     *                This is an easy way to say "I need a JRE to solve classes, and the one that is currently running is fine."
+     *                If false, will resolve any kind of type.
      */
     public ReflectionTypeSolver(boolean jreOnly) {
         super(ReflectionTypeSolver.class.getClassLoader());

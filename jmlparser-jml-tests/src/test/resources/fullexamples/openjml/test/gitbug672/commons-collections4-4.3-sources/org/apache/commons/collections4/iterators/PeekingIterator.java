@@ -31,26 +31,35 @@ import java.util.NoSuchElementException;
  */
 public class PeekingIterator<E> implements Iterator<E> {
 
-    /** The iterator being decorated. */
+    /**
+     * The iterator being decorated.
+     */
     private final Iterator<? extends E> iterator;
 
-    /** Indicates that the decorated iterator is exhausted. */
+    /**
+     * Indicates that the decorated iterator is exhausted.
+     */
     private boolean exhausted = false;
 
-    /** Indicates if the lookahead slot is filled. */
+    /**
+     * Indicates if the lookahead slot is filled.
+     */
     private boolean slotFilled = false;
 
-    /** The current slot for lookahead. */
+    /**
+     * The current slot for lookahead.
+     */
     private E slot;
 
     //-----------------------------------------------------------------------
+
     /**
      * Decorates the specified iterator to support one-element lookahead.
      * <p>
      * If the iterator is already a {@link PeekingIterator} it is returned directly.
      *
-     * @param <E>  the element type
-     * @param iterator  the iterator to decorate
+     * @param <E>      the element type
+     * @param iterator the iterator to decorate
      * @return a new peeking iterator
      * @throws NullPointerException if the iterator is null
      */
@@ -71,7 +80,7 @@ public class PeekingIterator<E> implements Iterator<E> {
     /**
      * Constructor.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      */
     public PeekingIterator(final Iterator<? extends E> iterator) {
         this.iterator = iterator;
@@ -148,7 +157,7 @@ public class PeekingIterator<E> implements Iterator<E> {
      * {@inheritDoc}
      *
      * @throws IllegalStateException if {@link #peek()} or {@link #element()} has been called
-     *   prior to the call to {@link #remove()}
+     *                               prior to the call to {@link #remove()}
      */
     @Override
     public void remove() {

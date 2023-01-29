@@ -1,9 +1,9 @@
 public class SparseArray {
     //@ public ghost int size;    
     //@ public ghost \locset footprint;
-    
+
     //@ public accessible \inv: size, footprint, \singleton(footprint);
-    
+
     private int[] val, idx, back;
     private int n = 0;
     
@@ -23,8 +23,7 @@ public class SparseArray {
       @ private invariant (\forall int x; 0 <= x && x < n; idx[back[x]] == x);
       @*/
 
-    
-    
+
     /*@ normal_behaviour
       @   requires 0 <= sz;
       @   ensures \fresh(footprint);
@@ -34,11 +33,11 @@ public class SparseArray {
       @   ensures (\forall int x; 0 <= x && x < size; get(x) == 0);
       @*/
     public /*@pure@*/ SparseArray(int sz) {
-	val = MemoryAllocator.alloc(sz);
-	idx = MemoryAllocator.alloc_unsigned(sz);
-	back = MemoryAllocator.alloc_unsigned(sz);
-	n = 0;
-	//@ set size = sz;
+        val = MemoryAllocator.alloc(sz);
+        idx = MemoryAllocator.alloc_unsigned(sz);
+        back = MemoryAllocator.alloc_unsigned(sz);
+        n = 0;
+        //@ set size = sz;
 	/*@ set footprint = \set_union(\singleton(this.val), 
 	                               \set_union(\singleton(this.idx), 
 	                                          \set_union(\singleton(this.back),
@@ -46,20 +45,20 @@ public class SparseArray {
 	                                                                \set_union(\all_fields(val), 
 	                                                                           \set_union(\all_fields(idx), 
 	                                                                                      \all_fields(back)))))));
-	  @*/ 
+	  @*/
     }
-    
-    
+
+
     /*@ normal_behavior
       @   requires 0 <= i && i < size;
       @   accessible footprint;
       @   ensures \result == get(i);
       @*/
     public /*@pure@*/ int get(int i) {
-	if(idx[i] < n && back[idx[i]] == i) return val[i];
-	else return 0;
+        if (idx[i] < n && back[idx[i]] == i) return val[i];
+        else return 0;
     }
-    
+
 
     /*@ normal_behaviour
       @   requires 0 <= i && i < size;
@@ -69,10 +68,12 @@ public class SparseArray {
       @   ensures get(i) == v;
       @*/
     public void set(int i, int v) {
-	val[i] = v;
-	if (!(idx[i] < n && back[idx[i]] == i)) {
-	    //assert(n < MAXLEN); // (*), see Verification Tasks
-	    idx[i] = n; back[n] = i; n = n + 1;
-	}
+        val[i] = v;
+        if (!(idx[i] < n && back[idx[i]] == i)) {
+            //assert(n < MAXLEN); // (*), see Verification Tasks
+            idx[i] = n;
+            back[n] = i;
+            n = n + 1;
+        }
     }
 }

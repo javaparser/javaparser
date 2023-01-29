@@ -9,15 +9,15 @@ class ParseLmtd {
     ParseLmtd next;
     int f;
     int c;
-    
+
     //@ model int mf;
     //@ represents mf = next.mf*c + f ;
-    
+
     /*@ normal_behavior
       @   requires (\forall int x; x*c == 0);
       @   ensures mf > \old(mf);
       @*/
     void simple(int n) {
-        f ++;
+        f++;
     }
 }

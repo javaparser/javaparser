@@ -12,7 +12,7 @@ public class TestUART {
     static DeviceRegShort uart_clear_tx_int_reg;
     static DeviceRegShort uart_ctrl_reg;
     static DeviceRegByte uart_rx_tx_reg;
-    
+
     public static class UARTTXHandler implements InterruptHandler {
         @Override
         public void handle() {
@@ -21,19 +21,19 @@ public class TestUART {
             uart_clear_tx_int_reg.reg = 0;
         }
 
-		@Override
-		public void register() {
-			CR16CInterruptDispatcher.init();
-	        InterruptDispatcher.registerHandler(this, (byte) 21);			
-		}
+        @Override
+        public void register() {
+            CR16CInterruptDispatcher.init();
+            InterruptDispatcher.registerHandler(this, (byte) 21);
+        }
 
-		@Override
-		public void enable() {
-		}
+        @Override
+        public void enable() {
+        }
 
-		@Override
-		public void disable() {
-		}
+        @Override
+        public void disable() {
+        }
     }
 
     /**
@@ -48,10 +48,10 @@ public class TestUART {
         uart_clear_tx_int_reg = new DeviceRegShort(0xFF4904);
         uart_ctrl_reg = new DeviceRegShort(0xFF4900);
         uart_rx_tx_reg = new DeviceRegByte(0xFF4902);
-        
+
         UARTTXHandler handler = new UARTTXHandler();
         handler.register();
-        
+
         uart_rx_tx_reg.reg = 'x';
         uart_ctrl_reg.reg |= 0x2;
         uart_clear_tx_int_reg.reg = 0;

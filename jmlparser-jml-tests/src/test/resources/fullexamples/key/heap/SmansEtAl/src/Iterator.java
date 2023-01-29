@@ -1,8 +1,8 @@
 class Iterator {
     private ArrayList list;
     private int index;
-    
-    
+
+
     /*@ normal_behavior
       @ requires l.\inv && l.size() >= 0;
       @ assignable \nothing;
@@ -20,8 +20,8 @@ class Iterator {
     Iterator(ArrayList l) {
         list = l;
     }
-    
-    
+
+
     /*@ normal_behavior
       @ requires hasNext();
       @ assignable footprint;
@@ -29,27 +29,27 @@ class Iterator {
       @ ensures \new_elems_fresh(footprint);
       @*/
     /*@nullable@*/ Object next() {
-	return list.get(index++);
+        return list.get(index++);
     }
-    
-    
+
+
     /*@ normal_behavior
       @ assignable \nothing;
       @ accessible footprint, list().footprint;
       @ ensures \result == hasNext();
       @*/
     boolean hasNext() {
-	return index < list.size();
+        return index < list.size();
     }
-    
-    
+
+
     /*@ normal_behavior
       @ assignable \nothing;
       @ accessible footprint;
       @ ensures \result == list();
       @*/
     ArrayList list() {
-	return list;
+        return list;
     }
     
     
@@ -63,5 +63,5 @@ class Iterator {
     /*@ model \locset footprint;
       @ accessible footprint: footprint;
       @ represents footprint = \locset(list, index);
-      @*/    
+      @*/
 }

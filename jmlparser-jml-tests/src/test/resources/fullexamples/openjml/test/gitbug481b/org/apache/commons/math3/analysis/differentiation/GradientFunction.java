@@ -18,26 +18,34 @@ package org.apache.commons.math3.analysis.differentiation;
 
 import org.apache.commons.math3.analysis.MultivariateVectorFunction;
 
-/** Class representing the gradient of a multivariate function.
+/**
+ * Class representing the gradient of a multivariate function.
  * <p>
  * The vectorial components of the function represent the derivatives
  * with respect to each function parameters.
  * </p>
+ *
  * @since 3.1
  */
 public class GradientFunction implements MultivariateVectorFunction {
 
-    /** Underlying real-valued function. */
+    /**
+     * Underlying real-valued function.
+     */
     private final MultivariateDifferentiableFunction f;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
+     *
      * @param f underlying real-valued function
      */
     public GradientFunction(final MultivariateDifferentiableFunction f) {
         this.f = f;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double[] value(double[] point) {
 
         // set up parameters

@@ -58,7 +58,7 @@ public class ModifierVisitorGenerator extends VisitorGenerator {
         List<PropertyMetaModel> sortedPropertyMetaModels = node.getAllPropertyMetaModels()
                 .stream()
                 .sorted(Comparator
-                        .comparingInt((PropertyMetaModel o) -> order.indexOf(o.getName())).reversed()
+                                .comparingInt((PropertyMetaModel o) -> order.indexOf(o.getName())).reversed()
 //                        .thenComparing(PropertyMetaModel::getName)
                 )
                 .collect(Collectors.toList());

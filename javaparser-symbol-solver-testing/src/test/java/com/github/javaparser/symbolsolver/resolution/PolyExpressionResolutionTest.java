@@ -60,8 +60,8 @@ public class PolyExpressionResolutionTest extends AbstractResolutionTest {
     void objectCreationPolyExpressionTest() {
         Expression expr = StaticJavaParser.parseExpression("new ArrayList<>()");
         // see issue https://github.com/javaparser/javaparser/issues/2985
-         assertFalse(expr.isPolyExpression());
-         assertTrue(expr.isStandaloneExpression());
+        assertFalse(expr.isPolyExpression());
+        assertTrue(expr.isStandaloneExpression());
     }
 
     @Test
@@ -85,14 +85,14 @@ public class PolyExpressionResolutionTest extends AbstractResolutionTest {
         assertFalse(expr.isPolyExpression());
         assertTrue(expr.isStandaloneExpression());
     }
-    
+
     @Test
     void methodCallExpressionStandaloneExpressionInAssignementContextTest() {
         Expression expr = StaticJavaParser.parseExpression("x = s.toString()").findAll(MethodCallExpr.class).get(0);
         assertFalse(expr.isPolyExpression());
         assertTrue(expr.isStandaloneExpression());
     }
-    
+
     @Test
     void methodCallExpressionPolyExpressionInAssignementContextTest() {
         Expression expr = StaticJavaParser.parseExpression("same = Util.<Integer, String>compare(p1, p2)").findAll(MethodCallExpr.class).get(0);
@@ -119,19 +119,19 @@ public class PolyExpressionResolutionTest extends AbstractResolutionTest {
         Expression expr = StaticJavaParser.parseExpression("a = m()").findFirst(MethodCallExpr.class).get();
         assertTrue(expr.appearsInAssignmentContext());
     }
-    
+
     @Test
     void notAppearsInAssignmentContextTest() {
         Expression expr = StaticJavaParser.parseExpression("a.m()").findFirst(MethodCallExpr.class).get();
         assertFalse(expr.appearsInAssignmentContext());
     }
-    
+
     @Test
     void notAppearsInInvocationContextTest() {
         Expression expr = StaticJavaParser.parseExpression("a = m()").findFirst(MethodCallExpr.class).get();
         assertFalse(expr.appearsInInvocationContext());
     }
-    
+
     @Test
     void appearsInInvocationContextTest() {
         Expression expr = StaticJavaParser.parseExpression("a().m()").findAll(MethodCallExpr.class).get(1);

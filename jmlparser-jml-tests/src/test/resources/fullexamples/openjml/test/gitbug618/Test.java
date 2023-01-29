@@ -2,7 +2,7 @@
 // They are replicated with Opt1.
 // The requires aspect is being a function 
 public class Test {
-	
+
 //	public void t1(/*@ non_null */ Optional<String> o) {
 //		//@ assume o.isPresent();
 //		//@ assert o.value != null;
@@ -22,26 +22,26 @@ public class Test {
 //		//@ assume (o.value != null);
 //		//@ assert o.isPresent();
 //	}
-	
+
 }
 
- class Test2 {
-	
-	public void t1(/*@ non_null */ Opt1 o) {
-		//@ assume o.nn();
-		//@ assert o.value != null;
-	}
-	
+class Test2 {
+
+    public void t1(/*@ non_null */ Opt1 o) {
+        //@ assume o.nn();
+        //@ assert o.value != null;
+    }
+
 //	public void q1(/*@ non_null */ Opt1 o) {
 //		//@ assert o.nn() ==> (o.value != null);
 //	}
-	
-	public void c1(/*@ non_null */ Opt1 o) {
-		if (o.nn()) {
-			//@ assert (o.value != null);
-		}
-	}
-	
+
+    public void c1(/*@ non_null */ Opt1 o) {
+        if (o.nn()) {
+            //@ assert (o.value != null);
+        }
+    }
+
 //	public void r1(/*@ non_null */ Opt1 o) {
 //		//@ assume (o.value != null);
 //		//@ assert o.nn();
@@ -87,7 +87,7 @@ public class Test {
 //		//@ assert o.nn();
 //	}
 //	
-	
-	
+
+
 }
 

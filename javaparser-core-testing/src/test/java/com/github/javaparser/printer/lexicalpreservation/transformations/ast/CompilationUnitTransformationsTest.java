@@ -39,7 +39,7 @@ class CompilationUnitTransformationsTest extends AbstractLexicalPreservingTest {
     void addingPackageDeclaration() {
         considerCode("class A {}");
         cu.setPackageDeclaration(new PackageDeclaration(new Name(new Name("foo"), "bar")));
-        assertTransformedToString("package foo.bar;"+ SYSTEM_EOL + SYSTEM_EOL + "class A {}", cu);
+        assertTransformedToString("package foo.bar;" + SYSTEM_EOL + SYSTEM_EOL + "class A {}", cu);
     }
 
     @Test

@@ -137,7 +137,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * In the example above, this method returns B,C,D,E
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
-    	List<ResolvedReferenceType> ancestors = new ArrayList<>();
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
             // init direct ancestors
@@ -332,8 +332,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     default boolean isJavaLangObject() {
-        return this.isClass() && !isAnonymousClass() && // Consider anonymous classes
-                hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return // Consider anonymous classes
+                this.isClass() && !isAnonymousClass() && hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**

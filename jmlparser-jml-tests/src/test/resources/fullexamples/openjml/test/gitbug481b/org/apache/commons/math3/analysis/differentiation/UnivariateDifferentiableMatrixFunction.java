@@ -25,15 +25,16 @@ import org.apache.commons.math3.exception.MathIllegalArgumentException;
  * @since 3.1
  */
 public interface UnivariateDifferentiableMatrixFunction
-    extends UnivariateMatrixFunction {
+        extends UnivariateMatrixFunction {
 
     /**
      * Compute the value for the function.
+     *
      * @param x the point for which the function value should be computed
      * @return the value
-     * @exception MathIllegalArgumentException if {@code x} does not
-     * satisfy the function's constraints (argument out of bound, or unsupported
-     * derivative order for example)
+     * @throws MathIllegalArgumentException if {@code x} does not
+     *                                      satisfy the function's constraints (argument out of bound, or unsupported
+     *                                      derivative order for example)
      */
     DerivativeStructure[][] value(DerivativeStructure x) throws MathIllegalArgumentException;
 

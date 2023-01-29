@@ -43,12 +43,14 @@ import org.apache.commons.math3.util.FastMath;
  * <p>
  * The formulas here use divided differences directly.</p>
  *
- * @since 1.2
  * @see MullerSolver2
+ * @since 1.2
  */
 public class MullerSolver extends AbstractUnivariateSolver {
 
-    /** Default absolute accuracy. */
+    /**
+     * Default absolute accuracy.
+     */
     private static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
 
     /**
@@ -57,6 +59,7 @@ public class MullerSolver extends AbstractUnivariateSolver {
     public MullerSolver() {
         this(DEFAULT_ABSOLUTE_ACCURACY);
     }
+
     /**
      * Construct a solver.
      *
@@ -65,6 +68,7 @@ public class MullerSolver extends AbstractUnivariateSolver {
     public MullerSolver(double absoluteAccuracy) {
         super(absoluteAccuracy);
     }
+
     /**
      * Construct a solver.
      *
@@ -81,9 +85,9 @@ public class MullerSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException,
-               NumberIsTooLargeException,
-               NoBracketingException {
+            throws TooManyEvaluationsException,
+            NumberIsTooLargeException,
+            NoBracketingException {
         final double min = getMin();
         final double max = getMax();
         final double initial = getStartValue();
@@ -102,7 +106,7 @@ public class MullerSolver extends AbstractUnivariateSolver {
             return max;
         }
         final double fInitial = computeObjectiveValue(initial);
-        if (FastMath.abs(fInitial) <  functionValueAccuracy) {
+        if (FastMath.abs(fInitial) < functionValueAccuracy) {
             return initial;
         }
 
@@ -118,17 +122,17 @@ public class MullerSolver extends AbstractUnivariateSolver {
     /**
      * Find a real root in the given interval.
      *
-     * @param min Lower bound for the interval.
-     * @param max Upper bound for the interval.
+     * @param min  Lower bound for the interval.
+     * @param max  Upper bound for the interval.
      * @param fMin function value at the lower bound.
      * @param fMax function value at the upper bound.
      * @return the point at which the function value is zero.
      * @throws TooManyEvaluationsException if the allowed number of calls to
-     * the function to be solved has been exhausted.
+     *                                     the function to be solved has been exhausted.
      */
     private double solve(double min, double max,
                          double fMin, double fMax)
-        throws TooManyEvaluationsException {
+            throws TooManyEvaluationsException {
         final double relativeAccuracy = getRelativeAccuracy();
         final double absoluteAccuracy = getAbsoluteAccuracy();
         final double functionValueAccuracy = getFunctionValueAccuracy();
@@ -166,7 +170,7 @@ public class MullerSolver extends AbstractUnivariateSolver {
             // check for convergence
             final double tolerance = FastMath.max(relativeAccuracy * FastMath.abs(x), absoluteAccuracy);
             if (FastMath.abs(x - oldx) <= tolerance ||
-                FastMath.abs(y) <= functionValueAccuracy) {
+                    FastMath.abs(y) <= functionValueAccuracy) {
                 return x;
             }
 
@@ -175,23 +179,26 @@ public class MullerSolver extends AbstractUnivariateSolver {
             // the real number equality test x == x1 is intentional and
             // completes the proximity tests above it
             boolean bisect = (x < x1 && (x1 - x0) > 0.95 * (x2 - x0)) ||
-                             (x > x1 && (x2 - x1) > 0.95 * (x2 - x0)) ||
-                             (x == x1);
+                    (x > x1 && (x2 - x1) > 0.95 * (x2 - x0)) ||
+                    (x == x1);
             // prepare the new bracketing interval for next iteration
             if (!bisect) {
                 x0 = x < x1 ? x0 : x1;
                 y0 = x < x1 ? y0 : y1;
                 x2 = x > x1 ? x2 : x1;
                 y2 = x > x1 ? y2 : y1;
-                x1 = x; y1 = y;
+                x1 = x;
+                y1 = y;
                 oldx = x;
             } else {
                 double xm = 0.5 * (x0 + x2);
                 double ym = computeObjectiveValue(xm);
                 if (FastMath.signum(y0) + FastMath.signum(ym) == 0.0) {
-                    x2 = xm; y2 = ym;
+                    x2 = xm;
+                    y2 = ym;
                 } else {
-                    x0 = xm; y0 = ym;
+                    x0 = xm;
+                    y0 = ym;
                 }
                 x1 = 0.5 * (x0 + x2);
                 y1 = computeObjectiveValue(x1);

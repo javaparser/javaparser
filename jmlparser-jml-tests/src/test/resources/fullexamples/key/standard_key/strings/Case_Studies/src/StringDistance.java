@@ -1,7 +1,6 @@
-
 public class StringDistance {
 
-    public static int distance (String s1, String s2) {
+    public static int distance(String s1, String s2) {
         if (s1 == null || s2 == null)
             return -1;
         int d = 0;
@@ -14,7 +13,7 @@ public class StringDistance {
             if (f >= 0) {
                 d += f;
             } else {
-                    d += -f;
+                d += -f;
             }
         }
         m = s1.length() - s2.length();
@@ -24,5 +23,5 @@ public class StringDistance {
             d += m;
         return d;
     }
-	
+
 }

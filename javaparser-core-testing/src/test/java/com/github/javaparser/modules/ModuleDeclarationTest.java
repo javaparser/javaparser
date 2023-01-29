@@ -45,7 +45,7 @@ class ModuleDeclarationTest {
 
     private CompilationUnit parse(String code) {
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(code));
-        if(!result.isSuccessful()){
+        if (!result.isSuccessful()) {
             System.err.println(result);
         }
         return result.getResult().get();

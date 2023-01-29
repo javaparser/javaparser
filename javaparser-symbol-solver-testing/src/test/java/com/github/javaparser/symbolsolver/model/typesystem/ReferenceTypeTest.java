@@ -335,7 +335,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         assertEquals(false, linkedListOfString.isAssignableBy(listOfStrings));
         assertEquals(true, linkedListOfString.isAssignableBy(linkedListOfString));
     }
-    
+
     @Test
     void testIsAssignableByUnionType() {
         assertEquals(true, ioException.isAssignableBy(unionWithIOExceptionAsCommonAncestor));
@@ -852,7 +852,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         assertTrue(rtB.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("l")));
         assertTrue(rtB.getAllFieldsVisibleToInheritors().stream().anyMatch(f -> f.getName().equals("b")));
     }
-    
+
     @Test
     void erasure_non_generic_type() {
         List<ResolvedType> types = declaredTypes(
@@ -860,9 +860,9 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         ResolvedType expected = types.get(0);
         assertEquals(expected, types.get(0).erasure());
     }
-    
+
     @Test
-    // The erasure of a parameterized type
+        // The erasure of a parameterized type
     void erasure_rawtype() {
         List<ResolvedType> types = declaredTypes(
                 "class A<String> {}");
@@ -875,16 +875,16 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    // The erasure of an array type T[] is |T|[].
+        // The erasure of an array type T[] is |T|[].
     void erasure_arraytype() {
         // create a type : List <String>
         ResolvedType genericList = array(genericType(List.class.getCanonicalName(), String.class.getCanonicalName()));
         String expected = "java.util.List[]";
         assertEquals(expected, genericList.erasure().describe());
     }
-    
+
     @Test
-    // The erasure of an array type T[] is |T|[].
+        // The erasure of an array type T[] is |T|[].
     void erasure_arraytype_with_bound() {
         // create a type : List <T extends Serializable>
         ResolvedTypeVariable typeArguments = parametrizedType("T", Serializable.class.getCanonicalName());
@@ -892,19 +892,19 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         String expected = "java.util.List<java.io.Serializable>[]";
         assertEquals(expected, genericList.erasure().describe());
     }
-    
+
     @Test
-    // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
+        // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
     void erasure_type_variable() {
         List<ResolvedType> types = declaredTypes(
                 "class A<T extends Number> {}");
         ResolvedType rt = types.get(0);
-        String expected =  "A<java.lang.Number>";
+        String expected = "A<java.lang.Number>";
         assertEquals(expected, rt.erasure().describe());
     }
-    
+
     @Test
-    // The erasure of a nested type T.C is |T|.C.
+        // The erasure of a nested type T.C is |T|.C.
     void erasure_nested_type() {
         List<ResolvedType> types = declaredTypes(
                 "class A<T> {" +
@@ -926,17 +926,17 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         // assertEquals(expectedErasedAType, typeA.erasure());
         assertEquals(expectedErasedCType, typeC.erasure());
     }
-    
+
     // return a generic type with type arguments (arguments can be bounded)
     private ResolvedType genericType(String type, ResolvedType... parameterTypes) {
         return type(type, toList(parameterTypes));
     }
-    
+
     // return a generic type with type arguments
     private ResolvedType genericType(String type, String... parameterTypes) {
         return new ReferenceTypeImpl(typeSolver.solveType(type), types(parameterTypes));
     }
-    
+
     // return a list of types
     private List<ResolvedType> types(String... types) {
         return Arrays.stream(types).map(type -> type(type)).collect(Collectors.toList());
@@ -946,11 +946,11 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
     private ResolvedType type(String type) {
         return type(type, new ArrayList<>());
     }
-    
+
     private ResolvedType type(String type, List<ResolvedType> typeArguments) {
         return new ReferenceTypeImpl(typeSolver.solveType(type), typeArguments);
     }
-    
+
     // return a type parameter
     private ResolvedTypeVariable parametrizedType(String type, String parameterType) {
         return new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType(parameterType, type + "." + parameterType,
@@ -965,16 +965,16 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
     private Set<ResolvedType> toSet(ResolvedType... resolvedTypes) {
         return new HashSet<>(toList(resolvedTypes));
     }
-    
+
     private List<ResolvedType> toList(ResolvedType... resolvedTypes) {
         return Arrays.asList(resolvedTypes);
     }
-    
+
     // return an array type from the base type
     private ResolvedType array(ResolvedType baseType) {
         return new ResolvedArrayType(baseType);
     }
-    
+
     // return a list of types from the declared types (using a static parser) 
     private List<ResolvedType> declaredTypes(String... lines) {
         CompilationUnit tree = treeOf(lines);
@@ -992,5 +992,5 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         }
         return StaticJavaParser.parse(builder.toString());
     }
-    
+
 }

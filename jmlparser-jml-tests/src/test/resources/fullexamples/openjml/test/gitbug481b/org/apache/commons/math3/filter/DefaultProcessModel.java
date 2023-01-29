@@ -40,34 +40,32 @@ public class DefaultProcessModel implements ProcessModel {
      */
     private RealMatrix controlMatrix;
 
-    /** The process noise covariance matrix. */
+    /**
+     * The process noise covariance matrix.
+     */
     private RealMatrix processNoiseCovMatrix;
 
-    /** The initial state estimation of the observed process. */
+    /**
+     * The initial state estimation of the observed process.
+     */
     private RealVector initialStateEstimateVector;
 
-    /** The initial error covariance matrix of the observed process. */
+    /**
+     * The initial error covariance matrix of the observed process.
+     */
     private RealMatrix initialErrorCovMatrix;
 
     /**
      * Create a new {@link ProcessModel}, taking double arrays as input parameters.
      *
-     * @param stateTransition
-     *            the state transition matrix
-     * @param control
-     *            the control matrix
-     * @param processNoise
-     *            the process noise matrix
-     * @param initialStateEstimate
-     *            the initial state estimate vector
-     * @param initialErrorCovariance
-     *            the initial error covariance matrix
-     * @throws NullArgumentException
-     *             if any of the input arrays is {@code null}
-     * @throws NoDataException
-     *             if any row / column dimension of the input matrices is zero
-     * @throws DimensionMismatchException
-     *             if any of the input matrices is non-rectangular
+     * @param stateTransition        the state transition matrix
+     * @param control                the control matrix
+     * @param processNoise           the process noise matrix
+     * @param initialStateEstimate   the initial state estimate vector
+     * @param initialErrorCovariance the initial error covariance matrix
+     * @throws NullArgumentException      if any of the input arrays is {@code null}
+     * @throws NoDataException            if any row / column dimension of the input matrices is zero
+     * @throws DimensionMismatchException if any of the input matrices is non-rectangular
      */
     public DefaultProcessModel(final double[][] stateTransition,
                                final double[][] control,
@@ -89,18 +87,12 @@ public class DefaultProcessModel implements ProcessModel {
      * The initial state estimate and error covariance are omitted and will be initialized by the
      * {@link KalmanFilter} to default values.
      *
-     * @param stateTransition
-     *            the state transition matrix
-     * @param control
-     *            the control matrix
-     * @param processNoise
-     *            the process noise matrix
-     * @throws NullArgumentException
-     *             if any of the input arrays is {@code null}
-     * @throws NoDataException
-     *             if any row / column dimension of the input matrices is zero
-     * @throws DimensionMismatchException
-     *             if any of the input matrices is non-rectangular
+     * @param stateTransition the state transition matrix
+     * @param control         the control matrix
+     * @param processNoise    the process noise matrix
+     * @throws NullArgumentException      if any of the input arrays is {@code null}
+     * @throws NoDataException            if any row / column dimension of the input matrices is zero
+     * @throws DimensionMismatchException if any of the input matrices is non-rectangular
      */
     public DefaultProcessModel(final double[][] stateTransition,
                                final double[][] control,
@@ -115,16 +107,11 @@ public class DefaultProcessModel implements ProcessModel {
     /**
      * Create a new {@link ProcessModel}, taking double arrays as input parameters.
      *
-     * @param stateTransition
-     *            the state transition matrix
-     * @param control
-     *            the control matrix
-     * @param processNoise
-     *            the process noise matrix
-     * @param initialStateEstimate
-     *            the initial state estimate vector
-     * @param initialErrorCovariance
-     *            the initial error covariance matrix
+     * @param stateTransition        the state transition matrix
+     * @param control                the control matrix
+     * @param processNoise           the process noise matrix
+     * @param initialStateEstimate   the initial state estimate vector
+     * @param initialErrorCovariance the initial error covariance matrix
      */
     public DefaultProcessModel(final RealMatrix stateTransition,
                                final RealMatrix control,
@@ -138,27 +125,37 @@ public class DefaultProcessModel implements ProcessModel {
         this.initialErrorCovMatrix = initialErrorCovariance;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getStateTransitionMatrix() {
         return stateTransitionMatrix;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getControlMatrix() {
         return controlMatrix;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getProcessNoise() {
         return processNoiseCovMatrix;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealVector getInitialStateEstimate() {
         return initialStateEstimateVector;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getInitialErrorCovariance() {
         return initialErrorCovMatrix;
     }

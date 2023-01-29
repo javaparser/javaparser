@@ -25,4 +25,5 @@ package org.apache.commons.math3.optim;
  *
  * @since 3.1
  */
-public interface OptimizationData {}
+public interface OptimizationData {
+}

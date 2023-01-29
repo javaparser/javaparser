@@ -46,23 +46,29 @@ import org.apache.commons.math3.util.FastMath;
  * @since 3.0
  */
 public abstract class BaseSecantSolver
-    extends AbstractUnivariateSolver
-    implements BracketedUnivariateSolver<UnivariateFunction> {
+        extends AbstractUnivariateSolver
+        implements BracketedUnivariateSolver<UnivariateFunction> {
 
-    /** Default absolute accuracy. */
+    /**
+     * Default absolute accuracy.
+     */
     protected static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
 
-    /** The kinds of solutions that the algorithm may accept. */
+    /**
+     * The kinds of solutions that the algorithm may accept.
+     */
     private AllowedSolution allowed;
 
-    /** The <em>Secant</em>-based root-finding method to use. */
+    /**
+     * The <em>Secant</em>-based root-finding method to use.
+     */
     private final Method method;
 
     /**
      * Construct a solver.
      *
      * @param absoluteAccuracy Absolute accuracy.
-     * @param method <em>Secant</em>-based root-finding method to use.
+     * @param method           <em>Secant</em>-based root-finding method to use.
      */
     protected BaseSecantSolver(final double absoluteAccuracy, final Method method) {
         super(absoluteAccuracy);
@@ -75,7 +81,7 @@ public abstract class BaseSecantSolver
      *
      * @param relativeAccuracy Relative accuracy.
      * @param absoluteAccuracy Absolute accuracy.
-     * @param method <em>Secant</em>-based root-finding method to use.
+     * @param method           <em>Secant</em>-based root-finding method to use.
      */
     protected BaseSecantSolver(final double relativeAccuracy,
                                final double absoluteAccuracy,
@@ -88,10 +94,10 @@ public abstract class BaseSecantSolver
     /**
      * Construct a solver.
      *
-     * @param relativeAccuracy Maximum relative error.
-     * @param absoluteAccuracy Maximum absolute error.
+     * @param relativeAccuracy      Maximum relative error.
+     * @param absoluteAccuracy      Maximum absolute error.
      * @param functionValueAccuracy Maximum function value error.
-     * @param method <em>Secant</em>-based root-finding method to use
+     * @param method                <em>Secant</em>-based root-finding method to use
      */
     protected BaseSecantSolver(final double relativeAccuracy,
                                final double absoluteAccuracy,
@@ -102,14 +108,18 @@ public abstract class BaseSecantSolver
         this.method = method;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double solve(final int maxEval, final UnivariateFunction f,
                         final double min, final double max,
                         final AllowedSolution allowedSolution) {
         return solve(maxEval, f, min, max, min + 0.5 * (max - min), allowedSolution);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double solve(final int maxEval, final UnivariateFunction f,
                         final double min, final double max, final double startValue,
                         final AllowedSolution allowedSolution) {
@@ -117,7 +127,9 @@ public abstract class BaseSecantSolver
         return super.solve(maxEval, f, min, max, startValue);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double solve(final int maxEval, final UnivariateFunction f,
                         final double min, final double max, final double startValue) {
@@ -128,11 +140,11 @@ public abstract class BaseSecantSolver
      * {@inheritDoc}
      *
      * @throws ConvergenceException if the algorithm failed due to finite
-     * precision.
+     *                              precision.
      */
     @Override
     protected final double doSolve()
-        throws ConvergenceException {
+            throws ConvergenceException {
         // Get initial solution
         double x0 = getMin();
         double x1 = getMax();
@@ -183,22 +195,22 @@ public abstract class BaseSecantSolver
                 inverted = !inverted;
             } else {
                 switch (method) {
-                case ILLINOIS:
-                    f0 *= 0.5;
-                    break;
-                case PEGASUS:
-                    f0 *= f1 / (f1 + fx);
-                    break;
-                case REGULA_FALSI:
-                    // Detect early that algorithm is stuck, instead of waiting
-                    // for the maximum number of iterations to be exceeded.
-                    if (x == x1) {
-                        throw new ConvergenceException();
-                    }
-                    break;
-                default:
-                    // Should never happen.
-                    throw new MathInternalError();
+                    case ILLINOIS:
+                        f0 *= 0.5;
+                        break;
+                    case PEGASUS:
+                        f0 *= f1 / (f1 + fx);
+                        break;
+                    case REGULA_FALSI:
+                        // Detect early that algorithm is stuck, instead of waiting
+                        // for the maximum number of iterations to be exceeded.
+                        if (x == x1) {
+                            throw new ConvergenceException();
+                        }
+                        break;
+                    default:
+                        // Should never happen.
+                        throw new MathInternalError();
                 }
             }
             // Update from [x0, x1] to [x0, x].
@@ -210,56 +222,58 @@ public abstract class BaseSecantSolver
             // the root than we already are.
             if (FastMath.abs(f1) <= ftol) {
                 switch (allowed) {
-                case ANY_SIDE:
-                    return x1;
-                case LEFT_SIDE:
-                    if (inverted) {
+                    case ANY_SIDE:
                         return x1;
-                    }
-                    break;
-                case RIGHT_SIDE:
-                    if (!inverted) {
-                        return x1;
-                    }
-                    break;
-                case BELOW_SIDE:
-                    if (f1 <= 0) {
-                        return x1;
-                    }
-                    break;
-                case ABOVE_SIDE:
-                    if (f1 >= 0) {
-                        return x1;
-                    }
-                    break;
-                default:
-                    throw new MathInternalError();
+                    case LEFT_SIDE:
+                        if (inverted) {
+                            return x1;
+                        }
+                        break;
+                    case RIGHT_SIDE:
+                        if (!inverted) {
+                            return x1;
+                        }
+                        break;
+                    case BELOW_SIDE:
+                        if (f1 <= 0) {
+                            return x1;
+                        }
+                        break;
+                    case ABOVE_SIDE:
+                        if (f1 >= 0) {
+                            return x1;
+                        }
+                        break;
+                    default:
+                        throw new MathInternalError();
                 }
             }
 
             // If the current interval is within the given accuracies, we
             // are satisfied with the current approximation.
             if (FastMath.abs(x1 - x0) < FastMath.max(rtol * FastMath.abs(x1),
-                                                     atol)) {
+                    atol)) {
                 switch (allowed) {
-                case ANY_SIDE:
-                    return x1;
-                case LEFT_SIDE:
-                    return inverted ? x1 : x0;
-                case RIGHT_SIDE:
-                    return inverted ? x0 : x1;
-                case BELOW_SIDE:
-                    return (f1 <= 0) ? x1 : x0;
-                case ABOVE_SIDE:
-                    return (f1 >= 0) ? x1 : x0;
-                default:
-                    throw new MathInternalError();
+                    case ANY_SIDE:
+                        return x1;
+                    case LEFT_SIDE:
+                        return inverted ? x1 : x0;
+                    case RIGHT_SIDE:
+                        return inverted ? x0 : x1;
+                    case BELOW_SIDE:
+                        return (f1 <= 0) ? x1 : x0;
+                    case ABOVE_SIDE:
+                        return (f1 >= 0) ? x1 : x0;
+                    default:
+                        throw new MathInternalError();
                 }
             }
         }
     }
 
-    /** <em>Secant</em>-based root-finding methods. */
+    /**
+     * <em>Secant</em>-based root-finding methods.
+     */
     protected enum Method {
 
         /**
@@ -268,10 +282,14 @@ public abstract class BaseSecantSolver
          */
         REGULA_FALSI,
 
-        /** The {@link IllinoisSolver <em>Illinois</em>} method. */
+        /**
+         * The {@link IllinoisSolver <em>Illinois</em>} method.
+         */
         ILLINOIS,
 
-        /** The {@link PegasusSolver <em>Pegasus</em>} method. */
+        /**
+         * The {@link PegasusSolver <em>Pegasus</em>} method.
+         */
         PEGASUS;
 
     }

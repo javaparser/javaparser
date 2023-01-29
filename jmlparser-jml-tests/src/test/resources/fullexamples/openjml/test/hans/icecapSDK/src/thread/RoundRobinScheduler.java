@@ -6,99 +6,98 @@ import vm.Scheduler;
 
 public class RoundRobinScheduler extends ThreadManager implements Scheduler {
 
-	private static final int DEFAULT_SEQUENCER_STACK_SIZE = 1024;
+    private static final int DEFAULT_SEQUENCER_STACK_SIZE = 1024;
 
-	private boolean started;
-	
-	private int index;
+    private boolean started;
 
-	private vm.ClockInterruptHandler clockHandler;
+    private int index;
 
-	private Thread thr;
-	
-	public RoundRobinScheduler() {
-		super();
-		started = false;		
-		index = 0;
-	}
+    private vm.ClockInterruptHandler clockHandler;
 
-	@Override
-	public Process getNextProcess() {
-		while (true) {
-			thr = threads.get(index);
-			index++;
-			if (index >= threads.size())
-			{
-				index = 0;
-			}
-			if (thr.state != Thread.FINISHED)
-			{
-				return thr.p;
-			}
-		}
-	}
+    private Thread thr;
 
-	public void start() {
-		if (!started) {
-			int[] sequencerStack = new int[DEFAULT_SEQUENCER_STACK_SIZE];
+    public RoundRobinScheduler() {
+        super();
+        started = false;
+        index = 0;
+    }
 
-			vm.ClockInterruptHandler.initialize(this, sequencerStack);
-			clockHandler = vm.ClockInterruptHandler.instance;
+    @Override
+    public Process getNextProcess() {
+        while (true) {
+            thr = threads.get(index);
+            index++;
+            if (index >= threads.size()) {
+                index = 0;
+            }
+            if (thr.state != Thread.FINISHED) {
+                return thr.p;
+            }
+        }
+    }
 
-			Thread mainThread = new Thread(new vm.Process(null, null));
-			mainThread.state = Thread.RUNNING;
-			threads.add(mainThread);
-			clockHandler.register();
-			clockHandler.startClockHandler(mainThread.p);
-			started = true;
-			clockHandler.enable();
-			clockHandler.yield();
-		}
-	}
+    public void start() {
+        if (!started) {
+            int[] sequencerStack = new int[DEFAULT_SEQUENCER_STACK_SIZE];
 
-	public void addThread(Thread thread) {
-		clockHandler.disable();
-		threads.add(thread);
-		clockHandler.enable();
-	}
+            vm.ClockInterruptHandler.initialize(this, sequencerStack);
+            clockHandler = vm.ClockInterruptHandler.instance;
 
-	public Thread currentThread() {
-		return thr;
-	}
+            Thread mainThread = new Thread(new vm.Process(null, null));
+            mainThread.state = Thread.RUNNING;
+            threads.add(mainThread);
+            clockHandler.register();
+            clockHandler.startClockHandler(mainThread.p);
+            started = true;
+            clockHandler.enable();
+            clockHandler.yield();
+        }
+    }
 
-	public void removeThread(Thread thread) {
-		clockHandler.disable();
-		threads.remove(thread);
-		clockHandler.enable();
-	}
+    public void addThread(Thread thread) {
+        clockHandler.disable();
+        threads.add(thread);
+        clockHandler.enable();
+    }
 
-	@Override
-	public void disable() {
-		clockHandler.disable();
-	}
+    public Thread currentThread() {
+        return thr;
+    }
 
-	@Override
-	public void enable() {
-		clockHandler.enable();
-	}
+    public void removeThread(Thread thread) {
+        clockHandler.disable();
+        threads.remove(thread);
+        clockHandler.enable();
+    }
 
-	@Override
-	public void wait(Object target) {
+    @Override
+    public void disable() {
+        clockHandler.disable();
+    }
 
-	}
+    @Override
+    public void enable() {
+        clockHandler.enable();
+    }
 
-	@Override
-	public void notify(Object target) {
-		
-	}
-	
-	@Override
-	public void notifyAll(Object target) {
-		
-	}
-	@Override
-	public Monitor getDefaultMonitor() {
-		return null;
-	}
+    @Override
+    public void wait(Object target) {
+
+    }
+
+    @Override
+    public void notify(Object target) {
+
+    }
+
+    @Override
+    public void notifyAll(Object target) {
+
+    }
+
+    @Override
+    public Monitor getDefaultMonitor() {
+        return null;
+    }
 
 }

@@ -27,8 +27,8 @@ class Saddleback {
       @ modifies \nothing;
       @*/
     public /*@nullable*/ int[] search(int[][] array, int value) {
-	int x = 0;
-	int y = array[0].length - 1;
+        int x = 0;
+        int y = array[0].length - 1;
 
 	/*@
 	  @ loop_invariant
@@ -41,20 +41,20 @@ class Saddleback {
 	  @ decreases array.length - x + y;
 	  @ modifies \nothing;
 	  @*/
-	while(x < array.length && y >= 0) {
+        while (x < array.length && y >= 0) {
 
-	     if(array[x][y] == value) {
-	    		return new int[] { x, y };
-	    }
+            if (array[x][y] == value) {
+                return new int[]{x, y};
+            }
 
-	     if(array[x][y] < value) {
-	     	x++;
-	     } else {
-	     	y--;
-	     }
+            if (array[x][y] < value) {
+                x++;
+            } else {
+                y--;
+            }
 
-	}
+        }
 
-	return null;
+        return null;
     }
 }

@@ -62,8 +62,9 @@ public class VisitorList<N extends Node> implements List<N> {
     @Override
     public boolean addAll(Collection<? extends N> col) {
         boolean modified = false;
-        for (N elem : col) if (add(elem))
-            modified = true;
+        for (N elem : col)
+            if (add(elem))
+                modified = true;
         return modified;
     }
 
@@ -93,8 +94,9 @@ public class VisitorList<N extends Node> implements List<N> {
 
     @Override
     public boolean containsAll(Collection<?> col) {
-        for (Object elem : col) if (!contains(elem))
-            return false;
+        for (Object elem : col)
+            if (!contains(elem))
+                return false;
         return true;
     }
 
@@ -212,8 +214,9 @@ public class VisitorList<N extends Node> implements List<N> {
     @Override
     public boolean removeAll(Collection<?> col) {
         boolean modified = false;
-        for (Object elem : col) if (remove(elem))
-            modified = true;
+        for (Object elem : col)
+            if (remove(elem))
+                modified = true;
         return modified;
     }
 

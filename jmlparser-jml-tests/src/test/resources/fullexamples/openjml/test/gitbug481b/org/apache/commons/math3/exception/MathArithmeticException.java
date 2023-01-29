@@ -30,10 +30,14 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class MathArithmeticException extends ArithmeticException
-    implements ExceptionContextProvider {
-    /** Serializable version Id. */
+        implements ExceptionContextProvider {
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -6024911025449780478L;
-    /** Context. */
+    /**
+     * Context.
+     */
     private final ExceptionContext context;
 
     /**
@@ -48,27 +52,33 @@ public class MathArithmeticException extends ArithmeticException
      * Constructor with a specific message.
      *
      * @param pattern Message pattern providing the specific context of
-     * the error.
-     * @param args Arguments.
+     *                the error.
+     * @param args    Arguments.
      */
     public MathArithmeticException(Localizable pattern,
-                                   Object ... args) {
+                                   Object... args) {
         context = new ExceptionContext(this);
         context.addMessage(pattern, args);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ExceptionContext getContext() {
         return context;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return context.getMessage();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getLocalizedMessage() {
         return context.getLocalizedMessage();

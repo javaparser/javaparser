@@ -152,7 +152,7 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void prettyColumnAlignParameters_disabled() {
-        
+
         PrinterConfiguration configuration = new DefaultPrinterConfiguration();
         final String EOL = configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString();
 
@@ -170,7 +170,7 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void prettyAlignMethodCallChains_enabled() {
-        
+
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
 
@@ -188,7 +188,7 @@ class DefaultPrettyPrinterTest {
                 "    }" + EOL +
                 "}" + EOL +
                 "";
-        
+
         String printed = getDefaultPrinter(configuration).print(parse(code));
 
         assertEquals(expected, printed);
@@ -196,7 +196,7 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void prettyAlignMethodCallChains_disabled() {
-        
+
         PrinterConfiguration configuration = new DefaultPrinterConfiguration();
         final String EOL = configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString();
 
@@ -243,14 +243,14 @@ class DefaultPrettyPrinterTest {
     void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
 
         CompilationUnit cu = parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
-        
+
         Indentation indentation = new Indentation(IndentType.TABS_WITH_SPACE_ALIGN, 1);
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS))
                 .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, indentation));
         String printed = getDefaultPrinter(configuration).print(cu);
-        
+
         assertEqualsStringIgnoringEol("class Foo {\n" +
                 "\n" +
                 "\tvoid bar() {\n" +
@@ -319,7 +319,7 @@ class DefaultPrettyPrinterTest {
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
         String printed = getDefaultPrinter(configuration).print(cu);
-        
+
         assertEqualsStringIgnoringEol("while (x.y().z()) {\n" +
                 "    boo().baa()\n" +
                 "         .bee();\n" +
@@ -330,15 +330,15 @@ class DefaultPrettyPrinterTest {
     void indentWithTabsAsFarAsPossible() {
 
         CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
-        
-       Indentation indentation = new Indentation(IndentType.TABS, 1);
+
+        Indentation indentation = new Indentation(IndentType.TABS, 1);
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS))
                 .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, indentation));
-        
+
         String printed = getDefaultPrinter(configuration).print(cu);
-        
+
         assertEqualsStringIgnoringEol("class Foo {\n" +
                 "\n" +
                 "\tvoid bar() {\n" +
@@ -358,13 +358,13 @@ class DefaultPrettyPrinterTest {
     void indentWithTabsAlignWithSpaces() {
 
         CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
-        
+
         Indentation indentation = new Indentation(IndentType.TABS_WITH_SPACE_ALIGN, 1);
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS))
                 .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, indentation));
-        
+
         String printed = getDefaultPrinter(configuration).print(cu);
 
         assertEqualsStringIgnoringEol("class Foo {\n" +
@@ -508,33 +508,33 @@ class DefaultPrettyPrinterTest {
                 "module foo.bar {\n" +
                 "}\n", printed);
     }
-    
+
     @Test
     public void testIssue2578() {
-        String code = 
+        String code =
                 "class C{\n" +
-                "  //orphan\n" +
-                "  /*orphan*/\n" +
-                "}";
+                        "  //orphan\n" +
+                        "  /*orphan*/\n" +
+                        "}";
         CompilationUnit cu = StaticJavaParser.parse(code);
         TypeDeclaration td = cu.findFirst(TypeDeclaration.class).get();
         assertEquals(2, td.getAllContainedComments().size());
         td.setPublic(true); // --- simple AST change -----
         assertEquals(2, td.getAllContainedComments().size()); // the orphaned comments exist
     }
-    
+
     @Test
     public void testIssue2535() {
 
-        String code = 
+        String code =
                 "public class A {\n" +
-                " public static A m() {\n" +
-                "  System.out.println(\"\");\n" +
-                "  // TODO\n" +
-                "  /* TODO */\n" +
-                "  /** TODO */\n" +
-                " }\n" +
-                "}";
+                        " public static A m() {\n" +
+                        "  System.out.println(\"\");\n" +
+                        "  // TODO\n" +
+                        "  /* TODO */\n" +
+                        "  /** TODO */\n" +
+                        " }\n" +
+                        "}";
 
         StaticJavaParser.setConfiguration(new ParserConfiguration());
 
@@ -545,56 +545,56 @@ class DefaultPrettyPrinterTest {
         assertTrue(cu.toString().contains("        /* TODO */"));
 
     }
-    
+
     @Test
     public void testIndentationWithDefaultSize() {
         Indentation indentation = new Indentation(IndentType.SPACES);
-        assertTrue(indentation.getSize()==4);
+        assertTrue(indentation.getSize() == 4);
         assertEquals("    ", indentation.getIndent());
         // on-the-fly modification
         indentation.setSize(2);
-        assertTrue(indentation.getSize()==2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("  ", indentation.getIndent());
     }
-    
+
     @Test
     public void testIndentationWithCustomSize() {
-        Indentation indentation = new Indentation(IndentType.TABS,2);
-        assertTrue(indentation.getSize()==2);
+        Indentation indentation = new Indentation(IndentType.TABS, 2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("\t\t", indentation.getIndent());
     }
-    
+
     @Test
     public void testIndentationWithOnTheFlyModifcation() {
         Indentation indentation = new Indentation(IndentType.SPACES);
         // on-the-fly modification
         indentation.setSize(2);
-        assertTrue(indentation.getSize()==2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("  ", indentation.getIndent());
         indentation.setType(IndentType.TABS);
         assertTrue(indentation.getType() == IndentType.TABS);
         assertEquals("\t\t", indentation.getIndent());
     }
-    
+
     @Test
     public void testIssue3317() {
 
-        String code = "public class Test {\n" + 
-                "  protected void someMethod() {\n" + 
-                "    // Before\n" + 
-                "    System.out\n"+
-                "    // Middle Comment\n" + 
-                "    .println(\"\");\n" + 
-                "    // After\n" + 
+        String code = "public class Test {\n" +
+                "  protected void someMethod() {\n" +
+                "    // Before\n" +
+                "    System.out\n" +
+                "    // Middle Comment\n" +
+                "    .println(\"\");\n" +
+                "    // After\n" +
                 "  }\n" +
                 "}";
-        
-        String expected = "public class Test {\n" + 
-                "\n" + 
-                "    protected void someMethod() {\n" + 
-                "        // Before\n" + 
-                "        System.out.// Middle Comment\n" + 
-                "        println(\"\");\n" + 
+
+        String expected = "public class Test {\n" +
+                "\n" +
+                "    protected void someMethod() {\n" +
+                "        // Before\n" +
+                "        System.out.// Middle Comment\n" +
+                "        println(\"\");\n" +
                 "        // After\n" +
                 "    }\n" +
                 "}\n";

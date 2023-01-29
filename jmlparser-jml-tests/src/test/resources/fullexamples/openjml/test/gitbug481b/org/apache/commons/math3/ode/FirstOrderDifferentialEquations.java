@@ -21,8 +21,8 @@ import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
 
 
-
-/** This interface represents a first order differential equations set.
+/**
+ * This interface represents a first order differential equations set.
  *
  * <p>This interface should be implemented by all real first order
  * differential equation problems before they can be handled by the
@@ -44,25 +44,28 @@ import org.apache.commons.math3.exception.MaxCountExceededException;
  * @see FirstOrderIntegrator
  * @see FirstOrderConverter
  * @see SecondOrderDifferentialEquations
- *
  * @since 1.2
  */
 
 public interface FirstOrderDifferentialEquations {
 
-    /** Get the dimension of the problem.
+    /**
+     * Get the dimension of the problem.
+     *
      * @return dimension of the problem
      */
     int getDimension();
 
-    /** Get the current time derivative of the state vector.
-     * @param t current value of the independent <I>time</I> variable
-     * @param y array containing the current value of the state vector
+    /**
+     * Get the current time derivative of the state vector.
+     *
+     * @param t    current value of the independent <I>time</I> variable
+     * @param y    array containing the current value of the state vector
      * @param yDot placeholder array where to put the time derivative of the state vector
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @throws MaxCountExceededException  if the number of functions evaluations is exceeded
+     * @throws DimensionMismatchException if arrays dimensions do not match equations settings
      */
     void computeDerivatives(double t, double[] y, double[] yDot)
-        throws MaxCountExceededException, DimensionMismatchException;
+            throws MaxCountExceededException, DimensionMismatchException;
 
 }

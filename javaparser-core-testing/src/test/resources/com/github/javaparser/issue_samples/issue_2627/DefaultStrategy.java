@@ -19,7 +19,6 @@
 package groovy.transform.builder;
 
 import groovy.transform.Undefined;
-import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.ast.expr.Expression;
 import org.codehaus.groovy.ast.stmt.BlockStatement;
 import org.codehaus.groovy.transform.BuilderASTTransformation;
@@ -42,7 +41,7 @@ import static org.objectweb.asm.Opcodes.*;
  * This strategy is used with the {@link Builder} AST transform to create a builder helper class
  * for the fluent creation of instances of a specified class.&nbsp;It can be used at the class,
  * static method or constructor levels.
- *
+ * <p>
  * You use it as follows:
  * <pre class="groovyTestCase">
  * import groovy.transform.builder.*
@@ -73,7 +72,7 @@ import static org.objectweb.asm.Opcodes.*;
  * <pre>
  * def p3 = Person.builder().withFirstName("Robert").withLastName("Lewandowski").withAge(21).build()
  * </pre>
- *
+ * <p>
  * You can also use the {@code @Builder} annotation in combination with this strategy on one or more constructor or
  * static method instead of or in addition to using it at the class level. An example with a constructor follows:
  * <pre class="groovyTestCase">
@@ -98,7 +97,7 @@ import static org.objectweb.asm.Opcodes.*;
  * in the builder. For the case of a static method, the return type of the static method becomes the
  * class of the instance being created. For static factory methods, this is normally the class containing the
  * static method but in general it can be any class.
- *
+ * <p>
  * Note: if using more than one {@code @Builder} annotation, which is only possible when using static method
  * or constructor variants, it is up to you to ensure that any generated helper classes or builder methods
  * have unique names. E.g.&nbsp;we can modify the previous example to have three builders. At least two of the builders
@@ -134,7 +133,7 @@ import static org.objectweb.asm.Opcodes.*;
  * assert Person.byRoleBuilder().roleName("Jack Sparrow").build().toString() == 'Person(Johnny, Depp, 1963)'
  * assert Person.builder().first("Johnny").last('Depp').born(1963).build().toString() == 'Person(Johnny, Depp, 1963)'
  * </pre>
- *
+ * <p>
  * The 'forClass' annotation attribute for the {@code @Builder} transform isn't applicable for this strategy.
  * The 'useSetters' annotation attribute for the {@code @Builder} transform is ignored by this strategy which always uses setters.
  */

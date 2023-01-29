@@ -24,14 +24,18 @@ package org.apache.commons.math3.optimization;
  * <br/>
  * Immutable class.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.1
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class SimpleBounds implements OptimizationData {
-    /** Lower bounds. */
+    /**
+     * Lower bounds.
+     */
     private final double[] lower;
-    /** Upper bounds. */
+    /**
+     * Upper bounds.
+     */
     private final double[] upper;
 
     /**
@@ -52,6 +56,7 @@ public class SimpleBounds implements OptimizationData {
     public double[] getLower() {
         return lower.clone();
     }
+
     /**
      * Gets the lower bounds.
      *

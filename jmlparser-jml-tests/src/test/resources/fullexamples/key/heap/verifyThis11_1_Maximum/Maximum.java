@@ -32,8 +32,8 @@ public class Maximum {
           @ decreases y - x;
           @ assignable \strictly_nothing;
           @*/
-        while(x != y) {
-            if(array[x] <= array[y]) {
+        while (x != y) {
+            if (array[x] <= array[y]) {
                 x++;
             } else {
                 y--;

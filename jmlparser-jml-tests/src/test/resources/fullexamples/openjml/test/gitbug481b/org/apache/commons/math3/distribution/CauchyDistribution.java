@@ -33,16 +33,25 @@ import org.apache.commons.math3.util.FastMath;
 public class CauchyDistribution extends AbstractRealDistribution {
     /**
      * Default inverse cumulative probability accuracy.
+     *
      * @since 2.1
      */
     public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 8589540077390120676L;
-    /** The median of this distribution. */
+    /**
+     * The median of this distribution.
+     */
     private final double median;
-    /** The scale of this distribution. */
+    /**
+     * The scale of this distribution.
+     */
     private final double scale;
-    /** Inverse cumulative probability accuracy */
+    /**
+     * Inverse cumulative probability accuracy
+     */
     private final double solverAbsoluteAccuracy;
 
     /**
@@ -64,7 +73,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
      * additional initialisation overhead.
      *
      * @param median Median for this distribution.
-     * @param scale Scale parameter for this distribution.
+     * @param scale  Scale parameter for this distribution.
      */
     public CauchyDistribution(double median, double scale) {
         this(median, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
@@ -80,11 +89,11 @@ public class CauchyDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param median Median for this distribution.
-     * @param scale Scale parameter for this distribution.
+     * @param median             Median for this distribution.
+     * @param scale              Scale parameter for this distribution.
      * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates
+     *                           (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NotStrictlyPositiveException if {@code scale <= 0}.
      * @since 2.1
      */
@@ -96,9 +105,9 @@ public class CauchyDistribution extends AbstractRealDistribution {
     /**
      * Creates a Cauchy distribution.
      *
-     * @param rng Random number generator.
+     * @param rng    Random number generator.
      * @param median Median for this distribution.
-     * @param scale Scale parameter for this distribution.
+     * @param scale  Scale parameter for this distribution.
      * @throws NotStrictlyPositiveException if {@code scale <= 0}.
      * @since 3.3
      */
@@ -109,12 +118,12 @@ public class CauchyDistribution extends AbstractRealDistribution {
     /**
      * Creates a Cauchy distribution.
      *
-     * @param rng Random number generator.
-     * @param median Median for this distribution.
-     * @param scale Scale parameter for this distribution.
+     * @param rng                Random number generator.
+     * @param median             Median for this distribution.
+     * @param scale              Scale parameter for this distribution.
      * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates
+     *                           (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NotStrictlyPositiveException if {@code scale <= 0}.
      * @since 3.1
      */
@@ -131,7 +140,9 @@ public class CauchyDistribution extends AbstractRealDistribution {
         solverAbsoluteAccuracy = inverseCumAccuracy;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(double x) {
         return 0.5 + (FastMath.atan((x - median) / scale) / FastMath.PI);
     }
@@ -154,7 +165,9 @@ public class CauchyDistribution extends AbstractRealDistribution {
         return scale;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         final double dev = x - median;
         return (1 / FastMath.PI) * (scale / (dev * dev + scale * scale));
@@ -162,7 +175,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * Returns {@code Double.NEGATIVE_INFINITY} when {@code p == 0}
      * and {@code Double.POSITIVE_INFINITY} when {@code p == 1}.
      */
@@ -173,7 +186,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
             throw new OutOfRangeException(p, 0, 1);
         } else if (p == 0) {
             ret = Double.NEGATIVE_INFINITY;
-        } else  if (p == 1) {
+        } else if (p == 1) {
             ret = Double.POSITIVE_INFINITY;
         } else {
             ret = median + scale * FastMath.tan(FastMath.PI * (p - .5));
@@ -181,7 +194,9 @@ public class CauchyDistribution extends AbstractRealDistribution {
         return ret;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected double getSolverAbsoluteAccuracy() {
         return solverAbsoluteAccuracy;
@@ -189,7 +204,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The mean is always undefined no matter the parameters.
      *
      * @return mean (always Double.NaN)
@@ -200,7 +215,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The variance is always undefined no matter the parameters.
      *
      * @return variance (always Double.NaN)
@@ -211,7 +226,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always negative infinity no matter
      * the parameters.
      *
@@ -223,7 +238,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is always positive infinity no matter
      * the parameters.
      *
@@ -233,19 +248,23 @@ public class CauchyDistribution extends AbstractRealDistribution {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}

@@ -13,18 +13,15 @@ package com.github.javaparser.ast;
  * public static final UserDataKey&lt;Role&gt; ROLE = new UserDataKey&lt;Role&gt;() { };
  * </code>
  * </pre>
- *
+ * <p>
  * This code was taken from the <a href="http://wicket.apache.org/">Wicket project</a>.
  *
- * @param <T>
- *            The type of the object which is stored
- *
+ * @param <T> The type of the object which is stored
  * @see Node#getUserData(UserDataKey)
  */
 public abstract class UserDataKey<T> {
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return getClass().hashCode();
     }
 
@@ -32,8 +29,7 @@ public abstract class UserDataKey<T> {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return obj != null && getClass().equals(obj.getClass());
     }
 }

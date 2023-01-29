@@ -20,24 +20,34 @@
 
 package org.jmlspecs.samples.dbc;
 
-/** Complex numbers in rectangular coordinates.
+/**
+ * Complex numbers in rectangular coordinates.
+ *
  * @author Gary T. Leavens with help from Abelson and Sussman's
- *          <cite>Structure and Interpretation of Computer Programs</cite>
+ * <cite>Structure and Interpretation of Computer Programs</cite>
  */
 public /*@ pure @*/ strictfp class Rectangular extends ComplexOps {
 
-    /** The real part of this number. */
+    /**
+     * The real part of this number.
+     */
     private double re;
-    /** The imaginary part of this number. */
+    /**
+     * The imaginary part of this number.
+     */
     private double img;
-    
-    /** Initialize this Complex number to be 0+(0*i). */
+
+    /**
+     * Initialize this Complex number to be 0+(0*i).
+     */
     //@ ensures realPart() == 0.0 && imaginaryPart() == 0.0;
     public Rectangular() {
         this(0.0);
-    }    
+    }
 
-    /** Initialize this Complex number to be re+(0*i). */
+    /**
+     * Initialize this Complex number to be re+(0*i).
+     */
     /*@   requires !Double.isNaN(re);
       @   ensures realPart() == re && imaginaryPart() == 0.0;
       @ also
@@ -47,8 +57,10 @@ public /*@ pure @*/ strictfp class Rectangular extends ComplexOps {
     public Rectangular(double re) {
         this(re, 0);
     }
-    
-    /** Initialize this Complex number to be re+(img*i). */
+
+    /**
+     * Initialize this Complex number to be re+(img*i).
+     */
     /*@
       @ ensures !Double.isNaN(re) ==> realPart() == re;
       @ ensures !Double.isNaN(img) ==> imaginaryPart() == img;
@@ -72,7 +84,7 @@ public /*@ pure @*/ strictfp class Rectangular extends ComplexOps {
 
     // specification inherited
     public double magnitude() {
-        return StrictMath.sqrt(re*re + img*img);
+        return StrictMath.sqrt(re * re + img * img);
     }
 
     // specification inherited

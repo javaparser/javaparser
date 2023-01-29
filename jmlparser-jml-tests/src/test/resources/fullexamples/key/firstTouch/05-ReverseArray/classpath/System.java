@@ -1,9 +1,9 @@
 // package java.lang;
 
 class System {
-   public static final Writer out;
+    public static final Writer out;
 }
 
 class Writer {
-   public void println(int value);
+    public void println(int value);
 }

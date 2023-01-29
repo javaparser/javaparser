@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 /* EmptyStackException.java -- Attempt to pop from an empty stack
    Copyright (C) 1998, 1999, 2001, 2005  Free Software Foundation, Inc.
@@ -75,17 +76,15 @@ package minicdj.util;
  * @since 1.0
  * @status updated to 1.4
  */
-public class EmptyStackException extends RuntimeException
-{
-  /**
-   * Compatible with JDK 1.0.
-   */
-  private static final long serialVersionUID = 5084686378493302095L;
+public class EmptyStackException extends RuntimeException {
+    /**
+     * Compatible with JDK 1.0.
+     */
+    private static final long serialVersionUID = 5084686378493302095L;
 
-  /**
-   * Constructs an EmptyStackException with no detail message.
-   */
-  public EmptyStackException()
-  {
-  }
+    /**
+     * Constructs an EmptyStackException with no detail message.
+     */
+    public EmptyStackException() {
+    }
 }

@@ -158,66 +158,72 @@ import java.util.Arrays;
  */
 public class AdamsMoultonIntegrator extends AdamsIntegrator {
 
-    /** Integrator method name. */
+    /**
+     * Integrator method name.
+     */
     private static final String METHOD_NAME = "Adams-Moulton";
 
     /**
      * Build an Adams-Moulton integrator with the given order and error control parameters.
-     * @param nSteps number of steps of the method excluding the one being computed
-     * @param minStep minimal step (sign is irrelevant, regardless of
-     * integration direction, forward or backward), the last step can
-     * be smaller than this
-     * @param maxStep maximal step (sign is irrelevant, regardless of
-     * integration direction, forward or backward), the last step can
-     * be smaller than this
+     *
+     * @param nSteps                number of steps of the method excluding the one being computed
+     * @param minStep               minimal step (sign is irrelevant, regardless of
+     *                              integration direction, forward or backward), the last step can
+     *                              be smaller than this
+     * @param maxStep               maximal step (sign is irrelevant, regardless of
+     *                              integration direction, forward or backward), the last step can
+     *                              be smaller than this
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
-     * @exception NumberIsTooSmallException if order is 1 or less
+     * @throws NumberIsTooSmallException if order is 1 or less
      */
     public AdamsMoultonIntegrator(final int nSteps,
                                   final double minStep, final double maxStep,
                                   final double scalAbsoluteTolerance,
                                   final double scalRelativeTolerance)
-        throws NumberIsTooSmallException {
+            throws NumberIsTooSmallException {
         super(METHOD_NAME, nSteps, nSteps + 1, minStep, maxStep,
-              scalAbsoluteTolerance, scalRelativeTolerance);
+                scalAbsoluteTolerance, scalRelativeTolerance);
     }
 
     /**
      * Build an Adams-Moulton integrator with the given order and error control parameters.
-     * @param nSteps number of steps of the method excluding the one being computed
-     * @param minStep minimal step (sign is irrelevant, regardless of
-     * integration direction, forward or backward), the last step can
-     * be smaller than this
-     * @param maxStep maximal step (sign is irrelevant, regardless of
-     * integration direction, forward or backward), the last step can
-     * be smaller than this
+     *
+     * @param nSteps               number of steps of the method excluding the one being computed
+     * @param minStep              minimal step (sign is irrelevant, regardless of
+     *                             integration direction, forward or backward), the last step can
+     *                             be smaller than this
+     * @param maxStep              maximal step (sign is irrelevant, regardless of
+     *                             integration direction, forward or backward), the last step can
+     *                             be smaller than this
      * @param vecAbsoluteTolerance allowed absolute error
      * @param vecRelativeTolerance allowed relative error
-     * @exception IllegalArgumentException if order is 1 or less
+     * @throws IllegalArgumentException if order is 1 or less
      */
     public AdamsMoultonIntegrator(final int nSteps,
                                   final double minStep, final double maxStep,
                                   final double[] vecAbsoluteTolerance,
                                   final double[] vecRelativeTolerance)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(METHOD_NAME, nSteps, nSteps + 1, minStep, maxStep,
-              vecAbsoluteTolerance, vecRelativeTolerance);
+                vecAbsoluteTolerance, vecRelativeTolerance);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void integrate(final ExpandableStatefulODE equations,final double t)
-        throws NumberIsTooSmallException, DimensionMismatchException,
-               MaxCountExceededException, NoBracketingException {
+    public void integrate(final ExpandableStatefulODE equations, final double t)
+            throws NumberIsTooSmallException, DimensionMismatchException,
+            MaxCountExceededException, NoBracketingException {
 
         sanityChecks(equations, t);
         setEquations(equations);
         final boolean forward = t > equations.getTime();
 
         // initialize working arrays
-        final double[] y0   = equations.getCompleteState();
-        final double[] y    = y0.clone();
+        final double[] y0 = equations.getCompleteState();
+        final double[] y = y0.clone();
         final double[] yDot = new double[y.length];
         final double[] yTmp = new double[y.length];
         final double[] predictedScaled = new double[y.length];
@@ -226,7 +232,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
         // set up two interpolators sharing the integrator arrays
         final NordsieckStepInterpolator interpolator = new NordsieckStepInterpolator();
         interpolator.reinitialize(y, forward,
-                                  equations.getPrimaryMapper(), equations.getSecondaryMappers());
+                equations.getPrimaryMapper(), equations.getSecondaryMappers());
 
         // set up integration control objects
         initIntegration(equations.getTime(), y0, t);
@@ -298,7 +304,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
             interpolator.shift();
             interpolator.storeTime(stepEnd);
             stepStart = acceptStep(interpolator, y, yDot, t);
-            scaled    = correctedScaled;
+            scaled = correctedScaled;
             nordsieck = nordsieckTmp;
 
             if (!isLastStep) {
@@ -315,13 +321,13 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
                 }
 
                 // stepsize control for next step
-                final double  factor     = computeStepGrowShrinkFactor(error);
-                final double  scaledH    = stepSize * factor;
-                final double  nextT      = stepStart + scaledH;
+                final double factor = computeStepGrowShrinkFactor(error);
+                final double scaledH = stepSize * factor;
+                final double nextT = stepStart + scaledH;
                 final boolean nextIsLast = forward ? (nextT >= t) : (nextT <= t);
                 hNew = filterStep(scaledH, forward, nextIsLast);
 
-                final double  filteredNextT      = stepStart + hNew;
+                final double filteredNextT = stepStart + hNew;
                 final boolean filteredNextIsLast = forward ? (filteredNextT >= t) : (filteredNextT <= t);
                 if (filteredNextIsLast) {
                     hNew = t - stepStart;
@@ -340,7 +346,8 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
 
     }
 
-    /** Corrector for current state in Adams-Moulton method.
+    /**
+     * Corrector for current state in Adams-Moulton method.
      * <p>
      * This visitor implements the Taylor series formula:
      * <pre>
@@ -350,37 +357,51 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
      */
     private class Corrector implements RealMatrixPreservingVisitor {
 
-        /** Previous state. */
+        /**
+         * Previous state.
+         */
         private final double[] previous;
 
-        /** Current scaled first derivative. */
+        /**
+         * Current scaled first derivative.
+         */
         private final double[] scaled;
 
-        /** Current state before correction. */
+        /**
+         * Current state before correction.
+         */
         private final double[] before;
 
-        /** Current state after correction. */
+        /**
+         * Current state after correction.
+         */
         private final double[] after;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param previous previous state
-         * @param scaled current scaled first derivative
-         * @param state state to correct (will be overwritten after visit)
+         * @param scaled   current scaled first derivative
+         * @param state    state to correct (will be overwritten after visit)
          */
         Corrector(final double[] previous, final double[] scaled, final double[] state) {
             this.previous = previous;
-            this.scaled   = scaled;
-            this.after    = state;
-            this.before   = state.clone();
+            this.scaled = scaled;
+            this.after = state;
+            this.before = state.clone();
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void start(int rows, int columns,
                           int startRow, int endRow, int startColumn, int endColumn) {
             Arrays.fill(after, 0.0);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void visit(int row, int column, double value) {
             if ((row & 0x1) == 0) {
                 after[column] -= value;
@@ -395,6 +416,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
          * considered to be an error, which must be normalized according to
          * error control settings. If the normalized value is greater than 1,
          * the correction was too large and the step must be rejected.</p>
+         *
          * @return the normalized correction, if greater than 1, the step
          * must be rejected
          */
@@ -405,10 +427,10 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
                 after[i] += previous[i] + scaled[i];
                 if (i < mainSetDimension) {
                     final double yScale = FastMath.max(FastMath.abs(previous[i]), FastMath.abs(after[i]));
-                    final double tol    = (vecAbsoluteTolerance == null) ?
-                                          (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
-                                          (vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * yScale);
-                    final double ratio  = (after[i] - before[i]) / tol; // (corrected-predicted)/tol
+                    final double tol = (vecAbsoluteTolerance == null) ?
+                            (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
+                            (vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * yScale);
+                    final double ratio = (after[i] - before[i]) / tol; // (corrected-predicted)/tol
                     error += ratio * ratio;
                 }
             }

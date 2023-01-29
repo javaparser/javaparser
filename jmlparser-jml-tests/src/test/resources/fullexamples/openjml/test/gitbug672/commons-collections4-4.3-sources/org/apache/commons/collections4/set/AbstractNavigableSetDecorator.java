@@ -31,7 +31,9 @@ public abstract class AbstractNavigableSetDecorator<E>
         extends AbstractSortedSetDecorator<E>
         implements NavigableSet<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150528L;
 
     /**
@@ -44,7 +46,7 @@ public abstract class AbstractNavigableSetDecorator<E>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param set  the set to decorate, must not be null
+     * @param set the set to decorate, must not be null
      * @throws NullPointerException if set is null
      */
     protected AbstractNavigableSetDecorator(final NavigableSet<E> set) {
@@ -105,7 +107,7 @@ public abstract class AbstractNavigableSetDecorator<E>
 
     @Override
     public NavigableSet<E> subSet(final E fromElement, final boolean fromInclusive, final E toElement,
-            final boolean toInclusive) {
+                                  final boolean toInclusive) {
         return decorated().subSet(fromElement, fromInclusive, toElement, toInclusive);
     }
 

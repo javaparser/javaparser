@@ -28,7 +28,7 @@ public class ParseProblemException extends RuntimeException {
 
     private static String createMessage(List<Problem> problems) {
         StringBuilder message = new StringBuilder();
-        for(Problem problem: problems){
+        for (Problem problem : problems) {
             message.append(problem.toString()).append(EOL);
         }
         return message.toString();

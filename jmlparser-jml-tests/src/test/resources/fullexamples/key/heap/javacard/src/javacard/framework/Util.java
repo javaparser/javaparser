@@ -41,19 +41,19 @@ public class Util {
         if (src == null || dest == null)
             throw JCSystem.npe;
         if (length < 0 || srcOffset < 0 || destOffset < 0
-                || srcOffset  > (short)(src.length - length)
-                || destOffset > (short)(dest.length - length))
+                || srcOffset > (short) (src.length - length)
+                || destOffset > (short) (dest.length - length))
             throw JCSystem.aioobe;
 
-        if(src == dest && srcOffset == destOffset) {
-          return (short) (destOffset + length);
+        if (src == dest && srcOffset == destOffset) {
+            return (short) (destOffset + length);
         }
         final boolean changeTransient =
-          (JCSystem.nativeKeYGetTransient(dest) == JCSystem.NOT_A_TRANSIENT_OBJECT);
-        if(changeTransient) {
-          JCSystem.nativeKeYSetTransient(dest, JCSystem.CLEAR_ON_RESET);
+                (JCSystem.nativeKeYGetTransient(dest) == JCSystem.NOT_A_TRANSIENT_OBJECT);
+        if (changeTransient) {
+            JCSystem.nativeKeYSetTransient(dest, JCSystem.CLEAR_ON_RESET);
         }
-        if(src != dest || srcOffset > destOffset) {
+        if (src != dest || srcOffset > destOffset) {
           /*@
              loop_invariant i >= 0 && i <= length &&
                 srcOffset + i >= 0 && srcOffset + i <= src.length &&
@@ -72,10 +72,10 @@ public class Util {
              decreases length - i;
              assignable<heap><savedHeap> dest[destOffset..destOffset+length-1];
           @*/
-          for(short i=0;i<length;i++) {
-              dest[destOffset + i] = src[srcOffset + i];
-          }
-        }else{
+            for (short i = 0; i < length; i++) {
+                dest[destOffset + i] = src[srcOffset + i];
+            }
+        } else {
           /*@
              loop_invariant i >= 0 && i <= length &&
                 srcOffset + length - i >= 0 && srcOffset + length - i  <= src.length &&
@@ -96,12 +96,12 @@ public class Util {
              assignable dest[destOffset..destOffset+length-1];
              assignable<heap><savedHeap> dest[destOffset..destOffset+length-1];
           @*/
-          for(short i=0; i<length; i++) {
-            dest[destOffset + (length - 1) - i] = src[srcOffset + (length - 1) - i];
-          }
+            for (short i = 0; i < length; i++) {
+                dest[destOffset + (length - 1) - i] = src[srcOffset + (length - 1) - i];
+            }
         }
-        if(changeTransient) {      
-          JCSystem.nativeKeYSetTransient(dest, JCSystem.NOT_A_TRANSIENT_OBJECT);
+        if (changeTransient) {
+            JCSystem.nativeKeYSetTransient(dest, JCSystem.NOT_A_TRANSIENT_OBJECT);
         }
         return (short) (destOffset + length);
     }
@@ -141,18 +141,18 @@ public class Util {
         if (src == null || dest == null)
             throw JCSystem.npe;
         if (length < 0 || srcOffset < 0 || destOffset < 0
-                || srcOffset  > (short)(src.length - length)
-                || destOffset > (short)(dest.length - length))
+                || srcOffset > (short) (src.length - length)
+                || destOffset > (short) (dest.length - length))
             throw JCSystem.aioobe;
 
-        if(src == dest && srcOffset == destOffset) {
-          return (short) (destOffset + length);
+        if (src == dest && srcOffset == destOffset) {
+            return (short) (destOffset + length);
         }
         final boolean startTransaction = (JCSystem.getTransactionDepth() == 0);
-        if(startTransaction) {
-          JCSystem.beginTransaction();
+        if (startTransaction) {
+            JCSystem.beginTransaction();
         }
-        if(src != dest || srcOffset > destOffset) {
+        if (src != dest || srcOffset > destOffset) {
           /*@
              loop_invariant i >= 0 && i <= length &&
                 srcOffset + i >= 0 && srcOffset + i <= src.length &&
@@ -181,10 +181,10 @@ public class Util {
              assignable<heap><savedHeap> dest[destOffset..destOffset+length-1];
              assignable<savedHeap> \transactionUpdated(dest);
           @*/
-          for(short i=0;i<length;i++) {
-              dest[destOffset + i] = src[srcOffset + i];
-          }
-        }else{
+            for (short i = 0; i < length; i++) {
+                dest[destOffset + i] = src[srcOffset + i];
+            }
+        } else {
           /*@
              loop_invariant i >= 0 && i <= length &&
                 srcOffset + length - i >= 0 && srcOffset + length - i  <= src.length &&
@@ -211,12 +211,12 @@ public class Util {
              assignable<heap><savedHeap> dest[destOffset..destOffset+length-1];
              assignable<savedHeap> \transactionUpdated(dest);
           @*/
-          for(short i=0; i<length; i++) {
-            dest[destOffset + (length - 1) - i] = src[srcOffset + (length - 1) - i];
-          }
+            for (short i = 0; i < length; i++) {
+                dest[destOffset + (length - 1) - i] = src[srcOffset + (length - 1) - i];
+            }
         }
-        if(startTransaction) {
-          JCSystem.commitTransaction();
+        if (startTransaction) {
+            JCSystem.commitTransaction();
         }
         return (short) (destOffset + length);
     }
@@ -243,15 +243,15 @@ public class Util {
     public static final byte arrayCompare(/*@ nullable @*/ byte[] src, short srcOffset,
             /*@ nullable @*/ byte[] dest, short destOffset, short length)
             throws NullPointerException, ArrayIndexOutOfBoundsException {
-         if (src == null || dest == null)
+        if (src == null || dest == null)
             throw JCSystem.npe;
-         if (length < 0 || srcOffset < 0 || destOffset < 0
-                || srcOffset  > (short)(src.length - length)
-                || destOffset > (short)(dest.length - length))
+        if (length < 0 || srcOffset < 0 || destOffset < 0
+                || srcOffset > (short) (src.length - length)
+                || destOffset > (short) (dest.length - length))
             throw JCSystem.aioobe;
 
-        if(src == dest && srcOffset == destOffset) {
-          return (byte)0;
+        if (src == dest && srcOffset == destOffset) {
+            return (byte) 0;
         }
 
         /*@ loop_invariant i>=0 && i <= length &&
@@ -259,15 +259,15 @@ public class Util {
             decreases length - i;
             assignable \strictly_nothing;
           @*/
-        for(short i=0; i<length; i++) {
-           if(src[srcOffset + i] < dest[destOffset + i]) {
-              return (byte)-1;
-           }
-           if(src[srcOffset + i] > dest[destOffset + i]) {
-              return (byte)1;
-           }
+        for (short i = 0; i < length; i++) {
+            if (src[srcOffset + i] < dest[destOffset + i]) {
+                return (byte) -1;
+            }
+            if (src[srcOffset + i] > dest[destOffset + i]) {
+                return (byte) 1;
+            }
         }
-        return (byte)0;
+        return (byte) 0;
     }
 
 
@@ -295,19 +295,19 @@ public class Util {
            signals_only NullPointerException, ArrayIndexOutOfBoundsException;
            assignable<heap><savedHeap> bArray[bOffset..bOffset+length-1]; @*/
     public static final short arrayFillNonAtomic(/*@ nullable @*/ byte[] bArray, short bOffset,
-            short length, byte value)
+                                                                  short length, byte value)
             throws NullPointerException, ArrayIndexOutOfBoundsException {
 
         if (bArray == null)
             throw JCSystem.npe;
-        if (length < 0 || bOffset < 0 
-                || bOffset  > (short)(bArray.length - length))
+        if (length < 0 || bOffset < 0
+                || bOffset > (short) (bArray.length - length))
             throw JCSystem.aioobe;
 
         final boolean changeTransient =
-          (JCSystem.nativeKeYGetTransient(bArray) == JCSystem.NOT_A_TRANSIENT_OBJECT);
-        if(changeTransient) {
-          JCSystem.nativeKeYSetTransient(bArray, JCSystem.CLEAR_ON_RESET);
+                (JCSystem.nativeKeYGetTransient(bArray) == JCSystem.NOT_A_TRANSIENT_OBJECT);
+        if (changeTransient) {
+            JCSystem.nativeKeYSetTransient(bArray, JCSystem.CLEAR_ON_RESET);
         }
 
           /*@
@@ -327,11 +327,11 @@ public class Util {
              decreases length - i;
              assignable<heap><savedHeap> bArray[bOffset..bOffset+length-1];
           @*/
-          for(short i=0;i<length;i++) {
-              bArray[bOffset + i] = value;
-          }
-        if(changeTransient) {      
-          JCSystem.nativeKeYSetTransient(bArray, JCSystem.NOT_A_TRANSIENT_OBJECT);
+        for (short i = 0; i < length; i++) {
+            bArray[bOffset + i] = value;
+        }
+        if (changeTransient) {
+            JCSystem.nativeKeYSetTransient(bArray, JCSystem.NOT_A_TRANSIENT_OBJECT);
         }
         return (short) (bOffset + length);
     }

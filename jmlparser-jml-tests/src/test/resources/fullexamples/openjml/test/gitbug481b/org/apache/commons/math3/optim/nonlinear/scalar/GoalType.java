@@ -25,8 +25,12 @@ import org.apache.commons.math3.optim.OptimizationData;
  * @since 2.0
  */
 public enum GoalType implements OptimizationData {
-    /** Maximization. */
+    /**
+     * Maximization.
+     */
     MAXIMIZE,
-    /** Minimization. */
+    /**
+     * Minimization.
+     */
     MINIMIZE
 }

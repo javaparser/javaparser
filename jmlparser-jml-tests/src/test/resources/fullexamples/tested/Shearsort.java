@@ -17,24 +17,24 @@ public class Shearsort {
     void shearsort(int n, int[][] M) {
         int log = n;
         for (int i = 0; i < log + 1; i++) {
-            for(int tid = 0; tid < n; tid++) {
+            for (int tid = 0; tid < n; tid++) {
                 sortrow(M, tid, tid % 2 == 0);
             }
-            for(int tid = 0; tid < n; tid++) {
+            for (int tid = 0; tid < n; tid++) {
                 sortcolumn(M, tid);
             }
         }
     }
 
     // An alternative version of shearsort, that only uses sort-row.
-    void alternativeshearsort(int n, int[][] M){
+    void alternativeshearsort(int n, int[][] M) {
         int log = 0;
-        for(int i = 0; i < log; ++i) {
-            for(int tid = 0; tid <= n; tid++) {
+        for (int i = 0; i < log; ++i) {
+            for (int tid = 0; tid <= n; tid++) {
                 sortrow(M, tid, tid % 2 == 0);
             }
             transpose(M);
-            for(int tid = 0; i <=n; tid++) {
+            for (int tid = 0; i <= n; tid++) {
                 sortrow(M, tid, true);
             }
             transpose(M);

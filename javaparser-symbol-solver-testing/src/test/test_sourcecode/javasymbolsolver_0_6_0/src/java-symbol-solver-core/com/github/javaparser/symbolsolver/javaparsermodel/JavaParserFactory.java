@@ -76,7 +76,7 @@ public class JavaParserFactory {
         } else if (node instanceof CatchClause) {
             return new CatchClauseContext((CatchClause) node, typeSolver);
         } else if (node instanceof ObjectCreationExpr &&
-            ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
+                ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
             return new AnonymousClassDeclarationContext((ObjectCreationExpr) node, typeSolver);
         } else {
             if (node instanceof NameExpr) {
@@ -86,7 +86,7 @@ public class JavaParserFactory {
                 }
             }
             final Node parentNode = getParentNode(node);
-            if(parentNode instanceof ObjectCreationExpr && node == ((ObjectCreationExpr) parentNode).getType()) {
+            if (parentNode instanceof ObjectCreationExpr && node == ((ObjectCreationExpr) parentNode).getType()) {
                 return getContext(getParentNode(parentNode), typeSolver);
             }
             return getContext(parentNode, typeSolver);
@@ -114,7 +114,7 @@ public class JavaParserFactory {
             return new NoSymbolDeclarator<Node>(node, typeSolver);
         }
     }
-    
+
     public static ReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
         if (node instanceof ClassOrInterfaceDeclaration) {
             if (((ClassOrInterfaceDeclaration) node).isInterface()) {

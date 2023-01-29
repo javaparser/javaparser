@@ -115,7 +115,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
     void addingAnnotation() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno()" + SYSTEM_EOL + "int foo();", it);
+        assertTransformedToString("@myAnno" + SYSTEM_EOL + "int foo();", it);
     }
 
     @Test
@@ -123,7 +123,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
         it.addAnnotation("myAnno2");
-        assertTransformedToString("@myAnno()" + SYSTEM_EOL + "@myAnno2()" + SYSTEM_EOL + "int foo();", it);
+        assertTransformedToString("@myAnno" + SYSTEM_EOL + "@myAnno2" + SYSTEM_EOL + "int foo();", it);
     }
 
     @Test
@@ -144,7 +144,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
     void replacingAnnotation() {
         AnnotationMemberDeclaration it = consider("@myAnno int foo();");
         it.getAnnotations().set(0, new NormalAnnotationExpr(new Name("myOtherAnno"), new NodeList<>()));
-        assertTransformedToString("@myOtherAnno() int foo();", it);
+        assertTransformedToString("@myOtherAnno int foo();", it);
     }
 
     // Javadoc

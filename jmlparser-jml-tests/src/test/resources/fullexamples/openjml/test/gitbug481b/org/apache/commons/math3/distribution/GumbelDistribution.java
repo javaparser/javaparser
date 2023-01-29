@@ -29,12 +29,13 @@ import org.apache.commons.math3.util.MathUtils;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Gumbel_distribution">Gumbel Distribution (Wikipedia)</a>
  * @see <a href="http://mathworld.wolfram.com/GumbelDistribution.html">Gumbel Distribution (Mathworld)</a>
- *
  * @since 3.4
  */
 public class GumbelDistribution extends AbstractRealDistribution {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20141003;
 
     /**
@@ -43,9 +44,13 @@ public class GumbelDistribution extends AbstractRealDistribution {
      */
     private static final double EULER = FastMath.PI / (2 * FastMath.E);
 
-    /** The location parameter. */
+    /**
+     * The location parameter.
+     */
     private final double mu;
-    /** The scale parameter. */
+    /**
+     * The scale parameter.
+     */
     private final double beta;
 
     /**
@@ -58,7 +63,7 @@ public class GumbelDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param mu location parameter
+     * @param mu   location parameter
      * @param beta scale parameter (must be positive)
      * @throws NotStrictlyPositiveException if {@code beta <= 0}
      */
@@ -69,8 +74,8 @@ public class GumbelDistribution extends AbstractRealDistribution {
     /**
      * Build a new instance.
      *
-     * @param rng Random number generator
-     * @param mu location parameter
+     * @param rng  Random number generator
+     * @param mu   location parameter
      * @param beta scale parameter (must be positive)
      * @throws NotStrictlyPositiveException if {@code beta <= 0}
      */
@@ -103,20 +108,26 @@ public class GumbelDistribution extends AbstractRealDistribution {
         return beta;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         final double z = (x - mu) / beta;
         final double t = FastMath.exp(-z);
         return FastMath.exp(-z - t) / beta;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(double x) {
         final double z = (x - mu) / beta;
         return FastMath.exp(-FastMath.exp(-z));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) throws OutOfRangeException {
         if (p < 0.0 || p > 1.0) {
@@ -129,37 +140,51 @@ public class GumbelDistribution extends AbstractRealDistribution {
         return mu - FastMath.log(-FastMath.log(p)) * beta;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNumericalMean() {
         return mu + EULER * beta;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNumericalVariance() {
         return (MathUtils.PI_SQUARED) / 6.0 * (beta * beta);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getSupportLowerBound() {
         return Double.NEGATIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getSupportUpperBound() {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportConnected() {
         return true;
     }

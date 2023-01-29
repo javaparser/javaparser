@@ -20,12 +20,12 @@ public final class Person {
     private int age = 0;
 
     public void setAge(int newAge) {
-	this.age = newAge;
+        this.age = newAge;
     }
 
     public void birthday() {
-	if (age >= 0) {
-	    age++;
-	} 
+        if (age >= 0) {
+            age++;
+        }
     }
 }

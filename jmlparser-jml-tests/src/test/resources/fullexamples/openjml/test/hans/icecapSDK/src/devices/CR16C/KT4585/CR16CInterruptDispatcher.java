@@ -31,8 +31,8 @@ public class CR16CInterruptDispatcher extends InterruptDispatcher {
     public static final byte DSP_INT = 29;
 
     private CR16CInterruptDispatcher() {
-	}
-    
+    }
+
     public static void init() {
         if (!InterruptDispatcher.init) {
             InterruptDispatcher.numberOfInterrupts = 31;

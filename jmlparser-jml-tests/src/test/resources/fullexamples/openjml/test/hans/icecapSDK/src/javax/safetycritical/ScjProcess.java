@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : ScjProcess.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,12 +19,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
- *    
+ *
  * Description: 
- * 
+ *
  * Revision history:
  *   date   init  comment
  *
@@ -44,273 +44,267 @@ import javax.scj.util.Priorities;
 
 /**
  * Defines the VM process context for an executing Java program.
- * 
- * @version 1.2; - December 2013
- * 
+ *
  * @author Anders P. Ravn, Aalborg University, <A
- *         HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
- *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
- * 
+ * HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
+ * Hans S&oslash;ndergaard, VIA University College, Denmark, <A
+ * HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * @version 1.2; - December 2013
  * @scjComment - implementation issue: infrastructure class; not part of the SCJ
- *             specification.
+ * specification.
  */
 class ScjProcess implements Comparable<ScjProcess> {
-	vm.Process process;
-	ManagedSchedulable msObject;
-	int state;
+    vm.Process process;
+    ManagedSchedulable msObject;
+    int state;
 
-	Clock rtClock;
-	AbsoluteTime next; // next activation time
+    Clock rtClock;
+    AbsoluteTime next; // next activation time
 
-	RelativeTime start;
-	RelativeTime period;
+    RelativeTime start;
+    RelativeTime period;
 
-	int index = -999;   // The index of the ScjProcesses; used by
-						// PriorityScheduler; -999 is 'no index set'
+    int index = -999;   // The index of the ScjProcesses; used by
+    // PriorityScheduler; -999 is 'no index set'
 
-	Object monitorLock = null;
-	AbsoluteTime next_temp = null;
-	boolean isNotified = false;
+    Object monitorLock = null;
+    AbsoluteTime next_temp = null;
+    boolean isNotified = false;
 
-	interface State {
-		public final static byte NEW         = 0;
-		public final static byte READY       = 1;
-		public final static byte EXECUTING   = 2;
-		public final static byte BLOCKED     = 3;
-		public final static byte SLEEPING    = 4;
-		public final static byte HANDLED     = 5;
-		public final static byte TERMINATED  = 6;
-		
-		public final static byte WAITING     = 7;
-		public final static byte REQUIRELOCK = 8;
-	}
+    interface State {
+        public final static byte NEW = 0;
+        public final static byte READY = 1;
+        public final static byte EXECUTING = 2;
+        public final static byte BLOCKED = 3;
+        public final static byte SLEEPING = 4;
+        public final static byte HANDLED = 5;
+        public final static byte TERMINATED = 6;
 
-	private ExceptionReporter exceptionReporter;
+        public final static byte WAITING = 7;
+        public final static byte REQUIRELOCK = 8;
+    }
 
-	/**
-	 * The constructor initializes a new VM process object
-	 * 
-	 * @param target
-	 * 	is the handler containing the handleAsyncEvent method 
-	 * 	to be executed
-	 * @param stack
-	 *   is the run time stack
-	 */
-	ScjProcess(ManagedSchedulable ms, int[] stack) {
-		this.rtClock = Clock.getRealtimeClock();
-		this.next = new AbsoluteTime(this.rtClock);
-		this.msObject = ms;
-		this.state = State.NEW;
-		this.exceptionReporter = new ExceptionReporter();
+    private ExceptionReporter exceptionReporter;
 
-		this.process = new vm.Process(new ProcessLogic() {
-			public void run() {
-				try {
-					runLogic (msObject);
-					
-				} catch (Exception e) {
-					Const.reporter.processExecutionError(e);
-				} finally {
-					if (msObject instanceof PeriodicEventHandler) {
-						next.add(period, next); // next = next + period
-					}
-					state = State.HANDLED;
-					//devices.Console.println("ScjProcess: " + process + ", HANDLED");
-				}
-			}
+    /**
+     * The constructor initializes a new VM process object
+     *
+     * @param target is the handler containing the handleAsyncEvent method
+     *               to be executed
+     * @param stack  is the run time stack
+     */
+    ScjProcess(ManagedSchedulable ms, int[] stack) {
+        this.rtClock = Clock.getRealtimeClock();
+        this.next = new AbsoluteTime(this.rtClock);
+        this.msObject = ms;
+        this.state = State.NEW;
+        this.exceptionReporter = new ExceptionReporter();
 
-			public void catchError(final Throwable t) {
-				exceptionReporter.t = t;
-				try {
-					ImmortalMemory immortal = 
-						ManagedMemory.ImmortalMemory.instance();
-					if (immortal != null) {
-						immortal.executeInArea(exceptionReporter);
-					} else {
-						Memory.executeInHeap(exceptionReporter);
-					}
-				} catch (OutOfMemoryError o) {
-					Const.reporter.processOutOfMemoryError(o);
-				}
-			}
-		}, stack);
+        this.process = new vm.Process(new ProcessLogic() {
+            public void run() {
+                try {
+                    runLogic(msObject);
 
-		this.process.initialize();
+                } catch (Exception e) {
+                    Const.reporter.processExecutionError(e);
+                } finally {
+                    if (msObject instanceof PeriodicEventHandler) {
+                        next.add(period, next); // next = next + period
+                    }
+                    state = State.HANDLED;
+                    //devices.Console.println("ScjProcess: " + process + ", HANDLED");
+                }
+            }
 
-		rtClock.getTime(this.next);
+            public void catchError(final Throwable t) {
+                exceptionReporter.t = t;
+                try {
+                    ImmortalMemory immortal =
+                            ManagedMemory.ImmortalMemory.instance();
+                    if (immortal != null) {
+                        immortal.executeInArea(exceptionReporter);
+                    } else {
+                        Memory.executeInHeap(exceptionReporter);
+                    }
+                } catch (OutOfMemoryError o) {
+                    Const.reporter.processOutOfMemoryError(o);
+                }
+            }
+        }, stack);
 
-		setRelease (msObject);
-		
-		setProcess (msObject);
-	}
-	
-	private void runLogic (ManagedSchedulable ms)
-	{
-		if (ms instanceof ManagedEventHandler)
-			((ManagedEventHandler) ms).privateMemory.enter(ms); // execute logic;  
-		else if (ms instanceof ManagedThread)
-			((ManagedThread) ms).privateMemory.enter(ms); 
-		else // (ms is instanceof ManagedLongEventHandler)
-			((ManagedLongEventHandler) ms).privateMemory.enter(ms); 
-	}
-	
-	private void setRelease (ManagedSchedulable ms)
-	{
-		if (ms instanceof PeriodicEventHandler) {
-			this.start = ((PeriodicParameters) ((PeriodicEventHandler) ms).release)
-					.getStart();
-			this.period = ((PeriodicParameters) ((PeriodicEventHandler) ms).release)
-					.getPeriod();
-			next.add(start, next); // next = next + start
-		}
-		else if (ms instanceof OneShotEventHandler) {
-			if (((OneShotEventHandler) ms).releaseTime instanceof RelativeTime) {
-				RelativeTime releaseTime = (RelativeTime) ((OneShotEventHandler) ms).releaseTime;
-				next.add(releaseTime, next); // next = next + releaseTime
-			} else {
-				AbsoluteTime releaseTime = (AbsoluteTime) ((OneShotEventHandler) ms).releaseTime;
-				int compare = releaseTime.compareTo(Clock.getRealtimeClock().getTime(new AbsoluteTime(rtClock)));
-				if (compare < 0)
-					next.add(new RelativeTime(), next);
-				else
-					next.set(releaseTime);
-			}
-		}
+        this.process.initialize();
+
+        rtClock.getTime(this.next);
+
+        setRelease(msObject);
+
+        setProcess(msObject);
+    }
+
+    private void runLogic(ManagedSchedulable ms) {
+        if (ms instanceof ManagedEventHandler)
+            ((ManagedEventHandler) ms).privateMemory.enter(ms); // execute logic;
+        else if (ms instanceof ManagedThread)
+            ((ManagedThread) ms).privateMemory.enter(ms);
+        else // (ms is instanceof ManagedLongEventHandler)
+            ((ManagedLongEventHandler) ms).privateMemory.enter(ms);
+    }
+
+    private void setRelease(ManagedSchedulable ms) {
+        if (ms instanceof PeriodicEventHandler) {
+            this.start = ((PeriodicParameters) ((PeriodicEventHandler) ms).release)
+                    .getStart();
+            this.period = ((PeriodicParameters) ((PeriodicEventHandler) ms).release)
+                    .getPeriod();
+            next.add(start, next); // next = next + start
+        } else if (ms instanceof OneShotEventHandler) {
+            if (((OneShotEventHandler) ms).releaseTime instanceof RelativeTime) {
+                RelativeTime releaseTime = (RelativeTime) ((OneShotEventHandler) ms).releaseTime;
+                next.add(releaseTime, next); // next = next + releaseTime
+            } else {
+                AbsoluteTime releaseTime = (AbsoluteTime) ((OneShotEventHandler) ms).releaseTime;
+                int compare = releaseTime.compareTo(Clock.getRealtimeClock().getTime(new AbsoluteTime(rtClock)));
+                if (compare < 0)
+                    next.add(new RelativeTime(), next);
+                else
+                    next.set(releaseTime);
+            }
+        }
 //		else
 //			devices.Console.println("UPS: ScjProcess.setRelease: more cases?");
-	}
-	
-	private void setProcess (ManagedSchedulable ms)
-	{
-		if (ms instanceof ManagedEventHandler)
-			((ManagedEventHandler) ms).process = this;
-		else if (ms instanceof ManagedThread)
-			((ManagedThread) ms).process = this;
-		else // (ms is instanceof ManagedLongEventHandler)
-			((ManagedLongEventHandler) ms).process = this; 
-	}
+    }
 
-	private static class ExceptionReporter implements Runnable {
-		Throwable t;
+    private void setProcess(ManagedSchedulable ms) {
+        if (ms instanceof ManagedEventHandler)
+            ((ManagedEventHandler) ms).process = this;
+        else if (ms instanceof ManagedThread)
+            ((ManagedThread) ms).process = this;
+        else // (ms is instanceof ManagedLongEventHandler)
+            ((ManagedLongEventHandler) ms).process = this;
+    }
 
-		public void run() {
-			Const.reporter.processExecutionError(t);
-		}
-	}
+    private static class ExceptionReporter implements Runnable {
+        Throwable t;
 
-	public String toString() {
-		return ("ScjProcess:" + msObject + " index: " + index);
-	}
+        public void run() {
+            Const.reporter.processExecutionError(t);
+        }
+    }
 
-	/**
-	 * Compares this process with the parameter process. HSO: The ordering of
-	 * the processes are done after growing priorities.
-	 * 
-	 * APR: The ordering of the processes are done after next release and
-	 * priority:
-	 * 
-	 * The "smallest" of the two processes is the process with the smallest (the
-	 * first) next release time; if the processes have the same release time,
-	 * the process with the highest priority comes first (is the "smallest").
-	 */
-	public int compareTo(ScjProcess process) {
-		// HSO: two queues in PriorityFrame: PriorityQueue and SleepingQueue (works)
-		//		return (this.target.priority - process.target.priority)
+    public String toString() {
+        return ("ScjProcess:" + msObject + " index: " + index);
+    }
 
-		if (msObject instanceof ManagedEventHandler
-				&& process.msObject instanceof ManagedEventHandler)
-			return (((ManagedEventHandler) msObject).priority.getPriority() - 
-					((ManagedEventHandler) process.msObject).priority.getPriority());
-		
-		if (msObject instanceof ManagedThread
-				&& process.msObject instanceof ManagedThread)
-			return (((ManagedThread) msObject).priority.getPriority() - 
-					((ManagedThread) process.msObject).priority.getPriority());
-		
-		if (msObject instanceof ManagedLongEventHandler
-				&& process.msObject instanceof ManagedLongEventHandler)
-			return (((ManagedLongEventHandler) msObject).priority.getPriority() - 
-					((ManagedLongEventHandler) process.msObject).priority.getPriority());
+    /**
+     * Compares this process with the parameter process. HSO: The ordering of
+     * the processes are done after growing priorities.
+     * <p>
+     * APR: The ordering of the processes are done after next release and
+     * priority:
+     * <p>
+     * The "smallest" of the two processes is the process with the smallest (the
+     * first) next release time; if the processes have the same release time,
+     * the process with the highest priority comes first (is the "smallest").
+     */
+    public int compareTo(ScjProcess process) {
+        // HSO: two queues in PriorityFrame: PriorityQueue and SleepingQueue (works)
+        //		return (this.target.priority - process.target.priority)
 
-		return -999; // HSO: not finished
+        if (msObject instanceof ManagedEventHandler
+                && process.msObject instanceof ManagedEventHandler)
+            return (((ManagedEventHandler) msObject).priority.getPriority() -
+                    ((ManagedEventHandler) process.msObject).priority.getPriority());
 
-	}
+        if (msObject instanceof ManagedThread
+                && process.msObject instanceof ManagedThread)
+            return (((ManagedThread) msObject).priority.getPriority() -
+                    ((ManagedThread) process.msObject).priority.getPriority());
 
-	ManagedSchedulable getTarget() {
-		return msObject;
-	}
-	
-	void setIndex(int index) {
-		this.index = index;
-	}
+        if (msObject instanceof ManagedLongEventHandler
+                && process.msObject instanceof ManagedLongEventHandler)
+            return (((ManagedLongEventHandler) msObject).priority.getPriority() -
+                    ((ManagedLongEventHandler) process.msObject).priority.getPriority());
 
-	/**
-	 * Idle process is created and put in readyQueue, so that readyQueue will
-	 * never be empty. Idle process has lowest priority. <br>
-	 * 
-	 * Idle process is a periodic handler with "infinite" period.
-	 */
+        return -999; // HSO: not finished
 
-	static ScjProcess idleProcess;
+    }
 
-	/**
-	 * Creates and returns the singleton idle process. If idle process is
-	 * already created, no new process is created.
-	 * 
-	 * @return Returns the singleton idle process.
-	 */
-	static ScjProcess createIdleProcess() {
-		if (idleProcess == null) {
+    ManagedSchedulable getTarget() {
+        return msObject;
+    }
 
-			PeriodicEventHandler peh = new PeriodicEventHandler(
-							new PriorityParameters(Priorities.MIN_PRIORITY),
-							new PeriodicParameters(
-								new RelativeTime(
-									Clock.getRealtimeClock()), // start (0,0)
-									Const.INFINITE_TIME),      // period
-							new StorageParameters(
-									2*Const.IDLE_BACKING_STORE, 
-									new long[] { Const.IDLE_PROCESS_STACK_SIZE },
-									2*Const.IDLE_BACKING_STORE, 
-									0, 
-									0 
-								)) {
-						public void handleAsyncEvent() {													
-							yield();
-						}
+    void setIndex(int index) {
+        this.index = index;
+    }
 
-						@IcecapCompileMe
-						private void yield() {
-							while (true) {
-								RealtimeClock.awaitNextTick();	
-							}
-						}
-					}; 
+    /**
+     * Idle process is created and put in readyQueue, so that readyQueue will
+     * never be empty. Idle process has lowest priority. <br>
+     * <p>
+     * Idle process is a periodic handler with "infinite" period.
+     */
 
-			ScjProcess process = new ScjProcess(peh, new int[Const.IDLE_PROCESS_STACK_SIZE]);
-			
-			process.rtClock.getTime(process.next);
-			process.index = -1;			
-			idleProcess = process;
-		}
-		return idleProcess;
-	}
+    static ScjProcess idleProcess;
 
-	public void start() {
-		process.initialize();
-	}
+    /**
+     * Creates and returns the singleton idle process. If idle process is
+     * already created, no new process is created.
+     *
+     * @return Returns the singleton idle process.
+     */
+    static ScjProcess createIdleProcess() {
+        if (idleProcess == null) {
 
-	String print() {
-		return ("name: " + this.msObject + " 	index: " + index);
-	}
-	
-	protected boolean nextState(PriorityFrame pFrame) {
-		return false;
-	}
-	
-	protected void gotoNextState(PriorityFrame pFrame) {
-	}
+            PeriodicEventHandler peh = new PeriodicEventHandler(
+                    new PriorityParameters(Priorities.MIN_PRIORITY),
+                    new PeriodicParameters(
+                            new RelativeTime(
+                                    Clock.getRealtimeClock()), // start (0,0)
+                            Const.INFINITE_TIME),      // period
+                    new StorageParameters(
+                            2 * Const.IDLE_BACKING_STORE,
+                            new long[]{Const.IDLE_PROCESS_STACK_SIZE},
+                            2 * Const.IDLE_BACKING_STORE,
+                            0,
+                            0
+                    )) {
+                public void handleAsyncEvent() {
+                    yield ();
+                }
 
-	void switchToPrivateMemArea() { ; } 	
+                @IcecapCompileMe
+                private void yield() {
+                    while (true) {
+                        RealtimeClock.awaitNextTick();
+                    }
+                }
+            };
+
+            ScjProcess process = new ScjProcess(peh, new int[Const.IDLE_PROCESS_STACK_SIZE]);
+
+            process.rtClock.getTime(process.next);
+            process.index = -1;
+            idleProcess = process;
+        }
+        return idleProcess;
+    }
+
+    public void start() {
+        process.initialize();
+    }
+
+    String print() {
+        return ("name: " + this.msObject + " 	index: " + index);
+    }
+
+    protected boolean nextState(PriorityFrame pFrame) {
+        return false;
+    }
+
+    protected void gotoNextState(PriorityFrame pFrame) {
+    }
+
+    void switchToPrivateMemArea() {
+        ;
+    }
 }

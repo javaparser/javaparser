@@ -50,12 +50,8 @@ public class MethodUsage implements ResolvedTypeParametrized {
     public MethodUsage(ResolvedMethodDeclaration declaration) {
         this.typeParametersMap = ResolvedTypeParametersMap.empty();
         this.declaration = declaration;
-        for (int i = 0; i < declaration.getNumberOfParams(); i++) {
-            paramTypes.add(declaration.getParam(i).getType());
-        }
-        for (int i = 0; i < declaration.getNumberOfSpecifiedExceptions(); i++) {
-            exceptionTypes.add(declaration.getSpecifiedException(i));
-        }
+        paramTypes.addAll(declaration.formalParameterTypes());
+        exceptionTypes.addAll(declaration.getSpecifiedExceptions());
         returnType = declaration.getReturnType();
     }
 

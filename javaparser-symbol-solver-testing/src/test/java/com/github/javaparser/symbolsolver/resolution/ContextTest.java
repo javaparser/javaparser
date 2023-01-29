@@ -607,12 +607,12 @@ class ContextTest extends AbstractSymbolResolutionTest {
     void localVariableDeclarationInScope() {
         String name = "a";
         CompilationUnit cu = parse(
-                "class A {\n" + 
-                "  void foo() {\n" +
-                "    SomeClass a;\n" +
-                "    a.aField;\n" +
-                "  }\n" +
-                "}", ParseStart.COMPILATION_UNIT);
+                "class A {\n" +
+                        "  void foo() {\n" +
+                        "    SomeClass a;\n" +
+                        "    a.aField;\n" +
+                        "  }\n" +
+                        "}", ParseStart.COMPILATION_UNIT);
 
         // The block statement expose to the 2nd statement the local var
         BlockStmt blockStmt = cu.findAll(BlockStmt.class).get(0);
@@ -623,20 +623,20 @@ class ContextTest extends AbstractSymbolResolutionTest {
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
         assertTrue(context.localVariableDeclarationInScope(name).isPresent());
     }
-    
+
     @Test
     void localVariableDeclarationInScopeWithMultipleLocalesVariables() {
         String name = "a";
         CompilationUnit cu = parse(
-                "class A {\n" + 
-                "  void foo() {\n" +
-                "    SomeClass a;\n" +
-                "    SomeClass b;\n" +
-                "    a.aField;\n" +
-                "    SomeClass c;\n" +
-                "    c.cField;\n" +
-                "  }\n" +
-                "}", ParseStart.COMPILATION_UNIT);
+                "class A {\n" +
+                        "  void foo() {\n" +
+                        "    SomeClass a;\n" +
+                        "    SomeClass b;\n" +
+                        "    a.aField;\n" +
+                        "    SomeClass c;\n" +
+                        "    c.cField;\n" +
+                        "  }\n" +
+                        "}", ParseStart.COMPILATION_UNIT);
 
         // The block statement expose to the 2nd statement the local var
         BlockStmt blockStmt = cu.findAll(BlockStmt.class).get(0);
@@ -681,7 +681,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     private void assertNumberOfVarsExposedToChildInContextNamed(Node parent, Node child, String paramName,
-                                                                  int expectedNumber, String message) {
+                                                                int expectedNumber, String message) {
         List<VariableDeclarator> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .localVariablesExposedToChild(child);
         assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(paramName)).count(), "[" + paramName + "]: " + message);
@@ -690,11 +690,13 @@ class ContextTest extends AbstractSymbolResolutionTest {
     private void assertNoPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
         assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 0, message);
     }
+
     private void assertOnePatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
         assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 1, message);
     }
+
     private void assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
-                                                                  int expectedNumber, String message) {
+                                                                                  int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .patternExprsExposedFromChildren();
         assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
@@ -703,11 +705,13 @@ class ContextTest extends AbstractSymbolResolutionTest {
     private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
         assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 0, message);
     }
+
     private void assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
         assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(parent, patternExprName, 1, message);
     }
+
     private void assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
-                                                                  int expectedNumber, String message) {
+                                                                                         int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .negatedPatternExprsExposedFromChildren();
         assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);

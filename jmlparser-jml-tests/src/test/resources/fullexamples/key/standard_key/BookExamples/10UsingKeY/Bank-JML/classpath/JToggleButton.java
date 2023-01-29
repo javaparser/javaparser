@@ -16,19 +16,29 @@
  */
 package javax.swing;
 
-public class JToggleButton extends javax.swing.AbstractButton implements javax.accessibility.Accessible
-{
+public class JToggleButton extends javax.swing.AbstractButton implements javax.accessibility.Accessible {
 
-   public JToggleButton();
-   public JToggleButton(javax.swing.Icon arg0);
-   public JToggleButton(javax.swing.Icon arg0, boolean arg1);
-   public JToggleButton(java.lang.String arg0);
-   public JToggleButton(java.lang.String arg0, boolean arg1);
-   public JToggleButton(javax.swing.Action arg0);
-   public JToggleButton(java.lang.String arg0, javax.swing.Icon arg1);
-   public JToggleButton(java.lang.String arg0, javax.swing.Icon arg1, boolean arg2);
-   public void updateUI();
-   public java.lang.String getUIClassID();
-   protected java.lang.String paramString();
-   public javax.accessibility.AccessibleContext getAccessibleContext();
+    public JToggleButton();
+
+    public JToggleButton(javax.swing.Icon arg0);
+
+    public JToggleButton(javax.swing.Icon arg0, boolean arg1);
+
+    public JToggleButton(java.lang.String arg0);
+
+    public JToggleButton(java.lang.String arg0, boolean arg1);
+
+    public JToggleButton(javax.swing.Action arg0);
+
+    public JToggleButton(java.lang.String arg0, javax.swing.Icon arg1);
+
+    public JToggleButton(java.lang.String arg0, javax.swing.Icon arg1, boolean arg2);
+
+    public void updateUI();
+
+    public java.lang.String getUIClassID();
+
+    protected java.lang.String paramString();
+
+    public javax.accessibility.AccessibleContext getAccessibleContext();
 }

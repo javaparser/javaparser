@@ -57,7 +57,7 @@ public abstract class Bound {
 
     /**
      * Given a bound of the form α = T or T = α, we say T is an instantiation of α.
-     *
+     * <p>
      * Return empty if it is not an instantiation. Otherwise it returns the variable of which this is an
      * instantiation.
      */
@@ -71,7 +71,7 @@ public abstract class Bound {
 
     /**
      * Given a bound of the form α &lt;: T, we say T is a proper upper bound of α.
-     *
+     * <p>
      * Return empty if it is not a proper upper bound. Otherwise it returns the variable of which this is an
      * proper upper bound.
      */
@@ -81,7 +81,7 @@ public abstract class Bound {
 
     /**
      * Given a bound of the form T &lt;: α, we say T is a proper lower bound of α.
-     *
+     * <p>
      * Return empty if it is not a proper lower bound. Otherwise it returns the variable of which this is an
      * proper lower bound.
      */

@@ -106,18 +106,18 @@ class FieldDeclarationBuildersTest {
     void testCreateGetterWithANonValidField() {
         assertThrows(IllegalStateException.class, () -> {
             FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
-        myPrivateField.getVariables().add(new VariableDeclarator(intType(), "secondField"));
-        myPrivateField.createGetter();
-    });
-        }
+            myPrivateField.getVariables().add(new VariableDeclarator(intType(), "secondField"));
+            myPrivateField.createGetter();
+        });
+    }
 
     @Test
     void testCreateSetterWithANonValidField() {
         assertThrows(IllegalStateException.class, () -> {
             FieldDeclaration myPrivateField = testClass.addPrivateField(int.class, "myField");
-        myPrivateField.getVariables().add(new VariableDeclarator(intType(), "secondField"));
-        myPrivateField.createSetter();
-    });
-        }
+            myPrivateField.getVariables().add(new VariableDeclarator(intType(), "secondField"));
+            myPrivateField.createSetter();
+        });
+    }
 
 }

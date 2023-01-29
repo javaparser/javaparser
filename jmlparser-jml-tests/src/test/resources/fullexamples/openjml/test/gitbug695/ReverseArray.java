@@ -11,7 +11,7 @@ public class ReverseArray {
         //@ assert len == s.length;
         char[] res = (char[]) new char[len];
         //@ assert len == res.length;
-        int i = len-1;
+        int i = len - 1;
         /** rlen tells how many elements of res are defined. **/
         int rlen = 0;
         //@ maintaining len == res.length;
@@ -24,7 +24,7 @@ public class ReverseArray {
             // System.out.println("i is " + i + ", len-1-i is " + (len-1-i));
             //@ assert res.length == len;
             //@ assert (len-1-i)+1 <= len;
-            res[len-1-i] = s[i];
+            res[len - 1 - i] = s[i];
             //@ assert res[(len-1-i)] == s[i];
             rlen += 1;
             //@ assert rlen == ((len-1) - i) + 1;
@@ -37,14 +37,16 @@ public class ReverseArray {
         return res;
     }
 
-    public static void main(String [] argv) {
+    public static void main(String[] argv) {
         ReverseArray ra = new ReverseArray();
-        char [] abc = new char[3];
-        abc[0] = 'a'; abc[1] = 'b'; abc[2] = 'c';
+        char[] abc = new char[3];
+        abc[0] = 'a';
+        abc[1] = 'b';
+        abc[2] = 'c';
         char[] revd = ra.reverse(abc);
         System.out.println("reverse(abc) is \""
-                           + ReverseArray.arr2str(revd)
-                           + "\"");
+                + ReverseArray.arr2str(revd)
+                + "\"");
     }
 
     /*@ public normal_behavior

@@ -67,13 +67,14 @@ import java.io.Serializable;
  *
  * @param <K> the type of the keys in the map
  * @param <V> the type of the values in the map
- *
  * @see java.lang.ref.Reference
  * @since 3.0 (previously in main package v2.1)
  */
 public class ReferenceMap<K, V> extends AbstractReferenceMap<K, V> implements Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 1555089888138299607L;
 
     /**
@@ -89,14 +90,14 @@ public class ReferenceMap<K, V> extends AbstractReferenceMap<K, V> implements Se
      * Constructs a new <code>ReferenceMap</code> that will
      * use the specified types of references.
      *
-     * @param keyType  the type of reference to use for keys;
-     *   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
-     *   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
-     *   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
-     * @param valueType  the type of reference to use for values;
-     *   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
-     *   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
-     *   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
+     * @param keyType   the type of reference to use for keys;
+     *                  must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
+     *                  {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
+     *                  {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
+     * @param valueType the type of reference to use for values;
+     *                  must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
+     *                  {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
+     *                  {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
      */
     public ReferenceMap(final ReferenceStrength keyType, final ReferenceStrength valueType) {
         super(keyType, valueType, DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR, false);
@@ -106,16 +107,16 @@ public class ReferenceMap<K, V> extends AbstractReferenceMap<K, V> implements Se
      * Constructs a new <code>ReferenceMap</code> that will
      * use the specified types of references.
      *
-     * @param keyType  the type of reference to use for keys;
-     *   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
-     *   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
-     *   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
-     * @param valueType  the type of reference to use for values;
-     *   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
-     *   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
-     *   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
+     * @param keyType     the type of reference to use for keys;
+     *                    must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
+     *                    {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
+     *                    {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
+     * @param valueType   the type of reference to use for values;
+     *                    must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
+     *                    {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
+     *                    {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
      * @param purgeValues should the value be automatically purged when the
-     *   key is garbage collected
+     *                    key is garbage collected
      */
     public ReferenceMap(final ReferenceStrength keyType, final ReferenceStrength valueType, final boolean purgeValues) {
         super(keyType, valueType, DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR, purgeValues);
@@ -126,19 +127,19 @@ public class ReferenceMap<K, V> extends AbstractReferenceMap<K, V> implements Se
      * specified reference types, load factor and initial
      * capacity.
      *
-     * @param keyType  the type of reference to use for keys;
-     *   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
-     *   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
-     *   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
+     * @param keyType    the type of reference to use for keys;
+     *                   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
+     *                   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
+     *                   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
      * @param valueType  the type of reference to use for values;
-     *   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
-     *   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
-     *   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
-     * @param capacity  the initial capacity for the map
-     * @param loadFactor  the load factor for the map
+     *                   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
+     *                   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
+     *                   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
+     * @param capacity   the initial capacity for the map
+     * @param loadFactor the load factor for the map
      */
     public ReferenceMap(final ReferenceStrength keyType, final ReferenceStrength valueType, final int capacity,
-            final float loadFactor) {
+                        final float loadFactor) {
         super(keyType, valueType, capacity, loadFactor, false);
     }
 
@@ -147,29 +148,30 @@ public class ReferenceMap<K, V> extends AbstractReferenceMap<K, V> implements Se
      * specified reference types, load factor and initial
      * capacity.
      *
-     * @param keyType  the type of reference to use for keys;
-     *   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
-     *   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
-     *   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
-     * @param valueType  the type of reference to use for values;
-     *   must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
-     *   {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
-     *   {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
-     * @param capacity  the initial capacity for the map
+     * @param keyType     the type of reference to use for keys;
+     *                    must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
+     *                    {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
+     *                    {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
+     * @param valueType   the type of reference to use for values;
+     *                    must be {@link AbstractReferenceMap.ReferenceStrength#HARD HARD},
+     *                    {@link AbstractReferenceMap.ReferenceStrength#SOFT SOFT},
+     *                    {@link AbstractReferenceMap.ReferenceStrength#WEAK WEAK}
+     * @param capacity    the initial capacity for the map
      * @param loadFactor  the load factor for the map
-     * @param purgeValues  should the value be automatically purged when the
-     *   key is garbage collected
+     * @param purgeValues should the value be automatically purged when the
+     *                    key is garbage collected
      */
     public ReferenceMap(final ReferenceStrength keyType, final ReferenceStrength valueType, final int capacity,
-            final float loadFactor, final boolean purgeValues) {
+                        final float loadFactor, final boolean purgeValues) {
         super(keyType, valueType, capacity, loadFactor, purgeValues);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -181,7 +183,7 @@ public class ReferenceMap<K, V> extends AbstractReferenceMap<K, V> implements Se
      * Read the map in using a custom routine.
      *
      * @param in the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {

@@ -100,11 +100,11 @@ public class JavaParserTypeSolver implements TypeSolver {
     }
 
     /**
-     * @param srcDir is the source code directory for the type solver.
+     * @param srcDir              is the source code directory for the type solver.
      * @param parserConfiguration is the configuration the solver should use when inspecting source code files.
-     * @param cacheSizeLimit is an optional size limit to the internal caches used by this solver.
-     *        Be advised that setting the size too low might lead to noticeable performance degradation.
-     *        However, using a size limit is advised when solving symbols in large code sources. In such cases, internal caches might consume large amounts of heap space.
+     * @param cacheSizeLimit      is an optional size limit to the internal caches used by this solver.
+     *                            Be advised that setting the size too low might lead to noticeable performance degradation.
+     *                            However, using a size limit is advised when solving symbols in large code sources. In such cases, internal caches might consume large amounts of heap space.
      */
     public JavaParserTypeSolver(Path srcDir, ParserConfiguration parserConfiguration, long cacheSizeLimit) {
         if (!Files.exists(srcDir) || !Files.isDirectory(srcDir)) {
@@ -120,12 +120,12 @@ public class JavaParserTypeSolver implements TypeSolver {
     /**
      * Create a {@link JavaParserTypeSolver} with a custom cache system.
      *
-     * @param srcDir                    The source code directory for the type solver.
-     * @param javaParser                The {@link JavaParser} to be used when parsing .java files.
-     * @param parsedFilesCache          The cache to be used to store {@link CompilationUnit} that is associated with
-     *                                  a file.
-     * @param parsedDirectoriesCache    The cache to store the list of {@link CompilationUnit} in a given directory.
-     * @param foundTypesCache           The cache that associated a qualified name to its {@link SymbolReference}.
+     * @param srcDir                 The source code directory for the type solver.
+     * @param javaParser             The {@link JavaParser} to be used when parsing .java files.
+     * @param parsedFilesCache       The cache to be used to store {@link CompilationUnit} that is associated with
+     *                               a file.
+     * @param parsedDirectoriesCache The cache to store the list of {@link CompilationUnit} in a given directory.
+     * @param foundTypesCache        The cache that associated a qualified name to its {@link SymbolReference}.
      */
     public JavaParserTypeSolver(Path srcDir,
                                 JavaParser javaParser,

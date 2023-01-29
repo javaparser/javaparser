@@ -27,14 +27,19 @@ package org.apache.commons.math3.ml.clustering;
  */
 public class CentroidCluster<T extends Clusterable> extends Cluster<T> {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -3075288519071812288L;
 
-    /** Center of the cluster. */
+    /**
+     * Center of the cluster.
+     */
     private final Clusterable center;
 
     /**
      * Build a cluster centered at a specified point.
+     *
      * @param center the point which is to be the center of this cluster
      */
     public CentroidCluster(final Clusterable center) {
@@ -44,6 +49,7 @@ public class CentroidCluster<T extends Clusterable> extends Cluster<T> {
 
     /**
      * Get the point chosen to be the center of this cluster.
+     *
      * @return chosen cluster center
      */
     public Clusterable getCenter() {

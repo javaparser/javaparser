@@ -27,16 +27,24 @@ public class StringKeyAnalyzer extends KeyAnalyzer<String> {
 
     private static final long serialVersionUID = -7032449491269434877L;
 
-    /** A singleton instance of {@link StringKeyAnalyzer}. */
+    /**
+     * A singleton instance of {@link StringKeyAnalyzer}.
+     */
     public static final StringKeyAnalyzer INSTANCE = new StringKeyAnalyzer();
 
-    /** The number of bits per {@link Character}. */
+    /**
+     * The number of bits per {@link Character}.
+     */
     public static final int LENGTH = Character.SIZE;
 
-    /** A bit mask where the first bit is 1 and the others are zero. */
+    /**
+     * A bit mask where the first bit is 1 and the others are zero.
+     */
     private static final int MSB = 0x8000;
 
-    /** Returns a bit mask where the given bit is set. */
+    /**
+     * Returns a bit mask where the given bit is set.
+     */
     private static int mask(final int bit) {
         return MSB >>> bit;
     }
@@ -74,7 +82,7 @@ public class StringKeyAnalyzer extends KeyAnalyzer<String> {
         // then figure out which bit makes the difference
         // and return it.
         char k = 0, f = 0;
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             final int index1 = beginIndex1 + i;
             final int index2 = beginIndex2 + i;
 
@@ -91,8 +99,8 @@ public class StringKeyAnalyzer extends KeyAnalyzer<String> {
             }
 
             if (k != f) {
-               final int x = k ^ f;
-               return i * LENGTH + Integer.numberOfLeadingZeros(x) - LENGTH;
+                final int x = k ^ f;
+                return i * LENGTH + Integer.numberOfLeadingZeros(x) - LENGTH;
             }
 
             if (k != 0) {

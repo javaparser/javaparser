@@ -37,14 +37,14 @@ class OperatorTransformationsTest extends AbstractLexicalPreservingTest {
         expression.asBinaryExpr().setRight(new NameExpr("c"));
         assertTransformedToString("a && c", expression);
     }
-    
+
     @Test
     void unaryExpressionOperator() {
         considerExpression("!a");
         expression.asUnaryExpr().setExpression(new NameExpr("b"));
         assertTransformedToString("!b", expression);
     }
-    
+
     @Test
     void assignExpressionOperator() {
         considerExpression("a <<= 1");

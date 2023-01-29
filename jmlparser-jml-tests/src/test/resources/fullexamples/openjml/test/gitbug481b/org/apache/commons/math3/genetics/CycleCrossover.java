@@ -42,7 +42,7 @@ import java.util.Set;
  * in cycle 1, the genes of parent 1 are copied to child 1, while in cycle 2 the genes of parent 1
  * are copied to child 2, and so forth ...
  * </p>
- *
+ * <p>
  * Example (zero-start cycle):
  * <pre>
  * p1 = (8 4 7 3 6 2 5 1 9 0)    X   c1 = (8 1 2 3 4 5 6 7 9 0)
@@ -52,19 +52,20 @@ import java.util.Set;
  * cycle 2: 4 1 7 2 5 6
  * cycle 3: 3
  * </pre>
- *
+ * <p>
  * This policy works only on {@link AbstractListChromosome}, and therefore it
  * is parameterized by T. Moreover, the chromosomes must have same lengths.
  *
+ * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
  * @see <a href="http://www.rubicite.com/Tutorials/GeneticAlgorithms/CrossoverOperators/CycleCrossoverOperator.aspx">
  * Cycle Crossover Operator</a>
- *
- * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
  * @since 3.1
  */
 public class CycleCrossover<T> implements CrossoverPolicy {
 
-    /** If the start index shall be chosen randomly. */
+    /**
+     * If the start index shall be chosen randomly.
+     */
     private final boolean randomStart;
 
     /**
@@ -96,11 +97,11 @@ public class CycleCrossover<T> implements CrossoverPolicy {
      * {@inheritDoc}
      *
      * @throws MathIllegalArgumentException if the chromosomes are not an instance of {@link AbstractListChromosome}
-     * @throws DimensionMismatchException if the length of the two chromosomes is different
+     * @throws DimensionMismatchException   if the length of the two chromosomes is different
      */
     @SuppressWarnings("unchecked")
     public ChromosomePair crossover(final Chromosome first, final Chromosome second)
-        throws DimensionMismatchException, MathIllegalArgumentException {
+            throws DimensionMismatchException, MathIllegalArgumentException {
 
         if (!(first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
@@ -111,13 +112,13 @@ public class CycleCrossover<T> implements CrossoverPolicy {
     /**
      * Helper for {@link #crossover(Chromosome, Chromosome)}. Performs the actual crossover.
      *
-     * @param first the first chromosome
+     * @param first  the first chromosome
      * @param second the second chromosome
      * @return the pair of new chromosomes that resulted from the crossover
      * @throws DimensionMismatchException if the length of the two chromosomes is different
      */
     protected ChromosomePair mate(final AbstractListChromosome<T> first, final AbstractListChromosome<T> second)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         final int length = first.getLength();
         if (length != second.getLength()) {
@@ -177,6 +178,6 @@ public class CycleCrossover<T> implements CrossoverPolicy {
         }
 
         return new ChromosomePair(first.newFixedLengthChromosome(child1Rep),
-                                  second.newFixedLengthChromosome(child2Rep));
+                second.newFixedLengthChromosome(child2Rep));
     }
 }

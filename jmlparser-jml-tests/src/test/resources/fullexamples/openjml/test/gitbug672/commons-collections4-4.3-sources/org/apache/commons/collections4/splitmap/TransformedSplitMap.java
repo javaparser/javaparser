@@ -56,20 +56,25 @@ import java.util.Map;
  * @param <K> the type of the keys to get in this map
  * @param <U> the type of the values to put in this map
  * @param <V> the type of the values to get in this map
- * @since 4.0
- *
  * @see org.apache.commons.collections4.SplitMapUtils#readableMap(org.apache.commons.collections4.Get)
  * @see org.apache.commons.collections4.SplitMapUtils#writableMap(Put)
+ * @since 4.0
  */
 public class TransformedSplitMap<J, K, U, V> extends AbstractIterableGetMapDecorator<K, V>
         implements Put<J, U>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 5966875321133456994L;
 
-    /** The transformer to use for the key */
+    /**
+     * The transformer to use for the key
+     */
     private final Transformer<? super J, ? extends K> keyTransformer;
-    /** The transformer to use for the value */
+    /**
+     * The transformer to use for the value
+     */
     private final Transformer<? super U, ? extends V> valueTransformer;
 
     /**
@@ -78,36 +83,37 @@ public class TransformedSplitMap<J, K, U, V> extends AbstractIterableGetMapDecor
      * If there are any elements already in the map being decorated, they are
      * NOT transformed.
      *
-     * @param <J>  the input key type
-     * @param <K>  the output key type
-     * @param <U>  the input value type
-     * @param <V>  the output value type
-     * @param map the map to decorate, must not be null
-     * @param keyTransformer the transformer to use for key conversion, must not be null
+     * @param <J>              the input key type
+     * @param <K>              the output key type
+     * @param <U>              the input value type
+     * @param <V>              the output value type
+     * @param map              the map to decorate, must not be null
+     * @param keyTransformer   the transformer to use for key conversion, must not be null
      * @param valueTransformer the transformer to use for value conversion, must not be null
      * @return a new transformed map
      * @throws NullPointerException if map or either of the transformers is null
      */
     public static <J, K, U, V> TransformedSplitMap<J, K, U, V> transformingMap(final Map<K, V> map,
-            final Transformer<? super J, ? extends K> keyTransformer,
-            final Transformer<? super U, ? extends V> valueTransformer) {
+                                                                               final Transformer<? super J, ? extends K> keyTransformer,
+                                                                               final Transformer<? super U, ? extends V> valueTransformer) {
         return new TransformedSplitMap<>(map, keyTransformer, valueTransformer);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the collection being decorated, they
      * are NOT transformed.
      *
-     * @param map the map to decorate, must not be null
-     * @param keyTransformer the transformer to use for key conversion, must not be null
+     * @param map              the map to decorate, must not be null
+     * @param keyTransformer   the transformer to use for key conversion, must not be null
      * @param valueTransformer the transformer to use for value conversion, must not be null
      * @throws NullPointerException if map or either of the transformers is null
      */
     protected TransformedSplitMap(final Map<K, V> map, final Transformer<? super J, ? extends K> keyTransformer,
-            final Transformer<? super U, ? extends V> valueTransformer) {
+                                  final Transformer<? super U, ? extends V> valueTransformer) {
         super(map);
         if (keyTransformer == null) {
             throw new NullPointerException("KeyTransformer must not be null.");
@@ -120,6 +126,7 @@ public class TransformedSplitMap<J, K, U, V> extends AbstractIterableGetMapDecor
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
      *
@@ -135,7 +142,7 @@ public class TransformedSplitMap<J, K, U, V> extends AbstractIterableGetMapDecor
      * Read the map in using a custom routine.
      *
      * @param in the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      * @since 3.1
      */
@@ -146,6 +153,7 @@ public class TransformedSplitMap<J, K, U, V> extends AbstractIterableGetMapDecor
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Transforms a key.
      * <p>

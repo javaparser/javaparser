@@ -12,6 +12,6 @@ public class StaticMethod {
     }
 
     public void b() {
-        a(data);   
+        a(data);
     }
 }

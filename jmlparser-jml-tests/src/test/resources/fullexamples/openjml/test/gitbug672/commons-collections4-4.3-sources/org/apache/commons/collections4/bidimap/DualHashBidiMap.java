@@ -38,12 +38,13 @@ import java.util.Map;
  *
  * @param <K> the type of the keys in the map
  * @param <V> the type of the values in the map
- *
  * @since 3.0
  */
 public class DualHashBidiMap<K, V> extends AbstractDualBidiMap<K, V> implements Serializable {
 
-    /** Ensure serialization compatibility */
+    /**
+     * Ensure serialization compatibility
+     */
     private static final long serialVersionUID = 721969328361808L;
 
     /**
@@ -57,7 +58,7 @@ public class DualHashBidiMap<K, V> extends AbstractDualBidiMap<K, V> implements 
      * Constructs a <code>HashBidiMap</code> and copies the mappings from
      * specified <code>Map</code>.
      *
-     * @param map  the map whose mappings are to be placed in this map
+     * @param map the map whose mappings are to be placed in this map
      */
     public DualHashBidiMap(final Map<? extends K, ? extends V> map) {
         super(new HashMap<K, V>(), new HashMap<V, K>());
@@ -67,9 +68,9 @@ public class DualHashBidiMap<K, V> extends AbstractDualBidiMap<K, V> implements 
     /**
      * Constructs a <code>HashBidiMap</code> that decorates the specified maps.
      *
-     * @param normalMap  the normal direction map
-     * @param reverseMap  the reverse direction map
-     * @param inverseBidiMap  the inverse BidiMap
+     * @param normalMap      the normal direction map
+     * @param reverseMap     the reverse direction map
+     * @param inverseBidiMap the inverse BidiMap
      */
     protected DualHashBidiMap(final Map<K, V> normalMap, final Map<V, K> reverseMap,
                               final BidiMap<V, K> inverseBidiMap) {
@@ -79,9 +80,9 @@ public class DualHashBidiMap<K, V> extends AbstractDualBidiMap<K, V> implements 
     /**
      * Creates a new instance of this object.
      *
-     * @param normalMap  the normal direction map
-     * @param reverseMap  the reverse direction map
-     * @param inverseBidiMap  the inverse BidiMap
+     * @param normalMap      the normal direction map
+     * @param reverseMap     the reverse direction map
+     * @param inverseBidiMap the inverse BidiMap
      * @return new bidi map
      */
     @Override

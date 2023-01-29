@@ -71,7 +71,7 @@ public class Issue3038Test extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-		CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = StaticJavaParser.parse(code);
 
         List<NameExpr> exprs = cu.findAll(NameExpr.class);
         for (NameExpr expr : exprs) {

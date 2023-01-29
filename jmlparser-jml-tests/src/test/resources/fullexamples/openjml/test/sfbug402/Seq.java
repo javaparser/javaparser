@@ -1,4 +1,3 @@
-
 public interface Seq<E extends Object> {
 
     /*@

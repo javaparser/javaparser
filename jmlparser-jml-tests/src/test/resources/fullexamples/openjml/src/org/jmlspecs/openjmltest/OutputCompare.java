@@ -17,15 +17,15 @@ public class OutputCompare {
     protected int failureLocation;
     protected String failureString;
     protected int failureCol;
-    
+
     protected int diagListPos;
-    
+
     protected static class Special {
         public String toString(String head, Object[] list) {
             String s = head + "(";
-            for (Object o: list) {
+            for (Object o : list) {
                 if (o instanceof Object[]) {
-                    s = s + toString("",(Object[])o);
+                    s = s + toString("", (Object[]) o);
                 } else {
                     s = s + o + ",\n";
                 }
@@ -33,53 +33,64 @@ public class OutputCompare {
             s = s + ")\n";
             return s;
         }
-        
-        public boolean compare(Object[] list) { return false; }
+
+        public boolean compare(Object[] list) {
+            return false;
+        }
     }
-    
+
     protected static class Optional extends Special {
         public Object[] list;
+
         public Optional(Object... list) {
             this.list = list;
         }
+
         public String toString() {
-            return toString("optional",list);
+            return toString("optional", list);
         }
     }
-    
+
     protected static class OneOf extends Special {
         public Object[] list;
-        public OneOf(Object ... list) {
+
+        public OneOf(Object... list) {
             this.list = list;
         }
+
         public String toString() {
-            return toString("oneof",list);
+            return toString("oneof", list);
         }
     }
-    
+
     protected static class Seq extends Special {
         public Object[] list;
-        public Seq(Object ... list) {
+
+        public Seq(Object... list) {
             this.list = list;
         }
+
         public String toString() {
-            return toString("seq",list);
+            return toString("seq", list);
         }
     }
-    
+
     protected static class AnyOrder extends Special {
         public Object[] list;
-        public AnyOrder(Object ... list) {
+
+        public AnyOrder(Object... list) {
             this.list = list;
         }
+
         public String toString() {
-            return toString("anyorder",list);
+            return toString("anyorder", list);
         }
     }
 
 
-    
-    /** Compares actual diagnostics against the given list of expected results */
+    /**
+     * Compares actual diagnostics against the given list of expected results
+     */
     public void compareResults(Object[] list, DiagnosticListenerX<JavaFileObject> collectorp) {
         collector = collectorp;
         failureLocation = -1;
@@ -99,11 +110,12 @@ public class OutputCompare {
                 }
             }
         } else {
-            Assert.assertEquals("Too little expected output: ",diagListPos,collector.getDiagnostics().size());
+            Assert.assertEquals("Too little expected output: ", diagListPos, collector.getDiagnostics().size());
         }
     }
-    
-    /** Compares actual diagnostics, beginning at position j, to given list. The
+
+    /**
+     * Compares actual diagnostics, beginning at position j, to given list. The
      * returned result is either the initial value of j, if no match was made,
      * or the value of j advanced over all matching items. If optional is false,
      * then error messages are printed if no match is found.
@@ -111,29 +123,32 @@ public class OutputCompare {
     protected boolean compareResults(Object list) {
         return compareResults(new Object[]{list});
     }
-    
+
     protected boolean compareResults(Object[] list) {
         int i = 0;
         int initPos = diagListPos;
         while (i < list.length) {
-            if (list[i] == null) { i+=2; continue; }
+            if (list[i] == null) {
+                i += 2;
+                continue;
+            }
             if (!(list[i] instanceof Special)) {
-                if (comparePair(list,i,diagListPos,false)) {
-                    diagListPos ++;
+                if (comparePair(list, i, diagListPos, false)) {
+                    diagListPos++;
                     i += 2;
                 } else {
                     diagListPos = initPos;
                     return false;
                 }
             } else if (list[i] instanceof AnyOrder) {
-                if (compareAnyOrder(((AnyOrder)list[i]).list)) {
+                if (compareAnyOrder(((AnyOrder) list[i]).list)) {
                     ++i;
                 } else {
                     diagListPos = initPos;
                     return false;
                 }
             } else if (list[i] instanceof OneOf) {
-                if (compareOneOf(((OneOf)list[i]).list)) {
+                if (compareOneOf(((OneOf) list[i]).list)) {
                     ++i;
                 } else {
                     diagListPos = initPos;
@@ -141,13 +156,13 @@ public class OutputCompare {
                 }
             } else if (list[i] instanceof Optional) {
                 int initPos2 = diagListPos;
-                if (!compareResults(((Optional)list[i]).list)) {
+                if (!compareResults(((Optional) list[i]).list)) {
                     diagListPos = initPos2;
                 }
                 ++i;
                 // It is OK if the optional did not match
             } else if (list[i] instanceof Seq) {
-                if (compareResults(((Seq)list[i]).list)) {
+                if (compareResults(((Seq) list[i]).list)) {
                     ++i;
                 } else {
                     diagListPos = initPos;
@@ -159,23 +174,24 @@ public class OutputCompare {
     }
 
     protected boolean comparePair(Object[] list, int i, int j, boolean issueErrors) {
-        int col = ((Integer)list[i+1]).intValue();
+        int col = ((Integer) list[i + 1]).intValue();
         if (collector.getDiagnostics().size() <= j) {
             failureLocation = j;
             failureString = null;
             return false;
         }
-        String act = JmlTestCase.noSource(collector.getDiagnostics().get(j)).replace('\\','/');
+        String act = JmlTestCase.noSource(collector.getDiagnostics().get(j)).replace('\\', '/');
         String exp = null;
         if (list[i] != null) {
-            exp = JmlTestCase.doReplacements(list[i].toString()).replace('\\','/');
+            exp = JmlTestCase.doReplacements(list[i].toString()).replace('\\', '/');
         }
         long actualColumn = -1;
         if (!exp.equals(act)) {
             failureLocation = j;
             failureString = list[i].toString();
             failureCol = -1;
-            if (issueErrors) assertEquals("Error " + j, list[i], JmlTestCase.noSource(collector.getDiagnostics().get(j)));
+            if (issueErrors)
+                assertEquals("Error " + j, list[i], JmlTestCase.noSource(collector.getDiagnostics().get(j)));
             return false;
         } else if (col != (actualColumn = Math.abs(collector.getDiagnostics().get(j).getColumnNumber()))) {
             failureLocation = j;
@@ -218,13 +234,14 @@ public class OutputCompare {
     protected boolean compareAnyOrder(Object[] list) {
         // None of lists[i] may be null or empty
         boolean[] used = new boolean[list.length];
-        for (int i=0; i<used.length; ++i) used[i] = false;
+        for (int i = 0; i < used.length; ++i) used[i] = false;
         int initPos = diagListPos;
         int latestFailure = -2;
         String latestString = null;
         int latestCol = 0;
         int toMatch = list.length;
-        more: while (toMatch > 0) {
+        more:
+        while (toMatch > 0) {
             for (int i = 0; i < list.length; ++i) {
                 if (used[i]) continue;
                 failureLocation = -3;
@@ -250,19 +267,20 @@ public class OutputCompare {
         }
         return true;
     }
-    
+
     public boolean ignoreNotes = true;
 
-    /** Compares two files, returning null if the same; returning a String of
+    /**
+     * Compares two files, returning null if the same; returning a String of
      * explanation if they are different.
      */
     public String compareFiles(String expected, String actual) {
-        BufferedReader exp = null,act = null;
+        BufferedReader exp = null, act = null;
         String diff = "";
         try {
             exp = new BufferedReader(new FileReader(expected));
             act = new BufferedReader(new FileReader(actual));
-            
+
             int line = 0;
             while (true) {
                 line++;
@@ -270,13 +288,13 @@ public class OutputCompare {
                 if (sexp != null) {
                     sexp = sexp.replace("\r\n", "\n");
                     sexp = JmlTestCase.doReplacements(sexp);
-                    sexp = sexp.replace('\\','/');
+                    sexp = sexp.replace('\\', '/');
                 }
                 while (true) {
                     String sact = act.readLine();
                     if (sact != null) {
                         sact = sact.replace("\r\n", "\n");
-                        sact = sact.replace('\\','/');
+                        sact = sact.replace('\\', '/');
                     }
                     if (sexp == null && sact == null) return diff.isEmpty() ? null : diff;
                     if (sexp != null && sact == null) {
@@ -292,9 +310,9 @@ public class OutputCompare {
                     }
                     if (!sexp.equals(sact)) {
                         int k = sexp.indexOf('(');
-                        if (k != -1 && sexp.contains("at java.") && sexp.substring(0,k).equals(sact.substring(0,k))) {
+                        if (k != -1 && sexp.contains("at java.") && sexp.substring(0, k).equals(sact.substring(0, k))) {
                             // OK
-                        } else {         
+                        } else {
                             if (sact.startsWith("Note: ") && ignoreNotes) continue;
                             diff += ("Lines differ at " + line + JmlTestCase.eol)
                                     + ("EXP: " + sexp + JmlTestCase.eol)
@@ -312,17 +330,19 @@ public class OutputCompare {
             try {
                 if (exp != null) exp.close();
                 if (act != null) act.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         return diff.isEmpty() ? null : diff;
     }
-    
-    /** Compare the content of 'actualFile' against the files dir + "/" + root and then with 1, 2, 3, etc.
+
+    /**
+     * Compare the content of 'actualFile' against the files dir + "/" + root and then with 1, 2, 3, etc.
      * appended. If none match, then returns the diffs against the last one.
      */
     public void compareFileToMultipleFiles(String actualFile, String dir, String root) {
         String diffs = "";
-        for (String f: new File(dir).list()) {
+        for (String f : new File(dir).list()) {
             if (!f.contains(root)) continue;
             diffs = compareFiles(dir + "/" + f, actualFile);
             if (diffs == null) break;
@@ -341,9 +361,9 @@ public class OutputCompare {
 
     public void compareTextToMultipleFiles(String output, String dir, String root, String actualLocation) {
         String diffs = "";
-        for (String f: new File(dir).list()) {
+        for (String f : new File(dir).list()) {
             if (!f.contains(root)) continue;
-            diffs = compareText(dir + "/" + f,output);
+            diffs = compareText(dir + "/" + f, output);
             if (diffs == null) break;
         }
         if (diffs != null) {
@@ -363,18 +383,19 @@ public class OutputCompare {
         }
     }
 
-    /** Compares a file to an actual String (ignoring difference kinds of 
+    /**
+     * Compares a file to an actual String (ignoring difference kinds of
      * line separators); returns null if they are the same, returns the
      * explanation string if they are different.
      */
     public String compareText(String expectedFile, String actual) {
         String term = "\n|(\r(\n)?)"; // any of the kinds of line terminators
         BufferedReader exp = null;
-        String[] lines = actual.split(term,-1); // -1 so we do not discard empty lines
+        String[] lines = actual.split(term, -1); // -1 so we do not discard empty lines
         String diff = "";
         try {
             exp = new BufferedReader(new FileReader(expectedFile));
-            
+
             boolean same = true;
             int line = 0;
             while (true) {
@@ -393,19 +414,19 @@ public class OutputCompare {
                     return diff;
                 }
                 sexp = JmlTestCase.doReplacements(sexp);
-                String sact = lines[line-1];
+                String sact = lines[line - 1];
                 if (sexp.equals(sact)) {
                     // OK
-                } else if (sexp.replace('\\','/').equals(sact.replace('\\','/'))) {
+                } else if (sexp.replace('\\', '/').equals(sact.replace('\\', '/'))) {
                     // OK
                 } else {
                     int k = sexp.indexOf('(');
-                    if (k != -1 && sexp.contains("at ") && sexp.substring(0,k).equals(sact.substring(0,k))) {
+                    if (k != -1 && sexp.contains("at ") && sexp.substring(0, k).equals(sact.substring(0, k))) {
                         // OK
-                    } else {         
+                    } else {
                         diff += ("Lines differ at " + line + JmlTestCase.eol)
-                            + ("EXP: " + sexp + JmlTestCase.eol)
-                            + ("ACT: " + sact + JmlTestCase.eol);
+                                + ("EXP: " + sexp + JmlTestCase.eol)
+                                + ("ACT: " + sact + JmlTestCase.eol);
                     }
                 }
             }
@@ -416,7 +437,8 @@ public class OutputCompare {
         } finally {
             try {
                 if (exp != null) exp.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         return diff.isEmpty() ? null : diff;
     }

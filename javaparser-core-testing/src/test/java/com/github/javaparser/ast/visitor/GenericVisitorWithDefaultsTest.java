@@ -59,13 +59,13 @@ class GenericVisitorWithDefaultsTest {
 
         argument = new Object();
         visitor = spy(
-            new GenericVisitorWithDefaults<Node, Object>() {
-                @Override
-                public Node defaultAction(Node n, Object arg) {
-                    super.defaultAction(n, arg);
-                    return n;
+                new GenericVisitorWithDefaults<Node, Object>() {
+                    @Override
+                    public Node defaultAction(Node n, Object arg) {
+                        super.defaultAction(n, arg);
+                        return n;
+                    }
                 }
-            }
         );
     }
 

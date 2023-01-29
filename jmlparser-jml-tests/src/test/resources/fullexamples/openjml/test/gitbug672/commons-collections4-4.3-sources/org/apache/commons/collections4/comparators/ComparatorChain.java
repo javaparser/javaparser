@@ -45,17 +45,26 @@ import java.util.*;
  */
 public class ComparatorChain<E> implements Comparator<E>, Serializable {
 
-    /** Serialization version from Collections 2.0. */
+    /**
+     * Serialization version from Collections 2.0.
+     */
     private static final long serialVersionUID = -721644942746081630L;
 
-    /** The list of comparators in the chain. */
+    /**
+     * The list of comparators in the chain.
+     */
     private final List<Comparator<E>> comparatorChain;
-    /** Order - false (clear) = ascend; true (set) = descend. */
+    /**
+     * Order - false (clear) = ascend; true (set) = descend.
+     */
     private BitSet orderingBits = null;
-   /** Whether the chain has been "locked". */
+    /**
+     * Whether the chain has been "locked".
+     */
     private boolean isLocked = false;
 
     //-----------------------------------------------------------------------
+
     /**
      * Construct a ComparatorChain with no Comparators.
      * You must add at least one Comparator before calling
@@ -97,8 +106,8 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
      * List.  All Comparators will default to the forward
      * sort order.
      *
-     * @param list   List of Comparators
-     * @see #ComparatorChain(List,BitSet)
+     * @param list List of Comparators
+     * @see #ComparatorChain(List, BitSet)
      */
     public ComparatorChain(final List<Comparator<E>> list) {
         this(list, new BitSet(list.size()));
@@ -114,10 +123,10 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
      * sort order is used; a return value of <i>true</i>
      * indicates reverse sort order.
      *
-     * @param list   List of Comparators.  NOTE: This constructor does not perform a
-     *               defensive copy of the list
-     * @param bits   Sort order for each Comparator.  Extra bits are ignored,
-     *               unless extra Comparators are added by another method.
+     * @param list List of Comparators.  NOTE: This constructor does not perform a
+     *             defensive copy of the list
+     * @param bits Sort order for each Comparator.  Extra bits are ignored,
+     *             unless extra Comparators are added by another method.
      */
     public ComparatorChain(final List<Comparator<E>> list, final BitSet bits) {
         comparatorChain = list;
@@ -125,6 +134,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Add a Comparator to the end of the chain using the
      * forward sort order
@@ -157,8 +167,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
      *
      * @param index      index of the Comparator to replace
      * @param comparator Comparator to place at the given index
-     * @throws IndexOutOfBoundsException
-     *                   if index &lt; 0 or index &gt;= size()
+     * @throws IndexOutOfBoundsException if index &lt; 0 or index &gt;= size()
      */
     public void setComparator(final int index, final Comparator<E> comparator) throws IndexOutOfBoundsException {
         setComparator(index, comparator, false);
@@ -175,7 +184,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
     public void setComparator(final int index, final Comparator<E> comparator, final boolean reverse) {
         checkLocked();
 
-        comparatorChain.set(index,comparator);
+        comparatorChain.set(index, comparator);
         if (reverse == true) {
             orderingBits.set(index);
         } else {
@@ -187,7 +196,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
      * Change the sort order at the given index in the
      * ComparatorChain to a forward sort.
      *
-     * @param index  Index of the ComparatorChain
+     * @param index Index of the ComparatorChain
      */
     public void setForwardSort(final int index) {
         checkLocked();
@@ -198,7 +207,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
      * Change the sort order at the given index in the
      * ComparatorChain to a reverse sort.
      *
-     * @param index  Index of the ComparatorChain
+     * @param index Index of the ComparatorChain
      */
     public void setReverseSort(final int index) {
         checkLocked();
@@ -220,7 +229,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
      * once they have performed a comparison.
      *
      * @return true = ComparatorChain cannot be modified; false =
-     *         ComparatorChain can still be modified.
+     * ComparatorChain can still be modified.
      */
     public boolean isLocked() {
         return isLocked;
@@ -250,12 +259,13 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Perform comparisons on the Objects as per
      * Comparator.compare(o1,o2).
      *
-     * @param o1  the first object to compare
-     * @param o2  the second object to compare
+     * @param o1 the first object to compare
+     * @param o2 the second object to compare
      * @return -1, 0, or 1
      * @throws UnsupportedOperationException if the ComparatorChain does not contain at least one Comparator
      */
@@ -271,7 +281,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
         for (int comparatorIndex = 0; comparators.hasNext(); ++comparatorIndex) {
 
             final Comparator<? super E> comparator = comparators.next();
-            int retval = comparator.compare(o1,o2);
+            int retval = comparator.compare(o1, o2);
             if (retval != 0) {
                 // invert the order if it is a reverse sort
                 if (orderingBits.get(comparatorIndex) == true) {
@@ -290,6 +300,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implement a hash code for this comparator that is consistent with
      * {@link #equals(Object) equals}.
@@ -321,7 +332,7 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
      * Subclasses may want to override this behavior to remain consistent
      * with the {@link Comparator#equals(Object)} contract.
      *
-     * @param object  the object to compare with
+     * @param object the object to compare with
      * @return true if equal
      * @since 3.0
      */
@@ -336,8 +347,8 @@ public class ComparatorChain<E> implements Comparator<E>, Serializable {
         if (object.getClass().equals(this.getClass())) {
             final ComparatorChain<?> chain = (ComparatorChain<?>) object;
             return (null == orderingBits ? null == chain.orderingBits : orderingBits.equals(chain.orderingBits)) &&
-                   (null == comparatorChain ? null == chain.comparatorChain :
-                                              comparatorChain.equals(chain.comparatorChain));
+                    (null == comparatorChain ? null == chain.comparatorChain :
+                            comparatorChain.equals(chain.comparatorChain));
         }
         return false;
     }

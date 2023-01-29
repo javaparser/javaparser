@@ -42,24 +42,24 @@ public class Issue3387Test extends AbstractLexicalPreservingTest {
                 .add("\t}")
                 .add("")
                 .add("}").toString());
-        
-        String expected = "class A {\n" + 
-                "\n" + 
-                "\t/**\n" + 
-                "\t * Change Javadoc\n" + 
-                "\t */\n" + 
-                "\tpublic void setTheNumber(int number) {\n" + 
-                "\t\tnumber = number;\n" + 
-                "\t}\n" + 
-                "\n" + 
+
+        String expected = "class A {\n" +
+                "\n" +
+                "\t/**\n" +
+                "\t * Change Javadoc\n" +
+                "\t */\n" +
+                "\tpublic void setTheNumber(int number) {\n" +
+                "\t\tnumber = number;\n" +
+                "\t}\n" +
+                "\n" +
                 "}";
 
-            MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
-            // create new javadoc comment
-            Javadoc javadoc = new Javadoc(JavadocDescription.parseText("Change Javadoc"));
-            md.setJavadocComment("\t", javadoc);
-            System.out.println(LexicalPreservingPrinter.print(cu));
-            assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
+        // create new javadoc comment
+        Javadoc javadoc = new Javadoc(JavadocDescription.parseText("Change Javadoc"));
+        md.setJavadocComment("\t", javadoc);
+        System.out.println(LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 
 

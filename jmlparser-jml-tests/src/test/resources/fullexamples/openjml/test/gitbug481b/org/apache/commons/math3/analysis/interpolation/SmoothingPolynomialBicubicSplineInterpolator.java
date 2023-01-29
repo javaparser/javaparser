@@ -34,14 +34,22 @@ import org.apache.commons.math3.util.Precision;
  */
 @Deprecated
 public class SmoothingPolynomialBicubicSplineInterpolator
-    extends BicubicSplineInterpolator {
-    /** Fitter for x. */
+        extends BicubicSplineInterpolator {
+    /**
+     * Fitter for x.
+     */
     private final PolynomialFitter xFitter;
-    /** Degree of the fitting polynomial. */
+    /**
+     * Degree of the fitting polynomial.
+     */
     private final int xDegree;
-    /** Fitter for y. */
+    /**
+     * Fitter for y.
+     */
     private final PolynomialFitter yFitter;
-    /** Degree of the fitting polynomial. */
+    /**
+     * Degree of the fitting polynomial.
+     */
     private final int yDegree;
 
     /**
@@ -53,22 +61,22 @@ public class SmoothingPolynomialBicubicSplineInterpolator
 
     /**
      * @param degree Degree of the polynomial fitting functions.
-     * @exception NotPositiveException if degree is not positive
+     * @throws NotPositiveException if degree is not positive
      */
     public SmoothingPolynomialBicubicSplineInterpolator(int degree)
-        throws NotPositiveException {
+            throws NotPositiveException {
         this(degree, degree);
     }
 
     /**
      * @param xDegree Degree of the polynomial fitting functions along the
-     * x-dimension.
+     *                x-dimension.
      * @param yDegree Degree of the polynomial fitting functions along the
-     * y-dimension.
-     * @exception NotPositiveException if degrees are not positive
+     *                y-dimension.
+     * @throws NotPositiveException if degrees are not positive
      */
     public SmoothingPolynomialBicubicSplineInterpolator(int xDegree, int yDegree)
-        throws NotPositiveException {
+            throws NotPositiveException {
         if (xDegree < 0) {
             throw new NotPositiveException(xDegree);
         }
@@ -80,8 +88,8 @@ public class SmoothingPolynomialBicubicSplineInterpolator
 
         final double safeFactor = 1e2;
         final SimpleVectorValueChecker checker
-            = new SimpleVectorValueChecker(safeFactor * Precision.EPSILON,
-                                           safeFactor * Precision.SAFE_MIN);
+                = new SimpleVectorValueChecker(safeFactor * Precision.EPSILON,
+                safeFactor * Precision.SAFE_MIN);
         xFitter = new PolynomialFitter(new GaussNewtonOptimizer(false, checker));
         yFitter = new PolynomialFitter(new GaussNewtonOptimizer(false, checker));
     }
@@ -93,8 +101,8 @@ public class SmoothingPolynomialBicubicSplineInterpolator
     public BicubicSplineInterpolatingFunction interpolate(final double[] xval,
                                                           final double[] yval,
                                                           final double[][] fval)
-        throws NoDataException, NullArgumentException,
-               DimensionMismatchException, NonMonotonicSequenceException {
+            throws NoDataException, NullArgumentException,
+            DimensionMismatchException, NonMonotonicSequenceException {
         if (xval.length == 0 || yval.length == 0 || fval.length == 0) {
             throw new NoDataException();
         }

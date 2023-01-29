@@ -37,7 +37,9 @@ import java.util.Queue;
  */
 public class PredicatedQueue<E> extends PredicatedCollection<E> implements Queue<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 2307609000539943581L;
 
     /**
@@ -46,28 +48,29 @@ public class PredicatedQueue<E> extends PredicatedCollection<E> implements Queue
      * If there are any elements already in the queue being decorated, they
      * are validated.
      *
-     * @param <E> the type of the elements in the queue
-     * @param Queue  the queue to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
+     * @param <E>       the type of the elements in the queue
+     * @param Queue     the queue to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
      * @return a new predicated queue
-     * @throws NullPointerException if queue or predicate is null
+     * @throws NullPointerException     if queue or predicate is null
      * @throws IllegalArgumentException if the queue contains invalid elements
      */
     public static <E> PredicatedQueue<E> predicatedQueue(final Queue<E> Queue,
-                                                          final Predicate<? super E> predicate) {
+                                                         final Predicate<? super E> predicate) {
         return new PredicatedQueue<>(Queue, predicate);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the collection being decorated, they
      * are validated.
      *
-     * @param queue  the queue to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
-     * @throws NullPointerException if queue or predicate is null
+     * @param queue     the queue to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
+     * @throws NullPointerException     if queue or predicate is null
      * @throws IllegalArgumentException if the Queue contains invalid elements
      */
     protected PredicatedQueue(final Queue<E> queue, final Predicate<? super E> predicate) {
@@ -90,7 +93,7 @@ public class PredicatedQueue<E> extends PredicatedCollection<E> implements Queue
      * Override to validate the object being added to ensure it matches
      * the predicate.
      *
-     * @param object  the object being added
+     * @param object the object being added
      * @return the result of adding to the underlying queue
      * @throws IllegalArgumentException if the add is invalid
      */

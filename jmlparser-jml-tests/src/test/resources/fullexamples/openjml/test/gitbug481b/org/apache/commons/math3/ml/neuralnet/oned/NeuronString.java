@@ -32,13 +32,21 @@ import java.io.Serializable;
  * @since 3.3
  */
 public class NeuronString implements Serializable {
-    /** Serial version ID */
+    /**
+     * Serial version ID
+     */
     private static final long serialVersionUID = 1L;
-    /** Underlying network. */
+    /**
+     * Underlying network.
+     */
     private final Network network;
-    /** Number of neurons. */
+    /**
+     * Number of neurons.
+     */
     private final int size;
-    /** Wrap. */
+    /**
+     * Wrap.
+     */
     private final boolean wrap;
 
     /**
@@ -50,10 +58,10 @@ public class NeuronString implements Serializable {
     /**
      * Constructor with restricted access, solely used for deserialization.
      *
-     * @param wrap Whether to wrap the dimension (i.e the first and last
-     * neurons will be linked together).
+     * @param wrap         Whether to wrap the dimension (i.e the first and last
+     *                     neurons will be linked together).
      * @param featuresList Arrays that will initialize the features sets of
-     * the network's neurons.
+     *                     the network's neurons.
      * @throws NumberIsTooSmallException if {@code num < 2}.
      */
     NeuronString(boolean wrap,
@@ -91,11 +99,11 @@ public class NeuronString implements Serializable {
      * The topology of the network can also be a circle (if the
      * dimension is wrapped).
      *
-     * @param num Number of neurons.
-     * @param wrap Whether to wrap the dimension (i.e the first and last
-     * neurons will be linked together).
+     * @param num         Number of neurons.
+     * @param wrap        Whether to wrap the dimension (i.e the first and last
+     *                    neurons will be linked together).
      * @param featureInit Arrays that will initialize the features sets of
-     * the network's neurons.
+     *                    the network's neurons.
      * @throws NumberIsTooSmallException if {@code num < 2}.
      */
     public NeuronString(int num,
@@ -157,7 +165,7 @@ public class NeuronString implements Serializable {
      */
     public double[] getFeatures(int i) {
         if (i < 0 ||
-            i >= size) {
+                i >= size) {
             throw new OutOfRangeException(i, 0, size - 1);
         }
 
@@ -201,24 +209,30 @@ public class NeuronString implements Serializable {
         }
 
         return new SerializationProxy(wrap,
-                                      featuresList);
+                featuresList);
     }
 
     /**
      * Serialization.
      */
     private static class SerializationProxy implements Serializable {
-        /** Serializable. */
+        /**
+         * Serializable.
+         */
         private static final long serialVersionUID = 20130226L;
-        /** Wrap. */
+        /**
+         * Wrap.
+         */
         private final boolean wrap;
-        /** Neurons' features. */
+        /**
+         * Neurons' features.
+         */
         private final double[][] featuresList;
 
         /**
-         * @param wrap Whether the dimension is wrapped.
+         * @param wrap         Whether the dimension is wrapped.
          * @param featuresList List of neurons features.
-         * {@code neuronList}.
+         *                     {@code neuronList}.
          */
         SerializationProxy(boolean wrap,
                            double[][] featuresList) {
@@ -233,7 +247,7 @@ public class NeuronString implements Serializable {
          */
         private Object readResolve() {
             return new NeuronString(wrap,
-                                    featuresList);
+                    featuresList);
         }
     }
 }

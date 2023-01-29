@@ -62,7 +62,6 @@ public class LoopContractExamples {
     }
 
 
-
     /*@ normal_behavior
       @ requires arr != null;
       @ ensures \result == (\sum int i; 0 <= i && i < arr.length; arr[i]);

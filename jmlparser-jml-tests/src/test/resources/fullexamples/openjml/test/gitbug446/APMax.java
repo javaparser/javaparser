@@ -1,6 +1,7 @@
 public class APMax implements AProc<Integer> {
     protected /*@ spec_public @*/ Integer maxSeen = Integer.MIN_VALUE;
-                                    //@ in objectState; 
+
+    //@ in objectState;
     /*@ also
       @   requires 0 <= i < a.length;
       @   requires \nonnullelements(a);
@@ -11,6 +12,9 @@ public class APMax implements AProc<Integer> {
             maxSeen = a[i];
         }
     }
+
     //@ ensures \result == maxSeen;
-    public /*@ pure @*/ Integer getMax() { return maxSeen; }
+    public /*@ pure @*/ Integer getMax() {
+        return maxSeen;
+    }
 }

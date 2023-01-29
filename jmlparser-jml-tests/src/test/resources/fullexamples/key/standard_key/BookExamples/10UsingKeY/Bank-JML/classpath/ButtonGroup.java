@@ -16,17 +16,24 @@
  */
 package javax.swing;
 
-public class ButtonGroup extends java.lang.Object implements java.io.Serializable
-{
-   protected java.util.Vector buttons;
+public class ButtonGroup extends java.lang.Object implements java.io.Serializable {
+    protected java.util.Vector buttons;
 
-   public ButtonGroup();
-   public void add(javax.swing.AbstractButton arg0);
-   public void remove(javax.swing.AbstractButton arg0);
-   public void clearSelection();
-   public java.util.Enumeration getElements();
-   public javax.swing.ButtonModel getSelection();
-   public void setSelected(javax.swing.ButtonModel arg0, boolean arg1);
-   public boolean isSelected(javax.swing.ButtonModel arg0);
-   public int getButtonCount();
+    public ButtonGroup();
+
+    public void add(javax.swing.AbstractButton arg0);
+
+    public void remove(javax.swing.AbstractButton arg0);
+
+    public void clearSelection();
+
+    public java.util.Enumeration getElements();
+
+    public javax.swing.ButtonModel getSelection();
+
+    public void setSelected(javax.swing.ButtonModel arg0, boolean arg1);
+
+    public boolean isSelected(javax.swing.ButtonModel arg0);
+
+    public int getButtonCount();
 }

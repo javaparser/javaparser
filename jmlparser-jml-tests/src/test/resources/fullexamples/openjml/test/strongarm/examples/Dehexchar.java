@@ -13,5 +13,5 @@ public class Dehexchar {
         }
         return -1;
     }
-    
+
 }

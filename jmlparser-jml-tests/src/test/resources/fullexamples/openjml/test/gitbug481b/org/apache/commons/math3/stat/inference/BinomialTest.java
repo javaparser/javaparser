@@ -42,16 +42,16 @@ public class BinomialTest {
      * <li>Probability must be &ge; 0 and &le; 1.</li>
      * </ul>
      *
-     * @param numberOfTrials number of trials performed
-     * @param numberOfSuccesses number of successes observed
-     * @param probability assumed probability of a single trial under the null hypothesis
+     * @param numberOfTrials        number of trials performed
+     * @param numberOfSuccesses     number of successes observed
+     * @param probability           assumed probability of a single trial under the null hypothesis
      * @param alternativeHypothesis type of hypothesis being evaluated (one- or two-sided)
-     * @param alpha significance level of the test
+     * @param alpha                 significance level of the test
      * @return true if the null hypothesis can be rejected with confidence {@code 1 - alpha}
-     * @throws NotPositiveException if {@code numberOfTrials} or {@code numberOfSuccesses} is negative
-     * @throws OutOfRangeException if {@code probability} is not between 0 and 1
+     * @throws NotPositiveException         if {@code numberOfTrials} or {@code numberOfSuccesses} is negative
+     * @throws OutOfRangeException          if {@code probability} is not between 0 and 1
      * @throws MathIllegalArgumentException if {@code numberOfTrials} &lt; {@code numberOfSuccesses} or
-     * if {@code alternateHypothesis} is null.
+     *                                      if {@code alternateHypothesis} is null.
      * @see AlternativeHypothesis
      */
     public boolean binomialTest(int numberOfTrials, int numberOfSuccesses, double probability,
@@ -84,15 +84,15 @@ public class BinomialTest {
      * <li>Probability must be &ge; 0 and &le; 1.</li>
      * </ul></p>
      *
-     * @param numberOfTrials number of trials performed
-     * @param numberOfSuccesses number of successes observed
-     * @param probability assumed probability of a single trial under the null hypothesis
+     * @param numberOfTrials        number of trials performed
+     * @param numberOfSuccesses     number of successes observed
+     * @param probability           assumed probability of a single trial under the null hypothesis
      * @param alternativeHypothesis type of hypothesis being evaluated (one- or two-sided)
      * @return p-value
-     * @throws NotPositiveException if {@code numberOfTrials} or {@code numberOfSuccesses} is negative
-     * @throws OutOfRangeException if {@code probability} is not between 0 and 1
+     * @throws NotPositiveException         if {@code numberOfTrials} or {@code numberOfSuccesses} is negative
+     * @throws OutOfRangeException          if {@code probability} is not between 0 and 1
      * @throws MathIllegalArgumentException if {@code numberOfTrials} &lt; {@code numberOfSuccesses} or
-     * if {@code alternateHypothesis} is null.
+     *                                      if {@code alternateHypothesis} is null.
      * @see AlternativeHypothesis
      */
     public double binomialTest(int numberOfTrials, int numberOfSuccesses, double probability,
@@ -108,8 +108,8 @@ public class BinomialTest {
         }
         if (numberOfTrials < numberOfSuccesses) {
             throw new MathIllegalArgumentException(
-                LocalizedFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
-                numberOfTrials, numberOfSuccesses);
+                    LocalizedFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
+                    numberOfTrials, numberOfSuccesses);
         }
         if (alternativeHypothesis == null) {
             throw new NullArgumentException();
@@ -118,39 +118,39 @@ public class BinomialTest {
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final BinomialDistribution distribution = new BinomialDistribution(null, numberOfTrials, probability);
         switch (alternativeHypothesis) {
-        case GREATER_THAN:
-            return 1 - distribution.cumulativeProbability(numberOfSuccesses - 1);
-        case LESS_THAN:
-            return distribution.cumulativeProbability(numberOfSuccesses);
-        case TWO_SIDED:
-            int criticalValueLow = 0;
-            int criticalValueHigh = numberOfTrials;
-            double pTotal = 0;
+            case GREATER_THAN:
+                return 1 - distribution.cumulativeProbability(numberOfSuccesses - 1);
+            case LESS_THAN:
+                return distribution.cumulativeProbability(numberOfSuccesses);
+            case TWO_SIDED:
+                int criticalValueLow = 0;
+                int criticalValueHigh = numberOfTrials;
+                double pTotal = 0;
 
-            while (true) {
-                double pLow = distribution.probability(criticalValueLow);
-                double pHigh = distribution.probability(criticalValueHigh);
+                while (true) {
+                    double pLow = distribution.probability(criticalValueLow);
+                    double pHigh = distribution.probability(criticalValueHigh);
 
-                if (pLow == pHigh) {
-                    pTotal += 2 * pLow;
-                    criticalValueLow++;
-                    criticalValueHigh--;
-                } else if (pLow < pHigh) {
-                    pTotal += pLow;
-                    criticalValueLow++;
-                } else {
-                    pTotal += pHigh;
-                    criticalValueHigh--;
+                    if (pLow == pHigh) {
+                        pTotal += 2 * pLow;
+                        criticalValueLow++;
+                        criticalValueHigh--;
+                    } else if (pLow < pHigh) {
+                        pTotal += pLow;
+                        criticalValueLow++;
+                    } else {
+                        pTotal += pHigh;
+                        criticalValueHigh--;
+                    }
+
+                    if (criticalValueLow > numberOfSuccesses || criticalValueHigh < numberOfSuccesses) {
+                        break;
+                    }
                 }
-
-                if (criticalValueLow > numberOfSuccesses || criticalValueHigh < numberOfSuccesses) {
-                    break;
-                }
-            }
-            return pTotal;
-        default:
-            throw new MathInternalError(LocalizedFormats. OUT_OF_RANGE_SIMPLE, alternativeHypothesis,
-                      AlternativeHypothesis.TWO_SIDED, AlternativeHypothesis.LESS_THAN);
+                return pTotal;
+            default:
+                throw new MathInternalError(LocalizedFormats.OUT_OF_RANGE_SIMPLE, alternativeHypothesis,
+                        AlternativeHypothesis.TWO_SIDED, AlternativeHypothesis.LESS_THAN);
         }
     }
 }

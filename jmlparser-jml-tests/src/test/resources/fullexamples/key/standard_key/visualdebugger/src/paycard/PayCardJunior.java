@@ -20,7 +20,7 @@ public class PayCardJunior extends PayCard {
       this.balance >= 0 && this.balance < juniorLimit && juniorLimit < limit; 
       @*/
 
-    /*@ spec_public @*/ private final static int juniorLimit=100;
+    /*@ spec_public @*/ private final static int juniorLimit = 100;
 
     /*@
       public normal_behavior
@@ -28,7 +28,7 @@ public class PayCardJunior extends PayCard {
       assignable LogRecord.transactionCounter;
      @*/
     public PayCardJunior(int cardLimit) {
-	//super(cardLimit);
+        //super(cardLimit);
     }
 
     /*@
@@ -37,7 +37,7 @@ public class PayCardJunior extends PayCard {
       ensures \result.limit==1000;
      @*/
     public static PayCardJunior createCard() {
-	return new PayCardJunior(1000);
+        return new PayCardJunior(1000);
     }
 
     /*@
@@ -68,18 +68,18 @@ public class PayCardJunior extends PayCard {
 	ensures balance == \old(balance) + amount;
       @*/
     private void charge0(int amount) throws CardException {
-	if(amount <= 0){
-	    throw new CardException();
-	} 
+        if (amount <= 0) {
+            throw new CardException();
+        }
         int checkStatus = this.checkSum(this.balance + amount);
         if (checkStatus != 1) {
             throw new CardException();
         } else {
             this.balance = this.balance + amount;
-	    log.addRecord(balance);
+            log.addRecord(balance);
         }
     }
-    
+
     /*@
      private normal_behavior
       ensures \result==1 ?  sum<juniorLimit : sum>=juniorLimit;

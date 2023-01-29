@@ -1,6 +1,6 @@
 final class Account {
     /*@nullable*/ Transaction transactions;
-    
+
     //@ ghost int balance;
     //@ ghost \locset footprint;
 
@@ -40,7 +40,8 @@ final class Account {
         //@ set balance = balance + amount;
         /*@ set footprint = \set_union(\all_fields(this),
                   transactions.footprint);
-        */;
+        */
+        ;
     }
 
     /*@ requires 0 <= amount && amount <= balance;
@@ -53,7 +54,8 @@ final class Account {
         //@ set balance = balance - amount;
         /*@ set footprint = \set_union(\all_fields(this),
                   transactions.footprint);
-        */;
+        */
+        ;
     }
 
     /*@ requires 0 <= amount && amount <= balance && 
@@ -74,7 +76,7 @@ final class Account {
       @ modifies \nothing;
       @*/
     int getTotal() {
-        if(transactions == null) {
+        if (transactions == null) {
             return 0;
         } else {
             return transactions.getTotal();
@@ -95,11 +97,11 @@ class Main {
 
         a2.deposit(200);
         a1.transfer(a2, 50);
-        
-        if(a2.getTotal() != 250)
+
+        if (a2.getTotal() != 250)
             throw new Error();
 
-        if(a1.getTotal() != 50)
+        if (a1.getTotal() != 50)
             throw new Error();
     }
 }

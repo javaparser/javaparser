@@ -41,7 +41,7 @@ import java.util.List;
  * List&lt;Date&gt; lazy = LazyList.decorate(new ArrayList&lt;Date&gt;(), factory);
  * Date date = lazy.get(3);
  * </pre>
- *
+ * <p>
  * After the above code is executed, <code>date</code> will contain
  * a new <code>Date</code> instance.  Furthermore, that <code>Date</code>
  * instance is the fourth element in the list.  The first, second,
@@ -58,18 +58,22 @@ import java.util.List;
  */
 public class LazyList<E> extends AbstractSerializableListDecorator<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -1708388017160694542L;
 
-    /** The factory to use to lazily instantiate the objects */
+    /**
+     * The factory to use to lazily instantiate the objects
+     */
     private final Factory<? extends E> factory;
 
     /**
      * Factory method to create a lazily instantiating list.
      *
-     * @param <E> the type of the elements in the list
-     * @param list  the list to decorate, must not be null
-     * @param factory  the factory to use for creation, must not be null
+     * @param <E>     the type of the elements in the list
+     * @param list    the list to decorate, must not be null
+     * @param factory the factory to use for creation, must not be null
      * @return a new lazy list
      * @throws NullPointerException if list or factory is null
      * @since 4.0
@@ -79,11 +83,12 @@ public class LazyList<E> extends AbstractSerializableListDecorator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param list  the list to decorate, must not be null
-     * @param factory  the factory to use for creation, must not be null
+     * @param list    the list to decorate, must not be null
+     * @param factory the factory to use for creation, must not be null
      * @throws NullPointerException if list or factory is null
      */
     protected LazyList(final List<E> list, final Factory<? extends E> factory) {
@@ -95,6 +100,7 @@ public class LazyList<E> extends AbstractSerializableListDecorator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Decorate the get method to perform the lazy behaviour.
      * <p>
@@ -103,7 +109,7 @@ public class LazyList<E> extends AbstractSerializableListDecorator<E> {
      * Indexes in-between the old size and the requested size are left with a
      * placeholder that is replaced with a factory object when requested.
      *
-     * @param index  the index to retrieve
+     * @param index the index to retrieve
      * @return the element at the given index
      */
     @Override

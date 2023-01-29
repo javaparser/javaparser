@@ -1,5 +1,5 @@
 public interface List {
-    
+
     //@ public ghost instance \locset footprint;
     //@ public ghost instance \seq seq;
 
@@ -12,9 +12,9 @@ public interface List {
       @   accessible footprint;
       @   ensures \result == seq.length;
       @*/
-    public /*@pure@*/ int size(); 
-    
-    
+    public /*@pure@*/ int size();
+
+
     /*@ public normal_behaviour
       @   requires 0 <= index && index < seq.length; 
       @   accessible footprint;
@@ -25,20 +25,20 @@ public interface List {
       @   signals_only IndexOutOfBoundsException;
       @*/
     public /*@pure@*/ Object get(int index);
-    
-    
+
+
     /*@ public normal_behaviour
       @   accessible footprint;
       @   ensures \result == (\exists int i; 0 <= i && i < seq.length; seq[i] == o);
       @*/
-    public /*@pure@*/ boolean contains(Object o);      
-    
-    
+    public /*@pure@*/ boolean contains(Object o);
+
+
     /*@ public normal_behaviour
       @   assignable footprint;
       @   ensures seq == \seq_concat(\old(seq), \seq_singleton(o));
       @   ensures \new_elems_fresh(footprint);
-      @*/    
+      @*/
     public void add(Object o);    
     
     /* @ public normal_behaviour
@@ -49,8 +49,8 @@ public interface List {
       @   ensures \disjoint(footprint, \result.*);
       @*/
     //   public /*@pure@*/ ListIterator iterator();
-    
-    
+
+
     /*@ public normal_behaviour
       @   requires (\forall int i; 0 <= i && i < seq.length; seq[i] != o);
       @   assignable \nothing;
@@ -63,5 +63,5 @@ public interface List {
       @   ensures \new_elems_fresh(footprint);
       @*/
     public void remove(Object o);
-    
+
 }

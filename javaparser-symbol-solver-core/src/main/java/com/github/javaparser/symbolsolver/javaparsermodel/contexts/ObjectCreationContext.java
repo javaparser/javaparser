@@ -60,7 +60,7 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
                         return SymbolReference.solved(it);
                     }
                 }
-            } 
+            }
         }
         // find first parent node that is not an object creation expression to avoid stack overflow errors, see #1711
         Node parentNode = demandParentNode(wrappedNode);

@@ -30,32 +30,40 @@ import java.util.Map;
  */
 public class SwitchTransformer<I, O> implements Transformer<I, O>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -6404460890903469332L;
 
-    /** The tests to consider */
+    /**
+     * The tests to consider
+     */
     private final Predicate<? super I>[] iPredicates;
-    /** The matching transformers to call */
+    /**
+     * The matching transformers to call
+     */
     private final Transformer<? super I, ? extends O>[] iTransformers;
-    /** The default transformer to call if no tests match */
+    /**
+     * The default transformer to call if no tests match
+     */
     private final Transformer<? super I, ? extends O> iDefault;
 
     /**
      * Factory method that performs validation and copies the parameter arrays.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
-     * @param predicates  array of predicates, cloned, no nulls
-     * @param transformers  matching array of transformers, cloned, no nulls
-     * @param defaultTransformer  the transformer to use if no match, null means return null
+     * @param <I>                the input type
+     * @param <O>                the output type
+     * @param predicates         array of predicates, cloned, no nulls
+     * @param transformers       matching array of transformers, cloned, no nulls
+     * @param defaultTransformer the transformer to use if no match, null means return null
      * @return the <code>chained</code> transformer
      * @throws NullPointerException if array is null
      * @throws NullPointerException if any element in the array is null
      */
     @SuppressWarnings("unchecked")
     public static <I, O> Transformer<I, O> switchTransformer(final Predicate<? super I>[] predicates,
-            final Transformer<? super I, ? extends O>[] transformers,
-            final Transformer<? super I, ? extends O> defaultTransformer) {
+                                                             final Transformer<? super I, ? extends O>[] transformers,
+                                                             final Transformer<? super I, ? extends O> defaultTransformer) {
         FunctorUtils.validate(predicates);
         FunctorUtils.validate(transformers);
         if (predicates.length != transformers.length) {
@@ -63,7 +71,7 @@ public class SwitchTransformer<I, O> implements Transformer<I, O>, Serializable 
         }
         if (predicates.length == 0) {
             return (Transformer<I, O>) (defaultTransformer == null ? ConstantTransformer.<I, O>nullTransformer() :
-                                                                     defaultTransformer);
+                    defaultTransformer);
         }
         return new SwitchTransformer<>(predicates, transformers, defaultTransformer);
     }
@@ -79,13 +87,13 @@ public class SwitchTransformer<I, O> implements Transformer<I, O>, Serializable 
      * null key. The ordering is that of the iterator() method on the entryset
      * collection of the map.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
-     * @param map  a map of predicates to transformers
+     * @param <I> the input type
+     * @param <O> the output type
+     * @param map a map of predicates to transformers
      * @return the <code>switch</code> transformer
      * @throws NullPointerException if the map is null
      * @throws NullPointerException if any transformer in the map is null
-     * @throws ClassCastException  if the map elements are of the wrong type
+     * @throws ClassCastException   if the map elements are of the wrong type
      */
     @SuppressWarnings("unchecked")
     public static <I, O> Transformer<I, O> switchTransformer(
@@ -102,13 +110,13 @@ public class SwitchTransformer<I, O> implements Transformer<I, O>, Serializable 
         final int size = map.size();
         if (size == 0) {
             return (Transformer<I, O>) (defaultTransformer == null ? ConstantTransformer.<I, O>nullTransformer() :
-                                                                     defaultTransformer);
+                    defaultTransformer);
         }
         final Transformer<? super I, ? extends O>[] transformers = new Transformer[size];
         final Predicate<? super I>[] preds = new Predicate[size];
         int i = 0;
         for (final Map.Entry<? extends Predicate<? super I>,
-                             ? extends Transformer<? super I, ? extends O>> entry : map.entrySet()) {
+                ? extends Transformer<? super I, ? extends O>> entry : map.entrySet()) {
             preds[i] = entry.getKey();
             transformers[i] = entry.getValue();
             i++;
@@ -119,15 +127,15 @@ public class SwitchTransformer<I, O> implements Transformer<I, O>, Serializable 
     /**
      * Hidden constructor for the use by the static factory methods.
      *
-     * @param clone  if {@code true} the input arguments will be cloned
-     * @param predicates  array of predicates, no nulls
-     * @param transformers  matching array of transformers, no nulls
-     * @param defaultTransformer  the transformer to use if no match, null means return null
+     * @param clone              if {@code true} the input arguments will be cloned
+     * @param predicates         array of predicates, no nulls
+     * @param transformers       matching array of transformers, no nulls
+     * @param defaultTransformer the transformer to use if no match, null means return null
      */
     @SuppressWarnings("unchecked")
     private SwitchTransformer(final boolean clone, final Predicate<? super I>[] predicates,
-                             final Transformer<? super I, ? extends O>[] transformers,
-                             final Transformer<? super I, ? extends O> defaultTransformer) {
+                              final Transformer<? super I, ? extends O>[] transformers,
+                              final Transformer<? super I, ? extends O> defaultTransformer) {
         super();
         iPredicates = clone ? FunctorUtils.copy(predicates) : predicates;
         iTransformers = clone ? FunctorUtils.copy(transformers) : transformers;
@@ -139,13 +147,13 @@ public class SwitchTransformer<I, O> implements Transformer<I, O>, Serializable 
      * Constructor that performs no validation.
      * Use <code>switchTransformer</code> if you want that.
      *
-     * @param predicates  array of predicates, cloned, no nulls
-     * @param transformers  matching array of transformers, cloned, no nulls
-     * @param defaultTransformer  the transformer to use if no match, null means return null
+     * @param predicates         array of predicates, cloned, no nulls
+     * @param transformers       matching array of transformers, cloned, no nulls
+     * @param defaultTransformer the transformer to use if no match, null means return null
      */
     public SwitchTransformer(final Predicate<? super I>[] predicates,
-            final Transformer<? super I, ? extends O>[] transformers,
-            final Transformer<? super I, ? extends O> defaultTransformer) {
+                             final Transformer<? super I, ? extends O>[] transformers,
+                             final Transformer<? super I, ? extends O> defaultTransformer) {
         this(true, predicates, transformers, defaultTransformer);
     }
 
@@ -153,7 +161,7 @@ public class SwitchTransformer<I, O> implements Transformer<I, O>, Serializable 
      * Transforms the input to result by calling the transformer whose matching
      * predicate returns true.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result
      */
     @Override

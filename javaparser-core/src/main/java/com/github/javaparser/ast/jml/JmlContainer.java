@@ -15,6 +15,7 @@ import com.github.javaparser.ast.expr.SimpleName;
  */
 @Deprecated
 public interface JmlContainer<R extends Node, T extends Node> extends Jmlish {
+
     NodeList<T> getElements();
 
     R setElements(NodeList<T> elements);
@@ -28,13 +29,13 @@ public interface JmlContainer<R extends Node, T extends Node> extends Jmlish {
     R setSingleLine(boolean singleLine);
 
     default void setTagsFromStart(JavaToken token) {
-        if (token.getText().trim().length() <= 3) return;
+        if (token.getText().trim().length() <= 3)
+            return;
         String tags = token.getText().trim().substring(2);
         Range range = token.getRange().get();
         tags = tags.substring(0, tags.length() - 1);
         NodeList<SimpleName> name = new NodeList<>();
         int start = 2 + range.begin.column;
-
         String[] split = tags.split("(?=[+-])");
         for (String tag : split) {
             JavaToken t = new JavaToken(GeneratedJavaParserConstants.IDENTIFIER, tag);

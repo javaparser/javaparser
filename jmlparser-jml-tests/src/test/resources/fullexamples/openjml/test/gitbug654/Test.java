@@ -1,6 +1,7 @@
 //@ nullable_by_default
 class C<T> {
 }
+
 //@ nullable_by_default
 class B {
     //@ nullable
@@ -17,9 +18,10 @@ class B {
         return xyz;
     }
 }
+
 //@ nullable_by_default
 public final class Test {
-    
+
     //@ public normal_behavior
     //@   ensures true;
     //@ pure

@@ -22,14 +22,19 @@ import java.util.Arrays;
 
 /**
  * A simple implementation of {@link Clusterable} for points with double coordinates.
+ *
  * @since 3.2
  */
 public class DoublePoint implements Clusterable, Serializable {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 3946024775784901369L;
 
-    /** Point coordinates. */
+    /**
+     * Point coordinates.
+     */
     private final double[] point;
 
     /**
@@ -52,17 +57,21 @@ public class DoublePoint implements Clusterable, Serializable {
      */
     public DoublePoint(final int[] point) {
         this.point = new double[point.length];
-        for ( int i = 0; i < point.length; i++) {
+        for (int i = 0; i < point.length; i++) {
             this.point[i] = point[i];
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double[] getPoint() {
         return point;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object other) {
         if (!(other instanceof DoublePoint)) {
@@ -71,13 +80,17 @@ public class DoublePoint implements Clusterable, Serializable {
         return Arrays.equals(point, ((DoublePoint) other).point);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Arrays.hashCode(point);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return Arrays.toString(point);

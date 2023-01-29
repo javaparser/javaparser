@@ -9,5 +9,5 @@ public class Test {
         //@ assert j == 3;
 
         return i + j;
-    }   
+    }
 }

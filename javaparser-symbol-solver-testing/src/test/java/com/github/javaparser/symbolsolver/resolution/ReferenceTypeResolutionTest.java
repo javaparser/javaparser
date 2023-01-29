@@ -43,57 +43,57 @@ public class ReferenceTypeResolutionTest extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
     }
-    
-	@Test
-	void enumTest() {
-	    String code = "enum DAY { MONDAY }";
+
+    @Test
+    void enumTest() {
+        String code = "enum DAY { MONDAY }";
         ResolvedEnumConstantDeclaration rt = StaticJavaParser.parse(code).findFirst(EnumConstantDeclaration.class).get().resolve();
         assertTrue(rt.isEnumConstant());
-	}
-	
-	@Test
+    }
+
+    @Test
     void objectTest() {
         String code = "class A { Object o; }";
         ResolvedReferenceType rt = StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType().asReferenceType();
         assertTrue(rt.isJavaLangObject());
     }
-	
-	@Test
+
+    @Test
     void cannotUnboxReferenceTypeTest() {
         String code = "class A { Object o; }";
         ResolvedReferenceType rt = StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType().asReferenceType();
         assertFalse(rt.isUnboxable());
     }
-	
-	@Test
+
+    @Test
     void unboxableTypeTest() {
         String code = "class A { Integer o; }";
         ResolvedReferenceType rt = StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType().asReferenceType();
         assertTrue(rt.asReferenceType().isUnboxable());
     }
-	
-	@Test
+
+    @Test
     void cannotUnboxTypeToSpecifiedPrimitiveTypeTest() {
         String code = "class A { Object o; }";
         ResolvedReferenceType rt = StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType().asReferenceType();
         assertFalse(rt.isUnboxableTo(ResolvedPrimitiveType.INT));
     }
-	
-	@Test
+
+    @Test
     void unboxTypeToSpecifiedPrimitiveTypeTest() {
         String code = "class A { Integer o; }";
         ResolvedReferenceType rt = StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType().asReferenceType();
         assertTrue(rt.isUnboxableTo(ResolvedPrimitiveType.INT));
     }
-	
-	@Test
+
+    @Test
     void cannotUnboxTypeToPrimitiveTypeTest() {
         String code = "class A { Object o; }";
         ResolvedReferenceType rt = StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType().asReferenceType();
         assertFalse(rt.toUnboxedType().isPresent());
     }
-	
-	@Test
+
+    @Test
     void unboxTypeToPrimitiveTypeTest() {
         String code = "class A { Integer o; }";
         ResolvedReferenceType rt = StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType().asReferenceType();

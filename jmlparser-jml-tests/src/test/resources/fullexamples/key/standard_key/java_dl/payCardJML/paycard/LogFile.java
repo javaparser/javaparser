@@ -15,8 +15,8 @@
 package paycard;
 
 
-public class LogFile {    
-    
+public class LogFile {
+
     private /*@ spec_public @*/ static final int logFileSize = 3;
     private /*@ spec_public @*/ int currentRecord;
     private /*@ spec_public nullable@*/ LogRecord[] logArray = new LogRecord[logFileSize];
@@ -29,25 +29,25 @@ public class LogFile {
       @                  && currentRecord >= 0
       @                  && LogRecord.transactionCounter >= 0;
       @*/
-    
+
     //@ public accessible \inv: this.*, this.logArray[*], LogRecord.transactionCounter;
 
-    
+
     /*@ public normal_behavior
       @   requires LogRecord.transactionCounter >= 0;
       @   ensures (\forall int x; 0 <= x && x < logArray.length; \fresh(logArray[x]));
       @   ensures currentRecord == 0;
       @*/
     public /*@pure@*/ LogFile() {
-	int i = 0;
+        int i = 0;
 	/*@ loop_invariant 0 <= i && i <= logArray.length
 	  @    && (\forall int x; 0 <= x && x < i; logArray[x] != null && \fresh(logArray[x]));
 	  @ assignable logArray[*];
 	  @ decreases logArray.length - i;
 	  @*/
-	while(i < logArray.length) {
+        while (i < logArray.length) {
             logArray[i++] = new LogRecord();
-	}
+        }
         currentRecord = 0;
     }
 
@@ -65,10 +65,10 @@ public class LogFile {
       @    ensures LogRecord.transactionCounter >= 0;
       @*/
     public void addRecord(int balance) throws CardException {
-	currentRecord++;
-	if(currentRecord == logFileSize) {
-	    currentRecord = 0;
-	}
+        currentRecord++;
+        if (currentRecord == logFileSize) {
+            currentRecord = 0;
+        }
         logArray[currentRecord].setRecord(balance);
     }
 
@@ -78,8 +78,8 @@ public class LogFile {
       @                            logArray[i].balance <= \result.balance);
       @ */
     public /*@ pure @*/ LogRecord getMaximumRecord() {
-	LogRecord max = logArray[0];
-	int i = 1;    
+        LogRecord max = logArray[0];
+        int i = 1;
 	/*@ loop_invariant 0 <= i && i <= logArray.length 
           @                && max != null 
           @                && (\forall int j; 0 <= j && j < i; 
@@ -87,17 +87,16 @@ public class LogFile {
 	  @ assignable \nothing;
 	  @ decreases logArray.length - i; 
 	  @*/
-	while(i < logArray.length) {
-	    LogRecord lr = logArray[i++];
-	    if(lr.getBalance() > max.getBalance()) {
-		max = lr;
-	    }        
-	}
-	return max;
+        while (i < logArray.length) {
+            LogRecord lr = logArray[i++];
+            if (lr.getBalance() > max.getBalance()) {
+                max = lr;
+            }
+        }
+        return max;
     }
 
 
-    
     /*@ public normal_behavior
       @ requires a.length > 0;
       @ assignable a[*];
@@ -113,35 +112,35 @@ public class LogFile {
 	  @ assignable a[*];
 	  @ decreases l - pos; 
 	  @*/
-        while(pos < l) {
-	    int counter = pos;
-	    int idx = pos;
+        while (pos < l) {
+            int counter = pos;
+            int idx = pos;
 	    /*@ loop_invariant pos <= counter && counter <= a.length 
   	      @     && pos <= idx && idx < a.length && pos < a.length 
 	      @     && (\forall int x; x >= pos && x < counter; a[idx] >= a[x]);
 	      @ assignable \nothing;
 	      @ decreases l - counter; 
 	      @*/
-	    while(counter < l) {
-	        if(a[counter] > a[idx]) {
-		    idx = counter;
-	        }
-	        counter = counter + 1;
-	    }
-  	    int tmp = a[idx];
-	    a[idx] = a[pos];
-	    a[pos] = tmp;
-	    pos = pos + 1;
+            while (counter < l) {
+                if (a[counter] > a[idx]) {
+                    idx = counter;
+                }
+                counter = counter + 1;
+            }
+            int tmp = a[idx];
+            a[idx] = a[pos];
+            a[pos] = tmp;
+            pos = pos + 1;
         }
     }
 
-    
+
     public static void main(String args[]) {
-	LogFile f = new LogFile();
-	int[] a = new int[]{3, 1, 7, 5, 4, 0, 6, 4};
-	f.demo(a);	
-	for(int i = 0; i < a.length; i++) {
-	    System.out.print(a[i] + ",");
-	}
+        LogFile f = new LogFile();
+        int[] a = new int[]{3, 1, 7, 5, 4, 0, 6, 4};
+        f.demo(a);
+        for (int i = 0; i < a.length; i++) {
+            System.out.print(a[i] + ",");
+        }
     }
 }

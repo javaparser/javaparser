@@ -36,7 +36,9 @@ import java.util.Set;
  */
 public class TransformedSet<E> extends TransformedCollection<E> implements Set<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 306127383500410386L;
 
     /**
@@ -46,15 +48,15 @@ public class TransformedSet<E> extends TransformedCollection<E> implements Set<E
      * are NOT transformed.
      * Contrast this with {@link #transformedSet(Set, Transformer)}.
      *
-     * @param <E> the element type
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the element type
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed set
      * @throws NullPointerException if set or transformer is null
      * @since 4.0
      */
     public static <E> TransformedSet<E> transformingSet(final Set<E> set,
-            final Transformer<? super E, ? extends E> transformer) {
+                                                        final Transformer<? super E, ? extends E> transformer) {
         return new TransformedSet<>(set, transformer);
     }
 
@@ -66,9 +68,9 @@ public class TransformedSet<E> extends TransformedCollection<E> implements Set<E
      * will be transformed by this method.
      * Contrast this with {@link #transformingSet(Set, Transformer)}.
      *
-     * @param <E> the element type
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the element type
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed set
      * @throws NullPointerException if set or transformer is null
      * @since 4.0
@@ -87,14 +89,15 @@ public class TransformedSet<E> extends TransformedCollection<E> implements Set<E
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the set being decorated, they
      * are NOT transformed.
      *
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @throws NullPointerException if set or transformer is null
      */
     protected TransformedSet(final Set<E> set, final Transformer<? super E, ? extends E> transformer) {

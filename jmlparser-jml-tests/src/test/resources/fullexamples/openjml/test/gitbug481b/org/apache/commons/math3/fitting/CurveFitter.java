@@ -41,16 +41,19 @@ import java.util.List;
  * really a least squares problem.
  *
  * @param <T> Function to use for the fit.
- *
  * @since 2.0
  * @deprecated As of 3.3. Please use {@link AbstractCurveFitter} and
  * {@link WeightedObservedPoints} instead.
  */
 @Deprecated
 public class CurveFitter<T extends ParametricUnivariateFunction> {
-    /** Optimizer to use for the fitting. */
+    /**
+     * Optimizer to use for the fitting.
+     */
     private final MultivariateVectorOptimizer optimizer;
-    /** Observed points. */
+    /**
+     * Observed points.
+     */
     private final List<WeightedObservedPoint> observations;
 
     /**
@@ -64,12 +67,14 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
         observations = new ArrayList<WeightedObservedPoint>();
     }
 
-    /** Add an observed (x,y) point to the sample with unit weight.
+    /**
+     * Add an observed (x,y) point to the sample with unit weight.
      * <p>Calling this method is equivalent to call
      * {@code addObservedPoint(1.0, x, y)}.</p>
+     *
      * @param x abscissa of the point
      * @param y observed value of the point at x, after fitting we should
-     * have f(x) as close as possible to this value
+     *          have f(x) as close as possible to this value
      * @see #addObservedPoint(double, double, double)
      * @see #addObservedPoint(WeightedObservedPoint)
      * @see #getObservations()
@@ -78,11 +83,13 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
         addObservedPoint(1.0, x, y);
     }
 
-    /** Add an observed weighted (x,y) point to the sample.
+    /**
+     * Add an observed weighted (x,y) point to the sample.
+     *
      * @param weight weight of the observed point in the fit
-     * @param x abscissa of the point
-     * @param y observed value of the point at x, after fitting we should
-     * have f(x) as close as possible to this value
+     * @param x      abscissa of the point
+     * @param y      observed value of the point at x, after fitting we should
+     *               have f(x) as close as possible to this value
      * @see #addObservedPoint(double, double)
      * @see #addObservedPoint(WeightedObservedPoint)
      * @see #getObservations()
@@ -91,7 +98,9 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
         observations.add(new WeightedObservedPoint(weight, x, y));
     }
 
-    /** Add an observed weighted (x,y) point to the sample.
+    /**
+     * Add an observed weighted (x,y) point to the sample.
+     *
      * @param observed observed point to add
      * @see #addObservedPoint(double, double)
      * @see #addObservedPoint(double, double, double)
@@ -101,7 +110,9 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
         observations.add(observed);
     }
 
-    /** Get the observed points.
+    /**
+     * Get the observed points.
+     *
      * @return observed points
      * @see #addObservedPoint(double, double)
      * @see #addObservedPoint(double, double, double)
@@ -125,11 +136,10 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
      * to the {@link #addObservedPoint(WeightedObservedPoint)
      * addObservedPoint} method.
      *
-     * @param f parametric function to fit.
+     * @param f            parametric function to fit.
      * @param initialGuess first guess of the function parameters.
      * @return the fitted parameters.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the start point dimension is wrong.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException if the start point dimension is wrong.
      */
     public double[] fit(T f, final double[] initialGuess) {
         return fit(Integer.MAX_VALUE, f, initialGuess);
@@ -142,24 +152,22 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
      * to the {@link #addObservedPoint(WeightedObservedPoint)
      * addObservedPoint} method.
      *
-     * @param f parametric function to fit.
+     * @param f            parametric function to fit.
      * @param initialGuess first guess of the function parameters.
-     * @param maxEval Maximum number of function evaluations.
+     * @param maxEval      Maximum number of function evaluations.
      * @return the fitted parameters.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the number of allowed evaluations is exceeded.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the start point dimension is wrong.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the number of allowed evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException  if the start point dimension is wrong.
      * @since 3.0
      */
     public double[] fit(int maxEval, T f,
                         final double[] initialGuess) {
         // Prepare least squares problem.
-        double[] target  = new double[observations.size()];
+        double[] target = new double[observations.size()];
         double[] weights = new double[observations.size()];
         int i = 0;
         for (WeightedObservedPoint point : observations) {
-            target[i]  = point.getY();
+            target[i] = point.getY();
             weights[i] = point.getWeight();
             ++i;
         }
@@ -169,19 +177,23 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
 
         // Perform the fit.
         final PointVectorValuePair optimum
-            = optimizer.optimize(new MaxEval(maxEval),
-                                 model.getModelFunction(),
-                                 model.getModelFunctionJacobian(),
-                                 new Target(target),
-                                 new Weight(weights),
-                                 new InitialGuess(initialGuess));
+                = optimizer.optimize(new MaxEval(maxEval),
+                model.getModelFunction(),
+                model.getModelFunctionJacobian(),
+                new Target(target),
+                new Weight(weights),
+                new InitialGuess(initialGuess));
         // Extract the coefficients.
         return optimum.getPointRef();
     }
 
-    /** Vectorial function computing function theoretical values. */
+    /**
+     * Vectorial function computing function theoretical values.
+     */
     private class TheoreticalValuesFunction {
-        /** Function to fit. */
+        /**
+         * Function to fit.
+         */
         private final ParametricUnivariateFunction f;
 
         /**
@@ -196,18 +208,18 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
          */
         public ModelFunction getModelFunction() {
             return new ModelFunction(new MultivariateVectorFunction() {
-                    /** {@inheritDoc} */
-                    public double[] value(double[] point) {
-                        // compute the residuals
-                        final double[] values = new double[observations.size()];
-                        int i = 0;
-                        for (WeightedObservedPoint observed : observations) {
-                            values[i++] = f.value(observed.getX(), point);
-                        }
-
-                        return values;
+                /** {@inheritDoc} */
+                public double[] value(double[] point) {
+                    // compute the residuals
+                    final double[] values = new double[observations.size()];
+                    int i = 0;
+                    for (WeightedObservedPoint observed : observations) {
+                        values[i++] = f.value(observed.getX(), point);
                     }
-                });
+
+                    return values;
+                }
+            });
         }
 
         /**
@@ -215,16 +227,16 @@ public class CurveFitter<T extends ParametricUnivariateFunction> {
          */
         public ModelFunctionJacobian getModelFunctionJacobian() {
             return new ModelFunctionJacobian(new MultivariateMatrixFunction() {
-                    /** {@inheritDoc} */
-                    public double[][] value(double[] point) {
-                        final double[][] jacobian = new double[observations.size()][];
-                        int i = 0;
-                        for (WeightedObservedPoint observed : observations) {
-                            jacobian[i++] = f.gradient(observed.getX(), point);
-                        }
-                        return jacobian;
+                /** {@inheritDoc} */
+                public double[][] value(double[] point) {
+                    final double[][] jacobian = new double[observations.size()][];
+                    int i = 0;
+                    for (WeightedObservedPoint observed : observations) {
+                        jacobian[i++] = f.gradient(observed.getX(), point);
                     }
-                });
+                    return jacobian;
+                }
+            });
         }
     }
 }

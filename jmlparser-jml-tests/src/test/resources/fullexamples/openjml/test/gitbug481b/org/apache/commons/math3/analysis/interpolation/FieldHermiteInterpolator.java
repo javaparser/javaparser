@@ -25,7 +25,8 @@ import org.apache.commons.math3.util.MathUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Polynomial interpolator using both sample values and sample derivatives.
+/**
+ * Polynomial interpolator using both sample values and sample derivatives.
  * <p>
  * The interpolation polynomials match all sample points, including both values
  * and provided derivatives. There is one polynomial for each component of
@@ -40,29 +41,36 @@ import java.util.List;
  * </p>
  *
  * @param <T> Type of the field elements.
- *
  * @since 3.2
  */
 public class FieldHermiteInterpolator<T extends FieldElement<T>> {
 
-    /** Sample abscissae. */
+    /**
+     * Sample abscissae.
+     */
     private final List<T> abscissae;
 
-    /** Top diagonal of the divided differences array. */
+    /**
+     * Top diagonal of the divided differences array.
+     */
     private final List<T[]> topDiagonal;
 
-    /** Bottom diagonal of the divided differences array. */
+    /**
+     * Bottom diagonal of the divided differences array.
+     */
     private final List<T[]> bottomDiagonal;
 
-    /** Create an empty interpolator.
+    /**
+     * Create an empty interpolator.
      */
     public FieldHermiteInterpolator() {
-        this.abscissae      = new ArrayList<T>();
-        this.topDiagonal    = new ArrayList<T[]>();
+        this.abscissae = new ArrayList<T>();
+        this.topDiagonal = new ArrayList<T[]>();
         this.bottomDiagonal = new ArrayList<T[]>();
     }
 
-    /** Add a sample point.
+    /**
+     * Add a sample point.
      * <p>
      * This method must be called once for each sample point. It is allowed to
      * mix some calls with values only with calls with values and first
@@ -71,21 +79,22 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
      * <p>
      * The point abscissae for all calls <em>must</em> be different.
      * </p>
-     * @param x abscissa of the sample point
+     *
+     * @param x     abscissa of the sample point
      * @param value value and derivatives of the sample point
-     * (if only one row is passed, it is the value, if two rows are
-     * passed the first one is the value and the second the derivative
-     * and so on)
-     * @exception ZeroException if the abscissa difference between added point
-     * and a previous point is zero (i.e. the two points are at same abscissa)
-     * @exception MathArithmeticException if the number of derivatives is larger
-     * than 20, which prevents computation of a factorial
+     *              (if only one row is passed, it is the value, if two rows are
+     *              passed the first one is the value and the second the derivative
+     *              and so on)
+     * @throws ZeroException              if the abscissa difference between added point
+     *                                    and a previous point is zero (i.e. the two points are at same abscissa)
+     * @throws MathArithmeticException    if the number of derivatives is larger
+     *                                    than 20, which prevents computation of a factorial
      * @throws DimensionMismatchException if derivative structures are inconsistent
-     * @throws NullArgumentException if x is null
+     * @throws NullArgumentException      if x is null
      */
-    public void addSamplePoint(final T x, final T[] ... value)
-        throws ZeroException, MathArithmeticException,
-               DimensionMismatchException, NullArgumentException {
+    public void addSamplePoint(final T x, final T[]... value)
+            throws ZeroException, MathArithmeticException,
+            DimensionMismatchException, NullArgumentException {
 
         MathUtils.checkNotNull(x);
         T factorial = x.getField().getOne();
@@ -126,10 +135,12 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
 
     }
 
-    /** Interpolate value at a specified abscissa.
+    /**
+     * Interpolate value at a specified abscissa.
+     *
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @throws NoDataException       if sample is empty
      * @throws NullArgumentException if x is null
      */
     public T[] value(T x) throws NoDataException, NullArgumentException {
@@ -155,12 +166,14 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
 
     }
 
-    /** Interpolate value and first derivatives at a specified abscissa.
-     * @param x interpolation abscissa
+    /**
+     * Interpolate value and first derivatives at a specified abscissa.
+     *
+     * @param x     interpolation abscissa
      * @param order maximum derivation order
      * @return interpolated value and derivatives (value in row 0,
      * 1<sup>st</sup> derivative in row 1, ... n<sup>th</sup> derivative in row n)
-     * @exception NoDataException if sample is empty
+     * @throws NoDataException       if sample is empty
      * @throws NullArgumentException if x is null
      */
     public T[][] derivatives(T x, int order) throws NoDataException, NullArgumentException {
@@ -172,7 +185,7 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
         }
 
         final T zero = x.getField().getZero();
-        final T one  = x.getField().getOne();
+        final T one = x.getField().getOne();
         final T[] tj = MathArrays.buildArray(x.getField(), order + 1);
         tj[0] = zero;
         for (int i = 0; i < order; ++i) {

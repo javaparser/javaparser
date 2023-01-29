@@ -26,19 +26,24 @@ import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D;
  * Computes the hit histogram.
  * Each bin will contain the number of data for which the corresponding
  * neuron is the best matching unit.
+ *
  * @since 3.6
  */
 public class HitHistogram implements MapDataVisualization {
-    /** Distance. */
+    /**
+     * Distance.
+     */
     private final DistanceMeasure distance;
-    /** Whether to compute relative bin counts. */
+    /**
+     * Whether to compute relative bin counts.
+     */
     private final boolean normalizeCount;
 
     /**
      * @param normalizeCount Whether to compute relative bin counts.
-     * If {@code true}, the data count in each bin will be divided by the total
-     * number of samples.
-     * @param distance Distance.
+     *                       If {@code true}, the data count in each bin will be divided by the total
+     *                       number of samples.
+     * @param distance       Distance.
      */
     public HitHistogram(boolean normalizeCount,
                         DistanceMeasure distance) {
@@ -46,7 +51,9 @@ public class HitHistogram implements MapDataVisualization {
         this.distance = distance;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double[][] computeImage(NeuronSquareMesh2D map,
                                    Iterable<double[]> data) {
         final int nR = map.getNumberOfRows();

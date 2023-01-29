@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
 public class Issue2374Test extends AbstractLexicalPreservingTest {
@@ -44,13 +43,13 @@ public class Issue2374Test extends AbstractLexicalPreservingTest {
                         "}"
         );
         String expected =
-        		"public class Bar {\n"
-        		+ "    public void foo() {\n"
-        		+ "        System.out.print(\"Hello\");\n"
-        		+ "        //Example comment\n"
-        		+ "        System.out.println(\"World!\");\n"
-        		+ "    }\n"
-        		+ "}";
+                "public class Bar {\n"
+                        + "    public void foo() {\n"
+                        + "        System.out.print(\"Hello\");\n"
+                        + "        //Example comment\n"
+                        + "        System.out.println(\"World!\");\n"
+                        + "    }\n"
+                        + "}";
         // contruct a statement with a comment
         Statement stmt = StaticJavaParser.parseStatement("System.out.println(\"World!\");");
         stmt.setLineComment(lineComment);

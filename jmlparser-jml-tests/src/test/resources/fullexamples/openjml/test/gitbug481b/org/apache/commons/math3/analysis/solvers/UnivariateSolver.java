@@ -22,7 +22,7 @@ import org.apache.commons.math3.analysis.UnivariateFunction;
 /**
  * Interface for (univariate real) root-finding algorithms.
  * Implementations will search for only one zero in the given interval.
- *
  */
 public interface UnivariateSolver
-    extends BaseUnivariateSolver<UnivariateFunction> {}
+        extends BaseUnivariateSolver<UnivariateFunction> {
+}

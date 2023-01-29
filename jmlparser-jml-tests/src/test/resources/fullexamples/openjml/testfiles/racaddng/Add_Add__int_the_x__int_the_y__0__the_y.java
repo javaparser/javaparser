@@ -10,21 +10,21 @@ import org.jmlspecs.jmlunitng.iterator.RepeatedAccessIterator;
 
 /**
  * Test data strategy for Add. Provides
- * test values for parameter "int the_y" 
- * of method "Add(int, int)". 
- * 
+ * test values for parameter "int the_y"
+ * of method "Add(int, int)".
+ *
  * @author JMLUnitNG 1.4b1 (104)
  * @version 2013-10-08 22:59 -0700
  */
 public class Add_Add__int_the_x__int_the_y__0__the_y
-  extends Add_ClassStrategy_int {
-  /**
-   * @return local-scope values for parameter 
-   *  "int the_y".
-   */
-  public RepeatedAccessIterator<?> localValues() {
-  	return new ObjectArrayIterator<Object>
-  	(new Object[]
-  	 { /* add local-scope int values or generators here */ });
-  }
+        extends Add_ClassStrategy_int {
+    /**
+     * @return local-scope values for parameter
+     * "int the_y".
+     */
+    public RepeatedAccessIterator<?> localValues() {
+        return new ObjectArrayIterator<Object>
+                (new Object[]
+                        { /* add local-scope int values or generators here */});
+    }
 }

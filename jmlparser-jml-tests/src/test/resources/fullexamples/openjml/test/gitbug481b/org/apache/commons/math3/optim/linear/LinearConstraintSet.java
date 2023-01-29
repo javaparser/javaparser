@@ -29,7 +29,9 @@ import java.util.Set;
  * @since 3.1
  */
 public class LinearConstraintSet implements OptimizationData {
-    /** Set of constraints. */
+    /**
+     * Set of constraints.
+     */
     private final Set<LinearConstraint> linearConstraints = new LinkedHashSet<LinearConstraint>();
 
     /**

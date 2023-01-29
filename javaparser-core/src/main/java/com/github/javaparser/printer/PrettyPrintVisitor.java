@@ -369,7 +369,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(final JavadocComment n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         if (configuration.isPrintComments() && configuration.isPrintJavadoc()) {
-            printer.println("/**");
+            printer.println(n.getHeader());
             final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
             String[] lines = commentContent.split("\\R");
             List<String> strippedLines = new ArrayList<>();
@@ -402,7 +402,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                     printer.println(line);
                 }
             }
-            printer.println(" */");
+            printer.println(" " + n.getFooter());
         }
     }
 
@@ -744,122 +744,96 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         n.getName().accept(this, arg);
     }
 
-
     @Override
     public void visit(JmlQuantifiedExpr jmlQuantifiedExpr, Void arg) {
-
     }
 
     @Override
     public void visit(JmlAccessibleClause n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlClauseLabel n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlExpressionStmt n, Void arg) {
-
     }
-
 
     @Override
     public void visit(JmlLabelExpr n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlLetExpr n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlMultiCompareExpr n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlSimpleExprClause n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlSignalsClause n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlSignalsOnlyClause n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlUnreachableStmt n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlCallableClause n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlCapturesClause n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlForallClause n, Void arg) {
-
     }
-
 
     @Override
     public void visit(JmlRefiningStmt n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlClauseIf n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlClassExprDeclaration n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlClassAccessibleDeclaration n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlRepresentsDeclaration n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlContract n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlBodyDeclaration n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlSetComprehension n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlGhostStmt n, Void arg) {
-
     }
 
     @Override
@@ -883,7 +857,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlImportDeclaration n, Void arg) {
-
     }
 
     @Override
@@ -893,17 +866,14 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlDocType n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlFieldDeclaration n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlOldClause n, Void arg) {
-
     }
 
     @Override
@@ -913,22 +883,18 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(JmlMultiExprClause n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlBeginStmt n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlEndStmt n, Void arg) {
-
     }
 
     @Override
     public void visit(JmlLabelStmt n, Void arg) {
-
     }
 
     @Override
@@ -1496,9 +1462,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.println(" {");
         printer.indent();
         if (n.getEntries().isNonEmpty()) {
-            final boolean alignVertically = // Either we hit the constant amount limit in the configurations, or...
-                    n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() || // any of the constants has a comment.
-                            n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
+            final // Either we hit the constant amount limit in the configurations, or...
+            boolean // Either we hit the constant amount limit in the configurations, or...
+                    alignVertically = // any of the constants has a comment.
+                    n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() || n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();
@@ -1814,7 +1781,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (configuration.isIgnoreComments()) {
             return;
         }
-        printer.print("//").println(normalizeEolInTextBlock(RTRIM.matcher(n.getContent()).replaceAll(""), ""));
+        printer.print(n.getHeader()).println(normalizeEolInTextBlock(RTRIM.matcher(n.getContent()).replaceAll(""), ""));
     }
 
     @Override
@@ -1825,7 +1792,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         final String commentContent = normalizeEolInTextBlock(n.getContent(), configuration.getEndOfLineCharacter());
         // as BlockComment should not be formatted, -1 to preserve any trailing empty line if present
         String[] lines = commentContent.split("\\R", -1);
-        printer.print("/*");
+        printer.print(n.getHeader());
         for (int i = 0; i < (lines.length - 1); i++) {
             printer.print(lines[i]);
             // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
@@ -1833,7 +1800,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         }
         // last line is not followed by a newline, and simply terminated with `*/`
         printer.print(lines[lines.length - 1]);
-        printer.println("*/");
+        printer.println(n.getFooter());
     }
 
     @Override

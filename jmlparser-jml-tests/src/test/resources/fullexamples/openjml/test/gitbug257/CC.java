@@ -1,3 +1,3 @@
 class CC {
-private java.util.Hashtable m;
+    private java.util.Hashtable m;
 }

@@ -46,17 +46,17 @@ class Issue2362Test extends AbstractSymbolResolutionTest {
         Path dir = adaptPath("src/test/resources/issue2362");
         Path file = adaptPath("src/test/resources/issue2362/Test.java");
 
-        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());	    
+        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
 
         ParserConfiguration pc = new ParserConfiguration()
-            	                        .setSymbolResolver(new JavaSymbolSolver(combinedSolver))
-            	                        .setLanguageLevel(LanguageLevel.JAVA_8);
+                .setSymbolResolver(new JavaSymbolSolver(combinedSolver))
+                .setLanguageLevel(LanguageLevel.JAVA_8);
 
         JavaParser javaParser = new JavaParser(pc);
 
         CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
                 new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
-        
+
         ObjectCreationExpr oce = unit.findFirst(ObjectCreationExpr.class).get();
         assertEquals(oce.resolve().getSignature(), "InnerClass(int)");
     }

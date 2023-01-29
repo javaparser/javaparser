@@ -18,61 +18,61 @@ import java.util.List;
  * Test data strategy for Add. Provides
  * instances of Add for testing, using
  * parameters from constructor tests.
- * 
+ *
  * @author JMLUnitNG 1.4b1 (104)
  * @version 2013-10-08 22:59 -0700
  */
 public class Add_InstanceStrategy extends ObjectStrategy {
-  /**
-   * @return local-scope instances of Add.
-   */
-  public RepeatedAccessIterator<?> localValues() {
-    return new ObjectArrayIterator<Object>
-    (new Object[]
-     { /* add Add values or generators here */ });
-  }
+    /**
+     * @return local-scope instances of Add.
+     */
+    public RepeatedAccessIterator<?> localValues() {
+        return new ObjectArrayIterator<Object>
+                (new Object[]
+                        { /* add Add values or generators here */});
+    }
 
-  /**
-   * @return default instances of Add, generated
-   *  using constructor test parameters.
-   */ 
-  public RepeatedAccessIterator<Add> defaultValues() {
-    final List<RepeatedAccessIterator<Add>> iters = 
-      new LinkedList<RepeatedAccessIterator<Add>>();
+    /**
+     * @return default instances of Add, generated
+     * using constructor test parameters.
+     */
+    public RepeatedAccessIterator<Add> defaultValues() {
+        final List<RepeatedAccessIterator<Add>> iters =
+                new LinkedList<RepeatedAccessIterator<Add>>();
 
-    // an instantiation iterator for the default constructor
-    // (if there isn't one, it will fail silently)
-    iters.add(new InstantiationIterator<Add>
-      (Add.class, 
-       new Class<?>[0], 
-       new ObjectArrayIterator<Object[]>(new Object[][]{{}})));
+        // an instantiation iterator for the default constructor
+        // (if there isn't one, it will fail silently)
+        iters.add(new InstantiationIterator<Add>
+                (Add.class,
+                        new Class<?>[0],
+                        new ObjectArrayIterator<Object[]>(new Object[][]{{}})));
 
-    // parameters for method Add(int, int)
-    iters.add(new InstantiationIterator<Add>
-      (Add.class, 
-       new Class<?>[]
-       {int.class, 
-        int.class},
-       Add_JML_Test.p_Add__int_the_x__int_the_y__0().wrapped()));
+        // parameters for method Add(int, int)
+        iters.add(new InstantiationIterator<Add>
+                (Add.class,
+                        new Class<?>[]
+                                {int.class,
+                                        int.class},
+                        Add_JML_Test.p_Add__int_the_x__int_the_y__0().wrapped()));
 
-    return new NonNullMultiIterator<Add>(iters);
-  }
+        return new NonNullMultiIterator<Add>(iters);
+    }
 
-  /**
-   * Constructor. The boolean parameter to <code>setReflective</code>
-   * determines whether or not reflection will be used to generate
-   * test objects, and the int parameter to <code>setMaxRecursionDepth</code>
-   * determines how many levels reflective generation of self-referential classes
-   * will recurse.
-   *
-   * @see ObjectStrategy#setReflective(boolean)
-   * @see ObjectStrategy#setMaxRecursionDepth(int)
-   */
-  public Add_InstanceStrategy() {
-    super(Add.class);
-    setReflective(false);
-    // uncomment to control the maximum reflective instantiation
-    // recursion depth, 0 by default
-    // setMaxRecursionDepth(0);
-  }
+    /**
+     * Constructor. The boolean parameter to <code>setReflective</code>
+     * determines whether or not reflection will be used to generate
+     * test objects, and the int parameter to <code>setMaxRecursionDepth</code>
+     * determines how many levels reflective generation of self-referential classes
+     * will recurse.
+     *
+     * @see ObjectStrategy#setReflective(boolean)
+     * @see ObjectStrategy#setMaxRecursionDepth(int)
+     */
+    public Add_InstanceStrategy() {
+        super(Add.class);
+        setReflective(false);
+        // uncomment to control the maximum reflective instantiation
+        // recursion depth, 0 by default
+        // setMaxRecursionDepth(0);
+    }
 }

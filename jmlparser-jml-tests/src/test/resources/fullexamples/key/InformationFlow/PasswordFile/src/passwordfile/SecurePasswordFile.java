@@ -63,7 +63,7 @@ class SecurePasswordFile {
           @*/
         for (int i = 0; i < names.length; i++) {
             if (names[i] == user &&
-                passwords[i] == password) {
+                    passwords[i] == password) {
                 return true;
             }
         }

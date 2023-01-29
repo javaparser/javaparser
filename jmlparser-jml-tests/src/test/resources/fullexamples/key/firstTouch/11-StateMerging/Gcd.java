@@ -23,8 +23,7 @@ public class Gcd {
         if (a > b) {
             big = a;
             small = b;
-        }
-        else {
+        } else {
             big = b;
             small = a;
         }

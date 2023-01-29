@@ -42,6 +42,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * A usage of the keyword "assert"
  * <br>In {@code assert dead : "Wasn't expecting to be dead here";} the check is "dead" and the message is the string.
+ *
  * @author Julio Vilmar Gesser
  */
 public class AssertStmt extends Statement {

@@ -30,8 +30,11 @@ import org.apache.commons.math3.random.RandomGenerator;
  * @since 3.3
  */
 public class FeatureInitializerFactory {
-    /** Class contains only static methods. */
-    private FeatureInitializerFactory() {}
+    /**
+     * Class contains only static methods.
+     */
+    private FeatureInitializerFactory() {
+    }
 
     /**
      * Uniform sampling of the given range.
@@ -39,17 +42,16 @@ public class FeatureInitializerFactory {
      * @param min Lower bound of the range.
      * @param max Upper bound of the range.
      * @param rng Random number generator used to draw samples from a
-     * uniform distribution.
+     *            uniform distribution.
      * @return an initializer such that the features will be initialized with
      * values within the given range.
-     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException
-     * if {@code min >= max}.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException if {@code min >= max}.
      */
     public static FeatureInitializer uniform(final RandomGenerator rng,
                                              final double min,
                                              final double max) {
         return randomize(new UniformRealDistribution(rng, min, max),
-                         function(new Constant(0), 0, 0));
+                function(new Constant(0), 0, 0));
     }
 
     /**
@@ -59,13 +61,12 @@ public class FeatureInitializerFactory {
      * @param max Upper bound of the range.
      * @return an initializer such that the features will be initialized with
      * values within the given range.
-     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException
-     * if {@code min >= max}.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException if {@code min >= max}.
      */
     public static FeatureInitializer uniform(final double min,
                                              final double max) {
         return randomize(new UniformRealDistribution(min, max),
-                         function(new Constant(0), 0, 0));
+                function(new Constant(0), 0, 0));
     }
 
     /**
@@ -73,9 +74,9 @@ public class FeatureInitializerFactory {
      * The argument {@code x} is set to {@code init} at the first call
      * and will be incremented at each call.
      *
-     * @param f Function.
+     * @param f    Function.
      * @param init Initial value.
-     * @param inc Increment
+     * @param inc  Increment
      * @return the initializer.
      */
     public static FeatureInitializer function(final UnivariateFunction f,
@@ -98,7 +99,7 @@ public class FeatureInitializerFactory {
      * Adds some amount of random data to the given initializer.
      *
      * @param random Random variable distribution.
-     * @param orig Original initializer.
+     * @param orig   Original initializer.
      * @return an initializer whose {@link FeatureInitializer#value() value}
      * method will return {@code orig.value() + random.sample()}.
      */

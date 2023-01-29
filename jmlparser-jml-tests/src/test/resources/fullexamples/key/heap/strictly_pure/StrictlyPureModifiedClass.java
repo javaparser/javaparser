@@ -3,7 +3,7 @@
 
 /* @ TODO weigl discuss strictly_pure*/ class StrictlyPureClass {
 
-   //@ ensures true;
-   void thisMethodIsStrictlyPureByDefault();
+    //@ ensures true;
+    void thisMethodIsStrictlyPureByDefault();
 
 }

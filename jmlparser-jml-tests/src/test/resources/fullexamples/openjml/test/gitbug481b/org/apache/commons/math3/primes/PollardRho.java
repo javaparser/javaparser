@@ -23,6 +23,7 @@ import java.util.List;
 
 /**
  * Implementation of the Pollard's rho factorization algorithm.
+ *
  * @since 3.2
  */
 class PollardRho {
@@ -35,6 +36,7 @@ class PollardRho {
 
     /**
      * Factorization using Pollard's rho algorithm.
+     *
      * @param n number to factors, must be &gt; 0
      * @return the list of prime factors of n.
      */
@@ -127,9 +129,9 @@ class PollardRho {
      *
      * @param a first number, must be &ge; 0
      * @param b second number, must be &ge; 0
-     * @return gcd(a,b)
+     * @return gcd(a, b)
      */
-    static int gcdPositive(int a, int b){
+    static int gcdPositive(int a, int b) {
         // both a and b must be positive, it is not checked here
         // gdc(a,0) = a
         if (a == 0) {

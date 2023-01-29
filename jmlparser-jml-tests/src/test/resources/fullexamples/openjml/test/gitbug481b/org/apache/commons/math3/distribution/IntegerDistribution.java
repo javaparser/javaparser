@@ -21,7 +21,6 @@ import org.apache.commons.math3.exception.OutOfRangeException;
 
 /**
  * Interface for distributions on the integers.
- *
  */
 public interface IntegerDistribution {
     /**
@@ -147,8 +146,7 @@ public interface IntegerDistribution {
      *
      * @param sampleSize the number of random values to generate
      * @return an array representing the random sample
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code sampleSize} is not positive
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code sampleSize} is not positive
      * @since 3.0
      */
     int[] sample(int sampleSize);

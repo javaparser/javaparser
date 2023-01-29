@@ -31,23 +31,25 @@ import java.util.Arrays;
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.Alphanumeric.class)
 @org.junit.jupiter.api.parallel.Execution(org.junit.jupiter.api.parallel.ExecutionMode.CONCURRENT)
 public class AllTests {
-    
+
     public static TestSuite suite() {
         try {
             File dir = new File("src/org/jmlspecs/openjmltest/testcases");
             File[] dirs = dir.listFiles();
             Arrays.sort(dirs);
             TestSuite suite = new TestSuite();
-            for (File f: dirs) {
+            for (File f : dirs) {
                 String nm = f.getName();
                 if (!nm.endsWith(".java")) continue;
-                nm = "org.jmlspecs.openjmltest.testcases." + nm.substring(0, nm.length()-5);
+                nm = "org.jmlspecs.openjmltest.testcases." + nm.substring(0, nm.length() - 5);
                 try {
                     suite.addTest(new junit.framework.JUnit4TestAdapter(Class.forName(nm)));
-                } catch (ClassNotFoundException e) {}
+                } catch (ClassNotFoundException e) {
+                }
             }
             return suite;
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return null;
     }
 

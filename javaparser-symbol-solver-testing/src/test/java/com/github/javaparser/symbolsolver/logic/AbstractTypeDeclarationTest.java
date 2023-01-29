@@ -37,7 +37,6 @@ public abstract class AbstractTypeDeclarationTest extends AbstractSymbolResoluti
      * Should say if an {@link AbstractTypeDeclaration} is functional interface.
      *
      * @param typeDeclaration The type declaration to check.
-     *
      * @return {@code True}
      */
     public abstract boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration);

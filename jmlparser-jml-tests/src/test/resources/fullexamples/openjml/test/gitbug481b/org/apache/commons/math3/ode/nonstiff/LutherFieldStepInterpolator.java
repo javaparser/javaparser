@@ -30,65 +30,95 @@ import org.apache.commons.math3.ode.FieldODEStateAndDerivative;
  * step computed. The interpolation equation is consistent with the
  * integration scheme.</p>
  *
- * @see LutherFieldIntegrator
  * @param <T> the type of the field elements
+ * @see LutherFieldIntegrator
  * @since 3.6
  */
 
 class LutherFieldStepInterpolator<T extends RealFieldElement<T>>
-    extends RungeKuttaFieldStepInterpolator<T> {
+        extends RungeKuttaFieldStepInterpolator<T> {
 
-    /** -49 - 49 q. */
+    /**
+     * -49 - 49 q.
+     */
     private final T c5a;
 
-    /** 392 + 287 q. */
+    /**
+     * 392 + 287 q.
+     */
     private final T c5b;
 
-    /** -637 - 357 q. */
+    /**
+     * -637 - 357 q.
+     */
     private final T c5c;
 
-    /** 833 + 343 q. */
+    /**
+     * 833 + 343 q.
+     */
     private final T c5d;
 
-    /** -49 + 49 q. */
+    /**
+     * -49 + 49 q.
+     */
     private final T c6a;
 
-    /** -392 - 287 q. */
+    /**
+     * -392 - 287 q.
+     */
     private final T c6b;
 
-    /** -637 + 357 q. */
+    /**
+     * -637 + 357 q.
+     */
     private final T c6c;
 
-    /** 833 - 343 q. */
+    /**
+     * 833 - 343 q.
+     */
     private final T c6d;
 
-    /** 49 + 49 q. */
+    /**
+     * 49 + 49 q.
+     */
     private final T d5a;
 
-    /** -1372 - 847 q. */
+    /**
+     * -1372 - 847 q.
+     */
     private final T d5b;
 
-    /** 2254 + 1029 q */
+    /**
+     * 2254 + 1029 q
+     */
     private final T d5c;
 
-    /** 49 - 49 q. */
+    /**
+     * 49 - 49 q.
+     */
     private final T d6a;
 
-    /** -1372 + 847 q. */
+    /**
+     * -1372 + 847 q.
+     */
     private final T d6b;
 
-    /** 2254 - 1029 q */
+    /**
+     * 2254 - 1029 q
+     */
     private final T d6c;
 
-    /** Simple constructor.
-     * @param field field to which the time and state vector elements belong
-     * @param forward integration direction indicator
-     * @param yDotK slopes at the intermediate points
+    /**
+     * Simple constructor.
+     *
+     * @param field               field to which the time and state vector elements belong
+     * @param forward             integration direction indicator
+     * @param yDotK               slopes at the intermediate points
      * @param globalPreviousState start of the global step
-     * @param globalCurrentState end of the global step
-     * @param softPreviousState start of the restricted step
-     * @param softCurrentState end of the restricted step
-     * @param mapper equations mapper for the all equations
+     * @param globalCurrentState  end of the global step
+     * @param softPreviousState   start of the restricted step
+     * @param softCurrentState    end of the restricted step
+     * @param mapper              equations mapper for the all equations
      */
     LutherFieldStepInterpolator(final Field<T> field, final boolean forward,
                                 final T[][] yDotK,
@@ -98,26 +128,28 @@ class LutherFieldStepInterpolator<T extends RealFieldElement<T>>
                                 final FieldODEStateAndDerivative<T> softCurrentState,
                                 final FieldEquationsMapper<T> mapper) {
         super(field, forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+                globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+                mapper);
         final T q = field.getZero().add(21).sqrt();
-        c5a = q.multiply(  -49).add(  -49);
-        c5b = q.multiply(  287).add(  392);
-        c5c = q.multiply( -357).add( -637);
-        c5d = q.multiply(  343).add(  833);
-        c6a = q.multiply(   49).add(  -49);
-        c6b = q.multiply( -287).add(  392);
-        c6c = q.multiply(  357).add( -637);
-        c6d = q.multiply( -343).add(  833);
-        d5a = q.multiply(   49).add(   49);
-        d5b = q.multiply( -847).add(-1372);
-        d5c = q.multiply( 1029).add( 2254);
-        d6a = q.multiply(  -49).add(   49);
-        d6b = q.multiply(  847).add(-1372);
-        d6c = q.multiply(-1029).add( 2254);
+        c5a = q.multiply(-49).add(-49);
+        c5b = q.multiply(287).add(392);
+        c5c = q.multiply(-357).add(-637);
+        c5d = q.multiply(343).add(833);
+        c6a = q.multiply(49).add(-49);
+        c6b = q.multiply(-287).add(392);
+        c6c = q.multiply(357).add(-637);
+        c6d = q.multiply(-343).add(833);
+        d5a = q.multiply(49).add(49);
+        d5b = q.multiply(-847).add(-1372);
+        d5c = q.multiply(1029).add(2254);
+        d6a = q.multiply(-49).add(49);
+        d6b = q.multiply(847).add(-1372);
+        d6c = q.multiply(-1029).add(2254);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected LutherFieldStepInterpolator<T> create(final Field<T> newField, final boolean newForward, final T[][] newYDotK,
                                                     final FieldODEStateAndDerivative<T> newGlobalPreviousState,
@@ -126,12 +158,14 @@ class LutherFieldStepInterpolator<T extends RealFieldElement<T>>
                                                     final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                     final FieldEquationsMapper<T> newMapper) {
         return new LutherFieldStepInterpolator<T>(newField, newForward, newYDotK,
-                                                  newGlobalPreviousState, newGlobalCurrentState,
-                                                  newSoftPreviousState, newSoftCurrentState,
-                                                  newMapper);
+                newGlobalPreviousState, newGlobalCurrentState,
+                newSoftPreviousState, newSoftCurrentState,
+                newMapper);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     protected FieldODEStateAndDerivative<T> computeInterpolatedStateAndDerivatives(final FieldEquationsMapper<T> mapper,
@@ -181,39 +215,39 @@ class LutherFieldStepInterpolator<T extends RealFieldElement<T>>
         // are fulfilled, but some of the former ones are not, so the resulting interpolator is order 5.
         // At the end, we get the b_i as polynomials in theta.
 
-        final T coeffDot1 =  theta.multiply(theta.multiply(theta.multiply(theta.multiply(   21        ).add( -47          )).add(   36         )).add( -54     /   5.0)).add(1);
-        final T coeffDot2 =  time.getField().getZero();
-        final T coeffDot3 =  theta.multiply(theta.multiply(theta.multiply(theta.multiply(  112        ).add(-608    /  3.0)).add(  320   / 3.0 )).add(-208    /  15.0));
-        final T coeffDot4 =  theta.multiply(theta.multiply(theta.multiply(theta.multiply( -567  /  5.0).add( 972    /  5.0)).add( -486   / 5.0 )).add( 324    /  25.0));
-        final T coeffDot5 =  theta.multiply(theta.multiply(theta.multiply(theta.multiply(c5a.divide(5)).add(c5b.divide(15))).add(c5c.divide(30))).add(c5d.divide(150)));
-        final T coeffDot6 =  theta.multiply(theta.multiply(theta.multiply(theta.multiply(c6a.divide(5)).add(c6b.divide(15))).add(c6c.divide(30))).add(c6d.divide(150)));
-        final T coeffDot7 =  theta.multiply(theta.multiply(theta.multiply(                                             3.0 ).add(   -3         )).add(   3   /   5.0));
+        final T coeffDot1 = theta.multiply(theta.multiply(theta.multiply(theta.multiply(21).add(-47)).add(36)).add(-54 / 5.0)).add(1);
+        final T coeffDot2 = time.getField().getZero();
+        final T coeffDot3 = theta.multiply(theta.multiply(theta.multiply(theta.multiply(112).add(-608 / 3.0)).add(320 / 3.0)).add(-208 / 15.0));
+        final T coeffDot4 = theta.multiply(theta.multiply(theta.multiply(theta.multiply(-567 / 5.0).add(972 / 5.0)).add(-486 / 5.0)).add(324 / 25.0));
+        final T coeffDot5 = theta.multiply(theta.multiply(theta.multiply(theta.multiply(c5a.divide(5)).add(c5b.divide(15))).add(c5c.divide(30))).add(c5d.divide(150)));
+        final T coeffDot6 = theta.multiply(theta.multiply(theta.multiply(theta.multiply(c6a.divide(5)).add(c6b.divide(15))).add(c6c.divide(30))).add(c6d.divide(150)));
+        final T coeffDot7 = theta.multiply(theta.multiply(theta.multiply(3.0).add(-3)).add(3 / 5.0));
         final T[] interpolatedState;
         final T[] interpolatedDerivatives;
 
         if (getGlobalPreviousState() != null && theta.getReal() <= 0.5) {
 
-            final T s         = thetaH;
-            final T coeff1    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(  21    /  5.0).add( -47    /  4.0)).add(   12         )).add( -27    /   5.0)).add(1));
-            final T coeff2    = time.getField().getZero();
-            final T coeff3    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply( 112    /  5.0).add(-152    /  3.0)).add(  320   / 9.0 )).add(-104    /  15.0)));
-            final T coeff4    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(-567    / 25.0).add( 243    /  5.0)).add( -162   / 5.0 )).add( 162    /  25.0)));
-            final T coeff5    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(c5a.divide(25)).add(c5b.divide(60))).add(c5c.divide(90))).add(c5d.divide(300))));
-            final T coeff6    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(c6a.divide(25)).add(c6b.divide(60))).add(c6c.divide(90))).add(c6d.divide(300))));
-            final T coeff7    = s.multiply(theta.multiply(theta.multiply(theta.multiply(                                      3    /  4.0 ).add(   -1         )).add(   3    /  10.0)));
-            interpolatedState       = previousStateLinearCombination(coeff1, coeff2, coeff3, coeff4, coeff5, coeff6, coeff7);
+            final T s = thetaH;
+            final T coeff1 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(21 / 5.0).add(-47 / 4.0)).add(12)).add(-27 / 5.0)).add(1));
+            final T coeff2 = time.getField().getZero();
+            final T coeff3 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(112 / 5.0).add(-152 / 3.0)).add(320 / 9.0)).add(-104 / 15.0)));
+            final T coeff4 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(-567 / 25.0).add(243 / 5.0)).add(-162 / 5.0)).add(162 / 25.0)));
+            final T coeff5 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(c5a.divide(25)).add(c5b.divide(60))).add(c5c.divide(90))).add(c5d.divide(300))));
+            final T coeff6 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(c6a.divide(25)).add(c6b.divide(60))).add(c6c.divide(90))).add(c6d.divide(300))));
+            final T coeff7 = s.multiply(theta.multiply(theta.multiply(theta.multiply(3 / 4.0).add(-1)).add(3 / 10.0)));
+            interpolatedState = previousStateLinearCombination(coeff1, coeff2, coeff3, coeff4, coeff5, coeff6, coeff7);
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2, coeffDot3, coeffDot4, coeffDot5, coeffDot6, coeffDot7);
         } else {
 
-            final T s         = oneMinusThetaH;
-            final T coeff1    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply( -21   /   5.0).add(   151  /  20.0)).add( -89   /   20.0)).add(  19 /  20.0)).add(- 1 / 20.0));
-            final T coeff2    = time.getField().getZero();
-            final T coeff3    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(-112   /   5.0).add(   424  /  15.0)).add( -328  /   45.0)).add( -16 /  45.0)).add(-16 /  45.0));
-            final T coeff4    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply( 567   /  25.0).add(  -648  /  25.0)).add(  162  /   25.0))));
-            final T coeff5    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(d5a.divide(25)).add(d5b.divide(300))).add(d5c.divide(900))).add( -49 / 180.0)).add(-49 / 180.0));
-            final T coeff6    = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(d6a.divide(25)).add(d6b.divide(300))).add(d6c.divide(900))).add( -49 / 180.0)).add(-49 / 180.0));
-            final T coeff7    = s.multiply(               theta.multiply(theta.multiply(theta.multiply(                        -3  /   4.0 ).add(   1   /    4.0)).add(  -1 /  20.0)).add( -1 /  20.0));
-            interpolatedState       = currentStateLinearCombination(coeff1, coeff2, coeff3, coeff4, coeff5, coeff6, coeff7);
+            final T s = oneMinusThetaH;
+            final T coeff1 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(-21 / 5.0).add(151 / 20.0)).add(-89 / 20.0)).add(19 / 20.0)).add(-1 / 20.0));
+            final T coeff2 = time.getField().getZero();
+            final T coeff3 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(-112 / 5.0).add(424 / 15.0)).add(-328 / 45.0)).add(-16 / 45.0)).add(-16 / 45.0));
+            final T coeff4 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(567 / 25.0).add(-648 / 25.0)).add(162 / 25.0))));
+            final T coeff5 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(d5a.divide(25)).add(d5b.divide(300))).add(d5c.divide(900))).add(-49 / 180.0)).add(-49 / 180.0));
+            final T coeff6 = s.multiply(theta.multiply(theta.multiply(theta.multiply(theta.multiply(d6a.divide(25)).add(d6b.divide(300))).add(d6c.divide(900))).add(-49 / 180.0)).add(-49 / 180.0));
+            final T coeff7 = s.multiply(theta.multiply(theta.multiply(theta.multiply(-3 / 4.0).add(1 / 4.0)).add(-1 / 20.0)).add(-1 / 20.0));
+            interpolatedState = currentStateLinearCombination(coeff1, coeff2, coeff3, coeff4, coeff5, coeff6, coeff7);
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2, coeffDot3, coeffDot4, coeffDot5, coeffDot6, coeffDot7);
         }
 

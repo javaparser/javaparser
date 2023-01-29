@@ -18,15 +18,17 @@
 package org.apache.commons.math3.random;
 
 
-/** This interface represents a random generator for whole vectors.
+/**
+ * This interface represents a random generator for whole vectors.
  *
  * @since 1.2
- *
  */
 
 public interface RandomVectorGenerator {
 
-    /** Generate a random vector.
+    /**
+     * Generate a random vector.
+     *
      * @return a random vector as an array of double.
      */
     double[] nextVector();

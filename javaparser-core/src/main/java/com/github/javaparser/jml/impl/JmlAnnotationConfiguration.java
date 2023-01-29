@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JmlAnnotationConfiguration {
+
     public static final String NOT_NULL = "org.jetbrains.annotations.NotNull";
+
     public static final String NULLABLE = "org.jetbrains.annotations.Nullable";
+
     public static final String CONTRACT = "org.jetbrains.annotations.Contract";
 
     private final Map<String, Modifier.DefaultKeyword> annotationToModifier = new HashMap<>();

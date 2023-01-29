@@ -76,7 +76,9 @@ public interface Type {
     /**
      * Is this a lambda constraint type?
      */
-    default boolean isConstraint() { return false; }
+    default boolean isConstraint() {
+        return false;
+    }
 
     /**
      * Can this be seen as a ReferenceTypeUsage?

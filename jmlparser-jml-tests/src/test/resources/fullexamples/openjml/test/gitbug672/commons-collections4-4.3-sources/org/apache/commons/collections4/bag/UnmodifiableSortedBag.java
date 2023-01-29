@@ -41,7 +41,9 @@ import java.util.Set;
 public final class UnmodifiableSortedBag<E>
         extends AbstractSortedBagDecorator<E> implements Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -3190437252665717841L;
 
     /**
@@ -50,7 +52,7 @@ public final class UnmodifiableSortedBag<E>
      * If the bag passed in is already unmodifiable, it is returned.
      *
      * @param <E> the type of the elements in the bag
-     * @param bag  the bag to decorate, must not be null
+     * @param bag the bag to decorate, must not be null
      * @return an unmodifiable SortedBag
      * @throws NullPointerException if bag is null
      * @since 4.0
@@ -63,10 +65,11 @@ public final class UnmodifiableSortedBag<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param bag  the bag to decorate, must not be null
+     * @param bag the bag to decorate, must not be null
      * @throws NullPointerException if bag is null
      */
     private UnmodifiableSortedBag(final SortedBag<E> bag) {
@@ -74,10 +77,11 @@ public final class UnmodifiableSortedBag<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the collection out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -88,10 +92,10 @@ public final class UnmodifiableSortedBag<E>
     /**
      * Read the collection in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
-     * @throws ClassCastException if deserialised object has wrong type
+     * @throws ClassCastException     if deserialised object has wrong type
      */
     @SuppressWarnings("unchecked") // will throw CCE, see Javadoc
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {

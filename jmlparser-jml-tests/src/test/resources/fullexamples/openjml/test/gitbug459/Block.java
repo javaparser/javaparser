@@ -1,11 +1,13 @@
 public class Block {
-    private /*@ spec_public @*/ int[] contents; 
+    private /*@ spec_public @*/ int[] contents;
 
     /*@ public normal_behavior
       @   ensures \fresh(contents);
       */
     /*@ pure */
-    public Block() { contents = new int[10]; }
+    public Block() {
+        contents = new int[10];
+    }
 
     /*@ public normal_behavior
       @   requires cont != null;

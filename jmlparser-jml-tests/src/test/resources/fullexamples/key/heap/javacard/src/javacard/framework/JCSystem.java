@@ -16,10 +16,13 @@ package javacard.framework;
 public final class JCSystem {
 
     private static native void nativeKeYBeginTransaction();
+
     private static native void nativeKeYAbortTransaction();
+
     private static native void nativeKeYCommitTransaction();
 
     static native byte nativeKeYGetTransient(Object o);
+
     static native void nativeKeYSetTransient(Object o, byte transientType);
 
     public static final byte NOT_A_TRANSIENT_OBJECT = (byte) 0;
@@ -47,11 +50,13 @@ public final class JCSystem {
           assignable<savedHeap> \strictly_nothing;
       @*/
     public static byte isTransient(Object o) {
-       if(o == null) { return 0; }
-       return nativeKeYGetTransient(o);
+        if (o == null) {
+            return 0;
+        }
+        return nativeKeYGetTransient(o);
     }
 
-    private static /*@ spec_public @*/ byte _transactionDepth = (byte)0;
+    private static /*@ spec_public @*/ byte _transactionDepth = (byte) 0;
     //@ public invariant getTransactionDepth() == 0 || getTransactionDepth() == 1;
 
     /*@ public normal_behavior
@@ -61,7 +66,7 @@ public final class JCSystem {
           assignable<savedHeap> \strictly_nothing;
           @*/
     public static byte getTransactionDepth() {
-      return _transactionDepth;
+        return _transactionDepth;
     }
 
     /*@ spec_public nullable @*/ static NegativeArraySizeException nase = new NegativeArraySizeException();

@@ -1,18 +1,23 @@
 class Other {
     // contract
-    void other() { }
-    final void otherFinal() { }
+    void other() {
+    }
+
+    final void otherFinal() {
+    }
 }
 
 final class Final {
-    void finalMethod() { }
+    void finalMethod() {
+    }
 }
 
 class Modular {
     Other other;
     Final _final;
 
-    private void privateMethod() { }
+    private void privateMethod() {
+    }
 
     //@ ensures true;
     void m() {

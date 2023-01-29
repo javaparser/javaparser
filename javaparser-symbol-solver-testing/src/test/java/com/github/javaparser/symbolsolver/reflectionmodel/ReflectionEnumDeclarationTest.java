@@ -40,7 +40,6 @@ class ReflectionEnumDeclarationTest extends AbstractSymbolResolutionTest {
     private TypeSolver typeSolver = new ReflectionTypeSolver(false);
 
 
-
     ///
     /// Test misc
     ///
@@ -85,17 +84,17 @@ class ReflectionEnumDeclarationTest extends AbstractSymbolResolutionTest {
     void testAsClass() {
         assertThrows(UnsupportedOperationException.class, () -> {
             ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
-        modifier.asClass();
-    });
-}
+            modifier.asClass();
+        });
+    }
 
     @Test
     void testAsInterface() {
         assertThrows(UnsupportedOperationException.class, () -> {
             ReflectionEnumDeclaration modifier = (ReflectionEnumDeclaration) typeSolver.solveType("com.github.javaparser.symbolsolver.reflectionmodel.MyModifier");
-        modifier.asInterface();
-    });
-}
+            modifier.asInterface();
+        });
+    }
 
     @Test
     void testAsEnum() {

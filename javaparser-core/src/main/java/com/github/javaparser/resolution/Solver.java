@@ -17,7 +17,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.Node;
@@ -59,8 +58,7 @@ public interface Solver {
      * <p>
      * It should contain its own private fields but not inherited private fields.
      */
-    SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration,
-                                                                          String name);
+    SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration, String name);
 
     /**
      * Try to solve a symbol just in the declaration, it does not delegate to the container.
@@ -77,5 +75,4 @@ public interface Solver {
      * @return The class resolved.
      */
     ResolvedType classToResolvedType(Class<?> clazz);
-
 }

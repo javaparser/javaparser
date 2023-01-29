@@ -18,7 +18,7 @@
 	<groupId>io.github.wadoon</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-    <version>3.24.11-SNAPSHOT</version>
+	<version>3.24.11-SNAPSHOT</version>
 
 	<name>jmlparser-parent</name>
 	<url>https://github.com/wadoon/jmlparser</url>
@@ -214,12 +214,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
-                    <version>3.1.0</version>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-                    <version>3.3.0</version>
+					<version>3.3.0</version>
 				</plugin>
 				<plugin>
 					<!-- See also: https://central.sonatype.org/pages/apache-maven.html#performing-a-release-deployment-with-the-maven-release-plugin -->
@@ -274,7 +274,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.4.1</version>
+					<version>3.4.1</version>
 					<configuration>
 						<source>${java.version}</source>
 						<additionalOptions>
@@ -325,7 +325,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.5.0</version>
+					<version>3.5.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -338,7 +338,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.2.1</version>
+					<version>3.2.1</version>
 					<configuration>
 						<configLocation>dev-files/JavaParser-CheckStyle.xml</configLocation>
 						<logViolationsToConsole>true</logViolationsToConsole>
@@ -362,7 +362,7 @@
 			<dependency>
 				<groupId>org.javassist</groupId>
 				<artifactId>javassist</artifactId>
-                <version>3.29.2-GA</version>
+				<version>3.29.2-GA</version>
 			</dependency>
 			<dependency>
 				<groupId>com.google.guava</groupId>
@@ -390,19 +390,19 @@
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-engine</artifactId>
-                <version>5.9.2</version>
+				<version>5.9.2</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-params</artifactId>
-                <version>5.9.2</version>
+				<version>5.9.2</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.junit.vintage</groupId>
 				<artifactId>junit-vintage-engine</artifactId>
-                <version>5.9.2</version>
+				<version>5.9.2</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>

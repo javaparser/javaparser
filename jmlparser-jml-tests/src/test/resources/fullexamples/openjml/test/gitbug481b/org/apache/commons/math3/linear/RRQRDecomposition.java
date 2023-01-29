@@ -44,15 +44,18 @@ import org.apache.commons.math3.util.FastMath;
  *
  * @see <a href="http://mathworld.wolfram.com/QRDecomposition.html">MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/QR_decomposition">Wikipedia</a>
- *
  * @since 3.2
  */
 public class RRQRDecomposition extends QRDecomposition {
 
-    /** An array to record the column pivoting for later creation of P. */
+    /**
+     * An array to record the column pivoting for later creation of P.
+     */
     private int[] p;
 
-    /** Cached value of P. */
+    /**
+     * Cached value of P.
+     */
     private RealMatrix cachedP;
 
 
@@ -61,25 +64,26 @@ public class RRQRDecomposition extends QRDecomposition {
      * The singularity threshold defaults to zero.
      *
      * @param matrix The matrix to decompose.
-     *
      * @see #RRQRDecomposition(RealMatrix, double)
      */
     public RRQRDecomposition(RealMatrix matrix) {
         this(matrix, 0d);
     }
 
-   /**
+    /**
      * Calculates the QR-decomposition of the given matrix.
      *
-     * @param matrix The matrix to decompose.
+     * @param matrix    The matrix to decompose.
      * @param threshold Singularity threshold.
      * @see #RRQRDecomposition(RealMatrix)
      */
-    public RRQRDecomposition(RealMatrix matrix,  double threshold) {
+    public RRQRDecomposition(RealMatrix matrix, double threshold) {
         super(matrix, threshold);
     }
 
-    /** Decompose matrix.
+    /**
+     * Decompose matrix.
+     *
      * @param qrt transposed matrix
      */
     @Override
@@ -91,9 +95,11 @@ public class RRQRDecomposition extends QRDecomposition {
         super.decompose(qrt);
     }
 
-    /** Perform Householder reflection for a minor A(minor, minor) of A.
+    /**
+     * Perform Householder reflection for a minor A(minor, minor) of A.
+     *
      * @param minor minor index
-     * @param qrt transposed matrix
+     * @param qrt   transposed matrix
      */
     @Override
     protected void performHouseholderReflection(int minor, double[][] qrt) {
@@ -128,7 +134,7 @@ public class RRQRDecomposition extends QRDecomposition {
 
     /**
      * Returns the pivot matrix, P, used in the QR Decomposition of matrix A such that AP = QR.
-     *
+     * <p>
      * If no pivoting is used in this decomposition then P is equal to the identity matrix.
      *
      * @return a permutation matrix.
@@ -136,12 +142,12 @@ public class RRQRDecomposition extends QRDecomposition {
     public RealMatrix getP() {
         if (cachedP == null) {
             int n = p.length;
-            cachedP = MatrixUtils.createRealMatrix(n,n);
+            cachedP = MatrixUtils.createRealMatrix(n, n);
             for (int i = 0; i < n; i++) {
                 cachedP.setEntry(p[i], i, 1);
             }
         }
-        return cachedP ;
+        return cachedP;
     }
 
     /**
@@ -164,12 +170,12 @@ public class RRQRDecomposition extends QRDecomposition {
      * @return effective numerical matrix rank
      */
     public int getRank(final double dropThreshold) {
-        RealMatrix r    = getR();
-        int rows        = r.getRowDimension();
-        int columns     = r.getColumnDimension();
-        int rank        = 1;
+        RealMatrix r = getR();
+        int rows = r.getRowDimension();
+        int columns = r.getColumnDimension();
+        int rank = 1;
         double lastNorm = r.getFrobeniusNorm();
-        double rNorm    = lastNorm;
+        double rNorm = lastNorm;
         while (rank < FastMath.min(rows, columns)) {
             double thisNorm = r.getSubMatrix(rank, rows - 1, rank, columns - 1).getFrobeniusNorm();
             if (thisNorm == 0 || (thisNorm / lastNorm) * rNorm < dropThreshold) {
@@ -191,6 +197,7 @@ public class RRQRDecomposition extends QRDecomposition {
      * double) construction}, an error will be triggered when
      * the {@link DecompositionSolver#solve(RealVector) solve} method will be called.
      * </p>
+     *
      * @return a solver
      */
     @Override
@@ -198,43 +205,56 @@ public class RRQRDecomposition extends QRDecomposition {
         return new Solver(super.getSolver(), this.getP());
     }
 
-    /** Specialized solver. */
+    /**
+     * Specialized solver.
+     */
     private static class Solver implements DecompositionSolver {
 
-        /** Upper level solver. */
+        /**
+         * Upper level solver.
+         */
         private final DecompositionSolver upper;
 
-        /** A permutation matrix for the pivots used in the QR decomposition */
+        /**
+         * A permutation matrix for the pivots used in the QR decomposition
+         */
         private RealMatrix p;
 
         /**
          * Build a solver from decomposed matrix.
          *
          * @param upper upper level solver.
-         * @param p permutation matrix
+         * @param p     permutation matrix
          */
         private Solver(final DecompositionSolver upper, final RealMatrix p) {
             this.upper = upper;
-            this.p     = p;
+            this.p = p;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public boolean isNonSingular() {
             return upper.isNonSingular();
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public RealVector solve(RealVector b) {
             return p.operate(upper.solve(b));
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public RealMatrix solve(RealMatrix b) {
             return p.multiply(upper.solve(b));
         }
 
         /**
          * {@inheritDoc}
+         *
          * @throws SingularMatrixException if the decomposed matrix is singular.
          */
         public RealMatrix getInverse() {

@@ -6,35 +6,35 @@
 package esc;
 
 /**
- * A trivial string class that supports initialization, 
+ * A trivial string class that supports initialization,
  * concatenation and the substring operation.
- * 
+ *
  * @author Daniel M. Zimmerman
  * @author YOUR NAME HERE
  * @version 2013-11-04
  */
 public class SimpleString {
-  /*
-   * The class should have a history constraint about the fact
-   * that it is immutable ("final" on the array isn't quite good enough).
-   */
-  
-  // Instance Fields
-  
-  /**
-   * The character data of this SimpleString.
-   */
-    private /*@ spec_public */ char[] my_chars;  
-    private /*@ spec_public */ int[] my_ints;  
-    private /*@ spec_public */ Object[] my_Objects;  
-    private /*@ spec_public */ Integer[] my_Integers;  
-  
-  // Constructors
-  
+    /*
+     * The class should have a history constraint about the fact
+     * that it is immutable ("final" on the array isn't quite good enough).
+     */
+
+    // Instance Fields
+
+    /**
+     * The character data of this SimpleString.
+     */
+    private /*@ spec_public */ char[] my_chars;
+    private /*@ spec_public */ int[] my_ints;
+    private /*@ spec_public */ Object[] my_Objects;
+    private /*@ spec_public */ Integer[] my_Integers;
+
+    // Constructors
+
     /**
      * Constructs a new SimpleString with the contents of the specified
      * array of characters in the order they appear in the array.
-     * 
+     *
      * @param the_array The array of characters.
      */
     //@ ensures (\forall int i; 0 <= i && i < my_chars.length; my_chars[i] == the_array[i]);
@@ -58,7 +58,7 @@ public class SimpleString {
     /**
      * Constructs a new SimpleString with the contents of the specified
      * array of ints in the order they appear in the array.
-     * 
+     *
      * @param the_array The array of ints.
      */
     //@ ensures (\forall int i; 0 <= i && i < my_ints.length; my_ints[i] == the_array[i]);
@@ -70,14 +70,14 @@ public class SimpleString {
     /**
      * Constructs a new SimpleString with the contents of the specified
      * array of ints in the order they appear in the array.
-     * 
+     *
      * @param the_array The array of ints.
      */
     //@ ensures my_Objects.length == the_array.length;
     //@ ensures (\forall int i; 0 <= i && i < my_Objects.length; my_Objects[i] == the_array[i]);
     public SimpleString(final /*@ non_null */ Object[] the_array) {
         my_Objects = new Object[the_array.length];
-        
+
         //@ assert the_array.length >= 0;
         //@ assert the_array instanceof Object[];
         //@ assert my_Objects instanceof Object[];

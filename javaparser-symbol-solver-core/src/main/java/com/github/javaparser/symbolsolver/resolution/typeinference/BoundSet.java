@@ -74,7 +74,6 @@ public class BoundSet {
     }
 
     /**
-
      * It is sometimes convenient to refer to an empty bound set with the symbol true; this is merely out of
      * convenience, and the two are interchangeable.
      */
@@ -97,14 +96,14 @@ public class BoundSet {
     }
 
     private Optional<Pair<SameAsBound, SameAsBound>> findPairSameAs(Predicate<Pair<SameAsBound, SameAsBound>> condition) {
-        for (int i=0;i<bounds.size();i++) {
+        for (int i = 0; i < bounds.size(); i++) {
             Bound bi = bounds.get(i);
             if (bi instanceof SameAsBound) {
-                SameAsBound si = (SameAsBound)bi;
+                SameAsBound si = (SameAsBound) bi;
                 for (int j = i + 1; j < bounds.size(); j++) {
                     Bound bj = bounds.get(j);
                     if (bj instanceof SameAsBound) {
-                        SameAsBound sj = (SameAsBound)bj;
+                        SameAsBound sj = (SameAsBound) bj;
                         Pair<SameAsBound, SameAsBound> pair = new Pair<SameAsBound, SameAsBound>(si, sj);
                         if (condition.test(pair)) {
                             return Optional.of(pair);
@@ -126,14 +125,14 @@ public class BoundSet {
 
     private <T> T forEachPairSameAs(Processor<SameAsBound, SameAsBound, T> processor, T initialValue) {
         T currentValue = initialValue;
-        for (int i=0;i<bounds.size();i++) {
+        for (int i = 0; i < bounds.size(); i++) {
             Bound bi = bounds.get(i);
             if (bi instanceof SameAsBound) {
-                SameAsBound si = (SameAsBound)bi;
+                SameAsBound si = (SameAsBound) bi;
                 for (int j = i + 1; j < bounds.size(); j++) {
                     Bound bj = bounds.get(j);
                     if (bj instanceof SameAsBound) {
-                        SameAsBound sj = (SameAsBound)bj;
+                        SameAsBound sj = (SameAsBound) bj;
                         currentValue = processor.process(si, sj, currentValue);
                     }
                 }
@@ -144,14 +143,14 @@ public class BoundSet {
 
     private <T> T forEachPairSameAndSubtype(Processor<SameAsBound, SubtypeOfBound, T> processor, T initialValue) {
         T currentValue = initialValue;
-        for (int i=0;i<bounds.size();i++) {
+        for (int i = 0; i < bounds.size(); i++) {
             Bound bi = bounds.get(i);
             if (bi instanceof SameAsBound) {
-                SameAsBound si = (SameAsBound)bi;
+                SameAsBound si = (SameAsBound) bi;
                 for (int j = i + 1; j < bounds.size(); j++) {
                     Bound bj = bounds.get(j);
                     if (bj instanceof SubtypeOfBound) {
-                        SubtypeOfBound sj = (SubtypeOfBound)bj;
+                        SubtypeOfBound sj = (SubtypeOfBound) bj;
                         currentValue = processor.process(si, sj, currentValue);
                     }
                 }
@@ -162,14 +161,14 @@ public class BoundSet {
 
     private <T> T forEachPairSubtypeAndSubtype(Processor<SubtypeOfBound, SubtypeOfBound, T> processor, T initialValue) {
         T currentValue = initialValue;
-        for (int i=0;i<bounds.size();i++) {
+        for (int i = 0; i < bounds.size(); i++) {
             Bound bi = bounds.get(i);
             if (bi instanceof SubtypeOfBound) {
-                SubtypeOfBound si = (SubtypeOfBound)bi;
+                SubtypeOfBound si = (SubtypeOfBound) bi;
                 for (int j = i + 1; j < bounds.size(); j++) {
                     Bound bj = bounds.get(j);
                     if (bj instanceof SubtypeOfBound) {
-                        SubtypeOfBound sj = (SubtypeOfBound)bj;
+                        SubtypeOfBound sj = (SubtypeOfBound) bj;
                         currentValue = processor.process(si, sj, currentValue);
                     }
                 }
@@ -195,7 +194,7 @@ public class BoundSet {
                 Optional<ResolvedReferenceTypeDeclaration> rtFrom1TypeDeclaration = rtFrom1.getTypeDeclaration();
                 Optional<ResolvedReferenceTypeDeclaration> rtFrom2TypeDeclaration = rtFrom2.getTypeDeclaration();
                 if (rtFrom1TypeDeclaration.isPresent() && rtFrom2TypeDeclaration.isPresent()) {
-                    if(rtFrom1TypeDeclaration.get().equals(rtFrom2TypeDeclaration.get())) {
+                    if (rtFrom1TypeDeclaration.get().equals(rtFrom2TypeDeclaration.get())) {
                         pairs.add(new Pair<>(rtFrom1, rtFrom2));
                     }
                 }
@@ -306,7 +305,7 @@ public class BoundSet {
 
         newConstraintsSet = forEachPairSameAs((a, b, currentConstraintSet) -> {
             if (a.getS().isInferenceVariable() && isProperType(a.getT())) {
-                InferenceVariable alpha = (InferenceVariable)a.getS();
+                InferenceVariable alpha = (InferenceVariable) a.getS();
                 ResolvedType U = a.getT();
                 ResolvedType S = b.getS();
                 ResolvedType T = b.getT();
@@ -314,7 +313,7 @@ public class BoundSet {
                 currentConstraintSet = currentConstraintSet.withConstraint(new TypeSameAsType(sub.apply(S), sub.apply(T)));
             }
             if (a.getT().isInferenceVariable() && isProperType(a.getS())) {
-                InferenceVariable alpha = (InferenceVariable)a.getT();
+                InferenceVariable alpha = (InferenceVariable) a.getT();
                 ResolvedType U = a.getS();
                 ResolvedType S = b.getS();
                 ResolvedType T = b.getT();
@@ -322,7 +321,7 @@ public class BoundSet {
                 currentConstraintSet = currentConstraintSet.withConstraint(new TypeSameAsType(sub.apply(S), sub.apply(T)));
             }
             if (b.getS().isInferenceVariable() && isProperType(b.getT())) {
-                InferenceVariable alpha = (InferenceVariable)b.getS();
+                InferenceVariable alpha = (InferenceVariable) b.getS();
                 ResolvedType U = b.getT();
                 ResolvedType S = a.getS();
                 ResolvedType T = a.getT();
@@ -330,7 +329,7 @@ public class BoundSet {
                 currentConstraintSet = currentConstraintSet.withConstraint(new TypeSameAsType(sub.apply(S), sub.apply(T)));
             }
             if (b.getT().isInferenceVariable() && isProperType(b.getS())) {
-                InferenceVariable alpha = (InferenceVariable)b.getT();
+                InferenceVariable alpha = (InferenceVariable) b.getT();
                 ResolvedType U = b.getS();
                 ResolvedType S = a.getS();
                 ResolvedType T = a.getT();
@@ -344,7 +343,7 @@ public class BoundSet {
 
         newConstraintsSet = forEachPairSameAndSubtype((a, b, currentConstraintSet) -> {
             if (a.getS().isInferenceVariable() && isProperType(a.getT())) {
-                InferenceVariable alpha = (InferenceVariable)a.getS();
+                InferenceVariable alpha = (InferenceVariable) a.getS();
                 ResolvedType U = a.getT();
                 ResolvedType S = b.getS();
                 ResolvedType T = b.getT();
@@ -352,7 +351,7 @@ public class BoundSet {
                 currentConstraintSet = currentConstraintSet.withConstraint(new TypeSubtypeOfType(typeSolver, sub.apply(S), sub.apply(T)));
             }
             if (a.getT().isInferenceVariable() && isProperType(a.getS())) {
-                InferenceVariable alpha = (InferenceVariable)a.getT();
+                InferenceVariable alpha = (InferenceVariable) a.getT();
                 ResolvedType U = a.getS();
                 ResolvedType S = b.getS();
                 ResolvedType T = b.getT();
@@ -374,7 +373,7 @@ public class BoundSet {
                     ResolvedReferenceType T = b.getT().asReferenceType();
                     List<Pair<ResolvedReferenceType, ResolvedReferenceType>> pairs = findPairsOfCommonAncestors(S, T);
                     for (Pair<ResolvedReferenceType, ResolvedReferenceType> pair : pairs) {
-                        for (int i=0;i<Math.min(pair.a.typeParametersValues().size(), pair.b.typeParametersValues().size()); i++) {
+                        for (int i = 0; i < Math.min(pair.a.typeParametersValues().size(), pair.b.typeParametersValues().size()); i++) {
                             ResolvedType si = pair.a.typeParametersValues().get(i);
                             ResolvedType ti = pair.b.typeParametersValues().get(i);
                             if (!si.isWildcard() && !ti.isWildcard()) {
@@ -393,7 +392,7 @@ public class BoundSet {
         // implied and new constraint formulas may be implied, as follows.
 
         for (Bound b : this.bounds.stream().filter(b -> b instanceof CapturesBound).collect(Collectors.toList())) {
-            CapturesBound capturesBound = (CapturesBound)b;
+            CapturesBound capturesBound = (CapturesBound) b;
 
             throw new UnsupportedOperationException();
 
@@ -502,7 +501,7 @@ public class BoundSet {
         for (InferenceVariable alphaJ : alphas) {
             for (Bound b : bounds) {
                 if (b instanceof SameAsBound) {
-                    SameAsBound sameAsBound = (SameAsBound)b;
+                    SameAsBound sameAsBound = (SameAsBound) b;
                     if (sameAsBound.getS().equals(alphaJ) && sameAsBound.getT().equals(beta)) {
                         return true;
                     }
@@ -539,8 +538,8 @@ public class BoundSet {
      */
     private Optional<Set<InferenceVariable>> smallestSetWithProperty(Set<InferenceVariable> uninstantiatedVariables,
                                                                      List<VariableDependency> dependencies) {
-        for (int i=1;i<=uninstantiatedVariables.size();i++) {
-            for (Set<InferenceVariable> aSubSet : buildAllSubsetsOfSize(uninstantiatedVariables, i)){
+        for (int i = 1; i <= uninstantiatedVariables.size(); i++) {
+            for (Set<InferenceVariable> aSubSet : buildAllSubsetsOfSize(uninstantiatedVariables, i)) {
                 if (hasProperty(aSubSet, dependencies)) {
                     return Optional.of(aSubSet);
                 }
@@ -552,11 +551,12 @@ public class BoundSet {
     /**
      * if αi depends on the resolution of a variable β, then either β has an instantiation
      * or there is some j such that β = αj
+     *
      * @return
      */
     private boolean hasProperty(Set<InferenceVariable> alphas, List<VariableDependency> dependencies) {
-        for (InferenceVariable alphaI: alphas) {
-            for (InferenceVariable beta: dependencies.stream()
+        for (InferenceVariable alphaI : alphas) {
+            for (InferenceVariable beta : dependencies.stream()
                     .filter(d -> d.depending.equals(alphaI))
                     .filter(d -> !d.isReflexive())
                     .map(d -> d.dependedOn)
@@ -621,9 +621,9 @@ public class BoundSet {
         // - An inference variable α depends on the resolution of an inference variable β if there exists an inference
         //   variable γ such that α depends on the resolution of γ and γ depends on the resolution of β.
 
-        for (int i=0;i<dependencies.size();i++) {
+        for (int i = 0; i < dependencies.size(); i++) {
             VariableDependency di = dependencies.get(i);
-            for (int j=i+1;j<dependencies.size();j++) {
+            for (int j = i + 1; j < dependencies.size(); j++) {
                 VariableDependency dj = dependencies.get(j);
                 if (di.dependedOn.equals(dj.depending)) {
                     dependencies.add(new VariableDependency(di.getDepending(), dj.getDependedOn()));
@@ -675,7 +675,7 @@ public class BoundSet {
                 uninstantiatedPortionOfV.add(v);
             }
         }
-        for (Set<InferenceVariable> alphas: allSetsWithProperty(uninstantiatedPortionOfV, dependencies)) {
+        for (Set<InferenceVariable> alphas : allSetsWithProperty(uninstantiatedPortionOfV, dependencies)) {
 
             // Resolution proceeds by generating an instantiation for each of α1, ..., αn based on the
             // bounds in the bound set:
@@ -777,8 +777,8 @@ public class BoundSet {
 
     private Set<Set<InferenceVariable>> allPossibleSetsWithProperty(Set<InferenceVariable> allElements, List<VariableDependency> dependencies) {
         Set<Set<InferenceVariable>> result = new HashSet<>();
-        for (int i=1;i<=allElements.size();i++) {
-            for (Set<InferenceVariable> aSubSet : buildAllSubsetsOfSize(allElements, i)){
+        for (int i = 1; i <= allElements.size(); i++) {
+            for (Set<InferenceVariable> aSubSet : buildAllSubsetsOfSize(allElements, i)) {
                 if (hasProperty(aSubSet, dependencies)) {
                     result.add(aSubSet);
                 }
@@ -820,7 +820,7 @@ public class BoundSet {
     private boolean appearInLeftPartOfCapture(InferenceVariable inferenceVariable) {
         for (Bound b : bounds) {
             if (b instanceof CapturesBound) {
-                CapturesBound capturesBound = (CapturesBound)b;
+                CapturesBound capturesBound = (CapturesBound) b;
                 if (capturesBound.getInferenceVariables().contains(inferenceVariable)) {
                     return true;
                 }

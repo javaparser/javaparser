@@ -28,13 +28,15 @@ import java.util.Iterator;
  */
 public abstract class AbstractUntypedIteratorDecorator<I, O> implements Iterator<O> {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     private final Iterator<I> iterator;
 
     /**
      * Create a new AbstractUntypedIteratorDecorator.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      * @throws NullPointerException if the iterator is null
      */
     protected AbstractUntypedIteratorDecorator(final Iterator<I> iterator) {

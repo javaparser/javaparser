@@ -38,7 +38,9 @@ public final class UnmodifiableQueue<E>
         extends AbstractQueueDecorator<E>
         implements Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 1832948656215393357L;
 
     /**
@@ -46,8 +48,8 @@ public final class UnmodifiableQueue<E>
      * <p>
      * If the queue passed in is already unmodifiable, it is returned.
      *
-     * @param <E> the type of the elements in the queue
-     * @param queue  the queue to decorate, must not be null
+     * @param <E>   the type of the elements in the queue
+     * @param queue the queue to decorate, must not be null
      * @return an unmodifiable Queue
      * @throws NullPointerException if queue is null
      */
@@ -61,10 +63,11 @@ public final class UnmodifiableQueue<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param queue  the queue to decorate, must not be null
+     * @param queue the queue to decorate, must not be null
      * @throws NullPointerException if queue is null
      */
     @SuppressWarnings("unchecked") // safe to upcast
@@ -73,10 +76,11 @@ public final class UnmodifiableQueue<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the collection out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an I/O error occurs while writing to the output stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -87,8 +91,8 @@ public final class UnmodifiableQueue<E>
     /**
      * Read the collection in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an I/O error occurs while reading from the input stream
+     * @param in the input stream
+     * @throws IOException            if an I/O error occurs while reading from the input stream
      * @throws ClassNotFoundException if the class of a serialized object can not be found
      */
     @SuppressWarnings("unchecked")

@@ -34,15 +34,17 @@ public interface ConvexHull<S extends Space, P extends Point<S>> extends Seriali
 
     /**
      * Get the vertices of the convex hull.
+     *
      * @return vertices of the convex hull
      */
     P[] getVertices();
 
     /**
      * Returns a new region that is enclosed by the convex hull.
+     *
      * @return the region enclosed by the convex hull
      * @throws InsufficientDataException if the number of vertices is not enough to
-     * build a region in the respective space
+     *                                   build a region in the respective space
      */
     Region<S> createRegion() throws InsufficientDataException;
 }

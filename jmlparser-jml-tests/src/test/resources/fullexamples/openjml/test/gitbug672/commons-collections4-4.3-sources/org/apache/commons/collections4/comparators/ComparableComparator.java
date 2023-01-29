@@ -36,20 +36,24 @@ import java.util.Comparator;
  * details.
  *
  * @param <E> the type of objects compared by this comparator
- *
- * @since 2.0
  * @see java.util.Collections#reverseOrder()
+ * @since 2.0
  */
 public class ComparableComparator<E extends Comparable<? super E>> implements Comparator<E>, Serializable {
 
-    /** Serialization version. */
-    private static final long serialVersionUID=-291439688585137865L;
+    /**
+     * Serialization version.
+     */
+    private static final long serialVersionUID = -291439688585137865L;
 
-    /** The singleton instance. */
+    /**
+     * The singleton instance.
+     */
     @SuppressWarnings("rawtypes")
     public static final ComparableComparator INSTANCE = new ComparableComparator();
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the singleton instance of a ComparableComparator.
      * <p>
@@ -57,7 +61,7 @@ public class ComparableComparator<E extends Comparable<? super E>> implements Co
      * instead of constructing a new instance to reduce allocation and GC overhead
      * when multiple comparable comparators may be used in the same VM.
      *
-     * @param <E>  the element type
+     * @param <E> the element type
      * @return the singleton ComparableComparator
      * @since 4.0
      */
@@ -67,6 +71,7 @@ public class ComparableComparator<E extends Comparable<? super E>> implements Co
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor whose use should be avoided.
      * <p>
@@ -77,18 +82,19 @@ public class ComparableComparator<E extends Comparable<? super E>> implements Co
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Compare the two {@link Comparable Comparable} arguments.
      * This method is equivalent to:
      * <pre>((Comparable)obj1).compareTo(obj2)</pre>
      *
-     * @param obj1  the first object to compare
-     * @param obj2  the second object to compare
+     * @param obj1 the first object to compare
+     * @param obj2 the second object to compare
      * @return negative if obj1 is less, positive if greater, zero if equal
      * @throws NullPointerException if <i>obj1</i> is <code>null</code>,
-     *         or when <code>((Comparable)obj1).compareTo(obj2)</code> does
-     * @throws ClassCastException if <i>obj1</i> is not a <code>Comparable</code>,
-     *         or when <code>((Comparable)obj1).compareTo(obj2)</code> does
+     *                              or when <code>((Comparable)obj1).compareTo(obj2)</code> does
+     * @throws ClassCastException   if <i>obj1</i> is not a <code>Comparable</code>,
+     *                              or when <code>((Comparable)obj1).compareTo(obj2)</code> does
      */
     @Override
     public int compare(final E obj1, final E obj2) {
@@ -96,6 +102,7 @@ public class ComparableComparator<E extends Comparable<? super E>> implements Co
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implement a hash code for this comparator that is consistent with
      * {@link #equals(Object) equals}.
@@ -117,14 +124,14 @@ public class ComparableComparator<E extends Comparable<? super E>> implements Co
      * <code>this.getClass()</code>. Subclasses may want to override this behavior to remain
      * consistent with the {@link Comparator#equals(Object)} contract.
      *
-     * @param object  the object to compare with
+     * @param object the object to compare with
      * @return {@code true} if equal
      * @since 3.0
      */
     @Override
     public boolean equals(final Object object) {
         return this == object ||
-               null != object && object.getClass().equals(this.getClass());
+                null != object && object.getClass().equals(this.getClass());
     }
 
 }

@@ -35,24 +35,24 @@ public class Issue2083Test extends AbstractSymbolResolutionTest {
 
     @Test
     public void test() {
-        
+
         TypeSolver typeSolver = new ReflectionTypeSolver(false);
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(config);
 
-        String s = 
-                "import static Simple.SPACES;\n" + 
-                "public class Simple {\n" + 
-                "  public enum IndentType {\n" + 
-                "    SPACES\n" + 
-                "  }\n" + 
-                "  public IndentType c = SPACES;\n" + 
-                "}";
+        String s =
+                "import static Simple.SPACES;\n" +
+                        "public class Simple {\n" +
+                        "  public enum IndentType {\n" +
+                        "    SPACES\n" +
+                        "  }\n" +
+                        "  public IndentType c = SPACES;\n" +
+                        "}";
         CompilationUnit cu = StaticJavaParser.parse(s);
-        FieldDeclaration  fd = cu.findFirst(FieldDeclaration.class).get();
+        FieldDeclaration fd = cu.findFirst(FieldDeclaration.class).get();
         assertEquals("Simple.IndentType", fd.resolve().getType().describe());
-        
+
     }
 
 }

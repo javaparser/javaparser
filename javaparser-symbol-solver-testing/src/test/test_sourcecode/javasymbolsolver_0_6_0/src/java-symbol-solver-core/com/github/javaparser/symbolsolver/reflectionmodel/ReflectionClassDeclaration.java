@@ -135,7 +135,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
         List<MethodDeclaration> methods = new ArrayList<>();
         Predicate<Method> staticFilter = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (Method method : Arrays.stream(clazz.getDeclaredMethods()).filter((m) -> m.getName().equals(name)).filter(staticFilter)
-                                    .sorted(new MethodComparator()).collect(Collectors.toList())) {
+                .sorted(new MethodComparator()).collect(Collectors.toList())) {
             if (method.isBridge() || method.isSynthetic()) continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
@@ -323,7 +323,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration {
     public Optional<ReferenceTypeDeclaration> containerType() {
         return reflectionClassAdapter.containerType();
     }
-    
+
     @Override
     public Set<ReferenceTypeDeclaration> internalTypes() {
         return Arrays.stream(this.clazz.getDeclaredClasses())

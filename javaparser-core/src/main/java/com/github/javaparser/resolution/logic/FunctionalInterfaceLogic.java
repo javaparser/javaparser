@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.logic;
 
 import com.github.javaparser.resolution.MethodUsage;
@@ -37,7 +36,7 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public final class FunctionalInterfaceLogic {
-    
+
     private static String JAVA_LANG_FUNCTIONAL_INTERFACE = FunctionalInterface.class.getCanonicalName();
 
     private FunctionalInterfaceLogic() {
@@ -49,10 +48,9 @@ public final class FunctionalInterfaceLogic {
      */
     public static Optional<MethodUsage> getFunctionalMethod(ResolvedType type) {
         Optional<ResolvedReferenceTypeDeclaration> optionalTypeDeclaration = type.asReferenceType().getTypeDeclaration();
-        if(!optionalTypeDeclaration.isPresent()) {
+        if (!optionalTypeDeclaration.isPresent()) {
             return Optional.empty();
         }
-
         ResolvedReferenceTypeDeclaration typeDeclaration = optionalTypeDeclaration.get();
         if (type.isReferenceType() && typeDeclaration.isInterface()) {
             return getFunctionalMethod(typeDeclaration);
@@ -66,13 +64,9 @@ public final class FunctionalInterfaceLogic {
      */
     public static Optional<MethodUsage> getFunctionalMethod(ResolvedReferenceTypeDeclaration typeDeclaration) {
         //We need to find all abstract methods
-        Set<MethodUsage> methods = typeDeclaration.getAllMethods().stream()
-                .filter(m -> m.getDeclaration().isAbstract())
-                // Remove methods inherited by Object:
+        Set<MethodUsage> methods = typeDeclaration.getAllMethods().stream().filter(m -> m.getDeclaration().isAbstract()).// Remove methods inherited by Object:
                 // Consider the case of Comparator which define equals. It would be considered a functional method.
-                .filter(m -> !declaredOnObject(m))
-                .collect(Collectors.toSet());
-
+                        filter(m -> !declaredOnObject(m)).collect(Collectors.toSet());
         if (methods.size() == 1) {
             return Optional.of(methods.iterator().next());
         } else {
@@ -98,9 +92,7 @@ public final class FunctionalInterfaceLogic {
         return p.getType().getCanonicalName();
     }
 
-    private static List<String> OBJECT_METHODS_SIGNATURES = Arrays.stream(Object.class.getDeclaredMethods())
-            .map(method -> getSignature(method))
-            .collect(Collectors.toList());
+    private static List<String> OBJECT_METHODS_SIGNATURES = Arrays.stream(Object.class.getDeclaredMethods()).map(method -> getSignature(method)).collect(Collectors.toList());
 
     private static boolean declaredOnObject(MethodUsage m) {
         return OBJECT_METHODS_SIGNATURES.contains(m.getDeclaration().getSignature());

@@ -31,12 +31,12 @@ import java.util.Optional;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class Issue3296Test extends AbstractLexicalPreservingTest  {
-    
+public class Issue3296Test extends AbstractLexicalPreservingTest {
+
     @Test
     public void test() {
         considerCode("public class Test { String[][] allTest; }");
-        String expected = "public class Test { @Nullable\n" + 
+        String expected = "public class Test { @Nullable\n" +
                 "String[][] allTest; }";
         Optional<ClassOrInterfaceDeclaration> clazzOptional = cu.getClassByName("Test");
         assertTrue(clazzOptional.isPresent());

@@ -183,21 +183,21 @@ public class JavaParserFacade {
         return res;
     }
 
-    public SymbolReference<TypeDeclaration> solve(ThisExpr node){
+    public SymbolReference<TypeDeclaration> solve(ThisExpr node) {
         // If 'this' is prefixed by a class eg. MyClass.this
-        if (node.getClassExpr().isPresent()){
+        if (node.getClassExpr().isPresent()) {
             // Get the class name
             String className = node.getClassExpr().get().toString();
             // Attempt to resolve using a typeSolver
             SymbolReference<ReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
-            if (clazz.isSolved()){
+            if (clazz.isSolved()) {
                 return SymbolReference.solved(clazz.getCorrespondingDeclaration());
             }
             // Attempt to resolve locally in Compilation unit
             Optional<CompilationUnit> cu = node.getAncestorOfType(CompilationUnit.class);
-            if (cu.isPresent()){
+            if (cu.isPresent()) {
                 Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
-                if (classByName.isPresent()){
+                if (classByName.isPresent()) {
                     return SymbolReference.solved(getTypeDeclaration(classByName.get()));
                 }
             }

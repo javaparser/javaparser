@@ -4,7 +4,6 @@ import banking_example.*;
 
 
 /**
- *
  * @author christoph
  */
 public class Bank {
@@ -85,8 +84,8 @@ public class Bank {
     public /*@ nullable */ UserAccount login(int userID,
                                              char[] password) {
         if (0 <= userID &&
-                 userID < userAccounts.length &&
-                 userAccounts[userID].tryLogin(userID, password)) {
+                userID < userAccounts.length &&
+                userAccounts[userID].tryLogin(userID, password)) {
             return userAccounts[userID];
         } else {
             return null;

@@ -9,6 +9,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 
 public enum JmlClauseKind implements JmlKeyword {
+
     ENSURES(GeneratedJavaParserConstants.ENSURES),
     ENSURES_FREE(GeneratedJavaParserConstants.ENSURES_FREE),
     ENSURES_REDUNDANTLY(GeneratedJavaParserConstants.ENSURES_REDUNDANTLY),
@@ -63,6 +64,7 @@ public enum JmlClauseKind implements JmlKeyword {
     NONE(-1);
 
     public final String jmlSymbol;
+
     private final int tokenType;
 
     JmlClauseKind(int tokenType) {
@@ -80,49 +82,14 @@ public enum JmlClauseKind implements JmlKeyword {
         return jmlSymbol;
     }
 
-    public static EnumSet<JmlClauseKind> VALID_CLAUSES_BLOCK_CONTRACT = EnumSet.of(
-            ENSURES,
-            ENSURES_FREE,
-            ENSURES_REDUNDANTLY,
-            REQUIRES,
-            REQUIRES_FREE,
-            REQUIRES_REDUNDANTLY,
-            DECREASES,
-            MODIFIES,
-            MODIFIABLE,
-            ASSIGNABLE,
-            ACCESSIBLE,
-            PRE,
-            POST,
-            RETURNS,
-            BREAKS,
-            CONTINUES,
-            OLD,
-            FORALL,
-            SIGNALS,
-            SIGNALS_ONLY,
-            WHEN,
-            WORKING_SPACE,
-            CAPTURES,
-            INITIALLY,
-            INVARIANT,
-            ASSIGNABLE_REDUNDANTLY,
-            MODIFIABLE_REDUNDANTLY,
-            MODIFIES_REDUNDANTLY,
-            CAPTURES_REDUNDANTLY,
-            CALLABLE,
-            DIVERGES,
-            DURATION
-    );
+    public static EnumSet<JmlClauseKind> VALID_CLAUSES_BLOCK_CONTRACT = EnumSet.of(ENSURES, ENSURES_FREE, ENSURES_REDUNDANTLY, REQUIRES, REQUIRES_FREE, REQUIRES_REDUNDANTLY, DECREASES, MODIFIES, MODIFIABLE, ASSIGNABLE, ACCESSIBLE, PRE, POST, RETURNS, BREAKS, CONTINUES, OLD, FORALL, SIGNALS, SIGNALS_ONLY, WHEN, WORKING_SPACE, CAPTURES, INITIALLY, INVARIANT, ASSIGNABLE_REDUNDANTLY, MODIFIABLE_REDUNDANTLY, MODIFIES_REDUNDANTLY, CAPTURES_REDUNDANTLY, CALLABLE, DIVERGES, DURATION);
 
     public static JmlClauseKind getKindByToken(JavaToken token) {
-        Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values())
-                .filter(it -> it.jmlSymbol.equals(token.getText())).findFirst();
+        Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values()).filter(it -> it.jmlSymbol.equals(token.getText())).findFirst();
         if (k.isPresent()) {
             return k.get();
         } else {
             throw new IllegalArgumentException("Could not find clause kind for: " + token.getText());
         }
     }
-
 }

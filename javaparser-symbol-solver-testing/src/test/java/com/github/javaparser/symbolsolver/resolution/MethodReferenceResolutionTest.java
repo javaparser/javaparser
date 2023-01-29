@@ -32,8 +32,10 @@ import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -382,19 +384,19 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
     public void resolveOverloadedMethodReference() {
         String s =
                 "import java.util.HashSet;\n" +
-                "import java.util.Set;\n" +
-                "import java.util.stream.Collectors;\n" +
-                "\n" +
-                "public class StreamTest {\n" +
-                "    \n" +
-                "    public void streamTest () {\n" +
-                "        Set<Integer> intSet = new HashSet<Integer>() {{\n" +
-                "           add(1);\n" +
-                "           add(2);\n" +
-                "        }};\n" +
-                "        Set <String> strings = intSet.stream().map(String::valueOf).collect(Collectors.toSet());\n" +
-                "    }\n" +
-                "}";
+                        "import java.util.Set;\n" +
+                        "import java.util.stream.Collectors;\n" +
+                        "\n" +
+                        "public class StreamTest {\n" +
+                        "    \n" +
+                        "    public void streamTest () {\n" +
+                        "        Set<Integer> intSet = new HashSet<Integer>() {{\n" +
+                        "           add(1);\n" +
+                        "           add(2);\n" +
+                        "        }};\n" +
+                        "        Set <String> strings = intSet.stream().map(String::valueOf).collect(Collectors.toSet());\n" +
+                        "    }\n" +
+                        "}";
         TypeSolver typeSolver = new ReflectionTypeSolver();
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
@@ -457,19 +459,19 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         String s =
                 "import java.util.stream.Stream;\n" +
                         "import java.util.List;\n" +
-                "\n" +
-                "public class StreamTest {\n" +
-                "\n" +
-                "    public void streamTest() {\n" +
-                "        String[] arr = {\"1\", \"2\", \"3\", \"\", null};\n" +
+                        "\n" +
+                        "public class StreamTest {\n" +
+                        "\n" +
+                        "    public void streamTest() {\n" +
+                        "        String[] arr = {\"1\", \"2\", \"3\", \"\", null};\n" +
                         "List<String> list = null;\n" +
-                "        list.stream().filter(this::isNotEmpty).forEach(s -> System.out.println(s));\n" +
-                "    }\n" +
-                "\n" +
-                "    private boolean isNotEmpty(String s) {\n" +
-                "        return s != null && s.length() > 0;\n" +
-                "    }\n" +
-                "}\n";
+                        "        list.stream().filter(this::isNotEmpty).forEach(s -> System.out.println(s));\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    private boolean isNotEmpty(String s) {\n" +
+                        "        return s != null && s.length() > 0;\n" +
+                        "    }\n" +
+                        "}\n";
         TypeSolver typeSolver = new ReflectionTypeSolver(false);
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
@@ -561,6 +563,63 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         }
 
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
+    }
+
+    @Test
+    @Disabled(value = "Waiting for constructor calls to be resolvable")
+    void zeroArgumentConstructor_resolveToDeclaration() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method reference expression
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "zeroArgumentConstructor");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        // resolve method reference expression
+        ResolvedMethodDeclaration resolvedMethodDeclaration = methodReferenceExpr.resolve();
+
+        // check that the expected method declaration equals the resolved method declaration
+        assertEquals("Supplier<SuperClass>", resolvedMethodDeclaration.getQualifiedSignature());
+    }
+
+    @Test
+    void zeroArgumentConstructor() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method reference expression
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "zeroArgumentConstructor");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        ResolvedType resolvedType = methodReferenceExpr.calculateResolvedType();
+
+        // check that the expected revolved type equals the resolved type
+        assertEquals("SuperClass", resolvedType.describe());
+    }
+
+    @Test
+    void singleArgumentConstructor() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method reference expression
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "zeroArgumentConstructor");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        ResolvedType resolvedType = methodReferenceExpr.calculateResolvedType();
+
+        // check that the expected revolved type equals the resolved type
+        System.out.println(resolvedType.describe());
+        assertEquals("SuperClass", resolvedType.describe());
     }
 
 }

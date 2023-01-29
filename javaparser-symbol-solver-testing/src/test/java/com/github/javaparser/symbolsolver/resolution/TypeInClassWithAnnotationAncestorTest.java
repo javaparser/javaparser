@@ -35,14 +35,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class TypeInClassWithAnnotationAncestorTest extends AbstractResolutionTest {
 
-	@Test
-	void resolveStringReturnType() {
-		CompilationUnit cu = parseSample("ClassWithAnnotationAncestor");
-		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassWithAnnotationAncestor");
+    @Test
+    void resolveStringReturnType() {
+        CompilationUnit cu = parseSample("ClassWithAnnotationAncestor");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassWithAnnotationAncestor");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testMethod");
         ResolvedType type = JavaParserFacade.get(new ReflectionTypeSolver())
                 .convertToUsage(method.getType());
-		assertFalse(type.isTypeVariable());
-		assertEquals("java.lang.String", type.describe());
-	}
+        assertFalse(type.isTypeVariable());
+        assertEquals("java.lang.String", type.describe());
+    }
 }

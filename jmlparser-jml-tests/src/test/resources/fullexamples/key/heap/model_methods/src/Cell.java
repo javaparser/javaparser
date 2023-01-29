@@ -17,8 +17,12 @@ class Cell {
     /*@ ensures \result == val;
       @ accessible footprint();
       @*/
-    /*@ strictly_pure*/ int get() { return val; }
+    /*@ strictly_pure*/ int get() {
+        return val;
+    }
 
     /*@ ensures post_set(v); assignable footprint(); @*/
-    void set(int v) { val = v; }
+    void set(int v) {
+        val = v;
+    }
 }

@@ -27,17 +27,22 @@ import org.apache.commons.math3.util.FastMath;
  * This class implements the Laplace distribution.
  *
  * @see <a href="http://en.wikipedia.org/wiki/Laplace_distribution">Laplace distribution (Wikipedia)</a>
- *
  * @since 3.4
  */
 public class LaplaceDistribution extends AbstractRealDistribution {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20141003;
 
-    /** The location parameter. */
+    /**
+     * The location parameter.
+     */
     private final double mu;
-    /** The scale parameter. */
+    /**
+     * The scale parameter.
+     */
     private final double beta;
 
     /**
@@ -50,7 +55,7 @@ public class LaplaceDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param mu location parameter
+     * @param mu   location parameter
      * @param beta scale parameter (must be positive)
      * @throws NotStrictlyPositiveException if {@code beta <= 0}
      */
@@ -61,8 +66,8 @@ public class LaplaceDistribution extends AbstractRealDistribution {
     /**
      * Build a new instance.
      *
-     * @param rng Random number generator
-     * @param mu location parameter
+     * @param rng  Random number generator
+     * @param mu   location parameter
      * @param beta scale parameter (must be positive)
      * @throws NotStrictlyPositiveException if {@code beta <= 0}
      */
@@ -95,12 +100,16 @@ public class LaplaceDistribution extends AbstractRealDistribution {
         return beta;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         return FastMath.exp(-FastMath.abs(x - mu) / beta) / (2.0 * beta);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(double x) {
         if (x <= mu) {
             return FastMath.exp((x - mu) / beta) / 2.0;
@@ -109,7 +118,9 @@ public class LaplaceDistribution extends AbstractRealDistribution {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) throws OutOfRangeException {
         if (p < 0.0 || p > 1.0) {
@@ -123,37 +134,51 @@ public class LaplaceDistribution extends AbstractRealDistribution {
         return mu + beta * x;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNumericalMean() {
         return mu;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNumericalVariance() {
         return 2.0 * beta * beta;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getSupportLowerBound() {
         return Double.NEGATIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getSupportUpperBound() {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportConnected() {
         return true;
     }

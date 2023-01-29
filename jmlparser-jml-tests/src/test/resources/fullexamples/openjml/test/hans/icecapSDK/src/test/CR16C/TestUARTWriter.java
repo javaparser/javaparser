@@ -10,7 +10,7 @@ public class TestUARTWriter {
 
     /**
      * @param args
-     * @throws IOException 
+     * @throws IOException
      */
     public static void main(String[] args) throws IOException {
         LED led = new LED();
@@ -19,7 +19,7 @@ public class TestUARTWriter {
         wdog.set |= WatchdogFreeze.FRZ_WDOG;
         String tick = "Tick";
         writer.register();
-        
+
         while (true) {
             led.on();
             devices.System.delay(10000);

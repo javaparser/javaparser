@@ -1,4 +1,3 @@
-
 //@ non_null_by_default
 public class ConfInf {
 
@@ -6,7 +5,10 @@ public class ConfInf {
 
     //@ public normal_behavior
     //@   assignable xx;
-    public static int inc() { return xx; }
+    public static int inc() {
+        return xx;
+    }
+
     //@ spec_public
     private final FF yy;
 
@@ -21,7 +23,8 @@ public class ConfInf {
 abstract class FF {
     //@ public normal_behavior
     //@ pure
-    public FF(int x) {}
+    public FF(int x) {
+    }
 }
 
 // This problem was triggered by calling a method in the arguments

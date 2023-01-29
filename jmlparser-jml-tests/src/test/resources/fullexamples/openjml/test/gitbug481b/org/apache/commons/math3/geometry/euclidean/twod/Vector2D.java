@@ -28,39 +28,57 @@ import org.apache.commons.math3.util.MathUtils;
 
 import java.text.NumberFormat;
 
-/** This class represents a 2D vector.
+/**
+ * This class represents a 2D vector.
  * <p>Instances of this class are guaranteed to be immutable.</p>
+ *
  * @since 3.0
  */
 public class Vector2D implements Vector<Euclidean2D> {
 
-    /** Origin (coordinates: 0, 0). */
-    public static final Vector2D ZERO   = new Vector2D(0, 0);
+    /**
+     * Origin (coordinates: 0, 0).
+     */
+    public static final Vector2D ZERO = new Vector2D(0, 0);
 
     // CHECKSTYLE: stop ConstantName
-    /** A vector with all coordinates set to NaN. */
+    /**
+     * A vector with all coordinates set to NaN.
+     */
     public static final Vector2D NaN = new Vector2D(Double.NaN, Double.NaN);
     // CHECKSTYLE: resume ConstantName
 
-    /** A vector with all coordinates set to positive infinity. */
+    /**
+     * A vector with all coordinates set to positive infinity.
+     */
     public static final Vector2D POSITIVE_INFINITY =
-        new Vector2D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+            new Vector2D(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
 
-    /** A vector with all coordinates set to negative infinity. */
+    /**
+     * A vector with all coordinates set to negative infinity.
+     */
     public static final Vector2D NEGATIVE_INFINITY =
-        new Vector2D(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+            new Vector2D(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
 
-    /** Serializable UID. */
+    /**
+     * Serializable UID.
+     */
     private static final long serialVersionUID = 266938651998679754L;
 
-    /** Abscissa. */
+    /**
+     * Abscissa.
+     */
     private final double x;
 
-    /** Ordinate. */
+    /**
+     * Ordinate.
+     */
     private final double y;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build a vector from its coordinates
+     *
      * @param x abscissa
      * @param y ordinate
      * @see #getX()
@@ -71,10 +89,12 @@ public class Vector2D implements Vector<Euclidean2D> {
         this.y = y;
     }
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build a vector from its coordinates
+     *
      * @param v coordinates array
-     * @exception DimensionMismatchException if array does not have 2 elements
+     * @throws DimensionMismatchException if array does not have 2 elements
      * @see #toArray()
      */
     public Vector2D(double[] v) throws DimensionMismatchException {
@@ -85,9 +105,11 @@ public class Vector2D implements Vector<Euclidean2D> {
         this.y = v[1];
     }
 
-    /** Multiplicative constructor
+    /**
+     * Multiplicative constructor
      * Build a vector from another one and a scale factor.
      * The vector built will be a * u
+     *
      * @param a scale factor
      * @param u base (unscaled) vector
      */
@@ -96,9 +118,11 @@ public class Vector2D implements Vector<Euclidean2D> {
         this.y = a * u.y;
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from two other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -109,9 +133,11 @@ public class Vector2D implements Vector<Euclidean2D> {
         this.y = a1 * u1.y + a2 * u2.y;
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from three other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -120,14 +146,16 @@ public class Vector2D implements Vector<Euclidean2D> {
      * @param u3 third base (unscaled) vector
      */
     public Vector2D(double a1, Vector2D u1, double a2, Vector2D u2,
-                   double a3, Vector2D u3) {
+                    double a3, Vector2D u3) {
         this.x = a1 * u1.x + a2 * u2.x + a3 * u3.x;
         this.y = a1 * u1.y + a2 * u2.y + a3 * u3.y;
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from four other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3 + a4 * u4
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -138,12 +166,14 @@ public class Vector2D implements Vector<Euclidean2D> {
      * @param u4 fourth base (unscaled) vector
      */
     public Vector2D(double a1, Vector2D u1, double a2, Vector2D u2,
-                   double a3, Vector2D u3, double a4, Vector2D u4) {
+                    double a3, Vector2D u3, double a4, Vector2D u4) {
         this.x = a1 * u1.x + a2 * u2.x + a3 * u3.x + a4 * u4.x;
         this.y = a1 * u1.y + a2 * u2.y + a3 * u3.y + a4 * u4.y;
     }
 
-    /** Get the abscissa of the vector.
+    /**
+     * Get the abscissa of the vector.
+     *
      * @return abscissa of the vector
      * @see #Vector2D(double, double)
      */
@@ -151,7 +181,9 @@ public class Vector2D implements Vector<Euclidean2D> {
         return x;
     }
 
-    /** Get the ordinate of the vector.
+    /**
+     * Get the ordinate of the vector.
+     *
      * @return ordinate of the vector
      * @see #Vector2D(double, double)
      */
@@ -159,69 +191,93 @@ public class Vector2D implements Vector<Euclidean2D> {
         return y;
     }
 
-    /** Get the vector coordinates as a dimension 2 array.
+    /**
+     * Get the vector coordinates as a dimension 2 array.
+     *
      * @return vector coordinates
      * @see #Vector2D(double[])
      */
     public double[] toArray() {
-        return new double[] { x, y };
+        return new double[]{x, y};
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Space getSpace() {
         return Euclidean2D.getInstance();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D getZero() {
         return ZERO;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNorm1() {
         return FastMath.abs(x) + FastMath.abs(y);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNorm() {
-        return FastMath.sqrt (x * x + y * y);
+        return FastMath.sqrt(x * x + y * y);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNormSq() {
         return x * x + y * y;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNormInf() {
         return FastMath.max(FastMath.abs(x), FastMath.abs(y));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D add(Vector<Euclidean2D> v) {
         Vector2D v2 = (Vector2D) v;
         return new Vector2D(x + v2.getX(), y + v2.getY());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D add(double factor, Vector<Euclidean2D> v) {
         Vector2D v2 = (Vector2D) v;
         return new Vector2D(x + factor * v2.getX(), y + factor * v2.getY());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D subtract(Vector<Euclidean2D> p) {
         Vector2D p3 = (Vector2D) p;
         return new Vector2D(x - p3.x, y - p3.y);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D subtract(double factor, Vector<Euclidean2D> v) {
         Vector2D v2 = (Vector2D) v;
         return new Vector2D(x - factor * v2.getX(), y - factor * v2.getY());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D normalize() throws MathArithmeticException {
         double s = getNorm();
         if (s == 0) {
@@ -230,16 +286,18 @@ public class Vector2D implements Vector<Euclidean2D> {
         return scalarMultiply(1 / s);
     }
 
-    /** Compute the angular separation between two vectors.
+    /**
+     * Compute the angular separation between two vectors.
      * <p>This method computes the angular separation between two
      * vectors using the dot product for well separated vectors and the
      * cross product for almost aligned vectors. This allows to have a
      * good accuracy in all cases, even for vectors very close to each
      * other.</p>
+     *
      * @param v1 first vector
      * @param v2 second vector
      * @return angular separation between v1 and v2
-     * @exception MathArithmeticException if either vector has a null norm
+     * @throws MathArithmeticException if either vector has a null norm
      */
     public static double angle(Vector2D v1, Vector2D v2) throws MathArithmeticException {
 
@@ -264,27 +322,37 @@ public class Vector2D implements Vector<Euclidean2D> {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D negate() {
         return new Vector2D(-x, -y);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D scalarMultiply(double a) {
         return new Vector2D(a * x, a * y);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isNaN() {
         return Double.isNaN(x) || Double.isNaN(y);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isInfinite() {
         return !isNaN() && (Double.isInfinite(x) || Double.isInfinite(y));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double distance1(Vector<Euclidean2D> p) {
         Vector2D p3 = (Vector2D) p;
         final double dx = FastMath.abs(p3.x - x);
@@ -292,13 +360,16 @@ public class Vector2D implements Vector<Euclidean2D> {
         return dx + dy;
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
     public double distance(Vector<Euclidean2D> p) {
         return distance((Point<Euclidean2D>) p);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double distance(Point<Euclidean2D> p) {
         Vector2D p3 = (Vector2D) p;
         final double dx = p3.x - x;
@@ -306,7 +377,9 @@ public class Vector2D implements Vector<Euclidean2D> {
         return FastMath.sqrt(dx * dx + dy * dy);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double distanceInf(Vector<Euclidean2D> p) {
         Vector2D p3 = (Vector2D) p;
         final double dx = FastMath.abs(p3.x - x);
@@ -314,7 +387,9 @@ public class Vector2D implements Vector<Euclidean2D> {
         return FastMath.max(dx, dy);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double distanceSq(Vector<Euclidean2D> p) {
         Vector2D p3 = (Vector2D) p;
         final double dx = p3.x - x;
@@ -322,7 +397,9 @@ public class Vector2D implements Vector<Euclidean2D> {
         return dx * dx + dy * dy;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double dotProduct(final Vector<Euclidean2D> v) {
         final Vector2D v2 = (Vector2D) v;
         return MathArrays.linearCombination(x, v2.x, y, v2.y);
@@ -334,7 +411,7 @@ public class Vector2D implements Vector<Euclidean2D> {
      * The cross product can be used to determine the location of a point
      * with regard to the line formed by (p1, p2) and is calculated as:
      * \[
-     *    P = (x_2 - x_1)(y_3 - y_1) - (y_2 - y_1)(x_3 - x_1)
+     * P = (x_2 - x_1)(y_3 - y_1) - (y_2 - y_1)(x_3 - x_1)
      * \]
      * with \(p3 = (x_3, y_3)\) being this instance.
      * <p>
@@ -345,7 +422,6 @@ public class Vector2D implements Vector<Euclidean2D> {
      * @param p1 first point of the line
      * @param p2 second point of the line
      * @return the cross-product
-     *
      * @see <a href="http://en.wikipedia.org/wiki/Cross_product">Cross product (Wikipedia)</a>
      */
     public double crossProduct(final Vector2D p1, final Vector2D p2) {
@@ -356,10 +432,12 @@ public class Vector2D implements Vector<Euclidean2D> {
         return MathArrays.linearCombination(x1, y1, -x2, y2);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>2</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>p1.subtract(p2).getNorm()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param p1 first vector
      * @param p2 second vector
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
@@ -368,10 +446,12 @@ public class Vector2D implements Vector<Euclidean2D> {
         return p1.distance(p2);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>p1.subtract(p2).getNormInf()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param p1 first vector
      * @param p2 second vector
      * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
@@ -380,10 +460,12 @@ public class Vector2D implements Vector<Euclidean2D> {
         return p1.distanceInf(p2);
     }
 
-    /** Compute the square of the distance between two vectors.
+    /**
+     * Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
      * <code>p1.subtract(p2).getNormSq()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param p1 first vector
      * @param p2 second vector
      * @return the square of the distance between p1 and p2
@@ -407,9 +489,8 @@ public class Vector2D implements Vector<Euclidean2D> {
      *
      * @param other Object to test for equality to this
      * @return true if two 2D vector objects are equal, false if
-     *         object is null, not an instance of Vector2D, or
-     *         not equal to this Vector2D instance
-     *
+     * object is null, not an instance of Vector2D, or
+     * not equal to this Vector2D instance
      */
     @Override
     public boolean equals(Object other) {
@@ -419,7 +500,7 @@ public class Vector2D implements Vector<Euclidean2D> {
         }
 
         if (other instanceof Vector2D) {
-            final Vector2D rhs = (Vector2D)other;
+            final Vector2D rhs = (Vector2D) other;
             if (rhs.isNaN()) {
                 return this.isNaN();
             }
@@ -441,10 +522,12 @@ public class Vector2D implements Vector<Euclidean2D> {
         if (isNaN()) {
             return 542;
         }
-        return 122 * (76 * MathUtils.hash(x) +  MathUtils.hash(y));
+        return 122 * (76 * MathUtils.hash(x) + MathUtils.hash(y));
     }
 
-    /** Get a string representation of this vector.
+    /**
+     * Get a string representation of this vector.
+     *
      * @return a string representation of this vector
      */
     @Override
@@ -452,7 +535,9 @@ public class Vector2D implements Vector<Euclidean2D> {
         return Vector2DFormat.getInstance().format(this);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String toString(final NumberFormat format) {
         return new Vector2DFormat(format).format(this);
     }

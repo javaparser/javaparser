@@ -28,17 +28,15 @@ import org.apache.commons.math3.optimization.*;
  * settings, iterations and evaluations counting.
  *
  * @param <FUNC> Type of the objective function to be optimized.
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
  * @deprecated As of 3.1 since the {@link BaseAbstractMultivariateOptimizer
  * base class} contains similar functionality.
  */
 @Deprecated
 public abstract class BaseAbstractMultivariateSimpleBoundsOptimizer<FUNC extends MultivariateFunction>
-    extends BaseAbstractMultivariateOptimizer<FUNC>
-    implements BaseMultivariateOptimizer<FUNC>,
-               BaseMultivariateSimpleBoundsOptimizer<FUNC> {
+        extends BaseAbstractMultivariateOptimizer<FUNC>
+        implements BaseMultivariateOptimizer<FUNC>,
+        BaseMultivariateSimpleBoundsOptimizer<FUNC> {
     /**
      * Simple constructor with default settings.
      * The convergence checker is set to a
@@ -48,7 +46,8 @@ public abstract class BaseAbstractMultivariateSimpleBoundsOptimizer<FUNC extends
      * @deprecated See {@link org.apache.commons.math3.optimization.SimpleValueChecker#SimpleValueChecker()}
      */
     @Deprecated
-    protected BaseAbstractMultivariateSimpleBoundsOptimizer() {}
+    protected BaseAbstractMultivariateSimpleBoundsOptimizer() {
+    }
 
     /**
      * @param checker Convergence checker.
@@ -57,20 +56,24 @@ public abstract class BaseAbstractMultivariateSimpleBoundsOptimizer<FUNC extends
         super(checker);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointValuePair optimize(int maxEval, FUNC f, GoalType goalType,
                                    double[] startPoint) {
         return super.optimizeInternal(maxEval, f, goalType,
-                                      new InitialGuess(startPoint));
+                new InitialGuess(startPoint));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public PointValuePair optimize(int maxEval, FUNC f, GoalType goalType,
                                    double[] startPoint,
                                    double[] lower, double[] upper) {
         return super.optimizeInternal(maxEval, f, goalType,
-                                      new InitialGuess(startPoint),
-                                      new SimpleBounds(lower, upper));
+                new InitialGuess(startPoint),
+                new SimpleBounds(lower, upper));
     }
 }

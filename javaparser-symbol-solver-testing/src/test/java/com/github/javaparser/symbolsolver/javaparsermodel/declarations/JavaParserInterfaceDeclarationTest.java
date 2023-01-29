@@ -354,9 +354,9 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
     @Test
     void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        
+
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
-        
+
         assertEquals(12, ancestors.size());
 
         ResolvedReferenceType ancestor;
@@ -747,7 +747,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
         ));
 
         // Temporary workaround to allow tests to pass on JDK14
-        if(TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
+        if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
 
@@ -918,7 +918,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
     @Override
     public JavaParserInterfaceDeclaration createValue() {
         ClassOrInterfaceDeclaration classOrInterface = StaticJavaParser.parse("interface A {}")
-                        .findFirst(ClassOrInterfaceDeclaration.class).get();
+                .findFirst(ClassOrInterfaceDeclaration.class).get();
         return new JavaParserInterfaceDeclaration(classOrInterface, typeSolver);
     }
 

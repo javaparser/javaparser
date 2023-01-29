@@ -14,11 +14,11 @@
 public class D extends C {
 
     public int h() {
-	return 5;
+        return 5;
     }
 
     public boolean f() {
-	return h()<3;
+        return h() < 3;
     }
 
 }

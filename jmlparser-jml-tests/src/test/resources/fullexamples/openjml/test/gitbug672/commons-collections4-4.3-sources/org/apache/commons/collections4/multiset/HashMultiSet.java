@@ -36,7 +36,9 @@ import java.util.HashMap;
  */
 public class HashMultiSet<E> extends AbstractMapMultiSet<E> implements Serializable {
 
-    /** Serial version lock */
+    /**
+     * Serial version lock
+     */
     private static final long serialVersionUID = 20150610L;
 
     /**
@@ -49,7 +51,7 @@ public class HashMultiSet<E> extends AbstractMapMultiSet<E> implements Serializa
     /**
      * Constructs a multiset containing all the members of the given collection.
      *
-     * @param coll  a collection to copy into this multiset
+     * @param coll a collection to copy into this multiset
      */
     public HashMultiSet(final Collection<? extends E> coll) {
         this();
@@ -57,10 +59,11 @@ public class HashMultiSet<E> extends AbstractMapMultiSet<E> implements Serializa
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the multiset out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -72,7 +75,7 @@ public class HashMultiSet<E> extends AbstractMapMultiSet<E> implements Serializa
      * Read the multiset in using a custom routine.
      *
      * @param in the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {

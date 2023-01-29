@@ -1,5 +1,4 @@
 /**
- *
  * @author christoph
  */
 public class Disjoint {
@@ -172,9 +171,8 @@ public class Disjoint {
         ensures     x == 0;
         assignable  y;
      */
-    void xZeroHelper(){
+    void xZeroHelper() {
     }
-
 
 
     /*@ requires    \disjoint(\locset(x), rep);

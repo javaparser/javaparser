@@ -90,7 +90,7 @@ class ImplementedOrExtendedTypeResolutionTest extends AbstractResolutionTest {
     @Test
     void solveImplementedTypeWithSameName() throws IOException {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(
-            new JavaParserTypeSolver(adaptPath("src/test/resources/ImplementedOrExtendedTypeResolution/pkg"))));
+                new JavaParserTypeSolver(adaptPath("src/test/resources/ImplementedOrExtendedTypeResolution/pkg"))));
 
         CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/ImplementedOrExtendedTypeResolution/pkg/main/A.java"));
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "A");

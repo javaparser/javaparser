@@ -29,58 +29,72 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Neural network, composed of {@link Neuron} instances and the links
  * between them.
- *
+ * <p>
  * Although updating a neuron's state is thread-safe, modifying the
  * network's topology (adding or removing links) is not.
  *
  * @since 3.3
  */
 public class Network
-    implements Iterable<Neuron>,
-               Serializable {
-    /** Serializable. */
+        implements Iterable<Neuron>,
+        Serializable {
+    /**
+     * Serializable.
+     */
     private static final long serialVersionUID = 20130207L;
-    /** Neurons. */
+    /**
+     * Neurons.
+     */
     private final ConcurrentHashMap<Long, Neuron> neuronMap
-        = new ConcurrentHashMap<Long, Neuron>();
-    /** Next available neuron identifier. */
+            = new ConcurrentHashMap<Long, Neuron>();
+    /**
+     * Next available neuron identifier.
+     */
     private final AtomicLong nextId;
-    /** Neuron's features set size. */
+    /**
+     * Neuron's features set size.
+     */
     private final int featureSize;
-    /** Links. */
+    /**
+     * Links.
+     */
     private final ConcurrentHashMap<Long, Set<Long>> linkMap
-        = new ConcurrentHashMap<Long, Set<Long>>();
+            = new ConcurrentHashMap<Long, Set<Long>>();
 
     /**
      * Comparator that prescribes an order of the neurons according
      * to the increasing order of their identifier.
      */
     public static class NeuronIdentifierComparator
-        implements Comparator<Neuron>,
-                   Serializable {
-        /** Version identifier. */
+            implements Comparator<Neuron>,
+            Serializable {
+        /**
+         * Version identifier.
+         */
         private static final long serialVersionUID = 20130207L;
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public int compare(Neuron a,
                            Neuron b) {
             final long aId = a.getIdentifier();
             final long bId = b.getIdentifier();
             return aId < bId ? -1 :
-                aId > bId ? 1 : 0;
+                    aId > bId ? 1 : 0;
         }
     }
 
     /**
      * Constructor with restricted access, solely used for deserialization.
      *
-     * @param nextId Next available identifier.
-     * @param featureSize Number of features.
-     * @param neuronList Neurons.
+     * @param nextId          Next available identifier.
+     * @param featureSize     Number of features.
+     * @param neuronList      Neurons.
      * @param neighbourIdList Links associated to each of the neurons in
-     * {@code neuronList}.
+     *                        {@code neuronList}.
      * @throws MathIllegalStateException if an inconsistency is detected
-     * (which probably means that the serialized form has been corrupted).
+     *                                   (which probably means that the serialized form has been corrupted).
      */
     Network(long nextId,
             int featureSize,
@@ -118,8 +132,8 @@ public class Network
 
     /**
      * @param initialIdentifier Identifier for the first neuron that
-     * will be added to this network.
-     * @param featureSize Size of the neuron's features.
+     *                          will be added to this network.
+     * @param featureSize       Size of the neuron's features.
      */
     public Network(long initialIdentifier,
                    int featureSize) {
@@ -137,7 +151,7 @@ public class Network
      */
     public synchronized Network copy() {
         final Network copy = new Network(nextId.get(),
-                                         featureSize);
+                featureSize);
 
 
         for (Map.Entry<Long, Neuron> e : neuronMap.entrySet()) {
@@ -181,8 +195,8 @@ public class Network
      * @param features Initial values for the neuron's features.
      * @return the neuron's identifier.
      * @throws DimensionMismatchException if the length of {@code features}
-     * is different from the expected size (as set by the
-     * {@link #Network(long,int) constructor}).
+     *                                    is different from the expected size (as set by the
+     *                                    {@link #Network(long, int) constructor}).
      */
     public long createNeuron(double[] features) {
         if (features.length != featureSize) {
@@ -198,11 +212,11 @@ public class Network
     /**
      * Deletes a neuron.
      * Links from all neighbours to the removed neuron will also be
-     * {@link #deleteLink(Neuron,Neuron) deleted}.
+     * {@link #deleteLink(Neuron, Neuron) deleted}.
      *
      * @param neuron Neuron to be removed from this network.
      * @throws NoSuchElementException if {@code n} does not belong to
-     * this network.
+     *                                this network.
      */
     public void deleteNeuron(Neuron neuron) {
         final Collection<Neuron> neighbours = getNeighbours(neuron);
@@ -234,7 +248,7 @@ public class Network
      * @param a Neuron.
      * @param b Neuron.
      * @throws NoSuchElementException if the neurons do not exist in the
-     * network.
+     *                                network.
      */
     public void addLink(Neuron a,
                         Neuron b) {
@@ -259,7 +273,7 @@ public class Network
      * to this network.
      *
      * @param linkSet Neuron identifier.
-     * @param id Neuron identifier.
+     * @param id      Neuron identifier.
      */
     private void addLinkToLinkSet(Set<Long> linkSet,
                                   long id) {
@@ -272,7 +286,7 @@ public class Network
      * @param a Neuron.
      * @param b Neuron.
      * @throws NoSuchElementException if the neurons do not exist in the
-     * network.
+     *                                network.
      */
     public void deleteLink(Neuron a,
                            Neuron b) {
@@ -297,7 +311,7 @@ public class Network
      * to this network.
      *
      * @param linkSet Neuron identifier.
-     * @param id Neuron identifier.
+     * @param id      Neuron identifier.
      */
     private void deleteLinkFromLinkSet(Set<Long> linkSet,
                                        long id) {
@@ -310,7 +324,7 @@ public class Network
      * @param id Identifier.
      * @return the neuron associated with the given {@code id}.
      * @throws NoSuchElementException if the neuron does not exist in the
-     * network.
+     *                                network.
      */
     public Neuron getNeuron(long id) {
         final Neuron n = neuronMap.get(id);
@@ -323,9 +337,10 @@ public class Network
     /**
      * Retrieves the neurons in the neighbourhood of any neuron in the
      * {@code neurons} list.
+     *
      * @param neurons Neurons for which to retrieve the neighbours.
      * @return the list of neighbours.
-     * @see #getNeighbours(Iterable,Iterable)
+     * @see #getNeighbours(Iterable, Iterable)
      */
     public Collection<Neuron> getNeighbours(Iterable<Neuron> neurons) {
         return getNeighbours(neurons, null);
@@ -340,7 +355,7 @@ public class Network
      *
      * @param neurons Neurons for which to retrieve the neighbours.
      * @param exclude Neurons to exclude from the returned list.
-     * Can be {@code null}.
+     *                Can be {@code null}.
      * @return the list of neighbours.
      */
     public Collection<Neuron> getNeighbours(Iterable<Neuron> neurons,
@@ -369,7 +384,7 @@ public class Network
      *
      * @param neuron Neuron for which to retrieve the neighbours.
      * @return the list of neighbours.
-     * @see #getNeighbours(Neuron,Iterable)
+     * @see #getNeighbours(Neuron, Iterable)
      */
     public Collection<Neuron> getNeighbours(Neuron neuron) {
         return getNeighbours(neuron, null);
@@ -378,9 +393,9 @@ public class Network
     /**
      * Retrieves the neighbours of the given neuron.
      *
-     * @param neuron Neuron for which to retrieve the neighbours.
+     * @param neuron  Neuron for which to retrieve the neighbours.
      * @param exclude Neurons to exclude from the returned list.
-     * Can be {@code null}.
+     *                Can be {@code null}.
      * @return the list of neighbours.
      */
     public Collection<Neuron> getNeighbours(Neuron neuron,
@@ -439,32 +454,42 @@ public class Network
         }
 
         return new SerializationProxy(nextId.get(),
-                                      featureSize,
-                                      neuronList,
-                                      neighbourIdList);
+                featureSize,
+                neuronList,
+                neighbourIdList);
     }
 
     /**
      * Serialization.
      */
     private static class SerializationProxy implements Serializable {
-        /** Serializable. */
+        /**
+         * Serializable.
+         */
         private static final long serialVersionUID = 20130207L;
-        /** Next identifier. */
+        /**
+         * Next identifier.
+         */
         private final long nextId;
-        /** Number of features. */
+        /**
+         * Number of features.
+         */
         private final int featureSize;
-        /** Neurons. */
+        /**
+         * Neurons.
+         */
         private final Neuron[] neuronList;
-        /** Links. */
+        /**
+         * Links.
+         */
         private final long[][] neighbourIdList;
 
         /**
-         * @param nextId Next available identifier.
-         * @param featureSize Number of features.
-         * @param neuronList Neurons.
+         * @param nextId          Next available identifier.
+         * @param featureSize     Number of features.
+         * @param neuronList      Neurons.
          * @param neighbourIdList Links associated to each of the neurons in
-         * {@code neuronList}.
+         *                        {@code neuronList}.
          */
         SerializationProxy(long nextId,
                            int featureSize,
@@ -483,9 +508,9 @@ public class Network
          */
         private Object readResolve() {
             return new Network(nextId,
-                               featureSize,
-                               neuronList,
-                               neighbourIdList);
+                    featureSize,
+                    neuronList,
+                    neighbourIdList);
         }
     }
 }

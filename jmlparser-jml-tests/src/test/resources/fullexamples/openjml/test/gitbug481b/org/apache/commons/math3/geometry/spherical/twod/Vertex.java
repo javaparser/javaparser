@@ -19,55 +19,73 @@ package org.apache.commons.math3.geometry.spherical.twod;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Spherical polygons boundary vertex.
+/**
+ * Spherical polygons boundary vertex.
+ *
  * @see SphericalPolygonsSet#getBoundaryLoops()
  * @see Edge
  * @since 3.3
  */
 public class Vertex {
 
-    /** Vertex location. */
+    /**
+     * Vertex location.
+     */
     private final S2Point location;
 
-    /** Incoming edge. */
+    /**
+     * Incoming edge.
+     */
     private Edge incoming;
 
-    /** Outgoing edge. */
+    /**
+     * Outgoing edge.
+     */
     private Edge outgoing;
 
-    /** Circles bound with this vertex. */
+    /**
+     * Circles bound with this vertex.
+     */
     private final List<Circle> circles;
 
-    /** Build a non-processed vertex not owned by any node yet.
+    /**
+     * Build a non-processed vertex not owned by any node yet.
+     *
      * @param location vertex location
      */
     Vertex(final S2Point location) {
         this.location = location;
         this.incoming = null;
         this.outgoing = null;
-        this.circles  = new ArrayList<Circle>();
+        this.circles = new ArrayList<Circle>();
     }
 
-    /** Get Vertex location.
+    /**
+     * Get Vertex location.
+     *
      * @return vertex location
      */
     public S2Point getLocation() {
         return location;
     }
 
-    /** Bind a circle considered to contain this vertex.
+    /**
+     * Bind a circle considered to contain this vertex.
+     *
      * @param circle circle to bind with this vertex
      */
     void bindWith(final Circle circle) {
         circles.add(circle);
     }
 
-    /** Get the common circle bound with both the instance and another vertex, if any.
+    /**
+     * Get the common circle bound with both the instance and another vertex, if any.
      * <p>
      * When two vertices are both bound to the same circle, this means they are
      * already handled by node associated with this circle, so there is no need
      * to create a cut hyperplane for them.
      * </p>
+     *
      * @param vertex other vertex to check instance against
      * @return circle bound with both the instance and another vertex, or null if the
      * two vertices do not share a circle yet
@@ -83,11 +101,13 @@ public class Vertex {
         return null;
     }
 
-    /** Set incoming edge.
+    /**
+     * Set incoming edge.
      * <p>
      * The circle supporting the incoming edge is automatically bound
      * with the instance.
      * </p>
+     *
      * @param incoming incoming edge
      */
     void setIncoming(final Edge incoming) {
@@ -95,18 +115,22 @@ public class Vertex {
         bindWith(incoming.getCircle());
     }
 
-    /** Get incoming edge.
+    /**
+     * Get incoming edge.
+     *
      * @return incoming edge
      */
     public Edge getIncoming() {
         return incoming;
     }
 
-    /** Set outgoing edge.
+    /**
+     * Set outgoing edge.
      * <p>
      * The circle supporting the outgoing edge is automatically bound
      * with the instance.
      * </p>
+     *
      * @param outgoing outgoing edge
      */
     void setOutgoing(final Edge outgoing) {
@@ -114,7 +138,9 @@ public class Vertex {
         bindWith(outgoing.getCircle());
     }
 
-    /** Get outgoing edge.
+    /**
+     * Get outgoing edge.
+     *
      * @return outgoing edge
      */
     public Edge getOutgoing() {

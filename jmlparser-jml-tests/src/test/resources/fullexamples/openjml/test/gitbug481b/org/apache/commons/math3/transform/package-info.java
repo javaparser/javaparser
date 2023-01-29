@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 /**
- *
- *     Implementations of transform methods, including Fast Fourier transforms.
- *
+ * Implementations of transform methods, including Fast Fourier transforms.
  */
 package org.apache.commons.math3.transform;

@@ -43,8 +43,8 @@ class MethodLikeSignaturesTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodLikeSignaturesTest");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
-                                                        .asExpressionStmt().getExpression().asVariableDeclarationExpr()
-                                                        .getVariable(0).getInitializer().get().asObjectCreationExpr();
+                .asExpressionStmt().getExpression().asVariableDeclarationExpr()
+                .getVariable(0).getInitializer().get().asObjectCreationExpr();
 
         ResolvedConstructorDeclaration resolvedConstructorDeclaration =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr).getCorrespondingDeclaration();
@@ -60,7 +60,7 @@ class MethodLikeSignaturesTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodLikeSignaturesTest");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
         MethodCallExpr methodCallExpr = method.getBody().get().getStatements().get(1)
-                                                .asExpressionStmt().getExpression().asMethodCallExpr();
+                .asExpressionStmt().getExpression().asMethodCallExpr();
 
         ResolvedMethodDeclaration resolvedMethodDeclaration =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr).getCorrespondingDeclaration();

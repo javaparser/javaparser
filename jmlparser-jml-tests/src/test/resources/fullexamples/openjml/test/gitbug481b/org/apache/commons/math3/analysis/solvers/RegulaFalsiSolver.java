@@ -54,7 +54,9 @@ package org.apache.commons.math3.analysis.solvers;
  */
 public class RegulaFalsiSolver extends BaseSecantSolver {
 
-    /** Construct a solver with default accuracy (1e-6). */
+    /**
+     * Construct a solver with default accuracy (1e-6).
+     */
     public RegulaFalsiSolver() {
         super(DEFAULT_ABSOLUTE_ACCURACY, Method.REGULA_FALSI);
     }
@@ -82,8 +84,8 @@ public class RegulaFalsiSolver extends BaseSecantSolver {
     /**
      * Construct a solver.
      *
-     * @param relativeAccuracy Relative accuracy.
-     * @param absoluteAccuracy Absolute accuracy.
+     * @param relativeAccuracy      Relative accuracy.
+     * @param absoluteAccuracy      Absolute accuracy.
      * @param functionValueAccuracy Maximum function value error.
      */
     public RegulaFalsiSolver(final double relativeAccuracy,

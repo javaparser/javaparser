@@ -24,7 +24,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Transformer to Nordsieck vectors for Adams integrators.
+/**
+ * Transformer to Nordsieck vectors for Adams integrators.
  * <p>This class is used by {@link AdamsBashforthIntegrator Adams-Bashforth} and
  * {@link AdamsMoultonIntegrator Adams-Moulton} integrators to convert between
  * classical representation with several previous first derivatives and Nordsieck
@@ -126,19 +127,27 @@ import java.util.Map;
  */
 public class AdamsNordsieckTransformer {
 
-    /** Cache for already computed coefficients. */
+    /**
+     * Cache for already computed coefficients.
+     */
     private static final Map<Integer, AdamsNordsieckTransformer> CACHE =
-        new HashMap<Integer, AdamsNordsieckTransformer>();
+            new HashMap<Integer, AdamsNordsieckTransformer>();
 
-    /** Update matrix for the higher order derivatives h<sup>2</sup>/2 y'', h<sup>3</sup>/6 y''' ... */
+    /**
+     * Update matrix for the higher order derivatives h<sup>2</sup>/2 y'', h<sup>3</sup>/6 y''' ...
+     */
     private final Array2DRowRealMatrix update;
 
-    /** Update coefficients of the higher order derivatives wrt y'. */
+    /**
+     * Update coefficients of the higher order derivatives wrt y'.
+     */
     private final double[] c1;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
+     *
      * @param n number of steps of the multistep method
-     * (excluding the one being computed)
+     *          (excluding the one being computed)
      */
     private AdamsNordsieckTransformer(final int n) {
 
@@ -147,7 +156,7 @@ public class AdamsNordsieckTransformer {
         // compute exact coefficients
         FieldMatrix<BigFraction> bigP = buildP(rows);
         FieldDecompositionSolver<BigFraction> pSolver =
-            new FieldLUDecomposition<BigFraction>(bigP).getSolver();
+                new FieldLUDecomposition<BigFraction>(bigP).getSolver();
 
         BigFraction[] u = new BigFraction[rows];
         Arrays.fill(u, BigFraction.ONE);
@@ -164,24 +173,26 @@ public class AdamsNordsieckTransformer {
         shiftedP[0] = new BigFraction[rows];
         Arrays.fill(shiftedP[0], BigFraction.ZERO);
         FieldMatrix<BigFraction> bigMSupdate =
-            pSolver.solve(new Array2DRowFieldMatrix<BigFraction>(shiftedP, false));
+                pSolver.solve(new Array2DRowFieldMatrix<BigFraction>(shiftedP, false));
 
         // convert coefficients to double
-        update         = MatrixUtils.bigFractionMatrixToRealMatrix(bigMSupdate);
-        c1             = new double[rows];
+        update = MatrixUtils.bigFractionMatrixToRealMatrix(bigMSupdate);
+        c1 = new double[rows];
         for (int i = 0; i < rows; ++i) {
             c1[i] = bigC1[i].doubleValue();
         }
 
     }
 
-    /** Get the Nordsieck transformer for a given number of steps.
+    /**
+     * Get the Nordsieck transformer for a given number of steps.
+     *
      * @param nSteps number of steps of the multistep method
-     * (excluding the one being computed)
+     *               (excluding the one being computed)
      * @return Nordsieck transformer for the specified number of steps
      */
     public static AdamsNordsieckTransformer getInstance(final int nSteps) {
-        synchronized(CACHE) {
+        synchronized (CACHE) {
             AdamsNordsieckTransformer t = CACHE.get(nSteps);
             if (t == null) {
                 t = new AdamsNordsieckTransformer(nSteps);
@@ -191,8 +202,10 @@ public class AdamsNordsieckTransformer {
         }
     }
 
-    /** Get the number of steps of the method
+    /**
+     * Get the number of steps of the method
      * (excluding the one being computed).
+     *
      * @return number of steps of the method
      * (excluding the one being computed)
      * @deprecated as of 3.6, this method is not used anymore
@@ -202,7 +215,8 @@ public class AdamsNordsieckTransformer {
         return c1.length;
     }
 
-    /** Build the P matrix.
+    /**
+     * Build the P matrix.
      * <p>The P matrix general terms are shifted (j+1) (-i)<sup>j</sup> terms
      * with i being the row number starting from 1 and j being the column
      * number starting from 1:
@@ -213,6 +227,7 @@ public class AdamsNordsieckTransformer {
      *        [  -8  48 -256 1280  ... ]
      *        [          ...           ]
      * </pre></p>
+     *
      * @param rows number of rows of the matrix
      * @return P matrix
      */
@@ -235,10 +250,12 @@ public class AdamsNordsieckTransformer {
 
     }
 
-    /** Initialize the high order scaled derivatives at step start.
-     * @param h step size to use for scaling
-     * @param t first steps times
-     * @param y first steps states
+    /**
+     * Initialize the high order scaled derivatives at step start.
+     *
+     * @param h    step size to use for scaling
+     * @param t    first steps times
+     * @param y    first steps states
      * @param yDot first steps derivatives
      * @return Nordieck vector at start of first step (h<sup>2</sup>/2 y''<sub>n</sub>,
      * h<sup>3</sup>/6 y'''<sub>n</sub> ... h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub>)
@@ -257,35 +274,35 @@ public class AdamsNordsieckTransformer {
         // The goal is to have s2 to sk as accurate as possible considering the fact the sum is
         // truncated and we don't want the error terms to be included in s2 ... sk, so we need
         // to solve also for the remainder
-        final double[][] a     = new double[c1.length + 1][c1.length + 1];
-        final double[][] b     = new double[c1.length + 1][y[0].length];
-        final double[]   y0    = y[0];
-        final double[]   yDot0 = yDot[0];
+        final double[][] a = new double[c1.length + 1][c1.length + 1];
+        final double[][] b = new double[c1.length + 1][y[0].length];
+        final double[] y0 = y[0];
+        final double[] yDot0 = yDot[0];
         for (int i = 1; i < y.length; ++i) {
 
-            final double di    = t[i] - t[0];
+            final double di = t[i] - t[0];
             final double ratio = di / h;
-            double dikM1Ohk    =  1 / h;
+            double dikM1Ohk = 1 / h;
 
             // linear coefficients of equations
             // y(ti) - y(t0) - di y'(t0) and y'(ti) - y'(t0)
-            final double[] aI    = a[2 * i - 2];
+            final double[] aI = a[2 * i - 2];
             final double[] aDotI = (2 * i - 1) < a.length ? a[2 * i - 1] : null;
             for (int j = 0; j < aI.length; ++j) {
                 dikM1Ohk *= ratio;
-                aI[j]     = di      * dikM1Ohk;
+                aI[j] = di * dikM1Ohk;
                 if (aDotI != null) {
-                    aDotI[j]  = (j + 2) * dikM1Ohk;
+                    aDotI[j] = (j + 2) * dikM1Ohk;
                 }
             }
 
             // expected value of the previous equations
-            final double[] yI    = y[i];
+            final double[] yI = y[i];
             final double[] yDotI = yDot[i];
-            final double[] bI    = b[2 * i - 2];
+            final double[] bI = b[2 * i - 2];
             final double[] bDotI = (2 * i - 1) < b.length ? b[2 * i - 1] : null;
             for (int j = 0; j < yI.length; ++j) {
-                bI[j]    = yI[j] - y0[j] - di * yDot0[j];
+                bI[j] = yI[j] - y0[j] - di * yDot0[j];
                 if (bDotI != null) {
                     bDotI[j] = yDotI[j] - yDot0[j];
                 }
@@ -309,14 +326,16 @@ public class AdamsNordsieckTransformer {
 
     }
 
-    /** Update the high order scaled derivatives for Adams integrators (phase 1).
+    /**
+     * Update the high order scaled derivatives for Adams integrators (phase 1).
      * <p>The complete update of high order derivatives has a form similar to:
      * <pre>
      * r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub>
      * </pre>
      * this method computes the P<sup>-1</sup> A P r<sub>n</sub> part.</p>
+     *
      * @param highOrder high order scaled derivatives
-     * (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
+     *                  (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
      * @return updated high order derivatives
      * @see #updateHighOrderDerivativesPhase2(double[], double[], Array2DRowRealMatrix)
      */
@@ -324,17 +343,19 @@ public class AdamsNordsieckTransformer {
         return update.multiply(highOrder);
     }
 
-    /** Update the high order scaled derivatives Adams integrators (phase 2).
+    /**
+     * Update the high order scaled derivatives Adams integrators (phase 2).
      * <p>The complete update of high order derivatives has a form similar to:
      * <pre>
      * r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub>
      * </pre>
      * this method computes the (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u part.</p>
      * <p>Phase 1 of the update must already have been performed.</p>
-     * @param start first order scaled derivatives at step start
-     * @param end first order scaled derivatives at step end
+     *
+     * @param start     first order scaled derivatives at step start
+     * @param end       first order scaled derivatives at step end
      * @param highOrder high order scaled derivatives, will be modified
-     * (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
+     *                  (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
      * @see #updateHighOrderDerivativesPhase1(Array2DRowRealMatrix)
      */
     public void updateHighOrderDerivativesPhase2(final double[] start,

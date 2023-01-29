@@ -47,11 +47,11 @@ public class PullRequest2398Test extends AbstractSymbolResolutionTest {
     void onlyInlucdeJarA() throws IOException {
         Path jarAPath = adaptPath("src/test/resources/pullRequest2398/A.jar");
         typeSolver = new CombinedTypeSolver(
-            new JarTypeSolver(jarAPath),
-            new ReflectionTypeSolver()
+                new JarTypeSolver(jarAPath),
+                new ReflectionTypeSolver()
         );
 
-        JavassistClassDeclaration classDecl = (JavassistClassDeclaration)typeSolver.solveType("A");
+        JavassistClassDeclaration classDecl = (JavassistClassDeclaration) typeSolver.solveType("A");
         JavassistMethodDeclaration method = findMethodWithName(classDecl, "b");
         try {
             method.getReturnType();
@@ -66,12 +66,12 @@ public class PullRequest2398Test extends AbstractSymbolResolutionTest {
         Path jarAPath = adaptPath("src/test/resources/pullRequest2398/A.jar");
         Path jarBPath = adaptPath("src/test/resources/pullRequest2398/B.jar");
         typeSolver = new CombinedTypeSolver(
-            new JarTypeSolver(jarAPath),
-            new JarTypeSolver(jarBPath),
-            new ReflectionTypeSolver()
+                new JarTypeSolver(jarAPath),
+                new JarTypeSolver(jarBPath),
+                new ReflectionTypeSolver()
         );
 
-        JavassistClassDeclaration classDecl = (JavassistClassDeclaration)typeSolver.solveType("A");
+        JavassistClassDeclaration classDecl = (JavassistClassDeclaration) typeSolver.solveType("A");
         JavassistMethodDeclaration method = findMethodWithName(classDecl, "b");
         final ResolvedType returnType = method.getReturnType();
         assertThat(returnType.describe(), is("B"));
@@ -79,6 +79,6 @@ public class PullRequest2398Test extends AbstractSymbolResolutionTest {
 
     private JavassistMethodDeclaration findMethodWithName(JavassistClassDeclaration classDecl, String name) {
         return classDecl.getDeclaredMethods().stream().filter(methodDecl -> methodDecl.getName().equals(name))
-            .map(m -> (JavassistMethodDeclaration)m).findAny().get();
+                .map(m -> (JavassistMethodDeclaration) m).findAny().get();
     }
 }

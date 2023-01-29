@@ -29,7 +29,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** Polynomial interpolator using both sample values and sample derivatives.
+/**
+ * Polynomial interpolator using both sample values and sample derivatives.
  * <p>
  * The interpolation polynomials match all sample points, including both values
  * and provided derivatives. There is one polynomial for each component of
@@ -47,24 +48,32 @@ import java.util.List;
  */
 public class HermiteInterpolator implements UnivariateDifferentiableVectorFunction {
 
-    /** Sample abscissae. */
+    /**
+     * Sample abscissae.
+     */
     private final List<Double> abscissae;
 
-    /** Top diagonal of the divided differences array. */
+    /**
+     * Top diagonal of the divided differences array.
+     */
     private final List<double[]> topDiagonal;
 
-    /** Bottom diagonal of the divided differences array. */
+    /**
+     * Bottom diagonal of the divided differences array.
+     */
     private final List<double[]> bottomDiagonal;
 
-    /** Create an empty interpolator.
+    /**
+     * Create an empty interpolator.
      */
     public HermiteInterpolator() {
-        this.abscissae      = new ArrayList<Double>();
-        this.topDiagonal    = new ArrayList<double[]>();
+        this.abscissae = new ArrayList<Double>();
+        this.topDiagonal = new ArrayList<double[]>();
         this.bottomDiagonal = new ArrayList<double[]>();
     }
 
-    /** Add a sample point.
+    /**
+     * Add a sample point.
      * <p>
      * This method must be called once for each sample point. It is allowed to
      * mix some calls with values only with calls with values and first
@@ -73,18 +82,19 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * <p>
      * The point abscissae for all calls <em>must</em> be different.
      * </p>
-     * @param x abscissa of the sample point
+     *
+     * @param x     abscissa of the sample point
      * @param value value and derivatives of the sample point
-     * (if only one row is passed, it is the value, if two rows are
-     * passed the first one is the value and the second the derivative
-     * and so on)
-     * @exception ZeroException if the abscissa difference between added point
-     * and a previous point is zero (i.e. the two points are at same abscissa)
-     * @exception MathArithmeticException if the number of derivatives is larger
-     * than 20, which prevents computation of a factorial
+     *              (if only one row is passed, it is the value, if two rows are
+     *              passed the first one is the value and the second the derivative
+     *              and so on)
+     * @throws ZeroException           if the abscissa difference between added point
+     *                                 and a previous point is zero (i.e. the two points are at same abscissa)
+     * @throws MathArithmeticException if the number of derivatives is larger
+     *                                 than 20, which prevents computation of a factorial
      */
-    public void addSamplePoint(final double x, final double[] ... value)
-        throws ZeroException, MathArithmeticException {
+    public void addSamplePoint(final double x, final double[]... value)
+            throws ZeroException, MathArithmeticException {
 
         for (int i = 0; i < value.length; ++i) {
 
@@ -122,12 +132,14 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
 
     }
 
-    /** Compute the interpolation polynomials.
+    /**
+     * Compute the interpolation polynomials.
+     *
      * @return interpolation polynomials array
-     * @exception NoDataException if sample is empty
+     * @throws NoDataException if sample is empty
      */
     public PolynomialFunction[] getPolynomials()
-        throws NoDataException {
+            throws NoDataException {
 
         // safety check
         checkInterpolation();
@@ -153,19 +165,21 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
 
     }
 
-    /** Interpolate value at a specified abscissa.
+    /**
+     * Interpolate value at a specified abscissa.
      * <p>
      * Calling this method is equivalent to call the {@link PolynomialFunction#value(double)
      * value} methods of all polynomials returned by {@link #getPolynomials() getPolynomials},
      * except it does not build the intermediate polynomials, so this method is faster and
      * numerically more stable.
      * </p>
+     *
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @throws NoDataException if sample is empty
      */
     public double[] value(double x)
-        throws NoDataException {
+            throws NoDataException {
 
         // safety check
         checkInterpolation();
@@ -185,19 +199,21 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
 
     }
 
-    /** Interpolate value at a specified abscissa.
+    /**
+     * Interpolate value at a specified abscissa.
      * <p>
      * Calling this method is equivalent to call the {@link
      * PolynomialFunction#value(DerivativeStructure) value} methods of all polynomials
      * returned by {@link #getPolynomials() getPolynomials}, except it does not build the
      * intermediate polynomials, so this method is faster and numerically more stable.
      * </p>
+     *
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @throws NoDataException if sample is empty
      */
     public DerivativeStructure[] value(final DerivativeStructure x)
-        throws NoDataException {
+            throws NoDataException {
 
         // safety check
         checkInterpolation();
@@ -218,9 +234,11 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
 
     }
 
-    /** Check interpolation can be performed.
-     * @exception NoDataException if interpolation cannot be performed
-     * because sample is empty
+    /**
+     * Check interpolation can be performed.
+     *
+     * @throws NoDataException if interpolation cannot be performed
+     *                         because sample is empty
      */
     private void checkInterpolation() throws NoDataException {
         if (abscissae.isEmpty()) {
@@ -228,11 +246,13 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
         }
     }
 
-    /** Create a polynomial from its coefficients.
+    /**
+     * Create a polynomial from its coefficients.
+     *
      * @param c polynomials coefficients
      * @return polynomial
      */
-    private PolynomialFunction polynomial(double ... c) {
+    private PolynomialFunction polynomial(double... c) {
         return new PolynomialFunction(c);
     }
 

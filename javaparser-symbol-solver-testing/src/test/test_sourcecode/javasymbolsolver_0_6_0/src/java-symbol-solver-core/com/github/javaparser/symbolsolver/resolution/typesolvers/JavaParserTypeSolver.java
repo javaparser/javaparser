@@ -43,7 +43,7 @@ public class JavaParserTypeSolver implements TypeSolver {
 
     private Map<String, CompilationUnit> parsedFiles = new HashMap<String, CompilationUnit>();
     private Map<String, List<CompilationUnit>> parsedDirectories = new HashMap<>();
-    private Map<String, ReferenceTypeDeclaration> foundTypes=new HashMap<>();
+    private Map<String, ReferenceTypeDeclaration> foundTypes = new HashMap<>();
 
     public JavaParserTypeSolver(File srcDir) {
         this.srcDir = srcDir;
@@ -100,7 +100,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         // TODO support enums
         // TODO support interfaces
         if (foundTypes.containsKey(name))
-        	return SymbolReference.solved(foundTypes.get(name));
+            return SymbolReference.solved(foundTypes.get(name));
 
         SymbolReference<ReferenceTypeDeclaration> result = tryToSolveTypeUncached(name);
         if (result.isSolved()) {

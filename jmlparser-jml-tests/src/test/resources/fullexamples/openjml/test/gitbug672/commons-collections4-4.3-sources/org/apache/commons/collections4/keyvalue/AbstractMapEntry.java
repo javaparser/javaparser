@@ -29,8 +29,8 @@ public abstract class AbstractMapEntry<K, V> extends AbstractKeyValue<K, V> impl
     /**
      * Constructs a new entry with the given key and given value.
      *
-     * @param key  the key for the entry, may be null
-     * @param value  the value for the entry, may be null
+     * @param key   the key for the entry, may be null
+     * @param value the value for the entry, may be null
      */
     protected AbstractMapEntry(final K key, final V value) {
         super(key, value);
@@ -38,13 +38,14 @@ public abstract class AbstractMapEntry<K, V> extends AbstractKeyValue<K, V> impl
 
     // Map.Entry interface
     //-------------------------------------------------------------------------
+
     /**
      * Sets the value stored in this <code>Map.Entry</code>.
      * <p>
      * This <code>Map.Entry</code> is not connected to a Map, so only the
      * local data is changed.
      *
-     * @param value  the new value
+     * @param value the new value
      * @return the previous value
      */
     @Override
@@ -57,7 +58,7 @@ public abstract class AbstractMapEntry<K, V> extends AbstractKeyValue<K, V> impl
      * <p>
      * Implemented per API documentation of {@link java.util.Map.Entry#equals(Object)}
      *
-     * @param obj  the object to compare to
+     * @param obj the object to compare to
      * @return true if equal key and value
      */
     @Override
@@ -70,8 +71,8 @@ public abstract class AbstractMapEntry<K, V> extends AbstractKeyValue<K, V> impl
         }
         final Map.Entry<?, ?> other = (Map.Entry<?, ?>) obj;
         return
-            (getKey() == null ? other.getKey() == null : getKey().equals(other.getKey())) &&
-            (getValue() == null ? other.getValue() == null : getValue().equals(other.getValue()));
+                (getKey() == null ? other.getKey() == null : getKey().equals(other.getKey())) &&
+                        (getValue() == null ? other.getValue() == null : getValue().equals(other.getValue()));
     }
 
     /**
@@ -84,7 +85,7 @@ public abstract class AbstractMapEntry<K, V> extends AbstractKeyValue<K, V> impl
     @Override
     public int hashCode() {
         return (getKey() == null ? 0 : getKey().hashCode()) ^
-               (getValue() == null ? 0 : getValue().hashCode());
+                (getValue() == null ? 0 : getValue().hashCode());
     }
 
 }

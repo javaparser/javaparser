@@ -62,7 +62,7 @@ public class PrettyPrinterConfiguration implements PrinterConfiguration {
 
     /**
      * @return the string that will be used to indent.
-     * @deprecated (@see Indentation.getIndent())
+     * @deprecated (@ see Indentation.getIndent ())
      */
     @Deprecated
     public String getIndent() {
@@ -71,7 +71,7 @@ public class PrettyPrinterConfiguration implements PrinterConfiguration {
 
     /**
      * @return the indentation size.
-     * @deprecated (@see Indentation.size)
+     * @deprecated (@ see Indentation.size)
      */
     @Deprecated
     public int getIndentSize() {
@@ -80,7 +80,8 @@ public class PrettyPrinterConfiguration implements PrinterConfiguration {
 
     /**
      * Set the size of the indent in characters.
-     * @deprecated (@see Indentation.size())
+     *
+     * @deprecated (@ see Indentation.size ())
      */
     @Deprecated
     public PrettyPrinterConfiguration setIndentSize(int indentSize) {
@@ -91,7 +92,8 @@ public class PrettyPrinterConfiguration implements PrinterConfiguration {
 
     /**
      * Get the type of indent to produce.
-     * @deprecated (@see Indentation.type)
+     *
+     * @deprecated (@ see Indentation.type)
      */
     @Deprecated
     public IndentType getIndentType() {
@@ -100,7 +102,8 @@ public class PrettyPrinterConfiguration implements PrinterConfiguration {
 
     /**
      * Set the type of indent to produce.
-     * @deprecated (@see Indentation.type())
+     *
+     * @deprecated (@ see Indentation.type ())
      */
     @Deprecated
     public PrettyPrinterConfiguration setIndentType(IndentType indentType) {
@@ -111,7 +114,8 @@ public class PrettyPrinterConfiguration implements PrinterConfiguration {
 
     /**
      * Get the tab width for pretty aligning.
-     * @deprecated (@see Indentation.size)
+     *
+     * @deprecated (@ see Indentation.size)
      */
     @Deprecated
     public int getTabWidth() {
@@ -120,7 +124,8 @@ public class PrettyPrinterConfiguration implements PrinterConfiguration {
 
     /**
      * Set the tab width for pretty aligning.
-     * @deprecated (@see Indentation.size)
+     *
+     * @deprecated (@ see Indentation.size)
      */
     @Deprecated
     public PrettyPrinterConfiguration setTabWidth(int tabWidth) {

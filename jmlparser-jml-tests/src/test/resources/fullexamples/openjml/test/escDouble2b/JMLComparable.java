@@ -20,19 +20,22 @@
 // 02110-1301  USA.
 
 
-/** JMLTypes with an compareTo operation, as in {@link java.lang.Comparable}.
+/**
+ * JMLTypes with an compareTo operation, as in {@link java.lang.Comparable}.
  *
- * @version $Revision: 1.12 $
  * @author Gary T. Leavens
+ * @version $Revision: 1.12 $
  * @see java.lang.Comparable
  */
 //-@ immutable
 public /*@ pure @*/ interface JMLComparable
-    extends JMLType, Comparable<JMLComparable> {
+        extends JMLType, Comparable<JMLComparable> {
 
-    /** Compare this to o, returning a comparison code.
-     *  @param o the object this is compared to.
-     *  @exception ClassCastException when o doesn't have an appropriate type.
+    /**
+     * Compare this to o, returning a comparison code.
+     *
+     * @param o the object this is compared to.
+     * @throws ClassCastException when o doesn't have an appropriate type.
      */
     /*@ also
       @   public behavior

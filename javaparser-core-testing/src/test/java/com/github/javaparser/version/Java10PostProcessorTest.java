@@ -46,7 +46,7 @@ class Java10PostProcessorTest {
 
         assertEquals(1, allVarTypes.size());
     }
-    
+
     @Test
     void expressionThatShouldNotBeInterpretedAsAVarType() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("var.class.getName();"));

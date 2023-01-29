@@ -24,7 +24,8 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.util.FastMath;
 import org.apache.commons.math3.util.MathUtils;
 
-/** This class represents a point on the 2-sphere.
+/**
+ * This class represents a point on the 2-sphere.
  * <p>
  * We use the mathematical convention to use the azimuthal angle \( \theta \)
  * in the x-y plane as the first coordinate, and the polar angle \( \varphi \)
@@ -33,87 +34,118 @@ import org.apache.commons.math3.util.MathUtils;
  * Coordinates</a> in MathWorld).
  * </p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
+ *
  * @since 3.3
  */
 public class S2Point implements Point<Sphere2D> {
 
-    /** +I (coordinates: \( \theta = 0, \varphi = \pi/2 \)). */
+    /**
+     * +I (coordinates: \( \theta = 0, \varphi = \pi/2 \)).
+     */
     public static final S2Point PLUS_I = new S2Point(0, 0.5 * FastMath.PI, Vector3D.PLUS_I);
 
-    /** +J (coordinates: \( \theta = \pi/2, \varphi = \pi/2 \))). */
+    /**
+     * +J (coordinates: \( \theta = \pi/2, \varphi = \pi/2 \))).
+     */
     public static final S2Point PLUS_J = new S2Point(0.5 * FastMath.PI, 0.5 * FastMath.PI, Vector3D.PLUS_J);
 
-    /** +K (coordinates: \( \theta = any angle, \varphi = 0 \)). */
+    /**
+     * +K (coordinates: \( \theta = any angle, \varphi = 0 \)).
+     */
     public static final S2Point PLUS_K = new S2Point(0, 0, Vector3D.PLUS_K);
 
-    /** -I (coordinates: \( \theta = \pi, \varphi = \pi/2 \)). */
+    /**
+     * -I (coordinates: \( \theta = \pi, \varphi = \pi/2 \)).
+     */
     public static final S2Point MINUS_I = new S2Point(FastMath.PI, 0.5 * FastMath.PI, Vector3D.MINUS_I);
 
-    /** -J (coordinates: \( \theta = 3\pi/2, \varphi = \pi/2 \)). */
+    /**
+     * -J (coordinates: \( \theta = 3\pi/2, \varphi = \pi/2 \)).
+     */
     public static final S2Point MINUS_J = new S2Point(1.5 * FastMath.PI, 0.5 * FastMath.PI, Vector3D.MINUS_J);
 
-    /** -K (coordinates: \( \theta = any angle, \varphi = \pi \)). */
+    /**
+     * -K (coordinates: \( \theta = any angle, \varphi = \pi \)).
+     */
     public static final S2Point MINUS_K = new S2Point(0, FastMath.PI, Vector3D.MINUS_K);
 
     // CHECKSTYLE: stop ConstantName
-    /** A vector with all coordinates set to NaN. */
+    /**
+     * A vector with all coordinates set to NaN.
+     */
     public static final S2Point NaN = new S2Point(Double.NaN, Double.NaN, Vector3D.NaN);
     // CHECKSTYLE: resume ConstantName
 
-    /** Serializable UID. */
+    /**
+     * Serializable UID.
+     */
     private static final long serialVersionUID = 20131218L;
 
-    /** Azimuthal angle \( \theta \) in the x-y plane. */
+    /**
+     * Azimuthal angle \( \theta \) in the x-y plane.
+     */
     private final double theta;
 
-    /** Polar angle \( \varphi \). */
+    /**
+     * Polar angle \( \varphi \).
+     */
     private final double phi;
 
-    /** Corresponding 3D normalized vector. */
+    /**
+     * Corresponding 3D normalized vector.
+     */
     private final Vector3D vector;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build a vector from its spherical coordinates
+     *
      * @param theta azimuthal angle \( \theta \) in the x-y plane
-     * @param phi polar angle \( \varphi \)
+     * @param phi   polar angle \( \varphi \)
+     * @throws OutOfRangeException if \( \varphi \) is not in the [\( 0; \pi \)] range
      * @see #getTheta()
      * @see #getPhi()
-     * @exception OutOfRangeException if \( \varphi \) is not in the [\( 0; \pi \)] range
      */
     public S2Point(final double theta, final double phi)
-        throws OutOfRangeException {
+            throws OutOfRangeException {
         this(theta, phi, vector(theta, phi));
     }
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build a vector from its underlying 3D vector
+     *
      * @param vector 3D vector
-     * @exception MathArithmeticException if vector norm is zero
+     * @throws MathArithmeticException if vector norm is zero
      */
     public S2Point(final Vector3D vector) throws MathArithmeticException {
         this(FastMath.atan2(vector.getY(), vector.getX()), Vector3D.angle(Vector3D.PLUS_K, vector),
-             vector.normalize());
+                vector.normalize());
     }
 
-    /** Build a point from its internal components.
-     * @param theta azimuthal angle \( \theta \) in the x-y plane
-     * @param phi polar angle \( \varphi \)
+    /**
+     * Build a point from its internal components.
+     *
+     * @param theta  azimuthal angle \( \theta \) in the x-y plane
+     * @param phi    polar angle \( \varphi \)
      * @param vector corresponding vector
      */
     private S2Point(final double theta, final double phi, final Vector3D vector) {
-        this.theta  = theta;
-        this.phi    = phi;
+        this.theta = theta;
+        this.phi = phi;
         this.vector = vector;
     }
 
-    /** Build the normalized vector corresponding to spherical coordinates.
+    /**
+     * Build the normalized vector corresponding to spherical coordinates.
+     *
      * @param theta azimuthal angle \( \theta \) in the x-y plane
-     * @param phi polar angle \( \varphi \)
+     * @param phi   polar angle \( \varphi \)
      * @return normalized vector
-     * @exception OutOfRangeException if \( \varphi \) is not in the [\( 0; \pi \)] range
+     * @throws OutOfRangeException if \( \varphi \) is not in the [\( 0; \pi \)] range
      */
     private static Vector3D vector(final double theta, final double phi)
-       throws OutOfRangeException {
+            throws OutOfRangeException {
 
         if (phi < 0 || phi > FastMath.PI) {
             throw new OutOfRangeException(phi, 0, FastMath.PI);
@@ -121,14 +153,16 @@ public class S2Point implements Point<Sphere2D> {
 
         final double cosTheta = FastMath.cos(theta);
         final double sinTheta = FastMath.sin(theta);
-        final double cosPhi   = FastMath.cos(phi);
-        final double sinPhi   = FastMath.sin(phi);
+        final double cosPhi = FastMath.cos(phi);
+        final double sinPhi = FastMath.sin(phi);
 
         return new Vector3D(cosTheta * sinPhi, sinTheta * sinPhi, cosPhi);
 
     }
 
-    /** Get the azimuthal angle \( \theta \) in the x-y plane.
+    /**
+     * Get the azimuthal angle \( \theta \) in the x-y plane.
+     *
      * @return azimuthal angle \( \theta \) in the x-y plane
      * @see #S2Point(double, double)
      */
@@ -136,7 +170,9 @@ public class S2Point implements Point<Sphere2D> {
         return theta;
     }
 
-    /** Get the polar angle \( \varphi \).
+    /**
+     * Get the polar angle \( \varphi \).
+     *
      * @return polar angle \( \varphi \)
      * @see #S2Point(double, double)
      */
@@ -144,36 +180,48 @@ public class S2Point implements Point<Sphere2D> {
         return phi;
     }
 
-    /** Get the corresponding normalized vector in the 3D euclidean space.
+    /**
+     * Get the corresponding normalized vector in the 3D euclidean space.
+     *
      * @return normalized vector
      */
     public Vector3D getVector() {
         return vector;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Space getSpace() {
         return Sphere2D.getInstance();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isNaN() {
         return Double.isNaN(theta) || Double.isNaN(phi);
     }
 
-    /** Get the opposite of the instance.
+    /**
+     * Get the opposite of the instance.
+     *
      * @return a new vector which is opposite to the instance
      */
     public S2Point negate() {
         return new S2Point(-theta, FastMath.PI - phi, vector.negate());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double distance(final Point<Sphere2D> point) {
         return distance(this, (S2Point) point);
     }
 
-    /** Compute the distance (angular separation) between two points.
+    /**
+     * Compute the distance (angular separation) between two points.
+     *
      * @param p1 first vector
      * @param p2 second vector
      * @return the angular separation between p1 and p2
@@ -197,9 +245,8 @@ public class S2Point implements Point<Sphere2D> {
      *
      * @param other Object to test for equality to this
      * @return true if two points on the 2-sphere objects are equal, false if
-     *         object is null, not an instance of S2Point, or
-     *         not equal to this S2Point instance
-     *
+     * object is null, not an instance of S2Point, or
+     * not equal to this S2Point instance
      */
     @Override
     public boolean equals(Object other) {
@@ -231,7 +278,7 @@ public class S2Point implements Point<Sphere2D> {
         if (isNaN()) {
             return 542;
         }
-        return 134 * (37 * MathUtils.hash(theta) +  MathUtils.hash(phi));
+        return 134 * (37 * MathUtils.hash(theta) + MathUtils.hash(phi));
     }
 
 }

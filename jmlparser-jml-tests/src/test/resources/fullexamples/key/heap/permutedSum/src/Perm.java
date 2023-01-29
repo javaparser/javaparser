@@ -4,27 +4,28 @@
  * is selected exactly once.
  * For simplicity, this implementation uses an array instead of a
  * (generic) collection type.
+ *
  * @author Daniel Bruns
  */
 class Perm {
 
-  int[] a;
+    int[] a;
 
-  /*@ normal_behavior
-    @ requires pIdx == 0;
-    @ ensures \result == (\sum int j; 0 <= j && j < a.length; a[j]);
-    @*/
-  int foo() {
-      int s = 0;
+    /*@ normal_behavior
+      @ requires pIdx == 0;
+      @ ensures \result == (\sum int j; 0 <= j && j < a.length; a[j]);
+      @*/
+    int foo() {
+        int s = 0;
       /*@ maintaining s == (\sum int i; 0 <= i && i < pIdx; (int)c[i]);
         @ maintaining \invariant_for(this);
         @ decreasing a.length - pIdx;
         @ assignable pIdx;
         @*/
-      while (hasNext())
-          s+= next();
-      return s;
-  }
+        while (hasNext())
+            s += next();
+        return s;
+    }
 
   /*@ ghost \seq perm; // permutation on indices
     @ ghost int pIdx;
@@ -44,17 +45,17 @@ class Perm {
     @ invariant c.length == a.length;
     @*/
 
-  /*@ normal_behavior
-    @ ensures \result == (pIdx < a.length); */
+    /*@ normal_behavior
+      @ ensures \result == (pIdx < a.length); */
     //@ strictly_pure helper
-  native boolean hasNext();
+    native boolean hasNext();
 
-  /*@ normal_behavior
-    @ requires pIdx < a.length;
-    @ ensures \result == (int)c[\old(pIdx)];
-    @ ensures pIdx == \old(pIdx)+1;
-    @ assignable pIdx;
-    @*/
-  native int next();
+    /*@ normal_behavior
+      @ requires pIdx < a.length;
+      @ ensures \result == (int)c[\old(pIdx)];
+      @ ensures pIdx == \old(pIdx)+1;
+      @ assignable pIdx;
+      @*/
+    native int next();
 
 }

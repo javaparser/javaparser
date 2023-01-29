@@ -44,24 +44,24 @@ class Issue2878Test extends AbstractResolutionTest {
         Path rootSourceDir = adaptPath("src/test/resources/issue2878");
 
         String src =
-                "import java.util.Optional;\n" + 
-                "\n" + 
-                "public class U10 {\n" + 
-                "    private final String file;\n" + 
-                "\n" + 
-                "    public U10(String file) {\n" + 
-                "        this.file = file;\n" + 
-                "    }\n" + 
-                "    public void main(String[] args) {\n" + 
-                "        U9 u1 = new U9(Optional.empty(), Optional.empty(), 1); // failed\n" + 
-                "        U9 u2 = new U9(Optional.of(file), Optional.empty(), 1); // success\n" + 
-                "        U9 u3 = new U9(Optional.empty(), Optional.empty(), \"/\"); // success\n" + 
-                "        U9 u4 = new U9(Optional.empty(), Optional.empty(), true); // success\n" + 
-                "    }\n" + 
-                "}";
-        
+                "import java.util.Optional;\n" +
+                        "\n" +
+                        "public class U10 {\n" +
+                        "    private final String file;\n" +
+                        "\n" +
+                        "    public U10(String file) {\n" +
+                        "        this.file = file;\n" +
+                        "    }\n" +
+                        "    public void main(String[] args) {\n" +
+                        "        U9 u1 = new U9(Optional.empty(), Optional.empty(), 1); // failed\n" +
+                        "        U9 u2 = new U9(Optional.of(file), Optional.empty(), 1); // success\n" +
+                        "        U9 u3 = new U9(Optional.empty(), Optional.empty(), \"/\"); // success\n" +
+                        "        U9 u4 = new U9(Optional.empty(), Optional.empty(), true); // success\n" +
+                        "    }\n" +
+                        "}";
+
         ParserConfiguration config = new ParserConfiguration();
-        CombinedTypeSolver cts = new CombinedTypeSolver(new ReflectionTypeSolver(false),new JavaParserTypeSolver(rootSourceDir.toFile()));
+        CombinedTypeSolver cts = new CombinedTypeSolver(new ReflectionTypeSolver(false), new JavaParserTypeSolver(rootSourceDir.toFile()));
         config.setSymbolResolver(new JavaSymbolSolver(cts));
         StaticJavaParser.setConfiguration(config);
 

@@ -36,7 +36,9 @@ public final class UnmodifiableCollection<E>
         extends AbstractCollectionDecorator<E>
         implements Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -239892006883819945L;
 
     /**
@@ -44,8 +46,8 @@ public final class UnmodifiableCollection<E>
      * <p>
      * If the collection passed in is already unmodifiable, it is returned.
      *
-     * @param <T> the type of the elements in the collection
-     * @param coll  the collection to decorate, must not be null
+     * @param <T>  the type of the elements in the collection
+     * @param coll the collection to decorate, must not be null
      * @return an unmodifiable collection
      * @throws NullPointerException if collection is null
      * @since 4.0
@@ -60,10 +62,11 @@ public final class UnmodifiableCollection<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param coll  the collection to decorate, must not be null
+     * @param coll the collection to decorate, must not be null
      * @throws NullPointerException if collection is null
      */
     @SuppressWarnings("unchecked") // safe to upcast

@@ -16,12 +16,15 @@
  */
 package java.awt;
 
-public interface LayoutManager
-{
+public interface LayoutManager {
 
-   public void addLayoutComponent(java.lang.String arg0, java.awt.Component arg1);
-   public void removeLayoutComponent(java.awt.Component arg0);
-   public java.awt.Dimension preferredLayoutSize(java.awt.Container arg0);
-   public java.awt.Dimension minimumLayoutSize(java.awt.Container arg0);
-   public void layoutContainer(java.awt.Container arg0);
+    public void addLayoutComponent(java.lang.String arg0, java.awt.Component arg1);
+
+    public void removeLayoutComponent(java.awt.Component arg0);
+
+    public java.awt.Dimension preferredLayoutSize(java.awt.Container arg0);
+
+    public java.awt.Dimension minimumLayoutSize(java.awt.Container arg0);
+
+    public void layoutContainer(java.awt.Container arg0);
 }

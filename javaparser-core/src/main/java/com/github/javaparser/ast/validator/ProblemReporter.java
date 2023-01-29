@@ -43,7 +43,7 @@ public class ProblemReporter {
      * Report a problem.
      *
      * @param message description of the problem
-     * @param node the node in which the problem occurred, used to find the Range of the problem.
+     * @param node    the node in which the problem occurred, used to find the Range of the problem.
      */
     public void report(NodeWithTokenRange<?> node, String message, Object... args) {
         report(node.getTokenRange().orElse(null), message, args);

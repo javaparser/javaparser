@@ -1,5 +1,5 @@
 final class SimplifiedLinkedList {
-        
+
     private /*@nullable@*/ Node first;
     private int size;
 
@@ -15,25 +15,25 @@ final class SimplifiedLinkedList {
       @ private invariant first == (Node)nodeseq[0];
       @ private invariant size == nodeseq.length;
       @*/
-    
+
 
     /*@ normal_behaviour
       @ requires n >= 0 && n < size && \invariant_for(this);
       @ ensures \result == (Node)nodeseq[n];
       @ assignable \strictly_nothing;
       */
-	//@ helper
+    //@ helper
     private Node getNext(int n) {
-	Node result = first;
+        Node result = first;
 	/*@ loop_invariant
 	  @   0<=i && i <=n && result == (Node)nodeseq[i];
 	  @ decreases n-i;
 	  @ assignable \strictly_nothing;
 	  @*/
-	for(int i = 0; i < n; i++) {
-	    result = result.next;
-	}
-	return result;
+        for (int i = 0; i < n; i++) {
+            result = result.next;
+        }
+        return result;
     }
 
     /*@ normal_behaviour
@@ -41,10 +41,10 @@ final class SimplifiedLinkedList {
       @ ensures nodeseq == \old(\seq_concat(nodeseq[0..i], nodeseq[i+1..nodeseq.length]));
       @*/
     public void remove(int i) {
-	Node node = getNext(i-1);
-	Node node2 = getNext(i);
-	node.next = node2.next;
+        Node node = getNext(i - 1);
+        Node node2 = getNext(i);
+        node.next = node2.next;
         //@ set nodeseq = (\seq_concat(\seq_sub(nodeseq,0,i), \seq_sub(nodeseq,i+1,\seq_length(nodeseq))));
-	size --;
+        size--;
     }
 }

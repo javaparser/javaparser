@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.model.typesystem;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -28,7 +27,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class LazyType implements ResolvedType {
+
     private ResolvedType concrete;
+
     private Function<Void, ResolvedType> provider;
 
     public LazyType(Function<Void, ResolvedType> provider) {
@@ -123,8 +124,7 @@ public class LazyType implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced,
-                                             Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         return getType().replaceTypeVariables(tp, replaced, inferredTypes);
     }
 

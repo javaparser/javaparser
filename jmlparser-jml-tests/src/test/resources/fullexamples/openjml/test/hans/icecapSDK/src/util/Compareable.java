@@ -1,5 +1,5 @@
 package util;
 
 public interface Compareable {
-	byte compareTo(Compareable right);
+    byte compareTo(Compareable right);
 }

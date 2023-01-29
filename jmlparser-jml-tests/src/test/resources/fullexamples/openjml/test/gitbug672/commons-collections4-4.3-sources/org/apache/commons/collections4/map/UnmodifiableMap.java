@@ -47,15 +47,17 @@ public final class UnmodifiableMap<K, V>
         extends AbstractMapDecorator<K, V>
         implements Unmodifiable, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 2737023427269031941L;
 
     /**
      * Factory method to create an unmodifiable map.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to decorate, must not be null
      * @return a new unmodifiable map
      * @throws NullPointerException if map is null
      * @since 4.0
@@ -70,10 +72,11 @@ public final class UnmodifiableMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if map is null
      */
     @SuppressWarnings("unchecked") // safe to upcast
@@ -82,10 +85,11 @@ public final class UnmodifiableMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      * @since 3.1
      */
@@ -97,8 +101,8 @@ public final class UnmodifiableMap<K, V>
     /**
      * Read the map in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      * @since 3.1
      */

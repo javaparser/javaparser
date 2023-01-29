@@ -36,10 +36,14 @@ import java.text.ParsePosition;
  */
 public class ProperBigFractionFormat extends BigFractionFormat {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -6337346779577272307L;
 
-    /** The format used for the whole number. */
+    /**
+     * The format used for the whole number.
+     */
     private NumberFormat wholeFormat;
 
     /**
@@ -53,18 +57,20 @@ public class ProperBigFractionFormat extends BigFractionFormat {
     /**
      * Create a proper formatting instance with a custom number format for the
      * whole, numerator, and denominator.
+     *
      * @param format the custom format for the whole, numerator, and
-     *        denominator.
+     *               denominator.
      */
     public ProperBigFractionFormat(final NumberFormat format) {
-        this(format, (NumberFormat)format.clone(), (NumberFormat)format.clone());
+        this(format, (NumberFormat) format.clone(), (NumberFormat) format.clone());
     }
 
     /**
      * Create a proper formatting instance with a custom number format for each
      * of the whole, numerator, and denominator.
-     * @param wholeFormat the custom format for the whole.
-     * @param numeratorFormat the custom format for the numerator.
+     *
+     * @param wholeFormat       the custom format for the whole.
+     * @param numeratorFormat   the custom format for the numerator.
      * @param denominatorFormat the custom format for the denominator.
      */
     public ProperBigFractionFormat(final NumberFormat wholeFormat,
@@ -78,10 +84,10 @@ public class ProperBigFractionFormat extends BigFractionFormat {
      * Formats a {@link BigFraction} object to produce a string.  The BigFraction
      * is output in proper format.
      *
-     * @param fraction the object to format.
+     * @param fraction   the object to format.
      * @param toAppendTo where the text is to be appended
-     * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * @param pos        On input: an alignment field, if desired. On output: the
+     *                   offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
     @Override
@@ -112,6 +118,7 @@ public class ProperBigFractionFormat extends BigFractionFormat {
 
     /**
      * Access the whole format.
+     *
      * @return the whole format.
      */
     public NumberFormat getWholeFormat() {
@@ -127,7 +134,7 @@ public class ProperBigFractionFormat extends BigFractionFormat {
      * will result in a <code>ParseException</code>.</p>
      *
      * @param source the string to parse
-     * @param pos input/ouput parsing parameter.
+     * @param pos    input/ouput parsing parameter.
      * @return the parsed {@link BigFraction} object.
      */
     @Override
@@ -176,20 +183,20 @@ public class ProperBigFractionFormat extends BigFractionFormat {
         final int startIndex = pos.getIndex();
         final char c = parseNextCharacter(source, pos);
         switch (c) {
-        case 0 :
-            // no '/'
-            // return num as a BigFraction
-            return new BigFraction(num);
-        case '/' :
-            // found '/', continue parsing denominator
-            break;
-        default :
-            // invalid '/'
-            // set index back to initial, error index should be the last
-            // character examined.
-            pos.setIndex(initialIndex);
-            pos.setErrorIndex(startIndex);
-            return null;
+            case 0:
+                // no '/'
+                // return num as a BigFraction
+                return new BigFraction(num);
+            case '/':
+                // found '/', continue parsing denominator
+                break;
+            default:
+                // invalid '/'
+                // set index back to initial, error index should be the last
+                // character examined.
+                pos.setIndex(initialIndex);
+                pos.setErrorIndex(startIndex);
+                return null;
         }
 
         // parse whitespace
@@ -226,6 +233,7 @@ public class ProperBigFractionFormat extends BigFractionFormat {
 
     /**
      * Modify the whole format.
+     *
      * @param format The new whole format value.
      * @throws NullArgumentException if {@code format} is {@code null}.
      */

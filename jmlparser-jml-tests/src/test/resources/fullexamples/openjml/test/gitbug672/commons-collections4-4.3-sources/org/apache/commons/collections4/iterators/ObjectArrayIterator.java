@@ -34,16 +34,25 @@ import java.util.NoSuchElementException;
  */
 public class ObjectArrayIterator<E> implements ResettableIterator<E> {
 
-    /** The array */
+    /**
+     * The array
+     */
     final E[] array;
-    /** The start index to loop from */
+    /**
+     * The start index to loop from
+     */
     final int startIndex;
-    /** The end index to loop to */
+    /**
+     * The end index to loop to
+     */
     final int endIndex;
-    /** The current iterator index */
+    /**
+     * The current iterator index
+     */
     int index = 0;
 
     //-------------------------------------------------------------------------
+
     /**
      * Constructs an ObjectArrayIterator that will iterate over the values in the
      * specified array.
@@ -59,9 +68,9 @@ public class ObjectArrayIterator<E> implements ResettableIterator<E> {
      * Constructs an ObjectArrayIterator that will iterate over the values in the
      * specified array from a specific start index.
      *
-     * @param array  the array to iterate over
-     * @param start  the index to start iterating at
-     * @throws NullPointerException if <code>array</code> is <code>null</code>
+     * @param array the array to iterate over
+     * @param start the index to start iterating at
+     * @throws NullPointerException      if <code>array</code> is <code>null</code>
      * @throws IndexOutOfBoundsException if the start index is out of bounds
      */
     public ObjectArrayIterator(final E array[], final int start) {
@@ -72,12 +81,12 @@ public class ObjectArrayIterator<E> implements ResettableIterator<E> {
      * Construct an ObjectArrayIterator that will iterate over a range of values
      * in the specified array.
      *
-     * @param array  the array to iterate over
-     * @param start  the index to start iterating at
-     * @param end  the index (exclusive) to finish iterating at
+     * @param array the array to iterate over
+     * @param start the index to start iterating at
+     * @param end   the index (exclusive) to finish iterating at
      * @throws IndexOutOfBoundsException if the start or end index is out of bounds
-     * @throws IllegalArgumentException if end index is before the start
-     * @throws NullPointerException if <code>array</code> is <code>null</code>
+     * @throws IllegalArgumentException  if end index is before the start
+     * @throws NullPointerException      if <code>array</code> is <code>null</code>
      */
     public ObjectArrayIterator(final E array[], final int start, final int end) {
         super();
@@ -117,7 +126,7 @@ public class ObjectArrayIterator<E> implements ResettableIterator<E> {
      *
      * @return the next element in the array
      * @throws NoSuchElementException if all the elements in the array
-     *    have already been returned
+     *                                have already been returned
      */
     @Override
     public E next() {

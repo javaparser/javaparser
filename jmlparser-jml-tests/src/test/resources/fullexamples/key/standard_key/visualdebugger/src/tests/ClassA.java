@@ -15,11 +15,12 @@ package tests;
 
 public class ClassA {
 
-	public ClassA(){}
-	
-	public int myFuncion() {
+    public ClassA() {
+    }
 
-		return 5;
-	}
+    public int myFuncion() {
+
+        return 5;
+    }
 
 }

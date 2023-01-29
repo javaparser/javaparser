@@ -36,8 +36,8 @@ public class CardRuntimeException extends java.lang.RuntimeException {
       @   assignable \nothing;
       @*/
     public CardRuntimeException(short reason) {
-       this();
-       setReason(reason);
+        this();
+        setReason(reason);
     }
 
     /*@ public normal_behavior
@@ -46,7 +46,7 @@ public class CardRuntimeException extends java.lang.RuntimeException {
       @   assignable \nothing;
       @*/
     CardRuntimeException() {
-        short one = (short)1;
+        short one = (short) 1;
         _reason = JCSystem.makeTransientShortArray(one, JCSystem.CLEAR_ON_RESET);
     }
 

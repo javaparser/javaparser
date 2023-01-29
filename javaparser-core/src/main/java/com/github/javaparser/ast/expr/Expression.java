@@ -782,6 +782,7 @@ public abstract class Expression extends Node {
 
     /**
      * See https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.2
+     *
      * @return true if the expression is a standalone expression
      */
     public boolean isStandaloneExpression() {
@@ -790,6 +791,7 @@ public abstract class Expression extends Node {
 
     /**
      * See https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.2
+     *
      * @return true if the expression is a poly expression
      */
     public boolean isPolyExpression() {

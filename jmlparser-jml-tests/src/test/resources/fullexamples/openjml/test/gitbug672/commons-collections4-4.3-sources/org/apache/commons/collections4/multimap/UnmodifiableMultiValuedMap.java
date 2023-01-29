@@ -38,13 +38,14 @@ import java.util.Set;
  *
  * @param <K> the type of key elements
  * @param <V> the type of value elements
- *
  * @since 4.1
  */
 public final class UnmodifiableMultiValuedMap<K, V>
         extends AbstractMultiValuedMapDecorator<K, V> implements Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150612L;
 
     /**
@@ -54,7 +55,7 @@ public final class UnmodifiableMultiValuedMap<K, V>
      *
      * @param <K> the type of key elements
      * @param <V> the type of value elements
-     * @param map  the map to decorate, may not be null
+     * @param map the map to decorate, may not be null
      * @return an unmodifiable MultiValuedMap
      * @throws NullPointerException if map is null
      */
@@ -70,7 +71,7 @@ public final class UnmodifiableMultiValuedMap<K, V>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the MultiValuedMap to decorate, may not be null
+     * @param map the MultiValuedMap to decorate, may not be null
      * @throws NullPointerException if the map is null
      */
     @SuppressWarnings("unchecked")

@@ -65,7 +65,9 @@ import java.util.Map;
  */
 public class CaseInsensitiveMap<K, V> extends AbstractHashedMap<K, V> implements Serializable, Cloneable {
 
-    /** Serialisation version */
+    /**
+     * Serialisation version
+     */
     private static final long serialVersionUID = -7074655917369299456L;
 
     /**
@@ -78,7 +80,7 @@ public class CaseInsensitiveMap<K, V> extends AbstractHashedMap<K, V> implements
     /**
      * Constructs a new, empty map with the specified initial capacity.
      *
-     * @param initialCapacity  the initial capacity
+     * @param initialCapacity the initial capacity
      * @throws IllegalArgumentException if the initial capacity is negative
      */
     public CaseInsensitiveMap(final int initialCapacity) {
@@ -89,8 +91,8 @@ public class CaseInsensitiveMap<K, V> extends AbstractHashedMap<K, V> implements
      * Constructs a new, empty map with the specified initial capacity and
      * load factor.
      *
-     * @param initialCapacity  the initial capacity
-     * @param loadFactor  the load factor
+     * @param initialCapacity the initial capacity
+     * @param loadFactor      the load factor
      * @throws IllegalArgumentException if the initial capacity is negative
      * @throws IllegalArgumentException if the load factor is less than zero
      */
@@ -105,7 +107,7 @@ public class CaseInsensitiveMap<K, V> extends AbstractHashedMap<K, V> implements
      * some entries to be removed (if string representation of keys differ
      * only by character case).
      *
-     * @param map  the map to copy
+     * @param map the map to copy
      * @throws NullPointerException if the map is null
      */
     public CaseInsensitiveMap(final Map<? extends K, ? extends V> map) {
@@ -113,13 +115,14 @@ public class CaseInsensitiveMap<K, V> extends AbstractHashedMap<K, V> implements
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Overrides convertKey() from {@link AbstractHashedMap} to convert keys to
      * lower case.
      * <p>
      * Returns {@link AbstractHashedMap#NULL} if key is null.
      *
-     * @param key  the key convert
+     * @param key the key convert
      * @return the converted key
      */
     @Override
@@ -135,6 +138,7 @@ public class CaseInsensitiveMap<K, V> extends AbstractHashedMap<K, V> implements
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Clones the map without cloning the keys or values.
      *
@@ -148,7 +152,7 @@ public class CaseInsensitiveMap<K, V> extends AbstractHashedMap<K, V> implements
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -160,7 +164,7 @@ public class CaseInsensitiveMap<K, V> extends AbstractHashedMap<K, V> implements
      * Read the map in using a custom routine.
      *
      * @param in the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {

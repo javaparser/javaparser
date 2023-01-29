@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.ast.expr.NameExpr.*;
@@ -102,13 +102,13 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     public EnumConstantDeclaration setArgs(List<Expression> args) {
         this.args = args;
-		setAsParentNodeOf(this.args);
+        setAsParentNodeOf(this.args);
         return this;
     }
 
     public EnumConstantDeclaration setClassBody(List<BodyDeclaration<?>> classBody) {
         this.classBody = classBody;
-		setAsParentNodeOf(this.classBody);
+        setAsParentNodeOf(this.classBody);
         return this;
     }
 
@@ -120,7 +120,7 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     @Override
     public JavadocComment getJavaDoc() {
-        if(getComment() instanceof JavadocComment){
+        if (getComment() instanceof JavadocComment) {
             return (JavadocComment) getComment();
         }
         return null;

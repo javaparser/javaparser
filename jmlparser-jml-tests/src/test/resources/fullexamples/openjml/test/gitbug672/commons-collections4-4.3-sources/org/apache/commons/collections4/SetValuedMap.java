@@ -40,9 +40,9 @@ public interface SetValuedMap<K, V> extends MultiValuedMap<K, V> {
      * have been mapped to the key.
      * <p>
      *
-     * @param key  the key to retrieve
+     * @param key the key to retrieve
      * @return the {@code Set} of values, implementations should return an
-     *   empty {@code Set} for no mapping
+     * empty {@code Set} for no mapping
      * @throws NullPointerException if the key is null and null keys are invalid
      */
     @Override
@@ -55,11 +55,11 @@ public interface SetValuedMap<K, V> extends MultiValuedMap<K, V> {
      * propagated to this set-valued map. In case no mapping was stored for the
      * specified key, an empty, unmodifiable set will be returned.
      *
-     * @param key  the key to remove values from
+     * @param key the key to remove values from
      * @return the {@code Set} of values removed, implementations should
-     *   return null for no mapping found, but may return an empty collection
+     * return null for no mapping found, but may return an empty collection
      * @throws UnsupportedOperationException if the map is unmodifiable
-     * @throws NullPointerException if the key is null and null keys are invalid
+     * @throws NullPointerException          if the key is null and null keys are invalid
      */
     @Override
     Set<V> remove(Object key);

@@ -32,17 +32,16 @@ public class OfflineAccountProxy extends Account {
      * storage becomes necessary
      */
     //@ private invariant offlineBalance >=0 && offlineBalance <= 1000;
-    private /*@ spec_public @*/ int offlineBalance = sessionLimit;    
+    private /*@ spec_public @*/ int offlineBalance = sessionLimit;
 
-    public /*@ pure @*/ OfflineAccountProxy (int accountNumber) {
-        super ( accountNumber );
+    public /*@ pure @*/ OfflineAccountProxy(int accountNumber) {
+        super(accountNumber);
     }
 
     /**
      * Withdraw <code>amount</code> from the account
-     * 
-     * @param amount
-     *            the amount to be withdrawn
+     *
+     * @param amount the amount to be withdrawn
      */
     /*@
         also
@@ -54,8 +53,8 @@ public class OfflineAccountProxy extends Account {
                          accountBalance() == \old(accountBalance()) - amount;
         assignable offlineBalance;
       @*/
-    public void withdraw (int amount) {
-        addTransaction ( new Withdrawal ( Clock.getCurrentDate(), amount ) );
+    public void withdraw(int amount) {
+        addTransaction(new Withdrawal(Clock.getCurrentDate(), amount));
         offlineBalance -= amount;
     }
 
@@ -65,15 +64,15 @@ public class OfflineAccountProxy extends Account {
      * customer does not receive anything). For this reason the method does not
      * have any preconditions
      */
-    public void requestStatement () {
-        addTransaction ( new AccountStatementRequest ( Clock.getCurrentDate () ) );
+    public void requestStatement() {
+        addTransaction(new AccountStatementRequest(Clock.getCurrentDate()));
     }
 
     /**
      * @return <code>true</code> iff the balance of this account can be
-     *         determined (not possible for the offline situation)
+     * determined (not possible for the offline situation)
      */
-    public /*@ pure @*/ boolean balanceIsAccessible () {
+    public /*@ pure @*/ boolean balanceIsAccessible() {
         return false;
     }
 
@@ -87,20 +86,19 @@ public class OfflineAccountProxy extends Account {
         requires   balanceIsAccessible();
         ensures    false;
       @*/
-    public /*@ pure @*/ int accountBalance () {
-        throw new RuntimeException ();
+    public /*@ pure @*/ int accountBalance() {
+        throw new RuntimeException();
     }
-    
+
     /**
      * Determine whether a certain amount of money may be withdrawn. Using
      * method <code>PermanentAccount.withdraw(int,int)</code> it is possible to
      * circumvent this check, which is necessary because for offline withdrawals
      * the balance cannot be accessed and checked
-     * 
-     * @param amount
-     *            the amount of money requested
+     *
+     * @param amount the amount of money requested
      * @return <code>true</code> iff <code>amount</code> can be withdrawn
-     *         from the account
+     * from the account
      */
     /*@
         also
@@ -108,34 +106,31 @@ public class OfflineAccountProxy extends Account {
         public normal_behavior
         requires amount > 0;
      @*/
-    public /*@ pure @*/ boolean newWithdrawalIsPossible (int amount) {
+    public /*@ pure @*/ boolean newWithdrawalIsPossible(int amount) {
         return amount <= offlineBalance;
     }
-    
+
     /**
      * Make the transactions buffered in <code>this</code> object persistent
      * by copying them to a permanent account
-     * 
-     * @param target
-     *            the account the transactions are supposed to be copied to
+     *
+     * @param target the account the transactions are supposed to be copied to
      */
-    public void replay (PermanentAccount target) {
+    public void replay(PermanentAccount target) {
         // replay transactions in the right order
-        replay ( target, getTransactions () );
-        flushTransactions ();
+        replay(target, getTransactions());
+        flushTransactions();
     }
 
     /**
      * Recursive helper method for replaying transactions
-     * 
-     * @param target
-     *            the account the transactions are supposed to be copied to
-     * @param transes
-     *            list of transactions that should be replayed
+     *
+     * @param target  the account the transactions are supposed to be copied to
+     * @param transes list of transactions that should be replayed
      */
-    private void replay (PermanentAccount target, TransactionList transes) {
-        if ( transes.isEmpty () ) return;
-        replay ( target, transes.tail () );
-        transes.head ().replay ( target );
+    private void replay(PermanentAccount target, TransactionList transes) {
+        if (transes.isEmpty()) return;
+        replay(target, transes.tail());
+        transes.head().replay(target);
     }
 }

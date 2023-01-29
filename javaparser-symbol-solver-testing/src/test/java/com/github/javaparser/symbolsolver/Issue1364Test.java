@@ -82,20 +82,19 @@ class Issue1364Test extends AbstractResolutionTest {
     void resolveSubClassOfObject() {
         assertTimeoutPreemptively(Duration.ofMillis(1000L), () -> {
             String code = String.join(System.lineSeparator(), "package graph;", "public class Vertex {", "    public static void main(String[] args) {", "        System.out.println();", "    }", "}");
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
-        assertTrue(parseResult.isSuccessful());
-        assertTrue(parseResult.getResult().isPresent());
-        List<MethodCallExpr> methodCallExprs = parseResult.getResult().get().findAll(MethodCallExpr.class);
-        assertEquals(1, methodCallExprs.size());
-        try {
-            methodCallExprs.get(0).calculateResolvedType();
-        fail("An UnsolvedSymbolException should be thrown");
-    } catch (UnsolvedSymbolException ignored) {
-    }
-    });
+            ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+            assertTrue(parseResult.isSuccessful());
+            assertTrue(parseResult.getResult().isPresent());
+            List<MethodCallExpr> methodCallExprs = parseResult.getResult().get().findAll(MethodCallExpr.class);
+            assertEquals(1, methodCallExprs.size());
+            try {
+                methodCallExprs.get(0).calculateResolvedType();
+                fail("An UnsolvedSymbolException should be thrown");
+            } catch (UnsolvedSymbolException ignored) {
+            }
+        });
 
-                        
-                
-}
+
+    }
 }
 

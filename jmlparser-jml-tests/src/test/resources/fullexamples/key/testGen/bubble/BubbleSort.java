@@ -11,7 +11,7 @@
 // Public License. See LICENSE.TXT for details.
 // 
 
-public class BubbleSort{
+public class BubbleSort {
 
     public int[] b;
 
@@ -23,58 +23,58 @@ public class BubbleSort{
       @                        a[i]<=a[i+1]) &&
       @                      equalsModOrdering(a, b); 
       @*/
-    public void sort(int[] a){
-	if(a==null) return;
-	boolean sorted = false;
-	int help;
-	while(!sorted){
-	    sorted=true;
-	    for(int i=0; i<a.length-1; i++){
-		if(a[i]>a[i+1]){
-		    help = a[i];
-		    a[i] = a[i+1];
-		    a[i+1] = help;
-		    sorted = false;
-		}
-	    }
-	}	
+    public void sort(int[] a) {
+        if (a == null) return;
+        boolean sorted = false;
+        int help;
+        while (!sorted) {
+            sorted = true;
+            for (int i = 0; i < a.length - 1; i++) {
+                if (a[i] > a[i + 1]) {
+                    help = a[i];
+                    a[i] = a[i + 1];
+                    a[i + 1] = help;
+                    sorted = false;
+                }
+            }
+        }
     }
 
-    public static /*@pure@*/ boolean equalsModOrdering(int[] a, int[] b){
-	if(a.length!=b.length){
-	    return false;
-	}
-	int[] x = new int[a.length];
-	int[] y = new int[a.length];
-	copy(a, x);
-	copy(b, y);
-	return equalsModOrderingHelp(x, y, 0);
+    public static /*@pure@*/ boolean equalsModOrdering(int[] a, int[] b) {
+        if (a.length != b.length) {
+            return false;
+        }
+        int[] x = new int[a.length];
+        int[] y = new int[a.length];
+        copy(a, x);
+        copy(b, y);
+        return equalsModOrderingHelp(x, y, 0);
     }
 
-    private static void copy(int[] a, int[] b){
-	for(int i=0; i<a.length; i++){
-	    b[i] = a[i];
-	}
+    private static void copy(int[] a, int[] b) {
+        for (int i = 0; i < a.length; i++) {
+            b[i] = a[i];
+        }
     }
 
-    private static boolean equalsModOrderingHelp(int[] a, int[] b, int start){
-	if(start>=a.length) return true;
-	int i = find(a[start], b, start);
-	if(i==-1){
-	    return false;
-	}
-	b[i] = b[start];
-	return equalsModOrderingHelp(a, b, start+1);
+    private static boolean equalsModOrderingHelp(int[] a, int[] b, int start) {
+        if (start >= a.length) return true;
+        int i = find(a[start], b, start);
+        if (i == -1) {
+            return false;
+        }
+        b[i] = b[start];
+        return equalsModOrderingHelp(a, b, start + 1);
     }
 
-    private static int find(int x, int[] ar, int i){
-	while(i < ar.length){
-	    if(ar[i] == x){
-		return i;
-	    }
-	    i++;
-	}
-	return -1;
+    private static int find(int x, int[] ar, int i) {
+        while (i < ar.length) {
+            if (ar[i] == x) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
     }
 
 }

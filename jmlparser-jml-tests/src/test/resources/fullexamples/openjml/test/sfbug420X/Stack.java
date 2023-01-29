@@ -1,38 +1,38 @@
 package stack;
 
 
-public interface Stack{
+public interface Stack {
 	/*@
 	  @public invariant count()>=0;
 	  @*/
 
-	//-RAC@ public instance model int count;
-	
-	//-RAC@ ensures \result == count;
-	//@ pure
-	//@ helper
-	int count();
+    //-RAC@ public instance model int count;
 
-	//@ requires i>=1 && i<=count();
-	//@ pure
-	int itemAt (int i);
+    //-RAC@ ensures \result == count;
+    //@ pure
+    //@ helper
+    int count();
 
-	//@ ensures \result==(count()==0);
-	//@ pure
-	boolean isEmpty ( );
+    //@ requires i>=1 && i<=count();
+    //@ pure
+    int itemAt(int i);
 
-	//-RAC@ assignable count;
-	//@ ensures \result ==> count() == \old(count()) + 1;
-	//@ ensures \result ==> item==(top());
-	//@ ensures (\forall int i; 1<=i && i<=\old(count()); itemAt(i)==\old(itemAt(i)));
-	boolean push(int item);
+    //@ ensures \result==(count()==0);
+    //@ pure
+    boolean isEmpty();
 
-	//@ requires count() >= 1;
-	//@ ensures \result == itemAt(count);
-	//@ pure
-	int top();
+    //-RAC@ assignable count;
+    //@ ensures \result ==> count() == \old(count()) + 1;
+    //@ ensures \result ==> item==(top());
+    //@ ensures (\forall int i; 1<=i && i<=\old(count()); itemAt(i)==\old(itemAt(i)));
+    boolean push(int item);
 
-	//@ ensures \result == (\old(count) != 0);
-	boolean remove ( );
+    //@ requires count() >= 1;
+    //@ ensures \result == itemAt(count);
+    //@ pure
+    int top();
+
+    //@ ensures \result == (\old(count) != 0);
+    boolean remove();
 
 }

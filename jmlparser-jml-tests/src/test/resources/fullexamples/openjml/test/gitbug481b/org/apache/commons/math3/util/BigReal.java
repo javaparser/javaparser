@@ -34,94 +34,123 @@ import java.math.RoundingMode;
  * This class is a simple wrapper around the standard <code>BigDecimal</code>
  * in order to implement the {@link FieldElement} interface.
  * </p>
+ *
  * @since 2.0
  */
 public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Serializable {
 
-    /** A big real representing 0. */
+    /**
+     * A big real representing 0.
+     */
     public static final BigReal ZERO = new BigReal(BigDecimal.ZERO);
 
-    /** A big real representing 1. */
+    /**
+     * A big real representing 1.
+     */
     public static final BigReal ONE = new BigReal(BigDecimal.ONE);
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 4984534880991310382L;
 
-    /** Underlying BigDecimal. */
+    /**
+     * Underlying BigDecimal.
+     */
     private final BigDecimal d;
 
-    /** Rounding mode for divisions. **/
+    /**
+     * Rounding mode for divisions.
+     **/
     private RoundingMode roundingMode = RoundingMode.HALF_UP;
 
     /*** BigDecimal scale ***/
     private int scale = 64;
 
-    /** Build an instance from a BigDecimal.
+    /**
+     * Build an instance from a BigDecimal.
+     *
      * @param val value of the instance
      */
     public BigReal(BigDecimal val) {
-        d =  val;
+        d = val;
     }
 
-    /** Build an instance from a BigInteger.
+    /**
+     * Build an instance from a BigInteger.
+     *
      * @param val value of the instance
      */
     public BigReal(BigInteger val) {
         d = new BigDecimal(val);
     }
 
-    /** Build an instance from an unscaled BigInteger.
+    /**
+     * Build an instance from an unscaled BigInteger.
+     *
      * @param unscaledVal unscaled value
-     * @param scale scale to use
+     * @param scale       scale to use
      */
     public BigReal(BigInteger unscaledVal, int scale) {
         d = new BigDecimal(unscaledVal, scale);
     }
 
-    /** Build an instance from an unscaled BigInteger.
+    /**
+     * Build an instance from an unscaled BigInteger.
+     *
      * @param unscaledVal unscaled value
-     * @param scale scale to use
-     * @param mc to used
+     * @param scale       scale to use
+     * @param mc          to used
      */
     public BigReal(BigInteger unscaledVal, int scale, MathContext mc) {
         d = new BigDecimal(unscaledVal, scale, mc);
     }
 
-    /** Build an instance from a BigInteger.
+    /**
+     * Build an instance from a BigInteger.
+     *
      * @param val value of the instance
-     * @param mc context to use
+     * @param mc  context to use
      */
     public BigReal(BigInteger val, MathContext mc) {
         d = new BigDecimal(val, mc);
     }
 
-    /** Build an instance from a characters representation.
+    /**
+     * Build an instance from a characters representation.
+     *
      * @param in character representation of the value
      */
     public BigReal(char[] in) {
         d = new BigDecimal(in);
     }
 
-    /** Build an instance from a characters representation.
-     * @param in character representation of the value
+    /**
+     * Build an instance from a characters representation.
+     *
+     * @param in     character representation of the value
      * @param offset offset of the first character to analyze
-     * @param len length of the array slice to analyze
+     * @param len    length of the array slice to analyze
      */
     public BigReal(char[] in, int offset, int len) {
         d = new BigDecimal(in, offset, len);
     }
 
-    /** Build an instance from a characters representation.
-     * @param in character representation of the value
+    /**
+     * Build an instance from a characters representation.
+     *
+     * @param in     character representation of the value
      * @param offset offset of the first character to analyze
-     * @param len length of the array slice to analyze
-     * @param mc context to use
+     * @param len    length of the array slice to analyze
+     * @param mc     context to use
      */
     public BigReal(char[] in, int offset, int len, MathContext mc) {
         d = new BigDecimal(in, offset, len, mc);
     }
 
-    /** Build an instance from a characters representation.
+    /**
+     * Build an instance from a characters representation.
+     *
      * @param in character representation of the value
      * @param mc context to use
      */
@@ -129,63 +158,79 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
         d = new BigDecimal(in, mc);
     }
 
-    /** Build an instance from a double.
+    /**
+     * Build an instance from a double.
+     *
      * @param val value of the instance
      */
     public BigReal(double val) {
         d = new BigDecimal(val);
     }
 
-    /** Build an instance from a double.
+    /**
+     * Build an instance from a double.
+     *
      * @param val value of the instance
-     * @param mc context to use
+     * @param mc  context to use
      */
     public BigReal(double val, MathContext mc) {
         d = new BigDecimal(val, mc);
     }
 
-    /** Build an instance from an int.
+    /**
+     * Build an instance from an int.
+     *
      * @param val value of the instance
      */
     public BigReal(int val) {
         d = new BigDecimal(val);
     }
 
-    /** Build an instance from an int.
+    /**
+     * Build an instance from an int.
+     *
      * @param val value of the instance
-     * @param mc context to use
+     * @param mc  context to use
      */
     public BigReal(int val, MathContext mc) {
         d = new BigDecimal(val, mc);
     }
 
-    /** Build an instance from a long.
+    /**
+     * Build an instance from a long.
+     *
      * @param val value of the instance
      */
     public BigReal(long val) {
         d = new BigDecimal(val);
     }
 
-    /** Build an instance from a long.
+    /**
+     * Build an instance from a long.
+     *
      * @param val value of the instance
-     * @param mc context to use
+     * @param mc  context to use
      */
     public BigReal(long val, MathContext mc) {
         d = new BigDecimal(val, mc);
     }
 
-    /** Build an instance from a String representation.
+    /**
+     * Build an instance from a String representation.
+     *
      * @param val character representation of the value
      */
     public BigReal(String val) {
         d = new BigDecimal(val);
     }
 
-    /** Build an instance from a String representation.
+    /**
+     * Build an instance from a String representation.
+     *
      * @param val character representation of the value
-     * @param mc context to use
+     * @param mc  context to use
      */
-    public BigReal(String val, MathContext mc)  {
+    public BigReal(String val, MathContext mc) {
         d = new BigDecimal(val, mc);
     }
 
@@ -227,17 +272,23 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
         this.scale = scale;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigReal add(BigReal a) {
         return new BigReal(d.add(a.d));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigReal subtract(BigReal a) {
         return new BigReal(d.subtract(a.d));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigReal negate() {
         return new BigReal(d.negate());
     }
@@ -270,55 +321,71 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigReal multiply(BigReal a) {
         return new BigReal(d.multiply(a.d));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public BigReal multiply(final int n) {
         return new BigReal(d.multiply(new BigDecimal(n)));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int compareTo(BigReal a) {
         return d.compareTo(a.d);
     }
 
-    /** Get the double value corresponding to the instance.
+    /**
+     * Get the double value corresponding to the instance.
+     *
      * @return double value corresponding to the instance
      */
     public double doubleValue() {
         return d.doubleValue();
     }
 
-    /** Get the BigDecimal value corresponding to the instance.
+    /**
+     * Get the BigDecimal value corresponding to the instance.
+     *
      * @return BigDecimal value corresponding to the instance
      */
     public BigDecimal bigDecimalValue() {
         return d;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
-        if (this == other){
+        if (this == other) {
             return true;
         }
 
-        if (other instanceof BigReal){
+        if (other instanceof BigReal) {
             return d.equals(((BigReal) other).d);
         }
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return d.hashCode();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Field<BigReal> getField() {
         return BigRealField.getInstance();
     }

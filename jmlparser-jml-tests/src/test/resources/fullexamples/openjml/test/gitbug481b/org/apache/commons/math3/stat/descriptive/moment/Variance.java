@@ -64,14 +64,17 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class Variance extends AbstractStorelessUnivariateStatistic implements Serializable, WeightedEvaluation {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -9111962718267217978L;
 
-    /** SecondMoment is used in incremental calculation of Variance*/
+    /**
+     * SecondMoment is used in incremental calculation of Variance
+     */
     protected SecondMoment moment = null;
 
     /**
@@ -106,7 +109,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * both {@code m2} and the Variance instance constructed from it.
      *
      * @param m2 the SecondMoment (Third or Fourth moments work
-     * here as well.)
+     *           here as well.)
      */
     public Variance(final SecondMoment m2) {
         incMoment = false;
@@ -117,9 +120,9 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * Constructs a Variance with the specified <code>isBiasCorrected</code>
      * property
      *
-     * @param isBiasCorrected  setting for bias correction - true means
-     * bias will be corrected and is equivalent to using the argumentless
-     * constructor
+     * @param isBiasCorrected setting for bias correction - true means
+     *                        bias will be corrected and is equivalent to using the argumentless
+     *                        constructor
      */
     public Variance(boolean isBiasCorrected) {
         moment = new SecondMoment();
@@ -130,10 +133,10 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * Constructs a Variance with the specified <code>isBiasCorrected</code>
      * property and the supplied external second moment.
      *
-     * @param isBiasCorrected  setting for bias correction - true means
-     * bias will be corrected
-     * @param m2 the SecondMoment (Third or Fourth moments work
-     * here as well.)
+     * @param isBiasCorrected setting for bias correction - true means
+     *                        bias will be corrected
+     * @param m2              the SecondMoment (Third or Fourth moments work
+     *                        here as well.)
      */
     public Variance(boolean isBiasCorrected, SecondMoment m2) {
         incMoment = false;
@@ -177,17 +180,17 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      */
     @Override
     public double getResult() {
-            if (moment.n == 0) {
-                return Double.NaN;
-            } else if (moment.n == 1) {
-                return 0d;
+        if (moment.n == 0) {
+            return Double.NaN;
+        } else if (moment.n == 1) {
+            return 0d;
+        } else {
+            if (isBiasCorrected) {
+                return moment.m2 / (moment.n - 1d);
             } else {
-                if (isBiasCorrected) {
-                    return moment.m2 / (moment.n - 1d);
-                } else {
-                    return moment.m2 / (moment.n);
-                }
+                return moment.m2 / (moment.n);
             }
+        }
     }
 
     /**
@@ -246,15 +249,15 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * Throws <code>MathIllegalArgumentException</code> if the array is null.</p>
      *
      * @param values the input array
-     * @param begin index of the first array element to include
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the variance of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     @Override
     public double evaluate(final double[] values, final int begin, final int length)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
 
         double var = Double.NaN;
 
@@ -305,10 +308,10 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * <p>
      * Throws <code>MathIllegalArgumentException</code> if either array is null.</p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
-     * @param begin index of the first array element to include
-     * @param length the number of elements to include
+     * @param begin   index of the first array element to include
+     * @param length  the number of elements to include
      * @return the weighted variance of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
@@ -318,7 +321,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
 
         double var = Double.NaN;
 
-        if (test(values, weights,begin, length)) {
+        if (test(values, weights, begin, length)) {
             clear();
             if (length == 1) {
                 var = 0.0;
@@ -363,14 +366,14 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * <p>
      * Throws <code>MathIllegalArgumentException</code> if either array is null.</p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
      * @return the weighted variance of the values
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         return evaluate(values, weights, 0, values.length);
     }
 
@@ -393,15 +396,15 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * Does not change the internal state of the statistic.</p>
      *
      * @param values the input array
-     * @param mean the precomputed mean value
-     * @param begin index of the first array element to include
+     * @param mean   the precomputed mean value
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the variance of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     public double evaluate(final double[] values, final double mean,
-            final int begin, final int length) throws MathIllegalArgumentException {
+                           final int begin, final int length) throws MathIllegalArgumentException {
 
         double var = Double.NaN;
 
@@ -449,7 +452,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * Does not change the internal state of the statistic.</p>
      *
      * @param values the input array
-     * @param mean the precomputed mean value
+     * @param mean   the precomputed mean value
      * @return the variance of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
@@ -493,18 +496,18 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * <p>
      * Does not change the internal state of the statistic.</p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
-     * @param mean the precomputed weighted mean value
-     * @param begin index of the first array element to include
-     * @param length the number of elements to include
+     * @param mean    the precomputed weighted mean value
+     * @param begin   index of the first array element to include
+     * @param length  the number of elements to include
      * @return the variance of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights,
-    final double mean, final int begin, final int length)
-    throws MathIllegalArgumentException {
+                           final double mean, final int begin, final int length)
+            throws MathIllegalArgumentException {
 
         double var = Double.NaN;
 
@@ -570,15 +573,15 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * <p>
      * Does not change the internal state of the statistic.</p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
-     * @param mean the precomputed weighted mean value
+     * @param mean    the precomputed weighted mean value
      * @return the variance of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights, final double mean)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         return evaluate(values, weights, mean, 0, values.length);
     }
 
@@ -612,11 +615,11 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source Variance to copy
-     * @param dest Variance to copy to
+     * @param dest   Variance to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(Variance source, Variance dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

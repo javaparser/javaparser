@@ -21,11 +21,13 @@ import org.apache.commons.math3.geometry.Space;
 
 import java.util.List;
 
-/** Interface for generating balls based on support points.
+/**
+ * Interface for generating balls based on support points.
  * <p>
  * This generator is used in the {@link WelzlEncloser Emo Welzl} algorithm
  * and its derivatives.
  * </p>
+ *
  * @param <S> Space type.
  * @param <P> Point type.
  * @see EnclosingBall
@@ -33,7 +35,9 @@ import java.util.List;
  */
 public interface SupportBallGenerator<S extends Space, P extends Point<S>> {
 
-    /** Create a ball whose boundary lies on prescribed support points.
+    /**
+     * Create a ball whose boundary lies on prescribed support points.
+     *
      * @param support support points (may be empty)
      * @return ball whose boundary lies on the prescribed support points
      */

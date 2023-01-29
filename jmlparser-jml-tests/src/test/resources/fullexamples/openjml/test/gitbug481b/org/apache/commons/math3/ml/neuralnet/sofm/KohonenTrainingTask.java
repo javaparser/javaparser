@@ -27,19 +27,25 @@ import java.util.Iterator;
  * @since 3.3
  */
 public class KohonenTrainingTask implements Runnable {
-    /** SOFM to be trained. */
+    /**
+     * SOFM to be trained.
+     */
     private final Network net;
-    /** Training data. */
+    /**
+     * Training data.
+     */
     private final Iterator<double[]> featuresIterator;
-    /** Update procedure. */
+    /**
+     * Update procedure.
+     */
     private final KohonenUpdateAction updateAction;
 
     /**
      * Creates a (sequential) trainer for the given network.
      *
-     * @param net Network to be trained with the SOFM algorithm.
+     * @param net              Network to be trained with the SOFM algorithm.
      * @param featuresIterator Training data iterator.
-     * @param updateAction SOFM update procedure.
+     * @param updateAction     SOFM update procedure.
      */
     public KohonenTrainingTask(Network net,
                                Iterator<double[]> featuresIterator,

@@ -25,9 +25,11 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.3
  */
 public class InsufficientDataException
-    extends MathIllegalArgumentException {
+        extends MathIllegalArgumentException {
 
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -2629324471511903359L;
 
     /**
@@ -40,7 +42,7 @@ public class InsufficientDataException
     /**
      * Construct the exception with a specific context.
      *
-     * @param pattern Message pattern providing the specific context of the error.
+     * @param pattern   Message pattern providing the specific context of the error.
      * @param arguments Values for replacing the placeholders in {@code pattern}.
      */
     public InsufficientDataException(Localizable pattern, Object... arguments) {

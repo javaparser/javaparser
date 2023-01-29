@@ -93,7 +93,7 @@ public class TypeInference {
         List<ResolvedTypeParameterDeclaration> Ps = methodDeclaration.getTypeParameters();
         List<InferenceVariable> alphas = InferenceVariable.instantiate(Ps);
         Substitution theta = Substitution.empty();
-        for (int i=0;i<Ps.size();i++) {
+        for (int i = 0; i < Ps.size(); i++) {
             theta = theta.withPair(Ps.get(0), alphas.get(0));
         }
 
@@ -105,7 +105,7 @@ public class TypeInference {
         //   These bounds, if any, are incorporated with B0 to produce a new bound set, B1.
 
         BoundSet B1 = B0;
-        for (int i=0;i<Ps.size();i++) {
+        for (int i = 0; i < Ps.size(); i++) {
             ResolvedTypeParameterDeclaration Pi = Ps.get(i);
             if (appearInThrowsClause(Pi, methodDeclaration)) {
                 B1 = B1.withBound(new ThrowsBound(alphas.get(i)));
@@ -377,7 +377,7 @@ public class TypeInference {
         // all i (1 ≤ i ≤ n), ‹Pi = Qi›. This constraint formula set is reduced to form the bound set B.
 
         ConstraintFormulaSet constraintFormulaSet = ConstraintFormulaSet.empty();
-        for (int i=0; i<n; i++) {
+        for (int i = 0; i < n; i++) {
             throw new UnsupportedOperationException();
             //Type pi = JavaParserFacade.get(typeSolver).convertToUsage(lambdaExpr.getParameters().get(i).getType(), lambdaExpr);
             //Type qi = JavaParserFacade.get(typeSolver).convertToUsage(interfaceDeclaration.getm.get(i).getType(), lambdaExpr);
@@ -399,6 +399,7 @@ public class TypeInference {
 
     /**
      * Return if m2 is more specific than m1
+     *
      * @param methodCall
      * @param m1
      * @param m2
@@ -502,7 +503,7 @@ public class TypeInference {
             return new MethodUsage(methodDeclaration);
         }
         List<ResolvedType> paramTypes = new LinkedList<>();
-        for (int i=0;i<methodDeclaration.getNumberOfParams();i++) {
+        for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
             paramTypes.add(instantiationSet.apply(methodDeclaration.getParam(i).getType()));
         }
         ResolvedType returnType = instantiationSet.apply(methodDeclaration.getReturnType());
@@ -532,7 +533,7 @@ public class TypeInference {
 
         BoundSet boundSet = BoundSet.empty();
 
-        for (int l=0;l<typeParameterDeclarations.size();l++) {
+        for (int l = 0; l < typeParameterDeclarations.size(); l++) {
             ResolvedTypeParameterDeclaration Pl = typeParameterDeclarations.get(l);
             InferenceVariable alphaL = inferenceVariables.get(l);
 
@@ -549,7 +550,7 @@ public class TypeInference {
                 for (ResolvedTypeParameterDeclaration.Bound bound : Pl.getBounds()) {
                     ResolvedType T = bound.getType();
                     Substitution substitution = Substitution.empty();
-                    for (int j=0;j<typeParameterDeclarations.size();j++) {
+                    for (int j = 0; j < typeParameterDeclarations.size(); j++) {
                         substitution = substitution.withPair(typeParameterDeclarations.get(j), inferenceVariables.get(j));
                     }
                     ResolvedType TWithSubstitutions = substitution.apply(T);
@@ -567,8 +568,7 @@ public class TypeInference {
     }
 
     private boolean appearInThrowsClause(ResolvedTypeParameterDeclaration p, ResolvedMethodDeclaration methodDeclaration) {
-        for (int j=0;j<methodDeclaration.getNumberOfSpecifiedExceptions();j++) {
-            ResolvedType thrownType = methodDeclaration.getSpecifiedException(j);
+        for (ResolvedType thrownType : methodDeclaration.getSpecifiedExceptions()) {
             if (thrownType.isTypeVariable() && thrownType.asTypeVariable().asTypeParameter().equals(p)) {
                 return true;
             }
@@ -578,7 +578,7 @@ public class TypeInference {
 
     private List<ResolvedType> formalParameterTypes(ResolvedMethodDeclaration methodDeclaration) {
         List<ResolvedType> types = new LinkedList<>();
-        for (int i=0;i<methodDeclaration.getNumberOfParams();i++) {
+        for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
             types.add(methodDeclaration.getParam(i).getType());
         }
         return types;
@@ -599,7 +599,7 @@ public class TypeInference {
         // - An implicitly typed lambda expression (§15.27.1).
 
         if (argument instanceof LambdaExpr) {
-            LambdaExpr lambdaExpr = (LambdaExpr)argument;
+            LambdaExpr lambdaExpr = (LambdaExpr) argument;
             if (isImplicitlyTyped(lambdaExpr)) {
                 return false;
             }
@@ -608,7 +608,7 @@ public class TypeInference {
         // - An inexact method reference expression (§15.13.1).
 
         if (argument instanceof MethodReferenceExpr) {
-            MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr)argument;
+            MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) argument;
             if (isInexact(methodReferenceExpr)) {
                 return false;
             }
@@ -642,14 +642,14 @@ public class TypeInference {
         // - A parenthesized expression (§15.8.5) whose contained expression is not pertinent to applicability.
 
         if (argument instanceof EnclosedExpr) {
-            EnclosedExpr enclosedExpr = (EnclosedExpr)argument;
+            EnclosedExpr enclosedExpr = (EnclosedExpr) argument;
             return isPertinentToApplicability(enclosedExpr.getInner());
         }
 
         // - A conditional expression (§15.25) whose second or third operand is not pertinent to applicability.
 
         if (argument instanceof ConditionalExpr) {
-            ConditionalExpr conditionalExpr = (ConditionalExpr)argument;
+            ConditionalExpr conditionalExpr = (ConditionalExpr) argument;
             return isPertinentToApplicability(conditionalExpr.getThenExpr()) &&
                     isPertinentToApplicability(conditionalExpr.getElseExpr());
         }
@@ -669,7 +669,7 @@ public class TypeInference {
         if (k != n) {
             return Optional.empty();
         }
-        for (int i=0;i<n;i++) {
+        for (int i = 0; i < n; i++) {
             Expression ei = es.get(i);
             ResolvedType fi = Fs.get(i);
             if (isPertinentToApplicability(ei)) {
@@ -710,7 +710,7 @@ public class TypeInference {
 
     private ConstraintFormulaSet constraintSetFromArgumentsSubstitution(List<ResolvedType> Fs, List<Expression> es, Substitution theta, int k) {
         ConstraintFormulaSet constraintFormulaSet = ConstraintFormulaSet.empty();
-        for (int i=0;i<k;i++) {
+        for (int i = 0; i < k; i++) {
             Expression ei = es.get(i);
             ResolvedType fi = Fs.get(i);
             ResolvedType fiTheta = typeWithSubstitution(fi, theta);
@@ -728,7 +728,7 @@ public class TypeInference {
         // for all i (1 ≤ i ≤ k) where ei is pertinent to applicability, ‹ei → F'i θ›.
 
         List<ResolvedType> FsFirst = new LinkedList<>();
-        for (int i=0;i<k;i++) {
+        for (int i = 0; i < k; i++) {
             ResolvedType FFirstI = i < Fs.size() ? Fs.get(i) : Fs.get(Fs.size() - 1);
             FsFirst.add(FFirstI);
         }

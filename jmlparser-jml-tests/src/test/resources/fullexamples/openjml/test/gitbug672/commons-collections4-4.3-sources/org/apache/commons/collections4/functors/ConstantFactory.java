@@ -31,21 +31,27 @@ import java.io.Serializable;
  */
 public class ConstantFactory<T> implements Factory<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -3520677225766901240L;
 
-    /** Returns null each time */
+    /**
+     * Returns null each time
+     */
     @SuppressWarnings("rawtypes") // The null factory works for all object types
     public static final Factory NULL_INSTANCE = new ConstantFactory<>(null);
 
-    /** The closures to call in turn */
+    /**
+     * The closures to call in turn
+     */
     private final T iConstant;
 
     /**
      * Factory method that performs validation.
      *
-     * @param <T>  the type of the constant
-     * @param constantToReturn  the constant object to return each time in the factory
+     * @param <T>              the type of the constant
+     * @param constantToReturn the constant object to return each time in the factory
      * @return the <code>constant</code> factory.
      */
     @SuppressWarnings("unchecked") // The null factory works for all object types
@@ -60,7 +66,7 @@ public class ConstantFactory<T> implements Factory<T>, Serializable {
      * Constructor that performs no validation.
      * Use <code>constantFactory</code> if you want that.
      *
-     * @param constantToReturn  the constant to return each time
+     * @param constantToReturn the constant to return each time
      */
     public ConstantFactory(final T constantToReturn) {
         super();

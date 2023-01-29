@@ -23,13 +23,15 @@ import org.apache.commons.math3.util.FastMath;
  * Implements the Wilson score method for creating a binomial proportion confidence interval.
  *
  * @see <a
- *      href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval">
- *      Wilson score interval (Wikipedia)</a>
+ * href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval">
+ * Wilson score interval (Wikipedia)</a>
  * @since 3.3
  */
 public class WilsonScoreInterval implements BinomialConfidenceInterval {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ConfidenceInterval createInterval(int numberOfTrials, int numberOfSuccesses, double confidenceLevel) {
         IntervalUtils.checkParameters(numberOfTrials, numberOfSuccesses, confidenceLevel);
         final double alpha = (1.0 - confidenceLevel) / 2;
@@ -41,8 +43,8 @@ public class WilsonScoreInterval implements BinomialConfidenceInterval {
         final double factor = 1.0 / (1 + (1.0 / numberOfTrials) * zSquared);
         final double modifiedSuccessRatio = mean + (1.0 / (2 * numberOfTrials)) * zSquared;
         final double difference = z *
-                                  FastMath.sqrt(1.0 / numberOfTrials * mean * (1 - mean) +
-                                                (1.0 / (4 * FastMath.pow(numberOfTrials, 2)) * zSquared));
+                FastMath.sqrt(1.0 / numberOfTrials * mean * (1 - mean) +
+                        (1.0 / (4 * FastMath.pow(numberOfTrials, 2)) * zSquared));
 
         final double lowerBound = factor * (modifiedSuccessRatio - difference);
         final double upperBound = factor * (modifiedSuccessRatio + difference);

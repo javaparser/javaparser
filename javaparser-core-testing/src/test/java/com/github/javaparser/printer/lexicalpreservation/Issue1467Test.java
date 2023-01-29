@@ -44,10 +44,10 @@ public class Issue1467Test extends AbstractLexicalPreservingTest {
                         "        System.out.print(\"Hello\");\n" +
                         "    }\n" +
                         "}");
-        String expected = 
-                "public void f() {\n" + 
-                "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" +
-                "    }" ;
+        String expected =
+                "public void f() {\n" +
+                        "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" +
+                        "    }";
         // add method declaration
         MethodDeclaration decl = cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Modifier.DefaultKeyword.PUBLIC);
         // create body 

@@ -38,13 +38,19 @@ import java.io.Serializable;
  */
 public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializable {
 
-    /** Serializable UID. */
+    /**
+     * Serializable UID.
+     */
     private static final long serialVersionUID = 20140129L;
 
-    /** Vertices of the hull. */
+    /**
+     * Vertices of the hull.
+     */
     private final Vector2D[] vertices;
 
-    /** Tolerance threshold used during creation of the hull vertices. */
+    /**
+     * Tolerance threshold used during creation of the hull vertices.
+     */
     private final double tolerance;
 
     /**
@@ -55,12 +61,13 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
 
     /**
      * Simple constructor.
-     * @param vertices the vertices of the convex hull, must be ordered
+     *
+     * @param vertices  the vertices of the convex hull, must be ordered
      * @param tolerance tolerance below which points are considered identical
      * @throws MathIllegalArgumentException if the vertices do not form a convex hull
      */
     public ConvexHull2D(final Vector2D[] vertices, final double tolerance)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
 
         // assign tolerance as it will be used by the isConvex method
         this.tolerance = tolerance;
@@ -74,6 +81,7 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
 
     /**
      * Checks whether the given hull vertices form a convex hull.
+     *
      * @param hullVertices the hull vertices
      * @return {@code true} if the vertices form a convex hull, {@code false} otherwise
      */
@@ -105,13 +113,16 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Vector2D[] getVertices() {
         return vertices.clone();
     }
 
     /**
      * Get the line segments of the convex hull, ordered.
+     *
      * @return the line segments of the convex hull
      */
     public Segment[] getLineSegments() {
@@ -156,7 +167,9 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
         return lineSegments;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Region<Euclidean2D> createRegion() throws InsufficientDataException {
         if (vertices.length < 3) {
             throw new InsufficientDataException();

@@ -1,20 +1,20 @@
 interface ListIterator {
-    
+
     //@ public model instance List list;
     //@ public model instance int pos;
-    
+
     //@ accessible list: this.*;
     //@ accessible pos: this.*;
     //@ accessible \inv: this.*, list.footprint;
-    
-    
+
+
     /*@ normal_behaviour
       @   accessible this.*, list.footprint;
       @   ensures \result == pos < list.size();
       @*/
     public /*@pure@*/ boolean hasNext();
-    
-    
+
+
     /*@ normal_behaviour
       @   requires pos < list.size();
       @   assignable this.*;

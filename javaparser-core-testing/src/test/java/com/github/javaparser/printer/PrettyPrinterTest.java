@@ -58,7 +58,7 @@ class PrettyPrinterTest {
         CompilationUnit cu = parse(code);
         return new DefaultPrettyPrinter().print(cu.findAll(VariableDeclarationExpr.class).get(0));
     }
-    
+
     private Optional<ConfigurationOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
         return config.get(new DefaultConfigurationOption(cOption));
     }
@@ -120,7 +120,7 @@ class PrettyPrinterTest {
     void prettyColumnAlignParameters_enabled() {
         PrinterConfiguration config = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS));
         final String EOL = getOption(config, ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
-        
+
         String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
         String expected = "class Example {" + EOL +
                 "" + EOL +
@@ -139,7 +139,7 @@ class PrettyPrinterTest {
 
     @Test
     void prettyColumnAlignParameters_disabled() {
-        
+
         PrinterConfiguration config = new DefaultPrinterConfiguration();
         final String EOL = getOption(config, ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
 
@@ -157,7 +157,7 @@ class PrettyPrinterTest {
 
     @Test
     void prettyAlignMethodCallChains_enabled() {
-        
+
         PrinterConfiguration config = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
         final String EOL = getOption(config, ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
 
@@ -179,7 +179,7 @@ class PrettyPrinterTest {
 
     @Test
     void prettyAlignMethodCallChains_disabled() {
-        
+
         PrinterConfiguration config = new DefaultPrinterConfiguration();
         final String EOL = getOption(config, ConfigOption.END_OF_LINE_CHARACTER).get().asValue();
 
@@ -193,7 +193,7 @@ class PrettyPrinterTest {
                 "";
 
         String printed = new DefaultPrettyPrinter(config).print(parse(code));
-        
+
         assertEquals(expected, printed);
     }
 
@@ -234,9 +234,9 @@ class PrettyPrinterTest {
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS))
                 .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, indentation));
-        
+
         String printed = new DefaultPrettyPrinter(config).print(cu);
-        
+
         assertEqualsStringIgnoringEol("class Foo {\n" +
                 "\n" +
                 "\tvoid bar() {\n" +
@@ -339,21 +339,21 @@ class PrettyPrinterTest {
                 "\t}\n" +
                 "}\n", printed);
     }
-    
+
     @Test
     void initializeWithSpecificConfiguration() {
         CompilationUnit cu = parse("class Foo { // this is a comment \n"
                 + "}");
         PrinterConfiguration config = new DefaultPrinterConfiguration()
                 .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
-        
+
         Printer printer = new DefaultPrettyPrinter(config);
         assertFalse(printer.getConfiguration().get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS)).isPresent());
         String printed = printer.print(cu);
         assertEqualsStringIgnoringEol("class Foo {\n"
                 + "}\n", printed);
     }
-                
+
 
     @Test
     void indentWithTabsAlignWithSpaces() {
@@ -507,33 +507,33 @@ class PrettyPrinterTest {
                 "module foo.bar {\n" +
                 "}\n", printed);
     }
-    
+
     @Test
     public void testIssue2578() {
-        String code = 
+        String code =
                 "class C{\n" +
-                "  //orphan\n" +
-                "  /*orphan*/\n" +
-                "}";
+                        "  //orphan\n" +
+                        "  /*orphan*/\n" +
+                        "}";
         CompilationUnit cu = StaticJavaParser.parse(code);
         TypeDeclaration td = cu.findFirst(TypeDeclaration.class).get();
         assertEquals(2, td.getAllContainedComments().size());
         td.setPublic(true); // --- simple AST change -----
         assertEquals(2, td.getAllContainedComments().size()); // the orphaned comments exist
     }
-    
+
     @Test
     public void testIssue2535() {
 
-        String code = 
+        String code =
                 "public class A {\n" +
-                " public static A m() {\n" +
-                "  System.out.println(\"\");\n" +
-                "  // TODO\n" +
-                "  /* TODO */\n" +
-                "  /** TODO */\n" +
-                " }\n" +
-                "}";
+                        " public static A m() {\n" +
+                        "  System.out.println(\"\");\n" +
+                        "  // TODO\n" +
+                        "  /* TODO */\n" +
+                        "  /** TODO */\n" +
+                        " }\n" +
+                        "}";
 
         StaticJavaParser.setConfiguration(new ParserConfiguration());
 
@@ -544,31 +544,31 @@ class PrettyPrinterTest {
         assertTrue(cu.toString().contains("        /* TODO */"));
 
     }
-    
+
     @Test
     public void testIndentationWithDefaultSize() {
         Indentation indentation = new Indentation(IndentType.SPACES);
-        assertTrue(indentation.getSize()==4);
+        assertTrue(indentation.getSize() == 4);
         assertEquals("    ", indentation.getIndent());
         // on-the-fly modification
         indentation.setSize(2);
-        assertTrue(indentation.getSize()==2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("  ", indentation.getIndent());
     }
-    
+
     @Test
     public void testIndentationWithCustomSize() {
-        Indentation indentation = new Indentation(IndentType.TABS,2);
-        assertTrue(indentation.getSize()==2);
+        Indentation indentation = new Indentation(IndentType.TABS, 2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("\t\t", indentation.getIndent());
     }
-    
+
     @Test
     public void testIndentationWithOnTheFlyModifcation() {
         Indentation indentation = new Indentation(IndentType.SPACES);
         // on-the-fly modification
         indentation.setSize(2);
-        assertTrue(indentation.getSize()==2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("  ", indentation.getIndent());
         indentation.setType(IndentType.TABS);
         assertTrue(indentation.getType() == IndentType.TABS);

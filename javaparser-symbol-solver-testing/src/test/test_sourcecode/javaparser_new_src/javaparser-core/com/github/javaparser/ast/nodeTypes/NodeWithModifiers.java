@@ -13,8 +13,8 @@ public interface NodeWithModifiers<T> {
     /**
      * Return the modifiers of this variable declaration.
      *
-     * @see Modifier
      * @return modifiers
+     * @see Modifier
      */
     EnumSet<Modifier> getModifiers();
 

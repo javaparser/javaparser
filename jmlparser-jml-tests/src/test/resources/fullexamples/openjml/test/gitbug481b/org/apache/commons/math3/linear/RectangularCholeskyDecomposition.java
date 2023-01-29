@@ -43,10 +43,14 @@ import org.apache.commons.math3.util.FastMath;
  */
 public class RectangularCholeskyDecomposition {
 
-    /** Permutated Cholesky root of the symmetric positive semidefinite matrix. */
+    /**
+     * Permutated Cholesky root of the symmetric positive semidefinite matrix.
+     */
     private final RealMatrix root;
 
-    /** Rank of the symmetric positive semidefinite matrix. */
+    /**
+     * Rank of the symmetric positive semidefinite matrix.
+     */
     private int rank;
 
     /**
@@ -56,16 +60,15 @@ public class RectangularCholeskyDecomposition {
      * columns by proceeding with the Cholesky algorithm until a nonpositive diagonal
      * element is encountered.
      *
+     * @param matrix Symmetric positive semidefinite matrix.
+     * @throws NonPositiveDefiniteMatrixException if the matrix is not
+     *                                            positive semidefinite.
      * @see <a href="http://eprints.ma.man.ac.uk/1193/01/covered/MIMS_ep2008_56.pdf">
      * Analysis of the Cholesky Decomposition of a Semi-definite Matrix</a>
-     *
-     * @param matrix Symmetric positive semidefinite matrix.
-     * @exception NonPositiveDefiniteMatrixException if the matrix is not
-     * positive semidefinite.
      * @since 3.1
      */
     public RectangularCholeskyDecomposition(RealMatrix matrix)
-        throws NonPositiveDefiniteMatrixException {
+            throws NonPositiveDefiniteMatrixException {
         this(matrix, 0);
     }
 
@@ -73,13 +76,13 @@ public class RectangularCholeskyDecomposition {
      * Decompose a symmetric positive semidefinite matrix.
      *
      * @param matrix Symmetric positive semidefinite matrix.
-     * @param small Diagonal elements threshold under which columns are
-     * considered to be dependent on previous ones and are discarded.
-     * @exception NonPositiveDefiniteMatrixException if the matrix is not
-     * positive semidefinite.
+     * @param small  Diagonal elements threshold under which columns are
+     *               considered to be dependent on previous ones and are discarded.
+     * @throws NonPositiveDefiniteMatrixException if the matrix is not
+     *                                            positive semidefinite.
      */
     public RectangularCholeskyDecomposition(RealMatrix matrix, double small)
-        throws NonPositiveDefiniteMatrixException {
+            throws NonPositiveDefiniteMatrixException {
 
         final int order = matrix.getRowDimension();
         final double[][] c = matrix.getData();
@@ -91,12 +94,12 @@ public class RectangularCholeskyDecomposition {
         }
 
         int r = 0;
-        for (boolean loop = true; loop;) {
+        for (boolean loop = true; loop; ) {
 
             // find maximal diagonal element
             int swapR = r;
             for (int i = r + 1; i < order; ++i) {
-                int ii  = index[i];
+                int ii = index[i];
                 int isr = index[swapR];
                 if (c[ii][ii] > c[isr][isr]) {
                     swapR = i;
@@ -106,12 +109,12 @@ public class RectangularCholeskyDecomposition {
 
             // swap elements
             if (swapR != r) {
-                final int tmpIndex    = index[r];
-                index[r]              = index[swapR];
-                index[swapR]          = tmpIndex;
+                final int tmpIndex = index[r];
+                index[r] = index[swapR];
+                index[swapR] = tmpIndex;
                 final double[] tmpRow = b[r];
-                b[r]                  = b[swapR];
-                b[swapR]              = tmpRow;
+                b[r] = b[swapR];
+                b[swapR] = tmpRow;
             }
 
             // check diagonal element
@@ -140,7 +143,7 @@ public class RectangularCholeskyDecomposition {
                 // transform the matrix
                 final double sqrt = FastMath.sqrt(c[ir][ir]);
                 b[r][r] = sqrt;
-                final double inverse  = 1 / sqrt;
+                final double inverse = 1 / sqrt;
                 final double inverse2 = 1 / c[ir][ir];
                 for (int i = r + 1; i < order; ++i) {
                     final int ii = index[i];
@@ -171,9 +174,11 @@ public class RectangularCholeskyDecomposition {
 
     }
 
-    /** Get the root of the covariance matrix.
+    /**
+     * Get the root of the covariance matrix.
      * The root is the rectangular matrix <code>B</code> such that
      * the covariance matrix is equal to <code>B.B<sup>T</sup></code>
+     *
      * @return root of the square matrix
      * @see #getRank()
      */
@@ -181,10 +186,12 @@ public class RectangularCholeskyDecomposition {
         return root;
     }
 
-    /** Get the rank of the symmetric positive semidefinite matrix.
+    /**
+     * Get the rank of the symmetric positive semidefinite matrix.
      * The r is the number of independent rows in the symmetric positive semidefinite
      * matrix, it is also the number of columns of the rectangular
      * matrix of the decomposition.
+     *
      * @return r of the square matrix.
      * @see #getRootMatrix()
      */

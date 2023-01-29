@@ -30,10 +30,14 @@ import java.util.Set;
  */
 public final class UniquePredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -3319417438027438040L;
 
-    /** The set of previously seen objects */
+    /**
+     * The set of previously seen objects
+     */
     private final Set<T> iSet = new HashSet<>();
 
     /**
@@ -59,7 +63,7 @@ public final class UniquePredicate<T> implements Predicate<T>, Serializable {
      * Evaluates the predicate returning true if the input object hasn't been
      * received yet.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if this is the first time the object is seen
      */
     @Override

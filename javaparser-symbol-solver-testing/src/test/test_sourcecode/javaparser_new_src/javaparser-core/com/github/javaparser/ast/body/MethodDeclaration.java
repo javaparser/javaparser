@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -53,15 +53,15 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
 /**
  * @author Julio Vilmar Gesser
  */
-public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements 
-        NodeWithJavaDoc<MethodDeclaration>, 
-        NodeWithDeclaration, 
+public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> implements
+        NodeWithJavaDoc<MethodDeclaration>,
+        NodeWithDeclaration,
         NodeWithName<MethodDeclaration>,
         NodeWithType<MethodDeclaration>,
         NodeWithElementType<MethodDeclaration>,
-        NodeWithModifiers<MethodDeclaration>, 
+        NodeWithModifiers<MethodDeclaration>,
         NodeWithParameters<MethodDeclaration>,
-        NodeWithThrowable<MethodDeclaration>, 
+        NodeWithThrowable<MethodDeclaration>,
         NodeWithBlockStmt<MethodDeclaration> {
 
     private EnumSet<Modifier> modifiers = EnumSet.noneOf(Modifier.class);
@@ -101,15 +101,15 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         setParameters(parameters);
     }
 
-    public MethodDeclaration(final EnumSet<Modifier> modifiers, 
+    public MethodDeclaration(final EnumSet<Modifier> modifiers,
                              final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, 
+                             final List<TypeParameter> typeParameters,
                              final Type elementType,
                              final List<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final String name,
-                             final List<Parameter> parameters, 
+                             final List<Parameter> parameters,
                              final List<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final List<ReferenceType> throws_, 
+                             final List<ReferenceType> throws_,
                              final BlockStmt body) {
         super(annotations);
         setModifiers(modifiers);
@@ -124,15 +124,15 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
     }
 
     public MethodDeclaration(Range range,
-                             final EnumSet<Modifier> modifiers, 
+                             final EnumSet<Modifier> modifiers,
                              final List<AnnotationExpr> annotations,
-                             final List<TypeParameter> typeParameters, 
+                             final List<TypeParameter> typeParameters,
                              final Type elementType,
                              final List<ArrayBracketPair> arrayBracketPairsAfterElementType,
                              final NameExpr nameExpr,
-                             final List<Parameter> parameters, 
+                             final List<Parameter> parameters,
                              final List<ArrayBracketPair> arrayBracketPairsAfterParameterList,
-                             final List<ReferenceType> throws_, 
+                             final List<ReferenceType> throws_,
                              final BlockStmt body) {
         super(range, annotations);
         setModifiers(modifiers);
@@ -163,9 +163,9 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * Return the modifiers of this member declaration.
-     * 
-     * @see Modifier
+     *
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -292,11 +292,11 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
 
     /**
      * The declaration returned has this schema:
-     *
+     * <p>
      * [accessSpecifier] [static] [abstract] [final] [native]
      * [synchronized] returnType methodName ([paramType [paramName]])
      * [throws exceptionsList]
-     * 
+     *
      * @return method declaration as String
      */
     @Override
@@ -383,7 +383,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         return this;
     }
 
-	/**
+    /**
      * @return the array brackets in this position: <code>int abc()[] {...}</code>
      */
     public List<ArrayBracketPair> getArrayBracketPairsAfterParameterList() {

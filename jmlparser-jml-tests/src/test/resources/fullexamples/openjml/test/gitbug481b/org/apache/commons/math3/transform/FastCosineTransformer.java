@@ -64,10 +64,14 @@ import java.io.Serializable;
  */
 public class FastCosineTransformer implements RealTransformer, Serializable {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     static final long serialVersionUID = 20120212L;
 
-    /** The type of DCT to be performed. */
+    /**
+     * The type of DCT to be performed.
+     */
     private final DctNormalization normalization;
 
     /**
@@ -75,7 +79,7 @@ public class FastCosineTransformer implements RealTransformer, Serializable {
      * conventions.
      *
      * @param normalization the type of normalization to be applied to the
-     * transformed data
+     *                      transformed data
      */
     public FastCosineTransformer(final DctNormalization normalization) {
         this.normalization = normalization;
@@ -85,10 +89,10 @@ public class FastCosineTransformer implements RealTransformer, Serializable {
      * {@inheritDoc}
      *
      * @throws MathIllegalArgumentException if the length of the data array is
-     * not a power of two plus one
+     *                                      not a power of two plus one
      */
     public double[] transform(final double[] f, final TransformType type)
-      throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         if (type == TransformType.FORWARD) {
             if (normalization == DctNormalization.ORTHOGONAL_DCT_I) {
                 final double s = FastMath.sqrt(2.0 / (f.length - 1));
@@ -109,16 +113,14 @@ public class FastCosineTransformer implements RealTransformer, Serializable {
     /**
      * {@inheritDoc}
      *
-     * @throws org.apache.commons.math3.exception.NonMonotonicSequenceException
-     * if the lower bound is greater than, or equal to the upper bound
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if the number of sample points is negative
-     * @throws MathIllegalArgumentException if the number of sample points is
-     * not a power of two plus one
+     * @throws org.apache.commons.math3.exception.NonMonotonicSequenceException if the lower bound is greater than, or equal to the upper bound
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException  if the number of sample points is negative
+     * @throws MathIllegalArgumentException                                     if the number of sample points is
+     *                                                                          not a power of two plus one
      */
     public double[] transform(final UnivariateFunction f,
-        final double min, final double max, final int n,
-        final TransformType type) throws MathIllegalArgumentException {
+                              final double min, final double max, final int n,
+                              final TransformType type) throws MathIllegalArgumentException {
 
         final double[] data = FunctionUtils.sample(f, min, max, n);
         return transform(data, type);
@@ -130,18 +132,18 @@ public class FastCosineTransformer implements RealTransformer, Serializable {
      * @param f the real data array to be transformed
      * @return the real transformed array
      * @throws MathIllegalArgumentException if the length of the data array is
-     * not a power of two plus one
+     *                                      not a power of two plus one
      */
     protected double[] fct(double[] f)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
 
         final double[] transformed = new double[f.length];
 
         final int n = f.length - 1;
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
             throw new MathIllegalArgumentException(
-                LocalizedFormats.NOT_POWER_OF_TWO_PLUS_ONE,
-                Integer.valueOf(f.length));
+                    LocalizedFormats.NOT_POWER_OF_TWO_PLUS_ONE,
+                    Integer.valueOf(f.length));
         }
         if (n == 1) {       // trivial case
             transformed[0] = 0.5 * (f[0] + f[1]);
@@ -171,7 +173,7 @@ public class FastCosineTransformer implements RealTransformer, Serializable {
         transformed[0] = y[0].getReal();
         transformed[1] = t1;
         for (int i = 1; i < (n >> 1); i++) {
-            transformed[2 * i]     = y[i].getReal();
+            transformed[2 * i] = y[i].getReal();
             transformed[2 * i + 1] = transformed[2 * i - 1] - y[i].getImaginary();
         }
         transformed[n] = y[n >> 1].getReal();

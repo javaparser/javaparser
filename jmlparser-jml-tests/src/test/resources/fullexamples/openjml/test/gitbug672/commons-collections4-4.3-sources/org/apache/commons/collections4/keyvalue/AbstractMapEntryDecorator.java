@@ -28,13 +28,15 @@ import java.util.Map;
  */
 public abstract class AbstractMapEntryDecorator<K, V> implements Map.Entry<K, V>, KeyValue<K, V> {
 
-    /** The <code>Map.Entry</code> to decorate */
+    /**
+     * The <code>Map.Entry</code> to decorate
+     */
     private final Map.Entry<K, V> entry;
 
     /**
      * Constructor that wraps (not copies).
      *
-     * @param entry  the <code>Map.Entry</code> to decorate, must not be null
+     * @param entry the <code>Map.Entry</code> to decorate, must not be null
      * @throws NullPointerException if the collection is null
      */
     public AbstractMapEntryDecorator(final Map.Entry<K, V> entry) {

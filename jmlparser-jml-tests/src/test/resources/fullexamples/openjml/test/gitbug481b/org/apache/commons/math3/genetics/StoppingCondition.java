@@ -27,7 +27,7 @@ public interface StoppingCondition {
      *
      * @param population the population to test.
      * @return <code>true</code> if this stopping condition is met by the given population,
-     *   <code>false</code> otherwise.
+     * <code>false</code> otherwise.
      */
     boolean isSatisfied(Population population);
 }

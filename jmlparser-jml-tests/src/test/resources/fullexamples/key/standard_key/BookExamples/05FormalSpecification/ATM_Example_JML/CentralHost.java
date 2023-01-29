@@ -1,4 +1,4 @@
-package ATM_Example_JML; 
+package ATM_Example_JML;
 
 /**
  * Class that represents the central host of our bank. This class manages the
@@ -6,7 +6,7 @@ package ATM_Example_JML;
  * accounts and issuing bank cards
  */
 public class CentralHost {
-    
+
     static final int maxAccountNumber = 10000;
-    
+
 }

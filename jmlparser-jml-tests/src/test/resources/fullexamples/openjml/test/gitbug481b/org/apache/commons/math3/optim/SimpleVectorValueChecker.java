@@ -23,37 +23,37 @@ import org.apache.commons.math3.util.FastMath;
 /**
  * Simple implementation of the {@link ConvergenceChecker} interface using
  * only objective function values.
- *
+ * <p>
  * Convergence is considered to have been reached if either the relative
  * difference between the objective function values is smaller than a
  * threshold or if either the absolute difference between the objective
  * function values is smaller than another threshold for all vectors elements.
  * <br/>
- * The {@link #converged(int,PointVectorValuePair,PointVectorValuePair) converged}
+ * The {@link #converged(int, PointVectorValuePair, PointVectorValuePair) converged}
  * method will also return {@code true} if the number of iterations has been set
- * (see {@link #SimpleVectorValueChecker(double,double,int) this constructor}).
+ * (see {@link #SimpleVectorValueChecker(double, double, int) this constructor}).
  *
  * @since 3.0
  */
 public class SimpleVectorValueChecker
-    extends AbstractConvergenceChecker<PointVectorValuePair> {
+        extends AbstractConvergenceChecker<PointVectorValuePair> {
     /**
      * If {@link #maxIterationCount} is set to this value, the number of
      * iterations will never cause
-     * {@link #converged(int,PointVectorValuePair,PointVectorValuePair)}
+     * {@link #converged(int, PointVectorValuePair, PointVectorValuePair)}
      * to return {@code true}.
      */
     private static final int ITERATION_CHECK_DISABLED = -1;
     /**
      * Number of iterations after which the
-     * {@link #converged(int,PointVectorValuePair,PointVectorValuePair)} method
+     * {@link #converged(int, PointVectorValuePair, PointVectorValuePair)} method
      * will return true (unless the check is disabled).
      */
     private final int maxIterationCount;
 
     /**
      * Build an instance with specified thresholds.
-     *
+     * <p>
      * In order to perform only relative checks, the absolute tolerance
      * must be set to a negative value. In order to perform only absolute
      * checks, the relative tolerance must be set to a negative value.
@@ -70,16 +70,15 @@ public class SimpleVectorValueChecker
     /**
      * Builds an instance with specified tolerance thresholds and
      * iteration count.
-     *
+     * <p>
      * In order to perform only relative checks, the absolute tolerance
      * must be set to a negative value. In order to perform only absolute
      * checks, the relative tolerance must be set to a negative value.
      *
      * @param relativeThreshold Relative tolerance threshold.
      * @param absoluteThreshold Absolute tolerance threshold.
-     * @param maxIter Maximum iteration count.
+     * @param maxIter           Maximum iteration count.
      * @throws NotStrictlyPositiveException if {@code maxIter <= 0}.
-     *
      * @since 3.1
      */
     public SimpleVectorValueChecker(final double relativeThreshold,
@@ -105,8 +104,8 @@ public class SimpleVectorValueChecker
      * not only for the best or worst ones.
      *
      * @param iteration Index of current iteration
-     * @param previous Best point in the previous iteration.
-     * @param current Best point in the current iteration.
+     * @param previous  Best point in the previous iteration.
+     * @param current   Best point in the current iteration.
      * @return {@code true} if the arguments satify the convergence criterion.
      */
     @Override
@@ -120,12 +119,12 @@ public class SimpleVectorValueChecker
         final double[] p = previous.getValueRef();
         final double[] c = current.getValueRef();
         for (int i = 0; i < p.length; ++i) {
-            final double pi         = p[i];
-            final double ci         = c[i];
+            final double pi = p[i];
+            final double ci = c[i];
             final double difference = FastMath.abs(pi - ci);
-            final double size       = FastMath.max(FastMath.abs(pi), FastMath.abs(ci));
+            final double size = FastMath.max(FastMath.abs(pi), FastMath.abs(ci));
             if (difference > size * getRelativeThreshold() &&
-                difference > getAbsoluteThreshold()) {
+                    difference > getAbsoluteThreshold()) {
                 return false;
             }
         }

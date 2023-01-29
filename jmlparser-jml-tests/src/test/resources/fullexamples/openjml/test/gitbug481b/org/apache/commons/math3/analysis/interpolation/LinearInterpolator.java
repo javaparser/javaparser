@@ -26,7 +26,6 @@ import org.apache.commons.math3.util.MathArrays;
 
 /**
  * Implements a linear function for interpolation of real univariate functions.
- *
  */
 public class LinearInterpolator implements UnivariateInterpolator {
     /**
@@ -35,24 +34,24 @@ public class LinearInterpolator implements UnivariateInterpolator {
      * @param x the arguments for the interpolation points
      * @param y the values for the interpolation points
      * @return a function which interpolates the data set
-     * @throws DimensionMismatchException if {@code x} and {@code y}
-     * have different sizes.
+     * @throws DimensionMismatchException    if {@code x} and {@code y}
+     *                                       have different sizes.
      * @throws NonMonotonicSequenceException if {@code x} is not sorted in
-     * strict increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code x} is smaller
-     * than 2.
+     *                                       strict increasing order.
+     * @throws NumberIsTooSmallException     if the size of {@code x} is smaller
+     *                                       than 2.
      */
     public PolynomialSplineFunction interpolate(double x[], double y[])
-        throws DimensionMismatchException,
-               NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+            throws DimensionMismatchException,
+            NumberIsTooSmallException,
+            NonMonotonicSequenceException {
         if (x.length != y.length) {
             throw new DimensionMismatchException(x.length, y.length);
         }
 
         if (x.length < 2) {
             throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
-                                                x.length, 2, true);
+                    x.length, 2, true);
         }
 
         // Number of intervals.  The number of data points is n + 1.

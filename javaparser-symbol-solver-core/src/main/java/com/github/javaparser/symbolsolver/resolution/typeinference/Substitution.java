@@ -58,7 +58,7 @@ public class Substitution {
 
     public ResolvedType apply(ResolvedType originalType) {
         ResolvedType result = originalType;
-        for (int i=0;i<typeParameterDeclarations.size();i++) {
+        for (int i = 0; i < typeParameterDeclarations.size(); i++) {
             result = result.replaceTypeVariables(typeParameterDeclarations.get(i), types.get(i));
         }
         return result;

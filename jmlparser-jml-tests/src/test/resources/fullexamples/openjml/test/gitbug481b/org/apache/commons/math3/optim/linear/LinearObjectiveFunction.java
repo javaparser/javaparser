@@ -41,14 +41,20 @@ import java.io.Serializable;
  * @since 2.0
  */
 public class LinearObjectiveFunction
-    implements MultivariateFunction,
-               OptimizationData,
-               Serializable {
-    /** Serializable version identifier. */
+        implements MultivariateFunction,
+        OptimizationData,
+        Serializable {
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -4531815507568396090L;
-    /** Coefficients of the linear equation (c<sub>i</sub>). */
+    /**
+     * Coefficients of the linear equation (c<sub>i</sub>).
+     */
     private final transient RealVector coefficients;
-    /** Constant term of the linear equation. */
+    /**
+     * Constant term of the linear equation.
+     */
     private final double constantTerm;
 
     /**
@@ -106,7 +112,9 @@ public class LinearObjectiveFunction
         return coefficients.dotProduct(point) + constantTerm;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -114,13 +122,15 @@ public class LinearObjectiveFunction
         }
         if (other instanceof LinearObjectiveFunction) {
             LinearObjectiveFunction rhs = (LinearObjectiveFunction) other;
-          return (constantTerm == rhs.constantTerm) && coefficients.equals(rhs.coefficients);
+            return (constantTerm == rhs.constantTerm) && coefficients.equals(rhs.coefficients);
         }
 
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Double.valueOf(constantTerm).hashCode() ^ coefficients.hashCode();
@@ -128,23 +138,25 @@ public class LinearObjectiveFunction
 
     /**
      * Serialize the instance.
+     *
      * @param oos stream where object should be written
      * @throws IOException if object cannot be written to stream
      */
     private void writeObject(ObjectOutputStream oos)
-        throws IOException {
+            throws IOException {
         oos.defaultWriteObject();
         MatrixUtils.serializeRealVector(coefficients, oos);
     }
 
     /**
      * Deserialize the instance.
+     *
      * @param ois stream from which the object should be read
      * @throws ClassNotFoundException if a class in the stream cannot be found
-     * @throws IOException if object cannot be read from the stream
+     * @throws IOException            if object cannot be read from the stream
      */
     private void readObject(ObjectInputStream ois)
-      throws ClassNotFoundException, IOException {
+            throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
         MatrixUtils.deserializeRealVector(this, "coefficients", ois);
     }

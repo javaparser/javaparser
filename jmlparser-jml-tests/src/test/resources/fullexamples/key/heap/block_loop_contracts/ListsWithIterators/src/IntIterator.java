@@ -4,10 +4,10 @@ public class IntIterator implements Iterator {
 
     private final IntLinkedList list;
     private /*@nullable@*/ IntNode next;
-    
+
     //@ ghost \seq nodeseq;
     //@ ghost \seq seq;
-    
+
     //@ public instance invariant nodeseq == list.nodeseq[0 .. nodeseq.length];
     //@ public instance invariant seq == list.seq[0 .. seq.length];
 
@@ -17,7 +17,7 @@ public class IntIterator implements Iterator {
 
     //@ public instance invariant next != null ==> next == (IntNode)list.nodeseq[nodeseq.length];
     //@ public instance invariant next != null ==> next.data == (int)list.seq[seq.length];
-    
+
     //@ public instance invariant seq.length == list.seq.length <==> next == null;
 
     /*@ public normal_behavior
@@ -63,7 +63,7 @@ public class IntIterator implements Iterator {
         //@ set nodeseq = \seq_concat(nodeseq, \seq_singleton(next));
         //@ set seq = \seq_concat(seq, \seq_singleton(next.data));
         next = next.next;
-        
+
         return MyInteger.valueOf(result);
     }
 }

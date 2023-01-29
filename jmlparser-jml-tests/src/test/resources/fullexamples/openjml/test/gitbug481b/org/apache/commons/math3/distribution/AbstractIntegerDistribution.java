@@ -30,24 +30,27 @@ import java.io.Serializable;
  * Base class for integer-valued discrete distributions.  Default
  * implementations are provided for some of the methods that do not vary
  * from distribution to distribution.
- *
  */
 public abstract class AbstractIntegerDistribution implements IntegerDistribution, Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -1146319659338487221L;
 
     /**
      * RandomData instance used to generate samples from the distribution.
+     *
      * @deprecated As of 3.1, to be removed in 4.0. Please use the
      * {@link #random} instance variable instead.
      */
     @Deprecated
     protected final org.apache.commons.math3.random.RandomDataImpl randomData =
-        new org.apache.commons.math3.random.RandomDataImpl();
+            new org.apache.commons.math3.random.RandomDataImpl();
 
     /**
      * RNG instance used to generate samples from the distribution.
+     *
      * @since 3.1
      */
     protected final RandomGenerator random;
@@ -73,7 +76,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The default implementation uses the identity
      * <p>{@code P(x0 < X <= x1) = P(X <= x1) - P(X <= x0)}</p>
      */
@@ -87,7 +90,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The default implementation returns
      * <ul>
      * <li>{@link #getSupportLowerBound()} for {@code p = 0},</li>
@@ -111,7 +114,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
             }
         } else {
             lower -= 1; // this ensures cumulativeProbability(lower) < p, which
-                        // is important for the solving step
+            // is important for the solving step
         }
 
         int upper = getSupportUpperBound();
@@ -148,7 +151,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
      * (lower, upper]}. The implementation does simple bisection to find the
      * smallest {@code p}-quantile <code>inf{x in Z | P(X<=x) >= p}</code>.
      *
-     * @param p the cumulative probability
+     * @param p     the cumulative probability
      * @param lower a value satisfying {@code cumulativeProbability(lower) < p}
      * @param upper a value satisfying {@code p <= cumulativeProbability(upper)}
      * @return the smallest {@code p}-quantile of this distribution
@@ -175,7 +178,9 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
         return upper;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void reseedRandomGenerator(long seed) {
         random.setSeed(seed);
         randomData.reSeed(seed);
@@ -183,7 +188,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The default implementation uses the
      * <a href="http://en.wikipedia.org/wiki/Inverse_transform_sampling">
      * inversion method</a>.
@@ -194,7 +199,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The default implementation generates the sample by calling
      * {@link #sample()} in a loop.
      */
@@ -222,7 +227,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
      * @throws MathInternalError if the cumulative probability is {@code NaN}
      */
     private double checkedCumulativeProbability(int argument)
-        throws MathInternalError {
+            throws MathInternalError {
         double result = Double.NaN;
         result = cumulativeProbability(argument);
         if (Double.isNaN(result)) {

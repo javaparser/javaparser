@@ -70,12 +70,12 @@ class NodePositionTest {
 
     @Test
     void packageProtectedMethodShouldHavePositionSet() throws IOException {
-      ensureAllNodesHaveValidBeginPosition("public class A { void foo() {} }");
+        ensureAllNodesHaveValidBeginPosition("public class A { void foo() {} }");
     }
 
     @Test
     void packageProtectedConstructorShouldHavePositionSet() throws IOException {
-      ensureAllNodesHaveValidBeginPosition("public class A { A() {} }");
+        ensureAllNodesHaveValidBeginPosition("public class A { A() {} }");
     }
 
     private void ensureAllNodesHaveValidBeginPosition(final String code) {

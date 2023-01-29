@@ -30,9 +30,13 @@ import org.apache.commons.math3.util.Pair;
  * @since 3.1
  */
 public class GaussIntegrator {
-    /** Nodes. */
+    /**
+     * Nodes.
+     */
     private final double[] points;
-    /** Nodes weights. */
+    /**
+     * Nodes weights.
+     */
     private final double[] weights;
 
     /**
@@ -40,18 +44,18 @@ public class GaussIntegrator {
      * The integration interval is defined by the first and last value of
      * {@code points} which must be sorted in increasing order.
      *
-     * @param points Integration points.
+     * @param points  Integration points.
      * @param weights Weights of the corresponding integration nodes.
      * @throws NonMonotonicSequenceException if the {@code points} are not
-     * sorted in increasing order.
-     * @throws DimensionMismatchException if points and weights don't have the same length
+     *                                       sorted in increasing order.
+     * @throws DimensionMismatchException    if points and weights don't have the same length
      */
     public GaussIntegrator(double[] points,
                            double[] weights)
-        throws NonMonotonicSequenceException, DimensionMismatchException {
+            throws NonMonotonicSequenceException, DimensionMismatchException {
         if (points.length != weights.length) {
             throw new DimensionMismatchException(points.length,
-                                                 weights.length);
+                    weights.length);
         }
 
         MathArrays.checkOrder(points, MathArrays.OrderDirection.INCREASING, true, true);
@@ -66,12 +70,11 @@ public class GaussIntegrator {
      *
      * @param pointsAndWeights Integration points and corresponding weights.
      * @throws NonMonotonicSequenceException if the {@code points} are not
-     * sorted in increasing order.
-     *
+     *                                       sorted in increasing order.
      * @see #GaussIntegrator(double[], double[])
      */
     public GaussIntegrator(Pair<double[], double[]> pointsAndWeights)
-        throws NonMonotonicSequenceException {
+            throws NonMonotonicSequenceException {
         this(pointsAndWeights.getFirst(), pointsAndWeights.getSecond());
     }
 
@@ -80,7 +83,7 @@ public class GaussIntegrator {
      * where {@code w} is a weight function that depends on the actual
      * flavor of the Gauss integration scheme.
      * The algorithm uses the points and associated weights, as passed
-     * to the {@link #GaussIntegrator(double[],double[]) constructor}.
+     * to the {@link #GaussIntegrator(double[], double[]) constructor}.
      *
      * @param f Function to integrate.
      * @return the integral of the weighted function.
@@ -110,6 +113,7 @@ public class GaussIntegrator {
     /**
      * Gets the integration point at the given index.
      * The index must be in the valid range but no check is performed.
+     *
      * @param index index of the integration point
      * @return the integration point.
      */
@@ -120,6 +124,7 @@ public class GaussIntegrator {
     /**
      * Gets the weight of the integration point at the given index.
      * The index must be in the valid range but no check is performed.
+     *
      * @param index index of the integration point
      * @return the weight.
      */

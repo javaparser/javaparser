@@ -1,1 +1,2 @@
-public interface Staff {}
+public interface Staff {
+}

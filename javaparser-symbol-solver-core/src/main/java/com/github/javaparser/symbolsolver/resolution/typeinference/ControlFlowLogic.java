@@ -34,10 +34,10 @@ import java.util.List;
 
 /**
  * Consider Control Flow to determine which statements are reachable.
- *
+ * <p>
  * Except for the special treatment of while, do, and for statements whose condition expression has the constant value
  * true, the values of expressions are not taken into account in the flow analysis.
- *
+ * <p>
  * See JLS 14.21
  *
  * @author Federico Tomassetti
@@ -58,8 +58,8 @@ public class ControlFlowLogic {
      * A break statement with no label attempts to transfer control to the innermost enclosing switch, while, do, or
      * for statement of the immediately enclosing method or initializer; this statement, which is called the break
      * target, then immediately completes normally.
-     *
-     *
+     * <p>
+     * <p>
      * A break statement with label Identifier attempts to transfer control to the enclosing labeled statement (§14.7)
      * that has the same Identifier as its label; this statement, which is called the break target, then immediately
      * completes normally. In this case, the break target need not be a switch, while, do, or for statement.
@@ -120,7 +120,7 @@ public class ControlFlowLogic {
         if (!isReachable(statement)) {
             return false;
         }
-        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>(){
+        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>() {
             @Override
             public Boolean visit(BlockStmt n, Void arg) {
                 // An empty block that is not a switch block can complete normally iff it is reachable
@@ -211,7 +211,7 @@ public class ControlFlowLogic {
 
     public boolean isReachable(Statement statement) {
 
-        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>(){
+        GenericVisitor<Boolean, Void> visitor = new GenericVisitorAdapter<Boolean, Void>() {
             @Override
             public Boolean visit(BlockStmt n, Void arg) {
                 // The block that is the body of a constructor, method, instance initializer, or static initializer is

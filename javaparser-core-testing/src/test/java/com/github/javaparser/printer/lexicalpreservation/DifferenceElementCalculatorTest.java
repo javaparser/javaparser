@@ -119,7 +119,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
     @Test
     void annotationDeclarationExampleWithModifierAdded() throws IOException {
         considerExample("AnnotationDeclaration_Example1_original");
-        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
+        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.MODIFIERS, new NodeList<>(), createModifierList(PUBLIC));
@@ -154,7 +154,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
     @Test
     void annotationDeclarationExampleWithNameChanged() throws IOException {
         considerExample("AnnotationDeclaration_Example1_original");
-        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
+        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
         SimpleName newName = new SimpleName("NewName");
@@ -190,7 +190,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
     @Test
     void annotationDeclarationExampleWithJavadocAdded() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
-        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
+        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         JavadocComment comment = new JavadocComment("Cool this annotation!");
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
@@ -226,7 +226,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
     @Test
     void annotationDeclarationExampleWithJavadocRemoved() throws IOException {
         considerExample("AnnotationDeclaration_Example9_original");
-        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
+        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.COMMENT, annotationDeclaration.getComment().get(), null);
@@ -261,7 +261,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
     @Test
     void annotationDeclarationExampleWithModifierRemoved() throws IOException {
         considerExample("AnnotationDeclaration_Example3_original");
-        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration)cu.getType(0);
+        AnnotationDeclaration annotationDeclaration = (AnnotationDeclaration) cu.getType(0);
         CsmElement element = ConcreteSyntaxModel.forClass(annotationDeclaration.getClass());
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmOriginal = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(element, annotationDeclaration);
         LexicalDifferenceCalculator.CalculatedSyntaxModel csmChanged = new LexicalDifferenceCalculator().calculatedSyntaxModelAfterPropertyChange(element, annotationDeclaration, ObservableProperty.MODIFIERS, createModifierList(PUBLIC), new NodeList<>());
@@ -432,7 +432,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
 
     private AnnotationMemberDeclaration considerAmd(String code) {
         considerCode("@interface AD { " + code + " }");
-        return (AnnotationMemberDeclaration)cu.getAnnotationDeclarationByName("AD").get().getMember(0);
+        return (AnnotationMemberDeclaration) cu.getAnnotationDeclarationByName("AD").get().getMember(0);
     }
 
     private ConstructorDeclaration considerCd(String code) {
@@ -442,7 +442,7 @@ class DifferenceElementCalculatorTest extends AbstractLexicalPreservingTest {
 
     private EnumConstantDeclaration considerEcd(String code) {
         considerCode("enum A { " + code + " }");
-        return ((EnumDeclaration)cu.getType(0)).getEntries().get(0);
+        return ((EnumDeclaration) cu.getType(0)).getEntries().get(0);
     }
 
     private MethodDeclaration considerMd(String code) {

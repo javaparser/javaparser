@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 /* Comparator.java -- Interface for objects that specify an ordering
    Copyright (C) 1998, 2001, 2005  Free Software Foundation, Inc.
@@ -93,49 +94,48 @@ package minicdj.util;
  * @since 1.2
  * @status updated to 1.4
  */
-public interface Comparator
-{
-  /**
-   * Return an integer that is negative, zero or positive depending on whether
-   * the first argument is less than, equal to or greater than the second
-   * according to this ordering. This method should obey the following
-   * contract:
-   * <ul>
-   *   <li>if compare(a, b) &lt; 0 then compare(b, a) &gt; 0</li>
-   *   <li>if compare(a, b) throws an exception, so does compare(b, a)</li>
-   *   <li>if compare(a, b) &lt; 0 and compare(b, c) &lt; 0 then compare(a, c)
-   *       &lt; 0</li>
-   *   <li>if compare(a, b) == 0 then compare(a, c) and compare(b, c) must
-   *       have the same sign</li>
-   * </ul>
-   * To be consistent with equals, the following additional constraint is
-   * in place:
-   * <ul>
-   *   <li>if a.equals(b) or both a and b are null, then
-   *       compare(a, b) == 0.</li>
-   * </ul><p>
-   *
-   * Although it is permissible for a comparator to provide an order
-   * inconsistent with equals, that should be documented.
-   *
-   * @param o1 the first object
-   * @param o2 the second object
-   * @return the comparison
-   * @throws ClassCastException if the elements are not of types that can be
-   *         compared by this ordering.
-   */
-  //int compare(Object o1, Object o2);
+public interface Comparator {
+    /**
+     * Return an integer that is negative, zero or positive depending on whether
+     * the first argument is less than, equal to or greater than the second
+     * according to this ordering. This method should obey the following
+     * contract:
+     * <ul>
+     *   <li>if compare(a, b) &lt; 0 then compare(b, a) &gt; 0</li>
+     *   <li>if compare(a, b) throws an exception, so does compare(b, a)</li>
+     *   <li>if compare(a, b) &lt; 0 and compare(b, c) &lt; 0 then compare(a, c)
+     *       &lt; 0</li>
+     *   <li>if compare(a, b) == 0 then compare(a, c) and compare(b, c) must
+     *       have the same sign</li>
+     * </ul>
+     * To be consistent with equals, the following additional constraint is
+     * in place:
+     * <ul>
+     *   <li>if a.equals(b) or both a and b are null, then
+     *       compare(a, b) == 0.</li>
+     * </ul><p>
+     *
+     * Although it is permissible for a comparator to provide an order
+     * inconsistent with equals, that should be documented.
+     *
+     * @param o1 the first object
+     * @param o2 the second object
+     * @return the comparison
+     * @throws ClassCastException if the elements are not of types that can be
+     *         compared by this ordering.
+     */
+    //int compare(Object o1, Object o2);
 
-  /**
-   * Return true if the object is equal to this object.  To be
-   * considered equal, the argument object must satisfy the constraints
-   * of <code>Object.equals()</code>, be a Comparator, and impose the
-   * same ordering as this Comparator. The default implementation
-   * inherited from Object is usually adequate.
-   *
-   * @param obj The object
-   * @return true if it is a Comparator that imposes the same order
-   * @see Object#equals(Object)
-   */
-  boolean equals(Object obj);
+    /**
+     * Return true if the object is equal to this object.  To be
+     * considered equal, the argument object must satisfy the constraints
+     * of <code>Object.equals()</code>, be a Comparator, and impose the
+     * same ordering as this Comparator. The default implementation
+     * inherited from Object is usually adequate.
+     *
+     * @param obj The object
+     * @return true if it is a Comparator that imposes the same order
+     * @see Object#equals(Object)
+     */
+    boolean equals(Object obj);
 }

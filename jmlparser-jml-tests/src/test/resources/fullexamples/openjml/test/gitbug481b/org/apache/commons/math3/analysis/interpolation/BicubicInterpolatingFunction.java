@@ -33,54 +33,62 @@ import java.util.Arrays;
  * @since 3.4
  */
 public class BicubicInterpolatingFunction
-    implements BivariateFunction {
-    /** Number of coefficients. */
+        implements BivariateFunction {
+    /**
+     * Number of coefficients.
+     */
     private static final int NUM_COEFF = 16;
     /**
      * Matrix to compute the spline coefficients from the function values
      * and function derivatives values
      */
     private static final double[][] AINV = {
-        { 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-        { 0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0 },
-        { -3,3,0,0,-2,-1,0,0,0,0,0,0,0,0,0,0 },
-        { 2,-2,0,0,1,1,0,0,0,0,0,0,0,0,0,0 },
-        { 0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0 },
-        { 0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0 },
-        { 0,0,0,0,0,0,0,0,-3,3,0,0,-2,-1,0,0 },
-        { 0,0,0,0,0,0,0,0,2,-2,0,0,1,1,0,0 },
-        { -3,0,3,0,0,0,0,0,-2,0,-1,0,0,0,0,0 },
-        { 0,0,0,0,-3,0,3,0,0,0,0,0,-2,0,-1,0 },
-        { 9,-9,-9,9,6,3,-6,-3,6,-6,3,-3,4,2,2,1 },
-        { -6,6,6,-6,-3,-3,3,3,-4,4,-2,2,-2,-2,-1,-1 },
-        { 2,0,-2,0,0,0,0,0,1,0,1,0,0,0,0,0 },
-        { 0,0,0,0,2,0,-2,0,0,0,0,0,1,0,1,0 },
-        { -6,6,6,-6,-4,-2,4,2,-3,3,-3,3,-2,-1,-2,-1 },
-        { 4,-4,-4,4,2,2,-2,-2,2,-2,2,-2,1,1,1,1 }
+            {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {-3, 3, 0, 0, -2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {2, -2, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, -3, 3, 0, 0, -2, -1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 2, -2, 0, 0, 1, 1, 0, 0},
+            {-3, 0, 3, 0, 0, 0, 0, 0, -2, 0, -1, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, -3, 0, 3, 0, 0, 0, 0, 0, -2, 0, -1, 0},
+            {9, -9, -9, 9, 6, 3, -6, -3, 6, -6, 3, -3, 4, 2, 2, 1},
+            {-6, 6, 6, -6, -3, -3, 3, 3, -4, 4, -2, 2, -2, -2, -1, -1},
+            {2, 0, -2, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 2, 0, -2, 0, 0, 0, 0, 0, 1, 0, 1, 0},
+            {-6, 6, 6, -6, -4, -2, 4, 2, -3, 3, -3, 3, -2, -1, -2, -1},
+            {4, -4, -4, 4, 2, 2, -2, -2, 2, -2, 2, -2, 1, 1, 1, 1}
     };
 
-    /** Samples x-coordinates */
+    /**
+     * Samples x-coordinates
+     */
     private final double[] xval;
-    /** Samples y-coordinates */
+    /**
+     * Samples y-coordinates
+     */
     private final double[] yval;
-    /** Set of cubic splines patching the whole data grid */
+    /**
+     * Set of cubic splines patching the whole data grid
+     */
     private final BicubicFunction[][] splines;
 
     /**
-     * @param x Sample values of the x-coordinate, in increasing order.
-     * @param y Sample values of the y-coordinate, in increasing order.
-     * @param f Values of the function on every grid point.
-     * @param dFdX Values of the partial derivative of function with respect
-     * to x on every grid point.
-     * @param dFdY Values of the partial derivative of function with respect
-     * to y on every grid point.
+     * @param x       Sample values of the x-coordinate, in increasing order.
+     * @param y       Sample values of the y-coordinate, in increasing order.
+     * @param f       Values of the function on every grid point.
+     * @param dFdX    Values of the partial derivative of function with respect
+     *                to x on every grid point.
+     * @param dFdY    Values of the partial derivative of function with respect
+     *                to y on every grid point.
      * @param d2FdXdY Values of the cross partial derivative of function on
-     * every grid point.
-     * @throws DimensionMismatchException if the various arrays do not contain
-     * the expected number of elements.
+     *                every grid point.
+     * @throws DimensionMismatchException    if the various arrays do not contain
+     *                                       the expected number of elements.
      * @throws NonMonotonicSequenceException if {@code x} or {@code y} are
-     * not strictly increasing.
-     * @throws NoDataException if any of the arrays has zero length.
+     *                                       not strictly increasing.
+     * @throws NoDataException               if any of the arrays has zero length.
      */
     public BicubicInterpolatingFunction(double[] x,
                                         double[] y,
@@ -88,9 +96,9 @@ public class BicubicInterpolatingFunction
                                         double[][] dFdX,
                                         double[][] dFdY,
                                         double[][] d2FdXdY)
-        throws DimensionMismatchException,
-               NoDataException,
-               NonMonotonicSequenceException {
+            throws DimensionMismatchException,
+            NoDataException,
+            NonMonotonicSequenceException {
         final int xLen = x.length;
         final int yLen = y.length;
 
@@ -139,11 +147,11 @@ public class BicubicInterpolatingFunction
                 final int jp1 = j + 1;
                 final double yR = yval[jp1] - yval[j];
                 final double xRyR = xR * yR;
-                final double[] beta = new double[] {
-                    f[i][j], f[ip1][j], f[i][jp1], f[ip1][jp1],
-                    dFdX[i][j] * xR, dFdX[ip1][j] * xR, dFdX[i][jp1] * xR, dFdX[ip1][jp1] * xR,
-                    dFdY[i][j] * yR, dFdY[ip1][j] * yR, dFdY[i][jp1] * yR, dFdY[ip1][jp1] * yR,
-                    d2FdXdY[i][j] * xRyR, d2FdXdY[ip1][j] * xRyR, d2FdXdY[i][jp1] * xRyR, d2FdXdY[ip1][jp1] * xRyR
+                final double[] beta = new double[]{
+                        f[i][j], f[ip1][j], f[i][jp1], f[ip1][jp1],
+                        dFdX[i][j] * xR, dFdX[ip1][j] * xR, dFdX[i][jp1] * xR, dFdX[ip1][jp1] * xR,
+                        dFdY[i][j] * yR, dFdY[ip1][j] * yR, dFdY[i][jp1] * yR, dFdY[ip1][jp1] * yR,
+                        d2FdXdY[i][j] * xRyR, d2FdXdY[ip1][j] * xRyR, d2FdXdY[i][jp1] * xRyR, d2FdXdY[ip1][jp1] * xRyR
                 };
 
                 splines[i][j] = new BicubicFunction(computeSplineCoefficients(beta));
@@ -155,7 +163,7 @@ public class BicubicInterpolatingFunction
      * {@inheritDoc}
      */
     public double value(double x, double y)
-        throws OutOfRangeException {
+            throws OutOfRangeException {
         final int i = searchIndex(x, xval);
         final int j = searchIndex(y, yval);
 
@@ -174,9 +182,9 @@ public class BicubicInterpolatingFunction
      */
     public boolean isValidPoint(double x, double y) {
         if (x < xval[0] ||
-            x > xval[xval.length - 1] ||
-            y < yval[0] ||
-            y > yval[yval.length - 1]) {
+                x > xval[xval.length - 1] ||
+                y < yval[0] ||
+                y > yval[yval.length - 1]) {
             return false;
         } else {
             return true;
@@ -184,18 +192,18 @@ public class BicubicInterpolatingFunction
     }
 
     /**
-     * @param c Coordinate.
+     * @param c   Coordinate.
      * @param val Coordinate samples.
      * @return the index in {@code val} corresponding to the interval
      * containing {@code c}.
      * @throws OutOfRangeException if {@code c} is out of the
-     * range defined by the boundary values of {@code val}.
+     *                             range defined by the boundary values of {@code val}.
      */
     private int searchIndex(double c, double[] val) {
         final int r = Arrays.binarySearch(val, c);
 
         if (r == -1 ||
-            r == -val.length - 1) {
+                r == -val.length - 1) {
             throw new OutOfRangeException(c, val[0], val[val.length - 1]);
         }
 
@@ -241,7 +249,7 @@ public class BicubicInterpolatingFunction
      * the corresponding variable(s).
      *
      * @param beta List of function values and function partial derivatives
-     * values.
+     *             values.
      * @return the spline coefficients.
      */
     private double[] computeSplineCoefficients(double[] beta) {
@@ -264,9 +272,13 @@ public class BicubicInterpolatingFunction
  * Bicubic function.
  */
 class BicubicFunction implements BivariateFunction {
-    /** Number of points. */
+    /**
+     * Number of points.
+     */
     private static final short N = 4;
-    /** Coefficients */
+    /**
+     * Coefficients
+     */
     private final double[][] a;
 
     /**
@@ -309,8 +321,8 @@ class BicubicFunction implements BivariateFunction {
     /**
      * Compute the value of the bicubic polynomial.
      *
-     * @param pX Powers of the x-coordinate.
-     * @param pY Powers of the y-coordinate.
+     * @param pX    Powers of the x-coordinate.
+     * @param pY    Powers of the y-coordinate.
      * @param coeff Spline coefficients.
      * @return the interpolated value.
      */

@@ -60,7 +60,7 @@ import static java.util.stream.Collectors.joining;
  * ...
  * }
  * </code></pre>
- *
+ * <p>
  * The types that make up the union type are its "elements"
  */
 public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
@@ -201,9 +201,7 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
 
     @Override
     public ResolvedType convertToUsage(Context context) {
-        List<ResolvedType> resolvedElements = getElements().stream()
-                .map(el -> el.convertToUsage(context))
-                .collect(Collectors.toList());
+        List<ResolvedType> resolvedElements = getElements().stream().map(el -> el.convertToUsage(context)).collect(Collectors.toList());
         return new ResolvedUnionType(resolvedElements);
     }
 }

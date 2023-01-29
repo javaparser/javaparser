@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 /**
- *
  * <p>
  * This package provides basic geometry components on the 1-sphere.
  * </p>
@@ -25,6 +24,5 @@
  * MathWorld), i.e. the 1-sphere is the one-dimensional closed curve
  * defined in 2D as x<sup>2</sup>+y<sup>2</sup>=1.
  * </p>
- *
  */
 package org.apache.commons.math3.geometry.spherical.oned;

@@ -26,7 +26,9 @@ import org.apache.commons.math3.util.FastMath;
  * @since 3.0
  */
 public class Ulp implements UnivariateFunction {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x) {
         return FastMath.ulp(x);
     }

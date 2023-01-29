@@ -25,18 +25,24 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class MultiDimensionMismatchException extends MathIllegalArgumentException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -8415396756375798143L;
 
-    /** Wrong dimensions. */
+    /**
+     * Wrong dimensions.
+     */
     private final Integer[] wrong;
-    /** Correct dimensions. */
+    /**
+     * Correct dimensions.
+     */
     private final Integer[] expected;
 
     /**
      * Construct an exception from the mismatched dimensions.
      *
-     * @param wrong Wrong dimensions.
+     * @param wrong    Wrong dimensions.
      * @param expected Expected dimensions.
      */
     public MultiDimensionMismatchException(Integer[] wrong,
@@ -48,8 +54,8 @@ public class MultiDimensionMismatchException extends MathIllegalArgumentExceptio
      * Construct an exception from the mismatched dimensions.
      *
      * @param specific Message pattern providing the specific context of
-     * the error.
-     * @param wrong Wrong dimensions.
+     *                 the error.
+     * @param wrong    Wrong dimensions.
      * @param expected Expected dimensions.
      */
     public MultiDimensionMismatchException(Localizable specific,
@@ -66,6 +72,7 @@ public class MultiDimensionMismatchException extends MathIllegalArgumentExceptio
     public Integer[] getWrongDimensions() {
         return wrong.clone();
     }
+
     /**
      * @return an array containing the expected dimensions.
      */
@@ -80,6 +87,7 @@ public class MultiDimensionMismatchException extends MathIllegalArgumentExceptio
     public int getWrongDimension(int index) {
         return wrong[index].intValue();
     }
+
     /**
      * @param index Dimension index.
      * @return the expected dimension stored at {@code index}.

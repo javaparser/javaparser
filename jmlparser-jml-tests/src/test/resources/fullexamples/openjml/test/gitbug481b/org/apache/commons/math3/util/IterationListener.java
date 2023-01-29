@@ -21,7 +21,6 @@ import java.util.EventListener;
 /**
  * The listener interface for receiving events occurring in an iterative
  * algorithm.
- *
  */
 public interface IterationListener extends EventListener {
     /**

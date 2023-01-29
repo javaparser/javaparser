@@ -26,10 +26,13 @@ import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D;
  * Computes the quantization error histogram.
  * Each bin will contain the average of the distances between samples
  * mapped to the corresponding unit and the weight vector of that unit.
+ *
  * @since 3.6
  */
 public class QuantizationError implements MapDataVisualization {
-    /** Distance. */
+    /**
+     * Distance.
+     */
     private final DistanceMeasure distance;
 
     /**
@@ -39,7 +42,9 @@ public class QuantizationError implements MapDataVisualization {
         this.distance = distance;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double[][] computeImage(NeuronSquareMesh2D map,
                                    Iterable<double[]> data) {
         final int nR = map.getNumberOfRows();

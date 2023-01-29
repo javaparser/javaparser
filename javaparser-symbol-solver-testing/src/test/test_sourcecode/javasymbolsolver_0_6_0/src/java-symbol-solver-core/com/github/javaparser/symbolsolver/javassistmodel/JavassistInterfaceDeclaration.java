@@ -107,7 +107,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
         Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
-            boolean isNotBridge =  (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
+            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
             if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
                 candidates.add(new JavassistMethodDeclaration(method, typeSolver));
             }
@@ -146,7 +146,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration imple
 
     @Override
     public List<FieldDeclaration> getAllFields() {
-      return javassistTypeDeclarationAdapter.getDeclaredFields();
+        return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override

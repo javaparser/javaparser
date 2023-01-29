@@ -29,14 +29,15 @@ public class RandomGeneratorFactory {
     /**
      * Class contains only static methods.
      */
-    private RandomGeneratorFactory() {}
+    private RandomGeneratorFactory() {
+    }
 
     /**
      * Creates a {@link RandomDataGenerator} instance that wraps a
      * {@link Random} instance.
      *
      * @param rng JDK {@link Random} instance that will generate the
-     * the random data.
+     *            the random data.
      * @return the given RNG, wrapped in a {@link RandomGenerator}.
      */
     public static RandomGenerator createRandomGenerator(final Random rng) {

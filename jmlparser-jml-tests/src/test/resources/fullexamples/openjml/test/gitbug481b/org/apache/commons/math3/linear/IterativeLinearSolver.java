@@ -32,7 +32,9 @@ import org.apache.commons.math3.util.MathUtils;
  */
 public abstract class IterativeLinearSolver {
 
-    /** The object in charge of managing the iterations. */
+    /**
+     * The object in charge of managing the iterations.
+     */
     private final IterationManager manager;
 
     /**
@@ -51,7 +53,7 @@ public abstract class IterativeLinearSolver {
      * @throws NullArgumentException if {@code manager} is {@code null}
      */
     public IterativeLinearSolver(final IterationManager manager)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(manager);
         this.manager = manager;
     }
@@ -62,32 +64,32 @@ public abstract class IterativeLinearSolver {
      * {@link #solveInPlace(RealLinearOperator, RealVector, RealVector) solveInPlace},
      * and throws an exception if one of the checks fails.
      *
-     * @param a the linear operator A of the system
-     * @param b the right-hand side vector
+     * @param a  the linear operator A of the system
+     * @param b  the right-hand side vector
      * @param x0 the initial guess of the solution
-     * @throws NullArgumentException if one of the parameters is {@code null}
+     * @throws NullArgumentException      if one of the parameters is {@code null}
      * @throws NonSquareOperatorException if {@code a} is not square
      * @throws DimensionMismatchException if {@code b} or {@code x0} have
-     * dimensions inconsistent with {@code a}
+     *                                    dimensions inconsistent with {@code a}
      */
     protected static void checkParameters(final RealLinearOperator a,
-        final RealVector b, final RealVector x0) throws
-        NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException {
+                                          final RealVector b, final RealVector x0) throws
+            NullArgumentException, NonSquareOperatorException,
+            DimensionMismatchException {
         MathUtils.checkNotNull(a);
         MathUtils.checkNotNull(b);
         MathUtils.checkNotNull(x0);
         if (a.getRowDimension() != a.getColumnDimension()) {
             throw new NonSquareOperatorException(a.getRowDimension(),
-                                                       a.getColumnDimension());
+                    a.getColumnDimension());
         }
         if (b.getDimension() != a.getRowDimension()) {
             throw new DimensionMismatchException(b.getDimension(),
-                                                 a.getRowDimension());
+                    a.getRowDimension());
         }
         if (x0.getDimension() != a.getColumnDimension()) {
             throw new DimensionMismatchException(x0.getDimension(),
-                                                 a.getColumnDimension());
+                    a.getColumnDimension());
         }
     }
 
@@ -107,18 +109,18 @@ public abstract class IterativeLinearSolver {
      * @param a the linear operator A of the system
      * @param b the right-hand side vector
      * @return a new vector containing the solution
-     * @throws NullArgumentException if one of the parameters is {@code null}
+     * @throws NullArgumentException      if one of the parameters is {@code null}
      * @throws NonSquareOperatorException if {@code a} is not square
      * @throws DimensionMismatchException if {@code b} has dimensions
-     * inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
-     * unless a custom
-     * {@link org.apache.commons.math3.util.Incrementor.MaxCountExceededCallback callback}
-     * has been set at construction of the {@link IterationManager}
+     *                                    inconsistent with {@code a}
+     * @throws MaxCountExceededException  at exhaustion of the iteration count,
+     *                                    unless a custom
+     *                                    {@link org.apache.commons.math3.util.Incrementor.MaxCountExceededCallback callback}
+     *                                    has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(final RealLinearOperator a, final RealVector b)
-        throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, MaxCountExceededException {
+            throws NullArgumentException, NonSquareOperatorException,
+            DimensionMismatchException, MaxCountExceededException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         x.set(0.);
@@ -129,22 +131,22 @@ public abstract class IterativeLinearSolver {
      * Returns an estimate of the solution to the linear system A &middot; x =
      * b.
      *
-     * @param a the linear operator A of the system
-     * @param b the right-hand side vector
+     * @param a  the linear operator A of the system
+     * @param b  the right-hand side vector
      * @param x0 the initial guess of the solution
      * @return a new vector containing the solution
-     * @throws NullArgumentException if one of the parameters is {@code null}
+     * @throws NullArgumentException      if one of the parameters is {@code null}
      * @throws NonSquareOperatorException if {@code a} is not square
      * @throws DimensionMismatchException if {@code b} or {@code x0} have
-     * dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
-     * unless a custom
-     * {@link org.apache.commons.math3.util.Incrementor.MaxCountExceededCallback callback}
-     * has been set at construction of the {@link IterationManager}
+     *                                    dimensions inconsistent with {@code a}
+     * @throws MaxCountExceededException  at exhaustion of the iteration count,
+     *                                    unless a custom
+     *                                    {@link org.apache.commons.math3.util.Incrementor.MaxCountExceededCallback callback}
+     *                                    has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(RealLinearOperator a, RealVector b, RealVector x0)
-        throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, MaxCountExceededException {
+            throws NullArgumentException, NonSquareOperatorException,
+            DimensionMismatchException, MaxCountExceededException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, b, x0.copy());
     }
@@ -153,21 +155,21 @@ public abstract class IterativeLinearSolver {
      * Returns an estimate of the solution to the linear system A &middot; x =
      * b. The solution is computed in-place (initial guess is modified).
      *
-     * @param a the linear operator A of the system
-     * @param b the right-hand side vector
+     * @param a  the linear operator A of the system
+     * @param b  the right-hand side vector
      * @param x0 initial guess of the solution
      * @return a reference to {@code x0} (shallow copy) updated with the
      * solution
-     * @throws NullArgumentException if one of the parameters is {@code null}
+     * @throws NullArgumentException      if one of the parameters is {@code null}
      * @throws NonSquareOperatorException if {@code a} is not square
      * @throws DimensionMismatchException if {@code b} or {@code x0} have
-     * dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
-     * unless a custom
-     * {@link org.apache.commons.math3.util.Incrementor.MaxCountExceededCallback callback}
-     * has been set at construction of the {@link IterationManager}
+     *                                    dimensions inconsistent with {@code a}
+     * @throws MaxCountExceededException  at exhaustion of the iteration count,
+     *                                    unless a custom
+     *                                    {@link org.apache.commons.math3.util.Incrementor.MaxCountExceededCallback callback}
+     *                                    has been set at construction of the {@link IterationManager}
      */
     public abstract RealVector solveInPlace(RealLinearOperator a, RealVector b,
-        RealVector x0) throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, MaxCountExceededException;
+                                            RealVector x0) throws NullArgumentException, NonSquareOperatorException,
+            DimensionMismatchException, MaxCountExceededException;
 }

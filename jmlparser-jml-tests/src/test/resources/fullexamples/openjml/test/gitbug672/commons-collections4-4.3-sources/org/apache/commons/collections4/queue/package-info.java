@@ -28,6 +28,5 @@
  *   <li>Transformed - transforms elements added to the queue
  *   <li>Unmodifiable - ensures the collection cannot be altered
  * </ul>
- *
  */
 package org.apache.commons.collections4.queue;

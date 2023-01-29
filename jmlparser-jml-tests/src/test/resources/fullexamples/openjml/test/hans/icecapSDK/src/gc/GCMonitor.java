@@ -2,16 +2,16 @@ package gc;
 
 public interface GCMonitor {
 
-	void freeObject(int ref);
-	
-	void addStaticRoot(int ref);
+    void freeObject(int ref);
 
-	int getFreeedObjects();
+    void addStaticRoot(int ref);
 
-	void reset();
+    int getFreeedObjects();
 
-	void addStackRoot(int ref);
+    void reset();
 
-	void visitChild(int parent, int child);
-	
+    void addStackRoot(int ref);
+
+    void visitChild(int parent, int child);
+
 }

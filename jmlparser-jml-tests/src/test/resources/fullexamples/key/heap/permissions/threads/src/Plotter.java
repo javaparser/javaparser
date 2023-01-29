@@ -1,11 +1,11 @@
 public final class Plotter extends ThreadSpec2 {
 
-        //@ accessible<heap> \inv : \nothing;
-        //@ accessible<permissions> \inv : \nothing;
+    //@ accessible<heap> \inv : \nothing;
+    //@ accessible<permissions> \inv : \nothing;
 
-        private /*@ nullable @*/ Buffer buffer;
-        private /*@ nullable @*/ AFilter ta;
-        private /*@ nullable @*/ BFilter tb;
+    private /*@ nullable @*/ Buffer buffer;
+    private /*@ nullable @*/ AFilter ta;
+    private /*@ nullable @*/ BFilter tb;
 
         /*@ helper model boolean preStart(Object contextThread) { return (
               \permission(this.buffer.inp) ==
@@ -36,7 +36,7 @@ public final class Plotter extends ThreadSpec2 {
                 )
             ); } @*/
 
-        /*@ helper model boolean postJoin(Object contextThread) { return true; } @*/
+    /*@ helper model boolean postJoin(Object contextThread) { return true; } @*/
 
         /*@ helper model boolean initPost() { return (
               \dl_writePermission(\permission(this.buffer)) &&
@@ -113,33 +113,34 @@ public final class Plotter extends ThreadSpec2 {
             ); } @*/
 
 
-        public /*@ helper @*/ void run() {
-            ta.join(); // all permissions on buffer.inp from sampler -> ta -> ct
-                       // all permissions on buffer.outa from ta -> ct
-            tb.join(); // all permissions on buffer.inp from sampler -> ta -> ct
-                       // all permissions on buffer.outa from tb -> ct
-            this.buffer.inp = 0; // dummy write operation
-            this.buffer.outa = 0; // dummy write operation
-            this.buffer.outb = 0; // dummy write operation
-        }
+    public /*@ helper @*/ void run() {
+        ta.join(); // all permissions on buffer.inp from sampler -> ta -> ct
+        // all permissions on buffer.outa from ta -> ct
+        tb.join(); // all permissions on buffer.inp from sampler -> ta -> ct
+        // all permissions on buffer.outa from tb -> ct
+        this.buffer.inp = 0; // dummy write operation
+        this.buffer.outa = 0; // dummy write operation
+        this.buffer.outb = 0; // dummy write operation
+    }
 
-        /*@ normal_behavior
-            requires a.stateInv();
-            requires b.stateInv();
-            requires a.buffer == buf;
-            requires b.buffer == buf;
-            requires a.sampler == b.sampler;
-            ensures initPost();
-            ensures this.buffer == buf;
-            ensures this.ta == a;
-            ensures this.tb == b;
-            ensures stateInv();
-            assignable \nothing;
-            assignable<permissions> \nothing; @*/
-        /*@ helper @*/ public Plotter(AFilter a, BFilter b, Buffer buf) {
-            this.ta = a;
-            this.tb = b;
-            this.buffer = buf;
-        }
+    /*@ normal_behavior
+        requires a.stateInv();
+        requires b.stateInv();
+        requires a.buffer == buf;
+        requires b.buffer == buf;
+        requires a.sampler == b.sampler;
+        ensures initPost();
+        ensures this.buffer == buf;
+        ensures this.ta == a;
+        ensures this.tb == b;
+        ensures stateInv();
+        assignable \nothing;
+        assignable<permissions> \nothing; @*/
+    /*@ helper @*/
+    public Plotter(AFilter a, BFilter b, Buffer buf) {
+        this.ta = a;
+        this.tb = b;
+        this.buffer = buf;
+    }
 }
 

@@ -28,7 +28,7 @@ import org.apache.commons.math3.util.Pair;
  * Such a quadrature rule allows the calculation of improper integrals
  * of a function
  * <p>
- *  \(f(x) e^{-x^2}\)
+ * \(f(x) e^{-x^2}\)
  * </p><p>
  * Recurrence relation and weights computation follow
  * <a href="http://en.wikipedia.org/wiki/Abramowitz_and_Stegun">
@@ -41,30 +41,38 @@ import org.apache.commons.math3.util.Pair;
  * based on the roots of the previous Hermite polynomial (interlacing).
  * Upper and lower bounds of these roots are provided by </p>
  * <blockquote>
- *  I. Krasikov,
- *  <em>Nonnegative quadratic forms and bounds on orthogonal polynomials</em>,
- *  Journal of Approximation theory <b>111</b>, 31-49
+ * I. Krasikov,
+ * <em>Nonnegative quadratic forms and bounds on orthogonal polynomials</em>,
+ * Journal of Approximation theory <b>111</b>, 31-49
  * </blockquote>
  *
  * @since 3.3
  */
 public class HermiteRuleFactory extends BaseRuleFactory<Double> {
-    /** &pi;<sup>1/2</sup> */
+    /**
+     * &pi;<sup>1/2</sup>
+     */
     private static final double SQRT_PI = 1.77245385090551602729;
-    /** &pi;<sup>-1/4</sup> */
+    /**
+     * &pi;<sup>-1/4</sup>
+     */
     private static final double H0 = 7.5112554446494248286e-1;
-    /** &pi;<sup>-1/4</sup> &radic;2 */
+    /**
+     * &pi;<sup>-1/4</sup> &radic;2
+     */
     private static final double H1 = 1.0622519320271969145;
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Pair<Double[], Double[]> computeRule(int numberOfPoints)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         if (numberOfPoints == 1) {
             // Break recursion.
-            return new Pair<Double[], Double[]>(new Double[] { 0d },
-                                                new Double[] { SQRT_PI });
+            return new Pair<Double[], Double[]>(new Double[]{0d},
+                    new Double[]{SQRT_PI});
         }
 
         // Get previous rule.

@@ -36,7 +36,6 @@ public class NoCache<K, V> implements Cache<K, V> {
      *
      * @param <expectedK> The expected type for the key.
      * @param <expectedV> The expected type for the value.
-     *
      * @return A newly created instance of {@link NoCache}.
      */
     public static <expectedK, expectedV> NoCache<expectedK, expectedV> create() {

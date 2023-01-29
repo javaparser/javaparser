@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 /**
- *
- *      Classes providing rank transformations.
- *
+ * Classes providing rank transformations.
  */
 package org.apache.commons.math3.stat.ranking;

@@ -55,11 +55,7 @@ class DifferenceElementCalculator {
             // because we can have nodes with the same content but in different lines
             // in this case we consider that nodes are not equals
             // If the nodes have no declared position they are considered equal.
-            return this.node.equals(cpi.node)
-                    && (this.node.hasRange() == false && cpi.node.hasRange() == false
-                    || (this.node.hasRange() && cpi.node.hasRange() && this.node.getRange().get().contains(cpi.node.getRange().get())
-            )
-            );
+            return this.node.equals(cpi.node) && (this.node.hasRange() == false && cpi.node.hasRange() == false || (this.node.hasRange() && cpi.node.hasRange() && this.node.getRange().get().contains(cpi.node.getRange().get())));
         }
 
         @Override
@@ -156,13 +152,13 @@ class DifferenceElementCalculator {
     static List<DifferenceElement> calculate(LexicalDifferenceCalculator.CalculatedSyntaxModel original, LexicalDifferenceCalculator.CalculatedSyntaxModel after) {
         // For performance reasons we use the positions of matching children
         // to guide the calculation of the difference
-        // 
+        //
         // Suppose we have:
         // qwerty[A]uiop
         // qwer[A]uiop
-        // 
+        //
         // with [A] being a child and lowercase letters being tokens
-        // 
+        //
         // We would calculate the Difference between "qwerty" and "qwer" then we know the A is kept, and then we
         // would calculate the difference between "uiop" and "uiop"
         List<ChildPositionInfo> childrenInOriginal = findChildrenPositions(original);
@@ -173,28 +169,22 @@ class DifferenceElementCalculator {
         int originalIndex = 0;
         int afterIndex = 0;
         int commonChildrenIndex = 0;
-        int posOfNextChildInOriginal = -1; // undefined
-        int posOfNextChildInAfter = -1; // undefined
-        // The algorithm is based on common child elements. 
-        // It first analyzes the elements preceding this child. 
-        // Then it keeps the common element and continues the analysis between the element 
+        // undefined
+        int posOfNextChildInOriginal = -1;
+        // undefined
+        int posOfNextChildInAfter = -1;
+        // The algorithm is based on common child elements.
+        // It first analyzes the elements preceding this child.
+        // Then it keeps the common element and continues the analysis between the element
         // following this child and the common element in the list.
         while (commonChildrenIndex < commonChildren.size()) {
             ChildPositionInfo child = commonChildren.get(commonChildrenIndex++);
             // search the position of the node "child" in the original list of cms element
             final int currentPosOfNextChildInOriginal = posOfNextChildInOriginal;
             final int currentPosOfNextChildInAfter = posOfNextChildInAfter;
-            posOfNextChildInOriginal = childrenInOriginal.stream()
-                    .filter(i -> i.equals(child))
-                    .map(i -> i.position)
-                    .filter(position -> position > currentPosOfNextChildInOriginal)
-                    .findFirst().orElse(posOfNextChildInOriginal);
+            posOfNextChildInOriginal = childrenInOriginal.stream().filter(i -> i.equals(child)).map(i -> i.position).filter(position -> position > currentPosOfNextChildInOriginal).findFirst().orElse(posOfNextChildInOriginal);
             // search the position of the node "child" in the modified list of cms element
-            posOfNextChildInAfter = childrenInAfter.stream()
-                    .filter(i -> i.equals(child))
-                    .map(i -> i.position)
-                    .filter(position -> position > currentPosOfNextChildInAfter)
-                    .findFirst().orElse(posOfNextChildInAfter);
+            posOfNextChildInAfter = childrenInAfter.stream().filter(i -> i.equals(child)).map(i -> i.position).filter(position -> position > currentPosOfNextChildInAfter).findFirst().orElse(posOfNextChildInAfter);
             // Imagine that the common elements has been moved, for example in the case where the parameters of a method are reversed
             // In this case the afterIndex will be greater than the position of the child in
             // the list

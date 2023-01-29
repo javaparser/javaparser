@@ -24,8 +24,8 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
-public class Issue1766Test extends AbstractLexicalPreservingTest  {
-    
+public class Issue1766Test extends AbstractLexicalPreservingTest {
+
     @Test
     public void testWithLexicalPreservationEnabled() {
 
@@ -39,21 +39,21 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
                         "    // nothing\n" +
                         "  }\n" +
                         "}");
-        
-        String expected = 
-                "public class SimpleTestClass {\n" + 
-                "  public SimpleTestClass() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "  @Override\n" + 
-                "  void bubber() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "}";
+
+        String expected =
+                "public class SimpleTestClass {\n" +
+                        "  public SimpleTestClass() {\n" +
+                        "    // nothing\n" +
+                        "  }\n" +
+                        "  @Override\n" +
+                        "  void bubber() {\n" +
+                        "    // nothing\n" +
+                        "  }\n" +
+                        "}";
 
         TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
-    
+
     @Test
     public void testWithLexicalPreservingPrinterSetup() {
 
@@ -67,17 +67,17 @@ public class Issue1766Test extends AbstractLexicalPreservingTest  {
                         "    // nothing\n" +
                         "  }\n" +
                         "}");
-        
-        String expected = 
-                "public class SimpleTestClass {\n" + 
-                "  public SimpleTestClass() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "  @Override\n" + 
-                "  void bubber() {\n" + 
-                "    // nothing\n" + 
-                "  }\n" + 
-                "}";
+
+        String expected =
+                "public class SimpleTestClass {\n" +
+                        "  public SimpleTestClass() {\n" +
+                        "    // nothing\n" +
+                        "  }\n" +
+                        "  @Override\n" +
+                        "  void bubber() {\n" +
+                        "    // nothing\n" +
+                        "  }\n" +
+                        "}";
 
         TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }

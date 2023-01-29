@@ -38,14 +38,16 @@ import java.io.Serializable;
  */
 public class FastHadamardTransformer implements RealTransformer, Serializable {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     static final long serialVersionUID = 20120211L;
 
     /**
      * {@inheritDoc}
      *
      * @throws MathIllegalArgumentException if the length of the data array is
-     * not a power of two
+     *                                      not a power of two
      */
     public double[] transform(final double[] f, final TransformType type) {
         if (type == TransformType.FORWARD) {
@@ -57,15 +59,13 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
     /**
      * {@inheritDoc}
      *
-     * @throws org.apache.commons.math3.exception.NonMonotonicSequenceException
-     *   if the lower bound is greater than, or equal to the upper bound
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     *   if the number of sample points is negative
-     * @throws MathIllegalArgumentException if the number of sample points is not a power of two
+     * @throws org.apache.commons.math3.exception.NonMonotonicSequenceException if the lower bound is greater than, or equal to the upper bound
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException  if the number of sample points is negative
+     * @throws MathIllegalArgumentException                                     if the number of sample points is not a power of two
      */
     public double[] transform(final UnivariateFunction f,
-        final double min, final double max, final int n,
-        final TransformType type) {
+                              final double min, final double max, final int n,
+                              final TransformType type) {
 
         return transform(FunctionUtils.sample(f, min, max, n), type);
     }
@@ -227,7 +227,7 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
      */
     protected double[] fht(double[] x) throws MathIllegalArgumentException {
 
-        final int n     = x.length;
+        final int n = x.length;
         final int halfN = n / 2;
 
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
@@ -241,14 +241,14 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
          * one dimension arrays which we are used in an alternating way.
          */
         double[] yPrevious = new double[n];
-        double[] yCurrent  = x.clone();
+        double[] yCurrent = x.clone();
 
         // iterate from left to right (column)
         for (int j = 1; j < n; j <<= 1) {
 
             // switch columns
             final double[] yTmp = yCurrent;
-            yCurrent  = yPrevious;
+            yCurrent = yPrevious;
             yPrevious = yTmp;
 
             // iterate from top to bottom (row)
@@ -278,7 +278,7 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
      */
     protected int[] fht(int[] x) throws MathIllegalArgumentException {
 
-        final int n     = x.length;
+        final int n = x.length;
         final int halfN = n / 2;
 
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
@@ -292,14 +292,14 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
          * one dimension arrays which we are used in an alternating way.
          */
         int[] yPrevious = new int[n];
-        int[] yCurrent  = x.clone();
+        int[] yCurrent = x.clone();
 
         // iterate from left to right (column)
         for (int j = 1; j < n; j <<= 1) {
 
             // switch columns
             final int[] yTmp = yCurrent;
-            yCurrent  = yPrevious;
+            yCurrent = yPrevious;
             yPrevious = yTmp;
 
             // iterate from top to bottom (row)

@@ -32,7 +32,9 @@ import java.util.List;
  */
 public class TournamentSelection implements SelectionPolicy {
 
-    /** number of chromosomes included in the tournament selections */
+    /**
+     * number of chromosomes included in the tournament selections
+     */
     private int arity;
 
     /**
@@ -56,7 +58,7 @@ public class TournamentSelection implements SelectionPolicy {
      */
     public ChromosomePair select(final Population population) throws MathIllegalArgumentException {
         return new ChromosomePair(tournament((ListPopulation) population),
-                                  tournament((ListPopulation) population));
+                tournament((ListPopulation) population));
     }
 
     /**
@@ -70,7 +72,7 @@ public class TournamentSelection implements SelectionPolicy {
     private Chromosome tournament(final ListPopulation population) throws MathIllegalArgumentException {
         if (population.getPopulationSize() < this.arity) {
             throw new MathIllegalArgumentException(LocalizedFormats.TOO_LARGE_TOURNAMENT_ARITY,
-                                                   arity, population.getPopulationSize());
+                    arity, population.getPopulationSize());
         }
         // auxiliary population
         ListPopulation tournamentPopulation = new ListPopulation(this.arity) {
@@ -82,8 +84,8 @@ public class TournamentSelection implements SelectionPolicy {
         };
 
         // create a copy of the chromosome list
-        List<Chromosome> chromosomes = new ArrayList<Chromosome> (population.getChromosomes());
-        for (int i=0; i<this.arity; i++) {
+        List<Chromosome> chromosomes = new ArrayList<Chromosome>(population.getChromosomes());
+        for (int i = 0; i < this.arity; i++) {
             // select a random individual and add it to the tournament
             int rind = GeneticAlgorithm.getRandomGenerator().nextInt(chromosomes.size());
             tournamentPopulation.addChromosome(chromosomes.get(rind));

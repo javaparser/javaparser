@@ -93,7 +93,7 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertEquals("foo.bar", resolved.getPackageName());
         assertEquals("MyAnnotationWithSingleValue", resolved.getName());
     }
-    
+
     @Test
     void solveJavaParserSingleMemberAnnotationAndDefaultvalue() {
         // parse compilation unit and get annotation expression
@@ -141,15 +141,15 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertEquals("java.lang", resolved.getPackageName());
         assertEquals("Override", resolved.getName());
     }
-    
+
     @Test
     void solveReflectionMarkerAnnotationWithDefault() throws IOException {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CH");
-        
+
         VariableDeclarator decl = Navigator.demandField(clazz, "field");
-        FieldDeclaration fd = (FieldDeclaration)decl.getParentNode().get();
+        FieldDeclaration fd = (FieldDeclaration) decl.getParentNode().get();
         MarkerAnnotationExpr annotationExpr = (MarkerAnnotationExpr) fd.getAnnotation(0);
 
         // resolve annotation expression
@@ -157,8 +157,8 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         // get default value
         Expression expr = resolved.getAnnotationMembers().get(0).getDefaultValue();
         assertEquals("BooleanLiteralExpr", expr.getClass().getSimpleName());
-        assertEquals(true, ((BooleanLiteralExpr)expr).getValue());
-        
+        assertEquals(true, ((BooleanLiteralExpr) expr).getValue());
+
         // resolve the type of the annotation member
         ResolvedType rt = resolved.getAnnotationMembers().get(0).getType();
         assertEquals("boolean", rt.describe());
@@ -234,7 +234,7 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertEquals("org.junit", resolved.getPackageName());
         assertEquals("Test", resolved.getName());
     }
-    
+
     @Test
     void solveJavassistNormalAnnotationWithDefault() throws IOException {
         // parse compilation unit and get annotation expression

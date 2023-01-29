@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 package minicdj.cdx;
 
@@ -30,7 +31,7 @@ import minicdj.util.LinkedList;
 
 /**
  * Reduces the set of possible collisions by using a voxel drawing algorithm.
- * 
+ *
  * @author Filip Pizlo, Jeff Hagelberg
  */
 /*@javax.safetycritical.annotate.Scope("cdx.CollisionDetectorHandler")*/
@@ -115,10 +116,10 @@ class Reducer {
             high_y = tmp;
         }
         // ugliest expression ever.
-        boolean result = (((xv == 0.0 && v_x <= x0 + r && x0 - r <= v_x + v_s) /* no motion in x */|| ((low_x <= 1.0f && 1.0f <= high_x)
+        boolean result = (((xv == 0.0 && v_x <= x0 + r && x0 - r <= v_x + v_s) /* no motion in x */ || ((low_x <= 1.0f && 1.0f <= high_x)
                 || (low_x <= 0.0f && 0.0f <= high_x) || (0.0f <= low_x && high_x <= 1.0f)))
-                && ((yv == 0.0 && v_y <= y0 + r && y0 - r <= v_y + v_s) /* no motion in y */|| ((low_y <= 1.0f && 1.0f <= high_y)
-                        || (low_y <= 0.0f && 0.0f <= high_y) || (0.0f <= low_y && high_y <= 1.0f))) && (xv == 0.0f
+                && ((yv == 0.0 && v_y <= y0 + r && y0 - r <= v_y + v_s) /* no motion in y */ || ((low_y <= 1.0f && 1.0f <= high_y)
+                || (low_y <= 0.0f && 0.0f <= high_y) || (0.0f <= low_y && high_y <= 1.0f))) && (xv == 0.0f
                 || yv == 0.0f || /* no motion in x or y or both */
                 (low_y <= high_x && high_x <= high_y) || (low_y <= low_x && low_x <= high_y) || (low_x <= low_y && high_y <= high_x)));
         Benchmarker.done(9);
@@ -193,19 +194,20 @@ class Reducer {
         HashMap voxel_map = new HashMap();
         HashMap graph_colors = new HashMap();
 
-        for (Iterator iter = motions.iterator(); iter.hasNext();)
+        for (Iterator iter = motions.iterator(); iter.hasNext(); )
             performVoxelHashing((Motion) iter.next(), voxel_map, graph_colors);
 
         LinkedList ret = new LinkedList();
-        for (Iterator iter = voxel_map.values().iterator(); iter.hasNext();) {
+        for (Iterator iter = voxel_map.values().iterator(); iter.hasNext(); ) {
             LinkedList cur_set = (LinkedList) iter.next();
             if (cur_set.size() > 1) ret.add(cur_set);
         }
         Benchmarker.done(12);
         return ret;
     }
+
     /** The voxel size. Each voxel is a square, so the is the length of a side. */
-    public float    voxel_size;
+    public float voxel_size;
 
     /** The horizontal side of a voxel. */
     public Vector2d horizontal;

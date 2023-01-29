@@ -14,7 +14,7 @@ public class W {
 }
 
 class X {
-    
+
     //@ private normal_behavior
     //@   ensures \result == 701;
     static public int qqq() {

@@ -107,4 +107,14 @@ public class LineComment extends Comment {
     public Optional<LineComment> toLineComment() {
         return Optional.of(this);
     }
+
+    @Override
+    public String getHeader() {
+        return "//";
+    }
+
+    @Override
+    public String getFooter() {
+        return "";
+    }
 }

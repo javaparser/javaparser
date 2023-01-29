@@ -59,10 +59,9 @@ package org.apache.commons.math3.analysis;
  *     }
  * }
  * </pre>
- *
+ * <p>
  * As shown, the exception is local to the user's code and it is guaranteed
  * that Apache Commons Math will not catch it.
- *
  */
 public interface UnivariateFunction {
     /**
@@ -71,11 +70,11 @@ public interface UnivariateFunction {
      * @param x Point at which the function value should be computed.
      * @return the value of the function.
      * @throws IllegalArgumentException when the activated method itself can
-     * ascertain that a precondition, specified in the API expressed at the
-     * level of the activated method, has been violated.
-     * When Commons Math throws an {@code IllegalArgumentException}, it is
-     * usually the consequence of checking the actual parameters passed to
-     * the method.
+     *                                  ascertain that a precondition, specified in the API expressed at the
+     *                                  level of the activated method, has been violated.
+     *                                  When Commons Math throws an {@code IllegalArgumentException}, it is
+     *                                  usually the consequence of checking the actual parameters passed to
+     *                                  the method.
      */
     double value(double x);
 }

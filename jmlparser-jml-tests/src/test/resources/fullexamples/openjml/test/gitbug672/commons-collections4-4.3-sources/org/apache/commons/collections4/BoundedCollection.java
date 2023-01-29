@@ -25,10 +25,9 @@ import java.util.Collection;
  * maximum number of elements. This interface allows the querying of details
  * associated with the maximum number of elements.
  *
+ * @param <E> the type of elements in this collection
  * @see CollectionUtils#isFull
  * @see CollectionUtils#maxSize
- *
- * @param <E> the type of elements in this collection
  * @since 3.0
  */
 public interface BoundedCollection<E> extends Collection<E> {

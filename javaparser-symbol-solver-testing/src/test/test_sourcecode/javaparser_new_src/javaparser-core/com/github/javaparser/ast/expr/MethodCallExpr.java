@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -58,19 +58,18 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         setArgs(args);
     }
 
-	public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String name, final List<Expression> args) {
-		super(range);
-		setScope(scope);
-		setTypeArguments(typeArguments);
-		setName(name);
-		setArgs(args);
-	}
+    public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String name, final List<Expression> args) {
+        super(range);
+        setScope(scope);
+        setTypeArguments(typeArguments);
+        setName(name);
+        setArgs(args);
+    }
 
     /**
      * Adds the given argument to the method call.
      *
-     * @param arg
-     *            argument value
+     * @param arg argument value
      */
     public MethodCallExpr addArgument(Expression arg) {
         getArgs().add(arg);
@@ -109,10 +108,10 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return scope;
     }
 
-	public void setArgs(final List<Expression> args) {
-		this.args = args;
-		setAsParentNodeOf(this.args);
-	}
+    public void setArgs(final List<Expression> args) {
+        this.args = args;
+        setAsParentNodeOf(this.args);
+    }
 
     public MethodCallExpr setName(final String name) {
         setNameExpr(new NameExpr(name));

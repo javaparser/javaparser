@@ -41,19 +41,29 @@ import java.util.Map.Entry;
  */
 public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, V> {
 
-    /** The values view */
+    /**
+     * The values view
+     */
     private transient Collection<V> valuesView;
 
-    /** The EntryValues view */
+    /**
+     * The EntryValues view
+     */
     private transient EntryValues entryValuesView;
 
-    /** The KeyMultiSet view */
+    /**
+     * The KeyMultiSet view
+     */
     private transient MultiSet<K> keysMultiSetView;
 
-    /** The AsMap view */
+    /**
+     * The AsMap view
+     */
     private transient AsMap asMapView;
 
-    /** The map used to store the data */
+    /**
+     * The map used to store the data
+     */
     private transient Map<K, Collection<V>> map;
 
     /**
@@ -66,7 +76,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to wrap, must not be null
+     * @param map the map to wrap, must not be null
      * @throws NullPointerException if the map is null
      */
     @SuppressWarnings("unchecked")
@@ -78,6 +88,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Gets the map being wrapped.
      *
@@ -144,9 +155,9 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
      * <p>
      * A subsequent <code>get(Object)</code> would return an empty collection.
      *
-     * @param key  the key to remove values from
+     * @param key the key to remove values from
      * @return the <code>Collection</code> of values removed, will return an
-     *   empty, unmodifiable collection for no mapping found
+     * empty, unmodifiable collection for no mapping found
      */
     @Override
     public Collection<V> remove(final Object key) {
@@ -162,7 +173,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
      * If the last value for a key is removed, an empty collection would be
      * returned from a subsequent {@link #get(Object)}.
      *
-     * @param key the key to remove from
+     * @param key   the key to remove from
      * @param value the value to remove
      * @return true if the mapping was removed, false otherwise
      */
@@ -233,7 +244,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
      * Unlike a normal <code>Map</code> the previous value is not replaced.
      * Instead the new value is added to the collection stored against the key.
      *
-     * @param key the key to store against
+     * @param key   the key to store against
      * @param value the value to add to the collection at the key
      * @return the value added if the map changed and null if the map did not change
      */
@@ -253,7 +264,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
 
     /**
      * Copies all of the mappings from the specified map to this map. The effect
-     * of this call is equivalent to that of calling {@link #put(Object,Object)
+     * of this call is equivalent to that of calling {@link #put(Object, Object)
      * put(k, v)} on this map once for each mapping from key {@code k} to value
      * {@code v} in the specified map. The behavior of this operation is
      * undefined if the specified map is modified while the operation is in
@@ -278,7 +289,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
     /**
      * Copies all of the mappings from the specified MultiValuedMap to this map.
      * The effect of this call is equivalent to that of calling
-     * {@link #put(Object,Object) put(k, v)} on this map once for each mapping
+     * {@link #put(Object, Object) put(k, v)} on this map once for each mapping
      * from key {@code k} to value {@code v} in the specified map. The
      * behavior of this operation is undefined if the specified map is modified
      * while the operation is in progress.
@@ -325,7 +336,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
     /**
      * Adds Iterable values to the collection associated with the specified key.
      *
-     * @param key the key to store against
+     * @param key    the key to store against
      * @param values the values to add to the collection at the key, may not be null
      * @return true if this map changed
      * @throws NullPointerException if values is null
@@ -574,7 +585,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
         }
 
         private final class MapEntryTransformer
-            implements Transformer<Map.Entry<K, Collection<V>>, MultiSet.Entry<K>> {
+                implements Transformer<Map.Entry<K, Collection<V>>, MultiSet.Entry<K>> {
             @Override
             public MultiSet.Entry<K> transform(final Map.Entry<K, Collection<V>> mapEntry) {
                 return new AbstractMultiSet.AbstractEntry<K>() {
@@ -765,12 +776,12 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
         final transient Map<K, Collection<V>> decoratedMap;
 
         AsMap(final Map<K, Collection<V>> map) {
-          this.decoratedMap = map;
+            this.decoratedMap = map;
         }
 
         @Override
         public Set<Map.Entry<K, Collection<V>>> entrySet() {
-          return new AsMapEntrySet();
+            return new AsMapEntrySet();
         }
 
         @Override
@@ -780,52 +791,50 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
 
         @Override
         public Collection<V> get(final Object key) {
-          final Collection<V> collection = decoratedMap.get(key);
-          if (collection == null) {
-            return null;
-          }
-          @SuppressWarnings("unchecked")
-        final
-          K k = (K) key;
-          return wrappedCollection(k);
+            final Collection<V> collection = decoratedMap.get(key);
+            if (collection == null) {
+                return null;
+            }
+            @SuppressWarnings("unchecked") final K k = (K) key;
+            return wrappedCollection(k);
         }
 
         @Override
         public Set<K> keySet() {
-          return AbstractMultiValuedMap.this.keySet();
+            return AbstractMultiValuedMap.this.keySet();
         }
 
         @Override
         public int size() {
-          return decoratedMap.size();
+            return decoratedMap.size();
         }
 
         @Override
         public Collection<V> remove(final Object key) {
-          final Collection<V> collection = decoratedMap.remove(key);
-          if (collection == null) {
-            return null;
-          }
+            final Collection<V> collection = decoratedMap.remove(key);
+            if (collection == null) {
+                return null;
+            }
 
-          final Collection<V> output = createCollection();
-          output.addAll(collection);
-          collection.clear();
-          return output;
+            final Collection<V> output = createCollection();
+            output.addAll(collection);
+            collection.clear();
+            return output;
         }
 
         @Override
         public boolean equals(final Object object) {
-          return this == object || decoratedMap.equals(object);
+            return this == object || decoratedMap.equals(object);
         }
 
         @Override
         public int hashCode() {
-          return decoratedMap.hashCode();
+            return decoratedMap.hashCode();
         }
 
         @Override
         public String toString() {
-          return decoratedMap.toString();
+            return decoratedMap.toString();
         }
 
         @Override
@@ -842,7 +851,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
 
             @Override
             public int size() {
-              return AsMap.this.size();
+                return AsMap.this.size();
             }
 
             @Override
@@ -885,8 +894,10 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
+     *
      * @param out the output stream
      * @throws IOException any of the usual I/O related exceptions
      */
@@ -903,10 +914,11 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
 
     /**
      * Read the map in using a custom routine.
+     *
      * @param in the input stream
-     * @throws IOException any of the usual I/O related exceptions
+     * @throws IOException            any of the usual I/O related exceptions
      * @throws ClassNotFoundException if the stream contains an object which class can not be loaded
-     * @throws ClassCastException if the stream does not contain the correct objects
+     * @throws ClassCastException     if the stream does not contain the correct objects
      */
     protected void doReadObject(final ObjectInputStream in)
             throws IOException, ClassNotFoundException {
@@ -918,8 +930,7 @@ public abstract class AbstractMultiValuedMap<K, V> implements MultiValuedMap<K, 
             final int valueSize = in.readInt();
             for (int j = 0; j < valueSize; j++) {
                 @SuppressWarnings("unchecked") // see above
-                final
-                V value = (V) in.readObject();
+                final V value = (V) in.readObject();
                 values.add(value);
             }
         }

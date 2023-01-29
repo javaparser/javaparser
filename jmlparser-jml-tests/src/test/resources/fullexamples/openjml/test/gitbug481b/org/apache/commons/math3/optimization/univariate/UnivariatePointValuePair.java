@@ -24,16 +24,22 @@ import java.io.Serializable;
  * point.
  * This is a simple immutable container.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class UnivariatePointValuePair implements Serializable {
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 1003888396256744753L;
-    /** Point. */
+    /**
+     * Point.
+     */
     private final double point;
-    /** Value of the objective function at the point. */
+    /**
+     * Value of the objective function at the point.
+     */
     private final double value;
 
     /**

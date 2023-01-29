@@ -80,8 +80,6 @@ public class Issue3308Test {
     }
 
 
-
-
     @Test
     void deepArray() {
         StaticJavaParser.getConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_9);

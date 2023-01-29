@@ -55,7 +55,7 @@ class NameTest {
         ImportDeclaration importDeclaration = parseImport("import java.util.List;");
 
         assertEquals("import java.util.List;" + SYSTEM_EOL, importDeclaration.toString());
-        assertEquals("import java.util.List;" , ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
+        assertEquals("import java.util.List;", ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
     }
 
     @Test

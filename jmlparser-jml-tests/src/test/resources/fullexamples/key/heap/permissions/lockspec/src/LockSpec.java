@@ -58,54 +58,54 @@ public interface LockSpec {
 }
 
 public interface Lock {
-  //@ public instance ghost LockSpec spec;
+    //@ public instance ghost LockSpec spec;
 
-  /*@ normal_behavior
-      requires spec.lockStatus(\dl_FALSE());
-      ensures spec.lockStatus(\dl_TRUE());
-      ensures spec.lockTransfer();
-      assignable<heap> \strictly_nothing;
-      assignable<permissions> spec.fpPerm(); @*/
-  public /*@ helper @*/ native void lock();
+    /*@ normal_behavior
+        requires spec.lockStatus(\dl_FALSE());
+        ensures spec.lockStatus(\dl_TRUE());
+        ensures spec.lockTransfer();
+        assignable<heap> \strictly_nothing;
+        assignable<permissions> spec.fpPerm(); @*/
+    public /*@ helper @*/ native void lock();
 
-  /*@ normal_behavior
-      requires spec.lockStatus(\dl_TRUE());
-      ensures spec.lockStatus(\dl_FALSE());
-      ensures spec.unlockTransfer();
-      assignable<heap> spec.fp(); // should be done by the prover
-      assignable<permissions> spec.fpPerm(); @*/
-  public /*@ helper @*/ native void unlock();
+    /*@ normal_behavior
+        requires spec.lockStatus(\dl_TRUE());
+        ensures spec.lockStatus(\dl_FALSE());
+        ensures spec.unlockTransfer();
+        assignable<heap> spec.fp(); // should be done by the prover
+        assignable<permissions> spec.fpPerm(); @*/
+    public /*@ helper @*/ native void unlock();
 }
 
 public class Counter implements LockSpec {
-   private int val;
-   private /*@ non_null @*/ Lock lock;
-   //@ invariant this.lock != \dl_currentThread() && this.lock.spec == this && \dl_writePermission(\permission(this.lock)) && \dl_writePermission(\permission(this.lock.spec));
-   //@ accessible<heap> \inv : this.lock, lock.spec;
-   //@ accessible<permissions> \inv : this.lock, lock.spec;
+    private int val;
+    private /*@ non_null @*/ Lock lock;
+    //@ invariant this.lock != \dl_currentThread() && this.lock.spec == this && \dl_writePermission(\permission(this.lock)) && \dl_writePermission(\permission(this.lock.spec));
+    //@ accessible<heap> \inv : this.lock, lock.spec;
+    //@ accessible<permissions> \inv : this.lock, lock.spec;
 
    /*@ model boolean lockState(boolean locked) {
           return (\permission(this.val) == (locked ? \dl_slice1(\dl_owner2(\dl_currentThread(), lockRef())) : \dl_slice1(\dl_owner1(lockRef())))) ;
         } @*/
-   /*@ model \locset fp() { return \singleton(this.val); } @*/
-   /*@ model \locset fpPerm() { return \singleton(this.val); } @*/
-   /*@ model \locset fpLock() { return \singleton(this.lock); } @*/
-   /*@ model two_state boolean lockTransfer() { return (\permission(this.val) == \dl_transferPermission(\dl_FALSE(), lockRef(), \dl_currentThread(), 0, \old(\permission(this.val)))); } @*/
-   /*@ model two_state boolean unlockTransfer() { return (\permission(this.val) == \dl_returnPermission(\dl_currentThread(), lockRef(), \old(\permission(this.val)))); } @*/
+    /*@ model \locset fp() { return \singleton(this.val); } @*/
+    /*@ model \locset fpPerm() { return \singleton(this.val); } @*/
+    /*@ model \locset fpLock() { return \singleton(this.lock); } @*/
+    /*@ model two_state boolean lockTransfer() { return (\permission(this.val) == \dl_transferPermission(\dl_FALSE(), lockRef(), \dl_currentThread(), 0, \old(\permission(this.val)))); } @*/
+    /*@ model two_state boolean unlockTransfer() { return (\permission(this.val) == \dl_returnPermission(\dl_currentThread(), lockRef(), \old(\permission(this.val)))); } @*/
 
-   /*@ model Lock lockRef() { return this.lock; } @*/
-   /*@ model boolean lockStatus(boolean locked) { return (locked ? \dl_writePermission(\permission(this.val)) : !\dl_readPermission(\permission(this.val))); } @*/
+    /*@ model Lock lockRef() { return this.lock; } @*/
+    /*@ model boolean lockStatus(boolean locked) { return (locked ? \dl_writePermission(\permission(this.val)) : !\dl_readPermission(\permission(this.val))); } @*/
 
-   /*@ normal_behavior
-        requires lockStatus(\dl_FALSE());
-        ensures lockStatus(\dl_FALSE());
-        assignable<heap> fp();
-        assignable<permissions> fpPerm(); @*/
-   public void increase() {
-      lock.lock();
-      val++;
-      lock.unlock();
-   }
+    /*@ normal_behavior
+         requires lockStatus(\dl_FALSE());
+         ensures lockStatus(\dl_FALSE());
+         assignable<heap> fp();
+         assignable<permissions> fpPerm(); @*/
+    public void increase() {
+        lock.lock();
+        val++;
+        lock.unlock();
+    }
 }
 
 

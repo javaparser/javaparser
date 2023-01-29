@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 /**
- *
  * Decimal floating point library for Java
  *
  * <p>Another floating point class.  This one is built using radix 10000
@@ -83,6 +82,5 @@
  * here is the one just to the right of the radix point.  This is a fine
  * detail and is really only a matter of definition.  Any side effects of
  * this can be rendered invisible by a subclass.</p>
- *
  */
 package org.apache.commons.math3.dfp;

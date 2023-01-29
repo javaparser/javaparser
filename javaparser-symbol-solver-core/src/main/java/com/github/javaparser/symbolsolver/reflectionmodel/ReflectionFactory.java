@@ -40,7 +40,7 @@ import java.util.List;
  * @author Federico Tomassetti
  */
 public class ReflectionFactory {
-    
+
     private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     public static ResolvedReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {

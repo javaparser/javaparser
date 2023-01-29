@@ -76,22 +76,32 @@ import java.util.Arrays;
  * </p>
  */
 public class ResizableDoubleArray implements DoubleArray, Serializable {
-    /** Additive expansion mode.
+    /**
+     * Additive expansion mode.
+     *
      * @deprecated As of 3.1. Please use {@link ExpansionMode#ADDITIVE} instead.
      */
     @Deprecated
     public static final int ADDITIVE_MODE = 1;
-    /** Multiplicative expansion mode.
+    /**
+     * Multiplicative expansion mode.
+     *
      * @deprecated As of 3.1. Please use {@link ExpansionMode#MULTIPLICATIVE} instead.
      */
     @Deprecated
     public static final int MULTIPLICATIVE_MODE = 0;
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -3485529955529426875L;
 
-    /** Default value for initial capacity. */
+    /**
+     * Default value for initial capacity.
+     */
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
-    /** Default value for array size modifier. */
+    /**
+     * Default value for array size modifier.
+     */
     private static final double DEFAULT_EXPANSION_FACTOR = 2.0;
     /**
      * Default value for the difference between {@link #contractionCriterion}
@@ -102,7 +112,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
     /**
      * The contraction criteria determines when the internal array will be
      * contracted to fit the number of elements contained in the element
-     *  array + 1.
+     * array + 1.
      */
     private double contractionCriterion = 2.5;
 
@@ -142,12 +152,17 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
 
     /**
      * Specification of expansion algorithm.
+     *
      * @since 3.1
      */
     public enum ExpansionMode {
-        /** Multiplicative expansion mode. */
+        /**
+         * Multiplicative expansion mode.
+         */
         MULTIPLICATIVE,
-        /** Additive expansion mode. */
+        /**
+         * Additive expansion mode.
+         */
         ADDITIVE
     }
 
@@ -172,11 +187,12 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *  <li>{@code expansionFactor = 2.0}</li>
      *  <li>{@code contractionCriterion = 2.5}</li>
      * </ul>
+     *
      * @param initialCapacity Initial size of the internal storage array.
      * @throws MathIllegalArgumentException if {@code initialCapacity <= 0}.
      */
     public ResizableDoubleArray(int initialCapacity)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         this(initialCapacity, DEFAULT_EXPANSION_FACTOR);
     }
 
@@ -200,10 +216,10 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      */
     public ResizableDoubleArray(double[] initialArray) {
         this(DEFAULT_INITIAL_CAPACITY,
-             DEFAULT_EXPANSION_FACTOR,
-             DEFAULT_CONTRACTION_DELTA + DEFAULT_EXPANSION_FACTOR,
-             ExpansionMode.MULTIPLICATIVE,
-             initialArray);
+                DEFAULT_EXPANSION_FACTOR,
+                DEFAULT_CONTRACTION_DELTA + DEFAULT_EXPANSION_FACTOR,
+                ExpansionMode.MULTIPLICATIVE,
+                initialArray);
     }
 
     /**
@@ -224,17 +240,17 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param initialCapacity Initial size of the internal storage array.
      * @param expansionFactor The array will be expanded based on this
-     * parameter.
+     *                        parameter.
      * @throws MathIllegalArgumentException if parameters are not valid.
      * @deprecated As of 3.1. Please use
-     * {@link #ResizableDoubleArray(int,double)} instead.
+     * {@link #ResizableDoubleArray(int, double)} instead.
      */
     @Deprecated
     public ResizableDoubleArray(int initialCapacity,
                                 float expansionFactor)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         this(initialCapacity,
-             (double) expansionFactor);
+                (double) expansionFactor);
     }
 
     /**
@@ -255,16 +271,16 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param initialCapacity Initial size of the internal storage array.
      * @param expansionFactor The array will be expanded based on this
-     * parameter.
+     *                        parameter.
      * @throws MathIllegalArgumentException if parameters are not valid.
      * @since 3.1
      */
     public ResizableDoubleArray(int initialCapacity,
                                 double expansionFactor)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         this(initialCapacity,
-             expansionFactor,
-             DEFAULT_CONTRACTION_DELTA + expansionFactor);
+                expansionFactor,
+                DEFAULT_CONTRACTION_DELTA + expansionFactor);
     }
 
     /**
@@ -280,22 +296,22 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *  <li>{@code contractionCriterion >= expansionFactor}</li>
      * </ul>
      *
-     * @param initialCapacity Initial size of the internal storage array..
-     * @param expansionFactor The array will be expanded based on this
-     * parameter.
+     * @param initialCapacity     Initial size of the internal storage array..
+     * @param expansionFactor     The array will be expanded based on this
+     *                            parameter.
      * @param contractionCriteria Contraction criteria.
      * @throws MathIllegalArgumentException if parameters are not valid.
      * @deprecated As of 3.1. Please use
-     * {@link #ResizableDoubleArray(int,double,double)} instead.
+     * {@link #ResizableDoubleArray(int, double, double)} instead.
      */
     @Deprecated
     public ResizableDoubleArray(int initialCapacity,
                                 float expansionFactor,
                                 float contractionCriteria)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         this(initialCapacity,
-             (double) expansionFactor,
-             (double) contractionCriteria);
+                (double) expansionFactor,
+                (double) contractionCriteria);
     }
 
     /**
@@ -311,9 +327,9 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *  <li>{@code contractionCriterion >= expansionFactor}</li>
      * </ul>
      *
-     * @param initialCapacity Initial size of the internal storage array..
-     * @param expansionFactor The array will be expanded based on this
-     * parameter.
+     * @param initialCapacity      Initial size of the internal storage array..
+     * @param expansionFactor      The array will be expanded based on this
+     *                             parameter.
      * @param contractionCriterion Contraction criterion.
      * @throws MathIllegalArgumentException if the parameters are not valid.
      * @since 3.1
@@ -321,12 +337,12 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
     public ResizableDoubleArray(int initialCapacity,
                                 double expansionFactor,
                                 double contractionCriterion)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         this(initialCapacity,
-             expansionFactor,
-             contractionCriterion,
-             ExpansionMode.MULTIPLICATIVE,
-             null);
+                expansionFactor,
+                contractionCriterion,
+                ExpansionMode.MULTIPLICATIVE,
+                null);
     }
 
     /**
@@ -343,26 +359,26 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * </li>
      * </ul></p>
      *
-     * @param initialCapacity the initial size of the internal storage array
-     * @param expansionFactor the array will be expanded based on this
-     *                        parameter
+     * @param initialCapacity     the initial size of the internal storage array
+     * @param expansionFactor     the array will be expanded based on this
+     *                            parameter
      * @param contractionCriteria the contraction Criteria
-     * @param expansionMode  the expansion mode
+     * @param expansionMode       the expansion mode
      * @throws MathIllegalArgumentException if parameters are not valid
      * @deprecated As of 3.1. Please use
-     * {@link #ResizableDoubleArray(int,double,double,ExpansionMode,double[])}
+     * {@link #ResizableDoubleArray(int, double, double, ExpansionMode, double[])}
      * instead.
      */
     @Deprecated
     public ResizableDoubleArray(int initialCapacity, float expansionFactor,
-            float contractionCriteria, int expansionMode) throws MathIllegalArgumentException {
+                                float contractionCriteria, int expansionMode) throws MathIllegalArgumentException {
         this(initialCapacity,
-             expansionFactor,
-             contractionCriteria,
-             expansionMode == ADDITIVE_MODE ?
-             ExpansionMode.ADDITIVE :
-             ExpansionMode.MULTIPLICATIVE,
-             null);
+                expansionFactor,
+                contractionCriteria,
+                expansionMode == ADDITIVE_MODE ?
+                        ExpansionMode.ADDITIVE :
+                        ExpansionMode.MULTIPLICATIVE,
+                null);
         // XXX Just ot retain the expected failure in a unit test.
         // With the new "enum", that test will become obsolete.
         setExpansionMode(expansionMode);
@@ -379,23 +395,23 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *  <li>{@code contractionCriterion >= expansionFactor}</li>
      * </ul>
      *
-     * @param initialCapacity Initial size of the internal storage array.
-     * @param expansionFactor The array will be expanded based on this
-     * parameter.
+     * @param initialCapacity      Initial size of the internal storage array.
+     * @param expansionFactor      The array will be expanded based on this
+     *                             parameter.
      * @param contractionCriterion Contraction criteria.
-     * @param expansionMode Expansion mode.
-     * @param data Initial contents of the array.
+     * @param expansionMode        Expansion mode.
+     * @param data                 Initial contents of the array.
      * @throws MathIllegalArgumentException if the parameters are not valid.
      */
     public ResizableDoubleArray(int initialCapacity,
                                 double expansionFactor,
                                 double contractionCriterion,
                                 ExpansionMode expansionMode,
-                                double ... data)
-        throws MathIllegalArgumentException {
+                                double... data)
+            throws MathIllegalArgumentException {
         if (initialCapacity <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.INITIAL_CAPACITY_NOT_POSITIVE,
-                                                   initialCapacity);
+                    initialCapacity);
         }
         checkContractExpand(contractionCriterion, expansionFactor);
 
@@ -418,11 +434,11 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * is thrown.
      *
      * @param original array to copy
-     * @exception NullArgumentException if original is null
+     * @throws NullArgumentException if original is null
      * @since 2.0
      */
     public ResizableDoubleArray(ResizableDoubleArray original)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(original);
         copy(original, this);
     }
@@ -500,7 +516,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @since 2.0
      */
     public synchronized double substituteMostRecentElement(double value)
-        throws MathIllegalStateException {
+            throws MathIllegalStateException {
         if (numElements < 1) {
             throw new MathIllegalStateException(
                     LocalizedFormats.CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY);
@@ -519,18 +535,18 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * IllegalArgumentException if the contractionCriteria is less than the
      * expansionCriteria
      *
-     * @param expansion factor to be checked
+     * @param expansion   factor to be checked
      * @param contraction criteria to be checked
      * @throws MathIllegalArgumentException if the contractionCriteria is less than
-     * the expansionCriteria.
+     *                                      the expansionCriteria.
      * @deprecated As of 3.1. Please use
-     * {@link #checkContractExpand(double,double)} instead.
+     * {@link #checkContractExpand(double, double)} instead.
      */
     @Deprecated
     protected void checkContractExpand(float contraction, float expansion)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         checkContractExpand((double) contraction,
-                            (double) expansion);
+                (double) expansion);
     }
 
     /**
@@ -539,7 +555,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * expansion criterion.
      *
      * @param contraction Criterion to be checked.
-     * @param expansion Factor to be checked.
+     * @param expansion   Factor to be checked.
      * @throws NumberIsTooSmallException if {@code contraction < expansion}.
      * @throws NumberIsTooSmallException if {@code contraction <= 1}.
      * @throws NumberIsTooSmallException if {@code expansion <= 1 }.
@@ -547,25 +563,25 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      */
     protected void checkContractExpand(double contraction,
                                        double expansion)
-        throws NumberIsTooSmallException {
+            throws NumberIsTooSmallException {
         if (contraction < expansion) {
             final NumberIsTooSmallException e = new NumberIsTooSmallException(contraction, 1, true);
             e.getContext().addMessage(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR,
-                                      contraction, expansion);
+                    contraction, expansion);
             throw e;
         }
 
         if (contraction <= 1) {
             final NumberIsTooSmallException e = new NumberIsTooSmallException(contraction, 1, false);
             e.getContext().addMessage(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_ONE,
-                                      contraction);
+                    contraction);
             throw e;
         }
 
         if (expansion <= 1) {
             final NumberIsTooSmallException e = new NumberIsTooSmallException(contraction, 1, false);
             e.getContext().addMessage(LocalizedFormats.EXPANSION_FACTOR_SMALLER_THAN_ONE,
-                                      expansion);
+                    expansion);
             throw e;
         }
     }
@@ -601,13 +617,13 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * to be discarded, leaving 3,4 in the array.  Throws illegalArgumentException
      * if i exceeds numElements.
      *
-     * @param i  the number of elements to discard from the front of the array
+     * @param i the number of elements to discard from the front of the array
      * @throws MathIllegalArgumentException if i is greater than numElements.
      * @since 2.0
      */
     public synchronized void discardFrontElements(int i)
-        throws MathIllegalArgumentException {
-        discardExtremeElements(i,true);
+            throws MathIllegalArgumentException {
+        discardExtremeElements(i, true);
     }
 
     /**
@@ -617,13 +633,13 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * to be discarded, leaving 1,2 in the array.  Throws illegalArgumentException
      * if i exceeds numElements.
      *
-     * @param i  the number of elements to discard from the end of the array
+     * @param i the number of elements to discard from the end of the array
      * @throws MathIllegalArgumentException if i is greater than numElements.
      * @since 2.0
      */
     public synchronized void discardMostRecentElements(int i)
-        throws MathIllegalArgumentException {
-        discardExtremeElements(i,false);
+            throws MathIllegalArgumentException {
+        discardExtremeElements(i, false);
     }
 
     /**
@@ -638,24 +654,24 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * Throws illegalArgumentException
      * if i exceeds numElements.
      *
-     * @param i  the number of elements to discard from the front/end of the array
+     * @param i     the number of elements to discard from the front/end of the array
      * @param front true if elements are to be discarded from the front
-     * of the array, false if elements are to be discarded from the end
-     * of the array
+     *              of the array, false if elements are to be discarded from the end
+     *              of the array
      * @throws MathIllegalArgumentException if i is greater than numElements.
      * @since 2.0
      */
     private synchronized void discardExtremeElements(int i,
                                                      boolean front)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         if (i > numElements) {
             throw new MathIllegalArgumentException(
                     LocalizedFormats.TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY,
                     i, numElements);
-       } else if (i < 0) {
-           throw new MathIllegalArgumentException(
-                   LocalizedFormats.CANNOT_DISCARD_NEGATIVE_NUMBER_OF_ELEMENTS,
-                   i);
+        } else if (i < 0) {
+            throw new MathIllegalArgumentException(
+                    LocalizedFormats.CANNOT_DISCARD_NEGATIVE_NUMBER_OF_ELEMENTS,
+                    i);
         } else {
             // "Subtract" this number of discarded from numElements
             numElements -= i;
@@ -750,7 +766,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @param index index to fetch a value from
      * @return value stored at the specified index
      * @throws ArrayIndexOutOfBoundsException if <code>index</code> is less than
-     * zero or is greater than <code>getNumElements() - 1</code>.
+     *                                        zero or is greater than <code>getNumElements() - 1</code>.
      */
     public synchronized double getElement(int index) {
         if (index >= numElements) {
@@ -762,11 +778,12 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
         }
     }
 
-     /**
+    /**
      * Returns a double array containing the elements of this
      * <code>ResizableArray</code>.  This method returns a copy, not a
      * reference to the underlying array, so that changes made to the returned
-     *  array have no effect on this <code>ResizableArray.</code>
+     * array have no effect on this <code>ResizableArray.</code>
+     *
      * @return the double array.
      */
     public synchronized double[] getElements() {
@@ -860,7 +877,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * only be used in cases where copying the internal array is not practical.
      * The {@link #getElements} method should be used in all other cases.
      *
-     *
      * @return the internal storage array used by this object
      * @since 2.0
      * @deprecated As of 3.1.
@@ -899,7 +915,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * internal storage array.
      * The addressable elements in the array are at indices contained in
      * the interval [{@link #getStartIndex()},
-     *               {@link #getStartIndex()} + {@link #getNumElements()} - 1].
+     * {@link #getStartIndex()} + {@link #getNumElements()} - 1].
      *
      * @return the start index.
      * @since 3.1
@@ -913,14 +929,14 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param contractionCriteria contraction criteria
      * @throws MathIllegalArgumentException if the contractionCriteria is less than
-     *         the expansionCriteria.
+     *                                      the expansionCriteria.
      * @deprecated As of 3.1 (to be removed in 4.0 as field will become "final").
      */
     @Deprecated
     public void setContractionCriteria(float contractionCriteria)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         checkContractExpand(contractionCriteria, getExpansionFactor());
-        synchronized(this) {
+        synchronized (this) {
             this.contractionCriterion = contractionCriteria;
         }
     }
@@ -936,10 +952,10 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
         final double[] array;
         final int start;
         final int num;
-        synchronized(this) {
+        synchronized (this) {
             array = internalArray;
             start = startIndex;
-            num   = numElements;
+            num = numElements;
         }
         return f.evaluate(array, start, num);
     }
@@ -975,16 +991,17 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * <li><code>expansionFactor > 1</code></li>
      * <li><code>contractionFactor >= expansionFactor</code></li>
      * </ul>
+     *
      * @param expansionFactor the new expansion factor value.
      * @throws MathIllegalArgumentException if expansionFactor is <= 1 or greater
-     * than contractionFactor
+     *                                      than contractionFactor
      * @deprecated As of 3.1 (to be removed in 4.0 as field will become "final").
      */
     @Deprecated
     public void setExpansionFactor(float expansionFactor) throws MathIllegalArgumentException {
         checkContractExpand(getContractionCriterion(), expansionFactor);
         // The check above verifies that the expansion factor is > 1.0;
-        synchronized(this) {
+        synchronized (this) {
             this.expansionFactor = expansionFactor;
         }
     }
@@ -999,14 +1016,14 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      */
     @Deprecated
     public void setExpansionMode(int expansionMode)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         if (expansionMode != MULTIPLICATIVE_MODE &&
-            expansionMode != ADDITIVE_MODE) {
+                expansionMode != ADDITIVE_MODE) {
             throw new MathIllegalArgumentException(LocalizedFormats.UNSUPPORTED_EXPANSION_MODE, expansionMode,
-                                                   MULTIPLICATIVE_MODE, "MULTIPLICATIVE_MODE",
-                                                   ADDITIVE_MODE, "ADDITIVE_MODE");
+                    MULTIPLICATIVE_MODE, "MULTIPLICATIVE_MODE",
+                    ADDITIVE_MODE, "ADDITIVE_MODE");
         }
-        synchronized(this) {
+        synchronized (this) {
             if (expansionMode == MULTIPLICATIVE_MODE) {
                 setExpansionMode(ExpansionMode.MULTIPLICATIVE);
             } else if (expansionMode == ADDITIVE_MODE) {
@@ -1023,7 +1040,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      */
     @Deprecated
     public void setExpansionMode(ExpansionMode expansionMode) {
-        synchronized(this) {
+        synchronized (this) {
             this.expansionMode = expansionMode;
         }
     }
@@ -1033,12 +1050,12 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param initialCapacity of the array
      * @throws MathIllegalArgumentException if <code>initialCapacity</code> is not
-     * positive.
+     *                                      positive.
      * @deprecated As of 3.1, this is a no-op.
      */
     @Deprecated
     protected void setInitialCapacity(int initialCapacity)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         // Body removed in 3.1.
     }
 
@@ -1051,7 +1068,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @throws MathIllegalArgumentException if <code>i</code> is negative.
      */
     public synchronized void setNumElements(int i)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         // If index is negative thrown an error.
         if (i < 0) {
             throw new MathIllegalArgumentException(
@@ -1111,28 +1128,27 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * is thrown</p>
      *
      * @param source ResizableDoubleArray to copy
-     * @param dest ResizableArray to replace with a copy of the source array
-     * @exception NullArgumentException if either source or dest is null
+     * @param dest   ResizableArray to replace with a copy of the source array
+     * @throws NullArgumentException if either source or dest is null
      * @since 2.0
-     *
      */
     public static void copy(ResizableDoubleArray source,
                             ResizableDoubleArray dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
-        synchronized(source) {
-           synchronized(dest) {
-               dest.contractionCriterion = source.contractionCriterion;
-               dest.expansionFactor = source.expansionFactor;
-               dest.expansionMode = source.expansionMode;
-               dest.internalArray = new double[source.internalArray.length];
-               System.arraycopy(source.internalArray, 0, dest.internalArray,
-                       0, dest.internalArray.length);
-               dest.numElements = source.numElements;
-               dest.startIndex = source.startIndex;
-           }
-       }
+        synchronized (source) {
+            synchronized (dest) {
+                dest.contractionCriterion = source.contractionCriterion;
+                dest.expansionFactor = source.expansionFactor;
+                dest.expansionMode = source.expansionMode;
+                dest.internalArray = new double[source.internalArray.length];
+                System.arraycopy(source.internalArray, 0, dest.internalArray,
+                        0, dest.internalArray.length);
+                dest.numElements = source.numElements;
+                dest.startIndex = source.startIndex;
+            }
+        }
     }
 
     /**
@@ -1160,14 +1176,14 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      */
     @Override
     public boolean equals(Object object) {
-        if (object == this ) {
+        if (object == this) {
             return true;
         }
         if (object instanceof ResizableDoubleArray == false) {
             return false;
         }
-        synchronized(this) {
-            synchronized(object) {
+        synchronized (this) {
+            synchronized (object) {
                 boolean result = true;
                 final ResizableDoubleArray other = (ResizableDoubleArray) object;
                 result = result && (other.contractionCriterion == contractionCriterion);

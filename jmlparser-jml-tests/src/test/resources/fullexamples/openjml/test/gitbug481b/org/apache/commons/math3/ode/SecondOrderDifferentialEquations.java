@@ -18,8 +18,9 @@
 package org.apache.commons.math3.ode;
 
 
-/** This interface represents a second order differential equations set.
-
+/**
+ * This interface represents a second order differential equations set.
+ *
  * <p>This interface should be implemented by all real second order
  * differential equation problems before they can be handled by the
  * integrators {@link SecondOrderIntegrator#integrate} method.</p>
@@ -46,18 +47,22 @@ package org.apache.commons.math3.ode;
 
 public interface SecondOrderDifferentialEquations {
 
-    /** Get the dimension of the problem.
+    /**
+     * Get the dimension of the problem.
+     *
      * @return dimension of the problem
      */
     int getDimension();
 
-    /** Get the current time derivative of the state vector.
-     * @param t current value of the independent <I>time</I> variable
-     * @param y array containing the current value of the state vector
-     * @param yDot array containing the current value of the first derivative
-     * of the state vector
+    /**
+     * Get the current time derivative of the state vector.
+     *
+     * @param t     current value of the independent <I>time</I> variable
+     * @param y     array containing the current value of the state vector
+     * @param yDot  array containing the current value of the first derivative
+     *              of the state vector
      * @param yDDot placeholder array where to put the second time derivative
-     * of the state vector
+     *              of the state vector
      */
     void computeSecondDerivatives(double t, double[] y, double[] yDot, double[] yDDot);
 

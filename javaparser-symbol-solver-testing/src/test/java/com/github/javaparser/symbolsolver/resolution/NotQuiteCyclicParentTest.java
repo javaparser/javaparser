@@ -37,21 +37,21 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class NotQuiteCyclicParentTest extends AbstractResolutionTest {
 
-	@Test
-	void testSimilarNameInterface() {
-		CompilationUnit cu = parseSample("NotQuiteCyclicParent");
-		ClassOrInterfaceDeclaration clazz = Navigator.demandInterface(cu, "NotQuiteCyclicParent");
-		MethodDeclaration method = Navigator.demandMethod(clazz, "main");
-		VariableDeclarationExpr varDec =
-				(VariableDeclarationExpr) ((ExpressionStmt) method.getBody().get().getStatement(0)).getExpression();
+    @Test
+    void testSimilarNameInterface() {
+        CompilationUnit cu = parseSample("NotQuiteCyclicParent");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandInterface(cu, "NotQuiteCyclicParent");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "main");
+        VariableDeclarationExpr varDec =
+                (VariableDeclarationExpr) ((ExpressionStmt) method.getBody().get().getStatement(0)).getExpression();
 
-		try {
-			ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(varDec);
-		} catch (UnsolvedSymbolException e) {
-			return;
-		}
+        try {
+            ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(varDec);
+        } catch (UnsolvedSymbolException e) {
+            return;
+        }
 
-		fail("We shouldn't be able to resolve the type (it is not defined).");
-	}
+        fail("We shouldn't be able to resolve the type (it is not defined).");
+    }
 
 }

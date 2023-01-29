@@ -28,17 +28,17 @@ public class TrieUtils {
     /**
      * {@link TrieUtils} should not normally be instantiated.
      */
-    private TrieUtils() {}
+    private TrieUtils() {
+    }
 
     /**
      * Returns an unmodifiable instance of a {@link Trie}
      *
      * @param <K>  the key type
      * @param <V>  the value type
-     * @param trie  the trie to make unmodifiable, must not be null
+     * @param trie the trie to make unmodifiable, must not be null
      * @return an unmodifiable trie backed by the given trie
      * @throws NullPointerException if trie is null
-     *
      * @see java.util.Collections#unmodifiableMap(java.util.Map)
      */
     public static <K, V> Trie<K, V> unmodifiableTrie(final Trie<K, ? extends V> trie) {

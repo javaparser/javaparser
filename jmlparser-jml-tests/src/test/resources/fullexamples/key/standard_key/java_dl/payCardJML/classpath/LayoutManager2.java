@@ -16,12 +16,15 @@
  */
 package java.awt;
 
-public interface LayoutManager2 extends java.awt.LayoutManager
-{
+public interface LayoutManager2 extends java.awt.LayoutManager {
 
-   public void addLayoutComponent(java.awt.Component arg0, java.lang.Object arg1);
-   public java.awt.Dimension maximumLayoutSize(java.awt.Container arg0);
-   public float getLayoutAlignmentX(java.awt.Container arg0);
-   public float getLayoutAlignmentY(java.awt.Container arg0);
-   public void invalidateLayout(java.awt.Container arg0);
+    public void addLayoutComponent(java.awt.Component arg0, java.lang.Object arg1);
+
+    public java.awt.Dimension maximumLayoutSize(java.awt.Container arg0);
+
+    public float getLayoutAlignmentX(java.awt.Container arg0);
+
+    public float getLayoutAlignmentY(java.awt.Container arg0);
+
+    public void invalidateLayout(java.awt.Container arg0);
 }

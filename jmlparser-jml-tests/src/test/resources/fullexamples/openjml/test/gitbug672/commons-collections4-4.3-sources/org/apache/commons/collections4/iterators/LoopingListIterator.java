@@ -38,9 +38,13 @@ import java.util.NoSuchElementException;
  */
 public class LoopingListIterator<E> implements ResettableListIterator<E> {
 
-    /** The list to base the iterator on */
+    /**
+     * The list to base the iterator on
+     */
     private final List<E> list;
-    /** The current list iterator */
+    /**
+     * The current list iterator
+     */
     private ListIterator<E> iterator;
 
     /**
@@ -86,7 +90,7 @@ public class LoopingListIterator<E> implements ResettableListIterator<E> {
     public E next() {
         if (list.isEmpty()) {
             throw new NoSuchElementException(
-                "There are no elements for this iterator to loop on");
+                    "There are no elements for this iterator to loop on");
         }
         if (iterator.hasNext() == false) {
             reset();
@@ -109,7 +113,7 @@ public class LoopingListIterator<E> implements ResettableListIterator<E> {
     public int nextIndex() {
         if (list.isEmpty()) {
             throw new NoSuchElementException(
-                "There are no elements for this iterator to loop on");
+                    "There are no elements for this iterator to loop on");
         }
         if (iterator.hasNext() == false) {
             return 0;
@@ -143,7 +147,7 @@ public class LoopingListIterator<E> implements ResettableListIterator<E> {
     public E previous() {
         if (list.isEmpty()) {
             throw new NoSuchElementException(
-                "There are no elements for this iterator to loop on");
+                    "There are no elements for this iterator to loop on");
         }
         if (iterator.hasPrevious() == false) {
             E result = null;
@@ -171,7 +175,7 @@ public class LoopingListIterator<E> implements ResettableListIterator<E> {
     public int previousIndex() {
         if (list.isEmpty()) {
             throw new NoSuchElementException(
-                "There are no elements for this iterator to loop on");
+                    "There are no elements for this iterator to loop on");
         }
         if (iterator.hasPrevious() == false) {
             return list.size() - 1;
@@ -194,8 +198,8 @@ public class LoopingListIterator<E> implements ResettableListIterator<E> {
      * {@link #previous} is called again.
      *
      * @throws UnsupportedOperationException if the remove method is
-     * not supported by the iterator implementation of the underlying
-     * list
+     *                                       not supported by the iterator implementation of the underlying
+     *                                       list
      */
     @Override
     public void remove() {
@@ -213,9 +217,9 @@ public class LoopingListIterator<E> implements ResettableListIterator<E> {
      * {@link List#listIterator} method returns an implementation
      * that supports it.
      *
-     * @param obj  the element to insert
+     * @param obj the element to insert
      * @throws UnsupportedOperationException if the add method is not
-     *  supported by the iterator implementation of the underlying list
+     *                                       supported by the iterator implementation of the underlying list
      */
     @Override
     public void add(final E obj) {
@@ -230,9 +234,9 @@ public class LoopingListIterator<E> implements ResettableListIterator<E> {
      * {@link List#listIterator} method returns an implementation
      * that supports it.
      *
-     * @param obj  the element with which to replace the last element returned
+     * @param obj the element with which to replace the last element returned
      * @throws UnsupportedOperationException if the set method is not
-     *  supported by the iterator implementation of the underlying list
+     *                                       supported by the iterator implementation of the underlying list
      */
     @Override
     public void set(final E obj) {

@@ -94,7 +94,7 @@ class PrettyPrintVisitorTest extends TestParser {
      * Here is a simple test according to R0 (removing spaces)
      */
     @Test
-    void printOperatorsR0(){
+    void printOperatorsR0() {
         PrinterConfiguration conf1 = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a=1+1;", print(statement1, conf1));
@@ -104,7 +104,7 @@ class PrettyPrintVisitorTest extends TestParser {
      * Here we test different operators according to requirement R1 (handling different operators)
      */
     @Test
-    void printOperatorsR1(){
+    void printOperatorsR1() {
 
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a = 1 + 1;", print(statement1));
@@ -131,7 +131,7 @@ class PrettyPrintVisitorTest extends TestParser {
      * Here is a simple test according to R2 (that it should be optional/modifiable)
      */
     @Test
-    void printOperatorsR2(){
+    void printOperatorsR2() {
         PrinterConfiguration conf1 = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement1 = parseStatement("a = 1 + 1;");
         assertEquals("a=1+1;", print(statement1, conf1));
@@ -151,7 +151,7 @@ class PrettyPrintVisitorTest extends TestParser {
     }
 
     @Test
-    void printOperatorA(){
+    void printOperatorA() {
         PrinterConfiguration conf = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement6 = parseStatement("if(1>2&&1<3||1<3){}");
         assertEquals("if (1>2&&1<3||1<3) {" + SYSTEM_EOL
@@ -159,7 +159,7 @@ class PrettyPrintVisitorTest extends TestParser {
     }
 
     @Test
-    void printOperator2(){
+    void printOperator2() {
         Expression expression = parseExpression("1+1");
         PrinterConfiguration spaces = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         assertEquals("1+1", print(expression, spaces));
@@ -477,12 +477,12 @@ class PrettyPrintVisitorTest extends TestParser {
         CompilationUnit cu = parseCompilationUnit(
                 ParserConfiguration.LanguageLevel.JAVA_13_PREVIEW,
                 "class X{String html = \"\"\"\n" +
-                "              <html>\n" +
-                "                  <body>\n" +
-                "                      <p>Hello, world</p>\n" +
-                "                  </body>\n" +
-                "              </html>\n" +
-                "              \"\"\";}"
+                        "              <html>\n" +
+                        "                  <body>\n" +
+                        "                      <p>Hello, world</p>\n" +
+                        "                  </body>\n" +
+                        "              </html>\n" +
+                        "              \"\"\";}"
         );
 
         assertEqualsStringIgnoringEol("String html = \"\"\"\n" +

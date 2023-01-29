@@ -16,80 +16,151 @@
  */
 package java.awt;
 
-public class Container extends java.awt.Component
-{
+public class Container extends java.awt.Component {
 
-   public Container();
-   public int getComponentCount();
-   public int countComponents();
-   public java.awt.Component getComponent(int arg0);
-   public java.awt.Component[] getComponents();
-   public java.awt.Insets getInsets();
-   public java.awt.Insets insets();
-   public java.awt.Component add(java.awt.Component arg0);
-   public java.awt.Component add(java.lang.String arg0, java.awt.Component arg1);
-   public java.awt.Component add(java.awt.Component arg0, int arg1);
-   public void setComponentZOrder(java.awt.Component arg0, int arg1);
-   public int getComponentZOrder(java.awt.Component arg0);
-   public void add(java.awt.Component arg0, java.lang.Object arg1);
-   public void add(java.awt.Component arg0, java.lang.Object arg1, int arg2);
-   protected void addImpl(java.awt.Component arg0, java.lang.Object arg1, int arg2);
-   public void remove(int arg0);
-   public void remove(java.awt.Component arg0);
-   public void removeAll();
-   public java.awt.LayoutManager getLayout();
-   public void setLayout(java.awt.LayoutManager arg0);
-   public void doLayout();
-   public void layout();
-   public void invalidate();
-   public void validate();
-   protected void validateTree();
-   public void setFont(java.awt.Font arg0);
-   public java.awt.Dimension getPreferredSize();
-   public java.awt.Dimension preferredSize();
-   public java.awt.Dimension getMinimumSize();
-   public java.awt.Dimension minimumSize();
-   public java.awt.Dimension getMaximumSize();
-   public float getAlignmentX();
-   public float getAlignmentY();
-   public void paint(java.awt.Graphics arg0);
-   public void update(java.awt.Graphics arg0);
-   public void print(java.awt.Graphics arg0);
-   public void paintComponents(java.awt.Graphics arg0);
-   public void printComponents(java.awt.Graphics arg0);
-   public void addContainerListener(java.awt.event.ContainerListener arg0);
-   public void removeContainerListener(java.awt.event.ContainerListener arg0);
-   public java.awt.event.ContainerListener[] getContainerListeners();
-   public java.util.EventListener[] getListeners(java.lang.Class arg0);
-   protected void processEvent(java.awt.AWTEvent arg0);
-   protected void processContainerEvent(java.awt.event.ContainerEvent arg0);
-   public void deliverEvent(java.awt.Event arg0);
-   public java.awt.Component getComponentAt(int arg0, int arg1);
-   public java.awt.Component locate(int arg0, int arg1);
-   public java.awt.Component getComponentAt(java.awt.Point arg0);
-   public java.awt.Point getMousePosition(boolean arg0) throws java.awt.HeadlessException;
-   public java.awt.Component findComponentAt(int arg0, int arg1);
-   public java.awt.Component findComponentAt(java.awt.Point arg0);
-   public void addNotify();
-   public void removeNotify();
-   public boolean isAncestorOf(java.awt.Component arg0);
-   protected java.lang.String paramString();
-   public void list(java.io.PrintStream arg0, int arg1);
-   public void list(java.io.PrintWriter arg0, int arg1);
-   public void setFocusTraversalKeys(int arg0, java.util.Set arg1);
-   public java.util.Set getFocusTraversalKeys(int arg0);
-   public boolean areFocusTraversalKeysSet(int arg0);
-   public boolean isFocusCycleRoot(java.awt.Container arg0);
-   public void transferFocusBackward();
-   public void setFocusTraversalPolicy(java.awt.FocusTraversalPolicy arg0);
-   public java.awt.FocusTraversalPolicy getFocusTraversalPolicy();
-   public boolean isFocusTraversalPolicySet();
-   public void setFocusCycleRoot(boolean arg0);
-   public boolean isFocusCycleRoot();
-   public final void setFocusTraversalPolicyProvider(boolean arg0);
-   public final boolean isFocusTraversalPolicyProvider();
-   public void transferFocusDownCycle();
-   public void applyComponentOrientation(java.awt.ComponentOrientation arg0);
-   public void addPropertyChangeListener(java.beans.PropertyChangeListener arg0);
-   public void addPropertyChangeListener(java.lang.String arg0, java.beans.PropertyChangeListener arg1);
+    public Container();
+
+    public int getComponentCount();
+
+    public int countComponents();
+
+    public java.awt.Component getComponent(int arg0);
+
+    public java.awt.Component[] getComponents();
+
+    public java.awt.Insets getInsets();
+
+    public java.awt.Insets insets();
+
+    public java.awt.Component add(java.awt.Component arg0);
+
+    public java.awt.Component add(java.lang.String arg0, java.awt.Component arg1);
+
+    public java.awt.Component add(java.awt.Component arg0, int arg1);
+
+    public void setComponentZOrder(java.awt.Component arg0, int arg1);
+
+    public int getComponentZOrder(java.awt.Component arg0);
+
+    public void add(java.awt.Component arg0, java.lang.Object arg1);
+
+    public void add(java.awt.Component arg0, java.lang.Object arg1, int arg2);
+
+    protected void addImpl(java.awt.Component arg0, java.lang.Object arg1, int arg2);
+
+    public void remove(int arg0);
+
+    public void remove(java.awt.Component arg0);
+
+    public void removeAll();
+
+    public java.awt.LayoutManager getLayout();
+
+    public void setLayout(java.awt.LayoutManager arg0);
+
+    public void doLayout();
+
+    public void layout();
+
+    public void invalidate();
+
+    public void validate();
+
+    protected void validateTree();
+
+    public void setFont(java.awt.Font arg0);
+
+    public java.awt.Dimension getPreferredSize();
+
+    public java.awt.Dimension preferredSize();
+
+    public java.awt.Dimension getMinimumSize();
+
+    public java.awt.Dimension minimumSize();
+
+    public java.awt.Dimension getMaximumSize();
+
+    public float getAlignmentX();
+
+    public float getAlignmentY();
+
+    public void paint(java.awt.Graphics arg0);
+
+    public void update(java.awt.Graphics arg0);
+
+    public void print(java.awt.Graphics arg0);
+
+    public void paintComponents(java.awt.Graphics arg0);
+
+    public void printComponents(java.awt.Graphics arg0);
+
+    public void addContainerListener(java.awt.event.ContainerListener arg0);
+
+    public void removeContainerListener(java.awt.event.ContainerListener arg0);
+
+    public java.awt.event.ContainerListener[] getContainerListeners();
+
+    public java.util.EventListener[] getListeners(java.lang.Class arg0);
+
+    protected void processEvent(java.awt.AWTEvent arg0);
+
+    protected void processContainerEvent(java.awt.event.ContainerEvent arg0);
+
+    public void deliverEvent(java.awt.Event arg0);
+
+    public java.awt.Component getComponentAt(int arg0, int arg1);
+
+    public java.awt.Component locate(int arg0, int arg1);
+
+    public java.awt.Component getComponentAt(java.awt.Point arg0);
+
+    public java.awt.Point getMousePosition(boolean arg0) throws java.awt.HeadlessException;
+
+    public java.awt.Component findComponentAt(int arg0, int arg1);
+
+    public java.awt.Component findComponentAt(java.awt.Point arg0);
+
+    public void addNotify();
+
+    public void removeNotify();
+
+    public boolean isAncestorOf(java.awt.Component arg0);
+
+    protected java.lang.String paramString();
+
+    public void list(java.io.PrintStream arg0, int arg1);
+
+    public void list(java.io.PrintWriter arg0, int arg1);
+
+    public void setFocusTraversalKeys(int arg0, java.util.Set arg1);
+
+    public java.util.Set getFocusTraversalKeys(int arg0);
+
+    public boolean areFocusTraversalKeysSet(int arg0);
+
+    public boolean isFocusCycleRoot(java.awt.Container arg0);
+
+    public void transferFocusBackward();
+
+    public void setFocusTraversalPolicy(java.awt.FocusTraversalPolicy arg0);
+
+    public java.awt.FocusTraversalPolicy getFocusTraversalPolicy();
+
+    public boolean isFocusTraversalPolicySet();
+
+    public void setFocusCycleRoot(boolean arg0);
+
+    public boolean isFocusCycleRoot();
+
+    public final void setFocusTraversalPolicyProvider(boolean arg0);
+
+    public final boolean isFocusTraversalPolicyProvider();
+
+    public void transferFocusDownCycle();
+
+    public void applyComponentOrientation(java.awt.ComponentOrientation arg0);
+
+    public void addPropertyChangeListener(java.beans.PropertyChangeListener arg0);
+
+    public void addPropertyChangeListener(java.lang.String arg0, java.beans.PropertyChangeListener arg1);
 }

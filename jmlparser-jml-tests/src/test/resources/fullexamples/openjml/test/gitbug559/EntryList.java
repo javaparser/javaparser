@@ -1,4 +1,4 @@
-/* A simple linked list of entries. */  
+/* A simple linked list of entries. */
 // This is the original error report - the stack overflow stems from repeatedly inlining the size() call in the ensures clause
 // Added the nullable and pure modifiers
 public class EntryList {
@@ -15,10 +15,10 @@ public class EntryList {
       @ pure
       @*/
     public int size() {  //@ assume rest != null ==> rest.size() < 1000000000; // Just to avoid overflow warnings
-        if(this.first == null) {
+        if (this.first == null) {
             return 0;
         }
-        if(this.rest == null) {
+        if (this.rest == null) {
             return 1;
         } else {
             return 1 + rest.size();

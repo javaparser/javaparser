@@ -23,22 +23,27 @@ import java.io.Serializable;
 
 /**
  * Classic median of 3 strategy given begin and end indices.
+ *
  * @since 3.4
  */
 public class MedianOf3PivotingStrategy implements PivotingStrategyInterface, Serializable {
 
-    /** Serializable UID. */
+    /**
+     * Serializable UID.
+     */
     private static final long serialVersionUID = 20140713L;
 
-    /**{@inheritDoc}
+    /**
+     * {@inheritDoc}
      * This in specific makes use of median of 3 pivoting.
+     *
      * @return The index corresponding to a pivot chosen between the
      * first, middle and the last indices of the array slice
      * @throws MathIllegalArgumentException when indices exceeds range
      */
     public int pivotIndex(final double[] work, final int begin, final int end)
-        throws MathIllegalArgumentException {
-        MathArrays.verifyValues(work, begin, end-begin);
+            throws MathIllegalArgumentException {
+        MathArrays.verifyValues(work, begin, end - begin);
         final int inclusiveEnd = end - 1;
         final int middle = begin + (inclusiveEnd - begin) / 2;
         final double wBegin = work[begin];

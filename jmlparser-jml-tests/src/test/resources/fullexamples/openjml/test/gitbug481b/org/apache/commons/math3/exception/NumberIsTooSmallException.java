@@ -25,7 +25,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class NumberIsTooSmallException extends MathIllegalNumberException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -6100997100383932834L;
     /**
      * Higher bound.
@@ -39,25 +41,25 @@ public class NumberIsTooSmallException extends MathIllegalNumberException {
     /**
      * Construct the exception.
      *
-     * @param wrong Value that is smaller than the minimum.
-     * @param min Minimum.
+     * @param wrong          Value that is smaller than the minimum.
+     * @param min            Minimum.
      * @param boundIsAllowed Whether {@code min} is included in the allowed range.
      */
     public NumberIsTooSmallException(Number wrong,
                                      Number min,
                                      boolean boundIsAllowed) {
         this(boundIsAllowed ?
-             LocalizedFormats.NUMBER_TOO_SMALL :
-             LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
-             wrong, min, boundIsAllowed);
+                        LocalizedFormats.NUMBER_TOO_SMALL :
+                        LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                wrong, min, boundIsAllowed);
     }
 
     /**
      * Construct the exception with a specific context.
      *
-     * @param specific Specific context pattern.
-     * @param wrong Value that is smaller than the minimum.
-     * @param min Minimum.
+     * @param specific       Specific context pattern.
+     * @param wrong          Value that is smaller than the minimum.
+     * @param min            Minimum.
      * @param boundIsAllowed Whether {@code min} is included in the allowed range.
      */
     public NumberIsTooSmallException(Localizable specific,

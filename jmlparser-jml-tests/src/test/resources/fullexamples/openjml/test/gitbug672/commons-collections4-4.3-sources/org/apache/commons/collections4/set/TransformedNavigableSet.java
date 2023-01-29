@@ -34,7 +34,9 @@ import java.util.NavigableSet;
  */
 public class TransformedNavigableSet<E> extends TransformedSortedSet<E> implements NavigableSet<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150528L;
 
     /**
@@ -44,14 +46,14 @@ public class TransformedNavigableSet<E> extends TransformedSortedSet<E> implemen
      * are NOT transformed.
      * Contrast this with {@link #transformedNavigableSet(NavigableSet, Transformer)}.
      *
-     * @param <E> the element type
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the element type
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed {@link NavigableSet}
      * @throws NullPointerException if set or transformer is null
      */
     public static <E> TransformedNavigableSet<E> transformingNavigableSet(final NavigableSet<E> set,
-            final Transformer<? super E, ? extends E> transformer) {
+                                                                          final Transformer<? super E, ? extends E> transformer) {
         return new TransformedNavigableSet<>(set, transformer);
     }
 
@@ -63,14 +65,14 @@ public class TransformedNavigableSet<E> extends TransformedSortedSet<E> implemen
      * will be transformed by this method.
      * Contrast this with {@link #transformingNavigableSet(NavigableSet, Transformer)}.
      *
-     * @param <E> the element type
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the element type
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed {@link NavigableSet}
      * @throws NullPointerException if set or transformer is null
      */
     public static <E> TransformedNavigableSet<E> transformedNavigableSet(final NavigableSet<E> set,
-            final Transformer<? super E, ? extends E> transformer) {
+                                                                         final Transformer<? super E, ? extends E> transformer) {
 
         final TransformedNavigableSet<E> decorated = new TransformedNavigableSet<>(set, transformer);
         if (set.size() > 0) {
@@ -85,14 +87,15 @@ public class TransformedNavigableSet<E> extends TransformedSortedSet<E> implemen
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the set being decorated, they
      * are NOT transformed.
      *
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @throws NullPointerException if set or transformer is null
      */
     protected TransformedNavigableSet(final NavigableSet<E> set,
@@ -154,7 +157,7 @@ public class TransformedNavigableSet<E> extends TransformedSortedSet<E> implemen
 
     @Override
     public NavigableSet<E> subSet(final E fromElement, final boolean fromInclusive, final E toElement,
-            final boolean toInclusive) {
+                                  final boolean toInclusive) {
         final NavigableSet<E> sub = decorated().subSet(fromElement, fromInclusive, toElement, toInclusive);
         return transformingNavigableSet(sub, transformer);
     }

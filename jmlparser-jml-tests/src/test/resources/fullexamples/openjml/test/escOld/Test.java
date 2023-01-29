@@ -1,6 +1,6 @@
 // Tests of old clauses in nested behaviors
 public class Test {
-    
+
     //@ public normal_behavior
     //@   old int iiiii = 20;
     //@   requires iiiii - 10 >= 0;
@@ -18,12 +18,12 @@ public class Test {
     public int mmm(int[] a, boolean b) {
         return 100;
     }
-    
+
     //@ public normal_behavior
     //@   requires k < 1000;
     //@   ensures \result == k + 100;
     //@ pure
     public int qq(int k) {
-        return k+100;
+        return k + 100;
     }
 }

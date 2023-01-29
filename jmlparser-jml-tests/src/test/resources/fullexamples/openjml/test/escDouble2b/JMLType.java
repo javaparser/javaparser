@@ -20,18 +20,22 @@
 // 02110-1301  USA.
 
 
-/** Objects with a clone and equals method.
+/**
+ * Objects with a clone and equals method.
  * JMLObjectType and JMLValueType are refinements
  * for object and value containers (respectively).
- * @version $Revision: 1.20 $
+ *
  * @author Gary T. Leavens and Albert L. Baker.
+ * @version $Revision: 1.20 $
  * @see JMLObjectType
  * @see JMLValueType
  */
 //@ pure
 public interface JMLType extends Cloneable, java.io.Serializable {
 
-    /** Return a clone of this object. */
+    /**
+     * Return a clone of this object.
+     */
     /*@  public normal_behavior
       @     ensures \result != null;
       @     ensures \result instanceof JMLType;
@@ -41,9 +45,10 @@ public interface JMLType extends Cloneable, java.io.Serializable {
     /*@    ensures \result != null
       @        && \typeof(\result) <: \type(JMLType);
       @*/
-    public /*@ pure @*/ Object clone();    
+    public /*@ pure @*/ Object clone();
 
-    /** Test whether this object's value is equal to the given argument.
+    /**
+     * Test whether this object's value is equal to the given argument.
      */
     /*@ also
       @   public normal_behavior
@@ -61,8 +66,10 @@ public interface JMLType extends Cloneable, java.io.Serializable {
       @      ensures \result <==> true;
       @   |}
       @*/
-    public /*@ pure @*/ boolean equals(/*@ nullable @*/ Object ob2);    
+    public /*@ pure @*/ boolean equals(/*@ nullable @*/ Object ob2);
 
-    /** Return a hash code for this object. */
+    /**
+     * Return a hash code for this object.
+     */
     public /*@ pure @*/ int hashCode();
 }

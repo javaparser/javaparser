@@ -50,7 +50,7 @@ class JavadocExtractorTest {
                 }
             }.visit(cu, null);
         } catch (ParseProblemException e) {
-            System.err.println("ERROR PROCESSING "+ file);
+            System.err.println("ERROR PROCESSING " + file);
         }
     }
 

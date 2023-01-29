@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 /**
- *
- *      Classes providing hypothesis testing.
- *
+ * Classes providing hypothesis testing.
  */
 package org.apache.commons.math3.stat.inference;

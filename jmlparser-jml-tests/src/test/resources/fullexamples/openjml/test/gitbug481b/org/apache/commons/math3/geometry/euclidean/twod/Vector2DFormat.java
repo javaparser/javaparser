@@ -52,11 +52,12 @@ public class Vector2DFormat extends VectorFormat<Euclidean2D> {
      */
     public Vector2DFormat() {
         super(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR,
-              CompositeFormat.getDefaultNumberFormat());
+                CompositeFormat.getDefaultNumberFormat());
     }
 
     /**
      * Create an instance with a custom number format for components.
+     *
      * @param format the custom format for components.
      */
     public Vector2DFormat(final NumberFormat format) {
@@ -65,30 +66,33 @@ public class Vector2DFormat extends VectorFormat<Euclidean2D> {
 
     /**
      * Create an instance with custom prefix, suffix and separator.
-     * @param prefix prefix to use instead of the default "{"
-     * @param suffix suffix to use instead of the default "}"
+     *
+     * @param prefix    prefix to use instead of the default "{"
+     * @param suffix    suffix to use instead of the default "}"
      * @param separator separator to use instead of the default "; "
      */
     public Vector2DFormat(final String prefix, final String suffix,
-                         final String separator) {
+                          final String separator) {
         super(prefix, suffix, separator, CompositeFormat.getDefaultNumberFormat());
     }
 
     /**
      * Create an instance with custom prefix, suffix, separator and format
      * for components.
-     * @param prefix prefix to use instead of the default "{"
-     * @param suffix suffix to use instead of the default "}"
+     *
+     * @param prefix    prefix to use instead of the default "{"
+     * @param suffix    suffix to use instead of the default "}"
      * @param separator separator to use instead of the default "; "
-     * @param format the custom format for components.
+     * @param format    the custom format for components.
      */
     public Vector2DFormat(final String prefix, final String suffix,
-                         final String separator, final NumberFormat format) {
+                          final String separator, final NumberFormat format) {
         super(prefix, suffix, separator, format);
     }
 
     /**
      * Returns the default 2D vector format for the current locale.
+     *
      * @return the default 2D vector format.
      */
     public static Vector2DFormat getInstance() {
@@ -97,6 +101,7 @@ public class Vector2DFormat extends VectorFormat<Euclidean2D> {
 
     /**
      * Returns the default 2D vector format for the given locale.
+     *
      * @param locale the specific locale used by the format.
      * @return the 2D vector format specific to the given locale.
      */
@@ -104,7 +109,9 @@ public class Vector2DFormat extends VectorFormat<Euclidean2D> {
         return new Vector2DFormat(CompositeFormat.getDefaultNumberFormat(locale));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StringBuffer format(final Vector<Euclidean2D> vector, final StringBuffer toAppendTo,
                                final FieldPosition pos) {
@@ -112,20 +119,24 @@ public class Vector2DFormat extends VectorFormat<Euclidean2D> {
         return format(toAppendTo, pos, p2.getX(), p2.getY());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector2D parse(final String source) throws MathParseException {
         ParsePosition parsePosition = new ParsePosition(0);
         Vector2D result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
             throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         Vector2D.class);
+                    parsePosition.getErrorIndex(),
+                    Vector2D.class);
         }
         return result;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector2D parse(final String source, final ParsePosition pos) {
         final double[] coordinates = parseCoordinates(2, source, pos);

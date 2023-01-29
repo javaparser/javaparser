@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : RealtimeClock.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,7 +19,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
  *************************************************************************/
@@ -29,93 +29,92 @@ package javax.realtime;
 import icecaptools.IcecapCompileMe;
 
 /**
- * A <code>RealtimeClock</code> implementation. 
- * 
- * @version 1.2; - December 2013
- * 
- * @author Anders P. Ravn, Aalborg University, 
+ * A <code>RealtimeClock</code> implementation.
+ *
+ * @author Anders P. Ravn, Aalborg University,
  * <A HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- * Hans S&oslash;ndergaard, VIA University College, Denmark, 
+ * Hans S&oslash;ndergaard, VIA University College, Denmark,
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * @version 1.2; - December 2013
  */
 class RealtimeClock extends Clock {
 //	private static vm.RealtimeClock nativeClock = 
 //		vm.RealtimeClock.getRealtimeClock();
 
-	static Clock rtClock = new RealtimeClock(); 
+    static Clock rtClock = new RealtimeClock();
 
-	RealtimeClock() {
-		super(true);
-		
+    RealtimeClock() {
+        super(true);
+
 //		int granularity = nativeClock.getGranularity();
 //
 //		long millis = granularity / 1000000;
 //		int nanos = granularity % 1000000;
 //
 //		resolution = new RelativeTime(millis, nanos, rtClock);
-		
-		resolution.clock = rtClock;
-	}
 
-	static Clock instance() {
-		return rtClock;
-	}
+        resolution.clock = rtClock;
+    }
 
-	/*@ 
-	  also public behaviour
-	    requires true;
-	    assignable \nothing;
-	    ensures \result.equals(new RelativeTime(0, 0, this));
-	  @*/
-	@Override
-	public RelativeTime getEpochOffset() {
-		return new RelativeTime(0, 0, this);
-	}
+    static Clock instance() {
+        return rtClock;
+    }
 
-	/**
-	 * Returns a newly allocated RelativeTime object that indicates the nominal
-	 * interval between ticks. The return value shall be associated with this
-	 * clock. All relative time differences measured by this clock are
-	 * approximately an integral multiple of the resolution.
-	 * 
-	 * @return clock resolution.
-	 */
-	@Override
-	public RelativeTime getResolution() {
-		return new RelativeTime(resolution);
-	}
+    /*@
+      also public behaviour
+        requires true;
+        assignable \nothing;
+        ensures \result.equals(new RelativeTime(0, 0, this));
+      @*/
+    @Override
+    public RelativeTime getEpochOffset() {
+        return new RelativeTime(0, 0, this);
+    }
 
-	@Override
-	public RelativeTime getResolution(RelativeTime dest) {
-		if (dest == null)
-			return getResolution();
-		else {
-			dest.set(resolution.getMilliseconds(), resolution.getNanoseconds());
-			dest.clock = rtClock;
-			return dest;
-		}
-	}
+    /**
+     * Returns a newly allocated RelativeTime object that indicates the nominal
+     * interval between ticks. The return value shall be associated with this
+     * clock. All relative time differences measured by this clock are
+     * approximately an integral multiple of the resolution.
+     *
+     * @return clock resolution.
+     */
+    @Override
+    public RelativeTime getResolution() {
+        return new RelativeTime(resolution);
+    }
 
-	@Override
-	public AbsoluteTime getTime() {
-		return getTime(new AbsoluteTime(0, 0, this));
-	}
+    @Override
+    public RelativeTime getResolution(RelativeTime dest) {
+        if (dest == null)
+            return getResolution();
+        else {
+            dest.set(resolution.getMilliseconds(), resolution.getNanoseconds());
+            dest.clock = rtClock;
+            return dest;
+        }
+    }
 
-	@Override
-	@IcecapCompileMe
-	public AbsoluteTime getTime(AbsoluteTime dest) {
-		if (dest == null)
-			dest = new AbsoluteTime();
-		nativeClock.getCurrentTime(dest); // returns Abs time in dest
+    @Override
+    public AbsoluteTime getTime() {
+        return getTime(new AbsoluteTime(0, 0, this));
+    }
 
-		// The values in dest are perhaps not normalized:
-		// Native values are (x secs, y nanoSecs) which are returned in
-		// dest as (1000*x milliSecs, y nanoSecs)
+    @Override
+    @IcecapCompileMe
+    public AbsoluteTime getTime(AbsoluteTime dest) {
+        if (dest == null)
+            dest = new AbsoluteTime();
+        nativeClock.getCurrentTime(dest); // returns Abs time in dest
 
-		dest.set(dest.getMilliseconds(), dest.getNanoseconds());
-		dest.clock = Clock.getRealtimeClock(); 
+        // The values in dest are perhaps not normalized:
+        // Native values are (x secs, y nanoSecs) which are returned in
+        // dest as (1000*x milliSecs, y nanoSecs)
 
-		return dest;
-	}
+        dest.set(dest.getMilliseconds(), dest.getNanoseconds());
+        dest.clock = Clock.getRealtimeClock();
+
+        return dest;
+    }
 
 }

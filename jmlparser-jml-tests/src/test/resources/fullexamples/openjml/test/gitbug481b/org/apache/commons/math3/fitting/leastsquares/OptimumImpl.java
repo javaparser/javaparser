@@ -28,11 +28,17 @@ import org.apache.commons.math3.linear.RealVector;
  */
 class OptimumImpl implements Optimum {
 
-    /** abscissa and ordinate */
+    /**
+     * abscissa and ordinate
+     */
     private final Evaluation value;
-    /** number of evaluations to compute this optimum */
+    /**
+     * number of evaluations to compute this optimum
+     */
     private final int evaluations;
-    /** number of iterations to compute this optimum */
+    /**
+     * number of iterations to compute this optimum
+     */
     private final int iterations;
 
     /**
@@ -50,47 +56,65 @@ class OptimumImpl implements Optimum {
 
     /* auto-generated implementations */
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getEvaluations() {
         return evaluations;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getIterations() {
         return iterations;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getCovariances(double threshold) {
         return value.getCovariances(threshold);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealVector getSigma(double covarianceSingularityThreshold) {
         return value.getSigma(covarianceSingularityThreshold);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getRMS() {
         return value.getRMS();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getJacobian() {
         return value.getJacobian();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getCost() {
         return value.getCost();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealVector getResiduals() {
         return value.getResiduals();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealVector getPoint() {
         return value.getPoint();
     }

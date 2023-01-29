@@ -308,6 +308,7 @@ public abstract class AbstractGenerator {
     protected MethodDeclaration prettyPrint(MethodDeclaration methodDeclaration) {
         return prettyPrint(methodDeclaration, "");
     }
+
     protected MethodDeclaration prettyPrint(MethodDeclaration methodDeclaration, String indent) {
         String methodDeclarationString = indent + methodDeclaration.toString().replaceAll("(\\R)", "$1" + indent);
         MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(methodDeclarationString);
@@ -318,6 +319,7 @@ public abstract class AbstractGenerator {
     protected EnumDeclaration prettyPrint(EnumDeclaration enumDeclaration) {
         return prettyPrint(enumDeclaration, "");
     }
+
     protected EnumDeclaration prettyPrint(EnumDeclaration enumDeclaration, String indent) {
         String enumDeclarationString = indent + enumDeclaration.toString().replaceAll("(\\R)", "$1" + indent);
         TypeDeclaration<?> prettyEnumDeclaration = StaticJavaParser.parseTypeDeclaration(enumDeclarationString);
@@ -331,6 +333,7 @@ public abstract class AbstractGenerator {
     protected SwitchStmt prettyPrint(SwitchStmt switchStmt) {
         return prettyPrint(switchStmt, "");
     }
+
     protected SwitchStmt prettyPrint(SwitchStmt switchStmt, String indent) {
         String switchStmtString = indent + switchStmt.toString().replaceAll("(\\R)", "$1" + indent);
         Statement prettySwitchStmt = StaticJavaParser.parseStatement(switchStmtString);

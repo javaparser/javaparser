@@ -11,7 +11,7 @@
 // Public License. See LICENSE.TXT for details.
 // 
 
-public class PinCard{
+public class PinCard {
 
     public int pin;
     public int counter_pin;
@@ -25,32 +25,32 @@ public class PinCard{
       @          (\old(pin) == pin && (\result==840 || \result==980)) : 
       @          (pin == newPin && \result==900);
       @*/
-    public int changePin(int oldPin, int newPin){
-	int sw;
-	if(counter_pin==0){
-	    sw = 9840;
-	}else{
-	    if(pin==oldPin){
-		pin = newPin;
-		counter_pin = 3;
-		permission_session = true;
-		sw = 9000;
-	    }else{
-		if(counter_pin == 1){
-		    counter_pin = 0;
-		    permission_session = false;
-		    sw = 9840;
-		}else{
-		    counter_pin--;
-		    sw = 9804;
-		}
-	    }
-	}
-	return sw;
+    public int changePin(int oldPin, int newPin) {
+        int sw;
+        if (counter_pin == 0) {
+            sw = 9840;
+        } else {
+            if (pin == oldPin) {
+                pin = newPin;
+                counter_pin = 3;
+                permission_session = true;
+                sw = 9000;
+            } else {
+                if (counter_pin == 1) {
+                    counter_pin = 0;
+                    permission_session = false;
+                    sw = 9840;
+                } else {
+                    counter_pin--;
+                    sw = 9804;
+                }
+            }
+        }
+        return sw;
     }
 
-    public void setPin(int pin){
-	this.pin = pin;
+    public void setPin(int pin) {
+        this.pin = pin;
     }
 
 } 

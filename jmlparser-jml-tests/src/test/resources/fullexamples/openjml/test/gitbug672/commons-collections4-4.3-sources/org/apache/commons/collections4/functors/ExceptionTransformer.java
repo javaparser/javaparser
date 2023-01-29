@@ -28,18 +28,22 @@ import java.io.Serializable;
  */
 public final class ExceptionTransformer<I, O> implements Transformer<I, O>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 7179106032121985545L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes") // the static instance works for all types
     public static final Transformer INSTANCE = new ExceptionTransformer<>();
 
     /**
      * Factory returning the singleton instance.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
+     * @param <I> the input type
+     * @param <O> the output type
      * @return the singleton instance
      * @since 3.1
      */
@@ -58,7 +62,7 @@ public final class ExceptionTransformer<I, O> implements Transformer<I, O>, Seri
     /**
      * Transforms the input to result by cloning it.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return never
      * @throws FunctorException always
      */

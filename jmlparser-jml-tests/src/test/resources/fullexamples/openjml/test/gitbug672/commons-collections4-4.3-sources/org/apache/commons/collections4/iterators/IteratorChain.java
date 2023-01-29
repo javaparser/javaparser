@@ -49,10 +49,14 @@ import java.util.Queue;
  */
 public class IteratorChain<E> implements Iterator<E> {
 
-    /** The chain of iterators */
+    /**
+     * The chain of iterators
+     */
     private final Queue<Iterator<? extends E>> iteratorChain = new LinkedList<>();
 
-    /** The current iterator */
+    /**
+     * The current iterator
+     */
     private Iterator<? extends E> currentIterator = null;
 
     /**
@@ -68,6 +72,7 @@ public class IteratorChain<E> implements Iterator<E> {
     private boolean isLocked = false;
 
     //-----------------------------------------------------------------------
+
     /**
      * Construct an IteratorChain with no Iterators.
      * <p>
@@ -102,7 +107,7 @@ public class IteratorChain<E> implements Iterator<E> {
      * This method takes two iterators. The newly constructed iterator will
      * iterate through each one of the input iterators in turn.
      *
-     * @param first the first child iterator in the IteratorChain, not null
+     * @param first  the first child iterator in the IteratorChain, not null
      * @param second the second child iterator in the IteratorChain, not null
      * @throws NullPointerException if either iterator is null
      */
@@ -137,8 +142,8 @@ public class IteratorChain<E> implements Iterator<E> {
      *
      * @param iteratorChain the collection of iterators, not null
      * @throws NullPointerException if iterators collection is or contains null
-     * @throws ClassCastException if iterators collection doesn't contain an
-     * iterator
+     * @throws ClassCastException   if iterators collection doesn't contain an
+     *                              iterator
      */
     public IteratorChain(final Collection<Iterator<? extends E>> iteratorChain) {
         super();
@@ -148,12 +153,13 @@ public class IteratorChain<E> implements Iterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Add an Iterator to the end of the chain
      *
      * @param iterator Iterator to add
      * @throws IllegalStateException if I've already started iterating
-     * @throws NullPointerException if the iterator is null
+     * @throws NullPointerException  if the iterator is null
      */
     public void addIterator(final Iterator<? extends E> iterator) {
         checkLocked();
@@ -210,7 +216,7 @@ public class IteratorChain<E> implements Iterator<E> {
     protected void updateCurrentIterator() {
         if (currentIterator == null) {
             if (iteratorChain.isEmpty()) {
-                currentIterator = EmptyIterator.<E> emptyIterator();
+                currentIterator = EmptyIterator.<E>emptyIterator();
             } else {
                 currentIterator = iteratorChain.remove();
             }
@@ -225,6 +231,7 @@ public class IteratorChain<E> implements Iterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Return true if any Iterator in the IteratorChain has a remaining element.
      *
@@ -244,7 +251,7 @@ public class IteratorChain<E> implements Iterator<E> {
      *
      * @return Object from the current Iterator
      * @throws java.util.NoSuchElementException if all the Iterators are
-     * exhausted
+     *                                          exhausted
      */
     @Override
     public E next() {
@@ -263,10 +270,10 @@ public class IteratorChain<E> implements Iterator<E> {
      * this method.
      *
      * @throws UnsupportedOperationException if the remove operator is not
-     * supported by the underlying Iterator
-     * @throws IllegalStateException if the next method has not yet been called,
-     * or the remove method has already been called after the last call to the
-     * next method.
+     *                                       supported by the underlying Iterator
+     * @throws IllegalStateException         if the next method has not yet been called,
+     *                                       or the remove method has already been called after the last call to the
+     *                                       next method.
      */
     @Override
     public void remove() {

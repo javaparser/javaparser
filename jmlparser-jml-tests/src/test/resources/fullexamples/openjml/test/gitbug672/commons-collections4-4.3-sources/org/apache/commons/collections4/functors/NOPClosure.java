@@ -27,10 +27,14 @@ import java.io.Serializable;
  */
 public final class NOPClosure<E> implements Closure<E>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 3518477308466486130L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes")
     public static final Closure INSTANCE = new NOPClosure<>();
 
@@ -56,7 +60,7 @@ public final class NOPClosure<E> implements Closure<E>, Serializable {
     /**
      * Do nothing.
      *
-     * @param input  the input object
+     * @param input the input object
      */
     @Override
     public void execute(final E input) {

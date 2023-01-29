@@ -28,17 +28,21 @@ import java.io.Serializable;
  */
 public final class NullIsExceptionPredicate<T> implements PredicateDecorator<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 3243449850504576071L;
 
-    /** The predicate to decorate */
+    /**
+     * The predicate to decorate
+     */
     private final Predicate<? super T> iPredicate;
 
     /**
      * Factory to create the null exception predicate.
      *
-     * @param <T> the type that the predicate queries
-     * @param predicate  the predicate to decorate, not null
+     * @param <T>       the type that the predicate queries
+     * @param predicate the predicate to decorate, not null
      * @return the predicate
      * @throws NullPointerException if the predicate is null
      */
@@ -53,7 +57,7 @@ public final class NullIsExceptionPredicate<T> implements PredicateDecorator<T>,
      * Constructor that performs no validation.
      * Use <code>nullIsExceptionPredicate</code> if you want that.
      *
-     * @param predicate  the predicate to call after the null check
+     * @param predicate the predicate to call after the null check
      */
     public NullIsExceptionPredicate(final Predicate<? super T> predicate) {
         super();
@@ -64,7 +68,7 @@ public final class NullIsExceptionPredicate<T> implements PredicateDecorator<T>,
      * Evaluates the predicate returning the result of the decorated predicate
      * once a null check is performed.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if decorated predicate returns true
      * @throws FunctorException if input is null
      */
@@ -85,7 +89,7 @@ public final class NullIsExceptionPredicate<T> implements PredicateDecorator<T>,
     @Override
     @SuppressWarnings("unchecked")
     public Predicate<? super T>[] getPredicates() {
-        return new Predicate[] { iPredicate };
+        return new Predicate[]{iPredicate};
     }
 
 }

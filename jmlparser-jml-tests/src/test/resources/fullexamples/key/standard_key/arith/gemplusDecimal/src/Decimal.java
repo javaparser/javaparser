@@ -12,19 +12,17 @@
 // 
 
 
-
-
 public class Decimal {
 
     private short intPart;
     private short decPart;
-    
-    
+
+
     public final static short PRECISION = 1000;
 
-    public static final short DECIMAL_OVERFLOW	 = (short)0x9f15;	
-	 
-    public static final short MAX_DECIMAL_NUMBER = (short)0x7fff;
+    public static final short DECIMAL_OVERFLOW = (short) 0x9f15;
+
+    public static final short MAX_DECIMAL_NUMBER = (short) 0x7fff;
 
 
     /**
@@ -42,61 +40,58 @@ public class Decimal {
 	}*/
 
 
-	intPart += e;
+        intPart += e;
 
-	if ( intPart > 0 && decPart < 0 ) {
-	    intPart--;
-	    decPart = (short)( decPart + PRECISION );
-	}
-	else if ( intPart < 0 && decPart > 0 ) {
-	    intPart++;
-	    decPart = (short)( decPart - PRECISION );
-	}
+        if (intPart > 0 && decPart < 0) {
+            intPart--;
+            decPart = (short) (decPart + PRECISION);
+        } else if (intPart < 0 && decPart > 0) {
+            intPart++;
+            decPart = (short) (decPart - PRECISION);
+        }
 
-	decPart += f;
-	if ( intPart > 0 && decPart < 0 ) {
-	    intPart--;
-	    decPart = (short)( decPart + PRECISION );
-	}
-	else if ( intPart < 0 && decPart > 0 ) {
-	    intPart++;
-	    decPart = (short)( decPart - PRECISION );
-	}
-	else {
-	    short retenue = 0;
-	    short signe = 1;
-	    if ( decPart < 0 ) {
-		signe = -1;
-		decPart = (short)( -decPart );
-	    }
-	    retenue = (short)( decPart / PRECISION );
-	    decPart = (short)( decPart % PRECISION );
-	    retenue *= signe;
-	    decPart *= signe;
-	    intPart += retenue;
+        decPart += f;
+        if (intPart > 0 && decPart < 0) {
+            intPart--;
+            decPart = (short) (decPart + PRECISION);
+        } else if (intPart < 0 && decPart > 0) {
+            intPart++;
+            decPart = (short) (decPart - PRECISION);
+        } else {
+            short retenue = 0;
+            short signe = 1;
+            if (decPart < 0) {
+                signe = -1;
+                decPart = (short) (-decPart);
+            }
+            retenue = (short) (decPart / PRECISION);
+            decPart = (short) (decPart % PRECISION);
+            retenue *= signe;
+            decPart *= signe;
+            intPart += retenue;
         }
     }
 
-    
+
     /**
      * Implementation by Cees-Bart Breunesse
      */
     public void mul1(short e, short f) {
 
-	       
-        short intBackup = intPart; 
+
+        short intBackup = intPart;
         short decBackup = decPart;
-        
+
         // a * b = a * (int(b) + frac(b)) = a * int(b) + a* frac(b)
-        
+
         intPart = (short) 0;
         decPart = (short) 0;
 
-	short i = (short)0;
-	while (i < e) {
-	    add(intBackup, decBackup);
-	    i++;
-	}
+        short i = (short) 0;
+        while (i < e) {
+            add(intBackup, decBackup);
+            i++;
+        }
 
 //        for ( short i = (short) 0; i < e; i++){
 //            add(intBackup, decBackup);
@@ -107,11 +102,11 @@ public class Decimal {
         intPart = (short) 0;
         decPart = (short) 0;
 
-	short j = (short)0;
-	while (j < intBackup) {
-	    add((short)0, f);
-	    j++;
-	}
+        short j = (short) 0;
+        while (j < intBackup) {
+            add((short) 0, f);
+            j++;
+        }
 
 //        for ( short i = (short) 0; i < intBackup; i++ ){
 //            add((short) 0, f);
@@ -119,21 +114,21 @@ public class Decimal {
 
         add(intPart_, decPart_);
 
-        short arrondis1 = decBackup;                
+        short arrondis1 = decBackup;
         short arrondis2 = f;
         short decal = (short) 0;
-        if ( arrondis1 > 100 ) {
+        if (arrondis1 > 100) {
             arrondis1 /= (short) 10;
             decal++;
         }
-        if ( arrondis2 > 100 ) {
-            arrondis2 /= (short) 10;        
+        if (arrondis2 > 100) {
+            arrondis2 /= (short) 10;
             decal++;
         }
 
-        short temp = (short)  (arrondis1 * arrondis2);        
+        short temp = (short) (arrondis1 * arrondis2);
         short aux = (short) (decal == 0 ? 1000 :
-			     (decal == 1 ? 100 : 10));
+                (decal == 1 ? 100 : 10));
         temp /= aux;
         add((short) 0, temp);
 
@@ -180,25 +175,25 @@ public class Decimal {
      */
     public void mul2(short e, short f) {
 
-	short intBackup = intPart; 
+        short intBackup = intPart;
         short decBackup = decPart;
-        
+
         // a * b = a * (int(b) + frac(b)) = a * int(b) + a* frac(b)
-        
+
         intPart = (short) 0;
         decPart = (short) 0;
 
-	short i = (short)0;
-	while (i < e) {
-	    add(intBackup, decBackup);
-	    i++;
-	}
+        short i = (short) 0;
+        while (i < e) {
+            add(intBackup, decBackup);
+            i++;
+        }
 
-	short j = (short)0;
-	while (j < intBackup) {
-	    add((short)0, f);
-	    j++;
-	}
+        short j = (short) 0;
+        while (j < intBackup) {
+            add((short) 0, f);
+            j++;
+        }
 
 //        for ( short i = (short) 0; i < e; i++){
 //            add(intBackup, decBackup);
@@ -208,21 +203,21 @@ public class Decimal {
 //            add((short) 0, f);
 //        }
 
-        short a1 = (short)(decBackup / 100);
-        short a2 = (short)((decBackup - a1 * 100) / 10);
-	short a3 = (short)(decBackup - a1 * 100 - a2 * 10);
+        short a1 = (short) (decBackup / 100);
+        short a2 = (short) ((decBackup - a1 * 100) / 10);
+        short a3 = (short) (decBackup - a1 * 100 - a2 * 10);
 
-	short d1a = (short)((a1 * f)/10);
-	short d2a = (short)((a2 * f)/100);
-	short d3a = (short)((a3 * f)/1000);
-	short gross = (short)(d1a + d2a + d3a);
+        short d1a = (short) ((a1 * f) / 10);
+        short d2a = (short) ((a2 * f) / 100);
+        short d3a = (short) ((a3 * f) / 1000);
+        short gross = (short) (d1a + d2a + d3a);
 
-	short d1b = (short)((a1 * f - d1a * 10) * 100);
-	short d2b = (short)((a2 * f - d2a * 100) * 10);
-	short d3b = (short) (a3 * f - d3a * 1000);
-	short rest = (short)(d1b + d2b + d3b);
+        short d1b = (short) ((a1 * f - d1a * 10) * 100);
+        short d2b = (short) ((a2 * f - d2a * 100) * 10);
+        short d3b = (short) (a3 * f - d3a * 1000);
+        short rest = (short) (d1b + d2b + d3b);
 
-        add((short) 0, (short)(gross+rest/1000));
+        add((short) 0, (short) (gross + rest / 1000));
 
     }
 }

@@ -28,15 +28,22 @@ import java.util.Iterator;
  */
 public class EnumerationIterator<E> implements Iterator<E> {
 
-    /** The collection to remove elements from */
+    /**
+     * The collection to remove elements from
+     */
     private final Collection<? super E> collection;
-    /** The enumeration being converted */
+    /**
+     * The enumeration being converted
+     */
     private Enumeration<? extends E> enumeration;
-    /** The last object retrieved */
+    /**
+     * The last object retrieved
+     */
     private E last;
 
     // Constructors
     //-----------------------------------------------------------------------
+
     /**
      * Constructs a new <code>EnumerationIterator</code> that will not
      * function until {@link #setEnumeration(Enumeration)} is called.
@@ -49,7 +56,7 @@ public class EnumerationIterator<E> implements Iterator<E> {
      * Constructs a new <code>EnumerationIterator</code> that provides
      * an iterator view of the given enumeration.
      *
-     * @param enumeration  the enumeration to use
+     * @param enumeration the enumeration to use
      */
     public EnumerationIterator(final Enumeration<? extends E> enumeration) {
         this(enumeration, null);
@@ -59,7 +66,7 @@ public class EnumerationIterator<E> implements Iterator<E> {
      * Constructs a new <code>EnumerationIterator</code> that will remove
      * elements from the specified collection.
      *
-     * @param enumeration  the enumeration to use
+     * @param enumeration the enumeration to use
      * @param collection  the collection to remove elements from
      */
     public EnumerationIterator(final Enumeration<? extends E> enumeration, final Collection<? super E> collection) {
@@ -71,11 +78,12 @@ public class EnumerationIterator<E> implements Iterator<E> {
 
     // Iterator interface
     //-----------------------------------------------------------------------
+
     /**
      * Returns true if the underlying enumeration has more elements.
      *
      * @return true if the underlying enumeration has more elements
-     * @throws NullPointerException  if the underlying enumeration is null
+     * @throws NullPointerException if the underlying enumeration is null
      */
     @Override
     public boolean hasNext() {
@@ -101,7 +109,7 @@ public class EnumerationIterator<E> implements Iterator<E> {
      * If so, the first occurrence of the last returned object from this
      * iterator will be removed from the collection.
      *
-     * @throws IllegalStateException <code>next()</code> not called.
+     * @throws IllegalStateException         <code>next()</code> not called.
      * @throws UnsupportedOperationException if no associated collection
      */
     @Override
@@ -119,6 +127,7 @@ public class EnumerationIterator<E> implements Iterator<E> {
 
     // Properties
     //-----------------------------------------------------------------------
+
     /**
      * Returns the underlying enumeration.
      *
@@ -131,7 +140,7 @@ public class EnumerationIterator<E> implements Iterator<E> {
     /**
      * Sets the underlying enumeration.
      *
-     * @param enumeration  the new underlying enumeration
+     * @param enumeration the new underlying enumeration
      */
     public void setEnumeration(final Enumeration<? extends E> enumeration) {
         this.enumeration = enumeration;

@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -31,10 +30,11 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * This class can be used to easily retrieve nodes from a JavaParser AST.
- *
+ * <p>
  * Note that methods with the prefix `demand` indicate that if the search value is not found, an exception will be thrown.
  *
  * @author Federico Tomassetti
@@ -54,9 +54,7 @@ public final class Navigator {
     }
 
     public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String qualifiedName) {
-        return findType(compilationUnit, qualifiedName)
-            .map(res -> res.toClassOrInterfaceDeclaration().orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is " + res.getClass().getCanonicalName())))
-            .orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
+        return findType(compilationUnit, qualifiedName).map(res -> res.toClassOrInterfaceDeclaration().orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is " + res.getClass().getCanonicalName()))).orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
     }
 
     /**
@@ -147,6 +145,19 @@ public final class Navigator {
         return node.getParentNode().orElseThrow(() -> new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST"));
     }
 
+    /**
+     * Traverses the parent chain starting at {@code node} and returns the
+     * first Node that returns make {@code isAcceptedParentNode} evaluate to
+     * {@code true}.
+     */
+    public static Node demandParentNode(Node node, Predicate<Node> isAcceptedParentNode) {
+        Node parent = node;
+        do {
+            parent = demandParentNode(parent);
+        } while (!isAcceptedParentNode.test(parent));
+        return parent;
+    }
+
     public static ReturnStmt demandReturnStmt(MethodDeclaration method) {
         return demandNodeOfGivenClass(method, ReturnStmt.class);
     }
@@ -199,7 +210,6 @@ public final class Navigator {
         if (node instanceof SwitchStmt) {
             return Optional.of((SwitchStmt) node);
         }
-
         return node.findFirst(SwitchStmt.class);
     }
 
@@ -213,10 +223,8 @@ public final class Navigator {
         if (cu.getTypes().isEmpty()) {
             return Optional.empty();
         }
-
         final String typeName = getOuterTypeName(qualifiedName);
         Optional<TypeDeclaration<?>> type = cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)).findFirst();
-
         final String innerTypeName = getInnerTypeName(qualifiedName);
         if (type.isPresent() && !innerTypeName.isEmpty()) {
             return findType(type.get(), innerTypeName);
@@ -232,7 +240,6 @@ public final class Navigator {
      */
     public static Optional<TypeDeclaration<?>> findType(TypeDeclaration<?> td, String qualifiedName) {
         final String typeName = getOuterTypeName(qualifiedName);
-
         Optional<TypeDeclaration<?>> type = Optional.empty();
         for (Node n : td.getMembers()) {
             if (n instanceof TypeDeclaration && ((TypeDeclaration<?>) n).getName().getId().equals(typeName)) {
@@ -265,5 +272,4 @@ public final class Navigator {
     public static Node requireParentNode(Node node) {
         return demandParentNode(node);
     }
-
 }

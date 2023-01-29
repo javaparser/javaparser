@@ -41,9 +41,11 @@ import java.util.Map;
  * @since 4.1
  */
 public class HashSetValuedHashMap<K, V> extends AbstractSetValuedMap<K, V>
-    implements Serializable {
+        implements Serializable {
 
-    /** Serialization Version */
+    /**
+     * Serialization Version
+     */
     private static final long serialVersionUID = 20151118L;
 
     /**
@@ -73,7 +75,7 @@ public class HashSetValuedHashMap<K, V> extends AbstractSetValuedMap<K, V>
      * Creates an empty HashSetValuedHashMap with the default initial
      * map capacity (16) and the specified initial set capacity.
      *
-     * @param initialSetCapacity  the initial capacity used for value collections
+     * @param initialSetCapacity the initial capacity used for value collections
      */
     public HashSetValuedHashMap(final int initialSetCapacity) {
         this(DEFAULT_INITIAL_MAP_CAPACITY, initialSetCapacity);
@@ -83,8 +85,8 @@ public class HashSetValuedHashMap<K, V> extends AbstractSetValuedMap<K, V>
      * Creates an empty HashSetValuedHashMap with the specified initial
      * map and list capacities.
      *
-     * @param initialMapCapacity  the initial hashmap capacity
-     * @param initialSetCapacity  the initial capacity used for value collections
+     * @param initialMapCapacity the initial hashmap capacity
+     * @param initialSetCapacity the initial capacity used for value collections
      */
     public HashSetValuedHashMap(final int initialMapCapacity, final int initialSetCapacity) {
         super(new HashMap<K, HashSet<V>>(initialMapCapacity));

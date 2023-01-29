@@ -5,19 +5,19 @@ import vm.HardwareObject;
 
 
 class CString extends HardwareObject {
-	private byte b;
-	
-	public CString(Address address) {
-		super(address);
-	}
+    private byte b;
 
-	public boolean hasNext() {
-		return (b != 0);
-	}
+    public CString(Address address) {
+        super(address);
+    }
 
-	public char next() {
-		char next = (char)b;
-		address.inc();
-		return next;
-	}
+    public boolean hasNext() {
+        return (b != 0);
+    }
+
+    public char next() {
+        char next = (char) b;
+        address.inc();
+        return next;
+    }
 }

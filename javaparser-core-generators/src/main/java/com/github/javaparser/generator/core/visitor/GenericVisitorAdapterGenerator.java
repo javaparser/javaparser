@@ -45,7 +45,7 @@ public class GenericVisitorAdapterGenerator extends VisitorGenerator {
 
         BlockStmt body = visitMethod.getBody().get();
         body.getStatements().clear();
-        
+
         body.addStatement("R result;");
 
         final String resultCheck = "if (result != null) return result;";

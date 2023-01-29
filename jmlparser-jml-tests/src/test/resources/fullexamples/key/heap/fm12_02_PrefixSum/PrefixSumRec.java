@@ -1,15 +1,15 @@
 final class PrefixSumRec {
 
     private final int[] a;
-    
+
     //@ invariant a.length > 0;
     //@ invariant isPow2(a.length);
     //@ accessible \inv: \singleton(a);
-    
+
     //@ axiom evenSumLemma();
 
-    PrefixSumRec(int [] a) {
-	this.a = a;
+    PrefixSumRec(int[] a) {
+        this.a = a;
     }
 
     /*@ normal_behavior
@@ -19,7 +19,9 @@ final class PrefixSumRec {
      */
 
     /*@ strictly_pure helper */
-    private static boolean evenSumLemma() { return true; }
+    private static boolean evenSumLemma() {
+        return true;
+    }
 
     /*@ public normal_behavior
       @   requires x > 0;
@@ -31,13 +33,13 @@ final class PrefixSumRec {
      */
 
     /*@ strictly_pure helper */
-    private static boolean isPow2(int x){
-      if (x==1) 
-          return true;
-      else if (x % 2 != 0 ) 
-          return false;
-      else 
-          return isPow2(x/2);
+    private static boolean isPow2(int x) {
+        if (x == 1)
+            return true;
+        else if (x % 2 != 0)
+            return false;
+        else
+            return isPow2(x / 2);
     } 
 
     /*@ normal_behavior
@@ -49,8 +51,8 @@ final class PrefixSumRec {
       */
 
     /*@ strictly_pure helper */
-    private static int pow2( int x ) {
-      return x==0? 1: 2*pow2(x-1);
+    private static int pow2(int x) {
+        return x == 0 ? 1 : 2 * pow2(x - 1);
     }
 
     /*@ normal_behavior
@@ -63,23 +65,23 @@ final class PrefixSumRec {
      */
 
     /*@ strictly_pure helper */
-    private static int div2 (int x) {
-        return x/2;
+    private static int div2(int x) {
+        return x / 2;
     }
-    
+
     /*@ normal_behavior
       @   ensures \result == (\exists int y; y*2 == x);
       @   ensures \result != (\exists int y; y*2 == x+1);
       @   accessible \nothing;
      */
     /*@ strictly_pure helper @*/
-    private static boolean even (int x) {
-        return x%2==0;
+    private static boolean even(int x) {
+        return x % 2 == 0;
     }
 
     //@ strictly_pure
     private /*@ helper @*/ static int leftMost(int left, int right) {
-	return 2*left - right + 1;
+        return 2 * left - right + 1;
     }
 
     /*@ normal_behavior
@@ -92,7 +94,7 @@ final class PrefixSumRec {
       @   accessible \nothing;
       */
     //@ strictly_pure helper
-    private static int min ( int k ) {
+    private static int min(int k) {
         int n = 0;
         /*@ maintaining (\forall int z; 0 <= z && z < n;
           @                 k% pow2(z+1) != pow2(z)-1 );
@@ -100,7 +102,7 @@ final class PrefixSumRec {
           @ decreasing k-n+1;
           @ assignable \strictly_nothing;
           @*/
-        while ( k% pow2(n+1) != pow2(n)-1 ) n++;
+        while (k % pow2(n + 1) != pow2(n) - 1) n++;
         return n;
     }
 
@@ -111,8 +113,8 @@ final class PrefixSumRec {
       @   measured_by k + 2;
       @   accessible \nothing;
       @*/
-    private /*@ helper strictly_pure @*/ static int f ( int k ) {
-        return even(k)? 1: f(div2(k-1));
+    private /*@ helper strictly_pure @*/ static int f(int k) {
+        return even(k) ? 1 : f(div2(k - 1));
     }
 
 
@@ -130,19 +132,19 @@ final class PrefixSumRec {
       @   assignable (\infinite_union int k; leftMost(left,right) <= k
       @              && k <= right && !even(k); \singleton(a[k]));
       @*/
-public void upsweep(int left, int right) {
-    int space = right - left;
-    if (space > 1) {
-        upsweep(left - div2(space), left);
-        upsweep(right - div2(space), right);
+    public void upsweep(int left, int right) {
+        int space = right - left;
+        if (space > 1) {
+            upsweep(left - div2(space), left);
+            upsweep(right - div2(space), right);
+        }
+        a[right] = a[left] + a[right];
     }
-    a[right] = a[left] + a[right];
-}
 
-    private static int binWeight (int i) {
-        if (i==0) return 0;
+    private static int binWeight(int i) {
+        if (i == 0) return 0;
         if (even(i)) return binWeight(div2(i));
-        return 1 + binWeight(div2(i-1));
+        return 1 + binWeight(div2(i - 1));
     }
 
     /*@ normal_behavior
@@ -164,20 +166,20 @@ public void upsweep(int left, int right) {
         a[left] = tmp;
         int space = right - left;
         if (space > 1) {
-            downsweep(left-div2(space),left);
-            downsweep(right-div2(space),right);
+            downsweep(left - div2(space), left);
+            downsweep(right - div2(space), right);
         }
     }
-    
+
     /*@ normal_behavior
       @   requires \invariant_for(p) && p.a.length > 1;
       @   ensures (\forall int i; 0 <= i && i < p.a.length;
       @             p.a[i] == (\sum int j; 0 <= j && j < i;
       @                           \old(p.a[i])));
       @*/
-    public static void main( PrefixSumRec p ) {
-        final int l = div2(p.a.length)-1;
-        final int r = p.a.length-1;
+    public static void main(PrefixSumRec p) {
+        final int l = div2(p.a.length) - 1;
+        final int r = p.a.length - 1;
         p.upsweep(l, r);
         p.a[r] = 0;
         p.downsweep(l, r);

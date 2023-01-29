@@ -22,7 +22,7 @@
  * least-squares optimizers} minimize the distance (called
  * <em>cost</em> or <em>&chi;<sup>2</sup></em>) between model and
  * observations.
- *
+ * <p>
  * <br/>
  * Algorithms in this category need access to a <em>problem</em>
  * (represented by a {@link org.apache.commons.math3.fitting.leastsquares.LeastSquaresProblem
@@ -34,6 +34,7 @@
  * org.apache.commons.math3.fitting.leastsquares.LeastSquaresBuilder builder} or it can
  * be created at once using a {@link org.apache.commons.math3.fitting.leastsquares.LeastSquaresFactory
  * factory}.
+ *
  * @since 3.3
  */
 package org.apache.commons.math3.fitting.leastsquares;

@@ -61,20 +61,20 @@ public final class SuffixArray {
       @*/
     private int compare(int x, int y) {
         if (x == y) return 0;
-        int l = LCP.lcp(a,x,y);
+        int l = LCP.lcp(a, x, y);
 
-        if (x+l == a.length) return -1;
-        if (y+l == a.length) return 1;
-        if (a[x+l] < a[y+l]) return -1;
-        if (a[x+l] > a[y+l]) return 1;
+        if (x + l == a.length) return -1;
+        if (y + l == a.length) return 1;
+        if (a[x + l] < a[y + l]) return -1;
+        if (a[x + l] > a[y + l]) return 1;
 
         return 0;
 //        throw new RuntimeException();
     }
 
 
-
-    /*@ helper @*/ private void sort(final int[] data) {
+    /*@ helper @*/
+    private void sort(final int[] data) {
         /* @ maintaining data.length == a.length;
           @ maintaining 0 <= k && k <= data.length;
           @ maintaining (\forall int i; 0 <= i && i < a.length;
@@ -85,7 +85,7 @@ public final class SuffixArray {
           @ decreasing data.length - k;
           @ assignable data[*];
           @*/
-        for(int k = 0; k < data.length; k++)
+        for (int k = 0; k < data.length; k++)
             /* @ maintaining 0 <= l && l <= k;
               @ maintaining (\forall int i; l < i && i <= k;
               @                 compare(data[i],data[i-1]) > 0);
@@ -95,7 +95,7 @@ public final class SuffixArray {
               @ decreasing l;
               @ assignable data[*];
               @*/
-            for(int l = k; l > 0 && compare(data[l - 1], data[l]) > 0; l--)
+            for (int l = k; l > 0 && compare(data[l - 1], data[l]) > 0; l--)
                 swap(data, l);
     }
 
@@ -111,7 +111,7 @@ public final class SuffixArray {
 
     /*@ helper @*/
     private void swap(/*@ nullable */ int[] data, int x) {
-        final int y = x-1;
+        final int y = x - 1;
         final int t = data[x];
         data[x] = data[y];
         data[y] = t;
@@ -119,7 +119,6 @@ public final class SuffixArray {
 
 
 }
-
 
 
 //Based on code by Robert Sedgewick and Kevin Wayne.

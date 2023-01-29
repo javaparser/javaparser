@@ -32,12 +32,12 @@ public class Issue1634Test extends AbstractLexicalPreservingTest {
     public void testWithLexicalPreservationEnabled() {
 
         considerCode("package com.wangym.test;\nclass A{ }");
-        
+
         String expected =
                 "package com.wangym.test;\n"
-                + "import lombok.Data;\n"
-                + "\n"
-                + "class A{ }";
+                        + "import lombok.Data;\n"
+                        + "\n"
+                        + "class A{ }";
 
         NodeList<ImportDeclaration> imports = cu.getImports();
         String str = "lombok.Data";

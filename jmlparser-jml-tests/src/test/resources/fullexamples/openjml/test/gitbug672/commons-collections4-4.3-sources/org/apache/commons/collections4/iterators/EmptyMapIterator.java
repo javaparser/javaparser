@@ -29,6 +29,7 @@ public class EmptyMapIterator<K, V> extends AbstractEmptyMapIterator<K, V> imple
 
     /**
      * Singleton instance of the iterator.
+     *
      * @since 3.1
      */
     @SuppressWarnings("rawtypes")
@@ -36,6 +37,7 @@ public class EmptyMapIterator<K, V> extends AbstractEmptyMapIterator<K, V> imple
 
     /**
      * Get a typed instance of the iterator.
+     *
      * @param <K> the key type
      * @param <V> the value type
      * @return {@link MapIterator}&lt;K, V&gt;

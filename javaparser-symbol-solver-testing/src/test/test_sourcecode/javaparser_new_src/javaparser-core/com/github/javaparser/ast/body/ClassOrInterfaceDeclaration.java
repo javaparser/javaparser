@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -119,9 +119,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     /**
-     * 
      * @param extendsList a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
+     *                    in the future, so please avoid passing null
      * @return
      */
     @Override
@@ -132,9 +131,8 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     /**
-     * 
      * @param implementsList a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
+     *                       in the future, so please avoid passing null
      */
     @Override
     public ClassOrInterfaceDeclaration setImplements(final List<ClassOrInterfaceType> implementsList) {
@@ -149,17 +147,14 @@ public final class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrIn
     }
 
     /**
-     *
      * @param typeParameters a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
+     *                       in the future, so please avoid passing null
      */
     public ClassOrInterfaceDeclaration setTypeParameters(final List<TypeParameter> typeParameters) {
         this.typeParameters = typeParameters;
         setAsParentNodeOf(this.typeParameters);
         return this;
     }
-
-   
 
 
 }

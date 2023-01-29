@@ -31,7 +31,7 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * This should not be used to represent fields of parameters.
- *
+ * <p>
  * Eventually this should be renamed in JavaParserVariableDeclaration.
  *
  * @author Federico Tomassetti

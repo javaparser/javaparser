@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 /**
- *
  * <p>
  * This package provides basic geometry components on the 2-sphere.
  * </p>
@@ -25,6 +24,5 @@
  * MathWorld), i.e. the 2-sphere is the two-dimensional surface
  * defined in 3D as x<sup>2</sup>+y<sup>2</sup>+z<sup>2</sup>=1.
  * </p>
- *
  */
 package org.apache.commons.math3.geometry.spherical.twod;

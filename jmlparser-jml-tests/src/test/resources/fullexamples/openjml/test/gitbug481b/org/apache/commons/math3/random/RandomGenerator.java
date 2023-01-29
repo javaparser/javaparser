@@ -31,6 +31,7 @@ public interface RandomGenerator {
      * <p>Sequences of values generated starting with the same seeds
      * should be identical.
      * </p>
+     *
      * @param seed the seed value
      */
     void setSeed(int seed);
@@ -41,6 +42,7 @@ public interface RandomGenerator {
      * <p>Sequences of values generated starting with the same seeds
      * should be identical.
      * </p>
+     *
      * @param seed the seed value
      */
     void setSeed(int[] seed);
@@ -51,6 +53,7 @@ public interface RandomGenerator {
      * <p>Sequences of values generated starting with the same seeds
      * should be identical.
      * </p>
+     *
      * @param seed the seed value
      */
     void setSeed(long seed);
@@ -61,7 +64,7 @@ public interface RandomGenerator {
      * the length of the byte array.
      *
      * @param bytes the non-null byte array in which to put the
-     * random bytes
+     *              random bytes
      */
     void nextBytes(byte[] bytes);
 
@@ -72,7 +75,7 @@ public interface RandomGenerator {
      * should be produced with  (approximately) equal probability.
      *
      * @return the next pseudorandom, uniformly distributed <code>int</code>
-     *  value from this random number generator's sequence
+     * value from this random number generator's sequence
      */
     int nextInt();
 
@@ -82,10 +85,10 @@ public interface RandomGenerator {
      * this random number generator's sequence.
      *
      * @param n the bound on the random number to be returned.  Must be
-     * positive.
-     * @return  a pseudorandom, uniformly distributed {@code int}
+     *          positive.
+     * @return a pseudorandom, uniformly distributed {@code int}
      * value between 0 (inclusive) and n (exclusive).
-     * @throws IllegalArgumentException  if n is not positive.
+     * @throws IllegalArgumentException if n is not positive.
      */
     int nextInt(int n);
 
@@ -95,8 +98,8 @@ public interface RandomGenerator {
      * 2<font size="-1"><sup>64</sup></font> possible {@code long} values
      * should be produced with (approximately) equal probability.
      *
-     * @return  the next pseudorandom, uniformly distributed <code>long</code>
-     *value from this random number generator's sequence
+     * @return the next pseudorandom, uniformly distributed <code>long</code>
+     * value from this random number generator's sequence
      */
     long nextLong();
 
@@ -105,7 +108,7 @@ public interface RandomGenerator {
      * <code>boolean</code> value from this random number generator's
      * sequence.
      *
-     * @return  the next pseudorandom, uniformly distributed
+     * @return the next pseudorandom, uniformly distributed
      * <code>boolean</code> value from this random number generator's
      * sequence
      */
@@ -116,7 +119,7 @@ public interface RandomGenerator {
      * value between <code>0.0</code> and <code>1.0</code> from this random
      * number generator's sequence.
      *
-     * @return  the next pseudorandom, uniformly distributed <code>float</code>
+     * @return the next pseudorandom, uniformly distributed <code>float</code>
      * value between <code>0.0</code> and <code>1.0</code> from this
      * random number generator's sequence
      */
@@ -127,9 +130,9 @@ public interface RandomGenerator {
      * <code>double</code> value between <code>0.0</code> and
      * <code>1.0</code> from this random number generator's sequence.
      *
-     * @return  the next pseudorandom, uniformly distributed
-     *  <code>double</code> value between <code>0.0</code> and
-     *  <code>1.0</code> from this random number generator's sequence
+     * @return the next pseudorandom, uniformly distributed
+     * <code>double</code> value between <code>0.0</code> and
+     * <code>1.0</code> from this random number generator's sequence
      */
     double nextDouble();
 
@@ -138,10 +141,10 @@ public interface RandomGenerator {
      * <code>double</code> value with mean <code>0.0</code> and standard
      * deviation <code>1.0</code> from this random number generator's sequence.
      *
-     * @return  the next pseudorandom, Gaussian ("normally") distributed
+     * @return the next pseudorandom, Gaussian ("normally") distributed
      * <code>double</code> value with mean <code>0.0</code> and
      * standard deviation <code>1.0</code> from this random number
-     *  generator's sequence
+     * generator's sequence
      */
     double nextGaussian();
 }

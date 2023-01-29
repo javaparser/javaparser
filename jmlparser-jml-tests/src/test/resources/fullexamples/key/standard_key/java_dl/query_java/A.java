@@ -16,6 +16,6 @@ public final class A {
     public boolean b;
 
     public /*@pure@*/ int getX() {
-	return x;
+        return x;
     }
 }

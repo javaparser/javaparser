@@ -55,11 +55,11 @@ final class Transaction {
       @ measured_by this.id;
       @*/
     int getTotal() {
-        if(next == null) {
+        if (next == null) {
             return amount;
         } else {
             return next.getTotal() + amount;
         }
     }
-        
+
 }

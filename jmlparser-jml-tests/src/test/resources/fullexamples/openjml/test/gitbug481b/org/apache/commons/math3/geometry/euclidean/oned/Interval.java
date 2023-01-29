@@ -21,32 +21,42 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.geometry.partitioning.Region.Location;
 
 
-/** This class represents a 1D interval.
+/**
+ * This class represents a 1D interval.
+ *
  * @see IntervalsSet
  * @since 3.0
  */
 public class Interval {
 
-    /** The lower bound of the interval. */
+    /**
+     * The lower bound of the interval.
+     */
     private final double lower;
 
-    /** The upper bound of the interval. */
+    /**
+     * The upper bound of the interval.
+     */
     private final double upper;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
+     *
      * @param lower lower bound of the interval
      * @param upper upper bound of the interval
      */
     public Interval(final double lower, final double upper) {
         if (upper < lower) {
             throw new NumberIsTooSmallException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
-                                                upper, lower, true);
+                    upper, lower, true);
         }
         this.lower = lower;
         this.upper = upper;
     }
 
-    /** Get the lower bound of the interval.
+    /**
+     * Get the lower bound of the interval.
+     *
      * @return lower bound of the interval
      * @since 3.1
      */
@@ -54,7 +64,9 @@ public class Interval {
         return lower;
     }
 
-    /** Get the lower bound of the interval.
+    /**
+     * Get the lower bound of the interval.
+     *
      * @return lower bound of the interval
      * @deprecated as of 3.1, replaced by {@link #getInf()}
      */
@@ -63,7 +75,9 @@ public class Interval {
         return getInf();
     }
 
-    /** Get the upper bound of the interval.
+    /**
+     * Get the upper bound of the interval.
+     *
      * @return upper bound of the interval
      * @since 3.1
      */
@@ -71,7 +85,9 @@ public class Interval {
         return upper;
     }
 
-    /** Get the upper bound of the interval.
+    /**
+     * Get the upper bound of the interval.
+     *
      * @return upper bound of the interval
      * @deprecated as of 3.1, replaced by {@link #getSup()}
      */
@@ -80,7 +96,9 @@ public class Interval {
         return getSup();
     }
 
-    /** Get the size of the interval.
+    /**
+     * Get the size of the interval.
+     *
      * @return size of the interval
      * @since 3.1
      */
@@ -88,7 +106,9 @@ public class Interval {
         return upper - lower;
     }
 
-    /** Get the length of the interval.
+    /**
+     * Get the length of the interval.
+     *
      * @return length of the interval
      * @deprecated as of 3.1, replaced by {@link #getSize()}
      */
@@ -97,7 +117,9 @@ public class Interval {
         return getSize();
     }
 
-    /** Get the barycenter of the interval.
+    /**
+     * Get the barycenter of the interval.
+     *
      * @return barycenter of the interval
      * @since 3.1
      */
@@ -105,7 +127,9 @@ public class Interval {
         return 0.5 * (lower + upper);
     }
 
-    /** Get the midpoint of the interval.
+    /**
+     * Get the midpoint of the interval.
+     *
      * @return midpoint of the interval
      * @deprecated as of 3.1, replaced by {@link #getBarycenter()}
      */
@@ -114,10 +138,12 @@ public class Interval {
         return getBarycenter();
     }
 
-    /** Check a point with respect to the interval.
-     * @param point point to check
+    /**
+     * Check a point with respect to the interval.
+     *
+     * @param point     point to check
      * @param tolerance tolerance below which points are considered to
-     * belong to the boundary
+     *                  belong to the boundary
      * @return a code representing the point status: either {@link
      * Location#INSIDE}, {@link Location#OUTSIDE} or {@link Location#BOUNDARY}
      * @since 3.1

@@ -54,6 +54,7 @@ public class MonotoneChain extends AbstractConvexHullGenerator2D {
 
     /**
      * Create a new MonotoneChain instance.
+     *
      * @param includeCollinearPoints whether collinear points shall be added as hull vertices
      */
     public MonotoneChain(final boolean includeCollinearPoints) {
@@ -62,14 +63,17 @@ public class MonotoneChain extends AbstractConvexHullGenerator2D {
 
     /**
      * Create a new MonotoneChain instance.
+     *
      * @param includeCollinearPoints whether collinear points shall be added as hull vertices
-     * @param tolerance tolerance below which points are considered identical
+     * @param tolerance              tolerance below which points are considered identical
      */
     public MonotoneChain(final boolean includeCollinearPoints, final double tolerance) {
         super(includeCollinearPoints, tolerance);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<Vector2D> findHullVertices(final Collection<Vector2D> points) {
 
@@ -115,7 +119,7 @@ public class MonotoneChain extends AbstractConvexHullGenerator2D {
         }
 
         // special case: if the lower and upper hull may contain only 1 point if all are identical
-        if (hullVertices.isEmpty() && ! lowerHull.isEmpty()) {
+        if (hullVertices.isEmpty() && !lowerHull.isEmpty()) {
             hullVertices.add(lowerHull.get(0));
         }
 
@@ -126,7 +130,7 @@ public class MonotoneChain extends AbstractConvexHullGenerator2D {
      * Update the partial hull with the current point.
      *
      * @param point the current point
-     * @param hull the partial hull
+     * @param hull  the partial hull
      */
     private void updateHull(final Vector2D point, final List<Vector2D> hull) {
         final double tolerance = getTolerance();

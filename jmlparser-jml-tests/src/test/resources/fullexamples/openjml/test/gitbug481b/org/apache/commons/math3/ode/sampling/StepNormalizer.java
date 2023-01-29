@@ -24,7 +24,7 @@ import org.apache.commons.math3.util.Precision;
 /**
  * This class wraps an object implementing {@link FixedStepHandler}
  * into a {@link StepHandler}.
-
+ *
  * <p>This wrapper allows to use fixed step handlers with general
  * integrators which cannot guaranty their integration steps will
  * remain constant and therefore only accept general step
@@ -89,49 +89,71 @@ import org.apache.commons.math3.util.Precision;
  */
 
 public class StepNormalizer implements StepHandler {
-    /** Fixed time step. */
+    /**
+     * Fixed time step.
+     */
     private double h;
 
-    /** Underlying step handler. */
+    /**
+     * Underlying step handler.
+     */
     private final FixedStepHandler handler;
 
-    /** First step time. */
+    /**
+     * First step time.
+     */
     private double firstTime;
 
-    /** Last step time. */
+    /**
+     * Last step time.
+     */
     private double lastTime;
 
-    /** Last state vector. */
+    /**
+     * Last state vector.
+     */
     private double[] lastState;
 
-    /** Last derivatives vector. */
+    /**
+     * Last derivatives vector.
+     */
     private double[] lastDerivatives;
 
-    /** Integration direction indicator. */
+    /**
+     * Integration direction indicator.
+     */
     private boolean forward;
 
-    /** The step normalizer bounds settings to use. */
+    /**
+     * The step normalizer bounds settings to use.
+     */
     private final StepNormalizerBounds bounds;
 
-    /** The step normalizer mode to use. */
+    /**
+     * The step normalizer mode to use.
+     */
     private final StepNormalizerMode mode;
 
-    /** Simple constructor. Uses {@link StepNormalizerMode#INCREMENT INCREMENT}
+    /**
+     * Simple constructor. Uses {@link StepNormalizerMode#INCREMENT INCREMENT}
      * mode, and {@link StepNormalizerBounds#FIRST FIRST} bounds setting, for
      * backwards compatibility.
-     * @param h fixed time step (sign is not used)
+     *
+     * @param h       fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
      */
     public StepNormalizer(final double h, final FixedStepHandler handler) {
         this(h, handler, StepNormalizerMode.INCREMENT,
-             StepNormalizerBounds.FIRST);
+                StepNormalizerBounds.FIRST);
     }
 
-    /** Simple constructor. Uses {@link StepNormalizerBounds#FIRST FIRST}
+    /**
+     * Simple constructor. Uses {@link StepNormalizerBounds#FIRST FIRST}
      * bounds setting.
-     * @param h fixed time step (sign is not used)
+     *
+     * @param h       fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
-     * @param mode step normalizer mode to use
+     * @param mode    step normalizer mode to use
      * @since 3.0
      */
     public StepNormalizer(final double h, final FixedStepHandler handler,
@@ -139,11 +161,13 @@ public class StepNormalizer implements StepHandler {
         this(h, handler, mode, StepNormalizerBounds.FIRST);
     }
 
-    /** Simple constructor. Uses {@link StepNormalizerMode#INCREMENT INCREMENT}
+    /**
+     * Simple constructor. Uses {@link StepNormalizerMode#INCREMENT INCREMENT}
      * mode.
-     * @param h fixed time step (sign is not used)
+     *
+     * @param h       fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
-     * @param bounds step normalizer bounds setting to use
+     * @param bounds  step normalizer bounds setting to use
      * @since 3.0
      */
     public StepNormalizer(final double h, final FixedStepHandler handler,
@@ -151,35 +175,39 @@ public class StepNormalizer implements StepHandler {
         this(h, handler, StepNormalizerMode.INCREMENT, bounds);
     }
 
-    /** Simple constructor.
-     * @param h fixed time step (sign is not used)
+    /**
+     * Simple constructor.
+     *
+     * @param h       fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
-     * @param mode step normalizer mode to use
-     * @param bounds step normalizer bounds setting to use
+     * @param mode    step normalizer mode to use
+     * @param bounds  step normalizer bounds setting to use
      * @since 3.0
      */
     public StepNormalizer(final double h, final FixedStepHandler handler,
                           final StepNormalizerMode mode,
                           final StepNormalizerBounds bounds) {
-        this.h          = FastMath.abs(h);
-        this.handler    = handler;
-        this.mode       = mode;
-        this.bounds     = bounds;
-        firstTime       = Double.NaN;
-        lastTime        = Double.NaN;
-        lastState       = null;
+        this.h = FastMath.abs(h);
+        this.handler = handler;
+        this.mode = mode;
+        this.bounds = bounds;
+        firstTime = Double.NaN;
+        lastTime = Double.NaN;
+        lastState = null;
         lastDerivatives = null;
-        forward         = true;
+        forward = true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void init(double t0, double[] y0, double t) {
 
-        firstTime       = Double.NaN;
-        lastTime        = Double.NaN;
-        lastState       = null;
+        firstTime = Double.NaN;
+        lastTime = Double.NaN;
+        lastState = null;
         lastDerivatives = null;
-        forward         = true;
+        forward = true;
 
         // initialize the underlying handler
         handler.init(t0, y0, t);
@@ -188,19 +216,20 @@ public class StepNormalizer implements StepHandler {
 
     /**
      * Handle the last accepted step
+     *
      * @param interpolator interpolator for the last accepted step. For
-     * efficiency purposes, the various integrators reuse the same
-     * object on each call, so if the instance wants to keep it across
-     * all calls (for example to provide at the end of the integration a
-     * continuous model valid throughout the integration range), it
-     * should build a local copy using the clone method and store this
-     * copy.
-     * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
+     *                     efficiency purposes, the various integrators reuse the same
+     *                     object on each call, so if the instance wants to keep it across
+     *                     all calls (for example to provide at the end of the integration a
+     *                     continuous model valid throughout the integration range), it
+     *                     should build a local copy using the clone method and store this
+     *                     copy.
+     * @param isLast       true if the step is the last one
+     * @throws MaxCountExceededException if the interpolator throws one because
+     *                                   the number of functions evaluations is exceeded
      */
     public void handleStep(final StepInterpolator interpolator, final boolean isLast)
-        throws MaxCountExceededException {
+            throws MaxCountExceededException {
         // The first time, update the last state with the start information.
         if (lastState == null) {
             firstTime = interpolator.getPreviousTime();
@@ -218,10 +247,10 @@ public class StepNormalizer implements StepHandler {
 
         // Calculate next normalized step time.
         double nextTime = (mode == StepNormalizerMode.INCREMENT) ?
-                          lastTime + h :
-                          (FastMath.floor(lastTime / h) + 1) * h;
+                lastTime + h :
+                (FastMath.floor(lastTime / h) + 1) * h;
         if (mode == StepNormalizerMode.MULTIPLES &&
-            Precision.equals(nextTime, lastTime, 1)) {
+                Precision.equals(nextTime, lastTime, 1)) {
             nextTime += h;
         }
 
@@ -244,7 +273,7 @@ public class StepNormalizer implements StepHandler {
             // the handler. We may have to output one more step. Only the last
             // one of those should be flagged as being the last.
             boolean addLast = bounds.lastIncluded() &&
-                              lastTime != interpolator.getCurrentTime();
+                    lastTime != interpolator.getCurrentTime();
             doNormalizedStep(!addLast);
             if (addLast) {
                 storeStep(interpolator, interpolator.getCurrentTime());
@@ -256,21 +285,23 @@ public class StepNormalizer implements StepHandler {
     /**
      * Returns a value indicating whether the next normalized time is in the
      * current step.
-     * @param nextTime the next normalized time
+     *
+     * @param nextTime     the next normalized time
      * @param interpolator interpolator for the last accepted step, to use to
-     * get the end time of the current step
+     *                     get the end time of the current step
      * @return value indicating whether the next normalized time is in the
      * current step
      */
     private boolean isNextInStep(double nextTime,
                                  StepInterpolator interpolator) {
         return forward ?
-               nextTime <= interpolator.getCurrentTime() :
-               nextTime >= interpolator.getCurrentTime();
+                nextTime <= interpolator.getCurrentTime() :
+                nextTime >= interpolator.getCurrentTime();
     }
 
     /**
      * Invokes the underlying step handler for the current normalized step.
+     *
      * @param isLast true if the step is the last one
      */
     private void doNormalizedStep(boolean isLast) {
@@ -280,21 +311,23 @@ public class StepNormalizer implements StepHandler {
         handler.handleStep(lastTime, lastState, lastDerivatives, isLast);
     }
 
-    /** Stores the interpolated information for the given time in the current
+    /**
+     * Stores the interpolated information for the given time in the current
      * state.
+     *
      * @param interpolator interpolator for the last accepted step, to use to
-     * get the interpolated information
-     * @param t the time for which to store the interpolated information
-     * @exception MaxCountExceededException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
+     *                     get the interpolated information
+     * @param t            the time for which to store the interpolated information
+     * @throws MaxCountExceededException if the interpolator throws one because
+     *                                   the number of functions evaluations is exceeded
      */
     private void storeStep(StepInterpolator interpolator, double t)
-        throws MaxCountExceededException {
+            throws MaxCountExceededException {
         lastTime = t;
         interpolator.setInterpolatedTime(lastTime);
         System.arraycopy(interpolator.getInterpolatedState(), 0,
-                         lastState, 0, lastState.length);
+                lastState, 0, lastState.length);
         System.arraycopy(interpolator.getInterpolatedDerivatives(), 0,
-                         lastDerivatives, 0, lastDerivatives.length);
+                lastDerivatives, 0, lastDerivatives.length);
     }
 }

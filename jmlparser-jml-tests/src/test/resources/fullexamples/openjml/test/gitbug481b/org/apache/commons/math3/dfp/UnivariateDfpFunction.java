@@ -18,6 +18,7 @@ package org.apache.commons.math3.dfp;
 
 /**
  * An interface representing a univariate {@link Dfp} function.
+ *
  * @deprecated as of 3.6, replaced with {@link org.apache.commons.math3.analysis.RealFieldUnivariateFunction}
  */
 @Deprecated
@@ -29,11 +30,11 @@ public interface UnivariateDfpFunction {
      * @param x Point at which the function value should be computed.
      * @return the value.
      * @throws IllegalArgumentException when the activated method itself can
-     * ascertain that preconditions, specified in the API expressed at the
-     * level of the activated method, have been violated.  In the vast
-     * majority of cases where Commons-Math throws IllegalArgumentException,
-     * it is the result of argument checking of actual parameters immediately
-     * passed to a method.
+     *                                  ascertain that preconditions, specified in the API expressed at the
+     *                                  level of the activated method, have been violated.  In the vast
+     *                                  majority of cases where Commons-Math throws IllegalArgumentException,
+     *                                  it is the result of argument checking of actual parameters immediately
+     *                                  passed to a method.
      */
     Dfp value(Dfp x);
 

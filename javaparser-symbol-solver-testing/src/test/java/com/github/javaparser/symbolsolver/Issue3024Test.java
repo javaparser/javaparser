@@ -56,7 +56,8 @@ public class Issue3024Test extends AbstractResolutionTest {
 
         List<MethodCallExpr> methodCallExprList = parse.findAll(MethodCallExpr.class);
         for (MethodCallExpr methodCallExpr : methodCallExprList) {
-            assertEquals("Test.getInstance",methodCallExpr.resolve().getQualifiedName());;
+            assertEquals("Test.getInstance", methodCallExpr.resolve().getQualifiedName());
+            ;
         }
     }
 

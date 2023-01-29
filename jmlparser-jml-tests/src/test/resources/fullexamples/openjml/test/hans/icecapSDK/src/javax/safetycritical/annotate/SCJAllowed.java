@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : SCJAllowed.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,12 +19,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
- *   
+ *
  * Description: 
- * 
+ *
  * Revision history:
  *   date   init  comment
  *
@@ -36,9 +36,9 @@ import java.lang.annotation.*;
 
 @Documented
 @Retention(RetentionPolicy.CLASS)
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD,
-		ElementType.CONSTRUCTOR })
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD,
+        ElementType.CONSTRUCTOR})
 public @interface SCJAllowed {
-	public Level value() default Level.LEVEL_0;
+    public Level value() default Level.LEVEL_0;
 
 }

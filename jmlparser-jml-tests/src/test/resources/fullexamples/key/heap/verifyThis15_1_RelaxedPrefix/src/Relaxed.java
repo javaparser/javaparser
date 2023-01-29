@@ -7,7 +7,7 @@ public class Relaxed {
       @            (\forall int j; 0 <= j < \result; pat[j] == a[j])
       @         && (\forall int j; \result < j < pat.length; pat[j] == a[j-1])
       @         );
-      @*/ 
+      @*/
     public static int isRelaxedPrefix(int[] pat, int[] a) {
         int shift = 0;
         int k = pat.length;
@@ -23,14 +23,13 @@ public class Relaxed {
           @ maintaining (\forall int j; k < j < i; pat[j] == a[j-1]);
           @ decreasing pat.length-i;
           @ assignable \strictly_nothing;
-          @*/ 
-        for(int i=0; i<pat.length; i++) {
-            if (pat[i]!=a[i-shift]) 
-                if (shift==0) {
+          @*/
+        for (int i = 0; i < pat.length; i++) {
+            if (pat[i] != a[i - shift])
+                if (shift == 0) {
                     k = i;
-                    shift=1;
-                }
-                    else return -1;
+                    shift = 1;
+                } else return -1;
         }
         return k;
     }

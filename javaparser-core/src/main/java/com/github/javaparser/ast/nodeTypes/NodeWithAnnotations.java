@@ -135,7 +135,7 @@ public interface NodeWithAnnotations<N extends Node> {
     /**
      * Annotates this with a single member annotation
      *
-     * @param name the name of the annotation
+     * @param name       the name of the annotation
      * @param expression the part between ()
      * @return this
      */
@@ -148,7 +148,7 @@ public interface NodeWithAnnotations<N extends Node> {
     /**
      * Annotates this with a single member annotation
      *
-     * @param clazz the class of the annotation
+     * @param clazz      the class of the annotation
      * @param expression the part between ()
      * @return this
      */
@@ -160,7 +160,7 @@ public interface NodeWithAnnotations<N extends Node> {
     /**
      * Annotates this with a single member annotation
      *
-     * @param name the name of the annotation
+     * @param name  the name of the annotation
      * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */

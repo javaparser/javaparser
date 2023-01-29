@@ -28,12 +28,16 @@ import org.apache.commons.math3.util.FastMath;
  * @since 3.0
  */
 public class Cosh implements UnivariateDifferentiableFunction, DifferentiableUnivariateFunction {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x) {
         return FastMath.cosh(x);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @deprecated as of 3.1, replaced by {@link #value(DerivativeStructure)}
      */
     @Deprecated
@@ -41,7 +45,9 @@ public class Cosh implements UnivariateDifferentiableFunction, DifferentiableUni
         return new Sinh();
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.1
      */
     public DerivativeStructure value(final DerivativeStructure t) {

@@ -51,6 +51,6 @@
 }
 
 
-.accordion input:checked~.accordion-body, .accordion[open] .accordion-body {
+.accordion input:checked ~ .accordion-body, .accordion[open] .accordion-body {
     overflow: scroll;
 }

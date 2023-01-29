@@ -61,11 +61,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 
     @Override
     public Optional<Type> solveGenericType(String name, TypeSolver typeSolver) {
-        if(wrappedNode.getScope().isPresent()){
+        if (wrappedNode.getScope().isPresent()) {
             Type typeOfScope = JavaParserFacade.get(typeSolver).getType(wrappedNode.getScope().get());
             Optional<Type> res = typeOfScope.asReferenceType().getGenericParameterByName(name);
             return res;
-        } else{
+        } else {
             return Optional.empty();
         }
     }
@@ -190,7 +190,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     }
                 }
                 return SymbolReference.unsolved(MethodDeclaration.class);
-            } else if (typeOfScope.isConstraint()){
+            } else if (typeOfScope.isConstraint()) {
                 return MethodResolutionLogic.solveMethodInType(typeOfScope.asConstraintType().getBound().asReferenceType().getTypeDeclaration(), name, argumentsTypes, typeSolver);
             } else {
                 return MethodResolutionLogic.solveMethodInType(typeOfScope.asReferenceType().getTypeDeclaration(), name, argumentsTypes, false, typeSolver);
@@ -237,12 +237,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 ParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
                 Type parameterType = parameter.getType();
                 if (parameter.isVariadic()) {
-                	parameterType = parameterType.asArrayType().getComponentType();
+                    parameterType = parameterType.asArrayType().getComponentType();
                 }
                 inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }
 
-            for (Map.Entry<TypeParameterDeclaration, Type> entry : derivedValues.entrySet()){
+            for (Map.Entry<TypeParameterDeclaration, Type> entry : derivedValues.entrySet()) {
                 methodUsage = methodUsage.replaceTypeParameter(entry.getKey(), entry.getValue());
             }
 
@@ -265,14 +265,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
         if (source.isReferenceType() && target.isReferenceType()) {
-        	ReferenceType sourceRefType = source.asReferenceType();
-        	ReferenceType targetRefType = target.asReferenceType();
+            ReferenceType sourceRefType = source.asReferenceType();
+            ReferenceType targetRefType = target.asReferenceType();
             if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
-            	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
-	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
-	                    inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
-	                }
-            	}
+                if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
+                    for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
+                        inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
+                    }
+                }
             }
             return;
         }
@@ -284,7 +284,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
         if (source.isWildcard() && target.isWildcard()) {
-            if (source.asWildcard().isBounded() && target.asWildcard().isBounded()){
+            if (source.asWildcard().isBounded() && target.asWildcard().isBounded()) {
                 inferTypes(source.asWildcard().getBoundedType(), target.asWildcard().getBoundedType(), mappings);
             }
             return;
@@ -297,8 +297,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             mappings.put(target.asTypeParameter(), source);
             return;
         }
-        if (source.isArray() && target.isWildcard()){
-            if(target.asWildcard().isBounded()){
+        if (source.isArray() && target.isWildcard()) {
+            if (target.asWildcard().isBounded()) {
                 inferTypes(source, target.asWildcard().getBoundedType(), mappings);
                 return;
             }
@@ -309,18 +309,18 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
 
-        if (source.isWildcard() && target.isReferenceType()){
-            if (source.asWildcard().isBounded()){
+        if (source.isWildcard() && target.isReferenceType()) {
+            if (source.asWildcard().isBounded()) {
                 inferTypes(source.asWildcard().getBoundedType(), target, mappings);
             }
             return;
         }
-        if (source.isConstraint() && target.isReferenceType()){
+        if (source.isConstraint() && target.isReferenceType()) {
             inferTypes(source.asConstraintType().getBound(), target, mappings);
             return;
         }
 
-        if (source.isConstraint() && target.isTypeVariable()){
+        if (source.isConstraint() && target.isTypeVariable()) {
             inferTypes(source.asConstraintType().getBound(), target, mappings);
             return;
         }
@@ -344,12 +344,12 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             if (actualParamTypes.size() == methodUsage.getDeclaration().getNumberOfParams()) {
                 // the varargs parameter is an Array, so extract the inner type
                 Type expectedType =
-                    methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
+                        methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
                 // the varargs corresponding type can be either T or Array<T>
                 Type actualType =
-                    actualParamTypes.get(actualParamTypes.size() - 1).isArray() ?
-                        actualParamTypes.get(actualParamTypes.size() - 1).asArrayType().getComponentType() :
-                        actualParamTypes.get(actualParamTypes.size() - 1);
+                        actualParamTypes.get(actualParamTypes.size() - 1).isArray() ?
+                                actualParamTypes.get(actualParamTypes.size() - 1).asArrayType().getComponentType() :
+                                actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
                     for (TypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
@@ -358,11 +358,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 if (!expectedType.isAssignableBy(actualType)) {
                     // ok, then it needs to be wrapped
                     throw new UnsupportedOperationException(
-                        String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
-                                      expectedType,
-                                      actualType,
-                                      methodUsage.getDeclaration(),
-                                      methodUsage));
+                            String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                                    expectedType,
+                                    actualType,
+                                    methodUsage.getDeclaration(),
+                                    methodUsage));
                 }
                 // match only the varargs type
                 matchTypeParameters(expectedType, actualType, matchedTypeParameters);
@@ -372,8 +372,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
 
         int until = methodUsage.getDeclaration().hasVariadicParameter() ?
-            actualParamTypes.size() - 1 :
-            actualParamTypes.size();
+                actualParamTypes.size() - 1 :
+                actualParamTypes.size();
 
         for (int i = 0; i < until; i++) {
             Type expectedType = methodUsage.getParamType(i);
@@ -443,7 +443,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             } else {
                 throw new UnsupportedOperationException("unbounded wildcard");
             }
-        } else if (type instanceof LambdaConstraintType){
+        } else if (type instanceof LambdaConstraintType) {
             LambdaConstraintType constraintType = (LambdaConstraintType) type;
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, typeSolver, invokationContext);
         } else if (type instanceof ArrayType) {

@@ -19,7 +19,9 @@ package org.apache.commons.math3.geometry.enclosing;
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.geometry.Space;
 
-/** Interface for algorithms computing enclosing balls.
+/**
+ * Interface for algorithms computing enclosing balls.
+ *
  * @param <S> Space type.
  * @param <P> Point type.
  * @see EnclosingBall
@@ -27,7 +29,9 @@ import org.apache.commons.math3.geometry.Space;
  */
 public interface Encloser<S extends Space, P extends Point<S>> {
 
-    /** Find a ball enclosing a list of points.
+    /**
+     * Find a ball enclosing a list of points.
+     *
      * @param points points to enclose
      * @return enclosing ball
      */

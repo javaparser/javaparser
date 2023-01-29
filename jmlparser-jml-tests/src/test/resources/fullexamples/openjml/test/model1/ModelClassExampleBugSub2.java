@@ -12,9 +12,12 @@ public class ModelClassExampleBugSub2<E> extends ModelClassExampleBug<E> {
     @*/
 
     public class IndexedContents extends ModelClassExampleBug<E>.Contents {
-        public boolean foo() { return false; }
-      }
-    
-    protected ModelClassExampleBugSub2() {}
+        public boolean foo() {
+            return false;
+        }
+    }
+
+    protected ModelClassExampleBugSub2() {
+    }
 
 }

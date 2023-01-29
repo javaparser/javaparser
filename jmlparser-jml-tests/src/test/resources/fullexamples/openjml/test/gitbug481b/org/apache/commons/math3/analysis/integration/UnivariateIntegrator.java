@@ -61,22 +61,22 @@ public interface UnivariateIntegrator {
      * Integrate the function in the given interval.
      *
      * @param maxEval Maximum number of evaluations.
-     * @param f the integrand function
-     * @param min the lower bound for the interval
-     * @param max the upper bound for the interval
+     * @param f       the integrand function
+     * @param min     the lower bound for the interval
+     * @param max     the upper bound for the interval
      * @return the value of integral
-     * @throws TooManyEvaluationsException if the maximum number of function
-     * evaluations is exceeded
-     * @throws MaxCountExceededException if the maximum iteration count is exceeded
-     * or the integrator detects convergence problems otherwise
+     * @throws TooManyEvaluationsException  if the maximum number of function
+     *                                      evaluations is exceeded
+     * @throws MaxCountExceededException    if the maximum iteration count is exceeded
+     *                                      or the integrator detects convergence problems otherwise
      * @throws MathIllegalArgumentException if {@code min > max} or the endpoints do not
-     * satisfy the requirements specified by the integrator
-     * @throws NullArgumentException if {@code f} is {@code null}.
+     *                                      satisfy the requirements specified by the integrator
+     * @throws NullArgumentException        if {@code f} is {@code null}.
      */
     double integrate(int maxEval, UnivariateFunction f, double min,
                      double max)
-        throws TooManyEvaluationsException, MaxCountExceededException,
-               MathIllegalArgumentException, NullArgumentException;
+            throws TooManyEvaluationsException, MaxCountExceededException,
+            MathIllegalArgumentException, NullArgumentException;
 
     /**
      * Get the number of function evaluations of the last run of the integrator.

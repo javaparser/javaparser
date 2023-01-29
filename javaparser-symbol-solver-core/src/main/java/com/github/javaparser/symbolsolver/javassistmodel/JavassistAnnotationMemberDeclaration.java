@@ -42,8 +42,9 @@ import java.util.function.Function;
  * @author Malte Skoruppa
  */
 public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationMemberDeclaration {
-    
+
     private static Map<Class<? extends MemberValue>, Function<MemberValue, ? extends Expression>> memberValueAsExressionConverter = new HashMap<>();
+
     static {
         memberValueAsExressionConverter.put(BooleanMemberValue.class, (memberValue) -> new BooleanLiteralExpr(BooleanMemberValue.class.cast(memberValue).getValue()));
         memberValueAsExressionConverter.put(CharMemberValue.class, (memberValue) -> new CharLiteralExpr(CharMemberValue.class.cast(memberValue).getValue()));
@@ -63,14 +64,15 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
 
     @Override
     public Expression getDefaultValue() {
-         AnnotationDefaultAttribute defaultAttribute = (AnnotationDefaultAttribute) annotationMember.getMethodInfo().getAttribute(AnnotationDefaultAttribute.tag);
-         if (defaultAttribute == null) return null;
-         MemberValue memberValue = defaultAttribute.getDefaultValue();
-         Function<MemberValue, ? extends Expression> fn = memberValueAsExressionConverter.get(memberValue.getClass());
-         if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
-         return fn.apply(memberValue);
+        AnnotationDefaultAttribute defaultAttribute = (AnnotationDefaultAttribute) annotationMember.getMethodInfo().getAttribute(AnnotationDefaultAttribute.tag);
+        if (defaultAttribute == null) return null;
+        MemberValue memberValue = defaultAttribute.getDefaultValue();
+        Function<MemberValue, ? extends Expression> fn = memberValueAsExressionConverter.get(memberValue.getClass());
+        if (fn == null)
+            throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        return fn.apply(memberValue);
     }
-    
+
     @Override
     public ResolvedType getType() {
         try {

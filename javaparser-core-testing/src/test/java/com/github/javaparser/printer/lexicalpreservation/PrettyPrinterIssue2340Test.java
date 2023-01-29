@@ -46,7 +46,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGenericVariableDeclarationWithAddedModifierWithAnotherSyntaxe() {
         String def2 = "List <String> i";
@@ -55,7 +55,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGeneric2VariableDeclarationWithAddedModifier() {
         String def2 = "List<List<String>> i";
@@ -64,7 +64,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGeneric2VariableDeclarationWithAddedModifierWithAnotherSyntaxe() {
         String def2 = "List < List < String > > i";

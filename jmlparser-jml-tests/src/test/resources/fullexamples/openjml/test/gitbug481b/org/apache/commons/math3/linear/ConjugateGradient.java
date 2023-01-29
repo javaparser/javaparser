@@ -76,12 +76,16 @@ import org.apache.commons.math3.util.IterationManager;
  * @since 3.0
  */
 public class ConjugateGradient
-    extends PreconditionedIterativeLinearSolver {
+        extends PreconditionedIterativeLinearSolver {
 
-    /** Key for the <a href="#context">exception context</a>. */
+    /**
+     * Key for the <a href="#context">exception context</a>.
+     */
     public static final String OPERATOR = "operator";
 
-    /** Key for the <a href="#context">exception context</a>. */
+    /**
+     * Key for the <a href="#context">exception context</a>.
+     */
     public static final String VECTOR = "vector";
 
     /**
@@ -90,7 +94,9 @@ public class ConjugateGradient
      */
     private boolean check;
 
-    /** The value of &delta;, for the default stopping criterion. */
+    /**
+     * The value of &delta;, for the default stopping criterion.
+     */
     private final double delta;
 
     /**
@@ -98,9 +104,9 @@ public class ConjugateGradient
      * stopping criterion</a>.
      *
      * @param maxIterations the maximum number of iterations
-     * @param delta the &delta; parameter for the default stopping criterion
-     * @param check {@code true} if positive definiteness of both matrix and
-     * preconditioner should be checked
+     * @param delta         the &delta; parameter for the default stopping criterion
+     * @param check         {@code true} if positive definiteness of both matrix and
+     *                      preconditioner should be checked
      */
     public ConjugateGradient(final int maxIterations, final double delta,
                              final boolean check) {
@@ -114,14 +120,14 @@ public class ConjugateGradient
      * stopping criterion</a> and custom iteration manager.
      *
      * @param manager the custom iteration manager
-     * @param delta the &delta; parameter for the default stopping criterion
-     * @param check {@code true} if positive definiteness of both matrix and
-     * preconditioner should be checked
+     * @param delta   the &delta; parameter for the default stopping criterion
+     * @param check   {@code true} if positive definiteness of both matrix and
+     *                preconditioner should be checked
      * @throws NullArgumentException if {@code manager} is {@code null}
      */
     public ConjugateGradient(final IterationManager manager,
                              final double delta, final boolean check)
-        throws NullArgumentException {
+            throws NullArgumentException {
         super(manager);
         this.delta = delta;
         this.check = check;
@@ -141,16 +147,16 @@ public class ConjugateGradient
      * {@inheritDoc}
      *
      * @throws NonPositiveDefiniteOperatorException if {@code a} or {@code m} is
-     * not positive definite
+     *                                              not positive definite
      */
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
                                    final RealLinearOperator m,
                                    final RealVector b,
                                    final RealVector x0)
-        throws NullArgumentException, NonPositiveDefiniteOperatorException,
-        NonSquareOperatorException, DimensionMismatchException,
-        MaxCountExceededException {
+            throws NullArgumentException, NonPositiveDefiniteOperatorException,
+            NonSquareOperatorException, DimensionMismatchException,
+            MaxCountExceededException {
         checkParameters(a, m, b, x0);
         final IterationManager manager = getIterationManager();
         // Initialization of default stopping criterion
@@ -179,7 +185,7 @@ public class ConjugateGradient
         }
         IterativeLinearSolverEvent evt;
         evt = new DefaultIterativeLinearSolverEvent(this,
-            manager.getIterations(), xro, bro, rro, rnorm);
+                manager.getIterations(), xro, bro, rro, rnorm);
         manager.fireInitializationEvent(evt);
         if (rnorm <= rmax) {
             manager.fireTerminationEvent(evt);
@@ -189,7 +195,7 @@ public class ConjugateGradient
         while (true) {
             manager.incrementIterationCount();
             evt = new DefaultIterativeLinearSolverEvent(this,
-                manager.getIterations(), xro, bro, rro, rnorm);
+                    manager.getIterations(), xro, bro, rro, rnorm);
             manager.fireIterationStartedEvent(evt);
             if (m != null) {
                 z = m.operate(r);
@@ -224,7 +230,7 @@ public class ConjugateGradient
             rhoPrev = rhoNext;
             rnorm = r.getNorm();
             evt = new DefaultIterativeLinearSolverEvent(this,
-                manager.getIterations(), xro, bro, rro, rnorm);
+                    manager.getIterations(), xro, bro, rro, rnorm);
             manager.fireIterationPerformedEvent(evt);
             if (rnorm <= rmax) {
                 manager.fireTerminationEvent(evt);

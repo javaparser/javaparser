@@ -47,7 +47,7 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
          *         result.append(buffer, 0, numChars);
          *     }
          */
-        if(!wrappedNode.getInner().isAssignExpr()) {
+        if (!wrappedNode.getInner().isAssignExpr()) {
             // Propagate any pattern expressions "up" without modification
             Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
             if (!this.equals(innerContext)) {
@@ -68,7 +68,7 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
          *         result.append(buffer, 0, numChars);
          *     }
          */
-        if(!wrappedNode.getInner().isAssignExpr()) {
+        if (!wrappedNode.getInner().isAssignExpr()) {
             // Propagate any pattern expressions "up" without modification
             Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
             if (!this.equals(innerContext)) {

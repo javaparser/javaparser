@@ -25,13 +25,16 @@ package org.apache.commons.math3.util;
  *
  * @param <K> Key type.
  * @param <V> Value type.
- *
  * @since 3.0
  */
 public class Pair<K, V> {
-    /** Key. */
+    /**
+     * Key.
+     */
     private final K key;
-    /** Value. */
+    /**
+     * Value.
+     */
     private final V value;
 
     /**
@@ -112,9 +115,9 @@ public class Pair<K, V> {
             return (key == null ?
                     oP.key == null :
                     key.equals(oP.key)) &&
-                (value == null ?
-                 oP.value == null :
-                 value.equals(oP.value));
+                    (value == null ?
+                            oP.value == null :
+                            value.equals(oP.value));
         }
     }
 
@@ -133,7 +136,9 @@ public class Pair<K, V> {
         return result;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "[" + getKey() + ", " + getValue() + "]";
@@ -145,8 +150,8 @@ public class Pair<K, V> {
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @param k First element of the pair.
-     * @param v Second element of the pair.
+     * @param k   First element of the pair.
+     * @param v   Second element of the pair.
      * @return a new {@code Pair} containing {@code k} and {@code v}.
      * @since 3.3
      */

@@ -69,14 +69,18 @@ import java.math.BigDecimal;
  * @see <a href="http://en.wikipedia.org/wiki/Kolmogorov-Smirnov_test">
  * Kolmogorov-Smirnov test (Wikipedia)</a>
  * @deprecated to be removed in version 4.0 -
- *  use {@link org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest}
+ * use {@link org.apache.commons.math3.stat.inference.KolmogorovSmirnovTest}
  */
 public class KolmogorovSmirnovDistribution implements Serializable {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -4670676796862967187L;
 
-    /** Number of observations. */
+    /**
+     * Number of observations.
+     */
     private int n;
 
     /**
@@ -84,7 +88,7 @@ public class KolmogorovSmirnovDistribution implements Serializable {
      * @throws NotStrictlyPositiveException if {@code n <= 0}
      */
     public KolmogorovSmirnovDistribution(int n)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         if (n <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.NOT_POSITIVE_NUMBER_OF_SAMPLES, n);
         }
@@ -103,9 +107,9 @@ public class KolmogorovSmirnovDistribution implements Serializable {
      * @param d statistic
      * @return the two-sided probability of {@code P(D_n < d)}
      * @throws MathArithmeticException if algorithm fails to convert {@code h}
-     * to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
-     * {@code d} as {@code (k - h) / m} for integer {@code k, m} and
-     * {@code 0 <= h < 1}.
+     *                                 to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
+     *                                 {@code d} as {@code (k - h) / m} for integer {@code k, m} and
+     *                                 {@code 0 <= h < 1}.
      */
     public double cdf(double d) throws MathArithmeticException {
         return this.cdf(d, false);
@@ -123,9 +127,9 @@ public class KolmogorovSmirnovDistribution implements Serializable {
      * @param d statistic
      * @return the two-sided probability of {@code P(D_n < d)}
      * @throws MathArithmeticException if algorithm fails to convert {@code h}
-     * to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
-     * {@code d} as {@code (k - h) / m} for integer {@code k, m} and
-     * {@code 0 <= h < 1}.
+     *                                 to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
+     *                                 {@code d} as {@code (k - h) / m} for integer {@code k, m} and
+     *                                 {@code 0 <= h < 1}.
      */
     public double cdfExact(double d) throws MathArithmeticException {
         return this.cdf(d, true);
@@ -135,18 +139,18 @@ public class KolmogorovSmirnovDistribution implements Serializable {
      * Calculates {@code P(D_n < d)} using method described in [1] with quick
      * decisions for extreme values given in [2] (see above).
      *
-     * @param d statistic
+     * @param d     statistic
      * @param exact whether the probability should be calculated exact using
-     * {@link org.apache.commons.math3.fraction.BigFraction} everywhere at the
-     * expense of very slow execution time, or if {@code double} should be used
-     * convenient places to gain speed. Almost never choose {@code true} in real
-     * applications unless you are very sure; {@code true} is almost solely for
-     * verification purposes.
+     *              {@link org.apache.commons.math3.fraction.BigFraction} everywhere at the
+     *              expense of very slow execution time, or if {@code double} should be used
+     *              convenient places to gain speed. Almost never choose {@code true} in real
+     *              applications unless you are very sure; {@code true} is almost solely for
+     *              verification purposes.
      * @return the two-sided probability of {@code P(D_n < d)}
      * @throws MathArithmeticException if algorithm fails to convert {@code h}
-     * to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
-     * {@code d} as {@code (k - h) / m} for integer {@code k, m} and
-     * {@code 0 <= h < 1}.
+     *                                 to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
+     *                                 {@code d} as {@code (k - h) / m} for integer {@code k, m} and
+     *                                 {@code 0 <= h < 1}.
      */
     public double cdf(double d, boolean exact) throws MathArithmeticException {
 
@@ -189,9 +193,9 @@ public class KolmogorovSmirnovDistribution implements Serializable {
      * @param d statistic
      * @return the two-sided probability of {@code P(D_n < d)}
      * @throws MathArithmeticException if algorithm fails to convert {@code h}
-     * to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
-     * {@code d} as {@code (k - h) / m} for integer {@code k, m} and
-     * {@code 0 <= h < 1}.
+     *                                 to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
+     *                                 {@code d} as {@code (k - h) / m} for integer {@code k, m} and
+     *                                 {@code 0 <= h < 1}.
      */
     private double exactK(double d) throws MathArithmeticException {
 
@@ -221,9 +225,9 @@ public class KolmogorovSmirnovDistribution implements Serializable {
      * @param d statistic
      * @return the two-sided probability of {@code P(D_n < d)}
      * @throws MathArithmeticException if algorithm fails to convert {@code h}
-     * to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
-     * {@code d} as {@code (k - h) / m} for integer {@code k, m} and
-     * {@code 0 <= h < 1}.
+     *                                 to a {@link org.apache.commons.math3.fraction.BigFraction} in expressing
+     *                                 {@code d} as {@code (k - h) / m} for integer {@code k, m} and
+     *                                 {@code 0 <= h < 1}.
      */
     private double roundedK(double d) throws MathArithmeticException {
 

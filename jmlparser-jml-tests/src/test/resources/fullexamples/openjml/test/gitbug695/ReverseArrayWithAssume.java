@@ -11,7 +11,7 @@ public class ReverseArrayWithAssume {
         //@ assert len == s.length;
         char[] res = (char[]) new char[len];
         //@ assert len == res.length;
-        int i = len-1;
+        int i = len - 1;
         /** rlen tells how many elements of res are defined. **/
         int rlen = 0;
         //@ maintaining len == res.length;
@@ -25,7 +25,7 @@ public class ReverseArrayWithAssume {
             // System.out.println("i is " + i + ", len-1-i is " + (len-1-i));
             //@ assert res.length == len;
             //@ assume (len-1-i)+1 < len;
-            res[len-1-i] = s[i];
+            res[len - 1 - i] = s[i];
             //@ assume res[(len-1-i)+1] == s[i];
             rlen += 1;
             //@ assert rlen == ((len-1) - i) + 1;
@@ -38,14 +38,16 @@ public class ReverseArrayWithAssume {
         return res;
     }
 
-    public static void main(String [] argv) {
+    public static void main(String[] argv) {
         ReverseArrayWithAssume ra = new ReverseArrayWithAssume();
-        char [] abc = new char[3];
-        abc[0] = 'a'; abc[1] = 'b'; abc[2] = 'c';
+        char[] abc = new char[3];
+        abc[0] = 'a';
+        abc[1] = 'b';
+        abc[2] = 'c';
         char[] revd = ra.reverse(abc);
         System.out.println("reverse(abc) is \""
-                           + ReverseArrayWithAssume.arr2str(revd)
-                           + "\"");
+                + ReverseArrayWithAssume.arr2str(revd)
+                + "\"");
     }
 
     /*@ public normal_behavior

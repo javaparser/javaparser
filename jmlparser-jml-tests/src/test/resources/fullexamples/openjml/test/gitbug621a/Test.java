@@ -8,13 +8,15 @@ public class Test {
         //@ assert 0 <= ac.x;
         workerMethod();  // error
     }
-    public void workerMethod() { 
+
+    public void workerMethod() {
     }
 }
+
 class AnotherClass {
     public int x;
     //@ public invariant 0 <= x;
-    
+
     //@ public normal_behavior
     //@   ensures \result == 0;
     //@ pure

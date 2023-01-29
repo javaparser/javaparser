@@ -28,22 +28,31 @@ import org.apache.commons.math3.util.FastMath;
  * This class implements the Nakagami distribution.
  *
  * @see <a href="http://en.wikipedia.org/wiki/Nakagami_distribution">Nakagami Distribution (Wikipedia)</a>
- *
  * @since 3.4
  */
 public class NakagamiDistribution extends AbstractRealDistribution {
 
-    /** Default inverse cumulative probability accuracy. */
+    /**
+     * Default inverse cumulative probability accuracy.
+     */
     public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20141003;
 
-    /** The shape parameter. */
+    /**
+     * The shape parameter.
+     */
     private final double mu;
-    /** The scale parameter. */
+    /**
+     * The scale parameter.
+     */
     private final double omega;
-    /** Inverse cumulative probability accuracy. */
+    /**
+     * Inverse cumulative probability accuracy.
+     */
     private final double inverseAbsoluteAccuracy;
 
     /**
@@ -56,9 +65,9 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param mu shape parameter
+     * @param mu    shape parameter
      * @param omega scale parameter (must be positive)
-     * @throws NumberIsTooSmallException if {@code mu < 0.5}
+     * @throws NumberIsTooSmallException    if {@code mu < 0.5}
      * @throws NotStrictlyPositiveException if {@code omega <= 0}
      */
     public NakagamiDistribution(double mu, double omega) {
@@ -75,11 +84,11 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param mu shape parameter
-     * @param omega scale parameter (must be positive)
+     * @param mu                      shape parameter
+     * @param omega                   scale parameter (must be positive)
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NumberIsTooSmallException if {@code mu < 0.5}
+     *                                cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * @throws NumberIsTooSmallException    if {@code mu < 0.5}
      * @throws NotStrictlyPositiveException if {@code omega <= 0}
      */
     public NakagamiDistribution(double mu, double omega, double inverseAbsoluteAccuracy) {
@@ -89,12 +98,12 @@ public class NakagamiDistribution extends AbstractRealDistribution {
     /**
      * Build a new instance.
      *
-     * @param rng Random number generator
-     * @param mu shape parameter
-     * @param omega scale parameter (must be positive)
+     * @param rng                     Random number generator
+     * @param mu                      shape parameter
+     * @param omega                   scale parameter (must be positive)
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NumberIsTooSmallException if {@code mu < 0.5}
+     *                                cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * @throws NumberIsTooSmallException    if {@code mu < 0.5}
      * @throws NotStrictlyPositiveException if {@code omega <= 0}
      */
     public NakagamiDistribution(RandomGenerator rng, double mu, double omega, double inverseAbsoluteAccuracy) {
@@ -130,58 +139,78 @@ public class NakagamiDistribution extends AbstractRealDistribution {
         return omega;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected double getSolverAbsoluteAccuracy() {
         return inverseAbsoluteAccuracy;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         if (x <= 0) {
             return 0.0;
         }
         return 2.0 * FastMath.pow(mu, mu) / (Gamma.gamma(mu) * FastMath.pow(omega, mu)) *
-                     FastMath.pow(x, 2 * mu - 1) * FastMath.exp(-mu * x * x / omega);
+                FastMath.pow(x, 2 * mu - 1) * FastMath.exp(-mu * x * x / omega);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(double x) {
         return Gamma.regularizedGammaP(mu, mu * x * x / omega);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNumericalMean() {
         return Gamma.gamma(mu + 0.5) / Gamma.gamma(mu) * FastMath.sqrt(omega / mu);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNumericalVariance() {
         double v = Gamma.gamma(mu + 0.5) / Gamma.gamma(mu);
         return omega * (1 - 1 / mu * v * v);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getSupportLowerBound() {
         return 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getSupportUpperBound() {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportConnected() {
         return true;
     }

@@ -3,7 +3,7 @@
  * @date 2019-10-25
  */
 public class A {
-    public B b(){
+    public B b() {
         return null;
     }
 }

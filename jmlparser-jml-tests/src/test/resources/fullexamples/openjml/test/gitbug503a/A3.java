@@ -1,4 +1,3 @@
-
 public class A3<T> {
     public int h() {
         int prime = 14747;

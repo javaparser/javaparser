@@ -53,9 +53,9 @@ public class Issue3136Test extends AbstractResolutionTest {
 
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
-        exprs.forEach(expr-> {
-            assertEquals("Program",expr.calculateResolvedType().describe());
-            assertEquals("Program",expr.resolve().getQualifiedName());
+        exprs.forEach(expr -> {
+            assertEquals("Program", expr.calculateResolvedType().describe());
+            assertEquals("Program", expr.resolve().getQualifiedName());
         });
     }
 }

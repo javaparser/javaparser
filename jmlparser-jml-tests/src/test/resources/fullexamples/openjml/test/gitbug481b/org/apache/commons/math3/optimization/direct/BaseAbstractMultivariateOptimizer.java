@@ -28,37 +28,52 @@ import org.apache.commons.math3.util.Incrementor;
  * evaluations counting, initial guess and simple bounds settings.
  *
  * @param <FUNC> Type of the objective function to be optimized.
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 2.2
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public abstract class BaseAbstractMultivariateOptimizer<FUNC extends MultivariateFunction>
-    implements BaseMultivariateOptimizer<FUNC> {
-    /** Evaluations counter. */
+        implements BaseMultivariateOptimizer<FUNC> {
+    /**
+     * Evaluations counter.
+     */
     protected final Incrementor evaluations = new Incrementor();
-    /** Convergence checker. */
+    /**
+     * Convergence checker.
+     */
     private ConvergenceChecker<PointValuePair> checker;
-    /** Type of optimization. */
+    /**
+     * Type of optimization.
+     */
     private GoalType goal;
-    /** Initial guess. */
+    /**
+     * Initial guess.
+     */
     private double[] start;
-    /** Lower bounds. */
+    /**
+     * Lower bounds.
+     */
     private double[] lowerBound;
-    /** Upper bounds. */
+    /**
+     * Upper bounds.
+     */
     private double[] upperBound;
-    /** Objective function. */
+    /**
+     * Objective function.
+     */
     private MultivariateFunction function;
 
     /**
      * Simple constructor with default settings.
      * The convergence check is set to a {@link SimpleValueChecker}.
+     *
      * @deprecated See {@link SimpleValueChecker#SimpleValueChecker()}
      */
     @Deprecated
     protected BaseAbstractMultivariateOptimizer() {
         this(new SimpleValueChecker());
     }
+
     /**
      * @param checker Convergence checker.
      */
@@ -66,17 +81,23 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
         this.checker = checker;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getMaxEvaluations() {
         return evaluations.getMaximalCount();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getEvaluations() {
         return evaluations.getCount();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ConvergenceChecker<PointValuePair> getConvergenceChecker() {
         return checker;
     }
@@ -87,7 +108,7 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
      * @param point Point at which the objective function must be evaluated.
      * @return the objective function value at the specified point.
      * @throws TooManyEvaluationsException if the maximal number of
-     * evaluations is exceeded.
+     *                                     evaluations is exceeded.
      */
     protected double computeObjectiveValue(double[] point) {
         try {
@@ -102,7 +123,7 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
      * {@inheritDoc}
      *
      * @deprecated As of 3.1. Please use
-     * {@link #optimize(int,MultivariateFunction,GoalType,OptimizationData[])}
+     * {@link #optimize(int, MultivariateFunction, GoalType, OptimizationData[])}
      * instead.
      */
     @Deprecated
@@ -114,14 +135,14 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
     /**
      * Optimize an objective function.
      *
-     * @param maxEval Allowed number of evaluations of the objective function.
-     * @param f Objective function.
+     * @param maxEval  Allowed number of evaluations of the objective function.
+     * @param f        Objective function.
      * @param goalType Optimization type.
-     * @param optData Optimization data. The following data will be looked for:
-     * <ul>
-     *  <li>{@link InitialGuess}</li>
-     *  <li>{@link SimpleBounds}</li>
-     * </ul>
+     * @param optData  Optimization data. The following data will be looked for:
+     *                 <ul>
+     *                  <li>{@link InitialGuess}</li>
+     *                  <li>{@link SimpleBounds}</li>
+     *                 </ul>
      * @return the point/value pair giving the optimal value of the objective
      * function.
      * @since 3.1
@@ -136,21 +157,19 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
     /**
      * Optimize an objective function.
      *
-     * @param f Objective function.
-     * @param goalType Type of optimization goal: either
-     * {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
+     * @param f          Objective function.
+     * @param goalType   Type of optimization goal: either
+     *                   {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
      * @param startPoint Start point for optimization.
-     * @param maxEval Maximum number of function evaluations.
+     * @param maxEval    Maximum number of function evaluations.
      * @return the point/value pair giving the optimal value for objective
      * function.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the start point dimension is wrong.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximal number of evaluations is exceeded.
-     * @throws org.apache.commons.math3.exception.NullArgumentException if
-     * any argument is {@code null}.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException  if the start point dimension is wrong.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximal number of evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.NullArgumentException       if
+     *                                                                        any argument is {@code null}.
      * @deprecated As of 3.1. Please use
-     * {@link #optimize(int,MultivariateFunction,GoalType,OptimizationData[])}
+     * {@link #optimize(int, MultivariateFunction, GoalType, OptimizationData[])}
      * instead.
      */
     @Deprecated
@@ -162,25 +181,25 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
     /**
      * Optimize an objective function.
      *
-     * @param maxEval Allowed number of evaluations of the objective function.
-     * @param f Objective function.
+     * @param maxEval  Allowed number of evaluations of the objective function.
+     * @param f        Objective function.
      * @param goalType Optimization type.
-     * @param optData Optimization data. The following data will be looked for:
-     * <ul>
-     *  <li>{@link InitialGuess}</li>
-     *  <li>{@link SimpleBounds}</li>
-     * </ul>
+     * @param optData  Optimization data. The following data will be looked for:
+     *                 <ul>
+     *                  <li>{@link InitialGuess}</li>
+     *                  <li>{@link SimpleBounds}</li>
+     *                 </ul>
      * @return the point/value pair giving the optimal value of the objective
      * function.
      * @throws TooManyEvaluationsException if the maximal number of
-     * evaluations is exceeded.
+     *                                     evaluations is exceeded.
      * @since 3.1
      */
     protected PointValuePair optimizeInternal(int maxEval,
                                               FUNC f,
                                               GoalType goalType,
                                               OptimizationData... optData)
-        throws TooManyEvaluationsException {
+            throws TooManyEvaluationsException {
         // Set internal state.
         evaluations.setMaximalCount(maxEval);
         evaluations.resetCount();
@@ -199,10 +218,10 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
      * characterize the problem.
      *
      * @param optData Optimization data. The following data will be looked for:
-     * <ul>
-     *  <li>{@link InitialGuess}</li>
-     *  <li>{@link SimpleBounds}</li>
-     * </ul>
+     *                <ul>
+     *                 <li>{@link InitialGuess}</li>
+     *                 <li>{@link SimpleBounds}</li>
+     *                </ul>
      */
     private void parseOptimizationData(OptimizationData... optData) {
         // The existing values (as set by the previous call) are reused if
@@ -234,6 +253,7 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
     public double[] getStartPoint() {
         return start == null ? null : start.clone();
     }
+
     /**
      * @return the lower bounds.
      * @since 3.1
@@ -241,6 +261,7 @@ public abstract class BaseAbstractMultivariateOptimizer<FUNC extends Multivariat
     public double[] getLowerBound() {
         return lowerBound == null ? null : lowerBound.clone();
     }
+
     /**
      * @return the upper bounds.
      * @since 3.1

@@ -11,8 +11,8 @@
 // Public License. See LICENSE.TXT for details.
 // 
 
-public abstract class AbstractList 
-    extends AbstractCollection
-    implements List {
+public abstract class AbstractList
+        extends AbstractCollection
+        implements List {
 }
 

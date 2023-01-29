@@ -35,41 +35,48 @@ import org.apache.commons.math3.exception.MaxCountExceededException;
  * thanks to the {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryEquations)}
  * method.
  * </p>
+ *
+ * @param <T> the type of the field elements
  * @see FirstOrderFieldDifferentialEquations
  * @see FieldExpandableODE
- * @param <T> the type of the field elements
  * @since 3.6
  */
 public interface FieldSecondaryEquations<T extends RealFieldElement<T>> {
 
-    /** Get the dimension of the secondary state parameters.
+    /**
+     * Get the dimension of the secondary state parameters.
+     *
      * @return dimension of the secondary state parameters
      */
     int getDimension();
 
-    /** Initialize equations at the start of an ODE integration.
+    /**
+     * Initialize equations at the start of an ODE integration.
      * <p>
      * This method is called once at the start of the integration. It
      * may be used by the equations to initialize some internal data
      * if needed.
      * </p>
-     * @param t0 value of the independent <I>time</I> variable at integration start
-     * @param primary0 array containing the value of the primary state vector at integration start
+     *
+     * @param t0         value of the independent <I>time</I> variable at integration start
+     * @param primary0   array containing the value of the primary state vector at integration start
      * @param secondary0 array containing the value of the secondary state vector at integration start
-     * @param finalTime target time for the integration
+     * @param finalTime  target time for the integration
      */
     void init(T t0, T[] primary0, T[] secondary0, T finalTime);
 
-    /** Compute the derivatives related to the secondary state parameters.
-     * @param t current value of the independent <I>time</I> variable
-     * @param primary array containing the current value of the primary state vector
+    /**
+     * Compute the derivatives related to the secondary state parameters.
+     *
+     * @param t          current value of the independent <I>time</I> variable
+     * @param primary    array containing the current value of the primary state vector
      * @param primaryDot array containing the derivative of the primary state vector
-     * @param secondary array containing the current value of the secondary state vector
+     * @param secondary  array containing the current value of the secondary state vector
      * @return derivative of the secondary state vector
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @throws MaxCountExceededException  if the number of functions evaluations is exceeded
+     * @throws DimensionMismatchException if arrays dimensions do not match equations settings
      */
     T[] computeDerivatives(T t, T[] primary, T[] primaryDot, T[] secondary)
-        throws MaxCountExceededException, DimensionMismatchException;
+            throws MaxCountExceededException, DimensionMismatchException;
 
 }

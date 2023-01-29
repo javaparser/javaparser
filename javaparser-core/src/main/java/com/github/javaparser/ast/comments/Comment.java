@@ -223,6 +223,23 @@ public abstract class Comment extends Node {
         return Optional.empty();
     }
 
+    /*
+     * Header is "//" for line comment
+     */
+    abstract public String getHeader();
+
+    /*
+     *
+     */
+    abstract public String getFooter();
+
+    /*
+     * Returns the content of the comment with header and footer
+     */
+    public String asString() {
+        return getHeader() + getContent() + getFooter();
+    }
+
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlComment() {
         return false;

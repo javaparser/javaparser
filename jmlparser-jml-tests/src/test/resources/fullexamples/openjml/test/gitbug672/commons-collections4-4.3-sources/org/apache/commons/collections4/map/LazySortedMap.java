@@ -40,7 +40,7 @@ import java.util.SortedMap;
  *     LazySortedMap.lazySortedMap(new HashMap&lt;String, Date&gt;(), factory);
  * Date date = lazy.get("NOW");
  * </pre>
- *
+ * <p>
  * After the above code is executed, <code>date</code> will refer to
  * a new <code>Date</code> instance. Furthermore, that <code>Date</code>
  * instance is mapped to the "NOW" key in the map.
@@ -57,18 +57,20 @@ import java.util.SortedMap;
  * @param <V> the type of the values in this map
  * @since 3.0
  */
-public class LazySortedMap<K,V> extends LazyMap<K,V> implements SortedMap<K,V> {
+public class LazySortedMap<K, V> extends LazyMap<K, V> implements SortedMap<K, V> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 2715322183617658933L;
 
     /**
      * Factory method to create a lazily instantiated sorted map.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
-     * @param factory  the factory to use, must not be null
+     * @param <K>     the key type
+     * @param <V>     the value type
+     * @param map     the map to decorate, must not be null
+     * @param factory the factory to use, must not be null
      * @return a new lazy sorted map
      * @throws NullPointerException if map or factory is null
      * @since 4.0
@@ -81,10 +83,10 @@ public class LazySortedMap<K,V> extends LazyMap<K,V> implements SortedMap<K,V> {
     /**
      * Factory method to create a lazily instantiated sorted map.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
-     * @param factory  the factory to use, must not be null
+     * @param <K>     the key type
+     * @param <V>     the value type
+     * @param map     the map to decorate, must not be null
+     * @param factory the factory to use, must not be null
      * @return a new lazy sorted map
      * @throws NullPointerException if map or factory is null
      * @since 4.0
@@ -95,36 +97,38 @@ public class LazySortedMap<K,V> extends LazyMap<K,V> implements SortedMap<K,V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
-     * @param factory  the factory to use, must not be null
+     * @param map     the map to decorate, must not be null
+     * @param factory the factory to use, must not be null
      * @throws NullPointerException if map or factory is null
      */
-    protected LazySortedMap(final SortedMap<K,V> map, final Factory<? extends V> factory) {
+    protected LazySortedMap(final SortedMap<K, V> map, final Factory<? extends V> factory) {
         super(map, factory);
     }
 
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
-     * @param factory  the factory to use, must not be null
+     * @param map     the map to decorate, must not be null
+     * @param factory the factory to use, must not be null
      * @throws NullPointerException if map or factory is null
      */
-    protected LazySortedMap(final SortedMap<K,V> map, final Transformer<? super K, ? extends V> factory) {
+    protected LazySortedMap(final SortedMap<K, V> map, final Transformer<? super K, ? extends V> factory) {
         super(map, factory);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the map being decorated.
      *
      * @return the decorated map
      */
-    protected SortedMap<K,V> getSortedMap() {
-        return (SortedMap<K,V>) map;
+    protected SortedMap<K, V> getSortedMap() {
+        return (SortedMap<K, V>) map;
     }
 
     //-----------------------------------------------------------------------
@@ -144,20 +148,20 @@ public class LazySortedMap<K,V> extends LazyMap<K,V> implements SortedMap<K,V> {
     }
 
     @Override
-    public SortedMap<K,V> subMap(final K fromKey, final K toKey) {
-        final SortedMap<K,V> map = getSortedMap().subMap(fromKey, toKey);
+    public SortedMap<K, V> subMap(final K fromKey, final K toKey) {
+        final SortedMap<K, V> map = getSortedMap().subMap(fromKey, toKey);
         return new LazySortedMap<>(map, factory);
     }
 
     @Override
-    public SortedMap<K,V> headMap(final K toKey) {
-        final SortedMap<K,V> map = getSortedMap().headMap(toKey);
+    public SortedMap<K, V> headMap(final K toKey) {
+        final SortedMap<K, V> map = getSortedMap().headMap(toKey);
         return new LazySortedMap<>(map, factory);
     }
 
     @Override
-    public SortedMap<K,V> tailMap(final K fromKey) {
-        final SortedMap<K,V> map = getSortedMap().tailMap(fromKey);
+    public SortedMap<K, V> tailMap(final K fromKey) {
+        final SortedMap<K, V> map = getSortedMap().tailMap(fromKey);
         return new LazySortedMap<>(map, factory);
     }
 

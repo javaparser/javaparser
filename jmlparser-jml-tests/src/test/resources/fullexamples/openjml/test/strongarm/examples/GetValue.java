@@ -12,41 +12,41 @@ public class GetValue {
 
     // @ requires x != null;
     private static String getValue(Reader x) throws Exception {
-	char c;
-	char q;
-	
-	StringBuffer sb = new StringBuffer(); 
-	do {
-	    c = (char)x.read();
-	} while (c == ' ' || c == '\t');
-	switch (c) {
-	case 0:
-	    return null;
-	case '"':
-	case '\'':
-	    q = c;
-	    sb = new StringBuffer();
-	    for (;;) {
-		c = (char)x.read();
-		if (c == q) {
-		    // Handle escaped double-quote
-		    if ((char)x.read() != '\"') {
-			//x.back();
-			break;
-		    }
-		}
-		if (c == 0 || c == '\n' || c == '\r') {
-		    //throw x.syntaxError("Missing close quote '" + q + "'.");
-		}
-		sb.append(c);
-	    }
-	    return sb.toString();
-	case ',':
-	    //x.back();
-	    return "";
-	default:
-	    //x.back();
-	    return sb.toString();
-	}
+        char c;
+        char q;
+
+        StringBuffer sb = new StringBuffer();
+        do {
+            c = (char) x.read();
+        } while (c == ' ' || c == '\t');
+        switch (c) {
+            case 0:
+                return null;
+            case '"':
+            case '\'':
+                q = c;
+                sb = new StringBuffer();
+                for (; ; ) {
+                    c = (char) x.read();
+                    if (c == q) {
+                        // Handle escaped double-quote
+                        if ((char) x.read() != '\"') {
+                            //x.back();
+                            break;
+                        }
+                    }
+                    if (c == 0 || c == '\n' || c == '\r') {
+                        //throw x.syntaxError("Missing close quote '" + q + "'.");
+                    }
+                    sb.append(c);
+                }
+                return sb.toString();
+            case ',':
+                //x.back();
+                return "";
+            default:
+                //x.back();
+                return sb.toString();
+        }
     }
 }

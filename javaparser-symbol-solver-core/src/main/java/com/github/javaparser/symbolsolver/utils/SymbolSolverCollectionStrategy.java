@@ -93,7 +93,8 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
                         }
                         if (current_root == null || (currentProjectDir != null && !currentProjectDir.equals(current_root))) {
                             current_root = currentProjectDir;
-                            if (current_root != null) Log.info("New current source root is %s", () -> current_root.toString());
+                            if (current_root != null)
+                                Log.info("New current source root is %s", () -> current_root.toString());
                         }
                     } else if (jarMatcher.matches(file)) {
                         Log.info("Jar file is found %s", () -> file.toString());

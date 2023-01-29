@@ -21,9 +21,10 @@ public class ParseResult<T> {
 
     /**
      * General constructor.
-     * @param result the AST, or empty if it wasn't created.
+     *
+     * @param result   the AST, or empty if it wasn't created.
      * @param problems a list of encountered parsing problems.
-     * @param tokens the complete list of tokens that were parsed, or empty if parsing failed completely.
+     * @param tokens   the complete list of tokens that were parsed, or empty if parsing failed completely.
      */
     ParseResult(Optional<T> result, List<Problem> problems, Optional<List<Token>> tokens, Optional<CommentsCollection> commentsCollection) {
         this.commentsCollection = assertNotNull(commentsCollection);

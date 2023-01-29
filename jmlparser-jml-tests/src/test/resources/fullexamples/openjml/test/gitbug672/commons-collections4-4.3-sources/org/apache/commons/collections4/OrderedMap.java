@@ -22,7 +22,6 @@ package org.apache.commons.collections4;
  *
  * @param <K> the type of the keys in the map
  * @param <V> the type of the values in the map
- *
  * @since 3.0
  */
 public interface OrderedMap<K, V> extends IterableMap<K, V> {
@@ -57,7 +56,7 @@ public interface OrderedMap<K, V> extends IterableMap<K, V> {
     /**
      * Gets the next key after the one specified.
      *
-     * @param key  the key to search for next from
+     * @param key the key to search for next from
      * @return the next key, null if no match or at end
      */
     K nextKey(K key);
@@ -65,7 +64,7 @@ public interface OrderedMap<K, V> extends IterableMap<K, V> {
     /**
      * Gets the previous key before the one specified.
      *
-     * @param key  the key to search for previous from
+     * @param key the key to search for previous from
      * @return the previous key, null if no match or at start
      */
     K previousKey(K key);

@@ -35,13 +35,14 @@ import org.apache.commons.math3.optimization.SimpleVectorValueChecker;
  * is faster but QR decomposition is more robust for difficult problems.
  * </p>
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 2.0
- *
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
-    /** Indicator for using LU decomposition. */
+    /**
+     * Indicator for using LU decomposition.
+     */
     private final boolean useLU;
 
     /**
@@ -49,6 +50,7 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
      * The normal equations will be solved using LU decomposition and the
      * convergence check is set to a {@link SimpleVectorValueChecker}
      * with default tolerances.
+     *
      * @deprecated See {@link SimpleVectorValueChecker#SimpleVectorValueChecker()}
      */
     @Deprecated
@@ -72,8 +74,8 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
      * with default tolerances.
      *
      * @param useLU If {@code true}, the normal equations will be solved
-     * using LU decomposition, otherwise they will be solved using QR
-     * decomposition.
+     *              using LU decomposition, otherwise they will be solved using QR
+     *              decomposition.
      * @deprecated See {@link SimpleVectorValueChecker#SimpleVectorValueChecker()}
      */
     @Deprecated
@@ -82,9 +84,9 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
     }
 
     /**
-     * @param useLU If {@code true}, the normal equations will be solved
-     * using LU decomposition, otherwise they will be solved using QR
-     * decomposition.
+     * @param useLU   If {@code true}, the normal equations will be solved
+     *                using LU decomposition, otherwise they will be solved using QR
+     *                decomposition.
      * @param checker Convergence checker.
      */
     public GaussNewtonOptimizer(final boolean useLU,
@@ -93,11 +95,13 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
         this.useLU = useLU;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointVectorValuePair doOptimize() {
         final ConvergenceChecker<PointVectorValuePair> checker
-            = getConvergenceChecker();
+                = getConvergenceChecker();
 
         // Computation will be useless without a checker (see "for-loop").
         if (checker == null) {
@@ -120,7 +124,7 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
         // iterate until convergence is reached
         PointVectorValuePair current = null;
         int iter = 0;
-        for (boolean converged = false; !converged;) {
+        for (boolean converged = false; !converged; ) {
             ++iter;
 
             // evaluate the objective function and its jacobian
@@ -132,12 +136,12 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
             current = new PointVectorValuePair(currentPoint, currentObjective);
 
             // build the linear problem
-            final double[]   b = new double[nC];
+            final double[] b = new double[nC];
             final double[][] a = new double[nC][nC];
             for (int i = 0; i < nR; ++i) {
 
-                final double[] grad   = weightedJacobian.getRow(i);
-                final double weight   = residualsWeights[i];
+                final double[] grad = weightedJacobian.getRow(i);
+                final double weight = residualsWeights[i];
                 final double residual = currentResiduals[i];
 
                 // compute the normal equation

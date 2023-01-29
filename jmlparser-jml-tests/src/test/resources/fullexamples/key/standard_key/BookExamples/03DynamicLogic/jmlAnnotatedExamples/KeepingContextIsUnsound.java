@@ -15,10 +15,10 @@ class KeepingContextIsUnsound {
 	/*@ loop_invariant true;
 	  @ assignable \nothing;
 	  @*/
-	while ( i<10 ) { 
-	    i=i+1; 
-	}
-	return i;
+        while (i < 10) {
+            i = i + 1;
+        }
+        return i;
     }
 
 }

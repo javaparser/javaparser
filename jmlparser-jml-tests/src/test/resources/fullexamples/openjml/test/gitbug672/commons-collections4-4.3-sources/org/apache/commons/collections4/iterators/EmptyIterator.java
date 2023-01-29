@@ -33,6 +33,7 @@ public class EmptyIterator<E> extends AbstractEmptyIterator<E> implements Resett
 
     /**
      * Singleton instance of the iterator.
+     *
      * @since 3.1
      */
     @SuppressWarnings("rawtypes")
@@ -40,6 +41,7 @@ public class EmptyIterator<E> extends AbstractEmptyIterator<E> implements Resett
 
     /**
      * Singleton instance of the iterator.
+     *
      * @since 2.1.1 and 3.1
      */
     @SuppressWarnings("rawtypes")
@@ -47,6 +49,7 @@ public class EmptyIterator<E> extends AbstractEmptyIterator<E> implements Resett
 
     /**
      * Get a typed resettable empty iterator instance.
+     *
      * @param <E> the element type
      * @return ResettableIterator&lt;E&gt;
      */
@@ -57,6 +60,7 @@ public class EmptyIterator<E> extends AbstractEmptyIterator<E> implements Resett
 
     /**
      * Get a typed empty iterator instance.
+     *
      * @param <E> the element type
      * @return Iterator&lt;E&gt;
      */

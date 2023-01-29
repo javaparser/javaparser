@@ -127,7 +127,7 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
         }
         return Optional.empty();
     }
-    
+
     @Override
     public ResolvedReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());

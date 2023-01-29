@@ -37,17 +37,22 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class Min extends AbstractStorelessUnivariateStatistic implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -2941995784909003131L;
 
-    /**Number of values that have been added */
+    /**
+     * Number of values that have been added
+     */
     private long n;
 
-    /**Current value of the statistic */
+    /**
+     * Current value of the statistic
+     */
     private double value;
 
     /**
@@ -120,15 +125,15 @@ public class Min extends AbstractStorelessUnivariateStatistic implements Seriali
      * </ul> </p>
      *
      * @param values the input array
-     * @param begin index of the first array element to include
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the minimum of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     @Override
-    public double evaluate(final double[] values,final int begin, final int length)
-    throws MathIllegalArgumentException {
+    public double evaluate(final double[] values, final int begin, final int length)
+            throws MathIllegalArgumentException {
         double min = Double.NaN;
         if (test(values, begin, length)) {
             min = values[begin];
@@ -157,11 +162,11 @@ public class Min extends AbstractStorelessUnivariateStatistic implements Seriali
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source Min to copy
-     * @param dest Min to copy to
+     * @param dest   Min to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(Min source, Min dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

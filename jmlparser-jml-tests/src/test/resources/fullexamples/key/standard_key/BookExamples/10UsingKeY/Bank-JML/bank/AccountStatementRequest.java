@@ -20,8 +20,8 @@ package bank;
  */
 public class AccountStatementRequest extends Transaction {
 
-    public /*@ pure @*/ AccountStatementRequest (int date) {
-        super ( date );
+    public /*@ pure @*/ AccountStatementRequest(int date) {
+        super(date);
     }
 
     /**
@@ -31,16 +31,15 @@ public class AccountStatementRequest extends Transaction {
      * real account. Note that the statement is requested for the correct date,
      * though this is meaningless because of the implementation of
      * <code>PermanentAccount.requestStatement</code>
-     * 
-     * @param target
-     *            the permanent account on which <code>this</code> transaction
-     *            is supposed to be carried out
+     *
+     * @param target the permanent account on which <code>this</code> transaction
+     *               is supposed to be carried out
      */
-    public void replay (PermanentAccount target) {
-        target.requestStatement ( getDate () );
+    public void replay(PermanentAccount target) {
+        target.requestStatement(getDate());
     }
 
-    public /*@ pure @*/ String toString () {
+    public /*@ pure @*/ String toString() {
         return "" + getDate() + ":AccountStatement";
     }
 }

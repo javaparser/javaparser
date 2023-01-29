@@ -5,8 +5,8 @@ import vm.HardwareObject;
 
 public class HeapAccessor extends HardwareObject {
 
-	public HeapAccessor(int address) {
-		super(new Address32Bit(address));
-	}
+    public HeapAccessor(int address) {
+        super(new Address32Bit(address));
+    }
 
 }

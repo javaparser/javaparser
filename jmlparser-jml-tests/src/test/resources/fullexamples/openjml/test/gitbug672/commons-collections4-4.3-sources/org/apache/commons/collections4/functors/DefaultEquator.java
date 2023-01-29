@@ -23,15 +23,19 @@ import java.io.Serializable;
 /**
  * Default {@link Equator} implementation.
  *
- * @param <T>  the types of object this {@link Equator} can evaluate.
+ * @param <T> the types of object this {@link Equator} can evaluate.
  * @since 4.0
  */
 public class DefaultEquator<T> implements Equator<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 825802648423525485L;
 
-    /** Static instance */
+    /**
+     * Static instance
+     */
     @SuppressWarnings("rawtypes") // the static instance works for all types
     public static final DefaultEquator INSTANCE = new DefaultEquator<>();
 
@@ -43,7 +47,7 @@ public class DefaultEquator<T> implements Equator<T>, Serializable {
     /**
      * Factory returning the typed singleton instance.
      *
-     * @param <T>  the object type
+     * @param <T> the object type
      * @return the singleton instance
      */
     @SuppressWarnings("unchecked") // the static instance works for all types
@@ -70,7 +74,7 @@ public class DefaultEquator<T> implements Equator<T>, Serializable {
      * {@inheritDoc}
      *
      * @return <code>o.hashCode()</code> if <code>o</code> is non-
-     *         <code>null</code>, else {@link #HASHCODE_NULL}.
+     * <code>null</code>, else {@link #HASHCODE_NULL}.
      */
     @Override
     public int hash(final T o) {

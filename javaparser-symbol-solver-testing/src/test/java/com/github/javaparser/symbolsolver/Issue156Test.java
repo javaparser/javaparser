@@ -42,7 +42,7 @@ class Issue156Test extends AbstractResolutionTest {
 
         CompilationUnit cu = parseSample("Issue156");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Issue156");
-          List<MethodCallExpr> methods = clazz.getChildNodes().get(3).getChildNodes().get(1).findAll(MethodCallExpr.class);
+        List<MethodCallExpr> methods = clazz.getChildNodes().get(3).getChildNodes().get(1).findAll(MethodCallExpr.class);
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
 

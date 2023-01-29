@@ -28,19 +28,24 @@ import org.apache.commons.math3.util.Pair;
  * Computes the topographic error histogram.
  * Each bin will contain the number of data for which the first and
  * second best matching units are not adjacent in the map.
+ *
  * @since 3.6
  */
 public class TopographicErrorHistogram implements MapDataVisualization {
-    /** Distance. */
+    /**
+     * Distance.
+     */
     private final DistanceMeasure distance;
-    /** Whether to compute relative bin counts. */
+    /**
+     * Whether to compute relative bin counts.
+     */
     private final boolean relativeCount;
 
     /**
      * @param relativeCount Whether to compute relative bin counts.
-     * If {@code true}, the data count in each bin will be divided by the total
-     * number of samples mapped to the neuron represented by that bin.
-     * @param distance Distance.
+     *                      If {@code true}, the data count in each bin will be divided by the total
+     *                      number of samples mapped to the neuron represented by that bin.
+     * @param distance      Distance.
      */
     public TopographicErrorHistogram(boolean relativeCount,
                                      DistanceMeasure distance) {
@@ -48,7 +53,9 @@ public class TopographicErrorHistogram implements MapDataVisualization {
         this.distance = distance;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double[][] computeImage(NeuronSquareMesh2D map,
                                    Iterable<double[]> data) {
         final int nR = map.getNumberOfRows();

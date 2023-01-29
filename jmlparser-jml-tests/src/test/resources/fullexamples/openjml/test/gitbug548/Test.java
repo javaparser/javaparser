@@ -1,19 +1,19 @@
 //@ non_null_by_default
 public class Test implements IFace {
-    
+
     public void m() {
-        
+
         //@ assert get() == 1;
         //@ assert getd() == 2;
     }
-    
+
 }
 
 interface IFace {
-    
+
     //@ ensures \result == 1;
     //@ model public pure int get();
-    
+
     //@ ensures \result == 2;
     //@ model public pure int getd();
 }

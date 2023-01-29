@@ -8,14 +8,19 @@ public class Interval implements IntSet {
     //@ assignable state;
     //@ ensures lb == l && ub == u;
     public Interval(int l, int u) {
-        lb = l; ub = u; 
+        lb = l;
+        ub = u;
     }
 
     //@ ensures \result == lb;
-    public /*@ pure @*/ int lower() { return lb; }
+    public /*@ pure @*/ int lower() {
+        return lb;
+    }
 
     //@ ensures \result == ub;
-    public /*@ pure @*/ int upper() { return ub; }
+    public /*@ pure @*/ int upper() {
+        return ub;
+    }
 
     //@ also
     //@   ensures \result <==> (lb <= i && i < ub) || (inclusive && i == ub);
@@ -34,7 +39,7 @@ public class Interval implements IntSet {
                 lb = i;
             } else {  //@ assert i >= ub && (!inclusive || i != ub);
                 if (i < Integer.MAX_VALUE) {
-                    ub = i+1;
+                    ub = i + 1;
                 } else {
                     ub = i;
                     inclusive = true;
@@ -50,15 +55,15 @@ public class Interval implements IntSet {
         }
         //@ assert lb <= i && i < ub || (inclusive && i == ub);
         if (lb <= i && i < ub) {
-            if (i-lb > ub-i) {
-                lb = i+1;
+            if (i - lb > ub - i) {
+                lb = i + 1;
             } else {
-                ub = i-1;
+                ub = i - 1;
             }
         } else if (inclusive) {
             //@ assert i == ub && ub == Integer.MAX_VALUE;
-            lb = i-1;
-            ub = i-1;
+            lb = i - 1;
+            ub = i - 1;
             inclusive = false;
         }
         //@ !contains(i);

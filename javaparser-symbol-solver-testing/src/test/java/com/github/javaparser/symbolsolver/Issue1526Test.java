@@ -42,6 +42,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * CompilationUnitContext.solveType(String name, TypeSolver typeSolver) checks package and imports in wrong order.
+ *
  * @see <a href="https://github.com/javaparser/javaparser/issues/1526">https://github.com/javaparser/javaparser/issues/1526</a>
  */
 public class Issue1526Test extends AbstractSymbolResolutionTest {
@@ -82,10 +83,10 @@ public class Issue1526Test extends AbstractSymbolResolutionTest {
         assumeTrue(cu.isSuccessful(), "the file should compile -- errors are expected when attempting to resolve.");
 
         cu.getResult().get().findAll(MethodCallExpr.class)
-            .forEach(methodCallExpr -> {
-                methodCallExpr.resolve();
-                methodCallExpr.calculateResolvedType();
-            });
+                .forEach(methodCallExpr -> {
+                    methodCallExpr.resolve();
+                    methodCallExpr.calculateResolvedType();
+                });
     }
 
 }

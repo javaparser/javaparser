@@ -3,17 +3,17 @@ package com.github.javaparser.ast;
 import java.util.EnumSet;
 
 public enum Modifier {
-	PUBLIC("public"),
+    PUBLIC("public"),
     PROTECTED("protected"),
-	PRIVATE("private"),
+    PRIVATE("private"),
     ABSTRACT("abstract"),
-	STATIC("static"),
-	FINAL("final"),
-    TRANSIENT("transient"), 
+    STATIC("static"),
+    FINAL("final"),
+    TRANSIENT("transient"),
     VOLATILE("volatile"),
-	SYNCHRONIZED("synchronized"),
-	NATIVE("native"),
-	STRICTFP("strictfp");
+    SYNCHRONIZED("synchronized"),
+    NATIVE("native"),
+    STRICTFP("strictfp");
 
     String lib;
 

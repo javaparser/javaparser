@@ -31,10 +31,14 @@ import java.util.Collection;
  */
 abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
 
-    /** Default value for tolerance. */
+    /**
+     * Default value for tolerance.
+     */
     private static final double DEFAULT_TOLERANCE = 1e-10;
 
-    /** Tolerance below which points are considered identical. */
+    /**
+     * Tolerance below which points are considered identical.
+     */
     private final double tolerance;
 
     /**
@@ -49,7 +53,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
      * The default tolerance (1e-10) will be used to determine identical points.
      *
      * @param includeCollinearPoints indicates if collinear points on the hull shall be
-     * added as hull vertices
+     *                               added as hull vertices
      */
     protected AbstractConvexHullGenerator2D(final boolean includeCollinearPoints) {
         this(includeCollinearPoints, DEFAULT_TOLERANCE);
@@ -59,8 +63,8 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
      * Simple constructor.
      *
      * @param includeCollinearPoints indicates if collinear points on the hull shall be
-     * added as hull vertices
-     * @param tolerance tolerance below which points are considered identical
+     *                               added as hull vertices
+     * @param tolerance              tolerance below which points are considered identical
      */
     protected AbstractConvexHullGenerator2D(final boolean includeCollinearPoints, final double tolerance) {
         this.includeCollinearPoints = includeCollinearPoints;
@@ -69,6 +73,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
 
     /**
      * Get the tolerance below which points are considered identical.
+     *
      * @return the tolerance below which points are considered identical
      */
     public double getTolerance() {
@@ -77,6 +82,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
 
     /**
      * Returns if collinear points on the hull will be added as hull vertices.
+     *
      * @return {@code true} if collinear points are added as hull vertices, or {@code false}
      * if only extreme points are present.
      */
@@ -84,7 +90,9 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
         return includeCollinearPoints;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ConvexHull2D generate(final Collection<Vector2D> points)
             throws NullArgumentException, ConvergenceException {
         // check for null points
@@ -99,7 +107,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
 
         try {
             return new ConvexHull2D(hullVertices.toArray(new Vector2D[hullVertices.size()]),
-                                    tolerance);
+                    tolerance);
         } catch (MathIllegalArgumentException e) {
             // the hull vertices may not form a convex hull if the tolerance value is to large
             throw new ConvergenceException();
@@ -108,6 +116,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
 
     /**
      * Find the convex hull vertices from the set of input points.
+     *
      * @param points the set of input points
      * @return the convex hull vertices in CCW winding
      */

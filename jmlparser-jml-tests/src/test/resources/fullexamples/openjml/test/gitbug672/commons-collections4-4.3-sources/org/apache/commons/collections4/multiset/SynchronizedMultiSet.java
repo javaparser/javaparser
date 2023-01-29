@@ -33,14 +33,16 @@ import java.util.Set;
  */
 public class SynchronizedMultiSet<E> extends SynchronizedCollection<E> implements MultiSet<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150629L;
 
     /**
      * Factory method to create a synchronized multiset.
      *
-     * @param <E> the type of the elements in the multiset
-     * @param multiset  the multiset to decorate, must not be null
+     * @param <E>      the type of the elements in the multiset
+     * @param multiset the multiset to decorate, must not be null
      * @return a new synchronized MultiSet
      * @throws NullPointerException if multiset is null
      */
@@ -49,10 +51,11 @@ public class SynchronizedMultiSet<E> extends SynchronizedCollection<E> implement
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param multiset  the multiset to decorate, must not be null
+     * @param multiset the multiset to decorate, must not be null
      * @throws NullPointerException if multiset is null
      */
     protected SynchronizedMultiSet(final MultiSet<E> multiset) {
@@ -62,8 +65,8 @@ public class SynchronizedMultiSet<E> extends SynchronizedCollection<E> implement
     /**
      * Constructor that wraps (not copies).
      *
-     * @param multiset  the multiset to decorate, must not be null
-     * @param lock  the lock to use, must not be null
+     * @param multiset the multiset to decorate, must not be null
+     * @param lock     the lock to use, must not be null
      * @throws NullPointerException if multiset or lock is null
      */
     protected SynchronizedMultiSet(final MultiSet<E> multiset, final Object lock) {
@@ -144,17 +147,21 @@ public class SynchronizedMultiSet<E> extends SynchronizedCollection<E> implement
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Synchronized Set for the MultiSet class.
      */
     static class SynchronizedSet<T> extends SynchronizedCollection<T> implements Set<T> {
-        /** Serialization version */
+        /**
+         * Serialization version
+         */
         private static final long serialVersionUID = 20150629L;
 
         /**
          * Constructor.
+         *
          * @param set  the set to decorate
-         * @param lock  the lock to use, shared with the multiset
+         * @param lock the lock to use, shared with the multiset
          */
         SynchronizedSet(final Set<T> set, final Object lock) {
             super(set, lock);

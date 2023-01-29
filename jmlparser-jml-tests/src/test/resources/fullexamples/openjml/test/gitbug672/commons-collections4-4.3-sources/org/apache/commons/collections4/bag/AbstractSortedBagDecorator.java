@@ -31,11 +31,14 @@ import java.util.Comparator;
 public abstract class AbstractSortedBagDecorator<E>
         extends AbstractBagDecorator<E> implements SortedBag<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -8223473624050467718L;
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
+     *
      * @since 3.1
      */
     protected AbstractSortedBagDecorator() {
@@ -45,7 +48,7 @@ public abstract class AbstractSortedBagDecorator<E>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param bag  the bag to decorate, must not be null
+     * @param bag the bag to decorate, must not be null
      * @throws NullPointerException if bag is null
      */
     protected AbstractSortedBagDecorator(final SortedBag<E> bag) {

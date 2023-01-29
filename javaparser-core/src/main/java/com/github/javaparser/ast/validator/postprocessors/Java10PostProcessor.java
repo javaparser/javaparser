@@ -50,22 +50,18 @@ public class Java10PostProcessor extends PostProcessors {
         @Override
         public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
             result.getResult().ifPresent(node -> {
-                node.findAll(ClassOrInterfaceType.class)
-                        .forEach(n -> {
-                            if (n.getNameAsString().equals("var")
-                                    && !matchForbiddenContext(n)) {
-                                n.replace(new VarType(n.getTokenRange().orElse(null)));
-                            }
-                        });
+                node.findAll(ClassOrInterfaceType.class).forEach(n -> {
+                    if (n.getNameAsString().equals("var") && !matchForbiddenContext(n)) {
+                        n.replace(new VarType(n.getTokenRange().orElse(null)));
+                    }
+                });
             });
         }
 
         private boolean matchForbiddenContext(ClassOrInterfaceType cit) {
-            return cit.getParentNode().isPresent()
-                    && FORBIDEN_PARENT_CONTEXT_TO_DETECT_POTENTIAL_VAR_TYPE.stream().anyMatch(cl -> cl.isInstance(cit.getParentNode().get()));
+            return cit.getParentNode().isPresent() && FORBIDEN_PARENT_CONTEXT_TO_DETECT_POTENTIAL_VAR_TYPE.stream().anyMatch(cl -> cl.isInstance(cit.getParentNode().get()));
         }
     };
-
 
     public Java10PostProcessor() {
         add(varNodeCreator);

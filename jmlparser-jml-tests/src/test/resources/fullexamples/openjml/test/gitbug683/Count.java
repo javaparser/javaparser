@@ -1,6 +1,10 @@
-/** class to demonstrate the need for \num_of in JML. */
-public class Count{
-    /** returns the number of elements in arr[low..k-1] equal to e. */
+/**
+ * class to demonstrate the need for \num_of in JML.
+ */
+public class Count {
+    /**
+     * returns the number of elements in arr[low..k-1] equal to e.
+     */
     /*@
         requires 0 <= low <= k <= high <= arr.length;
         ensures k <= low ==> \result == 0;
@@ -9,13 +13,13 @@ public class Count{
                                + (e == arr[k-1] ? 1 : 0);
         ensures 0 <= \result <= k-low;
     @*/
-    /*@ pure @*/ 
+    /*@ pure @*/
     int counteq(int arr[], int e, int low, int high, int k) {
         if (k <= low) {
             return 0;
         } else {
-            return counteq(arr, e, low, high, k-1)
-                   + (e == arr[k-1] ? 1 : 0);
+            return counteq(arr, e, low, high, k - 1)
+                    + (e == arr[k - 1] ? 1 : 0);
         }
     }
 
@@ -25,7 +29,7 @@ public class Count{
         ensures \result == counteq(arr, e, low, high, high);
         ensures 0 <= \result <= high-low;
     @*/
-    /*@ pure @*/ 
+    /*@ pure @*/
     int count(int arr[], int e, int low, int high) {
         int sum = 0;
         //@ maintaining low <= i <= high;

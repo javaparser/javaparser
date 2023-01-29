@@ -559,18 +559,15 @@ public final class JavaParser {
     }
 
     public ParseResult<ArbitraryNodeContainer> parseJmlClassLevel(Provider content) {
-        return parse(enableJml(
-                GeneratedJavaParser::JmlClassLevelStart), content);
+        return parse(enableJml(GeneratedJavaParser::JmlClassLevelStart), content);
     }
-
 
     public ParseResult<ArbitraryNodeContainer> parseJmlTypeLevel(String content) {
         return parseJmlTypeLevel(provider(content));
     }
 
     public ParseResult<ArbitraryNodeContainer> parseJmlTypeLevel(Provider content) {
-        return parse(enableJml(
-                GeneratedJavaParser::JmlTypeLevelStart), content);
+        return parse(enableJml(GeneratedJavaParser::JmlTypeLevelStart), content);
     }
 
     public ParseResult<ArbitraryNodeContainer> parseJmlModifierLevel(String content) {
@@ -578,10 +575,8 @@ public final class JavaParser {
     }
 
     public ParseResult<ArbitraryNodeContainer> parseJmlModifierLevel(Provider content) {
-        return parse(enableJml(
-                GeneratedJavaParser::JmlModifierLevelStart), content);
+        return parse(enableJml(GeneratedJavaParser::JmlModifierLevelStart), content);
     }
-
 
     public <T extends Expression> ParseResult<T> parseJmlExpression(String content) {
         return parseJmlExpression(provider(content));
@@ -589,9 +584,6 @@ public final class JavaParser {
 
     @SuppressWarnings("unchecked")
     public <T extends Expression> ParseResult<T> parseJmlExpression(Provider content) {
-        return (ParseResult<T>) parse(enableJml(
-                GeneratedJavaParser::ExpressionParseStart), content);
+        return (ParseResult<T>) parse(enableJml(GeneratedJavaParser::ExpressionParseStart), content);
     }
-
-
 }

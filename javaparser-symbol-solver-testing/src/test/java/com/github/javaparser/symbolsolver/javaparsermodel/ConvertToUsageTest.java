@@ -51,7 +51,7 @@ class ConvertToUsageTest extends AbstractResolutionTest {
         assertEquals("java.lang.Class<? super java.lang.Class<? extends java.lang.Class<? super java.lang.Integer>>>", usageDescribe(n, "g"));
     }
 
-    private String usageDescribe(List<NameExpr> n, String name){
+    private String usageDescribe(List<NameExpr> n, String name) {
         return n.stream().filter(x -> x.getNameAsString().equals(name))
                 .map(JavaParserFacade.get(typeSolver)::getType)
                 .map(ResolvedType::describe)

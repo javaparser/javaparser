@@ -10,7 +10,7 @@ public final class Message {
     //@ public invariant 0 <= id && id < Setup.numberOfVoters;
     //@ accessible \inv : this.*, Setup.numberOfVoters, source.id;
 
-    public Message (int id, int ballot) {
+    public Message(int id, int ballot) {
         this.ballot = ballot;
         this.id = id;
     }

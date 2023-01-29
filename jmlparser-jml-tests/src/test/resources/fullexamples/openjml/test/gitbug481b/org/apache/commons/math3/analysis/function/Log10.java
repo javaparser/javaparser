@@ -31,12 +31,16 @@ import org.apache.commons.math3.util.FastMath;
  */
 public class Log10 implements UnivariateDifferentiableFunction, DifferentiableUnivariateFunction {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x) {
         return FastMath.log10(x);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @deprecated as of 3.1, replaced by {@link #value(DerivativeStructure)}
      */
     @Deprecated
@@ -44,7 +48,9 @@ public class Log10 implements UnivariateDifferentiableFunction, DifferentiableUn
         return FunctionUtils.toDifferentiableUnivariateFunction(this).derivative();
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.1
      */
     public DerivativeStructure value(final DerivativeStructure t) {

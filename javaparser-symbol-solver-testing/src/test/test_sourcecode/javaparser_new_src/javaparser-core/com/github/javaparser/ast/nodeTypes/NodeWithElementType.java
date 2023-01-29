@@ -35,7 +35,7 @@ import java.util.List;
  * In most cases, the element type is simply the type.
  * In case of arrays, the element type is the type that is inside the deepest nesting:
  * for int[][][], the element type is int.
- *
+ * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with getElementType/setElementType
  * methods
  */
@@ -57,7 +57,7 @@ public interface NodeWithElementType<T> {
 
     /**
      * Sets this type to this class and try to import it to the {@link CompilationUnit} if needed
-     * 
+     *
      * @param typeClass the type
      * @return this
      */

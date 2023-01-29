@@ -32,30 +32,44 @@ import org.apache.commons.math3.util.FastMath;
  * intended for internal use by the library and is not public. As a consequence of
  * this explicitly limited scope, many methods directly returns references to
  * internal arrays, not copies.</p>
+ *
  * @since 2.0
  */
 class BiDiagonalTransformer {
 
-    /** Householder vectors. */
+    /**
+     * Householder vectors.
+     */
     private final double householderVectors[][];
 
-    /** Main diagonal. */
+    /**
+     * Main diagonal.
+     */
     private final double[] main;
 
-    /** Secondary diagonal. */
+    /**
+     * Secondary diagonal.
+     */
     private final double[] secondary;
 
-    /** Cached value of U. */
+    /**
+     * Cached value of U.
+     */
     private RealMatrix cachedU;
 
-    /** Cached value of B. */
+    /**
+     * Cached value of B.
+     */
     private RealMatrix cachedB;
 
-    /** Cached value of V. */
+    /**
+     * Cached value of V.
+     */
     private RealMatrix cachedV;
 
     /**
      * Build the transformation to bi-diagonal shape of a matrix.
+     *
      * @param matrix the matrix to transform.
      */
     BiDiagonalTransformer(RealMatrix matrix) {
@@ -64,11 +78,11 @@ class BiDiagonalTransformer {
         final int n = matrix.getColumnDimension();
         final int p = FastMath.min(m, n);
         householderVectors = matrix.getData();
-        main      = new double[p];
+        main = new double[p];
         secondary = new double[p - 1];
-        cachedU   = null;
-        cachedB   = null;
-        cachedV   = null;
+        cachedU = null;
+        cachedB = null;
+        cachedV = null;
 
         // transform matrix
         if (m >= n) {
@@ -82,6 +96,7 @@ class BiDiagonalTransformer {
     /**
      * Returns the matrix U of the transform.
      * <p>U is an orthogonal matrix, i.e. its transpose is also its inverse.</p>
+     *
      * @return the U matrix
      */
     public RealMatrix getU() {
@@ -91,7 +106,7 @@ class BiDiagonalTransformer {
             final int m = householderVectors.length;
             final int n = householderVectors[0].length;
             final int p = main.length;
-            final int diagOffset    = (m >= n) ? 0 : 1;
+            final int diagOffset = (m >= n) ? 0 : 1;
             final double[] diagonal = (m >= n) ? main : secondary;
             double[][] ua = new double[m][m];
 
@@ -131,6 +146,7 @@ class BiDiagonalTransformer {
 
     /**
      * Returns the bi-diagonal matrix B of the transform.
+     *
      * @return the B matrix
      */
     public RealMatrix getB() {
@@ -144,11 +160,11 @@ class BiDiagonalTransformer {
                 ba[i][i] = main[i];
                 if (m < n) {
                     if (i > 0) {
-                        ba[i][i-1] = secondary[i - 1];
+                        ba[i][i - 1] = secondary[i - 1];
                     }
                 } else {
                     if (i < main.length - 1) {
-                        ba[i][i+1] = secondary[i];
+                        ba[i][i + 1] = secondary[i];
                     }
                 }
             }
@@ -163,6 +179,7 @@ class BiDiagonalTransformer {
     /**
      * Returns the matrix V of the transform.
      * <p>V is an orthogonal matrix, i.e. its transpose is also its inverse.</p>
+     *
      * @return the V matrix
      */
     public RealMatrix getV() {
@@ -172,7 +189,7 @@ class BiDiagonalTransformer {
             final int m = householderVectors.length;
             final int n = householderVectors[0].length;
             final int p = main.length;
-            final int diagOffset    = (m >= n) ? 1 : 0;
+            final int diagOffset = (m >= n) ? 1 : 0;
             final double[] diagonal = (m >= n) ? secondary : main;
             double[][] va = new double[n][n];
 
@@ -214,6 +231,7 @@ class BiDiagonalTransformer {
      * Get the Householder vectors of the transform.
      * <p>Note that since this class is only intended for internal use,
      * it returns directly a reference to its internal arrays, not a copy.</p>
+     *
      * @return the main diagonal elements of the B matrix
      */
     double[][] getHouseholderVectorsRef() {
@@ -224,6 +242,7 @@ class BiDiagonalTransformer {
      * Get the main diagonal elements of the matrix B of the transform.
      * <p>Note that since this class is only intended for internal use,
      * it returns directly a reference to its internal arrays, not a copy.</p>
+     *
      * @return the main diagonal elements of the B matrix
      */
     double[] getMainDiagonalRef() {
@@ -234,6 +253,7 @@ class BiDiagonalTransformer {
      * Get the secondary diagonal elements of the matrix B of the transform.
      * <p>Note that since this class is only intended for internal use,
      * it returns directly a reference to its internal arrays, not a copy.</p>
+     *
      * @return the secondary diagonal elements of the B matrix
      */
     double[] getSecondaryDiagonalRef() {
@@ -242,10 +262,11 @@ class BiDiagonalTransformer {
 
     /**
      * Check if the matrix is transformed to upper bi-diagonal.
+     *
      * @return true if the matrix is transformed to upper bi-diagonal
      */
     boolean isUpperBiDiagonal() {
-        return householderVectors.length >=  householderVectors[0].length;
+        return householderVectors.length >= householderVectors[0].length;
     }
 
     /**

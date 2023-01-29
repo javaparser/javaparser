@@ -123,7 +123,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                     ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(type));
 
                     ResolvedLambdaConstraintType conType;
-                    if (argType.isWildcard()){
+                    if (argType.isWildcard()) {
                         conType = ResolvedLambdaConstraintType.bound(argType.asWildcard().getBoundedType());
                     } else {
                         conType = ResolvedLambdaConstraintType.bound(argType);

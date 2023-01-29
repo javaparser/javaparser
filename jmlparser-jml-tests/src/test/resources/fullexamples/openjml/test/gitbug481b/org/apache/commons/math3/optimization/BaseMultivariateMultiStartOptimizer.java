@@ -29,50 +29,61 @@ import java.util.Comparator;
 
 /**
  * Base class for all implementations of a multi-start optimizer.
- *
+ * <p>
  * This interface is mainly intended to enforce the internal coherence of
  * Commons-Math. Users of the API are advised to base their code on
  * {@link MultivariateMultiStartOptimizer} or on
  * {@link DifferentiableMultivariateMultiStartOptimizer}.
  *
  * @param <FUNC> Type of the objective function to be optimized.
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class BaseMultivariateMultiStartOptimizer<FUNC extends MultivariateFunction>
-    implements BaseMultivariateOptimizer<FUNC> {
-    /** Underlying classical optimizer. */
+        implements BaseMultivariateOptimizer<FUNC> {
+    /**
+     * Underlying classical optimizer.
+     */
     private final BaseMultivariateOptimizer<FUNC> optimizer;
-    /** Maximal number of evaluations allowed. */
+    /**
+     * Maximal number of evaluations allowed.
+     */
     private int maxEvaluations;
-    /** Number of evaluations already performed for all starts. */
+    /**
+     * Number of evaluations already performed for all starts.
+     */
     private int totalEvaluations;
-    /** Number of starts to go. */
+    /**
+     * Number of starts to go.
+     */
     private int starts;
-    /** Random generator for multi-start. */
+    /**
+     * Random generator for multi-start.
+     */
     private RandomVectorGenerator generator;
-    /** Found optima. */
+    /**
+     * Found optima.
+     */
     private PointValuePair[] optima;
 
     /**
      * Create a multi-start optimizer from a single-start optimizer.
      *
      * @param optimizer Single-start optimizer to wrap.
-     * @param starts Number of starts to perform. If {@code starts == 1},
-     * the {@link #optimize(int,MultivariateFunction,GoalType,double[])
-     * optimize} will return the same solution as {@code optimizer} would.
+     * @param starts    Number of starts to perform. If {@code starts == 1},
+     *                  the {@link #optimize(int, MultivariateFunction, GoalType, double[])
+     *                  optimize} will return the same solution as {@code optimizer} would.
      * @param generator Random vector generator to use for restarts.
-     * @throws NullArgumentException if {@code optimizer} or {@code generator}
-     * is {@code null}.
+     * @throws NullArgumentException        if {@code optimizer} or {@code generator}
+     *                                      is {@code null}.
      * @throws NotStrictlyPositiveException if {@code starts < 1}.
      */
     protected BaseMultivariateMultiStartOptimizer(final BaseMultivariateOptimizer<FUNC> optimizer,
-                                                      final int starts,
-                                                      final RandomVectorGenerator generator) {
+                                                  final int starts,
+                                                  final RandomVectorGenerator generator) {
         if (optimizer == null ||
-            generator == null) {
+                generator == null) {
             throw new NullArgumentException();
         }
         if (starts < 1) {
@@ -86,13 +97,13 @@ public class BaseMultivariateMultiStartOptimizer<FUNC extends MultivariateFuncti
 
     /**
      * Get all the optima found during the last call to {@link
-     * #optimize(int,MultivariateFunction,GoalType,double[]) optimize}.
+     * #optimize(int, MultivariateFunction, GoalType, double[]) optimize}.
      * The optimizer stores all the optima found during a set of
-     * restarts. The {@link #optimize(int,MultivariateFunction,GoalType,double[])
+     * restarts. The {@link #optimize(int, MultivariateFunction, GoalType, double[])
      * optimize} method returns the best point only. This method
      * returns all the points found at the end of each starts,
      * including the best one already returned by the {@link
-     * #optimize(int,MultivariateFunction,GoalType,double[]) optimize} method.
+     * #optimize(int, MultivariateFunction, GoalType, double[]) optimize} method.
      * <br/>
      * The returned array as one element for each start as specified
      * in the constructor. It is ordered with the results from the
@@ -100,15 +111,15 @@ public class BaseMultivariateMultiStartOptimizer<FUNC extends MultivariateFuncti
      * objective value (i.e in ascending order if minimizing and in
      * descending order if maximizing), followed by and null elements
      * corresponding to the runs that did not converge. This means all
-     * elements will be null if the {@link #optimize(int,MultivariateFunction,GoalType,double[])
+     * elements will be null if the {@link #optimize(int, MultivariateFunction, GoalType, double[])
      * optimize} method did throw an exception.
      * This also means that if the first element is not {@code null}, it
      * is the best point found across all starts.
      *
      * @return an array containing the optima.
      * @throws MathIllegalStateException if {@link
-     * #optimize(int,MultivariateFunction,GoalType,double[]) optimize}
-     * has not been called.
+     *                                   #optimize(int, MultivariateFunction, GoalType, double[]) optimize}
+     *                                   has not been called.
      */
     public PointValuePair[] getOptima() {
         if (optima == null) {
@@ -117,17 +128,23 @@ public class BaseMultivariateMultiStartOptimizer<FUNC extends MultivariateFuncti
         return optima.clone();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getMaxEvaluations() {
         return maxEvaluations;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getEvaluations() {
         return totalEvaluations;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ConvergenceChecker<PointValuePair> getConvergenceChecker() {
         return optimizer.getConvergenceChecker();
     }
@@ -136,8 +153,8 @@ public class BaseMultivariateMultiStartOptimizer<FUNC extends MultivariateFuncti
      * {@inheritDoc}
      */
     public PointValuePair optimize(int maxEval, final FUNC f,
-                                       final GoalType goal,
-                                       double[] startPoint) {
+                                   final GoalType goal,
+                                   double[] startPoint) {
         maxEvaluations = maxEval;
         RuntimeException lastException = null;
         optima = new PointValuePair[starts];
@@ -148,7 +165,7 @@ public class BaseMultivariateMultiStartOptimizer<FUNC extends MultivariateFuncti
             // CHECKSTYLE: stop IllegalCatch
             try {
                 optima[i] = optimizer.optimize(maxEval - totalEvaluations, f, goal,
-                                               i == 0 ? startPoint : generator.nextVector());
+                        i == 0 ? startPoint : generator.nextVector());
             } catch (RuntimeException mue) {
                 lastException = mue;
                 optima[i] = null;
@@ -175,19 +192,19 @@ public class BaseMultivariateMultiStartOptimizer<FUNC extends MultivariateFuncti
      */
     private void sortPairs(final GoalType goal) {
         Arrays.sort(optima, new Comparator<PointValuePair>() {
-                /** {@inheritDoc} */
-                public int compare(final PointValuePair o1,
-                                   final PointValuePair o2) {
-                    if (o1 == null) {
-                        return (o2 == null) ? 0 : 1;
-                    } else if (o2 == null) {
-                        return -1;
-                    }
-                    final double v1 = o1.getValue();
-                    final double v2 = o2.getValue();
-                    return (goal == GoalType.MINIMIZE) ?
-                        Double.compare(v1, v2) : Double.compare(v2, v1);
+            /** {@inheritDoc} */
+            public int compare(final PointValuePair o1,
+                               final PointValuePair o2) {
+                if (o1 == null) {
+                    return (o2 == null) ? 0 : 1;
+                } else if (o2 == null) {
+                    return -1;
                 }
-            });
+                final double v1 = o1.getValue();
+                final double v2 = o2.getValue();
+                return (goal == GoalType.MINIMIZE) ?
+                        Double.compare(v1, v2) : Double.compare(v2, v1);
+            }
+        });
     }
 }

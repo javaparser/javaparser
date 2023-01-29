@@ -38,24 +38,41 @@ import org.apache.commons.math3.util.FastMath;
 public class WeibullDistribution extends AbstractRealDistribution {
     /**
      * Default inverse cumulative probability accuracy.
+     *
      * @since 2.1
      */
     public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 8589540077390120676L;
-    /** The shape parameter. */
+    /**
+     * The shape parameter.
+     */
     private final double shape;
-    /** The scale parameter. */
+    /**
+     * The scale parameter.
+     */
     private final double scale;
-    /** Inverse cumulative probability accuracy. */
+    /**
+     * Inverse cumulative probability accuracy.
+     */
     private final double solverAbsoluteAccuracy;
-    /** Cached numerical mean */
+    /**
+     * Cached numerical mean
+     */
     private double numericalMean = Double.NaN;
-    /** Whether or not the numerical mean has been calculated */
+    /**
+     * Whether or not the numerical mean has been calculated
+     */
     private boolean numericalMeanIsCalculated = false;
-    /** Cached numerical variance */
+    /**
+     * Cached numerical variance
+     */
     private double numericalVariance = Double.NaN;
-    /** Whether or not the numerical variance has been calculated */
+    /**
+     * Whether or not the numerical variance has been calculated
+     */
     private boolean numericalVarianceIsCalculated = false;
 
     /**
@@ -70,12 +87,12 @@ public class WeibullDistribution extends AbstractRealDistribution {
      * additional initialisation overhead.
      *
      * @param alpha Shape parameter.
-     * @param beta Scale parameter.
+     * @param beta  Scale parameter.
      * @throws NotStrictlyPositiveException if {@code alpha <= 0} or
-     * {@code beta <= 0}.
+     *                                      {@code beta <= 0}.
      */
     public WeibullDistribution(double alpha, double beta)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(alpha, beta, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -90,13 +107,13 @@ public class WeibullDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param alpha Shape parameter.
-     * @param beta Scale parameter.
+     * @param alpha              Shape parameter.
+     * @param beta               Scale parameter.
      * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates
+     *                           (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NotStrictlyPositiveException if {@code alpha <= 0} or
-     * {@code beta <= 0}.
+     *                                      {@code beta <= 0}.
      * @since 2.1
      */
     public WeibullDistribution(double alpha, double beta,
@@ -107,26 +124,26 @@ public class WeibullDistribution extends AbstractRealDistribution {
     /**
      * Creates a Weibull distribution.
      *
-     * @param rng Random number generator.
+     * @param rng   Random number generator.
      * @param alpha Shape parameter.
-     * @param beta Scale parameter.
+     * @param beta  Scale parameter.
      * @throws NotStrictlyPositiveException if {@code alpha <= 0} or {@code beta <= 0}.
      * @since 3.3
      */
     public WeibullDistribution(RandomGenerator rng, double alpha, double beta)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(rng, alpha, beta, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
     /**
      * Creates a Weibull distribution.
      *
-     * @param rng Random number generator.
-     * @param alpha Shape parameter.
-     * @param beta Scale parameter.
+     * @param rng                Random number generator.
+     * @param alpha              Shape parameter.
+     * @param beta               Scale parameter.
      * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates
+     *                           (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NotStrictlyPositiveException if {@code alpha <= 0} or {@code beta <= 0}.
      * @since 3.1
      */
@@ -134,16 +151,16 @@ public class WeibullDistribution extends AbstractRealDistribution {
                                double alpha,
                                double beta,
                                double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         super(rng);
 
         if (alpha <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.SHAPE,
-                                                   alpha);
+                    alpha);
         }
         if (beta <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.SCALE,
-                                                   beta);
+                    beta);
         }
         scale = beta;
         shape = alpha;
@@ -168,7 +185,9 @@ public class WeibullDistribution extends AbstractRealDistribution {
         return scale;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         if (x < 0) {
             return 0;
@@ -187,7 +206,9 @@ public class WeibullDistribution extends AbstractRealDistribution {
         return (shape / scale) * xscalepow * FastMath.exp(-xscalepowshape);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logDensity(double x) {
         if (x < 0) {
@@ -207,7 +228,9 @@ public class WeibullDistribution extends AbstractRealDistribution {
         return FastMath.log(shape / scale) + logxscalepow - xscalepowshape;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(double x) {
         double ret;
         if (x <= 0.0) {
@@ -220,7 +243,7 @@ public class WeibullDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * Returns {@code 0} when {@code p == 0} and
      * {@code Double.POSITIVE_INFINITY} when {@code p == 1}.
      */
@@ -231,7 +254,7 @@ public class WeibullDistribution extends AbstractRealDistribution {
             throw new OutOfRangeException(p, 0.0, 1.0);
         } else if (p == 0) {
             ret = 0.0;
-        } else  if (p == 1) {
+        } else if (p == 1) {
             ret = Double.POSITIVE_INFINITY;
         } else {
             ret = scale * FastMath.pow(-FastMath.log1p(-p), 1.0 / shape);
@@ -253,7 +276,7 @@ public class WeibullDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The mean is {@code scale * Gamma(1 + (1 / shape))}, where {@code Gamma()}
      * is the Gamma-function.
      */
@@ -279,7 +302,7 @@ public class WeibullDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The variance is {@code scale^2 * Gamma(1 + (2 / shape)) - mean^2}
      * where {@code Gamma()} is the Gamma-function.
      */
@@ -302,12 +325,12 @@ public class WeibullDistribution extends AbstractRealDistribution {
         final double mn = getNumericalMean();
 
         return (sc * sc) * FastMath.exp(Gamma.logGamma(1 + (2 / sh))) -
-               (mn * mn);
+                (mn * mn);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always 0 no matter the parameters.
      *
      * @return lower bound of the support (always 0)
@@ -318,7 +341,7 @@ public class WeibullDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is always positive infinity
      * no matter the parameters.
      *
@@ -329,19 +352,23 @@ public class WeibullDistribution extends AbstractRealDistribution {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}

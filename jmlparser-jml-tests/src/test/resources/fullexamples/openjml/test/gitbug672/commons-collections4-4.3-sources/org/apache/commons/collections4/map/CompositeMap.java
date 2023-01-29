@@ -44,13 +44,19 @@ import java.util.Set;
  */
 public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -6096931280583808322L;
 
-    /** Array of all maps in the composite */
+    /**
+     * Array of all maps in the composite
+     */
     private Map<K, V>[] composite;
 
-    /** Handle mutation operations */
+    /**
+     * Handle mutation operations
+     */
     private MapMutator<K, V> mutator;
 
     /**
@@ -58,38 +64,38 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
      */
     @SuppressWarnings("unchecked")
     public CompositeMap() {
-        this(new Map[] {}, null);
+        this(new Map[]{}, null);
     }
 
     /**
      * Create a new CompositeMap with two composited Map instances.
      *
-     * @param one  the first Map to be composited
-     * @param two  the second Map to be composited
+     * @param one the first Map to be composited
+     * @param two the second Map to be composited
      * @throws IllegalArgumentException if there is a key collision
      */
     @SuppressWarnings("unchecked")
     public CompositeMap(final Map<K, V> one, final Map<K, V> two) {
-        this(new Map[] { one, two }, null);
+        this(new Map[]{one, two}, null);
     }
 
     /**
      * Create a new CompositeMap with two composited Map instances.
      *
-     * @param one  the first Map to be composited
-     * @param two  the second Map to be composited
-     * @param mutator  MapMutator to be used for mutation operations
+     * @param one     the first Map to be composited
+     * @param two     the second Map to be composited
+     * @param mutator MapMutator to be used for mutation operations
      */
     @SuppressWarnings("unchecked")
     public CompositeMap(final Map<K, V> one, final Map<K, V> two, final MapMutator<K, V> mutator) {
-        this(new Map[] { one, two }, mutator);
+        this(new Map[]{one, two}, mutator);
     }
 
     /**
      * Create a new CompositeMap which composites all of the Map instances in the
      * argument. It copies the argument array, it does not use it directly.
      *
-     * @param composite  the Maps to be composited
+     * @param composite the Maps to be composited
      * @throws IllegalArgumentException if there is a key collision
      */
     public CompositeMap(final Map<K, V>... composite) {
@@ -100,8 +106,8 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
      * Create a new CompositeMap which composites all of the Map instances in the
      * argument. It copies the argument array, it does not use it directly.
      *
-     * @param composite  Maps to be composited
-     * @param mutator  MapMutator to be used for mutation operations
+     * @param composite Maps to be composited
+     * @param mutator   MapMutator to be used for mutation operations
      */
     @SuppressWarnings("unchecked")
     public CompositeMap(final Map<K, V>[] composite, final MapMutator<K, V> mutator) {
@@ -113,10 +119,11 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Specify the MapMutator to be used by mutation operations.
      *
-     * @param mutator  the MapMutator to be used for mutation delegation
+     * @param mutator the MapMutator to be used for mutation delegation
      */
     public void setMutator(final MapMutator<K, V> mutator) {
         this.mutator = mutator;
@@ -125,9 +132,9 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
     /**
      * Add an additional Map to the composite.
      *
-     * @param map  the Map to be added to the composite
+     * @param map the Map to be added to the composite
      * @throws IllegalArgumentException if there is a key collision and there is no
-     *         MapMutator set to handle it.
+     *                                  MapMutator set to handle it.
      */
     @SuppressWarnings("unchecked")
     public synchronized void addComposited(final Map<K, V> map) throws IllegalArgumentException {
@@ -149,7 +156,7 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
     /**
      * Remove a Map from the composite.
      *
-     * @param map  the Map to be removed from the composite
+     * @param map the Map to be removed from the composite
      * @return The removed Map or <code>null</code> if map is not in the composite
      */
     @SuppressWarnings("unchecked")
@@ -168,6 +175,7 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Calls <code>clear()</code> on all composited Maps.
      *
@@ -187,14 +195,13 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
      * {@code (key==null ? k==null : key.equals(k))}.  (There can be
      * at most one such mapping.)
      *
-     * @param key  key whose presence in this map is to be tested.
+     * @param key key whose presence in this map is to be tested.
      * @return {@code true} if this map contains a mapping for the specified
-     *         key.
-     *
-     * @throws ClassCastException if the key is of an inappropriate type for
-     *         this map (optional).
+     * key.
+     * @throws ClassCastException   if the key is of an inappropriate type for
+     *                              this map (optional).
      * @throws NullPointerException if the key is {@code null} and this map
-     *            does not not permit {@code null} keys (optional).
+     *                              does not not permit {@code null} keys (optional).
      */
     @Override
     public boolean containsKey(final Object key) {
@@ -216,11 +223,11 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
      *
      * @param value value whose presence in this map is to be tested.
      * @return {@code true} if this map maps one or more keys to the
-     *         specified value.
-     * @throws ClassCastException if the value is of an inappropriate type for
-     *         this map (optional).
+     * specified value.
+     * @throws ClassCastException   if the value is of an inappropriate type for
+     *                              this map (optional).
      * @throws NullPointerException if the value is {@code null} and this map
-     *            does not not permit {@code null} values (optional).
+     *                              does not not permit {@code null} values (optional).
      */
     @Override
     public boolean containsValue(final Object value) {
@@ -246,8 +253,8 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
      * This implementation returns a <code>CompositeSet</code> which
      * composites the entry sets from all of the composited maps.
      *
-     * @see CompositeSet
      * @return a set view of the mappings contained in this map.
+     * @see CompositeSet
      */
     @Override
     public Set<Map.Entry<K, V>> entrySet() {
@@ -273,13 +280,11 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
      *
      * @param key key whose associated value is to be returned.
      * @return the value to which this map maps the specified key, or
-     *         {@code null} if the map contains no mapping for this key.
-     *
-     * @throws ClassCastException if the key is of an inappropriate type for
-     *         this map (optional).
+     * {@code null} if the map contains no mapping for this key.
+     * @throws ClassCastException   if the key is of an inappropriate type for
+     *                              this map (optional).
      * @throws NullPointerException key is {@code null} and this map does not
-     *         not permit {@code null} keys (optional).
-     *
+     *                              not permit {@code null} keys (optional).
      * @see #containsKey(Object)
      */
     @Override
@@ -339,22 +344,21 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
      * if {@link #containsKey(Object) m.containsKey(k)} would return
      * {@code true}.))
      *
-     * @param key key with which the specified value is to be associated.
+     * @param key   key with which the specified value is to be associated.
      * @param value value to be associated with the specified key.
      * @return previous value associated with specified key, or {@code null}
-     *         if there was no mapping for key.  A {@code null} return can
-     *         also indicate that the map previously associated {@code null}
-     *         with the specified key, if the implementation supports
-     *         {@code null} values.
-     *
+     * if there was no mapping for key.  A {@code null} return can
+     * also indicate that the map previously associated {@code null}
+     * with the specified key, if the implementation supports
+     * {@code null} values.
      * @throws UnsupportedOperationException if no MapMutator has been specified
-     * @throws ClassCastException if the class of the specified key or value
-     *            prevents it from being stored in this map.
-     * @throws IllegalArgumentException if some aspect of this key or value
-     *            prevents it from being stored in this map.
-     * @throws NullPointerException this map does not permit {@code null}
-     *            keys or values, and the specified key or value is
-     *            {@code null}.
+     * @throws ClassCastException            if the class of the specified key or value
+     *                                       prevents it from being stored in this map.
+     * @throws IllegalArgumentException      if some aspect of this key or value
+     *                                       prevents it from being stored in this map.
+     * @throws NullPointerException          this map does not permit {@code null}
+     *                                       keys or values, and the specified key or value is
+     *                                       {@code null}.
      */
     @Override
     public V put(final K key, final V value) {
@@ -367,24 +371,21 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
     /**
      * Copies all of the mappings from the specified map to this map
      * (optional operation).  The effect of this call is equivalent to that
-     * of calling {@link #put(Object,Object) put(k, v)} on this map once
+     * of calling {@link #put(Object, Object) put(k, v)} on this map once
      * for each mapping from key {@code k} to value {@code v} in the
      * specified map.  The behavior of this operation is unspecified if the
      * specified map is modified while the operation is in progress.
      *
      * @param map Mappings to be stored in this map.
-     *
      * @throws UnsupportedOperationException if the {@code putAll} method is
-     *         not supported by this map.
-     *
-     * @throws ClassCastException if the class of a key or value in the
-     *         specified map prevents it from being stored in this map.
-     *
-     * @throws IllegalArgumentException some aspect of a key or value in the
-     *         specified map prevents it from being stored in this map.
-     * @throws NullPointerException the specified map is {@code null}, or if
-     *         this map does not permit {@code null} keys or values, and the
-     *         specified map contains {@code null} keys or values.
+     *                                       not supported by this map.
+     * @throws ClassCastException            if the class of a key or value in the
+     *                                       specified map prevents it from being stored in this map.
+     * @throws IllegalArgumentException      some aspect of a key or value in the
+     *                                       specified map prevents it from being stored in this map.
+     * @throws NullPointerException          the specified map is {@code null}, or if
+     *                                       this map does not permit {@code null} keys or values, and the
+     *                                       specified map contains {@code null} keys or values.
      */
     @Override
     public void putAll(final Map<? extends K, ? extends V> map) {
@@ -410,14 +411,13 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
      *
      * @param key key whose mapping is to be removed from the map.
      * @return previous value associated with specified key, or {@code null}
-     *         if there was no mapping for key.
-     *
-     * @throws ClassCastException if the key is of an inappropriate type for
-     *         the composited map (optional).
-     * @throws NullPointerException if the key is {@code null} and the composited map
-     *            does not not permit {@code null} keys (optional).
+     * if there was no mapping for key.
+     * @throws ClassCastException            if the key is of an inappropriate type for
+     *                                       the composited map (optional).
+     * @throws NullPointerException          if the key is {@code null} and the composited map
+     *                                       does not not permit {@code null} keys (optional).
      * @throws UnsupportedOperationException if the {@code remove} method is
-     *         not supported by the composited map containing the key
+     *                                       not supported by the composited map containing the key
      */
     @Override
     public V remove(final Object key) {
@@ -470,7 +470,7 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
     /**
      * Checks if this Map equals another as per the Map specification.
      *
-     * @param obj  the object to compare to
+     * @param obj the object to compare to
      * @return true if the maps are equal
      */
     @Override
@@ -508,56 +508,54 @@ public class CompositeMap<K, V> extends AbstractIterableMap<K, V> implements Ser
          * Called when adding a new Composited Map results in a
          * key collision.
          *
-         * @param composite  the CompositeMap with the collision
+         * @param composite the CompositeMap with the collision
          * @param existing  the Map already in the composite which contains the
-         *        offending key
-         * @param added  the Map being added
-         * @param intersect  the intersection of the keysets of the existing and added maps
+         *                  offending key
+         * @param added     the Map being added
+         * @param intersect the intersection of the keysets of the existing and added maps
          */
         void resolveCollision(CompositeMap<K, V> composite, Map<K, V> existing,
-                Map<K, V> added, Collection<K> intersect);
+                              Map<K, V> added, Collection<K> intersect);
 
         /**
          * Called when the CompositeMap.put() method is invoked.
          *
-         * @param map  the CompositeMap which is being modified
-         * @param composited  array of Maps in the CompositeMap being modified
-         * @param key  key with which the specified value is to be associated.
-         * @param value  value to be associated with the specified key.
+         * @param map        the CompositeMap which is being modified
+         * @param composited array of Maps in the CompositeMap being modified
+         * @param key        key with which the specified value is to be associated.
+         * @param value      value to be associated with the specified key.
          * @return previous value associated with specified key, or {@code null}
-         *         if there was no mapping for key.  A {@code null} return can
-         *         also indicate that the map previously associated {@code null}
-         *         with the specified key, if the implementation supports
-         *         {@code null} values.
-         *
+         * if there was no mapping for key.  A {@code null} return can
+         * also indicate that the map previously associated {@code null}
+         * with the specified key, if the implementation supports
+         * {@code null} values.
          * @throws UnsupportedOperationException if not defined
-         * @throws ClassCastException if the class of the specified key or value
-         *            prevents it from being stored in this map.
-         * @throws IllegalArgumentException if some aspect of this key or value
-         *            prevents it from being stored in this map.
-         * @throws NullPointerException this map does not permit {@code null}
-         *            keys or values, and the specified key or value is
-         *            {@code null}.
+         * @throws ClassCastException            if the class of the specified key or value
+         *                                       prevents it from being stored in this map.
+         * @throws IllegalArgumentException      if some aspect of this key or value
+         *                                       prevents it from being stored in this map.
+         * @throws NullPointerException          this map does not permit {@code null}
+         *                                       keys or values, and the specified key or value is
+         *                                       {@code null}.
          */
         V put(CompositeMap<K, V> map, Map<K, V>[] composited, K key, V value);
 
         /**
          * Called when the CompositeMap.putAll() method is invoked.
          *
-         * @param map  the CompositeMap which is being modified
-         * @param composited  array of Maps in the CompositeMap being modified
-         * @param mapToAdd  Mappings to be stored in this CompositeMap
-         *
+         * @param map        the CompositeMap which is being modified
+         * @param composited array of Maps in the CompositeMap being modified
+         * @param mapToAdd   Mappings to be stored in this CompositeMap
          * @throws UnsupportedOperationException if not defined
-         * @throws ClassCastException if the class of the specified key or value
-         *            prevents it from being stored in this map.
-         * @throws IllegalArgumentException if some aspect of this key or value
-         *            prevents it from being stored in this map.
-         * @throws NullPointerException this map does not permit {@code null}
-         *            keys or values, and the specified key or value is
-         *            {@code null}.
+         * @throws ClassCastException            if the class of the specified key or value
+         *                                       prevents it from being stored in this map.
+         * @throws IllegalArgumentException      if some aspect of this key or value
+         *                                       prevents it from being stored in this map.
+         * @throws NullPointerException          this map does not permit {@code null}
+         *                                       keys or values, and the specified key or value is
+         *                                       {@code null}.
          */
         void putAll(CompositeMap<K, V> map, Map<K, V>[] composited,
-                Map<? extends K, ? extends V> mapToAdd);
+                    Map<? extends K, ? extends V> mapToAdd);
     }
 }

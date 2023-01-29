@@ -2,8 +2,8 @@ package util;
 
 public interface ReferenceIterator {
 
-	public boolean hasNext();
+    public boolean hasNext();
 
-	public int next();
+    public int next();
 
 }

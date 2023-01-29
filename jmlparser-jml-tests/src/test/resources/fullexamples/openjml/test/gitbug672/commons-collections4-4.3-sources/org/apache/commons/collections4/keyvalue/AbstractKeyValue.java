@@ -26,16 +26,20 @@ import org.apache.commons.collections4.KeyValue;
  */
 public abstract class AbstractKeyValue<K, V> implements KeyValue<K, V> {
 
-    /** The key */
+    /**
+     * The key
+     */
     private K key;
-    /** The value */
+    /**
+     * The value
+     */
     private V value;
 
     /**
      * Constructs a new pair with the specified key and given value.
      *
-     * @param key  the key for the entry, may be null
-     * @param value  the value for the entry, may be null
+     * @param key   the key for the entry, may be null
+     * @param value the value for the entry, may be null
      */
     protected AbstractKeyValue(final K key, final V value) {
         super();
@@ -83,10 +87,10 @@ public abstract class AbstractKeyValue<K, V> implements KeyValue<K, V> {
     @Override
     public String toString() {
         return new StringBuilder()
-            .append(getKey())
-            .append('=')
-            .append(getValue())
-            .toString();
+                .append(getKey())
+                .append('=')
+                .append(getValue())
+                .toString();
     }
 
 }

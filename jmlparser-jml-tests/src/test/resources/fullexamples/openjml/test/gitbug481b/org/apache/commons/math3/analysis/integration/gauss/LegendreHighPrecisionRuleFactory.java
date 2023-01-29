@@ -33,13 +33,21 @@ import java.math.MathContext;
  * @since 3.1
  */
 public class LegendreHighPrecisionRuleFactory extends BaseRuleFactory<BigDecimal> {
-    /** Settings for enhanced precision computations. */
+    /**
+     * Settings for enhanced precision computations.
+     */
     private final MathContext mContext;
-    /** The number {@code 2}. */
+    /**
+     * The number {@code 2}.
+     */
     private final BigDecimal two;
-    /** The number {@code -1}. */
+    /**
+     * The number {@code -1}.
+     */
     private final BigDecimal minusOne;
-    /** The number {@code 0.5}. */
+    /**
+     * The number {@code 0.5}.
+     */
     private final BigDecimal oneHalf;
 
     /**
@@ -59,15 +67,17 @@ public class LegendreHighPrecisionRuleFactory extends BaseRuleFactory<BigDecimal
         oneHalf = new BigDecimal("0.5", mContext);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Pair<BigDecimal[], BigDecimal[]> computeRule(int numberOfPoints)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         if (numberOfPoints == 1) {
             // Break recursion.
-            return new Pair<BigDecimal[], BigDecimal[]>(new BigDecimal[] { BigDecimal.ZERO },
-                                                        new BigDecimal[] { two });
+            return new Pair<BigDecimal[], BigDecimal[]>(new BigDecimal[]{BigDecimal.ZERO},
+                    new BigDecimal[]{two});
         }
 
         // Get previous rule.

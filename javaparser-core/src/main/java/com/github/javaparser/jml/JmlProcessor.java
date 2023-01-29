@@ -43,6 +43,7 @@ import java.util.*;
  * @see ParserConfiguration#getJmlKeys()
  */
 public class JmlProcessor extends Processor {
+
     @Override
     public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (configuration.isProcessJml()) {
@@ -51,21 +52,17 @@ public class JmlProcessor extends Processor {
             ArrayList<Node> processedJmlDoc = new ArrayList<>(4096);
             if (r.isPresent() && comments.isPresent()) {
                 for (List<String> activeKeys : configuration.getJmlKeys()) {
-                    final JmlReplaceVisitor v = new JmlReplaceVisitor(configuration,
-                            new TreeSet<>(activeKeys), result.getProblems());
+                    final JmlReplaceVisitor v = new JmlReplaceVisitor(configuration, new TreeSet<>(activeKeys), result.getProblems());
                     r.get().accept(v, null);
                     processedJmlDoc.addAll(v.processedJmlDoc);
                 }
             }
-
             if (!configuration.isKeepJmlDocs()) {
                 for (Node jmlDocContainer : processedJmlDoc) {
                     jmlDocContainer.remove();
                 }
-
                 //JmlDocHardRemover remover = new JmlDocHardRemover();
                 //remover.postProcess(result, configuration);
-
                 JmlWarnRemaingJmlDoc warn = new JmlWarnRemaingJmlDoc();
                 warn.postProcess(result, configuration);
             }
@@ -73,9 +70,13 @@ public class JmlProcessor extends Processor {
     }
 
     private static class JmlReplaceVisitor extends ModifierVisitor<Void> {
+
         final ProblemReporter reporter;
+
         final JmlDocSanitizer sanitizer;
+
         final JavaParser javaParser;
+
         private final List<Problem> problems;
 
         private final List<Node> processedJmlDoc = new ArrayList<>(4096);
@@ -107,8 +108,7 @@ public class JmlProcessor extends Processor {
             if (result != null) {
                 for (Node child : result.getChildren()) {
                     if (child instanceof NodeWithJmlTags) {
-                        ((NodeWithJmlTags) child).setJmlTags(
-                                (NodeList<SimpleName>) enabledKeys.accept(new CloneVisitor(), null));
+                        ((NodeWithJmlTags) child).setJmlTags((NodeList<SimpleName>) enabledKeys.accept(new CloneVisitor(), null));
                     }
                 }
             }
@@ -145,7 +145,6 @@ public class JmlProcessor extends Processor {
                 NodeList<BodyDeclaration<?>> members = parent.getMembers();
                 int pos = members.indexOf(n);
                 assert pos >= 0;
-
                 if (pos + 1 >= members.size()) {
                     //JML Documentation is last element, therefore it can only refer to upper element.
                     for (Node child : t.getChildren()) {
@@ -169,8 +168,7 @@ public class JmlProcessor extends Processor {
                         } else if (child instanceof JmlContract) {
                             ((NodeWithContracts<?>) next).addContracts((JmlContract) child);
                         } else {
-                            reporter.report(child, "JML construct " + child.getClass().getSimpleName()
-                                    + " not supported at this position.");
+                            reporter.report(child, "JML construct " + child.getClass().getSimpleName() + " not supported at this position.");
                         }
                     }
                 }
@@ -220,53 +218,43 @@ public class JmlProcessor extends Processor {
         private int handleJmlStatementLevel(BlockStmt p, JmlDocStmt n, int pos) {
             processedJmlDoc.add(n);
             ArbitraryNodeContainer t = parseJmlMethodLevel(n.getJmlComments());
-
             if (t == null) {
                 String s = sanitizer.asString(n.getJmlComments());
                 reporter.report(n, "Could not handle the JML comment.\n---\n" + s + "\n---\n");
                 return pos;
             }
             setJmlTags(t);
-
             pos = pos + 1;
-
             // possible the next statement after the given comment
-            @Nullable Statement nextStatement = pos < p.getStatements().size() ? p.getStatement(pos) : null;
-
+            @Nullable
+            Statement nextStatement = pos < p.getStatements().size() ? p.getStatement(pos) : null;
             //ignore LabeledStatements
             if (nextStatement != null) {
                 while (nextStatement.isLabeledStmt()) nextStatement = nextStatement.asLabeledStmt().getStatement();
             }
-
-
             // Positon to insert new statements
             int insertPosition = pos;
-
             for (Node child : t.getChildren()) {
                 if (child instanceof JmlStatement) {
                     p.getStatements().add(insertPosition++, (JmlStatement) child);
                 } else if (child instanceof Modifier) {
                     if (nextStatement == null) {
-                        reporter.report(child, "You passed a modifier but there is following " +
-                                "statement to carry it.");
+                        reporter.report(child, "You passed a modifier but there is following " + "statement to carry it.");
                     } else {
                         try {
                             ((NodeWithModifiers<?>) nextStatement).getModifiers().add((Modifier) child);
                         } catch (ClassCastException e) {
-                            reporter.report(nextStatement, "You passed a JML modifier but the following " +
-                                    "statement is not able to carry modifiers. " + nextStatement.getMetaModel().getTypeName());
+                            reporter.report(nextStatement, "You passed a JML modifier but the following " + "statement is not able to carry modifiers. " + nextStatement.getMetaModel().getTypeName());
                         }
                     }
                 } else if (child instanceof JmlContract) {
                     if (nextStatement == null) {
-                        reporter.report(child, "You passed a contract but there is following " +
-                                "statement to carry it.");
+                        reporter.report(child, "You passed a contract but there is following " + "statement to carry it.");
                     } else {
                         try {
                             ((NodeWithContracts<?>) nextStatement).addContracts((JmlContract) child);
                         } catch (ClassCastException e) {
-                            reporter.report(nextStatement, "You passed a JML contract but the following " +
-                                    "statement is not able to carry contract. " + nextStatement.getMetaModel().getTypeName());
+                            reporter.report(nextStatement, "You passed a JML contract but the following " + "statement is not able to carry contract. " + nextStatement.getMetaModel().getTypeName());
                         }
                     }
                 } else {
@@ -275,7 +263,6 @@ public class JmlProcessor extends Processor {
             }
             return insertPosition - 1;
         }
-
 
         @Override
         public Visitable visit(Modifier n, Void arg) {
@@ -293,9 +280,9 @@ public class JmlProcessor extends Processor {
                 processedJmlDoc.add(n);
                 NodeWithModifiers<?> parent = (NodeWithModifiers<?>) n.getParentNode().get();
                 ArbitraryNodeContainer t = parseJmlModifierLevel(doc.getJmlComments());
-                if (t == null) return;
+                if (t == null)
+                    return;
                 setJmlTags(t);
-
                 for (Node child : t.getChildren()) {
                     if (child instanceof Modifier) {
                         parent.getModifiers().add((Modifier) child);

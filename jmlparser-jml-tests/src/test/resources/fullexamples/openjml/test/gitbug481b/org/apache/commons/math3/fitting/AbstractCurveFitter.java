@@ -69,6 +69,7 @@ public abstract class AbstractCurveFitter {
      * The default implementation uses a {@link LevenbergMarquardtOptimizer
      * Levenberg-Marquardt} optimizer.
      * </p>
+     *
      * @return the optimizer to use for fitting the curve to the
      * given {@code points}.
      */
@@ -89,13 +90,17 @@ public abstract class AbstractCurveFitter {
      * Vector function for computing function theoretical values.
      */
     protected static class TheoreticalValuesFunction {
-        /** Function to fit. */
+        /**
+         * Function to fit.
+         */
         private final ParametricUnivariateFunction f;
-        /** Observations. */
+        /**
+         * Observations.
+         */
         private final double[] points;
 
         /**
-         * @param f function to fit.
+         * @param f            function to fit.
          * @param observations Observations.
          */
         public TheoreticalValuesFunction(final ParametricUnivariateFunction f,

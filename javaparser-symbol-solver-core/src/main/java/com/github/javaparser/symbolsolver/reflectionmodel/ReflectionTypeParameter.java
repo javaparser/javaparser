@@ -109,7 +109,7 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
             return ((ResolvedMethodLikeDeclaration) container).getQualifiedSignature();
         }
     }
-    
+
     @Override
     public ResolvedTypeParametrizable getContainer() {
         return this.container;
@@ -134,7 +134,7 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
         }
         return Optional.empty();
     }
-    
+
     @Override
     public ResolvedReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());

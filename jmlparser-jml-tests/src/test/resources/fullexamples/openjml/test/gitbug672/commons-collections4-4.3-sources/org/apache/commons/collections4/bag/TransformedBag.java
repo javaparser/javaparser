@@ -38,7 +38,9 @@ import java.util.Set;
  */
 public class TransformedBag<E> extends TransformedCollection<E> implements Bag<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 5421170911299074185L;
 
     /**
@@ -47,9 +49,9 @@ public class TransformedBag<E> extends TransformedCollection<E> implements Bag<E
      * If there are any elements already in the bag being decorated, they
      * are NOT transformed. Contrast this with {@link #transformedBag(Bag, Transformer)}.
      *
-     * @param <E> the type of the elements in the bag
-     * @param bag  the bag to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the type of the elements in the bag
+     * @param bag         the bag to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed Bag
      * @throws NullPointerException if bag or transformer is null
      * @since 4.0
@@ -66,9 +68,9 @@ public class TransformedBag<E> extends TransformedCollection<E> implements Bag<E
      * will be transformed by this method.
      * Contrast this with {@link #transformingBag(Bag, Transformer)}.
      *
-     * @param <E> the type of the elements in the bag
-     * @param bag  the bag to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the type of the elements in the bag
+     * @param bag         the bag to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed Bag
      * @throws NullPointerException if bag or transformer is null
      * @since 4.0
@@ -87,14 +89,15 @@ public class TransformedBag<E> extends TransformedCollection<E> implements Bag<E
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the bag being decorated, they
      * are NOT transformed.
      *
-     * @param bag  the bag to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param bag         the bag to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @throws NullPointerException if bag or transformer is null
      */
     protected TransformedBag(final Bag<E> bag, final Transformer<? super E, ? extends E> transformer) {

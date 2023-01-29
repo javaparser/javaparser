@@ -28,10 +28,14 @@ import java.io.Serializable;
  */
 public final class ExceptionClosure<E> implements Closure<E>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 7179106032121985545L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes") // the static instance works for all types
     public static final Closure INSTANCE = new ExceptionClosure<>();
 
@@ -57,7 +61,7 @@ public final class ExceptionClosure<E> implements Closure<E>, Serializable {
     /**
      * Always throw an exception.
      *
-     * @param input  the input object
+     * @param input the input object
      * @throws FunctorException always
      */
     @Override

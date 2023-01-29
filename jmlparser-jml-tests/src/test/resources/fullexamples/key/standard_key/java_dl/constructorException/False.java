@@ -12,6 +12,7 @@ class False {
      @ diverges true;
    */
 
-   /* @ helper */
-   False () {}
+    /* @ helper */
+    False() {
+    }
 }

@@ -27,17 +27,22 @@ import org.apache.commons.math3.exception.NumberIsTooSmallException;
  * <em>It is not a "user" class.</em>
  *
  * @param <PAIR> Type of the point/value pair returned by the optimization
- * algorithm.
- *
+ *               algorithm.
  * @since 3.1
  */
 public abstract class BaseMultivariateOptimizer<PAIR>
-    extends BaseOptimizer<PAIR> {
-    /** Initial guess. */
+        extends BaseOptimizer<PAIR> {
+    /**
+     * Initial guess.
+     */
     private double[] start;
-    /** Lower bounds. */
+    /**
+     * Lower bounds.
+     */
     private double[] lowerBound;
-    /** Upper bounds. */
+    /**
+     * Upper bounds.
+     */
     private double[] upperBound;
 
     /**
@@ -51,12 +56,12 @@ public abstract class BaseMultivariateOptimizer<PAIR>
      * {@inheritDoc}
      *
      * @param optData Optimization data. In addition to those documented in
-     * {@link BaseOptimizer#parseOptimizationData(OptimizationData[]) BaseOptimizer},
-     * this method will register the following data:
-     * <ul>
-     *  <li>{@link InitialGuess}</li>
-     *  <li>{@link SimpleBounds}</li>
-     * </ul>
+     *                {@link BaseOptimizer#parseOptimizationData(OptimizationData[]) BaseOptimizer},
+     *                this method will register the following data:
+     *                <ul>
+     *                 <li>{@link InitialGuess}</li>
+     *                 <li>{@link SimpleBounds}</li>
+     *                </ul>
      * @return {@inheritDoc}
      */
     @Override
@@ -70,10 +75,10 @@ public abstract class BaseMultivariateOptimizer<PAIR>
      * characterize the problem.
      *
      * @param optData Optimization data. The following data will be looked for:
-     * <ul>
-     *  <li>{@link InitialGuess}</li>
-     *  <li>{@link SimpleBounds}</li>
-     * </ul>
+     *                <ul>
+     *                 <li>{@link InitialGuess}</li>
+     *                 <li>{@link SimpleBounds}</li>
+     *                </ul>
      */
     @Override
     protected void parseOptimizationData(OptimizationData... optData) {
@@ -107,12 +112,14 @@ public abstract class BaseMultivariateOptimizer<PAIR>
     public double[] getStartPoint() {
         return start == null ? null : start.clone();
     }
+
     /**
      * @return the lower bounds, or {@code null} if not set.
      */
     public double[] getLowerBound() {
         return lowerBound == null ? null : lowerBound.clone();
     }
+
     /**
      * @return the upper bounds, or {@code null} if not set.
      */

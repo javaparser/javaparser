@@ -30,7 +30,7 @@ import org.apache.commons.math3.util.MathArrays;
  */
 @Deprecated
 public class TricubicSplineInterpolator
-    implements TrivariateGridInterpolator {
+        implements TrivariateGridInterpolator {
     /**
      * {@inheritDoc}
      */
@@ -38,8 +38,8 @@ public class TricubicSplineInterpolator
                                                            final double[] yval,
                                                            final double[] zval,
                                                            final double[][][] fval)
-        throws NoDataException, NumberIsTooSmallException,
-               DimensionMismatchException, NonMonotonicSequenceException {
+            throws NoDataException, NumberIsTooSmallException,
+            DimensionMismatchException, NonMonotonicSequenceException {
         if (xval.length == 0 || yval.length == 0 || zval.length == 0 || fval.length == 0) {
             throw new NoDataException();
         }
@@ -82,21 +82,21 @@ public class TricubicSplineInterpolator
 
         // For each line x[i] (0 <= i < xLen), construct a 2D spline in y and z
         final BicubicSplineInterpolatingFunction[] xSplineYZ
-            = new BicubicSplineInterpolatingFunction[xLen];
+                = new BicubicSplineInterpolatingFunction[xLen];
         for (int i = 0; i < xLen; i++) {
             xSplineYZ[i] = bsi.interpolate(yval, zval, fval[i]);
         }
 
         // For each line y[j] (0 <= j < yLen), construct a 2D spline in z and x
         final BicubicSplineInterpolatingFunction[] ySplineZX
-            = new BicubicSplineInterpolatingFunction[yLen];
+                = new BicubicSplineInterpolatingFunction[yLen];
         for (int j = 0; j < yLen; j++) {
             ySplineZX[j] = bsi.interpolate(zval, xval, fvalZX[j]);
         }
 
         // For each line z[k] (0 <= k < zLen), construct a 2D spline in x and y
         final BicubicSplineInterpolatingFunction[] zSplineXY
-            = new BicubicSplineInterpolatingFunction[zLen];
+                = new BicubicSplineInterpolatingFunction[zLen];
         for (int k = 0; k < zLen; k++) {
             zSplineXY[k] = bsi.interpolate(xval, yval, fvalXY[k]);
         }
@@ -148,7 +148,7 @@ public class TricubicSplineInterpolator
 
         // Third partial cross-derivatives
         final double[][][] d3FdXdYdZ = new double[xLen][yLen][zLen];
-        for (int i = 0; i < xLen ; i++) {
+        for (int i = 0; i < xLen; i++) {
             final int nI = nextIndex(i, xLen);
             final int pI = previousIndex(i);
             for (int j = 0; j < yLen; j++) {
@@ -160,26 +160,26 @@ public class TricubicSplineInterpolator
 
                     // XXX Not sure about this formula
                     d3FdXdYdZ[i][j][k] = (fval[nI][nJ][nK] - fval[nI][pJ][nK] -
-                                          fval[pI][nJ][nK] + fval[pI][pJ][nK] -
-                                          fval[nI][nJ][pK] + fval[nI][pJ][pK] +
-                                          fval[pI][nJ][pK] - fval[pI][pJ][pK]) /
-                        ((xval[nI] - xval[pI]) * (yval[nJ] - yval[pJ]) * (zval[nK] - zval[pK])) ;
+                            fval[pI][nJ][nK] + fval[pI][pJ][nK] -
+                            fval[nI][nJ][pK] + fval[nI][pJ][pK] +
+                            fval[pI][nJ][pK] - fval[pI][pJ][pK]) /
+                            ((xval[nI] - xval[pI]) * (yval[nJ] - yval[pJ]) * (zval[nK] - zval[pK]));
                 }
             }
         }
 
         // Create the interpolating splines
         return new TricubicSplineInterpolatingFunction(xval, yval, zval, fval,
-                                                       dFdX, dFdY, dFdZ,
-                                                       d2FdXdY, d2FdZdX, d2FdYdZ,
-                                                       d3FdXdYdZ);
+                dFdX, dFdY, dFdZ,
+                d2FdXdY, d2FdZdX, d2FdYdZ,
+                d3FdXdYdZ);
     }
 
     /**
      * Compute the next index of an array, clipping if necessary.
      * It is assumed (but not checked) that {@code i} is larger than or equal to 0.
      *
-     * @param i Index
+     * @param i   Index
      * @param max Upper limit of the array
      * @return the next index
      */
@@ -187,6 +187,7 @@ public class TricubicSplineInterpolator
         final int index = i + 1;
         return index < max ? index : index - 1;
     }
+
     /**
      * Compute the previous index of an array, clipping if necessary.
      * It is assumed (but not checked) that {@code i} is smaller than the size of the array.

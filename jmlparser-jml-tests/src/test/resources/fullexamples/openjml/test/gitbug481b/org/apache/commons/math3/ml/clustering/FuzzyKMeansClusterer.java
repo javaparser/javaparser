@@ -67,31 +67,49 @@ import java.util.List;
  */
 public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
-    /** The default value for the convergence criteria. */
+    /**
+     * The default value for the convergence criteria.
+     */
     private static final double DEFAULT_EPSILON = 1e-3;
 
-    /** The number of clusters. */
+    /**
+     * The number of clusters.
+     */
     private final int k;
 
-    /** The maximum number of iterations. */
+    /**
+     * The maximum number of iterations.
+     */
     private final int maxIterations;
 
-    /** The fuzziness factor. */
+    /**
+     * The fuzziness factor.
+     */
     private final double fuzziness;
 
-    /** The convergence criteria. */
+    /**
+     * The convergence criteria.
+     */
     private final double epsilon;
 
-    /** Random generator for choosing initial centers. */
+    /**
+     * Random generator for choosing initial centers.
+     */
     private final RandomGenerator random;
 
-    /** The membership matrix. */
+    /**
+     * The membership matrix.
+     */
     private double[][] membershipMatrix;
 
-    /** The list of points used in the last call to {@link #cluster(Collection)}. */
+    /**
+     * The list of points used in the last call to {@link #cluster(Collection)}.
+     */
     private List<T> points;
 
-    /** The list of clusters resulting from the last call to {@link #cluster(Collection)}. */
+    /**
+     * The list of clusters resulting from the last call to {@link #cluster(Collection)}.
+     */
     private List<CentroidCluster<T>> clusters;
 
     /**
@@ -99,7 +117,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      * <p>
      * The euclidean distance will be used as default distance measure.
      *
-     * @param k the number of clusters to split the data into
+     * @param k         the number of clusters to split the data into
      * @param fuzziness the fuzziness factor, must be &gt; 1.0
      * @throws NumberIsTooSmallException if {@code fuzziness <= 1.0}
      */
@@ -110,11 +128,11 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
     /**
      * Creates a new instance of a FuzzyKMeansClusterer.
      *
-     * @param k the number of clusters to split the data into
-     * @param fuzziness the fuzziness factor, must be &gt; 1.0
+     * @param k             the number of clusters to split the data into
+     * @param fuzziness     the fuzziness factor, must be &gt; 1.0
      * @param maxIterations the maximum number of iterations to run the algorithm for.
-     *   If negative, no maximum will be used.
-     * @param measure the distance measure to use
+     *                      If negative, no maximum will be used.
+     * @param measure       the distance measure to use
      * @throws NumberIsTooSmallException if {@code fuzziness <= 1.0}
      */
     public FuzzyKMeansClusterer(final int k, final double fuzziness,
@@ -126,13 +144,13 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
     /**
      * Creates a new instance of a FuzzyKMeansClusterer.
      *
-     * @param k the number of clusters to split the data into
-     * @param fuzziness the fuzziness factor, must be &gt; 1.0
+     * @param k             the number of clusters to split the data into
+     * @param fuzziness     the fuzziness factor, must be &gt; 1.0
      * @param maxIterations the maximum number of iterations to run the algorithm for.
-     *   If negative, no maximum will be used.
-     * @param measure the distance measure to use
-     * @param epsilon the convergence criteria (default is 1e-3)
-     * @param random random generator to use for choosing initial centers
+     *                      If negative, no maximum will be used.
+     * @param measure       the distance measure to use
+     * @param epsilon       the convergence criteria (default is 1e-3)
+     * @param random        random generator to use for choosing initial centers
      * @throws NumberIsTooSmallException if {@code fuzziness <= 1.0}
      */
     public FuzzyKMeansClusterer(final int k, final double fuzziness,
@@ -158,6 +176,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Return the number of clusters this instance will use.
+     *
      * @return the number of clusters
      */
     public int getK() {
@@ -166,6 +185,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Returns the fuzziness factor used by this instance.
+     *
      * @return the fuzziness factor
      */
     public double getFuzziness() {
@@ -174,6 +194,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Returns the maximum number of iterations this instance will use.
+     *
      * @return the maximum number of iterations, or -1 if no maximum is set
      */
     public int getMaxIterations() {
@@ -182,6 +203,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Returns the convergence criteria used by this instance.
+     *
      * @return the convergence criteria
      */
     public double getEpsilon() {
@@ -190,6 +212,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Returns the random generator this instance will use.
+     *
      * @return the random generator
      */
     public RandomGenerator getRandomGenerator() {
@@ -216,8 +239,9 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
     /**
      * Returns an unmodifiable list of the data points used in the last
      * call to {@link #cluster(Collection)}.
+     *
      * @return the list of data points, or {@code null} if {@link #cluster(Collection)} has
-     *   not been called before.
+     * not been called before.
      */
     public List<T> getDataPoints() {
         return points;
@@ -225,8 +249,9 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Returns the list of clusters resulting from the last call to {@link #cluster(Collection)}.
+     *
      * @return the list of clusters, or {@code null} if {@link #cluster(Collection)} has
-     *   not been called before.
+     * not been called before.
      */
     public List<CentroidCluster<T>> getClusters() {
         return clusters;
@@ -234,6 +259,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Get the value of the objective function.
+     *
      * @return the objective function evaluation as double value
      * @throws MathIllegalStateException if {@link #cluster(Collection)} has not been called before
      */
@@ -262,7 +288,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      * @param dataPoints the points to cluster
      * @return the list of clusters
      * @throws MathIllegalArgumentException if the data points are null or the number
-     *     of clusters is larger than the number of data points
+     *                                      of clusters is larger than the number of data points
      */
     @Override
     public List<CentroidCluster<T>> cluster(final Collection<T> dataPoints)

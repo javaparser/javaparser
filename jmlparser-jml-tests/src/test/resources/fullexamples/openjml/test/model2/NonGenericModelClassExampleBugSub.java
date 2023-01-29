@@ -7,7 +7,8 @@ public class NonGenericModelClassExampleBugSub extends NonGenericModelClassExamp
           public boolean foo() { return false; }
      }
 @*/
-    
-    protected NonGenericModelClassExampleBugSub() {}
+
+    protected NonGenericModelClassExampleBugSub() {
+    }
 
 }

@@ -11,8 +11,8 @@ package vacid0.redblacktree;
  * This is an implementation without null references;
  * instead, the parent of the root and the children of leaves is the special node <code>NIL</code>
  * (called the &quot;sentinel&quot; in Cormen et al.).
- * @author bruns
  *
+ * @author bruns
  */
 public class Node {
 
@@ -28,7 +28,7 @@ public class Node {
     boolean isRed;
     int key;
     int value;
-    
+
     //@ protected ghost int height;
 
     Node parent, left, right;
@@ -61,7 +61,7 @@ public class Node {
       @     && \invariant_for(this);
       @ accessible redBlackInvariant : treeFootprint \measured_by height;
       @*/
-    
+
 
     // `low-level' invariants
     /*@ invariant parent == NIL || parent.left == this || parent.right == this;
@@ -80,7 +80,7 @@ public class Node {
       @ ensures \fresh(footprint);
       @*/
     //@pure
-    Node (int key, int value){
+    Node(int key, int value) {
         parent = NIL;
         left = NIL;
         right = NIL;
@@ -89,48 +89,52 @@ public class Node {
         this.value = value;
     }
 
-    private Node (){}
-    
-    
+    private Node() {
+    }
+
+
     // Standard method implementations (not relevant for verification)
-    
-    /** Nodes are considered equal if they denote the same mapping */
-    public boolean equals (Object o){
+
+    /**
+     * Nodes are considered equal if they denote the same mapping
+     */
+    public boolean equals(Object o) {
         try {
-            Node n = (Node)o;
-            if (this == NIL){
+            Node n = (Node) o;
+            if (this == NIL) {
                 return (n == NIL);
             } else
-            return (n!= NIL && n.key == this.key && n.value == this.value);
+                return (n != NIL && n.key == this.key && n.value == this.value);
         } catch (Exception e) {
             return false;
         }
     }
-    
-    /** Queries whether the subtrees induced by the nodes are equal.
+
+    /**
+     * Queries whether the subtrees induced by the nodes are equal.
      * Stronger condition that <code>equals()</code>.
      */
-    public boolean equalSubtree (Node n){
+    public boolean equalSubtree(Node n) {
         if (this == NIL) return n == NIL;
         return equals(n) && left.equalSubtree(n.left) && right.equalSubtree(n.right);
     }
-   
-    public String toString(){
+
+    public String toString() {
         if (isRed)
-            return "("+key+"->"+value+")";
+            return "(" + key + "->" + value + ")";
         else
-            return "["+key+"->"+value+"]";
+            return "[" + key + "->" + value + "]";
     }
-    
-    String subtreeToString(int indent){
-        String sb = this.toString()+" ";
+
+    String subtreeToString(int indent) {
+        String sb = this.toString() + " ";
         int i = sb.length();
-        sb = sb + right.subtreeToString(i+indent);
-        sb = sb + spaces(i+indent);
-        sb = sb + left.subtreeToString(i+indent);
+        sb = sb + right.subtreeToString(i + indent);
+        sb = sb + spaces(i + indent);
+        sb = sb + left.subtreeToString(i + indent);
         return sb;
     }
-    
+
 
     private static String spaces(int i) {
         String sb = "";
@@ -140,9 +144,10 @@ public class Node {
     }
 
 
-
-    /** Special node for leaves that represent an empty data set.
+    /**
+     * Special node for leaves that represent an empty data set.
      * NIL is always black.
+     *
      * @author bruns
      */
     public final static /*@ pure @*/ class Nil extends Node {
@@ -162,20 +167,22 @@ public class Node {
           @ invariant parent == Node.NIL && left == Node.NIL && right == Node.NIL;
           @ invariant !isRed;
           @*/
-        
+
         //@ helper
-        private Nil(){
+        private Nil() {
             //@ set height = 0;
             parent = this;
             left = this;
             right = this;
-            isRed= false;
+            isRed = false;
         }
-        public String toString(){
+
+        public String toString() {
             return "[NIL]";
         }
-        String subtreeToString(int indent){
-            return toString()+"\n";
+
+        String subtreeToString(int indent) {
+            return toString() + "\n";
         }
     }
 

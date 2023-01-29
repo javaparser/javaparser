@@ -29,17 +29,22 @@ import org.apache.commons.math3.util.MathUtils;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Logistic_distribution">Logistic Distribution (Wikipedia)</a>
  * @see <a href="http://mathworld.wolfram.com/LogisticDistribution.html">Logistic Distribution (Mathworld)</a>
- *
  * @since 3.4
  */
 public class LogisticDistribution extends AbstractRealDistribution {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20141003;
 
-    /** The location parameter. */
+    /**
+     * The location parameter.
+     */
     private final double mu;
-    /** The scale parameter. */
+    /**
+     * The scale parameter.
+     */
     private final double s;
 
     /**
@@ -53,7 +58,7 @@ public class LogisticDistribution extends AbstractRealDistribution {
      * additional initialisation overhead.
      *
      * @param mu location parameter
-     * @param s scale parameter (must be positive)
+     * @param s  scale parameter (must be positive)
      * @throws NotStrictlyPositiveException if {@code beta <= 0}
      */
     public LogisticDistribution(double mu, double s) {
@@ -64,8 +69,8 @@ public class LogisticDistribution extends AbstractRealDistribution {
      * Build a new instance.
      *
      * @param rng Random number generator
-     * @param mu location parameter
-     * @param s scale parameter (must be positive)
+     * @param mu  location parameter
+     * @param s   scale parameter (must be positive)
      * @throws NotStrictlyPositiveException if {@code beta <= 0}
      */
     public LogisticDistribution(RandomGenerator rng, double mu, double s) {
@@ -97,20 +102,26 @@ public class LogisticDistribution extends AbstractRealDistribution {
         return s;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         double z = (x - mu) / s;
         double v = FastMath.exp(-z);
         return 1 / s * v / ((1.0 + v) * (1.0 + v));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(double x) {
         double z = 1 / s * (x - mu);
         return 1.0 / (1.0 + FastMath.exp(-z));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p) throws OutOfRangeException {
         if (p < 0.0 || p > 1.0) {
@@ -123,37 +134,51 @@ public class LogisticDistribution extends AbstractRealDistribution {
         return s * Math.log(p / (1.0 - p)) + mu;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNumericalMean() {
         return mu;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getNumericalVariance() {
         return (MathUtils.PI_SQUARED / 3.0) * (1.0 / (s * s));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getSupportLowerBound() {
         return Double.NEGATIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getSupportUpperBound() {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportConnected() {
         return true;
     }

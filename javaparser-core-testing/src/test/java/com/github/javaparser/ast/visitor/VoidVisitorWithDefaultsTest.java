@@ -58,7 +58,8 @@ class VoidVisitorWithDefaultsTest {
 
         argument = new Object();
         visitor = spy(
-            new VoidVisitorWithDefaults<Object>() {}
+                new VoidVisitorWithDefaults<Object>() {
+                }
         );
     }
 

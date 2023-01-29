@@ -36,13 +36,19 @@ import java.util.*;
  */
 public class CompositeCollection<E> implements Collection<E>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 8417515734108306801L;
 
-    /** CollectionMutator to handle changes to the collection */
+    /**
+     * CollectionMutator to handle changes to the collection
+     */
     private CollectionMutator<E> mutator;
 
-    /** Collections in the composite */
+    /**
+     * Collections in the composite
+     */
     private final List<Collection<E>> all = new ArrayList<>();
 
     /**
@@ -55,7 +61,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     /**
      * Create a Composite Collection with one collection.
      *
-     * @param compositeCollection  the Collection to be appended to the composite
+     * @param compositeCollection the Collection to be appended to the composite
      */
     public CompositeCollection(final Collection<E> compositeCollection) {
         super();
@@ -65,8 +71,8 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     /**
      * Create a Composite Collection with two collections.
      *
-     * @param compositeCollection1  the Collection to be appended to the composite
-     * @param compositeCollection2  the Collection to be appended to the composite
+     * @param compositeCollection1 the Collection to be appended to the composite
+     * @param compositeCollection2 the Collection to be appended to the composite
      */
     public CompositeCollection(final Collection<E> compositeCollection1,
                                final Collection<E> compositeCollection2) {
@@ -77,7 +83,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     /**
      * Create a Composite Collection with an array of collections.
      *
-     * @param compositeCollections  the collections to composite
+     * @param compositeCollections the collections to composite
      */
     public CompositeCollection(final Collection<E>... compositeCollections) {
         super();
@@ -85,6 +91,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the size of this composite collection.
      * <p>
@@ -123,7 +130,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * <p>
      * This implementation calls <code>contains()</code> on each collection.
      *
-     * @param obj  the object to search for
+     * @param obj the object to search for
      * @return true if obj is contained in any of the contained collections
      */
     @Override
@@ -142,8 +149,8 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * This implementation uses an <code>IteratorChain</code>.
      *
      * @return an <code>IteratorChain</code> instance which supports
-     *  <code>remove()</code>. Iteration occurs over contained collections in
-     *  the order they were added, but this behavior should not be relied upon.
+     * <code>remove()</code>. Iteration occurs over contained collections in
+     * the order they were added, but this behavior should not be relied upon.
      * @see IteratorChain
      */
     @Override
@@ -177,8 +184,8 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * Returns an object array, populating the supplied array if possible.
      * See <code>Collection</code> interface for full details.
      *
-     * @param <T>  the type of the elements in the collection
-     * @param array  the array to use, populating if possible
+     * @param <T>   the type of the elements in the collection
+     * @param array the array to use, populating if possible
      * @return an array of all the elements in the collection
      */
     @Override
@@ -208,19 +215,19 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * Adds an object to the collection, throwing UnsupportedOperationException
      * unless a CollectionMutator strategy is specified.
      *
-     * @param obj  the object to add
+     * @param obj the object to add
      * @return {@code true} if the collection was modified
      * @throws UnsupportedOperationException if CollectionMutator hasn't been set
      * @throws UnsupportedOperationException if add is unsupported
-     * @throws ClassCastException if the object cannot be added due to its type
-     * @throws NullPointerException if the object cannot be added because its null
-     * @throws IllegalArgumentException if the object cannot be added
+     * @throws ClassCastException            if the object cannot be added due to its type
+     * @throws NullPointerException          if the object cannot be added because its null
+     * @throws IllegalArgumentException      if the object cannot be added
      */
     @Override
     public boolean add(final E obj) {
         if (mutator == null) {
-           throw new UnsupportedOperationException(
-               "add() is not supported on CompositeCollection without a CollectionMutator strategy");
+            throw new UnsupportedOperationException(
+                    "add() is not supported on CompositeCollection without a CollectionMutator strategy");
         }
         return mutator.add(this, all, obj);
     }
@@ -229,18 +236,18 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * Removes an object from the collection, throwing UnsupportedOperationException
      * unless a CollectionMutator strategy is specified.
      *
-     * @param obj  the object being removed
+     * @param obj the object being removed
      * @return true if the collection is changed
      * @throws UnsupportedOperationException if removed is unsupported
-     * @throws ClassCastException if the object cannot be removed due to its type
-     * @throws NullPointerException if the object cannot be removed because its null
-     * @throws IllegalArgumentException if the object cannot be removed
+     * @throws ClassCastException            if the object cannot be removed due to its type
+     * @throws NullPointerException          if the object cannot be removed because its null
+     * @throws IllegalArgumentException      if the object cannot be removed
      */
     @Override
     public boolean remove(final Object obj) {
         if (mutator == null) {
             throw new UnsupportedOperationException(
-                "remove() is not supported on CompositeCollection without a CollectionMutator strategy");
+                    "remove() is not supported on CompositeCollection without a CollectionMutator strategy");
         }
         return mutator.remove(this, all, obj);
     }
@@ -251,7 +258,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * This implementation calls <code>contains()</code> for each element in the
      * specified collection.
      *
-     * @param coll  the collection to check for
+     * @param coll the collection to check for
      * @return true if all elements contained
      */
     @Override
@@ -268,19 +275,19 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * Adds a collection of elements to this collection, throwing
      * UnsupportedOperationException unless a CollectionMutator strategy is specified.
      *
-     * @param coll  the collection to add
+     * @param coll the collection to add
      * @return true if the collection was modified
      * @throws UnsupportedOperationException if CollectionMutator hasn't been set
      * @throws UnsupportedOperationException if add is unsupported
-     * @throws ClassCastException if the object cannot be added due to its type
-     * @throws NullPointerException if the object cannot be added because its null
-     * @throws IllegalArgumentException if the object cannot be added
+     * @throws ClassCastException            if the object cannot be added due to its type
+     * @throws NullPointerException          if the object cannot be added because its null
+     * @throws IllegalArgumentException      if the object cannot be added
      */
     @Override
     public boolean addAll(final Collection<? extends E> coll) {
         if (mutator == null) {
             throw new UnsupportedOperationException(
-                "addAll() is not supported on CompositeCollection without a CollectionMutator strategy");
+                    "addAll() is not supported on CompositeCollection without a CollectionMutator strategy");
         }
         return mutator.addAll(this, all, coll);
     }
@@ -290,7 +297,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * <p>
      * This implementation calls <code>removeAll</code> on each collection.
      *
-     * @param coll  the collection to remove
+     * @param coll the collection to remove
      * @return true if the collection was modified
      * @throws UnsupportedOperationException if removeAll is unsupported
      */
@@ -312,7 +319,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
      * <p>
      * This implementation calls <code>retainAll()</code> on each collection.
      *
-     * @param coll  the collection to remove
+     * @param coll the collection to remove
      * @return true if the collection was modified
      * @throws UnsupportedOperationException if retainAll is unsupported
      */
@@ -340,10 +347,11 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Specify a CollectionMutator strategy instance to handle changes.
      *
-     * @param mutator  the mutator to use
+     * @param mutator the mutator to use
      */
     public void setMutator(final CollectionMutator<E> mutator) {
         this.mutator = mutator;
@@ -352,7 +360,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     /**
      * Add these Collections to the list of collections in this composite
      *
-     * @param compositeCollection  the Collection to be appended to the composite
+     * @param compositeCollection the Collection to be appended to the composite
      */
     public void addComposited(final Collection<E> compositeCollection) {
         all.add(compositeCollection);
@@ -361,8 +369,8 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     /**
      * Add these Collections to the list of collections in this composite
      *
-     * @param compositeCollection1  the Collection to be appended to the composite
-     * @param compositeCollection2  the Collection to be appended to the composite
+     * @param compositeCollection1 the Collection to be appended to the composite
+     * @param compositeCollection2 the Collection to be appended to the composite
      */
     public void addComposited(final Collection<E> compositeCollection1,
                               final Collection<E> compositeCollection2) {
@@ -373,7 +381,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     /**
      * Add these Collections to the list of collections in this composite
      *
-     * @param compositeCollections  the Collections to be appended to the composite
+     * @param compositeCollections the Collections to be appended to the composite
      */
     public void addComposited(final Collection<E>... compositeCollections) {
         all.addAll(Arrays.asList(compositeCollections));
@@ -382,18 +390,19 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     /**
      * Removes a collection from the those being decorated in this composite.
      *
-     * @param coll  collection to be removed
+     * @param coll collection to be removed
      */
     public void removeComposited(final Collection<E> coll) {
         all.remove(coll);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns a new collection containing all of the elements
      *
      * @return A new ArrayList containing all of the elements in this composite.
-     *         The new collection is <i>not</i> backed by this composite.
+     * The new collection is <i>not</i> backed by this composite.
      */
     public Collection<E> toCollection() {
         return new ArrayList<>(this);
@@ -410,6 +419,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
 
     /**
      * Get the collection mutator to be used for this CompositeCollection.
+     *
      * @return CollectionMutator&lt;E&gt;
      */
     protected CollectionMutator<E> getMutator() {
@@ -417,6 +427,7 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Pluggable strategy to handle changes to the composite.
      *
@@ -427,48 +438,48 @@ public class CompositeCollection<E> implements Collection<E>, Serializable {
         /**
          * Called when an object is to be added to the composite.
          *
-         * @param composite  the CompositeCollection being changed
-         * @param collections  all of the Collection instances in this CompositeCollection
-         * @param obj  the object being added
+         * @param composite   the CompositeCollection being changed
+         * @param collections all of the Collection instances in this CompositeCollection
+         * @param obj         the object being added
          * @return true if the collection is changed
          * @throws UnsupportedOperationException if add is unsupported
-         * @throws ClassCastException if the object cannot be added due to its type
-         * @throws NullPointerException if the object cannot be added because its null
-         * @throws IllegalArgumentException if the object cannot be added
+         * @throws ClassCastException            if the object cannot be added due to its type
+         * @throws NullPointerException          if the object cannot be added because its null
+         * @throws IllegalArgumentException      if the object cannot be added
          */
         boolean add(CompositeCollection<E> composite, List<Collection<E>> collections, E obj);
 
         /**
          * Called when a collection is to be added to the composite.
          *
-         * @param composite  the CompositeCollection being changed
-         * @param collections  all of the Collection instances in this CompositeCollection
-         * @param coll  the collection being added
+         * @param composite   the CompositeCollection being changed
+         * @param collections all of the Collection instances in this CompositeCollection
+         * @param coll        the collection being added
          * @return true if the collection is changed
          * @throws UnsupportedOperationException if add is unsupported
-         * @throws ClassCastException if the object cannot be added due to its type
-         * @throws NullPointerException if the object cannot be added because its null
-         * @throws IllegalArgumentException if the object cannot be added
+         * @throws ClassCastException            if the object cannot be added due to its type
+         * @throws NullPointerException          if the object cannot be added because its null
+         * @throws IllegalArgumentException      if the object cannot be added
          */
         boolean addAll(CompositeCollection<E> composite,
-                              List<Collection<E>> collections,
-                              Collection<? extends E> coll);
+                       List<Collection<E>> collections,
+                       Collection<? extends E> coll);
 
         /**
          * Called when an object is to be removed to the composite.
          *
-         * @param composite  the CompositeCollection being changed
-         * @param collections  all of the Collection instances in this CompositeCollection
-         * @param obj  the object being removed
+         * @param composite   the CompositeCollection being changed
+         * @param collections all of the Collection instances in this CompositeCollection
+         * @param obj         the object being removed
          * @return true if the collection is changed
          * @throws UnsupportedOperationException if removed is unsupported
-         * @throws ClassCastException if the object cannot be removed due to its type
-         * @throws NullPointerException if the object cannot be removed because its null
-         * @throws IllegalArgumentException if the object cannot be removed
+         * @throws ClassCastException            if the object cannot be removed due to its type
+         * @throws NullPointerException          if the object cannot be removed because its null
+         * @throws IllegalArgumentException      if the object cannot be removed
          */
         boolean remove(CompositeCollection<E> composite,
-                              List<Collection<E>> collections,
-                              Object obj);
+                       List<Collection<E>> collections,
+                       Object obj);
 
     }
 

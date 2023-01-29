@@ -19,59 +19,76 @@ package org.apache.commons.math3.geometry.euclidean.twod;
 import org.apache.commons.math3.geometry.Point;
 import org.apache.commons.math3.util.FastMath;
 
-/** Simple container for a two-points segment.
+/**
+ * Simple container for a two-points segment.
+ *
  * @since 3.0
  */
 public class Segment {
 
-    /** Start point of the segment. */
+    /**
+     * Start point of the segment.
+     */
     private final Vector2D start;
 
-    /** End point of the segment. */
+    /**
+     * End point of the segment.
+     */
     private final Vector2D end;
 
-    /** Line containing the segment. */
-    private final Line     line;
+    /**
+     * Line containing the segment.
+     */
+    private final Line line;
 
-    /** Build a segment.
+    /**
+     * Build a segment.
+     *
      * @param start start point of the segment
-     * @param end end point of the segment
-     * @param line line containing the segment
+     * @param end   end point of the segment
+     * @param line  line containing the segment
      */
     public Segment(final Vector2D start, final Vector2D end, final Line line) {
-        this.start  = start;
-        this.end    = end;
-        this.line   = line;
+        this.start = start;
+        this.end = end;
+        this.line = line;
     }
 
-    /** Get the start point of the segment.
+    /**
+     * Get the start point of the segment.
+     *
      * @return start point of the segment
      */
     public Vector2D getStart() {
         return start;
     }
 
-    /** Get the end point of the segment.
+    /**
+     * Get the end point of the segment.
+     *
      * @return end point of the segment
      */
     public Vector2D getEnd() {
         return end;
     }
 
-    /** Get the line containing the segment.
+    /**
+     * Get the line containing the segment.
+     *
      * @return line containing the segment
      */
     public Line getLine() {
         return line;
     }
 
-    /** Calculates the shortest distance from a point to this line segment.
+    /**
+     * Calculates the shortest distance from a point to this line segment.
      * <p>
      * If the perpendicular extension from the point to the line does not
      * cross in the bounds of the line segment, the shortest distance to
      * the two end points will be returned.
      * </p>
-     *
+     * <p>
      * Algorithm adapted from:
      * <a href="http://www.codeguru.com/forum/printthread.php?s=cc8cf0596231f9a7dba4da6e77c29db3&t=194400&pp=15&page=1">
      * Thread @ Codeguru</a>
@@ -85,7 +102,7 @@ public class Segment {
         final double deltaY = end.getY() - start.getY();
 
         final double r = ((p.getX() - start.getX()) * deltaX + (p.getY() - start.getY()) * deltaY) /
-                         (deltaX * deltaX + deltaY * deltaY);
+                (deltaX * deltaX + deltaY * deltaY);
 
         // r == 0 => P = startPt
         // r == 1 => P = endPt
@@ -99,8 +116,7 @@ public class Segment {
             final double dist2 = getEnd().distance((Point<Euclidean2D>) p);
 
             return FastMath.min(dist1, dist2);
-        }
-        else {
+        } else {
             // find point on line and see if it is in the line segment
             final double px = start.getX() + r * deltaX;
             final double py = start.getY() + r * deltaY;

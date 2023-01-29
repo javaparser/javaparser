@@ -130,7 +130,7 @@ class JavassistUtils {
                     internalNameToCanonicalName(typeName));
             return new ReferenceTypeImpl(typeDeclaration, typeParameters, typeSolver);
         } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
-            SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable)signatureType;
+            SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable) signatureType;
             Optional<TypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
             if (!typeParameterDeclarationOpt.isPresent()) {
                 throw new UnsolvedSymbolException("Unable to solve TypeVariable " + typeVariableSignature);
@@ -150,8 +150,8 @@ class JavassistUtils {
         String typeName = typeArgument.jvmTypeName();
         Optional<Type> type = getGenericParameterByName(typeName, typeParametrizable);
         return type.orElseGet(() -> new ReferenceTypeImpl(
-            typeSolver.solveType(internalNameToCanonicalName(typeName)),
-            typeSolver));
+                typeSolver.solveType(internalNameToCanonicalName(typeName)),
+                typeSolver));
     }
 
     private static Optional<Type> getGenericParameterByName(String typeName, TypeParametrizable typeParametrizable) {

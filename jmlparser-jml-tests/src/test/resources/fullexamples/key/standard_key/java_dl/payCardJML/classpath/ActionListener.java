@@ -16,8 +16,7 @@
  */
 package java.awt.event;
 
-public interface ActionListener extends java.util.EventListener
-{
+public interface ActionListener extends java.util.EventListener {
 
-   public void actionPerformed(java.awt.event.ActionEvent arg0);
+    public void actionPerformed(java.awt.event.ActionEvent arg0);
 }

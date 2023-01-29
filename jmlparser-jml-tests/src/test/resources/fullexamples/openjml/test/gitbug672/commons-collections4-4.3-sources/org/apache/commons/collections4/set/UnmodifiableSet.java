@@ -37,14 +37,16 @@ public final class UnmodifiableSet<E>
         extends AbstractSerializableSetDecorator<E>
         implements Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 6499119872185240161L;
 
     /**
      * Factory method to create an unmodifiable set.
      *
      * @param <E> the element type
-     * @param set  the set to decorate, must not be null
+     * @param set the set to decorate, must not be null
      * @return a new unmodifiable set
      * @throws NullPointerException if set is null
      * @since 4.0
@@ -59,10 +61,11 @@ public final class UnmodifiableSet<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param set  the set to decorate, must not be null
+     * @param set the set to decorate, must not be null
      * @throws NullPointerException if set is null
      */
     @SuppressWarnings("unchecked") // safe to upcast

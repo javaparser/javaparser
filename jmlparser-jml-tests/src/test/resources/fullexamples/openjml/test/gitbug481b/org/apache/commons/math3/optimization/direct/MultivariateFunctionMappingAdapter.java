@@ -70,33 +70,38 @@ import org.apache.commons.math3.util.MathUtils;
  * </p>
  *
  * @see MultivariateFunctionPenaltyAdapter
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 
 @Deprecated
 public class MultivariateFunctionMappingAdapter implements MultivariateFunction {
 
-    /** Underlying bounded function. */
+    /**
+     * Underlying bounded function.
+     */
     private final MultivariateFunction bounded;
 
-    /** Mapping functions. */
+    /**
+     * Mapping functions.
+     */
     private final Mapper[] mappers;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
+     *
      * @param bounded bounded function
-     * @param lower lower bounds for each element of the input parameters array
-     * (some elements may be set to {@code Double.NEGATIVE_INFINITY} for
-     * unbounded values)
-     * @param upper upper bounds for each element of the input parameters array
-     * (some elements may be set to {@code Double.POSITIVE_INFINITY} for
-     * unbounded values)
-     * @exception DimensionMismatchException if lower and upper bounds are not
-     * consistent, either according to dimension or to values
+     * @param lower   lower bounds for each element of the input parameters array
+     *                (some elements may be set to {@code Double.NEGATIVE_INFINITY} for
+     *                unbounded values)
+     * @param upper   upper bounds for each element of the input parameters array
+     *                (some elements may be set to {@code Double.POSITIVE_INFINITY} for
+     *                unbounded values)
+     * @throws DimensionMismatchException if lower and upper bounds are not
+     *                                    consistent, either according to dimension or to values
      */
     public MultivariateFunctionMappingAdapter(final MultivariateFunction bounded,
-                                                  final double[] lower, final double[] upper) {
+                                              final double[] lower, final double[] upper) {
 
         // safety checks
         MathUtils.checkNotNull(lower);
@@ -135,7 +140,9 @@ public class MultivariateFunctionMappingAdapter implements MultivariateFunction 
 
     }
 
-    /** Map an array from unbounded to bounded.
+    /**
+     * Map an array from unbounded to bounded.
+     *
      * @param point unbounded value
      * @return bounded value
      */
@@ -151,7 +158,9 @@ public class MultivariateFunctionMappingAdapter implements MultivariateFunction 
 
     }
 
-    /** Map an array from bounded to unbounded.
+    /**
+     * Map an array from bounded to unbounded.
+     *
      * @param point bounded value
      * @return unbounded value
      */
@@ -167,12 +176,14 @@ public class MultivariateFunctionMappingAdapter implements MultivariateFunction 
 
     }
 
-    /** Compute the underlying function value from an unbounded point.
+    /**
+     * Compute the underlying function value from an unbounded point.
      * <p>
      * This method simply bounds the unbounded point using the mappings
      * set up at construction and calls the underlying function using
      * the bounded point.
      * </p>
+     *
      * @param point unbounded value
      * @return underlying function value
      * @see #unboundedToBounded(double[])
@@ -181,16 +192,22 @@ public class MultivariateFunctionMappingAdapter implements MultivariateFunction 
         return bounded.value(unboundedToBounded(point));
     }
 
-    /** Mapping interface. */
+    /**
+     * Mapping interface.
+     */
     private interface Mapper {
 
-        /** Map a value from unbounded to bounded.
+        /**
+         * Map a value from unbounded to bounded.
+         *
          * @param y unbounded value
          * @return bounded value
          */
         double unboundedToBounded(double y);
 
-        /** Map a value from bounded to unbounded.
+        /**
+         * Map a value from bounded to unbounded.
+         *
          * @param x bounded value
          * @return unbounded value
          */
@@ -198,100 +215,139 @@ public class MultivariateFunctionMappingAdapter implements MultivariateFunction 
 
     }
 
-    /** Local class for no bounds mapping. */
+    /**
+     * Local class for no bounds mapping.
+     */
     private static class NoBoundsMapper implements Mapper {
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
          */
         NoBoundsMapper() {
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double unboundedToBounded(final double y) {
             return y;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double boundedToUnbounded(final double x) {
             return x;
         }
 
     }
 
-    /** Local class for lower bounds mapping. */
+    /**
+     * Local class for lower bounds mapping.
+     */
     private static class LowerBoundMapper implements Mapper {
 
-        /** Low bound. */
+        /**
+         * Low bound.
+         */
         private final double lower;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param lower lower bound
          */
         LowerBoundMapper(final double lower) {
             this.lower = lower;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double unboundedToBounded(final double y) {
             return lower + FastMath.exp(y);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double boundedToUnbounded(final double x) {
             return FastMath.log(x - lower);
         }
 
     }
 
-    /** Local class for upper bounds mapping. */
+    /**
+     * Local class for upper bounds mapping.
+     */
     private static class UpperBoundMapper implements Mapper {
 
-        /** Upper bound. */
+        /**
+         * Upper bound.
+         */
         private final double upper;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param upper upper bound
          */
         UpperBoundMapper(final double upper) {
             this.upper = upper;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double unboundedToBounded(final double y) {
             return upper - FastMath.exp(-y);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double boundedToUnbounded(final double x) {
             return -FastMath.log(upper - x);
         }
 
     }
 
-    /** Local class for lower and bounds mapping. */
+    /**
+     * Local class for lower and bounds mapping.
+     */
     private static class LowerUpperBoundMapper implements Mapper {
 
-        /** Function from unbounded to bounded. */
+        /**
+         * Function from unbounded to bounded.
+         */
         private final UnivariateFunction boundingFunction;
 
-        /** Function from bounded to unbounded. */
+        /**
+         * Function from bounded to unbounded.
+         */
         private final UnivariateFunction unboundingFunction;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param lower lower bound
          * @param upper upper bound
          */
         LowerUpperBoundMapper(final double lower, final double upper) {
-            boundingFunction   = new Sigmoid(lower, upper);
+            boundingFunction = new Sigmoid(lower, upper);
             unboundingFunction = new Logit(lower, upper);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double unboundedToBounded(final double y) {
             return boundingFunction.value(y);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double boundedToUnbounded(final double x) {
             return unboundingFunction.value(x);
         }

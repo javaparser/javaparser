@@ -76,9 +76,9 @@ public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
                 .filter(n -> NameLogic.nameAsString(n).equals(name))
                 .collect(Collectors.toList());
         // In case of one name being contained in other as is, we remove it
-        for (int i=0;i<matchingNames.size();i++) {
+        for (int i = 0; i < matchingNames.size(); i++) {
             Node container = matchingNames.get(i);
-            for (int j=i+1;j<matchingNames.size();j++) {
+            for (int j = i + 1; j < matchingNames.size(); j++) {
                 Node contained = matchingNames.get(j);
                 if (contained.getParentNode().isPresent() && contained.getParentNode().get() == container
                         && NameLogic.nameAsString(contained).equals(NameLogic.nameAsString(container))) {

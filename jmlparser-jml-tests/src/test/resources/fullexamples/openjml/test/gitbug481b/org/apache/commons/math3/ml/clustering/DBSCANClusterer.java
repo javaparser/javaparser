@@ -51,17 +51,27 @@ import java.util.*;
  */
 public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
 
-    /** Maximum radius of the neighborhood to be considered. */
-    private final double              eps;
+    /**
+     * Maximum radius of the neighborhood to be considered.
+     */
+    private final double eps;
 
-    /** Minimum number of points needed for a cluster. */
-    private final int                 minPts;
+    /**
+     * Minimum number of points needed for a cluster.
+     */
+    private final int minPts;
 
-    /** Status of a point during the clustering process. */
+    /**
+     * Status of a point during the clustering process.
+     */
     private enum PointStatus {
-        /** The point has is considered to be noise. */
+        /**
+         * The point has is considered to be noise.
+         */
         NOISE,
-        /** The point is already part of a cluster. */
+        /**
+         * The point is already part of a cluster.
+         */
         PART_OF_CLUSTER
     }
 
@@ -70,25 +80,25 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
      * <p>
      * The euclidean distance will be used as default distance measure.
      *
-     * @param eps maximum radius of the neighborhood to be considered
+     * @param eps    maximum radius of the neighborhood to be considered
      * @param minPts minimum number of points needed for a cluster
      * @throws NotPositiveException if {@code eps < 0.0} or {@code minPts < 0}
      */
     public DBSCANClusterer(final double eps, final int minPts)
-        throws NotPositiveException {
+            throws NotPositiveException {
         this(eps, minPts, new EuclideanDistance());
     }
 
     /**
      * Creates a new instance of a DBSCANClusterer.
      *
-     * @param eps maximum radius of the neighborhood to be considered
-     * @param minPts minimum number of points needed for a cluster
+     * @param eps     maximum radius of the neighborhood to be considered
+     * @param minPts  minimum number of points needed for a cluster
      * @param measure the distance measure to use
      * @throws NotPositiveException if {@code eps < 0.0} or {@code minPts < 0}
      */
     public DBSCANClusterer(final double eps, final int minPts, final DistanceMeasure measure)
-        throws NotPositiveException {
+            throws NotPositiveException {
         super(measure);
 
         if (eps < 0.0d) {
@@ -103,6 +113,7 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Returns the maximum radius of the neighborhood to be considered.
+     *
      * @return maximum radius of the neighborhood
      */
     public double getEps() {
@@ -111,6 +122,7 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
 
     /**
      * Returns the minimum number of points needed for a cluster.
+     *
      * @return minimum number of points needed for a cluster
      */
     public int getMinPts() {
@@ -153,11 +165,11 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
     /**
      * Expands the cluster to include density-reachable items.
      *
-     * @param cluster Cluster to expand
-     * @param point Point to add to cluster
+     * @param cluster   Cluster to expand
+     * @param point     Point to add to cluster
      * @param neighbors List of neighbors
-     * @param points the data set
-     * @param visited the set of already visited points
+     * @param points    the data set
+     * @param visited   the set of already visited points
      * @return the expanded cluster
      */
     private Cluster<T> expandCluster(final Cluster<T> cluster,
@@ -194,7 +206,7 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
     /**
      * Returns a list of density-reachable neighbors of a {@code point}.
      *
-     * @param point the point to look for
+     * @param point  the point to look for
      * @param points possible neighbors
      * @return the List of neighbors
      */

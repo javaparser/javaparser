@@ -13,8 +13,8 @@ public class NetworkClient {
       @*/
     //@ helper
     public static void send(/*@ nullable */ byte[] message,
-                            Server server,
-                            int port) {
+                                            Server server,
+                                            int port) {
         // input
         Environment.untrustedOutput(0x2301);
         Environment.untrustedOutputMessage(message);

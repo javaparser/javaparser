@@ -35,9 +35,9 @@ class NodeText {
 
     public static final int NOT_FOUND = -1;
 
-    // 
+    //
     // Constructors
-    // 
+    //
     NodeText(List<TextElement> elements) {
         this.elements = elements;
     }
@@ -49,9 +49,10 @@ class NodeText {
         this(new LinkedList<>());
     }
 
-    // 
+    //
     // Adding elements
-    // 
+    //
+
     /**
      * Add an element at the end.
      */
@@ -82,9 +83,9 @@ class NodeText {
         elements.add(index, new TokenTextElement(tokenKind, text));
     }
 
-    // 
+    //
     // Finding elements
-    // 
+    //
     int findElement(TextElementMatcher matcher) {
         return findElement(matcher, 0);
     }
@@ -123,9 +124,9 @@ class NodeText {
         return tryToFindElement(TextElementMatchers.byNode(child), from);
     }
 
-    // 
+    //
     // Removing single elements
-    // 
+    //
     public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
         int i = 0;
         for (TextElement e : elements) {
@@ -146,25 +147,26 @@ class NodeText {
         throw new IllegalArgumentException();
     }
 
-    // 
+    //
     // Removing sequences
-    // 
+    //
     void removeElement(int index) {
         elements.remove(index);
     }
 
-    // 
+    //
     // Replacing elements
-    // 
+    //
     void replace(TextElementMatcher position, TextElement newElement) {
         int index = findElement(position, 0);
         elements.remove(index);
         elements.add(index, newElement);
     }
 
-    // 
+    //
     // Other methods
-    // 
+    //
+
     /**
      * Generate the corresponding string.
      */

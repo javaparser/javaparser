@@ -13,13 +13,18 @@ public class ModelClassExampleBug<E> {
     @*/
 
     public class Contents {
-        public boolean foo() { return true; }
+        public boolean foo() {
+            return true;
+        }
     }
 
     public static class SContents {
-        public boolean foo() { return true; }
+        public boolean foo() {
+            return true;
+        }
     }
 
 
-    protected ModelClassExampleBug() {}
+    protected ModelClassExampleBug() {
+    }
 }

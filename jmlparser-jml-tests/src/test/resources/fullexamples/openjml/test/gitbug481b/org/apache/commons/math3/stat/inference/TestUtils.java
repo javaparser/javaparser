@@ -28,21 +28,31 @@ import java.util.Collection;
  *
  * @since 1.1
  */
-public class TestUtils  {
+public class TestUtils {
 
-    /** Singleton TTest instance. */
+    /**
+     * Singleton TTest instance.
+     */
     private static final TTest T_TEST = new TTest();
 
-    /** Singleton ChiSquareTest instance. */
+    /**
+     * Singleton ChiSquareTest instance.
+     */
     private static final ChiSquareTest CHI_SQUARE_TEST = new ChiSquareTest();
 
-    /** Singleton OneWayAnova instance. */
+    /**
+     * Singleton OneWayAnova instance.
+     */
     private static final OneWayAnova ONE_WAY_ANANOVA = new OneWayAnova();
 
-    /** Singleton G-Test instance. */
+    /**
+     * Singleton G-Test instance.
+     */
     private static final GTest G_TEST = new GTest();
 
-    /** Singleton K-S test instance */
+    /**
+     * Singleton K-S test instance
+     */
     private static final KolmogorovSmirnovTest KS_TEST = new KolmogorovSmirnovTest();
 
     /**
@@ -58,7 +68,7 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#homoscedasticT(double[], double[])
      */
     public static double homoscedasticT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException {
+            throws NullArgumentException, NumberIsTooSmallException {
         return T_TEST.homoscedasticT(sample1, sample2);
     }
 
@@ -67,7 +77,7 @@ public class TestUtils  {
      */
     public static double homoscedasticT(final StatisticalSummary sampleStats1,
                                         final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException {
+            throws NullArgumentException, NumberIsTooSmallException {
         return T_TEST.homoscedasticT(sampleStats1, sampleStats2);
     }
 
@@ -76,8 +86,8 @@ public class TestUtils  {
      */
     public static boolean homoscedasticTTest(final double[] sample1, final double[] sample2,
                                              final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            OutOfRangeException, MaxCountExceededException {
         return T_TEST.homoscedasticTTest(sample1, sample2, alpha);
     }
 
@@ -85,7 +95,7 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#homoscedasticTTest(double[], double[])
      */
     public static double homoscedasticTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException, MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException, MaxCountExceededException {
         return T_TEST.homoscedasticTTest(sample1, sample2);
     }
 
@@ -94,7 +104,7 @@ public class TestUtils  {
      */
     public static double homoscedasticTTest(final StatisticalSummary sampleStats1,
                                             final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException, MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException, MaxCountExceededException {
         return T_TEST.homoscedasticTTest(sampleStats1, sampleStats2);
     }
 
@@ -102,8 +112,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#pairedT(double[], double[])
      */
     public static double pairedT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NoDataException,
-        DimensionMismatchException, NumberIsTooSmallException {
+            throws NullArgumentException, NoDataException,
+            DimensionMismatchException, NumberIsTooSmallException {
         return T_TEST.pairedT(sample1, sample2);
     }
 
@@ -112,8 +122,8 @@ public class TestUtils  {
      */
     public static boolean pairedTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
-        throws NullArgumentException, NoDataException, DimensionMismatchException,
-        NumberIsTooSmallException, OutOfRangeException, MaxCountExceededException {
+            throws NullArgumentException, NoDataException, DimensionMismatchException,
+            NumberIsTooSmallException, OutOfRangeException, MaxCountExceededException {
         return T_TEST.pairedTTest(sample1, sample2, alpha);
     }
 
@@ -121,8 +131,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#pairedTTest(double[], double[])
      */
     public static double pairedTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NoDataException, DimensionMismatchException,
-        NumberIsTooSmallException, MaxCountExceededException {
+            throws NullArgumentException, NoDataException, DimensionMismatchException,
+            NumberIsTooSmallException, MaxCountExceededException {
         return T_TEST.pairedTTest(sample1, sample2);
     }
 
@@ -130,7 +140,7 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#t(double, double[])
      */
     public static double t(final double mu, final double[] observed)
-        throws NullArgumentException, NumberIsTooSmallException {
+            throws NullArgumentException, NumberIsTooSmallException {
         return T_TEST.t(mu, observed);
     }
 
@@ -138,7 +148,7 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#t(double, org.apache.commons.math3.stat.descriptive.StatisticalSummary)
      */
     public static double t(final double mu, final StatisticalSummary sampleStats)
-        throws NullArgumentException, NumberIsTooSmallException {
+            throws NullArgumentException, NumberIsTooSmallException {
         return T_TEST.t(mu, sampleStats);
     }
 
@@ -146,7 +156,7 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#t(double[], double[])
      */
     public static double t(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException {
+            throws NullArgumentException, NumberIsTooSmallException {
         return T_TEST.t(sample1, sample2);
     }
 
@@ -155,7 +165,7 @@ public class TestUtils  {
      */
     public static double t(final StatisticalSummary sampleStats1,
                            final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException {
+            throws NullArgumentException, NumberIsTooSmallException {
         return T_TEST.t(sampleStats1, sampleStats2);
     }
 
@@ -163,8 +173,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#tTest(double, double[], double)
      */
     public static boolean tTest(final double mu, final double[] sample, final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            OutOfRangeException, MaxCountExceededException {
         return T_TEST.tTest(mu, sample, alpha);
     }
 
@@ -172,8 +182,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#tTest(double, double[])
      */
     public static double tTest(final double mu, final double[] sample)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            MaxCountExceededException {
         return T_TEST.tTest(mu, sample);
     }
 
@@ -182,8 +192,8 @@ public class TestUtils  {
      */
     public static boolean tTest(final double mu, final StatisticalSummary sampleStats,
                                 final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            OutOfRangeException, MaxCountExceededException {
         return T_TEST.tTest(mu, sampleStats, alpha);
     }
 
@@ -191,8 +201,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#tTest(double, org.apache.commons.math3.stat.descriptive.StatisticalSummary)
      */
     public static double tTest(final double mu, final StatisticalSummary sampleStats)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            MaxCountExceededException {
         return T_TEST.tTest(mu, sampleStats);
     }
 
@@ -201,8 +211,8 @@ public class TestUtils  {
      */
     public static boolean tTest(final double[] sample1, final double[] sample2,
                                 final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            OutOfRangeException, MaxCountExceededException {
         return T_TEST.tTest(sample1, sample2, alpha);
     }
 
@@ -210,8 +220,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.TTest#tTest(double[], double[])
      */
     public static double tTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            MaxCountExceededException {
         return T_TEST.tTest(sample1, sample2);
     }
 
@@ -221,8 +231,8 @@ public class TestUtils  {
     public static boolean tTest(final StatisticalSummary sampleStats1,
                                 final StatisticalSummary sampleStats2,
                                 final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            OutOfRangeException, MaxCountExceededException {
         return T_TEST.tTest(sampleStats1, sampleStats2, alpha);
     }
 
@@ -231,8 +241,8 @@ public class TestUtils  {
      */
     public static double tTest(final StatisticalSummary sampleStats1,
                                final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MaxCountExceededException {
+            throws NullArgumentException, NumberIsTooSmallException,
+            MaxCountExceededException {
         return T_TEST.tTest(sampleStats1, sampleStats2);
     }
 
@@ -240,8 +250,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.ChiSquareTest#chiSquare(double[], long[])
      */
     public static double chiSquare(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException {
         return CHI_SQUARE_TEST.chiSquare(expected, observed);
     }
 
@@ -249,8 +259,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.ChiSquareTest#chiSquare(long[][])
      */
     public static double chiSquare(final long[][] counts)
-        throws NullArgumentException, NotPositiveException,
-        DimensionMismatchException {
+            throws NullArgumentException, NotPositiveException,
+            DimensionMismatchException {
         return CHI_SQUARE_TEST.chiSquare(counts);
     }
 
@@ -259,8 +269,8 @@ public class TestUtils  {
      */
     public static boolean chiSquareTest(final double[] expected, final long[] observed,
                                         final double alpha)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(expected, observed, alpha);
     }
 
@@ -268,8 +278,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.ChiSquareTest#chiSquareTest(double[], long[])
      */
     public static double chiSquareTest(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, MaxCountExceededException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(expected, observed);
     }
 
@@ -277,8 +287,8 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.ChiSquareTest#chiSquareTest(long[][], double)
      */
     public static boolean chiSquareTest(final long[][] counts, final double alpha)
-        throws NullArgumentException, DimensionMismatchException,
-        NotPositiveException, OutOfRangeException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            NotPositiveException, OutOfRangeException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(counts, alpha);
     }
 
@@ -286,118 +296,112 @@ public class TestUtils  {
      * @see org.apache.commons.math3.stat.inference.ChiSquareTest#chiSquareTest(long[][])
      */
     public static double chiSquareTest(final long[][] counts)
-        throws NullArgumentException, DimensionMismatchException,
-        NotPositiveException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            NotPositiveException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(counts);
     }
 
     /**
      * @see org.apache.commons.math3.stat.inference.ChiSquareTest#chiSquareDataSetsComparison(long[], long[])
-     *
      * @since 1.2
      */
     public static double chiSquareDataSetsComparison(final long[] observed1,
                                                      final long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException {
+            throws DimensionMismatchException, NotPositiveException, ZeroException {
         return CHI_SQUARE_TEST.chiSquareDataSetsComparison(observed1, observed2);
     }
 
     /**
      * @see org.apache.commons.math3.stat.inference.ChiSquareTest#chiSquareTestDataSetsComparison(long[], long[])
-     *
      * @since 1.2
      */
     public static double chiSquareTestDataSetsComparison(final long[] observed1,
                                                          final long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException,
-        MaxCountExceededException {
+            throws DimensionMismatchException, NotPositiveException, ZeroException,
+            MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTestDataSetsComparison(observed1, observed2);
     }
 
     /**
      * @see org.apache.commons.math3.stat.inference.ChiSquareTest#chiSquareTestDataSetsComparison(long[], long[], double)
-     *
      * @since 1.2
      */
     public static boolean chiSquareTestDataSetsComparison(final long[] observed1,
                                                           final long[] observed2,
                                                           final double alpha)
-        throws DimensionMismatchException, NotPositiveException,
-        ZeroException, OutOfRangeException, MaxCountExceededException {
+            throws DimensionMismatchException, NotPositiveException,
+            ZeroException, OutOfRangeException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTestDataSetsComparison(observed1, observed2, alpha);
     }
 
     /**
      * @see org.apache.commons.math3.stat.inference.OneWayAnova#anovaFValue(Collection)
-     *
      * @since 1.2
      */
     public static double oneWayAnovaFValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException {
+            throws NullArgumentException, DimensionMismatchException {
         return ONE_WAY_ANANOVA.anovaFValue(categoryData);
     }
 
     /**
      * @see org.apache.commons.math3.stat.inference.OneWayAnova#anovaPValue(Collection)
-     *
      * @since 1.2
      */
     public static double oneWayAnovaPValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException,
-        ConvergenceException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            ConvergenceException, MaxCountExceededException {
         return ONE_WAY_ANANOVA.anovaPValue(categoryData);
     }
 
     /**
-     * @see org.apache.commons.math3.stat.inference.OneWayAnova#anovaTest(Collection,double)
-     *
+     * @see org.apache.commons.math3.stat.inference.OneWayAnova#anovaTest(Collection, double)
      * @since 1.2
      */
     public static boolean oneWayAnovaTest(final Collection<double[]> categoryData,
                                           final double alpha)
-        throws NullArgumentException, DimensionMismatchException,
-        OutOfRangeException, ConvergenceException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            OutOfRangeException, ConvergenceException, MaxCountExceededException {
         return ONE_WAY_ANANOVA.anovaTest(categoryData, alpha);
     }
 
-     /**
+    /**
      * @see org.apache.commons.math3.stat.inference.GTest#g(double[], long[])
      * @since 3.1
      */
     public static double g(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException {
         return G_TEST.g(expected, observed);
     }
 
     /**
-     * @see org.apache.commons.math3.stat.inference.GTest#gTest( double[],  long[] )
+     * @see org.apache.commons.math3.stat.inference.GTest#gTest(double[], long[])
      * @since 3.1
      */
     public static double gTest(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, MaxCountExceededException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException, MaxCountExceededException {
         return G_TEST.gTest(expected, observed);
     }
 
     /**
-     * @see org.apache.commons.math3.stat.inference.GTest#gTestIntrinsic(double[], long[] )
+     * @see org.apache.commons.math3.stat.inference.GTest#gTestIntrinsic(double[], long[])
      * @since 3.1
      */
     public static double gTestIntrinsic(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, MaxCountExceededException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException, MaxCountExceededException {
         return G_TEST.gTestIntrinsic(expected, observed);
     }
 
-     /**
-     * @see org.apache.commons.math3.stat.inference.GTest#gTest( double[],long[],double)
+    /**
+     * @see org.apache.commons.math3.stat.inference.GTest#gTest(double[], long[], double)
      * @since 3.1
      */
     public static boolean gTest(final double[] expected, final long[] observed,
                                 final double alpha)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
         return G_TEST.gTest(expected, observed, alpha);
     }
 
@@ -406,8 +410,8 @@ public class TestUtils  {
      * @since 3.1
      */
     public static double gDataSetsComparison(final long[] observed1,
-                                                  final long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException {
+                                             final long[] observed2)
+            throws DimensionMismatchException, NotPositiveException, ZeroException {
         return G_TEST.gDataSetsComparison(observed1, observed2);
     }
 
@@ -416,7 +420,7 @@ public class TestUtils  {
      * @since 3.1
      */
     public static double rootLogLikelihoodRatio(final long k11, final long k12, final long k21, final long k22)
-        throws DimensionMismatchException, NotPositiveException, ZeroException {
+            throws DimensionMismatchException, NotPositiveException, ZeroException {
         return G_TEST.rootLogLikelihoodRatio(k11, k12, k21, k22);
     }
 
@@ -426,21 +430,21 @@ public class TestUtils  {
      * @since 3.1
      */
     public static double gTestDataSetsComparison(final long[] observed1,
-                                                        final long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException,
-        MaxCountExceededException {
+                                                 final long[] observed2)
+            throws DimensionMismatchException, NotPositiveException, ZeroException,
+            MaxCountExceededException {
         return G_TEST.gTestDataSetsComparison(observed1, observed2);
     }
 
     /**
-     * @see org.apache.commons.math3.stat.inference.GTest#gTestDataSetsComparison(long[],long[],double)
+     * @see org.apache.commons.math3.stat.inference.GTest#gTestDataSetsComparison(long[], long[], double)
      * @since 3.1
      */
     public static boolean gTestDataSetsComparison(final long[] observed1,
                                                   final long[] observed2,
                                                   final double alpha)
-        throws DimensionMismatchException, NotPositiveException,
-        ZeroException, OutOfRangeException, MaxCountExceededException {
+            throws DimensionMismatchException, NotPositiveException,
+            ZeroException, OutOfRangeException, MaxCountExceededException {
         return G_TEST.gTestDataSetsComparison(observed1, observed2, alpha);
     }
 
@@ -503,7 +507,7 @@ public class TestUtils  {
      * @since 3.3
      */
     public static double kolmogorovSmirnovTest(double[] x, double[] y, boolean strict)
-            throws InsufficientDataException, NullArgumentException  {
+            throws InsufficientDataException, NullArgumentException {
         return KS_TEST.kolmogorovSmirnovTest(x, y, strict);
     }
 

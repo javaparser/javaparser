@@ -1,4 +1,4 @@
-public interface Proc<T,S> {
+public interface Proc<T, S> {
     //@ assignable objectState;
     S run(T x);
 }

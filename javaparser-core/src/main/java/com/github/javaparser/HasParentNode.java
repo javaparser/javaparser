@@ -73,8 +73,8 @@ public interface HasParentNode<T> extends Observable {
      * Walks the parents of this node and returns the first node of type {@code type} that matches {@code predicate}, or
      * {@code empty()} if none is found. The given type may also be an interface type, such as one of the
      * {@code NodeWith...} interface types.
-     * @deprecated
-     * This method is no longer acceptable to find ancestor.
+     *
+     * @deprecated This method is no longer acceptable to find ancestor.
      * <p> Use {@link findAncestor(Predicate, Class)} instead.
      */
     @Deprecated
@@ -86,6 +86,7 @@ public interface HasParentNode<T> extends Observable {
      * Walks the parents of this node and returns the first node that matches one of types {@code types}, or
      * {@code empty()} if none is found. The given type may also be an interface type, such as one of the
      * {@code NodeWith...} interface types.
+     *
      * @param <N>
      */
     default <N> Optional<N> findAncestor(Predicate<N> predicate, Class<N>... types) {

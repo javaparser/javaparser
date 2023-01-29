@@ -27,7 +27,6 @@ package org.apache.commons.collections4.sequence;
  *
  * @see SequencesComparator
  * @see EditScript
- *
  * @since 4.0
  */
 public class DeleteCommand<T> extends EditCommand<T> {
@@ -35,7 +34,7 @@ public class DeleteCommand<T> extends EditCommand<T> {
     /**
      * Simple constructor. Creates a new instance of {@link DeleteCommand}.
      *
-     * @param object  the object of the first sequence that should be deleted
+     * @param object the object of the first sequence that should be deleted
      */
     public DeleteCommand(final T object) {
         super(object);
@@ -45,7 +44,7 @@ public class DeleteCommand<T> extends EditCommand<T> {
      * Accept a visitor. When a <code>DeleteCommand</code> accepts a visitor, it calls
      * its {@link CommandVisitor#visitDeleteCommand visitDeleteCommand} method.
      *
-     * @param visitor  the visitor to be accepted
+     * @param visitor the visitor to be accepted
      */
     @Override
     public void accept(final CommandVisitor<T> visitor) {

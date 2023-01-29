@@ -34,7 +34,9 @@ import java.util.List;
  */
 public abstract class ClusterEvaluator<T extends Clusterable> {
 
-    /** The distance measure to use when evaluating the cluster. */
+    /**
+     * The distance measure to use when evaluating the cluster.
+     */
     private final DistanceMeasure measure;
 
     /**
@@ -47,6 +49,7 @@ public abstract class ClusterEvaluator<T extends Clusterable> {
 
     /**
      * Creates a new cluster evaluator with the given distance measure.
+     *
      * @param measure the distance measure to use
      */
     public ClusterEvaluator(final DistanceMeasure measure) {
@@ -55,6 +58,7 @@ public abstract class ClusterEvaluator<T extends Clusterable> {
 
     /**
      * Computes the evaluation score for the given list of clusters.
+     *
      * @param clusters the clusters to evaluate
      * @return the computed score
      */

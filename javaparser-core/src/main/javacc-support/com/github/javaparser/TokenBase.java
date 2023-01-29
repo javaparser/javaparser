@@ -31,7 +31,7 @@ abstract class TokenBase {
      * For tracking the >> >>> ambiguity.
      */
     int realKind = GT;
-    
+
     /**
      * This is the link to the token that JavaParser presents to the user
      */

@@ -20,11 +20,10 @@ package org.apache.commons.math3.optim;
  * Base class for all convergence checker implementations.
  *
  * @param <PAIR> Type of (point, value) pair.
- *
  * @since 3.0
  */
 public abstract class AbstractConvergenceChecker<PAIR>
-    implements ConvergenceChecker<PAIR> {
+        implements ConvergenceChecker<PAIR> {
     /**
      * Relative tolerance threshold.
      */

@@ -78,10 +78,10 @@ public class Pattern<T extends Node> {
     public Map<String, Node> find(Node n) {
         var queue = new ArrayDeque<Node>();
         queue.add(n);
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             var e = queue.pop();
             var r = match(e);
-            if(r!=null) return r;
+            if (r != null) return r;
             queue.addAll(e.getChildNodes());
         }
         return null;

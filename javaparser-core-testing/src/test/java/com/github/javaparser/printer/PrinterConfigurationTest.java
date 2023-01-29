@@ -33,7 +33,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PrinterConfigurationTest {
-    
+
     private Optional<ConfigurationOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
         return config.get(new DefaultConfigurationOption(cOption));
     }
@@ -64,13 +64,13 @@ class PrinterConfigurationTest {
         assertThrows(IllegalArgumentException.class, () -> {
             getOption(config, ConfigOption.PRINT_COMMENTS).get().asValue();
         });
-        
+
         // verify currentValue assignment: example we cannot assign a string to a boolean
         assertThrows(IllegalArgumentException.class, () -> {
             config.addOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS, "1"));
         });
     }
-    
+
     @Test
     void testUpdatedConfigurationOption() {
         PrinterConfiguration config = new DefaultPrinterConfiguration();
@@ -79,7 +79,7 @@ class PrinterConfigurationTest {
         // verify the currentValue is updated
         assertEquals(getOption(config, ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue(), Integer.valueOf(2));
     }
-    
+
     @Test
     void testRemoveOption() {
         PrinterConfiguration config = new DefaultPrinterConfiguration();

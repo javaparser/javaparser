@@ -45,7 +45,7 @@ public abstract class AbstractListValuedMap<K, V> extends AbstractMultiValuedMap
     /**
      * A constructor that wraps, not copies
      *
-     * @param map  the map to wrap, must not be null
+     * @param map the map to wrap, must not be null
      * @throws NullPointerException if the map is null
      */
     protected AbstractListValuedMap(final Map<K, ? extends List<V>> map) {
@@ -61,17 +61,19 @@ public abstract class AbstractListValuedMap<K, V> extends AbstractMultiValuedMap
 
     /**
      * Creates a new value collection using the provided factory.
+     *
      * @return a new list
      */
     @Override
     protected abstract List<V> createCollection();
 
     // -----------------------------------------------------------------------
+
     /**
      * Gets the list of values associated with the specified key. This would
      * return an empty list in case the mapping is not present
      *
-     * @param key  the key to retrieve
+     * @param key the key to retrieve
      * @return the {@code List} of values, will return an empty {@link List} for no mapping
      */
     @Override
@@ -89,9 +91,9 @@ public abstract class AbstractListValuedMap<K, V> extends AbstractMultiValuedMap
      * <p>
      * A subsequent <code>get(Object)</code> would return an empty list.
      *
-     * @param key  the key to remove values from
+     * @param key the key to remove values from
      * @return the <code>List</code> of values removed, will return an empty,
-     *   unmodifiable list for no mapping found.
+     * unmodifiable list for no mapping found.
      */
     @Override
     public List<V> remove(final Object key) {
@@ -99,6 +101,7 @@ public abstract class AbstractListValuedMap<K, V> extends AbstractMultiValuedMap
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Wrapped list to handle add and remove on the list returned by get(object)
      */
@@ -208,7 +211,9 @@ public abstract class AbstractListValuedMap<K, V> extends AbstractMultiValuedMap
 
     }
 
-    /** Values ListIterator */
+    /**
+     * Values ListIterator
+     */
     private class ValuesListIterator implements ListIterator<V> {
 
         private final K key;

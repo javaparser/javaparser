@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast;
 
 import com.github.javaparser.Range;
@@ -38,6 +38,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * }
  * </pre>
  * An enmpty import declaration is simply a semicolon among the import declarations.
+ *
  * @author Julio Vilmar Gesser
  */
 public final class ImportDeclaration extends Node {
@@ -63,14 +64,14 @@ public final class ImportDeclaration extends Node {
     /**
      * Create an empty import declaration without specifying its position.
      */
-    public static ImportDeclaration createEmptyDeclaration(){
+    public static ImportDeclaration createEmptyDeclaration() {
         return new ImportDeclaration();
     }
 
     /**
      * Create an empty import declaration specifying its position.
      */
-    public static ImportDeclaration createEmptyDeclaration(Range range){
+    public static ImportDeclaration createEmptyDeclaration(Range range) {
         return new ImportDeclaration(range);
     }
 
@@ -92,7 +93,7 @@ public final class ImportDeclaration extends Node {
     /**
      * Is this an empty import declaration or a normal import declaration?
      */
-    public boolean isEmptyImportDeclaration(){
+    public boolean isEmptyImportDeclaration() {
         return this.isEmptyImportDeclaration;
     }
 
@@ -108,7 +109,7 @@ public final class ImportDeclaration extends Node {
 
     /**
      * Retrieves the name of the import.
-     * 
+     *
      * @return the name of the import
      * @throws UnsupportedOperationException when invoked on an empty import declaration
      */
@@ -121,9 +122,9 @@ public final class ImportDeclaration extends Node {
 
     /**
      * Return if the import ends with "*".
-     * 
+     *
      * @return <code>true</code> if the import ends with "*", <code>false</code>
-     *         otherwise
+     * otherwise
      */
     public boolean isAsterisk() {
         return asterisk;
@@ -131,9 +132,9 @@ public final class ImportDeclaration extends Node {
 
     /**
      * Return if the import is static.
-     * 
+     *
      * @return <code>true</code> if the import is static, <code>false</code>
-     *         otherwise
+     * otherwise
      */
     public boolean isStatic() {
         return static_;
@@ -141,9 +142,8 @@ public final class ImportDeclaration extends Node {
 
     /**
      * Sets if this import is asterisk.
-     * 
-     * @param asterisk
-     *            <code>true</code> if this import is asterisk
+     *
+     * @param asterisk <code>true</code> if this import is asterisk
      * @throws UnsupportedOperationException when setting true on an empty import declaration
      */
     public ImportDeclaration setAsterisk(boolean asterisk) {
@@ -156,9 +156,8 @@ public final class ImportDeclaration extends Node {
 
     /**
      * Sets the name this import.
-     * 
-     * @param name
-     *            the name to set
+     *
+     * @param name the name to set
      * @throws UnsupportedOperationException when invoked on an empty import declaration
      */
     public ImportDeclaration setName(NameExpr name) {
@@ -172,9 +171,8 @@ public final class ImportDeclaration extends Node {
 
     /**
      * Sets if this import is static.
-     * 
-     * @param static_
-     *            <code>true</code> if this import is static
+     *
+     * @param static_ <code>true</code> if this import is static
      * @throws UnsupportedOperationException when setting true on an empty import declaration
      */
     public ImportDeclaration setStatic(boolean static_) {

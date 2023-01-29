@@ -1,5 +1,6 @@
 public class ResolutionTest {
-    public int i,j;
+    public int i, j;
+
     /*@
     forall int x, int j;
     ensures i > 2;

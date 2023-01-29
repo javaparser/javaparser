@@ -15,95 +15,87 @@ package tests;
 
 /**
  * The Class HowTacletsWork.
- * 
- * Used to demonstrate how taclets in the KeY-System work, 
+ * <p>
+ * Used to demonstrate how taclets in the KeY-System work,
  * respectivly in the Visual Debugger.
  * For this purpose Debug.sep(int intlit) statements are inserted
  * manually. This part below is commented out to avoid compiler errors.
- * 
  */
 
 public class HowTacletsWork {
-	//unimportant
-	public static void main(String[] args){
-		HowTacletsWork htw = new HowTacletsWork();
-		int[] i = {3,4,5};
-		//System.out.println(htw.middle(i));
-	}
-	
-public static void sep(int lit){/** Empty method stub */}
-	
-	public static int sep(int lit, int exp){
-		return exp;
-	}
-	public static boolean sep(int lit, boolean exp){
-		return exp;
-	}
-	
-	/**
-	 * Max.
-	 * 
-	 * Returns the maximum value of an array.
-	 * 
-	 * @param values
-	 *            the array
-	 * 
-	 * @return the int
-	 * 
-	 */
-	
-	
-	/*@ public normal_behavior ensures true; @*/
-	public int max(int[] values) {
-	sep(1);
-		int max = values[sep(8,0)];
-		sep(2);
-		int i = 0;
-		sep(3);
-		while (sep(9, i < values.length) ) {
-			sep(4);
-			int j = values[sep(10,i++)];
-			sep(5);
-			if (sep(11,j > max)) {
-			sep(6);
-				max = j;
-			}
-		}sep(7);
-		return max;
-	}
+    //unimportant
+    public static void main(String[] args) {
+        HowTacletsWork htw = new HowTacletsWork();
+        int[] i = {3, 4, 5};
+        //System.out.println(htw.middle(i));
+    }
 
-	/**
-	 * Middle.
-	 * 
-	 * Returns the middle Value of a given array.
-	 * For demo purpose.
-	 * 
-	 * @param myArray
-	 *            the integer array
-	 * 
-	 * @return the integer in the middle of the array.
-	 * 
-	 *
-	 */
-	/*@ public normal_behavior ensures true; @*/
-	
-		public int middle(int[] myArray) {
-		sep(12);
-		int i = myArray.length / 2;
-		sep(13);
-		return myArray[sep(14,i)];
-	}
+    public static void sep(int lit) {/** Empty method stub */}
+
+    public static int sep(int lit, int exp) {
+        return exp;
+    }
+
+    public static boolean sep(int lit, boolean exp) {
+        return exp;
+    }
+
+    /**
+     * Max.
+     * <p>
+     * Returns the maximum value of an array.
+     *
+     * @param values the array
+     * @return the int
+     */
+
+
+    /*@ public normal_behavior ensures true; @*/
+    public int max(int[] values) {
+        sep(1);
+        int max = values[sep(8, 0)];
+        sep(2);
+        int i = 0;
+        sep(3);
+        while (sep(9, i < values.length)) {
+            sep(4);
+            int j = values[sep(10, i++)];
+            sep(5);
+            if (sep(11, j > max)) {
+                sep(6);
+                max = j;
+            }
+        }
+        sep(7);
+        return max;
+    }
+
+    /**
+     * Middle.
+     * <p>
+     * Returns the middle Value of a given array.
+     * For demo purpose.
+     *
+     * @param myArray the integer array
+     * @return the integer in the middle of the array.
+     */
+    /*@ public normal_behavior ensures true; @*/
+    public int middle(int[] myArray) {
+        sep(12);
+        int i = myArray.length / 2;
+        sep(13);
+        return myArray[sep(14, i)];
+    }
 }
 /**
-  
- Here the Debug.sep(); statements are inserted.
- 
-package tests;
-
-public class HowTacletsWork {
-
-	
-
-	
-}
-*/
+ * Here the Debug.sep(); statements are inserted.
+ * <p>
+ * package tests;
+ * <p>
+ * public class HowTacletsWork {
+ * <p>
+ * <p>
+ * <p>
+ * <p>
+ * }
+ */

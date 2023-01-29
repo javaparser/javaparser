@@ -47,38 +47,41 @@ public class ThreadSpec {
           helper model two_state boolean joinTransfer(); @*/
 
 
-        /*@ normal_behavior
-            requires this != \dl_currentThread();
-            requires true;
-            requires preStart(\dl_currentThread());
-            ensures startTransfer();
-            assignable<permissions> workingPermissions();
-            assignable<heap> \nothing; @*/
-        public /*@ helper @*/ native void start();
+    /*@ normal_behavior
+        requires this != \dl_currentThread();
+        requires true;
+        requires preStart(\dl_currentThread());
+        ensures startTransfer();
+        assignable<permissions> workingPermissions();
+        assignable<heap> \nothing; @*/
+    public /*@ helper @*/ native void start();
 
-        /*@ normal_behavior
-            requires this != \dl_currentThread();
-            requires \dl_readPermission(\permission(this.canJoin)); 
-            ensures postJoin(\dl_currentThread());
-            ensures joinTransfer();
-            assignable<permissions> workingPermissions();
-            assignable<heap> workingPermissions(); @*/
-        public /*@ helper @*/ native void join();
+    /*@ normal_behavior
+        requires this != \dl_currentThread();
+        requires \dl_readPermission(\permission(this.canJoin));
+        ensures postJoin(\dl_currentThread());
+        ensures joinTransfer();
+        assignable<permissions> workingPermissions();
+        assignable<heap> workingPermissions(); @*/
+    public /*@ helper @*/ native void join();
 
-        /*@ normal_behavior
-            requires this == \dl_currentThread();
-            requires preStart(this);
-            ensures postJoin(this);
-            assignable<heap> workingPermissions();
-            assignable<permissions> \nothing; @*/
-        public /*@ helper @*/ void run() {}
+    /*@ normal_behavior
+        requires this == \dl_currentThread();
+        requires preStart(this);
+        ensures postJoin(this);
+        assignable<heap> workingPermissions();
+        assignable<permissions> \nothing; @*/
+    public /*@ helper @*/ void run() {
+    }
 
-        //@ public instance ghost boolean canJoin;
+    //@ public instance ghost boolean canJoin;
 
-        /*@ normal_behavior
-            ensures \dl_writePermission(\permission(this.canJoin));
-            ensures initPost();
-            assignable \nothing;
-            assignable<permissions> \nothing; @*/
-        /*@ helper @*/ public ThreadSpec() {}
+    /*@ normal_behavior
+        ensures \dl_writePermission(\permission(this.canJoin));
+        ensures initPost();
+        assignable \nothing;
+        assignable<permissions> \nothing; @*/
+    /*@ helper @*/
+    public ThreadSpec() {
+    }
 }

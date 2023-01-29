@@ -25,20 +25,28 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class NonSymmetricMatrixException extends MathIllegalArgumentException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -7518495577824189882L;
-    /** Row. */
+    /**
+     * Row.
+     */
     private final int row;
-    /** Column. */
+    /**
+     * Column.
+     */
     private final int column;
-    /** Threshold. */
+    /**
+     * Threshold.
+     */
     private final double threshold;
 
     /**
      * Construct an exception.
      *
-     * @param row Row index.
-     * @param column Column index.
+     * @param row       Row index.
+     * @param column    Column index.
      * @param threshold Relative symmetry threshold.
      */
     public NonSymmetricMatrixException(int row,
@@ -56,12 +64,14 @@ public class NonSymmetricMatrixException extends MathIllegalArgumentException {
     public int getRow() {
         return row;
     }
+
     /**
      * @return the column index of the entry.
      */
     public int getColumn() {
         return column;
     }
+
     /**
      * @return the relative symmetry threshold.
      */

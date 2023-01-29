@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 /**
- *
- *     Root finding algorithms, for univariate real functions.
- *
+ * Root finding algorithms, for univariate real functions.
  */
 package org.apache.commons.math3.analysis.solvers;

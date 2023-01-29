@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -29,19 +29,21 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class VoidType extends Type {
 
-	public VoidType() {
-	}
+    public VoidType() {
+    }
 
-	public VoidType(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
-		super(beginLine, beginColumn, endLine, endColumn);
-	}
+    public VoidType(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
+        super(beginLine, beginColumn, endLine, endColumn);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
 }

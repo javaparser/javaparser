@@ -27,20 +27,22 @@ import java.io.Serializable;
  *
  * @see PointValuePair
  * @see org.apache.commons.math3.analysis.MultivariateVectorFunction
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class PointVectorValuePair extends Pair<double[], double[]> implements Serializable {
 
-    /** Serializable UID. */
+    /**
+     * Serializable UID.
+     */
     private static final long serialVersionUID = 20120513L;
 
     /**
      * Builds a point/objective function value pair.
      *
      * @param point Point coordinates. This instance will store
-     * a copy of the array, not the array passed as argument.
+     *              a copy of the array, not the array passed as argument.
      * @param value Value of the objective function at the point.
      */
     public PointVectorValuePair(final double[] point,
@@ -51,22 +53,22 @@ public class PointVectorValuePair extends Pair<double[], double[]> implements Se
     /**
      * Build a point/objective function value pair.
      *
-     * @param point Point coordinates.
-     * @param value Value of the objective function at the point.
+     * @param point     Point coordinates.
+     * @param value     Value of the objective function at the point.
      * @param copyArray if {@code true}, the input arrays will be copied,
-     * otherwise they will be referenced.
+     *                  otherwise they will be referenced.
      */
     public PointVectorValuePair(final double[] point,
                                 final double[] value,
                                 final boolean copyArray) {
         super(copyArray ?
-              ((point == null) ? null :
-               point.clone()) :
-              point,
-              copyArray ?
-              ((value == null) ? null :
-               value.clone()) :
-              value);
+                        ((point == null) ? null :
+                                point.clone()) :
+                        point,
+                copyArray ?
+                        ((value == null) ? null :
+                                value.clone()) :
+                        value);
     }
 
     /**
@@ -111,28 +113,37 @@ public class PointVectorValuePair extends Pair<double[], double[]> implements Se
 
     /**
      * Replace the instance with a data transfer object for serialization.
+     *
      * @return data transfer object that will be serialized
      */
     private Object writeReplace() {
         return new DataTransferObject(getKey(), getValue());
     }
 
-    /** Internal class used only for serialization. */
+    /**
+     * Internal class used only for serialization.
+     */
     private static class DataTransferObject implements Serializable {
-        /** Serializable UID. */
+        /**
+         * Serializable UID.
+         */
         private static final long serialVersionUID = 20120513L;
         /**
          * Point coordinates.
+         *
          * @Serial
          */
         private final double[] point;
         /**
          * Value of the objective function at the point.
+         *
          * @Serial
          */
         private final double[] value;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param point Point coordinates.
          * @param value Value of the objective function at the point.
          */
@@ -141,7 +152,9 @@ public class PointVectorValuePair extends Pair<double[], double[]> implements Se
             this.value = value.clone();
         }
 
-        /** Replace the deserialized data transfer object with a {@link PointValuePair}.
+        /**
+         * Replace the deserialized data transfer object with a {@link PointValuePair}.
+         *
          * @return replacement {@link PointValuePair}
          */
         private Object readResolve() {

@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -62,8 +62,8 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     }
 
     /**
-     * @deprecated use {@link #getBody()}
      * @return
+     * @deprecated use {@link #getBody()}
      */
     @Deprecated
     public BlockStmt getBlock() {
@@ -75,8 +75,8 @@ public final class SynchronizedStmt extends Statement implements NodeWithBlockSt
     }
 
     /**
-     * @deprecated Use {@link #setBody(BlockStmt)} instead
      * @param block
+     * @deprecated Use {@link #setBody(BlockStmt)} instead
      */
     @Deprecated
     public SynchronizedStmt setBlock(final BlockStmt block) {

@@ -31,16 +31,26 @@ import org.apache.commons.math3.util.Incrementor;
 public abstract class AbstractOptimizationProblem<PAIR>
         implements OptimizationProblem<PAIR> {
 
-    /** Callback to use for the evaluation counter. */
+    /**
+     * Callback to use for the evaluation counter.
+     */
     private static final MaxEvalCallback MAX_EVAL_CALLBACK = new MaxEvalCallback();
-    /** Callback to use for the iteration counter. */
+    /**
+     * Callback to use for the iteration counter.
+     */
     private static final MaxIterCallback MAX_ITER_CALLBACK = new MaxIterCallback();
 
-    /** max evaluations */
+    /**
+     * max evaluations
+     */
     private final int maxEvaluations;
-    /** max iterations */
+    /**
+     * max iterations
+     */
     private final int maxIterations;
-    /** Convergence checker. */
+    /**
+     * Convergence checker.
+     */
     private final ConvergenceChecker<PAIR> checker;
 
     /**
@@ -58,22 +68,30 @@ public abstract class AbstractOptimizationProblem<PAIR>
         this.checker = checker;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Incrementor getEvaluationCounter() {
         return new Incrementor(this.maxEvaluations, MAX_EVAL_CALLBACK);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Incrementor getIterationCounter() {
         return new Incrementor(this.maxIterations, MAX_ITER_CALLBACK);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ConvergenceChecker<PAIR> getConvergenceChecker() {
         return checker;
     }
 
-    /** Defines the action to perform when reaching the maximum number of evaluations. */
+    /**
+     * Defines the action to perform when reaching the maximum number of evaluations.
+     */
     private static class MaxEvalCallback
             implements Incrementor.MaxCountExceededCallback {
         /**
@@ -86,7 +104,9 @@ public abstract class AbstractOptimizationProblem<PAIR>
         }
     }
 
-    /** Defines the action to perform when reaching the maximum number of evaluations. */
+    /**
+     * Defines the action to perform when reaching the maximum number of evaluations.
+     */
     private static class MaxIterCallback
             implements Incrementor.MaxCountExceededCallback {
         /**

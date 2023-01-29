@@ -62,7 +62,9 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> implements OrderedMap<K, V> {
 
-    /** Header in the linked list */
+    /**
+     * Header in the linked list
+     */
     transient LinkEntry<K, V> header;
 
     /**
@@ -75,9 +77,9 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     /**
      * Constructor which performs no validation on the passed in parameters.
      *
-     * @param initialCapacity  the initial capacity, must be a power of two
-     * @param loadFactor  the load factor, must be &gt; 0.0f and generally &lt; 1.0f
-     * @param threshold  the threshold, must be sensible
+     * @param initialCapacity the initial capacity, must be a power of two
+     * @param loadFactor      the load factor, must be &gt; 0.0f and generally &lt; 1.0f
+     * @param threshold       the threshold, must be sensible
      */
     protected AbstractLinkedMap(final int initialCapacity, final float loadFactor, final int threshold) {
         super(initialCapacity, loadFactor, threshold);
@@ -86,7 +88,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     /**
      * Constructs a new, empty map with the specified initial capacity.
      *
-     * @param initialCapacity  the initial capacity
+     * @param initialCapacity the initial capacity
      * @throws IllegalArgumentException if the initial capacity is negative
      */
     protected AbstractLinkedMap(final int initialCapacity) {
@@ -97,8 +99,8 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
      * Constructs a new, empty map with the specified initial capacity and
      * load factor.
      *
-     * @param initialCapacity  the initial capacity
-     * @param loadFactor  the load factor
+     * @param initialCapacity the initial capacity
+     * @param loadFactor      the load factor
      * @throws IllegalArgumentException if the initial capacity is negative
      * @throws IllegalArgumentException if the load factor is less than zero
      */
@@ -109,7 +111,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     /**
      * Constructor copying elements from another map.
      *
-     * @param map  the map to copy
+     * @param map the map to copy
      * @throws NullPointerException if the map is null
      */
     protected AbstractLinkedMap(final Map<? extends K, ? extends V> map) {
@@ -130,10 +132,11 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Checks whether the map contains the specified value.
      *
-     * @param value  the value to search for
+     * @param value the value to search for
      * @return true if the map contains the value
      */
     @Override
@@ -167,6 +170,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the first key in the map, which is the first inserted.
      *
@@ -196,7 +200,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     /**
      * Gets the next key in sequence.
      *
-     * @param key  the key to get after
+     * @param key the key to get after
      * @return the next key
      */
     @Override
@@ -213,7 +217,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     /**
      * Gets the previous key in sequence.
      *
-     * @param key  the key to get before
+     * @param key the key to get before
      * @return the previous key
      */
     @Override
@@ -223,10 +227,11 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the key at the specified index.
      *
-     * @param index  the index to retrieve
+     * @param index the index to retrieve
      * @return the key at the specified index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
@@ -260,13 +265,13 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
      * This implementation adds the entry to the data storage table and
      * to the end of the linked list.
      *
-     * @param entry  the entry to add
-     * @param hashIndex  the index into the data array to store at
+     * @param entry     the entry to add
+     * @param hashIndex the index into the data array to store at
      */
     @Override
     protected void addEntry(final HashEntry<K, V> entry, final int hashIndex) {
         final LinkEntry<K, V> link = (LinkEntry<K, V>) entry;
-        link.after  = header;
+        link.after = header;
         link.before = header.before;
         header.before.after = link;
         header.before = link;
@@ -278,10 +283,10 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
      * <p>
      * This implementation creates a new LinkEntry instance.
      *
-     * @param next  the next entry in sequence
-     * @param hashCode  the hash code to use
-     * @param key  the key to store
-     * @param value  the value to store
+     * @param next     the next entry in sequence
+     * @param hashCode the hash code to use
+     * @param key      the key to store
+     * @param value    the value to store
      * @return the newly created entry
      */
     @Override
@@ -295,8 +300,8 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
      * This implementation removes the entry from the linked list chain, then
      * calls the superclass implementation.
      *
-     * @param entry  the entry to remove
-     * @param hashIndex  the index into the data structure
+     * @param entry     the entry to remove
+     * @param hashIndex the index into the data structure
      * @param previous  the previous entry in the chain
      */
     @Override
@@ -310,11 +315,12 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the <code>before</code> field from a <code>LinkEntry</code>.
      * Used in subclasses that have no visibility of the field.
      *
-     * @param entry  the entry to query, must not be null
+     * @param entry the entry to query, must not be null
      * @return the <code>before</code> field of the entry
      * @throws NullPointerException if the entry is null
      * @since 3.1
@@ -327,7 +333,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
      * Gets the <code>after</code> field from a <code>LinkEntry</code>.
      * Used in subclasses that have no visibility of the field.
      *
-     * @param entry  the entry to query, must not be null
+     * @param entry the entry to query, must not be null
      * @return the <code>after</code> field of the entry
      * @throws NullPointerException if the entry is null
      * @since 3.1
@@ -337,6 +343,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * {@inheritDoc}
      */
@@ -397,6 +404,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Creates an entry set iterator.
      * Subclasses can override this to return iterators with different properties.
@@ -433,6 +441,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Creates a key set iterator.
      * Subclasses can override this to return iterators with different properties.
@@ -470,6 +479,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Creates a values iterator.
      * Subclasses can override this to return iterators with different properties.
@@ -507,6 +517,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * LinkEntry that stores the data.
      * <p>
@@ -516,18 +527,22 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
      * to provide the necessary access.
      */
     protected static class LinkEntry<K, V> extends HashEntry<K, V> {
-        /** The entry before this one in the order */
+        /**
+         * The entry before this one in the order
+         */
         protected LinkEntry<K, V> before;
-        /** The entry after this one in the order */
+        /**
+         * The entry after this one in the order
+         */
         protected LinkEntry<K, V> after;
 
         /**
          * Constructs a new entry.
          *
-         * @param next  the next entry in the hash bucket sequence
-         * @param hashCode  the hash code
-         * @param key  the key
-         * @param value  the value
+         * @param next     the next entry in the hash bucket sequence
+         * @param hashCode the hash code
+         * @param key      the key
+         * @param value    the value
          */
         protected LinkEntry(final HashEntry<K, V> next, final int hashCode, final Object key, final V value) {
             super(next, hashCode, key, value);
@@ -539,13 +554,21 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
      */
     protected static abstract class LinkIterator<K, V> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         protected final AbstractLinkedMap<K, V> parent;
-        /** The current (last returned) entry */
+        /**
+         * The current (last returned) entry
+         */
         protected LinkEntry<K, V> last;
-        /** The next entry */
+        /**
+         * The next entry
+         */
         protected LinkEntry<K, V> next;
-        /** The modification count expected */
+        /**
+         * The modification count expected
+         */
         protected int expectedModCount;
 
         protected LinkIterator(final AbstractLinkedMap<K, V> parent) {
@@ -567,7 +590,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
             if (parent.modCount != expectedModCount) {
                 throw new ConcurrentModificationException();
             }
-            if (next == parent.header)  {
+            if (next == parent.header) {
                 throw new NoSuchElementException(AbstractHashedMap.NO_NEXT_ENTRY);
             }
             last = next;
@@ -580,7 +603,7 @@ public abstract class AbstractLinkedMap<K, V> extends AbstractHashedMap<K, V> im
                 throw new ConcurrentModificationException();
             }
             final LinkEntry<K, V> previous = next.before;
-            if (previous == parent.header)  {
+            if (previous == parent.header) {
                 throw new NoSuchElementException(AbstractHashedMap.NO_PREVIOUS_ENTRY);
             }
             next = previous;

@@ -7,6 +7,7 @@ public class NonGenericModelClassExampleBug {
           public boolean foo() { return true; }
       }
     @*/
-    
-    protected NonGenericModelClassExampleBug() {}
+
+    protected NonGenericModelClassExampleBug() {
+    }
 }

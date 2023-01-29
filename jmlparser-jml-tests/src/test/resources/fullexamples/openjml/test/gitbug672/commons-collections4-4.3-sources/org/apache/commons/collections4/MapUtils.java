@@ -33,21 +33,21 @@ import java.util.Map.Entry;
  * <p>
  * It also provides the following decorators:
  *
- *  <ul>
- *  <li>{@link #fixedSizeMap(Map)}
- *  <li>{@link #fixedSizeSortedMap(SortedMap)}
- *  <li>{@link #lazyMap(Map,Factory)}
- *  <li>{@link #lazyMap(Map,Transformer)}
- *  <li>{@link #lazySortedMap(SortedMap,Factory)}
- *  <li>{@link #lazySortedMap(SortedMap,Transformer)}
- *  <li>{@link #predicatedMap(Map,Predicate,Predicate)}
- *  <li>{@link #predicatedSortedMap(SortedMap,Predicate,Predicate)}
- *  <li>{@link #transformedMap(Map, Transformer, Transformer)}
- *  <li>{@link #transformedSortedMap(SortedMap, Transformer, Transformer)}
- *  <li>{@link #multiValueMap( Map )}
- *  <li>{@link #multiValueMap( Map, Class )}
- *  <li>{@link #multiValueMap( Map, Factory )}
- *  </ul>
+ * <ul>
+ * <li>{@link #fixedSizeMap(Map)}
+ * <li>{@link #fixedSizeSortedMap(SortedMap)}
+ * <li>{@link #lazyMap(Map, Factory)}
+ * <li>{@link #lazyMap(Map, Transformer)}
+ * <li>{@link #lazySortedMap(SortedMap, Factory)}
+ * <li>{@link #lazySortedMap(SortedMap, Transformer)}
+ * <li>{@link #predicatedMap(Map, Predicate, Predicate)}
+ * <li>{@link #predicatedSortedMap(SortedMap, Predicate, Predicate)}
+ * <li>{@link #transformedMap(Map, Transformer, Transformer)}
+ * <li>{@link #transformedSortedMap(SortedMap, Transformer, Transformer)}
+ * <li>{@link #multiValueMap(Map)}
+ * <li>{@link #multiValueMap(Map, Class)}
+ * <li>{@link #multiValueMap(Map, Factory)}
+ * </ul>
  *
  * @since 1.0
  */
@@ -70,17 +70,19 @@ public class MapUtils {
     /**
      * <code>MapUtils</code> should not normally be instantiated.
      */
-    private MapUtils() {}
+    private MapUtils() {
+    }
 
     // Type safe getters
     //-------------------------------------------------------------------------
+
     /**
      * Gets from a Map in a null-safe manner.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map, <code>null</code> if null map input
      */
     public static <K, V> V getObject(final Map<? super K, V> map, final K key) {
@@ -95,9 +97,9 @@ public class MapUtils {
      * <p>
      * The String is obtained via <code>toString</code>.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a String, <code>null</code> if null map input
      */
     public static <K> String getString(final Map<? super K, ?> map, final K key) {
@@ -120,9 +122,9 @@ public class MapUtils {
      * <code>false</code> and non-zero returns <code>true</code>.
      * Otherwise, <code>null</code> is returned.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Boolean, <code>null</code> if null map input
      */
     public static <K> Boolean getBoolean(final Map<? super K, ?> map, final K key) {
@@ -153,9 +155,9 @@ public class MapUtils {
      * returning <code>null</code> if the conversion fails.
      * Otherwise, <code>null</code> is returned.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Number, <code>null</code> if null map input
      */
     public static <K> Number getNumber(final Map<? super K, ?> map, final K key) {
@@ -181,11 +183,11 @@ public class MapUtils {
     /**
      * Gets a Byte from a Map in a null-safe manner.
      * <p>
-     * The Byte is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The Byte is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Byte, <code>null</code> if null map input
      */
     public static <K> Byte getByte(final Map<? super K, ?> map, final K key) {
@@ -202,11 +204,11 @@ public class MapUtils {
     /**
      * Gets a Short from a Map in a null-safe manner.
      * <p>
-     * The Short is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The Short is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Short, <code>null</code> if null map input
      */
     public static <K> Short getShort(final Map<? super K, ?> map, final K key) {
@@ -223,11 +225,11 @@ public class MapUtils {
     /**
      * Gets a Integer from a Map in a null-safe manner.
      * <p>
-     * The Integer is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The Integer is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Integer, <code>null</code> if null map input
      */
     public static <K> Integer getInteger(final Map<? super K, ?> map, final K key) {
@@ -244,11 +246,11 @@ public class MapUtils {
     /**
      * Gets a Long from a Map in a null-safe manner.
      * <p>
-     * The Long is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The Long is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Long, <code>null</code> if null map input
      */
     public static <K> Long getLong(final Map<? super K, ?> map, final K key) {
@@ -265,11 +267,11 @@ public class MapUtils {
     /**
      * Gets a Float from a Map in a null-safe manner.
      * <p>
-     * The Float is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The Float is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Float, <code>null</code> if null map input
      */
     public static <K> Float getFloat(final Map<? super K, ?> map, final K key) {
@@ -286,11 +288,11 @@ public class MapUtils {
     /**
      * Gets a Double from a Map in a null-safe manner.
      * <p>
-     * The Double is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The Double is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Double, <code>null</code> if null map input
      */
     public static <K> Double getDouble(final Map<? super K, ?> map, final K key) {
@@ -310,9 +312,9 @@ public class MapUtils {
      * If the value returned from the specified map is not a Map then
      * <code>null</code> is returned.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Map, <code>null</code> if null map input
      */
     public static <K> Map<?, ?> getMap(final Map<? super K, ?> map, final K key) {
@@ -327,17 +329,18 @@ public class MapUtils {
 
     // Type safe getters with default values
     //-------------------------------------------------------------------------
+
     /**
      * Looks up the given key in the given map, converting null into the
      * given default value.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null
-     * @return  the value in the map, or defaultValue if the original value
-     *   is null or the map is null
+     * @param <K>          the key type
+     * @param <V>          the value type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null
+     * @return the value in the map, or defaultValue if the original value
+     * is null or the map is null
      */
     public static <K, V> V getObject(final Map<K, V> map, final K key, final V defaultValue) {
         if (map != null) {
@@ -353,13 +356,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a string, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a string, or defaultValue if the
-     *   original value is null, the map is null or the string conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a string, or defaultValue if the
+     * original value is null, the map is null or the string conversion fails
      */
     public static <K> String getString(final Map<? super K, ?> map, final K key, final String defaultValue) {
         String answer = getString(map, key);
@@ -373,13 +376,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a boolean, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a boolean, or defaultValue if the
-     *   original value is null, the map is null or the boolean conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a boolean, or defaultValue if the
+     * original value is null, the map is null or the boolean conversion fails
      */
     public static <K> Boolean getBoolean(final Map<? super K, ?> map, final K key, final Boolean defaultValue) {
         Boolean answer = getBoolean(map, key);
@@ -393,13 +396,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a number, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a number, or defaultValue if the
-     *   original value is null, the map is null or the number conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a number, or defaultValue if the
+     * original value is null, the map is null or the number conversion fails
      */
     public static <K> Number getNumber(final Map<? super K, ?> map, final K key, final Number defaultValue) {
         Number answer = getNumber(map, key);
@@ -413,13 +416,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a byte, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a number, or defaultValue if the
-     *   original value is null, the map is null or the number conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a number, or defaultValue if the
+     * original value is null, the map is null or the number conversion fails
      */
     public static <K> Byte getByte(final Map<? super K, ?> map, final K key, final Byte defaultValue) {
         Byte answer = getByte(map, key);
@@ -433,13 +436,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a short, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a number, or defaultValue if the
-     *   original value is null, the map is null or the number conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a number, or defaultValue if the
+     * original value is null, the map is null or the number conversion fails
      */
     public static <K> Short getShort(final Map<? super K, ?> map, final K key, final Short defaultValue) {
         Short answer = getShort(map, key);
@@ -453,13 +456,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * an integer, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a number, or defaultValue if the
-     *   original value is null, the map is null or the number conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a number, or defaultValue if the
+     * original value is null, the map is null or the number conversion fails
      */
     public static <K> Integer getInteger(final Map<? super K, ?> map, final K key, final Integer defaultValue) {
         Integer answer = getInteger(map, key);
@@ -473,13 +476,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a long, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a number, or defaultValue if the
-     *   original value is null, the map is null or the number conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a number, or defaultValue if the
+     * original value is null, the map is null or the number conversion fails
      */
     public static <K> Long getLong(final Map<? super K, ?> map, final K key, final Long defaultValue) {
         Long answer = getLong(map, key);
@@ -493,13 +496,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a float, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a number, or defaultValue if the
-     *   original value is null, the map is null or the number conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a number, or defaultValue if the
+     * original value is null, the map is null or the number conversion fails
      */
     public static <K> Float getFloat(final Map<? super K, ?> map, final K key, final Float defaultValue) {
         Float answer = getFloat(map, key);
@@ -513,13 +516,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a double, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a number, or defaultValue if the
-     *   original value is null, the map is null or the number conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a number, or defaultValue if the
+     * original value is null, the map is null or the number conversion fails
      */
     public static <K> Double getDouble(final Map<? super K, ?> map, final K key, final Double defaultValue) {
         Double answer = getDouble(map, key);
@@ -533,13 +536,13 @@ public class MapUtils {
      * Looks up the given key in the given map, converting the result into
      * a map, using the default value if the conversion fails.
      *
-     * @param <K>  the key type
-     * @param map  the map whose value to look up
-     * @param key  the key of the value to look up in that map
-     * @param defaultValue  what to return if the value is null or if the
-     *   conversion fails
-     * @return  the value in the map as a number, or defaultValue if the
-     *   original value is null, the map is null or the map conversion fails
+     * @param <K>          the key type
+     * @param map          the map whose value to look up
+     * @param key          the key of the value to look up in that map
+     * @param defaultValue what to return if the value is null or if the
+     *                     conversion fails
+     * @return the value in the map as a number, or defaultValue if the
+     * original value is null, the map is null or the map conversion fails
      */
     public static <K> Map<?, ?> getMap(final Map<? super K, ?> map, final K key, final Map<?, ?> defaultValue) {
         Map<?, ?> answer = getMap(map, key);
@@ -551,6 +554,7 @@ public class MapUtils {
 
     // Type safe primitive getters
     //-------------------------------------------------------------------------
+
     /**
      * Gets a boolean from a Map in a null-safe manner.
      * <p>
@@ -561,9 +565,9 @@ public class MapUtils {
      * <code>false</code> and non-zero returns <code>true</code>.
      * Otherwise, <code>false</code> is returned.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a Boolean, <code>false</code> if null map input
      */
     public static <K> boolean getBooleanValue(final Map<? super K, ?> map, final K key) {
@@ -573,11 +577,11 @@ public class MapUtils {
     /**
      * Gets a byte from a Map in a null-safe manner.
      * <p>
-     * The byte is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The byte is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a byte, <code>0</code> if null map input
      */
     public static <K> byte getByteValue(final Map<? super K, ?> map, final K key) {
@@ -591,11 +595,11 @@ public class MapUtils {
     /**
      * Gets a short from a Map in a null-safe manner.
      * <p>
-     * The short is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The short is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a short, <code>0</code> if null map input
      */
     public static <K> short getShortValue(final Map<? super K, ?> map, final K key) {
@@ -609,11 +613,11 @@ public class MapUtils {
     /**
      * Gets an int from a Map in a null-safe manner.
      * <p>
-     * The int is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The int is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as an int, <code>0</code> if null map input
      */
     public static <K> int getIntValue(final Map<? super K, ?> map, final K key) {
@@ -627,11 +631,11 @@ public class MapUtils {
     /**
      * Gets a long from a Map in a null-safe manner.
      * <p>
-     * The long is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The long is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a long, <code>0L</code> if null map input
      */
     public static <K> long getLongValue(final Map<? super K, ?> map, final K key) {
@@ -645,11 +649,11 @@ public class MapUtils {
     /**
      * Gets a float from a Map in a null-safe manner.
      * <p>
-     * The float is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The float is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a float, <code>0.0F</code> if null map input
      */
     public static <K> float getFloatValue(final Map<? super K, ?> map, final K key) {
@@ -663,11 +667,11 @@ public class MapUtils {
     /**
      * Gets a double from a Map in a null-safe manner.
      * <p>
-     * The double is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The double is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
+     * @param <K> the key type
+     * @param map the map to use
+     * @param key the key to look up
      * @return the value in the Map as a double, <code>0.0</code> if null map input
      */
     public static <K> double getDoubleValue(final Map<? super K, ?> map, final K key) {
@@ -680,6 +684,7 @@ public class MapUtils {
 
     // Type safe primitive getters with default values
     //-------------------------------------------------------------------------
+
     /**
      * Gets a boolean from a Map in a null-safe manner,
      * using the default value if the conversion fails.
@@ -691,10 +696,10 @@ public class MapUtils {
      * <code>false</code> and non-zero returns <code>true</code>.
      * Otherwise, <code>defaultValue</code> is returned.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
-     * @param defaultValue  return if the value is null or if the conversion fails
+     * @param <K>          the key type
+     * @param map          the map to use
+     * @param key          the key to look up
+     * @param defaultValue return if the value is null or if the conversion fails
      * @return the value in the Map as a Boolean, <code>defaultValue</code> if null map input
      */
     public static <K> boolean getBooleanValue(final Map<? super K, ?> map, final K key, final boolean defaultValue) {
@@ -709,12 +714,12 @@ public class MapUtils {
      * Gets a byte from a Map in a null-safe manner,
      * using the default value if the conversion fails.
      * <p>
-     * The byte is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The byte is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
-     * @param defaultValue  return if the value is null or if the conversion fails
+     * @param <K>          the key type
+     * @param map          the map to use
+     * @param key          the key to look up
+     * @param defaultValue return if the value is null or if the conversion fails
      * @return the value in the Map as a byte, <code>defaultValue</code> if null map input
      */
     public static <K> byte getByteValue(final Map<? super K, ?> map, final K key, final byte defaultValue) {
@@ -729,12 +734,12 @@ public class MapUtils {
      * Gets a short from a Map in a null-safe manner,
      * using the default value if the conversion fails.
      * <p>
-     * The short is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The short is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
-     * @param defaultValue  return if the value is null or if the conversion fails
+     * @param <K>          the key type
+     * @param map          the map to use
+     * @param key          the key to look up
+     * @param defaultValue return if the value is null or if the conversion fails
      * @return the value in the Map as a short, <code>defaultValue</code> if null map input
      */
     public static <K> short getShortValue(final Map<? super K, ?> map, final K key, final short defaultValue) {
@@ -749,12 +754,12 @@ public class MapUtils {
      * Gets an int from a Map in a null-safe manner,
      * using the default value if the conversion fails.
      * <p>
-     * The int is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The int is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
-     * @param defaultValue  return if the value is null or if the conversion fails
+     * @param <K>          the key type
+     * @param map          the map to use
+     * @param key          the key to look up
+     * @param defaultValue return if the value is null or if the conversion fails
      * @return the value in the Map as an int, <code>defaultValue</code> if null map input
      */
     public static <K> int getIntValue(final Map<? super K, ?> map, final K key, final int defaultValue) {
@@ -769,12 +774,12 @@ public class MapUtils {
      * Gets a long from a Map in a null-safe manner,
      * using the default value if the conversion fails.
      * <p>
-     * The long is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The long is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
-     * @param defaultValue  return if the value is null or if the conversion fails
+     * @param <K>          the key type
+     * @param map          the map to use
+     * @param key          the key to look up
+     * @param defaultValue return if the value is null or if the conversion fails
      * @return the value in the Map as a long, <code>defaultValue</code> if null map input
      */
     public static <K> long getLongValue(final Map<? super K, ?> map, final K key, final long defaultValue) {
@@ -789,12 +794,12 @@ public class MapUtils {
      * Gets a float from a Map in a null-safe manner,
      * using the default value if the conversion fails.
      * <p>
-     * The float is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The float is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
-     * @param defaultValue  return if the value is null or if the conversion fails
+     * @param <K>          the key type
+     * @param map          the map to use
+     * @param key          the key to look up
+     * @param defaultValue return if the value is null or if the conversion fails
      * @return the value in the Map as a float, <code>defaultValue</code> if null map input
      */
     public static <K> float getFloatValue(final Map<? super K, ?> map, final K key, final float defaultValue) {
@@ -809,12 +814,12 @@ public class MapUtils {
      * Gets a double from a Map in a null-safe manner,
      * using the default value if the conversion fails.
      * <p>
-     * The double is obtained from the results of {@link #getNumber(Map,Object)}.
+     * The double is obtained from the results of {@link #getNumber(Map, Object)}.
      *
-     * @param <K>  the key type
-     * @param map  the map to use
-     * @param key  the key to look up
-     * @param defaultValue  return if the value is null or if the conversion fails
+     * @param <K>          the key type
+     * @param map          the map to use
+     * @param key          the key to look up
+     * @param defaultValue return if the value is null or if the conversion fails
      * @return the value in the Map as a double, <code>defaultValue</code> if null map input
      */
     public static <K> double getDoubleValue(final Map<? super K, ?> map, final K key, final double defaultValue) {
@@ -827,6 +832,7 @@ public class MapUtils {
 
     // Conversion methods
     //-------------------------------------------------------------------------
+
     /**
      * Gets a new Properties object initialised with the values from a Map.
      * A null input will return an empty properties object.
@@ -835,9 +841,9 @@ public class MapUtils {
      * the provided map contains either a key or value which is {@code null},
      * a {@link NullPointerException} will be thrown.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to convert to a Properties object
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to convert to a Properties object
      * @return the properties object
      * @throws NullPointerException if a key or value in the provided map is {@code null}
      */
@@ -857,7 +863,7 @@ public class MapUtils {
     /**
      * Creates a new HashMap using data copied from a ResourceBundle.
      *
-     * @param resourceBundle  the resource bundle to convert, may not be null
+     * @param resourceBundle the resource bundle to convert, may not be null
      * @return the hashmap containing the data
      * @throws NullPointerException if the bundle is null
      */
@@ -876,6 +882,7 @@ public class MapUtils {
 
     // Printing methods
     //-------------------------------------------------------------------------
+
     /**
      * Prints the given map with nice line breaks.
      * <p>
@@ -886,12 +893,12 @@ public class MapUtils {
      * This method is NOT thread-safe in any special way. You must manually
      * synchronize on either this class or the stream as required.
      *
-     * @param out  the stream to print to, must not be null
-     * @param label  The label to be used, may be <code>null</code>.
-     *  If <code>null</code>, the label is not output.
-     *  It typically represents the name of the property in a bean or similar.
-     * @param map  The map to print, may be <code>null</code>.
-     *  If <code>null</code>, the text 'null' is output.
+     * @param out   the stream to print to, must not be null
+     * @param label The label to be used, may be <code>null</code>.
+     *              If <code>null</code>, the label is not output.
+     *              It typically represents the name of the property in a bean or similar.
+     * @param map   The map to print, may be <code>null</code>.
+     *              If <code>null</code>, the text 'null' is output.
      * @throws NullPointerException if the stream is <code>null</code>
      */
     public static void verbosePrint(final PrintStream out, final Object label, final Map<?, ?> map) {
@@ -908,12 +915,12 @@ public class MapUtils {
      * This method is NOT thread-safe in any special way. You must manually
      * synchronize on either this class or the stream as required.
      *
-     * @param out  the stream to print to, must not be null
-     * @param label  The label to be used, may be <code>null</code>.
-     *   If <code>null</code>, the label is not output.
-     *   It typically represents the name of the property in a bean or similar.
-     * @param map  The map to print, may be <code>null</code>.
-     *   If <code>null</code>, the text 'null' is output.
+     * @param out   the stream to print to, must not be null
+     * @param label The label to be used, may be <code>null</code>.
+     *              If <code>null</code>, the label is not output.
+     *              It typically represents the name of the property in a bean or similar.
+     * @param map   The map to print, may be <code>null</code>.
+     *              If <code>null</code>, the text 'null' is output.
      * @throws NullPointerException if the stream is <code>null</code>
      */
     public static void debugPrint(final PrintStream out, final Object label, final Map<?, ?> map) {
@@ -922,6 +929,7 @@ public class MapUtils {
 
     // Implementation methods
     //-------------------------------------------------------------------------
+
     /**
      * Implementation providing functionality for {@link #debugPrint} and for
      * {@link #verbosePrint}.  This prints the given map with nice line breaks.
@@ -933,16 +941,16 @@ public class MapUtils {
      * traversed in the sequential list of ancestors (e.g. father, grandfather,
      * great-grandfather, etc).
      *
-     * @param out  the stream to print to
-     * @param label  the label to be used, may be <code>null</code>.
-     *   If <code>null</code>, the label is not output.
-     *   It typically represents the name of the property in a bean or similar.
-     * @param map  the map to print, may be <code>null</code>.
-     *   If <code>null</code>, the text 'null' is output
-     * @param lineage  a stack consisting of any maps in which the previous
-     *   argument is contained. This is checked to avoid infinite recursion when
-     *   printing the output
-     * @param debug  flag indicating whether type names should be output.
+     * @param out     the stream to print to
+     * @param label   the label to be used, may be <code>null</code>.
+     *                If <code>null</code>, the label is not output.
+     *                It typically represents the name of the property in a bean or similar.
+     * @param map     the map to print, may be <code>null</code>.
+     *                If <code>null</code>, the text 'null' is output
+     * @param lineage a stack consisting of any maps in which the previous
+     *                argument is contained. This is checked to avoid infinite recursion when
+     *                printing the output
+     * @param debug   flag indicating whether type names should be output.
      * @throws NullPointerException if the stream is <code>null</code>
      */
     private static void verbosePrintInternal(final PrintStream out, final Object label, final Map<?, ?> map,
@@ -972,11 +980,11 @@ public class MapUtils {
             final Object childValue = entry.getValue();
             if (childValue instanceof Map && !lineage.contains(childValue)) {
                 verbosePrintInternal(
-                    out,
-                    childKey == null ? "null" : childKey,
-                    (Map<?, ?>) childValue,
-                    lineage,
-                    debug);
+                        out,
+                        childKey == null ? "null" : childKey,
+                        (Map<?, ?>) childValue,
+                        lineage,
+                        debug);
             } else {
                 printIndent(out, lineage.size());
                 out.print(childKey);
@@ -984,16 +992,16 @@ public class MapUtils {
 
                 final int lineageIndex =
                         IterableUtils.indexOf(lineage,
-                                              PredicateUtils.equalPredicate(childValue));
+                                PredicateUtils.equalPredicate(childValue));
                 if (lineageIndex == -1) {
                     out.print(childValue);
                 } else if (lineage.size() - 1 == lineageIndex) {
                     out.print("(this Map)");
                 } else {
                     out.print(
-                        "(ancestor["
-                            + (lineage.size() - 1 - lineageIndex - 1)
-                            + "] Map)");
+                            "(ancestor["
+                                    + (lineage.size() - 1 - lineageIndex - 1)
+                                    + "] Map)");
                 }
 
                 if (debug && childValue != null) {
@@ -1014,7 +1022,7 @@ public class MapUtils {
     /**
      * Writes indentation to the given stream.
      *
-     * @param out  the stream to indent
+     * @param out the stream to indent
      */
     private static void printIndent(final PrintStream out, final int indent) {
         for (int i = 0; i < indent; i++) {
@@ -1024,6 +1032,7 @@ public class MapUtils {
 
     // Misc
     //-----------------------------------------------------------------------
+
     /**
      * Inverts the supplied map returning a new HashMap such that the keys of
      * the input are swapped with the values.
@@ -1033,9 +1042,9 @@ public class MapUtils {
      * different keys, the returned map will map one of those keys to the
      * value, but the exact key which will be mapped is undefined.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to invert, may not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to invert, may not be null
      * @return a new HashMap containing the inverted data
      * @throws NullPointerException if the map is null
      */
@@ -1048,6 +1057,7 @@ public class MapUtils {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Protects against adding null values to a map.
      * <p>
@@ -1062,10 +1072,10 @@ public class MapUtils {
      * Note that this method can be used to circumvent the map's
      * value type at runtime.
      *
-     * @param <K>  the key type
-     * @param map  the map to add to, may not be null
-     * @param key  the key
-     * @param value  the value, null converted to ""
+     * @param <K>   the key type
+     * @param map   the map to add to, may not be null
+     * @param key   the key
+     * @param value the value, null converted to ""
      * @throws NullPointerException if the map is null
      */
     public static <K> void safeAddToMap(final Map<? super K, Object> map, final K key, final Object value)
@@ -1074,6 +1084,7 @@ public class MapUtils {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Puts all the keys and values from the specified array into the map.
      * <p>
@@ -1112,14 +1123,14 @@ public class MapUtils {
      * });
      * </pre>
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to populate, must not be null
-     * @param array  an array to populate from, null ignored
+     * @param <K>   the key type
+     * @param <V>   the value type
+     * @param map   the map to populate, must not be null
+     * @param array an array to populate from, null ignored
      * @return the input map
-     * @throws NullPointerException  if map is null
-     * @throws IllegalArgumentException  if sub-array or entry matching used and an entry is invalid
-     * @throws ClassCastException if the array contents is mixed
+     * @throws NullPointerException     if map is null
+     * @throws IllegalArgumentException if sub-array or entry matching used and an entry is invalid
+     * @throws ClassCastException       if the array contents is mixed
      * @since 3.2
      */
     @SuppressWarnings("unchecked") // As per Javadoc throws CCE for invalid array contents
@@ -1153,7 +1164,7 @@ public class MapUtils {
                 map.put((K) sub[0], (V) sub[1]);
             }
         } else {
-            for (int i = 0; i < array.length - 1;) {
+            for (int i = 0; i < array.length - 1; ) {
                 // these casts can fail if array has incorrect types
                 map.put((K) array[i++], (V) array[i++]);
             }
@@ -1172,8 +1183,8 @@ public class MapUtils {
      * @param map the map, possibly <code>null</code>
      * @return an empty map if the argument is <code>null</code>
      */
-    public static <K,V> Map<K,V> emptyIfNull(final Map<K,V> map) {
-        return map == null ? Collections.<K,V>emptyMap() : map;
+    public static <K, V> Map<K, V> emptyIfNull(final Map<K, V> map) {
+        return map == null ? Collections.<K, V>emptyMap() : map;
     }
 
     /**
@@ -1181,11 +1192,11 @@ public class MapUtils {
      * <p>
      * Null returns true.
      *
-     * @param map  the map to check, may be null
+     * @param map the map to check, may be null
      * @return true if empty or null
      * @since 3.2
      */
-    public static boolean isEmpty(final Map<?,?> map) {
+    public static boolean isEmpty(final Map<?, ?> map) {
         return map == null || map.isEmpty();
     }
 
@@ -1194,16 +1205,17 @@ public class MapUtils {
      * <p>
      * Null returns false.
      *
-     * @param map  the map to check, may be null
+     * @param map the map to check, may be null
      * @return true if non-null and non-empty
      * @since 3.2
      */
-    public static boolean isNotEmpty(final Map<?,?> map) {
+    public static boolean isNotEmpty(final Map<?, ?> map) {
         return !MapUtils.isEmpty(map);
     }
 
     // Map decorators
     //-----------------------------------------------------------------------
+
     /**
      * Returns a synchronized map backed by the given map.
      * <p>
@@ -1220,12 +1232,12 @@ public class MapUtils {
      *     }
      * }
      * </pre>
-     *
+     * <p>
      * This method uses the implementation in {@link java.util.Collections Collections}.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to synchronize, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to synchronize, must not be null
      * @return a synchronized map backed by the given map
      */
     public static <K, V> Map<K, V> synchronizedMap(final Map<K, V> map) {
@@ -1237,11 +1249,11 @@ public class MapUtils {
      * <p>
      * This method uses the implementation in the decorators subpackage.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to make unmodifiable, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to make unmodifiable, must not be null
      * @return an unmodifiable map backed by the given map
-     * @throws NullPointerException  if the map is null
+     * @throws NullPointerException if the map is null
      */
     public static <K, V> Map<K, V> unmodifiableMap(final Map<? extends K, ? extends V> map) {
         return UnmodifiableMap.unmodifiableMap(map);
@@ -1256,13 +1268,13 @@ public class MapUtils {
      * It is important not to use the original map after invoking this method,
      * as it is a backdoor for adding invalid objects.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to predicate, must not be null
-     * @param keyPred  the predicate for keys, null means no check
-     * @param valuePred  the predicate for values, null means no check
+     * @param <K>       the key type
+     * @param <V>       the value type
+     * @param map       the map to predicate, must not be null
+     * @param keyPred   the predicate for keys, null means no check
+     * @param valuePred the predicate for values, null means no check
      * @return a predicated map backed by the given map
-     * @throws NullPointerException  if the Map is null
+     * @throws NullPointerException if the Map is null
      */
     public static <K, V> IterableMap<K, V> predicatedMap(final Map<K, V> map, final Predicate<? super K> keyPred,
                                                          final Predicate<? super V> valuePred) {
@@ -1284,17 +1296,17 @@ public class MapUtils {
      * If there are any elements already in the map being decorated, they
      * are NOT transformed.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to transform, must not be null, typically empty
-     * @param keyTransformer  the transformer for the map keys, null means no transformation
-     * @param valueTransformer  the transformer for the map values, null means no transformation
+     * @param <K>              the key type
+     * @param <V>              the value type
+     * @param map              the map to transform, must not be null, typically empty
+     * @param keyTransformer   the transformer for the map keys, null means no transformation
+     * @param valueTransformer the transformer for the map values, null means no transformation
      * @return a transformed map backed by the given map
-     * @throws NullPointerException  if the Map is null
+     * @throws NullPointerException if the Map is null
      */
     public static <K, V> IterableMap<K, V> transformedMap(final Map<K, V> map,
-            final Transformer<? super K, ? extends K> keyTransformer,
-            final Transformer<? super V, ? extends V> valueTransformer) {
+                                                          final Transformer<? super K, ? extends K> keyTransformer,
+                                                          final Transformer<? super V, ? extends V> valueTransformer) {
         return TransformedMap.transformingMap(map, keyTransformer, valueTransformer);
     }
 
@@ -1302,13 +1314,13 @@ public class MapUtils {
      * Returns a fixed-sized map backed by the given map.
      * Elements may not be added or removed from the returned map, but
      * existing elements can be changed (for instance, via the
-     * {@link Map#put(Object,Object)} method).
+     * {@link Map#put(Object, Object)} method).
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map whose size to fix, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map whose size to fix, must not be null
      * @return a fixed-size map backed by that map
-     * @throws NullPointerException  if the Map is null
+     * @throws NullPointerException if the Map is null
      */
     public static <K, V> IterableMap<K, V> fixedSizeMap(final Map<K, V> map) {
         return FixedSizeMap.fixedSizeMap(map);
@@ -1332,17 +1344,17 @@ public class MapUtils {
      * Map lazyMap = MapUtils.lazyMap(new HashMap(), factory);
      * Object obj = lazyMap.get("test");
      * </pre>
-     *
+     * <p>
      * After the above code is executed, <code>obj</code> will contain
      * a new <code>Date</code> instance.  Furthermore, that <code>Date</code>
      * instance is the value for the <code>"test"</code> key in the map.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to make lazy, must not be null
-     * @param factory  the factory for creating new objects, must not be null
+     * @param <K>     the key type
+     * @param <V>     the value type
+     * @param map     the map to make lazy, must not be null
+     * @param factory the factory for creating new objects, must not be null
      * @return a lazy map backed by the given map
-     * @throws NullPointerException  if the Map or Factory is null
+     * @throws NullPointerException if the Map or Factory is null
      */
     public static <K, V> IterableMap<K, V> lazyMap(final Map<K, V> map, final Factory<? extends V> factory) {
         return LazyMap.lazyMap(map, factory);
@@ -1367,7 +1379,7 @@ public class MapUtils {
      * Map lazyMap = MapUtils.lazyMap(new HashMap(), factory);
      * Object obj = lazyMap.get("C:/dev");
      * </pre>
-     *
+     * <p>
      * After the above code is executed, <code>obj</code> will contain
      * a new <code>File</code> instance for the C drive dev directory.
      * Furthermore, that <code>File</code> instance is the value for the
@@ -1378,15 +1390,15 @@ public class MapUtils {
      * calls back to the factory Transformer to populate itself, all within the
      * same synchronized block.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to make lazy, must not be null
-     * @param transformerFactory  the factory for creating new objects, must not be null
+     * @param <K>                the key type
+     * @param <V>                the value type
+     * @param map                the map to make lazy, must not be null
+     * @param transformerFactory the factory for creating new objects, must not be null
      * @return a lazy map backed by the given map
-     * @throws NullPointerException  if the Map or Transformer is null
+     * @throws NullPointerException if the Map or Transformer is null
      */
     public static <K, V> IterableMap<K, V> lazyMap(final Map<K, V> map,
-            final Transformer<? super K, ? extends V> transformerFactory) {
+                                                   final Transformer<? super K, ? extends V> transformerFactory) {
         return LazyMap.lazyMap(map, transformerFactory);
     }
 
@@ -1397,11 +1409,11 @@ public class MapUtils {
      * If a key is added twice, the order is determined by the first add.
      * The order is observed through the keySet, values and entrySet.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to order, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to order, must not be null
      * @return an ordered map backed by the given map
-     * @throws NullPointerException  if the Map is null
+     * @throws NullPointerException if the Map is null
      */
     public static <K, V> OrderedMap<K, V> orderedMap(final Map<K, V> map) {
         return ListOrderedMap.listOrderedMap(map);
@@ -1411,9 +1423,9 @@ public class MapUtils {
      * Creates a mult-value map backed by the given map which returns
      * collections of type ArrayList.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to decorate
      * @return a multi-value map backed by the given map which returns ArrayLists of values.
      * @see MultiValueMap
      * @since 3.2
@@ -1428,12 +1440,12 @@ public class MapUtils {
      * Creates a multi-value map backed by the given map which returns
      * collections of the specified type.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param <C>  the collection class type
-     * @param map  the map to decorate
-     * @param collectionClass  the type of collections to return from the map
-     *   (must contain public no-arg constructor and extend Collection)
+     * @param <K>             the key type
+     * @param <V>             the value type
+     * @param <C>             the collection class type
+     * @param map             the map to decorate
+     * @param collectionClass the type of collections to return from the map
+     *                        (must contain public no-arg constructor and extend Collection)
      * @return a multi-value map backed by the given map which returns collections of the specified type
      * @see MultiValueMap
      * @since 3.2
@@ -1441,7 +1453,7 @@ public class MapUtils {
      */
     @Deprecated
     public static <K, V, C extends Collection<V>> MultiValueMap<K, V> multiValueMap(final Map<K, C> map,
-            final Class<C> collectionClass) {
+                                                                                    final Class<C> collectionClass) {
         return MultiValueMap.multiValueMap(map, collectionClass);
     }
 
@@ -1449,25 +1461,26 @@ public class MapUtils {
      * Creates a multi-value map backed by the given map which returns
      * collections created by the specified collection factory.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param <C>  the collection class type
-     * @param map  the map to decorate
-     * @param collectionFactory  a factor which creates collection objects
+     * @param <K>               the key type
+     * @param <V>               the value type
+     * @param <C>               the collection class type
+     * @param map               the map to decorate
+     * @param collectionFactory a factor which creates collection objects
      * @return a multi-value map backed by the given map which returns collections
-     *   created by the specified collection factory
+     * created by the specified collection factory
      * @see MultiValueMap
      * @since 3.2
      * @deprecated since 4.1, use {@link MultiValuedMap} instead
      */
     @Deprecated
     public static <K, V, C extends Collection<V>> MultiValueMap<K, V> multiValueMap(final Map<K, C> map,
-            final Factory<C> collectionFactory) {
+                                                                                    final Factory<C> collectionFactory) {
         return MultiValueMap.multiValueMap(map, collectionFactory);
     }
 
     // SortedMap decorators
     //-----------------------------------------------------------------------
+
     /**
      * Returns a synchronized sorted map backed by the given sorted map.
      * <p>
@@ -1484,14 +1497,14 @@ public class MapUtils {
      *     }
      * }
      * </pre>
-     *
+     * <p>
      * This method uses the implementation in {@link java.util.Collections Collections}.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to synchronize, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to synchronize, must not be null
      * @return a synchronized map backed by the given map
-     * @throws NullPointerException  if the map is null
+     * @throws NullPointerException if the map is null
      */
     public static <K, V> SortedMap<K, V> synchronizedSortedMap(final SortedMap<K, V> map) {
         return Collections.synchronizedSortedMap(map);
@@ -1502,11 +1515,11 @@ public class MapUtils {
      * <p>
      * This method uses the implementation in the decorators subpackage.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the sorted map to make unmodifiable, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the sorted map to make unmodifiable, must not be null
      * @return an unmodifiable map backed by the given map
-     * @throws NullPointerException  if the map is null
+     * @throws NullPointerException if the map is null
      */
     public static <K, V> SortedMap<K, V> unmodifiableSortedMap(final SortedMap<K, ? extends V> map) {
         return UnmodifiableSortedMap.unmodifiableSortedMap(map);
@@ -1521,16 +1534,16 @@ public class MapUtils {
      * It is important not to use the original map after invoking this method,
      * as it is a backdoor for adding invalid objects.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to predicate, must not be null
-     * @param keyPred  the predicate for keys, null means no check
-     * @param valuePred  the predicate for values, null means no check
+     * @param <K>       the key type
+     * @param <V>       the value type
+     * @param map       the map to predicate, must not be null
+     * @param keyPred   the predicate for keys, null means no check
+     * @param valuePred the predicate for values, null means no check
      * @return a predicated map backed by the given map
-     * @throws NullPointerException  if the SortedMap is null
+     * @throws NullPointerException if the SortedMap is null
      */
     public static <K, V> SortedMap<K, V> predicatedSortedMap(final SortedMap<K, V> map,
-            final Predicate<? super K> keyPred, final Predicate<? super V> valuePred) {
+                                                             final Predicate<? super K> keyPred, final Predicate<? super V> valuePred) {
         return PredicatedSortedMap.predicatedSortedMap(map, keyPred, valuePred);
     }
 
@@ -1549,17 +1562,17 @@ public class MapUtils {
      * If there are any elements already in the map being decorated, they
      * are NOT transformed.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to transform, must not be null, typically empty
-     * @param keyTransformer  the transformer for the map keys, null means no transformation
-     * @param valueTransformer  the transformer for the map values, null means no transformation
+     * @param <K>              the key type
+     * @param <V>              the value type
+     * @param map              the map to transform, must not be null, typically empty
+     * @param keyTransformer   the transformer for the map keys, null means no transformation
+     * @param valueTransformer the transformer for the map values, null means no transformation
      * @return a transformed map backed by the given map
-     * @throws NullPointerException  if the SortedMap is null
+     * @throws NullPointerException if the SortedMap is null
      */
     public static <K, V> SortedMap<K, V> transformedSortedMap(final SortedMap<K, V> map,
-            final Transformer<? super K, ? extends K> keyTransformer,
-            final Transformer<? super V, ? extends V> valueTransformer) {
+                                                              final Transformer<? super K, ? extends K> keyTransformer,
+                                                              final Transformer<? super V, ? extends V> valueTransformer) {
         return TransformedSortedMap.transformingSortedMap(map, keyTransformer, valueTransformer);
     }
 
@@ -1567,13 +1580,13 @@ public class MapUtils {
      * Returns a fixed-sized sorted map backed by the given sorted map.
      * Elements may not be added or removed from the returned map, but
      * existing elements can be changed (for instance, via the
-     * {@link Map#put(Object,Object)} method).
+     * {@link Map#put(Object, Object)} method).
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map whose size to fix, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map whose size to fix, must not be null
      * @return a fixed-size map backed by that map
-     * @throws NullPointerException  if the SortedMap is null
+     * @throws NullPointerException if the SortedMap is null
      */
     public static <K, V> SortedMap<K, V> fixedSizeSortedMap(final SortedMap<K, V> map) {
         return FixedSizeSortedMap.fixedSizeSortedMap(map);
@@ -1598,17 +1611,17 @@ public class MapUtils {
      * SortedMap lazy = MapUtils.lazySortedMap(new TreeMap(), factory);
      * Object obj = lazy.get("test");
      * </pre>
-     *
+     * <p>
      * After the above code is executed, <code>obj</code> will contain
      * a new <code>Date</code> instance.  Furthermore, that <code>Date</code>
      * instance is the value for the <code>"test"</code> key.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to make lazy, must not be null
-     * @param factory  the factory for creating new objects, must not be null
+     * @param <K>     the key type
+     * @param <V>     the value type
+     * @param map     the map to make lazy, must not be null
+     * @param factory the factory for creating new objects, must not be null
      * @return a lazy map backed by the given map
-     * @throws NullPointerException  if the SortedMap or Factory is null
+     * @throws NullPointerException if the SortedMap or Factory is null
      */
     public static <K, V> SortedMap<K, V> lazySortedMap(final SortedMap<K, V> map, final Factory<? extends V> factory) {
         return LazySortedMap.lazySortedMap(map, factory);
@@ -1633,7 +1646,7 @@ public class MapUtils {
      * SortedMap lazy = MapUtils.lazySortedMap(new TreeMap(), factory);
      * Object obj = lazy.get("C:/dev");
      * </pre>
-     *
+     * <p>
      * After the above code is executed, <code>obj</code> will contain
      * a new <code>File</code> instance for the C drive dev directory.
      * Furthermore, that <code>File</code> instance is the value for the
@@ -1644,15 +1657,15 @@ public class MapUtils {
      * calls back to the factory Transformer to populate itself, all within the
      * same synchronized block.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to make lazy, must not be null
-     * @param transformerFactory  the factory for creating new objects, must not be null
+     * @param <K>                the key type
+     * @param <V>                the value type
+     * @param map                the map to make lazy, must not be null
+     * @param transformerFactory the factory for creating new objects, must not be null
      * @return a lazy map backed by the given map
-     * @throws NullPointerException  if the Map or Transformer is null
+     * @throws NullPointerException if the Map or Transformer is null
      */
     public static <K, V> SortedMap<K, V> lazySortedMap(final SortedMap<K, V> map,
-            final Transformer<? super K, ? extends V> transformerFactory) {
+                                                       final Transformer<? super K, ? extends V> transformerFactory) {
         return LazySortedMap.lazySortedMap(map, transformerFactory);
     }
 
@@ -1660,10 +1673,10 @@ public class MapUtils {
      * Populates a Map using the supplied <code>Transformer</code> to transform the elements
      * into keys, using the unaltered element as the value in the <code>Map</code>.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map the <code>Map</code> to populate.
-     * @param elements the <code>Iterable</code> containing the input values for the map.
+     * @param <K>            the key type
+     * @param <V>            the value type
+     * @param map            the <code>Map</code> to populate.
+     * @param elements       the <code>Iterable</code> containing the input values for the map.
      * @param keyTransformer the <code>Transformer</code> used to transform the element into a key value
      * @throws NullPointerException if the map, elements or transformer are null
      */
@@ -1676,12 +1689,12 @@ public class MapUtils {
      * Populates a Map using the supplied <code>Transformer</code>s to transform the elements
      * into keys and values.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param <E>  the type of object contained in the {@link Iterable}
-     * @param map the <code>Map</code> to populate.
-     * @param elements the <code>Iterable</code> containing the input values for the map.
-     * @param keyTransformer the <code>Transformer</code> used to transform the element into a key value
+     * @param <K>              the key type
+     * @param <V>              the value type
+     * @param <E>              the type of object contained in the {@link Iterable}
+     * @param map              the <code>Map</code> to populate.
+     * @param elements         the <code>Iterable</code> containing the input values for the map.
+     * @param keyTransformer   the <code>Transformer</code> used to transform the element into a key value
      * @param valueTransformer the <code>Transformer</code> used to transform the element into a value
      * @throws NullPointerException if the map, elements or transformers are null
      */
@@ -1699,10 +1712,10 @@ public class MapUtils {
      * Populates a MultiMap using the supplied <code>Transformer</code> to transform the elements
      * into keys, using the unaltered element as the value in the <code>MultiMap</code>.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map the <code>MultiMap</code> to populate.
-     * @param elements the <code>Iterable</code> to use as input values for the map.
+     * @param <K>            the key type
+     * @param <V>            the value type
+     * @param map            the <code>MultiMap</code> to populate.
+     * @param elements       the <code>Iterable</code> to use as input values for the map.
      * @param keyTransformer the <code>Transformer</code> used to transform the element into a key value
      * @throws NullPointerException if the map, elements or transformer are null
      */
@@ -1715,12 +1728,12 @@ public class MapUtils {
      * Populates a MultiMap using the supplied <code>Transformer</code>s to transform the elements
      * into keys and values.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param <E>  the type of object contained in the {@link Iterable}
-     * @param map the <code>MultiMap</code> to populate.
-     * @param elements the <code>Iterable</code> containing the input values for the map.
-     * @param keyTransformer the <code>Transformer</code> used to transform the element into a key value
+     * @param <K>              the key type
+     * @param <V>              the value type
+     * @param <E>              the type of object contained in the {@link Iterable}
+     * @param map              the <code>MultiMap</code> to populate.
+     * @param elements         the <code>Iterable</code> containing the input values for the map.
+     * @param keyTransformer   the <code>Transformer</code> used to transform the element into a key value
      * @param valueTransformer the <code>Transformer</code> used to transform the element into a value
      * @throws NullPointerException if the map, collection or transformers are null
      */
@@ -1737,8 +1750,8 @@ public class MapUtils {
     /**
      * Get the specified {@link Map} as an {@link IterableMap}.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
+     * @param <K> the key type
+     * @param <V> the value type
      * @param map to wrap if necessary.
      * @return IterableMap&lt;K, V&gt;
      * @throws NullPointerException if map is null
@@ -1748,14 +1761,15 @@ public class MapUtils {
         if (map == null) {
             throw new NullPointerException("Map must not be null");
         }
-        return map instanceof IterableMap ? (IterableMap<K, V>) map : new AbstractMapDecorator<K, V>(map) {};
+        return map instanceof IterableMap ? (IterableMap<K, V>) map : new AbstractMapDecorator<K, V>(map) {
+        };
     }
 
     /**
      * Get the specified {@link SortedMap} as an {@link IterableSortedMap}.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
+     * @param <K>       the key type
+     * @param <V>       the value type
      * @param sortedMap to wrap if necessary
      * @return {@link IterableSortedMap}&lt;K, V&gt;
      * @throws NullPointerException if sortedMap is null
@@ -1766,11 +1780,13 @@ public class MapUtils {
             throw new NullPointerException("Map must not be null");
         }
         return sortedMap instanceof IterableSortedMap ? (IterableSortedMap<K, V>) sortedMap :
-                                                        new AbstractSortedMapDecorator<K, V>(sortedMap) {};
+                new AbstractSortedMapDecorator<K, V>(sortedMap) {
+                };
     }
 
     /**
      * Gets the given map size or 0 if the map is null
+     *
      * @param map a Map or null
      * @return the given map size or 0 if the map is null
      */

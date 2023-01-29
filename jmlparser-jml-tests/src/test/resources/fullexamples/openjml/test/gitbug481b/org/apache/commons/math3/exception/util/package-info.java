@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 /**
- *
- *    Classes supporting exception localization.
- *
+ * Classes supporting exception localization.
  */
 package org.apache.commons.math3.exception.util;

@@ -96,7 +96,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
     @Deprecated
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly) {
         return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
-                typeSolver,this, clazz);
+                typeSolver, this, clazz);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
             }
             try {
                 Type returnType = inferenceContext.addSingle(methodUsage.returnType());
-                for (int j=0;j<parameters.size();j++) {
+                for (int j = 0; j < parameters.size(); j++) {
                     methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
                 }
                 methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
@@ -270,7 +270,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration impl
         }
         return res;
     }
-    
+
     @Override
     public Optional<ReferenceTypeDeclaration> containerType() {
         return reflectionClassAdapter.containerType();

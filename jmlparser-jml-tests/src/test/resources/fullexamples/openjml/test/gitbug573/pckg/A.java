@@ -2,10 +2,10 @@ package pckg;
 
 public class A {
 
-	public B b;
+    public B b;
 
-	public int test(){
-	  return 0;
-	}
+    public int test() {
+        return 0;
+    }
 
 }

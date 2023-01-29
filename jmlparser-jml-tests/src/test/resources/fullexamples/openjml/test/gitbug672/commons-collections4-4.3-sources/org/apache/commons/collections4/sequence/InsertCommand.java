@@ -27,7 +27,6 @@ package org.apache.commons.collections4.sequence;
  *
  * @see SequencesComparator
  * @see EditScript
- *
  * @since 4.0
  */
 public class InsertCommand<T> extends EditCommand<T> {
@@ -35,7 +34,7 @@ public class InsertCommand<T> extends EditCommand<T> {
     /**
      * Simple constructor. Creates a new instance of InsertCommand
      *
-     * @param object  the object of the second sequence that should be inserted
+     * @param object the object of the second sequence that should be inserted
      */
     public InsertCommand(final T object) {
         super(object);
@@ -46,7 +45,7 @@ public class InsertCommand<T> extends EditCommand<T> {
      * it calls its {@link CommandVisitor#visitInsertCommand visitInsertCommand}
      * method.
      *
-     * @param visitor  the visitor to be accepted
+     * @param visitor the visitor to be accepted
      */
     @Override
     public void accept(final CommandVisitor<T> visitor) {

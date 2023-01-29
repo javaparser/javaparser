@@ -22,5 +22,6 @@
 package com.example;
 
 interface Alpha {
-  interface CustomInterface {}
+    interface CustomInterface {
+    }
 }

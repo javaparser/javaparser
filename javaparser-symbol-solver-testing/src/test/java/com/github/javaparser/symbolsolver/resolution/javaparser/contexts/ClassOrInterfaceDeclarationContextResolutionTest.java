@@ -407,19 +407,19 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveMethodWithAmbiguosCall() {
         assertThrows(MethodAmbiguityException.class, () -> {
             CompilationUnit cu = parseSample("ClassWithMethods");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
-        SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), false);
-    });
-                
-}
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+            Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, typeSolver);
+            SymbolReference<ResolvedMethodDeclaration> ref = context.solveMethod("foo5", ImmutableList.of(NullType.INSTANCE), false);
+        });
+
+    }
 
     @Test
     void solveMethodAsUsageSimpleCase() {
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+                new ReflectionTypeSolver());
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo0", ImmutableList.of());
         assertEquals(true, ref.isPresent());
@@ -432,7 +432,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+                new ReflectionTypeSolver());
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo1", ImmutableList.of());
         assertEquals(true, ref.isPresent());
@@ -445,7 +445,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+                new ReflectionTypeSolver());
 
         Optional<MethodUsage> ref = context.solveMethodAsUsage("foo2", ImmutableList.of());
         assertEquals(true, ref.isPresent());
@@ -458,7 +458,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+                new ReflectionTypeSolver());
 
         ResolvedType intType = ResolvedPrimitiveType.INT;
 
@@ -473,7 +473,7 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
         CompilationUnit cu = parseSample("ClassWithMethods");
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
         Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration,
-                                                                 new ReflectionTypeSolver());
+                new ReflectionTypeSolver());
 
         ResolvedType stringType = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
 
@@ -487,10 +487,10 @@ class ClassOrInterfaceDeclarationContextResolutionTest extends AbstractResolutio
     void solveMethodAsUsageWithAmbiguosCall() {
         assertThrows(MethodAmbiguityException.class, () -> {
             CompilationUnit cu = parseSample("ClassWithMethods");
-        ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
-        Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
-        Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(NullType.INSTANCE));
-    });
-                
-}
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration = Navigator.demandClass(cu, "A");
+            Context context = new ClassOrInterfaceDeclarationContext(classOrInterfaceDeclaration, new ReflectionTypeSolver());
+            Optional<MethodUsage> ref = context.solveMethodAsUsage("foo5", ImmutableList.of(NullType.INSTANCE));
+        });
+
+    }
 }

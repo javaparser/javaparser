@@ -41,16 +41,16 @@ public class Issue2259Test extends AbstractResolutionTest {
     @BeforeEach
     void setup() {
     }
-    
+
     @Test
     void test() throws IOException {
         // Source code
-        String src = "public class TestClass2 {\n" + 
-                "    public static void foo(Object o) {\n" + 
-                "    }\n" + 
-                "    public static void main(String[] args) {\n" + 
-                "        foo(new Object[5]);\n" + 
-                "    }\n" + 
+        String src = "public class TestClass2 {\n" +
+                "    public static void foo(Object o) {\n" +
+                "    }\n" +
+                "    public static void main(String[] args) {\n" +
+                "        foo(new Object[5]);\n" +
+                "    }\n" +
                 "}";
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
 
@@ -61,9 +61,9 @@ public class Issue2259Test extends AbstractResolutionTest {
         StaticJavaParser.setConfiguration(configuration);
         CompilationUnit cu = StaticJavaParser.parse(src);
         MethodCallExpr mce = cu.findFirst(MethodCallExpr.class).get();
-        assertEquals("foo(new Object[5])",mce.toString());
-        assertEquals("TestClass2.foo(java.lang.Object)",mce.resolve().getQualifiedSignature());
-        assertEquals("void",mce.calculateResolvedType().describe());
+        assertEquals("foo(new Object[5])", mce.toString());
+        assertEquals("TestClass2.foo(java.lang.Object)", mce.resolve().getQualifiedSignature());
+        assertEquals("void", mce.calculateResolvedType().describe());
 
     }
 

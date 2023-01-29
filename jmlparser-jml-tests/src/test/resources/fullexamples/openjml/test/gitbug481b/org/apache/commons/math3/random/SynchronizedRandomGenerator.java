@@ -26,7 +26,9 @@ package org.apache.commons.math3.random;
  * @since 3.1
  */
 public class SynchronizedRandomGenerator implements RandomGenerator {
-    /** Object to which all calls will be delegated. */
+    /**
+     * Object to which all calls will be delegated.
+     */
     private final RandomGenerator wrapped;
 
     /**
@@ -34,9 +36,9 @@ public class SynchronizedRandomGenerator implements RandomGenerator {
      * instance.
      *
      * @param rng Generator whose methods will be called through
-     * their corresponding overridden synchronized version.
-     * To ensure thread-safety, the wrapped generator <em>must</em>
-     * not be used directly.
+     *            their corresponding overridden synchronized version.
+     *            To ensure thread-safety, the wrapped generator <em>must</em>
+     *            not be used directly.
      */
     public SynchronizedRandomGenerator(RandomGenerator rng) {
         wrapped = rng;

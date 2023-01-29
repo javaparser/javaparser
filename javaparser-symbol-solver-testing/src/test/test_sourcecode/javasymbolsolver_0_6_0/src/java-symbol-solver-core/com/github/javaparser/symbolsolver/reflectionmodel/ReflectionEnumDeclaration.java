@@ -33,159 +33,159 @@ import java.util.*;
  */
 public class ReflectionEnumDeclaration extends AbstractTypeDeclaration implements EnumDeclaration {
 
-  ///
-  /// Fields
-  ///
+    ///
+    /// Fields
+    ///
 
-  private Class<?> clazz;
-  private TypeSolver typeSolver;
-  private ReflectionClassAdapter reflectionClassAdapter;
+    private Class<?> clazz;
+    private TypeSolver typeSolver;
+    private ReflectionClassAdapter reflectionClassAdapter;
 
-  ///
-  /// Constructors
-  ///
+    ///
+    /// Constructors
+    ///
 
-  public ReflectionEnumDeclaration(Class<?> clazz, TypeSolver typeSolver) {
-    if (clazz == null) {
-      throw new IllegalArgumentException("Class should not be null");
-    }
-    if (clazz.isInterface()) {
-      throw new IllegalArgumentException("Class should not be an interface");
-    }
-    if (clazz.isPrimitive()) {
-      throw new IllegalArgumentException("Class should not represent a primitive class");
-    }
-    if (clazz.isArray()) {
-      throw new IllegalArgumentException("Class should not be an array");
-    }
-    if (!clazz.isEnum()) {
-      throw new IllegalArgumentException("Class should be an enum");
-    }
-    this.clazz = clazz;
-    this.typeSolver = typeSolver;
-    this.reflectionClassAdapter = new ReflectionClassAdapter(clazz, typeSolver, this);
-  }
-
-  ///
-  /// Public methods
-  ///
-
-  @Override
-  public AccessLevel accessLevel() {
-    return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
-  }
-  
-  @Override
-  public Optional<ReferenceTypeDeclaration> containerType() {
-      return reflectionClassAdapter.containerType();
-  }
-
-  @Override
-  public String getPackageName() {
-    if (clazz.getPackage() != null) {
-      return clazz.getPackage().getName();
-    }
-    return null;
-  }
-
-  @Override
-  public String getClassName() {
-    String canonicalName = clazz.getCanonicalName();
-    if (canonicalName != null && getPackageName() != null) {
-      return canonicalName.substring(getPackageName().length() + 1, canonicalName.length());
-    }
-    return null;
-  }
-
-  @Override
-  public String getQualifiedName() {
-    return clazz.getCanonicalName();
-  }
-
-  @Override
-  public List<ReferenceType> getAncestors() {
-    return reflectionClassAdapter.getAncestors();
-  }
-
-  @Override
-  public FieldDeclaration getField(String name) {
-    return reflectionClassAdapter.getField(name);
-  }
-
-  @Override
-  public boolean hasField(String name) {
-    return reflectionClassAdapter.hasField(name);
-  }
-
-  @Override
-  public List<FieldDeclaration> getAllFields() {
-    return reflectionClassAdapter.getAllFields();
-  }
-
-  @Override
-  public Set<MethodDeclaration> getDeclaredMethods() {
-    return reflectionClassAdapter.getDeclaredMethods();
-  }
-
-  @Override
-  public boolean isAssignableBy(Type type) {
-    return reflectionClassAdapter.isAssignableBy(type);
-  }
-
-  @Override
-  public boolean isAssignableBy(ReferenceTypeDeclaration other) {
-    return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
-  }
-
-  @Override
-  public boolean hasDirectlyAnnotation(String qualifiedName) {
-    return reflectionClassAdapter.hasDirectlyAnnotation(qualifiedName);
-  }
-
-  @Override
-  public String getName() {
-    return clazz.getSimpleName();
-  }
-
-  @Override
-  public List<TypeParameterDeclaration> getTypeParameters() {
-    return reflectionClassAdapter.getTypeParameters();
-  }
-
-  public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly) {
-    return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
-            typeSolver,this, clazz);
-  }
-
-  public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
-    Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
-            typeParameterValues, this, clazz);
-    if (res.isPresent()) {
-        // We have to replace method type typeParametersValues here
-        InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
-        MethodUsage methodUsage = res.get();
-        int i = 0;
-        List<Type> parameters = new LinkedList<>();
-        for (Type actualType : parameterTypes) {
-            Type formalType = methodUsage.getParamType(i);
-            // We need to replace the class type typeParametersValues (while we derive the method ones)
-
-            parameters.add(inferenceContext.addPair(formalType, actualType));
-            i++;
+    public ReflectionEnumDeclaration(Class<?> clazz, TypeSolver typeSolver) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("Class should not be null");
         }
-        try {
-            Type returnType = inferenceContext.addSingle(methodUsage.returnType());
-            for (int j=0;j<parameters.size();j++) {
-                methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
+        if (clazz.isInterface()) {
+            throw new IllegalArgumentException("Class should not be an interface");
+        }
+        if (clazz.isPrimitive()) {
+            throw new IllegalArgumentException("Class should not represent a primitive class");
+        }
+        if (clazz.isArray()) {
+            throw new IllegalArgumentException("Class should not be an array");
+        }
+        if (!clazz.isEnum()) {
+            throw new IllegalArgumentException("Class should be an enum");
+        }
+        this.clazz = clazz;
+        this.typeSolver = typeSolver;
+        this.reflectionClassAdapter = new ReflectionClassAdapter(clazz, typeSolver, this);
+    }
+
+    ///
+    /// Public methods
+    ///
+
+    @Override
+    public AccessLevel accessLevel() {
+        return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
+    }
+
+    @Override
+    public Optional<ReferenceTypeDeclaration> containerType() {
+        return reflectionClassAdapter.containerType();
+    }
+
+    @Override
+    public String getPackageName() {
+        if (clazz.getPackage() != null) {
+            return clazz.getPackage().getName();
+        }
+        return null;
+    }
+
+    @Override
+    public String getClassName() {
+        String canonicalName = clazz.getCanonicalName();
+        if (canonicalName != null && getPackageName() != null) {
+            return canonicalName.substring(getPackageName().length() + 1, canonicalName.length());
+        }
+        return null;
+    }
+
+    @Override
+    public String getQualifiedName() {
+        return clazz.getCanonicalName();
+    }
+
+    @Override
+    public List<ReferenceType> getAncestors() {
+        return reflectionClassAdapter.getAncestors();
+    }
+
+    @Override
+    public FieldDeclaration getField(String name) {
+        return reflectionClassAdapter.getField(name);
+    }
+
+    @Override
+    public boolean hasField(String name) {
+        return reflectionClassAdapter.hasField(name);
+    }
+
+    @Override
+    public List<FieldDeclaration> getAllFields() {
+        return reflectionClassAdapter.getAllFields();
+    }
+
+    @Override
+    public Set<MethodDeclaration> getDeclaredMethods() {
+        return reflectionClassAdapter.getDeclaredMethods();
+    }
+
+    @Override
+    public boolean isAssignableBy(Type type) {
+        return reflectionClassAdapter.isAssignableBy(type);
+    }
+
+    @Override
+    public boolean isAssignableBy(ReferenceTypeDeclaration other) {
+        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+    }
+
+    @Override
+    public boolean hasDirectlyAnnotation(String qualifiedName) {
+        return reflectionClassAdapter.hasDirectlyAnnotation(qualifiedName);
+    }
+
+    @Override
+    public String getName() {
+        return clazz.getSimpleName();
+    }
+
+    @Override
+    public List<TypeParameterDeclaration> getTypeParameters() {
+        return reflectionClassAdapter.getTypeParameters();
+    }
+
+    public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly) {
+        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
+                typeSolver, this, clazz);
+    }
+
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<Type> parameterTypes, TypeSolver typeSolver, Context invokationContext, List<Type> typeParameterValues) {
+        Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
+                typeParameterValues, this, clazz);
+        if (res.isPresent()) {
+            // We have to replace method type typeParametersValues here
+            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+            MethodUsage methodUsage = res.get();
+            int i = 0;
+            List<Type> parameters = new LinkedList<>();
+            for (Type actualType : parameterTypes) {
+                Type formalType = methodUsage.getParamType(i);
+                // We need to replace the class type typeParametersValues (while we derive the method ones)
+
+                parameters.add(inferenceContext.addPair(formalType, actualType));
+                i++;
             }
-            methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
-            return Optional.of(methodUsage);
-        } catch (ConfilictingGenericTypesException e) {
-            return Optional.empty();
+            try {
+                Type returnType = inferenceContext.addSingle(methodUsage.returnType());
+                for (int j = 0; j < parameters.size(); j++) {
+                    methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
+                }
+                methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
+                return Optional.of(methodUsage);
+            } catch (ConfilictingGenericTypesException e) {
+                return Optional.empty();
+            }
+        } else {
+            return res;
         }
-    } else {
-        return res;
     }
-}
 
 }

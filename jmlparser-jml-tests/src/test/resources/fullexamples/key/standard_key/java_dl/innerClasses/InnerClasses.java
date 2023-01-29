@@ -18,29 +18,29 @@
 class InnerClasses {
 
     private int privField = 0;
-    
+
     class Innerst {
 
-	Innerst(int val) {
-	    // ignore argument
-	}
-	
-	void setPrivField() {
-	    privField = 1;
-	}
+        Innerst(int val) {
+            // ignore argument
+        }
+
+        void setPrivField() {
+            privField = 1;
+        }
     }
 
 
     void anonClass() {
-	final int newValue = 2;
+        final int newValue = 2;
 
-	Innerst anon = new Innerst(17) {
-		void setPrivField() {
-		    privField = newValue;
-		}
-	    };
+        Innerst anon = new Innerst(17) {
+            void setPrivField() {
+                privField = newValue;
+            }
+        };
 
-	anon.setPrivField();
+        anon.setPrivField();
     }
 
 /*  

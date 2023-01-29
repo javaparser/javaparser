@@ -138,7 +138,7 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     public List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers() {
         return wrappedNode.getMembers().stream()
                 .filter(m -> m instanceof AnnotationMemberDeclaration)
-                .map(m -> new JavaParserAnnotationMemberDeclaration((AnnotationMemberDeclaration)m, typeSolver))
+                .map(m -> new JavaParserAnnotationMemberDeclaration((AnnotationMemberDeclaration) m, typeSolver))
                 .collect(Collectors.toList());
     }
 

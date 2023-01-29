@@ -22,7 +22,7 @@ public class TestImplementation {
     }
 
     public static void main(String[] args) {
-        
+
         test(false, false, null, 0, true);
         map.put(key, value);
         test(true, true, value, 1, false);
@@ -32,7 +32,7 @@ public class TestImplementation {
         test(true, true, value, 1, false);
         map.remove(key);
         test(false, false, null, 0, true);
-        
+
         if (errors == 0) {
             //System.out.println("The map works as expected.");
         } else {

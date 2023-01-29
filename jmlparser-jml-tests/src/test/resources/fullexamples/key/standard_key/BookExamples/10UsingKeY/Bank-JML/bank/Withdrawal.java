@@ -19,7 +19,7 @@ package bank;
  * Objects of this class are immutable
  */
 public class Withdrawal extends Transaction {
-    
+
     /**
      * The amount of money that is withdrawn
      */
@@ -30,9 +30,9 @@ public class Withdrawal extends Transaction {
         public normal_behavior
         requires  amount > 0;
       @*/
-    public /*@ pure @*/ Withdrawal (final int date, final int amount) {
-        super ( date );
-        this.amount = amount;        
+    public /*@ pure @*/ Withdrawal(final int date, final int amount) {
+        super(date);
+        this.amount = amount;
     }
 
     /**
@@ -41,24 +41,23 @@ public class Withdrawal extends Transaction {
      * Invoking this method carries out <code>this</code> transaction on the
      * real account. Note that the withdrawal from the permanent account is
      * performed for the correct date
-     * 
-     * @param target
-     *            the permanent account on which <code>this</code> transaction
-     *            is supposed to be carried out
+     *
+     * @param target the permanent account on which <code>this</code> transaction
+     *               is supposed to be carried out
      */
-    public void replay (PermanentAccount target) {
-        target.withdraw ( getDate (), getAmount () );
+    public void replay(PermanentAccount target) {
+        target.withdraw(getDate(), getAmount());
     }
 
     /**
      * @return the amount of money that is withdrawn
      */
-    public /*@ pure @*/ int getAmount () {
+    public /*@ pure @*/ int getAmount() {
         return amount;
     }
 
-    
-    public /*@ pure @*/ String toString () {
+
+    public /*@ pure @*/ String toString() {
         return "" + getDate() + ":Withdrawal: " + getAmount();
     }
 }

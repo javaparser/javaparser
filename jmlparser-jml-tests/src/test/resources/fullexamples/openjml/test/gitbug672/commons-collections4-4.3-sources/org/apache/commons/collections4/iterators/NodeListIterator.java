@@ -27,14 +27,18 @@ import java.util.NoSuchElementException;
  * This iterator does not support {@link #remove()} as a {@link NodeList} does not support
  * removal of items.
  *
- * @since 4.0
  * @see NodeList
+ * @since 4.0
  */
 public class NodeListIterator implements Iterator<Node> {
 
-    /** the original NodeList instance */
+    /**
+     * the original NodeList instance
+     */
     private final NodeList nodeList;
-    /** The current iterator index */
+    /**
+     * The current iterator index
+     */
     private int index = 0;
 
     /**

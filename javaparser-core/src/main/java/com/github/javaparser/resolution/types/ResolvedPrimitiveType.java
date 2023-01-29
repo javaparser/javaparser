@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * @author Federico Tomassetti
  */
@@ -71,7 +70,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
      * Returns true if the specified type is a boxed type of a primitive type.
      */
     public static boolean isBoxType(ResolvedType type) {
-    	if (!type.isReferenceType()) {
+        if (!type.isReferenceType()) {
             return false;
         }
         String qName = type.asReferenceType().getQualifiedName();

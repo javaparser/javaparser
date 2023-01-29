@@ -57,30 +57,40 @@ import org.apache.commons.math3.util.MathUtils;
  * </p>
  *
  * @see MultivariateFunctionMappingAdapter
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 
 @Deprecated
 public class MultivariateFunctionPenaltyAdapter implements MultivariateFunction {
 
-    /** Underlying bounded function. */
+    /**
+     * Underlying bounded function.
+     */
     private final MultivariateFunction bounded;
 
-    /** Lower bounds. */
+    /**
+     * Lower bounds.
+     */
     private final double[] lower;
 
-    /** Upper bounds. */
+    /**
+     * Upper bounds.
+     */
     private final double[] upper;
 
-    /** Penalty offset. */
+    /**
+     * Penalty offset.
+     */
     private final double offset;
 
-    /** Penalty scales. */
+    /**
+     * Penalty scales.
+     */
     private final double[] scale;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * <p>
      * When the optimizer provided points are out of range, the value of the
      * penalty function will be used instead of the value of the underlying
@@ -108,22 +118,23 @@ public class MultivariateFunctionPenaltyAdapter implements MultivariateFunction 
      * boundaries violation than for small violations, so the optimizer has an hint
      * about the direction in which it should search for acceptable points.
      * </p>
+     *
      * @param bounded bounded function
-     * @param lower lower bounds for each element of the input parameters array
-     * (some elements may be set to {@code Double.NEGATIVE_INFINITY} for
-     * unbounded values)
-     * @param upper upper bounds for each element of the input parameters array
-     * (some elements may be set to {@code Double.POSITIVE_INFINITY} for
-     * unbounded values)
-     * @param offset base offset of the penalty function
-     * @param scale scale of the penalty function
-     * @exception DimensionMismatchException if lower bounds, upper bounds and
-     * scales are not consistent, either according to dimension or to bounadary
-     * values
+     * @param lower   lower bounds for each element of the input parameters array
+     *                (some elements may be set to {@code Double.NEGATIVE_INFINITY} for
+     *                unbounded values)
+     * @param upper   upper bounds for each element of the input parameters array
+     *                (some elements may be set to {@code Double.POSITIVE_INFINITY} for
+     *                unbounded values)
+     * @param offset  base offset of the penalty function
+     * @param scale   scale of the penalty function
+     * @throws DimensionMismatchException if lower bounds, upper bounds and
+     *                                    scales are not consistent, either according to dimension or to bounadary
+     *                                    values
      */
     public MultivariateFunctionPenaltyAdapter(final MultivariateFunction bounded,
-                                                  final double[] lower, final double[] upper,
-                                                  final double offset, final double[] scale) {
+                                              final double[] lower, final double[] upper,
+                                              final double offset, final double[] scale) {
 
         // safety checks
         MathUtils.checkNotNull(lower);
@@ -143,20 +154,22 @@ public class MultivariateFunctionPenaltyAdapter implements MultivariateFunction 
         }
 
         this.bounded = bounded;
-        this.lower   = lower.clone();
-        this.upper   = upper.clone();
-        this.offset  = offset;
-        this.scale   = scale.clone();
+        this.lower = lower.clone();
+        this.upper = upper.clone();
+        this.offset = offset;
+        this.scale = scale.clone();
 
     }
 
-    /** Compute the underlying function value from an unbounded point.
+    /**
+     * Compute the underlying function value from an unbounded point.
      * <p>
      * This method simply returns the value of the underlying function
      * if the unbounded point already fulfills the bounds, and compute
      * a replacement value using the offset and scale if bounds are
      * violated, without calling the function at all.
      * </p>
+     *
      * @param point unbounded point
      * @return either underlying function value or penalty function value
      */

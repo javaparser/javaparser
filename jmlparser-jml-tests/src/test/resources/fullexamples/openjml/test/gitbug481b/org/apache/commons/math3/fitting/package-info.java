@@ -16,7 +16,7 @@
  */
 /**
  * Classes to perform curve fitting.
- *
+ * <p>
  * Curve fitting is a special case of a least-squares problem
  * where the parameters are the coefficients of a function \( f \)
  * whose graph \( y = f(x) \) should pass through sample points, and

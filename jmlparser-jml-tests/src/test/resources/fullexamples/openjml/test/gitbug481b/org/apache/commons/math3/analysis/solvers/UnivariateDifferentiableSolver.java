@@ -26,4 +26,5 @@ import org.apache.commons.math3.analysis.differentiation.UnivariateDifferentiabl
  * @since 3.1
  */
 public interface UnivariateDifferentiableSolver
-    extends BaseUnivariateSolver<UnivariateDifferentiableFunction> {}
+        extends BaseUnivariateSolver<UnivariateDifferentiableFunction> {
+}

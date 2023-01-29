@@ -1,6 +1,6 @@
 //@ code_bigint_math spec_bigint_math
 public class BoxingTests {
-	//@ ensures \result == 1;
+    //@ ensures \result == 1;
     public static Integer incr_test() {
         Integer x = 0;
         x++;
@@ -8,7 +8,7 @@ public class BoxingTests {
     }
 
     public Integer i;
-    
+
     //@ requires b != null;
     //@ requires b.i != null;
     public static void incr_test2(BoxingTests b) {
@@ -30,8 +30,10 @@ public class BoxingTests {
         b &= false;
         return b;
     }
-    
-    public BoxingTests() { i = 0; }
+
+    public BoxingTests() {
+        i = 0;
+    }
 }
 
 // FIXME - add tests like Short += int, Short += SHort, etc.

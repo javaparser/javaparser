@@ -19,6 +19,7 @@ package org.apache.commons.math3.ml.clustering;
 
 /**
  * Interface for n-dimensional points that can be clustered together.
+ *
  * @since 3.2
  */
 public interface Clusterable {

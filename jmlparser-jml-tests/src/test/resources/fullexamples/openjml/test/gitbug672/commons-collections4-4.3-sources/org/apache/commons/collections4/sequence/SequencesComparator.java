@@ -52,21 +52,28 @@ import java.util.List;
  * @see EditScript
  * @see EditCommand
  * @see CommandVisitor
- *
  * @since 4.0
  */
 public class SequencesComparator<T> {
 
-    /** First sequence. */
+    /**
+     * First sequence.
+     */
     private final List<T> sequence1;
 
-    /** Second sequence. */
+    /**
+     * Second sequence.
+     */
     private final List<T> sequence2;
 
-    /** The equator used for testing object equality. */
+    /**
+     * The equator used for testing object equality.
+     */
     private final Equator<? super T> equator;
 
-    /** Temporary variables. */
+    /**
+     * Temporary variables.
+     */
     private final int[] vDown;
     private final int[] vUp;
 
@@ -81,8 +88,8 @@ public class SequencesComparator<T> {
      * important if subclassing is used for some elements in the first sequence
      * and the <code>equals</code> method is specialized.
      *
-     * @param sequence1  first sequence to be compared
-     * @param sequence2  second sequence to be compared
+     * @param sequence1 first sequence to be compared
+     * @param sequence2 second sequence to be compared
      */
     public SequencesComparator(final List<T> sequence1, final List<T> sequence2) {
         this(sequence1, sequence2, DefaultEquator.defaultEquator());
@@ -97,9 +104,9 @@ public class SequencesComparator<T> {
      * <code>Equator.equate(o1, o2)</code> where <code>o1</code> belongs to the first
      * sequence and <code>o2</code> belongs to the second sequence.
      *
-     * @param sequence1  first sequence to be compared
-     * @param sequence2  second sequence to be compared
-     * @param equator  the equator to use for testing object equality
+     * @param sequence1 first sequence to be compared
+     * @param sequence2 second sequence to be compared
+     * @param equator   the equator to use for testing object equality
      */
     public SequencesComparator(final List<T> sequence1, final List<T> sequence2, final Equator<? super T> equator) {
         this.sequence1 = sequence1;
@@ -108,7 +115,7 @@ public class SequencesComparator<T> {
 
         final int size = sequence1.size() + sequence2.size() + 2;
         vDown = new int[size];
-        vUp   = new int[size];
+        vUp = new int[size];
     }
 
     /**
@@ -122,7 +129,7 @@ public class SequencesComparator<T> {
      * sequence and the <code>equals</code> method is specialized.
      *
      * @return the edit script resulting from the comparison of the two
-     *         sequences
+     * sequences
      */
     public EditScript<T> getScript() {
         final EditScript<T> script = new EditScript<>();
@@ -133,7 +140,7 @@ public class SequencesComparator<T> {
     /**
      * Build a snake.
      *
-     * @param start  the value of the start of the snake
+     * @param start the value of the start of the snake
      * @param diag  the value of the diagonal of the snake
      * @param end1  the value of the end of the first sequence to be compared
      * @param end2  the value of the end of the second sequence to be compared
@@ -159,10 +166,10 @@ public class SequencesComparator<T> {
      * <a href="http://www.cs.arizona.edu/people/gene/PAPERS/diff.ps">
      * An O(ND) Difference Algorithm and Its Variations</a>.
      *
-     * @param start1  the begin of the first sequence to be compared
-     * @param end1  the end of the first sequence to be compared
-     * @param start2  the begin of the second sequence to be compared
-     * @param end2  the end of the second sequence to be compared
+     * @param start1 the begin of the first sequence to be compared
+     * @param end1   the end of the first sequence to be compared
+     * @param start2 the begin of the second sequence to be compared
+     * @param end2   the end of the second sequence to be compared
      * @return the middle snake
      */
     private Snake getMiddleSnake(final int start1, final int end1, final int start2, final int end2) {
@@ -174,22 +181,22 @@ public class SequencesComparator<T> {
             return null;
         }
 
-        final int delta  = m - n;
-        final int sum    = n + m;
+        final int delta = m - n;
+        final int sum = n + m;
         final int offset = (sum % 2 == 0 ? sum : sum + 1) / 2;
-        vDown[1+offset] = start1;
-        vUp[1+offset]   = end1 + 1;
+        vDown[1 + offset] = start1;
+        vUp[1 + offset] = end1 + 1;
 
-        for (int d = 0; d <= offset ; ++d) {
+        for (int d = 0; d <= offset; ++d) {
             // Down
             for (int k = -d; k <= d; k += 2) {
                 // First step
 
                 final int i = k + offset;
-                if (k == -d || k != d && vDown[i-1] < vDown[i+1]) {
-                    vDown[i] = vDown[i+1];
+                if (k == -d || k != d && vDown[i - 1] < vDown[i + 1]) {
+                    vDown[i] = vDown[i + 1];
                 } else {
-                    vDown[i] = vDown[i-1] + 1;
+                    vDown[i] = vDown[i - 1] + 1;
                 }
 
                 int x = vDown[i];
@@ -201,8 +208,8 @@ public class SequencesComparator<T> {
                 }
                 // Second step
                 if (delta % 2 != 0 && delta - d <= k && k <= delta + d) {
-                    if (vUp[i-delta] <= vDown[i]) { // NOPMD
-                        return buildSnake(vUp[i-delta], k + start1 - start2, end1, end2);
+                    if (vUp[i - delta] <= vDown[i]) { // NOPMD
+                        return buildSnake(vUp[i - delta], k + start1 - start2, end1, end2);
                     }
                 }
             }
@@ -212,10 +219,10 @@ public class SequencesComparator<T> {
                 // First step
                 final int i = k + offset - delta;
                 if (k == delta - d
-                        || k != delta + d && vUp[i+1] <= vUp[i-1]) {
-                    vUp[i] = vUp[i+1] - 1;
+                        || k != delta + d && vUp[i + 1] <= vUp[i - 1]) {
+                    vUp[i] = vUp[i + 1] - 1;
                 } else {
-                    vUp[i] = vUp[i-1];
+                    vUp[i] = vUp[i - 1];
                 }
 
                 int x = vUp[i] - 1;
@@ -226,7 +233,7 @@ public class SequencesComparator<T> {
                     y--;
                 }
                 // Second step
-                if (delta % 2 == 0 && -d <= k && k <= d ) {
+                if (delta % 2 == 0 && -d <= k && k <= d) {
                     if (vUp[i] <= vDown[i + delta]) { // NOPMD
                         return buildSnake(vUp[i], k + start1 - start2, end1, end2);
                     }
@@ -242,10 +249,10 @@ public class SequencesComparator<T> {
     /**
      * Build an edit script.
      *
-     * @param start1  the begin of the first sequence to be compared
-     * @param end1  the end of the first sequence to be compared
-     * @param start2  the begin of the second sequence to be compared
-     * @param end2  the end of the second sequence to be compared
+     * @param start1 the begin of the first sequence to be compared
+     * @param end1   the end of the first sequence to be compared
+     * @param start2 the begin of the second sequence to be compared
+     * @param end2   the end of the second sequence to be compared
      * @param script the edited script
      */
     private void buildScript(final int start1, final int end1, final int start2, final int end2,
@@ -278,14 +285,14 @@ public class SequencesComparator<T> {
         } else {
 
             buildScript(start1, middle.getStart(),
-                        start2, middle.getStart() - middle.getDiag(),
-                        script);
+                    start2, middle.getStart() - middle.getDiag(),
+                    script);
             for (int i = middle.getStart(); i < middle.getEnd(); ++i) {
                 script.append(new KeepCommand<>(sequence1.get(i)));
             }
             buildScript(middle.getEnd(), end1,
-                        middle.getEnd() - middle.getDiag(), end2,
-                        script);
+                    middle.getEnd() - middle.getDiag(), end2,
+                    script);
         }
     }
 
@@ -295,26 +302,32 @@ public class SequencesComparator<T> {
      */
     private static class Snake {
 
-        /** Start index. */
+        /**
+         * Start index.
+         */
         private final int start;
 
-        /** End index. */
+        /**
+         * End index.
+         */
         private final int end;
 
-        /** Diagonal number. */
+        /**
+         * Diagonal number.
+         */
         private final int diag;
 
         /**
          * Simple constructor. Creates a new instance of Snake with specified indices.
          *
-         * @param start  start index of the snake
-         * @param end  end index of the snake
+         * @param start start index of the snake
+         * @param end   end index of the snake
          * @param diag  diagonal number
          */
         public Snake(final int start, final int end, final int diag) {
             this.start = start;
-            this.end   = end;
-            this.diag  = diag;
+            this.end = end;
+            this.diag = diag;
         }
 
         /**

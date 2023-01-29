@@ -1,4 +1,3 @@
-
 public class Person {
 
     public static final int MASC = 0;
@@ -23,7 +22,7 @@ public class Person {
       @ public invariant (gender == MASC) | (gender == FEMI);
       @ public constraint gender == \old(gender);
       @*/
-    
+
     /*@ 
       @ requires !name.equals("");
       @ requires !firstname.equals("");
@@ -66,7 +65,7 @@ public class Person {
     public /*@ pure */ int getWeight() {
         return weight;
     }
-    
+
     /*@ 
       @ requires \typeof(this) == \type(Person) ;
       @ requires age < AGE_MAX;
@@ -107,6 +106,6 @@ public class Person {
       @ ensures \result != null;
       @*/
     public String toString() {
-        return firstname + " " + name + " is" + (gender == MASC ? " man ": " women ") + " aged " + age + " years and weighing " + weight + " kg";
+        return firstname + " " + name + " is" + (gender == MASC ? " man " : " women ") + " aged " + age + " years and weighing " + weight + " kg";
     }
 }

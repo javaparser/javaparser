@@ -36,7 +36,8 @@ public class FunctionUtils {
     /**
      * Class only contains static methods.
      */
-    private FunctionUtils() {}
+    private FunctionUtils() {
+    }
 
     /**
      * Composes functions.
@@ -47,7 +48,7 @@ public class FunctionUtils {
      * @param f List of functions.
      * @return the composite function.
      */
-    public static UnivariateFunction compose(final UnivariateFunction ... f) {
+    public static UnivariateFunction compose(final UnivariateFunction... f) {
         return new UnivariateFunction() {
             /** {@inheritDoc} */
             public double value(double x) {
@@ -70,7 +71,7 @@ public class FunctionUtils {
      * @return the composite function.
      * @since 3.1
      */
-    public static UnivariateDifferentiableFunction compose(final UnivariateDifferentiableFunction ... f) {
+    public static UnivariateDifferentiableFunction compose(final UnivariateDifferentiableFunction... f) {
         return new UnivariateDifferentiableFunction() {
 
             /** {@inheritDoc} */
@@ -105,7 +106,7 @@ public class FunctionUtils {
      * @deprecated as of 3.1 replaced by {@link #compose(UnivariateDifferentiableFunction...)}
      */
     @Deprecated
-    public static DifferentiableUnivariateFunction compose(final DifferentiableUnivariateFunction ... f) {
+    public static DifferentiableUnivariateFunction compose(final DifferentiableUnivariateFunction... f) {
         return new DifferentiableUnivariateFunction() {
             /** {@inheritDoc} */
             public double value(double x) {
@@ -140,7 +141,7 @@ public class FunctionUtils {
      * @param f List of functions.
      * @return a function that computes the sum of the functions.
      */
-    public static UnivariateFunction add(final UnivariateFunction ... f) {
+    public static UnivariateFunction add(final UnivariateFunction... f) {
         return new UnivariateFunction() {
             /** {@inheritDoc} */
             public double value(double x) {
@@ -160,7 +161,7 @@ public class FunctionUtils {
      * @return a function that computes the sum of the functions.
      * @since 3.1
      */
-    public static UnivariateDifferentiableFunction add(final UnivariateDifferentiableFunction ... f) {
+    public static UnivariateDifferentiableFunction add(final UnivariateDifferentiableFunction... f) {
         return new UnivariateDifferentiableFunction() {
 
             /** {@inheritDoc} */
@@ -176,7 +177,7 @@ public class FunctionUtils {
              * @throws DimensionMismatchException if functions are not consistent with each other
              */
             public DerivativeStructure value(final DerivativeStructure t)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 DerivativeStructure r = f[0].value(t);
                 for (int i = 1; i < f.length; i++) {
                     r = r.add(f[i].value(t));
@@ -195,7 +196,7 @@ public class FunctionUtils {
      * @deprecated as of 3.1 replaced by {@link #add(UnivariateDifferentiableFunction...)}
      */
     @Deprecated
-    public static DifferentiableUnivariateFunction add(final DifferentiableUnivariateFunction ... f) {
+    public static DifferentiableUnivariateFunction add(final DifferentiableUnivariateFunction... f) {
         return new DifferentiableUnivariateFunction() {
             /** {@inheritDoc} */
             public double value(double x) {
@@ -228,7 +229,7 @@ public class FunctionUtils {
      * @param f List of functions.
      * @return a function that computes the product of the functions.
      */
-    public static UnivariateFunction multiply(final UnivariateFunction ... f) {
+    public static UnivariateFunction multiply(final UnivariateFunction... f) {
         return new UnivariateFunction() {
             /** {@inheritDoc} */
             public double value(double x) {
@@ -248,14 +249,14 @@ public class FunctionUtils {
      * @return a function that computes the product of the functions.
      * @since 3.1
      */
-    public static UnivariateDifferentiableFunction multiply(final UnivariateDifferentiableFunction ... f) {
+    public static UnivariateDifferentiableFunction multiply(final UnivariateDifferentiableFunction... f) {
         return new UnivariateDifferentiableFunction() {
 
             /** {@inheritDoc} */
             public double value(final double t) {
                 double r = f[0].value(t);
                 for (int i = 1; i < f.length; i++) {
-                    r  *= f[i].value(t);
+                    r *= f[i].value(t);
                 }
                 return r;
             }
@@ -280,7 +281,7 @@ public class FunctionUtils {
      * @deprecated as of 3.1 replaced by {@link #multiply(UnivariateDifferentiableFunction...)}
      */
     @Deprecated
-    public static DifferentiableUnivariateFunction multiply(final DifferentiableUnivariateFunction ... f) {
+    public static DifferentiableUnivariateFunction multiply(final DifferentiableUnivariateFunction... f) {
         return new DifferentiableUnivariateFunction() {
             /** {@inheritDoc} */
             public double value(double x) {
@@ -318,8 +319,8 @@ public class FunctionUtils {
      * {@code h(x) = combiner(f(x), g(x)).}
      *
      * @param combiner Combiner function.
-     * @param f Function.
-     * @param g Function.
+     * @param f        Function.
+     * @param g        Function.
      * @return the composite function.
      */
     public static UnivariateFunction combine(final BivariateFunction combiner,
@@ -338,8 +339,8 @@ public class FunctionUtils {
      * h(x[]) = combiner(...combiner(combiner(initialValue,f(x[0])),f(x[1]))...),f(x[x.length-1]))
      * </code></pre>
      *
-     * @param combiner Combiner function.
-     * @param f Function.
+     * @param combiner     Combiner function.
+     * @param f            Function.
      * @param initialValue Initial value.
      * @return a collector function.
      */
@@ -363,7 +364,7 @@ public class FunctionUtils {
      * h(x[]) = combiner(...combiner(combiner(initialValue,x[0]),x[1])...),x[x.length-1])
      * </code></pre>
      *
-     * @param combiner Combiner function.
+     * @param combiner     Combiner function.
      * @param initialValue Initial value.
      * @return a collector function.
      */
@@ -375,7 +376,7 @@ public class FunctionUtils {
     /**
      * Creates a unary function by fixing the first argument of a binary function.
      *
-     * @param f Binary function.
+     * @param f     Binary function.
      * @param fixed value to which the first argument of {@code f} is set.
      * @return the unary function h(x) = f(fixed, x)
      */
@@ -388,10 +389,11 @@ public class FunctionUtils {
             }
         };
     }
+
     /**
      * Creates a unary function by fixing the second argument of a binary function.
      *
-     * @param f Binary function.
+     * @param f     Binary function.
      * @param fixed value to which the second argument of {@code f} is set.
      * @return the unary function h(x) = f(x, fixed)
      */
@@ -412,18 +414,18 @@ public class FunctionUtils {
      * are taken from {@code min} to {@code max - (max - min) / n}; therefore
      * {@code f} is not sampled at the upper bound {@code max}.</p>
      *
-     * @param f Function to be sampled
+     * @param f   Function to be sampled
      * @param min Lower bound of the interval (included).
      * @param max Upper bound of the interval (excluded).
-     * @param n Number of sample points.
+     * @param n   Number of sample points.
      * @return the array of samples.
-     * @throws NumberIsTooLargeException if the lower bound {@code min} is
-     * greater than, or equal to the upper bound {@code max}.
+     * @throws NumberIsTooLargeException    if the lower bound {@code min} is
+     *                                      greater than, or equal to the upper bound {@code max}.
      * @throws NotStrictlyPositiveException if the number of sample points
-     * {@code n} is negative.
+     *                                      {@code n} is negative.
      */
     public static double[] sample(UnivariateFunction f, double min, double max, int n)
-       throws NumberIsTooLargeException, NotStrictlyPositiveException {
+            throws NumberIsTooLargeException, NotStrictlyPositiveException {
 
         if (n <= 0) {
             throw new NotStrictlyPositiveException(
@@ -478,6 +480,7 @@ public class FunctionUtils {
      * Note that the converted function is able to handle {@link DerivativeStructure} up to order one.
      * If the function is called with higher order, a {@link NumberIsTooLargeException} is thrown.
      * </p>
+     *
      * @param f function to convert
      * @return converted function
      * @deprecated this conversion method is temporary in version 3.1, as the {@link
@@ -496,11 +499,11 @@ public class FunctionUtils {
              * @exception NumberIsTooLargeException if derivation order is greater than 1
              */
             public DerivativeStructure value(final DerivativeStructure t)
-                throws NumberIsTooLargeException {
+                    throws NumberIsTooLargeException {
                 switch (t.getOrder()) {
-                    case 0 :
+                    case 0:
                         return new DerivativeStructure(t.getFreeParameters(), 0, f.value(t.getValue()));
-                    case 1 : {
+                    case 1: {
                         final int parameters = t.getFreeParameters();
                         final double[] derivatives = new double[parameters + 1];
                         derivatives[0] = f.value(t.getValue());
@@ -513,7 +516,7 @@ public class FunctionUtils {
                         }
                         return new DerivativeStructure(parameters, 1, derivatives);
                     }
-                    default :
+                    default:
                         throw new NumberIsTooLargeException(t.getOrder(), 1, true);
                 }
             }
@@ -583,9 +586,9 @@ public class FunctionUtils {
                         final double[] gradient = new double[n];
                         final int[] orders = new int[n];
                         for (int i = 0; i < n; ++i) {
-                            orders[i]   = 1;
+                            orders[i] = 1;
                             gradient[i] = y.getPartialDerivative(orders);
-                            orders[i]   = 0;
+                            orders[i] = 0;
                         }
 
                         return gradient;
@@ -605,6 +608,7 @@ public class FunctionUtils {
      * If the function is called with inconsistent numbers of free parameters or higher order, a
      * {@link DimensionMismatchException} or a {@link NumberIsTooLargeException} will be thrown.
      * </p>
+     *
      * @param f function to convert
      * @return converted function
      * @deprecated this conversion method is temporary in version 3.1, as the {@link
@@ -624,12 +628,12 @@ public class FunctionUtils {
              * @exception DimensionMismatchException if numbers of free parameters are inconsistent
              */
             public DerivativeStructure value(final DerivativeStructure[] t)
-                throws DimensionMismatchException, NumberIsTooLargeException {
+                    throws DimensionMismatchException, NumberIsTooLargeException {
 
                 // check parameters and orders limits
                 final int parameters = t[0].getFreeParameters();
-                final int order      = t[0].getOrder();
-                final int n          = t.length;
+                final int order = t[0].getOrder();
+                final int n = t.length;
                 if (order > 1) {
                     throw new NumberIsTooLargeException(order, 1, true);
                 }
@@ -650,7 +654,7 @@ public class FunctionUtils {
                 for (int i = 0; i < n; ++i) {
                     point[i] = t[i].getValue();
                 }
-                final double value      = f.value(point);
+                final double value = f.value(point);
                 final double[] gradient = f.gradient().value(point);
 
                 // merge value and gradient into one DerivativeStructure
@@ -709,9 +713,9 @@ public class FunctionUtils {
                         final int[] orders = new int[n];
                         for (int i = 0; i < y.length; ++i) {
                             for (int j = 0; j < n; ++j) {
-                                orders[j]      = 1;
+                                orders[j] = 1;
                                 jacobian[i][j] = y[i].getPartialDerivative(orders);
-                                orders[j]      = 0;
+                                orders[j] = 0;
                             }
                         }
 
@@ -732,6 +736,7 @@ public class FunctionUtils {
      * If the function is called with inconsistent numbers of free parameters or higher order, a
      * {@link DimensionMismatchException} or a {@link NumberIsTooLargeException} will be thrown.
      * </p>
+     *
      * @param f function to convert
      * @return converted function
      * @deprecated this conversion method is temporary in version 3.1, as the {@link
@@ -751,12 +756,12 @@ public class FunctionUtils {
              * @exception DimensionMismatchException if numbers of free parameters are inconsistent
              */
             public DerivativeStructure[] value(final DerivativeStructure[] t)
-                throws DimensionMismatchException, NumberIsTooLargeException {
+                    throws DimensionMismatchException, NumberIsTooLargeException {
 
                 // check parameters and orders limits
                 final int parameters = t[0].getFreeParameters();
-                final int order      = t[0].getOrder();
-                final int n          = t.length;
+                final int order = t[0].getOrder();
+                final int n = t.length;
                 if (order > 1) {
                     throw new NumberIsTooLargeException(order, 1, true);
                 }
@@ -777,7 +782,7 @@ public class FunctionUtils {
                 for (int i = 0; i < n; ++i) {
                     point[i] = t[i].getValue();
                 }
-                final double[] value      = f.value(point);
+                final double[] value = f.value(point);
                 final double[][] jacobian = f.jacobian().value(point);
 
                 // merge value and Jacobian into a DerivativeStructure array

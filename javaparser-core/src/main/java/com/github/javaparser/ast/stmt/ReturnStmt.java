@@ -40,6 +40,7 @@ import java.util.function.Consumer;
 /**
  * The return statement, with an optional expression to return.
  * <br>{@code return 5 * 5;}
+ *
  * @author Julio Vilmar Gesser
  */
 public class ReturnStmt extends Statement {

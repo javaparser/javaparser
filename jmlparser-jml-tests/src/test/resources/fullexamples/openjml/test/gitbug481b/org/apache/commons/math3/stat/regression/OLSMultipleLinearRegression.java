@@ -49,10 +49,14 @@ import org.apache.commons.math3.stat.descriptive.moment.SecondMoment;
  */
 public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegression {
 
-    /** Cached QR decomposition of X matrix */
+    /**
+     * Cached QR decomposition of X matrix
+     */
     private QRDecomposition qr = null;
 
-    /** Singularity threshold for QR decomposition */
+    /**
+     * Singularity threshold for QR decomposition
+     */
     private final double threshold;
 
     /**
@@ -75,12 +79,13 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
 
     /**
      * Loads model x and y sample data, overriding any previous sample.
-     *
+     * <p>
      * Computes and caches QR decomposition of the X matrix.
+     *
      * @param y the [n,1] array representing the y sample
      * @param x the [n,k] array representing the x sample
      * @throws MathIllegalArgumentException if the x and y array data are not
-     *             compatible for the regression
+     *                                      compatible for the regression
      */
     public void newSampleData(double[] y, double[][] x) throws MathIllegalArgumentException {
         validateSampleData(x, y);
@@ -102,7 +107,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * <p>Compute the "hat" matrix.
      * </p>
      * <p>The hat matrix is defined in terms of the design matrix X
-     *  by X(X<sup>T</sup>X)<sup>-1</sup>X<sup>T</sup>
+     * by X(X<sup>T</sup>X)<sup>-1</sup>X<sup>T</sup>
      * </p>
      * <p>The implementation here uses the QR decomposition to compute the
      * hat matrix as Q I<sub>p</sub>Q<sup>T</sup> where I<sub>p</sub> is the
@@ -117,7 +122,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      *
      * @return the hat matrix
      * @throws NullPointerException unless method {@code newSampleData} has been
-     * called beforehand.
+     *                              called beforehand.
      */
     public RealMatrix calculateHat() {
         // Create augmented identity matrix
@@ -128,7 +133,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
         Array2DRowRealMatrix augI = new Array2DRowRealMatrix(n, n);
         double[][] augIData = augI.getDataRef();
         for (int i = 0; i < n; i++) {
-            for (int j =0; j < n; j++) {
+            for (int j = 0; j < n; j++) {
                 if (i == j && i < p) {
                     augIData[i][j] = 1d;
                 } else {
@@ -168,9 +173,9 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * Returns the sum of squared residuals.
      *
      * @return residual sum of squares
-     * @since 2.2
      * @throws org.apache.commons.math3.linear.SingularMatrixException if the design matrix is singular
-     * @throws NullPointerException if the data for the model have not been loaded
+     * @throws NullPointerException                                    if the data for the model have not been loaded
+     * @since 2.2
      */
     public double calculateResidualSumOfSquares() {
         final RealVector residuals = calculateResiduals();
@@ -188,7 +193,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * <p>If there is no variance in y, i.e., SSTO = 0, NaN is returned.</p>
      *
      * @return R-square statistic
-     * @throws NullPointerException if the sample has not been set
+     * @throws NullPointerException                                    if the sample has not been set
      * @throws org.apache.commons.math3.linear.SingularMatrixException if the design matrix is singular
      * @since 2.2
      */
@@ -211,7 +216,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * <p>If there is no variance in y, i.e., SSTO = 0, NaN is returned.</p>
      *
      * @return adjusted R-Squared statistic
-     * @throws NullPointerException if the sample has not been set
+     * @throws NullPointerException                                    if the sample has not been set
      * @throws org.apache.commons.math3.linear.SingularMatrixException if the design matrix is singular
      * @see #isNoIntercept()
      * @since 2.2
@@ -222,7 +227,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
             return 1 - (1 - calculateRSquared()) * (n / (n - getX().getColumnDimension()));
         } else {
             return 1 - (calculateResidualSumOfSquares() * (n - 1)) /
-                (calculateTotalSumOfSquares() * (n - getX().getColumnDimension()));
+                    (calculateTotalSumOfSquares() * (n - getX().getColumnDimension()));
         }
     }
 
@@ -246,7 +251,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      *
      * @return beta
      * @throws org.apache.commons.math3.linear.SingularMatrixException if the design matrix is singular
-     * @throws NullPointerException if the data for the model have not been loaded
+     * @throws NullPointerException                                    if the data for the model have not been loaded
      */
     @Override
     protected RealVector calculateBeta() {
@@ -268,12 +273,12 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      *
      * @return The beta variance-covariance matrix
      * @throws org.apache.commons.math3.linear.SingularMatrixException if the design matrix is singular
-     * @throws NullPointerException if the data for the model have not been loaded
+     * @throws NullPointerException                                    if the data for the model have not been loaded
      */
     @Override
     protected RealMatrix calculateBetaVariance() {
         int p = getX().getColumnDimension();
-        RealMatrix Raug = qr.getR().getSubMatrix(0, p - 1 , 0, p - 1);
+        RealMatrix Raug = qr.getR().getSubMatrix(0, p - 1, 0, p - 1);
         RealMatrix Rinv = new LUDecomposition(Raug).getSolver().getInverse();
         return Rinv.multiply(Rinv.transpose());
     }

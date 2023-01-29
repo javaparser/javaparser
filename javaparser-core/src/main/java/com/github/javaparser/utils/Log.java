@@ -66,7 +66,7 @@ public class Log {
 
         private void printStackTrace(Throwable throwable) {
             try (StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw)) {
+                 PrintWriter pw = new PrintWriter(sw)) {
                 throwable.printStackTrace(pw);
                 trace(sw::toString);
             } catch (IOException e) {

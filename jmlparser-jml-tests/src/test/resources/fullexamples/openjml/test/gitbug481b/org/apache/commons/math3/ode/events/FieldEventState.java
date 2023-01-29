@@ -28,7 +28,8 @@ import org.apache.commons.math3.ode.FieldODEStateAndDerivative;
 import org.apache.commons.math3.ode.sampling.FieldStepInterpolator;
 import org.apache.commons.math3.util.FastMath;
 
-/** This class handles the state for one {@link EventHandler
+/**
+ * This class handles the state for one {@link EventHandler
  * event handler} during integration steps.
  *
  * <p>Each time the integrator proposes a step, the event handler
@@ -43,116 +44,155 @@ import org.apache.commons.math3.util.FastMath;
  */
 public class FieldEventState<T extends RealFieldElement<T>> {
 
-    /** Event handler. */
+    /**
+     * Event handler.
+     */
     private final FieldEventHandler<T> handler;
 
-    /** Maximal time interval between events handler checks. */
+    /**
+     * Maximal time interval between events handler checks.
+     */
     private final double maxCheckInterval;
 
-    /** Convergence threshold for event localization. */
+    /**
+     * Convergence threshold for event localization.
+     */
     private final T convergence;
 
-    /** Upper limit in the iteration count for event localization. */
+    /**
+     * Upper limit in the iteration count for event localization.
+     */
     private final int maxIterationCount;
 
-    /** Time at the beginning of the step. */
+    /**
+     * Time at the beginning of the step.
+     */
     private T t0;
 
-    /** Value of the events handler at the beginning of the step. */
+    /**
+     * Value of the events handler at the beginning of the step.
+     */
     private T g0;
 
-    /** Simulated sign of g0 (we cheat when crossing events). */
+    /**
+     * Simulated sign of g0 (we cheat when crossing events).
+     */
     private boolean g0Positive;
 
-    /** Indicator of event expected during the step. */
+    /**
+     * Indicator of event expected during the step.
+     */
     private boolean pendingEvent;
 
-    /** Occurrence time of the pending event. */
+    /**
+     * Occurrence time of the pending event.
+     */
     private T pendingEventTime;
 
-    /** Occurrence time of the previous event. */
+    /**
+     * Occurrence time of the previous event.
+     */
     private T previousEventTime;
 
-    /** Integration direction. */
+    /**
+     * Integration direction.
+     */
     private boolean forward;
 
-    /** Variation direction around pending event.
-     *  (this is considered with respect to the integration direction)
+    /**
+     * Variation direction around pending event.
+     * (this is considered with respect to the integration direction)
      */
     private boolean increasing;
 
-    /** Next action indicator. */
+    /**
+     * Next action indicator.
+     */
     private Action nextAction;
 
-    /** Root-finding algorithm to use to detect state events. */
+    /**
+     * Root-finding algorithm to use to detect state events.
+     */
     private final BracketedRealFieldUnivariateSolver<T> solver;
 
-    /** Simple constructor.
-     * @param handler event handler
-     * @param maxCheckInterval maximal time interval between switching
-     * function checks (this interval prevents missing sign changes in
-     * case the integration steps becomes very large)
-     * @param convergence convergence threshold in the event time search
+    /**
+     * Simple constructor.
+     *
+     * @param handler           event handler
+     * @param maxCheckInterval  maximal time interval between switching
+     *                          function checks (this interval prevents missing sign changes in
+     *                          case the integration steps becomes very large)
+     * @param convergence       convergence threshold in the event time search
      * @param maxIterationCount upper limit of the iteration count in
-     * the event time search
-     * @param solver Root-finding algorithm to use to detect state events
+     *                          the event time search
+     * @param solver            Root-finding algorithm to use to detect state events
      */
     public FieldEventState(final FieldEventHandler<T> handler, final double maxCheckInterval,
                            final T convergence, final int maxIterationCount,
                            final BracketedRealFieldUnivariateSolver<T> solver) {
-        this.handler           = handler;
-        this.maxCheckInterval  = maxCheckInterval;
-        this.convergence       = convergence.abs();
+        this.handler = handler;
+        this.maxCheckInterval = maxCheckInterval;
+        this.convergence = convergence.abs();
         this.maxIterationCount = maxIterationCount;
-        this.solver            = solver;
+        this.solver = solver;
 
         // some dummy values ...
-        t0                = null;
-        g0                = null;
-        g0Positive        = true;
-        pendingEvent      = false;
-        pendingEventTime  = null;
+        t0 = null;
+        g0 = null;
+        g0Positive = true;
+        pendingEvent = false;
+        pendingEventTime = null;
         previousEventTime = null;
-        increasing        = true;
-        nextAction        = Action.CONTINUE;
+        increasing = true;
+        nextAction = Action.CONTINUE;
 
     }
 
-    /** Get the underlying event handler.
+    /**
+     * Get the underlying event handler.
+     *
      * @return underlying event handler
      */
     public FieldEventHandler<T> getEventHandler() {
         return handler;
     }
 
-    /** Get the maximal time interval between events handler checks.
+    /**
+     * Get the maximal time interval between events handler checks.
+     *
      * @return maximal time interval between events handler checks
      */
     public double getMaxCheckInterval() {
         return maxCheckInterval;
     }
 
-    /** Get the convergence threshold for event localization.
+    /**
+     * Get the convergence threshold for event localization.
+     *
      * @return convergence threshold for event localization
      */
     public T getConvergence() {
         return convergence;
     }
 
-    /** Get the upper limit in the iteration count for event localization.
+    /**
+     * Get the upper limit in the iteration count for event localization.
+     *
      * @return upper limit in the iteration count for event localization
      */
     public int getMaxIterationCount() {
         return maxIterationCount;
     }
 
-    /** Reinitialize the beginning of the step.
+    /**
+     * Reinitialize the beginning of the step.
+     *
      * @param interpolator valid for the current step
-     * @exception MaxCountExceededException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
+     * @throws MaxCountExceededException if the interpolator throws one because
+     *                                   the number of functions evaluations is exceeded
      */
     public void reinitializeBegin(final FieldStepInterpolator<T> interpolator)
-        throws MaxCountExceededException {
+            throws MaxCountExceededException {
 
         final FieldODEStateAndDerivative<T> s0 = interpolator.getPreviousState();
         t0 = s0.getTime();
@@ -172,7 +212,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero
             final double epsilon = FastMath.max(solver.getAbsoluteAccuracy().getReal(),
-                                                FastMath.abs(solver.getRelativeAccuracy().multiply(t0).getReal()));
+                    FastMath.abs(solver.getRelativeAccuracy().multiply(t0).getReal()));
             final T tStart = t0.add(0.5 * epsilon);
             g0 = handler.g(interpolator.getInterpolatedState(tStart));
         }
@@ -180,16 +220,18 @@ public class FieldEventState<T extends RealFieldElement<T>> {
 
     }
 
-    /** Evaluate the impact of the proposed step on the event handler.
+    /**
+     * Evaluate the impact of the proposed step on the event handler.
+     *
      * @param interpolator step interpolator for the proposed step
      * @return true if the event handler triggers an event before
      * the end of the proposed step
-     * @exception MaxCountExceededException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
-     * @exception NoBracketingException if the event cannot be bracketed
+     * @throws MaxCountExceededException if the interpolator throws one because
+     *                                   the number of functions evaluations is exceeded
+     * @throws NoBracketingException     if the event cannot be bracketed
      */
     public boolean evaluateStep(final FieldStepInterpolator<T> interpolator)
-        throws MaxCountExceededException, NoBracketingException {
+            throws MaxCountExceededException, NoBracketingException {
 
         forward = interpolator.isForward();
         final FieldODEStateAndDerivative<T> s1 = interpolator.getCurrentState();
@@ -200,7 +242,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
             return false;
         }
         final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt.getReal()) / maxCheckInterval));
-        final T   h = dt.divide(n);
+        final T h = dt.divide(n);
 
         final RealFieldUnivariateFunction<T> f = new RealFieldUnivariateFunction<T>() {
             /** {@inheritDoc} */
@@ -226,12 +268,12 @@ public class FieldEventState<T extends RealFieldElement<T>> {
 
                 // find the event time making sure we select a solution just at or past the exact root
                 final T root = forward ?
-                               solver.solve(maxIterationCount, f, ta, tb, AllowedSolution.RIGHT_SIDE) :
-                               solver.solve(maxIterationCount, f, tb, ta, AllowedSolution.LEFT_SIDE);
+                        solver.solve(maxIterationCount, f, ta, tb, AllowedSolution.RIGHT_SIDE) :
+                        solver.solve(maxIterationCount, f, tb, ta, AllowedSolution.LEFT_SIDE);
 
                 if (previousEventTime != null &&
-                    root.subtract(ta).abs().subtract(convergence).getReal() <= 0 &&
-                    root.subtract(previousEventTime).abs().subtract(convergence).getReal() <= 0) {
+                        root.subtract(ta).abs().subtract(convergence).getReal() <= 0 &&
+                        root.subtract(previousEventTime).abs().subtract(convergence).getReal() <= 0) {
                     // we have either found nothing or found (again ?) a past event,
                     // retry the substep excluding this value, and taking care to have the
                     // required sign in case the g function is noisy around its zero and
@@ -249,13 +291,13 @@ public class FieldEventState<T extends RealFieldElement<T>> {
                         // we have to handle it despite it is close to the former one
                         // maybe we have two very close roots
                         pendingEventTime = root;
-                        pendingEvent     = true;
+                        pendingEvent = true;
                         return true;
                     }
                 } else if (previousEventTime == null ||
-                           previousEventTime.subtract(root).abs().subtract(convergence).getReal() > 0) {
+                        previousEventTime.subtract(root).abs().subtract(convergence).getReal() > 0) {
                     pendingEventTime = root;
-                    pendingEvent     = true;
+                    pendingEvent = true;
                     return true;
                 } else {
                     // no sign change: there is no event for now
@@ -272,23 +314,27 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         }
 
         // no event during the whole step
-        pendingEvent     = false;
+        pendingEvent = false;
         pendingEventTime = null;
         return false;
 
     }
 
-    /** Get the occurrence time of the event triggered in the current step.
+    /**
+     * Get the occurrence time of the event triggered in the current step.
+     *
      * @return occurrence time of the event triggered in the current
      * step or infinity if no events are triggered
      */
     public T getEventTime() {
         return pendingEvent ?
-               pendingEventTime :
-               t0.getField().getZero().add(forward ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY);
+                pendingEventTime :
+                t0.getField().getZero().add(forward ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY);
     }
 
-    /** Acknowledge the fact the step has been accepted by the integrator.
+    /**
+     * Acknowledge the fact the step has been accepted by the integrator.
+     *
      * @param state state at the end of the step
      */
     public void stepAccepted(final FieldODEStateAndDerivative<T> state) {
@@ -299,23 +345,27 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         if (pendingEvent && pendingEventTime.subtract(state.getTime()).abs().subtract(convergence).getReal() <= 0) {
             // force the sign to its value "just after the event"
             previousEventTime = state.getTime();
-            g0Positive        = increasing;
-            nextAction        = handler.eventOccurred(state, !(increasing ^ forward));
+            g0Positive = increasing;
+            nextAction = handler.eventOccurred(state, !(increasing ^ forward));
         } else {
             g0Positive = g0.getReal() >= 0;
             nextAction = Action.CONTINUE;
         }
     }
 
-    /** Check if the integration should be stopped at the end of the
+    /**
+     * Check if the integration should be stopped at the end of the
      * current step.
+     *
      * @return true if the integration should be stopped
      */
     public boolean stop() {
         return nextAction == Action.STOP;
     }
 
-    /** Let the event handler reset the state if it wants.
+    /**
+     * Let the event handler reset the state if it wants.
+     *
      * @param state state at the beginning of the next step
      * @return reset state (may by the same as initial state if only
      * derivatives should be reset), or null if nothing is reset
@@ -334,8 +384,8 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         } else {
             newState = null;
         }
-        pendingEvent      = false;
-        pendingEventTime  = null;
+        pendingEvent = false;
+        pendingEventTime = null;
 
         return newState;
 

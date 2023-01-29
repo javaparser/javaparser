@@ -33,7 +33,8 @@ public class EnumerationUtils {
     /**
      * EnumerationUtils is not normally instantiated.
      */
-    private EnumerationUtils() {}
+    private EnumerationUtils() {
+    }
 
     /**
      * Returns the <code>index</code>-th value in the {@link Enumeration}, throwing
@@ -42,12 +43,12 @@ public class EnumerationUtils {
      * The Enumeration is advanced to <code>index</code> (or to the end, if
      * <code>index</code> exceeds the number of entries) as a side effect of this method.
      *
-     * @param e  the enumeration to get a value from
-     * @param index  the index to get
-     * @param <T> the type of object in the {@link Enumeration}
+     * @param e     the enumeration to get a value from
+     * @param index the index to get
+     * @param <T>   the type of object in the {@link Enumeration}
      * @return the object at the specified index
      * @throws IndexOutOfBoundsException if the index is invalid
-     * @throws IllegalArgumentException if the object type is invalid
+     * @throws IllegalArgumentException  if the object type is invalid
      * @since 4.1
      */
     public static <T> T get(final Enumeration<T> e, final int index) {
@@ -69,8 +70,8 @@ public class EnumerationUtils {
      * <p>As the enumeration is traversed, an ArrayList of its values is
      * created. The new list is returned.</p>
      *
-     * @param <E> the element type
-     * @param enumeration  the enumeration to traverse, which should not be <code>null</code>.
+     * @param <E>         the element type
+     * @param enumeration the enumeration to traverse, which should not be <code>null</code>.
      * @return a list containing all elements of the given enumeration
      * @throws NullPointerException if the enumeration parameter is <code>null</code>.
      */
@@ -82,7 +83,7 @@ public class EnumerationUtils {
      * Override toList(Enumeration) for StringTokenizer as it implements Enumeration&lt;Object&gt;
      * for the sake of backward compatibility.
      *
-     * @param stringTokenizer  the tokenizer to convert to a {@link List}&lt;{@link String}&gt;
+     * @param stringTokenizer the tokenizer to convert to a {@link List}&lt;{@link String}&gt;
      * @return a list containing all tokens of the given StringTokenizer
      */
     public static List<String> toList(final StringTokenizer stringTokenizer) {

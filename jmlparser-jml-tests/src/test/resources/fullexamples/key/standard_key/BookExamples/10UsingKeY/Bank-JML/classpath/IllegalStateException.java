@@ -16,11 +16,13 @@
  */
 package java.lang;
 
-public class IllegalStateException extends java.lang.RuntimeException
-{
+public class IllegalStateException extends java.lang.RuntimeException {
 
-   public IllegalStateException();
-   public IllegalStateException(java.lang.String arg0);
-   public IllegalStateException(java.lang.String arg0, java.lang.Throwable arg1);
-   public IllegalStateException(java.lang.Throwable arg0);
+    public IllegalStateException();
+
+    public IllegalStateException(java.lang.String arg0);
+
+    public IllegalStateException(java.lang.String arg0, java.lang.Throwable arg1);
+
+    public IllegalStateException(java.lang.Throwable arg0);
 }

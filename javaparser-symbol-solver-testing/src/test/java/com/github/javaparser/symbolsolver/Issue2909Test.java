@@ -43,35 +43,35 @@ public class Issue2909Test extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String s = 
-                "public class Program {\n" + 
-                "\n" + 
-                "    public class OuterClass {\n" + 
-                "        int field = 0;\n" + 
-                "\n" + 
-                "        public class InnerClass {\n" + 
-                "            InnerClass() {\n" + 
-                "               OuterClass outer = Program.OuterClass.this;\n" + 
-                "               Program.OuterClass.this.field = 1;\n" + 
-                "            }\n" + 
-                "        }\n" + 
-                "    }\n" + 
-                "}";
-        
+        String s =
+                "public class Program {\n" +
+                        "\n" +
+                        "    public class OuterClass {\n" +
+                        "        int field = 0;\n" +
+                        "\n" +
+                        "        public class InnerClass {\n" +
+                        "            InnerClass() {\n" +
+                        "               OuterClass outer = Program.OuterClass.this;\n" +
+                        "               Program.OuterClass.this.field = 1;\n" +
+                        "            }\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}";
+
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
-        exprs.forEach(expr-> {
-            assertEquals("Program.OuterClass",expr.calculateResolvedType().describe());
+        exprs.forEach(expr -> {
+            assertEquals("Program.OuterClass", expr.calculateResolvedType().describe());
         });
     }
-    
+
     @Test
     void testResolvingLocallyFromPartialReferenceToInnerClass() {
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String s = 
+        String s =
                 "public class Program {\n" +
                         "\n" +
                         "    public class OuterClass {\n" +
@@ -85,18 +85,18 @@ public class Issue2909Test extends AbstractResolutionTest {
                         "        }\n" +
                         "    }\n" +
                         "}";
-        
+
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
-        exprs.forEach(expr-> {
-            assertEquals("Program.OuterClass",expr.calculateResolvedType().describe());
+        exprs.forEach(expr -> {
+            assertEquals("Program.OuterClass", expr.calculateResolvedType().describe());
         });
     }
-    
+
     @Test
     void testInDepth() {
         Path rootSourceDir = adaptPath("src/test/resources/issue2909");
-        
+
         ParserConfiguration config = new ParserConfiguration();
         CombinedTypeSolver cts = new CombinedTypeSolver(new ReflectionTypeSolver(false), new JavaParserTypeSolver(rootSourceDir.toFile()));
         config.setSymbolResolver(new JavaSymbolSolver(cts));
@@ -133,11 +133,11 @@ public class Issue2909Test extends AbstractResolutionTest {
                 "    public class OuterClass {\n" +
                 "    }\n" +
                 "}";
-        
+
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<ThisExpr> exprs = cu.findAll(ThisExpr.class);
-        exprs.forEach(expr-> {
-            assertEquals("test.Program.FarOuterClass.OuterClass",expr.calculateResolvedType().describe());
+        exprs.forEach(expr -> {
+            assertEquals("test.Program.FarOuterClass.OuterClass", expr.calculateResolvedType().describe());
         });
     }
 }

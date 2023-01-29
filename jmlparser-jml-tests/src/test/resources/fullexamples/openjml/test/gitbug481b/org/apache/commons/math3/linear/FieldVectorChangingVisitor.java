@@ -32,8 +32,8 @@ public interface FieldVectorChangingVisitor<T extends FieldElement<?>> {
      * of the vector is visited.
      *
      * @param dimension the size of the vector
-     * @param start the index of the first entry to be visited
-     * @param end the index of the last entry to be visited (inclusive)
+     * @param start     the index of the first entry to be visited
+     * @param end       the index of the last entry to be visited (inclusive)
      */
     void start(int dimension, int start, int end);
 

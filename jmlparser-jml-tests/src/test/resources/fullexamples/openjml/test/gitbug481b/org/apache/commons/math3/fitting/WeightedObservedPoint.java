@@ -22,29 +22,38 @@ import java.io.Serializable;
  * This class is a simple container for weighted observed point in
  * {@link CurveFitter curve fitting}.
  * <p>Instances of this class are guaranteed to be immutable.</p>
+ *
  * @since 2.0
  */
 public class WeightedObservedPoint implements Serializable {
-    /** Serializable version id. */
+    /**
+     * Serializable version id.
+     */
     private static final long serialVersionUID = 5306874947404636157L;
-    /** Weight of the measurement in the fitting process. */
+    /**
+     * Weight of the measurement in the fitting process.
+     */
     private final double weight;
-    /** Abscissa of the point. */
+    /**
+     * Abscissa of the point.
+     */
     private final double x;
-    /** Observed value of the function at x. */
+    /**
+     * Observed value of the function at x.
+     */
     private final double y;
 
     /**
      * Simple constructor.
      *
      * @param weight Weight of the measurement in the fitting process.
-     * @param x Abscissa of the measurement.
-     * @param y Ordinate of the measurement.
+     * @param x      Abscissa of the measurement.
+     * @param y      Ordinate of the measurement.
      */
     public WeightedObservedPoint(final double weight, final double x, final double y) {
         this.weight = weight;
-        this.x      = x;
-        this.y      = y;
+        this.x = x;
+        this.y = y;
     }
 
     /**

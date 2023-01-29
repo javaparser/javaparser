@@ -55,28 +55,28 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
         Predicate<Exception> blacklistTestFilter = ExceptionHandlers.getTypeBasedBlacklist(NumberFormatException.class,
                 IndexOutOfBoundsException.class, IllegalStateException.class);
 
-        return Arrays.asList(new Object[][] {
-                { new RuntimeException(), ExceptionHandlers.IGNORE_ALL, true }, // 0
-                { new RuntimeException(), ExceptionHandlers.IGNORE_NONE, false }, // 1
+        return Arrays.asList(new Object[][]{
+                {new RuntimeException(), ExceptionHandlers.IGNORE_ALL, true}, // 0
+                {new RuntimeException(), ExceptionHandlers.IGNORE_NONE, false}, // 1
 
-                { new RuntimeException(), whitelistTestFilter, false }, // 2
-                { new IllegalStateException(), whitelistTestFilter, true }, // 3
+                {new RuntimeException(), whitelistTestFilter, false}, // 2
+                {new IllegalStateException(), whitelistTestFilter, true}, // 3
 
-                { new NumberFormatException(), whitelistTestFilter, true }, // 4
-                { new IllegalArgumentException(), whitelistTestFilter, false }, // 5
+                {new NumberFormatException(), whitelistTestFilter, true}, // 4
+                {new IllegalArgumentException(), whitelistTestFilter, false}, // 5
 
-                { new IndexOutOfBoundsException(), whitelistTestFilter, true }, // 6
-                { new ArrayIndexOutOfBoundsException(), whitelistTestFilter, true }, // 7
+                {new IndexOutOfBoundsException(), whitelistTestFilter, true}, // 6
+                {new ArrayIndexOutOfBoundsException(), whitelistTestFilter, true}, // 7
 
-                { new RuntimeException(), blacklistTestFilter, true }, // 8
-                { new NullPointerException(), blacklistTestFilter, true }, // 9
-                { new IllegalStateException(), blacklistTestFilter, false }, // 10
+                {new RuntimeException(), blacklistTestFilter, true}, // 8
+                {new NullPointerException(), blacklistTestFilter, true}, // 9
+                {new IllegalStateException(), blacklistTestFilter, false}, // 10
 
-                { new NumberFormatException(), blacklistTestFilter, false }, // 11
-                { new IllegalArgumentException(), blacklistTestFilter, true }, // 12
+                {new NumberFormatException(), blacklistTestFilter, false}, // 11
+                {new IllegalArgumentException(), blacklistTestFilter, true}, // 12
 
-                { new IndexOutOfBoundsException(), blacklistTestFilter, false }, // 13
-                { new ArrayIndexOutOfBoundsException(), blacklistTestFilter, false }, // 14
+                {new IndexOutOfBoundsException(), blacklistTestFilter, false}, // 13
+                {new ArrayIndexOutOfBoundsException(), blacklistTestFilter, false}, // 14
         });
     }
 
@@ -136,8 +136,8 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
 
     /**
      * 1. Given a fresh combined type solver, a type is searched in cache and since it doesn't
-     *    exist, a new entry should be registered.
-     *
+     * exist, a new entry should be registered.
+     * <p>
      * 2. Given a cache with a cached value, that values should be used.
      */
     @Test

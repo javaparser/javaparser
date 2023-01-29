@@ -112,7 +112,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
-      return javassistTypeDeclarationAdapter.getDeclaredFields();
+        return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override

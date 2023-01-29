@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Solving generic types that are of type java.lang.Object
+ *
  * @see <a href="https://github.com/javaparser/javaparser/issues/1370">https://github.com/javaparser/javaparser/issues/1370</a>
  */
 public class Issue1370Test {
@@ -37,18 +38,18 @@ public class Issue1370Test {
     @Test
     public void test() {
         final String source = String.join(System.lineSeparator(),
-                                          "package graph;",
-                                          "class Vertex<Data> {",
-                                          "    private final Data data;",
-                                          "    public Vertex(Data data) { this.data = data; }",
-                                          "    public Data getData() { return this.data; }",
-                                          "}",
-                                          "",
-                                          "public class Application {",
-                                          "    public static void main(String[] args) {",
-                                          "        System.out.println(new Vertex<>(42).getData().equals(42));",
-                                          "    }",
-                                          "}");
+                "package graph;",
+                "class Vertex<Data> {",
+                "    private final Data data;",
+                "    public Vertex(Data data) { this.data = data; }",
+                "    public Data getData() { return this.data; }",
+                "}",
+                "",
+                "public class Application {",
+                "    public static void main(String[] args) {",
+                "        System.out.println(new Vertex<>(42).getData().equals(42));",
+                "    }",
+                "}");
 
         final JavaParserFacade facade = JavaParserFacade.get(new ReflectionTypeSolver(false));
 

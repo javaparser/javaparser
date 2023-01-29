@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 
 /**
-  * Returns the sum of the available values.
+ * Returns the sum of the available values.
  * <p>
  * If there are no values in the dataset, then 0 is returned.
  * If any of the values are
@@ -35,14 +35,17 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class Sum extends AbstractStorelessUnivariateStatistic implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -8231831954703408316L;
 
-    /** */
+    /**
+     *
+     */
     private long n;
 
     /**
@@ -110,15 +113,15 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
      * Throws <code>MathIllegalArgumentException</code> if the array is null.</p>
      *
      * @param values the input array
-     * @param begin index of the first array element to include
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the sum of the values or 0 if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     @Override
     public double evaluate(final double[] values, final int begin, final int length)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         double sum = Double.NaN;
         if (test(values, begin, length, true)) {
             sum = 0.0;
@@ -148,16 +151,16 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
      *    weighted sum = &Sigma;(values[i] * weights[i])
      * </pre></p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
-     * @param begin index of the first array element to include
-     * @param length the number of elements to include
+     * @param begin   index of the first array element to include
+     * @param length  the number of elements to include
      * @return the sum of the values or 0 if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights,
-        final int begin, final int length) throws MathIllegalArgumentException {
+                           final int begin, final int length) throws MathIllegalArgumentException {
         double sum = Double.NaN;
         if (test(values, weights, begin, length, true)) {
             sum = 0.0;
@@ -184,14 +187,14 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
      *    weighted sum = &Sigma;(values[i] * weights[i])
      * </pre></p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
      * @return the sum of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         return evaluate(values, weights, 0, values.length);
     }
 
@@ -211,11 +214,11 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source Sum to copy
-     * @param dest Sum to copy to
+     * @param dest   Sum to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(Sum source, Sum dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

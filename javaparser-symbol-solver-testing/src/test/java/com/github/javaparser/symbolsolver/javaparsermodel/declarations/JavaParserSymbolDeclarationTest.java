@@ -59,7 +59,8 @@ class JavaParserSymbolDeclarationTest {
      */
     @Test
     void createdParameterShouldBeMarkedAsParameter() {
-        Parameter parameter = parseParameter("String myStr");;
+        Parameter parameter = parseParameter("String myStr");
+        ;
         ResolvedValueDeclaration parameterDeclaration = JavaParserSymbolDeclaration.parameter(parameter, typeSolver);
 
         assertTrue(parameterDeclaration.isParameter());

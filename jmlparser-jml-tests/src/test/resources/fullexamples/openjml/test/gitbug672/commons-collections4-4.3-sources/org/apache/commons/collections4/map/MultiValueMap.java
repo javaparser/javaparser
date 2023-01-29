@@ -57,38 +57,44 @@ import java.util.*;
 @Deprecated
 public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> implements MultiMap<K, V>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -2214159910087182007L;
 
-    /** The factory for creating value collections. */
+    /**
+     * The factory for creating value collections.
+     */
     private final Factory<? extends Collection<V>> collectionFactory;
-    /** The cached values. */
+    /**
+     * The cached values.
+     */
     private transient Collection<V> valuesView;
 
     /**
      * Creates a map which wraps the given map and
      * maps keys to ArrayLists.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to wrap
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to wrap
      * @return a new multi-value map
      * @since 4.0
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <K, V> MultiValueMap<K, V> multiValueMap(final Map<K, ? super Collection<V>> map) {
-        return MultiValueMap.<K, V, ArrayList> multiValueMap((Map<K, ? super Collection>) map, ArrayList.class);
+        return MultiValueMap.<K, V, ArrayList>multiValueMap((Map<K, ? super Collection>) map, ArrayList.class);
     }
 
     /**
      * Creates a map which decorates the given <code>map</code> and
      * maps keys to collections of type <code>collectionClass</code>.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param <C>  the collection class type
-     * @param map  the map to wrap
-     * @param collectionClass  the type of the collection class
+     * @param <K>             the key type
+     * @param <V>             the value type
+     * @param <C>             the collection class type
+     * @param map             the map to wrap
+     * @param collectionClass the type of the collection class
      * @return a new multi-value map
      * @since 4.0
      */
@@ -101,25 +107,26 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * Creates a map which decorates the given <code>map</code> and
      * creates the value collections using the supplied <code>collectionFactory</code>.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param <C>  the collection class type
-     * @param map  the map to decorate
-     * @param collectionFactory  the collection factory (must return a Collection object).
+     * @param <K>               the key type
+     * @param <V>               the value type
+     * @param <C>               the collection class type
+     * @param map               the map to decorate
+     * @param collectionFactory the collection factory (must return a Collection object).
      * @return a new multi-value map
      * @since 4.0
      */
     public static <K, V, C extends Collection<V>> MultiValueMap<K, V> multiValueMap(final Map<K, ? super C> map,
-            final Factory<C> collectionFactory) {
+                                                                                    final Factory<C> collectionFactory) {
         return new MultiValueMap<>(map, collectionFactory);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Creates a MultiValueMap based on a <code>HashMap</code> and
      * storing the multiple values in an <code>ArrayList</code>.
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public MultiValueMap() {
         this(new HashMap<K, V>(), new ReflectionFactory(ArrayList.class));
     }
@@ -128,9 +135,9 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * Creates a MultiValueMap which decorates the given <code>map</code> and
      * creates the value collections using the supplied <code>collectionFactory</code>.
      *
-     * @param <C>  the collection class type
-     * @param map  the map to decorate
-     * @param collectionFactory  the collection factory which must return a Collection instance
+     * @param <C>               the collection class type
+     * @param map               the map to decorate
+     * @param collectionFactory the collection factory which must return a Collection instance
      */
     @SuppressWarnings("unchecked")
     protected <C extends Collection<V>> MultiValueMap(final Map<K, ? super C> map,
@@ -143,10 +150,11 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      * @since 4.0
      */
@@ -158,8 +166,8 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
     /**
      * Read the map in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      * @since 4.0
      */
@@ -170,6 +178,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Clear the map.
      */
@@ -195,7 +204,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * If the last value for a key is removed, <code>null</code> will be returned
      * from a subsequent <code>get(key)</code>.
      *
-     * @param key  the key to remove from
+     * @param key   the key to remove from
      * @param value the value to remove
      * @return {@code true} if the mapping was removed, {@code false} otherwise
      */
@@ -220,7 +229,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * <p>
      * This checks all collections against all keys for the value, and thus could be slow.
      *
-     * @param value  the value to search for
+     * @param value the value to search for
      * @return true if the map contains the value
      */
     @Override
@@ -243,8 +252,8 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * Unlike a normal <code>Map</code> the previous value is not replaced.
      * Instead the new value is added to the collection stored against the key.
      *
-     * @param key  the key to store against
-     * @param value  the value to add to the collection at the key
+     * @param key   the key to store against
+     * @param value the value to add to the collection at the key
      * @return the value added if the map changed and null if the map did not change
      */
     @Override
@@ -275,7 +284,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * If you call this method with a multi map, each entry is
      * added using <code>putAll(Object,Collection)</code>.
      *
-     * @param map  the map to copy (either a normal or multi map)
+     * @param map the map to copy (either a normal or multi map)
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -322,8 +331,8 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
     /**
      * Checks whether the collection at the specified key contains the value.
      *
-     * @param key  the key to search for
-     * @param value  the value to search for
+     * @param key   the key to search for
+     * @param value the value to search for
      * @return true if the map contains the value
      */
     public boolean containsValue(final Object key, final Object value) {
@@ -338,7 +347,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * Gets the collection mapped to the specified key.
      * This method is a convenience method to typecast the result of <code>get(key)</code>.
      *
-     * @param key  the key to retrieve
+     * @param key the key to retrieve
      * @return the collection mapped to the key, null if no mapping
      */
     @SuppressWarnings("unchecked")
@@ -349,7 +358,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
     /**
      * Gets the size of the collection mapped to the specified key.
      *
-     * @param key  the key to get size for
+     * @param key the key to get size for
      * @return the size of the collection at the key, zero if key not in map
      */
     public int size(final Object key) {
@@ -364,8 +373,8 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * Adds a collection of values to the collection associated with
      * the specified key.
      *
-     * @param key  the key to store against
-     * @param values  the values to add to the collection at the key, null ignored
+     * @param key    the key to store against
+     * @param values the values to add to the collection at the key, null ignored
      * @return true if this map changed
      */
     public boolean putAll(final K key, final Collection<V> values) {
@@ -391,7 +400,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
     /**
      * Gets an iterator for the collection mapped to the specified key.
      *
-     * @param key  the key to get an iterator for
+     * @param key the key to get an iterator for
      * @return the iterator of the collection at the key, empty iterator if key not in map
      */
     public Iterator<V> iterator(final Object key) {
@@ -420,7 +429,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
         return new LazyIteratorChain<Entry<K, V>>() {
             @Override
             protected Iterator<? extends Entry<K, V>> nextIterator(final int count) {
-                if ( ! keyIterator.hasNext() ) {
+                if (!keyIterator.hasNext()) {
                     return null;
                 }
                 final K key = keyIterator.next();
@@ -432,10 +441,12 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
                             public K getKey() {
                                 return key;
                             }
+
                             @Override
                             public V getValue() {
                                 return input;
                             }
+
                             @Override
                             public V setValue(final V value) {
                                 throw new UnsupportedOperationException();
@@ -468,7 +479,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      * This method can be overridden to perform your own processing
      * instead of using the factory.
      *
-     * @param size  the collection size that is about to be added
+     * @param size the collection size that is about to be added
      * @return the new collection
      */
     protected Collection<V> createCollection(final int size) {
@@ -476,6 +487,7 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Inner class that provides the values view.
      */
@@ -538,7 +550,9 @@ public class MultiValueMap<K, V> extends AbstractMapDecorator<K, Object> impleme
      */
     private static class ReflectionFactory<T extends Collection<?>> implements Factory<T>, Serializable {
 
-        /** Serialization version */
+        /**
+         * Serialization version
+         */
         private static final long serialVersionUID = 2986114157496788874L;
 
         private final Class<T> clazz;

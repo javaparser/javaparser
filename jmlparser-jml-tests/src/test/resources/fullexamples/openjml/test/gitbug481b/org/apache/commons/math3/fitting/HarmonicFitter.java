@@ -26,7 +26,7 @@ import org.apache.commons.math3.util.FastMath;
 
 /**
  * Class that implements a curve fitting specialized for sinusoids.
- *
+ * <p>
  * Harmonic fitting is a very simple case of curve fitting. The
  * estimated coefficients are the amplitude a, the pulsation &omega; and
  * the phase &phi;: <code>f (t) = a cos (&omega; t + &phi;)</code>. They are
@@ -41,6 +41,7 @@ import org.apache.commons.math3.util.FastMath;
 public class HarmonicFitter extends CurveFitter<HarmonicOscillator.Parametric> {
     /**
      * Simple constructor.
+     *
      * @param optimizer Optimizer to use for the fitting.
      */
     public HarmonicFitter(final MultivariateVectorOptimizer optimizer) {
@@ -51,11 +52,11 @@ public class HarmonicFitter extends CurveFitter<HarmonicOscillator.Parametric> {
      * Fit an harmonic function to the observed points.
      *
      * @param initialGuess First guess values in the following order:
-     * <ul>
-     *  <li>Amplitude</li>
-     *  <li>Angular frequency</li>
-     *  <li>Phase</li>
-     * </ul>
+     *                     <ul>
+     *                      <li>Amplitude</li>
+     *                      <li>Angular frequency</li>
+     *                      <li>Phase</li>
+     *                     </ul>
      * @return the parameters of the harmonic function that best fits the
      * observed points (in the same order as above).
      */
@@ -70,9 +71,9 @@ public class HarmonicFitter extends CurveFitter<HarmonicOscillator.Parametric> {
      * @return the parameters of the harmonic function that best fits the
      * observed points (see the other {@link #fit(double[]) fit} method.
      * @throws NumberIsTooSmallException if the sample is too short for the
-     * the first guess to be computed.
-     * @throws ZeroException if the first guess cannot be computed because
-     * the abscissa range is zero.
+     *                                   the first guess to be computed.
+     * @throws ZeroException             if the first guess cannot be computed because
+     *                                   the abscissa range is zero.
      */
     public double[] fit() {
         return fit((new ParameterGuesser(getObservations())).guess());
@@ -178,11 +179,17 @@ public class HarmonicFitter extends CurveFitter<HarmonicOscillator.Parametric> {
      * number of measurements.</p>
      */
     public static class ParameterGuesser {
-        /** Amplitude. */
+        /**
+         * Amplitude.
+         */
         private final double a;
-        /** Angular frequency. */
+        /**
+         * Angular frequency.
+         */
         private final double omega;
-        /** Phase. */
+        /**
+         * Phase.
+         */
         private final double phi;
 
         /**
@@ -190,14 +197,14 @@ public class HarmonicFitter extends CurveFitter<HarmonicOscillator.Parametric> {
          *
          * @param observations Sampled observations.
          * @throws NumberIsTooSmallException if the sample is too short.
-         * @throws ZeroException if the abscissa range is zero.
+         * @throws ZeroException             if the abscissa range is zero.
          * @throws MathIllegalStateException when the guessing procedure cannot
-         * produce sensible results.
+         *                                   produce sensible results.
          */
         public ParameterGuesser(WeightedObservedPoint[] observations) {
             if (observations.length < 4) {
                 throw new NumberIsTooSmallException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
-                                                    observations.length, 4, true);
+                        observations.length, 4, true);
             }
 
             final WeightedObservedPoint[] sorted = sortObservations(observations);
@@ -220,7 +227,7 @@ public class HarmonicFitter extends CurveFitter<HarmonicOscillator.Parametric> {
          * </ul>
          */
         public double[] guess() {
-            return new double[] { a, omega, phi };
+            return new double[]{a, omega, phi};
         }
 
         /**
@@ -263,11 +270,11 @@ public class HarmonicFitter extends CurveFitter<HarmonicOscillator.Parametric> {
          * has been called previously.
          *
          * @param observations Observations, sorted w.r.t. abscissa.
-         * @throws ZeroException if the abscissa range is zero.
-         * @throws MathIllegalStateException when the guessing procedure cannot
-         * produce sensible results.
          * @return the guessed amplitude (at index 0) and circular frequency
          * (at index 1).
+         * @throws ZeroException             if the abscissa range is zero.
+         * @throws MathIllegalStateException when the guessing procedure cannot
+         *                                   produce sensible results.
          */
         private double[] guessAOmega(WeightedObservedPoint[] observations) {
             final double[] aOmega = new double[2];
@@ -296,7 +303,7 @@ public class HarmonicFitter extends CurveFitter<HarmonicOscillator.Parametric> {
                 final double dx = currentX - previousX;
                 final double dy = currentY - previousY;
                 final double f2StepIntegral =
-                    dx * (previousY * previousY + previousY * currentY + currentY * currentY) / 3;
+                        dx * (previousY * previousY + previousY * currentY + currentY * currentY) / 3;
                 final double fPrime2StepIntegral = dy * dy / dx;
 
                 final double x = currentX - startX;

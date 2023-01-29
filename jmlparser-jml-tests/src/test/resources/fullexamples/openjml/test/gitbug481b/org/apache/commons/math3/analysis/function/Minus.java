@@ -27,12 +27,16 @@ import org.apache.commons.math3.analysis.differentiation.UnivariateDifferentiabl
  * @since 3.0
  */
 public class Minus implements UnivariateDifferentiableFunction, DifferentiableUnivariateFunction {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x) {
         return -x;
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @deprecated as of 3.1, replaced by {@link #value(DerivativeStructure)}
      */
     @Deprecated
@@ -40,7 +44,9 @@ public class Minus implements UnivariateDifferentiableFunction, DifferentiableUn
         return new Constant(-1);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.1
      */
     public DerivativeStructure value(final DerivativeStructure t) {

@@ -60,7 +60,7 @@ class DataKeyTest {
     void removeWorks() {
         Node node = new SimpleName();
         node.setData(ABC, "Hurray!");
-        
+
         node.removeData(ABC);
 
         assertThat(node.containsData(ABC)).isFalse();

@@ -19,26 +19,34 @@ package org.apache.commons.math3.ode.nonstiff;
 
 import org.apache.commons.math3.RealFieldElement;
 
-/** This interface represents an integrator  based on Butcher arrays.
+/**
+ * This interface represents an integrator  based on Butcher arrays.
+ *
+ * @param <T> the type of the field elements
  * @see RungeKuttaFieldIntegrator
  * @see EmbeddedRungeKuttaFieldIntegrator
- * @param <T> the type of the field elements
  * @since 3.6
  */
 
 public interface FieldButcherArrayProvider<T extends RealFieldElement<T>> {
 
-    /** Get the time steps from Butcher array (without the first zero).
+    /**
+     * Get the time steps from Butcher array (without the first zero).
+     *
      * @return time steps from Butcher array (without the first zero
      */
     T[] getC();
 
-    /** Get the internal weights from Butcher array (without the first empty row).
+    /**
+     * Get the internal weights from Butcher array (without the first empty row).
+     *
      * @return internal weights from Butcher array (without the first empty row)
      */
     T[][] getA();
 
-    /** Get the external weights for the high order method from Butcher array.
+    /**
+     * Get the external weights for the high order method from Butcher array.
+     *
      * @return external weights for the high order method from Butcher array
      */
     T[] getB();

@@ -22,62 +22,79 @@ import org.apache.commons.math3.exception.MaxCountExceededException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/** Wrapper class enabling {@link FirstOrderDifferentialEquations basic simple}
- *  ODE instances to be used when processing {@link JacobianMatrices}.
+/**
+ * Wrapper class enabling {@link FirstOrderDifferentialEquations basic simple}
+ * ODE instances to be used when processing {@link JacobianMatrices}.
  *
  * @since 3.0
  */
 class ParameterizedWrapper implements ParameterizedODE {
 
-    /** Basic FODE without parameter. */
+    /**
+     * Basic FODE without parameter.
+     */
     private final FirstOrderDifferentialEquations fode;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
+     *
      * @param ode original first order differential equations
      */
     ParameterizedWrapper(final FirstOrderDifferentialEquations ode) {
         this.fode = ode;
     }
 
-    /** Get the dimension of the underlying FODE.
+    /**
+     * Get the dimension of the underlying FODE.
+     *
      * @return dimension of the underlying FODE
      */
     public int getDimension() {
         return fode.getDimension();
     }
 
-    /** Get the current time derivative of the state vector of the underlying FODE.
-     * @param t current value of the independent <I>time</I> variable
-     * @param y array containing the current value of the state vector
+    /**
+     * Get the current time derivative of the state vector of the underlying FODE.
+     *
+     * @param t    current value of the independent <I>time</I> variable
+     * @param y    array containing the current value of the state vector
      * @param yDot placeholder array where to put the time derivative of the state vector
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @throws MaxCountExceededException  if the number of functions evaluations is exceeded
+     * @throws DimensionMismatchException if arrays dimensions do not match equations settings
      */
     public void computeDerivatives(double t, double[] y, double[] yDot)
-        throws MaxCountExceededException, DimensionMismatchException {
+            throws MaxCountExceededException, DimensionMismatchException {
         fode.computeDerivatives(t, y, yDot);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Collection<String> getParametersNames() {
         return new ArrayList<String>();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupported(String name) {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getParameter(String name)
-        throws UnknownParameterException {
+            throws UnknownParameterException {
         if (!isSupported(name)) {
             throw new UnknownParameterException(name);
         }
         return Double.NaN;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setParameter(String name, double value) {
     }
 

@@ -23,13 +23,13 @@ import org.apache.commons.math3.util.FastMath;
 /**
  * This class implements the Luther sixth order Runge-Kutta
  * integrator for Ordinary Differential Equations.
-
+ *
  * <p>
  * This method is described in H. A. Luther 1968 paper <a
  * href="http://www.ams.org/journals/mcom/1968-22-102/S0025-5718-68-99876-1/S0025-5718-68-99876-1.pdf">
  * An explicit Sixth-Order Runge-Kutta Formula</a>.
  * </p>
-
+ *
  * <p>This method is an explicit Runge-Kutta method, its Butcher-array
  * is the following one :
  * <pre>
@@ -55,31 +55,41 @@ import org.apache.commons.math3.util.FastMath;
 
 public class LutherIntegrator extends RungeKuttaIntegrator {
 
-    /** Square root. */
+    /**
+     * Square root.
+     */
     private static final double Q = FastMath.sqrt(21);
 
-    /** Time steps Butcher array. */
+    /**
+     * Time steps Butcher array.
+     */
     private static final double[] STATIC_C = {
-        1.0, 1.0 / 2.0, 2.0 / 3.0, (7.0 - Q) / 14.0, (7.0 + Q) / 14.0, 1.0
+            1.0, 1.0 / 2.0, 2.0 / 3.0, (7.0 - Q) / 14.0, (7.0 + Q) / 14.0, 1.0
     };
 
-    /** Internal weights Butcher array. */
+    /**
+     * Internal weights Butcher array.
+     */
     private static final double[][] STATIC_A = {
-        {                      1.0        },
-        {                   3.0 /   8.0,                  1.0 /   8.0  },
-        {                   8.0 /   27.0,                 2.0 /   27.0,                  8.0 /   27.0  },
-        { (  -21.0 +   9.0 * Q) /  392.0, ( -56.0 +  8.0 * Q) /  392.0, ( 336.0 -  48.0 * Q) /  392.0, (-63.0 +   3.0 * Q) /  392.0 },
-        { (-1155.0 - 255.0 * Q) / 1960.0, (-280.0 - 40.0 * Q) / 1960.0, (   0.0 - 320.0 * Q) / 1960.0, ( 63.0 + 363.0 * Q) / 1960.0,   (2352.0 + 392.0 * Q) / 1960.0 },
-        { (  330.0 + 105.0 * Q) /  180.0, ( 120.0 +  0.0 * Q) /  180.0, (-200.0 + 280.0 * Q) /  180.0, (126.0 - 189.0 * Q) /  180.0,   (-686.0 - 126.0 * Q) /  180.0,   (490.0 -  70.0 * Q) / 180.0 }
+            {1.0},
+            {3.0 / 8.0, 1.0 / 8.0},
+            {8.0 / 27.0, 2.0 / 27.0, 8.0 / 27.0},
+            {(-21.0 + 9.0 * Q) / 392.0, (-56.0 + 8.0 * Q) / 392.0, (336.0 - 48.0 * Q) / 392.0, (-63.0 + 3.0 * Q) / 392.0},
+            {(-1155.0 - 255.0 * Q) / 1960.0, (-280.0 - 40.0 * Q) / 1960.0, (0.0 - 320.0 * Q) / 1960.0, (63.0 + 363.0 * Q) / 1960.0, (2352.0 + 392.0 * Q) / 1960.0},
+            {(330.0 + 105.0 * Q) / 180.0, (120.0 + 0.0 * Q) / 180.0, (-200.0 + 280.0 * Q) / 180.0, (126.0 - 189.0 * Q) / 180.0, (-686.0 - 126.0 * Q) / 180.0, (490.0 - 70.0 * Q) / 180.0}
     };
 
-    /** Propagation weights Butcher array. */
+    /**
+     * Propagation weights Butcher array.
+     */
     private static final double[] STATIC_B = {
-        1.0 / 20.0, 0, 16.0 / 45.0, 0, 49.0 / 180.0, 49.0 / 180.0, 1.0 / 20.0
+            1.0 / 20.0, 0, 16.0 / 45.0, 0, 49.0 / 180.0, 49.0 / 180.0, 1.0 / 20.0
     };
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build a fourth-order Luther integrator with the given step.
+     *
      * @param step integration step
      */
     public LutherIntegrator(final double step) {

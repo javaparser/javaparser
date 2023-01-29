@@ -77,7 +77,7 @@ public abstract class AbstractMethodLikeDeclarationContext
                 }
             }
         }
-        
+
         // Local types
         List<com.github.javaparser.ast.body.TypeDeclaration> localTypes = wrappedNode.getChildNodesByType(
                 com.github.javaparser.ast.body.TypeDeclaration.class);
@@ -89,7 +89,7 @@ public abstract class AbstractMethodLikeDeclarationContext
                         name.substring(localType.getName().getId().length() + 1), typeSolver);
             }
         }
-        
+
         return getParent().solveType(name, typeSolver);
     }
 

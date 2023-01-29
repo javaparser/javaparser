@@ -32,14 +32,17 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class Median extends Percentile implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -3961477041290915687L;
 
-    /** Fixed quantile. */
+    /**
+     * Fixed quantile.
+     */
     private static final double FIXED_QUANTILE_50 = 50.0;
 
     /**
@@ -65,30 +68,36 @@ public class Median extends Percentile implements Serializable {
      * Constructs a Median with the specific {@link EstimationType}, {@link NaNStrategy} and {@link PivotingStrategy}.
      *
      * @param estimationType one of the percentile {@link EstimationType  estimation types}
-     * @param nanStrategy one of {@link NaNStrategy} to handle with NaNs
-     * @param kthSelector {@link KthSelector} to use for pivoting during search
+     * @param nanStrategy    one of {@link NaNStrategy} to handle with NaNs
+     * @param kthSelector    {@link KthSelector} to use for pivoting during search
      * @throws MathIllegalArgumentException if p is not within (0,100]
-     * @throws NullArgumentException if type or NaNStrategy passed is null
+     * @throws NullArgumentException        if type or NaNStrategy passed is null
      */
     private Median(final EstimationType estimationType, final NaNStrategy nanStrategy,
                    final KthSelector kthSelector)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         super(FIXED_QUANTILE_50, estimationType, nanStrategy, kthSelector);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Median withEstimationType(final EstimationType newEstimationType) {
         return new Median(newEstimationType, getNaNStrategy(), getKthSelector());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Median withNaNStrategy(final NaNStrategy newNaNStrategy) {
         return new Median(getEstimationType(), newNaNStrategy, getKthSelector());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Median withKthSelector(final KthSelector newKthSelector) {
         return new Median(getEstimationType(), getNaNStrategy(), newKthSelector);

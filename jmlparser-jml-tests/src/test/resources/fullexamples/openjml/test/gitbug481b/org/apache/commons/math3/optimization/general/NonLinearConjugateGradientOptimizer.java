@@ -36,22 +36,31 @@ import org.apache.commons.math3.util.FastMath;
  * optional preconditioning.
  * </p>
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 2.0
- *
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class NonLinearConjugateGradientOptimizer
-    extends AbstractScalarDifferentiableOptimizer {
-    /** Update formula for the beta parameter. */
+        extends AbstractScalarDifferentiableOptimizer {
+    /**
+     * Update formula for the beta parameter.
+     */
     private final ConjugateGradientFormula updateFormula;
-    /** Preconditioner (may be null). */
+    /**
+     * Preconditioner (may be null).
+     */
     private final Preconditioner preconditioner;
-    /** solver to use in the line search (may be null). */
+    /**
+     * solver to use in the line search (may be null).
+     */
     private final UnivariateSolver solver;
-    /** Initial step used to bracket the optimum in line search. */
+    /**
+     * Initial step used to bracket the optimum in line search.
+     */
     private double initialStep;
-    /** Current point. */
+    /**
+     * Current point.
+     */
     private double[] point;
 
     /**
@@ -60,14 +69,14 @@ public class NonLinearConjugateGradientOptimizer
      * {@link IdentityPreconditioner preconditioner}.
      *
      * @param updateFormula formula to use for updating the &beta; parameter,
-     * must be one of {@link ConjugateGradientFormula#FLETCHER_REEVES} or {@link
-     * ConjugateGradientFormula#POLAK_RIBIERE}.
+     *                      must be one of {@link ConjugateGradientFormula#FLETCHER_REEVES} or {@link
+     *                      ConjugateGradientFormula#POLAK_RIBIERE}.
      * @deprecated See {@link SimpleValueChecker#SimpleValueChecker()}
      */
     @Deprecated
     public NonLinearConjugateGradientOptimizer(final ConjugateGradientFormula updateFormula) {
         this(updateFormula,
-             new SimpleValueChecker());
+                new SimpleValueChecker());
     }
 
     /**
@@ -75,44 +84,44 @@ public class NonLinearConjugateGradientOptimizer
      * {@link IdentityPreconditioner preconditioner}.
      *
      * @param updateFormula formula to use for updating the &beta; parameter,
-     * must be one of {@link ConjugateGradientFormula#FLETCHER_REEVES} or {@link
-     * ConjugateGradientFormula#POLAK_RIBIERE}.
-     * @param checker Convergence checker.
+     *                      must be one of {@link ConjugateGradientFormula#FLETCHER_REEVES} or {@link
+     *                      ConjugateGradientFormula#POLAK_RIBIERE}.
+     * @param checker       Convergence checker.
      */
     public NonLinearConjugateGradientOptimizer(final ConjugateGradientFormula updateFormula,
                                                ConvergenceChecker<PointValuePair> checker) {
         this(updateFormula,
-             checker,
-             new BrentSolver(),
-             new IdentityPreconditioner());
+                checker,
+                new BrentSolver(),
+                new IdentityPreconditioner());
     }
 
 
     /**
      * Constructor with default {@link IdentityPreconditioner preconditioner}.
      *
-     * @param updateFormula formula to use for updating the &beta; parameter,
-     * must be one of {@link ConjugateGradientFormula#FLETCHER_REEVES} or {@link
-     * ConjugateGradientFormula#POLAK_RIBIERE}.
-     * @param checker Convergence checker.
+     * @param updateFormula    formula to use for updating the &beta; parameter,
+     *                         must be one of {@link ConjugateGradientFormula#FLETCHER_REEVES} or {@link
+     *                         ConjugateGradientFormula#POLAK_RIBIERE}.
+     * @param checker          Convergence checker.
      * @param lineSearchSolver Solver to use during line search.
      */
     public NonLinearConjugateGradientOptimizer(final ConjugateGradientFormula updateFormula,
                                                ConvergenceChecker<PointValuePair> checker,
                                                final UnivariateSolver lineSearchSolver) {
         this(updateFormula,
-             checker,
-             lineSearchSolver,
-             new IdentityPreconditioner());
+                checker,
+                lineSearchSolver,
+                new IdentityPreconditioner());
     }
 
     /**
-     * @param updateFormula formula to use for updating the &beta; parameter,
-     * must be one of {@link ConjugateGradientFormula#FLETCHER_REEVES} or {@link
-     * ConjugateGradientFormula#POLAK_RIBIERE}.
-     * @param checker Convergence checker.
+     * @param updateFormula    formula to use for updating the &beta; parameter,
+     *                         must be one of {@link ConjugateGradientFormula#FLETCHER_REEVES} or {@link
+     *                         ConjugateGradientFormula#POLAK_RIBIERE}.
+     * @param checker          Convergence checker.
      * @param lineSearchSolver Solver to use during line search.
-     * @param preconditioner Preconditioner.
+     * @param preconditioner   Preconditioner.
      */
     public NonLinearConjugateGradientOptimizer(final ConjugateGradientFormula updateFormula,
                                                ConvergenceChecker<PointValuePair> checker,
@@ -132,9 +141,10 @@ public class NonLinearConjugateGradientOptimizer
      * The initial step is a factor with respect to the search direction,
      * which itself is roughly related to the gradient of the function
      * </p>
+     *
      * @param initialStep initial step used to bracket the optimum in line search,
-     * if a non-positive value is used, the initial step is reset to its
-     * default value of 1.0
+     *                    if a non-positive value is used, the initial step is reset to its
+     *                    default value of 1.0
      */
     public void setInitialStep(final double initialStep) {
         if (initialStep <= 0) {
@@ -144,7 +154,9 @@ public class NonLinearConjugateGradientOptimizer
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected PointValuePair doOptimize() {
         final ConvergenceChecker<PointValuePair> checker = getConvergenceChecker();
@@ -224,7 +236,7 @@ public class NonLinearConjugateGradientOptimizer
 
             // Compute conjugate search direction.
             if (iter % n == 0 ||
-                beta < 0) {
+                    beta < 0) {
                 // Break conjugation: reset search direction.
                 searchDirection = steepestDescent.clone();
             } else {
@@ -259,16 +271,21 @@ public class NonLinearConjugateGradientOptimizer
         throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_BRACKET_OPTIMUM_IN_LINE_SEARCH);
     }
 
-    /** Default identity preconditioner. */
+    /**
+     * Default identity preconditioner.
+     */
     public static class IdentityPreconditioner implements Preconditioner {
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double[] precondition(double[] variables, double[] r) {
             return r.clone();
         }
     }
 
-    /** Internal class for line search.
+    /**
+     * Internal class for line search.
      * <p>
      * The function represented by this class is the dot product of
      * the objective function gradient and the search direction. Its
@@ -278,17 +295,23 @@ public class NonLinearConjugateGradientOptimizer
      * </p>
      */
     private class LineSearchFunction implements UnivariateFunction {
-        /** Search direction. */
+        /**
+         * Search direction.
+         */
         private final double[] searchDirection;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param searchDirection search direction
          */
         LineSearchFunction(final double[] searchDirection) {
             this.searchDirection = searchDirection;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public double value(double x) {
             // current point in the search direction
             final double[] shiftedPoint = point.clone();

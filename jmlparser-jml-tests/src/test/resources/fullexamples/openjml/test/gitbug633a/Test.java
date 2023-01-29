@@ -16,7 +16,7 @@ public class Test {
         assert (-dd) % (-d) == -1.0;
     }
     */
-    
+
     public void m() {
         double d = 2.0;
         double dd = 3.0;
@@ -26,15 +26,15 @@ public class Test {
         assert d * dd == 6.0;
         assert dd / d == 1.5;
     }
-    
+
     public void mm() {
-        
+
         double d = 2;
         assert d != -1;
     }
-    
+
     public void mmm() {
-        
+
         double d = 2;
         double dd = 3;
         assert d + dd == 5;
@@ -43,8 +43,9 @@ public class Test {
         assert d * dd == 6;
         assert dd / d == 1.5;
     }
+
     public void mmod() {
-        
+
         double d = 2;
         double dd = 3;
         assert dd % d == 1.0;

@@ -25,13 +25,13 @@ public abstract class ExamDataBase {
 
     /**
      * Die zu der Klausur angemeldeten Studenten, auch diejenigen, die sich wieder
-     * abgemeldet haben. <code>students</code> ist niemals <code>null</code>. 
+     * abgemeldet haben. <code>students</code> ist niemals <code>null</code>.
      * F&uuml;r alle Studenten in <code>students</code> gilt:
      * <ul>
      *   <li> Die Punktzahl jedes Studenten liegt zwischen -1 und <code>maxPoints</code></li>
      *   <li> Jeder Student hat eine eindeutige Matrikelnummer und kommt nur einmal in
      *        <code>students</code> vor.</li>
-     *   <li> Jedes Objekt der Klasse <code>Student</code> ist in höchstens einer 
+     *   <li> Jedes Objekt der Klasse <code>Student</code> ist in höchstens einer
      *        <code>ExamDataBase</code> enthalten. </li>
      *   <li> Die Bonuspunktzahl liegt zwischen 0 und <code>maxPoints</code>.</li>
      * </ul>
@@ -64,26 +64,26 @@ public abstract class ExamDataBase {
     /*@ protected normal_behavior
       @  ensures \result==pointsToGrade(points, bonusPoints);
       @*/
-    protected /*@spec_public@*/ /*@pure@*/ int pointsToGrade(int points, 
-							     int bonusPoints){
-        points += (points<threshold 
-        	   ? 0 
-                   : (bonusPoints<=step 
-                      ? bonusPoints 
-                      : step));        
-	return (points<threshold
+    protected /*@spec_public@*/ /*@pure@*/ int pointsToGrade(int points,
+                                                             int bonusPoints) {
+        points += (points < threshold
+                ? 0
+                : (bonusPoints <= step
+                ? bonusPoints
+                : step));
+        return (points < threshold
                 ? 500
-                : ((points-threshold)/step>=9 
-                   ? 100 
-                   : (400 - 100*((points-threshold)/(3*step)) 
-                          - (((points-threshold)/step)%3==1
-                             ? 30 
-                             : ((points-threshold)/step)%3==2 
-                                ? 70 
-                                : 0))));
+                : ((points - threshold) / step >= 9
+                ? 100
+                : (400 - 100 * ((points - threshold) / (3 * step))
+                - (((points - threshold) / step) % 3 == 1
+                ? 30
+                : ((points - threshold) / step) % 3 == 2
+                ? 70
+                : 0))));
     }
 
-    /** 
+    /**
      * Setzt die Bestehensgrenze (<code>threshold</code>), die Schrittweite (<code>step</code>)
      * und die Maximalpunktzahl (<code>maxPoints</code>)
      * auf die neuen Werte newThreshold, newStep und newMaxPoints, falls diese die folgenden
@@ -95,8 +95,9 @@ public abstract class ExamDataBase {
      *   <li> newThreshold&lt;=newMaxPoints </li>
      * </ul>
      * andernfalls wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @param newThreshold der neue Wert f&uuml;r die Bestehensgrenze <code>threshold</code>
-     * @param newStep der neue Wert f&uuml;r die Schrittweite <code>step</code>
+     * @param newStep      der neue Wert f&uuml;r die Schrittweite <code>step</code>
      * @param newMaxPoints der neue Wert f&uuml;r die Maximalpunktzahl <code>maxPoints</code>
      * @throws ExamDataBaseException wird geworfen, falls die obigen Konsistenzbedingungen nicht erf&uuml;llt sind.
      */
@@ -112,11 +113,11 @@ public abstract class ExamDataBase {
       @             && 0<newStep && newStep<=(newMaxPoints-newThreshold)/10);
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
-      @*/  
-    public abstract void setExamParameters(int newThreshold, 
-                                           int newStep, 
-                                           int newMaxPoints) 
-						throws ExamDataBaseException;
+      @*/
+    public abstract void setExamParameters(int newThreshold,
+                                           int newStep,
+                                           int newMaxPoints)
+            throws ExamDataBaseException;
 
     /**
      * F&uuml;gt einen Studenten mit der Matrikelnummer <code>matrNr</code>, dem
@@ -127,12 +128,13 @@ public abstract class ExamDataBase {
      *   <li> <code>matrNr</code>&gt;0 gilt.
      *   <li> noch kein Student mit der Matrikelnummer <code>matrNr</code> in der Datenbasis
      *       vorhanden ist</li>
-     * </ul> 
+     * </ul>
      * andernfalls wird eine <code>ExamDataBaseException</code> geworfen.
-     * @param matrNr die Matrikelnummer des hinzuzuf&uuml;genden Studenten.
+     *
+     * @param matrNr    die Matrikelnummer des hinzuzuf&uuml;genden Studenten.
      * @param firstname der Vorname des Studenten.
-     * @param surname der Nachname des Studenten.
-     * @throws ExamDataBaseException wird geworfen, falls die obigen Konsistenzbedingungen nicht erf&uuml;llt sind. 
+     * @param surname   der Nachname des Studenten.
+     * @throws ExamDataBaseException wird geworfen, falls die obigen Konsistenzbedingungen nicht erf&uuml;llt sind.
      */
     /*@ public normal_behavior
       @  requires matrNr>0 && firstname!=null && surname!=null 
@@ -166,19 +168,20 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract void addStudent(int matrNr, 
-                                    String firstname, 
-                                    String surname) 
-						throws ExamDataBaseException;
+    public abstract void addStudent(int matrNr,
+                                    String firstname,
+                                    String surname)
+            throws ExamDataBaseException;
 
     /**
      * Entfernt den Studenten mit der Matrikelnummer <code>matrNr</code> aus der Datenbasis,
      * falls ein solcher darin enthalten ist. Falls nicht, wird eine <code>ExamDataBaseException</code>
      * geworfen. Diese Methode ist dazu gedacht, Fehleingaben in die Datenbasis zu korrigieren.
      * Bei Abmeldungen von der Klausur ist die Methode <code>setBackedOut</code> zu verwenden.
+     *
      * @param matrNr die Matrikelnummer des zu l&ouml;schenden Studenten.
      * @throws ExamDataBaseException wird geworfen, falls kein Student mit der Matrikelnummer
-     * <code>matrNr</code> in der Datenbasis enthalten ist.
+     *                               <code>matrNr</code> in der Datenbasis enthalten ist.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -209,17 +212,18 @@ public abstract class ExamDataBase {
     public abstract void deleteStudent(int matrNr) throws ExamDataBaseException;
 
 
-    /** 
+    /**
      * Setzt die Punktzahl des Studenten mit der Matrikelnummer <code>matrNr</code>
      * auf <code>points</code>.
+     *
      * @param matrNr die Matrikelnummer. Ein Student mit dieser Matrikelnummer mu&szlig; in der
-     *  Datenbasis enthalten sein.
+     *               Datenbasis enthalten sein.
      * @param points die Punktzahl des Studenten mit der Matrikelnummer <code>matrNr</code>.
-     *  Mu&szlig; zwischen -1 und <code>maxPoints</code> liegen.
+     *               Mu&szlig; zwischen -1 und <code>maxPoints</code> liegen.
      * @throws ExamDataBaseException wird geworfen wenn kein Student mit Matrikelnummer
-     * <code>matrNr</code>, der nicht von der Klausur zur&uuml;ckgetreten ist, 
-     * in der Datenbasis enthalten ist, oder <code>points</code> nicht
-     * im Bereich zwischen -1 und <code>maxPoints</code> liegt.
+     *                               <code>matrNr</code>, der nicht von der Klausur zur&uuml;ckgetreten ist,
+     *                               in der Datenbasis enthalten ist, oder <code>points</code> nicht
+     *                               im Bereich zwischen -1 und <code>maxPoints</code> liegt.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -239,19 +243,20 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract void setPoints(int matrNr, int points) 
-						throws ExamDataBaseException;
+    public abstract void setPoints(int matrNr, int points)
+            throws ExamDataBaseException;
 
-    /** 
+    /**
      * Setzt die Bonuspunktzahl des Studenten mit der Matrikelnummer <code>matrNr</code>
      * auf <code>bonusPoints</code>.
-     * @param matrNr die Matrikelnummer. Ein Student mit dieser Matrikelnummer mu&szlig; in der
-     *  Datenbasis enthalten sein.
+     *
+     * @param matrNr      die Matrikelnummer. Ein Student mit dieser Matrikelnummer mu&szlig; in der
+     *                    Datenbasis enthalten sein.
      * @param bonusPoints die Bonuspunktzahl des Studenten mit der Matrikelnummer <code>matrNr</code>.
-     *  Mu&szlig; zwischen 0 und <code>maxPoints</code> liegen.
+     *                    Mu&szlig; zwischen 0 und <code>maxPoints</code> liegen.
      * @throws ExamDataBaseException wird geworfen wenn kein Student mit Matrikelnummer
-     *  <code>matrNr</code> in der Datenbasis enthalten ist, oder <code>bonusPoints</code> nicht
-     *  im Bereich zwischen 0 und <code>maxPoints</code> liegt.
+     *                               <code>matrNr</code> in der Datenbasis enthalten ist, oder <code>bonusPoints</code> nicht
+     *                               im Bereich zwischen 0 und <code>maxPoints</code> liegt.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -272,17 +277,18 @@ public abstract class ExamDataBase {
       @  signals_only ExamDataBaseException;
       @*/
     public abstract void setBonusPoints(int matrNr, int bonusPoints)
-						throws ExamDataBaseException;
+            throws ExamDataBaseException;
 
-    /** 
+    /**
      * Vermerkt den Studenten mit der Matrikelnummer <code>matrNr</code> als
      * von der Klausur zur&uuml;ckgetreten oder macht die Abmeldung r&uuml;ckg&auml;ngig.
-     * @param matrNr die Matrikelnummer. Ein Student mit dieser Matrikelnummer mu&szlig; in der
-     *  Datenbasis enthalten sein.
+     *
+     * @param matrNr    die Matrikelnummer. Ein Student mit dieser Matrikelnummer mu&szlig; in der
+     *                  Datenbasis enthalten sein.
      * @param backedOut <code>true</code> falls der Student sich abmeldet, <code>false</code>,
-     *  falls er von der Abmeldung zur&uuml;cktritt.
+     *                  falls er von der Abmeldung zur&uuml;cktritt.
      * @throws ExamDataBaseException wird geworfen falls kein Student mit Matrikelnummer
-     *  <code>matrNr</code> in der Datenbasis existiert.
+     *                               <code>matrNr</code> in der Datenbasis existiert.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -300,8 +306,8 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract void setBackedOut(int matrNr, boolean backedOut) 
-						throws ExamDataBaseException;
+    public abstract void setBackedOut(int matrNr, boolean backedOut)
+            throws ExamDataBaseException;
 
 
     /*@ public normal_behavior
@@ -319,12 +325,13 @@ public abstract class ExamDataBase {
     /*@ public normal_behavior
       @  ensures \result==maxPoints;
       @*/
-    public abstract /*@pure@*/ int maxPoints(); 
+    public abstract /*@pure@*/ int maxPoints();
 
     /**
      * Liefert die Matrikelnummern aller in der Datenbasis enthaltenen
      * Studenten als Array zur&uuml;ck.
-     * @return Ein Integerarray bestehend aus den Matrikelnummern der in 
+     *
+     * @return Ein Integerarray bestehend aus den Matrikelnummern der in
      * der Datenbasis enthaltenen Studenten.
      */
     /*@ public normal_behavior
@@ -347,10 +354,11 @@ public abstract class ExamDataBase {
      * Liefert den Vornamen des Studenten mit der Matrikelnummer <code>matrNr</code>
      * zur&uuml;ck, falls ein solcher in der Datenbasis enthalten ist. Andernfalls
      * wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @return der Vorname des in der Datenbasis enthaltenen Studenten mit der
      * Matrikelnummer <code>matrNr</code>.
      * @throws ExamDataBaseException falls kein Student mit Matrikelnummer
-     * <code>matrNr</code> in der Datenbasis vorkommt.
+     *                               <code>matrNr</code> in der Datenbasis vorkommt.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -367,17 +375,18 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract String getFirstname(int matrNr) 
-						throws ExamDataBaseException;
+    public abstract String getFirstname(int matrNr)
+            throws ExamDataBaseException;
 
     /**
      * Liefert den Nachnamen des Studenten mit der Matrikelnummer <code>matrNr</code>
      * zur&uuml;ck, falls ein solcher in der Datenbasis enthalten ist. Andernfalls
      * wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @return der Nachname des in der Datenbasis enthaltenen Studenten mit der
      * Matrikelnummer <code>matrNr</code>.
      * @throws ExamDataBaseException falls kein Student mit Matrikelnummer
-     * <code>matrNr</code> in der Datenbasis vorkommt.
+     *                               <code>matrNr</code> in der Datenbasis vorkommt.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -394,17 +403,18 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract String getSurname(int matrNr) 
-						throws ExamDataBaseException;
+    public abstract String getSurname(int matrNr)
+            throws ExamDataBaseException;
 
     /**
      * Liefert die Punkte des Studenten mit der Matrikelnummer <code>matrNr</code>
      * zur&uuml;ck, falls ein solcher in der Datenbasis enthalten ist. Andernfalls
      * wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @return die Punkte des in der Datenbasis enthaltenen Studenten mit der
      * Matrikelnummer <code>matrNr</code>.
      * @throws ExamDataBaseException falls kein Student mit Matrikelnummer
-     * <code>matrNr</code> in der Datenbasis vorkommt.
+     *                               <code>matrNr</code> in der Datenbasis vorkommt.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -421,17 +431,18 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract int getPoints(int matrNr) 
-						throws ExamDataBaseException;
+    public abstract int getPoints(int matrNr)
+            throws ExamDataBaseException;
 
     /**
      * Liefert die Bonuspunkte des Studenten mit der Matrikelnummer <code>matrNr</code>
      * zur&uuml;ck, falls ein solcher in der Datenbasis enthalten ist. Andernfalls
      * wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @return die Bonuspunkte des in der Datenbasis enthaltenen Studenten mit der
      * Matrikelnummer <code>matrNr</code>.
      * @throws ExamDataBaseException falls kein Student mit Matrikelnummer
-     * <code>matrNr</code> in der Datenbasis vorkommt.
+     *                               <code>matrNr</code> in der Datenbasis vorkommt.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -448,8 +459,8 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract int getBonusPoints(int matrNr) 
-						throws ExamDataBaseException;
+    public abstract int getBonusPoints(int matrNr)
+            throws ExamDataBaseException;
 
 
     /**
@@ -457,10 +468,11 @@ public abstract class ExamDataBase {
      * enthalten, wird genau dann <code>true</code> zur&uuml;ckgeliefert, wenn
      * dieser Studenten von der Klausur zur&uuml;ckgetreten ist. Ist kein solcher Student
      * in der Datenbasis zu finden, wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @return <code>true</code> gdw. der in der Datenbasis enthaltene Studenten mit der
      * Matrikelnummer <code>matrNr</code> von der Klausur zur&uuml;ckgetreten ist.
      * @throws ExamDataBaseException falls kein Student mit Matrikelnummer
-     * <code>matrNr</code> in der Datenbasis vorkommt.
+     *                               <code>matrNr</code> in der Datenbasis vorkommt.
      */
    /*@ public normal_behavior
      @  requires (\exists int i; 
@@ -477,8 +489,8 @@ public abstract class ExamDataBase {
      @  assignable \object_creation(ExamDataBaseException);
      @  signals_only ExamDataBaseException;
      @*/
-    public abstract boolean getBackedOut(int matrNr) 
-						throws ExamDataBaseException;
+    public abstract boolean getBackedOut(int matrNr)
+            throws ExamDataBaseException;
 
 
     /**
@@ -486,10 +498,11 @@ public abstract class ExamDataBase {
      * zur&uuml;ck, falls ein solcher in der Datenbasis enthalten ist und nicht
      * von der Klausur zur&uuml;ckgetreten ist. Andernfalls
      * wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @return die Note des in der Datenbasis enthaltenen Studenten mit der
      * Matrikelnummer <code>matrNr</code>.
      * @throws ExamDataBaseException falls kein Student mit Matrikelnummer
-     * <code>matrNr</code> in der Datenbasis vorkommt.
+     *                               <code>matrNr</code> in der Datenbasis vorkommt.
      */
     /*@ public normal_behavior
       @  requires (\exists int i; 
@@ -507,14 +520,15 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract int getGrade(int matrNr) 
-						throws ExamDataBaseException;
+    public abstract int getGrade(int matrNr)
+            throws ExamDataBaseException;
 
     /**
      * Gibt genau dann <code>true</code> zur&uuml;ck, wenn f&uuml;r jeden in der
      * Datenbasis befindlichen Studenten, der nicht von der Klausur
      * zur&uuml;ckgetreten ist ein g&uuml;ltiger Punktestand
      * gr&ouml;&szlig;er 0 eingetragen wurde.
+     *
      * @return <code>true</code> gdw. f&uuml;r jeden in der
      * Datenbasis befindlichen Studenten, der nicht von der Klausur
      * zur&uuml;ckgetreten ist ein g&uuml;ltiger Punktestand
@@ -527,9 +541,10 @@ public abstract class ExamDataBase {
       @                              students[i].points>=0);
       @*/
     public abstract /*@pure@*/ boolean consistent();
-    
-    /** 
+
+    /**
      * Gibt die Anzahl der (nicht wieder abgemeldeten) Klausurteilnehmer zur&uuml;ck.
+     *
      * @return die Anzahl der (nicht wieder abgemeldeten) Klausurteilnehmer.
      */    
     /*@ public normal_behavior
@@ -538,15 +553,16 @@ public abstract class ExamDataBase {
       @                        && !students[i].backedOut);
       @*/
     public abstract /*@pure@*/ int getNumParticipants();
-    
-    /** 
+
+    /**
      * Gibt die Anzahl der Klausurteilnehmer mit Note <code>grade</code> zur&uuml;ck,
      * falls die Datenbasis konsistent ist (<code>consistent()==true</code>). Andernfalls
      * wird eine <code>ExamDataBaseException</code> geworfen.
-     * @return die Anzahl der (nicht wieder abgemeldeten) Klausurteilnehmer mit Note 
+     *
+     * @return die Anzahl der (nicht wieder abgemeldeten) Klausurteilnehmer mit Note
      * <code>grade</code>.
      * @throws ExamDataBaseException falls die Datenbasis inkonsistent ist
-     * (<code>consistent()==false</code>).
+     *                               (<code>consistent()==false</code>).
      */ 
     /*@ public normal_behavior
       @  requires consistent();
@@ -561,16 +577,17 @@ public abstract class ExamDataBase {
       @  assignable \object_creation(ExamDataBaseException);
       @  signals_only ExamDataBaseException;
       @*/
-    public abstract int getNumWithGrade(int grade) 
-						throws ExamDataBaseException;
+    public abstract int getNumWithGrade(int grade)
+            throws ExamDataBaseException;
 
-    /** 
+    /**
      * Gibt den Notendurchschnitt zur&uuml;ck,
      * falls die Datenbasis konsistent ist (<code>consistent()==true</code>). Andernfalls
      * wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @return der Notendurchschnitt.
      * @throws ExamDataBaseException falls die Datenbasis inkonsistent ist
-     * (<code>consistent()==false</code>).
+     *                               (<code>consistent()==false</code>).
      */ 
     /*@ public normal_behavior
       @  requires consistent();
@@ -591,13 +608,14 @@ public abstract class ExamDataBase {
       @*/
     public abstract int getAverage() throws ExamDataBaseException;
 
-    /** 
+    /**
      * Gibt den Notendurchschnitt der bestandenen Klausuren zur&uuml;ck,
      * falls die Datenbasis konsistent ist (<code>consistent()==true</code>). Andernfalls
      * wird eine <code>ExamDataBaseException</code> geworfen.
+     *
      * @return der Notendurchschnitt der bestandenen Klausuren.
      * @throws ExamDataBaseException falls die Datenbasis inkonsistent ist
-     * (<code>consistent()==false</code>).
+     *                               (<code>consistent()==false</code>).
      */
     /*@ public normal_behavior
       @  requires consistent();

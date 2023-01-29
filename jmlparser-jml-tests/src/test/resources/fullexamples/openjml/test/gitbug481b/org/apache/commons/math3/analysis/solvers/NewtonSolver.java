@@ -31,7 +31,9 @@ import org.apache.commons.math3.util.FastMath;
  */
 @Deprecated
 public class NewtonSolver extends AbstractDifferentiableUnivariateSolver {
-    /** Default absolute accuracy. */
+    /**
+     * Default absolute accuracy.
+     */
     private static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
 
     /**
@@ -40,6 +42,7 @@ public class NewtonSolver extends AbstractDifferentiableUnivariateSolver {
     public NewtonSolver() {
         this(DEFAULT_ABSOLUTE_ACCURACY);
     }
+
     /**
      * Construct a solver.
      *
@@ -52,20 +55,18 @@ public class NewtonSolver extends AbstractDifferentiableUnivariateSolver {
     /**
      * Find a zero near the midpoint of {@code min} and {@code max}.
      *
-     * @param f Function to solve.
-     * @param min Lower bound for the interval.
-     * @param max Upper bound for the interval.
+     * @param f       Function to solve.
+     * @param min     Lower bound for the interval.
+     * @param max     Upper bound for the interval.
      * @param maxEval Maximum number of evaluations.
      * @return the value where the function is zero.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximum evaluation count is exceeded.
-     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException
-     * if {@code min >= max}.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximum evaluation count is exceeded.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException   if {@code min >= max}.
      */
     @Override
     public double solve(int maxEval, final DifferentiableUnivariateFunction f,
                         final double min, final double max)
-        throws TooManyEvaluationsException {
+            throws TooManyEvaluationsException {
         return super.solve(maxEval, f, UnivariateSolverUtils.midpoint(min, max));
     }
 
@@ -74,7 +75,7 @@ public class NewtonSolver extends AbstractDifferentiableUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException {
+            throws TooManyEvaluationsException {
         final double startValue = getStartValue();
         final double absoluteAccuracy = getAbsoluteAccuracy();
 

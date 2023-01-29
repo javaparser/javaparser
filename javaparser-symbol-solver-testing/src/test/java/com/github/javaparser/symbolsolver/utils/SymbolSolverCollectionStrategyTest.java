@@ -66,7 +66,7 @@ class SymbolSolverCollectionStrategyTest {
         // not too many MethodDeclarations should be unresolved
         assertTrue(unresolved.get() < 10);
     }
-    
+
     @Test
     void resolveMultiSourceRoots() {
         String[] relativeRootDir = {"/src/main/java-templates", "src/main/java", "src/main/javacc-support", "target/generated-sources/javacc", "target/generated-sources/java-templates", "src/main/java-templates"};

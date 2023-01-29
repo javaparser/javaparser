@@ -73,15 +73,15 @@ public class OneWayAnova {
      * here</a></p>
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>
-     * arrays each containing data for one category
+     *                     arrays each containing data for one category
      * @return Fvalue
-     * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
+     * @throws NullArgumentException      if <code>categoryData</code> is <code>null</code>
      * @throws DimensionMismatchException if the length of the <code>categoryData</code>
-     * array is less than 2 or a contained <code>double[]</code> array does not have
-     * at least two values
+     *                                    array is less than 2 or a contained <code>double[]</code> array does not have
+     *                                    at least two values
      */
     public double anovaFValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException {
+            throws NullArgumentException, DimensionMismatchException {
 
         AnovaStats a = anovaStats(categoryData);
         return a.F;
@@ -107,18 +107,18 @@ public class OneWayAnova {
      * is the commons-math implementation of the F distribution.</p>
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>
-     * arrays each containing data for one category
+     *                     arrays each containing data for one category
      * @return Pvalue
-     * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
+     * @throws NullArgumentException      if <code>categoryData</code> is <code>null</code>
      * @throws DimensionMismatchException if the length of the <code>categoryData</code>
-     * array is less than 2 or a contained <code>double[]</code> array does not have
-     * at least two values
-     * @throws ConvergenceException if the p-value can not be computed due to a convergence error
-     * @throws MaxCountExceededException if the maximum number of iterations is exceeded
+     *                                    array is less than 2 or a contained <code>double[]</code> array does not have
+     *                                    at least two values
+     * @throws ConvergenceException       if the p-value can not be computed due to a convergence error
+     * @throws MaxCountExceededException  if the maximum number of iterations is exceeded
      */
     public double anovaPValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException,
-        ConvergenceException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            ConvergenceException, MaxCountExceededException {
 
         final AnovaStats a = anovaStats(categoryData);
         // No try-catch or advertised exception because args are valid
@@ -145,23 +145,23 @@ public class OneWayAnova {
      * where <code>F</code> is the F value and <code>cumulativeProbability</code>
      * is the commons-math implementation of the F distribution.</p>
      *
-     * @param categoryData <code>Collection</code> of {@link SummaryStatistics}
-     * each containing data for one category
+     * @param categoryData        <code>Collection</code> of {@link SummaryStatistics}
+     *                            each containing data for one category
      * @param allowOneElementData if true, allow computation for one catagory
-     * only or for one data element per category
+     *                            only or for one data element per category
      * @return Pvalue
-     * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
+     * @throws NullArgumentException      if <code>categoryData</code> is <code>null</code>
      * @throws DimensionMismatchException if the length of the <code>categoryData</code>
-     * array is less than 2 or a contained {@link SummaryStatistics} does not have
-     * at least two values
-     * @throws ConvergenceException if the p-value can not be computed due to a convergence error
-     * @throws MaxCountExceededException if the maximum number of iterations is exceeded
+     *                                    array is less than 2 or a contained {@link SummaryStatistics} does not have
+     *                                    at least two values
+     * @throws ConvergenceException       if the p-value can not be computed due to a convergence error
+     * @throws MaxCountExceededException  if the maximum number of iterations is exceeded
      * @since 3.2
      */
     public double anovaPValue(final Collection<SummaryStatistics> categoryData,
                               final boolean allowOneElementData)
-        throws NullArgumentException, DimensionMismatchException,
-               ConvergenceException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            ConvergenceException, MaxCountExceededException {
 
         final AnovaStats a = anovaStats(categoryData, allowOneElementData);
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -174,19 +174,16 @@ public class OneWayAnova {
      * This method calls the method that actually does the calculations (except
      * P-value).
      *
-     * @param categoryData
-     *            <code>Collection</code> of <code>double[]</code> arrays each
-     *            containing data for one category
+     * @param categoryData <code>Collection</code> of <code>double[]</code> arrays each
+     *                     containing data for one category
      * @return computed AnovaStats
-     * @throws NullArgumentException
-     *             if <code>categoryData</code> is <code>null</code>
-     * @throws DimensionMismatchException
-     *             if the length of the <code>categoryData</code> array is less
-     *             than 2 or a contained <code>double[]</code> array does not
-     *             contain at least two values
+     * @throws NullArgumentException      if <code>categoryData</code> is <code>null</code>
+     * @throws DimensionMismatchException if the length of the <code>categoryData</code> array is less
+     *                                    than 2 or a contained <code>double[]</code> array does not
+     *                                    contain at least two values
      */
     private AnovaStats anovaStats(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException {
+            throws NullArgumentException, DimensionMismatchException {
 
         MathUtils.checkNotNull(categoryData);
 
@@ -228,22 +225,22 @@ public class OneWayAnova {
      * <p>True is returned iff the estimated p-value is less than alpha.</p>
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>
-     * arrays each containing data for one category
-     * @param alpha significance level of the test
+     *                     arrays each containing data for one category
+     * @param alpha        significance level of the test
      * @return true if the null hypothesis can be rejected with
      * confidence 1 - alpha
-     * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
+     * @throws NullArgumentException      if <code>categoryData</code> is <code>null</code>
      * @throws DimensionMismatchException if the length of the <code>categoryData</code>
-     * array is less than 2 or a contained <code>double[]</code> array does not have
-     * at least two values
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
-     * @throws ConvergenceException if the p-value can not be computed due to a convergence error
-     * @throws MaxCountExceededException if the maximum number of iterations is exceeded
+     *                                    array is less than 2 or a contained <code>double[]</code> array does not have
+     *                                    at least two values
+     * @throws OutOfRangeException        if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws ConvergenceException       if the p-value can not be computed due to a convergence error
+     * @throws MaxCountExceededException  if the maximum number of iterations is exceeded
      */
     public boolean anovaTest(final Collection<double[]> categoryData,
                              final double alpha)
-        throws NullArgumentException, DimensionMismatchException,
-        OutOfRangeException, ConvergenceException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            OutOfRangeException, ConvergenceException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new OutOfRangeException(
@@ -257,19 +254,19 @@ public class OneWayAnova {
     /**
      * This method actually does the calculations (except P-value).
      *
-     * @param categoryData <code>Collection</code> of <code>double[]</code>
-     * arrays each containing data for one category
+     * @param categoryData        <code>Collection</code> of <code>double[]</code>
+     *                            arrays each containing data for one category
      * @param allowOneElementData if true, allow computation for one catagory
-     * only or for one data element per category
+     *                            only or for one data element per category
      * @return computed AnovaStats
-     * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
+     * @throws NullArgumentException      if <code>categoryData</code> is <code>null</code>
      * @throws DimensionMismatchException if <code>allowOneElementData</code> is false and the number of
-     * categories is less than 2 or a contained SummaryStatistics does not contain
-     * at least two values
+     *                                    categories is less than 2 or a contained SummaryStatistics does not contain
+     *                                    at least two values
      */
     private AnovaStats anovaStats(final Collection<SummaryStatistics> categoryData,
                                   final boolean allowOneElementData)
-        throws NullArgumentException, DimensionMismatchException {
+            throws NullArgumentException, DimensionMismatchException {
 
         MathUtils.checkNotNull(categoryData);
 
@@ -277,14 +274,14 @@ public class OneWayAnova {
             // check if we have enough categories
             if (categoryData.size() < 2) {
                 throw new DimensionMismatchException(LocalizedFormats.TWO_OR_MORE_CATEGORIES_REQUIRED,
-                                                     categoryData.size(), 2);
+                        categoryData.size(), 2);
             }
 
             // check if each category has enough data
             for (final SummaryStatistics array : categoryData) {
                 if (array.getN() <= 1) {
                     throw new DimensionMismatchException(LocalizedFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
-                                                         (int) array.getN(), 2);
+                            (int) array.getN(), 2);
                 }
             }
         }
@@ -321,25 +318,32 @@ public class OneWayAnova {
     }
 
     /**
-        Convenience class to pass dfbg,dfwg,F values around within OneWayAnova.
-        No get/set methods provided.
-    */
+     * Convenience class to pass dfbg,dfwg,F values around within OneWayAnova.
+     * No get/set methods provided.
+     */
     private static class AnovaStats {
 
-        /** Degrees of freedom in numerator (between groups). */
+        /**
+         * Degrees of freedom in numerator (between groups).
+         */
         private final int dfbg;
 
-        /** Degrees of freedom in denominator (within groups). */
+        /**
+         * Degrees of freedom in denominator (within groups).
+         */
         private final int dfwg;
 
-        /** Statistic. */
+        /**
+         * Statistic.
+         */
         private final double F;
 
         /**
          * Constructor
+         *
          * @param dfbg degrees of freedom in numerator (between groups)
          * @param dfwg degrees of freedom in denominator (within groups)
-         * @param F statistic
+         * @param F    statistic
          */
         private AnovaStats(int dfbg, int dfwg, double F) {
             this.dfbg = dfbg;

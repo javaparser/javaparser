@@ -32,54 +32,58 @@ import org.apache.commons.math3.util.FastMath;
  */
 public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
 
-    /** Maximal number of iterations for Simpson. */
+    /**
+     * Maximal number of iterations for Simpson.
+     */
     public static final int SIMPSON_MAX_ITERATIONS_COUNT = 64;
 
     /**
      * Build a Simpson integrator with given accuracies and iterations counts.
-     * @param relativeAccuracy relative accuracy of the result
-     * @param absoluteAccuracy absolute accuracy of the result
+     *
+     * @param relativeAccuracy      relative accuracy of the result
+     * @param absoluteAccuracy      absolute accuracy of the result
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
-     * (must be less than or equal to {@link #SIMPSON_MAX_ITERATIONS_COUNT})
-     * @exception NotStrictlyPositiveException if minimal number of iterations
-     * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
-     * is lesser than or equal to the minimal number of iterations
-     * @exception NumberIsTooLargeException if maximal number of iterations
-     * is greater than {@link #SIMPSON_MAX_ITERATIONS_COUNT}
+     *                              (must be less than or equal to {@link #SIMPSON_MAX_ITERATIONS_COUNT})
+     * @throws NotStrictlyPositiveException if minimal number of iterations
+     *                                      is not strictly positive
+     * @throws NumberIsTooSmallException    if maximal number of iterations
+     *                                      is lesser than or equal to the minimal number of iterations
+     * @throws NumberIsTooLargeException    if maximal number of iterations
+     *                                      is greater than {@link #SIMPSON_MAX_ITERATIONS_COUNT}
      */
     public SimpsonIntegrator(final double relativeAccuracy,
                              final double absoluteAccuracy,
                              final int minimalIterationCount,
                              final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+            throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
         super(relativeAccuracy, absoluteAccuracy, minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > SIMPSON_MAX_ITERATIONS_COUNT) {
             throw new NumberIsTooLargeException(maximalIterationCount,
-                                                SIMPSON_MAX_ITERATIONS_COUNT, false);
+                    SIMPSON_MAX_ITERATIONS_COUNT, false);
         }
     }
 
     /**
      * Build a Simpson integrator with given iteration counts.
+     *
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
-     * (must be less than or equal to {@link #SIMPSON_MAX_ITERATIONS_COUNT})
-     * @exception NotStrictlyPositiveException if minimal number of iterations
-     * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
-     * is lesser than or equal to the minimal number of iterations
-     * @exception NumberIsTooLargeException if maximal number of iterations
-     * is greater than {@link #SIMPSON_MAX_ITERATIONS_COUNT}
+     *                              (must be less than or equal to {@link #SIMPSON_MAX_ITERATIONS_COUNT})
+     * @throws NotStrictlyPositiveException if minimal number of iterations
+     *                                      is not strictly positive
+     * @throws NumberIsTooSmallException    if maximal number of iterations
+     *                                      is lesser than or equal to the minimal number of iterations
+     * @throws NumberIsTooLargeException    if maximal number of iterations
+     *                                      is greater than {@link #SIMPSON_MAX_ITERATIONS_COUNT}
      */
     public SimpsonIntegrator(final int minimalIterationCount,
                              final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+            throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
         super(minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > SIMPSON_MAX_ITERATIONS_COUNT) {
             throw new NumberIsTooLargeException(maximalIterationCount,
-                                                SIMPSON_MAX_ITERATIONS_COUNT, false);
+                    SIMPSON_MAX_ITERATIONS_COUNT, false);
         }
     }
 
@@ -91,10 +95,12 @@ public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
         super(DEFAULT_MIN_ITERATIONS_COUNT, SIMPSON_MAX_ITERATIONS_COUNT);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected double doIntegrate()
-        throws TooManyEvaluationsException, MaxCountExceededException {
+            throws TooManyEvaluationsException, MaxCountExceededException {
 
         TrapezoidIntegrator qtrap = new TrapezoidIntegrator();
         if (getMinimalIterationCount() == 1) {
@@ -111,7 +117,7 @@ public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
             if (getIterations() >= getMinimalIterationCount()) {
                 final double delta = FastMath.abs(s - olds);
                 final double rLimit =
-                    getRelativeAccuracy() * (FastMath.abs(olds) + FastMath.abs(s)) * 0.5;
+                        getRelativeAccuracy() * (FastMath.abs(olds) + FastMath.abs(s)) * 0.5;
                 if ((delta <= rLimit) || (delta <= getAbsoluteAccuracy())) {
                     return s;
                 }

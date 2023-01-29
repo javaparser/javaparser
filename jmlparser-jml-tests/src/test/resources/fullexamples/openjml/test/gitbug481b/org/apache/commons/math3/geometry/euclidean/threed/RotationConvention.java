@@ -19,12 +19,14 @@ package org.apache.commons.math3.geometry.euclidean.threed;
 
 /**
  * This enumerates is used to differentiate the semantics of a rotation.
+ *
  * @see Rotation
  * @since 3.6
  */
 public enum RotationConvention {
 
-    /** Constant for rotation that have the semantics of a vector operator.
+    /**
+     * Constant for rotation that have the semantics of a vector operator.
      * <p>
      * According to this convention, the rotation moves vectors with respect
      * to a fixed reference frame.
@@ -50,7 +52,8 @@ public enum RotationConvention {
      */
     VECTOR_OPERATOR,
 
-    /** Constant for rotation that have the semantics of a frame conversion.
+    /**
+     * Constant for rotation that have the semantics of a frame conversion.
      * <p>
      * According to this convention, the rotation considered vectors to be fixed,
      * but their coordinates change as they are converted from an initial frame to

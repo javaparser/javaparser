@@ -33,6 +33,5 @@
  *   <li>Transformed - transforms each element added to the bag
  *   <li>Collection - ensures compliance with the java.util.Collection contract
  * </ul>
- *
  */
 package org.apache.commons.collections4.bag;

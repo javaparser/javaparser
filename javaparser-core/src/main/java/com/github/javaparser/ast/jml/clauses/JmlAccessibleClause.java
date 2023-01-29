@@ -23,7 +23,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 @Deprecated
 public class JmlAccessibleClause extends JmlClause implements MethodContractable, BlockContractable, LoopContractable {
+
     private NodeList<SimpleName> heaps;
+
     private NodeList<Expression> expressions;
 
     @OptionalProperty

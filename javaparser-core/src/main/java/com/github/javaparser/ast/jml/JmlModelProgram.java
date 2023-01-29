@@ -20,14 +20,15 @@ import java.util.Optional;
  * @author Alexander Weigl
  * @version 1 (12/14/21)
  */
-public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelProgram>,
-        NodeWithAnnotations<JmlModelProgram>,
-        NodeWithContracts<JmlModelProgram> {
+public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelProgram>, NodeWithAnnotations<JmlModelProgram>, NodeWithContracts<JmlModelProgram> {
 
     private Modifier modifiers;
+
     @OptionalProperty
     private NodeList<JmlContract> contracts;
+
     private NodeList<AnnotationExpr> annotations;
+
     private NodeList<Statement> statements;
 
     public JmlModelProgram(TokenRange tokenRange) {
@@ -41,19 +42,15 @@ public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelP
 
     public JmlModelProgram(TokenRange range, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, JmlContract contracts, NodeList<Statement> statements) {
         super(range);
-
     }
 
-
     @Override
-
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return null;
     }
 
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
-
     }
 
     @Override

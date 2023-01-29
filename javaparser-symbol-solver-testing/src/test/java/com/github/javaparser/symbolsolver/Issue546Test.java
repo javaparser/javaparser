@@ -44,6 +44,7 @@ public class Issue546Test {
                 "        return z;\n" +
                 "}", printed);
     }
+
     @Test
     void switchWithoutTabs() {
         Statement cu = parseStatement("switch(x){ case 1: return y; case 2: return z;}");

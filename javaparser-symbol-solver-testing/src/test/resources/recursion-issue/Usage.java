@@ -1,6 +1,6 @@
-class Usage{
+class Usage {
 
-    void bar(){
+    void bar() {
         Extends.foo();
     }
 }

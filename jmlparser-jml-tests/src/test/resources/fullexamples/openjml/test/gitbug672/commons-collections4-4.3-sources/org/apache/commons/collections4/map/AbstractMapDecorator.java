@@ -39,11 +39,14 @@ import java.util.Set;
  */
 public abstract class AbstractMapDecorator<K, V> extends AbstractIterableMap<K, V> {
 
-    /** The map to decorate */
+    /**
+     * The map to decorate
+     */
     transient Map<K, V> map;
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
+     *
      * @since 3.1
      */
     protected AbstractMapDecorator() {
@@ -53,7 +56,7 @@ public abstract class AbstractMapDecorator<K, V> extends AbstractIterableMap<K, 
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if the map is null
      */
     protected AbstractMapDecorator(final Map<K, V> map) {

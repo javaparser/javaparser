@@ -85,6 +85,7 @@ public class TypeHelper {
 
     /**
      * see https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3
+     *
      * @param expression
      * @param t
      * @return
@@ -95,6 +96,7 @@ public class TypeHelper {
 
     /**
      * see https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3
+     *
      * @param expression
      * @param t
      * @return
@@ -106,6 +108,7 @@ public class TypeHelper {
 
     /**
      * see https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.3
+     *
      * @param s
      * @param t
      * @return
@@ -163,10 +166,10 @@ public class TypeHelper {
     public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
         throw new UnsupportedOperationException();
     }
-    
+
     // get the resolved boxed type of the specified primitive type
-    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver ) {
-        SymbolReference<ResolvedReferenceTypeDeclaration> typeDeclaration =  typeSolver.tryToSolveType(primitiveType.getBoxTypeQName());
+    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver) {
+        SymbolReference<ResolvedReferenceTypeDeclaration> typeDeclaration = typeSolver.tryToSolveType(primitiveType.getBoxTypeQName());
         return new ReferenceTypeImpl(typeDeclaration.getCorrespondingDeclaration());
     }
 
@@ -175,7 +178,7 @@ public class TypeHelper {
         if (!correspondingPrimitiveTypeForS.isPresent()) {
             return false;
         }
-        throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s="+s+", t=" + t);
+        throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s=" + s + ", t=" + t);
     }
 
     public static boolean areCompatibleThroughWideningPrimitiveConversion(ResolvedType s, ResolvedType t) {
@@ -305,6 +308,7 @@ public class TypeHelper {
 
     /**
      * See JLS 15.27.3. Type of a Lambda Expression
+     *
      * @return
      */
     public static Pair<ResolvedType, Boolean> groundTargetTypeOfLambda(LambdaExpr lambdaExpr, ResolvedType T, TypeSolver typeSolver) {
@@ -350,7 +354,7 @@ public class TypeHelper {
 
         ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
 
-        for (int i=0;i<AIs.size();i++) {
+        for (int i = 0; i < AIs.size(); i++) {
             ResolvedType Ai = AIs.get(i);
             ResolvedType Ti = null;
 
@@ -390,9 +394,7 @@ public class TypeHelper {
 
                 else if (Ai.isWildcard() && Ai.asWildcard().isLowerBounded()) {
                     Ti = Ai.asWildcard().getBoundedType();
-                }
-
-                else {
+                } else {
                     throw new RuntimeException("This should not happen");
                 }
             }

@@ -3,7 +3,7 @@ public class EntryList {
     /*@spec_public @*/ Object first;
     /*@spec_public @*/ EntryList rest;
 
-    EntryList( Object first, EntryList rest) {
+    EntryList(Object first, EntryList rest) {
         this.first = first;
         this.rest = rest;
     }
@@ -14,10 +14,10 @@ public class EntryList {
       @*/
     //@ pure
     public int size() {  //@ assume rest != null ==> rest.size() < 1000000000; // Just to avoid overflow warnings
-        if(this.first == null) {
+        if (this.first == null) {
             return 0;
         }
-        if(this.rest == null) {
+        if (this.rest == null) {
             return 1;
         } else {
             return 1 + rest.size();

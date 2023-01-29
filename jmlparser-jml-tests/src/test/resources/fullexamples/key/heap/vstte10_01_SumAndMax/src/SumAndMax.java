@@ -2,7 +2,7 @@ class SumAndMax {
 
     int sum;
     int max;
-   
+
     /*@ normal_behaviour
       @   requires (\forall int i; 0 <= i && i < a.length; 0 <= a[i]);
       @   assignable sum, max;
@@ -13,9 +13,9 @@ class SumAndMax {
       @   ensures sum <= a.length * max;
       @*/
     void sumAndMax(int[] a) {
-	sum = 0;
-	max = 0;
-	int k = 0;
+        sum = 0;
+        max = 0;
+        int k = 0;
       
         /*@ loop_invariant
           @   0 <= k && k <= a.length
@@ -28,12 +28,12 @@ class SumAndMax {
           @  assignable sum, max;
           @  decreases a.length - k;
           @*/
-	while(k < a.length) {
-            if(max < a[k]) {
+        while (k < a.length) {
+            if (max < a[k]) {
                 max = a[k];
             }
             sum += a[k];
             k++;
-	}
+        }
     }
 }

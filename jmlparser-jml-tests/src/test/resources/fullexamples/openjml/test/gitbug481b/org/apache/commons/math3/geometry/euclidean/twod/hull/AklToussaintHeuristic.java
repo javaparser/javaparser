@@ -39,7 +39,9 @@ import java.util.List;
  */
 public final class AklToussaintHeuristic {
 
-    /** Hide utility constructor. */
+    /**
+     * Hide utility constructor.
+     */
     private AklToussaintHeuristic() {
     }
 
@@ -114,7 +116,8 @@ public final class AklToussaintHeuristic {
 
     /**
      * Checks if the given point is located within the convex quadrilateral.
-     * @param point the point to check
+     *
+     * @param point               the point to check
      * @param quadrilateralPoints the convex quadrilateral, represented by 4 points
      * @return {@code true} if the point is inside the quadrilateral, {@code false} otherwise
      */

@@ -42,7 +42,9 @@ import java.util.Set;
  */
 public class PredicatedBag<E> extends PredicatedCollection<E> implements Bag<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -2575833140344736876L;
 
     /**
@@ -51,11 +53,11 @@ public class PredicatedBag<E> extends PredicatedCollection<E> implements Bag<E> 
      * If there are any elements already in the bag being decorated, they
      * are validated.
      *
-     * @param <E> the type of the elements in the bag
-     * @param bag  the bag to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
+     * @param <E>       the type of the elements in the bag
+     * @param bag       the bag to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
      * @return a new predicated Bag
-     * @throws NullPointerException if bag or predicate is null
+     * @throws NullPointerException     if bag or predicate is null
      * @throws IllegalArgumentException if the bag contains invalid elements
      * @since 4.0
      */
@@ -64,15 +66,16 @@ public class PredicatedBag<E> extends PredicatedCollection<E> implements Bag<E> 
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the bag being decorated, they
      * are validated.
      *
-     * @param bag  the bag to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
-     * @throws NullPointerException if bag or predicate is null
+     * @param bag       the bag to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
+     * @throws NullPointerException     if bag or predicate is null
      * @throws IllegalArgumentException if the bag contains invalid elements
      */
     protected PredicatedBag(final Bag<E> bag, final Predicate<? super E> predicate) {

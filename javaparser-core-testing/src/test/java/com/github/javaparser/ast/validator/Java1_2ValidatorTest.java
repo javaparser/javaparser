@@ -286,7 +286,7 @@ class Java1_2ValidatorTest {
                 "(line 1,col 29) 'protected' is not allowed here."
         );
     }
-    
+
     @Test
     void strictfpNotAllowedAsIdentifier() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("int strictfp;"));

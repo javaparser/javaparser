@@ -55,9 +55,9 @@ public class Issue1950Test extends AbstractResolutionTest {
                 "}";
         CompilationUnit cu = StaticJavaParser.parse(s);
         MethodCallExpr mce = cu.findFirst(MethodCallExpr.class).get();
-        
+
         ResolvedMethodDeclaration resolved = mce.resolve();
-        
+
         // 15.12.2.5. Choosing the Most Specific Method
         // One applicable method m1 is more specific than another applicable method m2, for an invocation with argument
         // expressions e1, ..., ek, if any of the following are true:

@@ -11,16 +11,16 @@ public class ParallelGcd {
 	  @ public static model two_state int gcd(int a, int b);
 	*/
 
-	/*@ public behavior
-	  @ requires 0 < aIn && 0 < bIn;
-	  @ assignable \nothing;
-	  @ ensures 0 < \result && (\result == gcd(aIn, bIn));
-	  @ signals (Exception e) true;
-	  @*/
-	public static int parallelGcd(final int aIn, final int bIn, final boolean[] r) throws Exception {
-		int a = aIn;
-		int b = bIn;
-		int i = 0;
+    /*@ public behavior
+      @ requires 0 < aIn && 0 < bIn;
+      @ assignable \nothing;
+      @ ensures 0 < \result && (\result == gcd(aIn, bIn));
+      @ signals (Exception e) true;
+      @*/
+    public static int parallelGcd(final int aIn, final int bIn, final boolean[] r) throws Exception {
+        int a = aIn;
+        int b = bIn;
+        int i = 0;
 
 		/*@ loop_invariant 0 <= i
 		  @ && 0 < a && 0 < b
@@ -30,17 +30,21 @@ public class ParallelGcd {
 		  @ assignable \nothing;
 		  @ decreases r.length - i;
 		  @*/
-		while(a != b) {
-			if (r.length <= i) {
-				throw new Exception();
-			}
-			if (r[i]) {
-				if (a > b) { a = a - b; }
-			} else {
-				if (b > a) { b = b - a; }
-			}
-			i++;
-		}
-		return a;
-	}
+        while (a != b) {
+            if (r.length <= i) {
+                throw new Exception();
+            }
+            if (r[i]) {
+                if (a > b) {
+                    a = a - b;
+                }
+            } else {
+                if (b > a) {
+                    b = b - a;
+                }
+            }
+            i++;
+        }
+        return a;
+    }
 }

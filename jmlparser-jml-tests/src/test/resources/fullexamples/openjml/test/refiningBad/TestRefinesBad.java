@@ -1,21 +1,23 @@
 public class TestRefinesBad {
-    
+
     public int mbad(int i) {
-        
+
         int j;
         //@ begin
         j = i + 10;
         j++;
         return j;
     }
+
     public int mbad2(int i) {
-        
+
         int j;
         //@ end
         j = i + 10;
         j++;
         return j;
     }
+
     public int mbad4(int i) {
 
         int j;

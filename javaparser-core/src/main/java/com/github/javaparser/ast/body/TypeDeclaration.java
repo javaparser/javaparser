@@ -198,6 +198,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * If the declared type is a local class declaration, it will return Optional.empty().
      * If the declared type is a local record declaration, it will return Optional.empty().
      * If the declared type is not contained in a compilation unit, it will return Optional.empty().
+     *
      * @see com.github.javaparser.ast.stmt.LocalClassDeclarationStmt
      * @see com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt
      */

@@ -27,7 +27,9 @@ import org.apache.commons.math3.util.Incrementor;
  */
 public class LeastSquaresAdapter implements LeastSquaresProblem {
 
-    /** the delegate problem */
+    /**
+     * the delegate problem
+     */
     private final LeastSquaresProblem problem;
 
     /**
@@ -39,38 +41,53 @@ public class LeastSquaresAdapter implements LeastSquaresProblem {
         this.problem = problem;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealVector getStart() {
         return problem.getStart();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getObservationSize() {
         return problem.getObservationSize();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getParameterSize() {
         return problem.getParameterSize();
     }
 
-    /** {@inheritDoc}
-     * @param point*/
+    /**
+     * {@inheritDoc}
+     *
+     * @param point
+     */
     public Evaluation evaluate(final RealVector point) {
         return problem.evaluate(point);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Incrementor getEvaluationCounter() {
         return problem.getEvaluationCounter();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Incrementor getIterationCounter() {
         return problem.getIterationCounter();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ConvergenceChecker<Evaluation> getConvergenceChecker() {
         return problem.getConvergenceChecker();
     }

@@ -108,4 +108,14 @@ public class BlockComment extends Comment {
     public Optional<BlockComment> toBlockComment() {
         return Optional.of(this);
     }
+
+    @Override
+    public String getHeader() {
+        return "/*";
+    }
+
+    @Override
+    public String getFooter() {
+        return "*/";
+    }
 }

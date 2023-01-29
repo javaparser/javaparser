@@ -32,7 +32,7 @@ public class ListSeq<E extends Object> implements Seq<E> {
 
     @Override
     public E current() {
-        return list.get(pos-1);
+        return list.get(pos - 1);
     }
 
     @Override  //@ pure helper
@@ -42,6 +42,6 @@ public class ListSeq<E extends Object> implements Seq<E> {
 
     @Override
     public Boolean pastEnd() {
-        return pos.equals(length()+1);
+        return pos.equals(length() + 1);
     }
 }

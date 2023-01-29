@@ -13,8 +13,8 @@
 
 package paycard;
 
-public class CardException extends java.lang.Exception{
+public class CardException extends java.lang.Exception {
 
-    public CardException(){
+    public CardException() {
     }
 }

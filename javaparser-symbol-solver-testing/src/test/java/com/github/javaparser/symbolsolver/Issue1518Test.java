@@ -42,13 +42,13 @@ class Issue1518Test extends AbstractResolutionTest {
         Path rootSourceDir = adaptPath("src/test/resources/issue1518");
 
         String src =
-                "public class App {\n" + 
-                "    public static void main(String[] args) {\n" + 
-                "        Test1.Test2 test2 = new Test1.Test2();\n" + 
-                "        Test1.Test3 test3 = new Test1.Test3();\n" + 
-                "    }\n" + 
-                "}";
-        
+                "public class App {\n" +
+                        "    public static void main(String[] args) {\n" +
+                        "        Test1.Test2 test2 = new Test1.Test2();\n" +
+                        "        Test1.Test3 test3 = new Test1.Test3();\n" +
+                        "    }\n" +
+                        "}";
+
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(rootSourceDir.toFile())));
         StaticJavaParser.setConfiguration(config);

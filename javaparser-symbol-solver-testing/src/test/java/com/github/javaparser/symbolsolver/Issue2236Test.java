@@ -47,13 +47,13 @@ public class Issue2236Test extends AbstractSymbolResolutionTest {
                 .setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
         StaticJavaParser.setConfiguration(configuration);
 
-        String src = "class X {public void f(){ " + 
+        String src = "class X {public void f(){ " +
                 "new A<Object>(new Boolean(true)); }}";
 
         CompilationUnit cu = StaticJavaParser.parse(src);
 
-        List<ObjectCreationExpr> oces = cu.findAll(ObjectCreationExpr .class);
+        List<ObjectCreationExpr> oces = cu.findAll(ObjectCreationExpr.class);
         assertEquals("A.A(java.lang.Boolean)", oces.get(0).resolve().getQualifiedSignature());
-        
+
     }
 }

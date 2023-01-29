@@ -28,23 +28,35 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Describes a neuron element of a neural network.
- *
+ * <p>
  * This class aims to be thread-safe.
  *
  * @since 3.3
  */
 public class Neuron implements Serializable {
-    /** Serializable. */
+    /**
+     * Serializable.
+     */
     private static final long serialVersionUID = 20130207L;
-    /** Identifier. */
+    /**
+     * Identifier.
+     */
     private final long identifier;
-    /** Length of the feature set. */
+    /**
+     * Length of the feature set.
+     */
     private final int size;
-    /** Neuron data. */
+    /**
+     * Neuron data.
+     */
     private final AtomicReference<double[]> features;
-    /** Number of attempts to update a neuron. */
+    /**
+     * Number of attempts to update a neuron.
+     */
     private final AtomicLong numberOfAttemptedUpdates = new AtomicLong(0);
-    /** Number of successful updates  of a neuron. */
+    /**
+     * Number of successful updates  of a neuron.
+     */
     private final AtomicLong numberOfSuccessfulUpdates = new AtomicLong(0);
 
     /**
@@ -57,7 +69,7 @@ public class Neuron implements Serializable {
      * instance to which they will belong.
      *
      * @param identifier Identifier (assigned by the {@link Network}).
-     * @param features Initial values of the feature set.
+     * @param features   Initial values of the feature set.
      */
     Neuron(long identifier,
            double[] features) {
@@ -76,7 +88,7 @@ public class Neuron implements Serializable {
      */
     public synchronized Neuron copy() {
         final Neuron copy = new Neuron(getIdentifier(),
-                                       getFeatures());
+                getFeatures());
         copy.numberOfAttemptedUpdates.set(numberOfAttemptedUpdates.get());
         copy.numberOfSuccessfulUpdates.set(numberOfSuccessfulUpdates.get());
 
@@ -129,14 +141,14 @@ public class Neuron implements Serializable {
      * redo its computation, and call this method again.
      *
      * @param expect Current values of the features, as assumed by the caller.
-     * Update will never succeed if the contents of this array does not match
-     * the values returned by {@link #getFeatures()}.
+     *               Update will never succeed if the contents of this array does not match
+     *               the values returned by {@link #getFeatures()}.
      * @param update Features's new values.
      * @return {@code true} if the update was successful, {@code false}
      * otherwise.
      * @throws DimensionMismatchException if the length of {@code update} is
-     * not the same as specified in the {@link #Neuron(long,double[])
-     * constructor}.
+     *                                    not the same as specified in the {@link #Neuron(long, double[])
+     *                                    constructor}.
      */
     public boolean compareAndSetFeatures(double[] expect,
                                          double[] update) {
@@ -167,7 +179,7 @@ public class Neuron implements Serializable {
 
     /**
      * Retrieves the number of calls to the
-     * {@link #compareAndSetFeatures(double[],double[]) compareAndSetFeatures}
+     * {@link #compareAndSetFeatures(double[], double[]) compareAndSetFeatures}
      * method.
      * Note that if the caller wants to use this method in combination with
      * {@link #getNumberOfSuccessfulUpdates()}, additional synchronization
@@ -182,7 +194,7 @@ public class Neuron implements Serializable {
 
     /**
      * Retrieves the number of successful calls to the
-     * {@link #compareAndSetFeatures(double[],double[]) compareAndSetFeatures}
+     * {@link #compareAndSetFeatures(double[], double[]) compareAndSetFeatures}
      * method.
      * Note that if the caller wants to use this method in combination with
      * {@link #getNumberOfAttemptedUpdates()}, additional synchronization
@@ -199,11 +211,11 @@ public class Neuron implements Serializable {
      * Checks whether the contents of both arrays is the same.
      *
      * @param current Current values.
-     * @param expect Expected values.
-     * @throws DimensionMismatchException if the length of {@code expected}
-     * is not the same as specified in the {@link #Neuron(long,double[])
-     * constructor}.
+     * @param expect  Expected values.
      * @return {@code true} if the arrays contain the same values.
+     * @throws DimensionMismatchException if the length of {@code expected}
+     *                                    is not the same as specified in the {@link #Neuron(long, double[])
+     *                                    constructor}.
      */
     private boolean containSameValues(double[] current,
                                       double[] expect) {
@@ -235,23 +247,29 @@ public class Neuron implements Serializable {
      */
     private Object writeReplace() {
         return new SerializationProxy(identifier,
-                                      features.get());
+                features.get());
     }
 
     /**
      * Serialization.
      */
     private static class SerializationProxy implements Serializable {
-        /** Serializable. */
+        /**
+         * Serializable.
+         */
         private static final long serialVersionUID = 20130207L;
-        /** Features. */
+        /**
+         * Features.
+         */
         private final double[] features;
-        /** Identifier. */
+        /**
+         * Identifier.
+         */
         private final long identifier;
 
         /**
          * @param identifier Identifier.
-         * @param features Features.
+         * @param features   Features.
          */
         SerializationProxy(long identifier,
                            double[] features) {
@@ -266,7 +284,7 @@ public class Neuron implements Serializable {
          */
         private Object readResolve() {
             return new Neuron(identifier,
-                              features);
+                    features);
         }
     }
 }

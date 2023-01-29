@@ -27,11 +27,12 @@ import java.math.BigInteger;
 /**
  * Some useful, arithmetics related, additions to the built-in functions in
  * {@link Math}.
- *
  */
 public final class ArithmeticUtils {
 
-    /** Private constructor. */
+    /**
+     * Private constructor.
+     */
     private ArithmeticUtils() {
         super();
     }
@@ -43,16 +44,16 @@ public final class ArithmeticUtils {
      * @param y an addend
      * @return the sum {@code x+y}
      * @throws MathArithmeticException if the result can not be represented
-     * as an {@code int}.
+     *                                 as an {@code int}.
      * @since 1.1
      */
     public static int addAndCheck(int x, int y)
             throws MathArithmeticException {
-        long s = (long)x + (long)y;
+        long s = (long) x + (long) y;
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
             throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_ADDITION, x, y);
         }
-        return (int)s;
+        return (int) s;
     }
 
     /**
@@ -89,16 +90,16 @@ public final class ArithmeticUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws NotPositiveException      if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
-     * represented by a long integer.
+     * @throws MathArithmeticException   if the result is too large to be
+     *                                   represented by a long integer.
      * @deprecated use {@link CombinatoricsUtils#binomialCoefficient(int, int)}
      */
     @Deprecated
     public static long binomialCoefficient(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
-       return CombinatoricsUtils.binomialCoefficient(n, k);
+            throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+        return CombinatoricsUtils.binomialCoefficient(n, k);
     }
 
     /**
@@ -121,15 +122,15 @@ public final class ArithmeticUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws NotPositiveException      if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
-     * represented by a long integer.
+     * @throws MathArithmeticException   if the result is too large to be
+     *                                   represented by a long integer.
      * @deprecated use {@link CombinatoricsUtils#binomialCoefficientDouble(int, int)}
      */
     @Deprecated
     public static double binomialCoefficientDouble(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+            throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
         return CombinatoricsUtils.binomialCoefficientDouble(n, k);
     }
 
@@ -149,15 +150,15 @@ public final class ArithmeticUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws NotPositiveException      if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
-     * represented by a long integer.
+     * @throws MathArithmeticException   if the result is too large to be
+     *                                   represented by a long integer.
      * @deprecated use {@link CombinatoricsUtils#binomialCoefficientLog(int, int)}
      */
     @Deprecated
     public static double binomialCoefficientLog(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+            throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
         return CombinatoricsUtils.binomialCoefficientLog(n, k);
     }
 
@@ -180,10 +181,10 @@ public final class ArithmeticUtils {
      * @param n argument
      * @return {@code n!}
      * @throws MathArithmeticException if the result is too large to be represented
-     * by a {@code long}.
-     * @throws NotPositiveException if {@code n < 0}.
+     *                                 by a {@code long}.
+     * @throws NotPositiveException    if {@code n < 0}.
      * @throws MathArithmeticException if {@code n > 20}: The factorial value is too
-     * large to fit in a {@code long}.
+     *                                 large to fit in a {@code long}.
      * @deprecated use {@link CombinatoricsUtils#factorial(int)}
      */
     @Deprecated
@@ -207,7 +208,7 @@ public final class ArithmeticUtils {
      */
     @Deprecated
     public static double factorialDouble(final int n) throws NotPositiveException {
-         return CombinatoricsUtils.factorialDouble(n);
+        return CombinatoricsUtils.factorialDouble(n);
     }
 
     /**
@@ -248,18 +249,18 @@ public final class ArithmeticUtils {
      * @param q Number.
      * @return the greatest common divisor (never negative).
      * @throws MathArithmeticException if the result cannot be represented as
-     * a non-negative {@code int} value.
+     *                                 a non-negative {@code int} value.
      * @since 1.1
      */
     public static int gcd(int p, int q) throws MathArithmeticException {
         int a = p;
         int b = q;
         if (a == 0 ||
-            b == 0) {
+                b == 0) {
             if (a == Integer.MIN_VALUE ||
-                b == Integer.MIN_VALUE) {
+                    b == Integer.MIN_VALUE) {
                 throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
-                                                  p, q);
+                        p, q);
             }
             return FastMath.abs(a + b);
         }
@@ -268,7 +269,7 @@ public final class ArithmeticUtils {
         long bl = b;
         boolean useLong = false;
         if (a < 0) {
-            if(Integer.MIN_VALUE == a) {
+            if (Integer.MIN_VALUE == a) {
                 useLong = true;
             } else {
                 a = -a;
@@ -284,9 +285,9 @@ public final class ArithmeticUtils {
             bl = -bl;
         }
         if (useLong) {
-            if(al == bl) {
+            if (al == bl) {
                 throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
-                                                  p, q);
+                        p, q);
             }
             long blbu = bl;
             bl = al;
@@ -294,7 +295,7 @@ public final class ArithmeticUtils {
             if (al == 0) {
                 if (bl > Integer.MAX_VALUE) {
                     throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
-                                                      p, q);
+                            p, q);
                 }
                 return (int) bl;
             }
@@ -331,8 +332,7 @@ public final class ArithmeticUtils {
     private static int gcdPositive(int a, int b) {
         if (a == 0) {
             return b;
-        }
-        else if (b == 0) {
+        } else if (b == 0) {
             return a;
         }
 
@@ -388,16 +388,16 @@ public final class ArithmeticUtils {
      * @param q Number.
      * @return the greatest common divisor, never negative.
      * @throws MathArithmeticException if the result cannot be represented as
-     * a non-negative {@code long} value.
+     *                                 a non-negative {@code long} value.
      * @since 2.1
      */
     public static long gcd(final long p, final long q) throws MathArithmeticException {
         long u = p;
         long v = q;
         if ((u == 0) || (v == 0)) {
-            if ((u == Long.MIN_VALUE) || (v == Long.MIN_VALUE)){
+            if ((u == Long.MIN_VALUE) || (v == Long.MIN_VALUE)) {
                 throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_64_BITS,
-                                                  p, q);
+                        p, q);
             }
             return FastMath.abs(u) + FastMath.abs(v);
         }
@@ -415,14 +415,14 @@ public final class ArithmeticUtils {
         // B1. [Find power of 2]
         int k = 0;
         while ((u & 1) == 0 && (v & 1) == 0 && k < 63) { // while u and v are
-                                                            // both even...
+            // both even...
             u /= 2;
             v /= 2;
             k++; // cast out twos.
         }
         if (k == 63) {
             throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_64_BITS,
-                                              p, q);
+                    p, q);
         }
         // B2. Initialize: u and v have been divided by 2^k and at least
         // one is odd.
@@ -468,17 +468,17 @@ public final class ArithmeticUtils {
      * @param b Number.
      * @return the least common multiple, never negative.
      * @throws MathArithmeticException if the result cannot be represented as
-     * a non-negative {@code int} value.
+     *                                 a non-negative {@code int} value.
      * @since 1.1
      */
     public static int lcm(int a, int b) throws MathArithmeticException {
-        if (a == 0 || b == 0){
+        if (a == 0 || b == 0) {
             return 0;
         }
         int lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
         if (lcm == Integer.MIN_VALUE) {
             throw new MathArithmeticException(LocalizedFormats.LCM_OVERFLOW_32_BITS,
-                                              a, b);
+                    a, b);
         }
         return lcm;
     }
@@ -502,17 +502,17 @@ public final class ArithmeticUtils {
      * @param b Number.
      * @return the least common multiple, never negative.
      * @throws MathArithmeticException if the result cannot be represented
-     * as a non-negative {@code long} value.
+     *                                 as a non-negative {@code long} value.
      * @since 2.1
      */
     public static long lcm(long a, long b) throws MathArithmeticException {
-        if (a == 0 || b == 0){
+        if (a == 0 || b == 0) {
             return 0;
         }
         long lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
-        if (lcm == Long.MIN_VALUE){
+        if (lcm == Long.MIN_VALUE) {
             throw new MathArithmeticException(LocalizedFormats.LCM_OVERFLOW_64_BITS,
-                                              a, b);
+                    a, b);
         }
         return lcm;
     }
@@ -524,15 +524,15 @@ public final class ArithmeticUtils {
      * @param y Factor.
      * @return the product {@code x * y}.
      * @throws MathArithmeticException if the result can not be
-     * represented as an {@code int}.
+     *                                 represented as an {@code int}.
      * @since 1.1
      */
     public static int mulAndCheck(int x, int y) throws MathArithmeticException {
-        long m = ((long)x) * ((long)y);
+        long m = ((long) x) * ((long) y);
         if (m < Integer.MIN_VALUE || m > Integer.MAX_VALUE) {
             throw new MathArithmeticException();
         }
-        return (int)m;
+        return (int) m;
     }
 
     /**
@@ -542,7 +542,7 @@ public final class ArithmeticUtils {
      * @param b Factor.
      * @return the product {@code a * b}.
      * @throws MathArithmeticException if the result can not be represented
-     * as a {@code long}.
+     *                                 as a {@code long}.
      * @since 1.2
      */
     public static long mulAndCheck(long a, long b) throws MathArithmeticException {
@@ -596,15 +596,15 @@ public final class ArithmeticUtils {
      * @param y Subtrahend.
      * @return the difference {@code x - y}.
      * @throws MathArithmeticException if the result can not be represented
-     * as an {@code int}.
+     *                                 as an {@code int}.
      * @since 1.1
      */
     public static int subAndCheck(int x, int y) throws MathArithmeticException {
-        long s = (long)x - (long)y;
+        long s = (long) x - (long) y;
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
             throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, x, y);
         }
-        return (int)s;
+        return (int) s;
     }
 
     /**
@@ -614,7 +614,7 @@ public final class ArithmeticUtils {
      * @param b Value.
      * @return the difference {@code a - b}.
      * @throws MathArithmeticException if the result can not be represented as a
-     * {@code long}.
+     *                                 {@code long}.
      * @since 1.2
      */
     public static long subAndCheck(long a, long b) throws MathArithmeticException {
@@ -638,13 +638,13 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return \( k^e \)
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws NotPositiveException    if {@code e < 0}.
      * @throws MathArithmeticException if the result would overflow.
      */
     public static int pow(final int k,
                           final int e)
-        throws NotPositiveException,
-               MathArithmeticException {
+            throws NotPositiveException,
+            MathArithmeticException {
         if (e < 0) {
             throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
         }
@@ -652,7 +652,7 @@ public final class ArithmeticUtils {
         try {
             int exp = e;
             int result = 1;
-            int k2p    = k;
+            int k2p = k;
             while (true) {
                 if ((exp & 0x1) != 0) {
                     result = mulAndCheck(result, k2p);
@@ -685,7 +685,7 @@ public final class ArithmeticUtils {
      * @param e Exponent (must be positive or zero).
      * @return k<sup>e</sup>
      * @throws NotPositiveException if {@code e < 0}.
-     * @deprecated As of 3.3. Please use {@link #pow(int,int)} instead.
+     * @deprecated As of 3.3. Please use {@link #pow(int, int)} instead.
      */
     @Deprecated
     public static int pow(final int k, long e) throws NotPositiveException {
@@ -694,7 +694,7 @@ public final class ArithmeticUtils {
         }
 
         int result = 1;
-        int k2p    = k;
+        int k2p = k;
         while (e != 0) {
             if ((e & 0x1) != 0) {
                 result *= k2p;
@@ -712,13 +712,13 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return \( k^e \)
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws NotPositiveException    if {@code e < 0}.
      * @throws MathArithmeticException if the result would overflow.
      */
     public static long pow(final long k,
                            final int e)
-        throws NotPositiveException,
-               MathArithmeticException {
+            throws NotPositiveException,
+            MathArithmeticException {
         if (e < 0) {
             throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
         }
@@ -726,7 +726,7 @@ public final class ArithmeticUtils {
         try {
             int exp = e;
             long result = 1;
-            long k2p    = k;
+            long k2p = k;
             while (true) {
                 if ((exp & 0x1) != 0) {
                     result = mulAndCheck(result, k2p);
@@ -759,7 +759,7 @@ public final class ArithmeticUtils {
      * @param e Exponent (must be positive or zero).
      * @return k<sup>e</sup>
      * @throws NotPositiveException if {@code e < 0}.
-     * @deprecated As of 3.3. Please use {@link #pow(long,int)} instead.
+     * @deprecated As of 3.3. Please use {@link #pow(long, int)} instead.
      */
     @Deprecated
     public static long pow(final long k, long e) throws NotPositiveException {
@@ -768,7 +768,7 @@ public final class ArithmeticUtils {
         }
 
         long result = 1l;
-        long k2p    = k;
+        long k2p = k;
         while (e != 0) {
             if ((e & 0x1) != 0) {
                 result *= k2p;
@@ -810,7 +810,7 @@ public final class ArithmeticUtils {
         }
 
         BigInteger result = BigInteger.ONE;
-        BigInteger k2p    = k;
+        BigInteger k2p = k;
         while (e != 0) {
             if ((e & 0x1) != 0) {
                 result = result.multiply(k2p);
@@ -837,7 +837,7 @@ public final class ArithmeticUtils {
         }
 
         BigInteger result = BigInteger.ONE;
-        BigInteger k2p    = k;
+        BigInteger k2p = k;
         while (!BigInteger.ZERO.equals(e)) {
             if (e.testBit(0)) {
                 result = result.multiply(k2p);
@@ -859,19 +859,20 @@ public final class ArithmeticUtils {
      * The preconditions are {@code 0 <= k <= n } (otherwise
      * {@code NotPositiveException} is thrown)
      * </p>
+     *
      * @param n the size of the set
      * @param k the number of non-empty subsets
      * @return {@code S(n,k)}
-     * @throws NotPositiveException if {@code k < 0}.
+     * @throws NotPositiveException      if {@code k < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if some overflow happens, typically for n exceeding 25 and
-     * k between 20 and n-2 (S(n,n-1) is handled specifically and does not overflow)
+     * @throws MathArithmeticException   if some overflow happens, typically for n exceeding 25 and
+     *                                   k between 20 and n-2 (S(n,n-1) is handled specifically and does not overflow)
      * @since 3.1
      * @deprecated use {@link CombinatoricsUtils#stirlingS2(int, int)}
      */
     @Deprecated
     public static long stirlingS2(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+            throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
         return CombinatoricsUtils.stirlingS2(n, k);
 
     }
@@ -879,20 +880,20 @@ public final class ArithmeticUtils {
     /**
      * Add two long integers, checking for overflow.
      *
-     * @param a Addend.
-     * @param b Addend.
+     * @param a       Addend.
+     * @param b       Addend.
      * @param pattern Pattern to use for any thrown exception.
      * @return the sum {@code a + b}.
      * @throws MathArithmeticException if the result cannot be represented
-     * as a {@code long}.
+     *                                 as a {@code long}.
      * @since 1.2
      */
-     private static long addAndCheck(long a, long b, Localizable pattern) throws MathArithmeticException {
-         final long result = a + b;
-         if (!((a ^ b) < 0 | (a ^ result) >= 0)) {
-             throw new MathArithmeticException(pattern, a, b);
-         }
-         return result;
+    private static long addAndCheck(long a, long b, Localizable pattern) throws MathArithmeticException {
+        final long result = a + b;
+        if (!((a ^ b) < 0 | (a ^ result) >= 0)) {
+            throw new MathArithmeticException(pattern, a, b);
+        }
+        return result;
     }
 
     /**

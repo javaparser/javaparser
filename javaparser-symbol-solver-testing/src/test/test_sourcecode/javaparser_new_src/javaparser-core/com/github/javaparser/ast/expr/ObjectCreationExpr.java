@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -39,12 +39,12 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
  * Defines constructor call expression.
  * Example:
  * <code>
- *     new Object()
+ * new Object()
  * </code>
  *
  * @author Julio Vilmar Gesser
  */
-public final class ObjectCreationExpr extends Expression implements 
+public final class ObjectCreationExpr extends Expression implements
         NodeWithTypeArguments<ObjectCreationExpr>,
         NodeWithType<ObjectCreationExpr> {
 
@@ -64,10 +64,10 @@ public final class ObjectCreationExpr extends Expression implements
 
     /**
      * Defines a call to a constructor.
-     * 
+     *
      * @param scope may be null
-     * @param type this is the class that the constructor is being called for.
-     * @param args Any arguments to pass to the constructor
+     * @param type  this is the class that the constructor is being called for.
+     * @param args  Any arguments to pass to the constructor
      */
     public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final List<Expression> args) {
         setScope(scope);
@@ -75,16 +75,16 @@ public final class ObjectCreationExpr extends Expression implements
         setArgs(args);
     }
 
-	public ObjectCreationExpr(final Range range,
-			final Expression scope, final ClassOrInterfaceType type, final List<Type<?>> typeArguments,
+    public ObjectCreationExpr(final Range range,
+                              final Expression scope, final ClassOrInterfaceType type, final List<Type<?>> typeArguments,
                               final List<Expression> args, final List<BodyDeclaration<?>> anonymousBody) {
-		super(range);
-		setScope(scope);
-		setType(type);
-		setTypeArguments(typeArguments);
-		setArgs(args);
-		setAnonymousClassBody(anonymousBody);
-	}
+        super(range);
+        setScope(scope);
+        setType(type);
+        setTypeArguments(typeArguments);
+        setArgs(args);
+        setAnonymousClassBody(anonymousBody);
+    }
 
     @Override
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

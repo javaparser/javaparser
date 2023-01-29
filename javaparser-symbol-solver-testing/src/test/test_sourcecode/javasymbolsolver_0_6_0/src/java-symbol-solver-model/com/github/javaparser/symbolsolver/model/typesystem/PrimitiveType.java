@@ -113,7 +113,7 @@ public class PrimitiveType implements Type {
                 }
             }
             return false;
-        } else if (other.isConstraint()){
+        } else if (other.isConstraint()) {
             return this.isAssignableBy(other.asConstraintType().getBound());
         } else {
             return false;

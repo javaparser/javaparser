@@ -1,8 +1,12 @@
 class MajorityVoting {
-    /** number of voters */
+    /**
+     * number of voters
+     */
     int V;
 
-    /** number of candidates */
+    /**
+     * number of candidates
+     */
     int C;
 
     /**
@@ -14,11 +18,11 @@ class MajorityVoting {
 
     /**
      * Vorbedingungen: - es wird mind. 1 Stimme abgegeben
-     *                 - die Stimmen werden für gueltige Kandidaten abgegeben
-     *                 - V passt zum übergebenen Array
-     *
+     * - die Stimmen werden für gueltige Kandidaten abgegeben
+     * - V passt zum übergebenen Array
+     * <p>
      * Nachbedingungen: - das Ergebnis beschreibt einen gueltigen Kandidaten
-     *                  - jeder Kandidat vereint hoechstens so viele Stimmen auf sich wie der Gewinner
+     * - jeder Kandidat vereint hoechstens so viele Stimmen auf sich wie der Gewinner
      */
 
     /*@ public normal_behaviour
@@ -32,7 +36,7 @@ class MajorityVoting {
      @      ensures (\forall int a; 1 <= a && a <= C; ((\sum int b; 0 <= b && b < votes.length; votes[b] == a ? 1 : 0) <= (\sum int c; 0 <= c && c < votes.length ; votes[c] == \result ? 1 : 0)));
      @*/
     int majorityVoting(int[] votes) {
-        int[] res = new int[C+1];
+        int[] res = new int[C + 1];
         int i = 0;
 
         /**
@@ -45,7 +49,7 @@ class MajorityVoting {
          @      assignable res[*];
          @      decreases V - i;
          @*/
-        while(i < V) {
+        while (i < V) {
             res[votes[i]]++;
             i++;
         }
@@ -69,12 +73,12 @@ class MajorityVoting {
          @      assignable elect, max;
          @      decreases (C - i + 1);
          @*/
-        while(i <= C) {
-            if(max < res[i]) {
+        while (i <= C) {
+            if (max < res[i]) {
                 max = res[i];
                 elect = i;
-            //} else if(max == res[i]) {
-            //    elect = 0;
+                //} else if(max == res[i]) {
+                //    elect = 0;
             }
             i++;
         }

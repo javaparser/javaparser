@@ -32,7 +32,9 @@ import java.util.Set;
  */
 public class TransformerMap implements NumberTransformer, Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 4605318041528645258L;
 
     /**
@@ -55,6 +57,7 @@ public class TransformerMap implements NumberTransformer, Serializable {
 
     /**
      * Tests if a Class is present in the TransformerMap.
+     *
      * @param key Class to check
      * @return true|false
      */
@@ -64,6 +67,7 @@ public class TransformerMap implements NumberTransformer, Serializable {
 
     /**
      * Tests if a NumberTransformer is present in the TransformerMap.
+     *
      * @param value NumberTransformer to check
      * @return true|false
      */
@@ -74,6 +78,7 @@ public class TransformerMap implements NumberTransformer, Serializable {
     /**
      * Returns the Transformer that is mapped to a class
      * if mapping is not present, this returns null.
+     *
      * @param key The Class of the object
      * @return the mapped NumberTransformer or null.
      */
@@ -85,7 +90,8 @@ public class TransformerMap implements NumberTransformer, Serializable {
      * Sets a Class to Transformer Mapping in the Map. If
      * the Class is already present, this overwrites that
      * mapping.
-     * @param key The Class
+     *
+     * @param key         The Class
      * @param transformer The NumberTransformer
      * @return the replaced transformer if one is present
      */
@@ -95,6 +101,7 @@ public class TransformerMap implements NumberTransformer, Serializable {
 
     /**
      * Removes a Class to Transformer Mapping in the Map.
+     *
      * @param key The Class
      * @return the removed transformer if one is present or
      * null if none was present.
@@ -112,6 +119,7 @@ public class TransformerMap implements NumberTransformer, Serializable {
 
     /**
      * Returns the Set of Classes used as keys in the map.
+     *
      * @return Set of Classes
      */
     public Set<Class<?>> classes() {
@@ -121,6 +129,7 @@ public class TransformerMap implements NumberTransformer, Serializable {
     /**
      * Returns the Set of NumberTransformers used as values
      * in the map.
+     *
      * @return Set of NumberTransformers
      */
     public Collection<NumberTransformer> transformers() {
@@ -134,7 +143,7 @@ public class TransformerMap implements NumberTransformer, Serializable {
      * @param o the Object to be transformed.
      * @return the double value of the Object.
      * @throws MathIllegalArgumentException if the Object can not be
-     * transformed into a Double.
+     *                                      transformed into a Double.
      * @see org.apache.commons.math3.util.NumberTransformer#transform(java.lang.Object)
      */
     public double transform(Object o) throws MathIllegalArgumentException {
@@ -152,7 +161,9 @@ public class TransformerMap implements NumberTransformer, Serializable {
         return value;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -160,14 +171,14 @@ public class TransformerMap implements NumberTransformer, Serializable {
         }
         if (other instanceof TransformerMap) {
             TransformerMap rhs = (TransformerMap) other;
-            if (! defaultTransformer.equals(rhs.defaultTransformer)) {
+            if (!defaultTransformer.equals(rhs.defaultTransformer)) {
                 return false;
             }
             if (map.size() != rhs.map.size()) {
                 return false;
             }
             for (Map.Entry<Class<?>, NumberTransformer> entry : map.entrySet()) {
-                if (! entry.getValue().equals(rhs.map.get(entry.getKey()))) {
+                if (!entry.getValue().equals(rhs.map.get(entry.getKey()))) {
                     return false;
                 }
             }
@@ -176,7 +187,9 @@ public class TransformerMap implements NumberTransformer, Serializable {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int hash = defaultTransformer.hashCode();

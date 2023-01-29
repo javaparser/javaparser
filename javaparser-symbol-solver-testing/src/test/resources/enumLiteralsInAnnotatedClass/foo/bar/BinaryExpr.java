@@ -6,6 +6,7 @@ public interface BinaryExpr {
         OR("||"),
         AND("&&");
 
-        Operator(String codeRepresentation) { }
+        Operator(String codeRepresentation) {
+        }
     }
 }

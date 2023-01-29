@@ -46,19 +46,24 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 class FirstMoment extends AbstractStorelessUnivariateStatistic
-    implements Serializable {
+        implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 6112755307178490473L;
 
 
-    /** Count of values that have been added */
+    /**
+     * Count of values that have been added
+     */
     protected long n;
 
-    /** First moment of values that have been added */
+    /**
+     * First moment of values that have been added
+     */
     protected double m1;
 
     /**
@@ -91,15 +96,15 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
      * @param original the {@code FirstMoment} instance to copy
      * @throws NullArgumentException if original is null
      */
-     FirstMoment(FirstMoment original) throws NullArgumentException {
-         super();
-         copy(original, this);
-     }
+    FirstMoment(FirstMoment original) throws NullArgumentException {
+        super();
+        copy(original, this);
+    }
 
     /**
      * {@inheritDoc}
      */
-     @Override
+    @Override
     public void increment(final double d) {
         if (n == 0) {
             m1 = 0.0;
@@ -153,11 +158,11 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source FirstMoment to copy
-     * @param dest FirstMoment to copy to
+     * @param dest   FirstMoment to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(FirstMoment source, FirstMoment dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

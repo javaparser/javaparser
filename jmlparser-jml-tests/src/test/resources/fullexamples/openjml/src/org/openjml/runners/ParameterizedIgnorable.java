@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/** This runner is a duplicate of org.junit.runners.Parameterized except that
+/**
+ * This runner is a duplicate of org.junit.runners.Parameterized except that
  * tests whose assumptions are false are recorded as ignored rather than as a
  * success.
  */
@@ -43,10 +44,10 @@ public class ParameterizedIgnorable extends org.junit.runners.Suite {
         private final List<Object[]> fParameterList;
 
         TestClassRunnerForParameters(Class<?> type,
-                List<Object[]> parameterList, int i) throws InitializationError {
+                                     List<Object[]> parameterList, int i) throws InitializationError {
             super(type);
-            fParameterList= parameterList;
-            fParameterSetNumber= i;
+            fParameterList = parameterList;
+            fParameterSetNumber = i;
         }
 
         @Override
@@ -86,21 +87,21 @@ public class ParameterizedIgnorable extends org.junit.runners.Suite {
         protected Statement classBlock(RunNotifier notifier) {
             return childrenInvoker(notifier);
         }
-        
+
         @Override
         protected Annotation[] getRunnerAnnotations() {
             return new Annotation[0];
         }
-        
+
         @Override
         protected void runChild(final FrameworkMethod method, RunNotifier notifier) {
-            Description description= describeChild(method);
+            Description description = describeChild(method);
             if (method.getAnnotation(Ignore.class) != null) {
                 notifier.fireTestIgnored(description);
             } else {
                 //runLeaf(methodBlock(method), description, notifier);
                 Statement statement = methodBlock(method);
-                EachTestNotifier eachNotifier= new EachTestNotifier(notifier, description);
+                EachTestNotifier eachNotifier = new EachTestNotifier(notifier, description);
                 eachNotifier.fireTestStarted();
                 try {
                     statement.evaluate();
@@ -116,15 +117,15 @@ public class ParameterizedIgnorable extends org.junit.runners.Suite {
 
     }
 
-    private final ArrayList<Runner> runners= new ArrayList<Runner>();
+    private final ArrayList<Runner> runners = new ArrayList<Runner>();
 
     /**
      * Only called reflectively. Do not use programmatically.
      */
     public ParameterizedIgnorable(Class<?> klass) throws Throwable {
         super(klass, Collections.<Runner>emptyList());
-        List<Object[]> parametersList= getParametersList(getTestClass());
-        for (int i= 0; i < parametersList.size(); i++)
+        List<Object[]> parametersList = getParametersList(getTestClass());
+        for (int i = 0; i < parametersList.size(); i++)
             runners.add(new TestClassRunnerForParameters(getTestClass().getJavaClass(),
                     parametersList, i));
     }
@@ -143,10 +144,10 @@ public class ParameterizedIgnorable extends org.junit.runners.Suite {
 
     private FrameworkMethod getParametersMethod(TestClass testClass)
             throws Exception {
-        List<FrameworkMethod> methods= testClass
+        List<FrameworkMethod> methods = testClass
                 .getAnnotatedMethods(org.junit.runners.Parameterized.Parameters.class);
         for (FrameworkMethod each : methods) {
-            int modifiers= each.getMethod().getModifiers();
+            int modifiers = each.getMethod().getModifiers();
             if (Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers))
                 return each;
         }
@@ -154,5 +155,5 @@ public class ParameterizedIgnorable extends org.junit.runners.Suite {
         throw new Exception("No public static parameters method on class "
                 + testClass.getName());
     }
-    
+
 }

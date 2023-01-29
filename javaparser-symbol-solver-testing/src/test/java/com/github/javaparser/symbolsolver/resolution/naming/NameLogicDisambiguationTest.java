@@ -54,8 +54,8 @@ class NameLogicDisambiguationTest extends AbstractNameLogicTest {
     @Test
     void ambiguousNameToLocalVar() {
         assertNameInCodeIsDisambiguited("class A { void foo() {\n" +
-                "SomeClass a; a.aField;" + "\n" +
-                "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
+                        "SomeClass a; a.aField;" + "\n" +
+                        "} }", "a", NameCategory.AMBIGUOUS_NAME, NameCategory.EXPRESSION_NAME, ParseStart.COMPILATION_UNIT,
                 new ReflectionTypeSolver());
     }
 

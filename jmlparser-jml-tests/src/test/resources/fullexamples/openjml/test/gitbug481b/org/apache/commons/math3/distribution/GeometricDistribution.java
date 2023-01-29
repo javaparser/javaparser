@@ -31,13 +31,21 @@ import org.apache.commons.math3.util.FastMath;
  */
 public class GeometricDistribution extends AbstractIntegerDistribution {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20130507L;
-    /** The probability of success. */
+    /**
+     * The probability of success.
+     */
     private final double probabilityOfSuccess;
-    /** {@code log(p)} where p is the probability of success. */
+    /**
+     * {@code log(p)} where p is the probability of success.
+     */
     private final double logProbabilityOfSuccess;
-    /** {@code log(1 - p)} where p is the probability of success. */
+    /**
+     * {@code log(1 - p)} where p is the probability of success.
+     */
     private final double log1mProbabilityOfSuccess;
 
     /**
@@ -61,7 +69,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
      * Creates a geometric distribution.
      *
      * @param rng Random number generator.
-     * @param p Probability of success.
+     * @param p   Probability of success.
      * @throws OutOfRangeException if {@code p <= 0} or {@code p > 1}.
      */
     public GeometricDistribution(RandomGenerator rng, double p) {
@@ -85,7 +93,9 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
         return probabilityOfSuccess;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double probability(int x) {
         if (x < 0) {
             return 0.0;
@@ -94,7 +104,9 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logProbability(int x) {
         if (x < 0) {
@@ -104,7 +116,9 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(int x) {
         if (x < 0) {
             return 0.0;
@@ -115,7 +129,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For probability parameter {@code p}, the mean is {@code (1 - p) / p}.
      */
     public double getNumericalMean() {
@@ -124,7 +138,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For probability parameter {@code p}, the variance is
      * {@code (1 - p) / (p * p)}.
      */
@@ -134,7 +148,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always 0.
      *
      * @return lower bound of the support (always 0)
@@ -145,7 +159,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is infinite (which we approximate as
      * {@code Integer.MAX_VALUE}).
      *
@@ -157,7 +171,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}
@@ -180,6 +194,6 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
         if (p == 0) {
             return 0;
         }
-        return Math.max(0, (int) Math.ceil(FastMath.log1p(-p)/log1mProbabilityOfSuccess-1));
+        return Math.max(0, (int) Math.ceil(FastMath.log1p(-p) / log1mProbabilityOfSuccess - 1));
     }
 }

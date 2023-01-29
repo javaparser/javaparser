@@ -12,7 +12,7 @@
 // 
 
 class AbruptTermination {
-   int[] ia;
+    int[] ia;
     /* @ normalbehavior
        @           requires ia != null ;
        @       assignable ia[];
@@ -24,17 +24,18 @@ class AbruptTermination {
        @                   : ( ia[i] == \old ( ia[i] ) ) ;
        @ */
 
-   void negatefirst() {
+    void negatefirst() {
        /* @ maintaining i >= 0 &&  i < = ia.length &&
 	  @ ( \forall int j; 0<=j && j<i ==>
 	  @
 	  @ ( ia[j] >= 0 && ia[j] == \old ( ia [j] ) ) ) ;
 	  @ decreasing ia.length - i ;
 	  @*/
-         for (int i = 0 ; i < ia.length; i++) {
-                 if ( ia[i] < 0 ) { ia [i] = -ia[i] ; 
-		     break ; 
-		 } 
-	 }
-   }
+        for (int i = 0; i < ia.length; i++) {
+            if (ia[i] < 0) {
+                ia[i] = -ia[i];
+                break;
+            }
+        }
+    }
 }

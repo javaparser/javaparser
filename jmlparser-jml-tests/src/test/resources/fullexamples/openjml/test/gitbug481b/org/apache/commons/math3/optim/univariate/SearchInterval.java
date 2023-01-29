@@ -28,19 +28,25 @@ import org.apache.commons.math3.optim.OptimizationData;
  * @since 3.1
  */
 public class SearchInterval implements OptimizationData {
-    /** Lower bound. */
+    /**
+     * Lower bound.
+     */
     private final double lower;
-    /** Upper bound. */
+    /**
+     * Upper bound.
+     */
     private final double upper;
-    /** Start value. */
+    /**
+     * Start value.
+     */
     private final double start;
 
     /**
-     * @param lo Lower bound.
-     * @param hi Upper bound.
+     * @param lo   Lower bound.
+     * @param hi   Upper bound.
      * @param init Start value.
      * @throws NumberIsTooLargeException if {@code lo >= hi}.
-     * @throws OutOfRangeException if {@code init < lo} or {@code init > hi}.
+     * @throws OutOfRangeException       if {@code init < lo} or {@code init > hi}.
      */
     public SearchInterval(double lo,
                           double hi,
@@ -49,7 +55,7 @@ public class SearchInterval implements OptimizationData {
             throw new NumberIsTooLargeException(lo, hi, false);
         }
         if (init < lo ||
-            init > hi) {
+                init > hi) {
             throw new OutOfRangeException(init, lo, hi);
         }
 
@@ -76,6 +82,7 @@ public class SearchInterval implements OptimizationData {
     public double getMin() {
         return lower;
     }
+
     /**
      * Gets the upper bound.
      *
@@ -84,6 +91,7 @@ public class SearchInterval implements OptimizationData {
     public double getMax() {
         return upper;
     }
+
     /**
      * Gets the start value.
      *

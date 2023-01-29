@@ -32,7 +32,9 @@ import java.util.Set;
 public abstract class AbstractMultiSetDecorator<E>
         extends AbstractCollectionDecorator<E> implements MultiSet<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150610L;
 
     /**
@@ -45,7 +47,7 @@ public abstract class AbstractMultiSetDecorator<E>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param multiset  the multiset to decorate, must not be null
+     * @param multiset the multiset to decorate, must not be null
      * @throws NullPointerException if multiset is null
      */
     protected AbstractMultiSetDecorator(final MultiSet<E> multiset) {

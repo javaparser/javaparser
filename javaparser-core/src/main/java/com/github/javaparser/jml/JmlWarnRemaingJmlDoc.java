@@ -19,6 +19,7 @@ import java.util.Optional;
  * @version 1 (2/1/22)
  */
 public class JmlWarnRemaingJmlDoc extends Processor {
+
     @Override
     public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (configuration.isProcessJml()) {
@@ -31,7 +32,9 @@ public class JmlWarnRemaingJmlDoc extends Processor {
     }
 
     public static class JmlWarnRemainingJmlDocVisitor extends GenericVisitorAdapter<Void, Void> {
+
         private static final String FOUND_JML_DOCUMENTATION_COMMENT = "JML annotation comment was not removed properly ";
+
         private final ProblemReporter problems;
 
         public JmlWarnRemainingJmlDocVisitor(List<Problem> problems) {

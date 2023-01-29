@@ -28,12 +28,16 @@ import org.apache.commons.math3.exception.DimensionMismatchException;
  * @since 3.1
  */
 public class Decimal64 extends Number
-                       implements RealFieldElement<Decimal64>, Comparable<Decimal64> {
+        implements RealFieldElement<Decimal64>, Comparable<Decimal64> {
 
-    /** The constant value of {@code 0d} as a {@code Decimal64}. */
+    /**
+     * The constant value of {@code 0d} as a {@code Decimal64}.
+     */
     public static final Decimal64 ZERO;
 
-    /** The constant value of {@code 1d} as a {@code Decimal64}. */
+    /**
+     * The constant value of {@code 1d} as a {@code Decimal64}.
+     */
     public static final Decimal64 ONE;
 
     /**
@@ -48,10 +52,14 @@ public class Decimal64 extends Number
      */
     public static final Decimal64 POSITIVE_INFINITY;
 
-    /** The constant value of {@link Double#NaN} as a {@code Decimal64}. */
+    /**
+     * The constant value of {@link Double#NaN} as a {@code Decimal64}.
+     */
     public static final Decimal64 NAN;
 
-    /** */
+    /**
+     *
+     */
     private static final long serialVersionUID = 20120227L;
 
     static {
@@ -62,7 +70,9 @@ public class Decimal64 extends Number
         NAN = new Decimal64(Double.NaN);
     }
 
-    /** The primitive {@code double} value of this object. */
+    /**
+     * The primitive {@code double} value of this object.
+     */
     private final double value;
 
     /**
@@ -78,14 +88,16 @@ public class Decimal64 extends Number
      * Methods from the FieldElement interface.
      */
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Field<Decimal64> getField() {
         return Decimal64Field.getInstance();
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation strictly enforces
      * {@code this.add(a).equals(new Decimal64(this.doubleValue()
      * + a.doubleValue()))}.
@@ -96,7 +108,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation strictly enforces
      * {@code this.subtract(a).equals(new Decimal64(this.doubleValue()
      * - a.doubleValue()))}.
@@ -107,7 +119,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation strictly enforces
      * {@code this.negate().equals(new Decimal64(-this.doubleValue()))}.
      */
@@ -117,7 +129,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation strictly enforces
      * {@code this.multiply(a).equals(new Decimal64(this.doubleValue()
      * * a.doubleValue()))}.
@@ -128,7 +140,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation strictly enforces
      * {@code this.multiply(n).equals(new Decimal64(n * this.doubleValue()))}.
      */
@@ -138,11 +150,10 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation strictly enforces
      * {@code this.divide(a).equals(new Decimal64(this.doubleValue()
      * / a.doubleValue()))}.
-     *
      */
     public Decimal64 divide(final Decimal64 a) {
         return new Decimal64(this.value / a.value);
@@ -150,7 +161,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation strictly enforces
      * {@code this.reciprocal().equals(new Decimal64(1.0
      * / this.doubleValue()))}.
@@ -165,7 +176,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation performs casting to a {@code byte}.
      */
     @Override
@@ -175,7 +186,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation performs casting to a {@code short}.
      */
     @Override
@@ -185,7 +196,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation performs casting to a {@code int}.
      */
     @Override
@@ -195,7 +206,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation performs casting to a {@code long}.
      */
     @Override
@@ -205,7 +216,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation performs casting to a {@code float}.
      */
     @Override
@@ -213,7 +224,9 @@ public class Decimal64 extends Number
         return (float) value;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double doubleValue() {
         return value;
@@ -225,7 +238,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation returns the same value as
      * <center> {@code new Double(this.doubleValue()).compareTo(new
      * Double(o.doubleValue()))} </center>
@@ -240,7 +253,9 @@ public class Decimal64 extends Number
      * Methods from the Object abstract class.
      */
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj) {
         if (obj instanceof Decimal64) {
@@ -253,7 +268,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The current implementation returns the same value as
      * {@code new Double(this.doubleValue()).hashCode()}
      *
@@ -267,7 +282,7 @@ public class Decimal64 extends Number
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The returned {@code String} is equal to
      * {@code Double.toString(this.doubleValue())}
      *
@@ -302,140 +317,180 @@ public class Decimal64 extends Number
         return Double.isNaN(value);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public double getReal() {
         return value;
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 add(final double a) {
         return new Decimal64(value + a);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 subtract(final double a) {
         return new Decimal64(value - a);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 multiply(final double a) {
         return new Decimal64(value * a);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 divide(final double a) {
         return new Decimal64(value / a);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 remainder(final double a) {
         return new Decimal64(FastMath.IEEEremainder(value, a));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 remainder(final Decimal64 a) {
         return new Decimal64(FastMath.IEEEremainder(value, a.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 abs() {
         return new Decimal64(FastMath.abs(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 ceil() {
         return new Decimal64(FastMath.ceil(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 floor() {
         return new Decimal64(FastMath.floor(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 rint() {
         return new Decimal64(FastMath.rint(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public long round() {
         return FastMath.round(value);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 signum() {
         return new Decimal64(FastMath.signum(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 copySign(final Decimal64 sign) {
         return new Decimal64(FastMath.copySign(value, sign.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 copySign(final double sign) {
         return new Decimal64(FastMath.copySign(value, sign));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 scalb(final int n) {
         return new Decimal64(FastMath.scalb(value, n));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 hypot(final Decimal64 y) {
         return new Decimal64(FastMath.hypot(value, y.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 sqrt() {
         return new Decimal64(FastMath.sqrt(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 cbrt() {
         return new Decimal64(FastMath.cbrt(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 rootN(final int n) {
@@ -446,56 +501,72 @@ public class Decimal64 extends Number
         }
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 pow(final double p) {
         return new Decimal64(FastMath.pow(value, p));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 pow(final int n) {
         return new Decimal64(FastMath.pow(value, n));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 pow(final Decimal64 e) {
         return new Decimal64(FastMath.pow(value, e.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 exp() {
         return new Decimal64(FastMath.exp(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 expm1() {
         return new Decimal64(FastMath.expm1(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 log() {
         return new Decimal64(FastMath.log(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 log1p() {
         return new Decimal64(FastMath.log1p(value));
     }
 
-    /** Base 10 logarithm.
+    /**
+     * Base 10 logarithm.
+     *
      * @return base 10 logarithm of the instance
      * @since 3.2
      */
@@ -503,102 +574,130 @@ public class Decimal64 extends Number
         return new Decimal64(FastMath.log10(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 cos() {
         return new Decimal64(FastMath.cos(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 sin() {
         return new Decimal64(FastMath.sin(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 tan() {
         return new Decimal64(FastMath.tan(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 acos() {
         return new Decimal64(FastMath.acos(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 asin() {
         return new Decimal64(FastMath.asin(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 atan() {
         return new Decimal64(FastMath.atan(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 atan2(final Decimal64 x) {
         return new Decimal64(FastMath.atan2(value, x.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 cosh() {
         return new Decimal64(FastMath.cosh(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 sinh() {
         return new Decimal64(FastMath.sinh(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 tanh() {
         return new Decimal64(FastMath.tanh(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 acosh() {
         return new Decimal64(FastMath.acosh(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 asinh() {
         return new Decimal64(FastMath.asinh(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 atanh() {
         return new Decimal64(FastMath.atanh(value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 linearCombination(final Decimal64[] a, final Decimal64[] b)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         if (a.length != b.length) {
             throw new DimensionMismatchException(a.length, b.length);
         }
@@ -611,11 +710,13 @@ public class Decimal64 extends Number
         return new Decimal64(MathArrays.linearCombination(aDouble, bDouble));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 linearCombination(final double[] a, final Decimal64[] b)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         if (a.length != b.length) {
             throw new DimensionMismatchException(a.length, b.length);
         }
@@ -626,47 +727,57 @@ public class Decimal64 extends Number
         return new Decimal64(MathArrays.linearCombination(a, bDouble));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
                                        final Decimal64 a2, final Decimal64 b2) {
         return new Decimal64(MathArrays.linearCombination(a1.value, b1.value,
-                                                          a2.value, b2.value));
+                a2.value, b2.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 linearCombination(final double a1, final Decimal64 b1,
                                        final double a2, final Decimal64 b2) {
         return new Decimal64(MathArrays.linearCombination(a1, b1.value,
-                                                          a2, b2.value));
+                a2, b2.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
                                        final Decimal64 a2, final Decimal64 b2,
                                        final Decimal64 a3, final Decimal64 b3) {
         return new Decimal64(MathArrays.linearCombination(a1.value, b1.value,
-                                                          a2.value, b2.value,
-                                                          a3.value, b3.value));
+                a2.value, b2.value,
+                a3.value, b3.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 linearCombination(final double a1, final Decimal64 b1,
                                        final double a2, final Decimal64 b2,
                                        final double a3, final Decimal64 b3) {
         return new Decimal64(MathArrays.linearCombination(a1, b1.value,
-                                                          a2, b2.value,
-                                                          a3, b3.value));
+                a2, b2.value,
+                a3, b3.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
@@ -674,12 +785,14 @@ public class Decimal64 extends Number
                                        final Decimal64 a3, final Decimal64 b3,
                                        final Decimal64 a4, final Decimal64 b4) {
         return new Decimal64(MathArrays.linearCombination(a1.value, b1.value,
-                                                          a2.value, b2.value,
-                                                          a3.value, b3.value,
-                                                          a4.value, b4.value));
+                a2.value, b2.value,
+                a3.value, b3.value,
+                a4.value, b4.value));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.2
      */
     public Decimal64 linearCombination(final double a1, final Decimal64 b1,
@@ -687,9 +800,9 @@ public class Decimal64 extends Number
                                        final double a3, final Decimal64 b3,
                                        final double a4, final Decimal64 b4) {
         return new Decimal64(MathArrays.linearCombination(a1, b1.value,
-                                                          a2, b2.value,
-                                                          a3, b3.value,
-                                                          a4, b4.value));
+                a2, b2.value,
+                a3, b3.value,
+                a4, b4.value));
     }
 
 }

@@ -34,24 +34,32 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class InstantiateFactory<T> implements Factory<T> {
 
-    /** The class to create */
+    /**
+     * The class to create
+     */
     private final Class<T> iClassToInstantiate;
-    /** The constructor parameter types */
+    /**
+     * The constructor parameter types
+     */
     private final Class<?>[] iParamTypes;
-    /** The constructor arguments */
+    /**
+     * The constructor arguments
+     */
     private final Object[] iArgs;
-    /** The constructor */
+    /**
+     * The constructor
+     */
     private transient Constructor<T> iConstructor = null;
 
     /**
      * Factory method that performs validation.
      *
-     * @param <T>  the type the factory creates
-     * @param classToInstantiate  the class to instantiate, not null
-     * @param paramTypes  the constructor parameter types, cloned
-     * @param args  the constructor arguments, cloned
+     * @param <T>                the type the factory creates
+     * @param classToInstantiate the class to instantiate, not null
+     * @param paramTypes         the constructor parameter types, cloned
+     * @param args               the constructor arguments, cloned
      * @return a new instantiate factory
-     * @throws NullPointerException if classToInstantiate is null
+     * @throws NullPointerException     if classToInstantiate is null
      * @throws IllegalArgumentException if paramTypes does not match args
      */
     public static <T> Factory<T> instantiateFactory(final Class<T> classToInstantiate,
@@ -61,8 +69,8 @@ public class InstantiateFactory<T> implements Factory<T> {
             throw new NullPointerException("Class to instantiate must not be null");
         }
         if (paramTypes == null && args != null
-            || paramTypes != null && args == null
-            || paramTypes != null && args != null && paramTypes.length != args.length) {
+                || paramTypes != null && args == null
+                || paramTypes != null && args != null && paramTypes.length != args.length) {
             throw new IllegalArgumentException("Parameter types must match the arguments");
         }
 
@@ -76,7 +84,7 @@ public class InstantiateFactory<T> implements Factory<T> {
      * Constructor that performs no validation.
      * Use <code>instantiateFactory</code> if you want that.
      *
-     * @param classToInstantiate  the class to instantiate
+     * @param classToInstantiate the class to instantiate
      */
     public InstantiateFactory(final Class<T> classToInstantiate) {
         super();
@@ -90,9 +98,9 @@ public class InstantiateFactory<T> implements Factory<T> {
      * Constructor that performs no validation.
      * Use <code>instantiateFactory</code> if you want that.
      *
-     * @param classToInstantiate  the class to instantiate
-     * @param paramTypes  the constructor parameter types, cloned
-     * @param args  the constructor arguments, cloned
+     * @param classToInstantiate the class to instantiate
+     * @param paramTypes         the constructor parameter types, cloned
+     * @param args               the constructor arguments, cloned
      */
     public InstantiateFactory(final Class<T> classToInstantiate, final Class<?>[] paramTypes, final Object[] args) {
         super();

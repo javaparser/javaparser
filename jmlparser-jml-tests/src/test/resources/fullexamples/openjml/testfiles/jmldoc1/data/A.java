@@ -1,17 +1,25 @@
 import org.jmlspecs.annotation.*;
 
-/** Documentation of class A */
+/**
+ * Documentation of class A
+ */
 @Pure
 public class A extends BB implements BInterface {
 
 // CONSTRUCTORS
 
-/** Documentation of a constructor with specs */
+    /**
+     * Documentation of a constructor with specs
+     */
 //@ requires true;
-public A() {}
+    public A() {
+    }
 
-/** Documentation of a constructor without specs */
-public A(@org.jmlspecs.annotation.Nullable Object o, /*@ nullable*/ Object oo) {}
+    /**
+     * Documentation of a constructor without specs
+     */
+    public A(@org.jmlspecs.annotation.Nullable Object o, /*@ nullable*/ Object oo) {
+    }
 
 /** Documentation for a model constructor with specs. */
 //@ requires i == 0;
@@ -39,16 +47,22 @@ public A(@org.jmlspecs.annotation.Nullable Object o, /*@ nullable*/ Object oo) {
 //@ represents bb_model = 0;
 
 // ENUMS
-/** */
-public static enum consts { EA, EB, EC }
+
+    /**
+     *
+     */
+    public static enum consts {EA, EB, EC}
 
 /** Model enum */
 // FIXME  @ model protected static enum mconsts { MEA, MEB }
 
 // ANNOTATIONS
 
-/** */
-public static @interface Annot {}
+    /**
+     *
+     */
+    public static @interface Annot {
+    }
 
 /** Model annotation */
 //@ model public @interface MAnnot {}
@@ -62,24 +76,28 @@ public static @interface Annot {}
  secret represents i = 0;
 */
 
-/** Documentatino for a ghost field and for fboth */
+    /**
+     * Documentatino for a ghost field and for fboth
+     */
 /*@
  ghost int ghost_i;
 */
 
-public A a;
+    public A a;
 
-/*@ non_null */ @Secret
-public Object fboth;
+    /*@ non_null */
+    @Secret
+    public Object fboth;
 //@ in i;
 //@ maps a.i \into i;
 
-/*@ non_null */ @Secret
-public Object fannot_nodocs; //@ in i;
+    /*@ non_null */
+    @Secret
+    public Object fannot_nodocs; //@ in i;
 
-protected Object fnone_nodocs;
+    protected Object fnone_nodocs;
 
-public @Secret Object fclauses_nodocs;
+    public @Secret Object fclauses_nodocs;
 //@ in i;
 //@ maps a.i \into i;
 
@@ -90,7 +108,9 @@ public @Secret Object fclauses_nodocs;
 //@ also requires true;
 //@ model @Deprecated Object adl(int i);
 
-/** Documentation for a model method mdl_nospecs and for nodocnospecs */
+    /**
+     * Documentation for a model method mdl_nospecs and for nodocnospecs
+     */
 //@ model int mdl_nospecs(int i);
 
 //@ requires i == 0;
@@ -104,114 +124,142 @@ public @Secret Object fclauses_nodocs;
 
 //@ requires i == "";
 //@ model void ambig(String i);
+    @Deprecated
+    public void nodocnospecs() {
+    }
 
+    /**
+     * Doc but no specs
+     */
+    public void docnospecs() {
+    }
 
-@Deprecated
-public void nodocnospecs() {}
-
-/** Doc but no specs */
-public void docnospecs() {}
-
-/** Documentation of method m with specs. More info. */
+    /**
+     * Documentation of method m with specs. More info.
+     */
 //@ requires true;
 //@ ensures \result == 0;
 //@ signals (java.io.FileNotFoundException e) true;
 //@ signals_only java.io.FileNotFoundException;
-@Pure
-public int m(@NonNull Object o) { return 0; }
+    @Pure
+    public int m(@NonNull Object o) {
+        return 0;
+    }
 
-/** Documentation of method m with specs. More info. */
+    /**
+     * Documentation of method m with specs. More info.
+     */
 //@ requires true;
 //@ ensures \result == 0;
 //@ modifies a;
 //@ signals (java.io.FileNotFoundException e) true;
 //@ signals_only java.io.FileNotFoundException;
-public int mmod(@NonNull Object o) { return 57; }
+    public int mmod(@NonNull Object o) {
+        return 57;
+    }
 
-//@ requires true;
+    //@ requires true;
 //@ ensures \result == 0;
 //@ signals (java.io.FileNotFoundException e) true;
 //@ signals_only java.io.FileNotFoundException;
-@Pure
-public int mm(Object o) { return 42; }
+    @Pure
+    public int mm(Object o) {
+        return 42;
+    }
 
 
-@NonNull
-public Object n(String s) { return new Object(); }
+    @NonNull
+    public Object n(String s) {
+        return new Object();
+    }
 
-/** @param s input
-    @return output
-*/
-/*@ non_null */
-public Object nn(/*@ non_null */ String s) { return new Object(); }
+    /**
+     * @param s input
+     * @return output
+     */
+    /*@ non_null */
+    public Object nn(/*@ non_null */ String s) {
+        return new Object();
+    }
 
-//@ public normal_behavior
+    //@ public normal_behavior
 //@  requires true;
 //@  ensures true;
 //@ also public behavior
 //@  requires false;
 //@  ensures false;
-@Query
-public void q() {}
+    @Query
+    public void q() {
+    }
 
-public void tttt(@NonNull Object a, /*@ nullable */ Object b, /*@ non_null */ Object c, @Nullable Object d) {}
+    public void tttt(@NonNull Object a, /*@ nullable */ Object b, /*@ non_null */ Object c, @Nullable Object d) {
+    }
 
 // NESTED CLASSES
 
-/** DOcumentation for class B. */
-@Pure
-static public class B {
+    /**
+     * DOcumentation for class B.
+     */
+    @Pure
+    static public class B {
 
 //@invariant false && true;
-}
+    }
 
-/** Documentation for a model nested class but not BNInterface. */
+    /**
+     * Documentation for a model nested class but not BNInterface.
+     */
 //@ static @Model public class MB { invariant true;  void qqq() {} }
 //@ static model public class MC extends BB {}
 
-/**/
-@Pure
-public static interface BNInterface_nodoc { /*@ invariant false; */ }
+    /**/
+    @Pure
+    public static interface BNInterface_nodoc { /*@ invariant false; */
+    }
 
 /** Documentation for a model nested interface. */
 //@ model public static interface BMInterface {}
 
 }
 
-interface BInterface extends BEInterface { 
-/*@ invariant false; */ 
+interface BInterface extends BEInterface {
+    /*@ invariant false; */
 
 //@ ensures false;
 //@ model Object adl(int i);
 
-//@ ensures false;
-int mm(Object o);
+    //@ ensures false;
+    int mm(Object o);
 
 }
 
 interface BEInterface {
 
-/*@ invariant false && false; */ 
+    /*@ invariant false && false; */
 
 //@ ensures false && false;
 //@ model @NonNull Object adl(int i);
 
-//@ ensures false && false;
-int mm(Object o);
+    //@ ensures false && false;
+    int mm(Object o);
 
 }
 
 class BB {
 
-public int z_public;
+    public int z_public;
 
 //@ invariant false;
 
-//@ ensures z_public == 10;
-public int mm(Object o) { return 0; }
+    //@ ensures z_public == 10;
+    public int mm(Object o) {
+        return 0;
+    }
 
-//@ ensures z_public == 11;
-public int mm() { return 0; }
+    //@ ensures z_public == 11;
+    public int mm() {
+        return 0;
+    }
 
 //@ public model int mdla();
 //@ public model int mdlb();
@@ -221,7 +269,8 @@ public int mm() { return 0; }
 //@ model public int bb_model;
 //@ ghost private int bb_private;
 
-static public class BBB {}
+    static public class BBB {
+    }
 //@ model static public class BBBM {}
 }
 

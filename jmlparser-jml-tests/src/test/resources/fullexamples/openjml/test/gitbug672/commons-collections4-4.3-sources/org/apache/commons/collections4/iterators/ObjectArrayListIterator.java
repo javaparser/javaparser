@@ -32,7 +32,6 @@ import java.util.NoSuchElementException;
  * @see org.apache.commons.collections4.iterators.ObjectArrayIterator
  * @see java.util.Iterator
  * @see java.util.ListIterator
- *
  * @since 3.0
  */
 public class ObjectArrayListIterator<E> extends ObjectArrayIterator<E>
@@ -47,6 +46,7 @@ public class ObjectArrayListIterator<E> extends ObjectArrayIterator<E>
     private int lastItemIndex = -1;
 
     //-------------------------------------------------------------------------
+
     /**
      * Constructs an ObjectArrayListIterator that will iterate over the values in the
      * specified array.
@@ -62,9 +62,9 @@ public class ObjectArrayListIterator<E> extends ObjectArrayIterator<E>
      * Constructs an ObjectArrayListIterator that will iterate over the values in the
      * specified array from a specific start index.
      *
-     * @param array  the array to iterate over
-     * @param start  the index to start iterating at
-     * @throws NullPointerException if <code>array</code> is <code>null</code>
+     * @param array the array to iterate over
+     * @param start the index to start iterating at
+     * @throws NullPointerException      if <code>array</code> is <code>null</code>
      * @throws IndexOutOfBoundsException if the start index is out of bounds
      */
     public ObjectArrayListIterator(final E[] array, final int start) {
@@ -75,12 +75,12 @@ public class ObjectArrayListIterator<E> extends ObjectArrayIterator<E>
      * Construct an ObjectArrayListIterator that will iterate over a range of values
      * in the specified array.
      *
-     * @param array  the array to iterate over
-     * @param start  the index to start iterating at
-     * @param end  the index (exclusive) to finish iterating at
+     * @param array the array to iterate over
+     * @param start the index to start iterating at
+     * @param end   the index (exclusive) to finish iterating at
      * @throws IndexOutOfBoundsException if the start or end index is out of bounds
-     * @throws IllegalArgumentException if end index is before the start
-     * @throws NullPointerException if <code>array</code> is <code>null</code>
+     * @throws IllegalArgumentException  if end index is before the start
+     * @throws NullPointerException      if <code>array</code> is <code>null</code>
      */
     public ObjectArrayListIterator(final E[] array, final int start, final int end) {
         super(array, start, end);
@@ -153,7 +153,7 @@ public class ObjectArrayListIterator<E> extends ObjectArrayIterator<E>
      * This iterator does not support modification of its backing array's size, and so will
      * always throw an {@link UnsupportedOperationException} when this method is invoked.
      *
-     * @param obj  the object to add
+     * @param obj the object to add
      * @throws UnsupportedOperationException always thrown.
      */
     @Override
@@ -174,9 +174,9 @@ public class ObjectArrayListIterator<E> extends ObjectArrayIterator<E>
      * <code>add()</code> or <code>remove()</code>, <code>set()</code> may be
      * called as often as desired.
      *
-     * @param obj  the object to set into the array
+     * @param obj the object to set into the array
      * @throws IllegalStateException if next() has not yet been called.
-     * @throws ClassCastException if the object type is unsuitable for the array
+     * @throws ClassCastException    if the object type is unsuitable for the array
      */
     @Override
     public void set(final E obj) {

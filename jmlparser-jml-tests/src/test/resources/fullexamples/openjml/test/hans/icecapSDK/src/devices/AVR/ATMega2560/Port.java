@@ -3,8 +3,7 @@ package devices.AVR.ATMega2560;
 import vm.Address32Bit;
 import vm.HardwareObject;
 
-public class Port extends HardwareObject
-{
+public class Port extends HardwareObject {
     public static final int DDRA = 0x001;
     public static final int DDRB = 0x004;
     public static final int DDRC = 0x007;

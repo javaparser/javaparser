@@ -33,20 +33,20 @@ public class MapUtils {
     /**
      * Class contains only static methods.
      */
-    private MapUtils() {}
+    private MapUtils() {
+    }
 
     /**
      * Finds the neuron that best matches the given features.
      *
      * @param features Data.
-     * @param neurons List of neurons to scan. If the list is empty
-     * {@code null} will be returned.
+     * @param neurons  List of neurons to scan. If the list is empty
+     *                 {@code null} will be returned.
      * @param distance Distance function. The neuron's features are
-     * passed as the first argument to {@link DistanceMeasure#compute(double[],double[])}.
+     *                 passed as the first argument to {@link DistanceMeasure#compute(double[], double[])}.
      * @return the neuron whose features are closest to the given data.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the size of the input is not compatible with the neurons features
-     * size.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException if the size of the input is not compatible with the neurons features
+     *                                                                       size.
      */
     public static Neuron findBest(double[] features,
                                   Iterable<Neuron> neurons,
@@ -68,21 +68,20 @@ public class MapUtils {
      * Finds the two neurons that best match the given features.
      *
      * @param features Data.
-     * @param neurons List of neurons to scan. If the list is empty
-     * {@code null} will be returned.
+     * @param neurons  List of neurons to scan. If the list is empty
+     *                 {@code null} will be returned.
      * @param distance Distance function. The neuron's features are
-     * passed as the first argument to {@link DistanceMeasure#compute(double[],double[])}.
+     *                 passed as the first argument to {@link DistanceMeasure#compute(double[], double[])}.
      * @return the two neurons whose features are closest to the given data.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the size of the input is not compatible with the neurons features
-     * size.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException if the size of the input is not compatible with the neurons features
+     *                                                                       size.
      */
     public static Pair<Neuron, Neuron> findBestAndSecondBest(double[] features,
                                                              Iterable<Neuron> neurons,
                                                              DistanceMeasure distance) {
-        Neuron[] best = { null, null };
-        double[] min = { Double.POSITIVE_INFINITY,
-                         Double.POSITIVE_INFINITY };
+        Neuron[] best = {null, null};
+        double[] min = {Double.POSITIVE_INFINITY,
+                Double.POSITIVE_INFINITY};
         for (final Neuron n : neurons) {
             final double d = distance.compute(n.getFeatures(), features);
             if (d < min[0]) {
@@ -108,18 +107,15 @@ public class MapUtils {
      * to the given {@code features}.
      *
      * @param features Data.
-     * @param neurons List of neurons to scan. If it is empty, an empty array
-     * will be returned.
+     * @param neurons  List of neurons to scan. If it is empty, an empty array
+     *                 will be returned.
      * @param distance Distance function.
      * @return the neurons, sorted in increasing order of distance in data
      * space.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the size of the input is not compatible with the neurons features
-     * size.
-     *
-     * @see #findBest(double[],Iterable,DistanceMeasure)
-     * @see #findBestAndSecondBest(double[],Iterable,DistanceMeasure)
-     *
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException if the size of the input is not compatible with the neurons features
+     *                                                                       size.
+     * @see #findBest(double[], Iterable, DistanceMeasure)
+     * @see #findBestAndSecondBest(double[], Iterable, DistanceMeasure)
      * @since 3.6
      */
     public static Neuron[] sort(double[] features,
@@ -145,11 +141,11 @@ public class MapUtils {
 
     /**
      * Computes the <a href="http://en.wikipedia.org/wiki/U-Matrix">
-     *  U-matrix</a> of a two-dimensional map.
+     * U-matrix</a> of a two-dimensional map.
      *
-     * @param map Network.
+     * @param map      Network.
      * @param distance Function to use for computing the average
-     * distance from a neuron to its neighbours.
+     *                 distance from a neuron to its neighbours.
      * @return the matrix of average distances.
      */
     public static double[][] computeU(NeuronSquareMesh2D map,
@@ -183,8 +179,8 @@ public class MapUtils {
     /**
      * Computes the "hit" histogram of a two-dimensional map.
      *
-     * @param data Feature vectors.
-     * @param map Network.
+     * @param data     Feature vectors.
+     * @param map      Network.
      * @param distance Function to use for determining the best matching unit.
      * @return the number of hits for each neuron in the map.
      */
@@ -229,8 +225,8 @@ public class MapUtils {
      * The quantization error is the average distance between a feature vector
      * and its "best matching unit" (closest neuron).
      *
-     * @param data Feature vectors.
-     * @param neurons List of neurons to scan.
+     * @param data     Feature vectors.
+     * @param neurons  List of neurons to scan.
      * @param distance Distance function.
      * @return the error.
      * @throws NoDataException if {@code data} is empty.
@@ -257,8 +253,8 @@ public class MapUtils {
      * The topographic error is the proportion of data for which first and
      * second best matching units are not adjacent in the map.
      *
-     * @param data Feature vectors.
-     * @param net Network.
+     * @param data     Feature vectors.
+     * @param net      Network.
      * @param distance Distance function.
      * @return the error.
      * @throws NoDataException if {@code data} is empty.
@@ -289,30 +285,38 @@ public class MapUtils {
      * Helper data structure holding a (Neuron, double) pair.
      */
     private static class PairNeuronDouble {
-        /** Comparator. */
+        /**
+         * Comparator.
+         */
         static final Comparator<PairNeuronDouble> COMPARATOR
-            = new Comparator<PairNeuronDouble>() {
+                = new Comparator<PairNeuronDouble>() {
             /** {@inheritDoc} */
             public int compare(PairNeuronDouble o1,
                                PairNeuronDouble o2) {
                 return Double.compare(o1.value, o2.value);
             }
         };
-        /** Key. */
+        /**
+         * Key.
+         */
         private final Neuron neuron;
-        /** Value. */
+        /**
+         * Value.
+         */
         private final double value;
 
         /**
          * @param neuron Neuron.
-         * @param value Value.
+         * @param value  Value.
          */
         PairNeuronDouble(Neuron neuron, double value) {
             this.neuron = neuron;
             this.value = value;
         }
 
-        /** @return the neuron. */
+        /**
+         * @return the neuron.
+         */
         public Neuron getNeuron() {
             return neuron;
         }

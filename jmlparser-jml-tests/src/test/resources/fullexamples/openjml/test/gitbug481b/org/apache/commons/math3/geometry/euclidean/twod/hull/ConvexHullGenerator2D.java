@@ -31,7 +31,9 @@ import java.util.Collection;
  */
 public interface ConvexHullGenerator2D extends ConvexHullGenerator<Euclidean2D, Vector2D> {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     ConvexHull2D generate(Collection<Vector2D> points) throws NullArgumentException, ConvergenceException;
 
 }

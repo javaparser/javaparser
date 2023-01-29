@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : PrioritySchedulerImpl.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,77 +19,77 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
  *************************************************************************/
 package javax.safetycritical;
 
 final class PrioritySchedulerImpl implements vm.Scheduler {
-	
-	PrioritySchedulerImpl() {		
-	}
-	
-	public Process getNextProcess() {
-		vm.ClockInterruptHandler.instance.disable();
-		ScjProcess scjProcess = PriorityScheduler.instance().move();
-		
-		if (scjProcess != null) {
-			scjProcess.switchToPrivateMemArea();
-			
-			vm.ClockInterruptHandler.instance.enable();
-			return scjProcess.process;
-		}
-		PriorityScheduler.instance().stop(
-				PriorityScheduler.instance().current.process);
-		vm.ClockInterruptHandler.instance.enable();
-		return null;
-	}
 
-	public void wait(Object target) {
-		vm.ClockInterruptHandler.instance.disable();
-		
-		Monitor monitor = Monitor.getMonitor(target);		
-		monitor.unlock();
-		
-		// process WAITING
-		PriorityScheduler.instance().current.state = ScjProcess.State.WAITING;
-		PriorityScheduler.instance().pFrame.waitQueue.addProcess(monitor, PriorityScheduler.instance().current);
-		//devices.Console.println(">>> To waitQueue: " + PriorityScheduler.instance().current.index);
-		
-		// move to next process in readyQueue
-		PriorityScheduler.instance().moveToNext();
-		
-		vm.ClockInterruptHandler.instance.enable();
-		vm.ClockInterruptHandler.instance.yield();
-	}
-		
-	public void notify(Object target) {
-		vm.ClockInterruptHandler.instance.disable();
-		
-		Monitor monitor = Monitor.getMonitor(target);
-		
-		ScjProcess process = PriorityScheduler.instance().pFrame.waitQueue.getNextProcess(monitor);
-		
-		if (process != null) {
-			// process in REQUIRELOCK state
-			process.state = ScjProcess.State.REQUIRELOCK;
-			//devices.Console.println("ScjProcess.State.REQUIRELOCK");
-			PriorityScheduler.instance().pFrame.lockQueue.addProcess(monitor, process);
-			//devices.Console.println(">>> To lockQueue: " + process.index);
-		}
-		vm.ClockInterruptHandler.instance.enable();
-	}
+    PrioritySchedulerImpl() {
+    }
 
-	public void notifyAll(Object target) {
-		vm.ClockInterruptHandler.instance.disable();
-		
-		Monitor monitor = Monitor.getMonitor(target);
+    public Process getNextProcess() {
+        vm.ClockInterruptHandler.instance.disable();
+        ScjProcess scjProcess = PriorityScheduler.instance().move();
 
-		ScjProcess process = PriorityScheduler.instance().pFrame.waitQueue.getNextProcess(monitor);
-		
-		while (process != null) {
-			
+        if (scjProcess != null) {
+            scjProcess.switchToPrivateMemArea();
+
+            vm.ClockInterruptHandler.instance.enable();
+            return scjProcess.process;
+        }
+        PriorityScheduler.instance().stop(
+                PriorityScheduler.instance().current.process);
+        vm.ClockInterruptHandler.instance.enable();
+        return null;
+    }
+
+    public void wait(Object target) {
+        vm.ClockInterruptHandler.instance.disable();
+
+        Monitor monitor = Monitor.getMonitor(target);
+        monitor.unlock();
+
+        // process WAITING
+        PriorityScheduler.instance().current.state = ScjProcess.State.WAITING;
+        PriorityScheduler.instance().pFrame.waitQueue.addProcess(monitor, PriorityScheduler.instance().current);
+        //devices.Console.println(">>> To waitQueue: " + PriorityScheduler.instance().current.index);
+
+        // move to next process in readyQueue
+        PriorityScheduler.instance().moveToNext();
+
+        vm.ClockInterruptHandler.instance.enable();
+        vm.ClockInterruptHandler.instance.yield();
+    }
+
+    public void notify(Object target) {
+        vm.ClockInterruptHandler.instance.disable();
+
+        Monitor monitor = Monitor.getMonitor(target);
+
+        ScjProcess process = PriorityScheduler.instance().pFrame.waitQueue.getNextProcess(monitor);
+
+        if (process != null) {
+            // process in REQUIRELOCK state
+            process.state = ScjProcess.State.REQUIRELOCK;
+            //devices.Console.println("ScjProcess.State.REQUIRELOCK");
+            PriorityScheduler.instance().pFrame.lockQueue.addProcess(monitor, process);
+            //devices.Console.println(">>> To lockQueue: " + process.index);
+        }
+        vm.ClockInterruptHandler.instance.enable();
+    }
+
+    public void notifyAll(Object target) {
+        vm.ClockInterruptHandler.instance.disable();
+
+        Monitor monitor = Monitor.getMonitor(target);
+
+        ScjProcess process = PriorityScheduler.instance().pFrame.waitQueue.getNextProcess(monitor);
+
+        while (process != null) {
+
 //			if (process != null) {
 //				// this if is on grounds of waitForObject(...):
 //				if (process.next_temp != null) {
@@ -99,20 +99,20 @@ final class PrioritySchedulerImpl implements vm.Scheduler {
 //					process.isNotified = true;
 //				}
 //			}
-			// process in REQUIRELOCK state
-			process.state = ScjProcess.State.REQUIRELOCK;
-			PriorityScheduler.instance().pFrame.lockQueue.addProcess(monitor, process);
+            // process in REQUIRELOCK state
+            process.state = ScjProcess.State.REQUIRELOCK;
+            PriorityScheduler.instance().pFrame.lockQueue.addProcess(monitor, process);
 //			devices.Console.println(">>> To lockQueue: " + process.index);
-			
-			process = PriorityScheduler.instance().pFrame.waitQueue.getNextProcess(monitor);
-		}
-		vm.ClockInterruptHandler.instance.enable();
-	}
-	
-	public Monitor getDefaultMonitor() {
-		return null;
-	}
-	
+
+            process = PriorityScheduler.instance().pFrame.waitQueue.getNextProcess(monitor);
+        }
+        vm.ClockInterruptHandler.instance.enable();
+    }
+
+    public Monitor getDefaultMonitor() {
+        return null;
+    }
+
 //	public static boolean waitForObject(Object target, HighResolutionTime time) {
 //		vm.ClockInterruptHandler.instance.disable();
 //

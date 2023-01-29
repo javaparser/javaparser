@@ -34,17 +34,22 @@ package org.apache.commons.math3.optimization.general;
  * other hand, the Polak-Ribi&egrave;re formula is often faster when it
  * does converge. Polak-Ribi&egrave;re is often used.
  * <p>
+ *
  * @see NonLinearConjugateGradientOptimizer
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 2.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public enum ConjugateGradientFormula {
 
-    /** Fletcher-Reeves formula. */
+    /**
+     * Fletcher-Reeves formula.
+     */
     FLETCHER_REEVES,
 
-    /** Polak-Ribi&egrave;re formula. */
+    /**
+     * Polak-Ribi&egrave;re formula.
+     */
     POLAK_RIBIERE
 
 }

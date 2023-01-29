@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ast.expr.Expression;
@@ -30,51 +30,51 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class SynchronizedStmt extends Statement {
 
-	private Expression expr;
+    private Expression expr;
 
-	private BlockStmt block;
+    private BlockStmt block;
 
-	public SynchronizedStmt() {
-	}
+    public SynchronizedStmt() {
+    }
 
-	public SynchronizedStmt(final Expression expr, final BlockStmt block) {
-		setExpr(expr);
-		setBlock(block);
-	}
+    public SynchronizedStmt(final Expression expr, final BlockStmt block) {
+        setExpr(expr);
+        setBlock(block);
+    }
 
-	public SynchronizedStmt(final int beginLine, final int beginColumn,
-			final int endLine, final int endColumn, final Expression expr,
-			final BlockStmt block) {
-		super(beginLine, beginColumn, endLine, endColumn);
-		setExpr(expr);
-		setBlock(block);
-	}
+    public SynchronizedStmt(final int beginLine, final int beginColumn,
+                            final int endLine, final int endColumn, final Expression expr,
+                            final BlockStmt block) {
+        super(beginLine, beginColumn, endLine, endColumn);
+        setExpr(expr);
+        setBlock(block);
+    }
 
-	@Override
-	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override
-	public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public BlockStmt getBlock() {
-		return block;
-	}
+    public BlockStmt getBlock() {
+        return block;
+    }
 
-	public Expression getExpr() {
-		return expr;
-	}
+    public Expression getExpr() {
+        return expr;
+    }
 
-	public void setBlock(final BlockStmt block) {
-		this.block = block;
-		setAsParentNodeOf(this.block);
-	}
+    public void setBlock(final BlockStmt block) {
+        this.block = block;
+        setAsParentNodeOf(this.block);
+    }
 
-	public void setExpr(final Expression expr) {
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
-	}
+    public void setExpr(final Expression expr) {
+        this.expr = expr;
+        setAsParentNodeOf(this.expr);
+    }
 }

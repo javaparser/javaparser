@@ -1,6 +1,7 @@
 public class Test {
 
-    public static class MyException extends Exception { }
+    public static class MyException extends Exception {
+    }
 
     //@ private exceptional_behavior
     //@   signals_only MyException;
@@ -17,7 +18,7 @@ public class Test {
         } catch (MyException e) {
         }
     }
-    
+
     //@ private exceptional_behavior
     //@   signals_only MyException;
     //@ //pure

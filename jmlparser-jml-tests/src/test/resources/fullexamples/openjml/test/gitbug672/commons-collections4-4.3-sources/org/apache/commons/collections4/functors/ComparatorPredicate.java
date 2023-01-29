@@ -85,21 +85,27 @@ public class ComparatorPredicate<T> implements Predicate<T>, Serializable {
 
     // Instance variables:
 
-    /** The internal object to compare with */
+    /**
+     * The internal object to compare with
+     */
     private final T object;
 
-    /** The comparator to use for comparison */
+    /**
+     * The comparator to use for comparison
+     */
     private final Comparator<T> comparator;
 
-    /** The comparison evaluation criterion to use */
+    /**
+     * The comparison evaluation criterion to use
+     */
     private final Criterion criterion;
 
     /**
      * Factory to create the comparator predicate
      *
-     * @param <T> the type that the predicate queries
-     * @param object  the object to compare to
-     * @param comparator  the comparator to use for comparison
+     * @param <T>        the type that the predicate queries
+     * @param object     the object to compare to
+     * @param comparator the comparator to use for comparison
      * @return the predicate
      * @throws NullPointerException if comparator is null
      */
@@ -110,9 +116,9 @@ public class ComparatorPredicate<T> implements Predicate<T>, Serializable {
     /**
      * Factory to create the comparator predicate
      *
-     * @param <T> the type that the predicate queries
-     * @param object  the object to compare to
-     * @param comparator  the comparator to use for comparison
+     * @param <T>        the type that the predicate queries
+     * @param object     the object to compare to
+     * @param comparator the comparator to use for comparison
      * @param criterion  the criterion to use to evaluate comparison
      * @return the predicate
      * @throws NullPointerException if comparator or criterion is null
@@ -132,8 +138,8 @@ public class ComparatorPredicate<T> implements Predicate<T>, Serializable {
      * Constructor that performs no validation.
      * Use <code>comparatorPredicate</code> if you want that.
      *
-     * @param object  the object to compare to
-     * @param comparator  the comparator to use for comparison
+     * @param object     the object to compare to
+     * @param comparator the comparator to use for comparison
      * @param criterion  the criterion to use to evaluate comparison
      */
     public ComparatorPredicate(final T object, final Comparator<T> comparator, final Criterion criterion) {
@@ -154,12 +160,11 @@ public class ComparatorPredicate<T> implements Predicate<T>, Serializable {
      * <li><code>comparator.compare(object, input) &lt;= 0 &amp;&amp; criterion == LESS_OR_EQUAL</code></li>
      * </ul>
      *
-     * @see org.apache.commons.collections4.Predicate#evaluate(java.lang.Object)
-     * @see java.util.Comparator#compare(java.lang.Object first, java.lang.Object second)
-     *
-     * @param target  the target object to compare to
+     * @param target the target object to compare to
      * @return {@code true} if the comparison succeeds according to the selected criterion
      * @throws IllegalStateException if the criterion is invalid (really not possible)
+     * @see org.apache.commons.collections4.Predicate#evaluate(java.lang.Object)
+     * @see java.util.Comparator#compare(java.lang.Object first, java.lang.Object second)
      */
     @Override
     public boolean evaluate(final T target) {
@@ -167,23 +172,23 @@ public class ComparatorPredicate<T> implements Predicate<T>, Serializable {
         boolean result = false;
         final int comparison = comparator.compare(object, target);
         switch (criterion) {
-        case EQUAL:
-            result = comparison == 0;
-            break;
-        case GREATER:
-            result = comparison > 0;
-            break;
-        case LESS:
-            result = comparison < 0;
-            break;
-        case GREATER_OR_EQUAL:
-            result = comparison >= 0;
-            break;
-        case LESS_OR_EQUAL:
-            result = comparison <= 0;
-            break;
-        default:
-            throw new IllegalStateException("The current criterion '" + criterion + "' is invalid.");
+            case EQUAL:
+                result = comparison == 0;
+                break;
+            case GREATER:
+                result = comparison > 0;
+                break;
+            case LESS:
+                result = comparison < 0;
+                break;
+            case GREATER_OR_EQUAL:
+                result = comparison >= 0;
+                break;
+            case LESS_OR_EQUAL:
+                result = comparison <= 0;
+                break;
+            default:
+                throw new IllegalStateException("The current criterion '" + criterion + "' is invalid.");
         }
 
         return result;

@@ -31,40 +31,40 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class Issue3087Test extends AbstractResolutionTest {
-    
+
     @Test
     void testCompilationUnitWithTwoClassesWithTheSameName() {
-      // Setup symbol solver
-      StaticJavaParser.getConfiguration()
-              .setSymbolResolver(
-                      new JavaSymbolSolver(new ReflectionTypeSolver())
-              );
-      // Setup source code
-      String sourceCode = "class A {\n" +
-              "\n" +
-              "    class EntrySetImpl implements EntrySet<Object, Object> {}\n" +
-              "\n" +
-              "    class Bar {\n" +
-              "        private class EntrySet {}\n" +
-              "    }\n" +
-              "\n" +
-              "    interface EntrySet<K, V> {}\n" +
-              "\n" +
-              "}\n";
-      CompilationUnit cu = StaticJavaParser.parse(sourceCode);
+        // Setup symbol solver
+        StaticJavaParser.getConfiguration()
+                .setSymbolResolver(
+                        new JavaSymbolSolver(new ReflectionTypeSolver())
+                );
+        // Setup source code
+        String sourceCode = "class A {\n" +
+                "\n" +
+                "    class EntrySetImpl implements EntrySet<Object, Object> {}\n" +
+                "\n" +
+                "    class Bar {\n" +
+                "        private class EntrySet {}\n" +
+                "    }\n" +
+                "\n" +
+                "    interface EntrySet<K, V> {}\n" +
+                "\n" +
+                "}\n";
+        CompilationUnit cu = StaticJavaParser.parse(sourceCode);
 
-      // Resolve the EntrySetImpl class and try to get its ancestors
-      ClassOrInterfaceDeclaration coid = cu.findFirst(
-              ClassOrInterfaceDeclaration.class,
-              c -> c.getNameAsString().equals("EntrySetImpl")
-      ).get();
-      
-      ResolvedReferenceTypeDeclaration resolvedClass = coid.resolve();
-      try {
-          resolvedClass.getAncestors();
-      } catch (IllegalArgumentException e) {
-          fail("Unable to resolve class EntrySet<Object, Object>", e);
-      }
+        // Resolve the EntrySetImpl class and try to get its ancestors
+        ClassOrInterfaceDeclaration coid = cu.findFirst(
+                ClassOrInterfaceDeclaration.class,
+                c -> c.getNameAsString().equals("EntrySetImpl")
+        ).get();
+
+        ResolvedReferenceTypeDeclaration resolvedClass = coid.resolve();
+        try {
+            resolvedClass.getAncestors();
+        } catch (IllegalArgumentException e) {
+            fail("Unable to resolve class EntrySet<Object, Object>", e);
+        }
     }
 
 }

@@ -128,7 +128,7 @@ public class TypeSubtypeOfType extends ConstraintFormula {
         //   - If T is an intersection type, I1 & ... & In, the constraint reduces to the following new constraints: for all i (1 ≤ i ≤ n), ‹S <: Ii›.
         //
 
-        throw new UnsupportedOperationException("S = "+ S + ", T = " + T);
+        throw new UnsupportedOperationException("S = " + S + ", T = " + T);
     }
 
     @Override

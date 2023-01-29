@@ -14,7 +14,7 @@ import org.junit.runners.model.Statement;
 // ignored tests (like using @Ignore); normally false assumptions result in
 // valid tests
 public class IgnoreFalseAssumptions extends BlockJUnit4ClassRunner {
-    
+
     public IgnoreFalseAssumptions(Class<?> klass) throws InitializationError {
         super(klass);
     }
@@ -22,13 +22,13 @@ public class IgnoreFalseAssumptions extends BlockJUnit4ClassRunner {
     @SuppressWarnings("restriction")
     @Override
     protected void runChild(final FrameworkMethod method, RunNotifier notifier) {
-        Description description= describeChild(method);
+        Description description = describeChild(method);
         if (method.getAnnotation(Ignore.class) != null) {
             notifier.fireTestIgnored(description);
         } else {
             //runLeaf(methodBlock(method), description, notifier);
             Statement statement = methodBlock(method);
-            EachTestNotifier eachNotifier= new EachTestNotifier(notifier, description);
+            EachTestNotifier eachNotifier = new EachTestNotifier(notifier, description);
             eachNotifier.fireTestStarted();
             try {
                 statement.evaluate();

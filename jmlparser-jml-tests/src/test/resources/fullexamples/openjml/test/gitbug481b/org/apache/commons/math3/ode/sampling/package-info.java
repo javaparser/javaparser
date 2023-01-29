@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 /**
- *
  * <p>
  * This package provides classes to handle sampling steps during
  * Ordinary Differential Equations integration.
@@ -54,7 +53,5 @@
  * {@link org.apache.commons.math3.ode.sampling.StepNormalizer StepNormalizer} instance
  * in order to be registered to the integrator.
  * </p>
- *
- *
  */
 package org.apache.commons.math3.ode.sampling;

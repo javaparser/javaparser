@@ -58,9 +58,11 @@ class LambdaReplacer(val nameGenerator: NameGenerator) : ModifierVisitor<Unit>()
                     val last = body.statements.last as? ReturnStmt
                     last?.expression?.map { it.calculateResolvedType().toString() }
                 }
+
                 is ExpressionStmt -> {
                     body.expression.calculateResolvedType().toString()
                 }
+
                 else -> {
                     null
                 }
@@ -75,6 +77,7 @@ class LambdaReplacer(val nameGenerator: NameGenerator) : ModifierVisitor<Unit>()
                     interfaze = "java.util.function.Supplier<$returnType>"
                     md.setName("accept")
                 }
+
             1 -> {
                 val firstParam = lambdaExpr.parameters.first.get().typeAsString
                 if (returnType == null) {
@@ -85,6 +88,7 @@ class LambdaReplacer(val nameGenerator: NameGenerator) : ModifierVisitor<Unit>()
                     md.setName("invoke")
                 }
             }
+
             2 -> {
                 val firstParam = lambdaExpr.parameters.first()?.typeAsString
                 val secondParam = lambdaExpr.parameters[1].typeAsString
@@ -96,6 +100,7 @@ class LambdaReplacer(val nameGenerator: NameGenerator) : ModifierVisitor<Unit>()
                     md.setName("invoke")
                 }
             }
+
             else -> error("ASM could not be infered")
         }
 

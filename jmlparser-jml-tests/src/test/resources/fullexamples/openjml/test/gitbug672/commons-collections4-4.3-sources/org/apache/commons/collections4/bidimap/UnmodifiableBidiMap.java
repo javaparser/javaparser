@@ -38,7 +38,9 @@ import java.util.Set;
 public final class UnmodifiableBidiMap<K, V>
         extends AbstractBidiMapDecorator<K, V> implements Unmodifiable {
 
-    /** The inverse unmodifiable map */
+    /**
+     * The inverse unmodifiable map
+     */
     private UnmodifiableBidiMap<V, K> inverse;
 
     /**
@@ -48,7 +50,7 @@ public final class UnmodifiableBidiMap<K, V>
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @return an unmodifiable BidiMap
      * @throws NullPointerException if map is null
      * @since 4.0
@@ -63,10 +65,11 @@ public final class UnmodifiableBidiMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if map is null
      */
     @SuppressWarnings("unchecked") // safe to upcast

@@ -30,17 +30,17 @@ import java.util.Set;
  * Utilities for working with "split maps:" objects that implement {@link Put}
  * and/or {@link Get} but not {@link Map}.
  *
- * @since 4.0
- *
  * @see Get
  * @see Put
+ * @since 4.0
  */
 public class SplitMapUtils {
 
     /**
      * <code>SplitMapUtils</code> should not normally be instantiated.
      */
-    private SplitMapUtils() {}
+    private SplitMapUtils() {
+    }
 
     //-----------------------------------------------------------------------
 
@@ -225,6 +225,7 @@ public class SplitMapUtils {
      * If <code>get</code> implements {@link IterableMap} directly, no conversion will take place.
      * If <code>get</code> implements {@link Map} but not {@link IterableMap} it will be decorated.
      * Otherwise an {@link Unmodifiable} {@link IterableMap} will be returned.
+     *
      * @param <K> the key type
      * @param <V> the value type
      * @param get to wrap, must not be null

@@ -2,7 +2,7 @@
 
 public interface IntSet {
     //@ public instance model JMLDataGroup state;
-    
+
     public /*@ pure @*/ boolean contains(int i);
 
     //@ requires size() > 0;

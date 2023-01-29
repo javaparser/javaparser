@@ -31,6 +31,5 @@
  * <ul>
  *   <li>Unmodifiable - ensures the collection cannot be altered
  * </ul>
- *
  */
 package org.apache.commons.collections4.trie;

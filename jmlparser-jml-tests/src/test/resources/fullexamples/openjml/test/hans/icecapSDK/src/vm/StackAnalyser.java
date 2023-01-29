@@ -2,8 +2,8 @@ package vm;
 
 public interface StackAnalyser {
 
-	void addStack(int[] stack);
+    void addStack(int[] stack);
 
-	void reportStackUsage();
+    void reportStackUsage();
 
 }

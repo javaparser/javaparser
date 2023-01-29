@@ -34,19 +34,25 @@ import java.lang.reflect.Method;
  */
 public class InvokerTransformer<I, O> implements Transformer<I, O> {
 
-    /** The method name to call */
+    /**
+     * The method name to call
+     */
     private final String iMethodName;
-    /** The array of reflection parameter types */
+    /**
+     * The array of reflection parameter types
+     */
     private final Class<?>[] iParamTypes;
-    /** The array of reflection arguments */
+    /**
+     * The array of reflection arguments
+     */
     private final Object[] iArgs;
 
     /**
      * Gets an instance of this transformer calling a specific method with no arguments.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
-     * @param methodName  the method name to call
+     * @param <I>        the input type
+     * @param <O>        the output type
+     * @param methodName the method name to call
      * @return an invoker transformer
      * @throws NullPointerException if methodName is null
      * @since 3.1
@@ -61,13 +67,13 @@ public class InvokerTransformer<I, O> implements Transformer<I, O> {
     /**
      * Gets an instance of this transformer calling a specific method with specific values.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
-     * @param methodName  the method name to call
-     * @param paramTypes  the parameter types of the method
-     * @param args  the arguments to pass to the method
+     * @param <I>        the input type
+     * @param <O>        the output type
+     * @param methodName the method name to call
+     * @param paramTypes the parameter types of the method
+     * @param args       the arguments to pass to the method
      * @return an invoker transformer
-     * @throws NullPointerException if methodName is null
+     * @throws NullPointerException     if methodName is null
      * @throws IllegalArgumentException if paramTypes does not match args
      */
     public static <I, O> Transformer<I, O> invokerTransformer(final String methodName, final Class<?>[] paramTypes,
@@ -76,8 +82,8 @@ public class InvokerTransformer<I, O> implements Transformer<I, O> {
             throw new NullPointerException("The method to invoke must not be null");
         }
         if (((paramTypes == null) && (args != null))
-            || ((paramTypes != null) && (args == null))
-            || ((paramTypes != null) && (args != null) && (paramTypes.length != args.length))) {
+                || ((paramTypes != null) && (args == null))
+                || ((paramTypes != null) && (args != null) && (paramTypes.length != args.length))) {
             throw new IllegalArgumentException("The parameter types must match the arguments");
         }
         if (paramTypes == null || paramTypes.length == 0) {
@@ -89,7 +95,7 @@ public class InvokerTransformer<I, O> implements Transformer<I, O> {
     /**
      * Constructor for no arg instance.
      *
-     * @param methodName  the method to call
+     * @param methodName the method to call
      */
     private InvokerTransformer(final String methodName) {
         super();
@@ -104,9 +110,9 @@ public class InvokerTransformer<I, O> implements Transformer<I, O> {
      * <p>
      * Note: from 4.0, the input parameters will be cloned
      *
-     * @param methodName  the method to call
-     * @param paramTypes  the constructor parameter types
-     * @param args  the constructor arguments
+     * @param methodName the method to call
+     * @param paramTypes the constructor parameter types
+     * @param args       the constructor arguments
      */
     public InvokerTransformer(final String methodName, final Class<?>[] paramTypes, final Object[] args) {
         super();
@@ -118,7 +124,7 @@ public class InvokerTransformer<I, O> implements Transformer<I, O> {
     /**
      * Transforms the input to result by invoking a method on the input.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result, null if null input
      */
     @Override
@@ -133,13 +139,13 @@ public class InvokerTransformer<I, O> implements Transformer<I, O> {
             return (O) method.invoke(input, iArgs);
         } catch (final NoSuchMethodException ex) {
             throw new FunctorException("InvokerTransformer: The method '" + iMethodName + "' on '" +
-                                       input.getClass() + "' does not exist");
+                    input.getClass() + "' does not exist");
         } catch (final IllegalAccessException ex) {
             throw new FunctorException("InvokerTransformer: The method '" + iMethodName + "' on '" +
-                                       input.getClass() + "' cannot be accessed");
+                    input.getClass() + "' cannot be accessed");
         } catch (final InvocationTargetException ex) {
             throw new FunctorException("InvokerTransformer: The method '" + iMethodName + "' on '" +
-                                       input.getClass() + "' threw an exception", ex);
+                    input.getClass() + "' threw an exception", ex);
         }
     }
 

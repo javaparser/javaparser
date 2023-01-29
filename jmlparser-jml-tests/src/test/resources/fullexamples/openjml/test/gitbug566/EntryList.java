@@ -3,12 +3,12 @@ public class EntryList {
     /*@ spec_public @*/ Object first;
 
     /*@ spec_public nullable @*/ EntryList rest;
-    
-    EntryList( Object first, EntryList rest ) {
-    	this.first = first;
-    	this.rest = rest;
+
+    EntryList(Object first, EntryList rest) {
+        this.first = first;
+        this.rest = rest;
     }
-    
+
     // some methods, among them:
 
     /*@ normal_behavior
@@ -22,6 +22,6 @@ public class EntryList {
       @ ensures \result == 1 + rest.size();
       @*/
     /*@ spec_public pure @*/ int size() {
-	   return 1 + (rest == null ? 0 : rest.size());
+        return 1 + (rest == null ? 0 : rest.size());
     }
 }

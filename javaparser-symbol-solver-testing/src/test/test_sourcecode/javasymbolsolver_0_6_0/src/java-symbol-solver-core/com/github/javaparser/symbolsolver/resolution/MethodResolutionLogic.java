@@ -90,7 +90,7 @@ public class MethodResolutionLogic {
                 } // else it is already assignable, nothing to do
             } else {
                 if (pos > argumentsTypes.size()) {
-                  return false;
+                    return false;
                 }
                 argumentsTypes = groupVariadicParamValues(argumentsTypes, pos, method.getLastParam().getType());
             }
@@ -183,7 +183,7 @@ public class MethodResolutionLogic {
 
             // In the case of nested parameterizations eg. List<R> <-> List<Integer>
             // we should peel off one layer and ensure R <-> Integer
-            if (expectedParam.isReferenceType() && actualParam.isReferenceType()){
+            if (expectedParam.isReferenceType() && actualParam.isReferenceType()) {
                 ReferenceType r1 = expectedParam.asReferenceType();
                 ReferenceType r2 = actualParam.asReferenceType();
 
@@ -278,7 +278,7 @@ public class MethodResolutionLogic {
             List<TypeParameterDeclaration> typeParameters = method.getDeclaration().getTypeParameters();
             typeParameters.addAll(method.declaringType().getTypeParameters());
 
-            if (expectedType.describe().equals(actualType.describe())){
+            if (expectedType.describe().equals(actualType.describe())) {
                 return true;
             }
 
@@ -292,7 +292,7 @@ public class MethodResolutionLogic {
                 inferTypes(argumentsTypes.get(j), parameterType, derivedValues);
             }
 
-            for (Map.Entry<TypeParameterDeclaration, Type> entry : derivedValues.entrySet()){
+            for (Map.Entry<TypeParameterDeclaration, Type> entry : derivedValues.entrySet()) {
                 TypeParameterDeclaration tp = entry.getKey();
                 expectedTypeWithInference = expectedTypeWithInference.replaceTypeVariables(tp, entry.getValue());
             }
@@ -385,26 +385,26 @@ public class MethodResolutionLogic {
         }
 
         if (applicableMethods.size() > 1) {
-          List<Integer> nullParamIndexes = new ArrayList<>();
-          for (int i = 0; i < argumentsTypes.size(); i++) {
-            if (argumentsTypes.get(i).isNull()) {
-              nullParamIndexes.add(i);
-            }
-          }
-          if (!nullParamIndexes.isEmpty()) {
-            // remove method with array param if a non array exists and arg is null
-            Set<MethodDeclaration> removeCandidates = new HashSet<>();
-            for (Integer nullParamIndex: nullParamIndexes) {
-              for (MethodDeclaration methDecl: applicableMethods) {
-                if (methDecl.getParam(nullParamIndex.intValue()).getType().isArray()) {
-                  removeCandidates.add(methDecl);
+            List<Integer> nullParamIndexes = new ArrayList<>();
+            for (int i = 0; i < argumentsTypes.size(); i++) {
+                if (argumentsTypes.get(i).isNull()) {
+                    nullParamIndexes.add(i);
                 }
-              }
             }
-            if (!removeCandidates.isEmpty() && removeCandidates.size() < applicableMethods.size()) {
-              applicableMethods.removeAll(removeCandidates);
+            if (!nullParamIndexes.isEmpty()) {
+                // remove method with array param if a non array exists and arg is null
+                Set<MethodDeclaration> removeCandidates = new HashSet<>();
+                for (Integer nullParamIndex : nullParamIndexes) {
+                    for (MethodDeclaration methDecl : applicableMethods) {
+                        if (methDecl.getParam(nullParamIndex.intValue()).getType().isArray()) {
+                            removeCandidates.add(methDecl);
+                        }
+                    }
+                }
+                if (!removeCandidates.isEmpty() && removeCandidates.size() < applicableMethods.size()) {
+                    applicableMethods.removeAll(removeCandidates);
+                }
             }
-          }
         }
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
@@ -428,26 +428,26 @@ public class MethodResolutionLogic {
                 }
             }
             if (possibleAmbiguity) {
-              // pick the first exact match if it exists
-              if (!isExactMatch(winningCandidate, argumentsTypes)) {
-                if (isExactMatch(other, argumentsTypes)) {
-                  winningCandidate = other;
-                } else {
-                  throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
+                // pick the first exact match if it exists
+                if (!isExactMatch(winningCandidate, argumentsTypes)) {
+                    if (isExactMatch(other, argumentsTypes)) {
+                        winningCandidate = other;
+                    } else {
+                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other);
+                    }
                 }
-              }
             }
             return SymbolReference.solved(winningCandidate);
         }
     }
 
     protected static boolean isExactMatch(MethodLikeDeclaration method, List<Type> argumentsTypes) {
-      for (int i = 0; i < method.getNumberOfParams(); i++) {
-        if (!method.getParam(i).getType().equals(argumentsTypes.get(i))) {
-          return false;
+        for (int i = 0; i < method.getNumberOfParams(); i++) {
+            if (!method.getParam(i).getType().equals(argumentsTypes.get(i))) {
+                return false;
+            }
         }
-      }
-      return true;
+        return true;
     }
 
     private static boolean isMoreSpecific(MethodDeclaration methodA, MethodDeclaration methodB, List<Type> argumentTypes, TypeSolver typeSolver) {
@@ -571,15 +571,15 @@ public class MethodResolutionLogic {
         return solveMethodInType(typeDeclaration, name, argumentsTypes, false, typeSolver);
     }
 
-        /**
-         * Replace TypeDeclaration.solveMethod
-         *
-         * @param typeDeclaration
-         * @param name
-         * @param argumentsTypes
-         * @param staticOnly
-         * @return
-         */
+    /**
+     * Replace TypeDeclaration.solveMethod
+     *
+     * @param typeDeclaration
+     * @param name
+     * @param argumentsTypes
+     * @param staticOnly
+     * @return
+     */
     public static SymbolReference<MethodDeclaration> solveMethodInType(TypeDeclaration typeDeclaration,
                                                                        String name, List<Type> argumentsTypes, boolean staticOnly,
                                                                        TypeSolver typeSolver) {
@@ -602,18 +602,18 @@ public class MethodResolutionLogic {
             return ((ReflectionClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         if (typeDeclaration instanceof ReflectionInterfaceDeclaration) {
-          return ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
+            return ((ReflectionInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
-          if (typeDeclaration instanceof ReflectionEnumDeclaration) {
+        if (typeDeclaration instanceof ReflectionEnumDeclaration) {
             return ((ReflectionEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         if (typeDeclaration instanceof JavassistInterfaceDeclaration) {
             return ((JavassistInterfaceDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         if (typeDeclaration instanceof JavassistClassDeclaration) {
-          return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
+            return ((JavassistClassDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
-          if (typeDeclaration instanceof JavassistEnumDeclaration) {
+        if (typeDeclaration instanceof JavassistEnumDeclaration) {
             return ((JavassistEnumDeclaration) typeDeclaration).solveMethod(name, argumentsTypes, staticOnly);
         }
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
@@ -652,8 +652,8 @@ public class MethodResolutionLogic {
             return;
         }
 
-        if (source.isWildcard() && target.isReferenceType()){
-            if (source.asWildcard().isBounded()){
+        if (source.isWildcard() && target.isReferenceType()) {
+            if (source.asWildcard().isBounded()) {
                 inferTypes(source.asWildcard().getBoundedType(), target, mappings);
             }
             return;

@@ -30,7 +30,7 @@ import java.util.Set;
 
 /**
  * The inference variable α appears in a throws clause.
- *
+ * <p>
  * A bound of the form throws α is purely informational: it directs resolution to optimize the instantiation of α so
  * that, if possible, it is not a checked exception type.
  *

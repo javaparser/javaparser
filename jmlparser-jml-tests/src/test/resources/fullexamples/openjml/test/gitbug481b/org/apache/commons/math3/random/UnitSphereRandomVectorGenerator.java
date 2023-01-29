@@ -27,7 +27,7 @@ import org.apache.commons.math3.util.FastMath;
  */
 
 public class UnitSphereRandomVectorGenerator
-    implements RandomVectorGenerator {
+        implements RandomVectorGenerator {
     /**
      * RNG used for generating the individual components of the vectors.
      */
@@ -39,13 +39,14 @@ public class UnitSphereRandomVectorGenerator
 
     /**
      * @param dimension Space dimension.
-     * @param rand RNG for the individual components of the vectors.
+     * @param rand      RNG for the individual components of the vectors.
      */
     public UnitSphereRandomVectorGenerator(final int dimension,
                                            final RandomGenerator rand) {
         this.dimension = dimension;
         this.rand = rand;
     }
+
     /**
      * Create an object that will use a default RNG ({@link MersenneTwister}),
      * in order to generate the individual components.
@@ -56,7 +57,9 @@ public class UnitSphereRandomVectorGenerator
         this(dimension, new MersenneTwister());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double[] nextVector() {
         final double[] v = new double[dimension];
 

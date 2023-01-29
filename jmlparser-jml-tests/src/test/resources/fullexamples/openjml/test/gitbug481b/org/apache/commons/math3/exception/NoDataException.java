@@ -26,7 +26,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  */
 public class NoDataException extends MathIllegalArgumentException {
 
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -3629324471511904459L;
 
     /**
@@ -35,6 +37,7 @@ public class NoDataException extends MathIllegalArgumentException {
     public NoDataException() {
         this(LocalizedFormats.NO_DATA);
     }
+
     /**
      * Construct the exception with a specific context.
      *

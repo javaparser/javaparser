@@ -2,7 +2,6 @@ package simple_evoting;
 
 
 /**
- *
  * @author christoph
  */
 public final class SMT {
@@ -32,8 +31,8 @@ public final class SMT {
       @*/
     //@ helper
     public static void send(Message msg,
-                     int senderID,
-                     Server server) {
+                            int senderID,
+                            Server server) {
         byte[] output_message =
                 SMTEnv.send(/*msg.length*/1, /*senderID*/ 0, /*recipient.ID*/ 0, server, /*port*/ 0);
         server.onCollectBallot(msg);

@@ -27,7 +27,9 @@ import java.util.Iterator;
  */
 public class IteratorEnumeration<E> implements Enumeration<E> {
 
-    /** The iterator being decorated. */
+    /**
+     * The iterator being decorated.
+     */
     private Iterator<? extends E> iterator;
 
     /**
@@ -65,7 +67,7 @@ public class IteratorEnumeration<E> implements Enumeration<E> {
      *
      * @return the next element from the underlying iterator.
      * @throws java.util.NoSuchElementException if the underlying iterator has
-     * no more elements
+     *                                          no more elements
      */
     @Override
     public E nextElement() {

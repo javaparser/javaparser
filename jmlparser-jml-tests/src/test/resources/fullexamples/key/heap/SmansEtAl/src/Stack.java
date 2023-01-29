@@ -1,16 +1,16 @@
 class Stack {
     private ArrayList contents;
-    
-    
+
+
     /*@ normal_behavior
       @ assignable \nothing;
       @ ensures size() == 0;
       @ ensures \fresh(footprint);
       @*/
     Stack() {
-	contents = new ArrayList();
+        contents = new ArrayList();
     }
-    
+
 
     /*@ normal_behavior
       @ assignable footprint;
@@ -19,17 +19,17 @@ class Stack {
       @ diverges true;
       @*/
     void push(/*@nullable@*/ Object o) {
-	contents.add(o);
+        contents.add(o);
     }
-    
-    
+
+
     /*@ normal_behavior
       @ assignable \nothing;
       @ accessible footprint;
       @ ensures \result == size();
       @*/
     int size() {
-	return contents.size();
+        return contents.size();
     }
     
     
@@ -43,8 +43,8 @@ class Stack {
       @ accessible footprint: footprint;
       @ represents footprint = \set_union( \locset(contents), contents.footprint );
       @*/
-    
-    
+
+
     /*@ normal_behavior
       @ requires other.\inv;
       @ requires \disjoint(footprint, other.footprint);

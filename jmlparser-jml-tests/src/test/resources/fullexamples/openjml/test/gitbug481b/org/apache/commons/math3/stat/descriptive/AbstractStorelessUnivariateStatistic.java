@@ -23,18 +23,16 @@ import org.apache.commons.math3.util.MathUtils;
 import org.apache.commons.math3.util.Precision;
 
 /**
- *
  * Abstract implementation of the {@link StorelessUnivariateStatistic} interface.
  * <p>
  * Provides default <code>evaluate()</code> and <code>incrementAll(double[])</code>
  * implementations.</p>
  * <p>
  * <strong>Note that these implementations are not synchronized.</strong></p>
- *
  */
 public abstract class AbstractStorelessUnivariateStatistic
-    extends AbstractUnivariateStatistic
-    implements StorelessUnivariateStatistic {
+        extends AbstractUnivariateStatistic
+        implements StorelessUnivariateStatistic {
 
     /**
      * This default implementation calls {@link #clear}, then invokes
@@ -50,6 +48,7 @@ public abstract class AbstractStorelessUnivariateStatistic
      * input array.</p>
      * <p>
      * If the array is null, a MathIllegalArgumentException is thrown.</p>
+     *
      * @param values input array
      * @return the value of the statistic applied to the input array
      * @throws MathIllegalArgumentException if values is null
@@ -78,8 +77,9 @@ public abstract class AbstractStorelessUnivariateStatistic
      * <p>
      * If the array is null or the index parameters are not valid, an
      * MathIllegalArgumentException is thrown.</p>
+     *
      * @param values the input array
-     * @param begin the index of the first element to include
+     * @param begin  the index of the first element to include
      * @param length the number of elements to include
      * @return the value of the statistic applied to the included array entries
      * @throws MathIllegalArgumentException if the array is null or the indices are not valid
@@ -87,7 +87,7 @@ public abstract class AbstractStorelessUnivariateStatistic
      */
     @Override
     public double evaluate(final double[] values, final int begin,
-            final int length) throws MathIllegalArgumentException {
+                           final int length) throws MathIllegalArgumentException {
         if (test(values, begin, length)) {
             clear();
             incrementAll(values, begin, length);
@@ -139,9 +139,9 @@ public abstract class AbstractStorelessUnivariateStatistic
      * <p>
      * Throws IllegalArgumentException if the input values array is null.</p>
      *
-     * @param values  array holding values to add
-     * @param begin   index of the first array element to add
-     * @param length  number of array elements to add
+     * @param values array holding values to add
+     * @param begin  index of the first array element to add
+     * @param length number of array elements to add
      * @throws MathIllegalArgumentException if values is null
      * @see org.apache.commons.math3.stat.descriptive.StorelessUnivariateStatistic#incrementAll(double[], int, int)
      */
@@ -158,20 +158,21 @@ public abstract class AbstractStorelessUnivariateStatistic
      * Returns true iff <code>object</code> is an
      * <code>AbstractStorelessUnivariateStatistic</code> returning the same
      * values as this for <code>getResult()</code> and <code>getN()</code>
+     *
      * @param object object to test equality against.
      * @return true if object returns the same value as this
      */
     @Override
     public boolean equals(Object object) {
-        if (object == this ) {
+        if (object == this) {
             return true;
         }
-       if (object instanceof AbstractStorelessUnivariateStatistic == false) {
+        if (object instanceof AbstractStorelessUnivariateStatistic == false) {
             return false;
         }
         AbstractStorelessUnivariateStatistic stat = (AbstractStorelessUnivariateStatistic) object;
         return Precision.equalsIncludingNaN(stat.getResult(), this.getResult()) &&
-               Precision.equalsIncludingNaN(stat.getN(), this.getN());
+                Precision.equalsIncludingNaN(stat.getN(), this.getN());
     }
 
     /**
@@ -181,7 +182,7 @@ public abstract class AbstractStorelessUnivariateStatistic
      */
     @Override
     public int hashCode() {
-        return 31* (31 + MathUtils.hash(getResult())) + MathUtils.hash(getN());
+        return 31 * (31 + MathUtils.hash(getResult())) + MathUtils.hash(getN());
     }
 
 }

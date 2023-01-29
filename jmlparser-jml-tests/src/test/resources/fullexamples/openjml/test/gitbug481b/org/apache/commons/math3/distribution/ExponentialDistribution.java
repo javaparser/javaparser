@@ -34,30 +34,39 @@ import org.apache.commons.math3.util.ResizableDoubleArray;
 public class ExponentialDistribution extends AbstractRealDistribution {
     /**
      * Default inverse cumulative probability accuracy.
+     *
      * @since 2.1
      */
     public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 2401296428283614780L;
     /**
      * Used when generating Exponential samples.
      * Table containing the constants
      * q_i = sum_{j=1}^i (ln 2)^j/j! = ln 2 + (ln 2)^2/2 + ... + (ln 2)^i/i!
      * until the largest representable fraction below 1 is exceeded.
-     *
+     * <p>
      * Note that
      * 1 = 2 - 1 = exp(ln 2) - 1 = sum_{n=1}^infty (ln 2)^n / n!
      * thus q_i -> 1 as i -> +inf,
      * so the higher i, the closer to one we get (the series is not alternating).
-     *
+     * <p>
      * By trying, n = 16 in Java is enough to reach 1.0.
      */
     private static final double[] EXPONENTIAL_SA_QI;
-    /** The mean of this distribution. */
+    /**
+     * The mean of this distribution.
+     */
     private final double mean;
-    /** The logarithm of the mean, stored to reduce computing time. **/
+    /**
+     * The logarithm of the mean, stored to reduce computing time.
+     **/
     private final double logMean;
-    /** Inverse cumulative probability accuracy. */
+    /**
+     * Inverse cumulative probability accuracy.
+     */
     private final double solverAbsoluteAccuracy;
 
     /**
@@ -115,10 +124,10 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param mean Mean of this distribution.
+     * @param mean               Mean of this distribution.
      * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates (defaults to
+     *                           {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NotStrictlyPositiveException if {@code mean <= 0}.
      * @since 2.1
      */
@@ -129,31 +138,31 @@ public class ExponentialDistribution extends AbstractRealDistribution {
     /**
      * Creates an exponential distribution.
      *
-     * @param rng Random number generator.
+     * @param rng  Random number generator.
      * @param mean Mean of this distribution.
      * @throws NotStrictlyPositiveException if {@code mean <= 0}.
      * @since 3.3
      */
     public ExponentialDistribution(RandomGenerator rng, double mean)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(rng, mean, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
     /**
      * Creates an exponential distribution.
      *
-     * @param rng Random number generator.
-     * @param mean Mean of this distribution.
+     * @param rng                Random number generator.
+     * @param mean               Mean of this distribution.
      * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates (defaults to
+     *                           {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NotStrictlyPositiveException if {@code mean <= 0}.
      * @since 3.1
      */
     public ExponentialDistribution(RandomGenerator rng,
                                    double mean,
                                    double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         super(rng);
 
         if (mean <= 0) {
@@ -173,13 +182,17 @@ public class ExponentialDistribution extends AbstractRealDistribution {
         return mean;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         final double logDensity = logDensity(x);
         return logDensity == Double.NEGATIVE_INFINITY ? 0 : FastMath.exp(logDensity);
     }
 
-    /** {@inheritDoc} **/
+    /**
+     * {@inheritDoc}
+     **/
     @Override
     public double logDensity(double x) {
         if (x < 0) {
@@ -190,7 +203,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The implementation of this method is based on:
      * <ul>
      * <li>
@@ -198,7 +211,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      * Exponential Distribution</a>, equation (1).</li>
      * </ul>
      */
-    public double cumulativeProbability(double x)  {
+    public double cumulativeProbability(double x) {
         double ret;
         if (x <= 0.0) {
             ret = 0.0;
@@ -210,7 +223,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * Returns {@code 0} when {@code p= = 0} and
      * {@code Double.POSITIVE_INFINITY} when {@code p == 1}.
      */
@@ -280,7 +293,9 @@ public class ExponentialDistribution extends AbstractRealDistribution {
         return mean * (a + umin * EXPONENTIAL_SA_QI[0]);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected double getSolverAbsoluteAccuracy() {
         return solverAbsoluteAccuracy;
@@ -288,7 +303,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For mean parameter {@code k}, the mean is {@code k}.
      */
     public double getNumericalMean() {
@@ -297,7 +312,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For mean parameter {@code k}, the variance is {@code k^2}.
      */
     public double getNumericalVariance() {
@@ -307,7 +322,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always 0 no matter the mean parameter.
      *
      * @return lower bound of the support (always 0)
@@ -318,7 +333,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is always positive infinity
      * no matter the mean parameter.
      *
@@ -328,19 +343,23 @@ public class ExponentialDistribution extends AbstractRealDistribution {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}

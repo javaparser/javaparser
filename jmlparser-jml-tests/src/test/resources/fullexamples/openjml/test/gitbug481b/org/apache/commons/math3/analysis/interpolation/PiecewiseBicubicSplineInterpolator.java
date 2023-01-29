@@ -28,34 +28,34 @@ import org.apache.commons.math3.util.MathArrays;
  * @since 2.2
  */
 public class PiecewiseBicubicSplineInterpolator
-    implements BivariateGridInterpolator {
+        implements BivariateGridInterpolator {
 
     /**
      * {@inheritDoc}
      */
-    public PiecewiseBicubicSplineInterpolatingFunction interpolate( final double[] xval,
-                                                                    final double[] yval,
-                                                                    final double[][] fval)
-        throws DimensionMismatchException,
-               NullArgumentException,
-               NoDataException,
-               NonMonotonicSequenceException {
-        if ( xval == null ||
-             yval == null ||
-             fval == null ||
-             fval[0] == null ) {
+    public PiecewiseBicubicSplineInterpolatingFunction interpolate(final double[] xval,
+                                                                   final double[] yval,
+                                                                   final double[][] fval)
+            throws DimensionMismatchException,
+            NullArgumentException,
+            NoDataException,
+            NonMonotonicSequenceException {
+        if (xval == null ||
+                yval == null ||
+                fval == null ||
+                fval[0] == null) {
             throw new NullArgumentException();
         }
 
-        if ( xval.length == 0 ||
-             yval.length == 0 ||
-             fval.length == 0 ) {
+        if (xval.length == 0 ||
+                yval.length == 0 ||
+                fval.length == 0) {
             throw new NoDataException();
         }
 
         MathArrays.checkOrder(xval);
         MathArrays.checkOrder(yval);
 
-        return new PiecewiseBicubicSplineInterpolatingFunction( xval, yval, fval );
+        return new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, fval);
     }
 }

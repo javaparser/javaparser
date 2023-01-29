@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 /**
- *
  * <p>
  * This package provides classes to solve Ordinary Differential Equations problems.
  * </p>
@@ -158,7 +157,5 @@
  * Adams-Moulton} integrators appear as variable-step ones. This is an experimental extension
  * to the classical algorithms using the Nordsieck vector representation.
  * </p>
- *
- *
  */
 package org.apache.commons.math3.ode;

@@ -1,23 +1,23 @@
 public class ConsFresh extends Parent {
 
-//@ public normal_behavior
+    //@ public normal_behavior
 //@   ensures \fresh(x);
 //@ pure
-public ConsFresh() {
-   super();
-}
+    public ConsFresh() {
+        super();
+    }
 
 }
 
 
 class Parent {
 
-public Object x;
+    public Object x;
 
-//@ public normal_behavior
+    //@ public normal_behavior
 //@   ensures \fresh(x);
 //@ pure
-public Parent() {
-   x= new Object();
-}
+    public Parent() {
+        x = new Object();
+    }
 }

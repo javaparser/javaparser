@@ -8,8 +8,8 @@ class BinarySearch {
         int l = 0;
         int r = a.length - 1;
 
-        if(a.length == 0) return -1;
-        if(a.length == 1) return a[0] == v ? 0 : -1;
+        if (a.length == 0) return -1;
+        if (a.length == 1) return a[0] == v ? 0 : -1;
 
         /*@ loop_invariant 0 <= l && l < r && r < a.length
           @                && (\forall int x; 0 <= x && x < l; a[x] < v)
@@ -17,19 +17,19 @@ class BinarySearch {
           @ assignable \nothing;
           @ decreases r - l;
           @*/
-        while(r > l + 1) {
+        while (r > l + 1) {
             int mid = l + (r - l) / 2;
-            if(a[mid] == v) {
-               return mid;
-            } else if(a[mid] > v) {
-               r = mid;
+            if (a[mid] == v) {
+                return mid;
+            } else if (a[mid] > v) {
+                r = mid;
             } else {
-               l = mid;
+                l = mid;
             }
         }
 
-        if(a[l] == v) return l;
-        if(a[r] == v) return r;
+        if (a[l] == v) return l;
+        if (a[r] == v) return r;
         return -1;
     }
 }

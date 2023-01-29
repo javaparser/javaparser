@@ -55,7 +55,6 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
         return JmlClauseKind.WORKING_SPACE;
     }
 
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

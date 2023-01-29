@@ -1,5 +1,5 @@
 public class Test {
-    
+
     //@ public normal_behavior
     //@   requires a.length > 100;
     //@   requires i>=0 && i < 5;
@@ -13,7 +13,7 @@ public class Test {
     //@   assignable a[ii];
     //@   ensures \result == iij;
     public int f(int[] a, int i, int j) {
-        a[i+i] = 0;
-       return i + i + j;
+        a[i + i] = 0;
+        return i + i + j;
     }
 }

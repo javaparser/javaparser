@@ -44,14 +44,17 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class SecondMoment extends FirstMoment implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 3942403127395076445L;
 
-    /** second moment of values that have been added */
+    /**
+     * second moment of values that have been added
+     */
     protected double m2;
 
     /**
@@ -70,7 +73,7 @@ public class SecondMoment extends FirstMoment implements Serializable {
      * @throws NullArgumentException if original is null
      */
     public SecondMoment(SecondMoment original)
-    throws NullArgumentException {
+            throws NullArgumentException {
         super(original);
         this.m2 = original.m2;
     }
@@ -120,11 +123,11 @@ public class SecondMoment extends FirstMoment implements Serializable {
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source SecondMoment to copy
-     * @param dest SecondMoment to copy to
+     * @param dest   SecondMoment to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(SecondMoment source, SecondMoment dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         FirstMoment.copy(source, dest);

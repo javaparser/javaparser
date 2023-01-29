@@ -27,9 +27,10 @@ import org.apache.commons.math3.analysis.MultivariateFunction;
  *
  * @see MultivariateDifferentiableOptimizer
  * @see MultivariateDifferentiableVectorOptimizer
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 2.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public interface MultivariateOptimizer
-    extends BaseMultivariateOptimizer<MultivariateFunction> {}
+        extends BaseMultivariateOptimizer<MultivariateFunction> {
+}

@@ -1,4 +1,4 @@
-public class Amount{
+public class Amount {
 
     //@ public invariant cents >= -100;
     //@ public invariant cents <= 100;
@@ -20,13 +20,13 @@ public class Amount{
     //@ ensures this.euros < 0 ==> cents <= 0;
 
     //@ pure
-    public Amount(int euros, int cents){
+    public Amount(int euros, int cents) {
         this.euros = euros;
         this.cents = cents;
     }
 
-    public /*@ pure @*/ Amount negate(){
-        return new Amount(-euros,-cents);
+    public /*@ pure @*/ Amount negate() {
+        return new Amount(-euros, -cents);
     }
 
 }

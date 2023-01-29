@@ -31,8 +31,8 @@ import static com.github.javaparser.utils.Utils.arrayToList;
  * A node that can have type arguments.
  * <pre>
  *     new X();        --> typeArguments == null
- *     new X&lt;>();      --> typeArguments.types = [], typeArguments.diamondOperator=true 
- *     new X&lt;C,D>();   --> typeArguments.types = [C,D], typeArguments.diamondOperator=false 
+ *     new X&lt;>();      --> typeArguments.types = [], typeArguments.diamondOperator=true
+ *     new X&lt;C,D>();   --> typeArguments.types = [C,D], typeArguments.diamondOperator=false
  * </pre>
  */
 public interface NodeWithTypeArguments<T> {
@@ -43,6 +43,7 @@ public interface NodeWithTypeArguments<T> {
 
     /**
      * Allows you to set the generic arguments
+     *
      * @param typeArguments The list of types of the generics
      */
     T setTypeArguments(List<Type<?>> typeArguments);
@@ -51,7 +52,7 @@ public interface NodeWithTypeArguments<T> {
      * @return whether the type arguments look like &lt;>.
      */
     default boolean isUsingDiamondOperator() {
-        if(getTypeArguments()==null){
+        if (getTypeArguments() == null) {
             return false;
         }
         return getTypeArguments().isEmpty();

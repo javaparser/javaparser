@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Note this issue number refers to the archived `javasymbolsolver` repository,
  * whose issues prior to it being integrated into JavaParser itself are numbered separately:
- *
+ * <p>
  * https://github.com/javaparser/javasymbolsolver/issues/343
  */
 class Issue343Test extends AbstractResolutionTest {

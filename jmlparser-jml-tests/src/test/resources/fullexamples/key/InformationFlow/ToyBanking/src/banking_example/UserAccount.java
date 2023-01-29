@@ -2,7 +2,6 @@ package banking_example;
 
 
 /**
- *
  * @author christoph
  */
 public class UserAccount {
@@ -80,13 +79,13 @@ public class UserAccount {
           @ assignable \strictly_nothing;
           @ decreases password.length - i;
           @*/
-        for(int i = 0; i < password.length && pwdCorrect; i++) {
+        for (int i = 0; i < password.length && pwdCorrect; i++) {
             pwdCorrect = (this.password[i] == password[i]);
         }
         boolean incorrectLoginsInRange =
                 (0 <= incorrectLogins && incorrectLogins < 3);
-        
-        if(userIDCorrect && incorrectLoginsInRange) {
+
+        if (userIDCorrect && incorrectLoginsInRange) {
             this.incorrectLogins = pwdCorrect ? 0 : this.incorrectLogins + 1;
         }
         /*@ set bankCustomerView =

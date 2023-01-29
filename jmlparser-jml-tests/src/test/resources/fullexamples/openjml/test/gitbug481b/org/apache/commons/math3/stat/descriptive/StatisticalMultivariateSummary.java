@@ -19,7 +19,7 @@ package org.apache.commons.math3.stat.descriptive;
 import org.apache.commons.math3.linear.RealMatrix;
 
 /**
- *  Reporting interface for basic multivariate statistics.
+ * Reporting interface for basic multivariate statistics.
  *
  * @since 1.2
  */
@@ -27,6 +27,7 @@ public interface StatisticalMultivariateSummary {
 
     /**
      * Returns the dimension of the data
+     *
      * @return The dimension of the data
      */
     int getDimension();
@@ -42,6 +43,7 @@ public interface StatisticalMultivariateSummary {
 
     /**
      * Returns the covariance of the available values.
+     *
      * @return The covariance, null if no multivariate sample
      * have been added or a zeroed matrix for a single value set.
      */
@@ -76,6 +78,7 @@ public interface StatisticalMultivariateSummary {
 
     /**
      * Returns the number of available values
+     *
      * @return The number of available values
      */
     long getN();

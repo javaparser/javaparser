@@ -118,7 +118,7 @@ public class ReferenceTypeImpl extends ReferenceType {
                 }
             }
             return false;
-        } else if (other.isConstraint()){
+        } else if (other.isConstraint()) {
             return isAssignableBy(other.asConstraintType().getBound());
         } else if (other.isWildcard()) {
             if (this.getQualifiedName().equals(Object.class.getCanonicalName())) {

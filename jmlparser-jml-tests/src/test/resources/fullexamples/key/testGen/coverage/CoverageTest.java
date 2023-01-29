@@ -3,29 +3,32 @@
 Author: Christoph Gladisch
 */
 
-final class CoverageTest { 
+final class CoverageTest {
 
- public void foo(){ };
- 
- /*@ public normal_behaviour
-   requires true;
-   ensures true;
- @*/ 
- public void test1(boolean a, boolean b){
-  if(a && b){
-    foo();
-  }
- } 
+    public void foo() {
+    }
 
- 
- /*@ public normal_behaviour
-   requires true;
-   ensures true;
- @*/ 
- public void test2(boolean a, boolean b, boolean c){
-  if((a && b) || (a && c) || (b && c)){
-    foo();
-  }
- } 
- 
+    ;
+
+    /*@ public normal_behaviour
+      requires true;
+      ensures true;
+    @*/
+    public void test1(boolean a, boolean b) {
+        if (a && b) {
+            foo();
+        }
+    }
+
+
+    /*@ public normal_behaviour
+      requires true;
+      ensures true;
+    @*/
+    public void test2(boolean a, boolean b, boolean c) {
+        if ((a && b) || (a && c) || (b && c)) {
+            foo();
+        }
+    }
+
 }

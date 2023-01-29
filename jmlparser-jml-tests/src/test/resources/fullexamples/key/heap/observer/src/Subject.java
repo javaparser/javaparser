@@ -1,6 +1,6 @@
 public abstract class Subject {
     protected /*@spec_public@*/ Observer[] observers = new Observer[0];
-    
+
     //@ public model \locset footprint;
     //@ accessible \inv: footprint, observers, observers.*, (\infinite_union int i; 0 <= i && i < observers.length ? observers[i].* : \empty);
     //@ accessible footprint: footprint;
@@ -12,7 +12,7 @@ public abstract class Subject {
       @                                  && observers[i] != this 
       @                                  && \disjoint(observers[i].*, footprint));
       @*/
-    
+
 
     /*@ public normal_behaviour
       @   requires o.\inv && o.subject == this && o != this && \disjoint(o.*, footprint);
@@ -22,19 +22,19 @@ public abstract class Subject {
       @   ensures (\forall int i; 0 <= i && i < observers.length - 1; observers[i] == \old(observers[i]));
       @*/
     public final void addObserver(Observer o) {
-	final Observer[] newArr = new Observer[observers.length + 1];
+        final Observer[] newArr = new Observer[observers.length + 1];
 	/*@ loop_invariant 0 <= i && i <= observers.length
 	  @                && (\forall int x; 0 <= x && x < i; newArr[x] == observers[x]);
 	  @ assignable newArr[*];
 	  @ decreases observers.length - i;
 	  @*/
-	for(int i = 0; i < observers.length; i++) {
-	    newArr[i] = observers[i];
-	}
-	newArr[newArr.length - 1] = o;
-	observers = newArr;
+        for (int i = 0; i < observers.length; i++) {
+            newArr[i] = observers[i];
+        }
+        newArr[newArr.length - 1] = o;
+        observers = newArr;
     }
-    
+
 
     /*@ public normal_behaviour
       @   assignable (\infinite_union int x; 0 <= x && x < observers.length ? observers[x].* : \empty);
@@ -48,8 +48,8 @@ public abstract class Subject {
 	  @ assignable (\infinite_union int x; 0 <= x && x < observers.length ? observers[x].* : \empty);
 	  @ decreases observers.length - i; 
 	  @*/
-	for(int i = 0; i < observers.length; i++) {
-	    observers[i].update();
-	}
+        for (int i = 0; i < observers.length; i++) {
+            observers[i].update();
+        }
     }
 }

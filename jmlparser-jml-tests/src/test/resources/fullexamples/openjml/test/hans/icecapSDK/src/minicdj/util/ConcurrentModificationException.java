@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 /* ConcurrentModificationException.java -- Data structure concurrently modified
    Copyright (C) 1998, 1999, 2001, 2005  Free Software Foundation, Inc.
@@ -88,27 +89,24 @@ package minicdj.util;
  * @since 1.2
  * @status updated to 1.4
  */
-public class ConcurrentModificationException extends RuntimeException
-{
-  /**
-   * Compatible with JDK 1.2.
-   */
-  private static final long serialVersionUID = -3666751008965953603L;
+public class ConcurrentModificationException extends RuntimeException {
+    /**
+     * Compatible with JDK 1.2.
+     */
+    private static final long serialVersionUID = -3666751008965953603L;
 
-  /**
-   * Constructs a ConcurrentModificationException with no detail message.
-   */
-  public ConcurrentModificationException()
-  {
-  }
+    /**
+     * Constructs a ConcurrentModificationException with no detail message.
+     */
+    public ConcurrentModificationException() {
+    }
 
-  /**
-   * Constructs a ConcurrentModificationException with a detail message.
-   *
-   * @param detail the detail message for the exception
-   */
-  public ConcurrentModificationException(String detail)
-  {
-    super(detail);
-  }
+    /**
+     * Constructs a ConcurrentModificationException with a detail message.
+     *
+     * @param detail the detail message for the exception
+     */
+    public ConcurrentModificationException(String detail) {
+        super(detail);
+    }
 }

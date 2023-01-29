@@ -133,7 +133,7 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
 
     /**
      * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
-     * so please avoid passing null
+     *                    so please avoid passing null
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReceiverParameter setAnnotations(final NodeList<AnnotationExpr> annotations) {

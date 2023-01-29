@@ -25,10 +25,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.SymbolDeclarator;
@@ -47,6 +44,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
@@ -54,6 +52,12 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
  * @author Federico Tomassetti
  */
 public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
+
+    /**
+     * Returns {@code true} when the Node to be tested is not an
+     * {@link EnclosedExpr}, {@code false} otherwise.
+     */
+    private static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
 
     public LambdaExprContext(LambdaExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -67,7 +71,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
             for (ResolvedValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
-                    Node parentNode = demandParentNode(wrappedNode);
+                    Node parentNode = demandParentNode(wrappedNode, IS_NOT_ENCLOSED_EXPR);
                     if (parentNode instanceof MethodCallExpr) {
                         MethodCallExpr methodCallExpr = (MethodCallExpr) parentNode;
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
@@ -76,7 +80,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
                         // Get the functional method in order for us to resolve it's type arguments properly
                         Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
-                        if (functionalMethodOpt.isPresent()){
+                        if (functionalMethodOpt.isPresent()) {
                             MethodUsage functionalMethod = functionalMethodOpt.get();
                             InferenceContext inferenceContext = new InferenceContext(typeSolver);
 
@@ -92,26 +96,28 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             // Find the position of this lambda argument
                             boolean found = false;
                             int lambdaParamIndex;
-                            for (lambdaParamIndex = 0; lambdaParamIndex < wrappedNode.getParameters().size(); lambdaParamIndex++){
-                                if (wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier().equals(name)){
+                            for (lambdaParamIndex = 0; lambdaParamIndex < wrappedNode.getParameters().size(); lambdaParamIndex++) {
+                                if (wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier().equals(name)) {
                                     found = true;
                                     break;
                                 }
                             }
-                            if (!found) { return Optional.empty(); }
+                            if (!found) {
+                                return Optional.empty();
+                            }
 
                             // Now resolve the argument type using the inference context
                             ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(functionalMethod.getParamType(lambdaParamIndex)));
 
                             ResolvedLambdaConstraintType conType;
-                            if (argType.isWildcard()){
+                            if (argType.isWildcard()) {
                                 conType = ResolvedLambdaConstraintType.bound(argType.asWildcard().getBoundedType());
                             } else {
                                 conType = ResolvedLambdaConstraintType.bound(argType);
                             }
                             Value value = new Value(conType, name);
                             return Optional.of(value);
-                        } else{
+                        } else {
                             return Optional.empty();
                         }
                     } else if (parentNode instanceof VariableDeclarator) {
@@ -255,6 +261,9 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     private int pos(MethodCallExpr callExpr, Expression param) {
         int i = 0;
         for (Expression p : callExpr.getArguments()) {
+            while (p instanceof EnclosedExpr) {
+                p = ((EnclosedExpr) p).getInner();
+            }
             if (p == param) {
                 return i;
             }

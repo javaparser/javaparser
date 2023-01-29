@@ -67,6 +67,7 @@ public class ListObservationTest {
             }
         };
     }
+
     @Test
     void addAllWithoutIndex() {
         List<String> changes = new LinkedList<>();

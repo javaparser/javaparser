@@ -32,7 +32,7 @@ public abstract class AbstractMap implements MapInterface {
     @ public invariant \domain_implies_created(map);
     @
     @*/
-    
+
     /*@ normal_behaviour
      @ requires target != entries;
      @ requires target != null;
@@ -46,10 +46,10 @@ public abstract class AbstractMap implements MapInterface {
      @ assignable target[targetIndex..targetIndex + numberCopies - 1];
      @*/
     abstract void copyMapEntries(/*@nullable*/ MapEntry[] target,
-            int targetIndex,
-            int entriesIndex,
-            int numberCopies);
-    
+                                               int targetIndex,
+                                               int entriesIndex,
+                                               int numberCopies);
+
     /*@ normal_behavior
      @ ensures \in_domain(map, key) ? 
      @              (\result >= 0 && \result < entries.length && entries[\result].key == key) : 
@@ -58,7 +58,7 @@ public abstract class AbstractMap implements MapInterface {
      @ accessible footprint;
      @*/
     abstract /*@ strictly_pure */ int getIndexOfKey(Object key);
-    
+
     /*@ normal_behavior
     @ ensures \fresh(\result);
     @ ensures \result.key == key;
@@ -75,7 +75,7 @@ public abstract class AbstractMap implements MapInterface {
      @   ensures (\forall int i; 0 <= i && i < \result.length; \result[i] == null);
      @*/
     abstract /*@ pure nullable */ MapEntry[] newMapEntryArray(int l);
-    
+
     /*@ normal_behaviour
      @ ensures \result.length == entries.length + 1;
      @ ensures (\forall int i; 0 <= i && i < entries.length; \result[i] == entries[i]);
@@ -119,7 +119,7 @@ public abstract class AbstractMap implements MapInterface {
      @ assignable newEntries[*];
      @*/
     abstract void removeCopyOldEntries( /*@ nullable */ MapEntry[] newEntries, int index);
-    
+
     /*@ normal_behaviour
      @ requires 0 <= index && index < entries.length;
      @ ensures \result.length == entries.length - 1;
@@ -138,7 +138,7 @@ public abstract class AbstractMap implements MapInterface {
      @ assignable footprint;
      @*/
     abstract Object removeInDomain(int index);
-    
+
     /*@ normal_behaviour
      @ requires 0 <= index && index < entries.length;
      @ ensures map == \map_remove(\old(map), \old(entries[index].key));
@@ -146,7 +146,7 @@ public abstract class AbstractMap implements MapInterface {
      @ assignable footprint;
      @*/
     abstract void removeInDomainWithoutResult(int index);
-    
+
     /*@ normal_behaviour
      @ requires 0 <= index && index < entries.length;
      @ requires (\forall int i; 0 <= i && i < newEntries.length;

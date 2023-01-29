@@ -23,17 +23,17 @@ import org.apache.commons.math3.exception.DimensionMismatchException;
  * This class defines a linear operator operating on real ({@code double})
  * vector spaces. No direct access to the coefficients of the underlying matrix
  * is provided.
- *
+ * <p>
  * The motivation for such an interface is well stated by
  * <a href="#BARR1994">Barrett et al. (1994)</a>:
  * <blockquote>
- *  We restrict ourselves to iterative methods, which work by repeatedly
- *  improving an approximate solution until it is accurate enough. These
- *  methods access the coefficient matrix A of the linear system only via the
- *  matrix-vector product y = A &middot; x
- *  (and perhaps z = A<sup>T</sup> &middot; x). Thus the user need only
- *  supply a subroutine for computing y (and perhaps z) given x, which permits
- *  full exploitation of the sparsity or other special structure of A.
+ * We restrict ourselves to iterative methods, which work by repeatedly
+ * improving an approximate solution until it is accurate enough. These
+ * methods access the coefficient matrix A of the linear system only via the
+ * matrix-vector product y = A &middot; x
+ * (and perhaps z = A<sup>T</sup> &middot; x). Thus the user need only
+ * supply a subroutine for computing y (and perhaps z) given x, which permits
+ * full exploitation of the sparsity or other special structure of A.
  * </blockquote>
  * <br/>
  *
@@ -70,10 +70,10 @@ public abstract class RealLinearOperator {
      * @param x the vector to operate on
      * @return the product of {@code this} instance with {@code x}
      * @throws DimensionMismatchException if the column dimension does not match
-     * the size of {@code x}
+     *                                    the size of {@code x}
      */
     public abstract RealVector operate(final RealVector x)
-        throws DimensionMismatchException;
+            throws DimensionMismatchException;
 
     /**
      * Returns the result of multiplying the transpose of {@code this} operator
@@ -84,13 +84,12 @@ public abstract class RealLinearOperator {
      * @param x the vector to operate on
      * @return the product of the transpose of {@code this} instance with
      * {@code x}
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the row dimension does not match the size of {@code x}
-     * @throws UnsupportedOperationException if this operation is not supported
-     * by {@code this} operator
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException if the row dimension does not match the size of {@code x}
+     * @throws UnsupportedOperationException                                 if this operation is not supported
+     *                                                                       by {@code this} operator
      */
     public RealVector operateTranspose(final RealVector x)
-        throws DimensionMismatchException, UnsupportedOperationException {
+            throws DimensionMismatchException, UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 

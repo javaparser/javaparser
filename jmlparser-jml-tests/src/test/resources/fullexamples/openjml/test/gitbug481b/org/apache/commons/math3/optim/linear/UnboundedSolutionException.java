@@ -25,7 +25,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.0
  */
 public class UnboundedSolutionException extends MathIllegalStateException {
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 940539497277290619L;
 
     /**

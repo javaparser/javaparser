@@ -118,13 +118,19 @@ public class KolmogorovSmirnovTest {
      */
     protected static final int MAXIMUM_PARTIAL_SUM_COUNT = 100000;
 
-    /** Convergence criterion for {@link #ksSum(double, double, int)} */
+    /**
+     * Convergence criterion for {@link #ksSum(double, double, int)}
+     */
     protected static final double KS_SUM_CAUCHY_CRITERION = 1E-20;
 
-    /** Convergence criterion for the sums in #pelzGood(double, double, int)} */
+    /**
+     * Convergence criterion for the sums in #pelzGood(double, double, int)}
+     */
     protected static final double PG_SUM_RELATIVE_ERROR = 1.0e-10;
 
-    /** No longer used. */
+    /**
+     * No longer used.
+     */
     @Deprecated
     protected static final int SMALL_SAMPLE_PRODUCT = 200;
 
@@ -134,12 +140,16 @@ public class KolmogorovSmirnovTest {
      */
     protected static final int LARGE_SAMPLE_PRODUCT = 10000;
 
-    /** Default number of iterations used by {@link #monteCarloP(double, int, int, boolean, int)}.
-     *  Deprecated as of version 3.6, as this method is no longer needed. */
+    /**
+     * Default number of iterations used by {@link #monteCarloP(double, int, int, boolean, int)}.
+     * Deprecated as of version 3.6, as this method is no longer needed.
+     */
     @Deprecated
     protected static final int MONTE_CARLO_ITERATIONS = 1000000;
 
-    /** Random data generator used by {@link #monteCarloP(double, int, int, boolean, int)} */
+    /**
+     * Random data generator used by {@link #monteCarloP(double, int, int, boolean, int)}
+     */
     private final RandomGenerator rng;
 
     /**
@@ -169,12 +179,12 @@ public class KolmogorovSmirnovTest {
      * extended precision. See {@link #cdfExact(double, int)}.
      *
      * @param distribution reference distribution
-     * @param data sample being being evaluated
-     * @param exact whether or not to force exact computation of the p-value
+     * @param data         sample being being evaluated
+     * @param exact        whether or not to force exact computation of the p-value
      * @return the p-value associated with the null hypothesis that {@code data} is a sample from
-     *         {@code distribution}
+     * {@code distribution}
      * @throws InsufficientDataException if {@code data} does not have length at least 2
-     * @throws NullArgumentException if {@code data} is null
+     * @throws NullArgumentException     if {@code data} is null
      */
     public double kolmogorovSmirnovTest(RealDistribution distribution, double[] data, boolean exact) {
         return 1d - cdf(kolmogorovSmirnovStatistic(distribution, data), data.length, exact);
@@ -187,10 +197,10 @@ public class KolmogorovSmirnovTest {
      * each of the values in {@code data}.
      *
      * @param distribution reference distribution
-     * @param data sample being evaluated
+     * @param data         sample being evaluated
      * @return Kolmogorov-Smirnov statistic \(D_n\)
      * @throws InsufficientDataException if {@code data} does not have length at least 2
-     * @throws NullArgumentException if {@code data} is null
+     * @throws NullArgumentException     if {@code data} is null
      */
     public double kolmogorovSmirnovStatistic(RealDistribution distribution, double[] data) {
         checkArray(data);
@@ -236,22 +246,22 @@ public class KolmogorovSmirnovTest {
      * If ties are known to be present in the data, {@link #bootstrap(double[], double[], int, boolean)}
      * may be used as an alternative method for estimating the p-value.</p>
      *
-     * @param x first sample dataset
-     * @param y second sample dataset
+     * @param x      first sample dataset
+     * @param y      second sample dataset
      * @param strict whether or not the probability to compute is expressed as a strict inequality
-     *        (ignored for large samples)
+     *               (ignored for large samples)
      * @return p-value associated with the null hypothesis that {@code x} and {@code y} represent
-     *         samples from the same distribution
+     * samples from the same distribution
      * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
-     *         least 2
-     * @throws NullArgumentException if either {@code x} or {@code y} is null
+     *                                   least 2
+     * @throws NullArgumentException     if either {@code x} or {@code y} is null
      * @see #bootstrap(double[], double[], int, boolean)
      */
     public double kolmogorovSmirnovTest(double[] x, double[] y, boolean strict) {
         final long lengthProduct = (long) x.length * y.length;
         double[] xa = null;
         double[] ya = null;
-        if (lengthProduct < LARGE_SAMPLE_PRODUCT && hasTies(x,y)) {
+        if (lengthProduct < LARGE_SAMPLE_PRODUCT && hasTies(x, y)) {
             xa = MathArrays.copyOf(x);
             ya = MathArrays.copyOf(y);
             fixTies(xa, ya);
@@ -275,10 +285,10 @@ public class KolmogorovSmirnovTest {
      * @param x first sample dataset
      * @param y second sample dataset
      * @return p-value associated with the null hypothesis that {@code x} and {@code y} represent
-     *         samples from the same distribution
+     * samples from the same distribution
      * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
-     *         least 2
-     * @throws NullArgumentException if either {@code x} or {@code y} is null
+     *                                   least 2
+     * @throws NullArgumentException     if either {@code x} or {@code y} is null
      */
     public double kolmogorovSmirnovTest(double[] x, double[] y) {
         return kolmogorovSmirnovTest(x, y, true);
@@ -293,13 +303,13 @@ public class KolmogorovSmirnovTest {
      * @param x first sample
      * @param y second sample
      * @return test statistic \(D_{n,m}\) used to evaluate the null hypothesis that {@code x} and
-     *         {@code y} represent samples from the same underlying distribution
+     * {@code y} represent samples from the same underlying distribution
      * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
-     *         least 2
-     * @throws NullArgumentException if either {@code x} or {@code y} is null
+     *                                   least 2
+     * @throws NullArgumentException     if either {@code x} or {@code y} is null
      */
     public double kolmogorovSmirnovStatistic(double[] x, double[] y) {
-        return integralKolmogorovSmirnovStatistic(x, y)/((double)(x.length * (long)y.length));
+        return integralKolmogorovSmirnovStatistic(x, y) / ((double) (x.length * (long) y.length));
     }
 
     /**
@@ -312,10 +322,10 @@ public class KolmogorovSmirnovTest {
      * @param x first sample
      * @param y second sample
      * @return test statistic \(n m D_{n,m}\) used to evaluate the null hypothesis that {@code x} and
-     *         {@code y} represent samples from the same underlying distribution
+     * {@code y} represent samples from the same underlying distribution
      * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
-     *         least 2
-     * @throws NullArgumentException if either {@code x} or {@code y} is null
+     *                                   least 2
+     * @throws NullArgumentException     if either {@code x} or {@code y} is null
      */
     private long integralKolmogorovSmirnovStatistic(double[] x, double[] y) {
         checkArray(x);
@@ -336,21 +346,20 @@ public class KolmogorovSmirnovTest {
         long supD = 0l;
         do {
             double z = Double.compare(sx[rankX], sy[rankY]) <= 0 ? sx[rankX] : sy[rankY];
-            while(rankX < n && Double.compare(sx[rankX], z) == 0) {
+            while (rankX < n && Double.compare(sx[rankX], z) == 0) {
                 rankX += 1;
                 curD += m;
             }
-            while(rankY < m && Double.compare(sy[rankY], z) == 0) {
+            while (rankY < m && Double.compare(sy[rankY], z) == 0) {
                 rankY += 1;
                 curD -= n;
             }
             if (curD > supD) {
                 supD = curD;
-            }
-            else if (-curD > supD) {
+            } else if (-curD > supD) {
                 supD = -curD;
             }
-        } while(rankX < n && rankY < m);
+        } while (rankX < n && rankY < m);
         return supD;
     }
 
@@ -360,11 +369,11 @@ public class KolmogorovSmirnovTest {
      * evaluating the null hypothesis that {@code data} conforms to {@code distribution}.
      *
      * @param distribution reference distribution
-     * @param data sample being being evaluated
+     * @param data         sample being being evaluated
      * @return the p-value associated with the null hypothesis that {@code data} is a sample from
-     *         {@code distribution}
+     * {@code distribution}
      * @throws InsufficientDataException if {@code data} does not have length at least 2
-     * @throws NullArgumentException if {@code data} is null
+     * @throws NullArgumentException     if {@code data} is null
      */
     public double kolmogorovSmirnovTest(RealDistribution distribution, double[] data) {
         return kolmogorovSmirnovTest(distribution, data, false);
@@ -375,12 +384,12 @@ public class KolmogorovSmirnovTest {
      * test</a> evaluating the null hypothesis that {@code data} conforms to {@code distribution}.
      *
      * @param distribution reference distribution
-     * @param data sample being being evaluated
-     * @param alpha significance level of the test
+     * @param data         sample being being evaluated
+     * @param alpha        significance level of the test
      * @return true iff the null hypothesis that {@code data} is a sample from {@code distribution}
-     *         can be rejected with confidence 1 - {@code alpha}
+     * can be rejected with confidence 1 - {@code alpha}
      * @throws InsufficientDataException if {@code data} does not have length at least 2
-     * @throws NullArgumentException if {@code data} is null
+     * @throws NullArgumentException     if {@code data} is null
      */
     public boolean kolmogorovSmirnovTest(RealDistribution distribution, double[] data, double alpha) {
         if ((alpha <= 0) || (alpha > 0.5)) {
@@ -401,10 +410,11 @@ public class KolmogorovSmirnovTest {
      * Software with Automated Balance Optimization: The Matching package for R.'
      * Journal of Statistical Software, 42(7): 1-52.
      * </pre>
-     * @param x first sample
-     * @param y second sample
+     *
+     * @param x          first sample
+     * @param y          second sample
      * @param iterations number of bootstrap resampling iterations
-     * @param strict whether or not the null hypothesis is expressed as a strict inequality
+     * @param strict     whether or not the null hypothesis is expressed as a strict inequality
      * @return estimated p-value
      */
     public double bootstrap(double[] x, double[] y, int iterations, boolean strict) {
@@ -431,7 +441,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         return strict ? greaterCount / (double) iterations :
-            (greaterCount + equalCount) / (double) iterations;
+                (greaterCount + equalCount) / (double) iterations;
     }
 
     /**
@@ -439,8 +449,8 @@ public class KolmogorovSmirnovTest {
      * This is equivalent to ks.boot(x,y, nboots=iterations) using the R Matching
      * package function. See #bootstrap(double[], double[], int, boolean).
      *
-     * @param x first sample
-     * @param y second sample
+     * @param x          first sample
+     * @param y          second sample
      * @param iterations number of bootstrap resampling iterations
      * @return estimated p-value
      */
@@ -458,11 +468,11 @@ public class KolmogorovSmirnovTest {
      * @param n sample size
      * @return \(P(D_n < d)\)
      * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
-     *         {@link org.apache.commons.math3.fraction.BigFraction} in expressing {@code d} as \((k
-     *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\)
+     *                                 {@link org.apache.commons.math3.fraction.BigFraction} in expressing {@code d} as \((k
+     *                                 - h) / m\) for integer {@code k, m} and \(0 \le h < 1\)
      */
     public double cdf(double d, int n)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
         return cdf(d, n, false);
     }
 
@@ -477,11 +487,11 @@ public class KolmogorovSmirnovTest {
      * @param n sample size
      * @return \(P(D_n < d)\)
      * @throws MathArithmeticException if the algorithm fails to convert {@code h} to a
-     *         {@link org.apache.commons.math3.fraction.BigFraction} in expressing {@code d} as \((k
-     *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\)
+     *                                 {@link org.apache.commons.math3.fraction.BigFraction} in expressing {@code d} as \((k
+     *                                 - h) / m\) for integer {@code k, m} and \(0 \le h < 1\)
      */
     public double cdfExact(double d, int n)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
         return cdf(d, n, true);
     }
 
@@ -489,20 +499,20 @@ public class KolmogorovSmirnovTest {
      * Calculates {@code P(D_n < d)} using method described in [1] with quick decisions for extreme
      * values given in [2] (see above).
      *
-     * @param d statistic
-     * @param n sample size
+     * @param d     statistic
+     * @param n     sample size
      * @param exact whether the probability should be calculated exact using
-     *        {@link org.apache.commons.math3.fraction.BigFraction} everywhere at the expense of
-     *        very slow execution time, or if {@code double} should be used convenient places to
-     *        gain speed. Almost never choose {@code true} in real applications unless you are very
-     *        sure; {@code true} is almost solely for verification purposes.
+     *              {@link org.apache.commons.math3.fraction.BigFraction} everywhere at the expense of
+     *              very slow execution time, or if {@code double} should be used convenient places to
+     *              gain speed. Almost never choose {@code true} in real applications unless you are very
+     *              sure; {@code true} is almost solely for verification purposes.
      * @return \(P(D_n < d)\)
      * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
-     *         {@link org.apache.commons.math3.fraction.BigFraction} in expressing {@code d} as \((k
-     *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\).
+     *                                 {@link org.apache.commons.math3.fraction.BigFraction} in expressing {@code d} as \((k
+     *                                 - h) / m\) for integer {@code k, m} and \(0 \le h < 1\).
      */
     public double cdf(double d, int n, boolean exact)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
 
         final double ninv = 1 / ((double) n);
         final double ninvhalf = 0.5 * ninv;
@@ -540,11 +550,11 @@ public class KolmogorovSmirnovTest {
      * @param n sample size
      * @return the two-sided probability of \(P(D_n < d)\)
      * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
-     *         {@link org.apache.commons.math3.fraction.BigFraction} in expressing {@code d} as \((k
-     *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\).
+     *                                 {@link org.apache.commons.math3.fraction.BigFraction} in expressing {@code d} as \((k
+     *                                 - h) / m\) for integer {@code k, m} and \(0 \le h < 1\).
      */
     private double exactK(double d, int n)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
 
         final int k = (int) Math.ceil(n * d);
 
@@ -660,7 +670,7 @@ public class KolmogorovSmirnovTest {
         for (k = 0; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
             kTerm = k + 0.5;
             kTerm2 = kTerm * kTerm;
-            increment =  (z6Term + z4Term + MathUtils.PI_SQUARED * (z4Term - z2Term) * kTerm2 +
+            increment = (z6Term + z4Term + MathUtils.PI_SQUARED * (z4Term - z2Term) * kTerm2 +
                     pi4 * (1 - twoZ2) * kTerm2 * kTerm2) * FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
             sum += increment;
             if (FastMath.abs(increment) < PG_SUM_RELATIVE_ERROR * FastMath.abs(sum)) {
@@ -698,7 +708,7 @@ public class KolmogorovSmirnovTest {
             kTerm4 = kTerm2 * kTerm2;
             kTerm6 = kTerm4 * kTerm2;
             increment = (pi6 * kTerm6 * (5 - 30 * z2) + pi4 * kTerm4 * (-60 * z2 + 212 * z4) +
-                            MathUtils.PI_SQUARED * kTerm2 * (135 * z4 - 96 * z6) - 30 * z6 - 90 * z8) *
+                    MathUtils.PI_SQUARED * kTerm2 * (135 * z4 - 96 * z6) - 30 * z6 - 90 * z8) *
                     FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
             sum += increment;
             if (FastMath.abs(increment) < PG_SUM_RELATIVE_ERROR * FastMath.abs(sum)) {
@@ -723,7 +733,7 @@ public class KolmogorovSmirnovTest {
             throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
         }
         return ret + (sqrtHalfPi / (sqrtN * n)) * (sum / (3240 * z6 * z4) +
-                + sum2 / (108 * z6));
+                +sum2 / (108 * z6));
 
     }
 
@@ -739,7 +749,7 @@ public class KolmogorovSmirnovTest {
      *         - h) / m\) for integer {@code k, m} and \(0 <= h < 1\).
      */
     private FieldMatrix<BigFraction> createExactH(double d, int n)
-        throws NumberIsTooLargeException, FractionConversionException {
+            throws NumberIsTooLargeException, FractionConversionException {
 
         final int k = (int) Math.ceil(n * d);
         final int m = 2 * k - 1;
@@ -828,7 +838,7 @@ public class KolmogorovSmirnovTest {
      * @throws NumberIsTooLargeException if fractional part is greater than 1
      */
     private RealMatrix createRoundedH(double d, int n)
-        throws NumberIsTooLargeException {
+            throws NumberIsTooLargeException {
 
         final int k = (int) Math.ceil(n * d);
         final int m = 2 * k - 1;
@@ -901,7 +911,7 @@ public class KolmogorovSmirnovTest {
      * Verifies that {@code array} has length at least 2.
      *
      * @param array array to test
-     * @throws NullArgumentException if array is null
+     * @throws NullArgumentException     if array is null
      * @throws InsufficientDataException if array is too short
      */
     private void checkArray(double[] array) {
@@ -910,7 +920,7 @@ public class KolmogorovSmirnovTest {
         }
         if (array.length < 2) {
             throw new InsufficientDataException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, array.length,
-                                                2);
+                    2);
         }
     }
 
@@ -920,8 +930,8 @@ public class KolmogorovSmirnovTest {
      * have been computed. If the sum does not converge before {@code maxIterations} iterations a
      * {@link TooManyIterationsException} is thrown.
      *
-     * @param t argument
-     * @param tolerance Cauchy criterion for partial sums
+     * @param t             argument
+     * @param tolerance     Cauchy criterion for partial sums
      * @param maxIterations maximum number of partial sums to compute
      * @return Kolmogorov sum evaluated at t
      * @throws TooManyIterationsException if the series does not converge
@@ -958,21 +968,20 @@ public class KolmogorovSmirnovTest {
      * {@code true} or not, the returned value divided by (n*m) is greater than
      * (resp greater than or equal to) the given d value (allowing some tolerance).
      *
-     * @param d a d-statistic in the range [0, 1]
-     * @param n first sample size
-     * @param m second sample size
+     * @param d      a d-statistic in the range [0, 1]
+     * @param n      first sample size
+     * @param m      second sample size
      * @param strict whether the returned value divided by (n*m) is allowed to be equal to d
      * @return the integral d-statistic in the range [0, n*m]
      */
     private static long calculateIntegralD(double d, int n, int m, boolean strict) {
         final double tol = 1e-12;  // d-values within tol of one another are considered equal
-        long nm = n * (long)m;
-        long upperBound = (long)FastMath.ceil((d - tol) * nm);
-        long lowerBound = (long)FastMath.floor((d + tol) * nm);
+        long nm = n * (long) m;
+        long upperBound = (long) FastMath.ceil((d - tol) * nm);
+        long lowerBound = (long) FastMath.floor((d + tol) * nm);
         if (strict && lowerBound == upperBound) {
             return upperBound + 1l;
-        }
-        else {
+        } else {
             return upperBound;
         }
     }
@@ -986,16 +995,16 @@ public class KolmogorovSmirnovTest {
      * definitions presented in [4] (class javadoc).
      * </p>
      *
-     * @param d D-statistic value
-     * @param n first sample size
-     * @param m second sample size
+     * @param d      D-statistic value
+     * @param n      first sample size
+     * @param m      second sample size
      * @param strict whether or not the probability to compute is expressed as a strict inequality
      * @return probability that a randomly selected m-n partition of m + n generates \(D_{n,m}\)
-     *         greater than (resp. greater than or equal to) {@code d}
+     * greater than (resp. greater than or equal to) {@code d}
      */
     public double exactP(double d, int n, int m, boolean strict) {
-       return 1 - n(m, n, m, n, calculateIntegralD(d, m, n, strict), strict) /
-               CombinatoricsUtils.binomialCoefficientDouble(n + m, m);
+        return 1 - n(m, n, m, n, calculateIntegralD(d, m, n, strict), strict) /
+                CombinatoricsUtils.binomialCoefficientDouble(n + m, m);
     }
 
     /**
@@ -1014,13 +1023,13 @@ public class KolmogorovSmirnovTest {
      * @param n first sample size
      * @param m second sample size
      * @return approximate probability that a randomly selected m-n partition of m + n generates
-     *         \(D_{n,m}\) greater than {@code d}
+     * \(D_{n,m}\) greater than {@code d}
      */
     public double approximateP(double d, int n, int m) {
         final double dm = m;
         final double dn = n;
         return 1 - ksSum(d * FastMath.sqrt((dm * dn) / (dm + dn)),
-                         KS_SUM_CAUCHY_CRITERION, MAXIMUM_PARTIAL_SUM_COUNT);
+                KS_SUM_CAUCHY_CRITERION, MAXIMUM_PARTIAL_SUM_COUNT);
     }
 
     /**
@@ -1031,9 +1040,9 @@ public class KolmogorovSmirnovTest {
      * that the number of {@code true} values is larger than or equal to the number of
      * {@code false} values.
      *
-     * @param b boolean array
+     * @param b                  boolean array
      * @param numberOfTrueValues number of {@code true} values the boolean array should finally have
-     * @param rng random data generator
+     * @param rng                random data generator
      */
     static void fillBooleanArrayRandomlyWithFixedNumberTrueValues(final boolean[] b, final int numberOfTrueValues, final RandomGenerator rng) {
         Arrays.fill(b, true);
@@ -1054,13 +1063,13 @@ public class KolmogorovSmirnovTest {
      * {@code d} if {@code strict} is {@code false}.
      * </p>
      *
-     * @param d D-statistic value
-     * @param n first sample size
-     * @param m second sample size
+     * @param d          D-statistic value
+     * @param n          first sample size
+     * @param m          second sample size
      * @param iterations number of random partitions to generate
-     * @param strict whether or not the probability to compute is expressed as a strict inequality
+     * @param strict     whether or not the probability to compute is expressed as a strict inequality
      * @return proportion of randomly generated m-n partitions of m + n that result in \(D_{n,m}\)
-     *         greater than (resp. greater than or equal to) {@code d}
+     * greater than (resp. greater than or equal to) {@code d}
      */
     public double monteCarloP(final double d, final int n, final int m, final boolean strict,
                               final int iterations) {
@@ -1075,12 +1084,12 @@ public class KolmogorovSmirnovTest {
      * The real D-statistic is obtained by dividing d by n*m.
      * See also {@link #monteCarloP(double, int, int, boolean, int)}.
      *
-     * @param d integral D-statistic
-     * @param n first sample size
-     * @param m second sample size
+     * @param d          integral D-statistic
+     * @param n          first sample size
+     * @param m          second sample size
      * @param iterations number of random partitions to generate
      * @return proportion of randomly generated m-n partitions of m + n that result in \(D_{n,m}\)
-     *         greater than or equal to {@code d/(n*m))}
+     * greater than or equal to {@code d/(n*m))}
      */
     private double integralMonteCarloP(final long d, final int n, final int m, final int iterations) {
 
@@ -1094,7 +1103,7 @@ public class KolmogorovSmirnovTest {
         for (int i = 0; i < iterations; i++) {
             fillBooleanArrayRandomlyWithFixedNumberTrueValues(b, nn, rng);
             long curD = 0l;
-            for(int j = 0; j < b.length; ++j) {
+            for (int j = 0; j < b.length; ++j) {
                 if (b[j]) {
                     curD += mm;
                     if (curD >= d) {
@@ -1120,7 +1129,7 @@ public class KolmogorovSmirnovTest {
      * minDelta is the minimum difference between unequal values in the combined
      * sample.  A fixed seed is used to generate the jitter, so repeated activations
      * with the same input arrays result in the same values.
-     *
+     * <p>
      * NOTE: if there are ties in the data, this method overwrites the data in
      * x and y with the jittered values.
      *
@@ -1128,42 +1137,42 @@ public class KolmogorovSmirnovTest {
      * @param y second sample
      */
     private static void fixTies(double[] x, double[] y) {
-       final double[] values = MathArrays.unique(MathArrays.concatenate(x,y));
-       if (values.length == x.length + y.length) {
-           return;  // There are no ties
-       }
+        final double[] values = MathArrays.unique(MathArrays.concatenate(x, y));
+        if (values.length == x.length + y.length) {
+            return;  // There are no ties
+        }
 
-       // Find the smallest difference between values, or 1 if all values are the same
-       double minDelta = 1;
-       double prev = values[0];
-       double delta = 1;
-       for (int i = 1; i < values.length; i++) {
-          delta = prev - values[i];
-          if (delta < minDelta) {
-              minDelta = delta;
-          }
-          prev = values[i];
-       }
-       minDelta /= 2;
+        // Find the smallest difference between values, or 1 if all values are the same
+        double minDelta = 1;
+        double prev = values[0];
+        double delta = 1;
+        for (int i = 1; i < values.length; i++) {
+            delta = prev - values[i];
+            if (delta < minDelta) {
+                minDelta = delta;
+            }
+            prev = values[i];
+        }
+        minDelta /= 2;
 
-       // Add jitter using a fixed seed (so same arguments always give same results),
-       // low-initialization-overhead generator
-       final RealDistribution dist =
-               new UniformRealDistribution(new JDKRandomGenerator(100), -minDelta, minDelta);
+        // Add jitter using a fixed seed (so same arguments always give same results),
+        // low-initialization-overhead generator
+        final RealDistribution dist =
+                new UniformRealDistribution(new JDKRandomGenerator(100), -minDelta, minDelta);
 
-       // It is theoretically possible that jitter does not break ties, so repeat
-       // until all ties are gone.  Bound the loop and throw MIE if bound is exceeded.
-       int ct = 0;
-       boolean ties = true;
-       do {
-           jitter(x, dist);
-           jitter(y, dist);
-           ties = hasTies(x, y);
-           ct++;
-       } while (ties && ct < 1000);
-       if (ties) {
-           throw new MathInternalError(); // Should never happen
-       }
+        // It is theoretically possible that jitter does not break ties, so repeat
+        // until all ties are gone.  Bound the loop and throw MIE if bound is exceeded.
+        int ct = 0;
+        boolean ties = true;
+        do {
+            jitter(x, dist);
+            jitter(y, dist);
+            ties = hasTies(x, y);
+            ct++;
+        } while (ties && ct < 1000);
+        if (ties) {
+            throw new MathInternalError(); // Should never happen
+        }
     }
 
     /**
@@ -1176,16 +1185,16 @@ public class KolmogorovSmirnovTest {
      */
     private static boolean hasTies(double[] x, double[] y) {
         final HashSet<Double> values = new HashSet<Double>();
-            for (int i = 0; i < x.length; i++) {
-                if (!values.add(x[i])) {
-                    return true;
-                }
+        for (int i = 0; i < x.length; i++) {
+            if (!values.add(x[i])) {
+                return true;
             }
-            for (int i = 0; i < y.length; i++) {
-                if (!values.add(y[i])) {
-                    return true;
-                }
+        }
+        for (int i = 0; i < y.length; i++) {
+            if (!values.add(y[i])) {
+                return true;
             }
+        }
         return false;
     }
 
@@ -1211,19 +1220,19 @@ public class KolmogorovSmirnovTest {
      * and recoded as a long to avoid rounding errors in comparison tests, so what
      * is actually tested is |im - jn| <= cmn.
      *
-     * @param i first path parameter
-     * @param j second path paramter
-     * @param m first sample size
-     * @param n second sample size
-     * @param cmn integral D-statistic (see {@link #calculateIntegralD(double, int, int, boolean)})
+     * @param i      first path parameter
+     * @param j      second path paramter
+     * @param m      first sample size
+     * @param n      second sample size
+     * @param cmn    integral D-statistic (see {@link #calculateIntegralD(double, int, int, boolean)})
      * @param strict whether or not the null hypothesis uses strict inequality
-     * @return C(i,j) for given m, n, c
+     * @return C(i, j) for given m, n, c
      */
     private static int c(int i, int j, int m, int n, long cmn, boolean strict) {
         if (strict) {
-            return FastMath.abs(i*(long)n - j*(long)m) <= cmn ? 1 : 0;
+            return FastMath.abs(i * (long) n - j * (long) m) <= cmn ? 1 : 0;
         }
-        return FastMath.abs(i*(long)n - j*(long)m) < cmn ? 1 : 0;
+        return FastMath.abs(i * (long) n - j * (long) m) < cmn ? 1 : 0;
     }
 
     /**
@@ -1233,11 +1242,11 @@ public class KolmogorovSmirnovTest {
      * The return value is integral, but subject to overflow, so it is maintained and
      * returned as a double.
      *
-     * @param i first path parameter
-     * @param j second path parameter
-     * @param m first sample size
-     * @param n second sample size
-     * @param cnm integral D-statistic (see {@link #calculateIntegralD(double, int, int, boolean)})
+     * @param i      first path parameter
+     * @param j      second path parameter
+     * @param m      first sample size
+     * @param n      second sample size
+     * @param cnm    integral D-statistic (see {@link #calculateIntegralD(double, int, int, boolean)})
      * @param strict whether or not the null hypothesis uses strict inequality
      * @return number or paths to (i, j) from (0,0) representing D-values as large as c for given m, n
      */

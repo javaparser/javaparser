@@ -50,8 +50,8 @@ public class PrototypeFactory {
      * <li>serialization clone</li>
      * </ul>
      *
-     * @param <T>  the type the factory creates
-     * @param prototype  the object to clone each time in the factory
+     * @param <T>       the type the factory creates
+     * @param prototype the object to clone each time in the factory
      * @return the <code>prototype</code> factory, or a {@link ConstantFactory#NULL_INSTANCE} if
      * the {@code prototype} is {@code null}
      * @throws IllegalArgumentException if the prototype cannot be cloned
@@ -67,11 +67,11 @@ public class PrototypeFactory {
 
         } catch (final NoSuchMethodException ex) {
             try {
-                prototype.getClass().getConstructor(new Class<?>[] { prototype.getClass() });
+                prototype.getClass().getConstructor(new Class<?>[]{prototype.getClass()});
                 return new InstantiateFactory<>(
-                    (Class<T>) prototype.getClass(),
-                    new Class<?>[] { prototype.getClass() },
-                    new Object[] { prototype });
+                        (Class<T>) prototype.getClass(),
+                        new Class<?>[]{prototype.getClass()},
+                        new Object[]{prototype});
             } catch (final NoSuchMethodException ex2) {
                 if (prototype instanceof Serializable) {
                     return (Factory<T>) new PrototypeSerializationFactory<>((Serializable) prototype);
@@ -90,14 +90,19 @@ public class PrototypeFactory {
 
     // PrototypeCloneFactory
     //-----------------------------------------------------------------------
+
     /**
      * PrototypeCloneFactory creates objects by copying a prototype using the clone method.
      */
     static class PrototypeCloneFactory<T> implements Factory<T> {
 
-        /** The object to clone each time */
+        /**
+         * The object to clone each time
+         */
         private final T iPrototype;
-        /** The method used to clone */
+        /**
+         * The method used to clone
+         */
         private transient Method iCloneMethod;
 
         /**
@@ -145,12 +150,15 @@ public class PrototypeFactory {
 
     // PrototypeSerializationFactory
     //-----------------------------------------------------------------------
+
     /**
      * PrototypeSerializationFactory creates objects by cloning a prototype using serialization.
      */
     static class PrototypeSerializationFactory<T extends Serializable> implements Factory<T> {
 
-        /** The object to clone via serialization each time */
+        /**
+         * The object to clone via serialization each time
+         */
         private final T iPrototype;
 
         /**

@@ -38,7 +38,7 @@ public class Indentation {
         /**
          * Indent with tabs but align with spaces when wrapping and aligning
          * method call chains and method call parameters.
-         *
+         * <p>
          * <p/><i>Example result:</i>
          * <pre>
          * class Foo {

@@ -1,4 +1,5 @@
-/** This is an example to illustrate JML's \bigint type,
+/**
+ * This is an example to illustrate JML's \bigint type,
  * which always represents mathematical integers no matter what
  * Java integer semantics are in force.
  */
@@ -17,22 +18,22 @@ public class Mult {
       @ requires (\bigint)x * (\bigint)y <= 2147483647;
       @ ensures \result == x * y;
       @*/
-    public int mult (int x, int y){
+    public int mult(int x, int y) {
         int z = 0;
         boolean n = x < 0;
         if (n) x = -x;
-	//@ ghost int oldx = x;
-	//@ ghost \bigint p = 0;
+        //@ ghost int oldx = x;
+        //@ ghost \bigint p = 0;
 	/*@ maintaining 0 <= x && x <= oldx;
           @ maintaining z == y * (oldx - x);
 	  @ maintaining (\bigint)z == p;
           @ decreasing  x;
 	  @*/
         while (x-- > 0) {
-	    //@ set p = p + (\bigint)y;
-	    z += y;
+            //@ set p = p + (\bigint)y;
+            z += y;
         }
-        return n? -z: z;
+        return n ? -z : z;
     }
 
 // this example involving a narrowing cast 
@@ -41,9 +42,10 @@ public class Mult {
     //@ ghost byte b;
 
     //@ ensures b == 0;
-    public void cast () {
+    public void cast() {
         //@ ghost \bigint z = 256;
         //@ set b = (byte) z;
-        {}
+        {
+        }
     }
 }

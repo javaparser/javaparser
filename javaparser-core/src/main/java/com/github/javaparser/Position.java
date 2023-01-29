@@ -116,6 +116,7 @@ public class Position implements Comparable<Position> {
      * Check if the position is usable,
      * also checks for special positions (ABSOLUTE_BEGIN_LINE and ABSOLUTE_END_LINE).
      * Does not know what it is pointing at, so it can't check if the position is after the end of the source.
+     *
      * @return true if the position is usable or a special position.
      */
     public boolean valid() {
@@ -123,8 +124,8 @@ public class Position implements Comparable<Position> {
     }
 
     /**
-     * @see #valid()
      * @return The inverse of {@link #valid()}
+     * @see #valid()
      */
     public boolean invalid() {
         return !valid();
@@ -132,8 +133,8 @@ public class Position implements Comparable<Position> {
 
     /**
      * @return If this position is valid, this.
-     *   Otherwise, if the alternativePosition is valid, return that.
-     *   Otherwise, just return this.
+     * Otherwise, if the alternativePosition is valid, return that.
+     * Otherwise, just return this.
      */
     public Position orIfInvalid(Position alternativePosition) {
         assertNotNull(alternativePosition);

@@ -20,16 +20,20 @@ import org.apache.commons.math3.geometry.partitioning.AbstractSubHyperplane;
 import org.apache.commons.math3.geometry.partitioning.Hyperplane;
 import org.apache.commons.math3.geometry.partitioning.Region;
 
-/** This class represents sub-hyperplane for {@link OrientedPoint}.
+/**
+ * This class represents sub-hyperplane for {@link OrientedPoint}.
  * <p>An hyperplane in 1D is a simple point, its orientation being a
  * boolean.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
+ *
  * @since 3.0
  */
 public class SubOrientedPoint extends AbstractSubHyperplane<Euclidean1D, Euclidean1D> {
 
-    /** Simple constructor.
-     * @param hyperplane underlying hyperplane
+    /**
+     * Simple constructor.
+     *
+     * @param hyperplane      underlying hyperplane
      * @param remainingRegion remaining region of the hyperplane
      */
     public SubOrientedPoint(final Hyperplane<Euclidean1D> hyperplane,
@@ -37,26 +41,34 @@ public class SubOrientedPoint extends AbstractSubHyperplane<Euclidean1D, Euclide
         super(hyperplane, remainingRegion);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getSize() {
         return 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected AbstractSubHyperplane<Euclidean1D, Euclidean1D> buildNew(final Hyperplane<Euclidean1D> hyperplane,
                                                                        final Region<Euclidean1D> remainingRegion) {
         return new SubOrientedPoint(hyperplane, remainingRegion);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SplitSubHyperplane<Euclidean1D> split(final Hyperplane<Euclidean1D> hyperplane) {
         final double global = hyperplane.getOffset(((OrientedPoint) getHyperplane()).getLocation());

@@ -40,7 +40,7 @@ public interface PIN {
     //@ public instance invariant maxPINSize > 0 && maxPINSize <= 127;
 
     //@ public instance invariant triesLeft >= 0 && triesLeft <= maxTries;
- 
+
     /*@ public normal_behavior
           requires true;
           ensures \result == isValidated;

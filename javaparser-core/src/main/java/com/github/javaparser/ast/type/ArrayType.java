@@ -161,7 +161,8 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
      * Returns a {@code TokenRange} with the outermost ending token
      */
     private static TokenRange getOuterMostTokenRange(TokenRange tokenRange1, TokenRange tokenRange2) {
-        if (tokenRange2 == null) return tokenRange1;
+        if (tokenRange2 == null)
+            return tokenRange1;
         if (tokenRange1.getEnd().getRange().get().isAfter(tokenRange2.getEnd().getRange().get())) {
             return tokenRange1;
         }

@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : Launcher.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,12 +19,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
- *   
+ *
  * Description: 
- * 
+ *
  * Revision history:
  *   date   init  comment
  *
@@ -39,57 +39,55 @@ import javax.scj.util.Const;
 /**
  * This class is used by an application class to launch a Level 0 or a Level 1
  * application.
- * 
- * @version 1.2; - December 2013
- * 
+ *
  * @author Anders P. Ravn, Aalborg University, <A
- *         HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
- *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
- * 
+ * HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
+ * Hans S&oslash;ndergaard, VIA University College, Denmark, <A
+ * HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * @version 1.2; - December 2013
  * @scjComment - The class is not part of the SCJ specification.
  */
 public class Launcher implements Runnable {
-	Safelet<?> app;
-	static int level;
+    Safelet<?> app;
+    static int level;
 
-	public Launcher(Safelet<?> app, int level) {
-		this.app = app;
-		Launcher.level = level;
+    public Launcher(Safelet<?> app, int level) {
+        this.app = app;
+        Launcher.level = level;
 
-		ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
-		
-		if (Memory.memoryAreaTrackingEnabled) {			
-			new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE, 
-					          Const.MEMORY_TRACKER_AREA_SIZE, 
-					          MemoryArea.overAllBackingStore, "MemTrk");
-		}
+        ManagedMemory.allocateBackingStore(Const.OVERALL_BACKING_STORE);
 
-		ManagedMemory immortalMem = new ManagedMemory.ImmortalMemory(
-				2*Const.IMMORTAL_MEM);
-		immortalMem.executeInArea(this);
-		//immortalMem.removeArea();
-	}
+        if (Memory.memoryAreaTrackingEnabled) {
+            new PrivateMemory(Const.MEMORY_TRACKER_AREA_SIZE,
+                    Const.MEMORY_TRACKER_AREA_SIZE,
+                    MemoryArea.overAllBackingStore, "MemTrk");
+        }
 
-	public void run() {
+        ManagedMemory immortalMem = new ManagedMemory.ImmortalMemory(
+                2 * Const.IMMORTAL_MEM);
+        immortalMem.executeInArea(this);
+        //immortalMem.removeArea();
+    }
 
-		if (level == 0) {
-			startLevel0();
-		} else {
-			startLevel1_2();
-		}
-	}
+    public void run() {
 
-	protected void startLevel0() {
-		MissionSequencer<?> seq = app.getSequencer();
-		CyclicScheduler.instance().start(seq);
-	}
+        if (level == 0) {
+            startLevel0();
+        } else {
+            startLevel1_2();
+        }
+    }
 
-	protected void startLevel1_2() {
-		// insert idle process before the mission sequencer.
-		PriorityScheduler sch = PriorityScheduler.instance();
-		sch.insertReadyQueue(ScjProcess.createIdleProcess());
-		app.getSequencer();
-		PriorityScheduler.instance().start();
-	}
+    protected void startLevel0() {
+        MissionSequencer<?> seq = app.getSequencer();
+        CyclicScheduler.instance().start(seq);
+    }
+
+    protected void startLevel1_2() {
+        // insert idle process before the mission sequencer.
+        PriorityScheduler sch = PriorityScheduler.instance();
+        sch.insertReadyQueue(ScjProcess.createIdleProcess());
+        app.getSequencer();
+        PriorityScheduler.instance().start();
+    }
 }

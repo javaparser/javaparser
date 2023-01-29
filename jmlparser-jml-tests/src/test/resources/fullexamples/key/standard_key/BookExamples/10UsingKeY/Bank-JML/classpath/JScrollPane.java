@@ -16,58 +16,96 @@
  */
 package javax.swing;
 
-public class JScrollPane extends javax.swing.JComponent implements javax.swing.ScrollPaneConstants, javax.accessibility.Accessible
-{
-   protected int verticalScrollBarPolicy;
-   protected int horizontalScrollBarPolicy;
-   protected javax.swing.JViewport viewport;
-   protected javax.swing.JScrollBar verticalScrollBar;
-   protected javax.swing.JScrollBar horizontalScrollBar;
-   protected javax.swing.JViewport rowHeader;
-   protected javax.swing.JViewport columnHeader;
-   protected java.awt.Component lowerLeft;
-   protected java.awt.Component lowerRight;
-   protected java.awt.Component upperLeft;
-   protected java.awt.Component upperRight;
+public class JScrollPane extends javax.swing.JComponent implements javax.swing.ScrollPaneConstants, javax.accessibility.Accessible {
+    protected int verticalScrollBarPolicy;
+    protected int horizontalScrollBarPolicy;
+    protected javax.swing.JViewport viewport;
+    protected javax.swing.JScrollBar verticalScrollBar;
+    protected javax.swing.JScrollBar horizontalScrollBar;
+    protected javax.swing.JViewport rowHeader;
+    protected javax.swing.JViewport columnHeader;
+    protected java.awt.Component lowerLeft;
+    protected java.awt.Component lowerRight;
+    protected java.awt.Component upperLeft;
+    protected java.awt.Component upperRight;
 
-   public JScrollPane(java.awt.Component arg0, int arg1, int arg2);
-   public JScrollPane(java.awt.Component arg0);
-   public JScrollPane(int arg0, int arg1);
-   public JScrollPane();
-   public javax.swing.plaf.ScrollPaneUI getUI();
-   public void setUI(javax.swing.plaf.ScrollPaneUI arg0);
-   public void updateUI();
-   public java.lang.String getUIClassID();
-   public void setLayout(java.awt.LayoutManager arg0);
-   public boolean isValidateRoot();
-   public int getVerticalScrollBarPolicy();
-   public void setVerticalScrollBarPolicy(int arg0);
-   public int getHorizontalScrollBarPolicy();
-   public void setHorizontalScrollBarPolicy(int arg0);
-   public javax.swing.border.Border getViewportBorder();
-   public void setViewportBorder(javax.swing.border.Border arg0);
-   public java.awt.Rectangle getViewportBorderBounds();
-   public javax.swing.JScrollBar createHorizontalScrollBar();
-   public javax.swing.JScrollBar getHorizontalScrollBar();
-   public void setHorizontalScrollBar(javax.swing.JScrollBar arg0);
-   public javax.swing.JScrollBar createVerticalScrollBar();
-   public javax.swing.JScrollBar getVerticalScrollBar();
-   public void setVerticalScrollBar(javax.swing.JScrollBar arg0);
-   protected javax.swing.JViewport createViewport();
-   public javax.swing.JViewport getViewport();
-   public void setViewport(javax.swing.JViewport arg0);
-   public void setViewportView(java.awt.Component arg0);
-   public javax.swing.JViewport getRowHeader();
-   public void setRowHeader(javax.swing.JViewport arg0);
-   public void setRowHeaderView(java.awt.Component arg0);
-   public javax.swing.JViewport getColumnHeader();
-   public void setColumnHeader(javax.swing.JViewport arg0);
-   public void setColumnHeaderView(java.awt.Component arg0);
-   public java.awt.Component getCorner(java.lang.String arg0);
-   public void setCorner(java.lang.String arg0, java.awt.Component arg1);
-   public void setComponentOrientation(java.awt.ComponentOrientation arg0);
-   public boolean isWheelScrollingEnabled();
-   public void setWheelScrollingEnabled(boolean arg0);
-   protected java.lang.String paramString();
-   public javax.accessibility.AccessibleContext getAccessibleContext();
+    public JScrollPane(java.awt.Component arg0, int arg1, int arg2);
+
+    public JScrollPane(java.awt.Component arg0);
+
+    public JScrollPane(int arg0, int arg1);
+
+    public JScrollPane();
+
+    public javax.swing.plaf.ScrollPaneUI getUI();
+
+    public void setUI(javax.swing.plaf.ScrollPaneUI arg0);
+
+    public void updateUI();
+
+    public java.lang.String getUIClassID();
+
+    public void setLayout(java.awt.LayoutManager arg0);
+
+    public boolean isValidateRoot();
+
+    public int getVerticalScrollBarPolicy();
+
+    public void setVerticalScrollBarPolicy(int arg0);
+
+    public int getHorizontalScrollBarPolicy();
+
+    public void setHorizontalScrollBarPolicy(int arg0);
+
+    public javax.swing.border.Border getViewportBorder();
+
+    public void setViewportBorder(javax.swing.border.Border arg0);
+
+    public java.awt.Rectangle getViewportBorderBounds();
+
+    public javax.swing.JScrollBar createHorizontalScrollBar();
+
+    public javax.swing.JScrollBar getHorizontalScrollBar();
+
+    public void setHorizontalScrollBar(javax.swing.JScrollBar arg0);
+
+    public javax.swing.JScrollBar createVerticalScrollBar();
+
+    public javax.swing.JScrollBar getVerticalScrollBar();
+
+    public void setVerticalScrollBar(javax.swing.JScrollBar arg0);
+
+    protected javax.swing.JViewport createViewport();
+
+    public javax.swing.JViewport getViewport();
+
+    public void setViewport(javax.swing.JViewport arg0);
+
+    public void setViewportView(java.awt.Component arg0);
+
+    public javax.swing.JViewport getRowHeader();
+
+    public void setRowHeader(javax.swing.JViewport arg0);
+
+    public void setRowHeaderView(java.awt.Component arg0);
+
+    public javax.swing.JViewport getColumnHeader();
+
+    public void setColumnHeader(javax.swing.JViewport arg0);
+
+    public void setColumnHeaderView(java.awt.Component arg0);
+
+    public java.awt.Component getCorner(java.lang.String arg0);
+
+    public void setCorner(java.lang.String arg0, java.awt.Component arg1);
+
+    public void setComponentOrientation(java.awt.ComponentOrientation arg0);
+
+    public boolean isWheelScrollingEnabled();
+
+    public void setWheelScrollingEnabled(boolean arg0);
+
+    protected java.lang.String paramString();
+
+    public javax.accessibility.AccessibleContext getAccessibleContext();
 }

@@ -29,20 +29,24 @@ import org.apache.commons.math3.linear.RealMatrix;
  * methods atomic operations for a single instance.  That is to say, as one
  * thread is computing a statistic from the instance, no other thread can modify
  * the instance nor compute another statistic.
+ *
  * @since 1.2
  */
 public class SynchronizedMultivariateSummaryStatistics
-    extends MultivariateSummaryStatistics {
+        extends MultivariateSummaryStatistics {
 
-    /** Serialization UID */
+    /**
+     * Serialization UID
+     */
     private static final long serialVersionUID = 7099834153347155363L;
 
     /**
      * Construct a SynchronizedMultivariateSummaryStatistics instance
-     * @param k dimension of the data
+     *
+     * @param k                         dimension of the data
      * @param isCovarianceBiasCorrected if true, the unbiased sample
-     * covariance is computed, otherwise the biased population covariance
-     * is computed
+     *                                  covariance is computed, otherwise the biased population covariance
+     *                                  is computed
      */
     public SynchronizedMultivariateSummaryStatistics(int k, boolean isCovarianceBiasCorrected) {
         super(k, isCovarianceBiasCorrected);
@@ -53,7 +57,7 @@ public class SynchronizedMultivariateSummaryStatistics
      */
     @Override
     public synchronized void addValue(double[] value) throws DimensionMismatchException {
-      super.addValue(value);
+        super.addValue(value);
     }
 
     /**
@@ -189,7 +193,7 @@ public class SynchronizedMultivariateSummaryStatistics
      */
     @Override
     public synchronized void setSumImpl(StorelessUnivariateStatistic[] sumImpl)
-    throws DimensionMismatchException, MathIllegalStateException {
+            throws DimensionMismatchException, MathIllegalStateException {
         super.setSumImpl(sumImpl);
     }
 
@@ -206,7 +210,7 @@ public class SynchronizedMultivariateSummaryStatistics
      */
     @Override
     public synchronized void setSumsqImpl(StorelessUnivariateStatistic[] sumsqImpl)
-    throws DimensionMismatchException, MathIllegalStateException {
+            throws DimensionMismatchException, MathIllegalStateException {
         super.setSumsqImpl(sumsqImpl);
     }
 
@@ -223,7 +227,7 @@ public class SynchronizedMultivariateSummaryStatistics
      */
     @Override
     public synchronized void setMinImpl(StorelessUnivariateStatistic[] minImpl)
-    throws DimensionMismatchException, MathIllegalStateException {
+            throws DimensionMismatchException, MathIllegalStateException {
         super.setMinImpl(minImpl);
     }
 
@@ -240,7 +244,7 @@ public class SynchronizedMultivariateSummaryStatistics
      */
     @Override
     public synchronized void setMaxImpl(StorelessUnivariateStatistic[] maxImpl)
-    throws DimensionMismatchException, MathIllegalStateException{
+            throws DimensionMismatchException, MathIllegalStateException {
         super.setMaxImpl(maxImpl);
     }
 
@@ -257,7 +261,7 @@ public class SynchronizedMultivariateSummaryStatistics
      */
     @Override
     public synchronized void setSumLogImpl(StorelessUnivariateStatistic[] sumLogImpl)
-    throws DimensionMismatchException, MathIllegalStateException {
+            throws DimensionMismatchException, MathIllegalStateException {
         super.setSumLogImpl(sumLogImpl);
     }
 
@@ -274,7 +278,7 @@ public class SynchronizedMultivariateSummaryStatistics
      */
     @Override
     public synchronized void setGeoMeanImpl(StorelessUnivariateStatistic[] geoMeanImpl)
-    throws DimensionMismatchException, MathIllegalStateException {
+            throws DimensionMismatchException, MathIllegalStateException {
         super.setGeoMeanImpl(geoMeanImpl);
     }
 
@@ -291,7 +295,7 @@ public class SynchronizedMultivariateSummaryStatistics
      */
     @Override
     public synchronized void setMeanImpl(StorelessUnivariateStatistic[] meanImpl)
-    throws DimensionMismatchException, MathIllegalStateException {
+            throws DimensionMismatchException, MathIllegalStateException {
         super.setMeanImpl(meanImpl);
     }
 }

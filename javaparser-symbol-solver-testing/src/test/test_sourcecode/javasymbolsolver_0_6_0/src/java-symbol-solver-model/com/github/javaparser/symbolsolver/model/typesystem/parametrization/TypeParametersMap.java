@@ -112,11 +112,11 @@ public class TypeParametersMap {
         }
     }
 
-    public List<String> getNames(){
+    public List<String> getNames() {
         return new ArrayList<>(nameToValue.keySet());
     }
 
-    public List<Type> getTypes(){
+    public List<Type> getTypes() {
         return new ArrayList<>(nameToValue.values());
     }
 

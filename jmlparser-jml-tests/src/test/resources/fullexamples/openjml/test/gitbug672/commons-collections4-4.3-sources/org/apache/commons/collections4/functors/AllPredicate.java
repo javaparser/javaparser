@@ -36,7 +36,9 @@ import static org.apache.commons.collections4.functors.TruePredicate.truePredica
  */
 public final class AllPredicate<T> extends AbstractQuantifierPredicate<T> {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -3094696765038308799L;
 
     /**
@@ -45,8 +47,8 @@ public final class AllPredicate<T> extends AbstractQuantifierPredicate<T> {
      * If the array is size zero, the predicate always returns true.
      * If the array is size one, then that predicate is returned.
      *
-     * @param <T> the type that the predicate queries
-     * @param predicates  the predicates to check, cloned, not null
+     * @param <T>        the type that the predicate queries
+     * @param predicates the predicates to check, cloned, not null
      * @return the <code>all</code> predicate
      * @throws NullPointerException if the predicates array is null
      * @throws NullPointerException if any predicate in the array is null
@@ -69,8 +71,8 @@ public final class AllPredicate<T> extends AbstractQuantifierPredicate<T> {
      * If the collection is size zero, the predicate always returns true.
      * If the collection is size one, then that predicate is returned.
      *
-     * @param <T> the type that the predicate queries
-     * @param predicates  the predicates to check, cloned, not null
+     * @param <T>        the type that the predicate queries
+     * @param predicates the predicates to check, cloned, not null
      * @return the <code>all</code> predicate
      * @throws NullPointerException if the predicates array is null
      * @throws NullPointerException if any predicate in the array is null
@@ -90,7 +92,7 @@ public final class AllPredicate<T> extends AbstractQuantifierPredicate<T> {
      * Constructor that performs no validation.
      * Use <code>allPredicate</code> if you want that.
      *
-     * @param predicates  the predicates to check, not cloned, not null
+     * @param predicates the predicates to check, not cloned, not null
      */
     public AllPredicate(final Predicate<? super T>... predicates) {
         super(predicates);
@@ -99,7 +101,7 @@ public final class AllPredicate<T> extends AbstractQuantifierPredicate<T> {
     /**
      * Evaluates the predicate returning true if all predicates return true.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if all decorated predicates return true
      */
     @Override

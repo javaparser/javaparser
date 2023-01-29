@@ -65,11 +65,11 @@ public class Issue2406Test extends AbstractSymbolResolutionTest {
 
             @Override
             public boolean test(Object t) {
-                return ((MethodCallExpr)t).getNameAsString().equals("copyOf");
+                return ((MethodCallExpr) t).getNameAsString().equals("copyOf");
             }
-            
+
         });
-        
+
         assertEquals("Main.copyOf(U[], int, java.lang.Class<? extends T[]>)", mces.get(0).resolve().getQualifiedSignature());
 
     }

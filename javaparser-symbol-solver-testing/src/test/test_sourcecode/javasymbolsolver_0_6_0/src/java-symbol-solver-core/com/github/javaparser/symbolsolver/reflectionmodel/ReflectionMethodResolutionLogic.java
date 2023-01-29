@@ -44,11 +44,12 @@ class ReflectionMethodResolutionLogic {
 
     static SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> parameterTypes, boolean staticOnly,
                                                           TypeSolver typeSolver, ReferenceTypeDeclaration scopeType,
-                                                          Class clazz){
+                                                          Class clazz) {
         List<MethodDeclaration> methods = new ArrayList<>();
         Predicate<Method> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (Method method : clazz.getMethods()) {
-            if (method.isBridge() || method.isSynthetic() || !method.getName().equals(name)|| !staticOnlyCheck.test(method)) continue;
+            if (method.isBridge() || method.isSynthetic() || !method.getName().equals(name) || !staticOnlyCheck.test(method))
+                continue;
             MethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
         }
@@ -60,7 +61,7 @@ class ReflectionMethodResolutionLogic {
             }
         }
 
-        if (scopeType.getAncestors().isEmpty()){
+        if (scopeType.getAncestors().isEmpty()) {
             ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
             SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectClass.getTypeDeclaration(), name, parameterTypes, staticOnly, typeSolver);
             if (ref.isSolved()) {
@@ -93,16 +94,16 @@ class ReflectionMethodResolutionLogic {
 
         }
 
-        for(ReferenceType ancestor : scopeType.getAncestors()){
+        for (ReferenceType ancestor : scopeType.getAncestors()) {
             SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestor.getTypeDeclaration(), name, argumentsTypes, typeSolver);
-            if (ref.isSolved()){
+            if (ref.isSolved()) {
                 MethodDeclaration correspondingDeclaration = ref.getCorrespondingDeclaration();
                 MethodUsage methodUsage = replaceParams(typeParameterValues, ancestor.getTypeDeclaration(), correspondingDeclaration);
                 methods.add(methodUsage);
             }
         }
 
-        if (scopeType.getAncestors().isEmpty()){
+        if (scopeType.getAncestors().isEmpty()) {
             ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
             SymbolReference<MethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectClass.getTypeDeclaration(), name, argumentsTypes, typeSolver);
             if (ref.isSolved()) {
@@ -128,7 +129,7 @@ class ReflectionMethodResolutionLogic {
         int i = 0;
 
         // Only replace if we have enough values provided
-        if (typeParameterValues.size() == typeParametrizable.getTypeParameters().size()){
+        if (typeParameterValues.size() == typeParametrizable.getTypeParameters().size()) {
             for (TypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
                 methodUsage = methodUsage.replaceTypeParameter(tp, typeParameterValues.get(i));
                 i++;

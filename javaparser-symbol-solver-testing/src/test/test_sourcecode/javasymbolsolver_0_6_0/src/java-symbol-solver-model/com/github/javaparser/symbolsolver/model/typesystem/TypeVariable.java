@@ -74,7 +74,7 @@ public class TypeVariable implements Type {
 
     @Override
     public Type replaceTypeVariables(TypeParameterDeclaration tpToBeReplaced, Type replaced, Map<TypeParameterDeclaration, Type> inferredTypes) {
-        if(tpToBeReplaced.getName().equals(this.typeParameter.getName())){
+        if (tpToBeReplaced.getName().equals(this.typeParameter.getName())) {
             inferredTypes.put(this.asTypeParameter(), replaced);
             return replaced;
         } else {

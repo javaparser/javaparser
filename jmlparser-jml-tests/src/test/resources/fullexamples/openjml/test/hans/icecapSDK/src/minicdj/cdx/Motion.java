@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 package minicdj.cdx;
 
@@ -27,7 +28,7 @@ import minicdj.collision.Vector3d;
 /**
  * Objects of the <code>Motion</code> class provide all a-priori known information about what the Aircraft was doing
  * between two frames. Also provides methods to do useful things with this object (so it's not just dead data).
- * 
+ *
  * @author Filip Pizlo
  */
 /*@javax.safetycritical.annotate.Scope("cdx.CollisionDetectorHandler")*/
@@ -76,13 +77,12 @@ class Motion {
 
     /**
      * Find an intersection between this Motion and another.
-     * 
+     *
      * @return a Vector3d object with the intersection point if an intersection was found, null otherwise.
      * @author Jeff Hagelberg, Filip Pizlo
      */
 
     // see the code for checking the (strange) semantics of the returned intersection
-
     public Vector3d findIntersection(final Motion other) {
         final Vector3d i1 = new Vector3d(), f1 = new Vector3d(), i2 = new Vector3d(), f2 = new Vector3d();
         i1.set(getFirstPosition());
@@ -161,8 +161,9 @@ class Motion {
                 final float y1col = i1.y + vy1 * (v1 + v2) / 2.0f;
                 final float z1col = i1.z + vz1 * (v1 + v2) / 2.0f;
                 if (z1col > Constants.MIN_Z && z1col <= Constants.MAX_Z && x1col >= Constants.MIN_X
-                        && x1col <= Constants.MAX_X && y1col >= Constants.MIN_Y && y1col <= Constants.MAX_Y) return new Vector3d(
-                    x1col, y1col, z1col);
+                        && x1col <= Constants.MAX_X && y1col >= Constants.MIN_Y && y1col <= Constants.MAX_Y)
+                    return new Vector3d(
+                            x1col, y1col, z1col);
             }
         } else {
 
@@ -176,8 +177,8 @@ class Motion {
 
             // devices.Console.println("i1 = "+i1+", i2 = "+i2+", dist = "+dist);
             if (dist <= r)
-            // devices.Console.println("Planes were travelling in parallel. Collision.");
-            return getFirstPosition();
+                // devices.Console.println("Planes were travelling in parallel. Collision.");
+                return getFirstPosition();
         }
         return null;
     }

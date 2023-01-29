@@ -74,6 +74,5 @@
  * the best optimum found or all optima if desired. This is a classical way to prevent being
  * trapped into a local extremum when looking for a global one.
  * </p>
- *
  */
 package org.apache.commons.math3.optimization;

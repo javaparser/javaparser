@@ -1,27 +1,28 @@
 /**
- *  This file is part of miniCDx benchmark for oSCJ.
+ * This file is part of miniCDx benchmark for oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
- 
- package minicdj.cdx;
+
+package minicdj.cdx;
 
 import minicdj.collision.Vector3d;
 import minicdj.util.*;
@@ -75,14 +76,14 @@ public class TransientDetectorScopeEntry implements Runnable {
              * devices.Console.println("CD collision "
              * +colIndex+" occured at location "+col.getLocation() +
              * " with "+aircraft.size()+" involved aircraft.");
-             * 
+             *
              * for(final Iterator aiter = aircraft.iterator(); aiter.hasNext();)
              * { Aircraft a = (Aircraft) aiter.next();
-             * 
-             * 
-             * 
-             * 
-             * 
+             *
+             *
+             *
+             *
+             *
              * devices.Console.println("CD collision "+colIndex+" includes aircraft "+
              * a); }
              */
@@ -107,7 +108,7 @@ public class TransientDetectorScopeEntry implements Runnable {
 
         int c = 0;
         final List ret = new LinkedList();
-        for (final Iterator iter = check.iterator(); iter.hasNext();)
+        for (final Iterator iter = check.iterator(); iter.hasNext(); )
             c += determineCollisions((List) iter.next(), ret);
         Benchmarker.done(2);
         return c; // .getCollisions();
@@ -123,13 +124,13 @@ public class TransientDetectorScopeEntry implements Runnable {
         final HashMap voxel_map = new HashMap();
         final HashMap graph_colors = new HashMap();
 
-        for (final Iterator iter = motions.iterator(); iter.hasNext();)
+        for (final Iterator iter = motions.iterator(); iter.hasNext(); )
             it.performVoxelHashing((Motion) iter.next(), voxel_map,
                     graph_colors);
 
         final List ret = new LinkedList();
         for (final Iterator iter = voxel_map.values().iterator(); iter
-                .hasNext();) {
+                .hasNext(); ) {
             final List cur_set = (List) iter.next();
             if (cur_set.size() > 1)
                 ret.add(cur_set);
@@ -139,14 +140,14 @@ public class TransientDetectorScopeEntry implements Runnable {
     }
 
     public boolean checkForDuplicates(final List collisions, Motion one,
-            Motion two) {
+                                      Motion two) {
         // (Peta) I have also changed the comparison employed in this method as
         // it is another major source of overhead
         // Java was checking all the callsign elements, while C just checked the
         // callsign array addresses
         byte c1 = one.getAircraft().getCallsign()[5];
         byte c2 = two.getAircraft().getCallsign()[5];
-        for (final Iterator iter = collisions.iterator(); iter.hasNext();) {
+        for (final Iterator iter = collisions.iterator(); iter.hasNext(); ) {
             Collision c = (Collision) iter.next();
             if ((c.first().getCallsign()[5] == c1)
                     && (c.second().getCallsign()[5] == c2)) {
@@ -196,7 +197,7 @@ public class TransientDetectorScopeEntry implements Runnable {
          * (checkForDuplicates(ret, one, two)) { final Vector3d vec =
          * one.findIntersection(two); if (vec != null) { ret.add(new
          * Collision(one.getAircraft(), two.getAircraft(), vec)); _ret++; }
-         * 
+         *
          * } } } Benchmarker.done(5); return _ret; //
          */
     }
@@ -235,7 +236,7 @@ public class TransientDetectorScopeEntry implements Runnable {
      * This method computes the motions and current positions of the aircraft
      * Afterwards, it stores the positions of the aircrafts into the StateTable
      * in the persistentScope
-     * 
+     *
      * @return
      */
     public List createMotions() {
@@ -317,21 +318,21 @@ public class TransientDetectorScopeEntry implements Runnable {
 
     CallSign mkCallsignInPersistentScope(final byte[] cs) {
         //try {
-           // r.cs = (byte[]) MemoryArea.newArrayInArea(r, byte.class, cs.length);
-            
-            //MemoryArea mem = MemoryArea.getMemoryArea(r);  // HSO
-            
-            
-            //r.cs = (byte[]) mem.newArray(byte.class, cs.length);  // HSO
-            
-       // } 
+        // r.cs = (byte[]) MemoryArea.newArrayInArea(r, byte.class, cs.length);
+
+        //MemoryArea mem = MemoryArea.getMemoryArea(r);  // HSO
+
+
+        //r.cs = (byte[]) mem.newArray(byte.class, cs.length);  // HSO
+
+        // }
         /*catch (IllegalAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }*/
         for (int i = 0; i < cs.length; i++)
             r.cs[i] = cs[i];
-        
+
         // MemoryArea.getMemoryArea(state).executeInArea(r); 
         //mem.executeInArea(r); // HSO
         return r.c;

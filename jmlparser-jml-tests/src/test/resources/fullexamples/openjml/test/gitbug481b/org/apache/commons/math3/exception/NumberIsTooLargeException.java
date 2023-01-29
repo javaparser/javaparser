@@ -25,7 +25,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class NumberIsTooLargeException extends MathIllegalNumberException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = 4330003017885151975L;
     /**
      * Higher bound.
@@ -39,24 +41,25 @@ public class NumberIsTooLargeException extends MathIllegalNumberException {
     /**
      * Construct the exception.
      *
-     * @param wrong Value that is larger than the maximum.
-     * @param max Maximum.
+     * @param wrong          Value that is larger than the maximum.
+     * @param max            Maximum.
      * @param boundIsAllowed if true the maximum is included in the allowed range.
      */
     public NumberIsTooLargeException(Number wrong,
                                      Number max,
                                      boolean boundIsAllowed) {
         this(boundIsAllowed ?
-             LocalizedFormats.NUMBER_TOO_LARGE :
-             LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
-             wrong, max, boundIsAllowed);
+                        LocalizedFormats.NUMBER_TOO_LARGE :
+                        LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                wrong, max, boundIsAllowed);
     }
+
     /**
      * Construct the exception with a specific context.
      *
-     * @param specific Specific context pattern.
-     * @param wrong Value that is larger than the maximum.
-     * @param max Maximum.
+     * @param specific       Specific context pattern.
+     * @param wrong          Value that is larger than the maximum.
+     * @param max            Maximum.
      * @param boundIsAllowed if true the maximum is included in the allowed range.
      */
     public NumberIsTooLargeException(Localizable specific,

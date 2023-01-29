@@ -23,7 +23,8 @@ import org.apache.commons.math3.geometry.Space;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Class implementing Emo Welzl algorithm to find the smallest enclosing ball in linear time.
+/**
+ * Class implementing Emo Welzl algorithm to find the smallest enclosing ball in linear time.
  * <p>
  * The class implements the algorithm described in paper <a
  * href="http://www.inf.ethz.ch/personal/emo/PublFiles/SmallEnclDisk_LNCS555_91.pdf">Smallest
@@ -36,19 +37,26 @@ import java.util.List;
  * Efficient Computation of Smallest Enclosing Balls in Three Dimensions</a> by Linus Källberg
  * to avoid performing local copies of data have been included.
  * </p>
+ *
  * @param <S> Space type.
  * @param <P> Point type.
  * @since 3.3
  */
 public class WelzlEncloser<S extends Space, P extends Point<S>> implements Encloser<S, P> {
 
-    /** Tolerance below which points are consider to be identical. */
+    /**
+     * Tolerance below which points are consider to be identical.
+     */
     private final double tolerance;
 
-    /** Generator for balls on support. */
+    /**
+     * Generator for balls on support.
+     */
     private final SupportBallGenerator<S, P> generator;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
+     *
      * @param tolerance below which points are consider to be identical
      * @param generator generator for balls on support
      */
@@ -57,7 +65,9 @@ public class WelzlEncloser<S extends Space, P extends Point<S>> implements Enclo
         this.generator = generator;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public EnclosingBall<S, P> enclose(final Iterable<P> points) {
 
         if (points == null || !points.iterator().hasNext()) {
@@ -70,7 +80,9 @@ public class WelzlEncloser<S extends Space, P extends Point<S>> implements Enclo
 
     }
 
-    /** Compute enclosing ball using Gärtner's pivoting heuristic.
+    /**
+     * Compute enclosing ball using Gärtner's pivoting heuristic.
+     *
      * @param points points to be enclosed
      * @return enclosing ball
      */
@@ -115,10 +127,12 @@ public class WelzlEncloser<S extends Space, P extends Point<S>> implements Enclo
         }
     }
 
-    /** Compute enclosing ball using Welzl's move to front heuristic.
-     * @param extreme subset of extreme points
+    /**
+     * Compute enclosing ball using Welzl's move to front heuristic.
+     *
+     * @param extreme   subset of extreme points
      * @param nbExtreme number of extreme points to consider
-     * @param support points that must belong to the ball support
+     * @param support   points that must belong to the ball support
      * @return enclosing ball, for the extreme subset only
      */
     private EnclosingBall<S, P> moveToFrontBall(final List<P> extreme, final int nbExtreme,
@@ -155,22 +169,24 @@ public class WelzlEncloser<S extends Space, P extends Point<S>> implements Enclo
 
     }
 
-    /** Select the point farthest to the current ball.
+    /**
+     * Select the point farthest to the current ball.
+     *
      * @param points points to be enclosed
-     * @param ball current ball
+     * @param ball   current ball
      * @return farthest point
      */
     public P selectFarthest(final Iterable<P> points, final EnclosingBall<S, P> ball) {
 
         final P center = ball.getCenter();
-        P farthest   = null;
-        double dMax  = -1.0;
+        P farthest = null;
+        double dMax = -1.0;
 
         for (final P point : points) {
             final double d = point.distance(center);
             if (d > dMax) {
                 farthest = point;
-                dMax     = d;
+                dMax = d;
             }
         }
 

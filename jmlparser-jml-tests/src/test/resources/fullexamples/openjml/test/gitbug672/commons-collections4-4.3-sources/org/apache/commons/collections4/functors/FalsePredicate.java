@@ -27,10 +27,14 @@ import java.io.Serializable;
  */
 public final class FalsePredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 7533784454832764388L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes") // the static instance works for all types
     public static final Predicate INSTANCE = new FalsePredicate<>();
 
@@ -56,7 +60,7 @@ public final class FalsePredicate<T> implements Predicate<T>, Serializable {
     /**
      * Evaluates the predicate returning false always.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return false always
      */
     @Override

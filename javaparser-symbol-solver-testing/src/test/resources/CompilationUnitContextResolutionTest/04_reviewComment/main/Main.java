@@ -13,8 +13,14 @@ public class Main {
 
     public enum NestedEnum {
         ;
-        public static void foo() {}
-        public static void bar() {}
-        public void baz() {}
+
+        public static void foo() {
+        }
+
+        public static void bar() {
+        }
+
+        public void baz() {
+        }
     }
 }

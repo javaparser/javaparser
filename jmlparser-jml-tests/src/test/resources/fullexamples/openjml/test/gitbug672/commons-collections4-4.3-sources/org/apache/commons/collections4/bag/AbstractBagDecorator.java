@@ -32,11 +32,14 @@ import java.util.Set;
 public abstract class AbstractBagDecorator<E>
         extends AbstractCollectionDecorator<E> implements Bag<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -3768146017343785417L;
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
+     *
      * @since 3.1
      */
     protected AbstractBagDecorator() {
@@ -46,7 +49,7 @@ public abstract class AbstractBagDecorator<E>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param bag  the bag to decorate, must not be null
+     * @param bag the bag to decorate, must not be null
      * @throws NullPointerException if bag is null
      */
     protected AbstractBagDecorator(final Bag<E> bag) {

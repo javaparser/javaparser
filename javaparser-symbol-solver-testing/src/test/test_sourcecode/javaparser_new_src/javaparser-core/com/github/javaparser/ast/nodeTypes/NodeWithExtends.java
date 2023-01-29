@@ -12,7 +12,7 @@ public interface NodeWithExtends<T> {
 
     /**
      * Add an extends to this and automatically add the import
-     * 
+     *
      * @param clazz the class to extand from
      * @return this
      */
@@ -23,7 +23,7 @@ public interface NodeWithExtends<T> {
 
     /**
      * Add an extends to this
-     * 
+     *
      * @param name the name of the type to extends from
      * @return this
      */

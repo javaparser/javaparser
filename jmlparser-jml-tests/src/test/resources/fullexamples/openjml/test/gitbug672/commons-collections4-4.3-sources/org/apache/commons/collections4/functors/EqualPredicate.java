@@ -29,20 +29,26 @@ import java.io.Serializable;
  */
 public final class EqualPredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 5633766978029907089L;
 
-    /** The value to compare to */
+    /**
+     * The value to compare to
+     */
     private final T iValue;
 
-    /** The equator to use for comparison */
+    /**
+     * The equator to use for comparison
+     */
     private final Equator<T> equator;
 
     /**
      * Factory to create the predicate.
      *
-     * @param <T> the type that the predicate queries
-     * @param object  the object to compare to
+     * @param <T>    the type that the predicate queries
+     * @param object the object to compare to
      * @return the predicate
      */
     public static <T> Predicate<T> equalPredicate(final T object) {
@@ -55,9 +61,9 @@ public final class EqualPredicate<T> implements Predicate<T>, Serializable {
     /**
      * Factory to create the identity predicate.
      *
-     * @param <T> the type that the predicate queries
+     * @param <T>     the type that the predicate queries
      * @param object  the object to compare to
-     * @param equator  the equator to use for comparison
+     * @param equator the equator to use for comparison
      * @return the predicate
      * @since 4.0
      */
@@ -72,7 +78,7 @@ public final class EqualPredicate<T> implements Predicate<T>, Serializable {
      * Constructor that performs no validation.
      * Use <code>equalPredicate</code> if you want that.
      *
-     * @param object  the object to compare to
+     * @param object the object to compare to
      */
     public EqualPredicate(final T object) {
         // do not use the DefaultEquator to keep backwards compatibility
@@ -85,7 +91,7 @@ public final class EqualPredicate<T> implements Predicate<T>, Serializable {
      * Use <code>equalPredicate</code> if you want that.
      *
      * @param object  the object to compare to
-     * @param equator  the equator to use for comparison
+     * @param equator the equator to use for comparison
      * @since 4.0
      */
     public EqualPredicate(final T object, final Equator<T> equator) {
@@ -97,7 +103,7 @@ public final class EqualPredicate<T> implements Predicate<T>, Serializable {
     /**
      * Evaluates the predicate returning true if the input equals the stored value.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if input object equals stored value
      */
     @Override

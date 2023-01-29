@@ -1,6 +1,6 @@
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-public class LambdaConstraintType  implements Type {
+public class LambdaConstraintType implements Type {
     Type bound;
 
     public LambdaConstraintType(Type bound) {
@@ -26,7 +26,7 @@ public class LambdaConstraintType  implements Type {
         return this;
     }
 
-    public static LambdaConstraintType bound(Type bound){
+    public static LambdaConstraintType bound(Type bound) {
         return new LambdaConstraintType(bound);
     }
 

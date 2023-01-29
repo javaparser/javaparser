@@ -59,7 +59,7 @@ class Issue257Test extends AbstractSymbolResolutionTest {
         Path pathToSourceFile = adaptPath("src/test/resources/issue257/A.java.txt");
         CompilationUnit cu = parse(pathToSourceFile);
         Statement statement = cu.getClassByName("A").get().getMethodsByName("run").get(0).getBody().get().getStatement(0);
-        ExpressionStmt expressionStmt = (ExpressionStmt)statement;
+        ExpressionStmt expressionStmt = (ExpressionStmt) statement;
         Expression expression = expressionStmt.getExpression();
         JavaParserFacade.get(typeSolver).getType(expression);
     }

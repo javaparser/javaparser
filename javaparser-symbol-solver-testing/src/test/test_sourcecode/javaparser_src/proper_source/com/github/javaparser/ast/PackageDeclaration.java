@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast;
 
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -39,6 +39,7 @@ import java.util.List;
  * PackageDeclaration ::= ( }{@link AnnotationExpr}{@code )* "package" }{@link NameExpr}{@code ) ";"
  * }
  * </pre>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class PackageDeclaration extends Node {
@@ -78,7 +79,7 @@ public final class PackageDeclaration extends Node {
     /**
      * Retrieves the list of annotations declared before the package
      * declaration. Return <code>null</code> if there are no annotations.
-     * 
+     *
      * @return list of annotations or <code>null</code>
      */
     public List<AnnotationExpr> getAnnotations() {
@@ -87,7 +88,7 @@ public final class PackageDeclaration extends Node {
 
     /**
      * Return the name of the package.
-     * 
+     *
      * @return the name of the package
      */
     public NameExpr getName() {
@@ -95,8 +96,7 @@ public final class PackageDeclaration extends Node {
     }
 
     /**
-     * @param annotations
-     *            the annotations to set
+     * @param annotations the annotations to set
      */
     public void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
@@ -105,9 +105,8 @@ public final class PackageDeclaration extends Node {
 
     /**
      * Sets the name of this package declaration.
-     * 
-     * @param name
-     *            the name to set
+     *
+     * @param name the name to set
      */
     public void setName(NameExpr name) {
         this.name = name;

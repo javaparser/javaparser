@@ -34,21 +34,21 @@ public class Issue3761Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test() {
-    	considerCode(
-        		"class C { \n"
-        		+ "    static String S = \"s\";\n"
-        		+ "}");
+        considerCode(
+                "class C { \n"
+                        + "    static String S = \"s\";\n"
+                        + "}");
 
         FieldDeclaration field = cu.findAll(FieldDeclaration.class).get(0);
 
-		List<Modifier.Keyword> kws = field.getModifiers().stream().map(Modifier::getKeyword).collect(Collectors.toList());
-		kws.add(0, Modifier.DefaultKeyword.PROTECTED);
-		field.setModifiers(kws.toArray(new Modifier.Keyword[] {}));
-        
-        String expected = 
-        		"class C { \r\n"
-        		+ "    protected static String S = \"s\";\r\n"
-        		+ "}";
+        List<Modifier.Keyword> kws = field.getModifiers().stream().map(Modifier::getKeyword).collect(Collectors.toList());
+        kws.add(0, Modifier.DefaultKeyword.PROTECTED);
+        field.setModifiers(kws.toArray(new Modifier.Keyword[]{}));
+
+        String expected =
+                "class C { \r\n"
+                        + "    protected static String S = \"s\";\r\n"
+                        + "}";
 
         assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }

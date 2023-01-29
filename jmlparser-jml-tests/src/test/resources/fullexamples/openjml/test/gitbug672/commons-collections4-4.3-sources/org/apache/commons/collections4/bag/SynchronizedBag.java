@@ -35,14 +35,16 @@ import java.util.Set;
  */
 public class SynchronizedBag<E> extends SynchronizedCollection<E> implements Bag<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 8084674570753837109L;
 
     /**
      * Factory method to create a synchronized bag.
      *
      * @param <E> the type of the elements in the bag
-     * @param bag  the bag to decorate, must not be null
+     * @param bag the bag to decorate, must not be null
      * @return a new synchronized Bag
      * @throws NullPointerException if bag is null
      * @since 4.0
@@ -52,10 +54,11 @@ public class SynchronizedBag<E> extends SynchronizedCollection<E> implements Bag
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param bag  the bag to decorate, must not be null
+     * @param bag the bag to decorate, must not be null
      * @throws NullPointerException if bag is null
      */
     protected SynchronizedBag(final Bag<E> bag) {
@@ -66,7 +69,7 @@ public class SynchronizedBag<E> extends SynchronizedCollection<E> implements Bag
      * Constructor that wraps (not copies).
      *
      * @param bag  the bag to decorate, must not be null
-     * @param lock  the lock to use, must not be null
+     * @param lock the lock to use, must not be null
      * @throws NullPointerException if bag or lock is null
      */
     protected SynchronizedBag(final Bag<E> bag, final Object lock) {
@@ -131,17 +134,21 @@ public class SynchronizedBag<E> extends SynchronizedCollection<E> implements Bag
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Synchronized Set for the Bag class.
      */
     class SynchronizedBagSet extends SynchronizedCollection<E> implements Set<E> {
-        /** Serialization version */
+        /**
+         * Serialization version
+         */
         private static final long serialVersionUID = 2990565892366827855L;
 
         /**
          * Constructor.
+         *
          * @param set  the set to decorate
-         * @param lock  the lock to use, shared with the bag
+         * @param lock the lock to use, shared with the bag
          */
         SynchronizedBagSet(final Set<E> set, final Object lock) {
             super(set, lock);

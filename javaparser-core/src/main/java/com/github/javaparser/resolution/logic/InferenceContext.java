@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.logic;
 
 import com.github.javaparser.resolution.TypeSolver;
@@ -39,8 +38,11 @@ import java.util.stream.Collectors;
 public class InferenceContext {
 
     private int nextInferenceVariableId = 0;
+
     private TypeSolver typeSolver;
+
     private List<InferenceVariableType> inferenceVariableTypes = new ArrayList<>();
+
     private Map<String, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
 
     public InferenceContext(TypeSolver typeSolver) {
@@ -75,15 +77,12 @@ public class InferenceContext {
         if (formalType.isReferenceType() && actualType.isReferenceType()) {
             ResolvedReferenceType formalTypeAsReference = formalType.asReferenceType();
             ResolvedReferenceType actualTypeAsReference = actualType.asReferenceType();
-
             if (!formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                 List<ResolvedReferenceType> ancestors = actualTypeAsReference.getAllAncestors();
                 final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
-                // Interfaces do not extend the class Object, 
+                // Interfaces do not extend the class Object,
                 // which means that if the formal parameter is of type Object, all types can match.
-                List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName) ?
-                        ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()) :
-                        ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+                List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName) ? ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()) : ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
@@ -92,11 +91,9 @@ public class InferenceContext {
                         throw new ConfilictingGenericTypesException(formalType, actualType);
                     }
                     correspondingFormalType = correspondingActualType;
-
                 }
                 actualTypeAsReference = correspondingFormalType.get(0).asReferenceType();
             }
-
             if (formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                 if (!formalTypeAsReference.typeParametersValues().isEmpty()) {
                     if (actualTypeAsReference.isRawType()) {
@@ -140,7 +137,6 @@ public class InferenceContext {
                     }
                 }
             }
-
             if (actualType.isReferenceType()) {
                 if (formalType.asWildcard().isBounded()) {
                     registerCorrespondance(formalType.asWildcard().getBoundedType(), actualType);
@@ -178,7 +174,7 @@ public class InferenceContext {
         } else if (formalType.isReferenceType()) {
             ResolvedReferenceType formalTypeAsReference = formalType.asReferenceType();
             if (formalTypeAsReference.isJavaLangObject()) {
-             // nothing to do
+                // nothing to do
             } else {
                 throw new UnsupportedOperationException(formalType.describe() + " " + actualType.describe());
             }

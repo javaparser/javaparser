@@ -41,7 +41,6 @@ import java.util.Collection;
  *
  * @param <K> the type of the keys in this map
  * @param <V> the type of the values in this map
- *
  * @since 2.0
  * @deprecated since 4.1, use {@link MultiValuedMap} instead
  */
@@ -59,16 +58,17 @@ public interface MultiMap<K, V> extends IterableMap<K, Object> {
      * they may choose to return an empty collection.
      *
      * @param key  the key to remove from
-     * @param item  the item to remove
+     * @param item the item to remove
      * @return {@code true} if the mapping was removed, {@code false} otherwise
      * @throws UnsupportedOperationException if the map is unmodifiable
-     * @throws ClassCastException if the key or value is of an invalid type
-     * @throws NullPointerException if the key or value is null and null is invalid
+     * @throws ClassCastException            if the key or value is of an invalid type
+     * @throws NullPointerException          if the key or value is null and null is invalid
      * @since 4.0 (signature in previous releases: V remove(K, V))
      */
     boolean removeMapping(K key, V item);
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the number of keys in this map.
      * <p>
@@ -93,10 +93,10 @@ public interface MultiMap<K, V> extends IterableMap<K, Object> {
      * <p>
      * Implementations may choose to return a clone of the internal collection.
      *
-     * @param key  the key to retrieve
+     * @param key the key to retrieve
      * @return the <code>Collection</code> of values, implementations should
-     *  return <code>null</code> for no mapping, but may return an empty collection
-     * @throws ClassCastException if the key is of an invalid type
+     * return <code>null</code> for no mapping, but may return an empty collection
+     * @throws ClassCastException   if the key is of an invalid type
      * @throws NullPointerException if the key is null and null keys are invalid
      */
     @Override
@@ -108,9 +108,9 @@ public interface MultiMap<K, V> extends IterableMap<K, Object> {
      * Implementations typically check all collections against all keys for the value.
      * This cannot be mandated due to backwards compatibility of this interface.
      *
-     * @param value  the value to search for
+     * @param value the value to search for
      * @return true if the map contains the value
-     * @throws ClassCastException if the value is of an invalid type
+     * @throws ClassCastException   if the value is of an invalid type
      * @throws NullPointerException if the value is null and null value are invalid
      */
     @Override
@@ -124,13 +124,13 @@ public interface MultiMap<K, V> extends IterableMap<K, Object> {
      * The collection may be a <code>List</code>, <code>Set</code> or other
      * collection dependent on implementation.
      *
-     * @param key  the key to store against
-     * @param value  the value to add to the collection at the key
+     * @param key   the key to store against
+     * @param value the value to add to the collection at the key
      * @return typically the value added if the map changed and null if the map did not change
      * @throws UnsupportedOperationException if the map is unmodifiable
-     * @throws ClassCastException if the key or value is of an invalid type
-     * @throws NullPointerException if the key or value is null and null is invalid
-     * @throws IllegalArgumentException if the key or value is invalid
+     * @throws ClassCastException            if the key or value is of an invalid type
+     * @throws NullPointerException          if the key or value is null and null is invalid
+     * @throws IllegalArgumentException      if the key or value is invalid
      */
     @Override
     Object put(K key, Object value);
@@ -141,12 +141,12 @@ public interface MultiMap<K, V> extends IterableMap<K, Object> {
      * Implementations typically return <code>null</code> from a subsequent
      * <code>get(Object)</code>, however they may choose to return an empty collection.
      *
-     * @param key  the key to remove values from
+     * @param key the key to remove values from
      * @return the <code>Collection</code> of values removed, implementations should
-     *  return <code>null</code> for no mapping found, but may return an empty collection
+     * return <code>null</code> for no mapping found, but may return an empty collection
      * @throws UnsupportedOperationException if the map is unmodifiable
-     * @throws ClassCastException if the key is of an invalid type
-     * @throws NullPointerException if the key is null and null keys are invalid
+     * @throws ClassCastException            if the key is of an invalid type
+     * @throws NullPointerException          if the key is null and null keys are invalid
      */
     @Override
     Object remove(Object key); // Cannot use remove(K key) as that does not properly implement Map#remove

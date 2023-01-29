@@ -27,20 +27,26 @@ import java.io.Serializable;
  */
 public final class AndPredicate<T> implements PredicateDecorator<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 4189014213763186912L;
 
-    /** The array of predicates to call */
+    /**
+     * The array of predicates to call
+     */
     private final Predicate<? super T> iPredicate1;
-    /** The array of predicates to call */
+    /**
+     * The array of predicates to call
+     */
     private final Predicate<? super T> iPredicate2;
 
     /**
      * Factory to create the predicate.
      *
-     * @param <T> the type that the predicate queries
-     * @param predicate1  the first predicate to check, not null
-     * @param predicate2  the second predicate to check, not null
+     * @param <T>        the type that the predicate queries
+     * @param predicate1 the first predicate to check, not null
+     * @param predicate2 the second predicate to check, not null
      * @return the <code>and</code> predicate
      * @throws NullPointerException if either predicate is null
      */
@@ -56,8 +62,8 @@ public final class AndPredicate<T> implements PredicateDecorator<T>, Serializabl
      * Constructor that performs no validation.
      * Use <code>andPredicate</code> if you want that.
      *
-     * @param predicate1  the first predicate to check, not null
-     * @param predicate2  the second predicate to check, not null
+     * @param predicate1 the first predicate to check, not null
+     * @param predicate2 the second predicate to check, not null
      */
     public AndPredicate(final Predicate<? super T> predicate1, final Predicate<? super T> predicate2) {
         super();
@@ -68,12 +74,12 @@ public final class AndPredicate<T> implements PredicateDecorator<T>, Serializabl
     /**
      * Evaluates the predicate returning true if both predicates return true.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if both decorated predicates return true
      */
     @Override
     public boolean evaluate(final T object) {
-       return iPredicate1.evaluate(object) && iPredicate2.evaluate(object);
+        return iPredicate1.evaluate(object) && iPredicate2.evaluate(object);
     }
 
     /**
@@ -85,7 +91,7 @@ public final class AndPredicate<T> implements PredicateDecorator<T>, Serializabl
     @Override
     @SuppressWarnings("unchecked")
     public Predicate<? super T>[] getPredicates() {
-        return new Predicate[] {iPredicate1, iPredicate2};
+        return new Predicate[]{iPredicate1, iPredicate2};
     }
 
 }

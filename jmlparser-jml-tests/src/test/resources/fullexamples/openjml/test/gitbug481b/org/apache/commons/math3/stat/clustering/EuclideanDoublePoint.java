@@ -24,6 +24,7 @@ import java.util.Collection;
 
 /**
  * A simple implementation of {@link Clusterable} for points with double coordinates.
+ *
  * @since 3.1
  * @deprecated As of 3.2 (to be removed in 4.0),
  * use {@link org.apache.commons.math3.ml.clustering.DoublePoint} instead
@@ -31,10 +32,14 @@ import java.util.Collection;
 @Deprecated
 public class EuclideanDoublePoint implements Clusterable<EuclideanDoublePoint>, Serializable {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 8026472786091227632L;
 
-    /** Point coordinates. */
+    /**
+     * Point coordinates.
+     */
     private final double[] point;
 
     /**
@@ -48,7 +53,9 @@ public class EuclideanDoublePoint implements Clusterable<EuclideanDoublePoint>, 
         this.point = point;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public EuclideanDoublePoint centroidOf(final Collection<EuclideanDoublePoint> points) {
         final double[] centroid = new double[getPoint().length];
         for (final EuclideanDoublePoint p : points) {
@@ -62,12 +69,16 @@ public class EuclideanDoublePoint implements Clusterable<EuclideanDoublePoint>, 
         return new EuclideanDoublePoint(centroid);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double distanceFrom(final EuclideanDoublePoint p) {
         return MathArrays.distance(point, p.getPoint());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object other) {
         if (!(other instanceof EuclideanDoublePoint)) {
@@ -85,13 +96,17 @@ public class EuclideanDoublePoint implements Clusterable<EuclideanDoublePoint>, 
         return point;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Arrays.hashCode(point);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return Arrays.toString(point);

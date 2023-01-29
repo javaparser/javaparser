@@ -47,13 +47,19 @@ import java.util.Iterator;
  */
 public abstract class LazyIteratorChain<E> implements Iterator<E> {
 
-    /** The number of times {@link #next()} was already called. */
+    /**
+     * The number of times {@link #next()} was already called.
+     */
     private int callCounter = 0;
 
-    /** Indicates that the Iterator chain has been exhausted. */
+    /**
+     * Indicates that the Iterator chain has been exhausted.
+     */
     private boolean chainExhausted = false;
 
-    /** The current iterator. */
+    /**
+     * The current iterator.
+     */
     private Iterator<? extends E> currentIterator = null;
 
     /**
@@ -137,9 +143,9 @@ public abstract class LazyIteratorChain<E> implements Iterator<E> {
      * Iterator does not support this method.
      *
      * @throws UnsupportedOperationException if the remove operator is not
-     *   supported by the underlying Iterator
-     * @throws IllegalStateException if the next method has not yet been called,
-     *   or the remove method has already been called after the last call to the next method.
+     *                                       supported by the underlying Iterator
+     * @throws IllegalStateException         if the next method has not yet been called,
+     *                                       or the remove method has already been called after the last call to the next method.
      */
     @Override
     public void remove() {

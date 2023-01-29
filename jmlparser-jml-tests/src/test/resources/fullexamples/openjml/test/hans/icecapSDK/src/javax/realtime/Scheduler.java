@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : Scheduler.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,7 +19,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
  *************************************************************************/
@@ -28,18 +28,15 @@ package javax.realtime;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
- * An instance of <code>Scheduler</code> manages the execution of 
+ * An instance of <code>Scheduler</code> manages the execution of
  * schedulable objects.
- * 
- * @version 1.2; - December 2013
- * 
+ *
  * @author Anders P. Ravn, Aalborg University, <A
- *         HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
- *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
- * 
- * @scjComment
- *   - public static Schedulable getCurrentSO() omitted
+ * HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
+ * Hans S&oslash;ndergaard, VIA University College, Denmark, <A
+ * HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * @version 1.2; - December 2013
+ * @scjComment - public static Schedulable getCurrentSO() omitted
  */
 @SCJAllowed
 public abstract class Scheduler {

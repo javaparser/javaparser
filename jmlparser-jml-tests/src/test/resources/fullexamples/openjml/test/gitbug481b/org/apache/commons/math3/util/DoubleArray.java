@@ -21,7 +21,6 @@ package org.apache.commons.math3.util;
  * Provides a standard interface for double arrays.  Allows different
  * array implementations to support various storage mechanisms
  * such as automatic expansion, contraction, and array "rolling".
- *
  */
 public interface DoubleArray {
 
@@ -41,7 +40,7 @@ public interface DoubleArray {
      * @param index index to fetch a value from
      * @return value stored at the specified index
      * @throws ArrayIndexOutOfBoundsException if <code>index</code> is less than
-     *         zero or is greater than <code>getNumElements() - 1</code>.
+     *                                        zero or is greater than <code>getNumElements() - 1</code>.
      */
     double getElement(int index);
 
@@ -55,7 +54,7 @@ public interface DoubleArray {
      * @param index index to store a value in
      * @param value value to store at the specified index
      * @throws ArrayIndexOutOfBoundsException if <code>index</code> is less than
-     *         zero.
+     *                                        zero.
      */
     void setElement(int index, double value);
 
@@ -87,7 +86,7 @@ public interface DoubleArray {
      *
      * @param value the value to be added to the array
      * @return the value which has been discarded or "pushed" out of the array
-     *         by this rolling insert
+     * by this rolling insert
      */
     double addElementRolling(double value);
 
@@ -96,7 +95,7 @@ public interface DoubleArray {
      * <code>DoubleArray</code>.  If the underlying implementation is
      * array-based, this method should always return a copy, rather than a
      * reference to the underlying array so that changes made to the returned
-     *  array have no effect on the <code>DoubleArray.</code>
+     * array have no effect on the <code>DoubleArray.</code>
      *
      * @return all elements added to the array
      */

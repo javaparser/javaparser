@@ -36,13 +36,12 @@ import java.util.stream.IntStream;
 /**
  * This class represents a group of {@link Removed} elements.
  * The {@link Removed} elements are ideally consecutive for the methods in this class to work correctly.
- *
+ * <p>
  * This class consists of methods that calculate information to better handle the difference application for the
  * containing {@link Removed} elements.
  *
- * @see Iterable
- *
  * @author ThLeu
+ * @see Iterable
  */
 final class RemovedGroup implements Iterable<Removed> {
 
@@ -67,7 +66,7 @@ final class RemovedGroup implements Iterable<Removed> {
      * Factory method to create a RemovedGroup which consists of consecutive Removed elements
      *
      * @param firstElementIndex the difference index at which the RemovedGroup starts
-     * @param removedList list of the consecutive Removed elements
+     * @param removedList       list of the consecutive Removed elements
      * @return a RemovedGroup object
      * @throws IllegalArgumentException if the firstElementIndex is null or the removedList is empty or null
      */
@@ -194,7 +193,7 @@ final class RemovedGroup implements Iterable<Removed> {
      * It is therefore necessary to avoid taking this element into account so we're looking for the first element that isn't a line break..
      * For example
      * class Foo {
-     *     int x;
+     * int x;
      * }
      * If there is something else than whitespace in front this element, Optional.empty() is returned.
      *

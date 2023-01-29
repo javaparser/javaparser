@@ -28,14 +28,18 @@ import java.util.Arrays;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Step_function">
- *  Step function</a>.
+ * Step function</a>.
  *
  * @since 3.0
  */
 public class StepFunction implements UnivariateFunction {
-    /** Abscissae. */
+    /**
+     * Abscissae.
+     */
     private final double[] abscissa;
-    /** Ordinates. */
+    /**
+     * Ordinates.
+     */
     private final double[] ordinate;
 
     /**
@@ -51,23 +55,22 @@ public class StepFunction implements UnivariateFunction {
      *
      * @param x Domain values where the function changes value.
      * @param y Values of the function.
-     * @throws NonMonotonicSequenceException
-     * if the {@code x} array is not sorted in strictly increasing order.
-     * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
-     * @throws DimensionMismatchException if {@code x} and {@code y} do not
-     * have the same length.
+     * @throws NonMonotonicSequenceException if the {@code x} array is not sorted in strictly increasing order.
+     * @throws NullArgumentException         if {@code x} or {@code y} are {@code null}.
+     * @throws NoDataException               if {@code x} or {@code y} are zero-length.
+     * @throws DimensionMismatchException    if {@code x} and {@code y} do not
+     *                                       have the same length.
      */
     public StepFunction(double[] x,
                         double[] y)
-        throws NullArgumentException, NoDataException,
-               DimensionMismatchException, NonMonotonicSequenceException {
+            throws NullArgumentException, NoDataException,
+            DimensionMismatchException, NonMonotonicSequenceException {
         if (x == null ||
-            y == null) {
+                y == null) {
             throw new NullArgumentException();
         }
         if (x.length == 0 ||
-            y.length == 0) {
+                y.length == 0) {
             throw new NoDataException();
         }
         if (y.length != x.length) {
@@ -79,14 +82,16 @@ public class StepFunction implements UnivariateFunction {
         ordinate = MathArrays.copyOf(y);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x) {
         int index = Arrays.binarySearch(abscissa, x);
         double fx = 0;
 
         if (index < -1) {
             // "x" is between "abscissa[-index-2]" and "abscissa[-index-1]".
-            fx = ordinate[-index-2];
+            fx = ordinate[-index - 2];
         } else if (index >= 0) {
             // "x" is exactly "abscissa[index]".
             fx = ordinate[index];

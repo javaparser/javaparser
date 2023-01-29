@@ -32,16 +32,24 @@ import java.util.NoSuchElementException;
  */
 public class BoundedIterator<E> implements Iterator<E> {
 
-    /** The iterator being decorated. */
+    /**
+     * The iterator being decorated.
+     */
     private final Iterator<? extends E> iterator;
 
-    /** The offset to bound the first element return */
+    /**
+     * The offset to bound the first element return
+     */
     private final long offset;
 
-    /** The max number of elements to return */
+    /**
+     * The max number of elements to return
+     */
     private final long max;
 
-    /** The position of the current element */
+    /**
+     * The position of the current element
+     */
     private long pos;
 
     //-----------------------------------------------------------------------
@@ -53,10 +61,10 @@ public class BoundedIterator<E> implements Iterator<E> {
      * The iterator is immediately advanced until it reaches the position at {@code offset},
      * incurring O(n) time.
      *
-     * @param iterator  the iterator to be decorated
-     * @param offset  the index of the first element of the decorated iterator to return
-     * @param max  the maximum number of elements of the decorated iterator to return
-     * @throws NullPointerException if iterator is null
+     * @param iterator the iterator to be decorated
+     * @param offset   the index of the first element of the decorated iterator to return
+     * @param max      the maximum number of elements of the decorated iterator to return
+     * @throws NullPointerException     if iterator is null
      * @throws IllegalArgumentException if either offset or max is negative
      */
     public BoundedIterator(final Iterator<? extends E> iterator, final long offset, final long max) {
@@ -99,6 +107,7 @@ public class BoundedIterator<E> implements Iterator<E> {
 
     /**
      * Checks whether the iterator is still within its bounded range.
+     *
      * @return {@code true} if the iterator is within its bounds, {@code false} otherwise
      */
     private boolean checkBounds() {

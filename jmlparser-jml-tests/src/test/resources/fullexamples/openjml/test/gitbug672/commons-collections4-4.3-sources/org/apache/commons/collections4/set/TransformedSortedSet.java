@@ -36,7 +36,9 @@ import java.util.SortedSet;
  */
 public class TransformedSortedSet<E> extends TransformedSet<E> implements SortedSet<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -1675486811351124386L;
 
     /**
@@ -46,15 +48,15 @@ public class TransformedSortedSet<E> extends TransformedSet<E> implements Sorted
      * are NOT transformed.
      * Contrast this with {@link #transformedSortedSet(SortedSet, Transformer)}.
      *
-     * @param <E> the element type
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the element type
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed {@link SortedSet}
      * @throws NullPointerException if set or transformer is null
      * @since 4.0
      */
     public static <E> TransformedSortedSet<E> transformingSortedSet(final SortedSet<E> set,
-            final Transformer<? super E, ? extends E> transformer) {
+                                                                    final Transformer<? super E, ? extends E> transformer) {
         return new TransformedSortedSet<>(set, transformer);
     }
 
@@ -66,15 +68,15 @@ public class TransformedSortedSet<E> extends TransformedSet<E> implements Sorted
      * will be transformed by this method.
      * Contrast this with {@link #transformingSortedSet(SortedSet, Transformer)}.
      *
-     * @param <E> the element type
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the element type
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed {@link SortedSet}
      * @throws NullPointerException if set or transformer is null
      * @since 4.0
      */
     public static <E> TransformedSortedSet<E> transformedSortedSet(final SortedSet<E> set,
-            final Transformer<? super E, ? extends E> transformer) {
+                                                                   final Transformer<? super E, ? extends E> transformer) {
 
         final TransformedSortedSet<E> decorated = new TransformedSortedSet<>(set, transformer);
         if (set.size() > 0) {
@@ -89,14 +91,15 @@ public class TransformedSortedSet<E> extends TransformedSet<E> implements Sorted
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the set being decorated, they
      * are NOT transformed.
      *
-     * @param set  the set to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param set         the set to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @throws NullPointerException if set or transformer is null
      */
     protected TransformedSortedSet(final SortedSet<E> set, final Transformer<? super E, ? extends E> transformer) {

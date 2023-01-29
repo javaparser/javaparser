@@ -45,9 +45,9 @@ import java.util.List;
  * support the following operations: <ul>
  * <li>loading the distribution from a file of observed data values</li>
  * <li>dividing the input data into "bin ranges" and reporting bin frequency
- *     counts (data for histogram)</li>
+ * counts (data for histogram)</li>
  * <li>reporting univariate statistics describing the full set of data values
- *     as well as the observations within each bin</li>
+ * as well as the observations within each bin</li>
  * <li>generating random values from the distribution</li>
  * </ul>
  * Applications can use <code>EmpiricalDistribution</code> to build grouped
@@ -81,51 +81,74 @@ import java.util.List;
  * distribution at the bin endpoints and interpolates within bins using
  * within-bin kernels.</p>
  *
- *<strong>USAGE NOTES:</strong><ul>
- *<li>The <code>binCount</code> is set by default to 1000.  A good rule of thumb
+ * <strong>USAGE NOTES:</strong><ul>
+ * <li>The <code>binCount</code> is set by default to 1000.  A good rule of thumb
  *    is to set the bin count to approximately the length of the input file divided
  *    by 10. </li>
- *<li>The input file <i>must</i> be a plain text file containing one valid numeric
+ * <li>The input file <i>must</i> be a plain text file containing one valid numeric
  *    entry per line.</li>
  * </ul></p>
- *
  */
 public class EmpiricalDistribution extends AbstractRealDistribution {
 
-    /** Default bin count */
+    /**
+     * Default bin count
+     */
     public static final int DEFAULT_BIN_COUNT = 1000;
 
-    /** Character set for file input */
+    /**
+     * Character set for file input
+     */
     private static final String FILE_CHARSET = "US-ASCII";
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 5729073523949762654L;
 
-    /** RandomDataGenerator instance to use in repeated calls to getNext() */
+    /**
+     * RandomDataGenerator instance to use in repeated calls to getNext()
+     */
     protected final RandomDataGenerator randomData;
 
-    /** List of SummaryStatistics objects characterizing the bins */
+    /**
+     * List of SummaryStatistics objects characterizing the bins
+     */
     private final List<SummaryStatistics> binStats;
 
-    /** Sample statistics */
+    /**
+     * Sample statistics
+     */
     private SummaryStatistics sampleStats = null;
 
-    /** Max loaded value */
+    /**
+     * Max loaded value
+     */
     private double max = Double.NEGATIVE_INFINITY;
 
-    /** Min loaded value */
+    /**
+     * Min loaded value
+     */
     private double min = Double.POSITIVE_INFINITY;
 
-    /** Grid size */
+    /**
+     * Grid size
+     */
     private double delta = 0d;
 
-    /** number of bins */
+    /**
+     * number of bins
+     */
     private final int binCount;
 
-    /** is the distribution loaded? */
+    /**
+     * is the distribution loaded?
+     */
     private boolean loaded = false;
 
-    /** upper bounds of subintervals in (0,1) "belonging" to the bins */
+    /**
+     * upper bounds of subintervals in (0,1) "belonging" to the bins
+     */
     private double[] upperBounds = null;
 
     /**
@@ -149,7 +172,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Creates a new EmpiricalDistribution with the specified bin count using the
      * provided {@link RandomGenerator} as the source of random data.
      *
-     * @param binCount number of bins. Must be strictly positive.
+     * @param binCount  number of bins. Must be strictly positive.
      * @param generator random data generator (may be null, resulting in default JDK generator)
      * @throws NotStrictlyPositiveException if {@code binCount <= 0}.
      * @since 3.0
@@ -173,10 +196,10 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Creates a new EmpiricalDistribution with the specified bin count using the
      * provided {@link RandomDataImpl} instance as the source of random data.
      *
-     * @param binCount number of bins
+     * @param binCount   number of bins
      * @param randomData random data generator (may be null, resulting in default JDK generator)
      * @since 3.0
-     * @deprecated As of 3.1. Please use {@link #EmpiricalDistribution(int,RandomGenerator)} instead.
+     * @deprecated As of 3.1. Please use {@link #EmpiricalDistribution(int, RandomGenerator)} instead.
      */
     @Deprecated
     public EmpiricalDistribution(int binCount, RandomDataImpl randomData) {
@@ -200,7 +223,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Private constructor to allow lazy initialisation of the RNG contained
      * in the {@link #randomData} instance variable.
      *
-     * @param binCount number of bins. Must be strictly positive.
+     * @param binCount   number of bins. Must be strictly positive.
      * @param randomData Random data generator.
      * @throws NotStrictlyPositiveException if {@code binCount <= 0}.
      */
@@ -220,7 +243,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * array of numbers.
      *
      * @param in the input data array
-     * @exception NullArgumentException if in is null
+     * @throws NullArgumentException if in is null
      */
     public void load(double[] in) throws NullArgumentException {
         DataAdapter da = new ArrayDataAdapter(in);
@@ -243,16 +266,15 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * valid numeric entry per line.</p>
      *
      * @param url url of the input file
-     *
-     * @throws IOException if an IO error occurs
+     * @throws IOException           if an IO error occurs
      * @throws NullArgumentException if url is null
-     * @throws ZeroException if URL contains no data
+     * @throws ZeroException         if URL contains no data
      */
     public void load(URL url) throws IOException, NullArgumentException, ZeroException {
         MathUtils.checkNotNull(url);
         Charset charset = Charset.forName(FILE_CHARSET);
         BufferedReader in =
-            new BufferedReader(new InputStreamReader(url.openStream(), charset));
+                new BufferedReader(new InputStreamReader(url.openStream(), charset));
         try {
             DataAdapter da = new StreamDataAdapter(in);
             da.computeStats();
@@ -264,11 +286,11 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             fillBinStats(new StreamDataAdapter(in));
             loaded = true;
         } finally {
-           try {
-               in.close();
-           } catch (IOException ex) { //NOPMD
-               // ignore
-           }
+            try {
+                in.close();
+            } catch (IOException ex) { //NOPMD
+                // ignore
+            }
         }
     }
 
@@ -279,7 +301,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * valid numeric entry per line.</p>
      *
      * @param file the input file
-     * @throws IOException if an IO error occurs
+     * @throws IOException           if an IO error occurs
      * @throws NullArgumentException if file is null
      */
     public void load(File file) throws IOException, NullArgumentException {
@@ -308,12 +330,12 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Provides methods for computing <code>sampleStats</code> and
      * <code>beanStats</code> abstracting the source of data.
      */
-    private abstract class DataAdapter{
+    private abstract class DataAdapter {
 
         /**
          * Compute bin stats.
          *
-         * @throws IOException  if an error occurs computing bin stats
+         * @throws IOException if an error occurs computing bin stats
          */
         public abstract void computeBinStats() throws IOException;
 
@@ -329,9 +351,11 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     /**
      * <code>DataAdapter</code> for data provided through some input stream
      */
-    private class StreamDataAdapter extends DataAdapter{
+    private class StreamDataAdapter extends DataAdapter {
 
-        /** Input stream providing access to the data */
+        /**
+         * Input stream providing access to the data
+         */
         private BufferedReader inputStream;
 
         /**
@@ -339,12 +363,14 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
          *
          * @param in BufferedReader input stream
          */
-        StreamDataAdapter(BufferedReader in){
+        StreamDataAdapter(BufferedReader in) {
             super();
             inputStream = in;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void computeBinStats() throws IOException {
             String str = null;
@@ -359,7 +385,9 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             inputStream = null;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void computeStats() throws IOException {
             String str = null;
@@ -379,7 +407,9 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      */
     private class ArrayDataAdapter extends DataAdapter {
 
-        /** Array of input  data values */
+        /**
+         * Array of input  data values
+         */
         private double[] inputArray;
 
         /**
@@ -394,7 +424,9 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             inputArray = in;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void computeStats() throws IOException {
             sampleStats = new SummaryStatistics();
@@ -403,12 +435,14 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             }
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void computeBinStats() throws IOException {
             for (int i = 0; i < inputArray.length; i++) {
                 SummaryStatistics stats =
-                    binStats.get(findBin(inputArray[i]));
+                        binStats.get(findBin(inputArray[i]));
                 stats.addValue(inputArray[i]);
             }
         }
@@ -418,14 +452,14 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Fills binStats array (second pass through data file).
      *
      * @param da object providing access to the data
-     * @throws IOException  if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     private void fillBinStats(final DataAdapter da)
-        throws IOException {
+            throws IOException {
         // Set up grid
         min = sampleStats.getMin();
         max = sampleStats.getMax();
-        delta = (max - min)/((double) binCount);
+        delta = (max - min) / ((double) binCount);
 
         // Initialize binStats ArrayList
         if (!binStats.isEmpty()) {
@@ -433,7 +467,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         }
         for (int i = 0; i < binCount; i++) {
             SummaryStatistics stats = new SummaryStatistics();
-            binStats.add(i,stats);
+            binStats.add(i, stats);
         }
 
         // Filling data in binStats Array
@@ -442,18 +476,18 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         // Assign upperBounds based on bin counts
         upperBounds = new double[binCount];
         upperBounds[0] =
-        ((double) binStats.get(0).getN()) / (double) sampleStats.getN();
-        for (int i = 1; i < binCount-1; i++) {
-            upperBounds[i] = upperBounds[i-1] +
-            ((double) binStats.get(i).getN()) / (double) sampleStats.getN();
+                ((double) binStats.get(0).getN()) / (double) sampleStats.getN();
+        for (int i = 1; i < binCount - 1; i++) {
+            upperBounds[i] = upperBounds[i - 1] +
+                    ((double) binStats.get(i).getN()) / (double) sampleStats.getN();
         }
-        upperBounds[binCount-1] = 1.0d;
+        upperBounds[binCount - 1] = 1.0d;
     }
 
     /**
      * Returns the index of the bin to which the given value belongs
      *
-     * @param value  the value whose bin we are trying to find
+     * @param value the value whose bin we are trying to find
      * @return the index of the bin containing the value
      */
     private int findBin(double value) {
@@ -466,6 +500,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Generates a random value from this distribution.
      * <strong>Preconditions:</strong><ul>
      * <li>the distribution must be loaded before invoking this method</li></ul>
+     *
      * @return the random value.
      * @throws MathIllegalStateException if the distribution has not been loaded
      */
@@ -514,7 +549,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * <p>Returns a fresh copy of the array of upper bounds for the bins.
      * Bins are: <br/>
      * [min,upperBounds[0]],(upperBounds[0],upperBounds[1]],...,
-     *  (upperBounds[binCount-2], upperBounds[binCount-1] = max].</p>
+     * (upperBounds[binCount-2], upperBounds[binCount-1] = max].</p>
      *
      * <p>Note: In versions 1.0-2.0 of commons-math, this method
      * incorrectly returned the array of probability generator upper
@@ -543,10 +578,10 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * <p>In versions 1.0-2.0 of commons-math, this array was (incorrectly) returned
      * by {@link #getUpperBounds()}.</p>
      *
-     * @since 2.1
      * @return array of upper bounds of subintervals used in data generation
      * @throws NullPointerException unless a {@code load} method has been
-     * called beforehand.
+     *                              called beforehand.
+     * @since 2.1
      */
     public double[] getGeneratorUpperBounds() {
         int len = upperBounds.length;
@@ -578,6 +613,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     @Override
@@ -597,6 +633,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * integral of the kernel density over B).</li>
      * <li>Return k(x) * P(B) / K(B), where k is the within-bin kernel density
      * and P(B) is the mass of B.</li></ol></p>
+     *
      * @since 3.1
      */
     public double density(double x) {
@@ -644,7 +681,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         final double kB = kB(binIndex);
         final double lower = binIndex == 0 ? min : binBounds[binIndex - 1];
         final double withinBinCum =
-            (kernel.cumulativeProbability(x) -  kernel.cumulativeProbability(lower)) / kB;
+                (kernel.cumulativeProbability(x) - kernel.cumulativeProbability(lower)) / kB;
         return pBminus + pB * withinBinCum;
     }
 
@@ -653,18 +690,18 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *
      * <p>Algorithm description:<ol>
      * <li>Find the smallest i such that the sum of the masses of the bins
-     *  through i is at least p.</li>
+     * through i is at least p.</li>
      * <li>
-     *   Let K be the within-bin kernel distribution for bin i.</br>
-     *   Let K(B) be the mass of B under K. <br/>
-     *   Let K(B-) be K evaluated at the lower endpoint of B (the combined
-     *   mass of the bins below B under K).<br/>
-     *   Let P(B) be the probability of bin i.<br/>
-     *   Let P(B-) be the sum of the bin masses below bin i. <br/>
-     *   Let pCrit = p - P(B-)<br/>
+     * Let K be the within-bin kernel distribution for bin i.</br>
+     * Let K(B) be the mass of B under K. <br/>
+     * Let K(B-) be K evaluated at the lower endpoint of B (the combined
+     * mass of the bins below B under K).<br/>
+     * Let P(B) be the probability of bin i.<br/>
+     * Let P(B-) be the sum of the bin masses below bin i. <br/>
+     * Let pCrit = p - P(B-)<br/>
      * <li>Return the inverse of K evaluated at <br/>
-     *    K(B-) + pCrit * K(B) / P(B) </li>
-     *  </ol></p>
+     * K(B-) + pCrit * K(B) / P(B) </li>
+     * </ol></p>
      *
      * @since 3.1
      */
@@ -703,14 +740,16 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     public double getNumericalMean() {
-       return sampleStats.getMean();
+        return sampleStats.getMean();
     }
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     public double getNumericalVariance() {
@@ -719,14 +758,16 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     public double getSupportLowerBound() {
-       return min;
+        return min;
     }
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     public double getSupportUpperBound() {
@@ -735,6 +776,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     public boolean isSupportLowerBoundInclusive() {
@@ -743,6 +785,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     public boolean isSupportUpperBoundInclusive() {
@@ -751,6 +794,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     public boolean isSupportConnected() {
@@ -759,6 +803,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
+     *
      * @since 3.1
      */
     @Override
@@ -774,7 +819,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      */
     private double pB(int i) {
         return i == 0 ? upperBounds[0] :
-            upperBounds[i] - upperBounds[i - 1];
+                upperBounds[i] - upperBounds[i - 1];
     }
 
     /**
@@ -799,7 +844,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         final double[] binBounds = getUpperBounds();
         final RealDistribution kernel = getKernel(binStats.get(i));
         return i == 0 ? kernel.cumulativeProbability(min, binBounds[0]) :
-            kernel.cumulativeProbability(binBounds[i - 1], binBounds[i]);
+                kernel.cumulativeProbability(binBounds[i - 1], binBounds[i]);
     }
 
     /**
@@ -836,8 +881,8 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             return new ConstantRealDistribution(bStats.getMean());
         } else {
             return new NormalDistribution(randomData.getRandomGenerator(),
-                bStats.getMean(), bStats.getStandardDeviation(),
-                NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+                    bStats.getMean(), bStats.getStandardDeviation(),
+                    NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
         }
     }
 }

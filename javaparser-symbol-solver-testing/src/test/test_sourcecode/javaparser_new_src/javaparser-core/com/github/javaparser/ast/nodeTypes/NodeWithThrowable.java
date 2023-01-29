@@ -13,7 +13,7 @@ public interface NodeWithThrowable<T> {
 
     /**
      * Adds this type to the throws clause
-     * 
+     *
      * @param throwType the exception type
      * @return this
      */
@@ -26,7 +26,7 @@ public interface NodeWithThrowable<T> {
 
     /**
      * Adds this class to the throws clause
-     * 
+     *
      * @param clazz the exception class
      * @return this
      */
@@ -37,7 +37,7 @@ public interface NodeWithThrowable<T> {
 
     /**
      * Check whether this elements throws this exception class
-     * 
+     *
      * @param clazz the class of the exception
      * @return true if found in throws clause, false if not
      */
@@ -47,7 +47,7 @@ public interface NodeWithThrowable<T> {
 
     /**
      * Check whether this elements throws this exception class
-     * 
+     *
      * @param throwableName the class of the exception
      * @return true if found in throws clause, false if not
      */

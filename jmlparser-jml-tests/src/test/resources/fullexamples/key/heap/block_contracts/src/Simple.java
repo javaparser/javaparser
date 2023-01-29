@@ -21,7 +21,8 @@ public class Simple {
           @ diverges false;
           @ assignable \nothing;
           @*/
-        label: {
+        label:
+        {
             if (j >= 0) break label;
             j = -j;
         }
@@ -64,16 +65,16 @@ public class Simple {
       @ assignable \nothing;
       @*/
     public int add(int x, int y) {
-       int z = 0;
+        int z = 0;
        /*@ ensures z == x + y;
          @ diverges false;
          @ signals_only \nothing;
          @ assignable \nothing;
          @*/
-       {
-           z = x + y;
-       }
-       return z;
+        {
+            z = x + y;
+        }
+        return z;
     }
 
     // :)
@@ -91,7 +92,8 @@ public class Simple {
           @ assignable \nothing;
           @*/
         {
-            label: {
+            label:
+            {
                 z = x + y;
                 break label;
             }
@@ -137,7 +139,8 @@ public class Simple {
       @*/
     public int vonAllemEtwas(int x, int y) {
         int z = 0;
-        outside: {
+        outside:
+        {
            /*@ requires x > 0 && y > 0;
              @ ensures x == y && z == x + y;
              @ breaks (outside) x < y && z == x * y;
@@ -146,16 +149,15 @@ public class Simple {
              @ diverges false;
              @ assignable \nothing;
              @*/
-            inside: {
+            inside:
+            {
                 if (x == y && x > 100) {
                     z = x + y;
                     break inside;
-                }
-                else if (x < y) {
+                } else if (x < y) {
                     z = x * y;
                     break outside;
-                }
-                else if (x > y) {
+                } else if (x > y) {
                     z = x / y;
                     // Note that the following is not valid java code,
                     // because outside does not label a loop statement.
@@ -165,8 +167,7 @@ public class Simple {
                         break;
                         break notALabel;
                     }
-                }
-                else if (x == y) {
+                } else if (x == y) {
                     return x + y;
                 }
             }
@@ -204,7 +205,7 @@ public class Simple {
         }
     }
 
-    
+
     /*@ normal_behavior
       @     ensures     \result != null;
       @     ensures     \fresh(\result);
@@ -216,17 +217,21 @@ public class Simple {
           @ ensures     len >= 0;
           @ assignable  \nothing;
           @*/
-        {len = (len < 0 ? 0 : len);}
+        {
+            len = (len < 0 ? 0 : len);
+        }
         byte[] array = null;
         /*@ normal_behavior
           @ ensures     array != null;
           @ ensures     \fresh(array);
           @ assignable  \nothing;
           @*/
-        {array = new byte[len];}
+        {
+            array = new byte[len];
+        }
         return array;
     }
-    
+
     /*@ normal_behavior
       @     assignable  \nothing;
       @*/

@@ -28,20 +28,18 @@ import com.github.javaparser.ast.jml.JmlKeyword;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * A primitive type in JML.
  */
 public class JmlLogicType extends Type implements Jmlish {
 
-
     public enum Primitive implements JmlKeyword {
-        SET("\\set"),
-        SEQ("\\seq"),
-        MAP("\\map"),
-        BIGINT("\\bigint"),
-        BIGFLOAT("\\bigfloat");
+
+        SET("\\set"), SEQ("\\seq"), MAP("\\map"), BIGINT("\\bigint"), BIGFLOAT("\\bigfloat");
 
         final String symbol;
 
@@ -70,7 +68,6 @@ public class JmlLogicType extends Type implements Jmlish {
         this.type = type;
     }
 
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -80,7 +77,6 @@ public class JmlLogicType extends Type implements Jmlish {
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
-
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -101,5 +97,10 @@ public class JmlLogicType extends Type implements Jmlish {
     @Override
     public ResolvedPrimitiveType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedPrimitiveType.class);
+    }
+
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        return resolve();
     }
 }

@@ -18,9 +18,9 @@ public class LinkList {
 
 
     public void reverse() {
-	if (head != null) {
-	    head = head.reverse();
-	}	
+        if (head != null) {
+            head = head.reverse();
+        }
     }
 
 }

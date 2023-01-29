@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 /* Stack.java - Class that provides a Last In First Out (LIFO)
    datatype, known more commonly as a Stack
@@ -80,101 +81,94 @@ package minicdj.util;
  * @since 1.0
  * @status updated to 1.4
  */
-public class Stack extends Vector
-{
-  // We could use Vector methods internally for the following methods,
-  // but have used Vector fields directly for efficiency (i.e. this
-  // often reduces out duplicate bounds checking).
+public class Stack extends Vector {
+    // We could use Vector methods internally for the following methods,
+    // but have used Vector fields directly for efficiency (i.e. this
+    // often reduces out duplicate bounds checking).
 
-  /**
-   * Compatible with JDK 1.0+.
-   */
-  private static final long serialVersionUID = 1224463164541339165L;
+    /**
+     * Compatible with JDK 1.0+.
+     */
+    private static final long serialVersionUID = 1224463164541339165L;
 
-  /**
-   * This constructor creates a new Stack, initially empty
-   */
-  public Stack()
-  {
-  }
+    /**
+     * This constructor creates a new Stack, initially empty
+     */
+    public Stack() {
+    }
 
-  /**
-   * Pushes an Object onto the top of the stack.  This method is effectively
-   * the same as addElement(item).
-   *
-   * @param item the Object to push onto the stack
-   * @return the Object pushed onto the stack
-   * @see Vector#addElement(Object)
-   */
-  public Object push(Object item)
-  {
-    // When growing the Stack, use the Vector routines in case more
-    // memory is needed.
-    // Note: spec indicates that this method *always* returns obj passed in!
+    /**
+     * Pushes an Object onto the top of the stack.  This method is effectively
+     * the same as addElement(item).
+     *
+     * @param item the Object to push onto the stack
+     * @return the Object pushed onto the stack
+     * @see Vector#addElement(Object)
+     */
+    public Object push(Object item) {
+        // When growing the Stack, use the Vector routines in case more
+        // memory is needed.
+        // Note: spec indicates that this method *always* returns obj passed in!
 
-    addElement(item);
-    return item;
-  }
+        addElement(item);
+        return item;
+    }
 
-  /**
-   * Pops an item from the stack and returns it.  The item popped is
-   * removed from the Stack.
-   *
-   * @return the Object popped from the stack
-   * @throws EmptyStackException if the stack is empty
-   */
-  public synchronized Object pop()
-  {
-    if (elementCount == 0)
-      throw new EmptyStackException();
+    /**
+     * Pops an item from the stack and returns it.  The item popped is
+     * removed from the Stack.
+     *
+     * @return the Object popped from the stack
+     * @throws EmptyStackException if the stack is empty
+     */
+    public synchronized Object pop() {
+        if (elementCount == 0)
+            throw new EmptyStackException();
 
-    modCount++;
-    Object obj = elementData[--elementCount];
+        modCount++;
+        Object obj = elementData[--elementCount];
 
-    // Set topmost element to null to assist the gc in cleanup.
-    elementData[elementCount] = null;
-    return obj;
-  }
+        // Set topmost element to null to assist the gc in cleanup.
+        elementData[elementCount] = null;
+        return obj;
+    }
 
-  /**
-   * Returns the top Object on the stack without removing it.
-   *
-   * @return the top Object on the stack
-   * @throws EmptyStackException if the stack is empty
-   */
-  public synchronized Object peek()
-  {
-    if (elementCount == 0)
-      throw new EmptyStackException();
+    /**
+     * Returns the top Object on the stack without removing it.
+     *
+     * @return the top Object on the stack
+     * @throws EmptyStackException if the stack is empty
+     */
+    public synchronized Object peek() {
+        if (elementCount == 0)
+            throw new EmptyStackException();
 
-    return elementData[elementCount - 1];
-  }
+        return elementData[elementCount - 1];
+    }
 
-  /**
-   * Tests if the stack is empty.
-   *
-   * @return true if the stack contains no items, false otherwise
-   */
-  public synchronized boolean empty()
-  {
-    return elementCount == 0;
-  }
+    /**
+     * Tests if the stack is empty.
+     *
+     * @return true if the stack contains no items, false otherwise
+     */
+    public synchronized boolean empty() {
+        return elementCount == 0;
+    }
 
-  /**
-   * Returns the position of an Object on the stack, with the top
-   * most Object being at position 1, and each Object deeper in the
-   * stack at depth + 1.
-   *
-   * @param o The object to search for
-   * @return The 1 based depth of the Object, or -1 if the Object
-   *         is not on the stack
-   */
-  public synchronized int search(Object o)
-  {
-    int i = elementCount;
-    while (--i >= 0)
-      if (equals(o, elementData[i]))
-        return elementCount - i;
-    return -1;
-  }
+    /**
+     * Returns the position of an Object on the stack, with the top
+     * most Object being at position 1, and each Object deeper in the
+     * stack at depth + 1.
+     *
+     * @param o The object to search for
+     * @return The 1 based depth of the Object, or -1 if the Object
+     *         is not on the stack
+     */
+    public synchronized int search(Object o) {
+        int i = elementCount;
+        while (--i >= 0)
+            if (equals(o, elementData[i]))
+                return elementCount - i;
+        return -1;
+    }
 }

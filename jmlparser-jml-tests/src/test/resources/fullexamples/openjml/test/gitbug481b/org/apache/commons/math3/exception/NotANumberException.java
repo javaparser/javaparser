@@ -24,7 +24,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.1
  */
 public class NotANumberException extends MathIllegalNumberException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = 20120906L;
 
     /**

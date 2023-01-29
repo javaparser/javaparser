@@ -2,24 +2,22 @@ package account;
 
 import unitTest.TestCase;
 
-public class TestConcreteAccount extends TestCase
-{
+public class TestConcreteAccount extends TestCase {
 
-  public static void main(String ... args) {
-    int k = args.length == 0 ? 10 : Integer.parseInt(args[0]);
-    new TestConcreteAccount("T").test(k);
-  }
+    public static void main(String... args) {
+        int k = args.length == 0 ? 10 : Integer.parseInt(args[0]);
+        new TestConcreteAccount("T").test(k);
+    }
 
-  public TestConcreteAccount(String name)
-  {
-    super(name);
-  }
-  
-  public void test (int i) 
-  { 
-    switch (i) { 
-      case 1:
-        new ConcreteAccount(0); break; 
+    public TestConcreteAccount(String name) {
+        super(name);
+    }
+
+    public void test(int i) {
+        switch (i) {
+            case 1:
+                new ConcreteAccount(0);
+                break;
 //      case 2:
 //        new ConcreteAccount(100); break;
 //      case 3: 
@@ -36,9 +34,10 @@ public class TestConcreteAccount extends TestCase
 //        AbstractAccount acc = new ConcreteAccount(300);
 //        assert acc.balance() == 300;
 //        break;
-      default: break;
+            default:
+                break;
+        }
     }
-  }
-  
-  public static final int testCount = 9; 
+
+    public static final int testCount = 9;
 }

@@ -27,10 +27,9 @@ import com.github.javaparser.ast.type.Type;
 
 /**
  * A node having members.
- *
+ * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getMembers
  * method.
- *
  */
 public interface NodeWithMembers<T> {
     List<BodyDeclaration<?>> getMembers();
@@ -41,7 +40,7 @@ public interface NodeWithMembers<T> {
      * Add a field to this and automatically add the import of the type if needed
      *
      * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param name      the name of the field
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
@@ -53,8 +52,8 @@ public interface NodeWithMembers<T> {
     /**
      * Add a field to this
      *
-     * @param type the type of the field
-     * @param name the name of the field
+     * @param type      the type of the field
+     * @param name      the name of the field
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
@@ -65,8 +64,8 @@ public interface NodeWithMembers<T> {
     /**
      * Add a field to this
      *
-     * @param type the type of the field
-     * @param name the name of the field
+     * @param type      the type of the field
+     * @param name      the name of the field
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link FieldDeclaration} created
      */
@@ -87,7 +86,7 @@ public interface NodeWithMembers<T> {
      * Add a private field to this
      *
      * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param name      the name of the field
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPrivateField(Class<?> typeClass, String name) {
@@ -108,9 +107,9 @@ public interface NodeWithMembers<T> {
 
     /**
      * Add a public field to this
-     * 
+     *
      * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param name      the name of the field
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addPublicField(Class<?> typeClass, String name) {
@@ -133,7 +132,7 @@ public interface NodeWithMembers<T> {
      * Add a protected field to this
      *
      * @param typeClass the type of the field
-     * @param name the name of the field
+     * @param name      the name of the field
      * @return the {@link FieldDeclaration} created
      */
     default FieldDeclaration addProtectedField(Class<?> typeClass, String name) {
@@ -156,7 +155,7 @@ public interface NodeWithMembers<T> {
      * Adds a methods with void return by default to this
      *
      * @param methodName the method name
-     * @param modifiers the modifiers like {@link Modifier#PUBLIC}
+     * @param modifiers  the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
     default MethodDeclaration addMethod(String methodName, Modifier... modifiers) {
@@ -172,7 +171,7 @@ public interface NodeWithMembers<T> {
 
     /**
      * Adds a constructor to this
-     * 
+     *
      * @param modifiers the modifiers like {@link Modifier#PUBLIC}
      * @return the {@link MethodDeclaration} created
      */
@@ -230,14 +229,14 @@ public interface NodeWithMembers<T> {
      * Try to find a {@link MethodDeclaration} by its parameters types
      *
      * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
-     *            void foo(Map&lt;Integer,String&gt; myMap,int number)
+     *                   void foo(Map&lt;Integer,String&gt; myMap,int number)
      * @return the methods found (multiple in case of polymorphism)
      */
     default List<MethodDeclaration> getMethodsByParameterTypes(String... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
                         && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
-                                .collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())))
+                        .collect(toSet()).equals(Stream.of(paramTypes).collect(toSet())))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
 
@@ -245,15 +244,15 @@ public interface NodeWithMembers<T> {
      * Try to find a {@link MethodDeclaration} by its parameters types
      *
      * @param paramTypes the types of parameters like "Map&lt;Integer,String&gt;","int" to match<br>
-     *            void foo(Map&lt;Integer,String&gt; myMap,int number)
+     *                   void foo(Map&lt;Integer,String&gt; myMap,int number)
      * @return the methods found (multiple in case of polymorphism)
      */
     default List<MethodDeclaration> getMethodsByParameterTypes(Class<?>... paramTypes) {
         return getMembers().stream()
                 .filter(m -> m instanceof MethodDeclaration
                         && ((MethodDeclaration) m).getParameters().stream().map(p -> p.getType().toString())
-                                .collect(toSet())
-                                .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())))
+                        .collect(toSet())
+                        .equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toSet())))
                 .map(m -> (MethodDeclaration) m).collect(toList());
     }
 
@@ -271,13 +270,13 @@ public interface NodeWithMembers<T> {
     }
 
     /**
-	 * Find all fields in the members of this node.
+     * Find all fields in the members of this node.
      *
-	 * @return the fields found. This list is immutable.
+     * @return the fields found. This list is immutable.
      */
     default List<FieldDeclaration> getFields() {
         return unmodifiableList(getMembers().stream()
-                .filter(m -> m instanceof FieldDeclaration )
+                .filter(m -> m instanceof FieldDeclaration)
                 .map(m -> (FieldDeclaration) m)
                 .collect(toList()));
     }

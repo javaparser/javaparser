@@ -1,6 +1,7 @@
 public class A {
 
-  private int ii;
+    private int ii;
 
-  public void m() {}
+    public void m() {
+    }
 }

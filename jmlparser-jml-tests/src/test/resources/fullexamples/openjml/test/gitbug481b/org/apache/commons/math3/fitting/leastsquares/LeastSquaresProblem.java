@@ -32,10 +32,10 @@ import org.apache.commons.math3.optim.OptimizationProblem;
  * LeastSquaresBuilder builder} or created at once using a {@link LeastSquaresFactory
  * factory}.
  * </p>
+ *
  * @see LeastSquaresBuilder
  * @see LeastSquaresFactory
  * @see LeastSquaresAdapter
- *
  * @since 3.3
  */
 public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresProblem.Evaluation> {
@@ -64,12 +64,10 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
     /**
      * Evaluate the model at the specified point.
      *
-     *
      * @param point the parameter values.
      * @return the model's value and derivative at the given point.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     *          if the maximal number of evaluations (of the model vector function) is
-     *          exceeded.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximal number of evaluations (of the model vector function) is
+     *                                                                        exceeded.
      */
     Evaluation evaluate(RealVector point);
 
@@ -86,11 +84,9 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * way for the caller to specify that the result of this computation should be
          * considered meaningless, and thus trigger an exception.
          *
-         *
          * @param threshold Singularity threshold.
          * @return the covariance matrix.
-         * @throws org.apache.commons.math3.linear.SingularMatrixException
-         *          if the covariance matrix cannot be computed (singular problem).
+         * @throws org.apache.commons.math3.linear.SingularMatrixException if the covariance matrix cannot be computed (singular problem).
          */
         RealMatrix getCovariances(double threshold);
 
@@ -100,12 +96,10 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * matrix, {@code sd(a[i]) ~= sqrt(C[i][i])}, where {@code a[i]} is the optimized
          * value of the {@code i}-th parameter, and {@code C} is the covariance matrix.
          *
-         *
          * @param covarianceSingularityThreshold Singularity threshold (see {@link
          *                                       #getCovariances(double) computeCovariances}).
          * @return an estimate of the standard deviation of the optimized parameters
-         * @throws org.apache.commons.math3.linear.SingularMatrixException
-         *          if the covariance matrix cannot be computed.
+         * @throws org.apache.commons.math3.linear.SingularMatrixException if the covariance matrix cannot be computed.
          */
         RealVector getSigma(double covarianceSingularityThreshold);
 
@@ -121,8 +115,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * Get the weighted Jacobian matrix.
          *
          * @return the weighted Jacobian: W<sup>1/2</sup> J.
-         * @throws org.apache.commons.math3.exception.DimensionMismatchException
-         * if the Jacobian dimension does not match problem dimension.
+         * @throws org.apache.commons.math3.exception.DimensionMismatchException if the Jacobian dimension does not match problem dimension.
          */
         RealMatrix getJacobian();
 
@@ -141,8 +134,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * then multiplied by the square root of the weight matrix.
          *
          * @return the weighted residuals: W<sup>1/2</sup> K.
-         * @throws org.apache.commons.math3.exception.DimensionMismatchException
-         * if the residuals have the wrong length.
+         * @throws org.apache.commons.math3.exception.DimensionMismatchException if the residuals have the wrong length.
          */
         RealVector getResiduals();
 

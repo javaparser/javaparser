@@ -19,7 +19,6 @@ package org.apache.commons.math3.exception.util;
 /**
  * Interface for accessing the context data structure stored in Commons Math
  * exceptions.
- *
  */
 public interface ExceptionContextProvider {
     /**

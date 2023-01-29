@@ -20,22 +20,28 @@ import org.apache.commons.math3.exception.MathUnsupportedOperationException;
 
 import java.io.Serializable;
 
-/** This interface represents a generic space, with affine and vectorial counterparts.
+/**
+ * This interface represents a generic space, with affine and vectorial counterparts.
+ *
  * @see Vector
  * @since 3.0
  */
 public interface Space extends Serializable {
 
-    /** Get the dimension of the space.
+    /**
+     * Get the dimension of the space.
+     *
      * @return dimension of the space
      */
     int getDimension();
 
-    /** Get the n-1 dimension subspace of this space.
+    /**
+     * Get the n-1 dimension subspace of this space.
+     *
      * @return n-1 dimension sub-space of this space
+     * @throws MathUnsupportedOperationException for dimension-1 spaces
+     *                                           which do not have sub-spaces
      * @see #getDimension()
-     * @exception MathUnsupportedOperationException for dimension-1 spaces
-     * which do not have sub-spaces
      */
     Space getSubSpace() throws MathUnsupportedOperationException;
 

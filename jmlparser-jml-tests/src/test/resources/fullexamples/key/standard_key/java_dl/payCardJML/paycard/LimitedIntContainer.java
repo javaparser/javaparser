@@ -24,5 +24,5 @@ public interface LimitedIntContainer {
     /*@ public normal_behavior
       @   ensures regularState ==> \result == value;
       @*/
-    /*@ pure @*/ int  available();
+    /*@ pure @*/ int available();
 }

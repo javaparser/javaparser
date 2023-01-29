@@ -33,7 +33,9 @@ import java.util.*;
  */
 public class UnmodifiableTrie<K, V> implements Trie<K, V>, Serializable, Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -7156426030315945159L;
 
     private final Trie<K, V> delegate;
@@ -43,7 +45,7 @@ public class UnmodifiableTrie<K, V> implements Trie<K, V>, Serializable, Unmodif
      *
      * @param <K>  the key type
      * @param <V>  the value type
-     * @param trie  the trie to decorate, must not be null
+     * @param trie the trie to decorate, must not be null
      * @return a new unmodifiable trie
      * @throws NullPointerException if trie is null
      */
@@ -57,10 +59,11 @@ public class UnmodifiableTrie<K, V> implements Trie<K, V>, Serializable, Unmodif
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param trie  the trie to decorate, must not be null
+     * @param trie the trie to decorate, must not be null
      * @throws NullPointerException if trie is null
      */
     public UnmodifiableTrie(final Trie<K, ? extends V> trie) {

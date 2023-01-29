@@ -30,16 +30,14 @@ import java.util.Optional;
  * @param <K> The type of the key.
  * @param <V> The type of the value.
  */
-public class GuavaCache<K, V> implements Cache<K, V>  {
+public class GuavaCache<K, V> implements Cache<K, V> {
 
     /**
      * Wrap a Guava cache with a custom cache.
      *
-     * @param guavaCache The guava cache to be wrapped-
-     *
+     * @param guavaCache  The guava cache to be wrapped-
      * @param <expectedK> The expected type for the key.
      * @param <expectedV> The expected type for the value.
-     *
      * @return A newly created instance of {@link NoCache}.
      */
     public static <expectedK, expectedV> GuavaCache<expectedK, expectedV> create(com.google.common.cache.Cache<expectedK, expectedV> guavaCache) {

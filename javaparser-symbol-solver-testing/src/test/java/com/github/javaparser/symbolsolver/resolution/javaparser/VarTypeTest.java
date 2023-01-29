@@ -70,19 +70,19 @@ class VarTypeTest {
     void failResolveNoInitializer() {
         assertThrows(IllegalStateException.class, () -> {
             CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc;}}")).getResult().get();
-        VarType varType = ast.findFirst(VarType.class).get();
-        varType.resolve();
-    });
-        
-}
+            VarType varType = ast.findFirst(VarType.class).get();
+            varType.resolve();
+        });
+
+    }
 
     @Test
     void failResolveWrongLocation() {
         assertThrows(IllegalStateException.class, () -> {
             CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(var x){};}")).getResult().get();
-        VarType varType = ast.findFirst(VarType.class).get();
-        varType.resolve();
-    });
-        
-}
+            VarType varType = ast.findFirst(VarType.class).get();
+            varType.resolve();
+        });
+
+    }
 }

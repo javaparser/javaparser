@@ -13,4 +13,5 @@
 
 package java.lang;
 
-public interface Cloneable { }
+public interface Cloneable {
+}

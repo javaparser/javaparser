@@ -35,13 +35,19 @@ import java.util.NoSuchElementException;
  */
 public class ZippingIterator<E> implements Iterator<E> {
 
-    /** The {@link Iterator}s to evaluate. */
+    /**
+     * The {@link Iterator}s to evaluate.
+     */
     private final Iterator<Iterator<? extends E>> iterators;
 
-    /** The next iterator to use for next(). */
+    /**
+     * The next iterator to use for next().
+     */
     private Iterator<? extends E> nextIterator = null;
 
-    /** The last iterator which was used for next(). */
+    /**
+     * The last iterator which was used for next().
+     */
     private Iterator<? extends E> lastReturned = null;
 
     // Constructors
@@ -51,36 +57,36 @@ public class ZippingIterator<E> implements Iterator<E> {
      * Constructs a new <code>ZippingIterator</code> that will provide
      * interleaved iteration over the two given iterators.
      *
-     * @param a  the first child iterator
-     * @param b  the second child iterator
+     * @param a the first child iterator
+     * @param b the second child iterator
      * @throws NullPointerException if either iterator is null
      */
     @SuppressWarnings("unchecked")
     public ZippingIterator(final Iterator<? extends E> a, final Iterator<? extends E> b) {
-        this(new Iterator[] {a, b});
+        this(new Iterator[]{a, b});
     }
 
     /**
      * Constructs a new <code>ZippingIterator</code> that will provide
      * interleaved iteration over the three given iterators.
      *
-     * @param a  the first child iterator
-     * @param b  the second child iterator
-     * @param c  the third child iterator
+     * @param a the first child iterator
+     * @param b the second child iterator
+     * @param c the third child iterator
      * @throws NullPointerException if either iterator is null
      */
     @SuppressWarnings("unchecked")
     public ZippingIterator(final Iterator<? extends E> a,
                            final Iterator<? extends E> b,
                            final Iterator<? extends E> c) {
-        this(new Iterator[] {a, b, c});
+        this(new Iterator[]{a, b, c});
     }
 
     /**
      * Constructs a new <code>ZippingIterator</code> that will provide
      * interleaved iteration of the specified iterators.
      *
-     * @param iterators  the array of iterators
+     * @param iterators the array of iterators
      * @throws NullPointerException if any iterator is null
      */
     public ZippingIterator(final Iterator<? extends E>... iterators) {
@@ -111,7 +117,7 @@ public class ZippingIterator<E> implements Iterator<E> {
             return true;
         }
 
-        while(iterators.hasNext()) {
+        while (iterators.hasNext()) {
             final Iterator<? extends E> childIterator = iterators.next();
             if (childIterator.hasNext()) {
                 nextIterator = childIterator;
@@ -145,7 +151,7 @@ public class ZippingIterator<E> implements Iterator<E> {
      * Removes the last returned element from the child iterator that produced it.
      *
      * @throws IllegalStateException if there is no last returned element, or if
-     *   the last returned element has already been removed
+     *                               the last returned element has already been removed
      */
     @Override
     public void remove() {

@@ -42,12 +42,15 @@ class LazyTypeTest extends AbstractSymbolResolutionTest {
     private ResolvedType lazyBar;
     private ResolvedType lazyBaz;
     private TypeSolver typeSolver;
-    
-    class Foo {}
-    
-    class Bar {}
 
-    class Baz extends Foo {}
+    class Foo {
+    }
+
+    class Bar {
+    }
+
+    class Baz extends Foo {
+    }
 
     @BeforeEach
     void setup() {
@@ -63,21 +66,21 @@ class LazyTypeTest extends AbstractSymbolResolutionTest {
     private ResolvedType lazy(ResolvedType type) {
         return new LazyType(v -> type);
     }
-    
+
     @Test
     void testIsAssignable() {
         assertEquals(true, foo.isAssignableBy(foo));
         assertEquals(true, foo.isAssignableBy(baz));
         assertEquals(false, foo.isAssignableBy(bar));
-        
+
         assertEquals(true, lazyFoo.isAssignableBy(lazyFoo));
         assertEquals(true, lazyFoo.isAssignableBy(lazyBaz));
         assertEquals(false, lazyFoo.isAssignableBy(lazyBar));
-        
+
         assertEquals(true, foo.isAssignableBy(lazyFoo));
         assertEquals(true, foo.isAssignableBy(lazyBaz));
         assertEquals(false, foo.isAssignableBy(lazyBar));
-        
+
     }
 
 }

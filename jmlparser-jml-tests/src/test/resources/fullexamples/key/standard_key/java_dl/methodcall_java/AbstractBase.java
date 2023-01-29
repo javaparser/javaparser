@@ -11,7 +11,6 @@
 // Public License. See LICENSE.TXT for details.
 // 
 
-public abstract class AbstractBase
-{
+public abstract class AbstractBase {
     public abstract int m();
 }

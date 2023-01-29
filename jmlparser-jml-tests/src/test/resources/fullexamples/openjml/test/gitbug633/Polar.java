@@ -20,21 +20,29 @@
 
 package org.jmlspecs.samples.dbc;
 
-/** Complex numbers in polar coordinates.
+/**
+ * Complex numbers in polar coordinates.
+ *
  * @author Gary T. Leavens with help from Abelson and Sussman's
- *          <cite>Structure and Interpretation of Computer Programs</cite>
+ * <cite>Structure and Interpretation of Computer Programs</cite>
  */
 public /*@ pure @*/ strictfp class Polar extends ComplexOps {
-    
-    /** The magnitude of this number. */
+
+    /**
+     * The magnitude of this number.
+     */
     private double mag;
-    /** The angle of this number. */
+    /**
+     * The angle of this number.
+     */
     private double ang;
-    
-    /** Initialize this polar coordinate number
+
+    /**
+     * Initialize this polar coordinate number
      * with magnitude mag and angle ang, except that
      * when the magnitude is negative, this
      * is interpreted as magnitude -mag and angle ang+StrictMath.PI.
+     *
      * @param mag the magnitude desired
      * @param ang the angle in radians, measured
      *            counterclockwise from the positive x axis
@@ -55,8 +63,7 @@ public /*@ pure @*/ strictfp class Polar extends ComplexOps {
       @   signals_only IllegalArgumentException;
       @*/
     public Polar(double mag, double ang)
-        throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         if (Double.isNaN(mag)) {
             throw new IllegalArgumentException();
         }
@@ -68,7 +75,8 @@ public /*@ pure @*/ strictfp class Polar extends ComplexOps {
         this.ang = standardizeAngle(ang);
     }
 
-    /** Standardize the angle so it's between
+    /**
+     * Standardize the angle so it's between
      * -StrictMath.PI and StrictMath.PI (radians).
      */
     /*@   requires Double.NEGATIVE_INFINITY < rad
@@ -80,17 +88,16 @@ public /*@ pure @*/ strictfp class Polar extends ComplexOps {
       @   signals_only IllegalArgumentException;
       @*/
     public static /*@ pure @*/ double standardizeAngle(double rad)
-        throws IllegalArgumentException
-    {
-        if (Double.isNaN(rad) || rad == Double.NEGATIVE_INFINITY 
-            || rad == Double.POSITIVE_INFINITY) {
+            throws IllegalArgumentException {
+        if (Double.isNaN(rad) || rad == Double.NEGATIVE_INFINITY
+                || rad == Double.POSITIVE_INFINITY) {
             throw new IllegalArgumentException();
         }
-        rad = rad % (2*StrictMath.PI);
+        rad = rad % (2 * StrictMath.PI);
         if (rad > StrictMath.PI) {
-            return rad - 2*StrictMath.PI;
+            return rad - 2 * StrictMath.PI;
         } else if (rad < -StrictMath.PI) {
-            return rad + 2*StrictMath.PI;
+            return rad + 2 * StrictMath.PI;
         } else {
             return rad;
         }

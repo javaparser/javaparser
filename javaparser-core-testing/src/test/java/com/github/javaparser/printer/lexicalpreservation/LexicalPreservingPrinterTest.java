@@ -633,7 +633,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                         }));
         assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
-                "   @Override()" + SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   @Override" + SYSTEM_EOL +
@@ -1012,10 +1012,10 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 methodDeclaration -> methodDeclaration.addAnnotation("Override"))));
         assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
-                "   @Override()" + SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
-                "   @Override()" + SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
                 "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
@@ -1036,7 +1036,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
-        assertEquals("@Deprecated()" + SYSTEM_EOL +
+        assertEquals("@Deprecated" + SYSTEM_EOL +
                 "public final class A {}", LexicalPreservingPrinter.print(cu));
 
     }
@@ -1047,7 +1047,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
-        assertEquals("@Deprecated()" + SYSTEM_EOL +
+        assertEquals("@Deprecated" + SYSTEM_EOL +
                 "public abstract class A {}", LexicalPreservingPrinter.print(cu));
     }
 
@@ -1442,10 +1442,10 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  int[] foo;\n" +
-                                "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  int[] foo;\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
     }
 
@@ -1454,18 +1454,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // Given
         considerCode("class Test {\n" +
-                    "  int[][] foo;\n" +
-                    "}");
+                "  int[][] foo;\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  int[][] foo;\n" +
-                                "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  int[][] foo;\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
     }
 
@@ -1474,18 +1474,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // Given
         considerCode("class Test {\n" +
-                    "  int foo[];\n" +
-                    "}");
+                "  int foo[];\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  int foo[];\n" +
-                                "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  int foo[];\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
     }
 
@@ -1493,7 +1493,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
      * Given a field that have arrays declared in C style and
      * When a marker annotation is added to the code
      * Assert that the result matches the expected.
-     *
+     * <p>
      * Issue: 3419
      */
     @Test
@@ -1501,18 +1501,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // Given
         considerCode("class Test {\n" +
-                     "  int foo[][];\n" +
-                     "}");
+                "  int foo[][];\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  int foo[][];\n" +
-                                "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  int foo[][];\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
     }
 
@@ -1521,18 +1521,18 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // Given
         considerCode("class Test {\n" +
-                     "  int[]foo;\n" +
-                     "}");
+                "  int[]foo;\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  int[]foo;\n" +
-                                 "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  int[]foo;\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
     }
 
@@ -1541,27 +1541,27 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         // Given
         considerCode("class Test {\n" +
-                     "  int[][]foo;\n" +
-                     "}");
+                "  int[][]foo;\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  int[][]foo;\n" +
-                                "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  int[][]foo;\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
     }
-    
+
     @Test
     void testClassOrInterfacePreservationWithFullyQualifiedName_SingleType() {
         // Given
         considerCode("class Test {\n" +
-                     "  java.lang.Object foo;\n" +
-                     "}");
+                "  java.lang.Object foo;\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
@@ -1569,20 +1569,20 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  java.lang.Object foo;\n" +
-                                "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  java.lang.Object foo;\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
 
     }
-    
+
     @Test
     void testClassOrInterfacePreservationWithFullyQualifiedName_ArrayType() {
         // Given
         considerCode("class Test {\n" +
-                     "  java.lang.Object[] foo;\n" +
-                     "}");
+                "  java.lang.Object[] foo;\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
@@ -1590,20 +1590,20 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  java.lang.Object[] foo;\n" +
-                                "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  java.lang.Object[] foo;\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
 
     }
-    
+
     @Test
     void testClassOrInterfacePreservationWithFullyQualifiedName_MultipleVariablesDeclarationWithSameType() {
         // Given
         considerCode("class Test {\n" +
-                     "  java.lang.Object[] foo, bar;\n" +
-                     "}");
+                "  java.lang.Object[] foo, bar;\n" +
+                "}");
 
         // When
         FieldDeclaration fooField = cu.findFirst(FieldDeclaration.class).orElseThrow(AssertionError::new);
@@ -1611,14 +1611,14 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         fooField.addMarkerAnnotation("Nullable");
 
         // Assert
-        String expectedCode =   "class Test {\n" +
-                                "  @Nullable\n" +
-                                "  java.lang.Object[] foo, bar;\n" +
-                                "}";
+        String expectedCode = "class Test {\n" +
+                "  @Nullable\n" +
+                "  java.lang.Object[] foo, bar;\n" +
+                "}";
         assertTransformedToString(expectedCode, cu);
 
     }
-    
+
     @Test
     void testClassOrInterfacePreservationWithFullyQualifiedName_MultipleVariablesDeclarationwithDifferentType() {
         // Given
@@ -1683,45 +1683,45 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertTransformedToString(expectedCode, cu);
 
     }
-    
+
     // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
     @Test
     void removedIndentationLineCommentsPrinted() {
-		considerCode("public class Foo {\n" +
-    			"  //line \n" +
-    			"  void mymethod() {\n" +
-    			"  }\n" +
-    			"}");
-		String expected =
-				"public class Foo {\n" + 
-		    	"  void mymethod() {\n" +
-		    	"  }\n" +
-		    	"}";
-    	cu.getAllContainedComments().get(0).remove();
-    	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        considerCode("public class Foo {\n" +
+                "  //line \n" +
+                "  void mymethod() {\n" +
+                "  }\n" +
+                "}");
+        String expected =
+                "public class Foo {\n" +
+                        "  void mymethod() {\n" +
+                        "  }\n" +
+                        "}";
+        cu.getAllContainedComments().get(0).remove();
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
-    
+
     // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
     @Test
     void removedIndentationBlockCommentsPrinted() {
-    	considerCode("public class Foo {\n" +
-    			"  /*\n" +
-    			"  *Block comment coming through\n" +
-    			"  */\n" +
-    			"  void mymethod() {\n" +
-    			"  }\n" +
-    			"}");
-    	String expected =
-    			"public class Foo {\n" +
-    	    	"  void mymethod() {\n" +
-    	    	"  }\n" +
-    	    	"}";
-    	cu.getAllContainedComments().get(0).remove();
-    	
-    	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        considerCode("public class Foo {\n" +
+                "  /*\n" +
+                "  *Block comment coming through\n" +
+                "  */\n" +
+                "  void mymethod() {\n" +
+                "  }\n" +
+                "}");
+        String expected =
+                "public class Foo {\n" +
+                        "  void mymethod() {\n" +
+                        "  }\n" +
+                        "}";
+        cu.getAllContainedComments().get(0).remove();
+
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
-    
- // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
+
+    // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
     @Test
     void removedIndentationJavaDocCommentsPrinted() {
         considerCode("public class Foo {\n" +

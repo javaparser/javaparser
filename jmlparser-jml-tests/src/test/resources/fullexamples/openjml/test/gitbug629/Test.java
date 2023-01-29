@@ -2,6 +2,7 @@ class Node {
     int data;
     /*@ nullable */ Node next;
 }
+
 public class Test {
     public Node getLast(Node head) {
         if (head == null)

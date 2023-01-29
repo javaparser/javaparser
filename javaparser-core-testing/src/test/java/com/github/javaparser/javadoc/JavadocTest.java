@@ -111,7 +111,7 @@ class JavadocTest {
         assertEquals("systemProperty", inlineTags.get(2).getName());
         assertEquals(" JAVA_HOME", inlineTags.get(2).getContent());
         assertEquals(SYSTEM_PROPERTY, inlineTags.get(2).getType());
-        
+
         String javadocText = javadoc.toText();
         assertTrue(javadocText.contains("{@link TOVersion}"));
     }

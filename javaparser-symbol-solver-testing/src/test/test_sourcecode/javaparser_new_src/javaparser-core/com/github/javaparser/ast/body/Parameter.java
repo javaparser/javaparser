@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.Range;
@@ -34,6 +34,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.utils.Pair;
 
 import static com.github.javaparser.ast.type.ArrayType.wrapInArrayTypes;
+
 import java.util.EnumSet;
 import java.util.List;
 
@@ -72,10 +73,8 @@ public final class Parameter extends Node implements
     /**
      * Creates a new {@link Parameter}.
      *
-     * @param elementType
-     *            type of the parameter
-     * @param name
-     *            name of the parameter
+     * @param elementType type of the parameter
+     * @param name        name of the parameter
      * @return instance of {@link Parameter}
      */
     public static Parameter create(Type elementType, String name) {
@@ -88,12 +87,12 @@ public final class Parameter extends Node implements
         setElementType(elementType);
     }
 
-    public Parameter(final Range range, 
-                     EnumSet<Modifier> modifiers, 
-                     List<AnnotationExpr> annotations, 
+    public Parameter(final Range range,
+                     EnumSet<Modifier> modifiers,
+                     List<AnnotationExpr> annotations,
                      Type elementType,
                      List<ArrayBracketPair> arrayBracketPairsAfterElementType,
-                     boolean isVarArgs, 
+                     boolean isVarArgs,
                      VariableDeclaratorId id) {
         super(range);
         setModifiers(modifiers);
@@ -138,6 +137,7 @@ public final class Parameter extends Node implements
         this.isVarArgs = isVarArgs;
         return this;
     }
+
     /**
      * @return the list returned could be immutable (in that case it will be empty)
      */
@@ -169,8 +169,8 @@ public final class Parameter extends Node implements
     /**
      * Return the modifiers of this parameter declaration.
      *
-     * @see Modifier
      * @return modifiers
+     * @see Modifier
      */
     @Override
     public EnumSet<Modifier> getModifiers() {
@@ -179,7 +179,7 @@ public final class Parameter extends Node implements
 
     /**
      * @param annotations a null value is currently treated as an empty list. This behavior could change
-     *            in the future, so please avoid passing null
+     *                    in the future, so please avoid passing null
      */
     @Override
     @SuppressWarnings("unchecked")

@@ -178,6 +178,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     }
 
     // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+
     /**
      * @return is this class's parent a LocalRecordDeclarationStmt ?
      */
@@ -354,7 +355,7 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     /**
      * Records are implicitly final, even without the explicit modifier.
      * https://openjdk.java.net/jeps/359#Restrictions-on-records
-     *
+     * <p>
      * If wanting to find out if the keyword {@code final} is explicitly added to this parameter,
      * you should use {@code node.hasModifier(Modifier.DefaultKeyword.FINAL)}
      *

@@ -1,4 +1,3 @@
-
 <!--
     Note that edits to this readme should be done via `docs/readme.md`.
     Modifying this file directly within the root directory risks it being overwritten. 
@@ -13,8 +12,8 @@
 [![License LGPL-3/Apache-2.0](https://img.shields.io/badge/license-LGPL--3%2FApache--2.0-blue.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667378.svg)](https://doi.org/10.5281/zenodo.2667378)
 
-
-This project contains a set of libraries implementing a Java 1.0 - Java 15 Parser with advanced analysis functionalities. This includes preview features to Java 13, with Java 14 preview features work-in-progress.
+This project contains a set of libraries implementing a Java 1.0 - Java 15 Parser with advanced analysis
+functionalities. This includes preview features to Java 13, with Java 14 preview features work-in-progress.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
@@ -34,10 +33,11 @@ Just add the following to your maven configuration or tailor to your own depende
 **Maven**:
 
 ```xml
+
 <dependency>
-    <groupId>com.github.javaparser</groupId>
-    <artifactId>javaparser-symbol-solver-core</artifactId>
-    <version>${project.version}</version>
+	<groupId>com.github.javaparser</groupId>
+	<artifactId>javaparser-symbol-solver-core</artifactId>
+	<version>${project.version}</version>
 </dependency>
 ```
 
@@ -49,17 +49,21 @@ implementation 'com.github.javaparser:javaparser-symbol-solver-core:${project.ve
 
 Since Version 3.5.10, the JavaParser project includes the JavaSymbolSolver.
 While JavaParser generates an Abstract Syntax Tree, JavaSymbolSolver analyzes that AST and is able to find
-the relation between an element and its declaration (e.g. for a variable name it could be a parameter of a method, providing information about its type, position in the AST, ect).
+the relation between an element and its declaration (e.g. for a variable name it could be a parameter of a method,
+providing information about its type, position in the AST, ect).
 
-Using the dependency above will add both JavaParser and JavaSymbolSolver to your project. If you only need the core functionality of parsing Java source code in order to traverse and manipulate the generated AST, you can reduce your projects boilerplate by only including JavaParser to your project:
+Using the dependency above will add both JavaParser and JavaSymbolSolver to your project. If you only need the core
+functionality of parsing Java source code in order to traverse and manipulate the generated AST, you can reduce your
+projects boilerplate by only including JavaParser to your project:
 
 **Maven**:
 
 ```xml
+
 <dependency>
-    <groupId>com.github.javaparser</groupId>
-    <artifactId>javaparser-core</artifactId>
-    <version>${project.version}</version>
+	<groupId>com.github.javaparser</groupId>
+	<artifactId>javaparser-core</artifactId>
+	<version>${project.version}</version>
 </dependency>
 ```
 
@@ -75,10 +79,11 @@ There is a separate module for this:
 **Maven**:
 
 ```xml
+
 <dependency>
-    <groupId>com.github.javaparser</groupId>
-    <artifactId>javaparser-core-serialization</artifactId>
-    <version>${project.version}</version>
+	<groupId>com.github.javaparser</groupId>
+	<artifactId>javaparser-core-serialization</artifactId>
+	<version>${project.version}</version>
 </dependency>
 ```
 
@@ -91,20 +96,24 @@ implementation 'com.github.javaparser:javaparser-core-serialization:${project.ve
 ## How To Compile Sources
 
 If you checked out the project's source code from GitHub, you can build the project with maven using:
+
 ```
 mvnw clean install
 ```
 
 If you want to generate the packaged jar files from the source files, you run the following maven command:
+
 ```
 mvnw package
 ```
 
 **NOTE** the jar files for the two modules can be found in:
+
 - `javaparser/javaparser-core/target/javaparser-core-\<version\>.jar`
 - `javaparser-symbol-solver-core/target/javaparser-symbol-solver-core-\<version\>.jar`
 
-If you checkout the sources and want to view the project in an IDE, it is best to first generate some of the source files;
+If you checkout the sources and want to view the project in an IDE, it is best to first generate some of the source
+files;
 otherwise you will get many compilation complaints in the IDE. (`mvnw clean install` already does this for you.)
 
 ```
@@ -117,7 +126,8 @@ The `run_metamodel_generator.sh` script will rebuild the metamodel,
 which is used by the code generators which are run by `run_core_generators.sh`
 Make sure that `javaparser-core` at least compiles before you run these.
 
-**Note**: for Eclipse IDE follow the steps described in the wiki: https://github.com/javaparser/javaparser/wiki/Eclipse-Project-Setup-Guide
+**Note**: for Eclipse IDE follow the steps described in the
+wiki: https://github.com/javaparser/javaparser/wiki/Eclipse-Project-Setup-Guide
 
 ## More information
 
@@ -125,8 +135,11 @@ Make sure that `javaparser-core` at least compiles before you run these.
 
 ## License
 
-JavaParser is available either under the terms of the LGPL License or the Apache License. You as the user are entitled to choose the terms under which adopt JavaParser.
+JavaParser is available either under the terms of the LGPL License or the Apache License. You as the user are entitled
+to choose the terms under which adopt JavaParser.
 
-For details about the LGPL License please refer to [LICENSE.LGPL](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.LGPL).
+For details about the LGPL License please refer
+to [LICENSE.LGPL](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.LGPL).
 
-For details about the Apache License please refer to [LICENSE.APACHE](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.APACHE).
+For details about the Apache License please refer
+to [LICENSE.APACHE](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.APACHE).

@@ -10,8 +10,8 @@ public class WhileDemo {
       @ diverges false; 
       @ */
     void findMax(int[] a) {
-	i = 1; 
-	m = a[0];
+        i = 1;
+        m = a[0];
  
 	/*@ loop_invariant  
           @ (1<=i && i<=a.length) &&
@@ -20,11 +20,11 @@ public class WhileDemo {
           @ assignable m,i;
 	  @ decreases a.length-i;
 	  @*/
-      while (i<a.length) {
-        if (a[i] > m )
-	    m = a[i];
-	i++;
-      }
+        while (i < a.length) {
+            if (a[i] > m)
+                m = a[i];
+            i++;
+        }
     }
 
 }

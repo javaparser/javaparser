@@ -1,5 +1,5 @@
 public interface TestC {
-    
+
     //@   requires r >= 5;
     //@   {|
     //@   requires r >= 10;

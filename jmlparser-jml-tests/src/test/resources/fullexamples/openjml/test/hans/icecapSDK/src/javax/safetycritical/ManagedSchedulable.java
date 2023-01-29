@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : ManagedSchedulable.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,7 +19,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
  *************************************************************************/
@@ -33,19 +33,18 @@ import javax.safetycritical.annotate.SCJRestricted;
 
 /**
  * All schedulable objects are managed by a mission.
- * 
- * @version 1.2; - December 2013
- * 
- * @author Anders P. Ravn, Aalborg University, 
+ *
+ * @author Anders P. Ravn, Aalborg University,
  * <A HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- * Hans S&oslash;ndergaard, VIA University College, Denmark, 
+ * Hans S&oslash;ndergaard, VIA University College, Denmark,
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * @version 1.2; - December 2013
  */
 @SCJAllowed
 public interface ManagedSchedulable extends Schedulable {
-	/**
-	 * Registers this schedulable object with the current mission.
-	 */
+    /**
+     * Registers this schedulable object with the current mission.
+     */
 	/*@ 
 	public behavior
 	  requires Mission.getMission().getPhase() == Phase.INITIALIZE;
@@ -54,12 +53,12 @@ public interface ManagedSchedulable extends Schedulable {
 	   
 	    ensures Mission.getMission().isRegistered(this);
 	  @*/
-	@SCJRestricted(Phase.INITIALIZE)
-	public void register();
+    @SCJRestricted(Phase.INITIALIZE)
+    public void register();
 
-	/**
-	 * Runs end-of-mission clean up associated with this schedulable object.
-	 */
+    /**
+     * Runs end-of-mission clean up associated with this schedulable object.
+     */
 	/*@ 
 	public behavior
 	  requires Mission.getMission().getPhase() == Phase.CLEANUP;    
@@ -67,12 +66,12 @@ public interface ManagedSchedulable extends Schedulable {
 	   
 	  ensures !Mission.getMission().isRegistered(this);
 	 @*/
-	@SCJAllowed(Level.SUPPORT)
-	public void cleanUp();
-	
-	/**
-	 * Indicates that the enclosing mission has been instructed to terminate.
-	 */
-	@SCJAllowed(Level.SUPPORT)
-	public void signalTermination();
+    @SCJAllowed(Level.SUPPORT)
+    public void cleanUp();
+
+    /**
+     * Indicates that the enclosing mission has been instructed to terminate.
+     */
+    @SCJAllowed(Level.SUPPORT)
+    public void signalTermination();
 }

@@ -47,13 +47,21 @@ import java.io.Serializable;
  * @since 2.0
  */
 public class LinearConstraint implements Serializable {
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -764632794033034092L;
-    /** Coefficients of the constraint (left hand side). */
+    /**
+     * Coefficients of the constraint (left hand side).
+     */
     private final transient RealVector coefficients;
-    /** Relationship between left and right hand sides (=, &lt;=, >=). */
+    /**
+     * Relationship between left and right hand sides (=, &lt;=, >=).
+     */
     private final Relationship relationship;
-    /** Value of the constraint (right hand side). */
+    /**
+     * Value of the constraint (right hand side).
+     */
     private final double value;
 
     /**
@@ -66,9 +74,10 @@ public class LinearConstraint implements Serializable {
      *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> >= v</li>
      * </ul>
      * </p>
+     *
      * @param coefficients The coefficients of the constraint (left hand side)
      * @param relationship The type of (in)equality used in the constraint
-     * @param value The value of the constraint (right hand side)
+     * @param value        The value of the constraint (right hand side)
      */
     public LinearConstraint(final double[] coefficients,
                             final Relationship relationship,
@@ -86,16 +95,17 @@ public class LinearConstraint implements Serializable {
      *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> >= v</li>
      * </ul>
      * </p>
+     *
      * @param coefficients The coefficients of the constraint (left hand side)
      * @param relationship The type of (in)equality used in the constraint
-     * @param value The value of the constraint (right hand side)
+     * @param value        The value of the constraint (right hand side)
      */
     public LinearConstraint(final RealVector coefficients,
                             final Relationship relationship,
                             final double value) {
         this.coefficients = coefficients;
         this.relationship = relationship;
-        this.value        = value;
+        this.value = value;
     }
 
     /**
@@ -111,11 +121,12 @@ public class LinearConstraint implements Serializable {
      *       r<sub>1</sub>x<sub>1</sub> + ... r<sub>n</sub>x<sub>n</sub> + r<sub>cst</sub></li>
      * </ul>
      * </p>
+     *
      * @param lhsCoefficients The coefficients of the linear expression on the left hand side of the constraint
-     * @param lhsConstant The constant term of the linear expression on the left hand side of the constraint
-     * @param relationship The type of (in)equality used in the constraint
+     * @param lhsConstant     The constant term of the linear expression on the left hand side of the constraint
+     * @param relationship    The type of (in)equality used in the constraint
      * @param rhsCoefficients The coefficients of the linear expression on the right hand side of the constraint
-     * @param rhsConstant The constant term of the linear expression on the right hand side of the constraint
+     * @param rhsConstant     The constant term of the linear expression on the right hand side of the constraint
      */
     public LinearConstraint(final double[] lhsCoefficients, final double lhsConstant,
                             final Relationship relationship,
@@ -126,7 +137,7 @@ public class LinearConstraint implements Serializable {
         }
         this.coefficients = new ArrayRealVector(sub, false);
         this.relationship = relationship;
-        this.value        = rhsConstant - lhsConstant;
+        this.value = rhsConstant - lhsConstant;
     }
 
     /**
@@ -142,18 +153,19 @@ public class LinearConstraint implements Serializable {
      *       r<sub>1</sub>x<sub>1</sub> + ... r<sub>n</sub>x<sub>n</sub> + r<sub>cst</sub></li>
      * </ul>
      * </p>
+     *
      * @param lhsCoefficients The coefficients of the linear expression on the left hand side of the constraint
-     * @param lhsConstant The constant term of the linear expression on the left hand side of the constraint
-     * @param relationship The type of (in)equality used in the constraint
+     * @param lhsConstant     The constant term of the linear expression on the left hand side of the constraint
+     * @param relationship    The type of (in)equality used in the constraint
      * @param rhsCoefficients The coefficients of the linear expression on the right hand side of the constraint
-     * @param rhsConstant The constant term of the linear expression on the right hand side of the constraint
+     * @param rhsConstant     The constant term of the linear expression on the right hand side of the constraint
      */
     public LinearConstraint(final RealVector lhsCoefficients, final double lhsConstant,
                             final Relationship relationship,
                             final RealVector rhsCoefficients, final double rhsConstant) {
         this.coefficients = lhsCoefficients.subtract(rhsCoefficients);
         this.relationship = relationship;
-        this.value        = rhsConstant - lhsConstant;
+        this.value = rhsConstant - lhsConstant;
     }
 
     /**
@@ -183,7 +195,9 @@ public class LinearConstraint implements Serializable {
         return value;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -192,39 +206,43 @@ public class LinearConstraint implements Serializable {
         if (other instanceof LinearConstraint) {
             LinearConstraint rhs = (LinearConstraint) other;
             return relationship == rhs.relationship &&
-                value == rhs.value &&
-                coefficients.equals(rhs.coefficients);
+                    value == rhs.value &&
+                    coefficients.equals(rhs.coefficients);
         }
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return relationship.hashCode() ^
-            Double.valueOf(value).hashCode() ^
-            coefficients.hashCode();
+                Double.valueOf(value).hashCode() ^
+                coefficients.hashCode();
     }
 
     /**
      * Serialize the instance.
+     *
      * @param oos stream where object should be written
      * @throws IOException if object cannot be written to stream
      */
     private void writeObject(ObjectOutputStream oos)
-        throws IOException {
+            throws IOException {
         oos.defaultWriteObject();
         MatrixUtils.serializeRealVector(coefficients, oos);
     }
 
     /**
      * Deserialize the instance.
+     *
      * @param ois stream from which the object should be read
      * @throws ClassNotFoundException if a class in the stream cannot be found
-     * @throws IOException if object cannot be read from the stream
+     * @throws IOException            if object cannot be read from the stream
      */
     private void readObject(ObjectInputStream ois)
-      throws ClassNotFoundException, IOException {
+            throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
         MatrixUtils.deserializeRealVector(this, "coefficients", ois);
     }

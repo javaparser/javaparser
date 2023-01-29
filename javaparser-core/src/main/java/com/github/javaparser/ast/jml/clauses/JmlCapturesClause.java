@@ -55,7 +55,6 @@ public class JmlCapturesClause extends JmlClause {
         return JmlClauseKind.CAPTURES;
     }
 
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {

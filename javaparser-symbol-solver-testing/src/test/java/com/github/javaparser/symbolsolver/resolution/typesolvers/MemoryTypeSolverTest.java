@@ -84,7 +84,6 @@ class MemoryTypeSolverTest extends AbstractTypeSolverTest<MemoryTypeSolver> {
      * Create the type solver with pre-registered classes.
      *
      * @param multipleClazz The classes to be registered.
-     *
      * @return The created memory solver.
      */
     public MemoryTypeSolver createTypeSolver(Class<?>... multipleClazz) {
@@ -100,8 +99,8 @@ class MemoryTypeSolverTest extends AbstractTypeSolverTest<MemoryTypeSolver> {
     /**
      * Register the class in memory.
      *
-     * @param memorySolver  The memory solver where the information should be registered.
-     * @param clazz         The class to be registered.
+     * @param memorySolver The memory solver where the information should be registered.
+     * @param clazz        The class to be registered.
      */
     private static void registerClassInMemory(MemoryTypeSolver memorySolver, Class<?> clazz) {
         ResolvedReferenceTypeDeclaration declaration = ReflectionFactory.typeDeclarationFor(clazz, memorySolver);

@@ -64,12 +64,13 @@ import java.util.Comparator;
  * Kendall tau rank correlation coefficient (Wikipedia)</a>
  * @see <a href="http://www.jstor.org/stable/2282833">A Computer
  * Method for Calculating Kendall's Tau with Ungrouped Data</a>
- *
  * @since 3.3
  */
 public class KendallsCorrelation {
 
-    /** correlation matrix */
+    /**
+     * correlation matrix
+     */
     private final RealMatrix correlationMatrix;
 
     /**
@@ -85,7 +86,7 @@ public class KendallsCorrelation {
      *
      * @param data rectangular array with columns representing variables
      * @throws IllegalArgumentException if the input data array is not
-     * rectangular with at least two rows and two columns.
+     *                                  rectangular with at least two rows and two columns.
      */
     public KendallsCorrelation(double[][] data) {
         this(MatrixUtils.createRealMatrix(data));
@@ -140,7 +141,7 @@ public class KendallsCorrelation {
      * @return correlation matrix
      */
     public RealMatrix computeCorrelationMatrix(final double[][] matrix) {
-       return computeCorrelationMatrix(new BlockRealMatrix(matrix));
+        return computeCorrelationMatrix(new BlockRealMatrix(matrix));
     }
 
     /**

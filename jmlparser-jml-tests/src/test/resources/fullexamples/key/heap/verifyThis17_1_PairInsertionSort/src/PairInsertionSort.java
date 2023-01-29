@@ -9,6 +9,7 @@
  * and M. Ulbrich.
  * The specification considers only sortedness, the permutation property
  * is yet to be done.
+ *
  * @author Michael Kirsten <kirsten@kit.edu>
  */
 public class PairInsertionSort {
@@ -33,9 +34,9 @@ public class PairInsertionSort {
 	  @ assignable a[left..(right - 1 + (right - left) % 2)], left, k;
 	  @ decreases \old(right) + 1 - left;
 	  @*/
-	for (int k = left; ++left <= right; k = ++left) {
-	    int a1 = a[k];
-	    int a2 = a[left];
+        for (int k = left; ++left <= right; k = ++left) {
+            int a1 = a[k];
+            int a2 = a[left];
 
 	    /*@ public normal_behaviour
 	      @ requires a1 == a[k] && a2 == a[left] && left <= \old(right);
@@ -66,11 +67,11 @@ public class PairInsertionSort {
 	      @ assignable a[(\old(left))+2..left], k;
 	      @ decreases k;
 	      @*/
-	    while (a1 < a[--k]) {
-		a[k + 2] = a[k];
-	    }
+            while (a1 < a[--k]) {
+                a[k + 2] = a[k];
+            }
 
-	    a[++k + 1] = a1;
+            a[++k + 1] = a1;
 
 	    /*@ loop_invariant right == \old(right) && \old(left) <= \old(right) && \old(left) < left && k < left;
 	      @ loop_invariant right == \old(right);
@@ -87,14 +88,14 @@ public class PairInsertionSort {
 	      @ assignable a[(\old(left)+1)..left-1], k;
 	      @ decreases k;
 	      @*/
-	    while (a2 < a[--k]) {
-		a[k + 1] = a[k];
-	    }
+            while (a2 < a[--k]) {
+                a[k + 1] = a[k];
+            }
 
-	    a[k + 1] = a2;
-	}
+            a[k + 1] = a2;
+        }
 
-	int last = a[right];
+        int last = a[right];
 
 	/*@ loop_invariant left == \old(right) + 1 + (\old(right) - \old(left)) % 2;
 	  @ loop_invariant \old(left) <= right && right <= \old(right);
@@ -108,10 +109,10 @@ public class PairInsertionSort {
 	  @ assignable a[(\old(left))+1 .. (\old(right))], right;
 	  @ decreases right;
 	  @*/
-	while (last < a[--right]) {
-	    a[right + 1] = a[right];
-	}
+        while (last < a[--right]) {
+            a[right + 1] = a[right];
+        }
 
-	a[right + 1] = last;
+        a[right + 1] = last;
     }
 }

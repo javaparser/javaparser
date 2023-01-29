@@ -35,7 +35,6 @@ import java.util.Map;
  *
  * @param <K> the type of the keys in this map
  * @param <V> the type of the values in this map
- *
  * @since 3.0
  */
 public interface IterableMap<K, V> extends Map<K, V>, Put<K, V>, IterableGet<K, V> {

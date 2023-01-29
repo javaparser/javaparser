@@ -25,8 +25,8 @@ import org.apache.commons.math3.exception.OutOfRangeException;
  * Interface to generate confidence intervals for a binomial proportion.
  *
  * @see <a
- *      href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval">Binomial
- *      proportion confidence interval (Wikipedia)</a>
+ * href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval">Binomial
+ * proportion confidence interval (Wikipedia)</a>
  * @since 3.3
  */
 public interface BinomialConfidenceInterval {
@@ -44,19 +44,19 @@ public interface BinomialConfidenceInterval {
      * </ul>
      * </p>
      *
-     * @param numberOfTrials number of trials
+     * @param numberOfTrials    number of trials
      * @param numberOfSuccesses number of successes
-     * @param confidenceLevel desired probability that the true probability of
-     *        success falls within the returned interval
+     * @param confidenceLevel   desired probability that the true probability of
+     *                          success falls within the returned interval
      * @return Confidence interval containing the probability of success with
-     *         probability {@code confidenceLevel}
+     * probability {@code confidenceLevel}
      * @throws NotStrictlyPositiveException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
-     * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws NotPositiveException         if {@code numberOfSuccesses < 0}.
+     * @throws NumberIsTooLargeException    if {@code numberOfSuccesses > numberOfTrials}.
+     * @throws OutOfRangeException          if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     ConfidenceInterval createInterval(int numberOfTrials, int numberOfSuccesses, double confidenceLevel)
             throws NotStrictlyPositiveException, NotPositiveException,
-                   NumberIsTooLargeException, OutOfRangeException;
+            NumberIsTooLargeException, OutOfRangeException;
 
 }

@@ -29,17 +29,20 @@ import java.util.Iterator;
  */
 public final class UnmodifiableIterator<E> implements Iterator<E>, Unmodifiable {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     private final Iterator<? extends E> iterator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Decorates the specified iterator such that it cannot be modified.
      * <p>
      * If the iterator is already unmodifiable it is returned directly.
      *
-     * @param <E>  the element type
-     * @param iterator  the iterator to decorate
+     * @param <E>      the element type
+     * @param iterator the iterator to decorate
      * @return a new unmodifiable iterator
      * @throws NullPointerException if the iterator is null
      */
@@ -56,10 +59,11 @@ public final class UnmodifiableIterator<E> implements Iterator<E>, Unmodifiable 
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      */
     private UnmodifiableIterator(final Iterator<? extends E> iterator) {
         super();

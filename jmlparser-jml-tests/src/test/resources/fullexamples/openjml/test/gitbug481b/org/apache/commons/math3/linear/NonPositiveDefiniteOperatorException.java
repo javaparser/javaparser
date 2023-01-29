@@ -32,11 +32,15 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class NonPositiveDefiniteOperatorException
-    extends MathIllegalArgumentException {
-    /** Serializable version Id. */
+        extends MathIllegalArgumentException {
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = 917034489420549847L;
 
-    /** Creates a new instance of this class. */
+    /**
+     * Creates a new instance of this class.
+     */
     public NonPositiveDefiniteOperatorException() {
         super(LocalizedFormats.NON_POSITIVE_DEFINITE_OPERATOR);
     }

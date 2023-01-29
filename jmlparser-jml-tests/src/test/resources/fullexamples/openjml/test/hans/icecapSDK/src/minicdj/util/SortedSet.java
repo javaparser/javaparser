@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 /* SortedSet.java -- A set that makes guarantees about the order of its
    elements
@@ -96,103 +97,102 @@ package minicdj.util;
  * @since 1.2
  * @status updated to 1.4
  */
-public interface SortedSet extends Set
-{
-  /**
-   * Returns the comparator used in sorting this set, or null if it is
-   * the elements' natural ordering.
-   *
-   * @return the sorting comparator
-   */
-  Comparator comparator();
+public interface SortedSet extends Set {
+    /**
+     * Returns the comparator used in sorting this set, or null if it is
+     * the elements' natural ordering.
+     *
+     * @return the sorting comparator
+     */
+    Comparator comparator();
 
-  /**
-   * Returns the first (lowest sorted) element in the set.
-   *
-   * @return the first element
-   * @throws NoSuchElementException if the set is empty.
-   */
-  Object first();
+    /**
+     * Returns the first (lowest sorted) element in the set.
+     *
+     * @return the first element
+     * @throws NoSuchElementException if the set is empty.
+     */
+    Object first();
 
-  /**
-   * Returns a view of the portion of the set strictly less than toElement. The
-   * view is backed by this set, so changes in one show up in the other.
-   * The subset supports all optional operations of the original.
-   * <p>
-   *
-   * The returned set throws an IllegalArgumentException any time an element is
-   * used which is out of the range of toElement. Note that the endpoint, toElement,
-   * is not included; if you want this value included, pass its successor object in to
-   * toElement.  For example, for Integers, you could request
-   * <code>headSet(new Integer(limit.intValue() + 1))</code>.
-   *
-   * @param toElement the exclusive upper range of the subset
-   * @return the subset
-   * @throws ClassCastException if toElement is not comparable to the set
-   *         contents
-   * @throws IllegalArgumentException if this is a subSet, and toElement is out
-   *         of range
-   * @throws NullPointerException if toElement is null but the set does not
-   *         allow null elements
-   */
-  SortedSet headSet(Object toElement);
+    /**
+     * Returns a view of the portion of the set strictly less than toElement. The
+     * view is backed by this set, so changes in one show up in the other.
+     * The subset supports all optional operations of the original.
+     * <p>
+     *
+     * The returned set throws an IllegalArgumentException any time an element is
+     * used which is out of the range of toElement. Note that the endpoint, toElement,
+     * is not included; if you want this value included, pass its successor object in to
+     * toElement.  For example, for Integers, you could request
+     * <code>headSet(new Integer(limit.intValue() + 1))</code>.
+     *
+     * @param toElement the exclusive upper range of the subset
+     * @return the subset
+     * @throws ClassCastException if toElement is not comparable to the set
+     *         contents
+     * @throws IllegalArgumentException if this is a subSet, and toElement is out
+     *         of range
+     * @throws NullPointerException if toElement is null but the set does not
+     *         allow null elements
+     */
+    SortedSet headSet(Object toElement);
 
-  /**
-   * Returns the last (highest sorted) element in the set.
-   *
-   * @return the last element
-   * @throws NoSuchElementException if the set is empty.
-   */
-  Object last();
+    /**
+     * Returns the last (highest sorted) element in the set.
+     *
+     * @return the last element
+     * @throws NoSuchElementException if the set is empty.
+     */
+    Object last();
 
-  /**
-   * Returns a view of the portion of the set greater than or equal to
-   * fromElement, and strictly less than toElement. The view is backed by
-   * this set, so changes in one show up in the other. The subset supports all
-   * optional operations of the original.
-   * <p>
-   *
-   * The returned set throws an IllegalArgumentException any time an element is
-   * used which is out of the range of fromElement and toElement. Note that the
-   * lower endpoint is included, but the upper is not; if you want to
-   * change the inclusion or exclusion of an endpoint, pass its successor
-   * object in instead.  For example, for Integers, you can request
-   * <code>subSet(new Integer(lowlimit.intValue() + 1),
-   * new Integer(highlimit.intValue() + 1))</code> to reverse
-   * the inclusiveness of both endpoints.
-   *
-   * @param fromElement the inclusive lower range of the subset
-   * @param toElement the exclusive upper range of the subset
-   * @return the subset
-   * @throws ClassCastException if fromElement or toElement is not comparable
-   *         to the set contents
-   * @throws IllegalArgumentException if this is a subSet, and fromElement or
-   *         toElement is out of range
-   * @throws NullPointerException if fromElement or toElement is null but the
-   *         set does not allow null elements
-   */
-  SortedSet subSet(Object fromElement, Object toElement);
+    /**
+     * Returns a view of the portion of the set greater than or equal to
+     * fromElement, and strictly less than toElement. The view is backed by
+     * this set, so changes in one show up in the other. The subset supports all
+     * optional operations of the original.
+     * <p>
+     *
+     * The returned set throws an IllegalArgumentException any time an element is
+     * used which is out of the range of fromElement and toElement. Note that the
+     * lower endpoint is included, but the upper is not; if you want to
+     * change the inclusion or exclusion of an endpoint, pass its successor
+     * object in instead.  For example, for Integers, you can request
+     * <code>subSet(new Integer(lowlimit.intValue() + 1),
+     * new Integer(highlimit.intValue() + 1))</code> to reverse
+     * the inclusiveness of both endpoints.
+     *
+     * @param fromElement the inclusive lower range of the subset
+     * @param toElement the exclusive upper range of the subset
+     * @return the subset
+     * @throws ClassCastException if fromElement or toElement is not comparable
+     *         to the set contents
+     * @throws IllegalArgumentException if this is a subSet, and fromElement or
+     *         toElement is out of range
+     * @throws NullPointerException if fromElement or toElement is null but the
+     *         set does not allow null elements
+     */
+    SortedSet subSet(Object fromElement, Object toElement);
 
-  /**
-   * Returns a view of the portion of the set greater than or equal to
-   * fromElement. The view is backed by this set, so changes in one show up
-   * in the other. The subset supports all optional operations of the original.
-   * <p>
-   *
-   * The returned set throws an IllegalArgumentException any time an element is
-   * used which is out of the range of fromElement. Note that the endpoint,
-   * fromElement, is included; if you do not want this value to be included, pass its
-   * successor object in to fromElement.  For example, for Integers, you could request
-   * <code>tailSet(new Integer(limit.intValue() + 1))</code>.
-   *
-   * @param fromElement the inclusive lower range of the subset
-   * @return the subset
-   * @throws ClassCastException if fromElement is not comparable to the set
-   *         contents
-   * @throws IllegalArgumentException if this is a subSet, and fromElement is
-   *         out of range
-   * @throws NullPointerException if fromElement is null but the set does not
-   *         allow null elements
-   */
-  SortedSet tailSet(Object fromElement);
+    /**
+     * Returns a view of the portion of the set greater than or equal to
+     * fromElement. The view is backed by this set, so changes in one show up
+     * in the other. The subset supports all optional operations of the original.
+     * <p>
+     *
+     * The returned set throws an IllegalArgumentException any time an element is
+     * used which is out of the range of fromElement. Note that the endpoint,
+     * fromElement, is included; if you do not want this value to be included, pass its
+     * successor object in to fromElement.  For example, for Integers, you could request
+     * <code>tailSet(new Integer(limit.intValue() + 1))</code>.
+     *
+     * @param fromElement the inclusive lower range of the subset
+     * @return the subset
+     * @throws ClassCastException if fromElement is not comparable to the set
+     *         contents
+     * @throws IllegalArgumentException if this is a subSet, and fromElement is
+     *         out of range
+     * @throws NullPointerException if fromElement is null but the set does not
+     *         allow null elements
+     */
+    SortedSet tailSet(Object fromElement);
 }

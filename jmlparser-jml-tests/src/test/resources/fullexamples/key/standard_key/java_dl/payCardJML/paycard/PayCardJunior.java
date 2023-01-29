@@ -16,7 +16,7 @@ package paycard;
 
 
 public class PayCardJunior extends PayCard {
-    
+
     /*@ spec_public @*/ private final static int juniorLimit = 100;    
 
     /*@ public invariant balance < juniorLimit 
@@ -25,9 +25,9 @@ public class PayCardJunior extends PayCard {
 
     /*@ public represents value = balance;
       @ public represents regularState = (unsuccessfulOperations <= 3);
-      @*/    
-    
-    
+      @*/
+
+
     /*@ public normal_behavior
       @   requires LogRecord.transactionCounter >= 0;
       @   requires cardLimit > juniorLimit;
@@ -36,10 +36,10 @@ public class PayCardJunior extends PayCard {
       @   ensures  LogRecord.transactionCounter >= 0;
       @*/
     public PayCardJunior(int cardLimit) {
-	super(cardLimit);
+        super(cardLimit);
     }
 
-    
+
     /*@ public normal_behavior
       @   requires LogRecord.transactionCounter >= 0; 
       @   assignable LogRecord.transactionCounter;
@@ -47,10 +47,10 @@ public class PayCardJunior extends PayCard {
       @   ensures  LogRecord.transactionCounter >= 0;      
       @*/
     public static PayCardJunior createCard() {
-	return new PayCardJunior(1000);
+        return new PayCardJunior(1000);
     }
 
-    
+
     /*@ also public normal_behavior
       @   requires amount > 0;
       @   ensures \old(balance) + amount < juniorLimit
@@ -65,7 +65,7 @@ public class PayCardJunior extends PayCard {
             this.unsuccessfulOperations++;
         }
     }
-    
+
 
     /*@ private exceptional_behavior
       @   requires amount <= 0 || checkSum(this.balance + amount) == 0;
@@ -77,32 +77,32 @@ public class PayCardJunior extends PayCard {
       @   ensures balance == \old(balance) + amount;
       @*/
     private void charge0(int amount) throws CardException {
-	if(amount <= 0){
-	    throw new CardException();
-	} 
+        if (amount <= 0) {
+            throw new CardException();
+        }
         int checkStatus = this.checkSum(this.balance + amount);
-        if(checkStatus != 1) {
+        if (checkStatus != 1) {
             throw new CardException();
         } else {
             this.balance = this.balance + amount;
-	    log.addRecord(balance);
+            log.addRecord(balance);
         }
     }
-    
-    
+
+
     /*@ private normal_behavior
       @   ensures \result == 1 ?  sum < juniorLimit : sum >= juniorLimit;
       @   ensures \result == 1 || \result == 0;
       @*/
     private /*@pure@*/ int checkSum(int sum) {
-        if(sum >= this.juniorLimit) {
+        if (sum >= this.juniorLimit) {
             return 0;
         } else {
             return 1;
         }
     }
 
-    
+
     /*@ public normal_behavior
       @   requires amount>0;
       @   ensures \old(balance) + amount < juniorLimit 

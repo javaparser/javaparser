@@ -4,7 +4,7 @@ public class B {
     public static void caller() {
         Inner a = new Inner();
     }
-    
+
     public static class Inner {
         //@ private normal_behavior
         //@   ensures true;

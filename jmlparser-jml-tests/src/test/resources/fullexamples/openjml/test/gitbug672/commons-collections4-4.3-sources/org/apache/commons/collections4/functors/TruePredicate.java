@@ -27,10 +27,14 @@ import java.io.Serializable;
  */
 public final class TruePredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 3374767158756189740L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes")
     public static final Predicate INSTANCE = new TruePredicate<>();
 
@@ -56,7 +60,7 @@ public final class TruePredicate<T> implements Predicate<T>, Serializable {
     /**
      * Evaluates the predicate returning true always.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true always
      */
     @Override

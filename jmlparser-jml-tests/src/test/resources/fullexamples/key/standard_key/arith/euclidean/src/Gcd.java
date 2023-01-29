@@ -13,7 +13,7 @@
 
 
 public class Gcd {
-    
+
     /*@
       @ public normal_behavior
       @   ensures (a != 0 || b != 0) ==>
@@ -22,19 +22,19 @@ public class Gcd {
       @                            \result % x == 0));
       @*/
     public static int gcd(int a, int b) {
-	if (a < 0) a = -a;
-	if (b < 0) b = -b;
+        if (a < 0) a = -a;
+        if (b < 0) b = -b;
 
-	int big, small;
-	if (a > b) {
-	    big = a;
-	    small = b;
-	} else {
-	    big = b;
-	    small = a;
-	}
-	
-	return gcdHelp(big, small);
+        int big, small;
+        if (a > b) {
+            big = a;
+            small = b;
+        } else {
+            big = b;
+            small = a;
+        }
+
+        return gcdHelp(big, small);
     }
 
     /*@
@@ -47,8 +47,8 @@ public class Gcd {
       @ assignable \nothing;
       @*/
     private static int gcdHelp(int _big, int _small) {
-	int big = _big;
-	int small = _small;
+        int big = _big;
+        int small = _small;
 
 	/*@
 	  @ loop_invariant small >= 0 && big >= small &&
@@ -59,13 +59,13 @@ public class Gcd {
 	  @ decreases small;
 	  @ assignable \nothing;
 	  @*/
-	while (small != 0) {
-	    final int t = big % small;
-	    big = small;
-	    small = t;
-	}
+        while (small != 0) {
+            final int t = big % small;
+            big = small;
+            small = t;
+        }
 
-	return big;
+        return big;
     }
-    
+
 }

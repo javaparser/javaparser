@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -46,7 +46,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Annotates this
-     * 
+     *
      * @param name the name of the annotation
      * @return the {@link NormalAnnotationExpr} added
      */
@@ -60,7 +60,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Annotates this and automatically add the import
-     * 
+     *
      * @param clazz the class of the annotation
      * @return the {@link NormalAnnotationExpr} added
      */
@@ -71,7 +71,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Annotates this with a marker annotation
-     * 
+     *
      * @param name the name of the annotation
      * @return this
      */
@@ -86,7 +86,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Annotates this with a marker annotation and automatically add the import
-     * 
+     *
      * @param clazz the class of the annotation
      * @return this
      */
@@ -97,8 +97,8 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Annotates this with a single member annotation
-     * 
-     * @param name the name of the annotation
+     *
+     * @param name  the name of the annotation
      * @param value the value, don't forget to add \"\" for a string value
      * @return this
      */
@@ -113,7 +113,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Annotates this with a single member annotation and automatically add the import
-     * 
+     *
      * @param clazz the class of the annotation
      * @param value the value, don't forget to add \"\" for a string value
      * @return this
@@ -126,7 +126,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Check whether an annotation with this name is present on this element
-     * 
+     *
      * @param annotationName the name of the annotation
      * @return true if found, false if not
      */
@@ -136,7 +136,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Check whether an annotation with this class is present on this element
-     * 
+     *
      * @param annotationClass the class of the annotation
      * @return true if found, false if not
      */
@@ -146,7 +146,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Try to find an annotation by its name
-     * 
+     *
      * @param annotationName the name of the annotation
      * @return null if not found, the annotation otherwise
      */
@@ -157,7 +157,7 @@ public interface NodeWithAnnotations<T> {
 
     /**
      * Try to find an annotation by its class
-     * 
+     *
      * @param annotationClass the class of the annotation
      * @return null if not found, the annotation otherwise
      */

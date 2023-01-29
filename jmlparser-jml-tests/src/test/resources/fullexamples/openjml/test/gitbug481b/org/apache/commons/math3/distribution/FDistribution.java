@@ -33,20 +33,33 @@ import org.apache.commons.math3.util.FastMath;
 public class FDistribution extends AbstractRealDistribution {
     /**
      * Default inverse cumulative probability accuracy.
+     *
      * @since 2.1
      */
     public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -8516354193418641566L;
-    /** The numerator degrees of freedom. */
+    /**
+     * The numerator degrees of freedom.
+     */
     private final double numeratorDegreesOfFreedom;
-    /** The numerator degrees of freedom. */
+    /**
+     * The numerator degrees of freedom.
+     */
     private final double denominatorDegreesOfFreedom;
-    /** Inverse cumulative probability accuracy. */
+    /**
+     * Inverse cumulative probability accuracy.
+     */
     private final double solverAbsoluteAccuracy;
-    /** Cached numerical variance */
+    /**
+     * Cached numerical variance
+     */
     private double numericalVariance = Double.NaN;
-    /** Whether or not the numerical variance has been calculated */
+    /**
+     * Whether or not the numerical variance has been calculated
+     */
     private boolean numericalVarianceIsCalculated = false;
 
     /**
@@ -59,17 +72,17 @@ public class FDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
+     * @param numeratorDegreesOfFreedom   Numerator degrees of freedom.
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
      * @throws NotStrictlyPositiveException if
-     * {@code numeratorDegreesOfFreedom <= 0} or
-     * {@code denominatorDegreesOfFreedom <= 0}.
+     *                                      {@code numeratorDegreesOfFreedom <= 0} or
+     *                                      {@code denominatorDegreesOfFreedom <= 0}.
      */
     public FDistribution(double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(numeratorDegreesOfFreedom, denominatorDegreesOfFreedom,
-             DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+                DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -83,66 +96,66 @@ public class FDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
+     * @param numeratorDegreesOfFreedom   Numerator degrees of freedom.
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
-     * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates.
+     * @param inverseCumAccuracy          the maximum absolute error in inverse
+     *                                    cumulative probability estimates.
      * @throws NotStrictlyPositiveException if
-     * {@code numeratorDegreesOfFreedom <= 0} or
-     * {@code denominatorDegreesOfFreedom <= 0}.
+     *                                      {@code numeratorDegreesOfFreedom <= 0} or
+     *                                      {@code denominatorDegreesOfFreedom <= 0}.
      * @since 2.1
      */
     public FDistribution(double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom,
                          double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(new Well19937c(), numeratorDegreesOfFreedom,
-             denominatorDegreesOfFreedom, inverseCumAccuracy);
+                denominatorDegreesOfFreedom, inverseCumAccuracy);
     }
 
     /**
      * Creates an F distribution.
      *
-     * @param rng Random number generator.
-     * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
+     * @param rng                         Random number generator.
+     * @param numeratorDegreesOfFreedom   Numerator degrees of freedom.
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
      * @throws NotStrictlyPositiveException if {@code numeratorDegreesOfFreedom <= 0} or
-     * {@code denominatorDegreesOfFreedom <= 0}.
+     *                                      {@code denominatorDegreesOfFreedom <= 0}.
      * @since 3.3
      */
     public FDistribution(RandomGenerator rng,
                          double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(rng, numeratorDegreesOfFreedom, denominatorDegreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
     /**
      * Creates an F distribution.
      *
-     * @param rng Random number generator.
-     * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
+     * @param rng                         Random number generator.
+     * @param numeratorDegreesOfFreedom   Numerator degrees of freedom.
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
-     * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates.
+     * @param inverseCumAccuracy          the maximum absolute error in inverse
+     *                                    cumulative probability estimates.
      * @throws NotStrictlyPositiveException if {@code numeratorDegreesOfFreedom <= 0} or
-     * {@code denominatorDegreesOfFreedom <= 0}.
+     *                                      {@code denominatorDegreesOfFreedom <= 0}.
      * @since 3.1
      */
     public FDistribution(RandomGenerator rng,
                          double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom,
                          double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         super(rng);
 
         if (numeratorDegreesOfFreedom <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.DEGREES_OF_FREEDOM,
-                                                   numeratorDegreesOfFreedom);
+                    numeratorDegreesOfFreedom);
         }
         if (denominatorDegreesOfFreedom <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.DEGREES_OF_FREEDOM,
-                                                   denominatorDegreesOfFreedom);
+                    denominatorDegreesOfFreedom);
         }
         this.numeratorDegreesOfFreedom = numeratorDegreesOfFreedom;
         this.denominatorDegreesOfFreedom = denominatorDegreesOfFreedom;
@@ -158,7 +171,9 @@ public class FDistribution extends AbstractRealDistribution {
         return FastMath.exp(logDensity(x));
     }
 
-    /** {@inheritDoc} **/
+    /**
+     * {@inheritDoc}
+     **/
     @Override
     public double logDensity(double x) {
         final double nhalf = numeratorDegreesOfFreedom / 2;
@@ -169,13 +184,13 @@ public class FDistribution extends AbstractRealDistribution {
         final double lognxm = FastMath.log(numeratorDegreesOfFreedom * x +
                 denominatorDegreesOfFreedom);
         return nhalf * logn + nhalf * logx - logx +
-               mhalf * logm - nhalf * lognxm - mhalf * lognxm -
-               Beta.logBeta(nhalf, mhalf);
+                mhalf * logm - nhalf * lognxm - mhalf * lognxm -
+                Beta.logBeta(nhalf, mhalf);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The implementation of this method is based on
      * <ul>
      *  <li>
@@ -184,7 +199,7 @@ public class FDistribution extends AbstractRealDistribution {
      *  </li>
      * </ul>
      */
-    public double cumulativeProbability(double x)  {
+    public double cumulativeProbability(double x) {
         double ret;
         if (x <= 0) {
             ret = 0;
@@ -193,8 +208,8 @@ public class FDistribution extends AbstractRealDistribution {
             double m = denominatorDegreesOfFreedom;
 
             ret = Beta.regularizedBeta((n * x) / (m + n * x),
-                0.5 * n,
-                0.5 * m);
+                    0.5 * n,
+                    0.5 * m);
         }
         return ret;
     }
@@ -217,7 +232,9 @@ public class FDistribution extends AbstractRealDistribution {
         return denominatorDegreesOfFreedom;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected double getSolverAbsoluteAccuracy() {
         return solverAbsoluteAccuracy;
@@ -225,7 +242,7 @@ public class FDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For denominator degrees of freedom parameter {@code b}, the mean is
      * <ul>
      *  <li>if {@code b > 2} then {@code b / (b - 2)},</li>
@@ -244,7 +261,7 @@ public class FDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For numerator degrees of freedom parameter {@code a} and denominator
      * degrees of freedom parameter {@code b}, the variance is
      * <ul>
@@ -275,8 +292,8 @@ public class FDistribution extends AbstractRealDistribution {
             final double numeratorDF = getNumeratorDegreesOfFreedom();
             final double denomDFMinusTwo = denominatorDF - 2;
 
-            return ( 2 * (denominatorDF * denominatorDF) * (numeratorDF + denominatorDF - 2) ) /
-                   ( (numeratorDF * (denomDFMinusTwo * denomDFMinusTwo) * (denominatorDF - 4)) );
+            return (2 * (denominatorDF * denominatorDF) * (numeratorDF + denominatorDF - 2)) /
+                    ((numeratorDF * (denomDFMinusTwo * denomDFMinusTwo) * (denominatorDF - 4)));
         }
 
         return Double.NaN;
@@ -284,7 +301,7 @@ public class FDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always 0 no matter the parameters.
      *
      * @return lower bound of the support (always 0)
@@ -295,7 +312,7 @@ public class FDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is always positive infinity
      * no matter the parameters.
      *
@@ -305,19 +322,23 @@ public class FDistribution extends AbstractRealDistribution {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}

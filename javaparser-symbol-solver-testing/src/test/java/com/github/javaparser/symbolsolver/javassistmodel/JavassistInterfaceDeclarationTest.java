@@ -110,9 +110,9 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void testAsClass() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavassistInterfaceDeclaration nodeWithAnnotations = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
-        nodeWithAnnotations.asClass();
-    });
-}
+            nodeWithAnnotations.asClass();
+        });
+    }
 
     @Test
     void testAsInterface() {
@@ -124,9 +124,9 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     void testAsEnum() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavassistInterfaceDeclaration nodeWithAnnotations = (JavassistInterfaceDeclaration) typeSolver.solveType("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations");
-        nodeWithAnnotations.asEnum();
-    });
-}
+            nodeWithAnnotations.asEnum();
+        });
+    }
 
     @Test
     void testGetPackageName() {
@@ -147,13 +147,13 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    void testHasDirectlyAnnotation(){
+    void testHasDirectlyAnnotation() {
         JavassistInterfaceDeclaration compilationUnit = (JavassistInterfaceDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestInterface");
         assertTrue(compilationUnit.hasDirectlyAnnotation("com.github.javaparser.test.TestAnnotation"));
     }
 
     @Test
-    void testHasAnnotation(){
+    void testHasAnnotation() {
         JavassistInterfaceDeclaration compilationUnit = (JavassistInterfaceDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestChildInterface");
         assertTrue(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
     }

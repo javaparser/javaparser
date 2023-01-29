@@ -4,9 +4,9 @@ public class Test {
     /*@
     static public datatype N {}
      */
-    
+
     public void m() {
-        
+
         //@ datatype X {};
     }
     

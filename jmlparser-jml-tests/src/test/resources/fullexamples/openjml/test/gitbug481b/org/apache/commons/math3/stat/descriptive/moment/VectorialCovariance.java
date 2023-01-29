@@ -25,39 +25,53 @@ import java.util.Arrays;
 
 /**
  * Returns the covariance matrix of the available vectors.
+ *
  * @since 1.2
  */
 public class VectorialCovariance implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 4118372414238930270L;
 
-    /** Sums for each component. */
+    /**
+     * Sums for each component.
+     */
     private final double[] sums;
 
-    /** Sums of products for each component. */
+    /**
+     * Sums of products for each component.
+     */
     private final double[] productsSums;
 
-    /** Indicator for bias correction. */
+    /**
+     * Indicator for bias correction.
+     */
     private final boolean isBiasCorrected;
 
-    /** Number of vectors in the sample. */
+    /**
+     * Number of vectors in the sample.
+     */
     private long n;
 
-    /** Constructs a VectorialCovariance.
-     * @param dimension vectors dimension
+    /**
+     * Constructs a VectorialCovariance.
+     *
+     * @param dimension       vectors dimension
      * @param isBiasCorrected if true, computed the unbiased sample covariance,
-     * otherwise computes the biased population covariance
+     *                        otherwise computes the biased population covariance
      */
     public VectorialCovariance(int dimension, boolean isBiasCorrected) {
-        sums         = new double[dimension];
+        sums = new double[dimension];
         productsSums = new double[dimension * (dimension + 1) / 2];
-        n            = 0;
+        n = 0;
         this.isBiasCorrected = isBiasCorrected;
     }
 
     /**
      * Add a new vector to the sample.
+     *
      * @param v vector to add
      * @throws DimensionMismatchException if the vector does not have the right dimension
      */
@@ -77,6 +91,7 @@ public class VectorialCovariance implements Serializable {
 
     /**
      * Get the covariance matrix.
+     *
      * @return covariance matrix
      */
     public RealMatrix getResult() {
@@ -102,6 +117,7 @@ public class VectorialCovariance implements Serializable {
 
     /**
      * Get the number of vectors in the sample.
+     *
      * @return number of vectors in the sample
      */
     public long getN() {
@@ -117,7 +133,9 @@ public class VectorialCovariance implements Serializable {
         Arrays.fill(productsSums, 0.0);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -129,7 +147,9 @@ public class VectorialCovariance implements Serializable {
         return result;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

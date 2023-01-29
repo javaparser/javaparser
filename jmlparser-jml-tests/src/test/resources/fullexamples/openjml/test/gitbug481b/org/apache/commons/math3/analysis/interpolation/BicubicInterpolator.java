@@ -26,29 +26,29 @@ import org.apache.commons.math3.util.MathArrays;
  * Generates a {@link BicubicInterpolatingFunction bicubic interpolating
  * function}.
  * <p>
- *  Caveat: Because the interpolation scheme requires that derivatives be
- *  specified at the sample points, those are approximated with finite
- *  differences (using the 2-points symmetric formulae).
- *  Since their values are undefined at the borders of the provided
- *  interpolation ranges, the interpolated values will be wrong at the
- *  edges of the patch.
- *  The {@code interpolate} method will return a function that overrides
- *  {@link BicubicInterpolatingFunction#isValidPoint(double,double)} to
- *  indicate points where the interpolation will be inaccurate.
+ * Caveat: Because the interpolation scheme requires that derivatives be
+ * specified at the sample points, those are approximated with finite
+ * differences (using the 2-points symmetric formulae).
+ * Since their values are undefined at the borders of the provided
+ * interpolation ranges, the interpolated values will be wrong at the
+ * edges of the patch.
+ * The {@code interpolate} method will return a function that overrides
+ * {@link BicubicInterpolatingFunction#isValidPoint(double, double)} to
+ * indicate points where the interpolation will be inaccurate.
  * </p>
  *
  * @since 3.4
  */
 public class BicubicInterpolator
-    implements BivariateGridInterpolator {
+        implements BivariateGridInterpolator {
     /**
      * {@inheritDoc}
      */
     public BicubicInterpolatingFunction interpolate(final double[] xval,
                                                     final double[] yval,
                                                     final double[][] fval)
-        throws NoDataException, DimensionMismatchException,
-               NonMonotonicSequenceException, NumberIsTooSmallException {
+            throws NoDataException, DimensionMismatchException,
+            NonMonotonicSequenceException, NumberIsTooSmallException {
         if (xval.length == 0 || yval.length == 0 || fval.length == 0) {
             throw new NoDataException();
         }
@@ -95,14 +95,14 @@ public class BicubicInterpolator
 
         // Create the interpolating function.
         return new BicubicInterpolatingFunction(xval, yval, fval,
-                                                dFdX, dFdY, d2FdXdY) {
+                dFdX, dFdY, d2FdXdY) {
             /** {@inheritDoc} */
             @Override
             public boolean isValidPoint(double x, double y) {
                 if (x < xval[1] ||
-                    x > xval[xval.length - 2] ||
-                    y < yval[1] ||
-                    y > yval[yval.length - 2]) {
+                        x > xval[xval.length - 2] ||
+                        y < yval[1] ||
+                        y > yval[yval.length - 2]) {
                     return false;
                 } else {
                     return true;

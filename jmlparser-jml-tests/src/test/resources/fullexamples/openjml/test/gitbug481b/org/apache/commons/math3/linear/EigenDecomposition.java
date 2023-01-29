@@ -69,37 +69,60 @@ import org.apache.commons.math3.util.Precision;
  * Handbook for automatic computation, vol. 2, Linear algebra, Springer-Verlag,
  * New-York
  * </p>
+ *
  * @see <a href="http://mathworld.wolfram.com/EigenDecomposition.html">MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix">Wikipedia</a>
  * @since 2.0 (changed to concrete class in 3.0)
  */
 public class EigenDecomposition {
-    /** Internally used epsilon criteria. */
+    /**
+     * Internally used epsilon criteria.
+     */
     private static final double EPSILON = 1e-12;
-    /** Maximum number of iterations accepted in the implicit QL transformation */
+    /**
+     * Maximum number of iterations accepted in the implicit QL transformation
+     */
     private byte maxIter = 30;
-    /** Main diagonal of the tridiagonal matrix. */
+    /**
+     * Main diagonal of the tridiagonal matrix.
+     */
     private double[] main;
-    /** Secondary diagonal of the tridiagonal matrix. */
+    /**
+     * Secondary diagonal of the tridiagonal matrix.
+     */
     private double[] secondary;
     /**
      * Transformer to tridiagonal (may be null if matrix is already
      * tridiagonal).
      */
     private TriDiagonalTransformer transformer;
-    /** Real part of the realEigenvalues. */
+    /**
+     * Real part of the realEigenvalues.
+     */
     private double[] realEigenvalues;
-    /** Imaginary part of the realEigenvalues. */
+    /**
+     * Imaginary part of the realEigenvalues.
+     */
     private double[] imagEigenvalues;
-    /** Eigenvectors. */
+    /**
+     * Eigenvectors.
+     */
     private ArrayRealVector[] eigenvectors;
-    /** Cached value of V. */
+    /**
+     * Cached value of V.
+     */
     private RealMatrix cachedV;
-    /** Cached value of D. */
+    /**
+     * Cached value of D.
+     */
     private RealMatrix cachedD;
-    /** Cached value of Vt. */
+    /**
+     * Cached value of Vt.
+     */
     private RealMatrix cachedVt;
-    /** Whether the matrix is symmetric. */
+    /**
+     * Whether the matrix is symmetric.
+     */
     private final boolean isSymmetric;
 
     /**
@@ -109,12 +132,12 @@ public class EigenDecomposition {
      *
      * @param matrix Matrix to decompose.
      * @throws MaxCountExceededException if the algorithm fails to converge.
-     * @throws MathArithmeticException if the decomposition of a general matrix
-     * results in a matrix with zero norm
+     * @throws MathArithmeticException   if the decomposition of a general matrix
+     *                                   results in a matrix with zero norm
      * @since 3.1
      */
     public EigenDecomposition(final RealMatrix matrix)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
         final double symTol = 10 * matrix.getRowDimension() * matrix.getColumnDimension() * Precision.EPSILON;
         isSymmetric = MatrixUtils.isSymmetric(matrix, symTol);
         if (isSymmetric) {
@@ -129,18 +152,18 @@ public class EigenDecomposition {
     /**
      * Calculates the eigen decomposition of the given real matrix.
      *
-     * @param matrix Matrix to decompose.
+     * @param matrix         Matrix to decompose.
      * @param splitTolerance Dummy parameter (present for backward
-     * compatibility only).
-     * @throws MathArithmeticException  if the decomposition of a general matrix
-     * results in a matrix with zero norm
+     *                       compatibility only).
+     * @throws MathArithmeticException   if the decomposition of a general matrix
+     *                                   results in a matrix with zero norm
      * @throws MaxCountExceededException if the algorithm fails to converge.
      * @deprecated in 3.1 (to be removed in 4.0) due to unused parameter
      */
     @Deprecated
     public EigenDecomposition(final RealMatrix matrix,
                               final double splitTolerance)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
         this(matrix);
     }
 
@@ -148,16 +171,16 @@ public class EigenDecomposition {
      * Calculates the eigen decomposition of the symmetric tridiagonal
      * matrix.  The Householder matrix is assumed to be the identity matrix.
      *
-     * @param main Main diagonal of the symmetric tridiagonal form.
+     * @param main      Main diagonal of the symmetric tridiagonal form.
      * @param secondary Secondary of the tridiagonal form.
      * @throws MaxCountExceededException if the algorithm fails to converge.
      * @since 3.1
      */
     public EigenDecomposition(final double[] main, final double[] secondary) {
         isSymmetric = true;
-        this.main      = main.clone();
+        this.main = main.clone();
         this.secondary = secondary.clone();
-        transformer    = null;
+        transformer = null;
         final int size = main.length;
         final double[][] z = new double[size][size];
         for (int i = 0; i < size; i++) {
@@ -170,10 +193,10 @@ public class EigenDecomposition {
      * Calculates the eigen decomposition of the symmetric tridiagonal
      * matrix.  The Householder matrix is assumed to be the identity matrix.
      *
-     * @param main Main diagonal of the symmetric tridiagonal form.
-     * @param secondary Secondary of the tridiagonal form.
+     * @param main           Main diagonal of the symmetric tridiagonal form.
+     * @param secondary      Secondary of the tridiagonal form.
      * @param splitTolerance Dummy parameter (present for backward
-     * compatibility only).
+     *                       compatibility only).
      * @throws MaxCountExceededException if the algorithm fails to converge.
      * @deprecated in 3.1 (to be removed in 4.0) due to unused parameter
      */
@@ -213,7 +236,6 @@ public class EigenDecomposition {
      * 2x2 blocks { {real +imaginary}, {-imaginary, real} }.
      *
      * @return the D matrix.
-     *
      * @see #getRealEigenvalues()
      * @see #getImagEigenvalues()
      */
@@ -225,9 +247,9 @@ public class EigenDecomposition {
 
             for (int i = 0; i < imagEigenvalues.length; i++) {
                 if (Precision.compareTo(imagEigenvalues[i], 0.0, EPSILON) > 0) {
-                    cachedD.setEntry(i, i+1, imagEigenvalues[i]);
+                    cachedD.setEntry(i, i + 1, imagEigenvalues[i]);
                 } else if (Precision.compareTo(imagEigenvalues[i], 0.0, EPSILON) < 0) {
-                    cachedD.setEntry(i, i-1, imagEigenvalues[i]);
+                    cachedD.setEntry(i, i - 1, imagEigenvalues[i]);
                 }
             }
         }
@@ -280,7 +302,6 @@ public class EigenDecomposition {
      * Gets a copy of the real parts of the eigenvalues of the original matrix.
      *
      * @return a copy of the real parts of the eigenvalues of the original matrix.
-     *
      * @see #getD()
      * @see #getRealEigenvalue(int)
      * @see #getImagEigenvalues()
@@ -296,7 +317,6 @@ public class EigenDecomposition {
      * @param i index of the eigenvalue (counting from 0)
      * @return real part of the i<sup>th</sup> eigenvalue of the original
      * matrix.
-     *
      * @see #getD()
      * @see #getRealEigenvalues()
      * @see #getImagEigenvalue(int)
@@ -311,7 +331,6 @@ public class EigenDecomposition {
      *
      * @return a copy of the imaginary parts of the eigenvalues of the original
      * matrix.
-     *
      * @see #getD()
      * @see #getImagEigenvalue(int)
      * @see #getRealEigenvalues()
@@ -327,7 +346,6 @@ public class EigenDecomposition {
      * @param i Index of the eigenvalue (counting from 0).
      * @return the imaginary part of the i<sup>th</sup> eigenvalue of the original
      * matrix.
-     *
      * @see #getD()
      * @see #getImagEigenvalues()
      * @see #getRealEigenvalue(int)
@@ -367,7 +385,7 @@ public class EigenDecomposition {
      *
      * @return the square-root of the matrix.
      * @throws MathUnsupportedOperationException if the matrix is not
-     * symmetric or not positive definite.
+     *                                           symmetric or not positive definite.
      * @since 3.1
      */
     public RealMatrix getSquareRoot() {
@@ -399,7 +417,7 @@ public class EigenDecomposition {
      *
      * @return a solver
      * @throws MathUnsupportedOperationException if the decomposition resulted in
-     * complex eigenvalues
+     *                                           complex eigenvalues
      */
     public DecompositionSolver getSolver() {
         if (hasComplexEigenvalues()) {
@@ -408,13 +426,21 @@ public class EigenDecomposition {
         return new Solver(realEigenvalues, imagEigenvalues, eigenvectors);
     }
 
-    /** Specialized solver. */
+    /**
+     * Specialized solver.
+     */
     private static class Solver implements DecompositionSolver {
-        /** Real part of the realEigenvalues. */
+        /**
+         * Real part of the realEigenvalues.
+         */
         private double[] realEigenvalues;
-        /** Imaginary part of the realEigenvalues. */
+        /**
+         * Imaginary part of the realEigenvalues.
+         */
         private double[] imagEigenvalues;
-        /** Eigenvectors. */
+        /**
+         * Eigenvectors.
+         */
         private final ArrayRealVector[] eigenvectors;
 
         /**
@@ -422,11 +448,11 @@ public class EigenDecomposition {
          *
          * @param realEigenvalues Real parts of the eigenvalues.
          * @param imagEigenvalues Imaginary parts of the eigenvalues.
-         * @param eigenvectors Eigenvectors.
+         * @param eigenvectors    Eigenvectors.
          */
         private Solver(final double[] realEigenvalues,
-                final double[] imagEigenvalues,
-                final ArrayRealVector[] eigenvectors) {
+                       final double[] imagEigenvalues,
+                       final ArrayRealVector[] eigenvectors) {
             this.realEigenvalues = realEigenvalues;
             this.imagEigenvalues = imagEigenvalues;
             this.eigenvectors = eigenvectors;
@@ -441,9 +467,8 @@ public class EigenDecomposition {
          *
          * @param b Right-hand side of the equation A &times; X = B.
          * @return a Vector X that minimizes the two norm of A &times; X - B.
-         *
          * @throws DimensionMismatchException if the matrices dimensions do not match.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws SingularMatrixException    if the decomposed matrix is singular.
          */
         public RealVector solve(final RealVector b) {
             if (!isNonSingular()) {
@@ -468,7 +493,9 @@ public class EigenDecomposition {
             return new ArrayRealVector(bp, false);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public RealMatrix solve(RealMatrix b) {
 
             if (!isNonSingular()) {
@@ -486,7 +513,7 @@ public class EigenDecomposition {
             for (int k = 0; k < nColB; ++k) {
                 for (int i = 0; i < m; ++i) {
                     tmpCol[i] = b.getEntry(i, k);
-                    bp[i][k]  = 0;
+                    bp[i][k] = 0;
                 }
                 for (int i = 0; i < m; ++i) {
                     final ArrayRealVector v = eigenvectors[i];
@@ -587,10 +614,10 @@ public class EigenDecomposition {
      * Find eigenvalues and eigenvectors (Dubrulle et al., 1971)
      *
      * @param householderMatrix Householder matrix of the transformation
-     * to tridiagonal form.
+     *                          to tridiagonal form.
      */
     private void findEigenVectors(final double[][] householderMatrix) {
-        final double[][]z = householderMatrix.clone();
+        final double[][] z = householderMatrix.clone();
         final int n = main.length;
         realEigenvalues = new double[n];
         imagEigenvalues = new double[n];
@@ -614,12 +641,12 @@ public class EigenDecomposition {
         }
         // Make null any main and secondary value too small to be significant
         if (maxAbsoluteValue != 0) {
-            for (int i=0; i < n; i++) {
+            for (int i = 0; i < n; i++) {
                 if (FastMath.abs(realEigenvalues[i]) <= Precision.EPSILON * maxAbsoluteValue) {
                     realEigenvalues[i] = 0;
                 }
                 if (FastMath.abs(e[i]) <= Precision.EPSILON * maxAbsoluteValue) {
-                    e[i]=0;
+                    e[i] = 0;
                 }
             }
         }
@@ -630,7 +657,7 @@ public class EigenDecomposition {
             do {
                 for (m = j; m < n - 1; m++) {
                     double delta = FastMath.abs(realEigenvalues[m]) +
-                        FastMath.abs(realEigenvalues[m + 1]);
+                            FastMath.abs(realEigenvalues[m + 1]);
                     if (FastMath.abs(e[m]) + delta == delta) {
                         break;
                     }
@@ -638,7 +665,7 @@ public class EigenDecomposition {
                 if (m != j) {
                     if (its == maxIter) {
                         throw new MaxCountExceededException(LocalizedFormats.CONVERGENCE_FAILED,
-                                                            maxIter);
+                                maxIter);
                     }
                     its++;
                     double q = (realEigenvalues[j + 1] - realEigenvalues[j]) / (2 * e[j]);
@@ -719,12 +746,12 @@ public class EigenDecomposition {
         maxAbsoluteValue = 0;
         for (int i = 0; i < n; i++) {
             if (FastMath.abs(realEigenvalues[i]) > maxAbsoluteValue) {
-                maxAbsoluteValue=FastMath.abs(realEigenvalues[i]);
+                maxAbsoluteValue = FastMath.abs(realEigenvalues[i]);
             }
         }
         // Make null any eigen value too small to be significant
         if (maxAbsoluteValue != 0.0) {
-            for (int i=0; i < n; i++) {
+            for (int i = 0; i < n; i++) {
                 if (FastMath.abs(realEigenvalues[i]) < Precision.EPSILON * maxAbsoluteValue) {
                     realEigenvalues[i] = 0;
                 }
@@ -755,7 +782,7 @@ public class EigenDecomposition {
 
         for (int i = 0; i < realEigenvalues.length; i++) {
             if (i == (realEigenvalues.length - 1) ||
-                Precision.equals(matT[i + 1][i], 0.0, EPSILON)) {
+                    Precision.equals(matT[i + 1][i], 0.0, EPSILON)) {
                 realEigenvalues[i] = matT[i][i];
             } else {
                 final double x = matT[i + 1][i + 1];
@@ -792,7 +819,7 @@ public class EigenDecomposition {
      * @throws MathArithmeticException if the Schur form has a norm of zero
      */
     private void findEigenVectorsFromSchur(final SchurTransformer schur)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
         final double[][] matrixT = schur.getT().getData();
         final double[][] matrixP = schur.getP().getData();
 
@@ -801,14 +828,14 @@ public class EigenDecomposition {
         // compute matrix norm
         double norm = 0.0;
         for (int i = 0; i < n; i++) {
-           for (int j = FastMath.max(i - 1, 0); j < n; j++) {
-               norm += FastMath.abs(matrixT[i][j]);
-           }
+            for (int j = FastMath.max(i - 1, 0); j < n; j++) {
+                norm += FastMath.abs(matrixT[i][j]);
+            }
         }
 
         // we can not handle a matrix with zero norm
         if (Precision.equals(norm, 0.0, EPSILON)) {
-           throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
         }
 
         // Backsubstitute to find vectors of upper triangular form
@@ -847,7 +874,7 @@ public class EigenDecomposition {
                             double x = matrixT[i][i + 1];
                             double y = matrixT[i + 1][i];
                             q = (realEigenvalues[i] - p) * (realEigenvalues[i] - p) +
-                                imagEigenvalues[i] * imagEigenvalues[i];
+                                    imagEigenvalues[i] * imagEigenvalues[i];
                             double t = (x * s - z * r) / q;
                             matrixT[i][idx] = t;
                             if (FastMath.abs(x) > FastMath.abs(z)) {
@@ -873,16 +900,16 @@ public class EigenDecomposition {
                 // Last vector component imaginary so matrix is triangular
                 if (FastMath.abs(matrixT[idx][idx - 1]) > FastMath.abs(matrixT[idx - 1][idx])) {
                     matrixT[idx - 1][idx - 1] = q / matrixT[idx][idx - 1];
-                    matrixT[idx - 1][idx]     = -(matrixT[idx][idx] - p) / matrixT[idx][idx - 1];
+                    matrixT[idx - 1][idx] = -(matrixT[idx][idx] - p) / matrixT[idx][idx - 1];
                 } else {
                     final Complex result = cdiv(0.0, -matrixT[idx - 1][idx],
-                                                matrixT[idx - 1][idx - 1] - p, q);
+                            matrixT[idx - 1][idx - 1] - p, q);
                     matrixT[idx - 1][idx - 1] = result.getReal();
-                    matrixT[idx - 1][idx]     = result.getImaginary();
+                    matrixT[idx - 1][idx] = result.getImaginary();
                 }
 
                 matrixT[idx][idx - 1] = 0.0;
-                matrixT[idx][idx]     = 1.0;
+                matrixT[idx][idx] = 1.0;
 
                 for (int i = idx - 2; i >= 0; i--) {
                     double ra = 0.0;
@@ -908,34 +935,34 @@ public class EigenDecomposition {
                             double x = matrixT[i][i + 1];
                             double y = matrixT[i + 1][i];
                             double vr = (realEigenvalues[i] - p) * (realEigenvalues[i] - p) +
-                                        imagEigenvalues[i] * imagEigenvalues[i] - q * q;
+                                    imagEigenvalues[i] * imagEigenvalues[i] - q * q;
                             final double vi = (realEigenvalues[i] - p) * 2.0 * q;
                             if (Precision.equals(vr, 0.0) && Precision.equals(vi, 0.0)) {
                                 vr = Precision.EPSILON * norm *
-                                     (FastMath.abs(w) + FastMath.abs(q) + FastMath.abs(x) +
-                                      FastMath.abs(y) + FastMath.abs(z));
+                                        (FastMath.abs(w) + FastMath.abs(q) + FastMath.abs(x) +
+                                                FastMath.abs(y) + FastMath.abs(z));
                             }
-                            final Complex c     = cdiv(x * r - z * ra + q * sa,
-                                                       x * s - z * sa - q * ra, vr, vi);
+                            final Complex c = cdiv(x * r - z * ra + q * sa,
+                                    x * s - z * sa - q * ra, vr, vi);
                             matrixT[i][idx - 1] = c.getReal();
-                            matrixT[i][idx]     = c.getImaginary();
+                            matrixT[i][idx] = c.getImaginary();
 
                             if (FastMath.abs(x) > (FastMath.abs(z) + FastMath.abs(q))) {
                                 matrixT[i + 1][idx - 1] = (-ra - w * matrixT[i][idx - 1] +
-                                                           q * matrixT[i][idx]) / x;
-                                matrixT[i + 1][idx]     = (-sa - w * matrixT[i][idx] -
-                                                           q * matrixT[i][idx - 1]) / x;
+                                        q * matrixT[i][idx]) / x;
+                                matrixT[i + 1][idx] = (-sa - w * matrixT[i][idx] -
+                                        q * matrixT[i][idx - 1]) / x;
                             } else {
-                                final Complex c2        = cdiv(-r - y * matrixT[i][idx - 1],
-                                                               -s - y * matrixT[i][idx], z, q);
+                                final Complex c2 = cdiv(-r - y * matrixT[i][idx - 1],
+                                        -s - y * matrixT[i][idx], z, q);
                                 matrixT[i + 1][idx - 1] = c2.getReal();
-                                matrixT[i + 1][idx]     = c2.getImaginary();
+                                matrixT[i + 1][idx] = c2.getImaginary();
                             }
                         }
 
                         // Overflow control
                         double t = FastMath.max(FastMath.abs(matrixT[i][idx - 1]),
-                                                FastMath.abs(matrixT[i][idx]));
+                                FastMath.abs(matrixT[i][idx]));
                         if ((Precision.EPSILON * t) * t > 1) {
                             for (int j = i; j <= idx; j++) {
                                 matrixT[j][idx - 1] /= t;

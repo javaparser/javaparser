@@ -1,3 +1,3 @@
 public class B extends A {
-  public static final String BFIELD = "b";
+    public static final String BFIELD = "b";
 }

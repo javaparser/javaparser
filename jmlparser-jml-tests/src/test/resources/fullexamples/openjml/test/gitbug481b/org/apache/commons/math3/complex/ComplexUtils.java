@@ -24,14 +24,14 @@ import org.apache.commons.math3.util.FastMath;
 /**
  * Static implementations of common
  * {@link org.apache.commons.math3.complex.Complex} utilities functions.
- *
  */
 public class ComplexUtils {
 
     /**
      * Default constructor.
      */
-    private ComplexUtils() {}
+    private ComplexUtils() {
+    }
 
     /**
      * Creates a complex number from the given polar representation.
@@ -52,8 +52,8 @@ public class ComplexUtils {
      * polar2Complex(INFINITY, -&pi;/4) = INFINITY - INFINITY i
      * polar2Complex(INFINITY, 5&pi;/4) = -INFINITY - INFINITY i </code></pre></p>
      *
-     * @param r the modulus of the complex number to create
-     * @param theta  the argument of the complex number to create
+     * @param r     the modulus of the complex number to create
+     * @param theta the argument of the complex number to create
      * @return <code>r&middot;e<sup>i&middot;theta</sup></code>
      * @throws MathIllegalArgumentException if {@code r} is negative.
      * @since 1.1
@@ -61,7 +61,7 @@ public class ComplexUtils {
     public static Complex polar2Complex(double r, double theta) throws MathIllegalArgumentException {
         if (r < 0) {
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.NEGATIVE_COMPLEX_MODULE, r);
+                    LocalizedFormats.NEGATIVE_COMPLEX_MODULE, r);
         }
         return new Complex(r * FastMath.cos(theta), r * FastMath.sin(theta));
     }
@@ -70,9 +70,8 @@ public class ComplexUtils {
      * Convert an array of primitive doubles to an array of {@code Complex} objects.
      *
      * @param real Array of numbers to be converted to their {@code Complex}
-     * equivalent.
+     *             equivalent.
      * @return an array of {@code Complex} objects.
-     *
      * @since 3.1
      */
     public static Complex[] convertToComplex(double[] real) {

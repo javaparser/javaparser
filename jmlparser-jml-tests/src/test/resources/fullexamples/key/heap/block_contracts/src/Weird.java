@@ -12,7 +12,8 @@ public class Weird {
       @*/
     public int behaviors(int x, int y) {
         int z = 0;
-        outside: {
+        outside:
+        {
             /*@ normal_behavior
               @ requires x > 0 && y > 0;
               @ ensures z == x + y;
@@ -46,27 +47,27 @@ public class Weird {
               @ signals (Exception e) z == 0;
               @ assignable \nothing;
               @*/
-           {
-               if (x > 0 && y > 0) {
-                   z = x + y;
-               }
-               if (x < 0 && y > 0) {
-                   z = x / y;
-                   break outside;
-               }
-               if (x > 0 && y < 0) {
-                   z = x % y;
-                   // Note that this is incorrect java code, because there is no loop statement.
-                   continue;
-               }
-               if (x < 0 && y < 0) {
-                   return x * y;
-               }
-               if (x == 0 && y == 0) {
-                   z = 0;
-                   throw new RuntimeException("foo");
-               }
-           }
+            {
+                if (x > 0 && y > 0) {
+                    z = x + y;
+                }
+                if (x < 0 && y > 0) {
+                    z = x / y;
+                    break outside;
+                }
+                if (x > 0 && y < 0) {
+                    z = x % y;
+                    // Note that this is incorrect java code, because there is no loop statement.
+                    continue;
+                }
+                if (x < 0 && y < 0) {
+                    return x * y;
+                }
+                if (x == 0 && y == 0) {
+                    z = 0;
+                    throw new RuntimeException("foo");
+                }
+            }
         }
         return z;
     }
@@ -96,7 +97,8 @@ public class Weird {
       @*/
     public int multipleBlockContracts(int x, int y) {
         int z = 0;
-        outside: {
+        outside:
+        {
             /*@ requires x >= 0 && y >= 0;
               @ ensures z == x + y;
               @ diverges false;
@@ -119,23 +121,22 @@ public class Weird {
               @ signals_only \nothing;
               @ assignable \nothing;
               @*/
-           {
-               if (x >= 0 && y >= 0) {
-                   z = x + y;
-               }
-               if (x < 0 && y < 0) {
-                   return x * y;
-               }
-               while (true) {
-                   if (x < 0 && y >= 0) {
-                       z = x / y;
-                       break label;
-                   }
-                   else {
-                       continue;
-                   }
-               }
-           }
+            {
+                if (x >= 0 && y >= 0) {
+                    z = x + y;
+                }
+                if (x < 0 && y < 0) {
+                    return x * y;
+                }
+                while (true) {
+                    if (x < 0 && y >= 0) {
+                        z = x / y;
+                        break label;
+                    } else {
+                        continue;
+                    }
+                }
+            }
         }
         return z;
     }
@@ -149,7 +150,8 @@ public class Weird {
       @*/
     public int bar(int x, int y) {
         int z = 0;
-        label: {
+        label:
+        {
             /*@ requires x > 0 && y > 0;
               @ ensures z == \before(z);
               @ breaks (label) z < \before(z);
@@ -160,26 +162,26 @@ public class Weird {
               @ assignable \nothing;
               @ assignable \nothing;
               @*/
-           {
-               if (x > 0 && y > 0) {
-                   z = x + y;
-               }
-               if (x < 0 && y > 0) {
-                   z = x / y;
-                   break label;
-               }
-               if (x > 0 && y < 0) {
-                   z = x % y;
-                   continue;
-               }
-               if (x < 0 && y < 0) {
-                   return x * y;
-               }
-               if (x == 0 && y == 0) {
-                   z = 0;
-                   throw new RuntimeException("foo");
-               }
-           }
+            {
+                if (x > 0 && y > 0) {
+                    z = x + y;
+                }
+                if (x < 0 && y > 0) {
+                    z = x / y;
+                    break label;
+                }
+                if (x > 0 && y < 0) {
+                    z = x % y;
+                    continue;
+                }
+                if (x < 0 && y < 0) {
+                    return x * y;
+                }
+                if (x == 0 && y == 0) {
+                    z = 0;
+                    throw new RuntimeException("foo");
+                }
+            }
         }
         return z;
     }

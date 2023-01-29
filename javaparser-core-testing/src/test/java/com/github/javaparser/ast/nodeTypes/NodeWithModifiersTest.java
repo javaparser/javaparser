@@ -85,7 +85,7 @@ class NodeWithModifiersTest {
         assertEquals(createModifierList(SYNCHRONIZED), node.getModifiers());
     }
 
-    private NodeWithModifiers anythingWithModifiers(Modifier.Keyword ... keywords) {
+    private NodeWithModifiers anythingWithModifiers(Modifier.Keyword... keywords) {
         ClassOrInterfaceDeclaration foo = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
         foo.addModifier(keywords);
         return foo;

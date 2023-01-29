@@ -26,18 +26,24 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class NonPositiveDefiniteMatrixException extends NumberIsTooSmallException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = 1641613838113738061L;
-    /** Index (diagonal element). */
+    /**
+     * Index (diagonal element).
+     */
     private final int index;
-    /** Threshold. */
+    /**
+     * Threshold.
+     */
     private final double threshold;
 
     /**
      * Construct an exception.
      *
-     * @param wrong Value that fails the positivity check.
-     * @param index Row (and column) index.
+     * @param wrong     Value that fails the positivity check.
+     * @param index     Row (and column) index.
      * @param threshold Absolute positivity threshold.
      */
     public NonPositiveDefiniteMatrixException(double wrong,
@@ -58,12 +64,14 @@ public class NonPositiveDefiniteMatrixException extends NumberIsTooSmallExceptio
     public int getRow() {
         return index;
     }
+
     /**
      * @return the column index.
      */
     public int getColumn() {
         return index;
     }
+
     /**
      * @return the absolute positivity threshold.
      */

@@ -26,7 +26,7 @@ package com.github.javaparser.symbolsolver.resolution.naming;
  * ExpressionName, MethodName, PackageOrTypeName, or AmbiguousName.
  * TypeName is less expressive than the other six categories, because it is denoted with TypeIdentifier, which excludes
  * the character sequence var (§3.8).
- *
+ * <p>
  * See JLS 6.5 (https://docs.oracle.com/javase/specs/jls/se10/html/jls-6.html#jls-6.5)
  */
 public enum NameCategory {

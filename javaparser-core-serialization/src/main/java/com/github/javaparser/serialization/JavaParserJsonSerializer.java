@@ -43,7 +43,7 @@ public class JavaParserJsonSerializer {
     /**
      * Serializes node and all its children into json. Any node siblings will be ignored.
      *
-     * @param node the node that will be the root level json object
+     * @param node      the node that will be the root level json object
      * @param generator the json-p generator for writing the json
      * @see <a href="https://javaee.github.io/jsonp/">json-p</a>
      */
@@ -60,8 +60,8 @@ public class JavaParserJsonSerializer {
     /**
      * Recursive depth-first method that serializes nodes into json
      *
-     * @param nodeName nullable String. If null, it is the root object, otherwise it is the property key for the object
-     * @param node the current node to be serialized
+     * @param nodeName  nullable String. If null, it is the root object, otherwise it is the property key for the object
+     * @param node      the current node to be serialized
      * @param generator the json-p generator for writing the json
      */
 

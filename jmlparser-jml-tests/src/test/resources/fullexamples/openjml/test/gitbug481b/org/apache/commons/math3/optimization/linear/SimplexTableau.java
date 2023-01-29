@@ -54,61 +54,91 @@ import java.util.*;
  * a1: Artificial variable</br>
  * RHS: Right hand side</br>
  * </p>
- * @deprecated As of 3.1 (to be removed in 4.0).
+ *
  * @since 2.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 class SimplexTableau implements Serializable {
 
-    /** Column label for negative vars. */
+    /**
+     * Column label for negative vars.
+     */
     private static final String NEGATIVE_VAR_COLUMN_LABEL = "x-";
 
-    /** Default amount of error to accept in floating point comparisons (as ulps). */
+    /**
+     * Default amount of error to accept in floating point comparisons (as ulps).
+     */
     private static final int DEFAULT_ULPS = 10;
 
-    /** The cut-off threshold to zero-out entries. */
+    /**
+     * The cut-off threshold to zero-out entries.
+     */
     private static final double CUTOFF_THRESHOLD = 1e-12;
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -1369660067587938365L;
 
-    /** Linear objective function. */
+    /**
+     * Linear objective function.
+     */
     private final LinearObjectiveFunction f;
 
-    /** Linear constraints. */
+    /**
+     * Linear constraints.
+     */
     private final List<LinearConstraint> constraints;
 
-    /** Whether to restrict the variables to non-negative values. */
+    /**
+     * Whether to restrict the variables to non-negative values.
+     */
     private final boolean restrictToNonNegative;
 
-    /** The variables each column represents */
+    /**
+     * The variables each column represents
+     */
     private final List<String> columnLabels = new ArrayList<String>();
 
-    /** Simple tableau. */
+    /**
+     * Simple tableau.
+     */
     private transient RealMatrix tableau;
 
-    /** Number of decision variables. */
+    /**
+     * Number of decision variables.
+     */
     private final int numDecisionVariables;
 
-    /** Number of slack variables. */
+    /**
+     * Number of slack variables.
+     */
     private final int numSlackVariables;
 
-    /** Number of artificial variables. */
+    /**
+     * Number of artificial variables.
+     */
     private int numArtificialVariables;
 
-    /** Amount of error to accept when checking for optimality. */
+    /**
+     * Amount of error to accept when checking for optimality.
+     */
     private final double epsilon;
 
-    /** Amount of error to accept in floating point comparisons. */
+    /**
+     * Amount of error to accept in floating point comparisons.
+     */
     private final int maxUlps;
 
     /**
      * Build a tableau for a linear problem.
-     * @param f linear objective function
-     * @param constraints linear constraints
-     * @param goalType type of optimization goal: either {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}
+     *
+     * @param f                     linear objective function
+     * @param constraints           linear constraints
+     * @param goalType              type of optimization goal: either {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}
      * @param restrictToNonNegative whether to restrict the variables to non-negative values
-     * @param epsilon amount of error to accept when checking for optimality
+     * @param epsilon               amount of error to accept when checking for optimality
      */
     SimplexTableau(final LinearObjectiveFunction f,
                    final Collection<LinearConstraint> constraints,
@@ -119,29 +149,30 @@ class SimplexTableau implements Serializable {
 
     /**
      * Build a tableau for a linear problem.
-     * @param f linear objective function
-     * @param constraints linear constraints
-     * @param goalType type of optimization goal: either {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}
+     *
+     * @param f                     linear objective function
+     * @param constraints           linear constraints
+     * @param goalType              type of optimization goal: either {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}
      * @param restrictToNonNegative whether to restrict the variables to non-negative values
-     * @param epsilon amount of error to accept when checking for optimality
-     * @param maxUlps amount of error to accept in floating point comparisons
+     * @param epsilon               amount of error to accept when checking for optimality
+     * @param maxUlps               amount of error to accept in floating point comparisons
      */
     SimplexTableau(final LinearObjectiveFunction f,
                    final Collection<LinearConstraint> constraints,
                    final GoalType goalType, final boolean restrictToNonNegative,
                    final double epsilon,
                    final int maxUlps) {
-        this.f                      = f;
-        this.constraints            = normalizeConstraints(constraints);
-        this.restrictToNonNegative  = restrictToNonNegative;
-        this.epsilon                = epsilon;
-        this.maxUlps                = maxUlps;
-        this.numDecisionVariables   = f.getCoefficients().getDimension() +
-                                      (restrictToNonNegative ? 0 : 1);
-        this.numSlackVariables      = getConstraintTypeCounts(Relationship.LEQ) +
-                                      getConstraintTypeCounts(Relationship.GEQ);
+        this.f = f;
+        this.constraints = normalizeConstraints(constraints);
+        this.restrictToNonNegative = restrictToNonNegative;
+        this.epsilon = epsilon;
+        this.maxUlps = maxUlps;
+        this.numDecisionVariables = f.getCoefficients().getDimension() +
+                (restrictToNonNegative ? 0 : 1);
+        this.numSlackVariables = getConstraintTypeCounts(Relationship.LEQ) +
+                getConstraintTypeCounts(Relationship.GEQ);
         this.numArtificialVariables = getConstraintTypeCounts(Relationship.EQ) +
-                                      getConstraintTypeCounts(Relationship.GEQ);
+                getConstraintTypeCounts(Relationship.GEQ);
         this.tableau = createTableau(goalType == GoalType.MAXIMIZE);
         initializeColumnLabels();
     }
@@ -150,27 +181,28 @@ class SimplexTableau implements Serializable {
      * Initialize the labels for the columns.
      */
     protected void initializeColumnLabels() {
-      if (getNumObjectiveFunctions() == 2) {
-        columnLabels.add("W");
-      }
-      columnLabels.add("Z");
-      for (int i = 0; i < getOriginalNumDecisionVariables(); i++) {
-        columnLabels.add("x" + i);
-      }
-      if (!restrictToNonNegative) {
-        columnLabels.add(NEGATIVE_VAR_COLUMN_LABEL);
-      }
-      for (int i = 0; i < getNumSlackVariables(); i++) {
-        columnLabels.add("s" + i);
-      }
-      for (int i = 0; i < getNumArtificialVariables(); i++) {
-        columnLabels.add("a" + i);
-      }
-      columnLabels.add("RHS");
+        if (getNumObjectiveFunctions() == 2) {
+            columnLabels.add("W");
+        }
+        columnLabels.add("Z");
+        for (int i = 0; i < getOriginalNumDecisionVariables(); i++) {
+            columnLabels.add("x" + i);
+        }
+        if (!restrictToNonNegative) {
+            columnLabels.add(NEGATIVE_VAR_COLUMN_LABEL);
+        }
+        for (int i = 0; i < getNumSlackVariables(); i++) {
+            columnLabels.add("s" + i);
+        }
+        for (int i = 0; i < getNumArtificialVariables(); i++) {
+            columnLabels.add("a" + i);
+        }
+        columnLabels.add("RHS");
     }
 
     /**
      * Create the tableau by itself.
+     *
      * @param maximize if true, goal is to maximize the objective function
      * @return created tableau
      */
@@ -178,7 +210,7 @@ class SimplexTableau implements Serializable {
 
         // create a matrix of the correct size
         int width = numDecisionVariables + numSlackVariables +
-        numArtificialVariables + getNumObjectiveFunctions() + 1; // + 1 is for RHS
+                numArtificialVariables + getNumObjectiveFunctions() + 1; // + 1 is for RHS
         int height = constraints.size() + getNumObjectiveFunctions();
         Array2DRowRealMatrix matrix = new Array2DRowRealMatrix(height, width);
 
@@ -189,14 +221,14 @@ class SimplexTableau implements Serializable {
         int zIndex = (getNumObjectiveFunctions() == 1) ? 0 : 1;
         matrix.setEntry(zIndex, zIndex, maximize ? 1 : -1);
         RealVector objectiveCoefficients =
-            maximize ? f.getCoefficients().mapMultiply(-1) : f.getCoefficients();
+                maximize ? f.getCoefficients().mapMultiply(-1) : f.getCoefficients();
         copyArray(objectiveCoefficients.toArray(), matrix.getDataRef()[zIndex]);
         matrix.setEntry(zIndex, width - 1,
-            maximize ? f.getConstantTerm() : -1 * f.getConstantTerm());
+                maximize ? f.getConstantTerm() : -1 * f.getConstantTerm());
 
         if (!restrictToNonNegative) {
             matrix.setEntry(zIndex, getSlackVariableOffset() - 1,
-                getInvertedCoefficientSum(objectiveCoefficients));
+                    getInvertedCoefficientSum(objectiveCoefficients));
         }
 
         // initialize the constraint rows
@@ -212,7 +244,7 @@ class SimplexTableau implements Serializable {
             // x-
             if (!restrictToNonNegative) {
                 matrix.setEntry(row, getSlackVariableOffset() - 1,
-                    getInvertedCoefficientSum(constraint.getCoefficients()));
+                        getInvertedCoefficientSum(constraint.getCoefficients()));
             }
 
             // RHS
@@ -239,6 +271,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get new versions of the constraints which have positive right hand sides.
+     *
      * @param originalConstraints original (not normalized) constraints
      * @return new versions of the constraints
      */
@@ -252,21 +285,23 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get a new equation equivalent to this one with a positive right hand side.
+     *
      * @param constraint reference constraint
      * @return new equation
      */
     private LinearConstraint normalize(final LinearConstraint constraint) {
         if (constraint.getValue() < 0) {
             return new LinearConstraint(constraint.getCoefficients().mapMultiply(-1),
-                                        constraint.getRelationship().oppositeRelationship(),
-                                        -1 * constraint.getValue());
+                    constraint.getRelationship().oppositeRelationship(),
+                    -1 * constraint.getValue());
         }
         return new LinearConstraint(constraint.getCoefficients(),
-                                    constraint.getRelationship(), constraint.getValue());
+                constraint.getRelationship(), constraint.getValue());
     }
 
     /**
      * Get the number of objective functions in this tableau.
+     *
      * @return 2 for Phase 1.  1 for Phase 2.
      */
     protected final int getNumObjectiveFunctions() {
@@ -275,6 +310,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get a count of constraints corresponding to a specified relationship.
+     *
      * @param relationship relationship to count
      * @return number of constraint with the specified relationship
      */
@@ -290,6 +326,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the -1 times the sum of all coefficients in the given array.
+     *
      * @param coefficients coefficients to sum
      * @return the -1 times the sum of all coefficients in the given array.
      */
@@ -303,6 +340,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Checks whether the given column is basic.
+     *
      * @param col index of the column to check
      * @return the row that the variable is basic in.  null if the column is not basic
      */
@@ -368,7 +406,7 @@ class SimplexTableau implements Serializable {
     }
 
     /**
-     * @param src the source array
+     * @param src  the source array
      * @param dest the destination array
      */
     private void copyArray(final double[] src, final double[] dest) {
@@ -377,6 +415,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Returns whether the problem is at an optimal state.
+     *
      * @return whether the model has been solved
      */
     boolean isOptimal() {
@@ -391,39 +430,40 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the current solution.
+     *
      * @return current solution
      */
     protected PointValuePair getSolution() {
-      int negativeVarColumn = columnLabels.indexOf(NEGATIVE_VAR_COLUMN_LABEL);
-      Integer negativeVarBasicRow = negativeVarColumn > 0 ? getBasicRow(negativeVarColumn) : null;
-      double mostNegative = negativeVarBasicRow == null ? 0 : getEntry(negativeVarBasicRow, getRhsOffset());
+        int negativeVarColumn = columnLabels.indexOf(NEGATIVE_VAR_COLUMN_LABEL);
+        Integer negativeVarBasicRow = negativeVarColumn > 0 ? getBasicRow(negativeVarColumn) : null;
+        double mostNegative = negativeVarBasicRow == null ? 0 : getEntry(negativeVarBasicRow, getRhsOffset());
 
-      Set<Integer> basicRows = new HashSet<Integer>();
-      double[] coefficients = new double[getOriginalNumDecisionVariables()];
-      for (int i = 0; i < coefficients.length; i++) {
-          int colIndex = columnLabels.indexOf("x" + i);
-          if (colIndex < 0) {
-            coefficients[i] = 0;
-            continue;
-          }
-          Integer basicRow = getBasicRow(colIndex);
-          if (basicRow != null && basicRow == 0) {
-              // if the basic row is found to be the objective function row
-              // set the coefficient to 0 -> this case handles unconstrained
-              // variables that are still part of the objective function
-              coefficients[i] = 0;
-          } else if (basicRows.contains(basicRow)) {
-              // if multiple variables can take a given value
-              // then we choose the first and set the rest equal to 0
-              coefficients[i] = 0 - (restrictToNonNegative ? 0 : mostNegative);
-          } else {
-              basicRows.add(basicRow);
-              coefficients[i] =
-                  (basicRow == null ? 0 : getEntry(basicRow, getRhsOffset())) -
-                  (restrictToNonNegative ? 0 : mostNegative);
-          }
-      }
-      return new PointValuePair(coefficients, f.getValue(coefficients));
+        Set<Integer> basicRows = new HashSet<Integer>();
+        double[] coefficients = new double[getOriginalNumDecisionVariables()];
+        for (int i = 0; i < coefficients.length; i++) {
+            int colIndex = columnLabels.indexOf("x" + i);
+            if (colIndex < 0) {
+                coefficients[i] = 0;
+                continue;
+            }
+            Integer basicRow = getBasicRow(colIndex);
+            if (basicRow != null && basicRow == 0) {
+                // if the basic row is found to be the objective function row
+                // set the coefficient to 0 -> this case handles unconstrained
+                // variables that are still part of the objective function
+                coefficients[i] = 0;
+            } else if (basicRows.contains(basicRow)) {
+                // if multiple variables can take a given value
+                // then we choose the first and set the rest equal to 0
+                coefficients[i] = 0 - (restrictToNonNegative ? 0 : mostNegative);
+            } else {
+                basicRows.add(basicRow);
+                coefficients[i] =
+                        (basicRow == null ? 0 : getEntry(basicRow, getRhsOffset())) -
+                                (restrictToNonNegative ? 0 : mostNegative);
+            }
+        }
+        return new PointValuePair(coefficients, f.getValue(coefficients));
     }
 
     /**
@@ -433,7 +473,7 @@ class SimplexTableau implements Serializable {
      * <pre>minuendRow = minuendRow - multiple * subtrahendRow</pre>
      *
      * @param dividendRow index of the row
-     * @param divisor value of the divisor
+     * @param divisor     value of the divisor
      */
     protected void divideRow(final int dividendRow, final double divisor) {
         for (int j = 0; j < getWidth(); j++) {
@@ -447,9 +487,9 @@ class SimplexTableau implements Serializable {
      * After application of this operation, the following will hold:
      * <pre>minuendRow = minuendRow - multiple * subtrahendRow</pre>
      *
-     * @param minuendRow row index
+     * @param minuendRow    row index
      * @param subtrahendRow row index
-     * @param multiple multiplication factor
+     * @param multiple      multiplication factor
      */
     protected void subtractRow(final int minuendRow, final int subtrahendRow,
                                final double multiple) {
@@ -465,6 +505,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the width of the tableau.
+     *
      * @return width of the tableau
      */
     protected final int getWidth() {
@@ -473,6 +514,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the height of the tableau.
+     *
      * @return height of the tableau
      */
     protected final int getHeight() {
@@ -481,7 +523,8 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get an entry of the tableau.
-     * @param row row index
+     *
+     * @param row    row index
      * @param column column index
      * @return entry at (row, column)
      */
@@ -491,9 +534,10 @@ class SimplexTableau implements Serializable {
 
     /**
      * Set an entry of the tableau.
-     * @param row row index
+     *
+     * @param row    row index
      * @param column column index
-     * @param value for the entry
+     * @param value  for the entry
      */
     protected final void setEntry(final int row, final int column,
                                   final double value) {
@@ -502,6 +546,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the offset of the first slack variable.
+     *
      * @return offset of the first slack variable
      */
     protected final int getSlackVariableOffset() {
@@ -510,6 +555,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the offset of the first artificial variable.
+     *
      * @return offset of the first artificial variable
      */
     protected final int getArtificialVariableOffset() {
@@ -518,6 +564,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the offset of the right hand side.
+     *
      * @return offset of the right hand side
      */
     protected final int getRhsOffset() {
@@ -539,6 +586,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the original number of decision variables.
+     *
      * @return original number of decision variables
      * @see #getNumDecisionVariables()
      */
@@ -548,6 +596,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the number of slack variables.
+     *
      * @return number of slack variables
      */
     protected final int getNumSlackVariables() {
@@ -556,6 +605,7 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the number of artificial variables.
+     *
      * @return number of artificial variables
      */
     protected final int getNumArtificialVariables() {
@@ -564,68 +614,75 @@ class SimplexTableau implements Serializable {
 
     /**
      * Get the tableau data.
+     *
      * @return tableau data
      */
     protected final double[][] getData() {
         return tableau.getData();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
 
-      if (this == other) {
-        return true;
-      }
+        if (this == other) {
+            return true;
+        }
 
-      if (other instanceof SimplexTableau) {
-          SimplexTableau rhs = (SimplexTableau) other;
-          return (restrictToNonNegative  == rhs.restrictToNonNegative) &&
-                 (numDecisionVariables   == rhs.numDecisionVariables) &&
-                 (numSlackVariables      == rhs.numSlackVariables) &&
-                 (numArtificialVariables == rhs.numArtificialVariables) &&
-                 (epsilon                == rhs.epsilon) &&
-                 (maxUlps                == rhs.maxUlps) &&
-                 f.equals(rhs.f) &&
-                 constraints.equals(rhs.constraints) &&
-                 tableau.equals(rhs.tableau);
-      }
-      return false;
+        if (other instanceof SimplexTableau) {
+            SimplexTableau rhs = (SimplexTableau) other;
+            return (restrictToNonNegative == rhs.restrictToNonNegative) &&
+                    (numDecisionVariables == rhs.numDecisionVariables) &&
+                    (numSlackVariables == rhs.numSlackVariables) &&
+                    (numArtificialVariables == rhs.numArtificialVariables) &&
+                    (epsilon == rhs.epsilon) &&
+                    (maxUlps == rhs.maxUlps) &&
+                    f.equals(rhs.f) &&
+                    constraints.equals(rhs.constraints) &&
+                    tableau.equals(rhs.tableau);
+        }
+        return false;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Boolean.valueOf(restrictToNonNegative).hashCode() ^
-               numDecisionVariables ^
-               numSlackVariables ^
-               numArtificialVariables ^
-               Double.valueOf(epsilon).hashCode() ^
-               maxUlps ^
-               f.hashCode() ^
-               constraints.hashCode() ^
-               tableau.hashCode();
+                numDecisionVariables ^
+                numSlackVariables ^
+                numArtificialVariables ^
+                Double.valueOf(epsilon).hashCode() ^
+                maxUlps ^
+                f.hashCode() ^
+                constraints.hashCode() ^
+                tableau.hashCode();
     }
 
     /**
      * Serialize the instance.
+     *
      * @param oos stream where object should be written
      * @throws IOException if object cannot be written to stream
      */
     private void writeObject(ObjectOutputStream oos)
-        throws IOException {
+            throws IOException {
         oos.defaultWriteObject();
         MatrixUtils.serializeRealMatrix(tableau, oos);
     }
 
     /**
      * Deserialize the instance.
+     *
      * @param ois stream from which the object should be read
      * @throws ClassNotFoundException if a class in the stream cannot be found
-     * @throws IOException if object cannot be read from the stream
+     * @throws IOException            if object cannot be read from the stream
      */
     private void readObject(ObjectInputStream ois)
-      throws ClassNotFoundException, IOException {
+            throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
         MatrixUtils.deserializeRealMatrix(this, "tableau", ois);
     }

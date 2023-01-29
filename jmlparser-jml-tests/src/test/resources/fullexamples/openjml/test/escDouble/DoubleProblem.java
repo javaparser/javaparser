@@ -1,18 +1,21 @@
 //-@ immutable
 public /*@ pure @*/ strictfp class DoubleProblem {
 
-    /** The double that is the abstract value of this object.
+    /**
+     * The double that is the abstract value of this object.
      */
     //@ model public double theDouble;
 
     //@ public invariant !Double.isNaN(theDouble);
-	//@ axiom Double.isFinite(0.0d);
+    //@ axiom Double.isFinite(0.0d);
 
     /*@ spec_public @*/ private double doubleValue;
     //@                                   in theDouble;
     //@ public represents theDouble = doubleValue;
 
-    /** Initialize this object to be zero. */
+    /**
+     * Initialize this object to be zero.
+     */
     /*@   public normal_behavior
       @     ensures theDouble == 0.0d;
       @*/
@@ -20,7 +23,8 @@ public /*@ pure @*/ strictfp class DoubleProblem {
         doubleValue = 0.0d;
     }
 
-    /** Initialize this object to contain the value of the given
+    /**
+     * Initialize this object to contain the value of the given
      * Double.
      */
     /*@   public normal_behavior
@@ -31,7 +35,8 @@ public /*@ pure @*/ strictfp class DoubleProblem {
         doubleValue = inDouble.doubleValue();
     }
 
-    /** Return the double contained in this object.
+    /**
+     * Return the double contained in this object.
      */
     /*@ public normal_behavior
       @   ensures Double.identical(\result,doubleValue);
@@ -41,12 +46,13 @@ public /*@ pure @*/ strictfp class DoubleProblem {
         return doubleValue;
     }
 
-    /** Tell if this object contains NaN (not a number).
+    /**
+     * Tell if this object contains NaN (not a number).
      */
     /*@ public normal_behavior
       @   ensures \result <==> Double.isNaN(theDouble);
       @*/
     public boolean isNaN() {
-	return Double.isNaN(doubleValue);
+        return Double.isNaN(doubleValue);
     }
 }

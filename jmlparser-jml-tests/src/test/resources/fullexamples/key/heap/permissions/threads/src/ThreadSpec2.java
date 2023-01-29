@@ -62,37 +62,40 @@ public class ThreadSpec2 {
           helper model two_state boolean joinTransfer(); @*/
 
 
-        /*@ normal_behavior
-            requires this != \dl_currentThread();
-            requires preStart(\dl_currentThread());
-            requires stateInv();
-            ensures startTransfer();
-            assignable<permissions> workingPermissions();
-            assignable<heap> \nothing; @*/
-        public /*@ helper @*/ native void start();
+    /*@ normal_behavior
+        requires this != \dl_currentThread();
+        requires preStart(\dl_currentThread());
+        requires stateInv();
+        ensures startTransfer();
+        assignable<permissions> workingPermissions();
+        assignable<heap> \nothing; @*/
+    public /*@ helper @*/ native void start();
 
-        /*@ normal_behavior
-            requires this != \dl_currentThread();
-            requires stateInv();
-            ensures joinTransfer();
-            assignable<permissions> workingPermissions();
-            assignable<heap> workingPermissions(); @*/
-        public /*@ helper @*/ native void join();
+    /*@ normal_behavior
+        requires this != \dl_currentThread();
+        requires stateInv();
+        ensures joinTransfer();
+        assignable<permissions> workingPermissions();
+        assignable<heap> workingPermissions(); @*/
+    public /*@ helper @*/ native void join();
 
-        /*@ normal_behavior
-            requires this == \dl_currentThread();
-            requires preStart(this);
-            requires stateInv();
-            ensures stateInv();
-            ensures postJoin(this);
-            assignable<heap> workingPermissions();
-            assignable<permissions> workingPermissions(); @*/
-        public /*@ helper @*/ void run() {}
+    /*@ normal_behavior
+        requires this == \dl_currentThread();
+        requires preStart(this);
+        requires stateInv();
+        ensures stateInv();
+        ensures postJoin(this);
+        assignable<heap> workingPermissions();
+        assignable<permissions> workingPermissions(); @*/
+    public /*@ helper @*/ void run() {
+    }
 
-        /*@ normal_behavior
-            ensures initPost();
-            ensures stateInv();
-            assignable \nothing;
-            assignable<permissions> \nothing; @*/
-        /*@ helper @*/ public ThreadSpec2() {}
+    /*@ normal_behavior
+        ensures initPost();
+        ensures stateInv();
+        assignable \nothing;
+        assignable<permissions> \nothing; @*/
+    /*@ helper @*/
+    public ThreadSpec2() {
+    }
 }

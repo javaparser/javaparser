@@ -1,4 +1,4 @@
 ---
-root(Type=StringLiteralExpr): 
-    value: "a\\\\: b"
+root(Type=StringLiteralExpr):
+  value: "a\\\\: b"
 ...

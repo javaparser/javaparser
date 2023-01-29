@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 package minicdj.collision;
 
@@ -28,7 +29,7 @@ import minicdj.cdx.ASCIIConverter;
  * The <code>Vector3d</code> class implements a 3-dimensional vector that can represent the position or velocity of an
  * object within a 3D space. This implementation uses public, non-final fields to avoid as much object creation as
  * possible. Java does not have value types per se, but these vector classes are the closest thing that is possible.
- * 
+ *
  * @author Ben L. Titzer
  */
 /*@javax.safetycritical.annotate.Scope("cdx.CollisionDetectorHandler")*/
@@ -38,12 +39,13 @@ public final class Vector3d {
     /**
      * The default constructor for the <code>Vector3d</code> returns an object representing the zero vector.
      */
-    public Vector3d() {}
+    public Vector3d() {
+    }
 
     /**
      * The main constructor for the <code>Vector3d</code> class takes the three coordinates as parameters and produces
      * an object representing that vector.
-     * 
+     *
      * @param x
      *            the coordinate on the x (east-west) axis
      * @param y
@@ -60,7 +62,7 @@ public final class Vector3d {
     /**
      * The secondary constructor for the <code>Vector3d</code> class takes a vector to copy into this new instance and
      * returns an instance that represents a copy of that vector.
-     * 
+     *
      * @param v
      *            the vale of the vector to copy into this new instance
      */
@@ -72,7 +74,7 @@ public final class Vector3d {
 
     /**
      * The <code>set</code> is basically a convenience method that resets the internal values of the coordinates.
-     * 
+     *
      * @param x
      *            the coordinate on the x (east-west) axis
      * @param y
@@ -88,7 +90,7 @@ public final class Vector3d {
 
     /**
      * The <code>set</code> is basically a convenience method that resets the internal values of the coordinates.
-     * 
+     *
      * @param val
      *            the value of the vector
      */

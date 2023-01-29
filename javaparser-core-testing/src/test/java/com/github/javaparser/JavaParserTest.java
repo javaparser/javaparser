@@ -82,20 +82,20 @@ class JavaParserTest {
 
     @Test
     void testSourcePositionsWithBrokenUnicodeEscapes() {
-    	// Source positions
-    	//                      111111111122222222 2 22333 3333
-    	//             123456789012345678901234567 8 90123 4567
-    	String code = "@interface AD { String X = \"\\uABC\"; }";
-    	ParseResult<CompilationUnit> cu = parseWithUnicodeEscapes(code);
-    	assertFalse(cu.getResult().isPresent());
-    	assertEquals("Lexical error at line 1, column 34.  Encountered: \"\\\"\" (34), after : \"\\\"\\\\uABC\"", cu.getProblem(0).getMessage());
+        // Source positions
+        //                      111111111122222222 2 22333 3333
+        //             123456789012345678901234567 8 90123 4567
+        String code = "@interface AD { String X = \"\\uABC\"; }";
+        ParseResult<CompilationUnit> cu = parseWithUnicodeEscapes(code);
+        assertFalse(cu.getResult().isPresent());
+        assertEquals("Lexical error at line 1, column 34.  Encountered: \"\\\"\" (34), after : \"\\\"\\\\uABC\"", cu.getProblem(0).getMessage());
     }
 
-	private static ParseResult<CompilationUnit> parseWithUnicodeEscapes(String code) {
-		ParserConfiguration config = new ParserConfiguration();
+    private static ParseResult<CompilationUnit> parseWithUnicodeEscapes(String code) {
+        ParserConfiguration config = new ParserConfiguration();
         config.setPreprocessUnicodeEscapes(true);
-		return new JavaParser(config).parse(code);
-	}
+        return new JavaParser(config).parse(code);
+    }
 
     @Test
     void rangeOfAnnotationMemberDeclarationWithArrayTypeIsCorrect() {
@@ -305,16 +305,16 @@ class JavaParserTest {
     }
 
     @Test
-    void xxx(){
+    void xxx() {
         YamlPrinter.print(StaticJavaParser.parse("class X{}"));
     }
 
     @Test
     void issue2879() {
         StaticJavaParser.parse(
-            "public class Test {" +
-            "    public void method(int @MyAnno ... param) {}" +
-            "}" +
-            "@Target(java.lang.annotation.ElementType.TYPE_USE) @interface MyAnno {}");
+                "public class Test {" +
+                        "    public void method(int @MyAnno ... param) {}" +
+                        "}" +
+                        "@Target(java.lang.annotation.ElementType.TYPE_USE) @interface MyAnno {}");
     }
 }

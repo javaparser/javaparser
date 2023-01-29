@@ -6,40 +6,44 @@ import org.jmlspecs.annotation.Nullable;
 public class FreshBugs {
     static class Node {
         Object payload_;
-        @Nullable Node next_;
+        @Nullable
+        Node next_;
+
         //@ ensures payload_ == payload && next_ == next;
         //@ pure
-        Node(Object payload, @Nullable Node next){
+        Node(Object payload, @Nullable Node next) {
             payload_ = payload;
             next_ = next;
         }
+
         //@ ensures payload_ == payload && next_ == null;
         // No pure on purpose
-        Node(Object payload){
+        Node(Object payload) {
             payload_ = payload;
             next_ = null;
         }
     }
+
     Object o = new Object();
-   
+
     /*@
       ensures \fresh(\result);
       ensures \fresh(\result.payload_); // ERROR
     */
-     Node fail_test0() {
+    Node fail_test0() {
         Node n = new Node(o, null);
         return n;
     }
-     
-     /*@
-       ensures \fresh(\result);
-     */
-     Node fresh_bug() {
-       Node n = new Node(new Object());
-       return n;
-     }
 
-    
+    /*@
+      ensures \fresh(\result);
+    */
+    Node fresh_bug() {
+        Node n = new Node(new Object());
+        return n;
+    }
+
+
     /*@
       ensures \fresh(\result);
       ensures \fresh(\result.payload_);
@@ -48,6 +52,7 @@ public class FreshBugs {
         Node n = new Node(new Object(), null);
         return n;
     }
+
     /*@
       ensures \fresh(\result);
       ensures \fresh(\result.payload_);
@@ -67,13 +72,15 @@ public class FreshBugs {
     }
 
     static class IntContainer {
-        int i_=0;
+        int i_ = 0;
+
         //@ ensures i_ == i;
         //@ pure
         IntContainer(int i) {
-            i_=i;
+            i_ = i;
         }
     }
+
     /*@
       ensures \fresh(\result);
     */

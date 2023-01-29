@@ -39,16 +39,17 @@ public class Utils {
 
     /**
      * // TODO: Replace this within the internal codebase.
+     *
      * @deprecated New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
-     *  else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
+     * else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
      */
     @Deprecated
     public static final String EOL = LineSeparator.SYSTEM.asRawString();
 
     /**
      * @deprecated Renamed from {@link #EOL} to make it explicit that we're using the system's line separator.
-     *             New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
-     *              else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
+     * New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
+     * else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
      */
     @Deprecated
     public static final String SYSTEM_EOL = LineSeparator.SYSTEM.asRawString();
@@ -91,7 +92,7 @@ public class Utils {
     public static String escapeEndOfLines(String string) {
         StringBuilder escapedString = new StringBuilder();
         for (char c : string.toCharArray()) {
-            switch(c) {
+            switch (c) {
                 case '\n':
                     escapedString.append("\\n");
                     break;

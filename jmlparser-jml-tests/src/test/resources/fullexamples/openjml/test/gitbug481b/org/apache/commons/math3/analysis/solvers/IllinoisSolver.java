@@ -42,7 +42,9 @@ package org.apache.commons.math3.analysis.solvers;
  */
 public class IllinoisSolver extends BaseSecantSolver {
 
-    /** Construct a solver with default accuracy (1e-6). */
+    /**
+     * Construct a solver with default accuracy (1e-6).
+     */
     public IllinoisSolver() {
         super(DEFAULT_ABSOLUTE_ACCURACY, Method.ILLINOIS);
     }
@@ -70,8 +72,8 @@ public class IllinoisSolver extends BaseSecantSolver {
     /**
      * Construct a solver.
      *
-     * @param relativeAccuracy Relative accuracy.
-     * @param absoluteAccuracy Absolute accuracy.
+     * @param relativeAccuracy      Relative accuracy.
+     * @param absoluteAccuracy      Absolute accuracy.
      * @param functionValueAccuracy Maximum function value error.
      */
     public IllinoisSolver(final double relativeAccuracy,

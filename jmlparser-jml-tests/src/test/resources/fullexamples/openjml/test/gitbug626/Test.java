@@ -8,7 +8,7 @@ public class Test {
     //@ensures (\result==-1)==>(\forall int i; (0<=i) && (i<4); !x[i]);
     public static int findFirstSetLoop(boolean[] x) {
         //@loop_invariant 0<=i && i<=4;
-        for (int i=0; i>=0 && i<4; i++)
+        for (int i = 0; i >= 0 && i < 4; i++)
             if (x[i]) return i;
         return -1;
     }

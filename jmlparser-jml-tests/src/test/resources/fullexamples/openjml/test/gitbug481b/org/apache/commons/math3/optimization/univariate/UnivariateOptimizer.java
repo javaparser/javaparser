@@ -21,9 +21,10 @@ import org.apache.commons.math3.analysis.UnivariateFunction;
 /**
  * Interface for univariate optimization algorithms.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public interface UnivariateOptimizer
-    extends BaseUnivariateOptimizer<UnivariateFunction> {}
+        extends BaseUnivariateOptimizer<UnivariateFunction> {
+}

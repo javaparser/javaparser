@@ -29,9 +29,8 @@ package org.apache.commons.math3.optimization;
  * </ul>
  *
  * @param <PAIR> Type of the point/objective pair.
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public interface BaseOptimizer<PAIR> {

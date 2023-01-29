@@ -46,13 +46,13 @@ import org.apache.commons.math3.util.MathArrays;
  * The internal line search optimizer is a {@link BrentOptimizer} with a
  * convergence checker set to {@link SimpleUnivariateValueChecker}.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 2.2
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class PowellOptimizer
-    extends BaseAbstractMultivariateOptimizer<MultivariateFunction>
-    implements MultivariateOptimizer {
+        extends BaseAbstractMultivariateOptimizer<MultivariateFunction>
+        implements MultivariateOptimizer {
     /**
      * Minimum relative tolerance.
      */
@@ -78,11 +78,11 @@ public class PowellOptimizer
      * The internal line search tolerances are set to the square-root of their
      * corresponding value in the multivariate optimizer.
      *
-     * @param rel Relative threshold.
-     * @param abs Absolute threshold.
+     * @param rel     Relative threshold.
+     * @param abs     Absolute threshold.
      * @param checker Convergence checker.
      * @throws NotStrictlyPositiveException if {@code abs <= 0}.
-     * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws NumberIsTooSmallException    if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
                            double abs,
@@ -95,13 +95,13 @@ public class PowellOptimizer
      * in addition to the parameters that control the default convergence
      * checking procedure and the line search tolerances.
      *
-     * @param rel Relative threshold for this optimizer.
-     * @param abs Absolute threshold for this optimizer.
+     * @param rel     Relative threshold for this optimizer.
+     * @param abs     Absolute threshold for this optimizer.
      * @param lineRel Relative threshold for the internal line search optimizer.
      * @param lineAbs Absolute threshold for the internal line search optimizer.
      * @param checker Convergence checker.
      * @throws NotStrictlyPositiveException if {@code abs <= 0}.
-     * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws NumberIsTooSmallException    if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
                            double abs,
@@ -121,7 +121,7 @@ public class PowellOptimizer
 
         // Create the line search optimizer.
         line = new LineSearch(lineRel,
-                              lineAbs);
+                lineAbs);
     }
 
     /**
@@ -133,7 +133,7 @@ public class PowellOptimizer
      * @param rel Relative threshold.
      * @param abs Absolute threshold.
      * @throws NotStrictlyPositiveException if {@code abs <= 0}.
-     * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws NumberIsTooSmallException    if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
                            double abs) {
@@ -143,12 +143,12 @@ public class PowellOptimizer
     /**
      * Builds an instance with the default convergence checking procedure.
      *
-     * @param rel Relative threshold.
-     * @param abs Absolute threshold.
+     * @param rel     Relative threshold.
+     * @param abs     Absolute threshold.
      * @param lineRel Relative threshold for the internal line search optimizer.
      * @param lineAbs Absolute threshold for the internal line search optimizer.
      * @throws NotStrictlyPositiveException if {@code abs <= 0}.
-     * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws NumberIsTooSmallException    if {@code rel < 2 * Math.ulp(1d)}.
      * @since 3.1
      */
     public PowellOptimizer(double rel,
@@ -158,7 +158,9 @@ public class PowellOptimizer
         this(rel, abs, lineRel, lineAbs, null);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected PointValuePair doOptimize() {
         final GoalType goal = getGoalType();
@@ -171,7 +173,7 @@ public class PowellOptimizer
         }
 
         final ConvergenceChecker<PointValuePair> checker
-            = getConvergenceChecker();
+                = getConvergenceChecker();
 
         double[] x = guess;
         double fVal = computeObjectiveValue(x);
@@ -205,8 +207,8 @@ public class PowellOptimizer
 
             // Default convergence check.
             boolean stop = 2 * (fX - fVal) <=
-                (relativeThreshold * (FastMath.abs(fX) + FastMath.abs(fVal)) +
-                 absoluteThreshold);
+                    (relativeThreshold * (FastMath.abs(fX) + FastMath.abs(fVal)) +
+                            absoluteThreshold);
 
             final PointValuePair previous = new PointValuePair(x1, fX);
             final PointValuePair current = new PointValuePair(x, fVal);
@@ -257,8 +259,8 @@ public class PowellOptimizer
      * Compute a new point (in the original space) and a new direction
      * vector, resulting from the line search.
      *
-     * @param p Point used in the line search.
-     * @param d Direction used in the line search.
+     * @param p       Point used in the line search.
+     * @param d       Direction used in the line search.
      * @param optimum Optimum found by the line search.
      * @return a 2-element array containing the new point (at index 0) and
      * the new direction (at index 1).
@@ -314,8 +316,8 @@ public class PowellOptimizer
         LineSearch(double rel,
                    double abs) {
             super(REL_TOL_UNUSED,
-                  ABS_TOL_UNUSED,
-                  new SimpleUnivariateValueChecker(rel, abs));
+                    ABS_TOL_UNUSED,
+                    new SimpleUnivariateValueChecker(rel, abs));
         }
 
         /**
@@ -324,22 +326,21 @@ public class PowellOptimizer
          * @param p Starting point.
          * @param d Search direction.
          * @return the optimum.
-         * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-         * if the number of evaluations is exceeded.
+         * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the number of evaluations is exceeded.
          */
         public UnivariatePointValuePair search(final double[] p, final double[] d) {
             final int n = p.length;
             final UnivariateFunction f = new UnivariateFunction() {
-                    /** {@inheritDoc} */
-                    public double value(double alpha) {
-                        final double[] x = new double[n];
-                        for (int i = 0; i < n; i++) {
-                            x[i] = p[i] + alpha * d[i];
-                        }
-                        final double obj = PowellOptimizer.this.computeObjectiveValue(x);
-                        return obj;
+                /** {@inheritDoc} */
+                public double value(double alpha) {
+                    final double[] x = new double[n];
+                    for (int i = 0; i < n; i++) {
+                        x[i] = p[i] + alpha * d[i];
                     }
-                };
+                    final double obj = PowellOptimizer.this.computeObjectiveValue(x);
+                    return obj;
+                }
+            };
 
             final GoalType goal = PowellOptimizer.this.getGoalType();
             bracket.search(f, goal, 0, 1);
@@ -347,7 +348,7 @@ public class PowellOptimizer
             // class that counts the number of evaluations (and will eventually
             // generate the exception).
             return optimize(Integer.MAX_VALUE, f, goal,
-                            bracket.getLo(), bracket.getHi(), bracket.getMid());
+                    bracket.getLo(), bracket.getHi(), bracket.getMid());
         }
     }
 }

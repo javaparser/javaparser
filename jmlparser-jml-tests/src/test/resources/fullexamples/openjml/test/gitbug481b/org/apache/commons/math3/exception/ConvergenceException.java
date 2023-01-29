@@ -26,7 +26,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class ConvergenceException extends MathIllegalStateException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = 4330003017885151975L;
 
     /**
@@ -40,11 +42,11 @@ public class ConvergenceException extends MathIllegalStateException {
      * Construct the exception with a specific context and arguments.
      *
      * @param pattern Message pattern providing the specific context of
-     * the error.
-     * @param args Arguments.
+     *                the error.
+     * @param args    Arguments.
      */
     public ConvergenceException(Localizable pattern,
-                                Object ... args) {
+                                Object... args) {
         getContext().addMessage(pattern, args);
     }
 }

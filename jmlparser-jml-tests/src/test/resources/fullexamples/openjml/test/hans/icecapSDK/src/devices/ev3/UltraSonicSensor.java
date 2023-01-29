@@ -2,15 +2,15 @@ package devices.ev3;
 
 public class UltraSonicSensor {
 
-	private static native short getSensor(byte sensor);
-	
-	private SensorPort port;
+    private static native short getSensor(byte sensor);
 
-	public UltraSonicSensor(SensorPort port) {
-		this.port = port;
-	}
+    private SensorPort port;
 
-	public short getSensorValue() {
-		return getSensor(port.getPort());
-	}
+    public UltraSonicSensor(SensorPort port) {
+        this.port = port;
+    }
+
+    public short getSensorValue() {
+        return getSensor(port.getPort());
+    }
 }

@@ -17,55 +17,69 @@
 
 package org.apache.commons.math3.dfp;
 
-/** Subclass of {@link Dfp} which hides the radix-10000 artifacts of the superclass.
+/**
+ * Subclass of {@link Dfp} which hides the radix-10000 artifacts of the superclass.
  * This should give outward appearances of being a decimal number with DIGITS*4-3
  * decimal digits. This class can be subclassed to appear to be an arbitrary number
  * of decimal digits less than DIGITS*4-3.
+ *
  * @since 2.2
  */
 public class DfpDec extends Dfp {
 
-    /** Makes an instance with a value of zero.
+    /**
+     * Makes an instance with a value of zero.
+     *
      * @param factory factory linked to this instance
      */
     protected DfpDec(final DfpField factory) {
         super(factory);
     }
 
-    /** Create an instance from a byte value.
+    /**
+     * Create an instance from a byte value.
+     *
      * @param factory factory linked to this instance
-     * @param x value to convert to an instance
+     * @param x       value to convert to an instance
      */
     protected DfpDec(final DfpField factory, byte x) {
         super(factory, x);
     }
 
-    /** Create an instance from an int value.
+    /**
+     * Create an instance from an int value.
+     *
      * @param factory factory linked to this instance
-     * @param x value to convert to an instance
+     * @param x       value to convert to an instance
      */
     protected DfpDec(final DfpField factory, int x) {
         super(factory, x);
     }
 
-    /** Create an instance from a long value.
+    /**
+     * Create an instance from a long value.
+     *
      * @param factory factory linked to this instance
-     * @param x value to convert to an instance
+     * @param x       value to convert to an instance
      */
     protected DfpDec(final DfpField factory, long x) {
         super(factory, x);
     }
 
-    /** Create an instance from a double value.
+    /**
+     * Create an instance from a double value.
+     *
      * @param factory factory linked to this instance
-     * @param x value to convert to an instance
+     * @param x       value to convert to an instance
      */
     protected DfpDec(final DfpField factory, double x) {
         super(factory, x);
         round(0);
     }
 
-    /** Copy constructor.
+    /**
+     * Copy constructor.
+     *
      * @param d instance to copy
      */
     public DfpDec(final Dfp d) {
@@ -73,56 +87,72 @@ public class DfpDec extends Dfp {
         round(0);
     }
 
-    /** Create an instance from a String representation.
+    /**
+     * Create an instance from a String representation.
+     *
      * @param factory factory linked to this instance
-     * @param s string representation of the instance
+     * @param s       string representation of the instance
      */
     protected DfpDec(final DfpField factory, final String s) {
         super(factory, s);
         round(0);
     }
 
-    /** Creates an instance with a non-finite value.
+    /**
+     * Creates an instance with a non-finite value.
+     *
      * @param factory factory linked to this instance
-     * @param sign sign of the Dfp to create
-     * @param nans code of the value, must be one of {@link #INFINITE},
-     * {@link #SNAN},  {@link #QNAN}
+     * @param sign    sign of the Dfp to create
+     * @param nans    code of the value, must be one of {@link #INFINITE},
+     *                {@link #SNAN},  {@link #QNAN}
      */
     protected DfpDec(final DfpField factory, final byte sign, final byte nans) {
         super(factory, sign, nans);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp newInstance() {
         return new DfpDec(getField());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp newInstance(final byte x) {
         return new DfpDec(getField(), x);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp newInstance(final int x) {
         return new DfpDec(getField(), x);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp newInstance(final long x) {
         return new DfpDec(getField(), x);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp newInstance(final double x) {
         return new DfpDec(getField(), x);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp newInstance(final Dfp d) {
 
@@ -138,32 +168,40 @@ public class DfpDec extends Dfp {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp newInstance(final String s) {
         return new DfpDec(getField(), s);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp newInstance(final byte sign, final byte nans) {
         return new DfpDec(getField(), sign, nans);
     }
 
-    /** Get the number of decimal digits this class is going to represent.
+    /**
+     * Get the number of decimal digits this class is going to represent.
      * Default implementation returns {@link #getRadixDigits()}*4-3. Subclasses can
      * override this to return something less.
+     *
      * @return number of decimal digits this class is going to represent
      */
     protected int getDecimalDigits() {
         return getRadixDigits() * 4 - 3;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected int round(int in) {
 
-        int msb = mant[mant.length-1];
+        int msb = mant[mant.length - 1];
         if (msb == 0) {
             // special case -- this == zero
             return 0;
@@ -173,7 +211,7 @@ public class DfpDec extends Dfp {
         int lsbthreshold = 1000;
         while (lsbthreshold > msb) {
             lsbthreshold /= 10;
-            cmaxdigits --;
+            cmaxdigits--;
         }
 
 
@@ -196,12 +234,12 @@ public class DfpDec extends Dfp {
         final int n;
         if (lsbthreshold == 1) {
             // look to the next digit for rounding
-            n = (mant[lsd-1] / 1000) % 10;
-            mant[lsd-1] %= 1000;
-            discarded |= mant[lsd-1];
+            n = (mant[lsd - 1] / 1000) % 10;
+            mant[lsd - 1] %= 1000;
+            discarded |= mant[lsd - 1];
         } else {
             n = (lsb * 10 / lsbthreshold) % 10;
-            discarded |= lsb % (lsbthreshold/10);
+            discarded |= lsb % (lsbthreshold / 10);
         }
 
         for (int i = 0; i < lsd; i++) {
@@ -231,14 +269,14 @@ public class DfpDec extends Dfp {
 
             case ROUND_HALF_EVEN:
                 inc = (n > 5) ||
-                      (n == 5 && discarded != 0) ||
-                      (n == 5 && discarded == 0 && ((lsb / lsbthreshold) & 1) == 1);  // round half-even
+                        (n == 5 && discarded != 0) ||
+                        (n == 5 && discarded == 0 && ((lsb / lsbthreshold) & 1) == 1);  // round half-even
                 break;
 
             case ROUND_HALF_ODD:
                 inc = (n > 5) ||
-                      (n == 5 && discarded != 0) ||
-                      (n == 5 && discarded == 0 && ((lsb / lsbthreshold) & 1) == 0);  // round half-odd
+                        (n == 5 && discarded != 0) ||
+                        (n == 5 && discarded == 0 && ((lsb / lsbthreshold) & 1) == 0);  // round half-odd
                 break;
 
             case ROUND_CEIL:
@@ -262,7 +300,7 @@ public class DfpDec extends Dfp {
 
             if (rh != 0) {
                 shiftRight();
-                mant[mant.length-1]=rh;
+                mant[mant.length - 1] = rh;
             }
         }
 
@@ -287,7 +325,9 @@ public class DfpDec extends Dfp {
         return 0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Dfp nextAfter(Dfp x) {
 
@@ -323,7 +363,7 @@ public class DfpDec extends Dfp {
             inc = copysign(inc, this);
 
             if (this.equals(getZero())) {
-                inc = power10K(MIN_EXP-mant.length-1);
+                inc = power10K(MIN_EXP - mant.length - 1);
             }
 
             if (inc.equals(getZero())) {
@@ -342,7 +382,7 @@ public class DfpDec extends Dfp {
             }
 
             if (this.equals(getZero())) {
-                inc = power10K(MIN_EXP-mant.length-1);
+                inc = power10K(MIN_EXP - mant.length - 1);
             }
 
             if (inc.equals(getZero())) {

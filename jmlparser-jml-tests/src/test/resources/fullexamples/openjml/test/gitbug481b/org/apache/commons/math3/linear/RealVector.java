@@ -78,18 +78,18 @@ public abstract class RealVector {
      * @see #getEntry(int)
      */
     public abstract void setEntry(int index, double value)
-        throws OutOfRangeException;
+            throws OutOfRangeException;
 
     /**
      * Change an entry at the specified index.
      *
-     * @param index Index location of entry to be set.
+     * @param index     Index location of entry to be set.
      * @param increment Value to add to the vector entry.
      * @throws OutOfRangeException if the index is not valid.
      * @since 3.0
      */
     public void addToEntry(int index, double increment)
-        throws OutOfRangeException {
+            throws OutOfRangeException {
         setEntry(index, getEntry(index) + increment);
     }
 
@@ -113,23 +113,23 @@ public abstract class RealVector {
      * Get a subvector from consecutive elements.
      *
      * @param index index of first element.
-     * @param n number of elements to be retrieved.
+     * @param n     number of elements to be retrieved.
      * @return a vector containing n elements.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws OutOfRangeException  if the index is not valid.
      * @throws NotPositiveException if the number of elements is not positive.
      */
     public abstract RealVector getSubVector(int index, int n)
-        throws NotPositiveException, OutOfRangeException;
+            throws NotPositiveException, OutOfRangeException;
 
     /**
      * Set a sequence of consecutive elements.
      *
      * @param index index of first element to be set.
-     * @param v vector containing the values to set.
+     * @param v     vector containing the values to set.
      * @throws OutOfRangeException if the index is not valid.
      */
     public abstract void setSubVector(int index, RealVector v)
-        throws OutOfRangeException;
+            throws OutOfRangeException;
 
     /**
      * Check whether any coordinate of this vector is {@code NaN}.
@@ -152,10 +152,10 @@ public abstract class RealVector {
      *
      * @param v Vector to compare instance with.
      * @throws DimensionMismatchException if the vectors do not
-     * have the same dimension.
+     *                                    have the same dimension.
      */
     protected void checkVectorDimensions(RealVector v)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         checkVectorDimensions(v.getDimension());
     }
 
@@ -164,10 +164,10 @@ public abstract class RealVector {
      *
      * @param n Expected dimension.
      * @throws DimensionMismatchException if the dimension is
-     * inconsistent with the vector size.
+     *                                    inconsistent with the vector size.
      */
     protected void checkVectorDimensions(int n)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         int d = getDimension();
         if (d != n) {
             throw new DimensionMismatchException(d, n);
@@ -178,13 +178,13 @@ public abstract class RealVector {
      * Check if an index is valid.
      *
      * @param index Index to check.
-     * @exception OutOfRangeException if {@code index} is not valid.
+     * @throws OutOfRangeException if {@code index} is not valid.
      */
     protected void checkIndex(final int index) throws OutOfRangeException {
         if (index < 0 ||
-            index >= getDimension()) {
+                index >= getDimension()) {
             throw new OutOfRangeException(LocalizedFormats.INDEX,
-                                          index, 0, getDimension() - 1);
+                    index, 0, getDimension() - 1);
         }
     }
 
@@ -192,26 +192,26 @@ public abstract class RealVector {
      * Checks that the indices of a subvector are valid.
      *
      * @param start the index of the first entry of the subvector
-     * @param end the index of the last entry of the subvector (inclusive)
-     * @throws OutOfRangeException if {@code start} of {@code end} are not valid
+     * @param end   the index of the last entry of the subvector (inclusive)
+     * @throws OutOfRangeException       if {@code start} of {@code end} are not valid
      * @throws NumberIsTooSmallException if {@code end < start}
      * @since 3.1
      */
     protected void checkIndices(final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+            throws NumberIsTooSmallException, OutOfRangeException {
         final int dim = getDimension();
         if ((start < 0) || (start >= dim)) {
             throw new OutOfRangeException(LocalizedFormats.INDEX, start, 0,
-                                          dim - 1);
+                    dim - 1);
         }
         if ((end < 0) || (end >= dim)) {
             throw new OutOfRangeException(LocalizedFormats.INDEX, end, 0,
-                                          dim - 1);
+                    dim - 1);
         }
         if (end < start) {
             // TODO Use more specific error message
             throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
-                                                end, start, false);
+                    end, start, false);
         }
     }
 
@@ -222,7 +222,7 @@ public abstract class RealVector {
      * @param v Vector to be added.
      * @return {@code this} + {@code v}.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      */
     public RealVector add(RealVector v) throws DimensionMismatchException {
         checkVectorDimensions(v);
@@ -243,7 +243,7 @@ public abstract class RealVector {
      * @param v Vector to be subtracted.
      * @return {@code this} - {@code v}.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      */
     public RealVector subtract(RealVector v) throws DimensionMismatchException {
         checkVectorDimensions(v);
@@ -295,7 +295,7 @@ public abstract class RealVector {
      * @param v Vector with which dot product should be computed
      * @return the scalar dot product between this instance and {@code v}.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      */
     public double dotProduct(RealVector v) throws DimensionMismatchException {
         checkVectorDimensions(v);
@@ -313,18 +313,18 @@ public abstract class RealVector {
      *
      * @param v Vector.
      * @return the cosine of the angle between this vector and {@code v}.
-     * @throws MathArithmeticException if {@code this} or {@code v} is the null
-     * vector
+     * @throws MathArithmeticException    if {@code this} or {@code v} is the null
+     *                                    vector
      * @throws DimensionMismatchException if the dimensions of {@code this} and
-     * {@code v} do not match
+     *                                    {@code v} do not match
      */
     public double cosine(RealVector v) throws DimensionMismatchException,
-        MathArithmeticException {
+            MathArithmeticException {
         final double norm = getNorm();
         final double vNorm = v.getNorm();
 
         if (norm == 0 ||
-            vNorm == 0) {
+                vNorm == 0) {
             throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
         }
         return dotProduct(v) / (norm * vNorm);
@@ -336,10 +336,10 @@ public abstract class RealVector {
      * @param v Vector by which instance elements must be divided.
      * @return a vector containing this[i] / v[i] for all i.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      */
     public abstract RealVector ebeDivide(RealVector v)
-        throws DimensionMismatchException;
+            throws DimensionMismatchException;
 
     /**
      * Element-by-element multiplication.
@@ -347,10 +347,10 @@ public abstract class RealVector {
      * @param v Vector by which instance elements must be multiplied
      * @return a vector containing this[i] * v[i] for all i.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      */
     public abstract RealVector ebeMultiply(RealVector v)
-        throws DimensionMismatchException;
+            throws DimensionMismatchException;
 
     /**
      * Distance between two vectors.
@@ -361,7 +361,7 @@ public abstract class RealVector {
      * @param v Vector to which distance is requested.
      * @return the distance between two vectors.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      * @see #getL1Distance(RealVector)
      * @see #getLInfDistance(RealVector)
      * @see #getNorm()
@@ -448,10 +448,10 @@ public abstract class RealVector {
      * @param v Vector to which distance is requested.
      * @return the distance between two vectors.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      */
     public double getL1Distance(RealVector v)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         checkVectorDimensions(v);
         double d = 0;
         Iterator<Entry> it = iterator();
@@ -471,13 +471,13 @@ public abstract class RealVector {
      * @param v Vector to which distance is requested.
      * @return the distance between two vectors.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      * @see #getDistance(RealVector)
      * @see #getL1Distance(RealVector)
      * @see #getLInfNorm()
      */
     public double getLInfDistance(RealVector v)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         checkVectorDimensions(v);
         double d = 0;
         Iterator<Entry> it = iterator();
@@ -495,7 +495,7 @@ public abstract class RealVector {
      * or all entries are {@code NaN}.
      */
     public int getMinIndex() {
-        int minIndex    = -1;
+        int minIndex = -1;
         double minValue = Double.POSITIVE_INFINITY;
         Iterator<Entry> iterator = iterator();
         while (iterator.hasNext()) {
@@ -526,7 +526,7 @@ public abstract class RealVector {
      * or all entries are {@code NaN}
      */
     public int getMaxIndex() {
-        int maxIndex    = -1;
+        int maxIndex = -1;
         double maxValue = Double.NEGATIVE_INFINITY;
         Iterator<Entry> iterator = iterator();
         while (iterator.hasNext()) {
@@ -569,7 +569,7 @@ public abstract class RealVector {
      * @param d Multiplication factor.
      * @return {@code this}.
      */
-    public RealVector mapMultiplyToSelf(double d){
+    public RealVector mapMultiplyToSelf(double d) {
         return mapToSelf(FunctionUtils.fix2ndArgument(new Multiply(), d));
     }
 
@@ -591,7 +591,7 @@ public abstract class RealVector {
      * @param d Value to be subtracted.
      * @return {@code this}.
      */
-    public RealVector mapSubtractToSelf(double d){
+    public RealVector mapSubtractToSelf(double d) {
         return mapAddToSelf(-d);
     }
 
@@ -613,7 +613,7 @@ public abstract class RealVector {
      * @param d Value to divide by.
      * @return {@code this}.
      */
-    public RealVector mapDivideToSelf(double d){
+    public RealVector mapDivideToSelf(double d) {
         return mapToSelf(FunctionUtils.fix2ndArgument(new Divide(), d));
     }
 
@@ -646,12 +646,12 @@ public abstract class RealVector {
      * @param v vector onto which instance must be projected.
      * @return projection of the instance onto {@code v}.
      * @throws DimensionMismatchException if {@code v} is not the same size as
-     * {@code this} vector.
-     * @throws MathArithmeticException if {@code this} or {@code v} is the null
-     * vector
+     *                                    {@code this} vector.
+     * @throws MathArithmeticException    if {@code this} or {@code v} is the null
+     *                                    vector
      */
     public RealVector projection(final RealVector v)
-        throws DimensionMismatchException, MathArithmeticException {
+            throws DimensionMismatchException, MathArithmeticException {
         final double norm2 = v.dotProduct(v);
         if (norm2 == 0.0) {
             throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
@@ -826,10 +826,10 @@ public abstract class RealVector {
      * @return a vector containing {@code a * this[i] + b * y[i]} for all
      * {@code i}.
      * @throws DimensionMismatchException if {@code y} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      */
     public RealVector combine(double a, double b, RealVector y)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         return copy().combineToSelf(a, b, y);
     }
 
@@ -843,10 +843,10 @@ public abstract class RealVector {
      * @return {@code this}, with components equal to
      * {@code a * this[i] + b * y[i]} for all {@code i}.
      * @throws DimensionMismatchException if {@code y} is not the same size as
-     * {@code this} vector.
+     *                                    {@code this} vector.
      */
     public RealVector combineToSelf(double a, double b, RealVector y)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         checkVectorDimensions(y);
         for (int i = 0; i < getDimension(); i++) {
             final double xi = getEntry(i);
@@ -861,7 +861,7 @@ public abstract class RealVector {
      * (increasing index).
      *
      * @param visitor the visitor to be used to process the entries of this
-     * vector
+     *                vector
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
      * @since 3.1
@@ -880,17 +880,17 @@ public abstract class RealVector {
      * (increasing index).
      *
      * @param visitor visitor to be used to process the entries of this vector
-     * @param start the index of the first entry to be visited
-     * @param end the index of the last entry to be visited (inclusive)
+     * @param start   the index of the first entry to be visited
+     * @param end     the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws OutOfRangeException       if the indices are not valid.
      * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor,
                                      final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+            throws NumberIsTooSmallException, OutOfRangeException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -906,7 +906,7 @@ public abstract class RealVector {
      * concrete implementation of this abstract class.
      *
      * @param visitor the visitor to be used to process the entries of this
-     * vector
+     *                vector
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
      * @since 3.1
@@ -922,17 +922,17 @@ public abstract class RealVector {
      * concrete implementation of this abstract class.
      *
      * @param visitor visitor to be used to process the entries of this vector
-     * @param start the index of the first entry to be visited
-     * @param end the index of the last entry to be visited (inclusive)
+     * @param start   the index of the first entry to be visited
+     * @param end     the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws OutOfRangeException       if the indices are not valid.
      * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor,
                                        final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+            throws NumberIsTooSmallException, OutOfRangeException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -941,7 +941,7 @@ public abstract class RealVector {
      * (increasing index).
      *
      * @param visitor the visitor to be used to process and modify the entries
-     * of this vector
+     *                of this vector
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
      * @since 3.1
@@ -960,17 +960,17 @@ public abstract class RealVector {
      * (increasing index).
      *
      * @param visitor visitor to be used to process the entries of this vector
-     * @param start the index of the first entry to be visited
-     * @param end the index of the last entry to be visited (inclusive)
+     * @param start   the index of the first entry to be visited
+     * @param end     the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws OutOfRangeException       if the indices are not valid.
      * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorChangingVisitor visitor,
-                              final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+                                     final int start, final int end)
+            throws NumberIsTooSmallException, OutOfRangeException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -986,7 +986,7 @@ public abstract class RealVector {
      * concrete implementation of this abstract class.
      *
      * @param visitor the visitor to be used to process the entries of this
-     * vector
+     *                vector
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
      * @since 3.1
@@ -1002,26 +1002,32 @@ public abstract class RealVector {
      * concrete implementation of this abstract class.
      *
      * @param visitor visitor to be used to process the entries of this vector
-     * @param start the index of the first entry to be visited
-     * @param end the index of the last entry to be visited (inclusive)
+     * @param start   the index of the first entry to be visited
+     * @param end     the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws OutOfRangeException       if the indices are not valid.
      * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor,
                                        final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+            throws NumberIsTooSmallException, OutOfRangeException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
-    /** An entry in the vector. */
+    /**
+     * An entry in the vector.
+     */
     protected class Entry {
-        /** Index of this entry. */
+        /**
+         * Index of this entry.
+         */
         private int index;
 
-        /** Simple constructor. */
+        /**
+         * Simple constructor.
+         */
         public Entry() {
             setIndex(0);
         }
@@ -1083,11 +1089,11 @@ public abstract class RealVector {
      * {@code other} is null, not an instance of {@code RealVector}, or
      * not equal to this {@code RealVector} instance.
      * @throws MathUnsupportedOperationException if this method is not
-     * overridden.
+     *                                           overridden.
      */
     @Override
     public boolean equals(Object other)
-        throws MathUnsupportedOperationException {
+            throws MathUnsupportedOperationException {
         throw new MathUnsupportedOperationException();
     }
 
@@ -1097,7 +1103,7 @@ public abstract class RealVector {
      * exception).
      *
      * @throws MathUnsupportedOperationException if this method is not
-     * overridden.
+     *                                           overridden.
      */
     @Override
     public int hashCode() throws MathUnsupportedOperationException {
@@ -1108,25 +1114,32 @@ public abstract class RealVector {
      * This class should rarely be used, but is here to provide
      * a default implementation of sparseIterator(), which is implemented
      * by walking over the entries, skipping those that are zero.
-     *
+     * <p>
      * Concrete subclasses which are SparseVector implementations should
      * make their own sparse iterator, rather than using this one.
-     *
+     * <p>
      * This implementation might be useful for ArrayRealVector, when expensive
      * operations which preserve the default value are to be done on the entries,
      * and the fraction of non-default values is small (i.e. someone took a
      * SparseVector, and passed it into the copy-constructor of ArrayRealVector)
-
      */
     protected class SparseEntryIterator implements Iterator<Entry> {
-        /** Dimension of the vector. */
+        /**
+         * Dimension of the vector.
+         */
         private final int dim;
-        /** Last entry returned by {@link #next()}. */
+        /**
+         * Last entry returned by {@link #next()}.
+         */
         private Entry current;
-        /** Next entry for {@link #next()} to return. */
+        /**
+         * Next entry for {@link #next()} to return.
+         */
         private Entry next;
 
-        /** Simple constructor. */
+        /**
+         * Simple constructor.
+         */
         protected SparseEntryIterator() {
             dim = getDimension();
             current = new Entry();
@@ -1153,12 +1166,16 @@ public abstract class RealVector {
             }
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public boolean hasNext() {
             return next.getIndex() >= 0;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public Entry next() {
             int index = next.getIndex();
             if (index < 0) {
@@ -1215,7 +1232,7 @@ public abstract class RealVector {
              */
             @Override
             public RealVector mapToSelf(UnivariateFunction function)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1283,7 +1300,7 @@ public abstract class RealVector {
                      * circumstances.
                      */
                     public void remove()
-                        throws MathUnsupportedOperationException {
+                            throws MathUnsupportedOperationException {
                         throw new MathUnsupportedOperationException();
                     }
                 };
@@ -1298,14 +1315,14 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector add(RealVector w)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.add(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public RealVector subtract(RealVector w)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.subtract(w);
             }
 
@@ -1323,7 +1340,7 @@ public abstract class RealVector {
              */
             @Override
             public RealVector mapAddToSelf(double d)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1341,7 +1358,7 @@ public abstract class RealVector {
              */
             @Override
             public RealVector mapSubtractToSelf(double d)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1359,7 +1376,7 @@ public abstract class RealVector {
              */
             @Override
             public RealVector mapMultiplyToSelf(double d)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1377,35 +1394,35 @@ public abstract class RealVector {
              */
             @Override
             public RealVector mapDivideToSelf(double d)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
             /** {@inheritDoc} */
             @Override
             public RealVector ebeMultiply(RealVector w)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.ebeMultiply(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public RealVector ebeDivide(RealVector w)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.ebeDivide(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public double dotProduct(RealVector w)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.dotProduct(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public double cosine(RealVector w)
-                throws DimensionMismatchException, MathArithmeticException {
+                    throws DimensionMismatchException, MathArithmeticException {
                 return v.cosine(w);
             }
 
@@ -1430,21 +1447,21 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public double getDistance(RealVector w)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.getDistance(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public double getL1Distance(RealVector w)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.getL1Distance(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public double getLInfDistance(RealVector w)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.getLInfDistance(w);
             }
 
@@ -1485,7 +1502,7 @@ public abstract class RealVector {
              */
             @Override
             public void setEntry(int index, double value)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1497,7 +1514,7 @@ public abstract class RealVector {
              */
             @Override
             public void addToEntry(int index, double value)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1522,7 +1539,7 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector getSubVector(int index, int n)
-                throws OutOfRangeException, NotPositiveException {
+                    throws OutOfRangeException, NotPositiveException {
                 return v.getSubVector(index, n);
             }
 
@@ -1534,7 +1551,7 @@ public abstract class RealVector {
              */
             @Override
             public void setSubVector(int index, RealVector w)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1546,7 +1563,7 @@ public abstract class RealVector {
              */
             @Override
             public void set(double value)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1571,7 +1588,7 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector combine(double a, double b, RealVector y)
-                throws DimensionMismatchException {
+                    throws DimensionMismatchException {
                 return v.combine(a, b, y);
             }
 
@@ -1583,7 +1600,7 @@ public abstract class RealVector {
              */
             @Override
             public RealVector combineToSelf(double a, double b, RealVector y)
-                throws MathUnsupportedOperationException {
+                    throws MathUnsupportedOperationException {
                 throw new MathUnsupportedOperationException();
             }
 
@@ -1603,7 +1620,7 @@ public abstract class RealVector {
                  */
                 @Override
                 public void setValue(double value)
-                    throws MathUnsupportedOperationException {
+                        throws MathUnsupportedOperationException {
                     throw new MathUnsupportedOperationException();
                 }
             }

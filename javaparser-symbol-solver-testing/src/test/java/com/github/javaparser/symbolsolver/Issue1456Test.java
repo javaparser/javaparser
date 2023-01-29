@@ -42,12 +42,12 @@ class Issue1456Test extends AbstractResolutionTest {
     @Test
     void fieldAccessIssue() throws IOException {
         Path rootSourceDir = adaptPath("src/test/resources/issue1456");
-        Path pathToSourceFile = adaptPath(rootSourceDir.toString()+"/bar/A.java");
-        
+        Path pathToSourceFile = adaptPath(rootSourceDir.toString() + "/bar/A.java");
+
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(rootSourceDir.toFile())));
         StaticJavaParser.setConfiguration(config);
-        
+
         CompilationUnit cu = StaticJavaParser.parse(pathToSourceFile);
 
         ClassOrInterfaceDeclaration cid = cu.findFirst(ClassOrInterfaceDeclaration.class).get();

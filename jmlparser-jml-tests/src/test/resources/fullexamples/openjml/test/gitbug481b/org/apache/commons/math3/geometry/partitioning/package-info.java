@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 /**
- *
  * This package provides classes to implement Binary Space Partition trees.
  *
  * <p>
@@ -109,6 +108,5 @@
  * implemented within the library itself. New methods may be added even for
  * minor versions, which breaks compatibility for external implementations.
  * </p>
- *
  */
 package org.apache.commons.math3.geometry.partitioning;

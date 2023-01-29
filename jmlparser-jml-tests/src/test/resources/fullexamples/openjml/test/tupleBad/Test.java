@@ -1,5 +1,5 @@
 public class Test {
-    
+
     public void m(String e) {
         //@ ghost int t = (1,e,4). 1;
         //@ ghost int v = (1,e,4).3;
@@ -17,5 +17,5 @@ public class Test {
         //@ set v = (1,e,4).a;
         //@ set v = e.4;
     }
-    
+
 }

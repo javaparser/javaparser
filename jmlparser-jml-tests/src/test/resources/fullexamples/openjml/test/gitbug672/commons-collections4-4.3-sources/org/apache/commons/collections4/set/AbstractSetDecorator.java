@@ -31,11 +31,14 @@ import java.util.Set;
 public abstract class AbstractSetDecorator<E> extends AbstractCollectionDecorator<E> implements
         Set<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -4678668309576958546L;
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
+     *
      * @since 3.1
      */
     protected AbstractSetDecorator() {
@@ -45,7 +48,7 @@ public abstract class AbstractSetDecorator<E> extends AbstractCollectionDecorato
     /**
      * Constructor that wraps (not copies).
      *
-     * @param set  the set to decorate, must not be null
+     * @param set the set to decorate, must not be null
      * @throws NullPointerException if set is null
      */
     protected AbstractSetDecorator(final Set<E> set) {

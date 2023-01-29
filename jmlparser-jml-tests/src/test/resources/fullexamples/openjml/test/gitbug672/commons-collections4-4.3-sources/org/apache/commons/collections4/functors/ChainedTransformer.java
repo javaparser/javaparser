@@ -31,17 +31,21 @@ import java.util.Collection;
  */
 public class ChainedTransformer<T> implements Transformer<T, T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 3514945074733160196L;
 
-    /** The transformers to call in turn */
+    /**
+     * The transformers to call in turn
+     */
     private final Transformer<? super T, ? extends T>[] iTransformers;
 
     /**
      * Factory method that performs validation and copies the parameter array.
      *
-     * @param <T>  the object type
-     * @param transformers  the transformers to chain, copied, no nulls
+     * @param <T>          the object type
+     * @param transformers the transformers to chain, copied, no nulls
      * @return the <code>chained</code> transformer
      * @throws NullPointerException if the transformers array is null
      * @throws NullPointerException if any transformer in the array is null
@@ -59,8 +63,8 @@ public class ChainedTransformer<T> implements Transformer<T, T>, Serializable {
      * result into the next transformer. The ordering is that of the iterator()
      * method on the collection.
      *
-     * @param <T>  the object type
-     * @param transformers  a collection of transformers to chain
+     * @param <T>          the object type
+     * @param transformers a collection of transformers to chain
      * @return the <code>chained</code> transformer
      * @throws NullPointerException if the transformers collection is null
      * @throws NullPointerException if any transformer in the collection is null
@@ -83,8 +87,8 @@ public class ChainedTransformer<T> implements Transformer<T, T>, Serializable {
     /**
      * Hidden constructor for the use by the static factory methods.
      *
-     * @param clone  if {@code true} the input argument will be cloned
-     * @param transformers  the transformers to chain, no nulls
+     * @param clone        if {@code true} the input argument will be cloned
+     * @param transformers the transformers to chain, no nulls
      */
     private ChainedTransformer(final boolean clone, final Transformer<? super T, ? extends T>[] transformers) {
         super();
@@ -95,7 +99,7 @@ public class ChainedTransformer<T> implements Transformer<T, T>, Serializable {
      * Constructor that performs no validation.
      * Use <code>chainedTransformer</code> if you want that.
      *
-     * @param transformers  the transformers to chain, copied, no nulls
+     * @param transformers the transformers to chain, copied, no nulls
      */
     public ChainedTransformer(final Transformer<? super T, ? extends T>... transformers) {
         this(true, transformers);
@@ -104,7 +108,7 @@ public class ChainedTransformer<T> implements Transformer<T, T>, Serializable {
     /**
      * Transforms the input to result via each decorated transformer
      *
-     * @param object  the input object passed to the first transformer
+     * @param object the input object passed to the first transformer
      * @return the transformed result
      */
     @Override

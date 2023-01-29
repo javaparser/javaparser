@@ -30,15 +30,17 @@ import org.apache.commons.math3.util.Pair;
  * @since 3.1
  */
 public class LegendreRuleFactory extends BaseRuleFactory<Double> {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Pair<Double[], Double[]> computeRule(int numberOfPoints)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         if (numberOfPoints == 1) {
             // Break recursion.
-            return new Pair<Double[], Double[]>(new Double[] { 0d },
-                                                new Double[] { 2d });
+            return new Pair<Double[], Double[]>(new Double[]{0d},
+                    new Double[]{2d});
         }
 
         // Get previous rule.

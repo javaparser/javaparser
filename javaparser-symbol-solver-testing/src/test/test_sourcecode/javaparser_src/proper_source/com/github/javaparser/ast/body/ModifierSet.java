@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -57,11 +57,11 @@ public final class ModifierSet {
     public static final int STRICTFP = Modifier.STRICT;
 
     public static AccessSpecifier getAccessSpecifier(int modifiers) {
-        if (isPublic(modifiers)){
+        if (isPublic(modifiers)) {
             return AccessSpecifier.PUBLIC;
-        } else if (isProtected(modifiers)){
+        } else if (isProtected(modifiers)) {
             return AccessSpecifier.PROTECTED;
-        } else if (isPrivate(modifiers)){
+        } else if (isPrivate(modifiers)) {
             return AccessSpecifier.PRIVATE;
         } else {
             return AccessSpecifier.DEFAULT;
@@ -100,6 +100,7 @@ public final class ModifierSet {
      * Is the element accessible from within the package?
      * It is the level of access which is applied if no modifiers are chosen,
      * it is sometimes called "default".
+     *
      * @param modifiers indicator
      * @return true if modifier denotes package level access
      */
@@ -133,8 +134,9 @@ public final class ModifierSet {
 
     /**
      * Removes the given modifier.
+     *
      * @param modifiers existing modifiers
-     * @param mod modifier to be removed
+     * @param mod       modifier to be removed
      * @return result for removing modifier
      */
     public static int removeModifier(int modifiers, int mod) {

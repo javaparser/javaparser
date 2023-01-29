@@ -27,16 +27,20 @@ import java.io.Serializable;
  */
 public abstract class AbstractQuantifierPredicate<T> implements PredicateDecorator<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -3094696765038308799L;
 
-    /** The array of predicates to call */
+    /**
+     * The array of predicates to call
+     */
     protected final Predicate<? super T>[] iPredicates;
 
     /**
      * Constructor that performs no validation.
      *
-     * @param predicates  the predicates to check, not cloned, not null
+     * @param predicates the predicates to check, not cloned, not null
      */
     public AbstractQuantifierPredicate(final Predicate<? super T>... predicates) {
         iPredicates = predicates;

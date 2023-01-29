@@ -1,4 +1,7 @@
 package com.github.javaparser;
 
-class FooClass {}
-class BarClass {}
+class FooClass {
+}
+
+class BarClass {
+}

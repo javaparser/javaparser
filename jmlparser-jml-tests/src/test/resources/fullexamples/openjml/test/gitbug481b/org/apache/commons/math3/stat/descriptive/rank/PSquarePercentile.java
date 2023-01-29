@@ -47,7 +47,6 @@ import java.util.*;
  * Note: This implementation is not synchronized and produces an approximate
  * result. For small samples, where data can be stored and processed in memory,
  * {@link Percentile} should be used.</p>
- *
  */
 public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         implements StorelessUnivariateStatistic, Serializable {
@@ -112,9 +111,10 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
 
     /**
      * Constructs a PSquarePercentile with the specific percentile value.
+     *
      * @param p the percentile
-     * @throws OutOfRangeException  if p is not greater than 0 and less
-     * than or equal to 100
+     * @throws OutOfRangeException if p is not greater than 0 and less
+     *                             than or equal to 100
      */
     public PSquarePercentile(final double p) {
         if (p > 100 || p < 0) {
@@ -315,10 +315,14 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          */
         private static final long serialVersionUID = 1L;
 
-        /** Low marker index */
+        /**
+         * Low marker index
+         */
         private static final int LOW = 2;
 
-        /** High marker index */
+        /**
+         * High marker index
+         */
         private static final int HIGH = 4;
 
         /**
@@ -356,7 +360,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * Constructor
          *
          * @param initialFive elements required to build Marker
-         * @param p quantile required to be computed
+         * @param p           quantile required to be computed
          */
         private Markers(final List<Double> initialFive, final double p) {
             this(createMarkerArray(initialFive, p));
@@ -366,7 +370,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * Creates a marker array using initial five elements and a quantile
          *
          * @param initialFive list of initial five elements
-         * @param p the pth quantile
+         * @param p           the pth quantile
          * @return Marker array
          */
         private static Marker[] createMarkerArray(
@@ -379,13 +383,13 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
                         countObserved, PSQUARE_CONSTANT);
             }
             Collections.sort(initialFive);
-            return new Marker[] {
+            return new Marker[]{
                     new Marker(),// Null Marker
                     new Marker(initialFive.get(0), 1, 0, 1),
                     new Marker(initialFive.get(1), 1 + 2 * p, p / 2, 2),
                     new Marker(initialFive.get(2), 1 + 4 * p, p, 3),
                     new Marker(initialFive.get(3), 3 + 2 * p, (1 + p) / 2, 4),
-                    new Marker(initialFive.get(4), 5, 1, 5) };
+                    new Marker(initialFive.get(4), 5, 1, 5)};
         }
 
         /**
@@ -453,7 +457,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          *
          * @param observation the input value to be checked for
          * @return kth cell (of the markers ranging from 1-5) where observed
-         *         sample fits
+         * sample fits
          */
         private int findCellAndUpdateMinMax(final double observation) {
             k = -1;
@@ -498,12 +502,12 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * Increment positions by d. Refer to algorithm paper for the
          * definition of d.
          *
-         * @param d The increment value for the position
+         * @param d          The increment value for the position
          * @param startIndex start index of the marker array
-         * @param endIndex end index of the marker array
+         * @param endIndex   end index of the marker array
          */
         private void incrementPositions(final int d, final int startIndex,
-                final int endIndex) {
+                                        final int endIndex) {
             for (int i = startIndex; i <= endIndex; i++) {
                 markerArray[i].incrementPosition(d);
             }
@@ -524,7 +528,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          *
          * @param anInputStream the input stream to be deserialized
          * @throws ClassNotFoundException thrown when a desired class not found
-         * @throws IOException thrown due to any io errors
+         * @throws IOException            thrown due to any io errors
          */
         private void readObject(ObjectInputStream anInputStream)
                 throws ClassNotFoundException, IOException {
@@ -562,12 +566,12 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          */
         @Override
         public Object clone() {
-            return new Markers(new Marker[] { new Marker(),
+            return new Markers(new Marker[]{new Marker(),
                     (Marker) markerArray[1].clone(),
                     (Marker) markerArray[2].clone(),
                     (Marker) markerArray[3].clone(),
                     (Marker) markerArray[4].clone(),
-                    (Marker) markerArray[5].clone() });
+                    (Marker) markerArray[5].clone()});
 
         }
 
@@ -659,13 +663,13 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         /**
          * Constructor of the marker with parameters
          *
-         * @param heightOfMarker represent the quantile value
-         * @param makerPositionDesired represent the desired marker position
+         * @param heightOfMarker          represent the quantile value
+         * @param makerPositionDesired    represent the desired marker position
          * @param markerPositionIncrement represent increments for position
-         * @param markerPositionNumber represent the position number of marker
+         * @param markerPositionNumber    represent the position number of marker
          */
         private Marker(double heightOfMarker, double makerPositionDesired,
-                double markerPositionIncrement, double markerPositionNumber) {
+                       double markerPositionIncrement, double markerPositionNumber) {
             this();
             this.markerHeight = heightOfMarker;
             this.desiredMarkerPosition = makerPositionDesired;
@@ -677,7 +681,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * Sets the previous marker.
          *
          * @param previousMarker the previous marker to the current marker in
-         *            the array of markers
+         *                       the array of markers
          * @return this instance
          */
         private Marker previous(final Marker previousMarker) {
@@ -690,7 +694,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * Sets the next marker.
          *
          * @param nextMarker the next marker to the current marker in the array
-         *            of markers
+         *                   of markers
          * @return this instance
          */
         private Marker next(final Marker nextMarker) {
@@ -750,11 +754,11 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
             if (di >= 1 && isNextHigher || di <= -1 && isPreviousLower) {
                 final int d = di >= 0 ? 1 : -1;
                 final double[] xval =
-                        new double[] { previous.intMarkerPosition,
-                                intMarkerPosition, next.intMarkerPosition };
+                        new double[]{previous.intMarkerPosition,
+                                intMarkerPosition, next.intMarkerPosition};
                 final double[] yval =
-                        new double[] { previous.markerHeight, markerHeight,
-                                next.markerHeight };
+                        new double[]{previous.markerHeight, markerHeight,
+                                next.markerHeight};
                 final double xD = intMarkerPosition + d;
 
                 UnivariateFunction univariateFunction =
@@ -765,9 +769,9 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
                 if (isEstimateBad(yval, markerHeight)) {
                     int delta = xD - xval[1] > 0 ? 1 : -1;
                     final double[] xBad =
-                            new double[] { xval[1], xval[1 + delta] };
+                            new double[]{xval[1], xval[1 + delta]};
                     final double[] yBad =
-                            new double[] { yval[1], yval[1 + delta] };
+                            new double[]{yval[1], yval[1 + delta]};
                     MathArrays.sortInPlace(xBad, yBad);// since d can be +/- 1
                     univariateFunction = linear.interpolate(xBad, yBad);
                     markerHeight = univariateFunction.value(xD);
@@ -781,7 +785,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * Check if parabolic/nonlinear estimate is bad by checking if the
          * ordinate found is beyond the y[0] and y[2].
          *
-         * @param y the array to get the bounds
+         * @param y  the array to get the bounds
          * @param yD the estimate
          * @return true if yD is a bad estimate
          */
@@ -825,24 +829,26 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
             return result;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int hashCode() {
-            return Arrays.hashCode(new double[] {markerHeight, intMarkerPosition,
-                desiredMarkerIncrement, desiredMarkerPosition, previous.index, next.index});
+            return Arrays.hashCode(new double[]{markerHeight, intMarkerPosition,
+                    desiredMarkerIncrement, desiredMarkerPosition, previous.index, next.index});
         }
 
         /**
          * Read Object to deserialize.
          *
          * @param anInstream Stream Object data
-         * @throws IOException thrown for IO Errors
+         * @throws IOException            thrown for IO Errors
          * @throws ClassNotFoundException thrown for class not being found
          */
         private void readObject(ObjectInputStream anInstream)
                 throws ClassNotFoundException, IOException {
             anInstream.defaultReadObject();
-            previous=next=this;
+            previous = next = this;
             linear = new LinearInterpolator();
         }
 
@@ -934,11 +940,11 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      * A creation method to build Markers
      *
      * @param initialFive list of initial five elements
-     * @param p the quantile desired
+     * @param p           the quantile desired
      * @return an instance of PSquareMarkers
      */
     public static PSquareMarkers newMarkers(final List<Double> initialFive,
-            final double p) {
+                                            final double p) {
         return new Markers(initialFive, p);
     }
 

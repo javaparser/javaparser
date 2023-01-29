@@ -37,7 +37,6 @@ import java.util.Set;
  *
  * @param <K> the type of the keys in the map
  * @param <V> the type of the values in the map
- *
  * @since 3.0
  */
 public interface BidiMap<K, V> extends IterableMap<K, V> {
@@ -58,17 +57,16 @@ public interface BidiMap<K, V> extends IterableMap<K, V> {
      *  map.put("C","B");  // contains C mapped to B, key A is removed
      * </pre>
      *
-     * @param key  the key to store
-     * @param value  the value to store
+     * @param key   the key to store
+     * @param value the value to store
      * @return the previous value mapped to this key
-     *
      * @throws UnsupportedOperationException if the <code>put</code> method is not supported
-     * @throws ClassCastException (optional) if the map limits the type of the
-     *  value and the specified value is inappropriate
-     * @throws IllegalArgumentException (optional) if the map limits the values
-     *  in some way and the value was invalid
-     * @throws NullPointerException (optional) if the map limits the values to
-     *  non-null and null was specified
+     * @throws ClassCastException            (optional) if the map limits the type of the
+     *                                       value and the specified value is inappropriate
+     * @throws IllegalArgumentException      (optional) if the map limits the values
+     *                                       in some way and the value was invalid
+     * @throws NullPointerException          (optional) if the map limits the values to
+     *                                       non-null and null was specified
      */
     @Override
     V put(K key, V value);
@@ -81,13 +79,12 @@ public interface BidiMap<K, V> extends IterableMap<K, V> {
      * Implementations should seek to make this method perform equally as well
      * as <code>get(Object)</code>.
      *
-     * @param value  the value to find the key for
+     * @param value the value to find the key for
      * @return the mapped key, or <code>null</code> if not found
-     *
-     * @throws ClassCastException (optional) if the map limits the type of the
-     *  value and the specified value is inappropriate
+     * @throws ClassCastException   (optional) if the map limits the type of the
+     *                              value and the specified value is inappropriate
      * @throws NullPointerException (optional) if the map limits the values to
-     *  non-null and null was specified
+     *                              non-null and null was specified
      */
     K getKey(Object value);
 
@@ -100,15 +97,14 @@ public interface BidiMap<K, V> extends IterableMap<K, V> {
      * Implementations should seek to make this method perform equally as well
      * as <code>remove(Object)</code>.
      *
-     * @param value  the value to find the key-value pair for
+     * @param value the value to find the key-value pair for
      * @return the key that was removed, <code>null</code> if nothing removed
-     *
-     * @throws ClassCastException (optional) if the map limits the type of the
-     *  value and the specified value is inappropriate
-     * @throws NullPointerException (optional) if the map limits the values to
-     *  non-null and null was specified
+     * @throws ClassCastException            (optional) if the map limits the type of the
+     *                                       value and the specified value is inappropriate
+     * @throws NullPointerException          (optional) if the map limits the values to
+     *                                       non-null and null was specified
      * @throws UnsupportedOperationException if this method is not supported
-     *  by the implementation
+     *                                       by the implementation
      */
     K removeValue(Object value);
 

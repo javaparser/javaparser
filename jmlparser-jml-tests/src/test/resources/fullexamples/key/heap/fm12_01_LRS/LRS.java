@@ -1,22 +1,23 @@
-/** Implementation of the Longest Repeated Substring algorithm.
-  * <em>FM 2012 Verification Competition, Problem 1 (part b).</em><br>
-  * Together with a suffix array, LCP can be used to solve interesting text
-  * problems, such as finding the longest repeated substring (LRS) in a text.<br>
-  * A suffix array (for a given text) is an array of all suffixes of the
-  * text. For the text [7,8,8,6], the suffix array is
-  *   [[7,8,8,6],
-  *      [8,8,6],
-  *        [8,6],
-  *          [6]]
-  * <p>Typically, the suffixes are not stored explicitly as above but
-  * represented as pointers into the original text. The suffixes in a suffix
-  * array  are sorted in lexicographical order. This way, occurrences of
-  * repeated substrings in the original text are neighbors in the suffix
-  * array.</p>
-  *
-  * For the above, example (assuming pointers are 0-based integers), the
-  * sorted suffix array is: [3,0,2,1]
-  */
+/**
+ * Implementation of the Longest Repeated Substring algorithm.
+ * <em>FM 2012 Verification Competition, Problem 1 (part b).</em><br>
+ * Together with a suffix array, LCP can be used to solve interesting text
+ * problems, such as finding the longest repeated substring (LRS) in a text.<br>
+ * A suffix array (for a given text) is an array of all suffixes of the
+ * text. For the text [7,8,8,6], the suffix array is
+ * [[7,8,8,6],
+ * [8,8,6],
+ * [8,6],
+ * [6]]
+ * <p>Typically, the suffixes are not stored explicitly as above but
+ * represented as pointers into the original text. The suffixes in a suffix
+ * array  are sorted in lexicographical order. This way, occurrences of
+ * repeated substrings in the original text are neighbors in the suffix
+ * array.</p>
+ * <p>
+ * For the above, example (assuming pointers are 0-based integers), the
+ * sorted suffix array is: [3,0,2,1]
+ */
 public class LRS {
 
 
@@ -25,7 +26,9 @@ public class LRS {
     private int l = 0;
     private final SuffixArray sa;
 
-    LRS (SuffixArray arr) { sa = arr; }
+    LRS(SuffixArray arr) {
+        sa = arr;
+    }
 
 
     /*@ normal_behavior
@@ -42,7 +45,9 @@ public class LRS {
       @         // there is no LRS of length l+1
       @*/
     public void doLRS() {
-        int s = 0; int t = 0; int l = 0;
+        int s = 0;
+        int t = 0;
+        int l = 0;
 
         /*@ maintaining sa != null && \invariant_for(sa);
           @ maintaining 0 <= s && s < sa.a.length;
@@ -60,15 +65,18 @@ public class LRS {
           @ decreasing sa.a.length-x;
           @ assignable \strictly_nothing;
           @*/
-        for (int x=1; x < sa.a.length; x++) {
-            int length = LCP.lcp(sa.a,sa.suffixes[x],
-                                      sa.suffixes[x-1]);
+        for (int x = 1; x < sa.a.length; x++) {
+            int length = LCP.lcp(sa.a, sa.suffixes[x],
+                    sa.suffixes[x - 1]);
             if (length > l) {
                 s = sa.suffixes[x];
-                t = sa.suffixes[x-1];
+                t = sa.suffixes[x - 1];
                 l = length;
-        }   }
-        this.s = s; this.t = t; this.l = l;
+            }
+        }
+        this.s = s;
+        this.t = t;
+        this.l = l;
     }
 
 }

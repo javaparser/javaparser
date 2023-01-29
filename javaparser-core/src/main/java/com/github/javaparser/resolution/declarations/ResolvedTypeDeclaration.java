@@ -121,7 +121,7 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
 
     /**
      * Is this type declaration corresponding to an anonymous class?
-     *
+     * <p>
      * This is an example of anonymous class:
      * <pre>
      * HelloWorld frenchGreeting = new HelloWorld() {

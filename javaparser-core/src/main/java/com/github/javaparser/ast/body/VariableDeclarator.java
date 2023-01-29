@@ -87,9 +87,9 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     /**
      * Defines the declaration of a variable.
      *
-     * @param name The identifier for this variable. IE. The variables name.
+     * @param name        The identifier for this variable. IE. The variables name.
      * @param initializer What this variable should be initialized to. An {@link com.github.javaparser.ast.expr.AssignExpr}
-     * is unnecessary as the {@code =} operator is already added.
+     *                    is unnecessary as the {@code =} operator is already added.
      */
     @AllFieldsConstructor
     public VariableDeclarator(Type type, SimpleName name, Expression initializer) {

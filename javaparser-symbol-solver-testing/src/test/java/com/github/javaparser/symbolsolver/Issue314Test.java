@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue314Test extends AbstractResolutionTest{
+class Issue314Test extends AbstractResolutionTest {
 
     private TypeSolver typeResolver;
     private JavaParserFacade javaParserFacade;
@@ -55,7 +55,7 @@ class Issue314Test extends AbstractResolutionTest{
 
     @Test
     void resolveReferenceToFieldInheritedByInterface() {
-        String code = "package foo.bar;\n"+
+        String code = "package foo.bar;\n" +
                 "interface  A {\n" +
                 "        int a = 0;\n" +
                 "    }\n" +
@@ -72,7 +72,6 @@ class Issue314Test extends AbstractResolutionTest{
         assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
         assertEquals("a", symbolReference.getCorrespondingDeclaration().getName());
     }
-
 
 
 }

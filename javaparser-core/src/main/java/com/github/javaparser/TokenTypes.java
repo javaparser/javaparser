@@ -95,7 +95,7 @@ public class TokenTypes {
      * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.5">The JLS</a>.
      */
     public static JavaToken.Category getCategory(int kind) {
-        switch(kind) {
+        switch (kind) {
             case WINDOWS_EOL:
             case UNIX_EOL:
             case OLD_MAC_EOL:
@@ -117,7 +117,8 @@ public class TokenTypes {
             case FEASIBLE_BEHAVIOR:
             case FEASIBLE_BEHAVIOUR:
             case BREAK_BEHAVIOUR:
-            case CALLABLE_REDUNDANTLY: //case BY:
+                //case BY:
+            case CALLABLE_REDUNDANTLY:
             case DURATION:
             case CALLABLE:
             case CAPTURES:
@@ -301,12 +302,12 @@ public class TokenTypes {
             case EXCEPTIONAL_BEHAVIOUR:
                 //case SINGLETON:
                 //case LOCKSET:
-//            case LOCSET:
-//            case UNION:
-//            case INTERSECT:
-//            case SUBSET:
-//            case DISJOINT:
-//            case SETMINUS:
+                //            case LOCSET:
+                //            case UNION:
+                //            case INTERSECT:
+                //            case SUBSET:
+                //            case DISJOINT:
+                //            case SETMINUS:
             case NEW_OBJECT:
                 //case NEWELEMSFRESH:
                 //case EMPTYSET:

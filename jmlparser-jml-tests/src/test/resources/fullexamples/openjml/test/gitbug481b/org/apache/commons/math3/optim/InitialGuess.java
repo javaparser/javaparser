@@ -25,7 +25,9 @@ package org.apache.commons.math3.optim;
  * @since 3.1
  */
 public class InitialGuess implements OptimizationData {
-    /** Initial guess. */
+    /**
+     * Initial guess.
+     */
     private final double[] init;
 
     /**

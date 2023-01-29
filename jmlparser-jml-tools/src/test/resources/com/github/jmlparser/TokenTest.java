@@ -5,5 +5,6 @@ class TokenTest {
       @   ensures key == null ==> \result == NULL_KEY;
       @   ensures key != null ==> \result == key;
       @*/
-    public void foo(){}
+    public void foo() {
+    }
 }

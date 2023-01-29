@@ -43,7 +43,9 @@ import java.util.Map;
 public class HashedMap<K, V>
         extends AbstractHashedMap<K, V> implements Serializable, Cloneable {
 
-    /** Serialisation version */
+    /**
+     * Serialisation version
+     */
     private static final long serialVersionUID = -1788199231038721040L;
 
     /**
@@ -56,7 +58,7 @@ public class HashedMap<K, V>
     /**
      * Constructs a new, empty map with the specified initial capacity.
      *
-     * @param initialCapacity  the initial capacity
+     * @param initialCapacity the initial capacity
      * @throws IllegalArgumentException if the initial capacity is negative
      */
     public HashedMap(final int initialCapacity) {
@@ -67,8 +69,8 @@ public class HashedMap<K, V>
      * Constructs a new, empty map with the specified initial capacity and
      * load factor.
      *
-     * @param initialCapacity  the initial capacity
-     * @param loadFactor  the load factor
+     * @param initialCapacity the initial capacity
+     * @param loadFactor      the load factor
      * @throws IllegalArgumentException if the initial capacity is negative
      * @throws IllegalArgumentException if the load factor is less than zero
      */
@@ -79,7 +81,7 @@ public class HashedMap<K, V>
     /**
      * Constructor copying elements from another map.
      *
-     * @param map  the map to copy
+     * @param map the map to copy
      * @throws NullPointerException if the map is null
      */
     public HashedMap(final Map<? extends K, ? extends V> map) {
@@ -87,6 +89,7 @@ public class HashedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Clones the map without cloning the keys or values.
      *
@@ -100,7 +103,7 @@ public class HashedMap<K, V>
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -112,7 +115,7 @@ public class HashedMap<K, V>
      * Read the map in using a custom routine.
      *
      * @param in the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {

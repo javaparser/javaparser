@@ -23,23 +23,22 @@ import org.apache.commons.math3.util.Pair;
 /**
  * Simple implementation of the {@link ConvergenceChecker} interface using
  * only point coordinates.
- *
+ * <p>
  * Convergence is considered to have been reached if either the relative
  * difference between each point coordinate are smaller than a threshold
  * or if either the absolute difference between the point coordinates are
  * smaller than another threshold.
  * <br/>
- * The {@link #converged(int,Pair,Pair) converged} method will also return
+ * The {@link #converged(int, Pair, Pair) converged} method will also return
  * {@code true} if the number of iterations has been set (see
- * {@link #SimplePointChecker(double,double,int) this constructor}).
+ * {@link #SimplePointChecker(double, double, int) this constructor}).
  *
  * @param <PAIR> Type of the (point, value) pair.
- * The type of the "value" part of the pair (not used by this class).
- *
+ *               The type of the "value" part of the pair (not used by this class).
  * @since 3.0
  */
 public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
-    extends AbstractConvergenceChecker<PAIR> {
+        extends AbstractConvergenceChecker<PAIR> {
     /**
      * If {@link #maxIterationCount} is set to this value, the number of
      * iterations will never cause {@link #converged(int, Pair, Pair)}
@@ -76,9 +75,8 @@ public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
      *
      * @param relativeThreshold Relative tolerance threshold.
      * @param absoluteThreshold Absolute tolerance threshold.
-     * @param maxIter Maximum iteration count.
+     * @param maxIter           Maximum iteration count.
      * @throws NotStrictlyPositiveException if {@code maxIter <= 0}.
-     *
      * @since 3.1
      */
     public SimplePointChecker(final double relativeThreshold,
@@ -104,8 +102,8 @@ public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
      * not only for the best or worst ones.
      *
      * @param iteration Index of current iteration
-     * @param previous Best point in the previous iteration.
-     * @param current Best point in the current iteration.
+     * @param previous  Best point in the previous iteration.
+     * @param current   Best point in the current iteration.
      * @return {@code true} if the arguments satify the convergence criterion.
      */
     @Override
@@ -124,7 +122,7 @@ public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
             final double difference = FastMath.abs(pi - ci);
             final double size = FastMath.max(FastMath.abs(pi), FastMath.abs(ci));
             if (difference > size * getRelativeThreshold() &&
-                difference > getAbsoluteThreshold()) {
+                    difference > getAbsoluteThreshold()) {
                 return false;
             }
         }

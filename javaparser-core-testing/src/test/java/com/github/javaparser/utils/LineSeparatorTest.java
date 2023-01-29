@@ -55,7 +55,7 @@ class LineSeparatorTest {
         assertFalse(LineSeparator.lookup("\r \n").isPresent());
         assertFalse(LineSeparator.lookup("\\r \\n").isPresent());
     }
-    
+
     @Test
     void lookupEscaped() {
         assertEquals(LineSeparator.CR, LineSeparator.lookupEscaped("\\r").get());

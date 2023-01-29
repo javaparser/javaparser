@@ -5,7 +5,7 @@ class C {
       @ ensures true;
       @ diverges true;
       @*/
-    void foo () {
+    void foo() {
         assert false;
     }
 
@@ -13,7 +13,7 @@ class C {
       @ signals (Throwable e) true;
       @ signals_only AssertionError;
       @*/
-    void bar () {
+    void bar() {
         assert false;
     }
 

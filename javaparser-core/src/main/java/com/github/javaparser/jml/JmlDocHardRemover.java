@@ -24,6 +24,7 @@ import java.util.Optional;
  * @version 1 (2/1/22)
  */
 public class JmlDocHardRemover extends Processor {
+
     @Override
     public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (configuration.isProcessJml()) {
@@ -40,8 +41,8 @@ public class JmlDocHardRemover extends Processor {
     }
 
     public static class JmlDocCollectorVisitor extends ModifierVisitor<Void> {
-        private final List<Node> docs = new LinkedList<>();
 
+        private final List<Node> docs = new LinkedList<>();
 
         @Override
         public JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {

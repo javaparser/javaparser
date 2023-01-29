@@ -33,12 +33,13 @@ import java.util.Map;
  *
  * @param <K> the type of the keys in the map
  * @param <V> the type of the values in the map
- *
  * @since 4.0
  */
 public class DualLinkedHashBidiMap<K, V> extends AbstractDualBidiMap<K, V> implements Serializable {
 
-    /** Ensure serialization compatibility */
+    /**
+     * Ensure serialization compatibility
+     */
     private static final long serialVersionUID = 721969328361810L;
 
     /**
@@ -81,7 +82,7 @@ public class DualLinkedHashBidiMap<K, V> extends AbstractDualBidiMap<K, V> imple
      */
     @Override
     protected BidiMap<V, K> createBidiMap(final Map<V, K> normalMap, final Map<K, V> reverseMap,
-            final BidiMap<K, V> inverseBidiMap) {
+                                          final BidiMap<K, V> inverseBidiMap) {
         return new DualLinkedHashBidiMap<>(normalMap, reverseMap, inverseBidiMap);
     }
 

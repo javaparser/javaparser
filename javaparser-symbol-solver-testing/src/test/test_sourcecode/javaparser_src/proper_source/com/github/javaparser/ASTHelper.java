@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -50,7 +50,7 @@ import java.util.List;
 
 /**
  * This class helps to construct new nodes.
- * 
+ *
  * @author Júlio Vilmar Gesser
  */
 public final class ASTHelper {
@@ -80,9 +80,8 @@ public final class ASTHelper {
     /**
      * Creates a new {@link NameExpr} from a qualified name.<br>
      * The qualified name can contains "." (dot) characters.
-     * 
-     * @param qualifiedName
-     *            qualified name
+     *
+     * @param qualifiedName qualified name
      * @return instanceof {@link NameExpr}
      */
     public static NameExpr createNameExpr(String qualifiedName) {
@@ -96,11 +95,9 @@ public final class ASTHelper {
 
     /**
      * Creates a new {@link Parameter}.
-     * 
-     * @param type
-     *            type of the parameter
-     * @param name
-     *            name of the parameter
+     *
+     * @param type type of the parameter
+     * @param name name of the parameter
      * @return instance of {@link Parameter}
      */
     public static Parameter createParameter(Type type, String name) {
@@ -109,13 +106,10 @@ public final class ASTHelper {
 
     /**
      * Creates a {@link FieldDeclaration}.
-     * 
-     * @param modifiers
-     *            modifiers
-     * @param type
-     *            type
-     * @param variable
-     *            variable declarator
+     *
+     * @param modifiers modifiers
+     * @param type      type
+     * @param variable  variable declarator
      * @return instance of {@link FieldDeclaration}
      */
     public static FieldDeclaration createFieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
@@ -127,13 +121,10 @@ public final class ASTHelper {
 
     /**
      * Creates a {@link FieldDeclaration}.
-     * 
-     * @param modifiers
-     *            modifiers
-     * @param type
-     *            type
-     * @param name
-     *            field name
+     *
+     * @param modifiers modifiers
+     * @param type      type
+     * @param name      field name
      * @return instance of {@link FieldDeclaration}
      */
     public static FieldDeclaration createFieldDeclaration(int modifiers, Type type, String name) {
@@ -144,11 +135,9 @@ public final class ASTHelper {
 
     /**
      * Creates a {@link VariableDeclarationExpr}.
-     * 
-     * @param type
-     *            type
-     * @param name
-     *            name
+     *
+     * @param type type
+     * @param name name
      * @return instance of {@link VariableDeclarationExpr}
      */
     public static VariableDeclarationExpr createVariableDeclarationExpr(Type type, String name) {
@@ -160,11 +149,9 @@ public final class ASTHelper {
     /**
      * Adds the given parameter to the method. The list of parameters will be
      * initialized if it is <code>null</code>.
-     * 
-     * @param method
-     *            method
-     * @param parameter
-     *            parameter
+     *
+     * @param method    method
+     * @param parameter parameter
      */
     public static void addParameter(MethodDeclaration method, Parameter parameter) {
         List<Parameter> parameters = method.getParameters();
@@ -178,11 +165,9 @@ public final class ASTHelper {
     /**
      * Adds the given argument to the method call. The list of arguments will be
      * initialized if it is <code>null</code>.
-     * 
-     * @param call
-     *            method call
-     * @param arg
-     *            argument value
+     *
+     * @param call method call
+     * @param arg  argument value
      */
     public static void addArgument(MethodCallExpr call, Expression arg) {
         List<Expression> args = call.getArgs();
@@ -196,11 +181,9 @@ public final class ASTHelper {
     /**
      * Adds the given type declaration to the compilation unit. The list of
      * types will be initialized if it is <code>null</code>.
-     * 
-     * @param cu
-     *            compilation unit
-     * @param type
-     *            type declaration
+     *
+     * @param cu   compilation unit
+     * @param type type declaration
      */
     public static void addTypeDeclaration(CompilationUnit cu, TypeDeclaration type) {
         List<TypeDeclaration> types = cu.getTypes();
@@ -214,11 +197,9 @@ public final class ASTHelper {
 
     /**
      * Creates a new {@link ReferenceType} for a class or interface.
-     * 
-     * @param name
-     *            name of the class or interface
-     * @param arrayCount
-     *            number of arrays or <code>0</code> if is not a array.
+     *
+     * @param name       name of the class or interface
+     * @param arrayCount number of arrays or <code>0</code> if is not a array.
      * @return instanceof {@link ReferenceType}
      */
     public static ReferenceType createReferenceType(String name, int arrayCount) {
@@ -227,11 +208,9 @@ public final class ASTHelper {
 
     /**
      * Creates a new {@link ReferenceType} for the given primitive type.
-     * 
-     * @param type
-     *            primitive type
-     * @param arrayCount
-     *            number of arrays or <code>0</code> if is not a array.
+     *
+     * @param type       primitive type
+     * @param arrayCount number of arrays or <code>0</code> if is not a array.
      * @return instanceof {@link ReferenceType}
      */
     public static ReferenceType createReferenceType(PrimitiveType type, int arrayCount) {
@@ -241,9 +220,9 @@ public final class ASTHelper {
     /**
      * Adds the given statement to the specified block. The list of statements
      * will be initialized if it is <code>null</code>.
-     * 
+     *
      * @param block to have expression added to
-     * @param stmt to be added
+     * @param stmt  to be added
      */
     public static void addStmt(BlockStmt block, Statement stmt) {
         List<Statement> stmts = block.getStmts();
@@ -257,9 +236,9 @@ public final class ASTHelper {
     /**
      * Adds the given expression to the specified block. The list of statements
      * will be initialized if it is <code>null</code>.
-     * 
+     *
      * @param block to have expression added to
-     * @param expr to be added
+     * @param expr  to be added
      */
     public static void addStmt(BlockStmt block, Expression expr) {
         addStmt(block, new ExpressionStmt(expr));
@@ -268,11 +247,9 @@ public final class ASTHelper {
     /**
      * Adds the given declaration to the specified type. The list of members
      * will be initialized if it is <code>null</code>.
-     * 
-     * @param type
-     *            type declaration
-     * @param decl
-     *            member declaration
+     *
+     * @param type type declaration
+     * @param decl member declaration
      */
     public static void addMember(TypeDeclaration type, BodyDeclaration decl) {
         List<BodyDeclaration> members = type.getMembers();

@@ -49,16 +49,16 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
 
     protected static String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
-    // 
+    //
     // Fields
-    // 
+    //
     protected ResolvedReferenceTypeDeclaration typeDeclaration;
 
     protected ResolvedTypeParametersMap typeParametersMap;
 
-    // 
+    //
     // Constructors
-    // 
+    //
     public ResolvedReferenceType(ResolvedReferenceTypeDeclaration typeDeclaration) {
         this(typeDeclaration, deriveParams(typeDeclaration));
     }
@@ -81,15 +81,14 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
         this.typeDeclaration = typeDeclaration;
     }
 
-    // 
+    //
     // Public Object methods
-    // 
+    //
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || (!isLazyType(o) && getClass() != o.getClass())
-                || (isLazyType(o) && !this.equals(asResolvedReferenceType(o))))
+        if (o == null || (!isLazyType(o) && getClass() != o.getClass()) || (isLazyType(o) && !this.equals(asResolvedReferenceType(o))))
             return false;
         ResolvedReferenceType that = asResolvedReferenceType(o);
         if (!typeDeclaration.equals(that.typeDeclaration))
@@ -422,9 +421,9 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
         return this.getAllMethods().stream().filter(m -> m.accessSpecifier() != AccessSpecifier.PRIVATE).collect(Collectors.toList());
     }
 
-    // 
+    //
     // Protected methods
-    // 
+    //
     protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, List<ResolvedType> typeParameters);
 
     protected ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration, ResolvedTypeParametersMap typeParametersMap) {
@@ -434,7 +433,7 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     protected abstract ResolvedReferenceType create(ResolvedReferenceTypeDeclaration typeDeclaration);
 
     /*
-     * Verify if the resolved type is a boxing type of a primitive  
+     * Verify if the resolved type is a boxing type of a primitive
      */
     protected boolean isCorrespondingBoxingType(String typeName) {
         ResolvedPrimitiveType resolvedPrimitiveType = (ResolvedPrimitiveType) ResolvedPrimitiveType.byName(typeName);
@@ -487,9 +486,9 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
         return false;
     }
 
-    // 
+    //
     // Private methods
-    // 
+    //
     private boolean compareConsideringVariableTypeParameters(ResolvedType referenceType, ResolvedTypeVariable typeVariable) {
         // verify if the ResolvedTypeVariable has only one type variable and the bound is
         // not a reference type with a bound parameter
@@ -525,8 +524,8 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     public boolean isJavaLangObject() {
-        return this.isReferenceType() && // Consider anonymous classes
-                hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return // Consider anonymous classes
+                this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -534,8 +533,8 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
      */
     public boolean isJavaLangEnum() {
-        return this.isReferenceType() && // Consider anonymous classes
-                hasName() && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return // Consider anonymous classes
+                this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_ENUM);
     }
 
     // /

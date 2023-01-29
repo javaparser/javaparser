@@ -17,7 +17,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
@@ -31,7 +30,7 @@ public class Processor {
     }
 
     /**
-     *  Adds a pre-parsing step, which has access to the sourcecode through the innerProvider.
+     * Adds a pre-parsing step, which has access to the sourcecode through the innerProvider.
      */
     public Provider preProcess(Provider innerProvider) {
         return innerProvider;

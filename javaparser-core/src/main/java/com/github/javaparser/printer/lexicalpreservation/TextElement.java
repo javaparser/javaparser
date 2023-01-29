@@ -84,7 +84,7 @@ public abstract class TextElement implements TextElementMatcher, PrintableTextEl
      * @return TextElementMatcher that matches any TextElement with the same Range
      */
     TextElementMatcher matchByRange() {
-        return (TextElement textElement) -> getRange().flatMap(r1 -> textElement.getRange().map(r1::equals)).// We're missing range information. This may happen when a node is manually instantiated. Don't be too harsh on that:
-                orElse(true);
+        return (TextElement textElement) -> // We're missing range information. This may happen when a node is manually instantiated. Don't be too harsh on that:
+                getRange().flatMap(r1 -> textElement.getRange().map(r1::equals)).orElse(true);
     }
 }

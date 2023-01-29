@@ -41,12 +41,13 @@ public class MultiMapUtils {
     /**
      * <code>MultiMapUtils</code> should not normally be instantiated.
      */
-    private MultiMapUtils() {}
+    private MultiMapUtils() {
+    }
 
     /**
      * An empty {@link UnmodifiableMultiValuedMap}.
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static final MultiValuedMap EMPTY_MULTI_VALUED_MAP =
             UnmodifiableMultiValuedMap.unmodifiableMultiValuedMap(new ArrayListValuedHashMap(0, 0));
 
@@ -70,7 +71,7 @@ public class MultiMapUtils {
      *
      * @param <K> the type of key in the map
      * @param <V> the type of value in the map
-     * @param map  the map, may be null
+     * @param map the map, may be null
      * @return an empty {@link MultiValuedMap} if the argument is null
      */
     @SuppressWarnings("unchecked")
@@ -83,7 +84,7 @@ public class MultiMapUtils {
      * <p>
      * If the provided map is null, returns true.
      *
-     * @param map  the map to check, may be null
+     * @param map the map to check, may be null
      * @return true if the map is empty or null
      */
     public static boolean isEmpty(final MultiValuedMap<?, ?> map) {
@@ -98,8 +99,8 @@ public class MultiMapUtils {
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @param map  the {@link MultiValuedMap} to use
-     * @param key  the key to look up
+     * @param map the {@link MultiValuedMap} to use
+     * @param key the key to look up
      * @return the Collection in the {@link MultiValuedMap}, or null if input map is null
      */
     public static <K, V> Collection<V> getCollection(final MultiValuedMap<K, V> map, final K key) {
@@ -117,8 +118,8 @@ public class MultiMapUtils {
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @param map  the {@link MultiValuedMap} to use
-     * @param key  the key to look up
+     * @param map the {@link MultiValuedMap} to use
+     * @param key the key to look up
      * @return the Collection in the {@link MultiValuedMap} as List, or null if input map is null
      */
     public static <K, V> List<V> getValuesAsList(final MultiValuedMap<K, V> map, final K key) {
@@ -137,8 +138,8 @@ public class MultiMapUtils {
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @param map  the {@link MultiValuedMap} to use
-     * @param key  the key to look up
+     * @param map the {@link MultiValuedMap} to use
+     * @param key the key to look up
      * @return the Collection in the {@link MultiValuedMap} as Set, or null if input map is null
      */
     public static <K, V> Set<V> getValuesAsSet(final MultiValuedMap<K, V> map, final K key) {
@@ -157,8 +158,8 @@ public class MultiMapUtils {
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @param map  the {@link MultiValuedMap} to use
-     * @param key  the key to look up
+     * @param map the {@link MultiValuedMap} to use
+     * @param key the key to look up
      * @return the Collection in the {@link MultiValuedMap} as Bag, or null if input map is null
      */
     public static <K, V> Bag<V> getValuesAsBag(final MultiValuedMap<K, V> map, final K key) {
@@ -208,7 +209,7 @@ public class MultiMapUtils {
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @param map  the {@link MultiValuedMap} to decorate, must not be null
+     * @param map the {@link MultiValuedMap} to decorate, must not be null
      * @return an unmodifiable {@link MultiValuedMap} backed by the provided map
      * @throws NullPointerException if map is null
      */
@@ -232,17 +233,17 @@ public class MultiMapUtils {
      * If there are any elements already in the map being decorated, they are
      * NOT transformed.
      *
-     * @param <K> the key type
-     * @param <V> the value type
-     * @param map  the {@link MultiValuedMap} to transform, must not be null, typically empty
-     * @param keyTransformer  the transformer for the map keys, null means no transformation
-     * @param valueTransformer  the transformer for the map values, null means no transformation
+     * @param <K>              the key type
+     * @param <V>              the value type
+     * @param map              the {@link MultiValuedMap} to transform, must not be null, typically empty
+     * @param keyTransformer   the transformer for the map keys, null means no transformation
+     * @param valueTransformer the transformer for the map values, null means no transformation
      * @return a transformed <code>MultiValuedMap</code> backed by the given map
      * @throws NullPointerException if map is null
      */
     public static <K, V> MultiValuedMap<K, V> transformedMultiValuedMap(final MultiValuedMap<K, V> map,
-            final Transformer<? super K, ? extends K> keyTransformer,
-            final Transformer<? super V, ? extends V> valueTransformer) {
+                                                                        final Transformer<? super K, ? extends K> keyTransformer,
+                                                                        final Transformer<? super V, ? extends V> valueTransformer) {
         return TransformedMultiValuedMap.transformingMap(map, keyTransformer, valueTransformer);
     }
 

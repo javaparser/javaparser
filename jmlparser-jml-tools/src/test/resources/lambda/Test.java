@@ -1,5 +1,6 @@
 class A {
     private final int test;
+
     public A() {
         this.test = 1;
     }
@@ -7,8 +8,8 @@ class A {
     void m(int i) {
         int outer = 10;
         make(a -> {
-            MyFunctionalInterface g = (x) -> test*2+x;
-            return test+g.apply(a)*2;
+            MyFunctionalInterface g = (x) -> test * 2 + x;
+            return test + g.apply(a) * 2;
         });
     }
 

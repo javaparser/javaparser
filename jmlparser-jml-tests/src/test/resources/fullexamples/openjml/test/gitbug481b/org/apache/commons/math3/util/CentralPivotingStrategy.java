@@ -23,24 +23,28 @@ import java.io.Serializable;
 
 /**
  * A mid point strategy based on the average of begin and end indices.
+ *
  * @since 3.4
  */
 public class CentralPivotingStrategy implements PivotingStrategyInterface, Serializable {
 
-    /** Serializable UID. */
+    /**
+     * Serializable UID.
+     */
     private static final long serialVersionUID = 20140713L;
 
     /**
      * {@inheritDoc}
      * This in particular picks a average of begin and end indices
+     *
      * @return The index corresponding to a simple average of
      * the first and the last element indices of the array slice
      * @throws MathIllegalArgumentException when indices exceeds range
      */
     public int pivotIndex(final double[] work, final int begin, final int end)
-        throws MathIllegalArgumentException {
-        MathArrays.verifyValues(work, begin, end-begin);
-        return begin + (end - begin)/2;
+            throws MathIllegalArgumentException {
+        MathArrays.verifyValues(work, begin, end - begin);
+        return begin + (end - begin) / 2;
     }
 
 }

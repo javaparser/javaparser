@@ -11,4 +11,5 @@
 // Public License. See LICENSE.TXT for details.
 // 
 
-public interface ISub1 extends ISuper {}
+public interface ISub1 extends ISuper {
+}

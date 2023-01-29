@@ -17,7 +17,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.promotion;
 
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
@@ -32,12 +31,12 @@ import com.github.javaparser.resolution.types.ResolvedType;
  * 3/ Otherwise, the conditional expression is a reference conditional expression
  */
 public class ConditionalExprResolver {
+
     private static final ResolvedPrimitiveType TYPE_BOOLEAN = ResolvedPrimitiveType.BOOLEAN;
 
     public static ConditionalExprHandler getConditionExprHandler(ResolvedType thenExpr, ResolvedType elseExpr) {
         // boolean conditional expressions
-        if (!thenExpr.isNull() && !elseExpr.isNull()
-                && thenExpr.isAssignableBy(TYPE_BOOLEAN) && elseExpr.isAssignableBy(TYPE_BOOLEAN)) {
+        if (!thenExpr.isNull() && !elseExpr.isNull() && thenExpr.isAssignableBy(TYPE_BOOLEAN) && elseExpr.isAssignableBy(TYPE_BOOLEAN)) {
             return new BooleanConditionalExprHandler(thenExpr, elseExpr);
             // numeric conditional expressions
         }

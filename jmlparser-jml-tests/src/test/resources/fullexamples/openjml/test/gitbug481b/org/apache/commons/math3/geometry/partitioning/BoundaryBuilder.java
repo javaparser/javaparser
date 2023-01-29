@@ -18,27 +18,33 @@ package org.apache.commons.math3.geometry.partitioning;
 
 import org.apache.commons.math3.geometry.Space;
 
-/** Visitor building boundary shell tree.
+/**
+ * Visitor building boundary shell tree.
  * <p>
  * The boundary shell is represented as {@link BoundaryAttribute boundary attributes}
  * at each internal node.
  * </p>
+ *
  * @param <S> Type of the space.
  * @since 3.4
  */
 class BoundaryBuilder<S extends Space> implements BSPTreeVisitor<S> {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Order visitOrder(BSPTree<S> node) {
         return Order.PLUS_MINUS_SUB;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void visitInternalNode(BSPTree<S> node) {
 
         SubHyperplane<S> plusOutside = null;
-        SubHyperplane<S> plusInside  = null;
-        NodesSet<S>      splitters   = null;
+        SubHyperplane<S> plusInside = null;
+        NodesSet<S> splitters = null;
 
         // characterize the cut sub-hyperplane,
         // first with respect to the plus sub-tree
@@ -88,7 +94,9 @@ class BoundaryBuilder<S extends Space> implements BSPTreeVisitor<S> {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void visitLeafNode(BSPTree<S> node) {
     }
 

@@ -28,12 +28,12 @@ import org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOpti
  * differentiable functions.
  * It contains boiler-plate code for dealing with gradient evaluation.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.1
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public abstract class AbstractDifferentiableOptimizer
-    extends BaseAbstractMultivariateOptimizer<MultivariateDifferentiableFunction> {
+        extends BaseAbstractMultivariateOptimizer<MultivariateDifferentiableFunction> {
     /**
      * Objective function gradient.
      */
@@ -60,10 +60,11 @@ public abstract class AbstractDifferentiableOptimizer
      * {@inheritDoc}
      *
      * @deprecated In 3.1. Please use
-     * {@link #optimizeInternal(int,MultivariateDifferentiableFunction,GoalType,OptimizationData[])}
+     * {@link #optimizeInternal(int, MultivariateDifferentiableFunction, GoalType, OptimizationData[])}
      * instead.
      */
-    @Override@Deprecated
+    @Override
+    @Deprecated
     protected PointValuePair optimizeInternal(final int maxEval,
                                               final MultivariateDifferentiableFunction f,
                                               final GoalType goalType,
@@ -71,7 +72,9 @@ public abstract class AbstractDifferentiableOptimizer
         return optimizeInternal(maxEval, f, goalType, new InitialGuess(startPoint));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected PointValuePair optimizeInternal(final int maxEval,
                                               final MultivariateDifferentiableFunction f,

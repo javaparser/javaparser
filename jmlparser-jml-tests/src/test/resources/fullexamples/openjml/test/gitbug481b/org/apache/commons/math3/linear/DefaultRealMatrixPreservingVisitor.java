@@ -27,15 +27,22 @@ package org.apache.commons.math3.linear;
  * @since 2.0
  */
 public class DefaultRealMatrixPreservingVisitor implements RealMatrixPreservingVisitor {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void start(int rows, int columns,
                       int startRow, int endRow, int startColumn, int endColumn) {
     }
 
-    /** {@inheritDoc} */
-    public void visit(int row, int column, double value) {}
+    /**
+     * {@inheritDoc}
+     */
+    public void visit(int row, int column, double value) {
+    }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double end() {
         return 0;
     }

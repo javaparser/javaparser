@@ -26,6 +26,7 @@ import java.util.Collection;
 
 /**
  * Random data generation utilities.
+ *
  * @deprecated to be removed in 4.0.  Use {@link RandomDataGenerator} directly
  */
 @Deprecated
@@ -40,8 +41,7 @@ public interface RandomData {
      *
      * @param len the length of the string to be generated
      * @return a random string of hex characters of length {@code len}
-     * @throws NotStrictlyPositiveException
-     * if {@code len <= 0}
+     * @throws NotStrictlyPositiveException if {@code len <= 0}
      */
     String nextHexString(int len) throws NotStrictlyPositiveException;
 
@@ -156,7 +156,7 @@ public interface RandomData {
      * <a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda3661.htm">
      * Normal Distribution</a></p>
      *
-     * @param mu the mean of the distribution
+     * @param mu    the mean of the distribution
      * @param sigma the standard deviation of the distribution
      * @return a random value following the specified Gaussian distribution
      * @throws NotStrictlyPositiveException if {@code sigma <= 0}.
@@ -192,11 +192,11 @@ public interface RandomData {
      * @return a uniformly distributed random value between lower and upper
      * (exclusive)
      * @throws NumberIsTooLargeException if {@code lower >= upper}
-     * @throws NotFiniteNumberException if one of the bounds is infinite
-     * @throws NotANumberException if one of the bounds is NaN
+     * @throws NotFiniteNumberException  if one of the bounds is infinite
+     * @throws NotANumberException       if one of the bounds is NaN
      */
     double nextUniform(double lower, double upper)
-        throws NumberIsTooLargeException, NotFiniteNumberException, NotANumberException;
+            throws NumberIsTooLargeException, NotFiniteNumberException, NotANumberException;
 
     /**
      * Generates a uniformly distributed random value from the interval
@@ -210,19 +210,19 @@ public interface RandomData {
      * <a href = "http://www.itl.nist.gov/div898/handbook/eda/section3/eda364.htm">
      * location and scale parameters</a>, respectively.</p>
      *
-     * @param lower the lower bound of the support
-     * @param upper the exclusive upper bound of the support
+     * @param lower          the lower bound of the support
+     * @param upper          the exclusive upper bound of the support
      * @param lowerInclusive {@code true} if the lower bound is inclusive
      * @return uniformly distributed random value in the {@code (lower, upper)}
      * interval, if {@code lowerInclusive} is {@code false}, or in the
      * {@code [lower, upper)} interval, if {@code lowerInclusive} is
      * {@code true}
      * @throws NumberIsTooLargeException if {@code lower >= upper}
-     * @throws NotFiniteNumberException if one of the bounds is infinite
-     * @throws NotANumberException if one of the bounds is NaN
+     * @throws NotFiniteNumberException  if one of the bounds is infinite
+     * @throws NotANumberException       if one of the bounds is NaN
      */
     double nextUniform(double lower, double upper, boolean lowerInclusive)
-        throws NumberIsTooLargeException, NotFiniteNumberException, NotANumberException;
+            throws NumberIsTooLargeException, NotFiniteNumberException, NotANumberException;
 
     /**
      * Generates an integer array of length {@code k} whose entries are selected
@@ -236,11 +236,11 @@ public interface RandomData {
      * @param k the size of the permutation
      * @return a random {@code k}-permutation of {@code n}, as an array of
      * integers
-     * @throws NumberIsTooLargeException if {@code k > n}.
+     * @throws NumberIsTooLargeException    if {@code k > n}.
      * @throws NotStrictlyPositiveException if {@code k <= 0}.
      */
     int[] nextPermutation(int n, int k)
-        throws NumberIsTooLargeException, NotStrictlyPositiveException;
+            throws NumberIsTooLargeException, NotStrictlyPositiveException;
 
     /**
      * Returns an array of {@code k} objects selected randomly from the
@@ -256,10 +256,10 @@ public interface RandomData {
      * @param c the collection to be sampled
      * @param k the size of the sample
      * @return a random sample of {@code k} elements from {@code c}
-     * @throws NumberIsTooLargeException if {@code k > c.size()}.
+     * @throws NumberIsTooLargeException    if {@code k > c.size()}.
      * @throws NotStrictlyPositiveException if {@code k <= 0}.
      */
     Object[] nextSample(Collection<?> c, int k)
-        throws NumberIsTooLargeException, NotStrictlyPositiveException;
+            throws NumberIsTooLargeException, NotStrictlyPositiveException;
 
 }

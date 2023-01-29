@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -30,11 +30,11 @@ import com.github.javaparser.ast.visitor.*;
 
 /**
  * Abstract class for all nodes of the AST.
- *
+ * <p>
  * Each Node can have one associated comment which describe it and
  * a number of "orphan comments" which it contains but are not specifically
  * associated to any element.
- * 
+ *
  * @author Julio Vilmar Gesser
  */
 public abstract class Node implements Cloneable {
@@ -71,34 +71,27 @@ public abstract class Node implements Cloneable {
 
     /**
      * Accept method for visitor support.
-     * 
-     * @param <R>
-     *            the type the return value of the visitor
-     * @param <A>
-     *            the type the argument passed to the visitor
-     * @param v
-     *            the visitor implementation
-     * @param arg
-     *            the argument passed to the visitor
+     *
+     * @param <R> the type the return value of the visitor
+     * @param <A> the type the argument passed to the visitor
+     * @param v   the visitor implementation
+     * @param arg the argument passed to the visitor
      * @return the result of the visit
      */
     public abstract <R, A> R accept(GenericVisitor<R, A> v, A arg);
 
     /**
      * Accept method for visitor support.
-     * 
-     * @param <A>
-     *            the type the argument passed for the visitor
-     * @param v
-     *            the visitor implementation
-     * @param arg
-     *            any value relevant for the visitor
+     *
+     * @param <A> the type the argument passed for the visitor
+     * @param v   the visitor implementation
+     * @param arg any value relevant for the visitor
      */
     public abstract <A> void accept(VoidVisitor<A> v, A arg);
 
     /**
      * Return the begin column of this node.
-     * 
+     *
      * @return the begin column of this node
      */
     public final int getBeginColumn() {
@@ -107,7 +100,7 @@ public abstract class Node implements Cloneable {
 
     /**
      * Return the begin line of this node.
-     * 
+     *
      * @return the begin line of this node
      */
     public final int getBeginLine() {
@@ -134,7 +127,7 @@ public abstract class Node implements Cloneable {
 
     /**
      * Return the end column of this node.
-     * 
+     *
      * @return the end column of this node
      */
     public final int getEndColumn() {
@@ -143,7 +136,7 @@ public abstract class Node implements Cloneable {
 
     /**
      * Return the end line of this node.
-     * 
+     *
      * @return the end line of this node
      */
     public final int getEndLine() {
@@ -152,9 +145,8 @@ public abstract class Node implements Cloneable {
 
     /**
      * Sets the begin column of this node.
-     * 
-     * @param beginColumn
-     *            the begin column of this node
+     *
+     * @param beginColumn the begin column of this node
      */
     public final void setBeginColumn(final int beginColumn) {
         this.beginColumn = beginColumn;
@@ -162,9 +154,8 @@ public abstract class Node implements Cloneable {
 
     /**
      * Sets the begin line of this node.
-     * 
-     * @param beginLine
-     *            the begin line of this node
+     *
+     * @param beginLine the begin line of this node
      */
     public final void setBeginLine(final int beginLine) {
         this.beginLine = beginLine;
@@ -179,8 +170,7 @@ public abstract class Node implements Cloneable {
         if (comment != null && (this instanceof Comment)) {
             throw new RuntimeException("A comment can not be commented");
         }
-        if (this.comment != null)
-        {
+        if (this.comment != null) {
             this.comment.setCommentedNode(null);
         }
         this.comment = comment;
@@ -200,9 +190,8 @@ public abstract class Node implements Cloneable {
 
     /**
      * Sets the end column of this node.
-     * 
-     * @param endColumn
-     *            the end column of this node
+     *
+     * @param endColumn the end column of this node
      */
     public final void setEndColumn(final int endColumn) {
         this.endColumn = endColumn;
@@ -210,9 +199,8 @@ public abstract class Node implements Cloneable {
 
     /**
      * Sets the end line of this node.
-     * 
-     * @param endLine
-     *            the end line of this node
+     *
+     * @param endLine the end line of this node
      */
     public final void setEndLine(final int endLine) {
         this.endLine = endLine;
@@ -220,7 +208,7 @@ public abstract class Node implements Cloneable {
 
     /**
      * Return the String representation of this node.
-     * 
+     *
      * @return the String representation of this node
      */
     @Override
@@ -278,12 +266,13 @@ public abstract class Node implements Cloneable {
     /**
      * This is a list of Comment which are inside the node and are not associated
      * with any meaningful AST Node.
-     *
+     * <p>
      * For example, comments at the end of methods (immediately before the parenthesis)
      * or at the end of CompilationUnit are orphan comments.
-     *
+     * <p>
      * When more than one comments preceed a statement, the one immediately preceeding it
      * it is associated with the statements, while the others are "orphan".
+     *
      * @return all comments that cannot be attributed to a concept
      */
     public List<Comment> getOrphanComments() {
@@ -294,6 +283,7 @@ public abstract class Node implements Cloneable {
      * This is the list of Comment which are contained in the Node either because
      * they are properly associated to one of its children or because they are floating
      * around inside the Node
+     *
      * @return all Comments within the node as a list
      */
     public List<Comment> getAllContainedComments() {
@@ -369,8 +359,7 @@ public abstract class Node implements Cloneable {
         }
     }
 
-    public boolean hasComment()
-    {
+    public boolean hasComment() {
         return comment != null;
     }
 }

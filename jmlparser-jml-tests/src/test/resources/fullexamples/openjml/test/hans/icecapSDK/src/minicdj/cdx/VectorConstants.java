@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 package minicdj.cdx;
 
@@ -27,7 +28,7 @@ import minicdj.collision.Vector3d;
 /**
  * The <code>VectorConstants</code> class implements some simple utility methods for obtaining vectors that are commonly
  * used, such as zero vectors, unit direction vectors, and orthogonal vectors.
- * 
+ *
  * @author Ben L. Titzer
  */
 final class VectorConstants {
@@ -42,7 +43,7 @@ final class VectorConstants {
      * The <code>west</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "west" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -56,7 +57,7 @@ final class VectorConstants {
      * The <code>east</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "east" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -70,7 +71,7 @@ final class VectorConstants {
      * The <code>north</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "north" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -84,7 +85,7 @@ final class VectorConstants {
      * The <code>south</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "south" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -98,7 +99,7 @@ final class VectorConstants {
      * The <code>up</code> method is a utility function that will set the destination operand to a unit vector pointing
      * in the "up" direction. This family of functions has been added for convenient access to the common orthogonal
      * directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -112,7 +113,7 @@ final class VectorConstants {
      * The <code>down</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "down" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -125,7 +126,7 @@ final class VectorConstants {
     /**
      * The <code>direction</code> method is a utility function that will return a unit vector in the direction
      * specified. It takes an argument in degrees and a vector destination where it stores the result.
-     * 
+     *
      * @param deg
      *            the angle's value in degrees
      * @param dest
@@ -142,7 +143,7 @@ final class VectorConstants {
      * The <code>west</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "west" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -155,7 +156,7 @@ final class VectorConstants {
      * The <code>east</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "east" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -168,7 +169,7 @@ final class VectorConstants {
      * The <code>north</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "north" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -181,7 +182,7 @@ final class VectorConstants {
      * The <code>south</code> method is a utility function that will set the destination operand to a unit vector
      * pointing in the "south" direction. This family of functions has been added for convenient access to the common
      * orthogonal directions.
-     * 
+     *
      * @param dest
      *            the vector in which to store the result
      */
@@ -193,7 +194,7 @@ final class VectorConstants {
     /**
      * The <code>direction</code> method is a utility function that will return a unit vector in the direction
      * specified. It takes an argument in degrees and a vector destination where it stores the result.
-     * 
+     *
      * @param deg
      *            the angle's value in degrees
      * @param dest

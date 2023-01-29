@@ -71,9 +71,9 @@ public class SourceRoot {
         }
 
         /**
-         * @param localPath the path to the file that was parsed, relative to the source root path.
+         * @param localPath    the path to the file that was parsed, relative to the source root path.
          * @param absolutePath the absolute path to the file that was parsed.
-         * @param result the result of parsing the file.
+         * @param result       the result of parsing the file.
          */
         Result process(Path localPath, Path absolutePath, ParseResult<CompilationUnit> result);
     }
@@ -90,7 +90,7 @@ public class SourceRoot {
 
     /**
      * @param root the root directory of a set of source files. It corresponds to the root of the package structure of the
-     * source files within, like "javaparser/javaparser-core/src/main/java"
+     *             source files within, like "javaparser/javaparser-core/src/main/java"
      */
     public SourceRoot(Path root) {
         assertNotNull(root);
@@ -103,7 +103,7 @@ public class SourceRoot {
 
     /**
      * @param root the root directory of a set of source files. It corresponds to the root of the package structure of the
-     * source files within, like "javaparser/javaparser-core/src/main/java"
+     *             source files within, like "javaparser/javaparser-core/src/main/java"
      */
     public SourceRoot(Path root, ParserConfiguration parserConfiguration) {
         this(root);
@@ -273,7 +273,7 @@ public class SourceRoot {
         Log.trace("Parsing %s", () -> localPath);
         ParseResult<CompilationUnit> result = new JavaParser(configuration).parse(COMPILATION_UNIT, provider(absolutePath, configuration.getCharacterEncoding()));
         result.getResult().ifPresent(cu -> cu.setStorage(absolutePath, configuration.getCharacterEncoding()));
-        switch(callback.process(localPath, absolutePath, result)) {
+        switch (callback.process(localPath, absolutePath, result)) {
             case SAVE:
                 result.getResult().ifPresent(cu -> save(cu, absolutePath));
             case DONT_SAVE:
@@ -290,7 +290,7 @@ public class SourceRoot {
      * callback. In comparison to the other parse methods, this is much more memory efficient, but saveAll() won't work.
      *
      * @param startPackage The package containing the file
-     * @param filename The name of the file
+     * @param filename     The name of the file
      */
     public SourceRoot parse(String startPackage, String filename, ParserConfiguration configuration, Callback callback) throws IOException {
         assertNotNull(startPackage);
@@ -446,7 +446,8 @@ public class SourceRoot {
 
     /**
      * Save the given compilation unit to the given path.
-     * @param cu the compilation unit
+     *
+     * @param cu   the compilation unit
      * @param path the path of the java file
      */
     private SourceRoot save(CompilationUnit cu, Path path) {
@@ -455,9 +456,10 @@ public class SourceRoot {
 
     /**
      * Save the given compilation unit to the given path.
-     * @param cu the compilation unit
-     * @param path the path of the java file
-     * @param encoding  the encoding to use while saving the file
+     *
+     * @param cu       the compilation unit
+     * @param path     the path of the java file
+     * @param encoding the encoding to use while saving the file
      */
     private SourceRoot save(CompilationUnit cu, Path path, Charset encoding) {
         assertNotNull(cu);
@@ -469,7 +471,8 @@ public class SourceRoot {
 
     /**
      * Save all previously parsed files back to a new path.
-     * @param root the root of the java packages
+     *
+     * @param root     the root of the java packages
      * @param encoding the encoding to use while saving the file
      */
     public SourceRoot saveAll(Path root, Charset encoding) {
@@ -487,6 +490,7 @@ public class SourceRoot {
 
     /**
      * Save all previously parsed files back to a new path.
+     *
      * @param root the root of the java packages
      */
     public SourceRoot saveAll(Path root) {
@@ -502,6 +506,7 @@ public class SourceRoot {
 
     /**
      * Save all previously parsed files back to where they were found, with the given encoding.
+     *
      * @param encoding the encoding to use.
      */
     public SourceRoot saveAll(Charset encoding) {

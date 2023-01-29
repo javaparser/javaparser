@@ -48,13 +48,14 @@ import java.util.Iterator;
  * to avoid unnecessary computation and synchronization delays.</p>
  *
  * @since 2.0
- *
  */
 public class AggregateSummaryStatistics implements StatisticalSummary,
         Serializable {
 
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -8207112444016386906L;
 
     /**
@@ -71,7 +72,6 @@ public class AggregateSummaryStatistics implements StatisticalSummary,
     /**
      * Initializes a new AggregateSummaryStatistics with default statistics
      * implementations.
-     *
      */
     public AggregateSummaryStatistics() {
         // No try-catch or throws NAE because arg is guaranteed non-null
@@ -85,19 +85,19 @@ public class AggregateSummaryStatistics implements StatisticalSummary,
      * to be used by contributing and aggregate statistics.
      *
      * @param prototypeStatistics a {@code SummaryStatistics} serving as a
-     *      prototype both for the internal aggregate statistics and for
-     *      contributing statistics obtained via the
-     *      {@code createContributingStatistics()} method.  Being a prototype
-     *      means that other objects are initialized by copying this object's state.
-     *      If {@code null}, a new, default statistics object is used.  Any statistic
-     *      values in the prototype are propagated to contributing statistics
-     *      objects and (once) into these aggregate statistics.
+     *                            prototype both for the internal aggregate statistics and for
+     *                            contributing statistics obtained via the
+     *                            {@code createContributingStatistics()} method.  Being a prototype
+     *                            means that other objects are initialized by copying this object's state.
+     *                            If {@code null}, a new, default statistics object is used.  Any statistic
+     *                            values in the prototype are propagated to contributing statistics
+     *                            objects and (once) into these aggregate statistics.
      * @throws NullArgumentException if prototypeStatistics is null
      * @see #createContributingStatistics()
      */
     public AggregateSummaryStatistics(SummaryStatistics prototypeStatistics) throws NullArgumentException {
         this(prototypeStatistics,
-             prototypeStatistics == null ? null : new SummaryStatistics(prototypeStatistics));
+                prototypeStatistics == null ? null : new SummaryStatistics(prototypeStatistics));
     }
 
     /**
@@ -108,24 +108,24 @@ public class AggregateSummaryStatistics implements StatisticalSummary,
      * state to be supplied for the aggregate statistics.
      *
      * @param prototypeStatistics a {@code SummaryStatistics} serving as a
-     *      prototype both for the internal aggregate statistics and for
-     *      contributing statistics obtained via the
-     *      {@code createContributingStatistics()} method.  Being a prototype
-     *      means that other objects are initialized by copying this object's state.
-     *      If {@code null}, a new, default statistics object is used.  Any statistic
-     *      values in the prototype are propagated to contributing statistics
-     *      objects, but not into these aggregate statistics.
-     * @param initialStatistics a {@code SummaryStatistics} to serve as the
-     *      internal aggregate statistics object.  If {@code null}, a new, default
-     *      statistics object is used.
+     *                            prototype both for the internal aggregate statistics and for
+     *                            contributing statistics obtained via the
+     *                            {@code createContributingStatistics()} method.  Being a prototype
+     *                            means that other objects are initialized by copying this object's state.
+     *                            If {@code null}, a new, default statistics object is used.  Any statistic
+     *                            values in the prototype are propagated to contributing statistics
+     *                            objects, but not into these aggregate statistics.
+     * @param initialStatistics   a {@code SummaryStatistics} to serve as the
+     *                            internal aggregate statistics object.  If {@code null}, a new, default
+     *                            statistics object is used.
      * @see #createContributingStatistics()
      */
     public AggregateSummaryStatistics(SummaryStatistics prototypeStatistics,
                                       SummaryStatistics initialStatistics) {
         this.statisticsPrototype =
-            (prototypeStatistics == null) ? new SummaryStatistics() : prototypeStatistics;
+                (prototypeStatistics == null) ? new SummaryStatistics() : prototypeStatistics;
         this.statistics =
-            (initialStatistics == null) ? new SummaryStatistics() : initialStatistics;
+                (initialStatistics == null) ? new SummaryStatistics() : initialStatistics;
     }
 
     /**
@@ -277,8 +277,8 @@ public class AggregateSummaryStatistics implements StatisticalSummary,
      * aggregated with those of this {@code AggregateSummaryStatistics}.
      *
      * @return a {@code SummaryStatistics} whose data will be aggregated with
-     *      those of this {@code AggregateSummaryStatistics}.  The initial state
-     *      is a copy of the configured prototype statistics.
+     * those of this {@code AggregateSummaryStatistics}.  The initial state
+     * is a copy of the configured prototype statistics.
      */
     public SummaryStatistics createContributingStatistics() {
         SummaryStatistics contributingStatistics
@@ -370,7 +370,7 @@ public class AggregateSummaryStatistics implements StatisticalSummary,
          * aggregate statistics object
          *
          * @param aggregateStatistics a {@code SummaryStatistics} into which
-         *      values added to this statistics object should be aggregated
+         *                            values added to this statistics object should be aggregated
          */
         AggregatingSummaryStatistics(SummaryStatistics aggregateStatistics) {
             this.aggregateStatistics = aggregateStatistics;
@@ -394,6 +394,7 @@ public class AggregateSummaryStatistics implements StatisticalSummary,
          * Returns true iff <code>object</code> is a
          * <code>SummaryStatistics</code> instance and all statistics have the
          * same values as this.
+         *
          * @param object the object to test equality against.
          * @return true if object equals this
          */
@@ -405,13 +406,14 @@ public class AggregateSummaryStatistics implements StatisticalSummary,
             if (object instanceof AggregatingSummaryStatistics == false) {
                 return false;
             }
-            AggregatingSummaryStatistics stat = (AggregatingSummaryStatistics)object;
+            AggregatingSummaryStatistics stat = (AggregatingSummaryStatistics) object;
             return super.equals(stat) &&
-                   aggregateStatistics.equals(stat.aggregateStatistics);
+                    aggregateStatistics.equals(stat.aggregateStatistics);
         }
 
         /**
          * Returns hash code based on values of statistics
+         *
          * @return hash code
          */
         @Override

@@ -43,7 +43,7 @@ public class Issue3159Test extends AbstractResolutionTest {
                 "    while (a < 10) {}\n" +
                 "  }\n" +
                 "}";
-        
+
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);

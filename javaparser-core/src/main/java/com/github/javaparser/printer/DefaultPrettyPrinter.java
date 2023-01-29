@@ -57,6 +57,7 @@ public class DefaultPrettyPrinter implements Printer {
 
     /**
      * Build a new DefaultPrettyPrinter with a configuration and a default factory
+     *
      * @param configuration
      */
     public DefaultPrettyPrinter(PrinterConfiguration configuration) {

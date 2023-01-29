@@ -24,7 +24,7 @@ import java.util.*;
  * A StaticBucketMap is an efficient, thread-safe implementation of
  * <code>java.util.Map</code> that performs well in in a highly
  * thread-contentious environment.  The map supports very efficient
- * {@link #get(Object) get}, {@link #put(Object,Object) put},
+ * {@link #get(Object) get}, {@link #put(Object, Object) put},
  * {@link #remove(Object) remove} and {@link #containsKey(Object) containsKey}
  * operations, assuming (approximate) uniform hashing and
  * that the number of entries does not exceed the number of buckets.  If the
@@ -32,7 +32,7 @@ import java.util.*;
  * objects are not uniformly distributed, these operations have a worst case
  * scenario that is proportional to the number of elements in the map
  * (<i>O(n)</i>).<p>
- *
+ * <p>
  * Each bucket in the hash table has its own monitor, so two threads can
  * safely operate on the map at the same time, often without incurring any
  * monitor contention.  This means that you don't have to wrap instances
@@ -47,38 +47,38 @@ import java.util.*;
  * <pre>
  *   staticBucketMapInstance.putAll(map);
  * </pre>
- *
+ * <p>
  * and
  *
  * <pre>
  *   staticBucketMapInstance.entrySet().removeAll(map.entrySet());
  * </pre>
- *
+ * <p>
  * then the results are generally random.  Those two statement could cancel
  * each other out, leaving <code>staticBucketMapInstance</code> essentially
  * unchanged, or they could leave some random subset of <code>map</code> in
  * <code>staticBucketMapInstance</code>.<p>
- *
+ * <p>
  * Also, much like an encyclopedia, the results of {@link #size()} and
  * {@link #isEmpty()} are out-of-date as soon as they are produced.<p>
- *
+ * <p>
  * The iterators returned by the collection views of this class are <i>not</i>
  * fail-fast.  They will <i>never</i> raise a
  * {@link java.util.ConcurrentModificationException}.  Keys and values
  * added to the map after the iterator is created do not necessarily appear
  * during iteration.  Similarly, the iterator does not necessarily fail to
  * return keys and values that were removed after the iterator was created.<p>
- *
+ * <p>
  * Finally, unlike {@link java.util.HashMap}-style implementations, this
  * class <i>never</i> rehashes the map.  The number of buckets is fixed
  * at construction time and never altered.  Performance may degrade if
  * you do not allocate enough buckets upfront.<p>
- *
+ * <p>
  * The {@link #atomic(Runnable)} method is provided to allow atomic iterations
  * and bulk operations; however, overuse of {@link #atomic(Runnable) atomic}
  * will basically result in a map that's slower than an ordinary synchronized
  * {@link java.util.HashMap}.
- *
+ * <p>
  * Use this class if you do not require reliable bulk operations and
  * iterations, or if you can make your own guarantees about how bulk
  * operations will affect the map.<p>
@@ -89,11 +89,17 @@ import java.util.*;
  */
 public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
 
-    /** The default number of buckets to use */
+    /**
+     * The default number of buckets to use
+     */
     private static final int DEFAULT_BUCKETS = 255;
-    /** The array of buckets, where the actual data is held */
+    /**
+     * The array of buckets, where the actual data is held
+     */
     private final Node<K, V>[] buckets;
-    /** The matching array of locks */
+    /**
+     * The matching array of locks
+     */
     private final Lock[] locks;
 
     /**
@@ -111,7 +117,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
      * thread contention.  The more buckets the fewer chances for thread
      * contention.
      *
-     * @param numBuckets  the number of buckets for this map
+     * @param numBuckets the number of buckets for this map
      */
     @SuppressWarnings("unchecked")
     public StaticBucketMap(final int numBuckets) {
@@ -131,6 +137,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Determine the exact hash entry for the key.  The hash algorithm
      * is rather simplistic, but it does the job:
@@ -140,8 +147,8 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
      * </pre>
      *
      * <p>
-     *   He is the entry's hashCode, Hk is the key's hashCode, and n is
-     *   the number of buckets.
+     * He is the entry's hashCode, Hk is the key's hashCode, and n is
+     * the number of buckets.
      * </p>
      */
     private int getHash(final Object key) {
@@ -170,7 +177,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
         int cnt = 0;
 
         for (int i = 0; i < buckets.length; i++) {
-            synchronized(locks[i]) {
+            synchronized (locks[i]) {
                 cnt += locks[i].size;
             }
         }
@@ -190,7 +197,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     /**
      * Gets the value associated with the key.
      *
-     * @param key  the key to retrieve
+     * @param key the key to retrieve
      * @return the associated value
      */
     @Override
@@ -214,7 +221,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     /**
      * Checks if the map contains the specified key.
      *
-     * @param key  the key to check
+     * @param key the key to check
      * @return true if found
      */
     @Override
@@ -238,7 +245,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     /**
      * Checks if the map contains the specified value.
      *
-     * @param value  the value to check
+     * @param value the value to check
      * @return true if found
      */
     @Override
@@ -260,11 +267,12 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Puts a new key value mapping into the map.
      *
-     * @param key  the key to use
-     * @param value  the value to use
+     * @param key   the key to use
+     * @param value the value to use
      * @return the previous mapping for the key
      */
     @Override
@@ -310,7 +318,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     /**
      * Removes the specified key from the map.
      *
-     * @param key  the key to remove
+     * @param key the key to remove
      * @return the previous value at this key
      */
     @Override
@@ -343,6 +351,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the key set.
      *
@@ -374,11 +383,12 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Puts all the entries from the specified map into this map.
      * This operation is <b>not atomic</b> and may have undesired effects.
      *
-     * @param map  the map of entries to add
+     * @param map the map of entries to add
      */
     @Override
     public void putAll(final Map<? extends K, ? extends V> map) {
@@ -404,7 +414,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     /**
      * Compares this map to another, as per the Map specification.
      *
-     * @param obj  the object to compare to
+     * @param obj the object to compare to
      * @return true if equal
      */
     @Override
@@ -442,6 +452,7 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * The Map.Entry for the StaticBucketMap.
      */
@@ -477,8 +488,8 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
 
             final Map.Entry<?, ?> e2 = (Map.Entry<?, ?>) obj;
             return (
-                (key == null ? e2.getKey() == null : key.equals(e2.getKey())) &&
-                (value == null ? e2.getValue() == null : value.equals(e2.getValue())));
+                    (key == null ? e2.getKey() == null : key.equals(e2.getKey())) &&
+                            (value == null ? e2.getValue() == null : value.equals(e2.getValue())));
         }
 
         @Override
@@ -677,21 +688,21 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
     }
 
     /**
-     *  Prevents any operations from occurring on this map while the
-     *  given {@link Runnable} executes.  This method can be used, for
-     *  instance, to execute a bulk operation atomically:
+     * Prevents any operations from occurring on this map while the
+     * given {@link Runnable} executes.  This method can be used, for
+     * instance, to execute a bulk operation atomically:
      *
-     *  <pre>
+     * <pre>
      *    staticBucketMapInstance.atomic(new Runnable() {
      *        public void run() {
      *            staticBucketMapInstance.putAll(map);
      *        }
      *    });
      *  </pre>
+     * <p>
+     * It can also be used if you need a reliable iterator:
      *
-     *  It can also be used if you need a reliable iterator:
-     *
-     *  <pre>
+     * <pre>
      *    staticBucketMapInstance.atomic(new Runnable() {
      *        public void run() {
      *            Iterator iterator = staticBucketMapInstance.iterator();
@@ -702,13 +713,13 @@ public final class StaticBucketMap<K, V> extends AbstractIterableMap<K, V> {
      *    });
      *  </pre>
      *
-     *  <b>Implementation note:</b> This method requires a lot of time
-     *  and a ton of stack space.  Essentially a recursive algorithm is used
-     *  to enter each bucket's monitor.  If you have twenty thousand buckets
-     *  in your map, then the recursive method will be invoked twenty thousand
-     *  times.  You have been warned.
+     * <b>Implementation note:</b> This method requires a lot of time
+     * and a ton of stack space.  Essentially a recursive algorithm is used
+     * to enter each bucket's monitor.  If you have twenty thousand buckets
+     * in your map, then the recursive method will be invoked twenty thousand
+     * times.  You have been warned.
      *
-     *  @param r  the code to execute atomically
+     * @param r the code to execute atomically
      */
     public void atomic(final Runnable r) {
         if (r == null) {

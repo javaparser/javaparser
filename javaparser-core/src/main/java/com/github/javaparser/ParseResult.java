@@ -42,7 +42,7 @@ public class ParseResult<T> {
     /**
      * General constructor.
      *
-     * @param result the AST, or empty if it wasn't created.
+     * @param result   the AST, or empty if it wasn't created.
      * @param problems a list of encountered parsing problems.
      */
     public ParseResult(T result, List<Problem> problems, CommentsCollection commentsCollection) {

@@ -39,7 +39,9 @@ import java.util.Set;
  */
 public class PredicatedSet<E> extends PredicatedCollection<E> implements Set<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -684521469108685117L;
 
     /**
@@ -48,11 +50,11 @@ public class PredicatedSet<E> extends PredicatedCollection<E> implements Set<E> 
      * If there are any elements already in the set being decorated, they
      * are validated.
      *
-     * @param <E> the element type
-     * @param set  the set to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
+     * @param <E>       the element type
+     * @param set       the set to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
      * @return a decorated set
-     * @throws NullPointerException if set or predicate is null
+     * @throws NullPointerException     if set or predicate is null
      * @throws IllegalArgumentException if the set contains invalid elements
      * @since 4.0
      */
@@ -61,15 +63,16 @@ public class PredicatedSet<E> extends PredicatedCollection<E> implements Set<E> 
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the set being decorated, they
      * are validated.
      *
-     * @param set  the set to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
-     * @throws NullPointerException if set or predicate is null
+     * @param set       the set to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
+     * @throws NullPointerException     if set or predicate is null
      * @throws IllegalArgumentException if the set contains invalid elements
      */
     protected PredicatedSet(final Set<E> set, final Predicate<? super E> predicate) {

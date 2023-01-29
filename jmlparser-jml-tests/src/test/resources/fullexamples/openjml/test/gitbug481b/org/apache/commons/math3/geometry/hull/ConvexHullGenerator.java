@@ -28,10 +28,8 @@ import java.util.Collection;
  *
  * @param <S> Type of the {@link Space}
  * @param <P> Type of the {@link Point}
- *
  * @see <a href="http://en.wikipedia.org/wiki/Convex_hull">Convex Hull (Wikipedia)</a>
  * @see <a href="http://mathworld.wolfram.com/ConvexHull.html">Convex Hull (MathWorld)</a>
- *
  * @since 3.3
  */
 public interface ConvexHullGenerator<S extends Space, P extends Point<S>> {
@@ -42,8 +40,8 @@ public interface ConvexHullGenerator<S extends Space, P extends Point<S>> {
      * @param points the set of input points
      * @return the convex hull
      * @throws NullArgumentException if the input collection is {@code null}
-     * @throws ConvergenceException if generator fails to generate a convex hull for
-     * the given set of input points
+     * @throws ConvergenceException  if generator fails to generate a convex hull for
+     *                               the given set of input points
      */
     ConvexHull<S, P> generate(Collection<P> points) throws NullArgumentException, ConvergenceException;
 }

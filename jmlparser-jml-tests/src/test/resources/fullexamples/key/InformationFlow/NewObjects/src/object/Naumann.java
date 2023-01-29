@@ -2,7 +2,6 @@ package object;
 
 
 /**
- *
  * @author christoph
  */
 public class Naumann {
@@ -14,13 +13,15 @@ public class Naumann {
                \by  x;
      */
     //@ helper
-    void  Pair_m(int x, int secret) {
+    void Pair_m(int x, int secret) {
         /*@ normal_behavior
             ensures     m_result != null && m_result.length == 10;
             ensures     \typeof(m_result) == \type(Node[]);
             determines      m_result \by \nothing
               \new_objects  m_result; */
-        { m_result = new Node[10]; }
+        {
+            m_result = new Node[10];
+        }
         int i = 0;
         /*@ loop_invariant 0 <= i && i <= m_result.length && m_result.length == 10;
             loop_invariant m_result != null && \typeof(m_result) == \type(Node[]);

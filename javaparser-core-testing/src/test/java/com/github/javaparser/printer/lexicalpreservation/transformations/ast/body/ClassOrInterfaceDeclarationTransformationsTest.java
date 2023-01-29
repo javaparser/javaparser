@@ -191,7 +191,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     void removingAnnotations() {
         ClassOrInterfaceDeclaration cid = consider(
                 "@Value" + SYSTEM_EOL +
-                "public class A {}");
+                        "public class A {}");
         cid.getAnnotationByName("Value").get().remove();
         assertTransformedToString("public class A {}", cid);
     }
@@ -199,7 +199,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     @Test
     void removingAnnotationsWithSpaces() {
         ClassOrInterfaceDeclaration cid = consider(
-                  "   @Value " + SYSTEM_EOL +
+                "   @Value " + SYSTEM_EOL +
                         "public class A {}");
         cid.getAnnotationByName("Value").get().remove();
         assertTransformedToString("public class A {}", cid);

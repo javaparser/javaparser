@@ -43,12 +43,12 @@ public class Issue2210Test extends AbstractResolutionTest {
     @Test
     void test2210Issue() {
         // Source code
-        String sourceCode = 
+        String sourceCode =
                 "class A {" +
-                " public void m() {\n" +
-                "   java.util.Arrays.asList(1, 2, 3).forEach(System.out::println);" +
-                " }\n" +
-                "}";
+                        " public void m() {\n" +
+                        "   java.util.Arrays.asList(1, 2, 3).forEach(System.out::println);" +
+                        " }\n" +
+                        "}";
         // Setup symbol solver
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));

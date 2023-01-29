@@ -65,7 +65,9 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      */
     public static final Direction DOWNSIDE_VARIANCE = Direction.DOWNSIDE;
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -2653430366886024994L;
 
     /**
@@ -90,9 +92,9 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * Constructs a SemiVariance with the specified <code>biasCorrected</code>
      * property and default (Downside) <code>varianceDirection</code> property.
      *
-     * @param biasCorrected  setting for bias correction - true means
-     * bias will be corrected and is equivalent to using the argumentless
-     * constructor
+     * @param biasCorrected setting for bias correction - true means
+     *                      bias will be corrected and is equivalent to using the argumentless
+     *                      constructor
      */
     public SemiVariance(final boolean biasCorrected) {
         this.biasCorrected = biasCorrected;
@@ -103,8 +105,8 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * Constructs a SemiVariance with the specified <code>Direction</code> property
      * and default (true) <code>biasCorrected</code> property
      *
-     * @param direction  setting for the direction of the SemiVariance
-     * to calculate
+     * @param direction setting for the direction of the SemiVariance
+     *                  to calculate
      */
     public SemiVariance(final Direction direction) {
         this.varianceDirection = direction;
@@ -115,12 +117,11 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * Constructs a SemiVariance with the specified <code>isBiasCorrected</code>
      * property and the specified <code>Direction</code> property.
      *
-     * @param corrected  setting for bias correction - true means
-     * bias will be corrected and is equivalent to using the argumentless
-     * constructor
-     *
-     * @param direction  setting for the direction of the SemiVariance
-     * to calculate
+     * @param corrected setting for bias correction - true means
+     *                  bias will be corrected and is equivalent to using the argumentless
+     *                  constructor
+     * @param direction setting for the direction of the SemiVariance
+     *                  to calculate
      */
     public SemiVariance(final boolean corrected, final Direction direction) {
         this.biasCorrected = corrected;
@@ -133,7 +134,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * to the {@code original}
      *
      * @param original the {@code SemiVariance} instance to copy
-     * @throws NullArgumentException  if original is null
+     * @throws NullArgumentException if original is null
      */
     public SemiVariance(final SemiVariance original) throws NullArgumentException {
         copy(original, this);
@@ -157,11 +158,11 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source SemiVariance to copy
-     * @param dest SemiVariance to copy to
+     * @param dest   SemiVariance to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(final SemiVariance source, SemiVariance dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());
@@ -170,98 +171,95 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
     }
 
     /**
-      * <p>Returns the {@link SemiVariance} of the designated values against the mean, using
-      * instance properties varianceDirection and biasCorrection.</p>
-      *
-      * <p>Returns <code>NaN</code> if the array is empty and throws
-      * <code>IllegalArgumentException</code> if the array is null.</p>
-      *
-      * @param values the input array
-      * @param start index of the first array element to include
-      * @param length the number of elements to include
-      * @return the SemiVariance
-      * @throws MathIllegalArgumentException if the parameters are not valid
-      *
-      */
-      @Override
-      public double evaluate(final double[] values, final int start, final int length)
-      throws MathIllegalArgumentException {
+     * <p>Returns the {@link SemiVariance} of the designated values against the mean, using
+     * instance properties varianceDirection and biasCorrection.</p>
+     *
+     * <p>Returns <code>NaN</code> if the array is empty and throws
+     * <code>IllegalArgumentException</code> if the array is null.</p>
+     *
+     * @param values the input array
+     * @param start  index of the first array element to include
+     * @param length the number of elements to include
+     * @return the SemiVariance
+     * @throws MathIllegalArgumentException if the parameters are not valid
+     */
+    @Override
+    public double evaluate(final double[] values, final int start, final int length)
+            throws MathIllegalArgumentException {
         double m = (new Mean()).evaluate(values, start, length);
         return evaluate(values, m, varianceDirection, biasCorrected, 0, values.length);
-      }
+    }
 
 
-      /**
-       * This method calculates {@link SemiVariance} for the entire array against the mean, using
-       * the current value of the biasCorrection instance property.
-       *
-       * @param values the input array
-       * @param direction the {@link Direction} of the semivariance
-       * @return the SemiVariance
-       * @throws MathIllegalArgumentException if values is null
-       *
-       */
-      public double evaluate(final double[] values, Direction direction)
-      throws MathIllegalArgumentException {
-          double m = (new Mean()).evaluate(values);
-          return evaluate (values, m, direction, biasCorrected, 0, values.length);
-      }
+    /**
+     * This method calculates {@link SemiVariance} for the entire array against the mean, using
+     * the current value of the biasCorrection instance property.
+     *
+     * @param values    the input array
+     * @param direction the {@link Direction} of the semivariance
+     * @return the SemiVariance
+     * @throws MathIllegalArgumentException if values is null
+     */
+    public double evaluate(final double[] values, Direction direction)
+            throws MathIllegalArgumentException {
+        double m = (new Mean()).evaluate(values);
+        return evaluate(values, m, direction, biasCorrected, 0, values.length);
+    }
 
-      /**
-       * <p>Returns the {@link SemiVariance} of the designated values against the cutoff, using
-       * instance properties variancDirection and biasCorrection.</p>
-       *
-       * <p>Returns <code>NaN</code> if the array is empty and throws
-       * <code>MathIllegalArgumentException</code> if the array is null.</p>
-       *
-       * @param values the input array
-       * @param cutoff the reference point
-       * @return the SemiVariance
-       * @throws MathIllegalArgumentException if values is null
-       */
-      public double evaluate(final double[] values, final double cutoff)
-      throws MathIllegalArgumentException {
-          return evaluate(values, cutoff, varianceDirection, biasCorrected, 0, values.length);
-      }
+    /**
+     * <p>Returns the {@link SemiVariance} of the designated values against the cutoff, using
+     * instance properties variancDirection and biasCorrection.</p>
+     *
+     * <p>Returns <code>NaN</code> if the array is empty and throws
+     * <code>MathIllegalArgumentException</code> if the array is null.</p>
+     *
+     * @param values the input array
+     * @param cutoff the reference point
+     * @return the SemiVariance
+     * @throws MathIllegalArgumentException if values is null
+     */
+    public double evaluate(final double[] values, final double cutoff)
+            throws MathIllegalArgumentException {
+        return evaluate(values, cutoff, varianceDirection, biasCorrected, 0, values.length);
+    }
 
-      /**
-       * <p>Returns the {@link SemiVariance} of the designated values against the cutoff in the
-       * given direction, using the current value of the biasCorrection instance property.</p>
-       *
-       * <p>Returns <code>NaN</code> if the array is empty and throws
-       * <code>MathIllegalArgumentException</code> if the array is null.</p>
-       *
-       * @param values the input array
-       * @param cutoff the reference point
-       * @param direction the {@link Direction} of the semivariance
-       * @return the SemiVariance
-       * @throws MathIllegalArgumentException if values is null
-       */
-      public double evaluate(final double[] values, final double cutoff, final Direction direction)
-      throws MathIllegalArgumentException {
-          return evaluate(values, cutoff, direction, biasCorrected, 0, values.length);
-      }
+    /**
+     * <p>Returns the {@link SemiVariance} of the designated values against the cutoff in the
+     * given direction, using the current value of the biasCorrection instance property.</p>
+     *
+     * <p>Returns <code>NaN</code> if the array is empty and throws
+     * <code>MathIllegalArgumentException</code> if the array is null.</p>
+     *
+     * @param values    the input array
+     * @param cutoff    the reference point
+     * @param direction the {@link Direction} of the semivariance
+     * @return the SemiVariance
+     * @throws MathIllegalArgumentException if values is null
+     */
+    public double evaluate(final double[] values, final double cutoff, final Direction direction)
+            throws MathIllegalArgumentException {
+        return evaluate(values, cutoff, direction, biasCorrected, 0, values.length);
+    }
 
 
-     /**
-      * <p>Returns the {@link SemiVariance} of the designated values against the cutoff
-      * in the given direction with the provided bias correction.</p>
-      *
-      * <p>Returns <code>NaN</code> if the array is empty and throws
-      * <code>IllegalArgumentException</code> if the array is null.</p>
-      *
-      * @param values the input array
-      * @param cutoff the reference point
-      * @param direction the {@link Direction} of the semivariance
-      * @param corrected the BiasCorrection flag
-      * @param start index of the first array element to include
-      * @param length the number of elements to include
-      * @return the SemiVariance
-      * @throws MathIllegalArgumentException if the parameters are not valid
-      *
-      */
-    public double evaluate (final double[] values, final double cutoff, final Direction direction,
-            final boolean corrected, final int start, final int length) throws MathIllegalArgumentException {
+    /**
+     * <p>Returns the {@link SemiVariance} of the designated values against the cutoff
+     * in the given direction with the provided bias correction.</p>
+     *
+     * <p>Returns <code>NaN</code> if the array is empty and throws
+     * <code>IllegalArgumentException</code> if the array is null.</p>
+     *
+     * @param values    the input array
+     * @param cutoff    the reference point
+     * @param direction the {@link Direction} of the semivariance
+     * @param corrected the BiasCorrection flag
+     * @param start     index of the first array element to include
+     * @param length    the number of elements to include
+     * @return the SemiVariance
+     * @throws MathIllegalArgumentException if the parameters are not valid
+     */
+    public double evaluate(final double[] values, final double cutoff, final Direction direction,
+                           final boolean corrected, final int start, final int length) throws MathIllegalArgumentException {
 
         test(values, start, length);
         if (values.length == 0) {
@@ -276,8 +274,8 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
                 double sumsq = 0.0;
                 for (int i = start; i < length; i++) {
                     if ((values[i] > cutoff) == booleanDirection) {
-                       dev = values[i] - cutoff;
-                       sumsq += dev * dev;
+                        dev = values[i] - cutoff;
+                        sumsq += dev * dev;
                     }
                 }
 
@@ -313,7 +311,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      *
      * @return the varianceDirection
      */
-    public Direction getVarianceDirection () {
+    public Direction getVarianceDirection() {
         return varianceDirection;
     }
 
@@ -335,16 +333,16 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
          * The UPSIDE Direction is used to specify that the observations above the
          * cutoff point will be used to calculate SemiVariance
          */
-        UPSIDE (true),
+        UPSIDE(true),
 
         /**
          * The DOWNSIDE Direction is used to specify that the observations below
          * the cutoff point will be used to calculate SemiVariance
          */
-        DOWNSIDE (false);
+        DOWNSIDE(false);
 
         /**
-         *   boolean value  UPSIDE <-> true
+         * boolean value  UPSIDE <-> true
          */
         private boolean direction;
 
@@ -353,7 +351,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
          *
          * @param b boolean value representing the Direction. True corresponds to UPSIDE.
          */
-        Direction (boolean b) {
+        Direction(boolean b) {
             direction = b;
         }
 
@@ -362,7 +360,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
          *
          * @return true if direction is UPSIDE; false otherwise
          */
-        boolean getDirection () {
+        boolean getDirection() {
             return direction;
         }
     }

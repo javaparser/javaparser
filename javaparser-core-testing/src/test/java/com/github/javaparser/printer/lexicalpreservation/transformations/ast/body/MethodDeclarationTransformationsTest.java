@@ -243,7 +243,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
                 "  }\n" +
                 "}\n", result);
     }
-    
+
     @Test
     void removingModifiersWithExistingAnnotations_withVariableNumberOfSeparator() {
         considerCode(
@@ -258,11 +258,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
         String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
         assertEqualsStringIgnoringEol(
-        		"class X {\n" +
-                "  @Test\n" +
-                "  void testCase() {\n" +
-                "  }\n" +
-                "}\n", result);
+                "class X {\n" +
+                        "  @Test\n" +
+                        "  void testCase() {\n" +
+                        "  }\n" +
+                        "}\n", result);
     }
 
     @Test
@@ -491,7 +491,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     public void parseAndPrintAnonymousClassExpression() {
         Expression expression = parseExpression("new Object() {" + SYSTEM_EOL +
                 "}");
-         String expected = "new Object() {" + SYSTEM_EOL +
+        String expected = "new Object() {" + SYSTEM_EOL +
                 "}";
         assertTransformedToString(expected, expression);
     }

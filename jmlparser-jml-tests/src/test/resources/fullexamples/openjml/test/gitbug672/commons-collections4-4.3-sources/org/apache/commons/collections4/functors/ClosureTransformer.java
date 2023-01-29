@@ -29,17 +29,21 @@ import java.io.Serializable;
  */
 public class ClosureTransformer<T> implements Transformer<T, T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 478466901448617286L;
 
-    /** The closure to wrap */
+    /**
+     * The closure to wrap
+     */
     private final Closure<? super T> iClosure;
 
     /**
      * Factory method that performs validation.
      *
-     * @param <T>  the type of the object to transform
-     * @param closure  the closure to call, not null
+     * @param <T>     the type of the object to transform
+     * @param closure the closure to call, not null
      * @return the <code>closure</code> transformer
      * @throws NullPointerException if the closure is null
      */
@@ -54,7 +58,7 @@ public class ClosureTransformer<T> implements Transformer<T, T>, Serializable {
      * Constructor that performs no validation.
      * Use <code>closureTransformer</code> if you want that.
      *
-     * @param closure  the closure to call, not null
+     * @param closure the closure to call, not null
      */
     public ClosureTransformer(final Closure<? super T> closure) {
         super();
@@ -64,7 +68,7 @@ public class ClosureTransformer<T> implements Transformer<T, T>, Serializable {
     /**
      * Transforms the input to result by executing a closure.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result
      */
     @Override

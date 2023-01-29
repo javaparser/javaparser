@@ -1,8 +1,7 @@
-
 public class Child extends Person {
     protected /*@ spec_public */ Person father;
     protected /*@ spec_public */ Person mother;
-    
+
     // Added public to the invariants for visibility reasons
     /*@
       @ public invariant age + 15 <= father.getAge();
@@ -20,7 +19,7 @@ public class Child extends Person {
         this.father = fath;
         this.mother = moth;
     }
-    
+
     /*@ also
       @ requires \typeof(this) == \type(Child);
       @ requires age < AGE_MAX;
@@ -35,13 +34,13 @@ public class Child extends Person {
         father.oneMoreYear();
         mother.oneMoreYear();
     }
-    
+
     /*@ also
       @ ensures \result != null;
       @*/
     public String toString() {
-        return super.toString() + 
-            "\n father = " + father +
-            "\n mother = " + mother;
+        return super.toString() +
+                "\n father = " + father +
+                "\n mother = " + mother;
     }
 }

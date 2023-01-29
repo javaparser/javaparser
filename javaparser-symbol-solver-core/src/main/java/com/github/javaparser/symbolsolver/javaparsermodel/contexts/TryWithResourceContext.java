@@ -54,7 +54,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
     public Optional<Value> solveSymbolAsValue(String name) {
         for (Expression expr : wrappedNode.getResources()) {
             if (expr instanceof VariableDeclarationExpr) {
-                for (VariableDeclarator v : ((VariableDeclarationExpr)expr).getVariables()) {
+                for (VariableDeclarator v : ((VariableDeclarationExpr) expr).getVariables()) {
                     if (v.getName().getIdentifier().equals(name)) {
                         ResolvedValueDeclaration decl = JavaParserSymbolDeclaration.localVar(v, typeSolver);
                         return Optional.of(Value.from(decl));
@@ -74,7 +74,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Expression expr : wrappedNode.getResources()) {
             if (expr instanceof VariableDeclarationExpr) {
-                for (VariableDeclarator v : ((VariableDeclarationExpr)expr).getVariables()) {
+                for (VariableDeclarator v : ((VariableDeclarationExpr) expr).getVariables()) {
                     if (v.getName().getIdentifier().equals(name)) {
                         return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(v, typeSolver));
                     }
@@ -98,7 +98,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
     @Override
     public List<VariableDeclarator> localVariablesExposedToChild(Node child) {
         NodeList<Expression> resources = wrappedNode.getResources();
-        for (int i=0;i<resources.size();i++) {
+        for (int i = 0; i < resources.size(); i++) {
             if (child == resources.get(i)) {
                 return resources.subList(0, i).stream()
                         .map(e -> e instanceof VariableDeclarationExpr ? ((VariableDeclarationExpr) e).getVariables()
@@ -111,7 +111,7 @@ public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
             List<VariableDeclarator> res = new LinkedList<>();
             for (Expression expr : resources) {
                 if (expr instanceof VariableDeclarationExpr) {
-                    res.addAll(((VariableDeclarationExpr)expr).getVariables());
+                    res.addAll(((VariableDeclarationExpr) expr).getVariables());
                 }
             }
             return res;

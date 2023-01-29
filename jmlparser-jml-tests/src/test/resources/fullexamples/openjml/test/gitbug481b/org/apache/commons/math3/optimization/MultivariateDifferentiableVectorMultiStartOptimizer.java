@@ -23,31 +23,31 @@ import org.apache.commons.math3.random.RandomVectorGenerator;
 /**
  * Special implementation of the {@link MultivariateDifferentiableVectorOptimizer}
  * interface adding multi-start features to an existing optimizer.
- *
+ * <p>
  * This class wraps a classical optimizer to use it several times in
  * turn with different starting points in order to avoid being trapped
  * into a local extremum when looking for a global one.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.1
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class MultivariateDifferentiableVectorMultiStartOptimizer
-    extends BaseMultivariateVectorMultiStartOptimizer<MultivariateDifferentiableVectorFunction>
-    implements MultivariateDifferentiableVectorOptimizer {
+        extends BaseMultivariateVectorMultiStartOptimizer<MultivariateDifferentiableVectorFunction>
+        implements MultivariateDifferentiableVectorOptimizer {
     /**
      * Create a multi-start optimizer from a single-start optimizer.
      *
      * @param optimizer Single-start optimizer to wrap.
-     * @param starts Number of starts to perform (including the
-     * first one), multi-start is disabled if value is less than or
-     * equal to 1.
+     * @param starts    Number of starts to perform (including the
+     *                  first one), multi-start is disabled if value is less than or
+     *                  equal to 1.
      * @param generator Random vector generator to use for restarts.
      */
     public MultivariateDifferentiableVectorMultiStartOptimizer(
-                final MultivariateDifferentiableVectorOptimizer optimizer,
-                final int starts,
-                final RandomVectorGenerator generator) {
+            final MultivariateDifferentiableVectorOptimizer optimizer,
+            final int starts,
+            final RandomVectorGenerator generator) {
         super(optimizer, starts, generator);
     }
 }

@@ -18,8 +18,10 @@
 package org.apache.commons.math3.ode.sampling;
 
 
-/** {@link StepNormalizer Step normalizer} modes. Determines how the step size
+/**
+ * {@link StepNormalizer Step normalizer} modes. Determines how the step size
  * is interpreted.
+ *
  * @see FieldStepNormalizer
  * @see StepNormalizer
  * @see StepNormalizerBounds
@@ -46,7 +48,8 @@ public enum StepNormalizerMode {
      */
     INCREMENT,
 
-    /** Steps are multiples of a fixed value. In other words, they are
+    /**
+     * Steps are multiples of a fixed value. In other words, they are
      * relative to the first multiple of the step size that is encountered
      * after the start value.
      *

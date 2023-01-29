@@ -16,40 +16,58 @@
  */
 package java.awt;
 
-public class BorderLayout extends java.lang.Object implements java.awt.LayoutManager2, java.io.Serializable
-{
-   public final static java.lang.String NORTH = "North";
-   public final static java.lang.String SOUTH = "South";
-   public final static java.lang.String EAST = "East";
-   public final static java.lang.String WEST = "West";
-   public final static java.lang.String CENTER = "Center";
-   public final static java.lang.String BEFORE_FIRST_LINE = "First";
-   public final static java.lang.String AFTER_LAST_LINE = "Last";
-   public final static java.lang.String BEFORE_LINE_BEGINS = "Before";
-   public final static java.lang.String AFTER_LINE_ENDS = "After";
-   public final static java.lang.String PAGE_START = "First";
-   public final static java.lang.String PAGE_END = "Last";
-   public final static java.lang.String LINE_START = "Before";
-   public final static java.lang.String LINE_END = "After";
+public class BorderLayout extends java.lang.Object implements java.awt.LayoutManager2, java.io.Serializable {
+    public final static java.lang.String NORTH = "North";
+    public final static java.lang.String SOUTH = "South";
+    public final static java.lang.String EAST = "East";
+    public final static java.lang.String WEST = "West";
+    public final static java.lang.String CENTER = "Center";
+    public final static java.lang.String BEFORE_FIRST_LINE = "First";
+    public final static java.lang.String AFTER_LAST_LINE = "Last";
+    public final static java.lang.String BEFORE_LINE_BEGINS = "Before";
+    public final static java.lang.String AFTER_LINE_ENDS = "After";
+    public final static java.lang.String PAGE_START = "First";
+    public final static java.lang.String PAGE_END = "Last";
+    public final static java.lang.String LINE_START = "Before";
+    public final static java.lang.String LINE_END = "After";
 
-   public BorderLayout();
-   public BorderLayout(int arg0, int arg1);
-   public int getHgap();
-   public void setHgap(int arg0);
-   public int getVgap();
-   public void setVgap(int arg0);
-   public void addLayoutComponent(java.awt.Component arg0, java.lang.Object arg1);
-   public void addLayoutComponent(java.lang.String arg0, java.awt.Component arg1);
-   public void removeLayoutComponent(java.awt.Component arg0);
-   public java.awt.Component getLayoutComponent(java.lang.Object arg0);
-   public java.awt.Component getLayoutComponent(java.awt.Container arg0, java.lang.Object arg1);
-   public java.lang.Object getConstraints(java.awt.Component arg0);
-   public java.awt.Dimension minimumLayoutSize(java.awt.Container arg0);
-   public java.awt.Dimension preferredLayoutSize(java.awt.Container arg0);
-   public java.awt.Dimension maximumLayoutSize(java.awt.Container arg0);
-   public float getLayoutAlignmentX(java.awt.Container arg0);
-   public float getLayoutAlignmentY(java.awt.Container arg0);
-   public void invalidateLayout(java.awt.Container arg0);
-   public void layoutContainer(java.awt.Container arg0);
-   public java.lang.String toString();
+    public BorderLayout();
+
+    public BorderLayout(int arg0, int arg1);
+
+    public int getHgap();
+
+    public void setHgap(int arg0);
+
+    public int getVgap();
+
+    public void setVgap(int arg0);
+
+    public void addLayoutComponent(java.awt.Component arg0, java.lang.Object arg1);
+
+    public void addLayoutComponent(java.lang.String arg0, java.awt.Component arg1);
+
+    public void removeLayoutComponent(java.awt.Component arg0);
+
+    public java.awt.Component getLayoutComponent(java.lang.Object arg0);
+
+    public java.awt.Component getLayoutComponent(java.awt.Container arg0, java.lang.Object arg1);
+
+    public java.lang.Object getConstraints(java.awt.Component arg0);
+
+    public java.awt.Dimension minimumLayoutSize(java.awt.Container arg0);
+
+    public java.awt.Dimension preferredLayoutSize(java.awt.Container arg0);
+
+    public java.awt.Dimension maximumLayoutSize(java.awt.Container arg0);
+
+    public float getLayoutAlignmentX(java.awt.Container arg0);
+
+    public float getLayoutAlignmentY(java.awt.Container arg0);
+
+    public void invalidateLayout(java.awt.Container arg0);
+
+    public void layoutContainer(java.awt.Container arg0);
+
+    public java.lang.String toString();
 }

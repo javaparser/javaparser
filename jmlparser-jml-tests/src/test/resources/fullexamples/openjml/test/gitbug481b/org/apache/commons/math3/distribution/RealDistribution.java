@@ -72,7 +72,6 @@ public interface RealDistribution {
      * takes a value between {@code x0} and {@code x1},
      * excluding the lower and including the upper endpoint
      * @throws NumberIsTooLargeException if {@code x0 > x1}
-     *
      * @deprecated As of 3.1. In 4.0, this method will be renamed
      * {@code probability(double x0, double x1)}.
      */
@@ -189,8 +188,7 @@ public interface RealDistribution {
      *
      * @param sampleSize the number of random values to generate
      * @return an array representing the random sample
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code sampleSize} is not positive
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code sampleSize} is not positive
      */
     double[] sample(int sampleSize);
 }

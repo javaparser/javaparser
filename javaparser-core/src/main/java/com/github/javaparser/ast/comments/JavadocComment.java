@@ -111,4 +111,14 @@ public class JavadocComment extends Comment {
     public Optional<JavadocComment> toJavadocComment() {
         return Optional.of(this);
     }
+
+    @Override
+    public String getHeader() {
+        return "/**";
+    }
+
+    @Override
+    public String getFooter() {
+        return "*/";
+    }
 }

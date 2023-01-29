@@ -25,7 +25,9 @@ import org.apache.commons.math3.exception.util.Localizable;
  */
 public class NotStrictlyPositiveException extends NumberIsTooSmallException {
 
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -7824848630829852237L;
 
     /**
@@ -36,11 +38,12 @@ public class NotStrictlyPositiveException extends NumberIsTooSmallException {
     public NotStrictlyPositiveException(Number value) {
         super(value, INTEGER_ZERO, false);
     }
+
     /**
      * Construct the exception with a specific context.
      *
      * @param specific Specific context where the error occurred.
-     * @param value Argument.
+     * @param value    Argument.
      */
     public NotStrictlyPositiveException(Localizable specific,
                                         Number value) {

@@ -25,29 +25,34 @@ import java.util.Comparator;
 /**
  * Decorates another Comparator with transformation behavior. That is, the
  * return value from the transform operation will be passed to the decorated
- * {@link Comparator#compare(Object,Object) compare} method.
+ * {@link Comparator#compare(Object, Object) compare} method.
  * <p>
  * This class is Serializable from Commons Collections 4.0.
  *
  * @param <I> the input type to the transformer
  * @param <O> the output type from the transformer
- *
- * @since 2.1
- *
  * @see org.apache.commons.collections4.Transformer
  * @see org.apache.commons.collections4.comparators.ComparableComparator
+ * @since 2.1
  */
 public class TransformingComparator<I, O> implements Comparator<I>, Serializable {
 
-    /** Serialization version from Collections 4.0. */
+    /**
+     * Serialization version from Collections 4.0.
+     */
     private static final long serialVersionUID = 3456940356043606220L;
 
-    /** The decorated comparator. */
+    /**
+     * The decorated comparator.
+     */
     private final Comparator<O> decorated;
-    /** The transformer being used. */
+    /**
+     * The transformer being used.
+     */
     private final Transformer<? super I, ? extends O> transformer;
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs an instance with the given Transformer and a
      * {@link ComparableComparator ComparableComparator}.
@@ -62,8 +67,8 @@ public class TransformingComparator<I, O> implements Comparator<I>, Serializable
     /**
      * Constructs an instance with the given Transformer and Comparator.
      *
-     * @param transformer  what will transform the arguments to <code>compare</code>
-     * @param decorated  the decorated Comparator
+     * @param transformer what will transform the arguments to <code>compare</code>
+     * @param decorated   the decorated Comparator
      */
     public TransformingComparator(final Transformer<? super I, ? extends O> transformer,
                                   final Comparator<O> decorated) {
@@ -72,11 +77,12 @@ public class TransformingComparator<I, O> implements Comparator<I>, Serializable
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns the result of comparing the values from the transform operation.
      *
-     * @param obj1  the first object to transform then compare
-     * @param obj2  the second object to transform then compare
+     * @param obj1 the first object to transform then compare
+     * @param obj2 the second object to transform then compare
      * @return negative if obj1 is less, positive if greater, zero if equal
      */
     @Override
@@ -87,6 +93,7 @@ public class TransformingComparator<I, O> implements Comparator<I>, Serializable
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implement a hash code for this comparator that is consistent with
      * {@link #equals(Object) equals}.
@@ -96,8 +103,8 @@ public class TransformingComparator<I, O> implements Comparator<I>, Serializable
     @Override
     public int hashCode() {
         int total = 17;
-        total = total*37 + (decorated == null ? 0 : decorated.hashCode());
-        total = total*37 + (transformer == null ? 0 : transformer.hashCode());
+        total = total * 37 + (decorated == null ? 0 : decorated.hashCode());
+        total = total * 37 + (transformer == null ? 0 : transformer.hashCode());
         return total;
     }
 
@@ -110,7 +117,7 @@ public class TransformingComparator<I, O> implements Comparator<I>, Serializable
      * iff <code><i>that</i></code> is a {@link TransformingComparator}
      * whose attributes are equal to mine.
      *
-     * @param object  the object to compare to
+     * @param object the object to compare to
      * @return true if equal
      */
     @Override
@@ -124,7 +131,7 @@ public class TransformingComparator<I, O> implements Comparator<I>, Serializable
         if (object.getClass().equals(this.getClass())) {
             final TransformingComparator<?, ?> comp = (TransformingComparator<?, ?>) object;
             return (null == decorated ? null == comp.decorated : decorated.equals(comp.decorated)) &&
-                   (null == transformer ? null == comp.transformer : transformer.equals(comp.transformer));
+                    (null == transformer ? null == comp.transformer : transformer.equals(comp.transformer));
         }
         return false;
     }

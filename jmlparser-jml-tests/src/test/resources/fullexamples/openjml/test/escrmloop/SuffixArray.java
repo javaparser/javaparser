@@ -58,13 +58,13 @@ public final class SuffixArray {
     //@ skipesc // Various proof failures
     private int compare(int x, int y) {
         if (x == y) return 0;
-        int l = LCP.lcp(a,x,y);
+        int l = LCP.lcp(a, x, y);
 
-        if (x+l == a.length) return -1;
-        if (y+l == a.length) return 1;
-        if (a[x+l] < a[y+l]) return -1;
-        if (a[x+l] > a[y+l]) return 1;
-        
+        if (x + l == a.length) return -1;
+        if (y + l == a.length) return 1;
+        if (a[x + l] < a[y + l]) return -1;
+        if (a[x + l] > a[y + l]) return 1;
+
         throw new RuntimeException();
     }
 
@@ -84,7 +84,7 @@ public final class SuffixArray {
           @                             : data[i] == \old(data[i]));
           @ decreasing data.length - k;         
           @*/
-        for(int k = 0; k < data.length; k++) 
+        for (int k = 0; k < data.length; k++)
            /*@ loop_modifies data[*];
               @ maintaining 0 <= l && l <= k;
               @ maintaining (\forall int i; l < i && i <= k;
@@ -94,7 +94,7 @@ public final class SuffixArray {
               @                 data[i] == \old(data[i]));
               @ decreasing l;              
               @*/
-            for(int l = k; l > 0 && compare(data[l - 1], data[l]) > 0; l--) 
+            for (int l = k; l > 0 && compare(data[l - 1], data[l]) > 0; l--)
                 swap(data, l);
     }
 
@@ -104,8 +104,8 @@ public final class SuffixArray {
       @ ensures data[x-1] == \old(data[x]);
       @ assignable data[x], data[x-1];
       @*/
-    private /*@ helper @*/ static void  swap(int[] data, int x) {
-        final int y = x-1;
+    private /*@ helper @*/ static void swap(int[] data, int x) {
+        final int y = x - 1;
         final int t = data[x];
         data[x] = data[y];
         data[y] = t;
@@ -113,7 +113,6 @@ public final class SuffixArray {
 
 
 }
-
 
 
 //Based on code by Robert Sedgewick and Kevin Wayne.

@@ -34,7 +34,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class Issue251Test extends AbstractResolutionTest{
+class Issue251Test extends AbstractResolutionTest {
 
     @Test
     void testSolveStaticallyImportedMemberType() {

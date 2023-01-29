@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : CyclicScheduler.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,7 +19,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
  *************************************************************************/
@@ -34,94 +34,90 @@ import javax.safetycritical.MissionSequencer.State;
 import javax.scj.util.Const;
 
 /**
- * 
- * @version 1.2; - December 2013
- * 
  * @author Anders P. Ravn, Aalborg University, <A
- *         HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- *         Hans S&oslash;ndergaard, VIA University College, Denmark, <A
- *         HREF="mailto:hso@viauc.dk">hso@via.dk</A>
- * 
- * @scjComment - implementation issue: infrastructure class; 
- *   not part of the SCJ specification.
+ * HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
+ * Hans S&oslash;ndergaard, VIA University College, Denmark, <A
+ * HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * @version 1.2; - December 2013
+ * @scjComment - implementation issue: infrastructure class;
+ * not part of the SCJ specification.
  */
 final class CyclicScheduler extends Scheduler implements vm.Scheduler {
-	MissionSequencer<?> seq;
+    MissionSequencer<?> seq;
 
-	private ScjProcess current;
+    private ScjProcess current;
 
-	private static CyclicScheduler scheduler;
+    private static CyclicScheduler scheduler;
 
-	/**
-	 * 
-	 * @return The cyclic scheduler.
-	 */
-	static CyclicScheduler instance() {
-		if (scheduler == null) {
-			scheduler = new CyclicScheduler();
-		}
-		return scheduler;
-	}
+    /**
+     * @return The cyclic scheduler.
+     */
+    static CyclicScheduler instance() {
+        if (scheduler == null) {
+            scheduler = new CyclicScheduler();
+        }
+        return scheduler;
+    }
 
-	private CyclicScheduler() {
-		int[] sequencerStack = new int[Const.HANDLER_STACK_SIZE_DEFAULT];
+    private CyclicScheduler() {
+        int[] sequencerStack = new int[Const.HANDLER_STACK_SIZE_DEFAULT];
 
-		vm.ClockInterruptHandler.initialize(this, sequencerStack);
-	}
+        vm.ClockInterruptHandler.initialize(this, sequencerStack);
+    }
 
-	public Process getNextProcess() {
-		ScjProcess scjProcess = CyclicScheduler.instance().getCurrentProcess();
+    public Process getNextProcess() {
+        ScjProcess scjProcess = CyclicScheduler.instance().getCurrentProcess();
 
-		if (scjProcess.getTarget() instanceof MissionSequencer<?>
-				&& ((MissionSequencer<?>) (scjProcess.getTarget())).currState == State.END) {
-			scjProcess.getTarget().cleanUp();
-			CyclicScheduler.instance().stop(scjProcess.process);
-		}
+        if (scjProcess.getTarget() instanceof MissionSequencer<?>
+                && ((MissionSequencer<?>) (scjProcess.getTarget())).currState == State.END) {
+            scjProcess.getTarget().cleanUp();
+            CyclicScheduler.instance().stop(scjProcess.process);
+        }
 
-		return scjProcess.process;
-	}
+        return scjProcess.process;
+    }
 
-	private vm.Process mainProcess;
+    private vm.Process mainProcess;
 
-	private void processStart() {
-		vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
-		mainProcess = new vm.Process(null, null);
+    private void processStart() {
+        vm.ClockInterruptHandler clockHandler = vm.ClockInterruptHandler.instance;
+        mainProcess = new vm.Process(null, null);
 
-		clockHandler.register();
-		clockHandler.enable();
-		clockHandler.startClockHandler(mainProcess);
-		clockHandler.yield();
-	}
+        clockHandler.register();
+        clockHandler.enable();
+        clockHandler.startClockHandler(mainProcess);
+        clockHandler.yield();
+    }
 
-	@IcecapCompileMe
-	void stop(vm.Process current) {
-		current.transferTo(mainProcess);
-	}
+    @IcecapCompileMe
+    void stop(vm.Process current) {
+        current.transferTo(mainProcess);
+    }
 
-	void start(MissionSequencer<?> seq) {
-		this.seq = seq;
+    void start(MissionSequencer<?> seq) {
+        this.seq = seq;
 
-		current = ManagedSchedMethods.createScjProcess(seq); 
-		processStart();
-	}
+        current = ManagedSchedMethods.createScjProcess(seq);
+        processStart();
+    }
 
-	ScjProcess getCurrentProcess() {
-		return current;
-	}
+    ScjProcess getCurrentProcess() {
+        return current;
+    }
 
-	public void wait(Object target) {
+    public void wait(Object target) {
 
-	}
+    }
 
-	public void notify(Object target) {
+    public void notify(Object target) {
 
-	}
+    }
 
-	public void notifyAll(Object target) {
-	}
+    public void notifyAll(Object target) {
+    }
 
-	public Monitor getDefaultMonitor() {
-		return null;
-	}
+    public Monitor getDefaultMonitor() {
+        return null;
+    }
 
 }

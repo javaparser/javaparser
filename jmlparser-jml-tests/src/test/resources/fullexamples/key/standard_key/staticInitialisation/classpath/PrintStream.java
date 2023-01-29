@@ -16,10 +16,9 @@
  */
 package java.io;
 
-public class PrintStream /* extends java.io.FilterOutputStream implements java.lang.Appendable, java.io.Closeable */
-{
+public class PrintStream /* extends java.io.FilterOutputStream implements java.lang.Appendable, java.io.Closeable */ {
 
-//    public PrintStream(java.io.OutputStream arg0);
+    //    public PrintStream(java.io.OutputStream arg0);
 //    public PrintStream(java.io.OutputStream arg0, boolean arg1);
 //    public PrintStream(java.io.OutputStream arg0, boolean arg1, java.lang.String arg2) throws java.io.UnsupportedEncodingException;
 //    public PrintStream(java.lang.String arg0) throws java.io.FileNotFoundException;
@@ -31,27 +30,47 @@ public class PrintStream /* extends java.io.FilterOutputStream implements java.l
 //    public boolean checkError();
 //    protected void setError();
 //    protected void clearError();
-   public void write(int arg0);
-   public void write(byte[] arg0, int arg1, int arg2);
-   public void print(boolean arg0);
-   public void print(char arg0);
-   public void print(int arg0);
-   public void print(long arg0);
-   public void print(float arg0);
-   public void print(double arg0);
-   public void print(char[] arg0);
-   public void print(java.lang.String arg0);
-   public void print(java.lang.Object arg0);
-   public void println();
-   public void println(boolean arg0);
-   public void println(char arg0);
-   public void println(int arg0);
-   public void println(long arg0);
-   public void println(float arg0);
-   public void println(double arg0);
-   public void println(char[] arg0);
-   public void println(java.lang.String arg0);
-   public void println(java.lang.Object arg0);
+    public void write(int arg0);
+
+    public void write(byte[] arg0, int arg1, int arg2);
+
+    public void print(boolean arg0);
+
+    public void print(char arg0);
+
+    public void print(int arg0);
+
+    public void print(long arg0);
+
+    public void print(float arg0);
+
+    public void print(double arg0);
+
+    public void print(char[] arg0);
+
+    public void print(java.lang.String arg0);
+
+    public void print(java.lang.Object arg0);
+
+    public void println();
+
+    public void println(boolean arg0);
+
+    public void println(char arg0);
+
+    public void println(int arg0);
+
+    public void println(long arg0);
+
+    public void println(float arg0);
+
+    public void println(double arg0);
+
+    public void println(char[] arg0);
+
+    public void println(java.lang.String arg0);
+
+    public void println(java.lang.Object arg0);
 //    public java.io.PrintStream printf(java.lang.String arg0, java.lang.Object[] arg1);
 //    public java.io.PrintStream printf(java.util.Locale arg0, java.lang.String arg1, java.lang.Object[] arg2);
 //    public java.io.PrintStream format(java.lang.String arg0, java.lang.Object[] arg1);

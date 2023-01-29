@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,18 +18,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.comments;
 
 import com.github.javaparser.ast.Node;
 
 /**
  * Abstract class for all AST nodes that represent comments.
- * 
+ *
+ * @author Julio Vilmar Gesser
  * @see BlockComment
  * @see LineComment
  * @see JavadocComment
- * @author Julio Vilmar Gesser
  */
 public abstract class Comment extends Node {
 
@@ -50,7 +50,7 @@ public abstract class Comment extends Node {
 
     /**
      * Return the text of the comment.
-     * 
+     *
      * @return text of the comment
      */
     public final String getContent() {
@@ -59,54 +59,44 @@ public abstract class Comment extends Node {
 
     /**
      * Sets the text of the comment.
-     * 
-     * @param content
-     *            the text of the comment to set
+     *
+     * @param content the text of the comment to set
      */
     public void setContent(String content) {
         this.content = content;
     }
 
-    public boolean isLineComment()
-    {
+    public boolean isLineComment() {
         return false;
     }
 
-    public LineComment asLineComment()
-    {
-        if (isLineComment())
-        {
+    public LineComment asLineComment() {
+        if (isLineComment()) {
             return (LineComment) this;
         } else {
             throw new UnsupportedOperationException("Not a line comment");
         }
     }
 
-    public Node getCommentedNode()
-    {
+    public Node getCommentedNode() {
         return this.commentedNode;
     }
 
-    public void setCommentedNode(Node commentedNode)
-    {
-        if (commentedNode==null)
-        {
+    public void setCommentedNode(Node commentedNode) {
+        if (commentedNode == null) {
             this.commentedNode = commentedNode;
             return;
         }
-        if (commentedNode==this)
-        {
+        if (commentedNode == this) {
             throw new IllegalArgumentException();
         }
-        if (commentedNode instanceof Comment)
-        {
+        if (commentedNode instanceof Comment) {
             throw new IllegalArgumentException();
         }
         this.commentedNode = commentedNode;
     }
 
-    public boolean isOrphan()
-    {
+    public boolean isOrphan() {
         return this.commentedNode == null;
     }
 }

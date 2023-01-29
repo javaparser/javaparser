@@ -30,7 +30,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class NullArgumentException extends MathIllegalArgumentException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -6024911025449780478L;
 
     /**
@@ -39,13 +41,14 @@ public class NullArgumentException extends MathIllegalArgumentException {
     public NullArgumentException() {
         this(LocalizedFormats.NULL_NOT_ALLOWED);
     }
+
     /**
-     * @param pattern Message pattern providing the specific context of
-     * the error.
+     * @param pattern   Message pattern providing the specific context of
+     *                  the error.
      * @param arguments Values for replacing the placeholders in {@code pattern}.
      */
     public NullArgumentException(Localizable pattern,
-                                 Object ... arguments) {
+                                 Object... arguments) {
         super(pattern, arguments);
     }
 }

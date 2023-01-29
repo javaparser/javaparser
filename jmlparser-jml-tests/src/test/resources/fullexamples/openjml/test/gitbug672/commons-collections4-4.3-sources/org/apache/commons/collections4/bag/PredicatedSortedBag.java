@@ -41,7 +41,9 @@ import java.util.Comparator;
  */
 public class PredicatedSortedBag<E> extends PredicatedBag<E> implements SortedBag<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 3448581314086406616L;
 
     /**
@@ -50,11 +52,11 @@ public class PredicatedSortedBag<E> extends PredicatedBag<E> implements SortedBa
      * If there are any elements already in the bag being decorated, they
      * are validated.
      *
-     * @param <E> the type of the elements in the bag
-     * @param bag  the bag to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
+     * @param <E>       the type of the elements in the bag
+     * @param bag       the bag to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
      * @return a new predicated SortedBag
-     * @throws NullPointerException if bag or predicate is null
+     * @throws NullPointerException     if bag or predicate is null
      * @throws IllegalArgumentException if the bag contains invalid elements
      * @since 4.0
      */
@@ -64,14 +66,15 @@ public class PredicatedSortedBag<E> extends PredicatedBag<E> implements SortedBa
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>If there are any elements already in the bag being decorated, they
      * are validated.
      *
-     * @param bag  the bag to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
-     * @throws NullPointerException if bag or predicate is null
+     * @param bag       the bag to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
+     * @throws NullPointerException     if bag or predicate is null
      * @throws IllegalArgumentException if the bag contains invalid elements
      */
     protected PredicatedSortedBag(final SortedBag<E> bag, final Predicate<? super E> predicate) {

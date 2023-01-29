@@ -52,7 +52,8 @@ public class PredicateUtils {
     /**
      * This class is not normally instantiated.
      */
-    private PredicateUtils() {}
+    private PredicateUtils() {
+    }
 
     // Simple predicates
     //-----------------------------------------------------------------------------
@@ -61,7 +62,7 @@ public class PredicateUtils {
      * Gets a Predicate that always throws an exception.
      * This could be useful during testing as a placeholder.
      *
-     * @param <T>  the type that the predicate queries
+     * @param <T> the type that the predicate queries
      * @return the predicate
      * @see ExceptionPredicate
      */
@@ -72,7 +73,7 @@ public class PredicateUtils {
     /**
      * Gets a Predicate that always returns true.
      *
-     * @param <T>  the type that the predicate queries
+     * @param <T> the type that the predicate queries
      * @return the predicate
      * @see TruePredicate
      */
@@ -83,7 +84,7 @@ public class PredicateUtils {
     /**
      * Gets a Predicate that always returns false.
      *
-     * @param <T>  the type that the predicate queries
+     * @param <T> the type that the predicate queries
      * @return the predicate
      * @see FalsePredicate
      */
@@ -94,7 +95,7 @@ public class PredicateUtils {
     /**
      * Gets a Predicate that checks if the input object passed in is null.
      *
-     * @param <T>  the type that the predicate queries
+     * @param <T> the type that the predicate queries
      * @return the predicate
      * @see NullPredicate
      */
@@ -105,7 +106,7 @@ public class PredicateUtils {
     /**
      * Gets a Predicate that checks if the input object passed in is not null.
      *
-     * @param <T>  the type that the predicate queries
+     * @param <T> the type that the predicate queries
      * @return the predicate
      * @see NotNullPredicate
      */
@@ -117,8 +118,8 @@ public class PredicateUtils {
      * Creates a Predicate that checks if the input object is equal to the
      * specified object using equals().
      *
-     * @param <T>  the type that the predicate queries
-     * @param value  the value to compare against
+     * @param <T>   the type that the predicate queries
+     * @param value the value to compare against
      * @return the predicate
      * @see EqualPredicate
      */
@@ -130,8 +131,8 @@ public class PredicateUtils {
      * Creates a Predicate that checks if the input object is equal to the
      * specified object by identity.
      *
-     * @param <T>  the type that the predicate queries
-     * @param value  the value to compare against
+     * @param <T>   the type that the predicate queries
+     * @param value the value to compare against
      * @return the predicate
      * @see IdentityPredicate
      */
@@ -144,7 +145,7 @@ public class PredicateUtils {
      * a particular type, using instanceof. A <code>null</code> input
      * object will return <code>false</code>.
      *
-     * @param type  the type to check for, may not be null
+     * @param type the type to check for, may not be null
      * @return the predicate
      * @throws NullPointerException if the class is null
      * @see InstanceofPredicate
@@ -160,7 +161,7 @@ public class PredicateUtils {
      * is accepted and will return true the first time, and false subsequently
      * as well.
      *
-     * @param <T>  the type that the predicate queries
+     * @param <T> the type that the predicate queries
      * @return the predicate
      * @see UniquePredicate
      */
@@ -179,8 +180,8 @@ public class PredicateUtils {
      * will call the <code>isEmpty</code> method on the input object to
      * determine the predicate result.
      *
-     * @param <T>  the type that the predicate queries
-     * @param methodName  the method name to call on the input object, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param methodName the method name to call on the input object, may not be null
      * @return the predicate
      * @throws NullPointerException if the methodName is null.
      * @see InvokerTransformer
@@ -201,12 +202,12 @@ public class PredicateUtils {
      * will call the <code>isEmpty</code> method on the input object to
      * determine the predicate result.
      *
-     * @param <T>  the type that the predicate queries
-     * @param methodName  the method name to call on the input object, may not be null
-     * @param paramTypes  the parameter types
-     * @param args  the arguments
+     * @param <T>        the type that the predicate queries
+     * @param methodName the method name to call on the input object, may not be null
+     * @param paramTypes the parameter types
+     * @param args       the arguments
      * @return the predicate
-     * @throws NullPointerException if the method name is null
+     * @throws NullPointerException     if the method name is null
      * @throws IllegalArgumentException if the paramTypes and args don't match
      * @see InvokerTransformer
      * @see TransformerPredicate
@@ -224,9 +225,9 @@ public class PredicateUtils {
      * Create a new Predicate that returns true only if both of the specified
      * predicates are true.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicate1  the first predicate, may not be null
-     * @param predicate2  the second predicate, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicate1 the first predicate, may not be null
+     * @param predicate2 the second predicate, may not be null
      * @return the <code>and</code> predicate
      * @throws NullPointerException if either predicate is null
      * @see AndPredicate
@@ -241,8 +242,8 @@ public class PredicateUtils {
      * predicates are true.
      * If the array of predicates is empty, then this predicate returns true.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicates  an array of predicates to check, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicates an array of predicates to check, may not be null
      * @return the <code>all</code> predicate
      * @throws NullPointerException if the predicates array is null
      * @throws NullPointerException if any predicate in the array is null
@@ -257,8 +258,8 @@ public class PredicateUtils {
      * predicates are true. The predicates are checked in iterator order.
      * If the collection of predicates is empty, then this predicate returns true.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicates  a collection of predicates to check, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicates a collection of predicates to check, may not be null
      * @return the <code>all</code> predicate
      * @throws NullPointerException if the predicates collection is null
      * @throws NullPointerException if any predicate in the collection is null
@@ -272,9 +273,9 @@ public class PredicateUtils {
      * Create a new Predicate that returns true if either of the specified
      * predicates are true.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicate1  the first predicate, may not be null
-     * @param predicate2  the second predicate, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicate1 the first predicate, may not be null
+     * @param predicate2 the second predicate, may not be null
      * @return the <code>or</code> predicate
      * @throws NullPointerException if either predicate is null
      * @see OrPredicate
@@ -289,8 +290,8 @@ public class PredicateUtils {
      * predicates are true.
      * If the array of predicates is empty, then this predicate returns false.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicates  an array of predicates to check, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicates an array of predicates to check, may not be null
      * @return the <code>any</code> predicate
      * @throws NullPointerException if the predicates array is null
      * @throws NullPointerException if any predicate in the array is null
@@ -305,8 +306,8 @@ public class PredicateUtils {
      * predicates are true. The predicates are checked in iterator order.
      * If the collection of predicates is empty, then this predicate returns false.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicates  a collection of predicates to check, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicates a collection of predicates to check, may not be null
      * @return the <code>any</code> predicate
      * @throws NullPointerException if the predicates collection is null
      * @throws NullPointerException if any predicate in the collection is null
@@ -320,17 +321,16 @@ public class PredicateUtils {
      * Create a new Predicate that returns true if one, but not both, of the
      * specified predicates are true. XOR
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicate1  the first predicate, may not be null
-     * @param predicate2  the second predicate, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicate1 the first predicate, may not be null
+     * @param predicate2 the second predicate, may not be null
      * @return the <code>either</code> predicate
      * @throws NullPointerException if either predicate is null
      * @see OnePredicate
      */
     public static <T> Predicate<T> eitherPredicate(final Predicate<? super T> predicate1,
                                                    final Predicate<? super T> predicate2) {
-        @SuppressWarnings("unchecked")
-        final Predicate<T> onePredicate = PredicateUtils.onePredicate(predicate1, predicate2);
+        @SuppressWarnings("unchecked") final Predicate<T> onePredicate = PredicateUtils.onePredicate(predicate1, predicate2);
         return onePredicate;
     }
 
@@ -339,8 +339,8 @@ public class PredicateUtils {
      * predicates are true.
      * If the array of predicates is empty, then this predicate returns false.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicates  an array of predicates to check, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicates an array of predicates to check, may not be null
      * @return the <code>one</code> predicate
      * @throws NullPointerException if the predicates array is null
      * @throws NullPointerException if any predicate in the array is null
@@ -355,8 +355,8 @@ public class PredicateUtils {
      * predicates are true. The predicates are checked in iterator order.
      * If the collection of predicates is empty, then this predicate returns false.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicates  a collection of predicates to check, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicates a collection of predicates to check, may not be null
      * @return the <code>one</code> predicate
      * @throws NullPointerException if the predicates collection is null
      * @throws NullPointerException if any predicate in the collection is null
@@ -370,17 +370,16 @@ public class PredicateUtils {
      * Create a new Predicate that returns true if neither of the specified
      * predicates are true.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicate1  the first predicate, may not be null
-     * @param predicate2  the second predicate, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicate1 the first predicate, may not be null
+     * @param predicate2 the second predicate, may not be null
      * @return the <code>neither</code> predicate
      * @throws NullPointerException if either predicate is null
      * @see NonePredicate
      */
     public static <T> Predicate<T> neitherPredicate(final Predicate<? super T> predicate1,
                                                     final Predicate<? super T> predicate2) {
-        @SuppressWarnings("unchecked")
-        final Predicate<T> nonePredicate = PredicateUtils.nonePredicate(predicate1, predicate2);
+        @SuppressWarnings("unchecked") final Predicate<T> nonePredicate = PredicateUtils.nonePredicate(predicate1, predicate2);
         return nonePredicate;
     }
 
@@ -389,8 +388,8 @@ public class PredicateUtils {
      * predicates are true.
      * If the array of predicates is empty, then this predicate returns true.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicates  an array of predicates to check, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicates an array of predicates to check, may not be null
      * @return the <code>none</code> predicate
      * @throws NullPointerException if the predicates array is null
      * @throws NullPointerException if any predicate in the array is null
@@ -405,8 +404,8 @@ public class PredicateUtils {
      * predicates are true. The predicates are checked in iterator order.
      * If the collection of predicates is empty, then this predicate returns true.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicates  a collection of predicates to check, may not be null
+     * @param <T>        the type that the predicate queries
+     * @param predicates a collection of predicates to check, may not be null
      * @return the <code>none</code> predicate
      * @throws NullPointerException if the predicates collection is null
      * @throws NullPointerException if any predicate in the collection is null
@@ -420,8 +419,8 @@ public class PredicateUtils {
      * Create a new Predicate that returns true if the specified predicate
      * returns false and vice versa.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicate  the predicate to not
+     * @param <T>       the type that the predicate queries
+     * @param predicate the predicate to not
      * @return the <code>not</code> predicate
      * @throws NullPointerException if the predicate is null
      * @see NotPredicate
@@ -438,8 +437,8 @@ public class PredicateUtils {
      * return either Boolean.TRUE or Boolean.FALSE otherwise a PredicateException
      * will be thrown.
      *
-     * @param <T>  the type that the predicate queries
-     * @param transformer  the transformer to wrap, may not be null
+     * @param <T>         the type that the predicate queries
+     * @param transformer the transformer to wrap, may not be null
      * @return the transformer wrapping predicate
      * @throws NullPointerException if the transformer is null
      * @see TransformerPredicate
@@ -456,13 +455,13 @@ public class PredicateUtils {
      * otherwise it calls the specified Predicate. This allows null handling
      * behaviour to be added to Predicates that don't support nulls.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicate  the predicate to wrap, may not be null
+     * @param <T>       the type that the predicate queries
+     * @param predicate the predicate to wrap, may not be null
      * @return the predicate
      * @throws NullPointerException if the predicate is null.
      * @see NullIsExceptionPredicate
      */
-    public static <T> Predicate<T> nullIsExceptionPredicate(final Predicate<? super T> predicate){
+    public static <T> Predicate<T> nullIsExceptionPredicate(final Predicate<? super T> predicate) {
         return NullIsExceptionPredicate.nullIsExceptionPredicate(predicate);
     }
 
@@ -471,13 +470,13 @@ public class PredicateUtils {
      * it calls the specified Predicate. This allows null handling behaviour to
      * be added to Predicates that don't support nulls.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicate  the predicate to wrap, may not be null
+     * @param <T>       the type that the predicate queries
+     * @param predicate the predicate to wrap, may not be null
      * @return the predicate
      * @throws NullPointerException if the predicate is null.
      * @see NullIsFalsePredicate
      */
-    public static <T> Predicate<T> nullIsFalsePredicate(final Predicate<? super T> predicate){
+    public static <T> Predicate<T> nullIsFalsePredicate(final Predicate<? super T> predicate) {
         return NullIsFalsePredicate.nullIsFalsePredicate(predicate);
     }
 
@@ -486,25 +485,26 @@ public class PredicateUtils {
      * it calls the specified Predicate. This allows null handling behaviour to
      * be added to Predicates that don't support nulls.
      *
-     * @param <T>  the type that the predicate queries
-     * @param predicate  the predicate to wrap, may not be null
+     * @param <T>       the type that the predicate queries
+     * @param predicate the predicate to wrap, may not be null
      * @return the predicate
      * @throws NullPointerException if the predicate is null.
      * @see NullIsTruePredicate
      */
-    public static <T> Predicate<T> nullIsTruePredicate(final Predicate<? super T> predicate){
+    public static <T> Predicate<T> nullIsTruePredicate(final Predicate<? super T> predicate) {
         return NullIsTruePredicate.nullIsTruePredicate(predicate);
     }
 
     // Transformed
     //-----------------------------------------------------------------------
+
     /**
      * Creates a predicate that transforms the input object before passing it
      * to the predicate.
      *
-     * @param <T>  the type that the predicate queries
-     * @param transformer  the transformer to call first
-     * @param predicate  the predicate to call with the result of the transform
+     * @param <T>         the type that the predicate queries
+     * @param transformer the transformer to call first
+     * @param predicate   the predicate to call with the result of the transform
      * @return the predicate
      * @throws NullPointerException if the transformer or the predicate is null
      * @see TransformedPredicate

@@ -71,6 +71,5 @@
  * {@link org.apache.commons.collections4.sequence.ReplacementsHandler#handleReplacement handleReplacement}
  * method is also provided. This allows the user to keep track of the current index in
  * both arrays if he needs so.
- *
  */
 package org.apache.commons.collections4.sequence;

@@ -35,7 +35,7 @@ import java.util.Set;
  * @since 4.1
  */
 public abstract class AbstractSetValuedMap<K, V> extends AbstractMultiValuedMap<K, V>
-    implements SetValuedMap<K, V> {
+        implements SetValuedMap<K, V> {
 
     /**
      * Constructor needed for subclass serialisation.
@@ -47,7 +47,7 @@ public abstract class AbstractSetValuedMap<K, V> extends AbstractMultiValuedMap<
     /**
      * A constructor that wraps, not copies
      *
-     * @param map  the map to wrap, must not be null
+     * @param map the map to wrap, must not be null
      * @throws NullPointerException if the map is null
      */
     protected AbstractSetValuedMap(final Map<K, ? extends Set<V>> map) {
@@ -63,19 +63,21 @@ public abstract class AbstractSetValuedMap<K, V> extends AbstractMultiValuedMap<
 
     /**
      * Creates a new value collection using the provided factory.
+     *
      * @return a new list
      */
     @Override
     protected abstract Set<V> createCollection();
 
     // -----------------------------------------------------------------------
+
     /**
      * Gets the set of values associated with the specified key. This would
      * return an empty set in case the mapping is not present
      *
-     * @param key  the key to retrieve
+     * @param key the key to retrieve
      * @return the <code>Set</code> of values, will return an empty
-     *   <code>Set</code> for no mapping
+     * <code>Set</code> for no mapping
      */
     @Override
     public Set<V> get(final K key) {
@@ -94,7 +96,7 @@ public abstract class AbstractSetValuedMap<K, V> extends AbstractMultiValuedMap<
      *
      * @param key the key to remove values from
      * @return the <code>Set</code> of values removed, will return an empty,
-     *   unmodifiable set for no mapping found.
+     * unmodifiable set for no mapping found.
      */
     @Override
     public Set<V> remove(final Object key) {
@@ -102,6 +104,7 @@ public abstract class AbstractSetValuedMap<K, V> extends AbstractMultiValuedMap<
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Wrapped set to handle add and remove on the collection returned by
      * {@code get(Object)}.

@@ -33,14 +33,14 @@ public interface AssociableToAST {
      * If the declaration is associated to an AST node return it, otherwise it return empty.
      * Declaration based on source code have an AST node associated while others don't. Example
      * of other declarations are declarations coming from reflection or JARs.
-     *
+     * <p>
      * You may wonder how this method is different from the various getWrappedNode.
      * The difference is that toAst is present in all Resolved* declarations (such as
      * ResolvedAnnotationDeclaration), while getWrappedNode is present
      * only on the subclasses of the Resolved* declarations that derive from JP AST nodes (such as
      * JavaParserClassDeclaration). Therefore one
      * which has a Resolved* declaration need to do a downcast before being able to use getWrappedNode.
-     *
+     * <p>
      * Now, this means that toAst could potentially replace getWrappedNode (but not the other way around!).
      * However toAst return an Optional, which is less convenient than getting the direct node. Also,
      * toAst sometimes have to return a more generic node. This is the case for subclasses of
@@ -64,9 +64,6 @@ public interface AssociableToAST {
      * @see AssociableToAST#toAst()
      */
     default <N extends Node> Optional<N> toAst(Class<N> clazz) {
-        return toAst()
-                .filter(clazz::isInstance)
-                .map(clazz::cast);
+        return toAst().filter(clazz::isInstance).map(clazz::cast);
     }
-
 }

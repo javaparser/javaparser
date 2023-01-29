@@ -26,10 +26,14 @@ import org.apache.commons.math3.exception.OutOfRangeException;
  */
 public class ConstantRealDistribution extends AbstractRealDistribution {
 
-    /** Serialization ID */
+    /**
+     * Serialization ID
+     */
     private static final long serialVersionUID = -4157745166772046273L;
 
-    /** Constant value of the distribution */
+    /**
+     * Constant value of the distribution
+     */
     private final double value;
 
     /**
@@ -42,17 +46,23 @@ public class ConstantRealDistribution extends AbstractRealDistribution {
         this.value = value;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         return x == value ? 1 : 0;
     }
 
-    /** {@inheritDoc} */
-    public double cumulativeProbability(double x)  {
+    /**
+     * {@inheritDoc}
+     */
+    public double cumulativeProbability(double x) {
         return x < value ? 0 : 1;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(final double p)
             throws OutOfRangeException {
@@ -90,12 +100,16 @@ public class ConstantRealDistribution extends AbstractRealDistribution {
         return value;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return true;
     }
@@ -107,16 +121,20 @@ public class ConstantRealDistribution extends AbstractRealDistribution {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public double sample()  {
+    public double sample() {
         return value;
     }
 
     /**
      * Override with no-op (there is no generator).
+     *
      * @param seed (ignored)
      */
     @Override
-    public void reseedRandomGenerator(long seed) {}
+    public void reseedRandomGenerator(long seed) {
+    }
 }

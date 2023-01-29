@@ -19,7 +19,7 @@ class Jml2JavaTranslatorTest {
 
     @Test
     void test2() {
-        JmlQuantifiedExpr  n1 = StaticJavaParser.parseJmlExpression("(\\forall int x; 5 < x < a.length; x%2==0)");
+        JmlQuantifiedExpr n1 = StaticJavaParser.parseJmlExpression("(\\forall int x; 5 < x < a.length; x%2==0)");
         var bound = Jml2JavaTranslator.findLowerBound(n1, "x");
         Truth.assertThat(bound.toString()).isEqualTo("5 + 1");
     }

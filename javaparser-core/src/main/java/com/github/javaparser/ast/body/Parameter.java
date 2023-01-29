@@ -180,7 +180,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
 
     /**
      * @param annotations a null value is currently treated as an empty list. This behavior could change in the future,
-     * so please avoid passing null
+     *                    so please avoid passing null
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Parameter setAnnotations(final NodeList<AnnotationExpr> annotations) {
@@ -325,7 +325,7 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
     /**
      * Record components (parameters here) are implicitly final, even without the explicitly-added modifier.
      * https://openjdk.java.net/jeps/359#Restrictions-on-records
-     *
+     * <p>
      * If wanting to find out if the keyword {@code final} has been explicitly added to this parameter,
      * you should use {@code node.hasModifier(Modifier.DefaultKeyword.FINAL)}
      *

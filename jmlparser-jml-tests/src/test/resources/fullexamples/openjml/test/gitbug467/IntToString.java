@@ -1,5 +1,5 @@
 public class IntToString {
-  public static String intToString(int x) {
-    return x + "";
-  }
+    public static String intToString(int x) {
+        return x + "";
+    }
 }

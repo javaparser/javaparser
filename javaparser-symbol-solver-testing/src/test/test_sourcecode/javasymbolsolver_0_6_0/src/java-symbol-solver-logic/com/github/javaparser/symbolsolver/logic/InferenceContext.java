@@ -51,7 +51,6 @@ public class InferenceContext {
     }
 
     /**
-     *
      * @return the actual with the inference variable inserted
      */
     public Type addPair(Type target, Type actual) {
@@ -78,7 +77,7 @@ public class InferenceContext {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
                     List<Type> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
-                    if (correspondingActualType.isEmpty()){
+                    if (correspondingActualType.isEmpty()) {
                         throw new ConfilictingGenericTypesException(formalType, actualType);
                     }
                     correspondingFormalType = correspondingActualType;
@@ -131,20 +130,20 @@ public class InferenceContext {
                 }
             }
 
-            if (actualType.isReferenceType()){
-                if (formalType.asWildcard().isBounded()){
+            if (actualType.isReferenceType()) {
+                if (formalType.asWildcard().isBounded()) {
                     registerCorrespondance(formalType.asWildcard().getBoundedType(), actualType);
                 }
             }
-        } else if (actualType instanceof InferenceVariableType){
-            if (formalType instanceof ReferenceType){
+        } else if (actualType instanceof InferenceVariableType) {
+            if (formalType instanceof ReferenceType) {
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);
-            } else if (formalType instanceof InferenceVariableType){
+            } else if (formalType instanceof InferenceVariableType) {
                 ((InferenceVariableType) actualType).registerEquivalentType(formalType);
             }
-        } else if (actualType.isConstraint()){
+        } else if (actualType.isConstraint()) {
             LambdaConstraintType constraintType = actualType.asConstraintType();
-            if (constraintType.getBound() instanceof InferenceVariableType){
+            if (constraintType.getBound() instanceof InferenceVariableType) {
                 ((InferenceVariableType) constraintType.getBound()).registerEquivalentType(formalType);
             }
         } else if (actualType.isPrimitive()) {
@@ -175,7 +174,7 @@ public class InferenceContext {
             return new ArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
         } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
-        } else if (type.isConstraint()){
+        } else if (type.isConstraint()) {
             return LambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
         } else if (type instanceof InferenceVariableType) {
             return type;

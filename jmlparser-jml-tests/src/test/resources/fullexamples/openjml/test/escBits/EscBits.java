@@ -1,5 +1,5 @@
 public class EscBits {
-    
+
     public void m() {
         boolean b = true;
         boolean bb = false;

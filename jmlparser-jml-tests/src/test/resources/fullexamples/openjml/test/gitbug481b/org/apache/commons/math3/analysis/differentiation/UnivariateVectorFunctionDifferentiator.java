@@ -18,13 +18,17 @@ package org.apache.commons.math3.analysis.differentiation;
 
 import org.apache.commons.math3.analysis.UnivariateVectorFunction;
 
-/** Interface defining the function differentiation operation.
+/**
+ * Interface defining the function differentiation operation.
+ *
  * @since 3.1
  */
 public interface UnivariateVectorFunctionDifferentiator {
 
-    /** Create an implementation of a {@link UnivariateDifferentiableVectorFunction
+    /**
+     * Create an implementation of a {@link UnivariateDifferentiableVectorFunction
      * differential} from a regular {@link UnivariateVectorFunction vector function}.
+     *
      * @param function function to differentiate
      * @return differential function
      */

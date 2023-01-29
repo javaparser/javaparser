@@ -62,44 +62,44 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
 
         //language=JAVA
         String src = "" +
-            "import java.awt.*;\n" +
-            "\n" +
-            "abstract class Screen <V extends Component> {\n" +
-            "    abstract V getView();\n" +
-            "}\n" +
-            "\n" +
-            "class D extends Component {\n" +
-            "    void getTest() {\n" +
-            "    }\n" +
-            "}\n" +
-            "\n" +
-            "class B extends Screen<D> {\n" +
-            "    @Override\n" +
-            "    D getView() {\n" +
-            "        return new D();\n" +
-            "    }\n" +
-            "}\n" +
-            "\n" +
-            "class Run {\n" +
-            "    public static void main(String[] args) {\n" +
-            "        B b1 = new B();\n" +
-            "        b1.getView(); // b1.getView() -> B#getView(), overriding Screen#getView() -> returns object of type D.\n" +
-            "        \n" +
-            "        // Note that if `b2.getView` is parsed as Screen#getView (as B extends Screen), it will return type `V extends Component` thus will fail to locate the method `Component#getTest()` \n" +
-            "        B b2 = new B();\n" +
-            "        b2.getView().getTest(); // b2.getView() -> returns object of type D, per above // D#getTest returns void.\n" +
-            "        \n" +
-            "        // This part is expected to fail as D#getView does not exist (where D is of type `V extends Component`)\n" +
-            "        B b3 = new B();\n" +
-            "        b3.getView().getView(); // b3.getView() -> returns object of type D, per above // D#getView doesn't exist, thus resolution will fail.\n" +
-            "    }\n" +
-            "}\n" +
-            "";
+                "import java.awt.*;\n" +
+                "\n" +
+                "abstract class Screen <V extends Component> {\n" +
+                "    abstract V getView();\n" +
+                "}\n" +
+                "\n" +
+                "class D extends Component {\n" +
+                "    void getTest() {\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "class B extends Screen<D> {\n" +
+                "    @Override\n" +
+                "    D getView() {\n" +
+                "        return new D();\n" +
+                "    }\n" +
+                "}\n" +
+                "\n" +
+                "class Run {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        B b1 = new B();\n" +
+                "        b1.getView(); // b1.getView() -> B#getView(), overriding Screen#getView() -> returns object of type D.\n" +
+                "        \n" +
+                "        // Note that if `b2.getView` is parsed as Screen#getView (as B extends Screen), it will return type `V extends Component` thus will fail to locate the method `Component#getTest()` \n" +
+                "        B b2 = new B();\n" +
+                "        b2.getView().getTest(); // b2.getView() -> returns object of type D, per above // D#getTest returns void.\n" +
+                "        \n" +
+                "        // This part is expected to fail as D#getView does not exist (where D is of type `V extends Component`)\n" +
+                "        B b3 = new B();\n" +
+                "        b3.getView().getView(); // b3.getView() -> returns object of type D, per above // D#getView doesn't exist, thus resolution will fail.\n" +
+                "    }\n" +
+                "}\n" +
+                "";
 
 
         ParseResult<CompilationUnit> parseResult = javaParser.parse(
-            ParseStart.COMPILATION_UNIT,
-            provider(src)
+                ParseStart.COMPILATION_UNIT,
+                provider(src)
         );
 
 

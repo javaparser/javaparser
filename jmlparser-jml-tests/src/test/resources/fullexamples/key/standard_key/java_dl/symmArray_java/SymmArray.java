@@ -29,7 +29,8 @@ public class SymmArray {
       @     (\forall int i, j; i >= 0 && i < ar.length && j >= 0 && j < ar.length;
       @                        ar[i][j] == ar[j][i]);
       @*/
-    public boolean IsSymmetric() {}
+    public boolean IsSymmetric() {
+    }
 
     /*@ public normal_behavior
       @   requires
@@ -41,16 +42,16 @@ public class SymmArray {
       @                        ar[i][j] == ar[j][i]);
       @*/
     public void assignA() {
-	ar[0][0] = 0;
-	ar[1][1] = 1;
-	ar[2][2] = 2;
-	ar[3][3] = 3;
-	ar[4][4] = 4;
-	ar[5][5] = 5;
-	ar[6][6] = 6;
-	ar[7][7] = 7;
-	ar[8][8] = 8;
-	ar[9][9] = 9;
+        ar[0][0] = 0;
+        ar[1][1] = 1;
+        ar[2][2] = 2;
+        ar[3][3] = 3;
+        ar[4][4] = 4;
+        ar[5][5] = 5;
+        ar[6][6] = 6;
+        ar[7][7] = 7;
+        ar[8][8] = 8;
+        ar[9][9] = 9;
     }
 
     /*@ public normal_behavior
@@ -58,15 +59,15 @@ public class SymmArray {
       @   ensures IsSymmetric();
       @*/
     public void assignB() {
-	ar[0][0] = 0;
-	ar[1][1] = 1;
-	ar[2][2] = 2;
-	ar[3][3] = 3;
-	ar[4][4] = 4;
-	ar[5][5] = 5;
-	ar[6][6] = 6;
-	ar[7][7] = 7;
-	ar[8][8] = 8;
-	ar[9][9] = 9;
+        ar[0][0] = 0;
+        ar[1][1] = 1;
+        ar[2][2] = 2;
+        ar[3][3] = 3;
+        ar[4][4] = 4;
+        ar[5][5] = 5;
+        ar[6][6] = 6;
+        ar[7][7] = 7;
+        ar[8][8] = 8;
+        ar[9][9] = 9;
     }
 }

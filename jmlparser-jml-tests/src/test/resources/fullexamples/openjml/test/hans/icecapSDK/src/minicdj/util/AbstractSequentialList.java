@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 /* AbstractSequentialList.java -- List implementation for sequential access
    Copyright (C) 1998, 1999, 2000, 2001, 2005  Free Software Foundation, Inc.
@@ -93,165 +94,157 @@ package minicdj.util;
  * @since 1.2
  * @status updated to 1.4
  */
-public abstract class AbstractSequentialList extends AbstractList
-{
-  /**
-   * The main constructor, for use by subclasses.
-   */
-  protected AbstractSequentialList()
-  {
-  }
+public abstract class AbstractSequentialList extends AbstractList {
+    /**
+     * The main constructor, for use by subclasses.
+     */
+    protected AbstractSequentialList() {
+    }
 
-  /**
-   * Returns a ListIterator over the list, starting from position index.
-   * Subclasses must provide an implementation of this method.
-   *
-   * @param index the starting position of the list
-   * @return the list iterator
-   * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt; size()
-   */
-  public abstract ListIterator listIterator(int index);
+    /**
+     * Returns a ListIterator over the list, starting from position index.
+     * Subclasses must provide an implementation of this method.
+     *
+     * @param index the starting position of the list
+     * @return the list iterator
+     * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt; size()
+     */
+    public abstract ListIterator listIterator(int index);
 
-  /**
-   * Insert an element into the list at a given position (optional operation).
-   * This shifts all existing elements from that position to the end one
-   * index to the right. This version of add has no return, since it is
-   * assumed to always succeed if there is no exception. This iteration
-   * uses listIterator(index).add(o).
-   *
-   * @param index the location to insert the item
-   * @param o the object to insert
-   * @throws UnsupportedOperationException if this list does not support the
-   *         add operation
-   * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt; size()
-   * @throws ClassCastException if o cannot be added to this list due to its
-   *         type
-   * @throws IllegalArgumentException if o cannot be added to this list for
-   *         some other reason.
-   * @throws NullPointerException if o is null and the list does not permit
-   *         the addition of null values.
-   */
-  public void add(int index, Object o)
-  {
-    listIterator(index).add(o);
-  }
+    /**
+     * Insert an element into the list at a given position (optional operation).
+     * This shifts all existing elements from that position to the end one
+     * index to the right. This version of add has no return, since it is
+     * assumed to always succeed if there is no exception. This iteration
+     * uses listIterator(index).add(o).
+     *
+     * @param index the location to insert the item
+     * @param o the object to insert
+     * @throws UnsupportedOperationException if this list does not support the
+     *         add operation
+     * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt; size()
+     * @throws ClassCastException if o cannot be added to this list due to its
+     *         type
+     * @throws IllegalArgumentException if o cannot be added to this list for
+     *         some other reason.
+     * @throws NullPointerException if o is null and the list does not permit
+     *         the addition of null values.
+     */
+    public void add(int index, Object o) {
+        listIterator(index).add(o);
+    }
 
-  /**
-   * Insert the contents of a collection into the list at a given position
-   * (optional operation). Shift all elements at that position to the right
-   * by the number of elements inserted. This operation is undefined if
-   * this list is modified during the operation (for example, if you try
-   * to insert a list into itself).
-   * <p>
-   *
-   * This implementation grabs listIterator(index), then proceeds to use add
-   * for each element returned by c's iterator. Sun's online specs are wrong,
-   * claiming that this also calls next(): listIterator.add() correctly
-   * skips the added element.
-   *
-   * @param index the location to insert the collection
-   * @param c the collection to insert
-   * @return true if the list was modified by this action, that is, if c is
-   *         non-empty
-   * @throws UnsupportedOperationException if this list does not support the
-   *         addAll operation
-   * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt; size()
-   * @throws ClassCastException if some element of c cannot be added to this
-   *         list due to its type
-   * @throws IllegalArgumentException if some element of c cannot be added
-   *         to this list for some other reason
-   * @throws NullPointerException if the specified collection is null
-   * @throws NullPointerException if an object, o, in c is null and the list
-   *         does not permit the addition of null values.
-   * @see #add(int, Object)
-   */
-  public boolean addAll(int index, Collection c)
-  {
-    Iterator ci = c.iterator();
-    int size = c.size();
-    ListIterator i = listIterator(index);
-    for (int pos = size; pos > 0; pos--)
-      i.add(ci.next());
-    return size > 0;
-  }
+    /**
+     * Insert the contents of a collection into the list at a given position
+     * (optional operation). Shift all elements at that position to the right
+     * by the number of elements inserted. This operation is undefined if
+     * this list is modified during the operation (for example, if you try
+     * to insert a list into itself).
+     * <p>
+     *
+     * This implementation grabs listIterator(index), then proceeds to use add
+     * for each element returned by c's iterator. Sun's online specs are wrong,
+     * claiming that this also calls next(): listIterator.add() correctly
+     * skips the added element.
+     *
+     * @param index the location to insert the collection
+     * @param c the collection to insert
+     * @return true if the list was modified by this action, that is, if c is
+     *         non-empty
+     * @throws UnsupportedOperationException if this list does not support the
+     *         addAll operation
+     * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt; size()
+     * @throws ClassCastException if some element of c cannot be added to this
+     *         list due to its type
+     * @throws IllegalArgumentException if some element of c cannot be added
+     *         to this list for some other reason
+     * @throws NullPointerException if the specified collection is null
+     * @throws NullPointerException if an object, o, in c is null and the list
+     *         does not permit the addition of null values.
+     * @see #add(int, Object)
+     */
+    public boolean addAll(int index, Collection c) {
+        Iterator ci = c.iterator();
+        int size = c.size();
+        ListIterator i = listIterator(index);
+        for (int pos = size; pos > 0; pos--)
+            i.add(ci.next());
+        return size > 0;
+    }
 
-  /**
-   * Get the element at a given index in this list. This implementation
-   * returns listIterator(index).next().
-   *
-   * @param index the index of the element to be returned
-   * @return the element at index index in this list
-   * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt;= size()
-   */
-  public Object get(int index)
-  {
-    // This is a legal listIterator position, but an illegal get.
-    if (index == size())
-      throw new IndexOutOfBoundsException("Index: " + index + ", Size:"
-                                          + size());
-    return listIterator(index).next();
-  }
+    /**
+     * Get the element at a given index in this list. This implementation
+     * returns listIterator(index).next().
+     *
+     * @param index the index of the element to be returned
+     * @return the element at index index in this list
+     * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt;= size()
+     */
+    public Object get(int index) {
+        // This is a legal listIterator position, but an illegal get.
+        if (index == size())
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size:"
+                    + size());
+        return listIterator(index).next();
+    }
 
-  /**
-   * Obtain an Iterator over this list, whose sequence is the list order. This
-   * implementation returns listIterator().
-   *
-   * @return an Iterator over the elements of this list, in order
-   */
-  public Iterator iterator()
-  {
-    return listIterator();
-  }
+    /**
+     * Obtain an Iterator over this list, whose sequence is the list order. This
+     * implementation returns listIterator().
+     *
+     * @return an Iterator over the elements of this list, in order
+     */
+    public Iterator iterator() {
+        return listIterator();
+    }
 
-  /**
-   * Remove the element at a given position in this list (optional operation).
-   * Shifts all remaining elements to the left to fill the gap. This
-   * implementation uses listIterator(index) and ListIterator.remove().
-   *
-   * @param index the position within the list of the object to remove
-   * @return the object that was removed
-   * @throws UnsupportedOperationException if this list does not support the
-   *         remove operation
-   * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt;= size()
-   */
-  public Object remove(int index)
-  {
-    // This is a legal listIterator position, but an illegal remove.
-    if (index == size())
-      throw new IndexOutOfBoundsException("Index: " + index + ", Size:"
-                                          + size());
-    ListIterator i = listIterator(index);
-    Object removed = i.next();
-    i.remove();
-    return removed;
-  }
+    /**
+     * Remove the element at a given position in this list (optional operation).
+     * Shifts all remaining elements to the left to fill the gap. This
+     * implementation uses listIterator(index) and ListIterator.remove().
+     *
+     * @param index the position within the list of the object to remove
+     * @return the object that was removed
+     * @throws UnsupportedOperationException if this list does not support the
+     *         remove operation
+     * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt;= size()
+     */
+    public Object remove(int index) {
+        // This is a legal listIterator position, but an illegal remove.
+        if (index == size())
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size:"
+                    + size());
+        ListIterator i = listIterator(index);
+        Object removed = i.next();
+        i.remove();
+        return removed;
+    }
 
-  /**
-   * Replace an element of this list with another object (optional operation).
-   * This implementation uses listIterator(index) and ListIterator.set(o).
-   *
-   * @param index the position within this list of the element to be replaced
-   * @param o the object to replace it with
-   * @return the object that was replaced
-   * @throws UnsupportedOperationException if this list does not support the
-   *         set operation
-   * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt;= size()
-   * @throws ClassCastException if o cannot be added to this list due to its
-   *         type
-   * @throws IllegalArgumentException if o cannot be added to this list for
-   *         some other reason
-   * @throws NullPointerException if o is null and the list does not allow
-   *         a value to be set to null.
-   */
-  public Object set(int index, Object o)
-  {
-    // This is a legal listIterator position, but an illegal set.
-    if (index == size())
-      throw new IndexOutOfBoundsException("Index: " + index + ", Size:"
-                                          + size());
-    ListIterator i = listIterator(index);
-    Object old = i.next();
-    i.set(o);
-    return old;
-  }
+    /**
+     * Replace an element of this list with another object (optional operation).
+     * This implementation uses listIterator(index) and ListIterator.set(o).
+     *
+     * @param index the position within this list of the element to be replaced
+     * @param o the object to replace it with
+     * @return the object that was replaced
+     * @throws UnsupportedOperationException if this list does not support the
+     *         set operation
+     * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt;= size()
+     * @throws ClassCastException if o cannot be added to this list due to its
+     *         type
+     * @throws IllegalArgumentException if o cannot be added to this list for
+     *         some other reason
+     * @throws NullPointerException if o is null and the list does not allow
+     *         a value to be set to null.
+     */
+    public Object set(int index, Object o) {
+        // This is a legal listIterator position, but an illegal set.
+        if (index == size())
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size:"
+                    + size());
+        ListIterator i = listIterator(index);
+        Object old = i.next();
+        i.set(o);
+        return old;
+    }
 }

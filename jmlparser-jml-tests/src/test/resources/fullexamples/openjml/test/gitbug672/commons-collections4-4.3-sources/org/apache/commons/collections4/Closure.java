@@ -33,10 +33,10 @@ public interface Closure<T> {
     /**
      * Performs an action on the specified input object.
      *
-     * @param input  the input to execute on
-     * @throws ClassCastException (runtime) if the input is the wrong class
+     * @param input the input to execute on
+     * @throws ClassCastException       (runtime) if the input is the wrong class
      * @throws IllegalArgumentException (runtime) if the input is invalid
-     * @throws FunctorException (runtime) if any other error occurs
+     * @throws FunctorException         (runtime) if any other error occurs
      */
     void execute(T input);
 

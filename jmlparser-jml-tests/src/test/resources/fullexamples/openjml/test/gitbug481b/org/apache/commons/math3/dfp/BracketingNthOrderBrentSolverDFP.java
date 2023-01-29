@@ -38,6 +38,7 @@ import org.apache.commons.math3.util.MathUtils;
  * </ul>
  * </p>
  * The given interval must bracket the root.
+ *
  * @deprecated as of 3.6 replaced with {@link FieldBracketingNthOrderBrentSolver}
  */
 @Deprecated
@@ -46,22 +47,23 @@ public class BracketingNthOrderBrentSolverDFP extends FieldBracketingNthOrderBre
     /**
      * Construct a solver.
      *
-     * @param relativeAccuracy Relative accuracy.
-     * @param absoluteAccuracy Absolute accuracy.
+     * @param relativeAccuracy      Relative accuracy.
+     * @param absoluteAccuracy      Absolute accuracy.
      * @param functionValueAccuracy Function value accuracy.
-     * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @param maximalOrder          maximal order.
+     * @throws NumberIsTooSmallException if maximal order is lower than 2
      */
     public BracketingNthOrderBrentSolverDFP(final Dfp relativeAccuracy,
                                             final Dfp absoluteAccuracy,
                                             final Dfp functionValueAccuracy,
                                             final int maximalOrder)
-        throws NumberIsTooSmallException {
+            throws NumberIsTooSmallException {
         super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy, maximalOrder);
     }
 
     /**
      * Get the absolute accuracy.
+     *
      * @return absolute accuracy
      */
     @Override
@@ -71,6 +73,7 @@ public class BracketingNthOrderBrentSolverDFP extends FieldBracketingNthOrderBre
 
     /**
      * Get the relative accuracy.
+     *
      * @return relative accuracy
      */
     @Override
@@ -80,6 +83,7 @@ public class BracketingNthOrderBrentSolverDFP extends FieldBracketingNthOrderBre
 
     /**
      * Get the function accuracy.
+     *
      * @return function accuracy
      */
     @Override
@@ -93,19 +97,19 @@ public class BracketingNthOrderBrentSolverDFP extends FieldBracketingNthOrderBre
      * Solvers that do require bracketing should be able to handle the case
      * where one of the endpoints is itself a root.
      *
-     * @param maxEval Maximum number of evaluations.
-     * @param f Function to solve.
-     * @param min Lower bound for the interval.
-     * @param max Upper bound for the interval.
+     * @param maxEval         Maximum number of evaluations.
+     * @param f               Function to solve.
+     * @param min             Lower bound for the interval.
+     * @param max             Upper bound for the interval.
      * @param allowedSolution The kind of solutions that the root-finding algorithm may
-     * accept as solutions.
+     *                        accept as solutions.
      * @return a value where the function is zero.
-     * @exception NullArgumentException if f is null.
-     * @exception NoBracketingException if root cannot be bracketed
+     * @throws NullArgumentException if f is null.
+     * @throws NoBracketingException if root cannot be bracketed
      */
     public Dfp solve(final int maxEval, final UnivariateDfpFunction f,
                      final Dfp min, final Dfp max, final AllowedSolution allowedSolution)
-        throws NullArgumentException, NoBracketingException {
+            throws NullArgumentException, NoBracketingException {
         return solve(maxEval, f, min, max, min.add(max).divide(2), allowedSolution);
     }
 
@@ -115,21 +119,21 @@ public class BracketingNthOrderBrentSolverDFP extends FieldBracketingNthOrderBre
      * Solvers that do require bracketing should be able to handle the case
      * where one of the endpoints is itself a root.
      *
-     * @param maxEval Maximum number of evaluations.
-     * @param f Function to solve.
-     * @param min Lower bound for the interval.
-     * @param max Upper bound for the interval.
-     * @param startValue Start value to use.
+     * @param maxEval         Maximum number of evaluations.
+     * @param f               Function to solve.
+     * @param min             Lower bound for the interval.
+     * @param max             Upper bound for the interval.
+     * @param startValue      Start value to use.
      * @param allowedSolution The kind of solutions that the root-finding algorithm may
-     * accept as solutions.
+     *                        accept as solutions.
      * @return a value where the function is zero.
-     * @exception NullArgumentException if f is null.
-     * @exception NoBracketingException if root cannot be bracketed
+     * @throws NullArgumentException if f is null.
+     * @throws NoBracketingException if root cannot be bracketed
      */
     public Dfp solve(final int maxEval, final UnivariateDfpFunction f,
                      final Dfp min, final Dfp max, final Dfp startValue,
                      final AllowedSolution allowedSolution)
-        throws NullArgumentException, NoBracketingException {
+            throws NullArgumentException, NoBracketingException {
 
         // checks
         MathUtils.checkNotNull(f);

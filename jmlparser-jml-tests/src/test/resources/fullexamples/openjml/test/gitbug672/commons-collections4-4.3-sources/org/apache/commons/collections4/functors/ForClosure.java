@@ -30,9 +30,13 @@ import org.apache.commons.collections4.Closure;
  */
 public class ForClosure<E> implements Closure<E> {
 
-    /** The number of times to loop */
+    /**
+     * The number of times to loop
+     */
     private final int iCount;
-    /** The closure to call */
+    /**
+     * The closure to call
+     */
     private final Closure<? super E> iClosure;
 
     /**
@@ -41,9 +45,9 @@ public class ForClosure<E> implements Closure<E> {
      * A null closure or zero count returns the <code>NOPClosure</code>.
      * A count of one returns the specified closure.
      *
-     * @param <E> the type that the closure acts on
-     * @param count  the number of times to execute the closure
-     * @param closure  the closure to execute, not null
+     * @param <E>     the type that the closure acts on
+     * @param count   the number of times to execute the closure
+     * @param closure the closure to execute, not null
      * @return the <code>for</code> closure
      */
     @SuppressWarnings("unchecked")
@@ -61,8 +65,8 @@ public class ForClosure<E> implements Closure<E> {
      * Constructor that performs no validation.
      * Use <code>forClosure</code> if you want that.
      *
-     * @param count  the number of times to execute the closure
-     * @param closure  the closure to execute, not null
+     * @param count   the number of times to execute the closure
+     * @param closure the closure to execute, not null
      */
     public ForClosure(final int count, final Closure<? super E> closure) {
         super();
@@ -73,7 +77,7 @@ public class ForClosure<E> implements Closure<E> {
     /**
      * Executes the closure <code>count</code> times.
      *
-     * @param input  the input object
+     * @param input the input object
      */
     @Override
     public void execute(final E input) {

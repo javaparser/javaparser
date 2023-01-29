@@ -26,15 +26,19 @@ import org.apache.commons.math3.random.RandomGenerator;
  * @since 3.1
  */
 public abstract class AbstractMultivariateRealDistribution
-    implements MultivariateRealDistribution {
-    /** RNG instance used to generate samples from the distribution. */
+        implements MultivariateRealDistribution {
+    /**
+     * RNG instance used to generate samples from the distribution.
+     */
     protected final RandomGenerator random;
-    /** The number of dimensions or columns in the multivariate distribution. */
+    /**
+     * The number of dimensions or columns in the multivariate distribution.
+     */
     private final int dimension;
 
     /**
      * @param rng Random number generator.
-     * @param n Number of dimensions.
+     * @param n   Number of dimensions.
      */
     protected AbstractMultivariateRealDistribution(RandomGenerator rng,
                                                    int n) {
@@ -42,24 +46,32 @@ public abstract class AbstractMultivariateRealDistribution
         dimension = n;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void reseedRandomGenerator(long seed) {
         random.setSeed(seed);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getDimension() {
         return dimension;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public abstract double[] sample();
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double[][] sample(final int sampleSize) {
         if (sampleSize <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES,
-                                                   sampleSize);
+                    sampleSize);
         }
         final double[][] out = new double[sampleSize][dimension];
         for (int i = 0; i < sampleSize; i++) {

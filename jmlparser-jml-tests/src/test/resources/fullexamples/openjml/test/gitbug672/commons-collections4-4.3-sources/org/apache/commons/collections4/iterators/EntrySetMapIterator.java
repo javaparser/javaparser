@@ -46,7 +46,7 @@ public class EntrySetMapIterator<K, V> implements MapIterator<K, V>, ResettableI
     /**
      * Constructor.
      *
-     * @param map  the map to iterate over
+     * @param map the map to iterate over
      */
     public EntrySetMapIterator(final Map<K, V> map) {
         super();
@@ -55,6 +55,7 @@ public class EntrySetMapIterator<K, V> implements MapIterator<K, V>, ResettableI
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Checks to see if there are more entries still to be iterated.
      *
@@ -79,15 +80,16 @@ public class EntrySetMapIterator<K, V> implements MapIterator<K, V>, ResettableI
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Removes the last returned key from the underlying <code>Map</code>.
      * <p>
      * This method can be called once per call to <code>next()</code>.
      *
      * @throws UnsupportedOperationException if remove is not supported by the map
-     * @throws IllegalStateException if <code>next()</code> has not yet been called
-     * @throws IllegalStateException if <code>remove()</code> has already been called
-     *  since the last call to <code>next()</code>
+     * @throws IllegalStateException         if <code>next()</code> has not yet been called
+     * @throws IllegalStateException         if <code>remove()</code> has already been called
+     *                                       since the last call to <code>next()</code>
      */
     @Override
     public void remove() {
@@ -100,6 +102,7 @@ public class EntrySetMapIterator<K, V> implements MapIterator<K, V>, ResettableI
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the current key, which is the key returned by the last call
      * to <code>next()</code>.
@@ -133,12 +136,12 @@ public class EntrySetMapIterator<K, V> implements MapIterator<K, V>, ResettableI
     /**
      * Sets the value associated with the current key.
      *
-     * @param value  the new value
+     * @param value the new value
      * @return the previous value
      * @throws UnsupportedOperationException if setValue is not supported by the map
-     * @throws IllegalStateException if <code>next()</code> has not yet been called
-     * @throws IllegalStateException if <code>remove()</code> has been called since the
-     *  last call to <code>next()</code>
+     * @throws IllegalStateException         if <code>next()</code> has not yet been called
+     * @throws IllegalStateException         if <code>remove()</code> has been called since the
+     *                                       last call to <code>next()</code>
      */
     @Override
     public V setValue(final V value) {
@@ -149,6 +152,7 @@ public class EntrySetMapIterator<K, V> implements MapIterator<K, V>, ResettableI
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Resets the state of the iterator.
      */

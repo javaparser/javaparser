@@ -36,12 +36,12 @@ class BinaryExprTest {
 
     /**
      * Evaluation takes place left to right, with && taking precedence over ||
-     *
+     * <p>
      * true || false && false || false
      * true ||      (1)       || false
      * (        2           ) || false
      * (             3               )
-     *
+     * <p>
      * true || false && false || false
      * true ||    (false)     || false
      * (     true           ) || false
@@ -126,10 +126,10 @@ class BinaryExprTest {
                 .stream()
                 .filter(binaryExpr -> binaryExpr.getOperator() == BinaryExpr.Operator.AND || binaryExpr.getOperator() == BinaryExpr.Operator.OR)
                 .forEach(binaryExpr -> {
-                    if(!binaryExpr.getLeft().isBooleanLiteralExpr()) {
+                    if (!binaryExpr.getLeft().isBooleanLiteralExpr()) {
                         binaryExpr.setLeft(new EnclosedExpr(binaryExpr.getLeft()));
                     }
-                    if(!binaryExpr.getRight().isBooleanLiteralExpr()) {
+                    if (!binaryExpr.getRight().isBooleanLiteralExpr()) {
                         binaryExpr.setRight(new EnclosedExpr(binaryExpr.getRight()));
                     }
                 });

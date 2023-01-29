@@ -32,13 +32,13 @@ import org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOpti
  * differentiable functions.
  * It contains boiler-plate code for dealing with gradient evaluation.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 2.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public abstract class AbstractScalarDifferentiableOptimizer
-    extends BaseAbstractMultivariateOptimizer<DifferentiableMultivariateFunction>
-    implements DifferentiableMultivariateOptimizer {
+        extends BaseAbstractMultivariateOptimizer<DifferentiableMultivariateFunction>
+        implements DifferentiableMultivariateOptimizer {
     /**
      * Objective function gradient.
      */
@@ -49,10 +49,12 @@ public abstract class AbstractScalarDifferentiableOptimizer
      * The convergence check is set to a
      * {@link org.apache.commons.math3.optimization.SimpleValueChecker
      * SimpleValueChecker}.
+     *
      * @deprecated See {@link org.apache.commons.math3.optimization.SimpleValueChecker#SimpleValueChecker()}
      */
     @Deprecated
-    protected AbstractScalarDifferentiableOptimizer() {}
+    protected AbstractScalarDifferentiableOptimizer() {
+    }
 
     /**
      * @param checker Convergence checker.
@@ -66,14 +68,15 @@ public abstract class AbstractScalarDifferentiableOptimizer
      *
      * @param evaluationPoint Point at which the gradient must be evaluated.
      * @return the gradient at the specified point.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the allowed number of evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the allowed number of evaluations is exceeded.
      */
     protected double[] computeObjectiveGradient(final double[] evaluationPoint) {
         return gradient.value(evaluationPoint);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected PointValuePair optimizeInternal(int maxEval,
                                               final DifferentiableMultivariateFunction f,
@@ -88,27 +91,25 @@ public abstract class AbstractScalarDifferentiableOptimizer
     /**
      * Optimize an objective function.
      *
-     * @param f Objective function.
-     * @param goalType Type of optimization goal: either
-     * {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
+     * @param f          Objective function.
+     * @param goalType   Type of optimization goal: either
+     *                   {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
      * @param startPoint Start point for optimization.
-     * @param maxEval Maximum number of function evaluations.
+     * @param maxEval    Maximum number of function evaluations.
      * @return the point/value pair giving the optimal value for objective
      * function.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the start point dimension is wrong.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximal number of evaluations is exceeded.
-     * @throws org.apache.commons.math3.exception.NullArgumentException if
-     * any argument is {@code null}.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException  if the start point dimension is wrong.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximal number of evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.NullArgumentException       if
+     *                                                                        any argument is {@code null}.
      */
     public PointValuePair optimize(final int maxEval,
                                    final MultivariateDifferentiableFunction f,
                                    final GoalType goalType,
                                    final double[] startPoint) {
         return optimizeInternal(maxEval,
-                                FunctionUtils.toDifferentiableMultivariateFunction(f),
-                                goalType,
-                                startPoint);
+                FunctionUtils.toDifferentiableMultivariateFunction(f),
+                goalType,
+                startPoint);
     }
 }

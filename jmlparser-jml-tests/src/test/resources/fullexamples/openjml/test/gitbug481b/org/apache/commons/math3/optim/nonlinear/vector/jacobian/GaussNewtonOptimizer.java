@@ -47,7 +47,9 @@ import org.apache.commons.math3.optim.PointVectorValuePair;
  */
 @Deprecated
 public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
-    /** Indicator for using LU decomposition. */
+    /**
+     * Indicator for using LU decomposition.
+     */
     private final boolean useLU;
 
     /**
@@ -61,9 +63,9 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
     }
 
     /**
-     * @param useLU If {@code true}, the normal equations will be solved
-     * using LU decomposition, otherwise they will be solved using QR
-     * decomposition.
+     * @param useLU   If {@code true}, the normal equations will be solved
+     *                using LU decomposition, otherwise they will be solved using QR
+     *                decomposition.
      * @param checker Convergence checker.
      */
     public GaussNewtonOptimizer(final boolean useLU,
@@ -72,13 +74,15 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
         this.useLU = useLU;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PointVectorValuePair doOptimize() {
         checkParameters();
 
         final ConvergenceChecker<PointVectorValuePair> checker
-            = getConvergenceChecker();
+                = getConvergenceChecker();
 
         // Computation will be useless without a checker (see "for-loop").
         if (checker == null) {
@@ -100,7 +104,7 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
 
         // iterate until convergence is reached
         PointVectorValuePair current = null;
-        for (boolean converged = false; !converged;) {
+        for (boolean converged = false; !converged; ) {
             incrementIterationCount();
 
             // evaluate the objective function and its jacobian
@@ -112,12 +116,12 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
             current = new PointVectorValuePair(currentPoint, currentObjective);
 
             // build the linear problem
-            final double[]   b = new double[nC];
+            final double[] b = new double[nC];
             final double[][] a = new double[nC][nC];
             for (int i = 0; i < nR; ++i) {
 
-                final double[] grad   = weightedJacobian.getRow(i);
-                final double weight   = residualsWeights[i];
+                final double[] grad = weightedJacobian.getRow(i);
+                final double weight = residualsWeights[i];
                 final double residual = currentResiduals[i];
 
                 // compute the normal equation
@@ -166,11 +170,11 @@ public class GaussNewtonOptimizer extends AbstractLeastSquaresOptimizer {
 
     /**
      * @throws MathUnsupportedOperationException if bounds were passed to the
-     * {@link #optimize(OptimizationData[]) optimize} method.
+     *                                           {@link #optimize(OptimizationData[]) optimize} method.
      */
     private void checkParameters() {
         if (getLowerBound() != null ||
-            getUpperBound() != null) {
+                getUpperBound() != null) {
             throw new MathUnsupportedOperationException(LocalizedFormats.CONSTRAINT);
         }
     }

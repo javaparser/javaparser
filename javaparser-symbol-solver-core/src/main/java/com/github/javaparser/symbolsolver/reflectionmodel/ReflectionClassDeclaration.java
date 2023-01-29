@@ -348,7 +348,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        if(!reflectionClassAdapter.getSuperClass().isPresent()) {
+        if (!reflectionClassAdapter.getSuperClass().isPresent()) {
             return Optional.empty();
         }
         return Optional.of(reflectionClassAdapter.getSuperClass().get());

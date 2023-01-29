@@ -24,141 +24,150 @@ import static org.junit.Assert.fail;
 
 
 public abstract class EscBase extends JmlTestCase {
-    
-	public static final String OpenJMLDemoPath = "../../OpenJMLDemo";
-	
-    @Rule public TestName testname = new TestName();
-    @Rule public Timeout timeout = new Timeout(10, TimeUnit.MINUTES); // limit on entire test, not on each proof attempt
-    
+
+    public static final String OpenJMLDemoPath = "../../OpenJMLDemo";
+
+    @Rule
+    public TestName testname = new TestName();
+    @Rule
+    public Timeout timeout = new Timeout(10, TimeUnit.MINUTES); // limit on entire test, not on each proof attempt
+
     protected static boolean runLongTests = System.getProperty("SKIPLONGTESTS") == null;
 
     static {
         if (!runLongTests) System.out.println("Skipping long-running tests");
     }
 
-    static public java.util.List<String> solvers = java.util.Arrays.asList(new String[]{ 
-            "z3_4_3", 
+    static public java.util.List<String> solvers = java.util.Arrays.asList(new String[]{
+            "z3_4_3",
 //            "z3_4_7", 
- //           "z3_4_5", 
- //           "z3_4_6", 
- //           "z3_4_3_1", 
+            //           "z3_4_5",
+            //           "z3_4_6",
+            //           "z3_4_3_1",
 //          "z3_4_4", 
 //            "cvc4",
             //"yices2",
- //             "yices", 
- //            "simplify" 
-            });
-        
+            //             "yices",
+            //            "simplify"
+    });
+
     static public java.util.List<String> solversWithNull;
-    		{
-    			solversWithNull = new LinkedList<String>();
-    			solversWithNull.add(null);
-    			solversWithNull.addAll(solvers);
-    		}
-        
+
+    {
+        solversWithNull = new LinkedList<String>();
+        solversWithNull.add(null);
+        solversWithNull.addAll(solvers);
+    }
+
 //    static public java.util.List<String[]> minQuants = java.util.Arrays.asList(new String[][]{ 
 //            new String[]{"-minQuant"}, 
 //            new String[]{"-no-minQuant"}, 
 //            });
-        
-    /** The parameters must be a String[] and a String */
+
+    /**
+     * The parameters must be a String[] and a String
+     */
     @Parameters
     static public Collection<String[]> parameters() {
         return solversOnly();
     }
-    
+
     static public Collection<String[]> solversOnly() {
         return makeParameters(solvers);
     }
-    
+
     public String getMethodName(int i) {
-    	return (new RuntimeException()).fillInStackTrace().getStackTrace()[i+1].getMethodName();
+        return (new RuntimeException()).fillInStackTrace().getStackTrace()[i + 1].getMethodName();
     }
-    
+
 //    public static final String[] minQuantOptions = new String[]{"-no-minQuant","-minQuant"};
-    
-    static public  Collection<String[]> solvers(java.util.List<String> solvers) {
+
+    static public Collection<String[]> solvers(java.util.List<String> solvers) {
         Collection<String[]> data = new ArrayList<String[]>(10);
-        for (String s: solvers) {
+        for (String s : solvers) {
             data.add(new String[]{s});
         }
         return data;
     }
 
-    static public  Collection<String[]> optionsAndSolvers(String[] options, java.util.List<String> solvers) {
+    static public Collection<String[]> optionsAndSolvers(String[] options, java.util.List<String> solvers) {
         Collection<String[]> data = new ArrayList<String[]>(10);
-        for (String s: solvers) {
-        	for (String opts: options) {
-        		data.add(new String[]{opts,s});
-        	}
-        }
-        return data;
-    }
-
-    
-    static public  Collection<String[]> makeParameters(java.util.List<String> options, java.util.List<String> solvers) {
-        Collection<String[]> data = new ArrayList<String[]>(10);
-        for (String s: solvers) {
-            for (String option: options) {
-                data.add(new String[]{option,s});
+        for (String s : solvers) {
+            for (String opts : options) {
+                data.add(new String[]{opts, s});
             }
         }
         return data;
     }
 
-    static public  Collection<String[]> makeParameters(java.util.List<String> solvers) {
+
+    static public Collection<String[]> makeParameters(java.util.List<String> options, java.util.List<String> solvers) {
         Collection<String[]> data = new ArrayList<String[]>(10);
-        for (String s: solvers) data.add(new String[]{null,s});
+        for (String s : solvers) {
+            for (String option : options) {
+                data.add(new String[]{option, s});
+            }
+        }
         return data;
     }
 
-    static public  Collection<String[]> makeParameters(String... solvers) {
+    static public Collection<String[]> makeParameters(java.util.List<String> solvers) {
         Collection<String[]> data = new ArrayList<String[]>(10);
-        for (String s: solvers) data.add(new String[]{null,s});
+        for (String s : solvers) data.add(new String[]{null, s});
         return data;
     }
-    
+
+    static public Collection<String[]> makeParameters(String... solvers) {
+        Collection<String[]> data = new ArrayList<String[]>(10);
+        for (String s : solvers) data.add(new String[]{null, s});
+        return data;
+    }
+
     static public void addOptionsToArgs(String options, java.util.List<String> args) {
         if (options != null) {
-            if (options.indexOf(',')>= 0) {
-            	for (String o: options.split(",")) if (!o.isEmpty()) args.add(o);
+            if (options.indexOf(',') >= 0) {
+                for (String o : options.split(",")) if (!o.isEmpty()) args.add(o);
             } else {
-            	for (String o: options.split(" ")) if (!o.isEmpty()) args.add(o);
+                for (String o : options.split(" ")) if (!o.isEmpty()) args.add(o);
             }
         }
     }
-    
+
     public void addOptions(String options) {
         if (options != null) {
-            if (options.indexOf(',')>= 0) {
-            	main.addOptions(options.split(","));
+            if (options.indexOf(',') >= 0) {
+                main.addOptions(options.split(","));
             } else {
-            	main.addOptions(options.split(","));
+                main.addOptions(options.split(","));
             }
         }
     }
-    
 
-    /** options is a comma- or space-separated list of options to be added */
+
+    /**
+     * options is a comma- or space-separated list of options to be added
+     */
     protected String options;
     protected String solver;
     protected boolean captureOutput = false;
-    
-    /** options is a comma- or space-separated list of options to be added */
+
+    /**
+     * options is a comma- or space-separated list of options to be added
+     */
     public EscBase(String options, String solver) {
         this.options = options;
         this.solver = solver;
     }
-    
+
 //    public void printDiagnostics() {
 //        System.out.println("SOLVER: " + solver + " " + options);
 //        super.printDiagnostics();
 //    }
 
     protected static String z = java.io.File.pathSeparator;
-    protected static String testspecpath1 = "$A"+z+"$B";
+    protected static String testspecpath1 = "$A" + z + "$B";
     protected static String testspecpath;
-    
+
     // Set this field to the expected exit value. 
     // 0: only static checking errors, not parsing or type errors
     // 1: parsing or type errors
@@ -174,107 +183,107 @@ public abstract class EscBase extends JmlTestCase {
         testspecpath = testspecpath1;
         collector = new FilteredDiagnosticCollector<JavaFileObject>(true);
         super.setUp();
-        main.addOptions("-specspath",   testspecpath);
-        main.addOptions("-command","esc");
-        main.addOptions("-keys","NOARITH");
-        main.addOptions("-escExitInfo","-no-purityCheck");
+        main.addOptions("-specspath", testspecpath);
+        main.addOptions("-command", "esc");
+        main.addOptions("-keys", "NOARITH");
+        main.addOptions("-escExitInfo", "-no-purityCheck");
 //        main.addOptions("-timeout=300"); // seconds
         main.addOptions("-jmltesting");
         main.addUncheckedOption("openjml.defaultProver=z3_4");
         addOptions(options);
-        if (solver != null) main.addOptions(JmlOption.PROVER.optionName(),solver);
+        if (solver != null) main.addOptions(JmlOption.PROVER.optionName(), solver);
         specs = JmlSpecs.instance(context);
         expectedExit = 0;
         noAssociatedDeclaration = false;
         ignoreNotes = false;
         print = false;
         args = new String[]{};
-        MethodProverSMT.benchmarkName = 
+        MethodProverSMT.benchmarkName =
                 (this.getClass() + "." + testname.getMethodName()).replace("[0]", "").substring(6);
     }
 
-    public void escOnFiles(String sourceDirname, String outDir, String ... opts) {
-    	boolean print = false;
-    	try {
-    		java.util.List<String> args = setupForFiles(sourceDirname, outDir, opts);
-    		String actCompile = outDir + "/actual";
-    		new File(actCompile).delete();
-    		PrintWriter pw = new PrintWriter(actCompile);
-    		int ex = -1;
-    		try {
-    			ex = org.jmlspecs.openjml.Main.execute(pw,null,null,args.toArray(new String[args.size()]));
-    		} finally {
-    			pw.close();
-    		}
+    public void escOnFiles(String sourceDirname, String outDir, String... opts) {
+        boolean print = false;
+        try {
+            java.util.List<String> args = setupForFiles(sourceDirname, outDir, opts);
+            String actCompile = outDir + "/actual";
+            new File(actCompile).delete();
+            PrintWriter pw = new PrintWriter(actCompile);
+            int ex = -1;
+            try {
+                ex = org.jmlspecs.openjml.Main.execute(pw, null, null, args.toArray(new String[args.size()]));
+            } finally {
+                pw.close();
+            }
 
-    		String diffs = outputCompare.compareFiles(outDir + "/expected", actCompile);
-    		int n = 0;
-    		while (diffs != null) {
-    			n++;
-    			String name = outDir + "/expected" + n;
-    			if (!new File(name).exists()) break;
-    			diffs = outputCompare.compareFiles(name, actCompile);
-    		}
-    		if (diffs != null) {
-    		    System.out.println("TEST DIFFERENCES: " + testname.getMethodName());
-    			System.out.println(diffs);
-    			fail("Files differ: " + diffs);
-    		}  
-    		if (expectedExit != -1 && ex != expectedExit) fail("Compile ended with exit code " + ex);
-    		new File(actCompile).delete();
+            String diffs = outputCompare.compareFiles(outDir + "/expected", actCompile);
+            int n = 0;
+            while (diffs != null) {
+                n++;
+                String name = outDir + "/expected" + n;
+                if (!new File(name).exists()) break;
+                diffs = outputCompare.compareFiles(name, actCompile);
+            }
+            if (diffs != null) {
+                System.out.println("TEST DIFFERENCES: " + testname.getMethodName());
+                System.out.println(diffs);
+                fail("Files differ: " + diffs);
+            }
+            if (expectedExit != -1 && ex != expectedExit) fail("Compile ended with exit code " + ex);
+            new File(actCompile).delete();
 
-    	} catch (Exception e) {
-    		e.printStackTrace(System.out);
-    		fail("Exception thrown while processing test: " + e);
-    	} catch (AssertionError e) {
-    		throw e;
-    	} finally {
-    		// Should close open objects
-    	}
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            fail("Exception thrown while processing test: " + e);
+        } catch (AssertionError e) {
+            throw e;
+        } finally {
+            // Should close open objects
+        }
     }
 
-    public void escOnFile(String sourceFilename, String outDir, String ... opts) {
-    	boolean print = false;
-    	try {
-    		new File(outDir).mkdirs();
-    		java.util.List<String> args = setupForFiles(sourceFilename, outDir, opts);
-    		String actCompile = outDir + "/actual";
-    		new File(actCompile).delete();
-    		PrintWriter pw = new PrintWriter(actCompile);
-    		int ex = -1;
-    		try {
-    			ex = org.jmlspecs.openjml.Main.execute(pw,null,null,args.toArray(new String[args.size()]));
-    		} finally {
-    			pw.close();
-    		}
+    public void escOnFile(String sourceFilename, String outDir, String... opts) {
+        boolean print = false;
+        try {
+            new File(outDir).mkdirs();
+            java.util.List<String> args = setupForFiles(sourceFilename, outDir, opts);
+            String actCompile = outDir + "/actual";
+            new File(actCompile).delete();
+            PrintWriter pw = new PrintWriter(actCompile);
+            int ex = -1;
+            try {
+                ex = org.jmlspecs.openjml.Main.execute(pw, null, null, args.toArray(new String[args.size()]));
+            } finally {
+                pw.close();
+            }
 
-    		String diffs = outputCompare.compareFiles(outDir + "/expected", actCompile);
-    		int n = 0;
-    		while (diffs != null) {
-    			n++;
-    			String name = outDir + "/expected" + n;
-    			if (!new File(name).exists()) break;
-    			diffs = outputCompare.compareFiles(name, actCompile);
-    		}
-    		if (diffs != null) {
-    		    System.out.println("TEST DIFFERENCES: " + testname.getMethodName());
-    			System.out.println(diffs);
-    			fail("Files differ: " + diffs);
-    		}  
-    		if (expectedExit != -1 && ex != expectedExit) fail("Compile ended with exit code " + ex);
-    		new File(actCompile).delete();
+            String diffs = outputCompare.compareFiles(outDir + "/expected", actCompile);
+            int n = 0;
+            while (diffs != null) {
+                n++;
+                String name = outDir + "/expected" + n;
+                if (!new File(name).exists()) break;
+                diffs = outputCompare.compareFiles(name, actCompile);
+            }
+            if (diffs != null) {
+                System.out.println("TEST DIFFERENCES: " + testname.getMethodName());
+                System.out.println(diffs);
+                fail("Files differ: " + diffs);
+            }
+            if (expectedExit != -1 && ex != expectedExit) fail("Compile ended with exit code " + ex);
+            new File(actCompile).delete();
 
-    	} catch (Exception e) {
-    		e.printStackTrace(System.out);
-    		fail("Exception thrown while processing test: " + e);
-    	} catch (AssertionError e) {
-    		throw e;
-    	} finally {
-    		// Should close open objects
-    	}
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            fail("Exception thrown while processing test: " + e);
+        } catch (AssertionError e) {
+            throw e;
+        } finally {
+            // Should close open objects
+        }
     }
 
-    public java.util.List<String> setupForFiles(String sourceDirOrFilename, String outDir, String ... opts) {
+    public java.util.List<String> setupForFiles(String sourceDirOrFilename, String outDir, String... opts) {
         new File(outDir).mkdirs();
         java.util.List<String> args = new LinkedList<String>();
         args.add("-esc");
@@ -285,14 +294,13 @@ public abstract class EscBase extends JmlTestCase {
         args.add("-code-math=java");
         if (!new File(sourceDirOrFilename).isFile()) args.add("-dir");
         args.add(sourceDirOrFilename);
-        if (solver != null) args.add("-prover="+solver);
-        addOptionsToArgs(options,args);        
+        if (solver != null) args.add("-prover=" + solver);
+        addOptionsToArgs(options, args);
         args.addAll(Arrays.asList(opts));
         return args;
     }
-    
-    
-    
+
+
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
@@ -301,15 +309,15 @@ public abstract class EscBase extends JmlTestCase {
         MethodProverSMT.benchmarkName = null;
     }
 
-    
+
     protected void helpTCX2(String classname, String s, String classname2, String s2, Object... list) {
         try {
-            String filename = classname.replace(".","/")+".java";
-            JavaFileObject f = new TestJavaFileObject(filename,s);
-            String filename2 = classname2.replace(".","/")+".java";
-            JavaFileObject f2 = new TestJavaFileObject(filename2,s2);
+            String filename = classname.replace(".", "/") + ".java";
+            JavaFileObject f = new TestJavaFileObject(filename, s);
+            String filename2 = classname2.replace(".", "/") + ".java";
+            JavaFileObject f2 = new TestJavaFileObject(filename2, s2);
             Log.instance(context).useSource(f);
-            helpTCXB(List.of(f,f2),list);
+            helpTCXB(List.of(f, f2), list);
         } catch (Exception e) {
             e.printStackTrace(System.out);
             fail("Exception thrown while processing test: " + e);
@@ -318,10 +326,10 @@ public abstract class EscBase extends JmlTestCase {
 
     protected void helpTCX(String classname, String s, Object... list) {
         try {
-            String filename = classname.replace(".","/") +".java";  // FIXME - I think this string should be prefixed with $A/ 
-            JavaFileObject f = new TestJavaFileObject(filename,s);
+            String filename = classname.replace(".", "/") + ".java";  // FIXME - I think this string should be prefixed with $A/
+            JavaFileObject f = new TestJavaFileObject(filename, s);
             Log.instance(context).useSource(f);
-            helpTCXB(List.of(f),list);
+            helpTCXB(List.of(f), list);
         } catch (Exception e) {
             e.printStackTrace(System.out);
             fail("Exception thrown while processing test: " + e);
@@ -330,17 +338,17 @@ public abstract class EscBase extends JmlTestCase {
 
     protected void helpTCXB(List<JavaFileObject> files, Object... list) {
         try {
-            for (JavaFileObject f: mockFiles) files = files.append(f);
-            
+            for (JavaFileObject f : mockFiles) files = files.append(f);
+
             int ex = main.compile(args, null, context, files, null).exitCode;
             if (captureOutput) collectOutput(false);
-            
+
             if (print) printDiagnostics();
-            outputCompare.compareResults(list,collector);
+            outputCompare.compareResults(list, collector);
             if (ex != expectedExit) fail("Compile ended with exit code " + ex);
 
         } catch (Exception e) {
-        	printDiagnostics();
+            printDiagnostics();
             e.printStackTrace(System.out);
             fail("Exception thrown while processing test: " + e);
         } catch (AssertionError e) {
@@ -348,12 +356,23 @@ public abstract class EscBase extends JmlTestCase {
             throw e;
         }
     }
-    
-    protected OneOf oneof(Object ... list) { return new OneOf(list); }
-    protected AnyOrder anyorder(Object ... list) { return new AnyOrder(list); }
-    protected Optional optional(Object ... list) { return new Optional(list); }
-    protected Seq seq(Object ... list) { return new Seq(list); }
-    
+
+    protected OneOf oneof(Object... list) {
+        return new OneOf(list);
+    }
+
+    protected AnyOrder anyorder(Object... list) {
+        return new AnyOrder(list);
+    }
+
+    protected Optional optional(Object... list) {
+        return new Optional(list);
+    }
+
+    protected Seq seq(Object... list) {
+        return new Seq(list);
+    }
+
 
 //    protected boolean comparePair(Object[] list, int i, int j, boolean issueErrors) {
 //        int col = ((Integer)list[i+1]).intValue();

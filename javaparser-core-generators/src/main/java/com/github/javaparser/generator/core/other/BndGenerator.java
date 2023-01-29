@@ -55,9 +55,9 @@ public class BndGenerator extends Generator {
                     .distinct()
                     .sorted()
                     .reduce(null, (packageList, packageName) ->
-                        concatPackageName(packageName, packageList, lineSeparator));
+                            concatPackageName(packageName, packageList, lineSeparator));
             Path output = projectRoot.resolve("bnd.bnd");
-            try(Writer writer = Files.newBufferedWriter(output)) {
+            try (Writer writer = Files.newBufferedWriter(output)) {
                 Path templateFile = projectRoot.resolve("bnd.bnd.template");
                 String template = new String(Files.readAllBytes(templateFile), StandardCharsets.UTF_8);
                 writer.write(template.replace("{exportedPackages}", packagesList));

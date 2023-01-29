@@ -41,10 +41,14 @@ import org.apache.commons.math3.linear.RealMatrix;
  */
 public class StorelessCovariance extends Covariance {
 
-    /** the square covariance matrix (upper triangular part) */
+    /**
+     * the square covariance matrix (upper triangular part)
+     */
     private StorelessBivariateCovariance[] covMatrix;
 
-    /** dimension of the square covariance matrix */
+    /**
+     * dimension of the square covariance matrix
+     */
     private int dimension;
 
     /**
@@ -60,10 +64,10 @@ public class StorelessCovariance extends Covariance {
      * Create a covariance matrix with a given number of rows and columns and the
      * indicated bias correction.
      *
-     * @param dim the dimension of the covariance matrix
+     * @param dim           the dimension of the covariance matrix
      * @param biasCorrected if <code>true</code> the covariance estimate is corrected
-     * for bias, i.e. n-1 in the denominator, otherwise there is no bias correction,
-     * i.e. n in the denominator.
+     *                      for bias, i.e. n-1 in the denominator, otherwise there is no bias correction,
+     *                      i.e. n in the denominator.
      */
     public StorelessCovariance(final int dim, final boolean biasCorrected) {
         dimension = dim;
@@ -78,8 +82,8 @@ public class StorelessCovariance extends Covariance {
      * @param biasCorrected if the covariance estimate shall be corrected for bias
      */
     private void initializeMatrix(final boolean biasCorrected) {
-        for(int i = 0; i < dimension; i++){
-            for(int j = 0; j < dimension; j++){
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
                 setElement(i, j, new StorelessBivariateCovariance(biasCorrected));
             }
         }
@@ -100,6 +104,7 @@ public class StorelessCovariance extends Covariance {
 
     /**
      * Gets the element at index (i, j) from the covariance matrix
+     *
      * @param i the row index
      * @param j the column index
      * @return the {@link StorelessBivariateCovariance} element at the given index
@@ -110,8 +115,9 @@ public class StorelessCovariance extends Covariance {
 
     /**
      * Sets the covariance element at index (i, j) in the covariance matrix
-     * @param i the row index
-     * @param j the column index
+     *
+     * @param i   the row index
+     * @param j   the column index
      * @param cov the {@link StorelessBivariateCovariance} element to be set
      */
     private void setElement(final int i, final int j,
@@ -126,11 +132,11 @@ public class StorelessCovariance extends Covariance {
      * @param yIndex column index in the covariance matrix
      * @return the covariance of the given element
      * @throws NumberIsTooSmallException if the number of observations
-     * in the cell is &lt; 2
+     *                                   in the cell is &lt; 2
      */
     public double getCovariance(final int xIndex,
                                 final int yIndex)
-        throws NumberIsTooSmallException {
+            throws NumberIsTooSmallException {
 
         return getElement(xIndex, yIndex).getResult();
 
@@ -141,10 +147,10 @@ public class StorelessCovariance extends Covariance {
      *
      * @param data array representing one row of data.
      * @throws DimensionMismatchException if the length of <code>rowData</code>
-     * does not match with the covariance matrix
+     *                                    does not match with the covariance matrix
      */
     public void increment(final double[] data)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         int length = data.length;
         if (length != dimension) {
@@ -153,8 +159,8 @@ public class StorelessCovariance extends Covariance {
 
         // only update the upper triangular part of the covariance matrix
         // as only these parts are actually stored
-        for (int i = 0; i < length; i++){
-            for (int j = i; j < length; j++){
+        for (int i = 0; i < length; i++) {
+            for (int j = i; j < length; j++) {
                 getElement(i, j).increment(data[i], data[j]);
             }
         }
@@ -187,8 +193,9 @@ public class StorelessCovariance extends Covariance {
 
     /**
      * {@inheritDoc}
+     *
      * @throws NumberIsTooSmallException if the number of observations
-     * in a cell is &lt; 2
+     *                                   in a cell is &lt; 2
      */
     @Override
     public RealMatrix getCovarianceMatrix() throws NumberIsTooSmallException {
@@ -200,7 +207,7 @@ public class StorelessCovariance extends Covariance {
      *
      * @return a two-dimensional double array of covariance values
      * @throws NumberIsTooSmallException if the number of observations
-     * for a cell is &lt; 2
+     *                                   for a cell is &lt; 2
      */
     public double[][] getData() throws NumberIsTooSmallException {
         final double[][] data = new double[dimension][dimension];
@@ -223,7 +230,7 @@ public class StorelessCovariance extends Covariance {
      */
     @Override
     public int getN()
-        throws MathUnsupportedOperationException {
+            throws MathUnsupportedOperationException {
         throw new MathUnsupportedOperationException();
     }
 }

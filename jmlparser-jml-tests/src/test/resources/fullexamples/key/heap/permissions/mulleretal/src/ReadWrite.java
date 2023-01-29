@@ -37,11 +37,11 @@ public class ReadWrite {
         /*@ loop_invariant !\dl_readPermission(\permission(this.rds));
             assignable<permissions> this.rds, this.lockedRds, this.val;
             assignable<heap> this.lockedRds, this.rds, this.val; @*/
-        while(!done) {
+        while (!done) {
             lock();
-            if(rds == 0) {
-              write();
-              done = true;
+            if (rds == 0) {
+                write();
+                done = true;
             }
             unlock();
         }
@@ -54,9 +54,13 @@ public class ReadWrite {
           assignable<permissions> this.rds, this.val, this.lockedRds;
           assignable<heap> this.rds, this.val, this.lockedRds; @*/
     public /*@ helper @*/ int doRead() {
-        lock(); rds++; unlock(); // read lock
+        lock();
+        rds++;
+        unlock(); // read lock
         int r = read();
-        lock(); rds--; unlock(); // read unlock
+        lock();
+        rds--;
+        unlock(); // read unlock
         return r;
     }
 

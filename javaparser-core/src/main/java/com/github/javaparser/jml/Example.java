@@ -17,6 +17,7 @@ import java.util.stream.IntStream;
  * @version 1 (2/26/21)
  */
 public class Example {
+
     public static void main(String[] args) throws FileNotFoundException {
         /*GeneratedJavaParserTokenManager manager = new GeneratedJavaParserTokenManager(
                 new SimpleCharStream(new StreamProvider(new FileReader(
@@ -31,33 +32,24 @@ public class Example {
             System.out.format("%3d: (%3d) %s%n", cnt++, t.kind, t);
         } while (t.kind != GeneratedJavaParserConstants.EOF);
         */
-
         ParserConfiguration config = new ParserConfiguration();
         config.setDoNotAssignCommentsPrecedingEmptyLines(false);
         config.setAttributeComments(true);
         config.setProcessJml(true);
         JavaParser jpb = new JavaParser(config);
-
-
-        IntStream timings = IntStream.rangeClosed(0, 0)
-                .map(i -> {
-                    long start = System.currentTimeMillis();
-                    try {
-                        ParseResult<CompilationUnit> result =
-                                jpb.parse(new File("/home/weigl/work/javaparser/JmlExample.java"));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    long stop = System.currentTimeMillis();
-                    return (int) (stop - start);
-                });
-
+        IntStream timings = IntStream.rangeClosed(0, 0).map(i -> {
+            long start = System.currentTimeMillis();
+            try {
+                ParseResult<CompilationUnit> result = jpb.parse(new File("/home/weigl/work/javaparser/JmlExample.java"));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            long stop = System.currentTimeMillis();
+            return (int) (stop - start);
+        });
         IntSummaryStatistics stat = timings.summaryStatistics();
         System.out.println(stat);
-
-        ParseResult<CompilationUnit> result =
-                jpb.parse(new File("/home/weigl/work/javaparser/JmlExample.java"));
-
+        ParseResult<CompilationUnit> result = jpb.parse(new File("/home/weigl/work/javaparser/JmlExample.java"));
         System.out.println(result);
         result.getResult().ifPresent(it -> {
             DefaultPrinterConfiguration c = new DefaultPrinterConfiguration();

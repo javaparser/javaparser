@@ -72,28 +72,28 @@ public interface MultiValuedMap<K, V> {
      * a mapping for a key {@code k} such that {@code (key==null ? k==null : key.equals(k))}.
      * (There can be at most one such mapping.)
      *
-     * @param key  key whose presence in this map is to be tested
+     * @param key key whose presence in this map is to be tested
      * @return true if this map contains a mapping for the specified key
      * @throws NullPointerException if the specified key is null and this map
-     *   does not permit null keys (optional)
+     *                              does not permit null keys (optional)
      */
     boolean containsKey(Object key);
 
     /**
      * Checks whether the map contains at least one mapping for the specified value.
      *
-     * @param value  the value to search for
+     * @param value the value to search for
      * @return true if the map contains the value
      * @throws NullPointerException if the value is null and null values are not supported
-     *   by the used collection types (optional)
+     *                              by the used collection types (optional)
      */
     boolean containsValue(Object value);
 
     /**
      * Checks whether the map contains a mapping for the specified key and value.
      *
-     * @param key  the key to search for
-     * @param value  the value to search for
+     * @param key   the key to search for
+     * @param value the value to search for
      * @return true if the map contains the value
      */
     boolean containsMapping(Object key, Object value);
@@ -105,9 +105,9 @@ public interface MultiValuedMap<K, V> {
      * returns {@code false}. Changes to the returned collection will update the underlying
      * {@code MultiValuedMap} and vice-versa.
      *
-     * @param key  the key to retrieve
+     * @param key the key to retrieve
      * @return the {@code Collection} of values, implementations should
-     *   return an empty collection for no mapping
+     * return an empty collection for no mapping
      * @throws NullPointerException if the key is null and null keys are invalid (optional)
      */
     Collection<V> get(K key);
@@ -125,28 +125,28 @@ public interface MultiValuedMap<K, V> {
      * The method will return {@code true} if the size of the multi-valued map
      * has been increased because of this operation.
      *
-     * @param key  the key to store against
-     * @param value  the value to add to the collection at the key
+     * @param key   the key to store against
+     * @param value the value to add to the collection at the key
      * @return true if the map changed as a result of this put operation, or false
-     *   if the map already contained the key-value mapping and the collection
-     *   type does not allow duplicate values, e.g. when using a Set
+     * if the map already contained the key-value mapping and the collection
+     * type does not allow duplicate values, e.g. when using a Set
      * @throws UnsupportedOperationException if the put operation is not supported by
-     *   this multi-valued map, e.g. if it is unmodifiable
-     * @throws NullPointerException if the key or value is null and null is invalid (optional)
-     * @throws IllegalArgumentException if some aspect of the specified key or value prevents
-     *   it from being stored in this multi-valued map
+     *                                       this multi-valued map, e.g. if it is unmodifiable
+     * @throws NullPointerException          if the key or value is null and null is invalid (optional)
+     * @throws IllegalArgumentException      if some aspect of the specified key or value prevents
+     *                                       it from being stored in this multi-valued map
      */
     boolean put(K key, V value);
 
     /**
      * Adds a mapping to the specified key for all values contained in the given Iterable.
      *
-     * @param key  the key to store against
-     * @param values  the values to add to the collection at the key, may not be null
+     * @param key    the key to store against
+     * @param values the values to add to the collection at the key, may not be null
      * @return true if the map changed as a result of this operation
      * @throws NullPointerException if the specified iterable is null, or if this map
-     *   does not permit null keys or values, and the specified key or values contain
-     *   null (optional)
+     *                              does not permit null keys or values, and the specified key or values contain
+     *                              null (optional)
      */
     boolean putAll(K key, Iterable<? extends V> values);
 
@@ -155,21 +155,21 @@ public interface MultiValuedMap<K, V> {
      * (optional operation).
      * <p>
      * The effect of this call is equivalent to that of calling
-     * {@link #put(Object,Object) put(k, v)} on this map once for each mapping
+     * {@link #put(Object, Object) put(k, v)} on this map once for each mapping
      * from key {@code k} to value {@code v} in the specified map.
      * <p>
      * The behavior of this operation is undefined if the specified map is modified
      * while the operation is in progress.
      *
-     * @param map  mappings to be stored in this map, may not be null
+     * @param map mappings to be stored in this map, may not be null
      * @return true if the map changed as a result of this operation
      * @throws UnsupportedOperationException if the {@code putAll} operation is
-     *   not supported by this map
-     * @throws NullPointerException if the specified map is null, or if this map
-     *   does not permit null keys or values, and the specified map
-     *   contains null keys or values (optional)
-     * @throws IllegalArgumentException if some property of a key or value in
-     *   the specified map prevents it from being stored in this map
+     *                                       not supported by this map
+     * @throws NullPointerException          if the specified map is null, or if this map
+     *                                       does not permit null keys or values, and the specified map
+     *                                       contains null keys or values (optional)
+     * @throws IllegalArgumentException      if some property of a key or value in
+     *                                       the specified map prevents it from being stored in this map
      */
     boolean putAll(Map<? extends K, ? extends V> map);
 
@@ -178,21 +178,21 @@ public interface MultiValuedMap<K, V> {
      * (optional operation).
      * <p>
      * The effect of this call is equivalent to that of calling
-     * {@link #put(Object,Object) put(k, v)} on this map once for each
+     * {@link #put(Object, Object) put(k, v)} on this map once for each
      * mapping from key {@code k} to value {@code v} in the specified map.
      * <p>
      * The behavior of this operation is undefined if the specified map is modified
      * while the operation is in progress.
      *
-     * @param map  mappings to be stored in this map, may not be null
+     * @param map mappings to be stored in this map, may not be null
      * @return true if the map changed as a result of this operation
      * @throws UnsupportedOperationException if the {@code putAll} operation is
-     *   not supported by this map
-     * @throws NullPointerException if the specified map is null, or if this map
-     *   does not permit null keys or values, and the specified map
-     *   contains null keys or values (optional)
-     * @throws IllegalArgumentException if some property of a key or value in
-     *   the specified map prevents it from being stored in this map
+     *                                       not supported by this map
+     * @throws NullPointerException          if the specified map is null, or if this map
+     *                                       does not permit null keys or values, and the specified map
+     *                                       contains null keys or values (optional)
+     * @throws IllegalArgumentException      if some property of a key or value in
+     *                                       the specified map prevents it from being stored in this map
      */
     boolean putAll(MultiValuedMap<? extends K, ? extends V> map);
 
@@ -203,10 +203,10 @@ public interface MultiValuedMap<K, V> {
      * to this multi-valued map. In case no mapping was stored for the specified
      * key, an empty, unmodifiable collection will be returned.
      *
-     * @param key  the key to remove values from
+     * @param key the key to remove values from
      * @return the values that were removed
      * @throws UnsupportedOperationException if the map is unmodifiable
-     * @throws NullPointerException if the key is null and null keys are invalid (optional)
+     * @throws NullPointerException          if the key is null and null keys are invalid (optional)
      */
     Collection<V> remove(Object key);
 
@@ -220,10 +220,10 @@ public interface MultiValuedMap<K, V> {
      * an empty collection from a subsequent <code>get(Object)</code>.
      *
      * @param key  the key to remove from
-     * @param item  the item to remove
+     * @param item the item to remove
      * @return true if the mapping was removed, false otherwise
      * @throws UnsupportedOperationException if the map is unmodifiable
-     * @throws NullPointerException if the key or value is null and null is invalid (optional)
+     * @throws NullPointerException          if the key or value is null and null is invalid (optional)
      */
     boolean removeMapping(Object key, Object item);
 

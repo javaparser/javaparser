@@ -10,13 +10,13 @@ final class MapImplementation extends AbstractMap {
         //@ set map = \map_empty;
         //@ set footprint = \set_union(\all_fields(this), \all_fields(entries));
     }
-    
+
     public void clear() {
         entries = new MapEntry[0];
         //@ set map = \map_empty;
         //@ set footprint = \set_union(\all_fields(this), \all_fields(entries));
     }
-    
+
     public boolean containsKey(Object key) {
         return getIndexOfKey(key) != -1;
     }
@@ -34,11 +34,11 @@ final class MapImplementation extends AbstractMap {
         }
         return false;
     }
-    
+
     void copyMapEntries(MapEntry[] target,
-            int targetIndex,
-            int entriesIndex,
-            int numberCopies) {
+                        int targetIndex,
+                        int entriesIndex,
+                        int numberCopies) {
         /*@ loop_invariant 0 <= i && i <= numberCopies;
          @ loop_invariant (\forall int x; 0 <= x && x < i; 
          @               ( target[targetIndex + x] == entries[entriesIndex + x] ));
@@ -78,7 +78,7 @@ final class MapImplementation extends AbstractMap {
     public boolean isEmpty() {
         return entries.length == 0;
     }
-    
+
     MapEntry newMapEntry(Object key, Object value) {
         return new MapEntry(key, value);
     }
@@ -96,8 +96,8 @@ final class MapImplementation extends AbstractMap {
             return putInDomain(index, value);
         }
     }
-   
-   MapEntry[] putExtendArray(Object key, Object value) {
+
+    MapEntry[] putExtendArray(Object key, Object value) {
         MapEntry[] result = newMapEntryArray(entries.length + 1);
         copyMapEntries(result, 0, 0, entries.length);
         result[entries.length] = newMapEntry(key, value);
@@ -118,7 +118,7 @@ final class MapImplementation extends AbstractMap {
         //@ set map = \map_update(map, key, value);
         return null;
     }
-    
+
     public Object remove(Object key) {
         int index = getIndexOfKey(key);
         if (index == -1) {
@@ -127,7 +127,7 @@ final class MapImplementation extends AbstractMap {
             return removeInDomain(index);
         }
     }
-    
+
     void removeCopyOldEntries(MapEntry[] newEntries, int index) {
         copyMapEntries(newEntries, 0, 0, index);
         copyMapEntries(newEntries, index, index + 1, newEntries.length - index);
@@ -144,17 +144,17 @@ final class MapImplementation extends AbstractMap {
         removeInDomainWithoutResult(index);
         return ret;
     }
-    
+
     void removeInDomainWithoutResult(int index) {
         removeSetEnries(removeGetNewArray(index), index);
-    }    
-    
-    public void removeSetEnries(MapEntry[] newEntries, int index){
+    }
+
+    public void removeSetEnries(MapEntry[] newEntries, int index) {
         //@ set map = \map_remove(map, entries[index].key);
         entries = newEntries;
         //@ set footprint = \set_union(\dl_allElementsOfArray(entries, \all_fields(entries[0])), \set_union(\all_fields(this), \all_fields(entries)));
     }
-    
+
     public int size() {
         return entries.length;
     }

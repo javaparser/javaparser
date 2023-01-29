@@ -8,7 +8,7 @@ import org.junit.Test;
 @org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)
 public class arith extends TCBase {
 
-    static String testspecpath = "$A"+z+"$B"+z+"$SY";
+    static String testspecpath = "$A" + z + "$B" + z + "$SY";
 
     @Override
     public void setUp() throws Exception {
@@ -16,13 +16,15 @@ public class arith extends TCBase {
         //jmldebug = true;
         super.setUp();
     }
-    
-    /** See the FIXME in BigInteger.jml */
+
+    /**
+     * See the FIXME in BigInteger.jml
+     */
     @Test
     public void testSomeJava() {
-        options.put("-specspath",   testspecpath);
-        JmlOption.setOption(context,JmlOption.PURITYCHECK,false);
-        helpTCF("A.java","public class A { java.math.BigInteger list; }");
+        options.put("-specspath", testspecpath);
+        JmlOption.setOption(context, JmlOption.PURITYCHECK, false);
+        helpTCF("A.java", "public class A { java.math.BigInteger list; }");
     }
 
 }

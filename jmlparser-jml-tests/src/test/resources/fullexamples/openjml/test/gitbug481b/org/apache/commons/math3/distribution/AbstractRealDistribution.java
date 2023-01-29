@@ -35,27 +35,35 @@ import java.io.Serializable;
  * @since 3.0
  */
 public abstract class AbstractRealDistribution
-implements RealDistribution, Serializable {
-    /** Default accuracy. */
+        implements RealDistribution, Serializable {
+    /**
+     * Default accuracy.
+     */
     public static final double SOLVER_DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -38038050983108802L;
-     /**
-      * RandomData instance used to generate samples from the distribution.
-      * @deprecated As of 3.1, to be removed in 4.0. Please use the
-      * {@link #random} instance variable instead.
-      */
+    /**
+     * RandomData instance used to generate samples from the distribution.
+     *
+     * @deprecated As of 3.1, to be removed in 4.0. Please use the
+     * {@link #random} instance variable instead.
+     */
     @Deprecated
     protected org.apache.commons.math3.random.RandomDataImpl randomData =
-        new org.apache.commons.math3.random.RandomDataImpl();
+            new org.apache.commons.math3.random.RandomDataImpl();
 
     /**
      * RNG instance used to generate samples from the distribution.
+     *
      * @since 3.1
      */
     protected final RandomGenerator random;
 
-    /** Solver absolute accuracy for inverse cumulative computation */
+    /**
+     * Solver absolute accuracy for inverse cumulative computation
+     */
     private double solverAbsoluteAccuracy = SOLVER_DEFAULT_ABSOLUTE_ACCURACY;
 
     /**
@@ -68,6 +76,7 @@ implements RealDistribution, Serializable {
         // New users are forbidden to use this constructor.
         random = null;
     }
+
     /**
      * @param rng Random number generator.
      * @since 3.1
@@ -78,12 +87,12 @@ implements RealDistribution, Serializable {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The default implementation uses the identity
      * <p>{@code P(x0 < X <= x1) = P(X <= x1) - P(X <= x0)}</p>
      *
      * @deprecated As of 3.1 (to be removed in 4.0). Please use
-     * {@link #probability(double,double)} instead.
+     * {@link #probability(double, double)} instead.
      */
     @Deprecated
     public double cumulativeProbability(double x0, double x1) throws NumberIsTooLargeException {
@@ -100,24 +109,23 @@ implements RealDistribution, Serializable {
      * takes a value between {@code x0} and {@code x1}, excluding the lower
      * and including the upper endpoint.
      * @throws NumberIsTooLargeException if {@code x0 > x1}.
-     *
-     * The default implementation uses the identity
-     * {@code P(x0 < X <= x1) = P(X <= x1) - P(X <= x0)}
-     *
+     *                                   <p>
+     *                                   The default implementation uses the identity
+     *                                   {@code P(x0 < X <= x1) = P(X <= x1) - P(X <= x0)}
      * @since 3.1
      */
     public double probability(double x0,
                               double x1) {
         if (x0 > x1) {
             throw new NumberIsTooLargeException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
-                                                x0, x1, true);
+                    x0, x1, true);
         }
         return cumulativeProbability(x1) - cumulativeProbability(x0);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The default implementation returns
      * <ul>
      * <li>{@link #getSupportLowerBound()} for {@code p = 0},</li>
@@ -171,7 +179,7 @@ implements RealDistribution, Serializable {
         final double sig = FastMath.sqrt(getNumericalVariance());
         final boolean chebyshevApplies;
         chebyshevApplies = !(Double.isInfinite(mu) || Double.isNaN(mu) ||
-                             Double.isInfinite(sig) || Double.isNaN(sig));
+                Double.isInfinite(sig) || Double.isNaN(sig));
 
         if (lowerBound == Double.NEGATIVE_INFINITY) {
             if (chebyshevApplies) {
@@ -203,9 +211,9 @@ implements RealDistribution, Serializable {
         };
 
         double x = UnivariateSolverUtils.solve(toSolve,
-                                                   lowerBound,
-                                                   upperBound,
-                                                   getSolverAbsoluteAccuracy());
+                lowerBound,
+                upperBound,
+                getSolverAbsoluteAccuracy());
 
         if (!isSupportConnected()) {
             /* Test for plateau. */
@@ -240,7 +248,9 @@ implements RealDistribution, Serializable {
         return solverAbsoluteAccuracy;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void reseedRandomGenerator(long seed) {
         random.setSeed(seed);
         randomData.reSeed(seed);
@@ -248,7 +258,7 @@ implements RealDistribution, Serializable {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The default implementation uses the
      * <a href="http://en.wikipedia.org/wiki/Inverse_transform_sampling">
      * inversion method.
@@ -260,7 +270,7 @@ implements RealDistribution, Serializable {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The default implementation generates the sample by calling
      * {@link #sample()} in a loop.
      */

@@ -17,7 +17,7 @@ class OldForParameters {
           @ assignable \strictly_nothing;
           @ decreasing i;
           @*/
-        while(i > 0) {
+        while (i > 0) {
             r++;
             i--;
         }

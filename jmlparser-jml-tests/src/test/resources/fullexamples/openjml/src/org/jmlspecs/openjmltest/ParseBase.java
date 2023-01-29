@@ -18,22 +18,24 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-/** This class is the base class for test suites that just are exercising the parser,
+/**
+ * This class is the base class for test suites that just are exercising the parser,
  * without doing any further typechecking.  FOr this purpose the parser can be
- * called standalone, and the parse tree inspected. 
- * @author David Cok
+ * called standalone, and the parse tree inspected.
  *
+ * @author David Cok
  */
 abstract public class ParseBase extends JmlTestCase {
 
     protected static String z = java.io.File.pathSeparator;
-    protected static String testspecpath = "$A"+z+"$B";
+    protected static String testspecpath = "$A" + z + "$B";
 
     protected ParserFactory fac;
     protected ScannerFactory sfac;
     protected JmlParser parser;
 
-    /** Set this to true in tests which start out the scanner in jml mode
+    /**
+     * Set this to true in tests which start out the scanner in jml mode
      * (avoiding the need to begin the test string with a JML comment annotation)
      */
     protected boolean jml;
@@ -41,8 +43,8 @@ abstract public class ParseBase extends JmlTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        main.addOptions("compilePolicy","check");  // Don't do code generation
-        main.addOptions("-specspath",   testspecpath);
+        main.addOptions("compilePolicy", "check");  // Don't do code generation
+        main.addOptions("-specspath", testspecpath);
         //main.register(context);
         JmlAttr.instance(context); // Needed to avoid circular dependencies in tool constructors that only occur in testing
         JmlEnter.instance(context); // Needed to avoid circular dependencies in tool constructors that only occur in testing
@@ -59,68 +61,74 @@ abstract public class ParseBase extends JmlTestCase {
         sfac = null;
     }
 
-    /** Compiles the given string as the content of a compilation unit,
+    /**
+     * Compiles the given string as the content of a compilation unit,
      * comparing the parse tree found to the expected node types and character
      * positions found in the second argument.
-     * @param s the content of a compilation unit
+     *
+     * @param s    the content of a compilation unit
      * @param list the expected parse tree formed by parsing the first argument
-     * as a compilation unit, each node is represented by a node type (instance 
-     * of Class) and character position (an int).
+     *             as a compilation unit, each node is represented by a node type (instance
+     *             of Class) and character position (an int).
      */
-    public void checkCompilationUnit(String s, Object ... list) {
+    public void checkCompilationUnit(String s, Object... list) {
         List<JCTree> out = parseCompilationUnit(s);
-        checkParseTree(out,list);
+        checkParseTree(out, list);
     }
 
     // TODO - put in a few harness tests
     // TODO - test error messages
-    public void checkCompilationUnitFailure(String failureMessage, String s, Object ... list) {
+    public void checkCompilationUnitFailure(String failureMessage, String s, Object... list) {
         boolean failed = false;
         try {
-            checkCompilationUnit(s,list);
+            checkCompilationUnit(s, list);
         } catch (AssertionError a) {
             failed = true;
-            assertEquals("Failure report wrong",failureMessage,a.getMessage());
+            assertEquals("Failure report wrong", failureMessage, a.getMessage());
         }
         if (!failed) fail("Test Harness failed to report an error");
     }
-    
-    /** Parses the content of a compilation unit, producing a list of nodes of
+
+    /**
+     * Parses the content of a compilation unit, producing a list of nodes of
      * the parse tree
+     *
      * @param s the string to parse
      * @return the list of nodes in the resulting parse tree
      */
     public List<JCTree> parseCompilationUnit(String s) {
         Log.instance(context).useSource(new TestJavaFileObject(s));
-        parser = ((JmlFactory)fac).newParser(s,false,true,true,jml);
+        parser = ((JmlFactory) fac).newParser(s, false, true, true, jml);
         JCTree e = parser.parseCompilationUnit();
         return ParseTreeScanner.walk(e);
     }
 
 
-    /** Compares a list of nodes to the expected values given in the 
+    /**
+     * Compares a list of nodes to the expected values given in the
      * second argument; the second argument is expected to consist of the
-     * class of a node (e.g. JCIdent.class) and the preferred character 
-     * position of that node, for each element of the actual list.  The two 
+     * class of a node (e.g. JCIdent.class) and the preferred character
+     * position of that node, for each element of the actual list.  The two
      * lists are compared (both for node type and position) and JUnit failures
      * are raised for the first difference found.
-     * @param actual a list of nodes as produced by ParseTreeScanner.walk
+     *
+     * @param actual   a list of nodes as produced by ParseTreeScanner.walk
      * @param expected a list of expected data - class types and character positions
-     * for each node in turn
+     *                 for each node in turn
      */
     public void checkParseTree(List<JCTree> actual, Object[] expected) {
         try {
             int i = 0;
             int k = 0;
             if (print) {
-                for (JCTree t: actual) {
+                for (JCTree t : actual) {
                     System.out.println(t.getClass() + " " + t.getStartPosition() + " " + t.getPreferredPosition() + " " + parser.getEndPos(t));
                 }
             }
             if (print) printDiagnostics();
             Object p1, p2, p3;
-            for (JCTree t: actual) {
-                if (i>=expected.length) break;
+            for (JCTree t : actual) {
+                if (i >= expected.length) break;
                 assertEquals("Class not matched at token " + k, expected[i++], t.getClass());
                 p1 = expected[i++];
                 p2 = (i < expected.length && expected[i] instanceof Integer) ? expected[i++] : null;
@@ -137,7 +145,7 @@ abstract public class ParseBase extends JmlTestCase {
                 }
                 ++k;
             }
-            if ( i != expected.length) fail("Incorrect number of nodes listed");
+            if (i != expected.length) fail("Incorrect number of nodes listed");
             if (parser.getScanner().token().kind != TokenKind.EOF) fail("Not at end of input");
         } catch (AssertionError e) {
             if (!print) printTree(actual);
@@ -145,28 +153,38 @@ abstract public class ParseBase extends JmlTestCase {
             throw e;
         }
     }
-    
-    /** Prints out the nodes of the tree */
+
+    /**
+     * Prints out the nodes of the tree
+     */
     public void printTree(List<JCTree> list) {
         System.out.println("NODES FOR " + name.getMethodName());
-        for (JCTree t: list) {
+        for (JCTree t : list) {
             System.out.println(t.getClass() + " " + t.getStartPosition() + " " + t.getPreferredPosition() + " " + parser.getEndPos(t));
         }
     }
 
-    /** A tree visitor class that walks the tree (depth-first), 
+    /**
+     * A tree visitor class that walks the tree (depth-first),
      * creating a list of the nodes it encounters.
      */
     static public class ParseTreeScanner extends JmlTreeScanner implements IJmlVisitor {
-        /** The list of nodes */
-        private List<JCTree> list = new LinkedList<JCTree>();;
+        /**
+         * The list of nodes
+         */
+        private List<JCTree> list = new LinkedList<JCTree>();
+        ;
 
-        /** Constructs the visitor, but otherwise does nothing. */
+        /**
+         * Constructs the visitor, but otherwise does nothing.
+         */
         public ParseTreeScanner() {
         }
 
-        /** A convenience method to walk the given tree and return the list of
+        /**
+         * A convenience method to walk the given tree and return the list of
          * its nodes.
+         *
          * @param tree the tree to be walked
          * @return the list of nodes in depth-first traversal order
          */
@@ -176,12 +194,17 @@ abstract public class ParseBase extends JmlTestCase {
             return t.result();
         }
 
-        /** Returns a reference to the list accumulated so far.
+        /**
+         * Returns a reference to the list accumulated so far.
+         *
          * @return the accumulator list
          */
-        public List<JCTree> result() { return list; }
+        public List<JCTree> result() {
+            return list;
+        }
 
-        /** Adds a node to the internal accumulator and then calls the
+        /**
+         * Adds a node to the internal accumulator and then calls the
          * super class method.
          */
         @Override
@@ -193,6 +216,9 @@ abstract public class ParseBase extends JmlTestCase {
     }
 
 
-    /** Just to avoid Junit framework complaints about no tests */
-    public void test() {} 
+    /**
+     * Just to avoid Junit framework complaints about no tests
+     */
+    public void test() {
+    }
 }

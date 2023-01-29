@@ -37,7 +37,9 @@ import java.util.Queue;
 public abstract class AbstractQueueDecorator<E> extends AbstractCollectionDecorator<E>
         implements Queue<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -2629815475789577029L;
 
     /**
@@ -50,7 +52,7 @@ public abstract class AbstractQueueDecorator<E> extends AbstractCollectionDecora
     /**
      * Constructor that wraps (not copies).
      *
-     * @param queue  the queue to decorate, must not be null
+     * @param queue the queue to decorate, must not be null
      * @throws NullPointerException if queue is null
      */
     protected AbstractQueueDecorator(final Queue<E> queue) {

@@ -44,34 +44,54 @@ import java.util.Locale;
  */
 public abstract class VectorFormat<S extends Space> {
 
-    /** The default prefix: "{". */
+    /**
+     * The default prefix: "{".
+     */
     public static final String DEFAULT_PREFIX = "{";
 
-    /** The default suffix: "}". */
+    /**
+     * The default suffix: "}".
+     */
     public static final String DEFAULT_SUFFIX = "}";
 
-    /** The default separator: ", ". */
+    /**
+     * The default separator: ", ".
+     */
     public static final String DEFAULT_SEPARATOR = "; ";
 
-    /** Prefix. */
+    /**
+     * Prefix.
+     */
     private final String prefix;
 
-    /** Suffix. */
+    /**
+     * Suffix.
+     */
     private final String suffix;
 
-    /** Separator. */
+    /**
+     * Separator.
+     */
     private final String separator;
 
-    /** Trimmed prefix. */
+    /**
+     * Trimmed prefix.
+     */
     private final String trimmedPrefix;
 
-    /** Trimmed suffix. */
+    /**
+     * Trimmed suffix.
+     */
     private final String trimmedSuffix;
 
-    /** Trimmed separator. */
+    /**
+     * Trimmed separator.
+     */
     private final String trimmedSeparator;
 
-    /** The format used for components. */
+    /**
+     * The format used for components.
+     */
     private final NumberFormat format;
 
     /**
@@ -81,11 +101,12 @@ public abstract class VectorFormat<S extends Space> {
      */
     protected VectorFormat() {
         this(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR,
-             CompositeFormat.getDefaultNumberFormat());
+                CompositeFormat.getDefaultNumberFormat());
     }
 
     /**
      * Create an instance with a custom number format for components.
+     *
      * @param format the custom format for components.
      */
     protected VectorFormat(final NumberFormat format) {
@@ -94,37 +115,40 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Create an instance with custom prefix, suffix and separator.
-     * @param prefix prefix to use instead of the default "{"
-     * @param suffix suffix to use instead of the default "}"
+     *
+     * @param prefix    prefix to use instead of the default "{"
+     * @param suffix    suffix to use instead of the default "}"
      * @param separator separator to use instead of the default "; "
      */
     protected VectorFormat(final String prefix, final String suffix,
-                          final String separator) {
+                           final String separator) {
         this(prefix, suffix, separator, CompositeFormat.getDefaultNumberFormat());
     }
 
     /**
      * Create an instance with custom prefix, suffix, separator and format
      * for components.
-     * @param prefix prefix to use instead of the default "{"
-     * @param suffix suffix to use instead of the default "}"
+     *
+     * @param prefix    prefix to use instead of the default "{"
+     * @param suffix    suffix to use instead of the default "}"
      * @param separator separator to use instead of the default "; "
-     * @param format the custom format for components.
+     * @param format    the custom format for components.
      */
     protected VectorFormat(final String prefix, final String suffix,
-                          final String separator, final NumberFormat format) {
-        this.prefix      = prefix;
-        this.suffix      = suffix;
-        this.separator   = separator;
-        trimmedPrefix    = prefix.trim();
-        trimmedSuffix    = suffix.trim();
+                           final String separator, final NumberFormat format) {
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.separator = separator;
+        trimmedPrefix = prefix.trim();
+        trimmedSuffix = suffix.trim();
         trimmedSeparator = separator.trim();
-        this.format      = format;
+        this.format = format;
     }
 
     /**
      * Get the set of locales for which point/vector formats are available.
      * <p>This is the same set as the {@link NumberFormat} set.</p>
+     *
      * @return available point/vector format locales.
      */
     public static Locale[] getAvailableLocales() {
@@ -133,6 +157,7 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Get the format prefix.
+     *
      * @return format prefix.
      */
     public String getPrefix() {
@@ -141,6 +166,7 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Get the format suffix.
+     *
      * @return format suffix.
      */
     public String getSuffix() {
@@ -149,6 +175,7 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Get the format separator between components.
+     *
      * @return format separator.
      */
     public String getSeparator() {
@@ -157,6 +184,7 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Get the components format.
+     *
      * @return components format.
      */
     public NumberFormat getFormat() {
@@ -165,6 +193,7 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Formats a {@link Vector} object to produce a string.
+     *
      * @param vector the object to format.
      * @return a formatted string.
      */
@@ -174,10 +203,11 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Formats a {@link Vector} object to produce a string.
-     * @param vector the object to format.
+     *
+     * @param vector     the object to format.
      * @param toAppendTo where the text is to be appended
-     * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * @param pos        On input: an alignment field, if desired. On output: the
+     *                   offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
     public abstract StringBuffer format(Vector<S> vector,
@@ -185,14 +215,15 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Formats the coordinates of a {@link Vector} to produce a string.
-     * @param toAppendTo where the text is to be appended
-     * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     *
+     * @param toAppendTo  where the text is to be appended
+     * @param pos         On input: an alignment field, if desired. On output: the
+     *                    offsets of the alignment field
      * @param coordinates coordinates of the object to format.
      * @return the value passed in as toAppendTo.
      */
     protected StringBuffer format(StringBuffer toAppendTo, FieldPosition pos,
-                                  double ... coordinates) {
+                                  double... coordinates) {
 
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
@@ -217,26 +248,29 @@ public abstract class VectorFormat<S extends Space> {
 
     /**
      * Parses a string to produce a {@link Vector} object.
+     *
      * @param source the string to parse
      * @return the parsed {@link Vector} object.
      * @throws MathParseException if the beginning of the specified string
-     * cannot be parsed.
+     *                            cannot be parsed.
      */
     public abstract Vector<S> parse(String source) throws MathParseException;
 
     /**
      * Parses a string to produce a {@link Vector} object.
+     *
      * @param source the string to parse
-     * @param pos input/output parsing parameter.
+     * @param pos    input/output parsing parameter.
      * @return the parsed {@link Vector} object.
      */
     public abstract Vector<S> parse(String source, ParsePosition pos);
 
     /**
      * Parses a string to produce an array of coordinates.
+     *
      * @param dimension dimension of the space
-     * @param source the string to parse
-     * @param pos input/output parsing parameter.
+     * @param source    the string to parse
+     * @param pos       input/output parsing parameter.
      * @return coordinates array.
      */
     protected double[] parseCoordinates(int dimension, String source, ParsePosition pos) {

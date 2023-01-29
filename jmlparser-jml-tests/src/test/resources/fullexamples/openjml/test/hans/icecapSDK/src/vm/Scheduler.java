@@ -1,15 +1,15 @@
 package vm;
 
 public interface Scheduler {
-	public vm.Process getNextProcess();
+    public vm.Process getNextProcess();
 
-	void wait(Object target);
+    void wait(Object target);
 
-	void notify(Object target);
-	
-	void notifyAll(Object target);
+    void notify(Object target);
 
-	public Monitor getDefaultMonitor();
+    void notifyAll(Object target);
 
-	/* TODO: void terminated(); */
+    public Monitor getDefaultMonitor();
+
+    /* TODO: void terminated(); */
 }

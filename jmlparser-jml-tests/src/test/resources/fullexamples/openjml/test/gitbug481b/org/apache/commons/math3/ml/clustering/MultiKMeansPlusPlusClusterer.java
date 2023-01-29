@@ -28,21 +28,30 @@ import java.util.List;
 /**
  * A wrapper around a k-means++ clustering algorithm which performs multiple trials
  * and returns the best solution.
+ *
  * @param <T> type of the points to cluster
  * @since 3.2
  */
 public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T> {
 
-    /** The underlying k-means clusterer. */
+    /**
+     * The underlying k-means clusterer.
+     */
     private final KMeansPlusPlusClusterer<T> clusterer;
 
-    /** The number of trial runs. */
+    /**
+     * The number of trial runs.
+     */
     private final int numTrials;
 
-    /** The cluster evaluator to use. */
+    /**
+     * The cluster evaluator to use.
+     */
     private final ClusterEvaluator<T> evaluator;
 
-    /** Build a clusterer.
+    /**
+     * Build a clusterer.
+     *
      * @param clusterer the k-means clusterer to use
      * @param numTrials number of trial runs
      */
@@ -51,7 +60,9 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
         this(clusterer, numTrials, new SumOfClusterVariances<T>(clusterer.getDistanceMeasure()));
     }
 
-    /** Build a clusterer.
+    /**
+     * Build a clusterer.
+     *
      * @param clusterer the k-means clusterer to use
      * @param numTrials number of trial runs
      * @param evaluator the cluster evaluator to use
@@ -68,6 +79,7 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
 
     /**
      * Returns the embedded k-means clusterer used by this instance.
+     *
      * @return the embedded clusterer
      */
     public KMeansPlusPlusClusterer<T> getClusterer() {
@@ -76,6 +88,7 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
 
     /**
      * Returns the number of trials this instance will do.
+     *
      * @return the number of trials
      */
     public int getNumTrials() {
@@ -84,11 +97,12 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
 
     /**
      * Returns the {@link ClusterEvaluator} used to determine the "best" clustering.
+     *
      * @return the used {@link ClusterEvaluator}
      * @since 3.3
      */
     public ClusterEvaluator<T> getClusterEvaluator() {
-       return evaluator;
+        return evaluator;
     }
 
     /**
@@ -97,14 +111,14 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
      * @param points the points to cluster
      * @return a list of clusters containing the points
      * @throws MathIllegalArgumentException if the data points are null or the number
-     *   of clusters is larger than the number of data points
-     * @throws ConvergenceException if an empty cluster is encountered and the
-     *   underlying {@link KMeansPlusPlusClusterer} has its
-     *   {@link KMeansPlusPlusClusterer.EmptyClusterStrategy} is set to {@code ERROR}.
+     *                                      of clusters is larger than the number of data points
+     * @throws ConvergenceException         if an empty cluster is encountered and the
+     *                                      underlying {@link KMeansPlusPlusClusterer} has its
+     *                                      {@link KMeansPlusPlusClusterer.EmptyClusterStrategy} is set to {@code ERROR}.
      */
     @Override
     public List<CentroidCluster<T>> cluster(final Collection<T> points)
-        throws MathIllegalArgumentException, ConvergenceException {
+            throws MathIllegalArgumentException, ConvergenceException {
 
         // at first, we have not found any clusters list yet
         List<CentroidCluster<T>> best = null;
@@ -121,7 +135,7 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
 
             if (evaluator.isBetterScore(varianceSum, bestVarianceSum)) {
                 // this one is the best we have found so far, remember it
-                best            = clusters;
+                best = clusters;
                 bestVarianceSum = varianceSum;
             }
 

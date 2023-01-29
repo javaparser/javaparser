@@ -40,23 +40,23 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue241Test extends AbstractResolutionTest{
+class Issue241Test extends AbstractResolutionTest {
 
     @Test
     void testSolveStaticallyImportedMemberType() {
         Path src = adaptPath("src/test/resources");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
-        		
+
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        
+
         CompilationUnit cu = parseSample("Issue241");
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "Main");
         VariableDeclarator v = Navigator.demandVariableDeclaration(cls, "foo").get();
-        
+
         Type t = v.getType();
         ResolvedType t2 = javaParserFacade.convert(t, t);
         String typeName = t2.asReferenceType().getQualifiedName();
-       
+
         assertEquals("issue241.TypeWithMemberType.MemberInterface", typeName);
     }
 }

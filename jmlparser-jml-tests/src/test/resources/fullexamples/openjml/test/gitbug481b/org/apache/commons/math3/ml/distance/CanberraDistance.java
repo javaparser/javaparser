@@ -27,12 +27,16 @@ import org.apache.commons.math3.util.MathArrays;
  */
 public class CanberraDistance implements DistanceMeasure {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -6972277381587032228L;
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double compute(double[] a, double[] b)
-    throws DimensionMismatchException {
+            throws DimensionMismatchException {
         MathArrays.checkEqualLength(a, b);
         double sum = 0;
         for (int i = 0; i < a.length; i++) {

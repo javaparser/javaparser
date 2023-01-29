@@ -42,7 +42,7 @@ public abstract class AbstractOrderedBidiMapDecorator<K, V>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if the collection is null
      */
     protected AbstractOrderedBidiMapDecorator(final OrderedBidiMap<K, V> map) {

@@ -103,7 +103,7 @@ public class InferenceVariableType implements Type {
         Set<Type> result = new HashSet<>();
         result.addAll(inferenceVariableType.equivalentTypes.stream().filter(t -> !t.isTypeVariable() && !(t instanceof InferenceVariableType)).collect(Collectors.toSet()));
         inferenceVariableType.equivalentTypes.stream().filter(t -> t instanceof InferenceVariableType).forEach(t -> {
-            InferenceVariableType ivt = (InferenceVariableType)t;
+            InferenceVariableType ivt = (InferenceVariableType) t;
             if (!considered.contains(ivt)) {
                 result.addAll(concreteEquivalentTypesAlsoIndirectly(considered, ivt));
             }
@@ -124,8 +124,8 @@ public class InferenceVariableType implements Type {
             return concreteEquivalent.iterator().next();
         }
         Set<Type> notTypeVariables = equivalentTypes.stream()
-                                                    .filter(t -> !t.isTypeVariable() && !hasInferenceVariables(t))
-                                                    .collect(Collectors.toSet());
+                .filter(t -> !t.isTypeVariable() && !hasInferenceVariables(t))
+                .collect(Collectors.toSet());
         if (notTypeVariables.size() == 1) {
             return notTypeVariables.iterator().next();
         } else if (notTypeVariables.size() == 0 && !superTypes.isEmpty()) {
@@ -139,22 +139,22 @@ public class InferenceVariableType implements Type {
         }
     }
 
-    private boolean hasInferenceVariables(Type type){
-        if (type instanceof InferenceVariableType){
+    private boolean hasInferenceVariables(Type type) {
+        if (type instanceof InferenceVariableType) {
             return true;
         }
 
-        if (type.isReferenceType()){
+        if (type.isReferenceType()) {
             ReferenceType refType = type.asReferenceType();
-            for (Type t : refType.typeParametersValues()){
-                if (hasInferenceVariables(t)){
+            for (Type t : refType.typeParametersValues()) {
+                if (hasInferenceVariables(t)) {
                     return true;
                 }
             }
             return false;
         }
 
-        if (type.isWildcard()){
+        if (type.isWildcard()) {
             Wildcard wildcardType = type.asWildcard();
             return hasInferenceVariables(wildcardType.getBoundedType());
         }

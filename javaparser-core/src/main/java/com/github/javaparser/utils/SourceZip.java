@@ -62,7 +62,7 @@ public class SourceZip {
      * Create a new ZIP parser. An instance of {@link JavaParser} with the given configuration will be used to parse
      * the ZIP.
      *
-     * @param zipPath The absolute path of ZIP file to parse.
+     * @param zipPath       The absolute path of ZIP file to parse.
      * @param configuration The configuration to initiate the default parser with.
      */
     public SourceZip(Path zipPath, ParserConfiguration configuration) {
@@ -78,7 +78,6 @@ public class SourceZip {
      * results in a list.
      *
      * @return A list of path-compilation unit pairs.
-     *
      * @throws IOException If an error occurs while trying to parse the given source.
      */
     public List<Pair<Path, ParseResult<CompilationUnit>>> parse() throws IOException {
@@ -93,7 +92,6 @@ public class SourceZip {
      * results in a list.
      *
      * @return A list of path-compilation unit pairs.
-     *
      * @throws IOException If an error occurs while trying to parse the given source.
      */
     public SourceZip parse(Callback callback) throws IOException {
@@ -121,7 +119,7 @@ public class SourceZip {
          * Process the given parse result.
          *
          * @param relativeZipEntryPath The relative path of the entry in the ZIP file that was parsed.
-         * @param result The parse result of file located at <i>absolutePath</i>.
+         * @param result               The parse result of file located at <i>absolutePath</i>.
          */
         void process(Path relativeZipEntryPath, ParseResult<CompilationUnit> result);
     }

@@ -45,8 +45,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * A statement consisting of a class declaration.
  * <br><code>class X { void m() { <b>class Y { }</b> } }</code>
  *
- * @see ClassOrInterfaceDeclaration
  * @author Julio Vilmar Gesser
+ * @see ClassOrInterfaceDeclaration
  */
 public class LocalClassDeclarationStmt extends Statement {
 

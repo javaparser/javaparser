@@ -1,5 +1,5 @@
 public class PreOld {
-    
+
     //@ public normal_behavior a:
     //@  old int y = i + 2;
     //@ also public normal_behavior b:
@@ -9,5 +9,5 @@ public class PreOld {
     public void mtest(short i) {
         //@ assert i - 1 == \old(x,a);
     }
-    
+
 }

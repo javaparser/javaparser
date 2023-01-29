@@ -32,7 +32,9 @@ import org.apache.commons.math3.util.FastMath;
  * @since 1.2
  */
 public class RiddersSolver extends AbstractUnivariateSolver {
-    /** Default absolute accuracy. */
+    /**
+     * Default absolute accuracy.
+     */
     private static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
 
     /**
@@ -41,6 +43,7 @@ public class RiddersSolver extends AbstractUnivariateSolver {
     public RiddersSolver() {
         this(DEFAULT_ABSOLUTE_ACCURACY);
     }
+
     /**
      * Construct a solver.
      *
@@ -49,6 +52,7 @@ public class RiddersSolver extends AbstractUnivariateSolver {
     public RiddersSolver(double absoluteAccuracy) {
         super(absoluteAccuracy);
     }
+
     /**
      * Construct a solver.
      *
@@ -65,8 +69,8 @@ public class RiddersSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException,
-               NoBracketingException {
+            throws TooManyEvaluationsException,
+            NoBracketingException {
         double min = getMin();
         double max = getMax();
         // [x1, x2] is the bracketing interval in each iteration
@@ -100,7 +104,7 @@ public class RiddersSolver extends AbstractUnivariateSolver {
             }
             final double delta = 1 - (y1 * y2) / (y3 * y3);  // delta > 1 due to bracketing
             final double correction = (FastMath.signum(y2) * FastMath.signum(y3)) *
-                                      (x3 - x1) / FastMath.sqrt(delta);
+                    (x3 - x1) / FastMath.sqrt(delta);
             final double x = x3 - correction;                // correction != 0
             final double y = computeObjectiveValue(x);
 

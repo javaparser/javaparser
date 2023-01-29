@@ -39,19 +39,25 @@ import java.util.Iterator;
  */
 public class SynchronizedCollection<E> implements Collection<E>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 2412805092710877986L;
 
-    /** The collection to decorate */
+    /**
+     * The collection to decorate
+     */
     private final Collection<E> collection;
-    /** The object to lock on, needed for List/SortedSet views */
+    /**
+     * The object to lock on, needed for List/SortedSet views
+     */
     protected final Object lock;
 
     /**
      * Factory method to create a synchronized collection.
      *
-     * @param <T> the type of the elements in the collection
-     * @param coll  the collection to decorate, must not be null
+     * @param <T>  the type of the elements in the collection
+     * @param coll the collection to decorate, must not be null
      * @return a new synchronized collection
      * @throws NullPointerException if collection is null
      * @since 4.0
@@ -61,10 +67,11 @@ public class SynchronizedCollection<E> implements Collection<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param collection  the collection to decorate, must not be null
+     * @param collection the collection to decorate, must not be null
      * @throws NullPointerException if the collection is null
      */
     protected SynchronizedCollection(final Collection<E> collection) {
@@ -78,8 +85,8 @@ public class SynchronizedCollection<E> implements Collection<E>, Serializable {
     /**
      * Constructor that wraps (not copies).
      *
-     * @param collection  the collection to decorate, must not be null
-     * @param lock  the lock object to use, must not be null
+     * @param collection the collection to decorate, must not be null
+     * @param lock       the lock object to use, must not be null
      * @throws NullPointerException if the collection or lock is null
      */
     protected SynchronizedCollection(final Collection<E> collection, final Object lock) {

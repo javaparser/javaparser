@@ -71,7 +71,7 @@ public class JavaParserFacade {
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
+
     /**
      * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
      * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
@@ -242,6 +242,9 @@ public class JavaParserFacade {
                                 List<LambdaArgumentTypePlaceholder> placeholders) {
         int i = 0;
         for (Expression parameterValue : args) {
+            while (parameterValue instanceof EnclosedExpr) {
+                parameterValue = ((EnclosedExpr) parameterValue).getInner();
+            }
             if (parameterValue.isLambdaExpr() || parameterValue.isMethodReferenceExpr()) {
                 LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(i);
                 argumentTypes.add(placeholder);
@@ -399,9 +402,9 @@ public class JavaParserFacade {
         }
 
         Optional<MethodUsage> result;
-        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getTypeDeclaration()
-                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
-                .getAllMethods();
+        ResolvedReferenceTypeDeclaration resolvedTypdeDecl = typeOfScope.asReferenceType().getTypeDeclaration()
+                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+        Set<MethodUsage> allMethods = resolvedTypdeDecl.getAllMethods();
 
         if (scope.isTypeExpr()) {
             // static methods should match all params
@@ -594,9 +597,8 @@ public class JavaParserFacade {
     /**
      * Convert a {@link Type} into the corresponding {@link ResolvedType}.
      *
-     * @param type      The type to be converted.
-     * @param context   The current context.
-     *
+     * @param type    The type to be converted.
+     * @param context The current context.
      * @return The type resolved.
      */
     protected ResolvedType convertToUsage(Type type, Context context) {
@@ -610,7 +612,6 @@ public class JavaParserFacade {
      * Convert a {@link Type} into the corresponding {@link ResolvedType}.
      *
      * @param type The type to be converted.
-     *
      * @return The type resolved.
      */
     public ResolvedType convertToUsage(Type type) {
@@ -707,7 +708,7 @@ public class JavaParserFacade {
      */
     @Deprecated
     public ResolvedType classToResolvedType(Class<?> clazz) {
-    	Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
         return symbolSolver.classToResolvedType(clazz);
     }
 

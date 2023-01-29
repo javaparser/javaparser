@@ -79,7 +79,7 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
     @Test
     void dependenciesBetweenJarsTriggeringReferencesThatCannotBeResolved() throws IOException {
         assertThrows(UnsolvedSymbolException.class, () -> {
-                Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
+            Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
             JarTypeSolver jarTypeSolver2 = new JarTypeSolver(pathToJar2);
             ResolvedReferenceTypeDeclaration b = jarTypeSolver2.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
             b.getAncestors();

@@ -37,14 +37,17 @@ import org.apache.commons.math3.util.FastMath;
  * similar to the pre-3.0 releases, use the
  * {@link IllinoisSolver <em>Illinois</em>} algorithm or the
  * {@link PegasusSolver <em>Pegasus</em>} algorithm.</p>
- *
  */
 public class SecantSolver extends AbstractUnivariateSolver {
 
-    /** Default absolute accuracy. */
+    /**
+     * Default absolute accuracy.
+     */
     protected static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
 
-    /** Construct a solver with default accuracy (1e-6). */
+    /**
+     * Construct a solver with default accuracy (1e-6).
+     */
     public SecantSolver() {
         super(DEFAULT_ABSOLUTE_ACCURACY);
     }
@@ -69,11 +72,13 @@ public class SecantSolver extends AbstractUnivariateSolver {
         super(relativeAccuracy, absoluteAccuracy);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final double doSolve()
-        throws TooManyEvaluationsException,
-               NoBracketingException {
+            throws TooManyEvaluationsException,
+            NoBracketingException {
         // Get initial solution
         double x0 = getMin();
         double x1 = getMax();

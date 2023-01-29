@@ -29,10 +29,14 @@ import java.util.Map;
  */
 public final class MapTransformer<I, O> implements Transformer<I, O>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 862391807045468939L;
 
-    /** The map of data to lookup in */
+    /**
+     * The map of data to lookup in
+     */
     private final Map<? super I, ? extends O> iMap;
 
     /**
@@ -40,8 +44,8 @@ public final class MapTransformer<I, O> implements Transformer<I, O>, Serializab
      * <p>
      * If the map is null, a transformer that always returns null is returned.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
+     * @param <I> the input type
+     * @param <O> the output type
      * @param map the map, not cloned
      * @return the transformer
      */
@@ -56,7 +60,7 @@ public final class MapTransformer<I, O> implements Transformer<I, O>, Serializab
      * Constructor that performs no validation.
      * Use <code>mapTransformer</code> if you want that.
      *
-     * @param map  the map to use for lookup, not cloned
+     * @param map the map to use for lookup, not cloned
      */
     private MapTransformer(final Map<? super I, ? extends O> map) {
         super();
@@ -66,7 +70,7 @@ public final class MapTransformer<I, O> implements Transformer<I, O>, Serializab
     /**
      * Transforms the input to result by looking it up in a <code>Map</code>.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result
      */
     @Override

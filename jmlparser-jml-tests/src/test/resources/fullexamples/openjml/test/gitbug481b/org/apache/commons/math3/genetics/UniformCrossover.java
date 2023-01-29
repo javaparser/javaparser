@@ -42,15 +42,17 @@ import java.util.List;
  * This policy works only on {@link AbstractListChromosome}, and therefore it
  * is parameterized by T. Moreover, the chromosomes must have same lengths.
  *
+ * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
  * @see <a href="http://en.wikipedia.org/wiki/Crossover_%28genetic_algorithm%29">Crossover techniques (Wikipedia)</a>
  * @see <a href="http://www.obitko.com/tutorials/genetic-algorithms/crossover-mutation.php">Crossover (Obitko.com)</a>
  * @see <a href="http://www.tomaszgwiazda.com/uniformX.htm">Uniform crossover</a>
- * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
  * @since 3.1
  */
 public class UniformCrossover<T> implements CrossoverPolicy {
 
-    /** The mixing ratio. */
+    /**
+     * The mixing ratio.
+     */
     private final double ratio;
 
     /**
@@ -79,12 +81,12 @@ public class UniformCrossover<T> implements CrossoverPolicy {
      * {@inheritDoc}
      *
      * @throws MathIllegalArgumentException iff one of the chromosomes is
-     *   not an instance of {@link AbstractListChromosome}
-     * @throws DimensionMismatchException if the length of the two chromosomes is different
+     *                                      not an instance of {@link AbstractListChromosome}
+     * @throws DimensionMismatchException   if the length of the two chromosomes is different
      */
     @SuppressWarnings("unchecked")
     public ChromosomePair crossover(final Chromosome first, final Chromosome second)
-        throws DimensionMismatchException, MathIllegalArgumentException {
+            throws DimensionMismatchException, MathIllegalArgumentException {
 
         if (!(first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
@@ -95,7 +97,7 @@ public class UniformCrossover<T> implements CrossoverPolicy {
     /**
      * Helper for {@link #crossover(Chromosome, Chromosome)}. Performs the actual crossover.
      *
-     * @param first the first chromosome
+     * @param first  the first chromosome
      * @param second the second chromosome
      * @return the pair of new chromosomes that resulted from the crossover
      * @throws DimensionMismatchException if the length of the two chromosomes is different
@@ -129,6 +131,6 @@ public class UniformCrossover<T> implements CrossoverPolicy {
         }
 
         return new ChromosomePair(first.newFixedLengthChromosome(child1Rep),
-                                  second.newFixedLengthChromosome(child2Rep));
+                second.newFixedLengthChromosome(child2Rep));
     }
 }

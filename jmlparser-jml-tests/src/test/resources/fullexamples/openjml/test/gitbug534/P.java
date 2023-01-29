@@ -1,7 +1,7 @@
 public class P {
 
-	public int calc(int x) {
-		return x*2;
-	}
-	
+    public int calc(int x) {
+        return x * 2;
+    }
+
 }

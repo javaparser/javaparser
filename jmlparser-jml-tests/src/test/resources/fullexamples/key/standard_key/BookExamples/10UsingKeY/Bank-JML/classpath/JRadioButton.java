@@ -16,19 +16,29 @@
  */
 package javax.swing;
 
-public class JRadioButton extends javax.swing.JToggleButton implements javax.accessibility.Accessible
-{
+public class JRadioButton extends javax.swing.JToggleButton implements javax.accessibility.Accessible {
 
-   public JRadioButton();
-   public JRadioButton(javax.swing.Icon arg0);
-   public JRadioButton(javax.swing.Action arg0);
-   public JRadioButton(javax.swing.Icon arg0, boolean arg1);
-   public JRadioButton(java.lang.String arg0);
-   public JRadioButton(java.lang.String arg0, boolean arg1);
-   public JRadioButton(java.lang.String arg0, javax.swing.Icon arg1);
-   public JRadioButton(java.lang.String arg0, javax.swing.Icon arg1, boolean arg2);
-   public void updateUI();
-   public java.lang.String getUIClassID();
-   protected java.lang.String paramString();
-   public javax.accessibility.AccessibleContext getAccessibleContext();
+    public JRadioButton();
+
+    public JRadioButton(javax.swing.Icon arg0);
+
+    public JRadioButton(javax.swing.Action arg0);
+
+    public JRadioButton(javax.swing.Icon arg0, boolean arg1);
+
+    public JRadioButton(java.lang.String arg0);
+
+    public JRadioButton(java.lang.String arg0, boolean arg1);
+
+    public JRadioButton(java.lang.String arg0, javax.swing.Icon arg1);
+
+    public JRadioButton(java.lang.String arg0, javax.swing.Icon arg1, boolean arg2);
+
+    public void updateUI();
+
+    public java.lang.String getUIClassID();
+
+    protected java.lang.String paramString();
+
+    public javax.accessibility.AccessibleContext getAccessibleContext();
 }

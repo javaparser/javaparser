@@ -34,6 +34,5 @@
  *   <li>Growth - grows the list instead of erroring when set/add used with index beyond the list size</li>
  *   <li>SetUnique - a list that avoids duplicate entries like a Set</li>
  * </ul>
- *
  */
 package org.apache.commons.collections4.list;

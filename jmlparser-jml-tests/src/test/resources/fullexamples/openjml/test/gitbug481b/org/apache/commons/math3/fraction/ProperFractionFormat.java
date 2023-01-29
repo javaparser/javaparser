@@ -37,10 +37,14 @@ import java.text.ParsePosition;
  */
 public class ProperFractionFormat extends FractionFormat {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 760934726031766749L;
 
-    /** The format used for the whole number. */
+    /**
+     * The format used for the whole number.
+     */
     private NumberFormat wholeFormat;
 
     /**
@@ -54,24 +58,25 @@ public class ProperFractionFormat extends FractionFormat {
     /**
      * Create a proper formatting instance with a custom number format for the
      * whole, numerator, and denominator.
+     *
      * @param format the custom format for the whole, numerator, and
-     *        denominator.
+     *               denominator.
      */
     public ProperFractionFormat(NumberFormat format) {
-        this(format, (NumberFormat)format.clone(), (NumberFormat)format.clone());
+        this(format, (NumberFormat) format.clone(), (NumberFormat) format.clone());
     }
 
     /**
      * Create a proper formatting instance with a custom number format for each
      * of the whole, numerator, and denominator.
-     * @param wholeFormat the custom format for the whole.
-     * @param numeratorFormat the custom format for the numerator.
+     *
+     * @param wholeFormat       the custom format for the whole.
+     * @param numeratorFormat   the custom format for the numerator.
      * @param denominatorFormat the custom format for the denominator.
      */
     public ProperFractionFormat(NumberFormat wholeFormat,
-            NumberFormat numeratorFormat,
-            NumberFormat denominatorFormat)
-    {
+                                NumberFormat numeratorFormat,
+                                NumberFormat denominatorFormat) {
         super(numeratorFormat, denominatorFormat);
         setWholeFormat(wholeFormat);
     }
@@ -80,15 +85,15 @@ public class ProperFractionFormat extends FractionFormat {
      * Formats a {@link Fraction} object to produce a string.  The fraction
      * is output in proper format.
      *
-     * @param fraction the object to format.
+     * @param fraction   the object to format.
      * @param toAppendTo where the text is to be appended
-     * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * @param pos        On input: an alignment field, if desired. On output: the
+     *                   offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
     @Override
     public StringBuffer format(Fraction fraction, StringBuffer toAppendTo,
-            FieldPosition pos) {
+                               FieldPosition pos) {
 
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
@@ -112,6 +117,7 @@ public class ProperFractionFormat extends FractionFormat {
 
     /**
      * Access the whole format.
+     *
      * @return the whole format.
      */
     public NumberFormat getWholeFormat() {
@@ -127,7 +133,7 @@ public class ProperFractionFormat extends FractionFormat {
      * will result in a <code>ParseException</code>.</p>
      *
      * @param source the string to parse
-     * @param pos input/ouput parsing parameter.
+     * @param pos    input/ouput parsing parameter.
      * @return the parsed {@link Fraction} object.
      */
     @Override
@@ -176,20 +182,20 @@ public class ProperFractionFormat extends FractionFormat {
         int startIndex = pos.getIndex();
         char c = parseNextCharacter(source, pos);
         switch (c) {
-        case 0 :
-            // no '/'
-            // return num as a fraction
-            return new Fraction(num.intValue(), 1);
-        case '/' :
-            // found '/', continue parsing denominator
-            break;
-        default :
-            // invalid '/'
-            // set index back to initial, error index should be the last
-            // character examined.
-            pos.setIndex(initialIndex);
-            pos.setErrorIndex(startIndex);
-            return null;
+            case 0:
+                // no '/'
+                // return num as a fraction
+                return new Fraction(num.intValue(), 1);
+            case '/':
+                // found '/', continue parsing denominator
+                break;
+            default:
+                // invalid '/'
+                // set index back to initial, error index should be the last
+                // character examined.
+                pos.setIndex(initialIndex);
+                pos.setErrorIndex(startIndex);
+                return null;
         }
 
         // parse whitespace
@@ -219,6 +225,7 @@ public class ProperFractionFormat extends FractionFormat {
 
     /**
      * Modify the whole format.
+     *
      * @param format The new whole format value.
      * @throws NullArgumentException if {@code format} is {@code null}.
      */

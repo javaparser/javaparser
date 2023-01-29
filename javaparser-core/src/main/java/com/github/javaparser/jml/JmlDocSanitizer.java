@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
  * @version 1 (11/23/21)
  */
 public class JmlDocSanitizer {
+
     private final Set<String> enabledKeys;
 
     public JmlDocSanitizer(Set<String> enabledKeys) {
@@ -27,9 +28,9 @@ public class JmlDocSanitizer {
     }
 
     public String asString(NodeList<JmlDoc> jmlDocs, boolean emulateGlobalPosition) {
-        if (jmlDocs.isEmpty()) return "";
+        if (jmlDocs.isEmpty())
+            return "";
         StringConstructor s = new StringConstructor();
-
         for (JmlDoc jmlDoc : jmlDocs) {
             JavaToken tok = jmlDoc.getContent();
             if (emulateGlobalPosition) {
@@ -91,10 +92,10 @@ public class JmlDocSanitizer {
         } else {
             end = s.indexOf("\n", pos + 2);
         }
-        if (end == -1) { // Comment is aborted by EOF rather than */ or \n
+        if (end == -1) {
+            // Comment is aborted by EOF rather than */ or \n
             end = s.length();
         }
-
         for (int i = pos; i < end; i++) {
             s.setCharAt(i, ' ');
         }
@@ -122,17 +123,17 @@ public class JmlDocSanitizer {
 
     private boolean isJmlComment(StringBuilder s, int pos) {
         int posAt = s.indexOf("@", pos + 2);
-        if (posAt < 0) return false;
+        if (posAt < 0)
+            return false;
         for (int i = pos + 2; i < posAt; i++) {
             int point = s.charAt(i);
             if (!(Character.isJavaIdentifierPart(point) || point == '-' || point == '+')) {
                 return false;
             }
         }
-
-        if (pos + 2 == posAt) //unconditonal JML comment
+        if (//unconditonal JML comment
+                pos + 2 == posAt)
             return true;
-
         String[] keys = splitTags(s.substring(pos + 2, posAt));
         return isActiveJmlSpec(keys);
     }
@@ -152,18 +153,15 @@ public class JmlDocSanitizer {
             //a JML annotation with no keys is always included,
             return true;
         }
-
         //a JML annotation with at least one positive-key is only included
         boolean plusKeyFound = false;
         //if at least one of these positive keys is enabled
         boolean enabledPlusKeyFound = false;
-
         //a JML annotation with an enabled negative-key is ignored (even if there are enabled positive-keys).
         boolean enabledNegativeKeyFound = false;
-
         for (String marker : keys) {
-            if (marker.isEmpty()) continue;
-
+            if (marker.isEmpty())
+                continue;
             plusKeyFound = plusKeyFound || isPositive(marker);
             enabledPlusKeyFound = enabledPlusKeyFound || isPositive(marker) && isEnabled(activeKeys, marker);
             enabledNegativeKeyFound = enabledNegativeKeyFound || isNegative(marker) && isEnabled(activeKeys, marker);
@@ -171,10 +169,8 @@ public class JmlDocSanitizer {
                 return false;
             }
         }
-
         return (!plusKeyFound || enabledPlusKeyFound) && !enabledNegativeKeyFound;
     }
-
 
     public boolean isActiveJmlSpec(String[] keys) {
         return isActiveJmlSpec(enabledKeys, keys);
@@ -199,9 +195,12 @@ public class JmlDocSanitizer {
 }
 
 class StringConstructor {
+
     private final StringBuilder sb = new StringBuilder(1024);
+
     //JavaCC starts with 1/1
     private int curLine = 1;
+
     private int curColumn = 1;
 
     public StringConstructor append(String value) {
@@ -222,16 +221,13 @@ class StringConstructor {
         if (curLine > line || (curLine == line && curColumn > column)) {
             throw new IllegalArgumentException();
         }
-
         for (; curLine < line; curLine++) {
             sb.append("\n");
             curColumn = 1;
         }
-
         for (; curColumn < column; curColumn++) {
             sb.append(" ");
         }
-
         return this;
     }
 
@@ -239,7 +235,6 @@ class StringConstructor {
     public String toString() {
         return sb.toString();
     }
-
 
     public StringBuilder getBuffer() {
         return sb;

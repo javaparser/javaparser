@@ -32,14 +32,16 @@ import org.apache.commons.collections4.Transformer;
  */
 public class CloneTransformer<T> implements Transformer<T, T> {
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes") // the singleton instance works for all types
     public static final Transformer INSTANCE = new CloneTransformer<>();
 
     /**
      * Factory returning the singleton instance.
      *
-     * @param <T>  the type of the objects to be cloned
+     * @param <T> the type of the objects to be cloned
      * @return the singleton instance
      * @since 3.1
      */
@@ -58,7 +60,7 @@ public class CloneTransformer<T> implements Transformer<T, T> {
     /**
      * Transforms the input to result by cloning it.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result
      */
     @Override

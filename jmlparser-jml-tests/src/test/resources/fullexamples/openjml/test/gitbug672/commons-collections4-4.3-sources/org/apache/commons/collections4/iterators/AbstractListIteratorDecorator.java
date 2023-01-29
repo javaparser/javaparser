@@ -27,14 +27,17 @@ import java.util.ListIterator;
  */
 public class AbstractListIteratorDecorator<E> implements ListIterator<E> {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     private final ListIterator<E> iterator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that decorates the specified iterator.
      *
-     * @param iterator  the iterator to decorate, must not be null
+     * @param iterator the iterator to decorate, must not be null
      * @throws NullPointerException if the iterator is null
      */
     public AbstractListIteratorDecorator(final ListIterator<E> iterator) {
@@ -56,55 +59,73 @@ public class AbstractListIteratorDecorator<E> implements ListIterator<E> {
 
     //-----------------------------------------------------------------------
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasNext() {
         return iterator.hasNext();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E next() {
         return iterator.next();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int nextIndex() {
         return iterator.nextIndex();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPrevious() {
         return iterator.hasPrevious();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public E previous() {
         return iterator.previous();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int previousIndex() {
         return iterator.previousIndex();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void remove() {
         iterator.remove();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void set(final E obj) {
         iterator.set(obj);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void add(final E obj) {
         iterator.add(obj);

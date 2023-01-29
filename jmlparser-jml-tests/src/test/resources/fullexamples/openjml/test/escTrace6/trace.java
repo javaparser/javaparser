@@ -1,9 +1,10 @@
 public class trace {
-    
+
     static public int k;
-    
-    static public void mm() {}
-    
+
+    static public void mm() {
+    }
+
     //@ requires true;
     //@ assignable k;
     //@ signals (Exception e) false;
@@ -11,9 +12,9 @@ public class trace {
         k = 1;
         mm();
         k = 2;
-        return ;
+        return;
     }
-    
+
     //@ requires true;
     //@ assignable k;
     //@ ensures k == 2;
@@ -23,19 +24,21 @@ public class trace {
             k = 1;
             mm();
             k = 2;
-        } finally {}
+        } finally {
+        }
     }
-    
+
     //@ requires true;
     //@ assignable k;
     //@ ensures k == 2;
     //@ signals (Exception e) k == 1;
-    
+
     public void m3() {
         try {
             k = 1;
             mm();
             k = 2;
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 }

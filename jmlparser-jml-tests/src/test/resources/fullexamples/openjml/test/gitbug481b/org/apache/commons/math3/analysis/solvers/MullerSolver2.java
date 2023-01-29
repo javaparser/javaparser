@@ -43,12 +43,14 @@ import org.apache.commons.math3.util.FastMath;
  * <p>
  * The formulas here do not use divided differences directly.</p>
  *
- * @since 1.2
  * @see MullerSolver
+ * @since 1.2
  */
 public class MullerSolver2 extends AbstractUnivariateSolver {
 
-    /** Default absolute accuracy. */
+    /**
+     * Default absolute accuracy.
+     */
     private static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
 
     /**
@@ -57,6 +59,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
     public MullerSolver2() {
         this(DEFAULT_ABSOLUTE_ACCURACY);
     }
+
     /**
      * Construct a solver.
      *
@@ -65,6 +68,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
     public MullerSolver2(double absoluteAccuracy) {
         super(absoluteAccuracy);
     }
+
     /**
      * Construct a solver.
      *
@@ -72,7 +76,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
      * @param absoluteAccuracy Absolute accuracy.
      */
     public MullerSolver2(double relativeAccuracy,
-                        double absoluteAccuracy) {
+                         double absoluteAccuracy) {
         super(relativeAccuracy, absoluteAccuracy);
     }
 
@@ -81,9 +85,9 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException,
-               NumberIsTooLargeException,
-               NoBracketingException {
+            throws TooManyEvaluationsException,
+            NumberIsTooLargeException,
+            NoBracketingException {
         final double min = getMin();
         final double max = getMax();
 
@@ -108,7 +112,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
             return x1;
         }
 
-        if(y0 * y1 > 0) {
+        if (y0 * y1 > 0) {
             throw new NoBracketingException(x0, x1, y0, y1);
         }
 
@@ -151,7 +155,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
             // check for convergence
             final double tolerance = FastMath.max(relativeAccuracy * FastMath.abs(x), absoluteAccuracy);
             if (FastMath.abs(x - oldx) <= tolerance ||
-                FastMath.abs(y) <= functionValueAccuracy) {
+                    FastMath.abs(y) <= functionValueAccuracy) {
                 return x;
             }
 

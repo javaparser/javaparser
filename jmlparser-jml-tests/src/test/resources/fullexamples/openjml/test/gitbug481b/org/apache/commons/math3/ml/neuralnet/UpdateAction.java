@@ -27,7 +27,7 @@ public interface UpdateAction {
     /**
      * Updates the network in response to the sample {@code features}.
      *
-     * @param net Network.
+     * @param net      Network.
      * @param features Training data.
      */
     void update(Network net, double[] features);

@@ -30,12 +30,16 @@ import org.apache.commons.math3.util.FastMath;
  * @since 3.0
  */
 public class Cos implements UnivariateDifferentiableFunction, DifferentiableUnivariateFunction {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x) {
         return FastMath.cos(x);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @deprecated as of 3.1, replaced by {@link #value(DerivativeStructure)}
      */
     @Deprecated
@@ -43,7 +47,9 @@ public class Cos implements UnivariateDifferentiableFunction, DifferentiableUniv
         return FunctionUtils.toDifferentiableUnivariateFunction(this).derivative();
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.1
      */
     public DerivativeStructure value(final DerivativeStructure t) {

@@ -41,6 +41,7 @@ import java.util.function.Function;
 public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotationMemberDeclaration {
 
     private static Map<Class<?>, Function<Object, ? extends Expression>> valueAsExressionConverter = new HashMap<>();
+
     static {
         valueAsExressionConverter.put(Boolean.class, (value) -> new BooleanLiteralExpr(Boolean.class.cast(value)));
         valueAsExressionConverter.put(Character.class, (value) -> new CharLiteralExpr(Character.class.cast(value)));
@@ -49,7 +50,7 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
         valueAsExressionConverter.put(Long.class, (value) -> new LongLiteralExpr(Long.class.cast(value)));
         valueAsExressionConverter.put(String.class, (value) -> new StringLiteralExpr(String.class.cast(value)));
     }
-    
+
     private Method annotationMember;
     private TypeSolver typeSolver;
 
@@ -62,7 +63,8 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
     public Expression getDefaultValue() {
         Object value = annotationMember.getDefaultValue();
         Function<Object, ? extends Expression> fn = valueAsExressionConverter.get(value.getClass());
-        if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        if (fn == null)
+            throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
         return fn.apply(value);
     }
 

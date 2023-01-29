@@ -24,17 +24,24 @@ import java.io.Serializable;
 
 /**
  * A strategy of selecting random index between begin and end indices.
+ *
  * @since 3.4
  */
 public class RandomPivotingStrategy implements PivotingStrategyInterface, Serializable {
 
-    /** Serializable UID. */
+    /**
+     * Serializable UID.
+     */
     private static final long serialVersionUID = 20140713L;
 
-    /** Random generator to use for selecting pivot. */
+    /**
+     * Random generator to use for selecting pivot.
+     */
     private final RandomGenerator random;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
+     *
      * @param random random generator to use for selecting pivot
      */
     public RandomPivotingStrategy(final RandomGenerator random) {
@@ -44,13 +51,14 @@ public class RandomPivotingStrategy implements PivotingStrategyInterface, Serial
     /**
      * {@inheritDoc}
      * A uniform random pivot selection between begin and end indices
+     *
      * @return The index corresponding to a random uniformly selected
      * value between first and the last indices of the array slice
      * @throws MathIllegalArgumentException when indices exceeds range
      */
     public int pivotIndex(final double[] work, final int begin, final int end)
-        throws MathIllegalArgumentException {
-        MathArrays.verifyValues(work, begin, end-begin);
+            throws MathIllegalArgumentException {
+        MathArrays.verifyValues(work, begin, end - begin);
         return begin + random.nextInt(end - begin - 1);
     }
 

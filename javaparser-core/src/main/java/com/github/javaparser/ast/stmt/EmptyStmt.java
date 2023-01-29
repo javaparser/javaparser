@@ -34,6 +34,7 @@ import java.util.function.Consumer;
 
 /**
  * An empty statement is a ";" where a statement is expected.
+ *
  * @author Julio Vilmar Gesser
  */
 public class EmptyStmt extends Statement {

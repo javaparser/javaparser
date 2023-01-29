@@ -16,11 +16,10 @@
  */
 package java.lang;
 
-public final class System extends java.lang.Object
-{
-   public final static java.io.InputStream in;
-   public final static java.io.PrintStream out;
-   public final static java.io.PrintStream err;
+public final class System extends java.lang.Object {
+    public final static java.io.InputStream in;
+    public final static java.io.PrintStream out;
+    public final static java.io.PrintStream err;
 
 //    public static void setIn(java.io.InputStream arg0);
 //    public static void setOut(java.io.PrintStream arg0);

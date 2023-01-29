@@ -40,19 +40,19 @@ public class Issue1479Test extends AbstractSymbolResolutionTest {
 
     @Test
     public void test() throws IOException {
-        
+
         CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(adaptPath("src/test/resources/issue1479")));
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
         StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
-        
-        String src = 
+
+        String src =
                 "public class Foo {\n" +
-                "  public void m() {\n" +
-                "    doSomething(B.AFIELD);\n" +
-                "  }\n" +
-                "  public void doSomething(String a) {\n" +
-                "  }\n" +
-                "}\n";
+                        "  public void m() {\n" +
+                        "    doSomething(B.AFIELD);\n" +
+                        "  }\n" +
+                        "  public void doSomething(String a) {\n" +
+                        "  }\n" +
+                        "}\n";
 
         CompilationUnit cu = StaticJavaParser.parse(src);
         FieldAccessExpr fae = cu.findFirst(FieldAccessExpr.class).get();
@@ -62,5 +62,5 @@ public class Issue1479Test extends AbstractSymbolResolutionTest {
         Optional<FieldDeclaration> fd = value.toAst(FieldDeclaration.class);
         assertEquals("a", fd.get().getVariable(0).getInitializer().get().asStringLiteralExpr().getValue());
     }
-    
+
 }

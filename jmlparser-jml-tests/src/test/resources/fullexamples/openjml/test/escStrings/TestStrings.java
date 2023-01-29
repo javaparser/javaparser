@@ -1,6 +1,5 @@
-
 public class TestStrings {
-    
+
     //@ public normal_behavior
     //@   ensures \result == "ABC".equals(s);
 
@@ -9,7 +8,7 @@ public class TestStrings {
         if ("ABC".equals(s)) return true;
         return false;
     }
-    
+
     //@ public normal_behavior
     //@   ensures "ABC".equals(s) ==> \result == 1;
     //@   ensures "ABD".equals(s) ==> \result == 2;
@@ -18,12 +17,16 @@ public class TestStrings {
     //@ pure
     public static int m2(String s) {
         switch (s) {
-        case "ABC": /*@ assert "ABC".equals(s); */ return 1;
-        case "ABD": /*@ assert !"ABC".equals(s); */return 2;
-        case "DEF": return 3;
-        default: /*@ assert !"ABC".equals(s); */ return -1;
+            case "ABC": /*@ assert "ABC".equals(s); */
+                return 1;
+            case "ABD": /*@ assert !"ABC".equals(s); */
+                return 2;
+            case "DEF":
+                return 3;
+            default: /*@ assert !"ABC".equals(s); */
+                return -1;
         }
     }
-    
-    
+
+
 }

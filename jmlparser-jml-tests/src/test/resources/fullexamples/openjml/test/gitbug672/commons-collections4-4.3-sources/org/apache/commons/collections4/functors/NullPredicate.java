@@ -27,10 +27,14 @@ import java.io.Serializable;
  */
 public final class NullPredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 7533784454832764388L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes")
     public static final Predicate INSTANCE = new NullPredicate<>();
 
@@ -56,7 +60,7 @@ public final class NullPredicate<T> implements Predicate<T>, Serializable {
     /**
      * Evaluates the predicate returning true if the input is null.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if input is null
      */
     @Override

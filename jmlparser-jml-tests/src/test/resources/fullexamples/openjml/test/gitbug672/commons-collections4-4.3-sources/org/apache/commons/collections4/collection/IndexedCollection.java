@@ -37,23 +37,30 @@ import java.util.HashMap;
  *
  * @param <K> the type of object in the index.
  * @param <C> the type of object in the collection.
- *
  * @since 4.0
  */
 public class IndexedCollection<K, C> extends AbstractCollectionDecorator<C> {
 
     // TODO: replace with MultiValuedMap
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -5512610452568370038L;
 
-    /** The {@link Transformer} for generating index keys. */
+    /**
+     * The {@link Transformer} for generating index keys.
+     */
     private final Transformer<C, K> keyTransformer;
 
-    /** The map of indexes to collected objects. */
+    /**
+     * The map of indexes to collected objects.
+     */
     private final MultiMap<K, C> index;
 
-    /** The uniqueness constraint for the index. */
+    /**
+     * The uniqueness constraint for the index.
+     */
     private final boolean uniqueIndex;
 
     /**
@@ -62,42 +69,42 @@ public class IndexedCollection<K, C> extends AbstractCollectionDecorator<C> {
      * If an element is added, which maps to an existing key, an {@link IllegalArgumentException}
      * will be thrown.
      *
-     * @param <K> the index object type.
-     * @param <C> the collection type.
-     * @param coll the decorated {@link Collection}.
+     * @param <K>            the index object type.
+     * @param <C>            the collection type.
+     * @param coll           the decorated {@link Collection}.
      * @param keyTransformer the {@link Transformer} for generating index keys.
      * @return the created {@link IndexedCollection}.
      */
     public static <K, C> IndexedCollection<K, C> uniqueIndexedCollection(final Collection<C> coll,
                                                                          final Transformer<C, K> keyTransformer) {
         return new IndexedCollection<>(coll, keyTransformer,
-                                           MultiValueMap.<K, C>multiValueMap(new HashMap<K, Collection<C>>()),
-                                           true);
+                MultiValueMap.<K, C>multiValueMap(new HashMap<K, Collection<C>>()),
+                true);
     }
 
     /**
      * Create an {@link IndexedCollection} for a non-unique index.
      *
-     * @param <K> the index object type.
-     * @param <C> the collection type.
-     * @param coll the decorated {@link Collection}.
+     * @param <K>            the index object type.
+     * @param <C>            the collection type.
+     * @param coll           the decorated {@link Collection}.
      * @param keyTransformer the {@link Transformer} for generating index keys.
      * @return the created {@link IndexedCollection}.
      */
     public static <K, C> IndexedCollection<K, C> nonUniqueIndexedCollection(final Collection<C> coll,
                                                                             final Transformer<C, K> keyTransformer) {
         return new IndexedCollection<>(coll, keyTransformer,
-                                           MultiValueMap.<K, C>multiValueMap(new HashMap<K, Collection<C>>()),
-                                           false);
+                MultiValueMap.<K, C>multiValueMap(new HashMap<K, Collection<C>>()),
+                false);
     }
 
     /**
      * Create a {@link IndexedCollection}.
      *
-     * @param coll  decorated {@link Collection}
-     * @param keyTransformer  {@link Transformer} for generating index keys
-     * @param map  map to use as index
-     * @param uniqueIndex  if the index shall enforce uniqueness of index keys
+     * @param coll           decorated {@link Collection}
+     * @param keyTransformer {@link Transformer} for generating index keys
+     * @param map            map to use as index
+     * @param uniqueIndex    if the index shall enforce uniqueness of index keys
      */
     public IndexedCollection(final Collection<C> coll, final Transformer<C, K> keyTransformer,
                              final MultiMap<K, C> map, final boolean uniqueIndex) {
@@ -112,7 +119,7 @@ public class IndexedCollection<K, C> extends AbstractCollectionDecorator<C> {
      * {@inheritDoc}
      *
      * @throws IllegalArgumentException if the object maps to an existing key and the index
-     *   enforces a uniqueness constraint
+     *                                  enforces a uniqueness constraint
      */
     @Override
     public boolean add(final C object) {
@@ -126,7 +133,7 @@ public class IndexedCollection<K, C> extends AbstractCollectionDecorator<C> {
     @Override
     public boolean addAll(final Collection<? extends C> coll) {
         boolean changed = false;
-        for (final C c: coll) {
+        for (final C c : coll) {
             changed |= add(c);
         }
         return changed;
@@ -171,7 +178,7 @@ public class IndexedCollection<K, C> extends AbstractCollectionDecorator<C> {
      * value associated with the given key. To retrieve all elements associated
      * with a key, use {@link #values(Object)}.
      *
-     * @param key  key to look up
+     * @param key key to look up
      * @return element found
      * @see #values(Object)
      */
@@ -184,7 +191,7 @@ public class IndexedCollection<K, C> extends AbstractCollectionDecorator<C> {
     /**
      * Get all elements associated with the given key.
      *
-     * @param key  key to look up
+     * @param key key to look up
      * @return a collection of elements found, or null if {@code contains(key) == false}
      */
     @SuppressWarnings("unchecked") // index is a MultiMap which returns a Collection
@@ -237,7 +244,7 @@ public class IndexedCollection<K, C> extends AbstractCollectionDecorator<C> {
      *
      * @param object the object to index
      * @throws IllegalArgumentException if the object maps to an existing key and the index
-     *   enforces a uniqueness constraint
+     *                                  enforces a uniqueness constraint
      */
     private void addToIndex(final C object) {
         final K key = keyTransformer.transform(object);

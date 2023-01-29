@@ -408,8 +408,8 @@ public class CompilationUnit extends Node {
      * Add an import to the list of {@link ImportDeclaration} of this compilation unit<br>
      * <b>This method check if no import with the same name is already in the list</b>
      *
-     * @param name the import name
-     * @param isStatic is it an "import static"
+     * @param name       the import name
+     * @param isStatic   is it an "import static"
      * @param isAsterisk does the import end with ".*"
      * @return this, the {@link CompilationUnit}
      */
@@ -442,7 +442,7 @@ public class CompilationUnit extends Node {
     /**
      * Add a class to the types of this compilation unit
      *
-     * @param name the class name
+     * @param name      the class name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
@@ -465,7 +465,7 @@ public class CompilationUnit extends Node {
     /**
      * Add an interface to the types of this compilation unit
      *
-     * @param name the interface name
+     * @param name      the interface name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
@@ -488,7 +488,7 @@ public class CompilationUnit extends Node {
     /**
      * Add an enum to the types of this compilation unit
      *
-     * @param name the enum name
+     * @param name      the enum name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
@@ -511,7 +511,7 @@ public class CompilationUnit extends Node {
     /**
      * Add an annotation declaration to the types of this compilation unit
      *
-     * @param name the annotation name
+     * @param name      the annotation name
      * @param modifiers the modifiers (like Modifier.PUBLIC)
      * @return the newly created class
      */
@@ -788,7 +788,7 @@ public class CompilationUnit extends Node {
          * encoding passed as a parameter.
          *
          * @param makeOutput a function that formats the compilation unit
-         * @param encoding the encoding to use for the saved file
+         * @param encoding   the encoding to use for the saved file
          */
         public void save(Function<CompilationUnit, String> makeOutput, Charset encoding) {
             try {

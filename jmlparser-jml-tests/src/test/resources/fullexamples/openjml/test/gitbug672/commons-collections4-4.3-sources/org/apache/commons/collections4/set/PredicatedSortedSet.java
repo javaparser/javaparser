@@ -43,7 +43,9 @@ import java.util.SortedSet;
  */
 public class PredicatedSortedSet<E> extends PredicatedSet<E> implements SortedSet<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -9110948148132275052L;
 
     /**
@@ -52,11 +54,11 @@ public class PredicatedSortedSet<E> extends PredicatedSet<E> implements SortedSe
      * If there are any elements already in the set being decorated, they
      * are validated.
      *
-     * @param <E> the element type
-     * @param set  the set to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
+     * @param <E>       the element type
+     * @param set       the set to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
      * @return a new predicated sorted set.
-     * @throws NullPointerException if set or predicate is null
+     * @throws NullPointerException     if set or predicate is null
      * @throws IllegalArgumentException if the set contains invalid elements
      * @since 4.0
      */
@@ -66,15 +68,16 @@ public class PredicatedSortedSet<E> extends PredicatedSet<E> implements SortedSe
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the set being decorated, they
      * are validated.
      *
-     * @param set  the set to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
-     * @throws NullPointerException if set or predicate is null
+     * @param set       the set to decorate, must not be null
+     * @param predicate the predicate to use for validation, must not be null
+     * @throws NullPointerException     if set or predicate is null
      * @throws IllegalArgumentException if the set contains invalid elements
      */
     protected PredicatedSortedSet(final SortedSet<E> set, final Predicate<? super E> predicate) {

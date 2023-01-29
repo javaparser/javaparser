@@ -138,7 +138,7 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
         assertNotNull(x.getCorrespondingDeclaration());
         assertTrue(x.getCorrespondingDeclaration().isInterface());
     }
-    
+
     @Test
     public void givenJavaParserTypeSolver_tryToSolveAnUnexpectedSourceFileName_expectSuccess() {
         Path src = adaptPath("src/test/test_sourcecode");
@@ -151,7 +151,7 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
 
     /**
      * {@link com.github.javaparser.JavaParser} doesn't work across multiple threads.
-     *
+     * <p>
      * This test makes sure the concurrency is handled.
      */
     @RepeatedTest(25)

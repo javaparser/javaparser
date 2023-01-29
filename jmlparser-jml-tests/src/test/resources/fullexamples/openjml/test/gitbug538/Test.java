@@ -1,9 +1,9 @@
 public class Test {
-    
+
     public int n;
-    
+
     //@ public invariant n > 0;
-    
+
     //@ public behavior
     //@    ensures n == nn;
     //@ pure

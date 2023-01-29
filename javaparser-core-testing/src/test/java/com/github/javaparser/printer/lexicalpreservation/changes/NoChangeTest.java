@@ -44,7 +44,7 @@ class NoChangeTest {
     @AfterEach
     void tearDown() throws Exception {
     }
-    
+
     @Test
     void getValue_WithMethodFound() {
         Object o = new NoChange().getValue(ObservableProperty.ANNOTATIONS, new ClassOrInterfaceType());
@@ -57,5 +57,5 @@ class NoChangeTest {
             new NoChange().getValue(ObservableProperty.IMPORTS, new ClassOrInterfaceType());
         }, "RuntimeException was expected");
     }
-    
+
 }

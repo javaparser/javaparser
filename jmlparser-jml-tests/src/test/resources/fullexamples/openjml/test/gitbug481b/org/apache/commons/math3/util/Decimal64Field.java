@@ -22,15 +22,19 @@ import org.apache.commons.math3.FieldElement;
 /**
  * The field of double precision floating-point numbers.
  *
- * @since 3.1
  * @see Decimal64
+ * @since 3.1
  */
 public class Decimal64Field implements Field<Decimal64> {
 
-    /** The unique instance of this class. */
+    /**
+     * The unique instance of this class.
+     */
     private static final Decimal64Field INSTANCE = new Decimal64Field();
 
-    /** Default constructor. */
+    /**
+     * Default constructor.
+     */
     private Decimal64Field() {
         // Do nothing
     }
@@ -44,17 +48,23 @@ public class Decimal64Field implements Field<Decimal64> {
         return INSTANCE;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Decimal64 getZero() {
         return Decimal64.ZERO;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Decimal64 getOne() {
         return Decimal64.ONE;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends FieldElement<Decimal64>> getRuntimeClass() {
         return Decimal64.class;
     }

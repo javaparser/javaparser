@@ -29,9 +29,13 @@ import org.apache.commons.math3.exception.NumberIsTooLargeException;
  * @since 3.3
  */
 public class QuasiSigmoidDecayFunction {
-    /** Sigmoid. */
+    /**
+     * Sigmoid.
+     */
     private final Logistic sigmoid;
-    /** See {@link #value(long)}. */
+    /**
+     * See {@link #value(long)}.
+     */
     private final double scale;
 
     /**
@@ -44,10 +48,10 @@ public class QuasiSigmoidDecayFunction {
      * </ul>
      *
      * @param initValue Initial value, i.e. {@link #value(long) value(0)}.
-     * @param slope Value of the function derivative at {@code numCall}.
-     * @param numCall Inflexion point.
+     * @param slope     Value of the function derivative at {@code numCall}.
+     * @param numCall   Inflexion point.
      * @throws NotStrictlyPositiveException if {@code initValue <= 0}.
-     * @throws NumberIsTooLargeException if {@code slope >= 0}.
+     * @throws NumberIsTooLargeException    if {@code slope >= 0}.
      * @throws NotStrictlyPositiveException if {@code numCall <= 0}.
      */
     public QuasiSigmoidDecayFunction(double initValue,

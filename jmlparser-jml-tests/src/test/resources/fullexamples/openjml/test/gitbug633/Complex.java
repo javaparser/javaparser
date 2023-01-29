@@ -22,43 +22,50 @@ package org.jmlspecs.samples.dbc;
 
 //@ model import org.jmlspecs.models.JMLDouble;
 
-/** Complex numbers.  Note that these are immutable.
+/**
+ * Complex numbers.  Note that these are immutable.
  * Abstractly, one can think of a complex number as
- *  realPart+(imaginaryPart*i).
+ * realPart+(imaginaryPart*i).
  * Alternatively, one can think of it as distance
- * from the origin along a given angle 
+ * from the origin along a given angle
  * (measured in radians counterclockwise from
  * the positive x axis), hence a pair of
- *  (magnitude, angle).
+ * (magnitude, angle).
  * This class supports both of these views.
- *
+ * <p>
  * The specifications in this class are intentionally of the lightweight
  * variety.
  *
  * @author Gary T. Leavens with help from Abelson and Sussman's
- *          <cite>Structure and Interpretation of Computer Programs</cite>
+ * <cite>Structure and Interpretation of Computer Programs</cite>
  */
 public /*@ pure @*/ interface Complex {
-    
+
     //@ public ghost static final double tolerance = 0.005;
-    
-    /** Return the real part of this complex number. */
+
+    /**
+     * Return the real part of this complex number.
+     */
     /*@ ensures JMLDouble.approximatelyEqualTo(
       @             magnitude()*StrictMath.cos(angle()),
       @             \result,
       @             tolerance);
-      @*/  
+      @*/
     double realPart();
-    
-    /** Return the imaginary part of this complex number. */
+
+    /**
+     * Return the imaginary part of this complex number.
+     */
     /*@ ensures JMLDouble.approximatelyEqualTo(
       @             \result,
       @             magnitude()*StrictMath.sin(angle()),
       @             tolerance);
-      @*/  
+      @*/
     double imaginaryPart();
 
-    /** Return the magnitude of this complex number. */
+    /**
+     * Return the magnitude of this complex number.
+     */
     /*@ ensures JMLDouble.approximatelyEqualTo(
       @             StrictMath.sqrt(realPart()*realPart()
       @                       + imaginaryPart()*imaginaryPart()),
@@ -66,16 +73,20 @@ public /*@ pure @*/ interface Complex {
       @             tolerance);
       @*/
     double magnitude();
-    
-    /** Return the angle of this complex number. */
+
+    /**
+     * Return the angle of this complex number.
+     */
     /*@ ensures JMLDouble.approximatelyEqualTo(
       @             StrictMath.atan2(imaginaryPart(), realPart()),
       @             \result,
       @             tolerance);
       @*/
     double angle();
-    
-    /** Return this + b (the sum of this and b). */
+
+    /**
+     * Return this + b (the sum of this and b).
+     */
     //@ requires_redundantly b != null; 
     //@ ensures_redundantly \result != null;
     /*@ ensures JMLDouble.approximatelyEqualTo(
@@ -88,8 +99,10 @@ public /*@ pure @*/ interface Complex {
       @             tolerance);
       @*/
     Complex add(Complex b);
-    
-    /** Return this - b (the difference between this and b). */
+
+    /**
+     * Return this - b (the difference between this and b).
+     */
     //@ requires_redundantly b != null; 
     //@ ensures_redundantly \result != null;
     /*@ ensures JMLDouble.approximatelyEqualTo(
@@ -102,7 +115,7 @@ public /*@ pure @*/ interface Complex {
       @             tolerance);
       @*/
     Complex sub(Complex b);
-    
+
     /** Tell whether the given angles are the same, taking into account
      *  that angles measured in radians wrap around after 2*StrictMath.PI
      *  times.
@@ -117,7 +130,7 @@ public /*@ pure @*/ interface Complex {
     // !FIXME! - Take the following axioms out when Simplify knows them
     //@ axiom (\forall double d,dd; dd > 0.0; d%dd > -dd && d%dd < dd);
     //@ axiom (\forall double d,dd; d > -dd ==> d+dd > 0.0);
-    
+
     /** Return the positive remainder of n divided by d. */
     /*@ requires d > 0.0;
       @ ensures \result >= 0.0;
@@ -130,7 +143,9 @@ public /*@ pure @*/ interface Complex {
       @ }
       @*/
 
-    /** Return this * b (the product of this and b). */
+    /**
+     * Return this * b (the product of this and b).
+     */
     /*@   requires_redundantly b != null; 
       @   requires !Double.isNaN(this.magnitude() * b.magnitude());
       @   requires !Double.isNaN(this.angle()) && !Double.isNaN(b.angle());
@@ -149,8 +164,10 @@ public /*@ pure @*/ interface Complex {
       @   ensures \result.imaginaryPart() == 0.0;
       @*/
     Complex mul(Complex b);
-    
-    /** Return this/b (the quotient of this by b). */
+
+    /**
+     * Return this/b (the quotient of this by b).
+     */
     /*@   requires_redundantly b != null;
       @   requires !Double.isNaN(this.magnitude() / b.magnitude());
       @   requires !Double.isNaN(this.angle()) && !Double.isNaN(b.angle());
@@ -169,8 +186,10 @@ public /*@ pure @*/ interface Complex {
       @   ensures \result.imaginaryPart() == 0.0;
       @*/
     Complex div(Complex b);
-    
-    /** Return true if these are the same complex number. */
+
+    /**
+     * Return true if these are the same complex number.
+     */
     /*@ also
       @ ensures \result
       @     <==> o instanceof Complex
@@ -183,7 +202,9 @@ public /*@ pure @*/ interface Complex {
       @*/
     boolean equals(/*@ nullable @*/ Object o);
 
-    /** Return a hashCode for this number. */
+    /**
+     * Return a hashCode for this number.
+     */
     // specification inherited
     int hashCode();
 }

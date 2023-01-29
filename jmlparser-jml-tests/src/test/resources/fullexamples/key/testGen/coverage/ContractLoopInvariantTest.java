@@ -15,44 +15,54 @@ By default KeY does not know the classes of the standard Java runtime environmen
 
 class ContractLoopInvariantTest {
 
-  void A(){ /*System.out.println("A");*/ }
+    void A() { /*System.out.println("A");*/ }
 
-  void B(){ /*System.out.println("B");*/ }
+    void B() { /*System.out.println("B");*/ }
 
-  void C(){ /*System.out.println("C");*/ }
+    void C() { /*System.out.println("C");*/ }
 
-  /*@ public normal_behavior
-    requires 0<=n; ensures true;
-  @*/
-  public void foo1(int n){
-    int i=0;
+    /*@ public normal_behavior
+      requires 0<=n; ensures true;
+    @*/
+    public void foo1(int n) {
+        int i = 0;
     /*@ loop_invariant 0<=i && i<=n;
 	decreases n-i;
     @*/
-    while(i < n){
-      if(i==10){ A();}
-      B();
-      i++;
+        while (i < n) {
+            if (i == 10) {
+                A();
+            }
+            B();
+            i++;
+        }
+        if (i == 20) {
+            C();
+        }
     }
-    if(i==20){ C(); }
-  }
 
 
-  public int i;
-  /*@ public normal_behavior
-    requires i<=n; ensures i==n;
-    modifies i; @*/
-  public void D(int n){
-    /*System.out.println("D");*/
-    while(i < n){ i++; A(); }
-  }
+    public int i;
 
-  /*@ public normal_behavior
-    requires i<=n; ensures i==n;
-    modifies i; @*/
-  public void foo2(int n){
-    D(n);
-    if(i==20){ C(); }
-  }
+    /*@ public normal_behavior
+      requires i<=n; ensures i==n;
+      modifies i; @*/
+    public void D(int n) {
+        /*System.out.println("D");*/
+        while (i < n) {
+            i++;
+            A();
+        }
+    }
+
+    /*@ public normal_behavior
+      requires i<=n; ensures i==n;
+      modifies i; @*/
+    public void foo2(int n) {
+        D(n);
+        if (i == 20) {
+            C();
+        }
+    }
 
 }

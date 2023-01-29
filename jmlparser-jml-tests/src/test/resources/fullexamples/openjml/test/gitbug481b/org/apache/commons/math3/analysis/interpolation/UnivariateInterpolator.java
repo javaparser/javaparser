@@ -22,7 +22,6 @@ import org.apache.commons.math3.exception.MathIllegalArgumentException;
 
 /**
  * Interface representing a univariate real interpolating function.
- *
  */
 public interface UnivariateInterpolator {
     /**
@@ -31,11 +30,10 @@ public interface UnivariateInterpolator {
      * @param xval Arguments for the interpolation points.
      * @param yval Values for the interpolation points.
      * @return a function which interpolates the dataset.
-     * @throws MathIllegalArgumentException
-     * if the arguments violate assumptions made by the interpolation
-     * algorithm.
-     * @throws DimensionMismatchException if arrays lengthes do not match
+     * @throws MathIllegalArgumentException if the arguments violate assumptions made by the interpolation
+     *                                      algorithm.
+     * @throws DimensionMismatchException   if arrays lengthes do not match
      */
     UnivariateFunction interpolate(double xval[], double yval[])
-        throws MathIllegalArgumentException, DimensionMismatchException;
+            throws MathIllegalArgumentException, DimensionMismatchException;
 }

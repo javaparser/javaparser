@@ -37,6 +37,5 @@
  * <li>PrototypeFactory$PrototypeSerializationFactory</li>
  * <li>WhileClosure</li>
  * </ul>
- *
  */
 package org.apache.commons.collections4.functors;

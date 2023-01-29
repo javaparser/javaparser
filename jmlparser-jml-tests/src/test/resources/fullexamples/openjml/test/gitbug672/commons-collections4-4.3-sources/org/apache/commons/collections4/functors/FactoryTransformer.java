@@ -28,18 +28,22 @@ import java.io.Serializable;
  */
 public class FactoryTransformer<I, O> implements Transformer<I, O>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -6817674502475353160L;
 
-    /** The factory to wrap */
+    /**
+     * The factory to wrap
+     */
     private final Factory<? extends O> iFactory;
 
     /**
      * Factory method that performs validation.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
-     * @param factory  the factory to call, not null
+     * @param <I>     the input type
+     * @param <O>     the output type
+     * @param factory the factory to call, not null
      * @return the <code>factory</code> transformer
      * @throws NullPointerException if the factory is null
      */
@@ -54,7 +58,7 @@ public class FactoryTransformer<I, O> implements Transformer<I, O>, Serializable
      * Constructor that performs no validation.
      * Use <code>factoryTransformer</code> if you want that.
      *
-     * @param factory  the factory to call, not null
+     * @param factory the factory to call, not null
      */
     public FactoryTransformer(final Factory<? extends O> factory) {
         super();
@@ -65,7 +69,7 @@ public class FactoryTransformer<I, O> implements Transformer<I, O>, Serializable
      * Transforms the input by ignoring the input and returning the result of
      * calling the decorated factory.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result
      */
     @Override

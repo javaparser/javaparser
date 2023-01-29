@@ -37,17 +37,23 @@ import java.util.ListIterator;
  */
 public class ReverseListIterator<E> implements ResettableListIterator<E> {
 
-    /** The list being wrapped. */
+    /**
+     * The list being wrapped.
+     */
     private final List<E> list;
-    /** The list iterator being wrapped. */
+    /**
+     * The list iterator being wrapped.
+     */
     private ListIterator<E> iterator;
-    /** Flag to indicate if updating is possible at the moment. */
+    /**
+     * Flag to indicate if updating is possible at the moment.
+     */
     private boolean validForUpdate = true;
 
     /**
      * Constructor that wraps a list.
      *
-     * @param list  the list to create a reversed iterator for
+     * @param list the list to create a reversed iterator for
      * @throws NullPointerException if the list is null
      */
     public ReverseListIterator(final List<E> list) {
@@ -60,6 +66,7 @@ public class ReverseListIterator<E> implements ResettableListIterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Checks whether there is another element.
      *
@@ -130,7 +137,7 @@ public class ReverseListIterator<E> implements ResettableListIterator<E> {
      * Removes the last returned element.
      *
      * @throws UnsupportedOperationException if the list is unmodifiable
-     * @throws IllegalStateException if there is no element to remove
+     * @throws IllegalStateException         if there is no element to remove
      */
     @Override
     public void remove() {
@@ -143,9 +150,9 @@ public class ReverseListIterator<E> implements ResettableListIterator<E> {
     /**
      * Replaces the last returned element.
      *
-     * @param obj  the object to set
+     * @param obj the object to set
      * @throws UnsupportedOperationException if the list is unmodifiable
-     * @throws IllegalStateException if the iterator is not in a valid state for set
+     * @throws IllegalStateException         if the iterator is not in a valid state for set
      */
     @Override
     public void set(final E obj) {
@@ -158,9 +165,9 @@ public class ReverseListIterator<E> implements ResettableListIterator<E> {
     /**
      * Adds a new element to the list between the next and previous elements.
      *
-     * @param obj  the object to add
+     * @param obj the object to add
      * @throws UnsupportedOperationException if the list is unmodifiable
-     * @throws IllegalStateException if the iterator is not in a valid state for set
+     * @throws IllegalStateException         if the iterator is not in a valid state for set
      */
     @Override
     public void add(final E obj) {

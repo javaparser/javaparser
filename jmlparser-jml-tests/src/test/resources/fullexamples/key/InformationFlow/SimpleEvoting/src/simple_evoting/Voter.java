@@ -6,7 +6,7 @@ public final class Voter {
     /*@ spec_public @*/ final int vote;
 
 
-    Voter (int id, int vote) {
+    Voter(int id, int vote) {
         this.id = id;
         this.vote = vote;
     }

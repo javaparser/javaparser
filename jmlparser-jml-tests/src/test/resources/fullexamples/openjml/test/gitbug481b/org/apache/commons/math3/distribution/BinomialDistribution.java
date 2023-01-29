@@ -31,11 +31,17 @@ import org.apache.commons.math3.util.FastMath;
  * @see <a href="http://mathworld.wolfram.com/BinomialDistribution.html">Binomial Distribution (MathWorld)</a>
  */
 public class BinomialDistribution extends AbstractIntegerDistribution {
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 6751309484392813623L;
-    /** The number of trials. */
+    /**
+     * The number of trials.
+     */
     private final int numberOfTrials;
-    /** The probability of success. */
+    /**
+     * The probability of success.
+     */
     private final double probabilityOfSuccess;
 
     /**
@@ -50,9 +56,9 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
      * additional initialisation overhead.
      *
      * @param trials Number of trials.
-     * @param p Probability of success.
+     * @param p      Probability of success.
      * @throws NotPositiveException if {@code trials < 0}.
-     * @throws OutOfRangeException if {@code p < 0} or {@code p > 1}.
+     * @throws OutOfRangeException  if {@code p < 0} or {@code p > 1}.
      */
     public BinomialDistribution(int trials, double p) {
         this(new Well19937c(), trials, p);
@@ -61,11 +67,11 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
     /**
      * Creates a binomial distribution.
      *
-     * @param rng Random number generator.
+     * @param rng    Random number generator.
      * @param trials Number of trials.
-     * @param p Probability of success.
+     * @param p      Probability of success.
      * @throws NotPositiveException if {@code trials < 0}.
-     * @throws OutOfRangeException if {@code p < 0} or {@code p > 1}.
+     * @throws OutOfRangeException  if {@code p < 0} or {@code p > 1}.
      * @since 3.1
      */
     public BinomialDistribution(RandomGenerator rng,
@@ -75,7 +81,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
 
         if (trials < 0) {
             throw new NotPositiveException(LocalizedFormats.NUMBER_OF_TRIALS,
-                                           trials);
+                    trials);
         }
         if (p < 0 || p > 1) {
             throw new OutOfRangeException(p, 0, 1);
@@ -103,13 +109,17 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
         return probabilityOfSuccess;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double probability(int x) {
         final double logProbability = logProbability(x);
         return logProbability == Double.NEGATIVE_INFINITY ? 0 : FastMath.exp(logProbability);
     }
 
-    /** {@inheritDoc} **/
+    /**
+     * {@inheritDoc}
+     **/
     @Override
     public double logProbability(int x) {
         if (numberOfTrials == 0) {
@@ -126,7 +136,9 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
         return ret;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(int x) {
         double ret;
         if (x < 0) {
@@ -142,7 +154,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For {@code n} trials and probability parameter {@code p}, the mean is
      * {@code n * p}.
      */
@@ -152,7 +164,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For {@code n} trials and probability parameter {@code p}, the variance is
      * {@code n * p * (1 - p)}.
      */
@@ -163,7 +175,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always 0 except for the probability
      * parameter {@code p = 1}.
      *
@@ -175,7 +187,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is the number of trials except for the
      * probability parameter {@code p = 0}.
      *
@@ -187,7 +199,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}

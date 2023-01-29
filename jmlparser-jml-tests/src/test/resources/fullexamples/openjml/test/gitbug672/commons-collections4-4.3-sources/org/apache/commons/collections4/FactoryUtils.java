@@ -46,16 +46,16 @@ public class FactoryUtils {
     /**
      * This class is not normally instantiated.
      */
-    private FactoryUtils() {}
+    private FactoryUtils() {
+    }
 
     /**
      * Gets a Factory that always throws an exception.
      * This could be useful during testing as a placeholder.
      *
-     * @see org.apache.commons.collections4.functors.ExceptionFactory
-     *
      * @param <T> the type that the factory creates
      * @return the factory
+     * @see org.apache.commons.collections4.functors.ExceptionFactory
      */
     public static <T> Factory<T> exceptionFactory() {
         return ExceptionFactory.<T>exceptionFactory();
@@ -65,9 +65,9 @@ public class FactoryUtils {
      * Gets a Factory that will return null each time the factory is used.
      * This could be useful during testing as a placeholder.
      *
-     * @see org.apache.commons.collections4.functors.ConstantFactory
      * @param <T> the "type" of null object the factory should return.
      * @return the factory
+     * @see org.apache.commons.collections4.functors.ConstantFactory
      */
     public static <T> Factory<T> nullFactory() {
         return ConstantFactory.<T>constantFactory(null);
@@ -79,11 +79,10 @@ public class FactoryUtils {
      * immutable objects should use the constant factory. Mutable objects should
      * use the prototype factory.
      *
-     * @see org.apache.commons.collections4.functors.ConstantFactory
-     *
-     * @param <T> the type that the factory creates
-     * @param constantToReturn  the constant object to return each time in the factory
+     * @param <T>              the type that the factory creates
+     * @param constantToReturn the constant object to return each time in the factory
      * @return the <code>constant</code> factory.
+     * @see org.apache.commons.collections4.functors.ConstantFactory
      */
     public static <T> Factory<T> constantFactory(final T constantToReturn) {
         return ConstantFactory.constantFactory(constantToReturn);
@@ -100,13 +99,12 @@ public class FactoryUtils {
      * <li>serialization clone</li>
      * </ul>
      *
-     * @see org.apache.commons.collections4.functors.PrototypeFactory
-     *
-     * @param <T> the type that the factory creates
-     * @param prototype  the object to clone each time in the factory
+     * @param <T>       the type that the factory creates
+     * @param prototype the object to clone each time in the factory
      * @return the <code>prototype</code> factory, or a {@link ConstantFactory#NULL_INSTANCE} if
      * the {@code prototype} is {@code null}
      * @throws IllegalArgumentException if the prototype cannot be cloned
+     * @see org.apache.commons.collections4.functors.PrototypeFactory
      */
     public static <T> Factory<T> prototypeFactory(final T prototype) {
         return PrototypeFactory.<T>prototypeFactory(prototype);
@@ -116,12 +114,11 @@ public class FactoryUtils {
      * Creates a Factory that can create objects of a specific type using
      * a no-args constructor.
      *
-     * @see org.apache.commons.collections4.functors.InstantiateFactory
-     *
-     * @param <T> the type that the factory creates
-     * @param classToInstantiate  the Class to instantiate each time in the factory
+     * @param <T>                the type that the factory creates
+     * @param classToInstantiate the Class to instantiate each time in the factory
      * @return the <code>reflection</code> factory
      * @throws NullPointerException if the classToInstantiate is null
+     * @see org.apache.commons.collections4.functors.InstantiateFactory
      */
     public static <T> Factory<T> instantiateFactory(final Class<T> classToInstantiate) {
         return InstantiateFactory.instantiateFactory(classToInstantiate, null, null);
@@ -131,16 +128,15 @@ public class FactoryUtils {
      * Creates a Factory that can create objects of a specific type using
      * the arguments specified to this method.
      *
-     * @see org.apache.commons.collections4.functors.InstantiateFactory
-     *
-     * @param <T> the type that the factory creates
-     * @param classToInstantiate  the Class to instantiate each time in the factory
-     * @param paramTypes  parameter types for the constructor, can be null
-     * @param args  the arguments to pass to the constructor, can be null
+     * @param <T>                the type that the factory creates
+     * @param classToInstantiate the Class to instantiate each time in the factory
+     * @param paramTypes         parameter types for the constructor, can be null
+     * @param args               the arguments to pass to the constructor, can be null
      * @return the <code>reflection</code> factory
-     * @throws NullPointerException if the classToInstantiate is null
+     * @throws NullPointerException     if the classToInstantiate is null
      * @throws IllegalArgumentException if the paramTypes and args don't match
      * @throws IllegalArgumentException if the constructor doesn't exist
+     * @see org.apache.commons.collections4.functors.InstantiateFactory
      */
     public static <T> Factory<T> instantiateFactory(final Class<T> classToInstantiate, final Class<?>[] paramTypes,
                                                     final Object[] args) {

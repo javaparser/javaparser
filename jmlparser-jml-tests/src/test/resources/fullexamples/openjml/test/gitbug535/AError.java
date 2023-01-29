@@ -1,22 +1,22 @@
 public class AError {
 
-//@ public behavior
+    //@ public behavior
 //@  ensures true;
-public void m() {
-   throw new AssertionError();
-}
+    public void m() {
+        throw new AssertionError();
+    }
 
-//@ public normal_behavior
+    //@ public normal_behavior
 //@  ensures true;
-public void mm() {
-   throw new AssertionError();
-}
+    public void mm() {
+        throw new AssertionError();
+    }
 
-//@ public behavior
+    //@ public behavior
 //@  ensures true;
 //@  signals_only Exception;
-public void mmm() {
-   throw new AssertionError();
-}
+    public void mmm() {
+        throw new AssertionError();
+    }
 
 }

@@ -62,9 +62,9 @@ public class Issue1511Test {
         // get compilation unit & extract explicit constructor invocation statement
         CompilationUnit cu = StaticJavaParser.parse(file.toFile());
         ExplicitConstructorInvocationStmt ecis = cu.getPrimaryType().orElseThrow(IllegalStateException::new)
-            .asClassOrInterfaceDeclaration().getMember(0)
-            .asConstructorDeclaration().getBody().getStatement(0)
-            .asExplicitConstructorInvocationStmt();
+                .asClassOrInterfaceDeclaration().getMember(0)
+                .asConstructorDeclaration().getBody().getStatement(0)
+                .asExplicitConstructorInvocationStmt();
 
         // attempt to resolve explicit constructor invocation statement
         ResolvedConstructorDeclaration rcd = ecis.resolve(); //.resolveInvokedConstructor(); // <-- exception occurs

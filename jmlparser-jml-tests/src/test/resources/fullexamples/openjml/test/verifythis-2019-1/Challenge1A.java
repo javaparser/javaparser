@@ -7,9 +7,9 @@
 // monotonic  i in 0 .. cut.length-2   a[cut[i]..cut[i+1]-1] is monotonic 
 // maximal    i in 1 .. cut.length-1   a[
 public class Challenge1A {
-    
+
     //@ public normal_behavior
-	//@ requires a.length >= 1;
+    //@ requires a.length >= 1;
     //@ assigns \nothing;
     //@ ensures \result.length <= a.length/2 + 2; // non-empty
     //@ ensures \result[0] == 0 && \result[\result.length-1] == a.length; // begin-to-end
@@ -18,8 +18,8 @@ public class Challenge1A {
     // @ ensures \forall int i; 0 <= i < \result.length-1; \result[i+1] < a.length ==> (a[\result[i]] < a[\result[i]+1] <=!=> a[\result[i+1]-1] < a[\result[i+1]]); // maximal
     // @ ensures \forall int i; 0 <= i < \result.length-1; \result[i] > 0 ==> (a[\result[i]] < a[\result[i]+1] <=!=> a[\result[i]-1] < a[\result[i]]); // maximal
     public int[] findMonotonicCutpoints(int[] a) {
-        
-        int[] cut = new int[a.length/2+2];
+
+        int[] cut = new int[a.length / 2 + 2];
         cut[0] = 0;
         int lengthcut = 1;
         int x = 0;
@@ -37,7 +37,7 @@ public class Challenge1A {
         // @ loop_invariant x > 0 ==> (a[x] < a[x+1] <=!=> a[x-1] < a[x]); // last segment maximal so far
         //@ loop_writes x, y, lengthcut, cut[*];
         //@ loop_decreases n - y;
-        while (y<n) {
+        while (y < n) {
             // @ assume \forall int i; 0 <= i < lengthcut-1; cut[i] > 0 ==> (a[cut[i]] < a[cut[i]+1] <=!=> a[cut[i]-1] < a[cut[i]]); // maximal so far
             // @ assume x > 0 ==> (a[x] < a[x+1] <=!=> a[x-1] < a[x]); // last segment maximal so far
 
@@ -48,7 +48,7 @@ public class Challenge1A {
             //@ loop_invariant \forall int j; x <= j < y-1; (a[x] < a[x+1] <==> a[j] < a[j+1]); // last segment monotonic so far
             //@ loop_writes y;
             //@ loop_decreases n - y;
-            while (y < n && (a[y-1] < a[y] == increasing)) y = y + 1;
+            while (y < n && (a[y - 1] < a[y] == increasing)) y = y + 1;
             // @ assert \forall int i; 0 <= i < lengthcut-1; cut[i] > 0 ==> (a[cut[i]] < a[cut[i]+1] <=!=> a[cut[i]-1] < a[cut[i]]); // maximal so far
             cut[lengthcut++] = y;
             //@ assert \forall int i; 0 <= i < lengthcut; 0 <= cut[i] <= y; // within bounds so far

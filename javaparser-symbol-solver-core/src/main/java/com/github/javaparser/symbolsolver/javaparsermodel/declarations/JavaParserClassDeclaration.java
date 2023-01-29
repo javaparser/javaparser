@@ -104,7 +104,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     ///
     /// Public methods: fields
     ///
-    
+
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
@@ -189,7 +189,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        if(isJavaLangObject()) {
+        if (isJavaLangObject()) {
             // If this is java.lang.Object, it has no super class.
             return Optional.empty();
         } else if (wrappedNode.getExtendedTypes().isEmpty()) {

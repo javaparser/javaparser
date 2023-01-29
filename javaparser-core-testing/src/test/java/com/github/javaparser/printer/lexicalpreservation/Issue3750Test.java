@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Issue3750Test extends AbstractLexicalPreservingTest {
 
-	@Test
+    @Test
     void test() {
         considerCode(
                 "public class MyClass {\n"
@@ -41,9 +41,9 @@ public class Issue3750Test extends AbstractLexicalPreservingTest {
 
         List<FieldDeclaration> fields = cu.findAll(FieldDeclaration.class);
         FieldDeclaration field = fields.get(0);
-        
-        String expected = 
-        		"public class MyClass {\n"
+
+        String expected =
+                "public class MyClass {\n"
                         + " // Comment\n"
                         + " String s1;\n"
                         + "}";

@@ -69,7 +69,7 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
             public String getContainerId() {
                 return classQName;
             }
-            
+
             @Override
             public TypeParametrizable getContainer() {
                 return null;
@@ -152,7 +152,7 @@ public interface TypeParameterDeclaration extends TypeDeclaration {
      * The ID of the container. See TypeContainer.getId
      */
     String getContainerId();
-    
+
     /**
      * The TypeParametrizable of the container. Can be either a ReferenceTypeDeclaration or a MethodLikeDeclaration
      */

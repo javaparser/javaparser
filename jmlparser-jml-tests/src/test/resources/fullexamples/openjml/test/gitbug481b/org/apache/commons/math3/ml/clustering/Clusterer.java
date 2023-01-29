@@ -31,7 +31,9 @@ import java.util.List;
  */
 public abstract class Clusterer<T extends Clusterable> {
 
-    /** The distance measure to use. */
+    /**
+     * The distance measure to use.
+     */
     private DistanceMeasure measure;
 
     /**
@@ -49,9 +51,9 @@ public abstract class Clusterer<T extends Clusterable> {
      * @param points the set of {@link Clusterable} instances
      * @return a {@link List} of clusters
      * @throws MathIllegalArgumentException if points are null or the number of
-     *   data points is not compatible with this clusterer
-     * @throws ConvergenceException if the algorithm has not yet converged after
-     *   the maximum number of iterations has been exceeded
+     *                                      data points is not compatible with this clusterer
+     * @throws ConvergenceException         if the algorithm has not yet converged after
+     *                                      the maximum number of iterations has been exceeded
      */
     public abstract List<? extends Cluster<T>> cluster(Collection<T> points)
             throws MathIllegalArgumentException, ConvergenceException;

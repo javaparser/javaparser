@@ -398,7 +398,6 @@ class NameLogicTest extends AbstractNameLogicTest {
     }
 
 
-
     private void assertNameInCodeHasRole(String code, String name, NameRole nameRole, ParseStart parseStart) {
         Node nameNode = getNameInCode(code, name, parseStart);
         assertEquals(nameRole, NameLogic.classifyRole(nameNode));

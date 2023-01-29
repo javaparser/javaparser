@@ -39,6 +39,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An annotation that has zero or more key-value pairs.<br>{@code @Mapping(a=5, d=10)}
+ *
  * @author Julio Vilmar Gesser
  */
 public class NormalAnnotationExpr extends AnnotationExpr {

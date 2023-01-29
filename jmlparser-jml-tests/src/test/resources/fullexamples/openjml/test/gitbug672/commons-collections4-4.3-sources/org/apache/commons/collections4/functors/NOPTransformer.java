@@ -27,17 +27,21 @@ import java.io.Serializable;
  */
 public class NOPTransformer<T> implements Transformer<T, T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 2133891748318574490L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes")
     public static final Transformer INSTANCE = new NOPTransformer<>();
 
     /**
      * Factory returning the singleton instance.
      *
-     * @param <T>  the input/output type
+     * @param <T> the input/output type
      * @return the singleton instance
      * @since 3.1
      */
@@ -56,7 +60,7 @@ public class NOPTransformer<T> implements Transformer<T, T>, Serializable {
     /**
      * Transforms the input to result by doing nothing.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result which is the input
      */
     @Override

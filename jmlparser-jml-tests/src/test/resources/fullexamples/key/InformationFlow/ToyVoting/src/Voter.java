@@ -1,12 +1,12 @@
 /**
  * Information flow example.
- *
+ * <p>
  * The example is a toy implementation of a voting process. The vote of every
  * voter is read and send over a not further modelled network. If the read
  * vote is not valid, then 0 is send instead to indicate abstention. The votes
  * itself and whether a vote is valid is secrete. At the end the
  * participation is output.
- *
+ * <p>
  * Without the optimisations described in the FM-Paper the verification of
  * the method secure_voting() with the help of self-composition is very
  * expensive or even infeasible.
@@ -21,9 +21,9 @@ public class Voter {
     public static final int low_NUM_OF_VOTERS = 763;
     public static int low_numOfVotes;
     public boolean low_sendSuccessful;
-    
+
     private boolean high_voteValid;
-    
+
     /*@ normal_behavior
         determines low_outputStream,
                    low_outputStreamAvailable,
@@ -53,7 +53,8 @@ public class Voter {
                            low_numOfVotes,
                            low_sendSuccessful
                        \by \itself;    @*/
-            {   if (isValid(high_vote)) {
+            {
+                if (isValid(high_vote)) {
                     high_voteValid = true;
                     low_sendSuccessful = sendVote(high_vote);
                 } else {
@@ -68,11 +69,13 @@ public class Voter {
                            low_numOfVotes,
                            low_sendSuccessful
                        \by \itself;    @*/
-            { low_numOfVotes = (low_sendSuccessful ? low_numOfVotes + 1 : low_numOfVotes); }
+            {
+                low_numOfVotes = (low_sendSuccessful ? low_numOfVotes + 1 : low_numOfVotes);
+            }
         }
         publishVoterParticipation();
     }
-    
+
     /*@ normal_behavior
         determines low_outputStream,
                    low_outputStreamAvailable,
@@ -83,7 +86,7 @@ public class Voter {
     int inputVote() {
         return high_inputStream;
     }
-    
+
     /*@ normal_behavior
         determines low_outputStream,
                    low_outputStreamAvailable,
@@ -100,7 +103,7 @@ public class Voter {
             return false;
         }
     }
-    
+
     /*@ normal_behavior
         determines low_outputStream,
                    low_outputStreamAvailable,
@@ -112,7 +115,7 @@ public class Voter {
         // vote has to be in range 1..255
         return 0 < high_vote && high_vote <= 255;
     }
-    
+
     /*@ normal_behavior
         determines low_outputStream,
                    low_outputStreamAvailable,
@@ -123,8 +126,8 @@ public class Voter {
     void publishVoterParticipation() {
         low_outputStream = low_numOfVotes * 100 / low_NUM_OF_VOTERS;
     }
-    
-    
+
+
     /*@ normal_behavior
         determines low_outputStream,
                    low_outputStreamAvailable,

@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -61,11 +61,11 @@ public final class VariableDeclarator extends Node implements
 
     /**
      * Defines the declaration of a variable.
-     * 
-     * @param id The identifier for this variable. IE. The variables name.
+     *
+     * @param id   The identifier for this variable. IE. The variables name.
      * @param init What this variable should be initialized to.
-     *            An {@link com.github.javaparser.ast.expr.AssignExpr} is unnecessary as the <code>=</code> operator is
-     *            already added.
+     *             An {@link com.github.javaparser.ast.expr.AssignExpr} is unnecessary as the <code>=</code> operator is
+     *             already added.
      */
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
         setId(id);

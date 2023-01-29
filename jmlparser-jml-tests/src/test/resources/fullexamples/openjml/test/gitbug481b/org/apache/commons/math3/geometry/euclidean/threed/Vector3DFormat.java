@@ -40,7 +40,6 @@ import java.util.Locale;
  * <p><b>Note:</b> using "," as a separator may interfere with the grouping separator
  * of the default {@link NumberFormat} for the current locale. Thus it is advised
  * to use a {@link NumberFormat} instance with disabled grouping in such a case.</p>
- *
  */
 public class Vector3DFormat extends VectorFormat<Euclidean3D> {
 
@@ -51,11 +50,12 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
      */
     public Vector3DFormat() {
         super(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR,
-              CompositeFormat.getDefaultNumberFormat());
+                CompositeFormat.getDefaultNumberFormat());
     }
 
     /**
      * Create an instance with a custom number format for components.
+     *
      * @param format the custom format for components.
      */
     public Vector3DFormat(final NumberFormat format) {
@@ -64,30 +64,33 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
 
     /**
      * Create an instance with custom prefix, suffix and separator.
-     * @param prefix prefix to use instead of the default "{"
-     * @param suffix suffix to use instead of the default "}"
+     *
+     * @param prefix    prefix to use instead of the default "{"
+     * @param suffix    suffix to use instead of the default "}"
      * @param separator separator to use instead of the default "; "
      */
     public Vector3DFormat(final String prefix, final String suffix,
-                         final String separator) {
+                          final String separator) {
         super(prefix, suffix, separator, CompositeFormat.getDefaultNumberFormat());
     }
 
     /**
      * Create an instance with custom prefix, suffix, separator and format
      * for components.
-     * @param prefix prefix to use instead of the default "{"
-     * @param suffix suffix to use instead of the default "}"
+     *
+     * @param prefix    prefix to use instead of the default "{"
+     * @param suffix    suffix to use instead of the default "}"
      * @param separator separator to use instead of the default "; "
-     * @param format the custom format for components.
+     * @param format    the custom format for components.
      */
     public Vector3DFormat(final String prefix, final String suffix,
-                         final String separator, final NumberFormat format) {
+                          final String separator, final NumberFormat format) {
         super(prefix, suffix, separator, format);
     }
 
     /**
      * Returns the default 3D vector format for the current locale.
+     *
      * @return the default 3D vector format.
      */
     public static Vector3DFormat getInstance() {
@@ -96,6 +99,7 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
 
     /**
      * Returns the default 3D vector format for the given locale.
+     *
      * @param locale the specific locale used by the format.
      * @return the 3D vector format specific to the given locale.
      */
@@ -105,10 +109,11 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
 
     /**
      * Formats a {@link Vector3D} object to produce a string.
-     * @param vector the object to format.
+     *
+     * @param vector     the object to format.
      * @param toAppendTo where the text is to be appended
-     * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * @param pos        On input: an alignment field, if desired. On output: the
+     *                   offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
     @Override
@@ -120,10 +125,11 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
 
     /**
      * Parses a string to produce a {@link Vector3D} object.
+     *
      * @param source the string to parse
      * @return the parsed {@link Vector3D} object.
      * @throws MathParseException if the beginning of the specified string
-     * cannot be parsed.
+     *                            cannot be parsed.
      */
     @Override
     public Vector3D parse(final String source) throws MathParseException {
@@ -131,16 +137,17 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
         Vector3D result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
             throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         Vector3D.class);
+                    parsePosition.getErrorIndex(),
+                    Vector3D.class);
         }
         return result;
     }
 
     /**
      * Parses a string to produce a {@link Vector3D} object.
+     *
      * @param source the string to parse
-     * @param pos input/ouput parsing parameter.
+     * @param pos    input/ouput parsing parameter.
      * @return the parsed {@link Vector3D} object.
      */
     @Override

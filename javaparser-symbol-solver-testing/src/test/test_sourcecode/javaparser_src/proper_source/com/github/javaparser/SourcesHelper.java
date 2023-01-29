@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,14 +18,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser;
 
 import java.io.*;
 
 public class SourcesHelper {
 
-    static String streamToString(InputStream in, String encoding){
+    static String streamToString(InputStream in, String encoding) {
         if (encoding == null) {
             return streamToString(in);
         } else {
@@ -34,7 +34,7 @@ public class SourcesHelper {
         }
     }
 
-    static String streamToString(InputStream in){
+    static String streamToString(InputStream in) {
         java.util.Scanner s = new java.util.Scanner(in).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
@@ -45,7 +45,7 @@ public class SourcesHelper {
     }
 
     static String readerToString(Reader reader) throws IOException {
-        char[] arr = new char[8*1024]; // 8K at a time
+        char[] arr = new char[8 * 1024]; // 8K at a time
         StringBuilder buf = new StringBuilder();
         int numChars;
 
@@ -56,7 +56,7 @@ public class SourcesHelper {
         return buf.toString();
     }
 
-    static Reader stringToReader(String s){
+    static Reader stringToReader(String s) {
         return new StringReader(s);
     }
 

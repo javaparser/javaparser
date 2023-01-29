@@ -28,8 +28,8 @@ import org.apache.commons.math3.util.FastMath;
  * Laguerre's Method</a> for root finding of real coefficient polynomials.
  * For reference, see
  * <blockquote>
- *  <b>A First Course in Numerical Analysis</b>,
- *  ISBN 048641454X, chapter 8.
+ * <b>A First Course in Numerical Analysis</b>,
+ * ISBN 048641454X, chapter 8.
  * </blockquote>
  * Laguerre's method is global in the sense that it can start with any initial
  * approximation and be able to solve all roots from that point.
@@ -38,9 +38,13 @@ import org.apache.commons.math3.util.FastMath;
  * @since 1.2
  */
 public class LaguerreSolver extends AbstractPolynomialSolver {
-    /** Default absolute accuracy. */
+    /**
+     * Default absolute accuracy.
+     */
     private static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
-    /** Complex solver. */
+    /**
+     * Complex solver.
+     */
     private final ComplexSolver complexSolver = new ComplexSolver();
 
     /**
@@ -49,6 +53,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
     public LaguerreSolver() {
         this(DEFAULT_ABSOLUTE_ACCURACY);
     }
+
     /**
      * Construct a solver.
      *
@@ -57,6 +62,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
     public LaguerreSolver(double absoluteAccuracy) {
         super(absoluteAccuracy);
     }
+
     /**
      * Construct a solver.
      *
@@ -67,11 +73,12 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                           double absoluteAccuracy) {
         super(relativeAccuracy, absoluteAccuracy);
     }
+
     /**
      * Construct a solver.
      *
-     * @param relativeAccuracy Relative accuracy.
-     * @param absoluteAccuracy Absolute accuracy.
+     * @param relativeAccuracy      Relative accuracy.
+     * @param absoluteAccuracy      Absolute accuracy.
      * @param functionValueAccuracy Function value accuracy.
      */
     public LaguerreSolver(double relativeAccuracy,
@@ -85,9 +92,9 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      */
     @Override
     public double doSolve()
-        throws TooManyEvaluationsException,
-               NumberIsTooLargeException,
-               NoBracketingException {
+            throws TooManyEvaluationsException,
+            NumberIsTooLargeException,
+            NoBracketingException {
         final double min = getMin();
         final double max = getMax();
         final double initial = getStartValue();
@@ -128,18 +135,18 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
 
     /**
      * Find a real root in the given interval.
-     *
+     * <p>
      * Despite the bracketing condition, the root returned by
-     * {@link LaguerreSolver.ComplexSolver#solve(Complex[],Complex)} may
+     * {@link LaguerreSolver.ComplexSolver#solve(Complex[], Complex)} may
      * not be a real zero inside {@code [min, max]}.
      * For example, <code> p(x) = x<sup>3</sup> + 1, </code>
      * with {@code min = -2}, {@code max = 2}, {@code initial = 0}.
      * When it occurs, this code calls
-     * {@link LaguerreSolver.ComplexSolver#solveAll(Complex[],Complex)}
+     * {@link LaguerreSolver.ComplexSolver#solveAll(Complex[], Complex)}
      * in order to obtain all roots and picks up one real root.
      *
-     * @param lo Lower bound of the search interval.
-     * @param hi Higher bound of the search interval.
+     * @param lo  Lower bound of the search interval.
+     * @param hi  Higher bound of the search interval.
      * @param fLo Function value at the lower bound of the search interval.
      * @param fHi Function value at the higher bound of the search interval.
      * @return the point at which the function value is zero.
@@ -176,21 +183,20 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * Note: This method is not part of the API of {@link BaseUnivariateSolver}.</p>
      *
      * @param coefficients Polynomial coefficients.
-     * @param initial Start value.
+     * @param initial      Start value.
      * @return the full set of complex roots of the polynomial
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximum number of evaluations is exceeded when solving for one of the roots
-     * @throws NullArgumentException if the {@code coefficients} is
-     * {@code null}.
-     * @throws NoDataException if the {@code coefficients} array is empty.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximum number of evaluations is exceeded when solving for one of the roots
+     * @throws NullArgumentException                                          if the {@code coefficients} is
+     *                                                                        {@code null}.
+     * @throws NoDataException                                                if the {@code coefficients} array is empty.
      * @since 3.1
      */
     public Complex[] solveAllComplex(double[] coefficients,
                                      double initial)
-        throws NullArgumentException,
-               NoDataException,
-               TooManyEvaluationsException {
-       return solveAllComplex(coefficients, initial, Integer.MAX_VALUE);
+            throws NullArgumentException,
+            NoDataException,
+            TooManyEvaluationsException {
+        return solveAllComplex(coefficients, initial, Integer.MAX_VALUE);
     }
 
     /**
@@ -200,28 +206,27 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * Note: This method is not part of the API of {@link BaseUnivariateSolver}.</p>
      *
      * @param coefficients polynomial coefficients
-     * @param initial start value
-     * @param maxEval maximum number of evaluations
+     * @param initial      start value
+     * @param maxEval      maximum number of evaluations
      * @return the full set of complex roots of the polynomial
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximum number of evaluations is exceeded when solving for one of the roots
-     * @throws NullArgumentException if the {@code coefficients} is
-     * {@code null}
-     * @throws NoDataException if the {@code coefficients} array is empty
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximum number of evaluations is exceeded when solving for one of the roots
+     * @throws NullArgumentException                                          if the {@code coefficients} is
+     *                                                                        {@code null}
+     * @throws NoDataException                                                if the {@code coefficients} array is empty
      * @since 3.5
      */
     public Complex[] solveAllComplex(double[] coefficients,
                                      double initial, int maxEval)
-        throws NullArgumentException,
-               NoDataException,
-               TooManyEvaluationsException {
+            throws NullArgumentException,
+            NoDataException,
+            TooManyEvaluationsException {
         setup(maxEval,
-              new PolynomialFunction(coefficients),
-              Double.NEGATIVE_INFINITY,
-              Double.POSITIVE_INFINITY,
-              initial);
+                new PolynomialFunction(coefficients),
+                Double.NEGATIVE_INFINITY,
+                Double.POSITIVE_INFINITY,
+                initial);
         return complexSolver.solveAll(ComplexUtils.convertToComplex(coefficients),
-                                      new Complex(initial, 0d));
+                new Complex(initial, 0d));
     }
 
     /**
@@ -231,21 +236,20 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * Note: This method is not part of the API of {@link BaseUnivariateSolver}.</p>
      *
      * @param coefficients Polynomial coefficients.
-     * @param initial Start value.
+     * @param initial      Start value.
      * @return a complex root of the polynomial
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximum number of evaluations is exceeded.
-     * @throws NullArgumentException if the {@code coefficients} is
-     * {@code null}.
-     * @throws NoDataException if the {@code coefficients} array is empty.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximum number of evaluations is exceeded.
+     * @throws NullArgumentException                                          if the {@code coefficients} is
+     *                                                                        {@code null}.
+     * @throws NoDataException                                                if the {@code coefficients} array is empty.
      * @since 3.1
      */
     public Complex solveComplex(double[] coefficients,
                                 double initial)
-        throws NullArgumentException,
-               NoDataException,
-               TooManyEvaluationsException {
-       return solveComplex(coefficients, initial, Integer.MAX_VALUE);
+            throws NullArgumentException,
+            NoDataException,
+            TooManyEvaluationsException {
+        return solveComplex(coefficients, initial, Integer.MAX_VALUE);
     }
 
     /**
@@ -255,28 +259,27 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * Note: This method is not part of the API of {@link BaseUnivariateSolver}.</p>
      *
      * @param coefficients polynomial coefficients
-     * @param initial start value
-     * @param maxEval maximum number of evaluations
+     * @param initial      start value
+     * @param maxEval      maximum number of evaluations
      * @return a complex root of the polynomial
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximum number of evaluations is exceeded
-     * @throws NullArgumentException if the {@code coefficients} is
-     * {@code null}
-     * @throws NoDataException if the {@code coefficients} array is empty
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximum number of evaluations is exceeded
+     * @throws NullArgumentException                                          if the {@code coefficients} is
+     *                                                                        {@code null}
+     * @throws NoDataException                                                if the {@code coefficients} array is empty
      * @since 3.1
      */
     public Complex solveComplex(double[] coefficients,
                                 double initial, int maxEval)
-        throws NullArgumentException,
-               NoDataException,
-               TooManyEvaluationsException {
+            throws NullArgumentException,
+            NoDataException,
+            TooManyEvaluationsException {
         setup(maxEval,
-              new PolynomialFunction(coefficients),
-              Double.NEGATIVE_INFINITY,
-              Double.POSITIVE_INFINITY,
-              initial);
+                new PolynomialFunction(coefficients),
+                Double.NEGATIVE_INFINITY,
+                Double.POSITIVE_INFINITY,
+                initial);
         return complexSolver.solve(ComplexUtils.convertToComplex(coefficients),
-                                   new Complex(initial, 0d));
+                new Complex(initial, 0d));
     }
 
     /**
@@ -289,14 +292,14 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          *
          * @param min Lower bound for the interval.
          * @param max Upper bound for the interval.
-         * @param z Complex root.
+         * @param z   Complex root.
          * @return {@code true} if z is a real zero.
          */
         public boolean isRoot(double min, double max, Complex z) {
             if (isSequence(min, z.getReal(), max)) {
                 double tolerance = FastMath.max(getRelativeAccuracy() * z.abs(), getAbsoluteAccuracy());
                 return (FastMath.abs(z.getImaginary()) <= tolerance) ||
-                     (z.abs() <= getFunctionValueAccuracy());
+                        (z.abs() <= getFunctionValueAccuracy());
             }
             return false;
         }
@@ -306,18 +309,17 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * coefficients, starting from the given initial value.
          *
          * @param coefficients Polynomial coefficients.
-         * @param initial Start value.
+         * @param initial      Start value.
          * @return the point at which the function value is zero.
-         * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-         * if the maximum number of evaluations is exceeded.
-         * @throws NullArgumentException if the {@code coefficients} is
-         * {@code null}.
-         * @throws NoDataException if the {@code coefficients} array is empty.
+         * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximum number of evaluations is exceeded.
+         * @throws NullArgumentException                                          if the {@code coefficients} is
+         *                                                                        {@code null}.
+         * @throws NoDataException                                                if the {@code coefficients} array is empty.
          */
         public Complex[] solveAll(Complex coefficients[], Complex initial)
-            throws NullArgumentException,
-                   NoDataException,
-                   TooManyEvaluationsException {
+                throws NullArgumentException,
+                NoDataException,
+                TooManyEvaluationsException {
             if (coefficients == null) {
                 throw new NullArgumentException();
             }
@@ -355,18 +357,17 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * starting from the given initial value.
          *
          * @param coefficients Polynomial coefficients.
-         * @param initial Start value.
+         * @param initial      Start value.
          * @return the point at which the function value is zero.
-         * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-         * if the maximum number of evaluations is exceeded.
-         * @throws NullArgumentException if the {@code coefficients} is
-         * {@code null}.
-         * @throws NoDataException if the {@code coefficients} array is empty.
+         * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximum number of evaluations is exceeded.
+         * @throws NullArgumentException                                          if the {@code coefficients} is
+         *                                                                        {@code null}.
+         * @throws NoDataException                                                if the {@code coefficients} array is empty.
          */
         public Complex solve(Complex coefficients[], Complex initial)
-            throws NullArgumentException,
-                   NoDataException,
-                   TooManyEvaluationsException {
+                throws NullArgumentException,
+                NoDataException,
+                TooManyEvaluationsException {
             if (coefficients == null) {
                 throw new NullArgumentException();
             }
@@ -380,19 +381,19 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
             final double relativeAccuracy = getRelativeAccuracy();
             final double functionValueAccuracy = getFunctionValueAccuracy();
 
-            final Complex nC  = new Complex(n, 0);
+            final Complex nC = new Complex(n, 0);
             final Complex n1C = new Complex(n - 1, 0);
 
             Complex z = initial;
             Complex oldz = new Complex(Double.POSITIVE_INFINITY,
-                                       Double.POSITIVE_INFINITY);
+                    Double.POSITIVE_INFINITY);
             while (true) {
                 // Compute pv (polynomial value), dv (derivative value), and
                 // d2v (second derivative value) simultaneously.
                 Complex pv = coefficients[n];
                 Complex dv = Complex.ZERO;
                 Complex d2v = Complex.ZERO;
-                for (int j = n-1; j >= 0; j--) {
+                for (int j = n - 1; j >= 0; j--) {
                     d2v = dv.add(z.multiply(d2v));
                     dv = pv.add(z.multiply(dv));
                     pv = coefficients[j].add(z.multiply(pv));
@@ -401,7 +402,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
 
                 // Check for convergence.
                 final double tolerance = FastMath.max(relativeAccuracy * z.abs(),
-                                                      absoluteAccuracy);
+                        absoluteAccuracy);
                 if ((z.subtract(oldz)).abs() <= tolerance) {
                     return z;
                 }
@@ -424,7 +425,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                 if (denominator.equals(new Complex(0.0, 0.0))) {
                     z = z.add(new Complex(absoluteAccuracy, absoluteAccuracy));
                     oldz = new Complex(Double.POSITIVE_INFINITY,
-                                       Double.POSITIVE_INFINITY);
+                            Double.POSITIVE_INFINITY);
                 } else {
                     oldz = z;
                     z = z.subtract(nC.divide(denominator));

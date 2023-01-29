@@ -36,7 +36,7 @@ public class SingletonListIterator<E> implements ResettableListIterator<E> {
     /**
      * Constructs a new <code>SingletonListIterator</code>.
      *
-     * @param object  the single object to return from the iterator
+     * @param object the single object to return from the iterator
      */
     public SingletonListIterator(final E object) {
         super();
@@ -97,7 +97,7 @@ public class SingletonListIterator<E> implements ResettableListIterator<E> {
      *
      * @return the single object
      * @throws NoSuchElementException if the single object has already
-     *    been returned
+     *                                been returned
      */
     @Override
     public E next() {
@@ -116,7 +116,7 @@ public class SingletonListIterator<E> implements ResettableListIterator<E> {
      *
      * @return the single object
      * @throws NoSuchElementException if the single object has not already
-     *    been returned
+     *                                been returned
      */
     @Override
     public E previous() {
@@ -129,14 +129,15 @@ public class SingletonListIterator<E> implements ResettableListIterator<E> {
 
     /**
      * Remove the object from this iterator.
+     *
      * @throws IllegalStateException if the {@code next} or {@code previous}
-     *        method has not yet been called, or the {@code remove} method
-     *        has already been called after the last call to {@code next}
-     *        or {@code previous}.
+     *                               method has not yet been called, or the {@code remove} method
+     *                               has already been called after the last call to {@code next}
+     *                               or {@code previous}.
      */
     @Override
     public void remove() {
-        if(!nextCalled || removed) {
+        if (!nextCalled || removed) {
             throw new IllegalStateException();
         }
         object = null;
@@ -146,7 +147,7 @@ public class SingletonListIterator<E> implements ResettableListIterator<E> {
     /**
      * Add always throws {@link UnsupportedOperationException}.
      *
-     * @param obj  the object to add
+     * @param obj the object to add
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -157,9 +158,9 @@ public class SingletonListIterator<E> implements ResettableListIterator<E> {
     /**
      * Set sets the value of the singleton.
      *
-     * @param obj  the object to set
+     * @param obj the object to set
      * @throws IllegalStateException if {@code next} has not been called
-     *          or the object has been removed
+     *                               or the object has been removed
      */
     @Override
     public void set(final E obj) {

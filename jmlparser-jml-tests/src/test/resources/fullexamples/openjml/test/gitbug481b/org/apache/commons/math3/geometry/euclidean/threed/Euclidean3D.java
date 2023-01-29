@@ -24,46 +24,62 @@ import java.io.Serializable;
 
 /**
  * This class implements a three-dimensional space.
+ *
  * @since 3.0
  */
 public class Euclidean3D implements Serializable, Space {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 6249091865814886817L;
 
-    /** Private constructor for the singleton.
+    /**
+     * Private constructor for the singleton.
      */
     private Euclidean3D() {
     }
 
-    /** Get the unique instance.
+    /**
+     * Get the unique instance.
+     *
      * @return the unique instance
      */
     public static Euclidean3D getInstance() {
         return LazyHolder.INSTANCE;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getDimension() {
         return 3;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Euclidean2D getSubSpace() {
         return Euclidean2D.getInstance();
     }
 
     // CHECKSTYLE: stop HideUtilityClassConstructor
-    /** Holder for the instance.
+
+    /**
+     * Holder for the instance.
      * <p>We use here the Initialization On Demand Holder Idiom.</p>
      */
     private static class LazyHolder {
-        /** Cached field instance. */
+        /**
+         * Cached field instance.
+         */
         private static final Euclidean3D INSTANCE = new Euclidean3D();
     }
     // CHECKSTYLE: resume HideUtilityClassConstructor
 
-    /** Handle deserialization of the singleton.
+    /**
+     * Handle deserialization of the singleton.
+     *
      * @return the singleton instance
      */
     private Object readResolve() {

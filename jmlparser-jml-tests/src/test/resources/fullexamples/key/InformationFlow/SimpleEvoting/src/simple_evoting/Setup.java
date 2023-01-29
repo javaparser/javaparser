@@ -35,7 +35,7 @@ public final class Setup {
       @             \declassifies (\seq_def int i; 0; numberOfCandidates;
       @                               (\num_of int j; 0 <= j && j < numberOfVoters; voters[j].vote == i));
       @*/
-    public void main () {
+    public void main() {
         boolean resultReady = server.resultReady();
         /*@ maintaining \invariant_for(this);
           @
@@ -52,7 +52,7 @@ public final class Setup {
           @            (\seq_def int i; 0; numberOfVoters; server.ballotCast[i])
           @        \by \itself;
           @*/
-        while ( !resultReady ) { // possibly infinite loop
+        while (!resultReady) { // possibly infinite loop
             // let adversary decide send order
             final int k = Environment.untrustedInput(voters.length);
             final Voter v = voters[k];
@@ -73,7 +73,7 @@ public final class Setup {
       @             \declassifies (\seq_def int i; 0; numberOfCandidates;
       @                               (\num_of int j; 0 <= j && j < numberOfVoters; voters[j].vote == i));
       @*/
-    private void publishResult () {
+    private void publishResult() {
         out = server.votesForCandidates;
     }
 

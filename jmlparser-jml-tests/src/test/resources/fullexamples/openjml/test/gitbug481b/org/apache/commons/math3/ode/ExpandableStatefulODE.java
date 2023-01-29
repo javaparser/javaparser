@@ -42,54 +42,71 @@ import java.util.List;
  *
  * @see FirstOrderDifferentialEquations
  * @see JacobianMatrices
- *
  * @since 3.0
  */
 
 public class ExpandableStatefulODE {
 
-    /** Primary differential equation. */
+    /**
+     * Primary differential equation.
+     */
     private final FirstOrderDifferentialEquations primary;
 
-    /** Mapper for primary equation. */
+    /**
+     * Mapper for primary equation.
+     */
     private final EquationsMapper primaryMapper;
 
-    /** Time. */
+    /**
+     * Time.
+     */
     private double time;
 
-    /** State. */
+    /**
+     * State.
+     */
     private final double[] primaryState;
 
-    /** State derivative. */
+    /**
+     * State derivative.
+     */
     private final double[] primaryStateDot;
 
-    /** Components of the expandable ODE. */
+    /**
+     * Components of the expandable ODE.
+     */
     private List<SecondaryComponent> components;
 
-    /** Build an expandable set from its primary ODE set.
+    /**
+     * Build an expandable set from its primary ODE set.
+     *
      * @param primary the primary set of differential equations to be integrated.
      */
     public ExpandableStatefulODE(final FirstOrderDifferentialEquations primary) {
-        final int n          = primary.getDimension();
-        this.primary         = primary;
-        this.primaryMapper   = new EquationsMapper(0, n);
-        this.time            = Double.NaN;
-        this.primaryState    = new double[n];
+        final int n = primary.getDimension();
+        this.primary = primary;
+        this.primaryMapper = new EquationsMapper(0, n);
+        this.time = Double.NaN;
+        this.primaryState = new double[n];
         this.primaryStateDot = new double[n];
-        this.components      = new ArrayList<ExpandableStatefulODE.SecondaryComponent>();
+        this.components = new ArrayList<ExpandableStatefulODE.SecondaryComponent>();
     }
 
-    /** Get the primary set of differential equations.
+    /**
+     * Get the primary set of differential equations.
+     *
      * @return primary set of differential equations
      */
     public FirstOrderDifferentialEquations getPrimary() {
         return primary;
     }
 
-    /** Return the dimension of the complete set of equations.
+    /**
+     * Return the dimension of the complete set of equations.
      * <p>
      * The complete set of equations correspond to the primary set plus all secondary sets.
      * </p>
+     *
      * @return dimension of the complete set of equations
      */
     public int getTotalDimension() {
@@ -103,15 +120,17 @@ public class ExpandableStatefulODE {
         }
     }
 
-    /** Get the current time derivative of the complete state vector.
-     * @param t current value of the independent <I>time</I> variable
-     * @param y array containing the current value of the complete state vector
+    /**
+     * Get the current time derivative of the complete state vector.
+     *
+     * @param t    current value of the independent <I>time</I> variable
+     * @param y    array containing the current value of the complete state vector
      * @param yDot placeholder array where to put the time derivative of the complete state vector
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @throws MaxCountExceededException  if the number of functions evaluations is exceeded
+     * @throws DimensionMismatchException if arrays dimensions do not match equations settings
      */
     public void computeDerivatives(final double t, final double[] y, final double[] yDot)
-        throws MaxCountExceededException, DimensionMismatchException {
+            throws MaxCountExceededException, DimensionMismatchException {
 
         // compute derivatives of the primary equations
         primaryMapper.extractEquationData(y, primaryState);
@@ -121,7 +140,7 @@ public class ExpandableStatefulODE {
         for (final SecondaryComponent component : components) {
             component.mapper.extractEquationData(y, component.state);
             component.equation.computeDerivatives(t, primaryState, primaryStateDot,
-                                                  component.state, component.stateDot);
+                    component.state, component.stateDot);
             component.mapper.insertEquationData(component.stateDot, yDot);
         }
 
@@ -129,7 +148,9 @@ public class ExpandableStatefulODE {
 
     }
 
-    /** Add a set of secondary equations to be integrated along with the primary set.
+    /**
+     * Add a set of secondary equations to be integrated along with the primary set.
+     *
      * @param secondary secondary equations set
      * @return index of the secondary equation in the expanded state
      */
@@ -151,7 +172,9 @@ public class ExpandableStatefulODE {
 
     }
 
-    /** Get an equations mapper for the primary equations set.
+    /**
+     * Get an equations mapper for the primary equations set.
+     *
      * @return mapper for the primary set
      * @see #getSecondaryMappers()
      */
@@ -159,7 +182,9 @@ public class ExpandableStatefulODE {
         return primaryMapper;
     }
 
-    /** Get the equations mappers for the secondary equations sets.
+    /**
+     * Get the equations mappers for the secondary equations sets.
+     *
      * @return equations mappers for the secondary equations sets
      * @see #getPrimaryMapper()
      */
@@ -171,24 +196,30 @@ public class ExpandableStatefulODE {
         return mappers;
     }
 
-    /** Set current time.
+    /**
+     * Set current time.
+     *
      * @param time current time
      */
     public void setTime(final double time) {
         this.time = time;
     }
 
-    /** Get current time.
+    /**
+     * Get current time.
+     *
      * @return current time
      */
     public double getTime() {
         return time;
     }
 
-    /** Set primary part of the current state.
+    /**
+     * Set primary part of the current state.
+     *
      * @param primaryState primary part of the current state
      * @throws DimensionMismatchException if the dimension of the array does not
-     * match the primary set
+     *                                    match the primary set
      */
     public void setPrimaryState(final double[] primaryState) throws DimensionMismatchException {
 
@@ -202,29 +233,35 @@ public class ExpandableStatefulODE {
 
     }
 
-    /** Get primary part of the current state.
+    /**
+     * Get primary part of the current state.
+     *
      * @return primary part of the current state
      */
     public double[] getPrimaryState() {
         return primaryState.clone();
     }
 
-    /** Get primary part of the current state derivative.
+    /**
+     * Get primary part of the current state derivative.
+     *
      * @return primary part of the current state derivative
      */
     public double[] getPrimaryStateDot() {
         return primaryStateDot.clone();
     }
 
-    /** Set secondary part of the current state.
-     * @param index index of the part to set as returned by {@link
-     * #addSecondaryEquations(SecondaryEquations)}
+    /**
+     * Set secondary part of the current state.
+     *
+     * @param index          index of the part to set as returned by {@link
+     *                       #addSecondaryEquations(SecondaryEquations)}
      * @param secondaryState secondary part of the current state
      * @throws DimensionMismatchException if the dimension of the partial state does not
-     * match the selected equations set dimension
+     *                                    match the selected equations set dimension
      */
     public void setSecondaryState(final int index, final double[] secondaryState)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         // get either the secondary state
         double[] localArray = components.get(index).state;
@@ -239,31 +276,37 @@ public class ExpandableStatefulODE {
 
     }
 
-    /** Get secondary part of the current state.
+    /**
+     * Get secondary part of the current state.
+     *
      * @param index index of the part to set as returned by {@link
-     * #addSecondaryEquations(SecondaryEquations)}
+     *              #addSecondaryEquations(SecondaryEquations)}
      * @return secondary part of the current state
      */
     public double[] getSecondaryState(final int index) {
         return components.get(index).state.clone();
     }
 
-    /** Get secondary part of the current state derivative.
+    /**
+     * Get secondary part of the current state derivative.
+     *
      * @param index index of the part to set as returned by {@link
-     * #addSecondaryEquations(SecondaryEquations)}
+     *              #addSecondaryEquations(SecondaryEquations)}
      * @return secondary part of the current state derivative
      */
     public double[] getSecondaryStateDot(final int index) {
         return components.get(index).stateDot.clone();
     }
 
-    /** Set the complete current state.
+    /**
+     * Set the complete current state.
+     *
      * @param completeState complete current state to copy data from
      * @throws DimensionMismatchException if the dimension of the complete state does not
-     * match the complete equations sets dimension
+     *                                    match the complete equations sets dimension
      */
     public void setCompleteState(final double[] completeState)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         // safety checks
         if (completeState.length != getTotalDimension()) {
@@ -278,10 +321,12 @@ public class ExpandableStatefulODE {
 
     }
 
-    /** Get the complete current state.
+    /**
+     * Get the complete current state.
+     *
      * @return complete current state
      * @throws DimensionMismatchException if the dimension of the complete state does not
-     * match the complete equations sets dimension
+     *                                    match the complete equations sets dimension
      */
     public double[] getCompleteState() throws DimensionMismatchException {
 
@@ -298,31 +343,43 @@ public class ExpandableStatefulODE {
 
     }
 
-    /** Components of the compound stateful ODE. */
+    /**
+     * Components of the compound stateful ODE.
+     */
     private static class SecondaryComponent {
 
-        /** Secondary differential equation. */
+        /**
+         * Secondary differential equation.
+         */
         private final SecondaryEquations equation;
 
-        /** Mapper between local and complete arrays. */
+        /**
+         * Mapper between local and complete arrays.
+         */
         private final EquationsMapper mapper;
 
-        /** State. */
+        /**
+         * State.
+         */
         private final double[] state;
 
-        /** State derivative. */
+        /**
+         * State derivative.
+         */
         private final double[] stateDot;
 
-        /** Simple constructor.
-         * @param equation secondary differential equation
+        /**
+         * Simple constructor.
+         *
+         * @param equation   secondary differential equation
          * @param firstIndex index to use for the first element in the complete arrays
          */
         SecondaryComponent(final SecondaryEquations equation, final int firstIndex) {
-            final int n   = equation.getDimension();
+            final int n = equation.getDimension();
             this.equation = equation;
-            mapper        = new EquationsMapper(firstIndex, n);
-            state         = new double[n];
-            stateDot      = new double[n];
+            mapper = new EquationsMapper(firstIndex, n);
+            state = new double[n];
+            stateDot = new double[n];
         }
 
     }

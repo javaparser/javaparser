@@ -1,5 +1,5 @@
 public class trace {
-    
+
     //@ requires true;
     //@ ensures \result != 0;
     public int m(int k) {

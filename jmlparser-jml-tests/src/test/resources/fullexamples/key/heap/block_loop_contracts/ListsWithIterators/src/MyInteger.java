@@ -1,7 +1,7 @@
 public final class MyInteger {
 
     public final int val;
-    
+
     /*@ public normal_behavior
       @ ensures this.val == val;
       @ assignable \nothing;
@@ -18,7 +18,7 @@ public final class MyInteger {
     public static MyInteger valueOf(int val) {
         return new MyInteger(val);
     }
-    
+
     /*@ public normal_behavior
       @ ensures \result == val;
       @ assignable \strictly_nothing;

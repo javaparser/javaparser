@@ -29,37 +29,34 @@ import org.apache.commons.math3.analysis.MultivariateFunction;
  * </ul>
  *
  * @param <FUNC> Type of the objective function to be optimized.
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public interface BaseMultivariateSimpleBoundsOptimizer<FUNC extends MultivariateFunction>
-    extends BaseMultivariateOptimizer<FUNC> {
+        extends BaseMultivariateOptimizer<FUNC> {
     /**
      * Optimize an objective function.
      *
-     * @param f Objective function.
-     * @param goalType Type of optimization goal: either
-     * {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
+     * @param f          Objective function.
+     * @param goalType   Type of optimization goal: either
+     *                   {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
      * @param startPoint Start point for optimization.
-     * @param maxEval Maximum number of function evaluations.
+     * @param maxEval    Maximum number of function evaluations.
      * @param lowerBound Lower bound for each of the parameters.
      * @param upperBound Upper bound for each of the parameters.
      * @return the point/value pair giving the optimal value for objective
      * function.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the array sizes are wrong.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximal number of evaluations is exceeded.
-     * @throws org.apache.commons.math3.exception.NullArgumentException if
-     * {@code f}, {@code goalType} or {@code startPoint} is {@code null}.
-     * @throws org.apache.commons.math3.exception.NumberIsTooSmallException if any
-     * of the initial values is less than its lower bound.
-     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException if any
-     * of the initial values is greater than its upper bound.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException  if the array sizes are wrong.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximal number of evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.NullArgumentException       if
+     *                                                                        {@code f}, {@code goalType} or {@code startPoint} is {@code null}.
+     * @throws org.apache.commons.math3.exception.NumberIsTooSmallException   if any
+     *                                                                        of the initial values is less than its lower bound.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException   if any
+     *                                                                        of the initial values is greater than its upper bound.
      */
     PointValuePair optimize(int maxEval, FUNC f, GoalType goalType,
-                                double[] startPoint,
-                                double[] lowerBound, double[] upperBound);
+                            double[] startPoint,
+                            double[] lowerBound, double[] upperBound);
 }

@@ -40,6 +40,7 @@ public abstract class AbstractOrderedMapDecorator<K, V> extends AbstractMapDecor
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
+     *
      * @since 3.1
      */
     protected AbstractOrderedMapDecorator() {
@@ -49,7 +50,7 @@ public abstract class AbstractOrderedMapDecorator<K, V> extends AbstractMapDecor
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if the map is null
      */
     public AbstractOrderedMapDecorator(final OrderedMap<K, V> map) {

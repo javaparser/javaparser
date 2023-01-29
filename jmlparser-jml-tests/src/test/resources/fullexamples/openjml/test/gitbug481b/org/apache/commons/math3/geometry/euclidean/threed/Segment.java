@@ -17,46 +17,62 @@
 package org.apache.commons.math3.geometry.euclidean.threed;
 
 
-/** Simple container for a two-points segment.
+/**
+ * Simple container for a two-points segment.
+ *
  * @since 3.0
  */
 public class Segment {
 
-    /** Start point of the segment. */
+    /**
+     * Start point of the segment.
+     */
     private final Vector3D start;
 
-    /** End point of the segments. */
+    /**
+     * End point of the segments.
+     */
     private final Vector3D end;
 
-    /** Line containing the segment. */
-    private final Line     line;
+    /**
+     * Line containing the segment.
+     */
+    private final Line line;
 
-    /** Build a segment.
+    /**
+     * Build a segment.
+     *
      * @param start start point of the segment
-     * @param end end point of the segment
-     * @param line line containing the segment
+     * @param end   end point of the segment
+     * @param line  line containing the segment
      */
     public Segment(final Vector3D start, final Vector3D end, final Line line) {
-        this.start  = start;
-        this.end    = end;
-        this.line   = line;
+        this.start = start;
+        this.end = end;
+        this.line = line;
     }
 
-    /** Get the start point of the segment.
+    /**
+     * Get the start point of the segment.
+     *
      * @return start point of the segment
      */
     public Vector3D getStart() {
         return start;
     }
 
-    /** Get the end point of the segment.
+    /**
+     * Get the end point of the segment.
+     *
      * @return end point of the segment
      */
     public Vector3D getEnd() {
         return end;
     }
 
-    /** Get the line containing the segment.
+    /**
+     * Get the line containing the segment.
+     *
      * @return line containing the segment
      */
     public Line getLine() {

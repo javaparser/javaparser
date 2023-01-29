@@ -9,7 +9,7 @@ public class Environment {
     //@ public static model \locset rep;
     //@ public static represents rep = \locset(result);
     //@ accessible rep : \locset(result);
-    
+
     /*@ normal_behavior
       @ ensures     true;
       @ assignable  rep;
@@ -60,7 +60,9 @@ public class Environment {
           @        \by  Environment.result, len
           @        \new_objects returnval;
           @*/
-        { returnval = new byte[len]; }
+        {
+            returnval = new byte[len];
+        }
         return untrustedInputMessage(returnval);
     }
 

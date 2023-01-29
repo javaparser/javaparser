@@ -27,8 +27,11 @@ import org.apache.commons.math3.util.FastMath;
  * @since 3.3
  */
 public class NeighbourhoodSizeFunctionFactory {
-    /** Class contains only static methods. */
-    private NeighbourhoodSizeFunctionFactory() {}
+    /**
+     * Class contains only static methods.
+     */
+    private NeighbourhoodSizeFunctionFactory() {
+    }
 
     /**
      * Creates an exponential decay {@link NeighbourhoodSizeFunction function}.
@@ -39,20 +42,16 @@ public class NeighbourhoodSizeFunctionFactory {
      *  <li><code>b = -numCall / ln(valueAtNumCall / initValue)</code>
      * </ul>
      *
-     * @param initValue Initial value, i.e.
-     * {@link NeighbourhoodSizeFunction#value(long) value(0)}.
+     * @param initValue      Initial value, i.e.
+     *                       {@link NeighbourhoodSizeFunction#value(long) value(0)}.
      * @param valueAtNumCall Value of the function at {@code numCall}.
-     * @param numCall Argument for which the function returns
-     * {@code valueAtNumCall}.
+     * @param numCall        Argument for which the function returns
+     *                       {@code valueAtNumCall}.
      * @return the neighbourhood size function.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code initValue <= 0}.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code valueAtNumCall <= 0}.
-     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException
-     * if {@code valueAtNumCall >= initValue}.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code numCall <= 0}.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code initValue <= 0}.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code valueAtNumCall <= 0}.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException    if {@code valueAtNumCall >= initValue}.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code numCall <= 0}.
      */
     public static NeighbourhoodSizeFunction exponentialDecay(final double initValue,
                                                              final double valueAtNumCall,
@@ -60,7 +59,7 @@ public class NeighbourhoodSizeFunctionFactory {
         return new NeighbourhoodSizeFunction() {
             /** DecayFunction. */
             private final ExponentialDecayFunction decay
-                = new ExponentialDecayFunction(initValue, valueAtNumCall, numCall);
+                    = new ExponentialDecayFunction(initValue, valueAtNumCall, numCall);
 
             /** {@inheritDoc} */
             public int value(long n) {
@@ -79,16 +78,13 @@ public class NeighbourhoodSizeFunctionFactory {
      * </ul>
      *
      * @param initValue Initial value, i.e.
-     * {@link NeighbourhoodSizeFunction#value(long) value(0)}.
-     * @param slope Value of the function derivative at {@code numCall}.
-     * @param numCall Inflexion point.
+     *                  {@link NeighbourhoodSizeFunction#value(long) value(0)}.
+     * @param slope     Value of the function derivative at {@code numCall}.
+     * @param numCall   Inflexion point.
      * @return the neighbourhood size function.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code initValue <= 0}.
-     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException
-     * if {@code slope >= 0}.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code numCall <= 0}.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code initValue <= 0}.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException    if {@code slope >= 0}.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code numCall <= 0}.
      */
     public static NeighbourhoodSizeFunction quasiSigmoidDecay(final double initValue,
                                                               final double slope,
@@ -96,7 +92,7 @@ public class NeighbourhoodSizeFunctionFactory {
         return new NeighbourhoodSizeFunction() {
             /** DecayFunction. */
             private final QuasiSigmoidDecayFunction decay
-                = new QuasiSigmoidDecayFunction(initValue, slope, numCall);
+                    = new QuasiSigmoidDecayFunction(initValue, slope, numCall);
 
             /** {@inheritDoc} */
             public int value(long n) {

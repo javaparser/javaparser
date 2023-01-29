@@ -28,11 +28,12 @@ import org.apache.commons.math3.util.FastMath;
 
 /**
  * An implementation of the Mann-Whitney U test (also called Wilcoxon rank-sum test).
- *
  */
 public class MannWhitneyUTest {
 
-    /** Ranking algorithm. */
+    /**
+     * Ranking algorithm.
+     */
     private NaturalRanking naturalRanking;
 
     /**
@@ -49,10 +50,8 @@ public class MannWhitneyUTest {
      * Create a test instance using the given strategies for NaN's and ties.
      * Only use this if you are sure of what you are doing.
      *
-     * @param nanStrategy
-     *            specifies the strategy that should be used for Double.NaN's
-     * @param tiesStrategy
-     *            specifies the strategy that should be used for ties
+     * @param nanStrategy  specifies the strategy that should be used for Double.NaN's
+     * @param tiesStrategy specifies the strategy that should be used for ties
      */
     public MannWhitneyUTest(final NaNStrategy nanStrategy,
                             final TiesStrategy tiesStrategy) {
@@ -65,22 +64,24 @@ public class MannWhitneyUTest {
      * @param x first sample
      * @param y second sample
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws NoDataException       if {@code x} or {@code y} are zero-length.
      */
     private void ensureDataConformance(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException {
+            throws NullArgumentException, NoDataException {
 
         if (x == null ||
-            y == null) {
+                y == null) {
             throw new NullArgumentException();
         }
         if (x.length == 0 ||
-            y.length == 0) {
+                y.length == 0) {
             throw new NoDataException();
         }
     }
 
-    /** Concatenate the samples into one array.
+    /**
+     * Concatenate the samples into one array.
+     *
      * @param x first sample
      * @param y second sample
      * @return concatenated array
@@ -120,10 +121,10 @@ public class MannWhitneyUTest {
      * @param y the second sample
      * @return Mann-Whitney U statistic (maximum of U<sup>x</sup> and U<sup>y</sup>)
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws NoDataException       if {@code x} or {@code y} are zero-length.
      */
     public double mannWhitneyU(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException {
+            throws NullArgumentException, NoDataException {
 
         ensureDataConformance(x, y);
 
@@ -156,18 +157,18 @@ public class MannWhitneyUTest {
 
     /**
      * @param Umin smallest Mann-Whitney U value
-     * @param n1 number of subjects in first sample
-     * @param n2 number of subjects in second sample
+     * @param n1   number of subjects in first sample
+     * @param n2   number of subjects in second sample
      * @return two-sided asymptotic p-value
-     * @throws ConvergenceException if the p-value can not be computed
-     * due to a convergence error
+     * @throws ConvergenceException      if the p-value can not be computed
+     *                                   due to a convergence error
      * @throws MaxCountExceededException if the maximum number of
-     * iterations is exceeded
+     *                                   iterations is exceeded
      */
     private double calculateAsymptoticPValue(final double Umin,
                                              final int n1,
                                              final int n2)
-        throws ConvergenceException, MaxCountExceededException {
+            throws ConvergenceException, MaxCountExceededException {
 
         /* long multiplication to avoid overflow (double not used due to efficiency
          * and to avoid precision loss)
@@ -212,16 +213,16 @@ public class MannWhitneyUTest {
      * @param x the first sample
      * @param y the second sample
      * @return asymptotic p-value
-     * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
-     * @throws ConvergenceException if the p-value can not be computed due to a
-     * convergence error
+     * @throws NullArgumentException     if {@code x} or {@code y} are {@code null}.
+     * @throws NoDataException           if {@code x} or {@code y} are zero-length.
+     * @throws ConvergenceException      if the p-value can not be computed due to a
+     *                                   convergence error
      * @throws MaxCountExceededException if the maximum number of iterations
-     * is exceeded
+     *                                   is exceeded
      */
     public double mannWhitneyUTest(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException,
-        ConvergenceException, MaxCountExceededException {
+            throws NullArgumentException, NoDataException,
+            ConvergenceException, MaxCountExceededException {
 
         ensureDataConformance(x, y);
 

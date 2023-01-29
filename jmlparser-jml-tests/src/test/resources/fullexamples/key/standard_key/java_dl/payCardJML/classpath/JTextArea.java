@@ -16,41 +16,73 @@
  */
 package javax.swing;
 
-public class JTextArea extends javax.swing.text.JTextComponent
-{
+public class JTextArea extends javax.swing.text.JTextComponent {
 
-   public JTextArea();
-   public JTextArea(java.lang.String arg0);
-   public JTextArea(int arg0, int arg1);
-   public JTextArea(java.lang.String arg0, int arg1, int arg2);
-   public JTextArea(javax.swing.text.Document arg0);
-   public JTextArea(javax.swing.text.Document arg0, java.lang.String arg1, int arg2, int arg3);
-   public java.lang.String getUIClassID();
-   protected javax.swing.text.Document createDefaultModel();
-   public void setTabSize(int arg0);
-   public int getTabSize();
-   public void setLineWrap(boolean arg0);
-   public boolean getLineWrap();
-   public void setWrapStyleWord(boolean arg0);
-   public boolean getWrapStyleWord();
-   public int getLineOfOffset(int arg0) throws javax.swing.text.BadLocationException;
-   public int getLineCount();
-   public int getLineStartOffset(int arg0) throws javax.swing.text.BadLocationException;
-   public int getLineEndOffset(int arg0) throws javax.swing.text.BadLocationException;
-   public void insert(java.lang.String arg0, int arg1);
-   public void append(java.lang.String arg0);
-   public void replaceRange(java.lang.String arg0, int arg1, int arg2);
-   public int getRows();
-   public void setRows(int arg0);
-   protected int getRowHeight();
-   public int getColumns();
-   public void setColumns(int arg0);
-   protected int getColumnWidth();
-   public java.awt.Dimension getPreferredSize();
-   public void setFont(java.awt.Font arg0);
-   protected java.lang.String paramString();
-   public boolean getScrollableTracksViewportWidth();
-   public java.awt.Dimension getPreferredScrollableViewportSize();
-   public int getScrollableUnitIncrement(java.awt.Rectangle arg0, int arg1, int arg2);
-   public javax.accessibility.AccessibleContext getAccessibleContext();
+    public JTextArea();
+
+    public JTextArea(java.lang.String arg0);
+
+    public JTextArea(int arg0, int arg1);
+
+    public JTextArea(java.lang.String arg0, int arg1, int arg2);
+
+    public JTextArea(javax.swing.text.Document arg0);
+
+    public JTextArea(javax.swing.text.Document arg0, java.lang.String arg1, int arg2, int arg3);
+
+    public java.lang.String getUIClassID();
+
+    protected javax.swing.text.Document createDefaultModel();
+
+    public void setTabSize(int arg0);
+
+    public int getTabSize();
+
+    public void setLineWrap(boolean arg0);
+
+    public boolean getLineWrap();
+
+    public void setWrapStyleWord(boolean arg0);
+
+    public boolean getWrapStyleWord();
+
+    public int getLineOfOffset(int arg0) throws javax.swing.text.BadLocationException;
+
+    public int getLineCount();
+
+    public int getLineStartOffset(int arg0) throws javax.swing.text.BadLocationException;
+
+    public int getLineEndOffset(int arg0) throws javax.swing.text.BadLocationException;
+
+    public void insert(java.lang.String arg0, int arg1);
+
+    public void append(java.lang.String arg0);
+
+    public void replaceRange(java.lang.String arg0, int arg1, int arg2);
+
+    public int getRows();
+
+    public void setRows(int arg0);
+
+    protected int getRowHeight();
+
+    public int getColumns();
+
+    public void setColumns(int arg0);
+
+    protected int getColumnWidth();
+
+    public java.awt.Dimension getPreferredSize();
+
+    public void setFont(java.awt.Font arg0);
+
+    protected java.lang.String paramString();
+
+    public boolean getScrollableTracksViewportWidth();
+
+    public java.awt.Dimension getPreferredScrollableViewportSize();
+
+    public int getScrollableUnitIncrement(java.awt.Rectangle arg0, int arg1, int arg2);
+
+    public javax.accessibility.AccessibleContext getAccessibleContext();
 }

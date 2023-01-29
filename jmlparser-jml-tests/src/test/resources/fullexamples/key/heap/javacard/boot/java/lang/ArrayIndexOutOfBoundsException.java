@@ -13,7 +13,8 @@
 
 package java.lang;
 
-public class ArrayIndexOutOfBoundsException extends java.lang.IndexOutOfBoundsException
-{
-   public ArrayIndexOutOfBoundsException() { super(); }
+public class ArrayIndexOutOfBoundsException extends java.lang.IndexOutOfBoundsException {
+    public ArrayIndexOutOfBoundsException() {
+        super();
+    }
 }

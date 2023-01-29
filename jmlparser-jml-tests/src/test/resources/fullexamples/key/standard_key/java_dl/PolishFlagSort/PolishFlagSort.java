@@ -13,7 +13,7 @@
 
 public class PolishFlagSort {
     public static final int RED = 0;
-    public static final int WHITE = 1;    
+    public static final int WHITE = 1;
 
     /*@
       @ public normal_behavior
@@ -24,10 +24,11 @@ public class PolishFlagSort {
       @             ar[I] <= ar[J]);
       @    assignable ar[*];
       @*/
-    public static void sort ( int[] ar ) {
-	if (ar.length <= 0) return;
+    public static void sort(int[] ar) {
+        if (ar.length <= 0) return;
 
-	int i = 0; int j = ar.length;
+        int i = 0;
+        int j = ar.length;
 
 	/*@ loop_invariant 0 <= i && i <= j && j <= ar.length
 	  @                &&
@@ -41,15 +42,15 @@ public class PolishFlagSort {
 	  @ assignable ar[*];
 	  @ decreases j - i;
 	  @*/
-	while (i != j) {
-	    if (ar[i]==RED) {
-		++i;
-	    } else {
-		--j;
-		final int t = ar[i];
-		ar[i] = ar[j];
-		ar[j] = t;
-	    }
-	}
+        while (i != j) {
+            if (ar[i] == RED) {
+                ++i;
+            } else {
+                --j;
+                final int t = ar[i];
+                ar[i] = ar[j];
+                ar[j] = t;
+            }
+        }
     }
 }

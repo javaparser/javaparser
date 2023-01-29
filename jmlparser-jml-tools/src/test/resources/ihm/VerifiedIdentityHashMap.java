@@ -86,7 +86,7 @@ package ihm;
  * associated with a key that an instance already contains is not a
  * structural modification.)  This is typically accomplished by
  * synchronizing on some object that naturally encapsulates the map.
- *
+ * <p>
  * If no such object exists, the map should be "wrapped" using the
  * {@link Collections#synchronizedMap Collections.synchronizedMap}
  * method.  This is best done at creation time, to prevent accidental
@@ -122,14 +122,14 @@ package ihm;
  * <a href="{@docRoot}/../technotes/guides/collections/index.html">
  * Java Collections Framework</a>.
  *
- * @see     System#identityHashCode(Object)
- * @see     Object#hashCode()
- * @see     Collection
- * @see     Map
- * @see     HashMap
- * @see     TreeMap
- * @author  Doug Lea and Josh Bloch
- * @since   1.4
+ * @author Doug Lea and Josh Bloch
+ * @see System#identityHashCode(Object)
+ * @see Object#hashCode()
+ * @see Collection
+ * @see Map
+ * @see HashMap
+ * @see TreeMap
+ * @since 1.4
  */
 
 public class VerifiedIdentityHashMap
@@ -284,7 +284,7 @@ public class VerifiedIdentityHashMap
      * (specified) expected maximum size of 21, given a load factor
      * of 2/3.
      */
-    private /*@ spec_public @*/ static final int DEFAULT_CAPACITY =  32; // Original code. Disable for JJBMC
+    private /*@ spec_public @*/ static final int DEFAULT_CAPACITY = 32; // Original code. Disable for JJBMC
     // private /*@ spec_public @*/ static final int DEFAULT_CAPACITY =  4; // Enable for JJBMC
 
     /**
@@ -293,18 +293,18 @@ public class VerifiedIdentityHashMap
      * to an expected maximum size of 2, given a load factor of 2/3.
      * MUST be a power of two.
      */
-    private /*@ spec_public @*/ static final int MINIMUM_CAPACITY =  4;
+    private /*@ spec_public @*/ static final int MINIMUM_CAPACITY = 4;
 
     /**
      * The maximum capacity, used if a higher value is implicitly specified
      * by either of the constructors with arguments.
      * MUST be a power of two <= 1<<29.
-     *
+     * <p>
      * In fact, the map can hold no more than MAXIMUM_CAPACITY-1 items
      * because it has to have at least one slot with the key == null
      * in order to avoid infinite loops in get(), put(), remove()
      */
-    private /*@ spec_public @*/ static final int MAXIMUM_CAPACITY =  1 << 29; // Original code. Disable for JJBMC
+    private /*@ spec_public @*/ static final int MAXIMUM_CAPACITY = 1 << 29; // Original code. Disable for JJBMC
     // private /*@ spec_public @*/ static final int MAXIMUM_CAPACITY =  4; // Enable for JJBMC
 
     /**
@@ -327,7 +327,7 @@ public class VerifiedIdentityHashMap
     /**
      * Value representing null keys inside tables.
      */
-    private /*@ spec_public @*/ static final Object NULL_KEY =  new Object();
+    private /*@ spec_public @*/ static final Object NULL_KEY = new Object();
 
     /**
      * Use NULL_KEY for key if it is null.
@@ -537,7 +537,7 @@ public class VerifiedIdentityHashMap
      * mappings.
      *
      * @return <tt>true</tt> if this identity hash map contains no key-value
-     *         mappings
+     * mappings
      */
     /*@ also
       @ public normal_behavior
@@ -561,7 +561,7 @@ public class VerifiedIdentityHashMap
       @     \result >= 0;
       @*/
     private /*@ spec_public @*/ static /*@ strictly_pure @*/ int hash(Object x, int length) {
-        int h =  System.identityHashCode(x);
+        int h = System.identityHashCode(x);
         // Multiply by -127, and left-shift to use least bit as part of hash
         return ((h << 1) - (h << 8)) & (length - 1);
     }
@@ -641,11 +641,11 @@ public class VerifiedIdentityHashMap
       @   ensures
       @     \result == null;
       @*/
-     public /*@ pure nullable @*/ java.lang.Object get(/*@ nullable @*/ Object key) {
-        Object k =  maskNull(key);
-        Object[] tab =  table;
-        int len =  tab.length;
-        int i =  hash(k, len);
+    public /*@ pure nullable @*/ java.lang.Object get(/*@ nullable @*/ Object key) {
+        Object k = maskNull(key);
+        Object[] tab = table;
+        int len = tab.length;
+        int i = hash(k, len);
 
         //+KEY@ ghost \bigint hash = i;
 
@@ -672,7 +672,7 @@ public class VerifiedIdentityHashMap
           @ assignable \strictly_nothing;
           @*/
         while (true) {
-            Object item =  tab[i];
+            Object item = tab[i];
             if (item == k)
                 return (java.lang.Object) tab[i + 1];
             if (item == null)
@@ -685,10 +685,10 @@ public class VerifiedIdentityHashMap
      * Tests whether the specified object reference is a key in this identity
      * hash map.
      *
-     * @param   key   possible key
-     * @return  <code>true</code> if the specified object reference is a key
-     *          in this map
-     * @see     #containsValue(Object)
+     * @param key possible key
+     * @return <code>true</code> if the specified object reference is a key
+     * in this map
+     * @see #containsValue(Object)
      */
      /*+KEY@ 
        @ also
@@ -707,10 +707,10 @@ public class VerifiedIdentityHashMap
        @         table[j * 2] == maskNull(key));
        @*/
     public /*@ strictly_pure @*/ boolean containsKey(/*@ nullable @*/ Object key) {
-        Object k =  maskNull(key);
-        Object[] tab =  table;
-        int len =  tab.length;
-        int i =  hash(k, len);
+        Object k = maskNull(key);
+        Object[] tab = table;
+        int len = tab.length;
+        int i = hash(k, len);
 
         //+KEY@ ghost \bigint hash = i;
         
@@ -737,7 +737,7 @@ public class VerifiedIdentityHashMap
           @ assignable \strictly_nothing;
           @*/
         while (true) {
-            Object item =  tab[i];
+            Object item = tab[i];
             if (item == k)
                 return true;
             if (item == null)
@@ -752,8 +752,8 @@ public class VerifiedIdentityHashMap
      *
      * @param value value whose presence in this map is to be tested
      * @return <tt>true</tt> if this map maps one or more keys to the
-     *         specified object reference
-     * @see     #containsKey(Object)
+     * specified object reference
+     * @see #containsKey(Object)
      */
     /*+KEY@ 
       @ also
@@ -772,7 +772,7 @@ public class VerifiedIdentityHashMap
       @         table[j * 2] != null && table[j * 2 + 1] == value);
       @*/
     public /*@ strictly_pure @*/ boolean containsValue(/*@ nullable @*/ Object value) {
-        Object[] tab =  table;
+        Object[] tab = table;
 
         /*+KEY@
           @ // Index i is always an odd value within the array bounds
@@ -788,7 +788,7 @@ public class VerifiedIdentityHashMap
           @ 
           @ assignable \strictly_nothing;
           @*/
-        for (int i =  1; i < tab.length; i += 2)
+        for (int i = 1; i < tab.length; i += 2)
             if (tab[i] == value && tab[i - 1] != null)
                 return true;
 
@@ -798,10 +798,10 @@ public class VerifiedIdentityHashMap
     /**
      * Tests if the specified key-value mapping is in the map.
      *
-     * @param   key   possible key
-     * @param   value possible value
-     * @return  <code>true</code> if and only if the specified key-value
-     *          mapping is in the map
+     * @param key   possible key
+     * @param value possible value
+     * @return <code>true</code> if and only if the specified key-value
+     * mapping is in the map
      */
     /*+KEY@ 
       @ private normal_behavior
@@ -818,11 +818,11 @@ public class VerifiedIdentityHashMap
       @       table[i * 2] == maskNull(key) && table[i * 2 + 1] == value);
       @*/
     private /*@ spec_public @*/ /*@ strictly_pure @*/ boolean containsMapping(Object key, Object value) {
-        Object k =  maskNull(key);
-        Object[] tab =  table;
-        int len =  tab.length;
-        int i =  hash(k, len);
-        
+        Object k = maskNull(key);
+        Object[] tab = table;
+        int len = tab.length;
+        int i = hash(k, len);
+
         //+KEY@ ghost \bigint hash = i;
         
         /*+KEY@
@@ -848,7 +848,7 @@ public class VerifiedIdentityHashMap
           @ assignable \strictly_nothing;
           @*/
         while (true) {
-            Object item =  tab[i];
+            Object item = tab[i];
             if (item == k)
                 return tab[i + 1] == value;
             if (item == null)
@@ -862,15 +862,15 @@ public class VerifiedIdentityHashMap
      * hash map.  If the map previously contained a mapping for the key, the
      * old value is replaced.
      *
-     * @param key the key with which the specified value is to be associated
+     * @param key   the key with which the specified value is to be associated
      * @param value the value to be associated with the specified key
      * @return the previous value associated with <tt>key</tt>, or
-     *         <tt>null</tt> if there was no mapping for <tt>key</tt>.
-     *         (A <tt>null</tt> return can also indicate that the map
-     *         previously associated <tt>null</tt> with <tt>key</tt>.)
-     * @see     Object#equals(Object)
-     * @see     #get(Object)
-     * @see     #containsKey(Object)
+     * <tt>null</tt> if there was no mapping for <tt>key</tt>.
+     * (A <tt>null</tt> return can also indicate that the map
+     * previously associated <tt>null</tt> with <tt>key</tt>.)
+     * @see Object#equals(Object)
+     * @see #get(Object)
+     * @see #containsKey(Object)
      */
     /*+KEY@ 
       @ also
@@ -996,14 +996,15 @@ public class VerifiedIdentityHashMap
       @         table[i * 2] == maskNull(key) && table[i * 2 + 1] == value);
       @*/
     public /*@ nullable @*/ java.lang.Object put(/*@ nullable @*/ java.lang.Object key, /*@ nullable @*/ java.lang.Object value) {
-        final Object k =  maskNull(key);
+        final Object k = maskNull(key);
 
-        retryAfterResize: for (;;) {
-            final Object[] tab =  table;
-            final int len =  tab.length;
-            int i =  hash(k, len);
+        retryAfterResize:
+        for (; ; ) {
+            final Object[] tab = table;
+            final int len = tab.length;
+            int i = hash(k, len);
 
-          //+KEY@ ghost \bigint hash = i;
+            //+KEY@ ghost \bigint hash = i;
         
           /*+KEY@
             @ // Index i is always an even value within the array bounds
@@ -1034,13 +1035,13 @@ public class VerifiedIdentityHashMap
             for (Object item; (item = tab[i]) != null;
                  i = nextKeyIndex(i, len)) {
                 if (item == k) {
-                    java.lang.Object oldValue =  (java.lang.Object) tab[i + 1];
+                    java.lang.Object oldValue = (java.lang.Object) tab[i + 1];
                     tab[i + 1] = value;
                     return oldValue;
                 }
             }
 
-            final int s =  size + 1;
+            final int s = size + 1;
             // Use optimized form of 3 * s.
             // Next capacity is len, 2 * current capacity.
             if (s + (s << 1) > len && resize(len))
@@ -1212,12 +1213,12 @@ public class VerifiedIdentityHashMap
       @         table[2*n] == \old(table[2*m]) && table[2*n + 1] == \old(table[2*m + 1])));
       @*/
     private boolean resize(int newCapacity)
-        // assert (newCapacity & -newCapacity) == newCapacity; // power of 2
+    // assert (newCapacity & -newCapacity) == newCapacity; // power of 2
     {
-        int newLength =  newCapacity * 2;
+        int newLength = newCapacity * 2;
 
-        Object[] oldTable =  table;
-        int oldLength =  oldTable.length;
+        Object[] oldTable = table;
+        int oldLength = oldTable.length;
         if (oldLength == 2 * MAXIMUM_CAPACITY) { // can't expand any further
             if (size == MAXIMUM_CAPACITY - 1)
                 throw new IllegalStateException("Capacity exhausted.");
@@ -1226,7 +1227,7 @@ public class VerifiedIdentityHashMap
         if (oldLength >= newLength)
             return false;
 
-        Object[] newTable =  new Object[newLength];
+        Object[] newTable = new Object[newLength];
 
         /*+KEY@
           @ // All processed entries are copied to newTable
@@ -1305,13 +1306,13 @@ public class VerifiedIdentityHashMap
           @ decreasing
           @   oldLength - j;
           @*/
-        for (int j =  0; j < oldLength; j += 2) {
-            Object key =  oldTable[j];
+        for (int j = 0; j < oldLength; j += 2) {
+            Object key = oldTable[j];
             if (key != null) {
-                Object value =  oldTable[j + 1];
+                Object value = oldTable[j + 1];
                 oldTable[j] = null;
                 oldTable[j + 1] = null;
-                int i =  hash(key, newLength);
+                int i = hash(key, newLength);
 
                 //+KEY@ ghost \bigint hash = i;
                 
@@ -1360,13 +1361,13 @@ public class VerifiedIdentityHashMap
      * @throws NullPointerException if the specified map is null
      */
     public void putAll(Map m) {
-        int n =  m.size();
+        int n = m.size();
         if (n == 0)
             return;
         if (n > size)
             resize(capacity(n)); // conservatively pre-expand
 
-        for (Object o: m.entrySet()) {
+        for (Object o : m.entrySet()) {
             Entry e = (Entry) o;
             put(e.getKey(), e.getValue());
         }
@@ -1377,15 +1378,15 @@ public class VerifiedIdentityHashMap
      *
      * @param key key whose mapping is to be removed from the map
      * @return the previous value associated with <tt>key</tt>, or
-     *         <tt>null</tt> if there was no mapping for <tt>key</tt>.
-     *         (A <tt>null</tt> return can also indicate that the map
-     *         previously associated <tt>null</tt> with <tt>key</tt>.)
+     * <tt>null</tt> if there was no mapping for <tt>key</tt>.
+     * (A <tt>null</tt> return can also indicate that the map
+     * previously associated <tt>null</tt> with <tt>key</tt>.)
      */
     public java.lang.Object remove(Object key) {
-        Object k =  maskNull(key);
-        Object[] tab =  table;
-        int len =  tab.length;
-        int i =  hash(k, len);
+        Object k = maskNull(key);
+        Object[] tab = table;
+        int len = tab.length;
+        int i = hash(k, len);
 
         //+KEY@ ghost \bigint hash = i;
         
@@ -1395,11 +1396,11 @@ public class VerifiedIdentityHashMap
           @ assignable i, modCount, size, tab[*];
           @*/
         while (true) {
-            Object item =  tab[i];
+            Object item = tab[i];
             if (item == k) {
                 modCount++;
                 size--;
-                @SuppressWarnings("unchecked") java.lang.Object oldValue =  (java.lang.Object) tab[i + 1];
+                @SuppressWarnings("unchecked") java.lang.Object oldValue = (java.lang.Object) tab[i + 1];
                 tab[i + 1] = null;
                 tab[i] = null;
                 closeDeletion(i);
@@ -1414,19 +1415,19 @@ public class VerifiedIdentityHashMap
     /**
      * Removes the specified key-value mapping from the map if it is present.
      *
-     * @param   key   possible key
-     * @param   value possible value
-     * @return  <code>true</code> if and only if the specified key-value
-     *          mapping was in the map
+     * @param key   possible key
+     * @param value possible value
+     * @return <code>true</code> if and only if the specified key-value
+     * mapping was in the map
      */
     private boolean removeMapping(Object key, Object value) {
-        Object k =  maskNull(key);
-        Object[] tab =  table;
-        int len =  tab.length;
-        int i =  hash(k, len);
+        Object k = maskNull(key);
+        Object[] tab = table;
+        int len = tab.length;
+        int i = hash(k, len);
 
         while (true) {
-            Object item =  tab[i];
+            Object item = tab[i];
             if (item == k) {
                 if (tab[i + 1] != value)
                     return false;
@@ -1451,26 +1452,26 @@ public class VerifiedIdentityHashMap
      * @param d the index of a newly empty deleted slot
      */
     private void closeDeletion(int d)
-        // Adapted from Knuth Section 6.4 Algorithm R
+    // Adapted from Knuth Section 6.4 Algorithm R
     {
-        Object[] tab =  table;
-        int len =  tab.length;
+        Object[] tab = table;
+        int len = tab.length;
 
         // Look for items to swap into newly vacated slot
         // starting at index immediately following deletion,
         // and continuing until a null slot is seen, indicating
         // the end of a run of possibly-colliding keys.
         Object item;
-        for (int i =  nextKeyIndex(d, len); (item = tab[i]) != null;
+        for (int i = nextKeyIndex(d, len); (item = tab[i]) != null;
              i = nextKeyIndex(i, len))
-            // The following test triggers if the item at slot i (which
-            // hashes to be at slot r) should take the spot vacated by d.
-            // If so, we swap it in, and then continue with d now at the
-            // newly vacated i.  This process will terminate when we hit
-            // the null slot at the end of this run.
-            // The test is messy because we are using a circular table.
+        // The following test triggers if the item at slot i (which
+        // hashes to be at slot r) should take the spot vacated by d.
+        // If so, we swap it in, and then continue with d now at the
+        // newly vacated i.  This process will terminate when we hit
+        // the null slot at the end of this run.
+        // The test is messy because we are using a circular table.
         {
-            int r =  hash(item, len);
+            int r = hash(item, len);
             if ((i < r && (r <= d || d <= i)) || (r <= d && d <= i)) {
                 tab[d] = item;
                 tab[d + 1] = tab[i + 1];
@@ -1513,7 +1514,7 @@ public class VerifiedIdentityHashMap
       @*/
     public void clear() {
         modCount++;
-        Object[] tab =  table;
+        Object[] tab = table;
 
         /*+KEY@
           @ maintaining
@@ -1525,7 +1526,7 @@ public class VerifiedIdentityHashMap
           @ assignable
           @   tab[0 .. tab.length - (\bigint)1];
           @*/
-        for (int i =  0; i < tab.length; i++)
+        for (int i = 0; i < tab.length; i++)
             tab[i] = null;
         size = 0;
     }
@@ -1543,7 +1544,7 @@ public class VerifiedIdentityHashMap
      * to a normal map.  However, the <tt>Object.equals</tt> contract is
      * guaranteed to hold among <tt>VerifiedIdentityHashMap</tt> instances.</b>
      *
-     * @param  o object to be compared for equality with this map
+     * @param o object to be compared for equality with this map
      * @return <tt>true</tt> if the specified object is equal to this map
      * @see Object#equals(Object)
      */
@@ -1551,19 +1552,19 @@ public class VerifiedIdentityHashMap
         if (o == this) {
             return true;
         } else if (o instanceof VerifiedIdentityHashMap) {
-            VerifiedIdentityHashMap m =  (VerifiedIdentityHashMap) o;
+            VerifiedIdentityHashMap m = (VerifiedIdentityHashMap) o;
             if (m.size() != size)
                 return false;
 
-            Object[] tab =  m.table;
-            for (int i =  0; i < tab.length; i += 2) {
-                Object k =  tab[i];
+            Object[] tab = m.table;
+            for (int i = 0; i < tab.length; i += 2) {
+                Object k = tab[i];
                 if (k != null && !containsMapping(k, tab[i + 1]))
                     return false;
             }
             return true;
         } else if (o instanceof Map) {
-            Map m =  (Map)o;
+            Map m = (Map) o;
             return entrySet().equals(m.entrySet());
         } else {
             return false;  // o is not a Map
@@ -1590,12 +1591,12 @@ public class VerifiedIdentityHashMap
      * @see #equals(Object)
      */
     public int hashCode() {
-        int result =  0;
-        Object[] tab =  table;
-        for (int i =  0; i < tab.length; i += 2) {
-            Object key =  tab[i];
+        int result = 0;
+        Object[] tab = table;
+        for (int i = 0; i < tab.length; i += 2) {
+            Object key = tab[i];
             if (key != null) {
-                Object k =  unmaskNull(key);
+                Object k = unmaskNull(key);
                 result += System.identityHashCode(k) ^
                         System.identityHashCode(tab[i + 1]);
             }
@@ -1611,7 +1612,7 @@ public class VerifiedIdentityHashMap
      */
     public Object clone() {
         try {
-            VerifiedIdentityHashMap m =  (VerifiedIdentityHashMap) super.clone();
+            VerifiedIdentityHashMap m = (VerifiedIdentityHashMap) super.clone();
             m.entrySet = null;
             m.table = table.clone();
             return m;
@@ -1621,16 +1622,16 @@ public class VerifiedIdentityHashMap
     }
 
     private abstract class IdentityHashMapIterator implements Iterator {
-        int index =  (size != 0 ? 0 : table.length); // current slot.
-        int expectedModCount =  modCount; // to support fast-fail
-        int lastReturnedIndex =  -1;      // to allow remove()
+        int index = (size != 0 ? 0 : table.length); // current slot.
+        int expectedModCount = modCount; // to support fast-fail
+        int lastReturnedIndex = -1;      // to allow remove()
         boolean indexValid; // To avoid unnecessary next computation
-        Object[] traversalTable =  table; // reference to main table or copy
+        Object[] traversalTable = table; // reference to main table or copy
 
         public boolean hasNext() {
-            Object[] tab =  traversalTable;
-            for (int i =  index; i < tab.length; i += 2) {
-                Object key =  tab[i];
+            Object[] tab = traversalTable;
+            for (int i = index; i < tab.length; i += 2) {
+                Object key = tab[i];
                 if (key != null) {
                     index = i;
                     return indexValid = true;
@@ -1659,7 +1660,7 @@ public class VerifiedIdentityHashMap
                 throw new ConcurrentModificationException();
 
             expectedModCount = ++modCount;
-            int deletedSlot =  lastReturnedIndex;
+            int deletedSlot = lastReturnedIndex;
             lastReturnedIndex = -1;
             // back up index to revisit new contents after deletion
             index = deletedSlot;
@@ -1677,11 +1678,11 @@ public class VerifiedIdentityHashMap
             // even in these rare cases, this is not very expensive in
             // time or space.
 
-            Object[] tab =  traversalTable;
-            int len =  tab.length;
+            Object[] tab = traversalTable;
+            int len = tab.length;
 
-            int d =  deletedSlot;
-            Object key =  tab[d];
+            int d = deletedSlot;
+            Object key = tab[d];
             tab[d] = null;        // vacate the slot
             tab[d + 1] = null;
 
@@ -1696,9 +1697,9 @@ public class VerifiedIdentityHashMap
             size--;
 
             Object item;
-            for (int i =  nextKeyIndex(d, len); (item = tab[i]) != null;
+            for (int i = nextKeyIndex(d, len); (item = tab[i]) != null;
                  i = nextKeyIndex(i, len)) {
-                int r =  hash(item, len);
+                int r = hash(item, len);
                 // See closeDeletion for explanation of this conditional
                 if ((i < r && (r <= d || d <= i)) ||
                         (r <= d && d <= i)) {
@@ -1712,8 +1713,8 @@ public class VerifiedIdentityHashMap
 
                     if (i < deletedSlot && d >= deletedSlot &&
                             traversalTable == VerifiedIdentityHashMap.this.table) {
-                        int remaining =  len - deletedSlot;
-                        Object[] newTable =  new Object[remaining];
+                        int remaining = len - deletedSlot;
+                        Object[] newTable = new Object[remaining];
                         System.arraycopy(tab, deletedSlot,
                                 newTable, 0, remaining);
                         traversalTable = newTable;
@@ -1732,21 +1733,21 @@ public class VerifiedIdentityHashMap
 
     private class KeyIterator extends IdentityHashMapIterator {
         @SuppressWarnings("unchecked")
-         public java.lang.Object next() {
+        public java.lang.Object next() {
             return (java.lang.Object) unmaskNull(traversalTable[nextIndex()]);
         }
     }
 
     private class ValueIterator extends IdentityHashMapIterator {
         @SuppressWarnings("unchecked")
-         public java.lang.Object next() {
+        public java.lang.Object next() {
             return (java.lang.Object) traversalTable[nextIndex() + 1];
         }
     }
 
     private class EntryIterator
             extends IdentityHashMapIterator {
-        private Entry lastReturnedEntry =  null;
+        private Entry lastReturnedEntry = null;
 
         public Map.Entry next() {
             lastReturnedEntry = new Entry(nextIndex());
@@ -1767,23 +1768,23 @@ public class VerifiedIdentityHashMap
             private Entry(int index) {
                 this.index = index;
             }
-            
+
             @SuppressWarnings("unchecked")
             public java.lang.Object getKey() {
                 checkIndexForEntryUse();
                 return (java.lang.Object) unmaskNull(traversalTable[index]);
             }
-            
+
             @SuppressWarnings("unchecked")
             public java.lang.Object getValue() {
                 checkIndexForEntryUse();
                 return (java.lang.Object) traversalTable[index + 1];
             }
-            
+
             @SuppressWarnings("unchecked")
             public java.lang.Object setValue(java.lang.Object value) {
                 checkIndexForEntryUse();
-                java.lang.Object oldValue =  (java.lang.Object) traversalTable[index + 1];
+                java.lang.Object oldValue = (java.lang.Object) traversalTable[index + 1];
                 traversalTable[index + 1] = value;
                 // if shadowing, force into main table
                 if (traversalTable != VerifiedIdentityHashMap.this.table)
@@ -1797,7 +1798,7 @@ public class VerifiedIdentityHashMap
 
                 if (!(o instanceof Map.Entry))
                     return false;
-                Map.Entry e =  (Map.Entry)o;
+                Map.Entry e = (Map.Entry) o;
                 return (e.getKey() == unmaskNull(traversalTable[index]) &&
                         e.getValue() == traversalTable[index + 1]);
             }
@@ -1832,7 +1833,7 @@ public class VerifiedIdentityHashMap
      * view the first time this view is requested.  The view is stateless,
      * so there's no reason to create more than one.
      */
-    private /*@ spec_public nullable @*/ transient Set entrySet =  null;
+    private /*@ spec_public nullable @*/ transient Set entrySet = null;
 
     /**
      * Returns an identity-based set view of the keys contained in this map.
@@ -1873,10 +1874,10 @@ public class VerifiedIdentityHashMap
      * @see System#identityHashCode(Object)
      */
     public Set keySet() {
-        Set ks =  keySet;
+        Set ks = keySet;
         if (ks != null)
             return ks;
-         else
+        else
             return keySet = new KeySet();
     }
 
@@ -1884,25 +1885,29 @@ public class VerifiedIdentityHashMap
         public Iterator iterator() {
             return new KeyIterator();
         }
+
         public int size() {
             return size;
         }
+
         public boolean contains(Object o) {
             return containsKey(o);
         }
+
         public boolean remove(Object o) {
-            int oldSize =  size;
+            int oldSize = size;
             VerifiedIdentityHashMap.this.remove(o);
             return size != oldSize;
         }
+
         /*
          * Must revert from AbstractSet's impl to AbstractCollection's, as
          * the former contains an optimization that results in incorrect
          * behavior when c is a smaller "normal" (non-identity-based) Set.
          */
         public boolean removeAll(Collection c) {
-            boolean modified =  false;
-            for (Iterator i =  iterator(); i.hasNext();) {
+            boolean modified = false;
+            for (Iterator i = iterator(); i.hasNext(); ) {
                 if (c.contains(i.next())) {
                     i.remove();
                     modified = true;
@@ -1910,12 +1915,14 @@ public class VerifiedIdentityHashMap
             }
             return modified;
         }
+
         public void clear() {
             VerifiedIdentityHashMap.this.clear();
         }
+
         public int hashCode() {
-            int result =  0;
-            for (java.lang.Object key: this)
+            int result = 0;
+            for (java.lang.Object key : this)
                 result += System.identityHashCode(key);
             return result;
         }
@@ -1942,10 +1949,10 @@ public class VerifiedIdentityHashMap
      * <tt>containsAll</tt> methods.</b>
      */
     public Collection values() {
-        Collection vs =  values;
+        Collection vs = values;
         if (vs != null)
             return vs;
-         else
+        else
             return values = new Values();
     }
 
@@ -1953,14 +1960,17 @@ public class VerifiedIdentityHashMap
         public Iterator iterator() {
             return new ValueIterator();
         }
+
         public int size() {
             return size;
         }
+
         public boolean contains(Object o) {
             return containsValue(o);
         }
+
         public boolean remove(Object o) {
-            for (Iterator i =  iterator(); i.hasNext();) {
+            for (Iterator i = iterator(); i.hasNext(); ) {
                 if (i.next() == o) {
                     i.remove();
                     return true;
@@ -1968,6 +1978,7 @@ public class VerifiedIdentityHashMap
             }
             return false;
         }
+
         public void clear() {
             VerifiedIdentityHashMap.this.clear();
         }
@@ -2012,10 +2023,10 @@ public class VerifiedIdentityHashMap
      * @return a set view of the identity-mappings contained in this map
      */
     public Set entrySet() {
-        Set es =  entrySet;
+        Set es = entrySet;
         if (es != null)
             return es;
-         else
+        else
             return entrySet = new EntrySet();
     }
 
@@ -2023,32 +2034,37 @@ public class VerifiedIdentityHashMap
         public Iterator iterator() {
             return new EntryIterator();
         }
+
         public boolean contains(Object o) {
             if (!(o instanceof Map.Entry))
                 return false;
-            Map.Entry entry =  (Map.Entry)o;
+            Map.Entry entry = (Map.Entry) o;
             return containsMapping(entry.getKey(), entry.getValue());
         }
+
         public boolean remove(Object o) {
             if (!(o instanceof Map.Entry))
                 return false;
-            Map.Entry entry =  (Map.Entry)o;
+            Map.Entry entry = (Map.Entry) o;
             return removeMapping(entry.getKey(), entry.getValue());
         }
+
         public int size() {
             return size;
         }
+
         public void clear() {
             VerifiedIdentityHashMap.this.clear();
         }
+
         /*
          * Must revert from AbstractSet's impl to AbstractCollection's, as
          * the former contains an optimization that results in incorrect
          * behavior when c is a smaller "normal" (non-identity-based) Set.
          */
         public boolean removeAll(Collection c) {
-            boolean modified =  false;
-            for (Iterator i =  iterator(); i.hasNext();) {
+            boolean modified = false;
+            for (Iterator i = iterator(); i.hasNext(); ) {
                 if (c.contains(i.next())) {
                     i.remove();
                     modified = true;
@@ -2058,22 +2074,23 @@ public class VerifiedIdentityHashMap
         }
 
         public Object[] toArray() {
-            int size =  size();
-            Object[] result =  new Object[size];
-            Iterator it =  iterator();
-            for (int i =  0; i < size; i++)
-                result[i] = new AbstractMap.SimpleEntry(((java.util.Map.Entry)it.next()));
+            int size = size();
+            Object[] result = new Object[size];
+            Iterator it = iterator();
+            for (int i = 0; i < size; i++)
+                result[i] = new AbstractMap.SimpleEntry(((java.util.Map.Entry) it.next()));
             return result;
         }
+
         @SuppressWarnings("unchecked")
-         public java.lang.Object[] toArray(java.lang.Object[] a) {
-            int size =  size();
+        public java.lang.Object[] toArray(java.lang.Object[] a) {
+            int size = size();
             if (a.length < size)
-                a = (java.lang.Object[])java.lang.reflect
+                a = (java.lang.Object[]) java.lang.reflect
                         .Array.newInstance(a.getClass().getComponentType(), size);
-            Iterator it =  iterator();
-            for (int i =  0; i < size; i++)
-                a[i] = (java.lang.Object) new AbstractMap.SimpleEntry(((java.util.Map.Entry)it.next()));
+            Iterator it = iterator();
+            for (int i = 0; i < size; i++)
+                a[i] = (java.lang.Object) new AbstractMap.SimpleEntry(((java.util.Map.Entry) it.next()));
             if (a.length > size)
                 a[size] = null;
             return a;

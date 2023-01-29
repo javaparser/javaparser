@@ -1,8 +1,11 @@
 public class W {
     public int x;
 
-    class R extends W { }
-    class S extends W { }
+    class R extends W {
+    }
+
+    class S extends W {
+    }
 
     //@ public normal_behavior
     //@   requires r != null && s != null;
@@ -22,5 +25,5 @@ public class W {
     public void p(R r, S s) {
         r.x = 10;
     }
-    
+
 }

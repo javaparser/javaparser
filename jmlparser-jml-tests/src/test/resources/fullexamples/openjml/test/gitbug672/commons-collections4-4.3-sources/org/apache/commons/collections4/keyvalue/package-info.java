@@ -24,6 +24,5 @@
  *   <li>KeyValue - a key and value pair, without map entry semantics
  *   <li>MultiKey - a holder of multiple keys tied together
  * </ul>
- *
  */
 package org.apache.commons.collections4.keyvalue;

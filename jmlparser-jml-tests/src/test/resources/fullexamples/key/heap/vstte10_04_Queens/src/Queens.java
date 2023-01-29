@@ -1,4 +1,4 @@
-class Queens {   
+class Queens {
 
     /*@ private normal_behaviour
       @   //pos is within bounds
@@ -26,17 +26,17 @@ class Queens {
 	  @ assignable \nothing;
 	  @ decreases pos - q;
 	  @*/
-	for(int q = 0; q < pos; q++) {
-	    if (!((board[q] != board[pos])
-	           && (board[q] - board[pos] != pos - q)
-		   && (board[pos] - board[q] != pos - q))) {
-		return false;
-	    }
-	}
-	return true;
+        for (int q = 0; q < pos; q++) {
+            if (!((board[q] != board[pos])
+                    && (board[q] - board[pos] != pos - q)
+                    && (board[pos] - board[q] != pos - q))) {
+                return false;
+            }
+        }
+        return true;
     }
-    
-    
+
+
     /*@ private normal_behaviour
       @   //pos is within bounds
       @   requires 0 <= pos && pos < board.length;
@@ -74,7 +74,7 @@ class Queens {
       @
       @   assignable board[pos..board.length-1];
       @   measured_by board.length - pos;
-      @*/    
+      @*/
     private static /*@nullable@*/ boolean search(int pos, int[] board) {
 	/*@ loop_invariant
 	  @   //i is within bounds 
@@ -100,23 +100,23 @@ class Queens {
 	  @ assignable board[pos..board.length-1];
 	  @ decreases board.length - i;
 	  @*/
-	for(int i = 0; i < board.length; i++) {
-	    board[pos] = i;
-	    if(isConsistent(board, pos)) {
-		if(pos == board.length - 1) {
-		    return true;
-		} else {
-		    boolean complete = search(pos + 1, board);
-		    if(complete) {
-			return true;
-		    }
-		}
-	    }
-	}
-	return false;
+        for (int i = 0; i < board.length; i++) {
+            board[pos] = i;
+            if (isConsistent(board, pos)) {
+                if (pos == board.length - 1) {
+                    return true;
+                } else {
+                    boolean complete = search(pos + 1, board);
+                    if (complete) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
-    
-    
+
+
     /*@ public normal_behaviour
       @   //n must be positive
       @   requires 0 < n;
@@ -138,13 +138,13 @@ class Queens {
       @                                                                       (int)s[x] != (int)s[p] 
       @                                                                       && (int)s[x] - (int)s[p] != p - x 
       @                                                                       && (int)s[p] - (int)s[x] != p - x));
-      @*/        
+      @*/
     public static /*@pure nullable@*/ int[] nQueens(int n) {
-	int[] board = new int[n];
-	// FIXME the development of model methods implmentation revealed
-	// that this problem is very sensitive to quantifier instantiation
-	// mischaps, see bug #1370. Changing the if statement into ? : seems
-	// to solve the problem. 
+        int[] board = new int[n];
+        // FIXME the development of model methods implmentation revealed
+        // that this problem is very sensitive to quantifier instantiation
+        // mischaps, see bug #1370. Changing the if statement into ? : seems
+        // to solve the problem.
 	/*
 	if(search(0, board)) {
 	    return board;
@@ -152,7 +152,7 @@ class Queens {
 	    return null;
 	}
 	*/
-	return search(0, board) ? board : null;
+        return search(0, board) ? board : null;
     }
     
     

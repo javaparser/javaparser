@@ -47,6 +47,7 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
  * It will pick up the changes.
  */
 public class ParserConfiguration {
+
     //region jmlparser
     private List<List<String>> jmlKeys = new ArrayList<>();
 
@@ -85,7 +86,6 @@ public class ParserConfiguration {
     }
 
     //endregion
-
     public enum LanguageLevel {
 
         /**
@@ -231,7 +231,7 @@ public class ParserConfiguration {
 
         final PostProcessors postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW };
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW};
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {
             this.validator = validator;
@@ -334,10 +334,8 @@ public class ParserConfiguration {
                 }
             }
         });
-
         JmlProcessor jmlProcessor = new JmlProcessor();
         processors.add(() -> jmlProcessor);
-
         processors.add(() -> new Processor() {
 
             @Override
@@ -373,7 +371,6 @@ public class ParserConfiguration {
                 }
             }
         });
-
     }
 
     public boolean isAttributeComments() {

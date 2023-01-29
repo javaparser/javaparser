@@ -24,10 +24,11 @@ import org.apache.commons.math3.util.FastMath;
  * bisection algorithm</a> for finding zeros of univariate real functions.
  * <p>
  * The function should be continuous but not necessarily smooth.</p>
- *
  */
 public class BisectionSolver extends AbstractUnivariateSolver {
-    /** Default absolute accuracy. */
+    /**
+     * Default absolute accuracy.
+     */
     private static final double DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
 
     /**
@@ -36,6 +37,7 @@ public class BisectionSolver extends AbstractUnivariateSolver {
     public BisectionSolver() {
         this(DEFAULT_ABSOLUTE_ACCURACY);
     }
+
     /**
      * Construct a solver.
      *
@@ -44,6 +46,7 @@ public class BisectionSolver extends AbstractUnivariateSolver {
     public BisectionSolver(double absoluteAccuracy) {
         super(absoluteAccuracy);
     }
+
     /**
      * Construct a solver.
      *
@@ -60,7 +63,7 @@ public class BisectionSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException {
+            throws TooManyEvaluationsException {
         double min = getMin();
         double max = getMax();
         verifyInterval(min, max);

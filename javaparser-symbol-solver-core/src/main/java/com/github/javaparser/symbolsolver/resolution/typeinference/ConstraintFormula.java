@@ -138,7 +138,7 @@ public abstract class ConstraintFormula {
     /**
      * A formula is reduced to one or both of:
      * i) A bound or bound set, which is to be incorporated with the "current" bound set. Initially, the current bound
-     *    set is empty.
+     * set is empty.
      * ii) Further constraint formulas, which are to be reduced recursively.
      */
     public abstract ReductionResult reduce(BoundSet currentBoundSet);

@@ -38,10 +38,14 @@ import org.apache.commons.math3.util.FastMath;
  */
 @Deprecated
 public abstract class AbstractLeastSquaresOptimizer
-    extends JacobianMultivariateVectorOptimizer {
-    /** Square-root of the weight matrix. */
+        extends JacobianMultivariateVectorOptimizer {
+    /**
+     * Square-root of the weight matrix.
+     */
     private RealMatrix weightMatrixSqrt;
-    /** Cost value (square root of the sum of the residuals). */
+    /**
+     * Cost value (square root of the sum of the residuals).
+     */
     private double cost;
 
     /**
@@ -57,7 +61,7 @@ public abstract class AbstractLeastSquaresOptimizer
      * @param params Model parameters at which to compute the Jacobian.
      * @return the weighted Jacobian: W<sup>1/2</sup> J.
      * @throws DimensionMismatchException if the Jacobian dimension does not
-     * match problem dimension.
+     *                                    match problem dimension.
      */
     protected RealMatrix computeWeightedJacobian(double[] params) {
         return weightMatrixSqrt.multiply(MatrixUtils.createRealMatrix(computeJacobian(params)));
@@ -77,7 +81,7 @@ public abstract class AbstractLeastSquaresOptimizer
 
     /**
      * Gets the root-mean-square (RMS) value.
-     *
+     * <p>
      * The RMS the root of the arithmetic mean of the square of all weighted
      * residuals.
      * This is related to the criterion that is minimized by the optimizer
@@ -94,6 +98,7 @@ public abstract class AbstractLeastSquaresOptimizer
      * Get a Chi-Square-like value assuming the N residuals follow N
      * distinct normal distributions centered on 0 and whose variances are
      * the reciprocal of the weights.
+     *
      * @return chi-square value
      */
     public double getChiSquare() {
@@ -128,11 +133,10 @@ public abstract class AbstractLeastSquaresOptimizer
      * that the result of this computation should be considered meaningless,
      * and thus trigger an exception.
      *
-     * @param params Model parameters.
+     * @param params    Model parameters.
      * @param threshold Singularity threshold.
      * @return the covariance matrix.
-     * @throws org.apache.commons.math3.linear.SingularMatrixException
-     * if the covariance matrix cannot be computed (singular problem).
+     * @throws org.apache.commons.math3.linear.SingularMatrixException if the covariance matrix cannot be computed (singular problem).
      */
     public double[][] computeCovariances(double[] params,
                                          double threshold) {
@@ -144,7 +148,7 @@ public abstract class AbstractLeastSquaresOptimizer
 
         // Compute the covariances matrix.
         final DecompositionSolver solver
-            = new QRDecomposition(jTj, threshold).getSolver();
+                = new QRDecomposition(jTj, threshold).getSolver();
         return solver.getInverse().getData();
     }
 
@@ -155,12 +159,11 @@ public abstract class AbstractLeastSquaresOptimizer
      * is the optimized value of the {@code i}-th parameter, and {@code C} is
      * the covariance matrix.
      *
-     * @param params Model parameters.
+     * @param params                         Model parameters.
      * @param covarianceSingularityThreshold Singularity threshold (see
-     * {@link #computeCovariances(double[],double) computeCovariances}).
+     *                                       {@link #computeCovariances(double[], double) computeCovariances}).
      * @return an estimate of the standard deviation of the optimized parameters
-     * @throws org.apache.commons.math3.linear.SingularMatrixException
-     * if the covariance matrix cannot be computed.
+     * @throws org.apache.commons.math3.linear.SingularMatrixException if the covariance matrix cannot be computed.
      */
     public double[] computeSigma(double[] params,
                                  double covarianceSingularityThreshold) {
@@ -177,20 +180,20 @@ public abstract class AbstractLeastSquaresOptimizer
      * {@inheritDoc}
      *
      * @param optData Optimization data. In addition to those documented in
-     * {@link JacobianMultivariateVectorOptimizer#parseOptimizationData(OptimizationData[])
-     * JacobianMultivariateVectorOptimizer}, this method will register the following data:
-     * <ul>
-     *  <li>{@link org.apache.commons.math3.optim.nonlinear.vector.Weight}</li>
-     * </ul>
+     *                {@link JacobianMultivariateVectorOptimizer#parseOptimizationData(OptimizationData[])
+     *                JacobianMultivariateVectorOptimizer}, this method will register the following data:
+     *                <ul>
+     *                 <li>{@link org.apache.commons.math3.optim.nonlinear.vector.Weight}</li>
+     *                </ul>
      * @return {@inheritDoc}
      * @throws TooManyEvaluationsException if the maximal number of
-     * evaluations is exceeded.
-     * @throws DimensionMismatchException if the initial guess, target, and weight
-     * arguments have inconsistent dimensions.
+     *                                     evaluations is exceeded.
+     * @throws DimensionMismatchException  if the initial guess, target, and weight
+     *                                     arguments have inconsistent dimensions.
      */
     @Override
     public PointVectorValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException {
+            throws TooManyEvaluationsException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }
@@ -203,18 +206,18 @@ public abstract class AbstractLeastSquaresOptimizer
      * function.
      *
      * @param objectiveValue Value of the the objective function. This is
-     * the value returned from a call to
-     * {@link #computeObjectiveValue(double[]) computeObjectiveValue}
-     * (whose array argument contains the model parameters).
+     *                       the value returned from a call to
+     *                       {@link #computeObjectiveValue(double[]) computeObjectiveValue}
+     *                       (whose array argument contains the model parameters).
      * @return the residuals.
      * @throws DimensionMismatchException if {@code params} has a wrong
-     * length.
+     *                                    length.
      */
     protected double[] computeResiduals(double[] objectiveValue) {
         final double[] target = getTarget();
         if (objectiveValue.length != target.length) {
             throw new DimensionMismatchException(target.length,
-                                                 objectiveValue.length);
+                    objectiveValue.length);
         }
 
         final double[] residuals = new double[target.length];
@@ -232,9 +235,9 @@ public abstract class AbstractLeastSquaresOptimizer
      * field is recomputed.
      *
      * @param optData Optimization data. The following data will be looked for:
-     * <ul>
-     *  <li>{@link Weight}</li>
-     * </ul>
+     *                <ul>
+     *                 <li>{@link Weight}</li>
+     *                </ul>
      */
     @Override
     protected void parseOptimizationData(OptimizationData... optData) {

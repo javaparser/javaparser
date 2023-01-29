@@ -87,10 +87,14 @@ public class IteratorIterable<E> implements Iterable<E> {
         };
     }
 
-    /** the iterator being adapted into an iterable. */
+    /**
+     * the iterator being adapted into an iterable.
+     */
     private final Iterator<? extends E> iterator;
 
-    /** the iterator parameterized as the {@link #iterator()} return type. */
+    /**
+     * the iterator parameterized as the {@link #iterator()} return type.
+     */
     private final Iterator<E> typeSafeIterator;
 
     /**
@@ -107,7 +111,7 @@ public class IteratorIterable<E> implements Iterable<E> {
      * Constructs a new <code>IteratorIterable</code> that will use the given
      * iterator.
      *
-     * @param iterator the iterator to use.
+     * @param iterator    the iterator to use.
      * @param multipleUse <code>true</code> if the new iterable can be used in multiple iterations
      */
     public IteratorIterable(final Iterator<? extends E> iterator, final boolean multipleUse) {
@@ -128,7 +132,7 @@ public class IteratorIterable<E> implements Iterable<E> {
     @Override
     public Iterator<E> iterator() {
         if (iterator instanceof ResettableIterator) {
-            ((ResettableIterator<? extends E>)iterator).reset();
+            ((ResettableIterator<? extends E>) iterator).reset();
         }
         return typeSafeIterator;
     }

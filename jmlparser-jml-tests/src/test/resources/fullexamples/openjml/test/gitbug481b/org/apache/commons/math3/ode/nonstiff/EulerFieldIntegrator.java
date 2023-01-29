@@ -43,54 +43,64 @@ import org.apache.commons.math3.util.MathArrays;
  * this package only as a comparison reference for more useful
  * integrators.</p>
  *
+ * @param <T> the type of the field elements
  * @see MidpointFieldIntegrator
  * @see ClassicalRungeKuttaFieldIntegrator
  * @see GillFieldIntegrator
  * @see ThreeEighthesFieldIntegrator
  * @see LutherFieldIntegrator
- * @param <T> the type of the field elements
  * @since 3.6
  */
 
 public class EulerFieldIntegrator<T extends RealFieldElement<T>> extends RungeKuttaFieldIntegrator<T> {
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build an Euler integrator with the given step.
+     *
      * @param field field to which the time and state vector elements belong
-     * @param step integration step
+     * @param step  integration step
      */
     public EulerFieldIntegrator(final Field<T> field, final T step) {
         super(field, "Euler", step);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public T[] getC() {
         return MathArrays.buildArray(getField(), 0);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public T[][] getA() {
         return MathArrays.buildArray(getField(), 0, 0);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public T[] getB() {
         final T[] b = MathArrays.buildArray(getField(), 1);
         b[0] = getField().getOne();
         return b;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected EulerFieldStepInterpolator<T>
-        createInterpolator(final boolean forward, T[][] yDotK,
-                           final FieldODEStateAndDerivative<T> globalPreviousState,
-                           final FieldODEStateAndDerivative<T> globalCurrentState,
-                           final FieldEquationsMapper<T> mapper) {
+    createInterpolator(final boolean forward, T[][] yDotK,
+                       final FieldODEStateAndDerivative<T> globalPreviousState,
+                       final FieldODEStateAndDerivative<T> globalCurrentState,
+                       final FieldEquationsMapper<T> mapper) {
         return new EulerFieldStepInterpolator<T>(getField(), forward, yDotK,
-                                                 globalPreviousState, globalCurrentState,
-                                                 globalPreviousState, globalCurrentState,
-                                                 mapper);
+                globalPreviousState, globalCurrentState,
+                globalPreviousState, globalCurrentState,
+                mapper);
     }
 
 }

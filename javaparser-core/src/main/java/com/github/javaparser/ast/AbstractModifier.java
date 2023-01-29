@@ -8,7 +8,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Alexander Weigl
  * @version 1 (12/12/21)
  */
-public class AbstractModifier extends Node{
+public class AbstractModifier extends Node {
+
     public AbstractModifier() {
         this(null);
     }
@@ -24,6 +25,5 @@ public class AbstractModifier extends Node{
 
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
-
     }
 }

@@ -30,7 +30,7 @@ import java.util.List;
  * N-point crossover policy. For each iteration a random crossover point is
  * selected and the first part from each parent is copied to the corresponding
  * child, and the second parts are copied crosswise.
- *
+ * <p>
  * Example (2-point crossover):
  * <pre>
  * -C- denotes a crossover point
@@ -42,7 +42,7 @@ import java.util.List;
  *      /----\ /--------\ /-----\             /----\ /--------\ /-----\
  * c1 = (1 0  | 1 0 1 0  | 0 1 1)    X   c2 = (0 1  | 1 0 0 1  | 0 1 1)
  * </pre>
- *
+ * <p>
  * This policy works only on {@link AbstractListChromosome}, and therefore it
  * is parameterized by T. Moreover, the chromosomes must have same lengths.
  *
@@ -51,7 +51,9 @@ import java.util.List;
  */
 public class NPointCrossover<T> implements CrossoverPolicy {
 
-    /** The number of crossover points. */
+    /**
+     * The number of crossover points.
+     */
     private final int crossoverPoints;
 
     /**
@@ -83,7 +85,7 @@ public class NPointCrossover<T> implements CrossoverPolicy {
      * Performs a N-point crossover. N random crossover points are selected and are used
      * to divide the parent chromosomes into segments. The segments are copied in alternate
      * order from the two parents to the corresponding child chromosomes.
-     *
+     * <p>
      * Example (2-point crossover):
      * <pre>
      * -C- denotes a crossover point
@@ -96,16 +98,16 @@ public class NPointCrossover<T> implements CrossoverPolicy {
      * c1 = (1 0  | 1 0 1 0  | 0 1 1)    X   c2 = (0 1  | 1 0 0 1  | 0 1 1)
      * </pre>
      *
-     * @param first first parent (p1)
+     * @param first  first parent (p1)
      * @param second second parent (p2)
      * @return pair of two children (c1,c2)
      * @throws MathIllegalArgumentException iff one of the chromosomes is
-     *   not an instance of {@link AbstractListChromosome}
-     * @throws DimensionMismatchException if the length of the two chromosomes is different
+     *                                      not an instance of {@link AbstractListChromosome}
+     * @throws DimensionMismatchException   if the length of the two chromosomes is different
      */
     @SuppressWarnings("unchecked") // OK because of instanceof checks
     public ChromosomePair crossover(final Chromosome first, final Chromosome second)
-        throws DimensionMismatchException, MathIllegalArgumentException {
+            throws DimensionMismatchException, MathIllegalArgumentException {
 
         if (!(first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
@@ -116,15 +118,15 @@ public class NPointCrossover<T> implements CrossoverPolicy {
     /**
      * Helper for {@link #crossover(Chromosome, Chromosome)}. Performs the actual crossover.
      *
-     * @param first the first chromosome
+     * @param first  the first chromosome
      * @param second the second chromosome
      * @return the pair of new chromosomes that resulted from the crossover
      * @throws DimensionMismatchException if the length of the two chromosomes is different
-     * @throws NumberIsTooLargeException if the number of crossoverPoints is too large for the actual chromosomes
+     * @throws NumberIsTooLargeException  if the number of crossoverPoints is too large for the actual chromosomes
      */
     private ChromosomePair mate(final AbstractListChromosome<T> first,
                                 final AbstractListChromosome<T> second)
-        throws DimensionMismatchException, NumberIsTooLargeException {
+            throws DimensionMismatchException, NumberIsTooLargeException {
 
         final int length = first.getLength();
         if (length != second.getLength()) {
@@ -173,6 +175,6 @@ public class NPointCrossover<T> implements CrossoverPolicy {
         }
 
         return new ChromosomePair(first.newFixedLengthChromosome(child1Rep),
-                                  second.newFixedLengthChromosome(child2Rep));
+                second.newFixedLengthChromosome(child2Rep));
     }
 }

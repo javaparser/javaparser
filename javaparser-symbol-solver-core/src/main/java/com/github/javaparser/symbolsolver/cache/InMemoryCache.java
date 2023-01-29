@@ -33,14 +33,13 @@ import java.util.WeakHashMap;
  * @param <K> The type of the key.
  * @param <V> The type of the value.
  */
-public class InMemoryCache<K, V> implements Cache<K, V>  {
+public class InMemoryCache<K, V> implements Cache<K, V> {
 
     /**
      * Create a new instance for a cache in memory.
      *
      * @param <expectedK> The expected type for the key.
      * @param <expectedV> The expected type for the value.
-     *
      * @return A newly created instance of {@link InMemoryCache}.
      */
     public static <expectedK, expectedV> InMemoryCache<expectedK, expectedV> create() {

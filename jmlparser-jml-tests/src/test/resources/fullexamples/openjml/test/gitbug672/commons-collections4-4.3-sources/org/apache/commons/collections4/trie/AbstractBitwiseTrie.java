@@ -43,7 +43,7 @@ public abstract class AbstractBitwiseTrie<K, V> extends AbstractMap<K, V>
     /**
      * Constructs a new {@link Trie} using the given {@link KeyAnalyzer}.
      *
-     * @param keyAnalyzer  the {@link KeyAnalyzer} to use
+     * @param keyAnalyzer the {@link KeyAnalyzer} to use
      */
     protected AbstractBitwiseTrie(final KeyAnalyzer<? super K> keyAnalyzer) {
         if (keyAnalyzer == null) {
@@ -55,6 +55,7 @@ public abstract class AbstractBitwiseTrie<K, V> extends AbstractMap<K, V>
 
     /**
      * Returns the {@link KeyAnalyzer} that constructed the {@link Trie}.
+     *
      * @return the {@link KeyAnalyzer} used by this {@link Trie}
      */
     protected KeyAnalyzer<? super K> getKeyAnalyzer() {
@@ -189,7 +190,7 @@ public abstract class AbstractBitwiseTrie<K, V> extends AbstractMap<K, V>
         @Override
         public int hashCode() {
             return (getKey() == null ? 0 : getKey().hashCode()) ^
-                   (getValue() == null ? 0 : getValue().hashCode());
+                    (getValue() == null ? 0 : getValue().hashCode());
         }
 
         @Override
@@ -200,7 +201,7 @@ public abstract class AbstractBitwiseTrie<K, V> extends AbstractMap<K, V>
                 return false;
             }
 
-            final Map.Entry<?, ?> other = (Map.Entry<?, ?>)o;
+            final Map.Entry<?, ?> other = (Map.Entry<?, ?>) o;
             if (compare(key, other.getKey())
                     && compare(value, other.getValue())) {
                 return true;

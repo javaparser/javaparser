@@ -123,17 +123,17 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     void testAsInterface() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        compilationUnit.asInterface();
-    });
-}
+            compilationUnit.asInterface();
+        });
+    }
 
     @Test
     void testAsEnum() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-        compilationUnit.asEnum();
-    });
-}
+            compilationUnit.asEnum();
+        });
+    }
 
     @Test
     void testGetPackageName() {
@@ -166,7 +166,7 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     }
 
     @Test
-    void testGetGenericTypeField(){
+    void testGetGenericTypeField() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.ClassWithFields");
         List<ResolvedFieldDeclaration> declarationList = compilationUnit.getAllFields();
         assertEquals(6, declarationList.size());

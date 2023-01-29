@@ -1,9 +1,9 @@
 package vm;
 
 public class HardwareObject {
-	protected Address address;
+    protected Address address;
 
-	public HardwareObject(Address address) {
-		this.address = address;
-	}
+    public HardwareObject(Address address) {
+        this.address = address;
+    }
 }

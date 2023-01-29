@@ -27,10 +27,14 @@ import java.io.Serializable;
  */
 public final class NotNullPredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 7533784454832764388L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes")
     public static final Predicate INSTANCE = new NotNullPredicate<>();
 
@@ -56,7 +60,7 @@ public final class NotNullPredicate<T> implements Predicate<T>, Serializable {
     /**
      * Evaluates the predicate returning true if the object does not equal null.
      *
-     * @param object  the object to evaluate
+     * @param object the object to evaluate
      * @return true if not null
      */
     @Override

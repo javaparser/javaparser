@@ -30,20 +30,29 @@ import org.apache.commons.math3.util.MathArrays;
  * Multivariate normal distribution (Wikipedia)</a>
  * @see <a href="http://mathworld.wolfram.com/MultivariateNormalDistribution.html">
  * Multivariate normal distribution (MathWorld)</a>
- *
  * @since 3.1
  */
 public class MultivariateNormalDistribution
-    extends AbstractMultivariateRealDistribution {
-    /** Vector of means. */
+        extends AbstractMultivariateRealDistribution {
+    /**
+     * Vector of means.
+     */
     private final double[] means;
-    /** Covariance matrix. */
+    /**
+     * Covariance matrix.
+     */
     private final RealMatrix covarianceMatrix;
-    /** The matrix inverse of the covariance matrix. */
+    /**
+     * The matrix inverse of the covariance matrix.
+     */
     private final RealMatrix covarianceMatrixInverse;
-    /** The determinant of the covariance matrix. */
+    /**
+     * The determinant of the covariance matrix.
+     */
     private final double covarianceMatrixDeterminant;
-    /** Matrix used in computation of samples. */
+    /**
+     * Matrix used in computation of samples.
+     */
     private final RealMatrix samplingMatrix;
 
     /**
@@ -61,20 +70,20 @@ public class MultivariateNormalDistribution
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param means Vector of means.
+     * @param means       Vector of means.
      * @param covariances Covariance matrix.
-     * @throws DimensionMismatchException if the arrays length are
-     * inconsistent.
-     * @throws SingularMatrixException if the eigenvalue decomposition cannot
-     * be performed on the provided covariance matrix.
+     * @throws DimensionMismatchException         if the arrays length are
+     *                                            inconsistent.
+     * @throws SingularMatrixException            if the eigenvalue decomposition cannot
+     *                                            be performed on the provided covariance matrix.
      * @throws NonPositiveDefiniteMatrixException if any of the eigenvalues is
-     * negative.
+     *                                            negative.
      */
     public MultivariateNormalDistribution(final double[] means,
                                           final double[][] covariances)
-        throws SingularMatrixException,
-               DimensionMismatchException,
-               NonPositiveDefiniteMatrixException {
+            throws SingularMatrixException,
+            DimensionMismatchException,
+            NonPositiveDefiniteMatrixException {
         this(new Well19937c(), means, covariances);
     }
 
@@ -86,22 +95,22 @@ public class MultivariateNormalDistribution
      * and to the number of rows and columns of the covariance matrix.
      * It is frequently written as "p" in formulae.
      *
-     * @param rng Random Number Generator.
-     * @param means Vector of means.
+     * @param rng         Random Number Generator.
+     * @param means       Vector of means.
      * @param covariances Covariance matrix.
-     * @throws DimensionMismatchException if the arrays length are
-     * inconsistent.
-     * @throws SingularMatrixException if the eigenvalue decomposition cannot
-     * be performed on the provided covariance matrix.
+     * @throws DimensionMismatchException         if the arrays length are
+     *                                            inconsistent.
+     * @throws SingularMatrixException            if the eigenvalue decomposition cannot
+     *                                            be performed on the provided covariance matrix.
      * @throws NonPositiveDefiniteMatrixException if any of the eigenvalues is
-     * negative.
+     *                                            negative.
      */
     public MultivariateNormalDistribution(RandomGenerator rng,
                                           final double[] means,
                                           final double[][] covariances)
             throws SingularMatrixException,
-                   DimensionMismatchException,
-                   NonPositiveDefiniteMatrixException {
+            DimensionMismatchException,
+            NonPositiveDefiniteMatrixException {
         super(rng, means.length);
 
         final int dim = means.length;
@@ -175,7 +184,9 @@ public class MultivariateNormalDistribution
         return covarianceMatrix.copy();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(final double[] vals) throws DimensionMismatchException {
         final int dim = getDimension();
         if (vals.length != dim) {
@@ -183,8 +194,8 @@ public class MultivariateNormalDistribution
         }
 
         return FastMath.pow(2 * FastMath.PI, -0.5 * dim) *
-            FastMath.pow(covarianceMatrixDeterminant, -0.5) *
-            getExponentTerm(vals);
+                FastMath.pow(covarianceMatrixDeterminant, -0.5) *
+                getExponentTerm(vals);
     }
 
     /**
@@ -203,7 +214,9 @@ public class MultivariateNormalDistribution
         return std;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double[] sample() {
         final int dim = getDimension();

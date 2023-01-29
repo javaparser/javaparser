@@ -28,17 +28,21 @@ import java.io.Serializable;
  */
 public final class IdentityPredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -89901658494523293L;
 
-    /** The value to compare to */
+    /**
+     * The value to compare to
+     */
     private final T iValue;
 
     /**
      * Factory to create the identity predicate.
      *
-     * @param <T> the type that the predicate queries
-     * @param object  the object to compare to
+     * @param <T>    the type that the predicate queries
+     * @param object the object to compare to
      * @return the predicate
      */
     public static <T> Predicate<T> identityPredicate(final T object) {
@@ -52,7 +56,7 @@ public final class IdentityPredicate<T> implements Predicate<T>, Serializable {
      * Constructor that performs no validation.
      * Use <code>identityPredicate</code> if you want that.
      *
-     * @param object  the object to compare to
+     * @param object the object to compare to
      */
     public IdentityPredicate(final T object) {
         super();
@@ -63,7 +67,7 @@ public final class IdentityPredicate<T> implements Predicate<T>, Serializable {
      * Evaluates the predicate returning true if the input object is identical to
      * the stored object.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if input is the same object as the stored value
      */
     @Override

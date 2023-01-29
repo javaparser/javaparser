@@ -31,21 +31,27 @@ import java.io.Serializable;
  */
 public class ConstantTransformer<I, O> implements Transformer<I, O>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 6374440726369055124L;
 
-    /** Returns null each time */
+    /**
+     * Returns null each time
+     */
     @SuppressWarnings("rawtypes")
     public static final Transformer NULL_INSTANCE = new ConstantTransformer<>(null);
 
-    /** The closures to call in turn */
+    /**
+     * The closures to call in turn
+     */
     private final O iConstant;
 
     /**
      * Get a typed null instance.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
+     * @param <I> the input type
+     * @param <O> the output type
      * @return Transformer&lt;I, O&gt; that always returns null.
      */
     @SuppressWarnings("unchecked") // The null transformer works for all object types
@@ -56,9 +62,9 @@ public class ConstantTransformer<I, O> implements Transformer<I, O>, Serializabl
     /**
      * Transformer method that performs validation.
      *
-     * @param <I>  the input type
-     * @param <O>  the output type
-     * @param constantToReturn  the constant object to return each time in the factory
+     * @param <I>              the input type
+     * @param <O>              the output type
+     * @param constantToReturn the constant object to return each time in the factory
      * @return the <code>constant</code> factory.
      */
     public static <I, O> Transformer<I, O> constantTransformer(final O constantToReturn) {
@@ -72,7 +78,7 @@ public class ConstantTransformer<I, O> implements Transformer<I, O>, Serializabl
      * Constructor that performs no validation.
      * Use <code>constantTransformer</code> if you want that.
      *
-     * @param constantToReturn  the constant to return each time
+     * @param constantToReturn the constant to return each time
      */
     public ConstantTransformer(final O constantToReturn) {
         super();
@@ -82,7 +88,7 @@ public class ConstantTransformer<I, O> implements Transformer<I, O>, Serializabl
     /**
      * Transforms the input by ignoring it and returning the stored constant instead.
      *
-     * @param input  the input object which is ignored
+     * @param input the input object which is ignored
      * @return the stored constant
      */
     @Override

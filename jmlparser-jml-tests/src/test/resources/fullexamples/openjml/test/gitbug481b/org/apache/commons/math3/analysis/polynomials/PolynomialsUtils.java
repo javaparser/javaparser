@@ -32,19 +32,29 @@ import java.util.Map;
  */
 public class PolynomialsUtils {
 
-    /** Coefficients for Chebyshev polynomials. */
+    /**
+     * Coefficients for Chebyshev polynomials.
+     */
     private static final List<BigFraction> CHEBYSHEV_COEFFICIENTS;
 
-    /** Coefficients for Hermite polynomials. */
+    /**
+     * Coefficients for Hermite polynomials.
+     */
     private static final List<BigFraction> HERMITE_COEFFICIENTS;
 
-    /** Coefficients for Laguerre polynomials. */
+    /**
+     * Coefficients for Laguerre polynomials.
+     */
     private static final List<BigFraction> LAGUERRE_COEFFICIENTS;
 
-    /** Coefficients for Legendre polynomials. */
+    /**
+     * Coefficients for Legendre polynomials.
+     */
     private static final List<BigFraction> LEGENDRE_COEFFICIENTS;
 
-    /** Coefficients for Jacobi polynomials. */
+    /**
+     * Coefficients for Jacobi polynomials.
+     */
     private static final Map<JacobiKey, List<BigFraction>> JACOBI_COEFFICIENTS;
 
     static {
@@ -94,24 +104,26 @@ public class PolynomialsUtils {
      * polynomials of the first kind</a> are orthogonal polynomials.
      * They can be defined by the following recurrence relations:</p><p>
      * \(
-     *    T_0(x) = 1 \\
-     *    T_1(x) = x \\
-     *    T_{k+1}(x) = 2x T_k(x) - T_{k-1}(x)
+     * T_0(x) = 1 \\
+     * T_1(x) = x \\
+     * T_{k+1}(x) = 2x T_k(x) - T_{k-1}(x)
      * \)
      * </p>
+     *
      * @param degree degree of the polynomial
      * @return Chebyshev polynomial of specified degree
      */
     public static PolynomialFunction createChebyshevPolynomial(final int degree) {
         return buildPolynomial(degree, CHEBYSHEV_COEFFICIENTS,
                 new RecurrenceCoefficientsGenerator() {
-            /** Fixed recurrence coefficients. */
-            private final BigFraction[] coeffs = { BigFraction.ZERO, BigFraction.TWO, BigFraction.ONE };
-            /** {@inheritDoc} */
-            public BigFraction[] generate(int k) {
-                return coeffs;
-            }
-        });
+                    /** Fixed recurrence coefficients. */
+                    private final BigFraction[] coeffs = {BigFraction.ZERO, BigFraction.TWO, BigFraction.ONE};
+
+                    /** {@inheritDoc} */
+                    public BigFraction[] generate(int k) {
+                        return coeffs;
+                    }
+                });
     }
 
     /**
@@ -120,26 +132,26 @@ public class PolynomialsUtils {
      * polynomials</a> are orthogonal polynomials.
      * They can be defined by the following recurrence relations:</p><p>
      * \(
-     *  H_0(x) = 1 \\
-     *  H_1(x) = 2x \\
-     *  H_{k+1}(x) = 2x H_k(X) - 2k H_{k-1}(x)
+     * H_0(x) = 1 \\
+     * H_1(x) = 2x \\
+     * H_{k+1}(x) = 2x H_k(X) - 2k H_{k-1}(x)
      * \)
      * </p>
-
+     *
      * @param degree degree of the polynomial
      * @return Hermite polynomial of specified degree
      */
     public static PolynomialFunction createHermitePolynomial(final int degree) {
         return buildPolynomial(degree, HERMITE_COEFFICIENTS,
                 new RecurrenceCoefficientsGenerator() {
-            /** {@inheritDoc} */
-            public BigFraction[] generate(int k) {
-                return new BigFraction[] {
-                        BigFraction.ZERO,
-                        BigFraction.TWO,
-                        new BigFraction(2 * k)};
-            }
-        });
+                    /** {@inheritDoc} */
+                    public BigFraction[] generate(int k) {
+                        return new BigFraction[]{
+                                BigFraction.ZERO,
+                                BigFraction.TWO,
+                                new BigFraction(2 * k)};
+                    }
+                });
     }
 
     /**
@@ -148,26 +160,27 @@ public class PolynomialsUtils {
      * polynomials</a> are orthogonal polynomials.
      * They can be defined by the following recurrence relations:</p><p>
      * \(
-     *   L_0(x) = 1 \\
-     *   L_1(x) = 1 - x \\
-     *   (k+1) L_{k+1}(x) = (2k + 1 - x) L_k(x) - k L_{k-1}(x)
+     * L_0(x) = 1 \\
+     * L_1(x) = 1 - x \\
+     * (k+1) L_{k+1}(x) = (2k + 1 - x) L_k(x) - k L_{k-1}(x)
      * \)
      * </p>
+     *
      * @param degree degree of the polynomial
      * @return Laguerre polynomial of specified degree
      */
     public static PolynomialFunction createLaguerrePolynomial(final int degree) {
         return buildPolynomial(degree, LAGUERRE_COEFFICIENTS,
                 new RecurrenceCoefficientsGenerator() {
-            /** {@inheritDoc} */
-            public BigFraction[] generate(int k) {
-                final int kP1 = k + 1;
-                return new BigFraction[] {
-                        new BigFraction(2 * k + 1, kP1),
-                        new BigFraction(-1, kP1),
-                        new BigFraction(k, kP1)};
-            }
-        });
+                    /** {@inheritDoc} */
+                    public BigFraction[] generate(int k) {
+                        final int kP1 = k + 1;
+                        return new BigFraction[]{
+                                new BigFraction(2 * k + 1, kP1),
+                                new BigFraction(-1, kP1),
+                                new BigFraction(k, kP1)};
+                    }
+                });
     }
 
     /**
@@ -176,26 +189,27 @@ public class PolynomialsUtils {
      * polynomials</a> are orthogonal polynomials.
      * They can be defined by the following recurrence relations:</p><p>
      * \(
-     *   P_0(x) = 1 \\
-     *   P_1(x) = x \\
-     *   (k+1) P_{k+1}(x) = (2k+1) x P_k(x) - k P_{k-1}(x)
+     * P_0(x) = 1 \\
+     * P_1(x) = x \\
+     * (k+1) P_{k+1}(x) = (2k+1) x P_k(x) - k P_{k-1}(x)
      * \)
      * </p>
+     *
      * @param degree degree of the polynomial
      * @return Legendre polynomial of specified degree
      */
     public static PolynomialFunction createLegendrePolynomial(final int degree) {
         return buildPolynomial(degree, LEGENDRE_COEFFICIENTS,
-                               new RecurrenceCoefficientsGenerator() {
-            /** {@inheritDoc} */
-            public BigFraction[] generate(int k) {
-                final int kP1 = k + 1;
-                return new BigFraction[] {
-                        BigFraction.ZERO,
-                        new BigFraction(k + kP1, kP1),
-                        new BigFraction(k, kP1)};
-            }
-        });
+                new RecurrenceCoefficientsGenerator() {
+                    /** {@inheritDoc} */
+                    public BigFraction[] generate(int k) {
+                        final int kP1 = k + 1;
+                        return new BigFraction[]{
+                                BigFraction.ZERO,
+                                new BigFraction(k + kP1, kP1),
+                                new BigFraction(k, kP1)};
+                    }
+                });
     }
 
     /**
@@ -204,16 +218,17 @@ public class PolynomialsUtils {
      * polynomials</a> are orthogonal polynomials.
      * They can be defined by the following recurrence relations:</p><p>
      * \(
-     *    P_0^{vw}(x) = 1 \\
-     *    P_{-1}^{vw}(x) = 0 \\
-     *    2k(k + v + w)(2k + v + w - 2) P_k^{vw}(x) = \\
-     *    (2k + v + w - 1)[(2k + v + w)(2k + v + w - 2) x + v^2 - w^2] P_{k-1}^{vw}(x) \\
-     *  - 2(k + v - 1)(k + w - 1)(2k + v + w) P_{k-2}^{vw}(x)
+     * P_0^{vw}(x) = 1 \\
+     * P_{-1}^{vw}(x) = 0 \\
+     * 2k(k + v + w)(2k + v + w - 2) P_k^{vw}(x) = \\
+     * (2k + v + w - 1)[(2k + v + w)(2k + v + w - 2) x + v^2 - w^2] P_{k-1}^{vw}(x) \\
+     * - 2(k + v - 1)(k + w - 1)(2k + v + w) P_{k-2}^{vw}(x)
      * \)
      * </p>
+     *
      * @param degree degree of the polynomial
-     * @param v first exponent
-     * @param w second exponent
+     * @param v      first exponent
+     * @param w      second exponent
      * @return Jacobi polynomial of specified degree
      */
     public static PolynomialFunction createJacobiPolynomial(final int degree, final int v, final int w) {
@@ -237,36 +252,44 @@ public class PolynomialsUtils {
         }
 
         return buildPolynomial(degree, JACOBI_COEFFICIENTS.get(key),
-                               new RecurrenceCoefficientsGenerator() {
-            /** {@inheritDoc} */
-            public BigFraction[] generate(int k) {
-                k++;
-                final int kvw      = k + v + w;
-                final int twoKvw   = kvw + k;
-                final int twoKvwM1 = twoKvw - 1;
-                final int twoKvwM2 = twoKvw - 2;
-                final int den      = 2 * k *  kvw * twoKvwM2;
+                new RecurrenceCoefficientsGenerator() {
+                    /** {@inheritDoc} */
+                    public BigFraction[] generate(int k) {
+                        k++;
+                        final int kvw = k + v + w;
+                        final int twoKvw = kvw + k;
+                        final int twoKvwM1 = twoKvw - 1;
+                        final int twoKvwM2 = twoKvw - 2;
+                        final int den = 2 * k * kvw * twoKvwM2;
 
-                return new BigFraction[] {
-                    new BigFraction(twoKvwM1 * (v * v - w * w), den),
-                    new BigFraction(twoKvwM1 * twoKvw * twoKvwM2, den),
-                    new BigFraction(2 * (k + v - 1) * (k + w - 1) * twoKvw, den)
-                };
-            }
-        });
+                        return new BigFraction[]{
+                                new BigFraction(twoKvwM1 * (v * v - w * w), den),
+                                new BigFraction(twoKvwM1 * twoKvw * twoKvwM2, den),
+                                new BigFraction(2 * (k + v - 1) * (k + w - 1) * twoKvw, den)
+                        };
+                    }
+                });
 
     }
 
-    /** Inner class for Jacobi polynomials keys. */
+    /**
+     * Inner class for Jacobi polynomials keys.
+     */
     private static class JacobiKey {
 
-        /** First exponent. */
+        /**
+         * First exponent.
+         */
         private final int v;
 
-        /** Second exponent. */
+        /**
+         * Second exponent.
+         */
         private final int w;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param v first exponent
          * @param w second exponent
          */
@@ -275,7 +298,9 @@ public class PolynomialsUtils {
             this.w = w;
         }
 
-        /** Get hash code.
+        /**
+         * Get hash code.
+         *
          * @return hash code
          */
         @Override
@@ -283,7 +308,9 @@ public class PolynomialsUtils {
             return (v << 16) ^ w;
         }
 
-        /** Check if the instance represent the same key as another instance.
+        /**
+         * Check if the instance represent the same key as another instance.
+         *
          * @param key other key
          * @return true if the instance and the other key refer to the same polynomial
          */
@@ -313,7 +340,7 @@ public class PolynomialsUtils {
      * \(\sum_{i=0}^{n-1} b_i x^i = \sum_{i=0}^{n-1} a_i (x + \Delta)^i\) for all \(x\).
      *
      * @param coefficients Coefficients of the original polynomial.
-     * @param shift Shift value.
+     * @param shift        Shift value.
      * @return the coefficients \(b_i\) of the shifted
      * polynomial.
      */
@@ -324,23 +351,23 @@ public class PolynomialsUtils {
 
         // Pascal triangle.
         final int[][] coeff = new int[dp1][dp1];
-        for (int i = 0; i < dp1; i++){
-            for(int j = 0; j <= i; j++){
+        for (int i = 0; i < dp1; i++) {
+            for (int j = 0; j <= i; j++) {
                 coeff[i][j] = (int) CombinatoricsUtils.binomialCoefficient(i, j);
             }
         }
 
         // First polynomial coefficient.
-        for (int i = 0; i < dp1; i++){
+        for (int i = 0; i < dp1; i++) {
             newCoefficients[0] += coefficients[i] * FastMath.pow(shift, i);
         }
 
         // Superior order.
         final int d = dp1 - 1;
         for (int i = 0; i < d; i++) {
-            for (int j = i; j < d; j++){
+            for (int j = i; j < d; j++) {
                 newCoefficients[i + 1] += coeff[j + 1][j - i] *
-                    coefficients[j + 1] * FastMath.pow(shift, j - i);
+                        coefficients[j + 1] * FastMath.pow(shift, j - i);
             }
         }
 
@@ -348,10 +375,12 @@ public class PolynomialsUtils {
     }
 
 
-    /** Get the coefficients array for a given degree.
-     * @param degree degree of the polynomial
+    /**
+     * Get the coefficients array for a given degree.
+     *
+     * @param degree       degree of the polynomial
      * @param coefficients list where the computed coefficients are stored
-     * @param generator recurrence coefficients generator
+     * @param generator    recurrence coefficients generator
      * @return coefficients array
      */
     private static PolynomialFunction buildPolynomial(final int degree,
@@ -384,10 +413,12 @@ public class PolynomialsUtils {
 
     }
 
-    /** Compute polynomial coefficients up to a given degree.
-     * @param degree maximal degree
-     * @param maxDegree current maximal degree
-     * @param generator recurrence coefficients generator
+    /**
+     * Compute polynomial coefficients up to a given degree.
+     *
+     * @param degree       maximal degree
+     * @param maxDegree    current maximal degree
+     * @param generator    recurrence coefficients generator
      * @param coefficients list where the computed coefficients should be appended
      */
     private static void computeUpToDegree(final int degree, final int maxDegree,
@@ -404,8 +435,8 @@ public class PolynomialsUtils {
             // Pk+1(X) = (a[0] + a[1] X) Pk(X) - a[2] Pk-1(X)
             BigFraction[] ai = generator.generate(k);
 
-            BigFraction ck     = coefficients.get(startK);
-            BigFraction ckm1   = coefficients.get(startKm1);
+            BigFraction ck = coefficients.get(startK);
+            BigFraction ckm1 = coefficients.get(startKm1);
 
             // degree 0 coefficient
             coefficients.add(ck.multiply(ai[0]).subtract(ckm1.multiply(ai[2])));
@@ -413,8 +444,8 @@ public class PolynomialsUtils {
             // degree 1 to degree k-1 coefficients
             for (int i = 1; i < k; ++i) {
                 final BigFraction ckPrev = ck;
-                ck     = coefficients.get(startK + i);
-                ckm1   = coefficients.get(startKm1 + i);
+                ck = coefficients.get(startK + i);
+                ckm1 = coefficients.get(startKm1 + i);
                 coefficients.add(ck.multiply(ai[0]).add(ckPrev.multiply(ai[1])).subtract(ckm1.multiply(ai[2])));
             }
 
@@ -430,10 +461,13 @@ public class PolynomialsUtils {
 
     }
 
-    /** Interface for recurrence coefficients generation. */
+    /**
+     * Interface for recurrence coefficients generation.
+     */
     private interface RecurrenceCoefficientsGenerator {
         /**
          * Generate recurrence coefficients.
+         *
          * @param k highest degree of the polynomials used in the recurrence
          * @return an array of three coefficients such that
          * \( P_{k+1}(x) = (a[0] + a[1] x) P_k(x) - a[2] P_{k-1}(x) \)

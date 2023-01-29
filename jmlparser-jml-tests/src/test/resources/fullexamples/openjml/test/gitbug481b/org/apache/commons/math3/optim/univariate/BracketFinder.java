@@ -32,7 +32,9 @@ import org.apache.commons.math3.util.IntegerSequence;
  * @since 2.2
  */
 public class BracketFinder {
-    /** Tolerance to avoid division by zero. */
+    /**
+     * Tolerance to avoid division by zero.
+     */
     private static final double EPS_MIN = 1e-21;
     /**
      * Golden section.
@@ -73,7 +75,7 @@ public class BracketFinder {
 
     /**
      * Constructor with default values {@code 100, 500} (see the
-     * {@link #BracketFinder(double,int) other constructor}).
+     * {@link #BracketFinder(double, int) other constructor}).
      */
     public BracketFinder() {
         this(100, 500);
@@ -82,9 +84,9 @@ public class BracketFinder {
     /**
      * Create a bracketing interval finder.
      *
-     * @param growLimit Expanding factor.
+     * @param growLimit      Expanding factor.
      * @param maxEvaluations Maximum number of evaluations allowed for finding
-     * a bracketing interval.
+     *                       a bracketing interval.
      */
     public BracketFinder(double growLimit,
                          int maxEvaluations) {
@@ -104,10 +106,10 @@ public class BracketFinder {
      *
      * @param func Function whose optimum should be bracketed.
      * @param goal {@link GoalType Goal type}.
-     * @param xA Initial point.
-     * @param xB Initial point.
+     * @param xA   Initial point.
+     * @param xB   Initial point.
      * @throws TooManyEvaluationsException if the maximum number of evaluations
-     * is exceeded.
+     *                                     is exceeded.
      */
     public void search(UnivariateFunction func,
                        GoalType goal,
@@ -119,8 +121,8 @@ public class BracketFinder {
         double fA = eval(func, xA);
         double fB = eval(func, xB);
         if (isMinim ?
-            fA < fB :
-            fA > fB) {
+                fA < fB :
+                fA > fB) {
 
             double tmp = xA;
             xA = xB;
@@ -148,16 +150,16 @@ public class BracketFinder {
             if ((w - xC) * (xB - w) > 0) {
                 fW = eval(func, w);
                 if (isMinim ?
-                    fW < fC :
-                    fW > fC) {
+                        fW < fC :
+                        fW > fC) {
                     xA = xB;
                     xB = w;
                     fA = fB;
                     fB = fW;
                     break;
                 } else if (isMinim ?
-                           fW > fB :
-                           fW < fB) {
+                        fW > fB :
+                        fW < fB) {
                     xC = w;
                     fC = fW;
                     break;
@@ -170,13 +172,13 @@ public class BracketFinder {
             } else if ((w - wLim) * (xC - w) > 0) {
                 fW = eval(func, w);
                 if (isMinim ?
-                    fW < fC :
-                    fW > fC) {
+                        fW < fC :
+                        fW > fC) {
                     xB = xC;
                     xC = w;
                     w = xC + GOLD * (xC - xB);
                     fB = fC;
-                    fC =fW;
+                    fC = fW;
                     fW = eval(func, w);
                 }
             } else {
@@ -234,6 +236,7 @@ public class BracketFinder {
 
     /**
      * Get function value at {@link #getLo()}.
+     *
      * @return function value at {@link #getLo()}
      */
     public double getFLo() {
@@ -250,6 +253,7 @@ public class BracketFinder {
 
     /**
      * Get function value at {@link #getHi()}.
+     *
      * @return function value at {@link #getHi()}
      */
     public double getFHi() {
@@ -266,6 +270,7 @@ public class BracketFinder {
 
     /**
      * Get function value at {@link #getMid()}.
+     *
      * @return function value at {@link #getMid()}
      */
     public double getFMid() {
@@ -277,7 +282,7 @@ public class BracketFinder {
      * @param x Argument.
      * @return {@code f(x)}
      * @throws TooManyEvaluationsException if the maximal number of evaluations is
-     * exceeded.
+     *                                     exceeded.
      */
     private double eval(UnivariateFunction f, double x) {
         try {

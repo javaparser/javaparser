@@ -30,6 +30,5 @@
  *   <li>Transformed - transforms elements as they are added
  *   <li>Indexed - provides a map-like view onto another collection
  * </ul>
- *
  */
 package org.apache.commons.collections4.collection;

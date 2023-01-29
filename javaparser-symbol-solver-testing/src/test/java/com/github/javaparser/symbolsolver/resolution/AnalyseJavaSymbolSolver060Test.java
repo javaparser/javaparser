@@ -84,13 +84,13 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
 
     /**
      * @param projectName is one of "java-symbol-solver-core", "java-symbol-solver-logic", "java-symbol-solver-model"
-     * @param fileName describes the file being analyzed
+     * @param fileName    describes the file being analyzed
      */
     private void parse(String projectName, String fileName) throws IOException {
         Path sourceFile = src.resolve(projectName + "/" + fileName + ".java");
         OutputStream outErrStream = new ByteArrayOutputStream();
         PrintStream outErr = new PrintStream(outErrStream);
-        
+
         // set configuration to ignore comment
         StaticJavaParser.getConfiguration().setAttributeComments(false);
 
@@ -100,7 +100,7 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         String output = outErrStream.toString();
 
         String path = adaptPath(expectedOutput) + "/" + projectName + "/" + fileName.replaceAll("/", "_") + ".txt";
-        File dstFile = new File(path);  
+        File dstFile = new File(path);
 
         if (DEBUG && (sourceFileInfoExtractor.getFailures() != 0 || sourceFileInfoExtractor.getUnsupported() != 0)) {
             System.err.println(output);

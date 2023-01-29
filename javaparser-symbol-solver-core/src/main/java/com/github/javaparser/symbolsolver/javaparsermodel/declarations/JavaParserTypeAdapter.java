@@ -97,14 +97,14 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     /**
      * This method is deprecated because it receives the TypesSolver as a parameter.
      * Eventually we would like to remove all usages of TypeSolver as a parameter.
-     *
+     * <p>
      * Also, resolution should move out of declarations, so that they are pure declarations and the resolution should
      * work for JavaParser, Reflection and Javassist classes in the same way and not be specific to the three
      * implementations.
      */
     @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
-        if(wrappedNode instanceof NodeWithTypeParameters<?>) {
+        if (wrappedNode instanceof NodeWithTypeParameters<?>) {
             NodeList<TypeParameter> typeParameters = ((NodeWithTypeParameters<?>) wrappedNode).getTypeParameters();
             for (com.github.javaparser.ast.type.TypeParameter typeParameter : typeParameters) {
                 if (typeParameter.getName().getId().equals(name)) {
@@ -157,7 +157,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                 .getParentNode()
                 .map(node -> node.getSymbolResolver().toTypeDeclaration(node));
     }
-    
+
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {
         List<ResolvedFieldDeclaration> fields = new ArrayList<>();
         if (wrappedNode.getMembers() != null) {

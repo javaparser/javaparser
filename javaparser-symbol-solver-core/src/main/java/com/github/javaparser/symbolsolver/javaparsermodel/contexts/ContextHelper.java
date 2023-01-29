@@ -45,7 +45,7 @@ public class ContextHelper {
 
         if (typeDeclaration instanceof MethodUsageResolutionCapability) {
             return ((MethodUsageResolutionCapability) typeDeclaration)
-                           .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
+                    .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
         } else {
             throw new UnsupportedOperationException(typeDeclaration.toString());
         }

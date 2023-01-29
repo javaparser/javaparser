@@ -54,7 +54,8 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author Federico Tomassetti
-a */
+ * a
+ */
 class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;

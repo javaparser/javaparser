@@ -1,61 +1,60 @@
 # JML Parser
 
-This project provides a library for the parsing of Java with 
-the Java Modelling Language (JML). JML is a formal specification 
-for Java to decribe the functional behavior, e.g., 
+This project provides a library for the parsing of Java with
+the Java Modelling Language (JML). JML is a formal specification
+for Java to decribe the functional behavior, e.g.,
 pre- and post-conditions of methods, class and loop invariants.
 
 The bases of this project is the [Java Parser]https://github.com/javaparser/javaparser)
 project, which is extended in the following ways:
 
-* new lexer and grammar rules 
-* new AST classes and also new attributes for `Block`, `WhileStatement`, 
+* new lexer and grammar rules
+* new AST classes and also new attributes for `Block`, `WhileStatement`,
   `ForStatement`, `DoStatement`, and `CallableDeclaration` (constructors and methods).
-* (TODO) extension of the name resolution  
+* (TODO) extension of the name resolution
 
+## JML AST Classes
 
-## JML AST Classes 
-* Behavior 
-* Jmlish 
-  * JmlLogicType 
-  * JmlStatement 
-    * JmlStmtWithExpression 
-    * JmlUnreachableStmt 
-    * JmlGhostStatements 
-    * JmlSetStmt 
-    * JmlRefiningStmt 
-  * JmlName 
-  * JmlClassLevel 
-    * JmlRepresentsDeclaration 
-    * JmlFieldDeclaration 
-    * JmlClassAccessibleDeclaration 
-    * ClassInvariantClause
-  * LocationSetExpression 
-    * LocationSetPrimary 
-    * LocationSetLiftExpression 
-    * LocationSetArrayAccess 
-    * LocationSetBindingExpr 
-    * LocationSetFunction 
-    * LocationSetFieldAccess 
-  * JmlClause 
-    * JmlClauseE 
-    * CapturesClause 
-    * SignalsClause 
-    * OldClause 
-    * JmlClauseHL 
-    * DurationClause 
-    * SignalsOnlyClause 
-    * JmlClauseHE 
-    * CallableClause 
-    * JmlClauseLE 
-    * ForallClause 
-  * JmlContract 
-  * JmlContainer
-    * JmlBodyDeclaration
-    * JmlContracts 
-  * JmlSetComprehension 
-  * JmlStatements 
-
+* Behavior
+* Jmlish
+    * JmlLogicType
+    * JmlStatement
+        * JmlStmtWithExpression
+        * JmlUnreachableStmt
+        * JmlGhostStatements
+        * JmlSetStmt
+        * JmlRefiningStmt
+    * JmlName
+    * JmlClassLevel
+        * JmlRepresentsDeclaration
+        * JmlFieldDeclaration
+        * JmlClassAccessibleDeclaration
+        * ClassInvariantClause
+    * LocationSetExpression
+        * LocationSetPrimary
+        * LocationSetLiftExpression
+        * LocationSetArrayAccess
+        * LocationSetBindingExpr
+        * LocationSetFunction
+        * LocationSetFieldAccess
+    * JmlClause
+        * JmlClauseE
+        * CapturesClause
+        * SignalsClause
+        * OldClause
+        * JmlClauseHL
+        * DurationClause
+        * SignalsOnlyClause
+        * JmlClauseHE
+        * CallableClause
+        * JmlClauseLE
+        * ForallClause
+    * JmlContract
+    * JmlContainer
+        * JmlBodyDeclaration
+        * JmlContracts
+    * JmlSetComprehension
+    * JmlStatements
 
 ```plantuml
 @startuml
@@ -362,7 +361,6 @@ com.github.javaparser.ast.Jmlish <|.. com.github.javaparser.ast.jml.locref.Locat
 com.github.javaparser.ast.Node <|-- com.github.javaparser.ast.jml.locref.LocationSetExpression
 @enduml
 ```
-
 
 ```plantuml
 @startuml

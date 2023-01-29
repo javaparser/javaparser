@@ -1,6 +1,6 @@
 //@ model import org.jmlspecs.models.JMLEqualsToObjectMap;
 
-public class Test < K extends Comparable < K >,O >{
+public class Test<K extends Comparable<K>, O> {
 
     /*@ spec_public nullable @*/ O obj;
 

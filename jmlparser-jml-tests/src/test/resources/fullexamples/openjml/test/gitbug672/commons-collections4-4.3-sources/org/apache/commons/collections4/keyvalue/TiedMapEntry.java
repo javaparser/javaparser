@@ -31,20 +31,26 @@ import java.util.Map;
  */
 public class TiedMapEntry<K, V> implements Map.Entry<K, V>, KeyValue<K, V>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -8453869361373831205L;
 
-    /** The map underlying the entry/iterator */
+    /**
+     * The map underlying the entry/iterator
+     */
     private final Map<K, V> map;
 
-    /** The key */
+    /**
+     * The key
+     */
     private final K key;
 
     /**
      * Constructs a new entry with the given Map and key.
      *
-     * @param map  the map
-     * @param key  the key
+     * @param map the map
+     * @param key the key
      */
     public TiedMapEntry(final Map<K, V> map, final K key) {
         super();
@@ -54,6 +60,7 @@ public class TiedMapEntry<K, V> implements Map.Entry<K, V>, KeyValue<K, V>, Seri
 
     // Map.Entry interface
     //-------------------------------------------------------------------------
+
     /**
      * Gets the key of this entry
      *
@@ -77,7 +84,7 @@ public class TiedMapEntry<K, V> implements Map.Entry<K, V>, KeyValue<K, V>, Seri
     /**
      * Sets the value associated with the key direct onto the map.
      *
-     * @param value  the new value
+     * @param value the new value
      * @return the old value
      * @throws IllegalArgumentException if the value is set to this map entry
      */
@@ -94,7 +101,7 @@ public class TiedMapEntry<K, V> implements Map.Entry<K, V>, KeyValue<K, V>, Seri
      * <p>
      * Implemented per API documentation of {@link java.util.Map.Entry#equals(Object)}
      *
-     * @param obj  the object to compare to
+     * @param obj the object to compare to
      * @return true if equal key and value
      */
     @Override
@@ -105,11 +112,11 @@ public class TiedMapEntry<K, V> implements Map.Entry<K, V>, KeyValue<K, V>, Seri
         if (obj instanceof Map.Entry == false) {
             return false;
         }
-        final Map.Entry<?,?> other = (Map.Entry<?,?>) obj;
+        final Map.Entry<?, ?> other = (Map.Entry<?, ?>) obj;
         final Object value = getValue();
         return
-            (key == null ? other.getKey() == null : key.equals(other.getKey())) &&
-            (value == null ? other.getValue() == null : value.equals(other.getValue()));
+                (key == null ? other.getKey() == null : key.equals(other.getKey())) &&
+                        (value == null ? other.getValue() == null : value.equals(other.getValue()));
     }
 
     /**
@@ -123,7 +130,7 @@ public class TiedMapEntry<K, V> implements Map.Entry<K, V>, KeyValue<K, V>, Seri
     public int hashCode() {
         final Object value = getValue();
         return (getKey() == null ? 0 : getKey().hashCode()) ^
-               (value == null ? 0 : value.hashCode());
+                (value == null ? 0 : value.hashCode());
     }
 
     /**

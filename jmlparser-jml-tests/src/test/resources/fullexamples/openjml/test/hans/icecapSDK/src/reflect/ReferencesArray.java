@@ -6,33 +6,33 @@ import vm.Address32Bit;
 import vm.HardwareObject;
 
 public class ReferencesArray extends HardwareObject {
-	private short value;
+    private short value;
 
-	@IcecapCompileMe
-	public ReferencesArray(int address) {
-		super(new Address32Bit(address));
-	}
+    @IcecapCompileMe
+    public ReferencesArray(int address) {
+        super(new Address32Bit(address));
+    }
 
-	public ReferencesArray() {
-		super(new Address32Bit(0));
-	}
+    public ReferencesArray() {
+        super(new Address32Bit(0));
+    }
 
-	@IcecapCompileMe
-	public byte getShortReferences() {
-		return (byte) (value >> 8);
-	}
+    @IcecapCompileMe
+    public byte getShortReferences() {
+        return (byte) (value >> 8);
+    }
 
-	@IcecapCompileMe
-	public byte getByteReferences() {
-		return (byte) (value & 0xff);
-	}
+    @IcecapCompileMe
+    public byte getByteReferences() {
+        return (byte) (value & 0xff);
+    }
 
-	public short nextShort() {
-		address.add(2);
-		return value;
-	}
+    public short nextShort() {
+        address.add(2);
+        return value;
+    }
 
-	public void setAddress(Address address) {
-		super.address = address;
-	}
+    public void setAddress(Address address) {
+        super.address = address;
+    }
 }

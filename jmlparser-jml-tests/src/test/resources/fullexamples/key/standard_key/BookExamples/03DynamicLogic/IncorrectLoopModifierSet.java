@@ -12,12 +12,12 @@ class IncorrectLoopModifierSet {
       @  ensures a==0;
       @  diverges true; 
       @*/
-    void dummy(int i) {	
-	while ( i<10 ) {
-	    if ( i>0 ) {
-		a = 5;
-	    }
-	    i=i+1;
-	}
+    void dummy(int i) {
+        while (i < 10) {
+            if (i > 0) {
+                a = 5;
+            }
+            i = i + 1;
+        }
     }
 }

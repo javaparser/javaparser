@@ -24,16 +24,15 @@ import java.util.Set;
  *
  * @param <K> the type of the keys in this map
  * @param <V> the type of the values in this map
- *
- * @since 4.0
  * @see Put
+ * @since 4.0
  */
 public interface Get<K, V> {
 
     /**
      * @param key key whose presence in this map is to be tested
      * @return <code>true</code> if this map contains a mapping for the specified
-     *         key
+     * key
      * @see java.util.Map#containsKey(Object)
      */
     boolean containsKey(Object key);
@@ -41,7 +40,7 @@ public interface Get<K, V> {
     /**
      * @param value value whose presence in this map is to be tested
      * @return <code>true</code> if this map maps one or more keys to the
-     *         specified value
+     * specified value
      * @see java.util.Map#containsValue(Object)
      */
     boolean containsValue(Object value);
@@ -55,7 +54,7 @@ public interface Get<K, V> {
     /**
      * @param key the key whose associated value is to be returned
      * @return the value to which the specified key is mapped, or
-     *         {@code null} if this map contains no mapping for the key
+     * {@code null} if this map contains no mapping for the key
      * @see java.util.Map#get(Object)
      */
     V get(Object key);
@@ -63,7 +62,7 @@ public interface Get<K, V> {
     /**
      * @param key key whose mapping is to be removed from the map
      * @return the previous value associated with <code>key</code>, or
-     *         <code>null</code> if there was no mapping for <code>key</code>.
+     * <code>null</code> if there was no mapping for <code>key</code>.
      * @see java.util.Map#remove(Object)
      */
     V remove(Object key);

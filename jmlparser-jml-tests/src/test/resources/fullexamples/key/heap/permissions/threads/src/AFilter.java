@@ -1,10 +1,10 @@
 public final class AFilter extends ThreadSpec2 {
 
-        //@ accessible<heap> \inv : \nothing;
-        //@ accessible<permissions> \inv : \nothing;
+    //@ accessible<heap> \inv : \nothing;
+    //@ accessible<permissions> \inv : \nothing;
 
-        private /*@ nullable spec_public @*/ Buffer buffer;
-        private /*@ nullable spec_public @*/ Sampler sampler;
+    private /*@ nullable spec_public @*/ Buffer buffer;
+    private /*@ nullable spec_public @*/ Sampler sampler;
 
 /*
               \permission(this.buffer.inp) ==
@@ -27,7 +27,7 @@ public final class AFilter extends ThreadSpec2 {
             );
         } @*/
 
-        // TODO!!? (permissions are established by joinTransfer)
+    // TODO!!? (permissions are established by joinTransfer)
         /*@ helper model boolean postJoin(Object contextThread) {
               return true;
             } @*/ 
@@ -77,25 +77,26 @@ public final class AFilter extends ThreadSpec2 {
                  )
                ); } @*/
 
-        public /*@ helper @*/ void run() {
-            sampler.join(); // all permissions on buffer.inp from sampler to ct
-            this.buffer.outa = this.buffer.inp; // dummy read & write operation
-        }
+    public /*@ helper @*/ void run() {
+        sampler.join(); // all permissions on buffer.inp from sampler to ct
+        this.buffer.outa = this.buffer.inp; // dummy read & write operation
+    }
 
-        /*@ normal_behavior
-            requires \dl_currentThread() != s;
-            requires s.stateInv();
-            requires s.buffer == b;
-            ensures initPost();
-            ensures this.buffer == b;
-            ensures this.sampler == s;
-            ensures stateInv();
-            assignable \nothing;
-            assignable<permissions> \nothing; @*/
-        /*@ helper @*/ public AFilter(Sampler s, Buffer b) {
-            this.sampler = s;
-            this.buffer = b;
-        }
+    /*@ normal_behavior
+        requires \dl_currentThread() != s;
+        requires s.stateInv();
+        requires s.buffer == b;
+        ensures initPost();
+        ensures this.buffer == b;
+        ensures this.sampler == s;
+        ensures stateInv();
+        assignable \nothing;
+        assignable<permissions> \nothing; @*/
+    /*@ helper @*/
+    public AFilter(Sampler s, Buffer b) {
+        this.sampler = s;
+        this.buffer = b;
+    }
 }
 
 

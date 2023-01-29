@@ -28,10 +28,12 @@ import org.apache.commons.math3.exception.TooManyEvaluationsException;
  * @since 3.1
  */
 public abstract class AbstractUnivariateDifferentiableSolver
-    extends BaseAbstractUnivariateSolver<UnivariateDifferentiableFunction>
-    implements UnivariateDifferentiableSolver {
+        extends BaseAbstractUnivariateSolver<UnivariateDifferentiableFunction>
+        implements UnivariateDifferentiableSolver {
 
-    /** Function to solve. */
+    /**
+     * Function to solve.
+     */
     private UnivariateDifferentiableFunction function;
 
     /**
@@ -46,8 +48,8 @@ public abstract class AbstractUnivariateDifferentiableSolver
     /**
      * Construct a solver with given accuracies.
      *
-     * @param relativeAccuracy Maximum relative error.
-     * @param absoluteAccuracy Maximum absolute error.
+     * @param relativeAccuracy      Maximum relative error.
+     * @param absoluteAccuracy      Maximum absolute error.
      * @param functionValueAccuracy Maximum function value error.
      */
     protected AbstractUnivariateDifferentiableSolver(final double relativeAccuracy,
@@ -61,11 +63,10 @@ public abstract class AbstractUnivariateDifferentiableSolver
      *
      * @param point Point at which the objective function must be evaluated.
      * @return the objective function value and derivative at specified point.
-     * @throws TooManyEvaluationsException
-     * if the maximal number of evaluations is exceeded.
+     * @throws TooManyEvaluationsException if the maximal number of evaluations is exceeded.
      */
     protected DerivativeStructure computeObjectiveValueAndDerivative(double point)
-        throws TooManyEvaluationsException {
+            throws TooManyEvaluationsException {
         incrementEvaluationCount();
         return function.value(new DerivativeStructure(1, 1, 0, point));
     }

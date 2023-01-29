@@ -38,13 +38,19 @@ import java.util.Set;
  */
 public final class MapBackedSet<E, V> implements Set<E>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 6723912213766056587L;
 
-    /** The map being used as the backing store */
+    /**
+     * The map being used as the backing store
+     */
     private final Map<E, ? super V> map;
 
-    /** The dummyValue to use */
+    /**
+     * The dummyValue to use
+     */
     private final V dummyValue;
 
     /**
@@ -52,7 +58,7 @@ public final class MapBackedSet<E, V> implements Set<E>, Serializable {
      *
      * @param <E> the element type
      * @param <V> the dummy value type in the map
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @return a new map backed set
      * @throws NullPointerException if map is null
      * @since 4.0
@@ -64,10 +70,10 @@ public final class MapBackedSet<E, V> implements Set<E>, Serializable {
     /**
      * Factory method to create a set from a map.
      *
-     * @param <E> the element type
-     * @param <V> the dummy value type in the map
-     * @param map  the map to decorate, must not be null
-     * @param dummyValue  the dummy value to use
+     * @param <E>        the element type
+     * @param <V>        the dummy value type in the map
+     * @param map        the map to decorate, must not be null
+     * @param dummyValue the dummy value to use
      * @return a new map backed set
      * @throws NullPointerException if map is null
      * @since 4.0
@@ -77,11 +83,12 @@ public final class MapBackedSet<E, V> implements Set<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
-     * @param dummyValue  the dummy value to use
+     * @param map        the map to decorate, must not be null
+     * @param dummyValue the dummy value to use
      * @throws NullPointerException if map is null
      */
     private MapBackedSet(final Map<E, ? super V> map, final V dummyValue) {

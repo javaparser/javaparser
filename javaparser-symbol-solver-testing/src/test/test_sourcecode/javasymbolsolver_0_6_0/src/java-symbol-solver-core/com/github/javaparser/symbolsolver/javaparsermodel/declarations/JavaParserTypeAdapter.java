@@ -113,7 +113,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
 
     public Optional<ReferenceTypeDeclaration> containerType() {
         Optional<Node> parent = wrappedNode.getParentNode();
-        return parent.isPresent() ? 
+        return parent.isPresent() ?
                 Optional.of(JavaParserFactory.toTypeDeclaration(parent.get(), typeSolver)) :
                 Optional.empty();
     }

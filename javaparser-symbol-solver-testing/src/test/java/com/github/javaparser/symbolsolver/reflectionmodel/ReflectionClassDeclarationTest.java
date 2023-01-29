@@ -218,9 +218,9 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, List<E>, RandomAccess
         assertEquals(ImmutableSet.of(Serializable.class.getCanonicalName(),
-                Cloneable.class.getCanonicalName(),
-                List.class.getCanonicalName(),
-                RandomAccess.class.getCanonicalName()),
+                        Cloneable.class.getCanonicalName(),
+                        List.class.getCanonicalName(),
+                        RandomAccess.class.getCanonicalName()),
                 arraylist.getInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
@@ -230,11 +230,11 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         // Serializable, Cloneable, Iterable<E>, Collection<E>, List<E>, RandomAccess
         assertEquals(ImmutableSet.of(Serializable.class.getCanonicalName(),
-                Cloneable.class.getCanonicalName(),
-                List.class.getCanonicalName(),
-                RandomAccess.class.getCanonicalName(),
-                Collection.class.getCanonicalName(),
-                Iterable.class.getCanonicalName()),
+                        Cloneable.class.getCanonicalName(),
+                        List.class.getCanonicalName(),
+                        RandomAccess.class.getCanonicalName(),
+                        Collection.class.getCanonicalName(),
+                        Iterable.class.getCanonicalName()),
                 arraylist.getAllInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
@@ -243,8 +243,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         TypeSolver typeResolver = new ReflectionTypeSolver();
         ResolvedClassDeclaration arraylist = new ReflectionClassDeclaration(ArrayList.class, typeResolver);
         assertEquals(ImmutableSet.of(Object.class.getCanonicalName(),
-                AbstractCollection.class.getCanonicalName(),
-                AbstractList.class.getCanonicalName()),
+                        AbstractCollection.class.getCanonicalName(),
+                        AbstractList.class.getCanonicalName()),
                 arraylist.getAllSuperClasses().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
         ResolvedClassDeclaration string = new ReflectionClassDeclaration(String.class, typeResolver);
         assertEquals(ImmutableSet.of(Object.class.getCanonicalName()),
@@ -403,11 +403,11 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         ReflectionClassDeclaration coid = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
 
         assertEquals(ImmutableSet.of("com.github.javaparser.ast.nodeTypes.NodeWithExtends",
-                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
-                "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
-                "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
-                "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters",
-                "com.github.javaparser.resolution.Resolvable"),
+                        "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier",
+                        "com.github.javaparser.ast.nodeTypes.NodeWithImplements",
+                        "com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAbstractModifier",
+                        "com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters",
+                        "com.github.javaparser.resolution.Resolvable"),
                 coid.getInterfaces().stream().map(i -> i.getQualifiedName()).collect(Collectors.toSet()));
     }
 
@@ -455,8 +455,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetAllInterfacesWithoutParameters() {
         ReflectionClassDeclaration compilationUnit = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.CompilationUnit");
         assertEquals(ImmutableSet.of("java.lang.Cloneable", "com.github.javaparser.ast.visitor.Visitable", "com.github.javaparser.ast.observer.Observable",
-                "com.github.javaparser.HasParentNode", "com.github.javaparser.ast.nodeTypes.NodeWithRange",
-                "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange").stream().sorted().collect(Collectors.toList()),
+                        "com.github.javaparser.HasParentNode", "com.github.javaparser.ast.nodeTypes.NodeWithRange",
+                        "com.github.javaparser.ast.nodeTypes.NodeWithTokenRange").stream().sorted().collect(Collectors.toList()),
                 compilationUnit.getAllInterfaces().stream().map(i -> i.getQualifiedName()).sorted().collect(Collectors.toList()));
 
         ReflectionClassDeclaration coid = (ReflectionClassDeclaration) typeResolver.solveType("com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
@@ -825,7 +825,8 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
 
     public static class ClassWithSyntheticConstructor {
 
-        private ClassWithSyntheticConstructor() {}
+        private ClassWithSyntheticConstructor() {
+        }
 
         public static ClassWithSyntheticConstructor newInstance() {
             return ClassWithSyntheticConstructorHelper.create();

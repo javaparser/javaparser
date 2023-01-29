@@ -43,6 +43,7 @@ class SwitchStmtTest {
         assertEquals(STATEMENT_GROUP, switchStmt.getEntry(2).getType());
         assertEquals(new NodeList<>(), switchStmt.getEntry(2).getLabels());
     }
+
     @Test
     void jep325Example1() {
         SwitchStmt switchStmt = parseStatement("switch (day) {\n" +
@@ -54,7 +55,6 @@ class SwitchStmtTest {
 
         assertEquals(EXPRESSION, switchStmt.getEntry(0).getType());
     }
-
 
 
 }

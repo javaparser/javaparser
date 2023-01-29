@@ -98,6 +98,7 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
         return parameter;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlSignalsClause setParameter(final Parameter parameter) {
         assertNotNull(parameter);
         if (parameter == this.parameter) {
@@ -112,6 +113,7 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
@@ -128,6 +130,7 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlSignalsClause clone() {
         return (JmlSignalsClause) accept(new CloneVisitor(), null);
     }

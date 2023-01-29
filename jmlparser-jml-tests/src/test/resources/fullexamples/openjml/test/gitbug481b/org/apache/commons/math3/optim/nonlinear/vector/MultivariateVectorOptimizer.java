@@ -33,12 +33,18 @@ import org.apache.commons.math3.optim.PointVectorValuePair;
  */
 @Deprecated
 public abstract class MultivariateVectorOptimizer
-    extends BaseMultivariateOptimizer<PointVectorValuePair> {
-    /** Target values for the model function at optimum. */
+        extends BaseMultivariateOptimizer<PointVectorValuePair> {
+    /**
+     * Target values for the model function at optimum.
+     */
     private double[] target;
-    /** Weight matrix. */
+    /**
+     * Weight matrix.
+     */
     private RealMatrix weightMatrix;
-    /** Model function. */
+    /**
+     * Model function.
+     */
     private MultivariateVectorFunction model;
 
     /**
@@ -56,7 +62,7 @@ public abstract class MultivariateVectorOptimizer
      * @param params Point at which the objective function must be evaluated.
      * @return the objective function value at the specified point.
      * @throws TooManyEvaluationsException if the maximal number of evaluations
-     * (of the model vector function) is exceeded.
+     *                                     (of the model vector function) is exceeded.
      */
     protected double[] computeObjectiveValue(double[] params) {
         super.incrementEvaluationCount();
@@ -67,23 +73,23 @@ public abstract class MultivariateVectorOptimizer
      * {@inheritDoc}
      *
      * @param optData Optimization data. In addition to those documented in
-     * {@link BaseMultivariateOptimizer#parseOptimizationData(OptimizationData[])
-     * BaseMultivariateOptimizer}, this method will register the following data:
-     * <ul>
-     *  <li>{@link Target}</li>
-     *  <li>{@link Weight}</li>
-     *  <li>{@link ModelFunction}</li>
-     * </ul>
+     *                {@link BaseMultivariateOptimizer#parseOptimizationData(OptimizationData[])
+     *                BaseMultivariateOptimizer}, this method will register the following data:
+     *                <ul>
+     *                 <li>{@link Target}</li>
+     *                 <li>{@link Weight}</li>
+     *                 <li>{@link ModelFunction}</li>
+     *                </ul>
      * @return {@inheritDoc}
      * @throws TooManyEvaluationsException if the maximal number of
-     * evaluations is exceeded.
-     * @throws DimensionMismatchException if the initial guess, target, and weight
-     * arguments have inconsistent dimensions.
+     *                                     evaluations is exceeded.
+     * @throws DimensionMismatchException  if the initial guess, target, and weight
+     *                                     arguments have inconsistent dimensions.
      */
     @Override
     public PointVectorValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException,
-               DimensionMismatchException {
+            throws TooManyEvaluationsException,
+            DimensionMismatchException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }
@@ -96,6 +102,7 @@ public abstract class MultivariateVectorOptimizer
     public RealMatrix getWeight() {
         return weightMatrix.copy();
     }
+
     /**
      * Gets the observed values to be matched by the objective vector
      * function.
@@ -120,11 +127,11 @@ public abstract class MultivariateVectorOptimizer
      * characterize the problem.
      *
      * @param optData Optimization data. The following data will be looked for:
-     * <ul>
-     *  <li>{@link Target}</li>
-     *  <li>{@link Weight}</li>
-     *  <li>{@link ModelFunction}</li>
-     * </ul>
+     *                <ul>
+     *                 <li>{@link Target}</li>
+     *                 <li>{@link Weight}</li>
+     *                 <li>{@link ModelFunction}</li>
+     *                </ul>
      */
     @Override
     protected void parseOptimizationData(OptimizationData... optData) {
@@ -156,12 +163,12 @@ public abstract class MultivariateVectorOptimizer
      * Check parameters consistency.
      *
      * @throws DimensionMismatchException if {@link #target} and
-     * {@link #weightMatrix} have inconsistent dimensions.
+     *                                    {@link #weightMatrix} have inconsistent dimensions.
      */
     private void checkParameters() {
         if (target.length != weightMatrix.getColumnDimension()) {
             throw new DimensionMismatchException(target.length,
-                                                 weightMatrix.getColumnDimension());
+                    weightMatrix.getColumnDimension());
         }
     }
 }

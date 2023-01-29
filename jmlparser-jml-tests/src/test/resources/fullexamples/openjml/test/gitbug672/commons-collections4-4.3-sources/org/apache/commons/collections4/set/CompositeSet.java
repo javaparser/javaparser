@@ -43,13 +43,19 @@ import java.util.*;
  */
 public class CompositeSet<E> implements Set<E>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 5185069727540378940L;
 
-    /** SetMutator to handle changes to the collection */
+    /**
+     * SetMutator to handle changes to the collection
+     */
     private SetMutator<E> mutator;
 
-    /** Sets in the composite */
+    /**
+     * Sets in the composite
+     */
     private final List<Set<E>> all = new ArrayList<>();
 
     /**
@@ -62,7 +68,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
     /**
      * Create a CompositeSet with just <code>set</code> composited.
      *
-     * @param set  the initial set in the composite
+     * @param set the initial set in the composite
      */
     public CompositeSet(final Set<E> set) {
         super();
@@ -72,7 +78,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
     /**
      * Create a composite set with sets as the initial set of composited Sets.
      *
-     * @param sets  the initial sets in the composite
+     * @param sets the initial sets in the composite
      */
     public CompositeSet(final Set<E>... sets) {
         super();
@@ -80,6 +86,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the size of this composite set.
      * <p>
@@ -118,7 +125,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * <p>
      * This implementation calls <code>contains()</code> on each set.
      *
-     * @param obj  the object to search for
+     * @param obj the object to search for
      * @return true if obj is contained in any of the contained sets
      */
     @Override
@@ -137,8 +144,8 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * This implementation uses an <code>IteratorChain</code>.
      *
      * @return an <code>IteratorChain</code> instance which supports
-     *  <code>remove()</code>. Iteration occurs over contained collections in
-     *  the order they were added, but this behavior should not be relied upon.
+     * <code>remove()</code>. Iteration occurs over contained collections in
+     * the order they were added, but this behavior should not be relied upon.
      * @see IteratorChain
      */
     @Override
@@ -172,8 +179,8 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * Returns an object array, populating the supplied array if possible.
      * See <code>Collection</code> interface for full details.
      *
-     * @param <T>  the type of the elements in the collection
-     * @param array  the array to use, populating if possible
+     * @param <T>   the type of the elements in the collection
+     * @param array the array to use, populating if possible
      * @return an array of all the elements in the collection
      */
     @Override
@@ -203,18 +210,18 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * Adds an object to the collection, throwing UnsupportedOperationException
      * unless a SetMutator strategy is specified.
      *
-     * @param obj  the object to add
+     * @param obj the object to add
      * @return {@code true} if the collection was modified
      * @throws UnsupportedOperationException if SetMutator hasn't been set or add is unsupported
-     * @throws ClassCastException if the object cannot be added due to its type
-     * @throws NullPointerException if the object cannot be added because its null
-     * @throws IllegalArgumentException if the object cannot be added
+     * @throws ClassCastException            if the object cannot be added due to its type
+     * @throws NullPointerException          if the object cannot be added because its null
+     * @throws IllegalArgumentException      if the object cannot be added
      */
     @Override
     public boolean add(final E obj) {
         if (mutator == null) {
-           throw new UnsupportedOperationException(
-               "add() is not supported on CompositeSet without a SetMutator strategy");
+            throw new UnsupportedOperationException(
+                    "add() is not supported on CompositeSet without a SetMutator strategy");
         }
         return mutator.add(this, all, obj);
     }
@@ -223,7 +230,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * If a <code>CollectionMutator</code> is defined for this CompositeSet then this
      * method will be called anyway.
      *
-     * @param obj  object to be removed
+     * @param obj object to be removed
      * @return true if the object is removed, false otherwise
      */
     @Override
@@ -242,7 +249,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * This implementation calls <code>contains()</code> for each element in the
      * specified collection.
      *
-     * @param coll  the collection to check for
+     * @param coll the collection to check for
      * @return true if all elements contained
      */
     @Override
@@ -259,18 +266,18 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * Adds a collection of elements to this composite, throwing
      * UnsupportedOperationException unless a SetMutator strategy is specified.
      *
-     * @param coll  the collection to add
+     * @param coll the collection to add
      * @return true if the composite was modified
      * @throws UnsupportedOperationException if SetMutator hasn't been set or add is unsupported
-     * @throws ClassCastException if the object cannot be added due to its type
-     * @throws NullPointerException if the object cannot be added because its null
-     * @throws IllegalArgumentException if the object cannot be added
+     * @throws ClassCastException            if the object cannot be added due to its type
+     * @throws NullPointerException          if the object cannot be added because its null
+     * @throws IllegalArgumentException      if the object cannot be added
      */
     @Override
     public boolean addAll(final Collection<? extends E> coll) {
         if (mutator == null) {
             throw new UnsupportedOperationException(
-                "addAll() is not supported on CompositeSet without a SetMutator strategy");
+                    "addAll() is not supported on CompositeSet without a SetMutator strategy");
         }
         return mutator.addAll(this, all, coll);
     }
@@ -280,7 +287,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * <p>
      * This implementation calls <code>removeAll</code> on each collection.
      *
-     * @param coll  the collection to remove
+     * @param coll the collection to remove
      * @return true if the composite was modified
      * @throws UnsupportedOperationException if removeAll is unsupported
      */
@@ -302,7 +309,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
      * <p>
      * This implementation calls <code>retainAll()</code> on each collection.
      *
-     * @param coll  the collection to remove
+     * @param coll the collection to remove
      * @return true if the composite was modified
      * @throws UnsupportedOperationException if retainAll is unsupported
      */
@@ -330,10 +337,11 @@ public class CompositeSet<E> implements Set<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Specify a SetMutator strategy instance to handle changes.
      *
-     * @param mutator  the mutator to use
+     * @param mutator the mutator to use
      */
     public void setMutator(final SetMutator<E> mutator) {
         this.mutator = mutator;
@@ -342,10 +350,10 @@ public class CompositeSet<E> implements Set<E>, Serializable {
     /**
      * Add a Set to this composite.
      *
-     * @param set  the set to add
-     * @throws IllegalArgumentException if a SetMutator is set, but fails to resolve a collision
+     * @param set the set to add
+     * @throws IllegalArgumentException      if a SetMutator is set, but fails to resolve a collision
      * @throws UnsupportedOperationException if there is no SetMutator set
-     * @throws NullPointerException if {@code set} is null
+     * @throws NullPointerException          if {@code set} is null
      * @see SetMutator
      */
     public synchronized void addComposited(final Set<E> set) {
@@ -354,12 +362,12 @@ public class CompositeSet<E> implements Set<E>, Serializable {
             if (intersects.size() > 0) {
                 if (this.mutator == null) {
                     throw new UnsupportedOperationException(
-                        "Collision adding composited set with no SetMutator set");
+                            "Collision adding composited set with no SetMutator set");
                 }
                 getMutator().resolveCollision(this, existingSet, set, intersects);
                 if (CollectionUtils.intersection(existingSet, set).size() > 0) {
                     throw new IllegalArgumentException(
-                        "Attempt to add illegal entry unresolved by SetMutator.resolveCollision()");
+                            "Attempt to add illegal entry unresolved by SetMutator.resolveCollision()");
                 }
             }
         }
@@ -369,8 +377,8 @@ public class CompositeSet<E> implements Set<E>, Serializable {
     /**
      * Add these Sets to the list of sets in this composite.
      *
-     * @param set1  the first Set to be appended to the composite
-     * @param set2  the second Set to be appended to the composite
+     * @param set1 the first Set to be appended to the composite
+     * @param set2 the second Set to be appended to the composite
      */
     public void addComposited(final Set<E> set1, final Set<E> set2) {
         addComposited(set1);
@@ -380,7 +388,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
     /**
      * Add these Sets to the list of sets in this composite
      *
-     * @param sets  the Sets to be appended to the composite
+     * @param sets the Sets to be appended to the composite
      */
     public void addComposited(final Set<E>... sets) {
         for (final Set<E> set : sets) {
@@ -391,18 +399,19 @@ public class CompositeSet<E> implements Set<E>, Serializable {
     /**
      * Removes a set from those being decorated in this composite.
      *
-     * @param set  set to be removed
+     * @param set set to be removed
      */
     public void removeComposited(final Set<E> set) {
         all.remove(set);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns a new Set containing all of the elements.
      *
      * @return A new HashSet containing all of the elements in this composite.
-     *   The new collection is <i>not</i> backed by this composite.
+     * The new collection is <i>not</i> backed by this composite.
      */
     public Set<E> toSet() {
         return new HashSet<>(this);
@@ -419,6 +428,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
 
     /**
      * Get the set mutator to be used for this CompositeSet.
+     *
      * @return the set mutator
      */
     protected SetMutator<E> getMutator() {
@@ -427,6 +437,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
 
     /**
      * {@inheritDoc}
+     *
      * @see java.util.Set#equals
      */
     @Override
@@ -440,6 +451,7 @@ public class CompositeSet<E> implements Set<E>, Serializable {
 
     /**
      * {@inheritDoc}
+     *
      * @see java.util.Set#hashCode
      */
     @Override
@@ -459,32 +471,32 @@ public class CompositeSet<E> implements Set<E>, Serializable {
         /**
          * Called when an object is to be added to the composite.
          *
-         * @param composite  the CompositeSet being changed
-         * @param sets  all of the Set instances in this CompositeSet
-         * @param obj  the object being added
+         * @param composite the CompositeSet being changed
+         * @param sets      all of the Set instances in this CompositeSet
+         * @param obj       the object being added
          * @return true if the collection is changed
          * @throws UnsupportedOperationException if add is unsupported
-         * @throws ClassCastException if the object cannot be added due to its type
-         * @throws NullPointerException if the object cannot be added because its null
-         * @throws IllegalArgumentException if the object cannot be added
+         * @throws ClassCastException            if the object cannot be added due to its type
+         * @throws NullPointerException          if the object cannot be added because its null
+         * @throws IllegalArgumentException      if the object cannot be added
          */
         boolean add(CompositeSet<E> composite, List<Set<E>> sets, E obj);
 
         /**
          * Called when a collection is to be added to the composite.
          *
-         * @param composite  the CompositeSet being changed
-         * @param sets  all of the Set instances in this CompositeSet
-         * @param coll  the collection being added
+         * @param composite the CompositeSet being changed
+         * @param sets      all of the Set instances in this CompositeSet
+         * @param coll      the collection being added
          * @return true if the collection is changed
          * @throws UnsupportedOperationException if add is unsupported
-         * @throws ClassCastException if the object cannot be added due to its type
-         * @throws NullPointerException if the object cannot be added because its null
-         * @throws IllegalArgumentException if the object cannot be added
+         * @throws ClassCastException            if the object cannot be added due to its type
+         * @throws NullPointerException          if the object cannot be added because its null
+         * @throws IllegalArgumentException      if the object cannot be added
          */
         boolean addAll(CompositeSet<E> composite,
-                              List<Set<E>> sets,
-                              Collection<? extends E> coll);
+                       List<Set<E>> sets,
+                       Collection<? extends E> coll);
 
         /**
          * Called when a Set is added to the CompositeSet and there is a
@@ -493,14 +505,14 @@ public class CompositeSet<E> implements Set<E>, Serializable {
          * If <code>added</code> and <code>existing</code> still have any intersects
          * after this method returns an IllegalArgumentException will be thrown.
          *
-         * @param comp  the CompositeSet being modified
-         * @param existing  the Set already existing in the composite
-         * @param added  the Set being added to the composite
-         * @param intersects  the intersection of the existing and added sets
+         * @param comp       the CompositeSet being modified
+         * @param existing   the Set already existing in the composite
+         * @param added      the Set being added to the composite
+         * @param intersects the intersection of the existing and added sets
          */
         void resolveCollision(CompositeSet<E> comp,
-                                     Set<E> existing,
-                                     Set<E> added,
-                                     Collection<E> intersects);
+                              Set<E> existing,
+                              Set<E> added,
+                              Collection<E> intersects);
     }
 }

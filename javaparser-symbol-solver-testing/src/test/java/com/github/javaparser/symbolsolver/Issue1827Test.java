@@ -36,7 +36,7 @@ public class Issue1827Test extends AbstractResolutionTest {
 
     @Test
     public void solveParametrizedParametersConstructor() {
-        
+
         String src = "public class ParametrizedParametersConstructor {\n"
                 + "    public void foo() {\n"
                 + "        EClass arg = new EClass();\n"
@@ -54,7 +54,7 @@ public class Issue1827Test extends AbstractResolutionTest {
                 + "\n"
                 + "interface BaseType<T> {\n"
                 + "}";
-        
+
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
         StaticJavaParser

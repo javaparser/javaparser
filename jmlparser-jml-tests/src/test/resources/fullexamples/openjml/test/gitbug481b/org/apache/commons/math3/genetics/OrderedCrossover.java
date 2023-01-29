@@ -47,10 +47,9 @@ import java.util.*;
  * This policy works only on {@link AbstractListChromosome}, and therefore it
  * is parameterized by T. Moreover, the chromosomes must have same lengths.
  *
+ * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
  * @see <a href="http://www.rubicite.com/Tutorials/GeneticAlgorithms/CrossoverOperators/Order1CrossoverOperator.aspx">
  * Order 1 Crossover Operator</a>
- *
- * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
  * @since 3.1
  */
 public class OrderedCrossover<T> implements CrossoverPolicy {
@@ -59,12 +58,12 @@ public class OrderedCrossover<T> implements CrossoverPolicy {
      * {@inheritDoc}
      *
      * @throws MathIllegalArgumentException iff one of the chromosomes is
-     *   not an instance of {@link AbstractListChromosome}
-     * @throws DimensionMismatchException if the length of the two chromosomes is different
+     *                                      not an instance of {@link AbstractListChromosome}
+     * @throws DimensionMismatchException   if the length of the two chromosomes is different
      */
     @SuppressWarnings("unchecked")
     public ChromosomePair crossover(final Chromosome first, final Chromosome second)
-        throws DimensionMismatchException, MathIllegalArgumentException {
+            throws DimensionMismatchException, MathIllegalArgumentException {
 
         if (!(first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
@@ -75,13 +74,13 @@ public class OrderedCrossover<T> implements CrossoverPolicy {
     /**
      * Helper for {@link #crossover(Chromosome, Chromosome)}. Performs the actual crossover.
      *
-     * @param first the first chromosome
+     * @param first  the first chromosome
      * @param second the second chromosome
      * @return the pair of new chromosomes that resulted from the crossover
      * @throws DimensionMismatchException if the length of the two chromosomes is different
      */
     protected ChromosomePair mate(final AbstractListChromosome<T> first, final AbstractListChromosome<T> second)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         final int length = first.getLength();
         if (length != second.getLength()) {
@@ -141,6 +140,6 @@ public class OrderedCrossover<T> implements CrossoverPolicy {
         Collections.rotate(child2, lb);
 
         return new ChromosomePair(first.newFixedLengthChromosome(child1),
-                                  second.newFixedLengthChromosome(child2));
+                second.newFixedLengthChromosome(child2));
     }
 }

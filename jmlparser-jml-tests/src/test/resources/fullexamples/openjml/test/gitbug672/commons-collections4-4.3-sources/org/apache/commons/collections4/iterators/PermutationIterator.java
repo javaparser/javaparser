@@ -29,8 +29,7 @@ import java.util.*;
  * NOTE: in case an empty collection is provided, the iterator will
  * return exactly one empty list as result, as 0! = 1.
  *
- * @param <E>  the type of the objects being permuted
- *
+ * @param <E> the type of the objects being permuted
  * @since 4.0
  */
 public class PermutationIterator<E> implements Iterator<List<E>> {
@@ -62,7 +61,8 @@ public class PermutationIterator<E> implements Iterator<List<E>> {
 
     /**
      * Standard constructor for this class.
-     * @param coll  the collection to generate permutations for
+     *
+     * @param coll the collection to generate permutations for
      * @throws NullPointerException if coll is null
      */
     public PermutationIterator(final Collection<? extends E> coll) {
@@ -85,6 +85,7 @@ public class PermutationIterator<E> implements Iterator<List<E>> {
 
     /**
      * Indicates if there are more permutation available.
+     *
      * @return true if there are more permutations, otherwise false
      */
     @Override
@@ -94,6 +95,7 @@ public class PermutationIterator<E> implements Iterator<List<E>> {
 
     /**
      * Returns the next permutation of the input collection.
+     *
      * @return a list of the permutator's elements representing a permutation
      * @throws NoSuchElementException if there are no more permutations
      */
@@ -108,7 +110,7 @@ public class PermutationIterator<E> implements Iterator<List<E>> {
         int largestKey = -1;
         for (int i = 0; i < keys.length; i++) {
             if ((direction[i] && i < keys.length - 1 && keys[i] > keys[i + 1]) ||
-                (!direction[i] && i > 0 && keys[i] > keys[i - 1])) {
+                    (!direction[i] && i > 0 && keys[i] > keys[i - 1])) {
                 if (keys[i] > largestKey) { // NOPMD
                     largestKey = keys[i];
                     indexOfLargestMobileInteger = i;

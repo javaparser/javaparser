@@ -51,16 +51,16 @@ public class WalkFindTest {
         SimpleName x = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0).getName();
         assertEquals("int x;", x.findAncestor(FieldDeclaration.class).get().toString());
     }
-    
+
     @Test
     void findParentFromTypes() {
         CompilationUnit cu = parse("class X{Integer x;}");
         VariableDeclarator vd = cu.getClassByName("X").get().getMember(0).asFieldDeclaration().getVariables().get(0);
         assertEquals(FieldDeclaration.class.getName(),
-                vd.findAncestor(new Class[] { CompilationUnit.class, ClassOrInterfaceDeclaration.class, FieldDeclaration.class }).get().getClass()
+                vd.findAncestor(new Class[]{CompilationUnit.class, ClassOrInterfaceDeclaration.class, FieldDeclaration.class}).get().getClass()
                         .getName());
         assertEquals(ClassOrInterfaceDeclaration.class.getName(),
-                vd.findAncestor(new Class[] { CompilationUnit.class, ClassOrInterfaceDeclaration.class }).get().getClass()
+                vd.findAncestor(new Class[]{CompilationUnit.class, ClassOrInterfaceDeclaration.class}).get().getClass()
                         .getName());
     }
 

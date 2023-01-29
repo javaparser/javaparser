@@ -35,26 +35,26 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 public class Issue2781Test extends AbstractResolutionTest {
-    
+
     @Test()
     void test() throws FileNotFoundException {
-        
+
         String code =
-                "public class A implements AnInterface {\n" + 
-                "        private AnInterface field;\n" + 
-                "\n" + 
-                "        protected AnInterface getContainer() {\n" + 
-                "            return this.field;\n" + 
-                "        }\n" + 
-                "        protected static class AnInterface {\n" + 
-                "        }\n" + 
-                "}";
-        
+                "public class A implements AnInterface {\n" +
+                        "        private AnInterface field;\n" +
+                        "\n" +
+                        "        protected AnInterface getContainer() {\n" +
+                        "            return this.field;\n" +
+                        "        }\n" +
+                        "        protected static class AnInterface {\n" +
+                        "        }\n" +
+                        "}";
+
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(adaptPath("src/test/resources")));
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(combinedTypeSolver));
-        
+
         CompilationUnit cu = StaticJavaParser.parse(code);
         List<ConstructorDeclaration> constructorDeclarations = cu.findAll(ConstructorDeclaration.class);
         constructorDeclarations.forEach(constructorDeclaration -> {
@@ -64,7 +64,7 @@ public class Issue2781Test extends AbstractResolutionTest {
             });
         });
 
-        
+
     }
-    
+
 }

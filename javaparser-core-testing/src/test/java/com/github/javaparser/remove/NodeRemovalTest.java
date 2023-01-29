@@ -49,32 +49,32 @@ class NodeRemovalTest extends AbstractLexicalPreservingTest {
         assertEquals(0, compilationUnit.getTypes().size());
     }
 
-	@Test
-	void testRemoveFieldFromClass() {
+    @Test
+    void testRemoveFieldFromClass() {
         ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
 
-		FieldDeclaration addField = testClass.addField(String.class, "test");
-		assertEquals(1, testClass.getMembers().size());
-		boolean remove = addField.remove();
-		assertTrue(remove);
-		assertEquals(0, testClass.getMembers().size());
-	}
+        FieldDeclaration addField = testClass.addField(String.class, "test");
+        assertEquals(1, testClass.getMembers().size());
+        boolean remove = addField.remove();
+        assertTrue(remove);
+        assertEquals(0, testClass.getMembers().size());
+    }
 
-	@Test
-	void testRemoveStatementFromMethodBody() {
+    @Test
+    void testRemoveStatementFromMethodBody() {
         ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("testC");
 
-		MethodDeclaration addMethod = testClass.addMethod("testM");
-		BlockStmt methodBody = addMethod.createBody();
-		Statement addStatement = methodBody.addAndGetStatement("test");
-		assertEquals(1, methodBody.getStatements().size());
-		boolean remove = addStatement.remove();
-		assertTrue(remove);
-		assertEquals(0, methodBody.getStatements().size());
-	}
+        MethodDeclaration addMethod = testClass.addMethod("testM");
+        BlockStmt methodBody = addMethod.createBody();
+        Statement addStatement = methodBody.addAndGetStatement("test");
+        assertEquals(1, methodBody.getStatements().size());
+        boolean remove = addStatement.remove();
+        assertTrue(remove);
+        assertEquals(0, methodBody.getStatements().size());
+    }
 
-	@Test
-	void testRemoveStatementFromMethodBodyWithLexicalPreservingPrinter() {
+    @Test
+    void testRemoveStatementFromMethodBodyWithLexicalPreservingPrinter() {
         considerStatement("{\r\n" + "    log.error(\"context\", e);\r\n" +
                 "    log.error(\"context\", e);\r\n" +
                 "    throw new ApplicationException(e);\r\n" + "}\r\n");
@@ -87,11 +87,11 @@ class NodeRemovalTest extends AbstractLexicalPreservingTest {
         assertTrue(children.stream().allMatch(n -> n.getParentNode() != null));
     }
 
-	// remove the node and parent's node until response is true
-	boolean remove(Node node) {
-		boolean result = node.remove();
-		if (!result && node.getParentNode().isPresent())
-			result = remove(node.getParentNode().get());
-		return result;
-	}
+    // remove the node and parent's node until response is true
+    boolean remove(Node node) {
+        boolean result = node.remove();
+        if (!result && node.getParentNode().isPresent())
+            result = remove(node.getParentNode().get());
+        return result;
+    }
 }

@@ -26,29 +26,29 @@ import org.apache.commons.math3.util.FastMath;
 
 /**
  * Utility routines for {@link UnivariateSolver} objects.
- *
  */
 public class UnivariateSolverUtils {
     /**
      * Class contains only static methods.
      */
-    private UnivariateSolverUtils() {}
+    private UnivariateSolverUtils() {
+    }
 
     /**
      * Convenience method to find a zero of a univariate real function.  A default
      * solver is used.
      *
      * @param function Function.
-     * @param x0 Lower bound for the interval.
-     * @param x1 Upper bound for the interval.
+     * @param x0       Lower bound for the interval.
+     * @param x1       Upper bound for the interval.
      * @return a value where the function is zero.
      * @throws NoBracketingException if the function has the same sign at the
-     * endpoints.
+     *                               endpoints.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static double solve(UnivariateFunction function, double x0, double x1)
-        throws NullArgumentException,
-               NoBracketingException {
+            throws NullArgumentException,
+            NoBracketingException {
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
@@ -60,20 +60,20 @@ public class UnivariateSolverUtils {
      * Convenience method to find a zero of a univariate real function.  A default
      * solver is used.
      *
-     * @param function Function.
-     * @param x0 Lower bound for the interval.
-     * @param x1 Upper bound for the interval.
+     * @param function         Function.
+     * @param x0               Lower bound for the interval.
+     * @param x1               Upper bound for the interval.
      * @param absoluteAccuracy Accuracy to be used by the solver.
      * @return a value where the function is zero.
      * @throws NoBracketingException if the function has the same sign at the
-     * endpoints.
+     *                               endpoints.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static double solve(UnivariateFunction function,
                                double x0, double x1,
                                double absoluteAccuracy)
-        throws NullArgumentException,
-               NoBracketingException {
+            throws NullArgumentException,
+            NoBracketingException {
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
@@ -85,25 +85,25 @@ public class UnivariateSolverUtils {
      * Force a root found by a non-bracketing solver to lie on a specified side,
      * as if the solver were a bracketing one.
      *
-     * @param maxEval maximal number of new evaluations of the function
-     * (evaluations already done for finding the root should have already been subtracted
-     * from this number)
-     * @param f function to solve
-     * @param bracketing bracketing solver to use for shifting the root
-     * @param baseRoot original root found by a previous non-bracketing solver
-     * @param min minimal bound of the search interval
-     * @param max maximal bound of the search interval
+     * @param maxEval         maximal number of new evaluations of the function
+     *                        (evaluations already done for finding the root should have already been subtracted
+     *                        from this number)
+     * @param f               function to solve
+     * @param bracketing      bracketing solver to use for shifting the root
+     * @param baseRoot        original root found by a previous non-bracketing solver
+     * @param min             minimal bound of the search interval
+     * @param max             maximal bound of the search interval
      * @param allowedSolution the kind of solutions that the root-finding algorithm may
-     * accept as solutions.
+     *                        accept as solutions.
      * @return a root approximation, on the specified side of the exact root
      * @throws NoBracketingException if the function has the same sign at the
-     * endpoints.
+     *                               endpoints.
      */
     public static double forceSide(final int maxEval, final UnivariateFunction f,
                                    final BracketedUnivariateSolver<UnivariateFunction> bracketing,
                                    final double baseRoot, final double min, final double max,
                                    final AllowedSolution allowedSolution)
-        throws NoBracketingException {
+            throws NoBracketingException {
 
         if (allowedSolution == AllowedSolution.ANY_SIDE) {
             // no further bracketing required
@@ -112,11 +112,11 @@ public class UnivariateSolverUtils {
 
         // find a very small interval bracketing the root
         final double step = FastMath.max(bracketing.getAbsoluteAccuracy(),
-                                         FastMath.abs(baseRoot * bracketing.getRelativeAccuracy()));
-        double xLo        = FastMath.max(min, baseRoot - step);
-        double fLo        = f.value(xLo);
-        double xHi        = FastMath.min(max, baseRoot + step);
-        double fHi        = f.value(xHi);
+                FastMath.abs(baseRoot * bracketing.getRelativeAccuracy()));
+        double xLo = FastMath.max(min, baseRoot - step);
+        double fLo = f.value(xLo);
+        double xHi = FastMath.min(max, baseRoot + step);
+        double fHi = f.value(xHi);
         int remainingEval = maxEval - 2;
         while (remainingEval > 0) {
 
@@ -151,23 +151,23 @@ public class UnivariateSolverUtils {
             // update the lower bound
             if (changeLo) {
                 xLo = FastMath.max(min, xLo - step);
-                fLo  = f.value(xLo);
+                fLo = f.value(xLo);
                 remainingEval--;
             }
 
             // update the higher bound
             if (changeHi) {
                 xHi = FastMath.min(max, xHi + step);
-                fHi  = f.value(xHi);
+                fHi = f.value(xHi);
                 remainingEval--;
             }
 
         }
 
         throw new NoBracketingException(LocalizedFormats.FAILED_BRACKETING,
-                                        xLo, xHi, fLo, fHi,
-                                        maxEval - remainingEval, maxEval, baseRoot,
-                                        min, max);
+                xLo, xHi, fLo, fHi,
+                maxEval - remainingEval, maxEval, baseRoot,
+                min, max);
 
     }
 
@@ -180,54 +180,55 @@ public class UnivariateSolverUtils {
      * iterations to throw a {@code ConvergenceException.}  Unless you are
      * confident that there is a root between {@code lowerBound} and
      * {@code upperBound} near {@code initial}, it is better to use
-     * {@link #bracket(UnivariateFunction, double, double, double, double,double, int)
+     * {@link #bracket(UnivariateFunction, double, double, double, double, double, int)
      * bracket(function, initial, lowerBound, upperBound, q, r, maximumIterations)},
      * explicitly specifying the maximum number of iterations.</p>
      *
-     * @param function Function.
-     * @param initial Initial midpoint of interval being expanded to
-     * bracket a root.
+     * @param function   Function.
+     * @param initial    Initial midpoint of interval being expanded to
+     *                   bracket a root.
      * @param lowerBound Lower bound (a is never lower than this value)
      * @param upperBound Upper bound (b never is greater than this
-     * value).
+     *                   value).
      * @return a two-element array holding a and b.
-     * @throws NoBracketingException if a root cannot be bracketted.
+     * @throws NoBracketingException        if a root cannot be bracketted.
      * @throws NotStrictlyPositiveException if {@code maximumIterations <= 0}.
-     * @throws NullArgumentException if {@code function} is {@code null}.
+     * @throws NullArgumentException        if {@code function} is {@code null}.
      */
     public static double[] bracket(UnivariateFunction function,
                                    double initial,
                                    double lowerBound, double upperBound)
-        throws NullArgumentException,
-               NotStrictlyPositiveException,
-               NoBracketingException {
+            throws NullArgumentException,
+            NotStrictlyPositiveException,
+            NoBracketingException {
         return bracket(function, initial, lowerBound, upperBound, 1.0, 1.0, Integer.MAX_VALUE);
     }
 
-     /**
+    /**
      * This method simply calls {@link #bracket(UnivariateFunction, double, double, double,
      * double, double, int) bracket(function, initial, lowerBound, upperBound, q, r, maximumIterations)}
      * with {@code q} and {@code r} set to 1.0.
-     * @param function Function.
-     * @param initial Initial midpoint of interval being expanded to
-     * bracket a root.
-     * @param lowerBound Lower bound (a is never lower than this value).
-     * @param upperBound Upper bound (b never is greater than this
-     * value).
+     *
+     * @param function          Function.
+     * @param initial           Initial midpoint of interval being expanded to
+     *                          bracket a root.
+     * @param lowerBound        Lower bound (a is never lower than this value).
+     * @param upperBound        Upper bound (b never is greater than this
+     *                          value).
      * @param maximumIterations Maximum number of iterations to perform
      * @return a two element array holding a and b.
-     * @throws NoBracketingException if the algorithm fails to find a and b
-     * satisfying the desired conditions.
+     * @throws NoBracketingException        if the algorithm fails to find a and b
+     *                                      satisfying the desired conditions.
      * @throws NotStrictlyPositiveException if {@code maximumIterations <= 0}.
-     * @throws NullArgumentException if {@code function} is {@code null}.
+     * @throws NullArgumentException        if {@code function} is {@code null}.
      */
     public static double[] bracket(UnivariateFunction function,
                                    double initial,
                                    double lowerBound, double upperBound,
                                    int maximumIterations)
-        throws NullArgumentException,
-               NotStrictlyPositiveException,
-               NoBracketingException {
+            throws NullArgumentException,
+            NotStrictlyPositiveException,
+            NoBracketingException {
         return bracket(function, initial, lowerBound, upperBound, 1.0, 1.0, maximumIterations);
     }
 
@@ -280,72 +281,73 @@ public class UnivariateSolverUtils {
      * As shown by this example, the initial value (here {@code 4}) may lie outside of the returned
      * bracketing interval.
      * </p>
-     * @param function function to check
-     * @param initial Initial midpoint of interval being expanded to
-     * bracket a root.
-     * @param lowerBound Lower bound (a is never lower than this value).
-     * @param upperBound Upper bound (b never is greater than this
-     * value).
-     * @param q additive offset used to compute bounds sequence (must be strictly positive)
-     * @param r multiplicative factor used to compute bounds sequence
+     *
+     * @param function          function to check
+     * @param initial           Initial midpoint of interval being expanded to
+     *                          bracket a root.
+     * @param lowerBound        Lower bound (a is never lower than this value).
+     * @param upperBound        Upper bound (b never is greater than this
+     *                          value).
+     * @param q                 additive offset used to compute bounds sequence (must be strictly positive)
+     * @param r                 multiplicative factor used to compute bounds sequence
      * @param maximumIterations Maximum number of iterations to perform
      * @return a two element array holding the bracketing values.
-     * @exception NoBracketingException if function cannot be bracketed in the search interval
+     * @throws NoBracketingException if function cannot be bracketed in the search interval
      */
     public static double[] bracket(final UnivariateFunction function, final double initial,
                                    final double lowerBound, final double upperBound,
                                    final double q, final double r, final int maximumIterations)
-        throws NoBracketingException {
+            throws NoBracketingException {
 
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
-        if (q <= 0)  {
+        if (q <= 0) {
             throw new NotStrictlyPositiveException(q);
         }
-        if (maximumIterations <= 0)  {
+        if (maximumIterations <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.INVALID_MAX_ITERATIONS, maximumIterations);
         }
         verifySequence(lowerBound, initial, upperBound);
 
         // initialize the recurrence
-        double a     = initial;
-        double b     = initial;
-        double fa    = Double.NaN;
-        double fb    = Double.NaN;
+        double a = initial;
+        double b = initial;
+        double fa = Double.NaN;
+        double fb = Double.NaN;
         double delta = 0;
 
         for (int numIterations = 0;
              (numIterations < maximumIterations) && (a > lowerBound || b < upperBound);
              ++numIterations) {
 
-            final double previousA  = a;
+            final double previousA = a;
             final double previousFa = fa;
-            final double previousB  = b;
+            final double previousB = b;
             final double previousFb = fb;
 
             delta = r * delta + q;
-            a     = FastMath.max(initial - delta, lowerBound);
-            b     = FastMath.min(initial + delta, upperBound);
-            fa    = function.value(a);
-            fb    = function.value(b);
+            a = FastMath.max(initial - delta, lowerBound);
+            b = FastMath.min(initial + delta, upperBound);
+            fa = function.value(a);
+            fb = function.value(b);
 
             if (numIterations == 0) {
                 // at first iteration, we don't have a previous interval
                 // we simply compare both sides of the initial interval
                 if (fa * fb <= 0) {
                     // the first interval already brackets a root
-                    return new double[] { a, b };
+                    return new double[]{a, b};
                 }
             } else {
                 // we have a previous interval with constant sign and expand it,
                 // we expect sign changes to occur at boundaries
                 if (fa * previousFa <= 0) {
                     // sign change detected at near lower bound
-                    return new double[] { a, previousA };
+                    return new double[]{a, previousA};
                 } else if (fb * previousFb <= 0) {
                     // sign change detected at near upper bound
-                    return new double[] { previousB, b };
+                    return new double[]{previousB, b};
                 }
             }
 
@@ -373,8 +375,8 @@ public class UnivariateSolverUtils {
      * opposite signs at the endpoints.
      *
      * @param function Function.
-     * @param lower Lower endpoint.
-     * @param upper Upper endpoint.
+     * @param lower    Lower endpoint.
+     * @param upper    Upper endpoint.
      * @return {@code true} if the function values have opposite signs at the
      * given points.
      * @throws NullArgumentException if {@code function} is {@code null}.
@@ -382,7 +384,7 @@ public class UnivariateSolverUtils {
     public static boolean isBracketing(UnivariateFunction function,
                                        final double lower,
                                        final double upper)
-        throws NullArgumentException {
+            throws NullArgumentException {
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
@@ -395,8 +397,8 @@ public class UnivariateSolverUtils {
      * Check whether the arguments form a (strictly) increasing sequence.
      *
      * @param start First number.
-     * @param mid Second number.
-     * @param end Third number.
+     * @param mid   Second number.
+     * @param end   Third number.
      * @return {@code true} if the arguments form an increasing sequence.
      */
     public static boolean isSequence(final double start,
@@ -414,26 +416,26 @@ public class UnivariateSolverUtils {
      */
     public static void verifyInterval(final double lower,
                                       final double upper)
-        throws NumberIsTooLargeException {
+            throws NumberIsTooLargeException {
         if (lower >= upper) {
             throw new NumberIsTooLargeException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
-                                                lower, upper, false);
+                    lower, upper, false);
         }
     }
 
     /**
      * Check that {@code lower < initial < upper}.
      *
-     * @param lower Lower endpoint.
+     * @param lower   Lower endpoint.
      * @param initial Initial value.
-     * @param upper Upper endpoint.
+     * @param upper   Upper endpoint.
      * @throws NumberIsTooLargeException if {@code lower >= initial} or
-     * {@code initial >= upper}.
+     *                                   {@code initial >= upper}.
      */
     public static void verifySequence(final double lower,
                                       final double initial,
                                       final double upper)
-        throws NumberIsTooLargeException {
+            throws NumberIsTooLargeException {
         verifyInterval(lower, initial);
         verifyInterval(initial, upper);
     }
@@ -443,25 +445,25 @@ public class UnivariateSolverUtils {
      * bracket a root.
      *
      * @param function Function.
-     * @param lower Lower endpoint.
-     * @param upper Upper endpoint.
+     * @param lower    Lower endpoint.
+     * @param upper    Upper endpoint.
      * @throws NoBracketingException if the function has the same sign at the
-     * endpoints.
+     *                               endpoints.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static void verifyBracketing(UnivariateFunction function,
                                         final double lower,
                                         final double upper)
-        throws NullArgumentException,
-               NoBracketingException {
+            throws NullArgumentException,
+            NoBracketingException {
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
         verifyInterval(lower, upper);
         if (!isBracketing(function, lower, upper)) {
             throw new NoBracketingException(lower, upper,
-                                            function.value(lower),
-                                            function.value(upper));
+                    function.value(lower),
+                    function.value(upper));
         }
     }
 }

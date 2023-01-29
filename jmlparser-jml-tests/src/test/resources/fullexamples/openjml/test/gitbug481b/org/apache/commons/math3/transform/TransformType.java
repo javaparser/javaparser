@@ -22,9 +22,13 @@ package org.apache.commons.math3.transform;
  * @since 3.0
  */
 public enum TransformType {
-    /** The type to be specified for forward transforms. */
+    /**
+     * The type to be specified for forward transforms.
+     */
     FORWARD,
 
-    /** The type to be specified for inverse transforms. */
+    /**
+     * The type to be specified for inverse transforms.
+     */
     INVERSE;
 }

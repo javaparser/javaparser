@@ -23,27 +23,36 @@ import java.util.Comparator;
  * A {@link Comparator} for {@link Boolean} objects that can sort either
  * true or false first.
  * <p>
+ *
  * @see #getTrueFirstComparator()
  * @see #getFalseFirstComparator()
  * @see #booleanComparator(boolean)
- *
  * @since 3.0
  */
 public final class BooleanComparator implements Comparator<Boolean>, Serializable {
 
-    /** Serialization version. */
+    /**
+     * Serialization version.
+     */
     private static final long serialVersionUID = 1830042991606340609L;
 
-    /** Constant "true first" reference. */
+    /**
+     * Constant "true first" reference.
+     */
     private static final BooleanComparator TRUE_FIRST = new BooleanComparator(true);
 
-    /** Constant "false first" reference. */
+    /**
+     * Constant "false first" reference.
+     */
     private static final BooleanComparator FALSE_FIRST = new BooleanComparator(false);
 
-    /** <code>true</code> iff <code>true</code> values sort before <code>false</code> values. */
+    /**
+     * <code>true</code> iff <code>true</code> values sort before <code>false</code> values.
+     */
     private boolean trueFirst = false;
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns a BooleanComparator instance that sorts
      * <code>true</code> values before <code>false</code> values.
@@ -91,7 +100,7 @@ public final class BooleanComparator implements Comparator<Boolean>, Serializabl
      * </p>
      *
      * @param trueFirst when <code>true</code>, sort
-     * <code>true</code> <code>Boolean</code>s before <code>false</code>
+     *                  <code>true</code> <code>Boolean</code>s before <code>false</code>
      * @return a singleton BooleanComparator instance
      * @since 4.0
      */
@@ -100,6 +109,7 @@ public final class BooleanComparator implements Comparator<Boolean>, Serializabl
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Creates a <code>BooleanComparator</code> that sorts
      * <code>false</code> values before <code>true</code> values.
@@ -120,19 +130,20 @@ public final class BooleanComparator implements Comparator<Boolean>, Serializabl
      * Please use the static factories instead whenever possible.
      *
      * @param trueFirst when <code>true</code>, sort
-     *  <code>true</code> boolean values before <code>false</code>
+     *                  <code>true</code> boolean values before <code>false</code>
      */
     public BooleanComparator(final boolean trueFirst) {
         this.trueFirst = trueFirst;
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Compares two non-<code>null</code> <code>Boolean</code> objects
      * according to the value of {@link #sortsTrueFirst()}.
      *
-     * @param b1  the first boolean to compare
-     * @param b2  the second boolean to compare
+     * @param b1 the first boolean to compare
+     * @param b2 the second boolean to compare
      * @return negative if obj1 is less, positive if greater, zero if equal
      * @throws NullPointerException when either argument <code>null</code>
      */
@@ -141,10 +152,11 @@ public final class BooleanComparator implements Comparator<Boolean>, Serializabl
         final boolean v1 = b1.booleanValue();
         final boolean v2 = b2.booleanValue();
 
-        return (v1 ^ v2) ? ( (v1 ^ trueFirst) ? 1 : -1 ) : 0;
+        return (v1 ^ v2) ? ((v1 ^ trueFirst) ? 1 : -1) : 0;
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implement a hash code for this comparator that is consistent with
      * {@link #equals(Object) equals}.
@@ -166,23 +178,24 @@ public final class BooleanComparator implements Comparator<Boolean>, Serializabl
      * iff <code><i>that</i></code> is a {@link BooleanComparator}
      * whose value of {@link #sortsTrueFirst()} is equal to mine.
      *
-     * @param object  the object to compare to
+     * @param object the object to compare to
      * @return true if equal
      */
     @Override
     public boolean equals(final Object object) {
         return (this == object) ||
-               ((object instanceof BooleanComparator) &&
-                (this.trueFirst == ((BooleanComparator)object).trueFirst));
+                ((object instanceof BooleanComparator) &&
+                        (this.trueFirst == ((BooleanComparator) object).trueFirst));
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns <code>true</code> iff
      * I sort <code>true</code> values before
      * <code>false</code> values.  In other words,
      * returns <code>true</code> iff
-     * {@link #compare(Boolean,Boolean) compare(Boolean.FALSE,Boolean.TRUE)}
+     * {@link #compare(Boolean, Boolean) compare(Boolean.FALSE,Boolean.TRUE)}
      * returns a positive value.
      *
      * @return the trueFirst flag

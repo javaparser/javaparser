@@ -54,17 +54,23 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
+    /**
+     * Returns {@code true} when the Node to be tested is not an
+     * {@link EnclosedExpr}, {@code false} otherwise.
+     */
+    private static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
     private final ResolvedType stringReferenceType;
-    
+
     private final TypeSolver typeSolver;
     private final JavaParserFacade facade;
-    
+
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
@@ -191,10 +197,10 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
         return node.getThenExpr().accept(this, solveLambdas);
     }
-    
+
     private boolean isCompatible(ResolvedType resolvedType, ResolvedPrimitiveType primitiveType) {
         return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType))
-        || (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
+                || (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
     }
 
     @Override
@@ -313,18 +319,18 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodCallExpr node, Boolean solveLambdas) {
-        Log.trace("getType on method call %s", ()-> node);
+        Log.trace("getType on method call %s", () -> node);
         // first solve the method
         MethodUsage ref = facade.solveMethodAsUsage(node);
-        Log.trace("getType on method call %s resolved to %s", ()-> node, ()-> ref);
-        Log.trace("getType on method call %s return type is %s", ()-> node, ref::returnType);
+        Log.trace("getType on method call %s resolved to %s", () -> node, () -> ref);
+        Log.trace("getType on method call %s return type is %s", () -> node, ref::returnType);
         return ref.returnType();
         // the type is the return type of the method
     }
 
     @Override
     public ResolvedType visit(NameExpr node, Boolean solveLambdas) {
-        Log.trace("getType on name expr %s", ()-> node);
+        Log.trace("getType on name expr %s", () -> node);
         Optional<Value> value = createSolver().solveSymbolAsValue(node.getName().getId(), node);
         if (!value.isPresent()) {
             throw new UnsolvedSymbolException("Solving " + node, node.getName().getId());
@@ -335,7 +341,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(TypeExpr node, Boolean solveLambdas) {
-        Log.trace("getType on type expr %s", ()-> node);
+        Log.trace("getType on type expr %s", () -> node);
         if (!(node.getType() instanceof ClassOrInterfaceType)) {
             throw new UnsupportedOperationException(node.getType().getClass().getCanonicalName());
         }
@@ -449,14 +455,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(LambdaExpr node, Boolean solveLambdas) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
+        if (demandParentNode(node, IS_NOT_ENCLOSED_EXPR) instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
             int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
-                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(demandParentNode(node, IS_NOT_ENCLOSED_EXPR).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on lambda expr %s", () -> refMethod.getCorrespondingDeclaration().getName());
 
             // The type parameter referred here should be the java.util.stream.Stream.T
             ResolvedType result = refMethod.getCorrespondingDeclaration().getParam(pos).getType();
@@ -490,8 +496,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 result = resolveLambda(node, result);
             }
             return result;
-        } else if (demandParentNode(node) instanceof VariableDeclarator)
-        {
+        } else if (demandParentNode(node) instanceof VariableDeclarator) {
             VariableDeclarator decExpr = (VariableDeclarator) demandParentNode(node);
             ResolvedType result = decExpr.getType().resolve();
 
@@ -579,6 +584,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodReferenceExpr node, Boolean solveLambdas) {
+        if ("new".equals(node.getIdentifier())) {
+            return node.getScope().calculateResolvedType();
+        }
         if (demandParentNode(node) instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
             int pos = getParamPos(node);
@@ -586,7 +594,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             if (!refMethod.isSolved()) {
                 throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
             }
-            Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
+            Log.trace("getType on method reference expr %s", () -> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
                 MethodUsage usage = facade.solveMethodAsUsage(callExpr);
                 ResolvedType result = usage.getParamType(pos);
@@ -638,10 +646,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     }
 
     private static int getParamPos(Node node) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) demandParentNode(node);
+        if (demandParentNode(node, IS_NOT_ENCLOSED_EXPR) instanceof MethodCallExpr) {
+            MethodCallExpr call = (MethodCallExpr) demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
             for (int i = 0; i < call.getArguments().size(); i++) {
-                if (call.getArguments().get(i) == node) return i;
+                Expression expression = call.getArguments().get(i);
+                while (expression instanceof EnclosedExpr) {
+                    expression = ((EnclosedExpr) expression).getInner();
+                }
+                if (expression == node) return i;
             }
             throw new IllegalStateException();
         }

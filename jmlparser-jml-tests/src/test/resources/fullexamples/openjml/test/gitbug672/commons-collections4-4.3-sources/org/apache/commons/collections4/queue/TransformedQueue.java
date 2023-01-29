@@ -34,7 +34,9 @@ import java.util.Queue;
  */
 public class TransformedQueue<E> extends TransformedCollection<E> implements Queue<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -7901091318986132033L;
 
     /**
@@ -44,9 +46,9 @@ public class TransformedQueue<E> extends TransformedCollection<E> implements Que
      * are NOT transformed.
      * Contrast this with {@link #transformedQueue(Queue, Transformer)}.
      *
-     * @param <E> the type of the elements in the queue
-     * @param queue  the queue to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the type of the elements in the queue
+     * @param queue       the queue to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed Queue
      * @throws NullPointerException if queue or transformer is null
      */
@@ -63,9 +65,9 @@ public class TransformedQueue<E> extends TransformedCollection<E> implements Que
      * will be transformed by this method.
      * Contrast this with {@link #transformingQueue(Queue, Transformer)}.
      *
-     * @param <E> the type of the elements in the queue
-     * @param queue  the queue to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the type of the elements in the queue
+     * @param queue       the queue to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed Queue
      * @throws NullPointerException if queue or transformer is null
      * @since 4.0
@@ -86,14 +88,15 @@ public class TransformedQueue<E> extends TransformedCollection<E> implements Que
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the queue being decorated, they
      * are NOT transformed.
      *
-     * @param queue  the queue to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param queue       the queue to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @throws NullPointerException if queue or transformer is null
      */
     protected TransformedQueue(final Queue<E> queue, final Transformer<? super E, ? extends E> transformer) {

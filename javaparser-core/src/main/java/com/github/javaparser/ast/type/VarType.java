@@ -159,23 +159,17 @@ public class VarType extends Type {
                     // Iterable with parameter type
                     List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
                     if (parametersType.isEmpty()) {
-                        Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT)
-                                .getDeclaration();
-                        return oObjectDeclaration
-                                .map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
-                                .orElseThrow(() -> new UnsupportedOperationException());
+                        Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT).getDeclaration();
+                        return oObjectDeclaration.map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType())).orElseThrow(() -> new UnsupportedOperationException());
                     }
                     return parametersType.get(0);
                 }
             }
         }
-        return initializer
-                .map(Expression::calculateResolvedType)
-                .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
+        return initializer.map(Expression::calculateResolvedType).orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
     }
 
-    private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(
-            VariableDeclarator variableDeclarator) {
+    private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(VariableDeclarator variableDeclarator) {
         Optional<Node> node = variableDeclarator.getParentNode();
         if (!node.isPresent() || !(node.get() instanceof VariableDeclarationExpr)) {
             return Optional.empty();

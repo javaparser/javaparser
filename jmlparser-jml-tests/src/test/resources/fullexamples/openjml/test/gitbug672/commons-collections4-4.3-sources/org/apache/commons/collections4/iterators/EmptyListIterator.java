@@ -34,6 +34,7 @@ public class EmptyListIterator<E> extends AbstractEmptyIterator<E> implements
 
     /**
      * Singleton instance of the iterator.
+     *
      * @since 3.1
      */
     @SuppressWarnings("rawtypes")
@@ -41,6 +42,7 @@ public class EmptyListIterator<E> extends AbstractEmptyIterator<E> implements
 
     /**
      * Singleton instance of the iterator.
+     *
      * @since 2.1.1 and 3.1
      */
     @SuppressWarnings("rawtypes")
@@ -48,6 +50,7 @@ public class EmptyListIterator<E> extends AbstractEmptyIterator<E> implements
 
     /**
      * Get a typed instance of the iterator.
+     *
      * @param <E> the element type
      * @return {@link ResettableListIterator}&lt;E&gt;
      */
@@ -58,6 +61,7 @@ public class EmptyListIterator<E> extends AbstractEmptyIterator<E> implements
 
     /**
      * Get a typed instance of the iterator.
+     *
      * @param <E> the element type
      * @return {@link ListIterator}&lt;E&gt;
      */

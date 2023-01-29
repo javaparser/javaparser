@@ -5,14 +5,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Test {
-    
-    
+
+
     public void m1(Integer[] a) {
         //@ reachable;
         Stream<Integer> s = Arrays.stream(a);
         //@ assert Arrays.equalElements(s.values,a);
         //@ reachable;
-        Collector<Integer,?,List<Integer>> coll = Collectors.<Integer>toList();
+        Collector<Integer, ?, List<Integer>> coll = Collectors.<Integer>toList();
         //@ assert coll == Collectors.<Integer>toList();
         //@ reachable;
         List<Integer> r = s.collect(coll);

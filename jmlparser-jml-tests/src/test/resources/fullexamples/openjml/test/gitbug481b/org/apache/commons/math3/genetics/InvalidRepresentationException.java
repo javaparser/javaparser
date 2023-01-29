@@ -26,17 +26,19 @@ import org.apache.commons.math3.exception.util.Localizable;
  */
 public class InvalidRepresentationException extends MathIllegalArgumentException {
 
-    /** Serialization version id */
+    /**
+     * Serialization version id
+     */
     private static final long serialVersionUID = 1L;
 
     /**
      * Construct an InvalidRepresentationException with a specialized message.
      *
      * @param pattern Message pattern.
-     * @param args Arguments.
+     * @param args    Arguments.
      */
-    public InvalidRepresentationException(Localizable pattern, Object ... args) {
-       super(pattern, args);
+    public InvalidRepresentationException(Localizable pattern, Object... args) {
+        super(pattern, args);
     }
 
 }

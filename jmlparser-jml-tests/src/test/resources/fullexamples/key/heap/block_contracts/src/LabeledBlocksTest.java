@@ -1,4 +1,3 @@
-
 public class LabeledBlocksTest {
 
     /*@ normal_behavior
@@ -10,7 +9,8 @@ public class LabeledBlocksTest {
         /*@ normal_behavior
           @ ensures i == 42;
           @*/
-        label: {
+        label:
+        {
             i = 42;
         }
 
@@ -27,7 +27,8 @@ public class LabeledBlocksTest {
           @ requires i <= 42;
           @ ensures i == 42;
           @*/
-        label: while(i < 42) {
+        label:
+        while (i < 42) {
             ++i;
         }
 
@@ -44,7 +45,9 @@ public class LabeledBlocksTest {
           @ requires i <= 42;
           @ ensures i == 42;
           @*/
-        label: for(i = 0; i < 42; ++i) { }
+        label:
+        for (i = 0; i < 42; ++i) {
+        }
 
         return i;
     }

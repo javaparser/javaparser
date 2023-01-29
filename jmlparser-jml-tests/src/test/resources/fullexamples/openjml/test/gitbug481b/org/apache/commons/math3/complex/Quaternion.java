@@ -35,27 +35,47 @@ import java.io.Serializable;
  * @since 3.1
  */
 public final class Quaternion implements Serializable {
-    /** Identity quaternion. */
+    /**
+     * Identity quaternion.
+     */
     public static final Quaternion IDENTITY = new Quaternion(1, 0, 0, 0);
-    /** Zero quaternion. */
+    /**
+     * Zero quaternion.
+     */
     public static final Quaternion ZERO = new Quaternion(0, 0, 0, 0);
-    /** i */
+    /**
+     * i
+     */
     public static final Quaternion I = new Quaternion(0, 1, 0, 0);
-    /** j */
+    /**
+     * j
+     */
     public static final Quaternion J = new Quaternion(0, 0, 1, 0);
-    /** k */
+    /**
+     * k
+     */
     public static final Quaternion K = new Quaternion(0, 0, 0, 1);
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20092012L;
 
-    /** First component (scalar part). */
+    /**
+     * First component (scalar part).
+     */
     private final double q0;
-    /** Second component (first vector part). */
+    /**
+     * Second component (first vector part).
+     */
     private final double q1;
-    /** Third component (second vector part). */
+    /**
+     * Third component (second vector part).
+     */
     private final double q2;
-    /** Fourth component (third vector part). */
+    /**
+     * Fourth component (third vector part).
+     */
     private final double q3;
 
     /**
@@ -80,13 +100,12 @@ public final class Quaternion implements Serializable {
      * Builds a quaternion from scalar and vector parts.
      *
      * @param scalar Scalar part of the quaternion.
-     * @param v Components of the vector part of the quaternion.
-     *
+     * @param v      Components of the vector part of the quaternion.
      * @throws DimensionMismatchException if the array length is not 3.
      */
     public Quaternion(final double scalar,
                       final double[] v)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         if (v.length != 3) {
             throw new DimensionMismatchException(v.length, 3);
         }
@@ -164,9 +183,9 @@ public final class Quaternion implements Serializable {
     public static Quaternion add(final Quaternion q1,
                                  final Quaternion q2) {
         return new Quaternion(q1.getQ0() + q2.getQ0(),
-                              q1.getQ1() + q2.getQ1(),
-                              q1.getQ2() + q2.getQ2(),
-                              q1.getQ3() + q2.getQ3());
+                q1.getQ1() + q2.getQ1(),
+                q1.getQ2() + q2.getQ2(),
+                q1.getQ3() + q2.getQ3());
     }
 
     /**
@@ -189,9 +208,9 @@ public final class Quaternion implements Serializable {
     public static Quaternion subtract(final Quaternion q1,
                                       final Quaternion q2) {
         return new Quaternion(q1.getQ0() - q2.getQ0(),
-                              q1.getQ1() - q2.getQ1(),
-                              q1.getQ2() - q2.getQ2(),
-                              q1.getQ3() - q2.getQ3());
+                q1.getQ1() - q2.getQ1(),
+                q1.getQ2() - q2.getQ2(),
+                q1.getQ3() - q2.getQ3());
     }
 
     /**
@@ -214,9 +233,9 @@ public final class Quaternion implements Serializable {
     public static double dotProduct(final Quaternion q1,
                                     final Quaternion q2) {
         return q1.getQ0() * q2.getQ0() +
-            q1.getQ1() * q2.getQ1() +
-            q1.getQ2() * q2.getQ2() +
-            q1.getQ3() * q2.getQ3();
+                q1.getQ1() * q2.getQ1() +
+                q1.getQ2() * q2.getQ2() +
+                q1.getQ3() * q2.getQ3();
     }
 
     /**
@@ -236,9 +255,9 @@ public final class Quaternion implements Serializable {
      */
     public double getNorm() {
         return FastMath.sqrt(q0 * q0 +
-                             q1 * q1 +
-                             q2 * q2 +
-                             q3 * q3);
+                q1 * q1 +
+                q2 * q2 +
+                q3 * q3);
     }
 
     /**
@@ -256,9 +275,9 @@ public final class Quaternion implements Serializable {
         }
 
         return new Quaternion(q0 / norm,
-                              q1 / norm,
-                              q2 / norm,
-                              q3 / norm);
+                q1 / norm,
+                q2 / norm,
+                q3 / norm);
     }
 
     /**
@@ -272,9 +291,9 @@ public final class Quaternion implements Serializable {
         if (other instanceof Quaternion) {
             final Quaternion q = (Quaternion) other;
             return q0 == q.getQ0() &&
-                q1 == q.getQ1() &&
-                q2 == q.getQ2() &&
-                q3 == q.getQ3();
+                    q1 == q.getQ1() &&
+                    q2 == q.getQ2() &&
+                    q3 == q.getQ3();
         }
 
         return false;
@@ -287,7 +306,7 @@ public final class Quaternion implements Serializable {
     public int hashCode() {
         // "Effective Java" (second edition, p. 47).
         int result = 17;
-        for (double comp : new double[] { q0, q1, q2, q3 }) {
+        for (double comp : new double[]{q0, q1, q2, q3}) {
             final int c = MathUtils.hash(comp);
             result = 31 * result + c;
         }
@@ -298,7 +317,7 @@ public final class Quaternion implements Serializable {
      * Checks whether this instance is equal to another quaternion
      * within a given tolerance.
      *
-     * @param q Quaternion with which to compare the current quaternion.
+     * @param q   Quaternion with which to compare the current quaternion.
      * @param eps Tolerance.
      * @return {@code true} if the each of the components are equal
      * within the allowed absolute error.
@@ -306,9 +325,9 @@ public final class Quaternion implements Serializable {
     public boolean equals(final Quaternion q,
                           final double eps) {
         return Precision.equals(q0, q.getQ0(), eps) &&
-            Precision.equals(q1, q.getQ1(), eps) &&
-            Precision.equals(q2, q.getQ2(), eps) &&
-            Precision.equals(q3, q.getQ3(), eps);
+                Precision.equals(q1, q.getQ1(), eps) &&
+                Precision.equals(q2, q.getQ2(), eps) &&
+                Precision.equals(q3, q.getQ3(), eps);
     }
 
     /**
@@ -345,9 +364,9 @@ public final class Quaternion implements Serializable {
             // The quaternion of rotation (normalized quaternion) q and -q
             // are equivalent (i.e. represent the same rotation).
             return new Quaternion(-unitQ.getQ0(),
-                                  -unitQ.getQ1(),
-                                  -unitQ.getQ2(),
-                                  -unitQ.getQ3());
+                    -unitQ.getQ1(),
+                    -unitQ.getQ2(),
+                    -unitQ.getQ3());
         } else {
             return this.normalize();
         }
@@ -367,9 +386,9 @@ public final class Quaternion implements Serializable {
         }
 
         return new Quaternion(q0 / squareNorm,
-                              -q1 / squareNorm,
-                              -q2 / squareNorm,
-                              -q3 / squareNorm);
+                -q1 / squareNorm,
+                -q2 / squareNorm,
+                -q3 / squareNorm);
     }
 
     /**
@@ -430,7 +449,7 @@ public final class Quaternion implements Serializable {
      * @see #getQ3()
      */
     public double[] getVectorPart() {
-        return new double[] { getQ1(), getQ2(), getQ3() };
+        return new double[]{getQ1(), getQ2(), getQ3()};
     }
 
     /**
@@ -441,9 +460,9 @@ public final class Quaternion implements Serializable {
      */
     public Quaternion multiply(final double alpha) {
         return new Quaternion(alpha * q0,
-                              alpha * q1,
-                              alpha * q2,
-                              alpha * q3);
+                alpha * q1,
+                alpha * q2,
+                alpha * q3);
     }
 
     /**
@@ -454,11 +473,11 @@ public final class Quaternion implements Serializable {
         final String sp = " ";
         final StringBuilder s = new StringBuilder();
         s.append("[")
-            .append(q0).append(sp)
-            .append(q1).append(sp)
-            .append(q2).append(sp)
-            .append(q3)
-            .append("]");
+                .append(q0).append(sp)
+                .append(q1).append(sp)
+                .append(q2).append(sp)
+                .append(q3)
+                .append("]");
 
         return s.toString();
     }

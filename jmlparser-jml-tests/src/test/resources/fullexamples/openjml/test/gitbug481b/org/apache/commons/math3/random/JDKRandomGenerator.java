@@ -26,7 +26,9 @@ import java.util.Random;
  */
 public class JDKRandomGenerator extends Random implements RandomGenerator {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -7745277476784028798L;
 
     /**
@@ -46,12 +48,16 @@ public class JDKRandomGenerator extends Random implements RandomGenerator {
         setSeed(seed);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setSeed(int seed) {
         setSeed((long) seed);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void setSeed(int[] seed) {
         setSeed(RandomGeneratorFactory.convertToLong(seed));
     }

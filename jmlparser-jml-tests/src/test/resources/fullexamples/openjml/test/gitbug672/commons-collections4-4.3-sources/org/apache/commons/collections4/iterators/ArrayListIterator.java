@@ -35,7 +35,6 @@ import java.util.NoSuchElementException;
  * @see org.apache.commons.collections4.iterators.ArrayIterator
  * @see java.util.Iterator
  * @see java.util.ListIterator
- *
  * @since 3.0
  */
 public class ArrayListIterator<E> extends ArrayIterator<E>
@@ -51,13 +50,14 @@ public class ArrayListIterator<E> extends ArrayIterator<E>
 
     // Constructors
     // ----------------------------------------------------------------------
+
     /**
      * Constructs an ArrayListIterator that will iterate over the values in the
      * specified array.
      *
      * @param array the array to iterate over
      * @throws IllegalArgumentException if <code>array</code> is not an array.
-     * @throws NullPointerException if <code>array</code> is <code>null</code>
+     * @throws NullPointerException     if <code>array</code> is <code>null</code>
      */
     public ArrayListIterator(final Object array) {
         super(array);
@@ -67,10 +67,10 @@ public class ArrayListIterator<E> extends ArrayIterator<E>
      * Constructs an ArrayListIterator that will iterate over the values in the
      * specified array from a specific start index.
      *
-     * @param array  the array to iterate over
-     * @param startIndex  the index to start iterating at
-     * @throws IllegalArgumentException if <code>array</code> is not an array.
-     * @throws NullPointerException if <code>array</code> is <code>null</code>
+     * @param array      the array to iterate over
+     * @param startIndex the index to start iterating at
+     * @throws IllegalArgumentException  if <code>array</code> is not an array.
+     * @throws NullPointerException      if <code>array</code> is <code>null</code>
      * @throws IndexOutOfBoundsException if the start index is out of bounds
      */
     public ArrayListIterator(final Object array, final int startIndex) {
@@ -81,13 +81,13 @@ public class ArrayListIterator<E> extends ArrayIterator<E>
      * Construct an ArrayListIterator that will iterate over a range of values
      * in the specified array.
      *
-     * @param array  the array to iterate over
-     * @param startIndex  the index to start iterating at
-     * @param endIndex  the index (exclusive) to finish iterating at
-     * @throws IllegalArgumentException if <code>array</code> is not an array.
+     * @param array      the array to iterate over
+     * @param startIndex the index to start iterating at
+     * @param endIndex   the index (exclusive) to finish iterating at
+     * @throws IllegalArgumentException  if <code>array</code> is not an array.
      * @throws IndexOutOfBoundsException if the start or end index is out of bounds
-     * @throws IllegalArgumentException if end index is before the start
-     * @throws NullPointerException if <code>array</code> is <code>null</code>
+     * @throws IllegalArgumentException  if end index is before the start
+     * @throws NullPointerException      if <code>array</code> is <code>null</code>
      */
     public ArrayListIterator(final Object array, final int startIndex, final int endIndex) {
         super(array, startIndex, endIndex);
@@ -95,6 +95,7 @@ public class ArrayListIterator<E> extends ArrayIterator<E>
 
     // ListIterator interface
     //-----------------------------------------------------------------------
+
     /**
      * Returns true if there are previous elements to return from the array.
      *
@@ -161,7 +162,7 @@ public class ArrayListIterator<E> extends ArrayIterator<E>
      * This iterator does not support modification of its backing collection, and so will
      * always throw an {@link UnsupportedOperationException} when this method is invoked.
      *
-     * @param o  the element to add
+     * @param o the element to add
      * @throws UnsupportedOperationException always thrown.
      * @see java.util.ListIterator#set
      */
@@ -183,9 +184,9 @@ public class ArrayListIterator<E> extends ArrayIterator<E>
      * not support <code>add()</code> or <code>remove()</code>, <code>set()</code> may be
      * called as often as desired.
      *
-     * @param o  the element to set
+     * @param o the element to set
      * @throws IllegalStateException if {@link #next()} or {@link #previous()} has not been called
-     * before {@link #set(Object)}
+     *                               before {@link #set(Object)}
      * @see java.util.ListIterator#set
      */
     @Override

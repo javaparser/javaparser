@@ -68,9 +68,9 @@ public class Issue1945Test extends AbstractResolutionTest {
             "}";
 
     // Expected Result MethodCallExpr in parsed code
-    private final static Map<String,String> resultsQualifiedName = new HashMap<>();
+    private final static Map<String, String> resultsQualifiedName = new HashMap<>();
 
-    private final static Map<String,String> resultsResolvedType = new HashMap<>();
+    private final static Map<String, String> resultsResolvedType = new HashMap<>();
 
     @BeforeAll
     static void init() {
@@ -91,12 +91,12 @@ public class Issue1945Test extends AbstractResolutionTest {
 
     private static List<MethodCallExpr> parsedCodeMethodCalls() {
         Path srcDir = adaptPath("src/test/resources/issue1945");
-        
+
         CombinedTypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(false), new JavaParserTypeSolver(srcDir));
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(config);
-        
+
         CompilationUnit cu = StaticJavaParser.parse(code);
 
         return cu.findAll(MethodCallExpr.class);

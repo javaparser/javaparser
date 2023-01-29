@@ -1,5 +1,6 @@
 /**
  * ConditionalConfidentialExample
+ *
  * @author christoph
  */
 public class ConditionalConfidentialExample {

@@ -6,7 +6,8 @@ public class Bug1 {
     public static void main(String... args) {
         LinkedList<?>[] a = new LinkedList<?>[1];
         a[0] = new LinkedList<Boolean>();
-        int k = 0; Object o = new Object();
+        int k = 0;
+        Object o = new Object();
         //@ ghost \TYPE t = \elemtype(\typeof(a));
         //@ assert (\lbl TY t) == \type(LinkedList);
         //@ assert (\lbl TY2 \typeof(k)) == \type(int);

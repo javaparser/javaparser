@@ -28,16 +28,19 @@ import org.apache.commons.collections4.Unmodifiable;
  */
 public final class UnmodifiableMapIterator<K, V> implements MapIterator<K, V>, Unmodifiable {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     private final MapIterator<? extends K, ? extends V> iterator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Decorates the specified iterator such that it cannot be modified.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param iterator  the iterator to decorate
+     * @param <K>      the key type
+     * @param <V>      the value type
+     * @param iterator the iterator to decorate
      * @return a new unmodifiable map iterator
      * @throws NullPointerException if the iterator is null
      */
@@ -55,10 +58,11 @@ public final class UnmodifiableMapIterator<K, V> implements MapIterator<K, V>, U
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      */
     private UnmodifiableMapIterator(final MapIterator<? extends K, ? extends V> iterator) {
         super();

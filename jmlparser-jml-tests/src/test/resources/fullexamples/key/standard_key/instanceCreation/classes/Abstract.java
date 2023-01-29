@@ -11,5 +11,5 @@
 // Public License. See LICENSE.TXT for details.
 // 
 
-public abstract class Abstract {    
+public abstract class Abstract {
 }

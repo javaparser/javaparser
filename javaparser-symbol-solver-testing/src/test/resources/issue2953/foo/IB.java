@@ -1,4 +1,5 @@
 package foo;
+
 public interface IB {
     Integer getCode();
 

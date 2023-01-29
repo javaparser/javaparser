@@ -160,14 +160,15 @@ final class Tree {
           ));
       @ assignable t.footprint();
       @*/
-    static /*@ helper nullable @*/ Tree deleteMin (Tree t) {
-       Tree tt, p2, p;
+    static /*@ helper nullable @*/ Tree deleteMin(Tree t) {
+        Tree tt, p2, p;
 
-       p = t.left;
-       if (p == null) {
-           t = t.right;
-       } else {
-           p2 = t; tt = p.left;
+        p = t.left;
+        if (p == null) {
+            t = t.right;
+        } else {
+            p2 = t;
+            tt = p.left;
 
            /*@ loop_invariant t.treeInv();
              @ loop_invariant t.treeInvUntilLeft(p2);
@@ -187,12 +188,14 @@ final class Tree {
              @ decreasing tt == null ? 0 : (tt.height+1);
              @ assignable \strictly_nothing;
              @*/
-           while (tt != null) {
-               p2 = p; p = tt; tt = p.left;
-           }
-           p2.left = p.right;
-       }
-       return t;
+            while (tt != null) {
+                p2 = p;
+                p = tt;
+                tt = p.left;
+            }
+            p2.left = p.right;
+        }
+        return t;
     }
 
 }

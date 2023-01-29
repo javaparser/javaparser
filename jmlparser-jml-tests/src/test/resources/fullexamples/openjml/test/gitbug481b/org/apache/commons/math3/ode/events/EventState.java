@@ -26,7 +26,8 @@ import org.apache.commons.math3.ode.ExpandableStatefulODE;
 import org.apache.commons.math3.ode.sampling.StepInterpolator;
 import org.apache.commons.math3.util.FastMath;
 
-/** This class handles the state for one {@link EventHandler
+/**
+ * This class handles the state for one {@link EventHandler
  * event handler} during integration steps.
  *
  * <p>Each time the integrator proposes a step, the event handler
@@ -40,127 +41,170 @@ import org.apache.commons.math3.util.FastMath;
  */
 public class EventState {
 
-    /** Event handler. */
+    /**
+     * Event handler.
+     */
     private final EventHandler handler;
 
-    /** Maximal time interval between events handler checks. */
+    /**
+     * Maximal time interval between events handler checks.
+     */
     private final double maxCheckInterval;
 
-    /** Convergence threshold for event localization. */
+    /**
+     * Convergence threshold for event localization.
+     */
     private final double convergence;
 
-    /** Upper limit in the iteration count for event localization. */
+    /**
+     * Upper limit in the iteration count for event localization.
+     */
     private final int maxIterationCount;
 
-    /** Equation being integrated. */
+    /**
+     * Equation being integrated.
+     */
     private ExpandableStatefulODE expandable;
 
-    /** Time at the beginning of the step. */
+    /**
+     * Time at the beginning of the step.
+     */
     private double t0;
 
-    /** Value of the events handler at the beginning of the step. */
+    /**
+     * Value of the events handler at the beginning of the step.
+     */
     private double g0;
 
-    /** Simulated sign of g0 (we cheat when crossing events). */
+    /**
+     * Simulated sign of g0 (we cheat when crossing events).
+     */
     private boolean g0Positive;
 
-    /** Indicator of event expected during the step. */
+    /**
+     * Indicator of event expected during the step.
+     */
     private boolean pendingEvent;
 
-    /** Occurrence time of the pending event. */
+    /**
+     * Occurrence time of the pending event.
+     */
     private double pendingEventTime;
 
-    /** Occurrence time of the previous event. */
+    /**
+     * Occurrence time of the previous event.
+     */
     private double previousEventTime;
 
-    /** Integration direction. */
+    /**
+     * Integration direction.
+     */
     private boolean forward;
 
-    /** Variation direction around pending event.
-     *  (this is considered with respect to the integration direction)
+    /**
+     * Variation direction around pending event.
+     * (this is considered with respect to the integration direction)
      */
     private boolean increasing;
 
-    /** Next action indicator. */
+    /**
+     * Next action indicator.
+     */
     private EventHandler.Action nextAction;
 
-    /** Root-finding algorithm to use to detect state events. */
+    /**
+     * Root-finding algorithm to use to detect state events.
+     */
     private final UnivariateSolver solver;
 
-    /** Simple constructor.
-     * @param handler event handler
-     * @param maxCheckInterval maximal time interval between switching
-     * function checks (this interval prevents missing sign changes in
-     * case the integration steps becomes very large)
-     * @param convergence convergence threshold in the event time search
+    /**
+     * Simple constructor.
+     *
+     * @param handler           event handler
+     * @param maxCheckInterval  maximal time interval between switching
+     *                          function checks (this interval prevents missing sign changes in
+     *                          case the integration steps becomes very large)
+     * @param convergence       convergence threshold in the event time search
      * @param maxIterationCount upper limit of the iteration count in
-     * the event time search
-     * @param solver Root-finding algorithm to use to detect state events
+     *                          the event time search
+     * @param solver            Root-finding algorithm to use to detect state events
      */
     public EventState(final EventHandler handler, final double maxCheckInterval,
                       final double convergence, final int maxIterationCount,
                       final UnivariateSolver solver) {
-        this.handler           = handler;
-        this.maxCheckInterval  = maxCheckInterval;
-        this.convergence       = FastMath.abs(convergence);
+        this.handler = handler;
+        this.maxCheckInterval = maxCheckInterval;
+        this.convergence = FastMath.abs(convergence);
         this.maxIterationCount = maxIterationCount;
-        this.solver            = solver;
+        this.solver = solver;
 
         // some dummy values ...
-        expandable        = null;
-        t0                = Double.NaN;
-        g0                = Double.NaN;
-        g0Positive        = true;
-        pendingEvent      = false;
-        pendingEventTime  = Double.NaN;
+        expandable = null;
+        t0 = Double.NaN;
+        g0 = Double.NaN;
+        g0Positive = true;
+        pendingEvent = false;
+        pendingEventTime = Double.NaN;
         previousEventTime = Double.NaN;
-        increasing        = true;
-        nextAction        = EventHandler.Action.CONTINUE;
+        increasing = true;
+        nextAction = EventHandler.Action.CONTINUE;
 
     }
 
-    /** Get the underlying event handler.
+    /**
+     * Get the underlying event handler.
+     *
      * @return underlying event handler
      */
     public EventHandler getEventHandler() {
         return handler;
     }
 
-    /** Set the equation.
+    /**
+     * Set the equation.
+     *
      * @param expandable equation being integrated
      */
     public void setExpandable(final ExpandableStatefulODE expandable) {
         this.expandable = expandable;
     }
 
-    /** Get the maximal time interval between events handler checks.
+    /**
+     * Get the maximal time interval between events handler checks.
+     *
      * @return maximal time interval between events handler checks
      */
     public double getMaxCheckInterval() {
         return maxCheckInterval;
     }
 
-    /** Get the convergence threshold for event localization.
+    /**
+     * Get the convergence threshold for event localization.
+     *
      * @return convergence threshold for event localization
      */
     public double getConvergence() {
         return convergence;
     }
 
-    /** Get the upper limit in the iteration count for event localization.
+    /**
+     * Get the upper limit in the iteration count for event localization.
+     *
      * @return upper limit in the iteration count for event localization
      */
     public int getMaxIterationCount() {
         return maxIterationCount;
     }
 
-    /** Reinitialize the beginning of the step.
+    /**
+     * Reinitialize the beginning of the step.
+     *
      * @param interpolator valid for the current step
-     * @exception MaxCountExceededException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
+     * @throws MaxCountExceededException if the interpolator throws one because
+     *                                   the number of functions evaluations is exceeded
      */
     public void reinitializeBegin(final StepInterpolator interpolator)
-        throws MaxCountExceededException {
+            throws MaxCountExceededException {
 
         t0 = interpolator.getPreviousTime();
         interpolator.setInterpolatedTime(t0);
@@ -180,7 +224,7 @@ public class EventState {
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero
             final double epsilon = FastMath.max(solver.getAbsoluteAccuracy(),
-                                                FastMath.abs(solver.getRelativeAccuracy() * t0));
+                    FastMath.abs(solver.getRelativeAccuracy() * t0));
             final double tStart = t0 + 0.5 * epsilon;
             interpolator.setInterpolatedTime(tStart);
             g0 = handler.g(tStart, getCompleteState(interpolator));
@@ -189,7 +233,9 @@ public class EventState {
 
     }
 
-    /** Get the complete state (primary and secondary).
+    /**
+     * Get the complete state (primary and secondary).
+     *
      * @param interpolator interpolator to use
      * @return complete state
      */
@@ -198,27 +244,29 @@ public class EventState {
         final double[] complete = new double[expandable.getTotalDimension()];
 
         expandable.getPrimaryMapper().insertEquationData(interpolator.getInterpolatedState(),
-                                                         complete);
+                complete);
         int index = 0;
         for (EquationsMapper secondary : expandable.getSecondaryMappers()) {
             secondary.insertEquationData(interpolator.getInterpolatedSecondaryState(index++),
-                                         complete);
+                    complete);
         }
 
         return complete;
 
     }
 
-    /** Evaluate the impact of the proposed step on the event handler.
+    /**
+     * Evaluate the impact of the proposed step on the event handler.
+     *
      * @param interpolator step interpolator for the proposed step
      * @return true if the event handler triggers an event before
      * the end of the proposed step
-     * @exception MaxCountExceededException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
-     * @exception NoBracketingException if the event cannot be bracketed
+     * @throws MaxCountExceededException if the interpolator throws one because
+     *                                   the number of functions evaluations is exceeded
+     * @throws NoBracketingException     if the event cannot be bracketed
      */
     public boolean evaluateStep(final StepInterpolator interpolator)
-        throws MaxCountExceededException, NoBracketingException {
+            throws MaxCountExceededException, NoBracketingException {
 
         try {
             forward = interpolator.isForward();
@@ -228,7 +276,7 @@ public class EventState {
                 // we cannot do anything on such a small step, don't trigger any events
                 return false;
             }
-            final int    n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheckInterval));
+            final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheckInterval));
             final double h = dt / n;
 
             final UnivariateFunction f = new UnivariateFunction() {
@@ -266,25 +314,25 @@ public class EventState {
                         BracketedUnivariateSolver<UnivariateFunction> bracketing =
                                 (BracketedUnivariateSolver<UnivariateFunction>) solver;
                         root = forward ?
-                               bracketing.solve(maxIterationCount, f, ta, tb, AllowedSolution.RIGHT_SIDE) :
-                               bracketing.solve(maxIterationCount, f, tb, ta, AllowedSolution.LEFT_SIDE);
+                                bracketing.solve(maxIterationCount, f, ta, tb, AllowedSolution.RIGHT_SIDE) :
+                                bracketing.solve(maxIterationCount, f, tb, ta, AllowedSolution.LEFT_SIDE);
                     } else {
                         final double baseRoot = forward ?
-                                                solver.solve(maxIterationCount, f, ta, tb) :
-                                                solver.solve(maxIterationCount, f, tb, ta);
+                                solver.solve(maxIterationCount, f, ta, tb) :
+                                solver.solve(maxIterationCount, f, tb, ta);
                         final int remainingEval = maxIterationCount - solver.getEvaluations();
                         BracketedUnivariateSolver<UnivariateFunction> bracketing =
                                 new PegasusSolver(solver.getRelativeAccuracy(), solver.getAbsoluteAccuracy());
                         root = forward ?
-                               UnivariateSolverUtils.forceSide(remainingEval, f, bracketing,
-                                                                   baseRoot, ta, tb, AllowedSolution.RIGHT_SIDE) :
-                               UnivariateSolverUtils.forceSide(remainingEval, f, bracketing,
-                                                                   baseRoot, tb, ta, AllowedSolution.LEFT_SIDE);
+                                UnivariateSolverUtils.forceSide(remainingEval, f, bracketing,
+                                        baseRoot, ta, tb, AllowedSolution.RIGHT_SIDE) :
+                                UnivariateSolverUtils.forceSide(remainingEval, f, bracketing,
+                                        baseRoot, tb, ta, AllowedSolution.LEFT_SIDE);
                     }
 
                     if ((!Double.isNaN(previousEventTime)) &&
-                        (FastMath.abs(root - ta) <= convergence) &&
-                        (FastMath.abs(root - previousEventTime) <= convergence)) {
+                            (FastMath.abs(root - ta) <= convergence) &&
+                            (FastMath.abs(root - previousEventTime) <= convergence)) {
                         // we have either found nothing or found (again ?) a past event,
                         // retry the substep excluding this value, and taking care to have the
                         // required sign in case the g function is noisy around its zero and
@@ -306,7 +354,7 @@ public class EventState {
                             return true;
                         }
                     } else if (Double.isNaN(previousEventTime) ||
-                               (FastMath.abs(previousEventTime - root) > convergence)) {
+                            (FastMath.abs(previousEventTime - root) > convergence)) {
                         pendingEventTime = root;
                         pendingEvent = true;
                         return true;
@@ -325,7 +373,7 @@ public class EventState {
             }
 
             // no event during the whole step
-            pendingEvent     = false;
+            pendingEvent = false;
             pendingEventTime = Double.NaN;
             return false;
 
@@ -335,21 +383,25 @@ public class EventState {
 
     }
 
-    /** Get the occurrence time of the event triggered in the current step.
+    /**
+     * Get the occurrence time of the event triggered in the current step.
+     *
      * @return occurrence time of the event triggered in the current
      * step or infinity if no events are triggered
      */
     public double getEventTime() {
         return pendingEvent ?
-               pendingEventTime :
-               (forward ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY);
+                pendingEventTime :
+                (forward ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY);
     }
 
-    /** Acknowledge the fact the step has been accepted by the integrator.
+    /**
+     * Acknowledge the fact the step has been accepted by the integrator.
+     *
      * @param t value of the independent <i>time</i> variable at the
-     * end of the step
+     *          end of the step
      * @param y array containing the current value of the state vector
-     * at the end of the step
+     *          at the end of the step
      */
     public void stepAccepted(final double t, final double[] y) {
 
@@ -359,27 +411,31 @@ public class EventState {
         if (pendingEvent && (FastMath.abs(pendingEventTime - t) <= convergence)) {
             // force the sign to its value "just after the event"
             previousEventTime = t;
-            g0Positive        = increasing;
-            nextAction        = handler.eventOccurred(t, y, !(increasing ^ forward));
+            g0Positive = increasing;
+            nextAction = handler.eventOccurred(t, y, !(increasing ^ forward));
         } else {
             g0Positive = g0 >= 0;
             nextAction = EventHandler.Action.CONTINUE;
         }
     }
 
-    /** Check if the integration should be stopped at the end of the
+    /**
+     * Check if the integration should be stopped at the end of the
      * current step.
+     *
      * @return true if the integration should be stopped
      */
     public boolean stop() {
         return nextAction == EventHandler.Action.STOP;
     }
 
-    /** Let the event handler reset the state if it wants.
+    /**
+     * Let the event handler reset the state if it wants.
+     *
      * @param t value of the independent <i>time</i> variable at the
-     * beginning of the next step
+     *          beginning of the next step
      * @param y array were to put the desired state vector at the beginning
-     * of the next step
+     *          of the next step
      * @return true if the integrator should reset the derivatives too
      */
     public boolean reset(final double t, final double[] y) {
@@ -391,31 +447,41 @@ public class EventState {
         if (nextAction == EventHandler.Action.RESET_STATE) {
             handler.resetState(t, y);
         }
-        pendingEvent      = false;
-        pendingEventTime  = Double.NaN;
+        pendingEvent = false;
+        pendingEventTime = Double.NaN;
 
         return (nextAction == EventHandler.Action.RESET_STATE) ||
-               (nextAction == EventHandler.Action.RESET_DERIVATIVES);
+                (nextAction == EventHandler.Action.RESET_DERIVATIVES);
 
     }
 
-    /** Local wrapper to propagate exceptions. */
+    /**
+     * Local wrapper to propagate exceptions.
+     */
     private static class LocalMaxCountExceededException extends RuntimeException {
 
-        /** Serializable UID. */
+        /**
+         * Serializable UID.
+         */
         private static final long serialVersionUID = 20120901L;
 
-        /** Wrapped exception. */
+        /**
+         * Wrapped exception.
+         */
         private final MaxCountExceededException wrapped;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param exception exception to wrap
          */
         LocalMaxCountExceededException(final MaxCountExceededException exception) {
             wrapped = exception;
         }
 
-        /** Get the wrapped exception.
+        /**
+         * Get the wrapped exception.
+         *
          * @return wrapped exception
          */
         public MaxCountExceededException getException() {

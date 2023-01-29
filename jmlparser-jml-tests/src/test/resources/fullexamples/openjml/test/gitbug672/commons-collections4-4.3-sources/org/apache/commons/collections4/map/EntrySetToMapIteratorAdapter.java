@@ -28,23 +28,29 @@ import java.util.Set;
  *
  * @param <K> the type of the keys in the map
  * @param <V> the type of the values in the map
- *
  * @since 4.0
  */
 public class EntrySetToMapIteratorAdapter<K, V> implements MapIterator<K, V>, ResettableIterator<K> {
 
-    /** The adapted Map entry Set. */
+    /**
+     * The adapted Map entry Set.
+     */
     Set<Map.Entry<K, V>> entrySet;
 
-    /** The resettable iterator in use. */
+    /**
+     * The resettable iterator in use.
+     */
     transient Iterator<Map.Entry<K, V>> iterator;
 
-    /** The currently positioned Map entry. */
+    /**
+     * The currently positioned Map entry.
+     */
     transient Map.Entry<K, V> entry;
 
     /**
      * Create a new EntrySetToMapIteratorAdapter.
-     * @param entrySet  the entrySet to adapt
+     *
+     * @param entrySet the entrySet to adapt
      */
     public EntrySetToMapIteratorAdapter(final Set<Map.Entry<K, V>> entrySet) {
         this.entrySet = entrySet;
@@ -111,6 +117,7 @@ public class EntrySetToMapIteratorAdapter<K, V> implements MapIterator<K, V>, Re
 
     /**
      * Get the currently active entry.
+     *
      * @return Map.Entry&lt;K, V&gt;
      */
     protected synchronized Map.Entry<K, V> current() {

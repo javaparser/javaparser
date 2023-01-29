@@ -21,6 +21,7 @@ import org.apache.commons.math3.exception.MathIllegalArgumentException;
 
 /**
  * A strategy to pick a pivoting index of an array for doing partitioning.
+ *
  * @see MedianOf3PivotingStrategy
  * @see RandomPivotingStrategy
  * @see CentralPivotingStrategy
@@ -31,14 +32,15 @@ public interface PivotingStrategyInterface {
     /**
      * Find pivot index of the array so that partition and K<sup>th</sup>
      * element selection can be made
-     * @param work data array
+     *
+     * @param work  data array
      * @param begin index of the first element of the slice
-     * @param end index after the last element of the slice
+     * @param end   index after the last element of the slice
      * @return the index of the pivot element chosen between the
      * first and the last element of the array slice
      * @throws MathIllegalArgumentException when indices exceeds range
      */
     int pivotIndex(double[] work, int begin, int end)
-        throws MathIllegalArgumentException;
+            throws MathIllegalArgumentException;
 
 }

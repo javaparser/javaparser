@@ -34,21 +34,22 @@ import java.util.Set;
  *
  * @param <K> the type of the keys in the map
  * @param <V> the type of the values in the map
- *
  * @since 3.0
  */
 public final class UnmodifiableEntrySet<K, V>
         extends AbstractSetDecorator<Map.Entry<K, V>> implements Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 1678353579659253473L;
 
     /**
      * Factory method to create an unmodifiable set of Map Entry objects.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param set  the set to decorate, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param set the set to decorate, must not be null
      * @return a new unmodifiable entry set
      * @throws NullPointerException if set is null
      * @since 4.0
@@ -61,10 +62,11 @@ public final class UnmodifiableEntrySet<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param set  the set to decorate, must not be null
+     * @param set the set to decorate, must not be null
      * @throws NullPointerException if set is null
      */
     private UnmodifiableEntrySet(final Set<Map.Entry<K, V>> set) {
@@ -146,6 +148,7 @@ public final class UnmodifiableEntrySet<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implementation of an entry set iterator.
      */
@@ -167,6 +170,7 @@ public final class UnmodifiableEntrySet<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implementation of a map entry that is unmodifiable.
      */

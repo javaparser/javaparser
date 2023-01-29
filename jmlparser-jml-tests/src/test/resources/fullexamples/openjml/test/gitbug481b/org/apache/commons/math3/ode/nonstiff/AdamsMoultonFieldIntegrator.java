@@ -162,66 +162,72 @@ import java.util.Arrays;
  */
 public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends AdamsFieldIntegrator<T> {
 
-    /** Integrator method name. */
+    /**
+     * Integrator method name.
+     */
     private static final String METHOD_NAME = "Adams-Moulton";
 
     /**
      * Build an Adams-Moulton integrator with the given order and error control parameters.
-     * @param field field to which the time and state vector elements belong
-     * @param nSteps number of steps of the method excluding the one being computed
-     * @param minStep minimal step (sign is irrelevant, regardless of
-     * integration direction, forward or backward), the last step can
-     * be smaller than this
-     * @param maxStep maximal step (sign is irrelevant, regardless of
-     * integration direction, forward or backward), the last step can
-     * be smaller than this
+     *
+     * @param field                 field to which the time and state vector elements belong
+     * @param nSteps                number of steps of the method excluding the one being computed
+     * @param minStep               minimal step (sign is irrelevant, regardless of
+     *                              integration direction, forward or backward), the last step can
+     *                              be smaller than this
+     * @param maxStep               maximal step (sign is irrelevant, regardless of
+     *                              integration direction, forward or backward), the last step can
+     *                              be smaller than this
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
-     * @exception NumberIsTooSmallException if order is 1 or less
+     * @throws NumberIsTooSmallException if order is 1 or less
      */
     public AdamsMoultonFieldIntegrator(final Field<T> field, final int nSteps,
                                        final double minStep, final double maxStep,
                                        final double scalAbsoluteTolerance,
                                        final double scalRelativeTolerance)
-        throws NumberIsTooSmallException {
+            throws NumberIsTooSmallException {
         super(field, METHOD_NAME, nSteps, nSteps + 1, minStep, maxStep,
-              scalAbsoluteTolerance, scalRelativeTolerance);
+                scalAbsoluteTolerance, scalRelativeTolerance);
     }
 
     /**
      * Build an Adams-Moulton integrator with the given order and error control parameters.
-     * @param field field to which the time and state vector elements belong
-     * @param nSteps number of steps of the method excluding the one being computed
-     * @param minStep minimal step (sign is irrelevant, regardless of
-     * integration direction, forward or backward), the last step can
-     * be smaller than this
-     * @param maxStep maximal step (sign is irrelevant, regardless of
-     * integration direction, forward or backward), the last step can
-     * be smaller than this
+     *
+     * @param field                field to which the time and state vector elements belong
+     * @param nSteps               number of steps of the method excluding the one being computed
+     * @param minStep              minimal step (sign is irrelevant, regardless of
+     *                             integration direction, forward or backward), the last step can
+     *                             be smaller than this
+     * @param maxStep              maximal step (sign is irrelevant, regardless of
+     *                             integration direction, forward or backward), the last step can
+     *                             be smaller than this
      * @param vecAbsoluteTolerance allowed absolute error
      * @param vecRelativeTolerance allowed relative error
-     * @exception IllegalArgumentException if order is 1 or less
+     * @throws IllegalArgumentException if order is 1 or less
      */
     public AdamsMoultonFieldIntegrator(final Field<T> field, final int nSteps,
                                        final double minStep, final double maxStep,
                                        final double[] vecAbsoluteTolerance,
                                        final double[] vecRelativeTolerance)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(field, METHOD_NAME, nSteps, nSteps + 1, minStep, maxStep,
-              vecAbsoluteTolerance, vecRelativeTolerance);
+                vecAbsoluteTolerance, vecRelativeTolerance);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                    final FieldODEState<T> initialState,
                                                    final T finalTime)
-        throws NumberIsTooSmallException, DimensionMismatchException,
-               MaxCountExceededException, NoBracketingException {
+            throws NumberIsTooSmallException, DimensionMismatchException,
+            MaxCountExceededException, NoBracketingException {
 
         sanityChecks(initialState, finalTime);
-        final T   t0 = initialState.getTime();
-        final T[] y  = equations.getMapper().mapState(initialState);
+        final T t0 = initialState.getTime();
+        final T[] y = equations.getMapper().mapState(initialState);
         setStepStart(initIntegration(equations, t0, y, finalTime));
         final boolean forward = finalTime.subtract(initialState.getTime()).getReal() > 0;
 
@@ -230,10 +236,10 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
 
         // reuse the step that was chosen by the starter integrator
         FieldODEStateAndDerivative<T> stepStart = getStepStart();
-        FieldODEStateAndDerivative<T> stepEnd   =
-                        AdamsFieldStepInterpolator.taylor(stepStart,
-                                                          stepStart.getTime().add(getStepSize()),
-                                                          getStepSize(), scaled, nordsieck);
+        FieldODEStateAndDerivative<T> stepEnd =
+                AdamsFieldStepInterpolator.taylor(stepStart,
+                        stepStart.getTime().add(getStepSize()),
+                        getStepSize(), scaled, nordsieck);
 
         // main integration loop
         setIsLastStep(false);
@@ -266,10 +272,10 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
                     final T factor = computeStepGrowShrinkFactor(error);
                     rescale(filterStep(getStepSize().multiply(factor), forward, false));
                     stepEnd = AdamsFieldStepInterpolator.taylor(getStepStart(),
-                                                                getStepStart().getTime().add(getStepSize()),
-                                                                getStepSize(),
-                                                                scaled,
-                                                                nordsieck);
+                            getStepStart().getTime().add(getStepSize()),
+                            getStepSize(),
+                            scaled,
+                            nordsieck);
                 }
             }
 
@@ -286,11 +292,11 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
             // discrete events handling
             stepEnd = new FieldODEStateAndDerivative<T>(stepEnd.getTime(), predictedY, correctedYDot);
             setStepStart(acceptStep(new AdamsFieldStepInterpolator<T>(getStepSize(), stepEnd,
-                                                                      correctedScaled, predictedNordsieck, forward,
-                                                                      getStepStart(), stepEnd,
-                                                                      equations.getMapper()),
-                                    finalTime));
-            scaled    = correctedScaled;
+                            correctedScaled, predictedNordsieck, forward,
+                            getStepStart(), stepEnd,
+                            equations.getMapper()),
+                    finalTime));
+            scaled = correctedScaled;
             nordsieck = predictedNordsieck;
 
             if (!isLastStep()) {
@@ -304,25 +310,25 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
                 }
 
                 // stepsize control for next step
-                final T  factor     = computeStepGrowShrinkFactor(error);
-                final T  scaledH    = getStepSize().multiply(factor);
-                final T  nextT      = getStepStart().getTime().add(scaledH);
+                final T factor = computeStepGrowShrinkFactor(error);
+                final T scaledH = getStepSize().multiply(factor);
+                final T nextT = getStepStart().getTime().add(scaledH);
                 final boolean nextIsLast = forward ?
-                                           nextT.subtract(finalTime).getReal() >= 0 :
-                                           nextT.subtract(finalTime).getReal() <= 0;
+                        nextT.subtract(finalTime).getReal() >= 0 :
+                        nextT.subtract(finalTime).getReal() <= 0;
                 T hNew = filterStep(scaledH, forward, nextIsLast);
 
-                final T  filteredNextT      = getStepStart().getTime().add(hNew);
+                final T filteredNextT = getStepStart().getTime().add(hNew);
                 final boolean filteredNextIsLast = forward ?
-                                                   filteredNextT.subtract(finalTime).getReal() >= 0 :
-                                                   filteredNextT.subtract(finalTime).getReal() <= 0;
+                        filteredNextT.subtract(finalTime).getReal() >= 0 :
+                        filteredNextT.subtract(finalTime).getReal() <= 0;
                 if (filteredNextIsLast) {
                     hNew = finalTime.subtract(getStepStart().getTime());
                 }
 
                 rescale(hNew);
                 stepEnd = AdamsFieldStepInterpolator.taylor(getStepStart(), getStepStart().getTime().add(getStepSize()),
-                                                            getStepSize(), scaled, nordsieck);
+                        getStepSize(), scaled, nordsieck);
 
             }
 
@@ -335,7 +341,8 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
 
     }
 
-    /** Corrector for current state in Adams-Moulton method.
+    /**
+     * Corrector for current state in Adams-Moulton method.
      * <p>
      * This visitor implements the Taylor series formula:
      * <pre>
@@ -345,37 +352,51 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
      */
     private class Corrector implements FieldMatrixPreservingVisitor<T> {
 
-        /** Previous state. */
+        /**
+         * Previous state.
+         */
         private final T[] previous;
 
-        /** Current scaled first derivative. */
+        /**
+         * Current scaled first derivative.
+         */
         private final T[] scaled;
 
-        /** Current state before correction. */
+        /**
+         * Current state before correction.
+         */
         private final T[] before;
 
-        /** Current state after correction. */
+        /**
+         * Current state after correction.
+         */
         private final T[] after;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param previous previous state
-         * @param scaled current scaled first derivative
-         * @param state state to correct (will be overwritten after visit)
+         * @param scaled   current scaled first derivative
+         * @param state    state to correct (will be overwritten after visit)
          */
         Corrector(final T[] previous, final T[] scaled, final T[] state) {
             this.previous = previous;
-            this.scaled   = scaled;
-            this.after    = state;
-            this.before   = state.clone();
+            this.scaled = scaled;
+            this.after = state;
+            this.before = state.clone();
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void start(int rows, int columns,
                           int startRow, int endRow, int startColumn, int endColumn) {
             Arrays.fill(after, getField().getZero());
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void visit(int row, int column, T value) {
             if ((row & 0x1) == 0) {
                 after[column] = after[column].subtract(value);
@@ -390,6 +411,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
          * considered to be an error, which must be normalized according to
          * error control settings. If the normalized value is greater than 1,
          * the correction was too large and the step must be rejected.</p>
+         *
          * @return the normalized correction, if greater than 1, the step
          * must be rejected
          */
@@ -401,9 +423,9 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
                 if (i < mainSetDimension) {
                     final T yScale = MathUtils.max(previous[i].abs(), after[i].abs());
                     final T tol = (vecAbsoluteTolerance == null) ?
-                                  yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
-                                  yScale.multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);
-                    final T ratio  = after[i].subtract(before[i]).divide(tol); // (corrected-predicted)/tol
+                            yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
+                            yScale.multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);
+                    final T ratio = after[i].subtract(before[i]).divide(tol); // (corrected-predicted)/tol
                     error = error.add(ratio.multiply(ratio));
                 }
             }

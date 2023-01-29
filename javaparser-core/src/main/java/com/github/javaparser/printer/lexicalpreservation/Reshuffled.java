@@ -106,7 +106,7 @@ public class Reshuffled implements DifferenceElement {
     }
 
     /*
-     * Replaces all eol tokens in the list by the specified line separator token 
+     * Replaces all eol tokens in the list by the specified line separator token
      */
     private List<CsmElement> replaceTokens(List<CsmElement> elements, CsmElement lineSeparator) {
         return elements.stream().map(element -> isNewLineToken(element) ? lineSeparator : element).collect(Collectors.toList());

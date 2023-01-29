@@ -43,7 +43,7 @@ import org.apache.commons.math3.ode.sampling.StepInterpolator;
  *   </li>
  * </ul>
  * </p>
- *
+ * <p>
  * where &theta; belongs to [0 ; 1] and where y'<sub>1</sub> to y'<sub>4</sub> are the four
  * evaluations of the derivatives already computed during the
  * step.</p>
@@ -53,12 +53,15 @@ import org.apache.commons.math3.ode.sampling.StepInterpolator;
  */
 
 class ClassicalRungeKuttaStepInterpolator
-    extends RungeKuttaStepInterpolator {
+        extends RungeKuttaStepInterpolator {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20111120L;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * This constructor builds an instance that is not usable yet, the
      * {@link RungeKuttaStepInterpolator#reinitialize} method should be
      * called before using the instance in order to initialize the
@@ -74,58 +77,64 @@ class ClassicalRungeKuttaStepInterpolator
     }
     // CHECKSTYLE: resume RedundantModifier
 
-    /** Copy constructor.
+    /**
+     * Copy constructor.
+     *
      * @param interpolator interpolator to copy from. The copy is a deep
-     * copy: its arrays are separated from the original arrays of the
-     * instance
+     *                     copy: its arrays are separated from the original arrays of the
+     *                     instance
      */
     ClassicalRungeKuttaStepInterpolator(final ClassicalRungeKuttaStepInterpolator interpolator) {
         super(interpolator);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected StepInterpolator doCopy() {
         return new ClassicalRungeKuttaStepInterpolator(this);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void computeInterpolatedStateAndDerivatives(final double theta,
-                                            final double oneMinusThetaH) {
+                                                          final double oneMinusThetaH) {
 
-        final double oneMinusTheta  = 1 - theta;
+        final double oneMinusTheta = 1 - theta;
         final double oneMinus2Theta = 1 - 2 * theta;
-        final double coeffDot1     = oneMinusTheta * oneMinus2Theta;
-        final double coeffDot23    = 2 * theta * oneMinusTheta;
-        final double coeffDot4     = -theta * oneMinus2Theta;
+        final double coeffDot1 = oneMinusTheta * oneMinus2Theta;
+        final double coeffDot23 = 2 * theta * oneMinusTheta;
+        final double coeffDot4 = -theta * oneMinus2Theta;
         if ((previousState != null) && (theta <= 0.5)) {
-            final double fourTheta2     = 4 * theta * theta;
-            final double s             = theta * h / 6.0;
-            final double coeff1        = s * ( 6 - 9 * theta + fourTheta2);
-            final double coeff23       = s * ( 6 * theta - fourTheta2);
-            final double coeff4        = s * (-3 * theta + fourTheta2);
+            final double fourTheta2 = 4 * theta * theta;
+            final double s = theta * h / 6.0;
+            final double coeff1 = s * (6 - 9 * theta + fourTheta2);
+            final double coeff23 = s * (6 * theta - fourTheta2);
+            final double coeff4 = s * (-3 * theta + fourTheta2);
             for (int i = 0; i < interpolatedState.length; ++i) {
-                final double yDot1  = yDotK[0][i];
+                final double yDot1 = yDotK[0][i];
                 final double yDot23 = yDotK[1][i] + yDotK[2][i];
-                final double yDot4  = yDotK[3][i];
+                final double yDot4 = yDotK[3][i];
                 interpolatedState[i] =
-                        previousState[i] + coeff1  * yDot1 + coeff23 * yDot23 + coeff4  * yDot4;
+                        previousState[i] + coeff1 * yDot1 + coeff23 * yDot23 + coeff4 * yDot4;
                 interpolatedDerivatives[i] =
                         coeffDot1 * yDot1 + coeffDot23 * yDot23 + coeffDot4 * yDot4;
             }
         } else {
-            final double fourTheta      = 4 * theta;
-            final double s             = oneMinusThetaH / 6.0;
-            final double coeff1        = s * ((-fourTheta + 5) * theta - 1);
-            final double coeff23       = s * (( fourTheta - 2) * theta - 2);
-            final double coeff4        = s * ((-fourTheta - 1) * theta - 1);
+            final double fourTheta = 4 * theta;
+            final double s = oneMinusThetaH / 6.0;
+            final double coeff1 = s * ((-fourTheta + 5) * theta - 1);
+            final double coeff23 = s * ((fourTheta - 2) * theta - 2);
+            final double coeff4 = s * ((-fourTheta - 1) * theta - 1);
             for (int i = 0; i < interpolatedState.length; ++i) {
-                final double yDot1  = yDotK[0][i];
+                final double yDot1 = yDotK[0][i];
                 final double yDot23 = yDotK[1][i] + yDotK[2][i];
-                final double yDot4  = yDotK[3][i];
+                final double yDot4 = yDotK[3][i];
                 interpolatedState[i] =
-                        currentState[i] + coeff1  * yDot1 + coeff23 * yDot23 + coeff4  * yDot4;
+                        currentState[i] + coeff1 * yDot1 + coeff23 * yDot23 + coeff4 * yDot4;
                 interpolatedDerivatives[i] =
                         coeffDot1 * yDot1 + coeffDot23 * yDot23 + coeffDot4 * yDot4;
             }

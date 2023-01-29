@@ -76,9 +76,9 @@ class JavassistUtils {
 
         for (ResolvedReferenceType ancestor : scopeType.getAncestors()) {
             ancestor.getTypeDeclaration()
-                .flatMap(superClassTypeDeclaration -> ancestor.getTypeDeclaration())
-                .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
-                .ifPresent(methods::add);
+                    .flatMap(superClassTypeDeclaration -> ancestor.getTypeDeclaration())
+                    .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
+                    .ifPresent(methods::add);
         }
 
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
@@ -153,6 +153,7 @@ class JavassistUtils {
             throw new RuntimeException(signatureType.getClass().getCanonicalName());
         }
     }
+
     /*
      * Manage dimension of an array
      */
@@ -222,7 +223,7 @@ class JavassistUtils {
      * <p>
      * The parameters are counted from 0, skipping the implicit {@code this} parameter of non-static methods.
      *
-     * @param method the method to look into
+     * @param method      the method to look into
      * @param paramNumber the number of the parameter to look for
      * @return the found parameter name or empty, if the name is not available
      */

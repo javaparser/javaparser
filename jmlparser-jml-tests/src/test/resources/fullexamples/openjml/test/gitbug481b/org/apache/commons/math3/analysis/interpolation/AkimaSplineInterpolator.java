@@ -46,8 +46,10 @@ import org.apache.commons.math3.util.Precision;
  * </p>
  */
 public class AkimaSplineInterpolator
-    implements UnivariateInterpolator {
-    /** The minimum number of points that are needed to compute the function. */
+        implements UnivariateInterpolator {
+    /**
+     * The minimum number of points that are needed to compute the function.
+     */
     private static final int MINIMUM_NUMBER_POINTS = 5;
 
     /**
@@ -56,20 +58,20 @@ public class AkimaSplineInterpolator
      * @param xvals the arguments for the interpolation points
      * @param yvals the values for the interpolation points
      * @return a function which interpolates the data set
-     * @throws DimensionMismatchException if {@code xvals} and {@code yvals} have
-     *         different sizes.
+     * @throws DimensionMismatchException    if {@code xvals} and {@code yvals} have
+     *                                       different sizes.
      * @throws NonMonotonicSequenceException if {@code xvals} is not sorted in
-     *         strict increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code xvals} is smaller
-     *         than 5.
+     *                                       strict increasing order.
+     * @throws NumberIsTooSmallException     if the size of {@code xvals} is smaller
+     *                                       than 5.
      */
     public PolynomialSplineFunction interpolate(double[] xvals,
                                                 double[] yvals)
-        throws DimensionMismatchException,
-               NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+            throws DimensionMismatchException,
+            NumberIsTooSmallException,
+            NonMonotonicSequenceException {
         if (xvals == null ||
-            yvals == null) {
+                yvals == null) {
             throw new NullArgumentException();
         }
 
@@ -79,8 +81,8 @@ public class AkimaSplineInterpolator
 
         if (xvals.length < MINIMUM_NUMBER_POINTS) {
             throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
-                                                xvals.length,
-                                                MINIMUM_NUMBER_POINTS, true);
+                    xvals.length,
+                    MINIMUM_NUMBER_POINTS, true);
         }
 
         MathArrays.checkOrder(xvals);
@@ -105,7 +107,7 @@ public class AkimaSplineInterpolator
             final double wP = weights[i + 1];
             final double wM = weights[i - 1];
             if (Precision.equals(wP, 0.0) &&
-                Precision.equals(wM, 0.0)) {
+                    Precision.equals(wM, 0.0)) {
                 final double xv = xvals[i];
                 final double xvP = xvals[i + 1];
                 final double xvM = xvals[i - 1];
@@ -118,11 +120,11 @@ public class AkimaSplineInterpolator
         firstDerivatives[0] = differentiateThreePoint(xvals, yvals, 0, 0, 1, 2);
         firstDerivatives[1] = differentiateThreePoint(xvals, yvals, 1, 0, 1, 2);
         firstDerivatives[xvals.length - 2] = differentiateThreePoint(xvals, yvals, xvals.length - 2,
-                                                                     xvals.length - 3, xvals.length - 2,
-                                                                     xvals.length - 1);
+                xvals.length - 3, xvals.length - 2,
+                xvals.length - 1);
         firstDerivatives[xvals.length - 1] = differentiateThreePoint(xvals, yvals, xvals.length - 1,
-                                                                     xvals.length - 3, xvals.length - 2,
-                                                                     xvals.length - 1);
+                xvals.length - 3, xvals.length - 2,
+                xvals.length - 1);
 
         return interpolateHermiteSorted(xvals, yvals, firstDerivatives);
     }
@@ -132,12 +134,12 @@ public class AkimaSplineInterpolator
      * Math.NET CubicSpline class. This is used by both the Apache Math and the
      * Math.NET Akima Cubic Spline algorithms
      *
-     * @param xvals x values to calculate the numerical derivative with
-     * @param yvals y values to calculate the numerical derivative with
+     * @param xvals                  x values to calculate the numerical derivative with
+     * @param yvals                  y values to calculate the numerical derivative with
      * @param indexOfDifferentiation index of the elemnt we are calculating the derivative around
-     * @param indexOfFirstSample index of the first element to sample for the three point method
-     * @param indexOfSecondsample index of the second element to sample for the three point method
-     * @param indexOfThirdSample index of the third element to sample for the three point method
+     * @param indexOfFirstSample     index of the first element to sample for the three point method
+     * @param indexOfSecondsample    index of the second element to sample for the three point method
+     * @param indexOfThirdSample     index of the third element to sample for the three point method
      * @return the derivative
      */
     private double differentiateThreePoint(double[] xvals, double[] yvals,
@@ -164,8 +166,8 @@ public class AkimaSplineInterpolator
      * pairs and their derivatives. This is modeled off of the
      * InterpolateHermiteSorted method in the Math.NET CubicSpline class.
      *
-     * @param xvals x values for interpolation
-     * @param yvals y values for interpolation
+     * @param xvals            x values for interpolation
+     * @param yvals            y values for interpolation
      * @param firstDerivatives first derivative values of the function
      * @return polynomial that fits the function
      */
@@ -178,14 +180,14 @@ public class AkimaSplineInterpolator
 
         if (xvals.length != firstDerivatives.length) {
             throw new DimensionMismatchException(xvals.length,
-                                                 firstDerivatives.length);
+                    firstDerivatives.length);
         }
 
         final int minimumLength = 2;
         if (xvals.length < minimumLength) {
             throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
-                                                xvals.length, minimumLength,
-                                                true);
+                    xvals.length, minimumLength,
+                    true);
         }
 
         final int size = xvals.length - 1;

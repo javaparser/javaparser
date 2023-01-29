@@ -99,8 +99,8 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      * Creates a {@link FieldDeclaration}.
      *
      * @param modifiers modifiers
-     * @param type type
-     * @param name field name
+     * @param type      type
+     * @param name      field name
      */
     public FieldDeclaration(NodeList<Modifier> modifiers, Type type, String name) {
         this(assertNotNull(modifiers), new VariableDeclarator(type, assertNotNull(name)));
@@ -168,7 +168,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      *
      * @return the {@link MethodDeclaration} created
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
-     * class or enum
+     *                               class or enum
      */
     public MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
@@ -195,7 +195,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      *
      * @return the {@link MethodDeclaration} created
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
-     * class or enum
+     *                               class or enum
      */
     public MethodDeclaration createSetter() {
         if (getVariables().size() != 1)

@@ -61,20 +61,29 @@ import org.apache.commons.math3.util.MathUtils;
  * </p>
  *
  * @see MultivariateFunctionMappingAdapter
- *
  * @since 3.0
  */
 public class MultivariateFunctionPenaltyAdapter
-    implements MultivariateFunction {
-    /** Underlying bounded function. */
+        implements MultivariateFunction {
+    /**
+     * Underlying bounded function.
+     */
     private final MultivariateFunction bounded;
-    /** Lower bounds. */
+    /**
+     * Lower bounds.
+     */
     private final double[] lower;
-    /** Upper bounds. */
+    /**
+     * Upper bounds.
+     */
     private final double[] upper;
-    /** Penalty offset. */
+    /**
+     * Penalty offset.
+     */
     private final double offset;
-    /** Penalty scales. */
+    /**
+     * Penalty scales.
+     */
     private final double[] scale;
 
     /**
@@ -106,18 +115,19 @@ public class MultivariateFunctionPenaltyAdapter
      * boundaries violation than for small violations, so the optimizer has an hint
      * about the direction in which it should search for acceptable points.
      * </p>
+     *
      * @param bounded bounded function
-     * @param lower lower bounds for each element of the input parameters array
-     * (some elements may be set to {@code Double.NEGATIVE_INFINITY} for
-     * unbounded values)
-     * @param upper upper bounds for each element of the input parameters array
-     * (some elements may be set to {@code Double.POSITIVE_INFINITY} for
-     * unbounded values)
-     * @param offset base offset of the penalty function
-     * @param scale scale of the penalty function
-     * @exception DimensionMismatchException if lower bounds, upper bounds and
-     * scales are not consistent, either according to dimension or to bounadary
-     * values
+     * @param lower   lower bounds for each element of the input parameters array
+     *                (some elements may be set to {@code Double.NEGATIVE_INFINITY} for
+     *                unbounded values)
+     * @param upper   upper bounds for each element of the input parameters array
+     *                (some elements may be set to {@code Double.POSITIVE_INFINITY} for
+     *                unbounded values)
+     * @param offset  base offset of the penalty function
+     * @param scale   scale of the penalty function
+     * @throws DimensionMismatchException if lower bounds, upper bounds and
+     *                                    scales are not consistent, either according to dimension or to bounadary
+     *                                    values
      */
     public MultivariateFunctionPenaltyAdapter(final MultivariateFunction bounded,
                                               final double[] lower, final double[] upper,
@@ -141,10 +151,10 @@ public class MultivariateFunctionPenaltyAdapter
         }
 
         this.bounded = bounded;
-        this.lower   = lower.clone();
-        this.upper   = upper.clone();
-        this.offset  = offset;
-        this.scale   = scale.clone();
+        this.lower = lower.clone();
+        this.upper = upper.clone();
+        this.offset = offset;
+        this.scale = scale.clone();
     }
 
     /**
@@ -155,6 +165,7 @@ public class MultivariateFunctionPenaltyAdapter
      * a replacement value using the offset and scale if bounds are
      * violated, without calling the function at all.
      * </p>
+     *
      * @param point unbounded point
      * @return either underlying function value or penalty function value
      */

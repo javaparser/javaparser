@@ -43,14 +43,17 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -370076995648386763L;
 
-    /**Number of values that have been added */
+    /**
+     * Number of values that have been added
+     */
     private int n;
 
     /**
@@ -62,8 +65,8 @@ public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements S
      * Create a SumOfLogs instance
      */
     public SumOfLogs() {
-       value = 0d;
-       n = 0;
+        value = 0d;
+        n = 0;
     }
 
     /**
@@ -120,16 +123,16 @@ public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements S
      * See {@link SumOfLogs}.</p>
      *
      * @param values the input array
-     * @param begin index of the first array element to include
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the sum of the natural logs of the values or 0 if
      * length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     @Override
     public double evaluate(final double[] values, final int begin, final int length)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         double sumLog = Double.NaN;
         if (test(values, begin, length, true)) {
             sumLog = 0.0;
@@ -156,11 +159,11 @@ public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements S
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source SumOfLogs to copy
-     * @param dest SumOfLogs to copy to
+     * @param dest   SumOfLogs to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(SumOfLogs source, SumOfLogs dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

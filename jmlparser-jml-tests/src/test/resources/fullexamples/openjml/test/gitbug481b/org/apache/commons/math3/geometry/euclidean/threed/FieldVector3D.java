@@ -30,25 +30,36 @@ import java.text.NumberFormat;
 /**
  * This class is a re-implementation of {@link Vector3D} using {@link RealFieldElement}.
  * <p>Instance of this class are guaranteed to be immutable.</p>
+ *
  * @param <T> the type of the field elements
  * @since 3.2
  */
 public class FieldVector3D<T extends RealFieldElement<T>> implements Serializable {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20130224L;
 
-    /** Abscissa. */
+    /**
+     * Abscissa.
+     */
     private final T x;
 
-    /** Ordinate. */
+    /**
+     * Ordinate.
+     */
     private final T y;
 
-    /** Height. */
+    /**
+     * Height.
+     */
     private final T z;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build a vector from its coordinates
+     *
      * @param x abscissa
      * @param y ordinate
      * @param z height
@@ -62,10 +73,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = z;
     }
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build a vector from its coordinates
+     *
      * @param v coordinates array
-     * @exception DimensionMismatchException if array does not have 3 elements
+     * @throws DimensionMismatchException if array does not have 3 elements
      * @see #toArray()
      */
     public FieldVector3D(final T[] v) throws DimensionMismatchException {
@@ -77,8 +90,10 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = v[2];
     }
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build a vector from its azimuthal coordinates
+     *
      * @param alpha azimuth (&alpha;) around Z
      *              (0 is +X, &pi;/2 is +Y, &pi; is -X and 3&pi;/2 is -Y)
      * @param delta elevation (&delta;) above (XY) plane, from -&pi;/2 to +&pi;/2
@@ -92,21 +107,25 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = delta.sin();
     }
 
-    /** Multiplicative constructor
+    /**
+     * Multiplicative constructor
      * Build a vector from another one and a scale factor.
      * The vector built will be a * u
+     *
      * @param a scale factor
      * @param u base (unscaled) vector
      */
-    public FieldVector3D(final T a, final FieldVector3D<T>u) {
+    public FieldVector3D(final T a, final FieldVector3D<T> u) {
         this.x = a.multiply(u.x);
         this.y = a.multiply(u.y);
         this.z = a.multiply(u.z);
     }
 
-    /** Multiplicative constructor
+    /**
+     * Multiplicative constructor
      * Build a vector from another one and a scale factor.
      * The vector built will be a * u
+     *
      * @param a scale factor
      * @param u base (unscaled) vector
      */
@@ -116,9 +135,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = a.multiply(u.getZ());
     }
 
-    /** Multiplicative constructor
+    /**
+     * Multiplicative constructor
      * Build a vector from another one and a scale factor.
      * The vector built will be a * u
+     *
      * @param a scale factor
      * @param u base (unscaled) vector
      */
@@ -128,9 +149,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = u.z.multiply(a);
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from two other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -144,9 +167,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ());
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from two other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -160,9 +185,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(u1.getZ(), a1, u2.getZ(), a2);
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from two other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -176,9 +203,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ());
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from three other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -195,9 +224,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ(), a3, u3.getZ());
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from three other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -214,9 +245,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(u1.getZ(), a1, u2.getZ(), a2, u3.getZ(), a3);
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from three other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -233,9 +266,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ(), a3, u3.getZ());
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from four other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3 + a4 * u4
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -255,9 +290,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ(), a3, u3.getZ(), a4, u4.getZ());
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from four other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3 + a4 * u4
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -277,9 +314,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(u1.getZ(), a1, u2.getZ(), a2, u3.getZ(), a3, u4.getZ(), a4);
     }
 
-    /** Linear constructor
+    /**
+     * Linear constructor
      * Build a vector from four other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3 + a4 * u4
+     *
      * @param a1 first scale factor
      * @param u1 first base (unscaled) vector
      * @param a2 second scale factor
@@ -299,7 +338,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ(), a3, u3.getZ(), a4, u4.getZ());
     }
 
-    /** Get the abscissa of the vector.
+    /**
+     * Get the abscissa of the vector.
+     *
      * @return abscissa of the vector
      * @see #FieldVector3D(RealFieldElement, RealFieldElement, RealFieldElement)
      */
@@ -307,7 +348,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return x;
     }
 
-    /** Get the ordinate of the vector.
+    /**
+     * Get the ordinate of the vector.
+     *
      * @return ordinate of the vector
      * @see #FieldVector3D(RealFieldElement, RealFieldElement, RealFieldElement)
      */
@@ -315,7 +358,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return y;
     }
 
-    /** Get the height of the vector.
+    /**
+     * Get the height of the vector.
+     *
      * @return height of the vector
      * @see #FieldVector3D(RealFieldElement, RealFieldElement, RealFieldElement)
      */
@@ -323,7 +368,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return z;
     }
 
-    /** Get the vector coordinates as a dimension 3 array.
+    /**
+     * Get the vector coordinates as a dimension 3 array.
+     *
      * @return vector coordinates
      * @see #FieldVector3D(RealFieldElement[])
      */
@@ -335,21 +382,27 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return array;
     }
 
-    /** Convert to a constant vector without derivatives.
+    /**
+     * Convert to a constant vector without derivatives.
+     *
      * @return a constant vector
      */
     public Vector3D toVector3D() {
         return new Vector3D(x.getReal(), y.getReal(), z.getReal());
     }
 
-    /** Get the L<sub>1</sub> norm for the vector.
+    /**
+     * Get the L<sub>1</sub> norm for the vector.
+     *
      * @return L<sub>1</sub> norm for the vector
      */
     public T getNorm1() {
         return x.abs().add(y.abs()).add(z.abs());
     }
 
-    /** Get the L<sub>2</sub> norm for the vector.
+    /**
+     * Get the L<sub>2</sub> norm for the vector.
+     *
      * @return Euclidean norm for the vector
      */
     public T getNorm() {
@@ -357,7 +410,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return x.multiply(x).add(y.multiply(y)).add(z.multiply(z)).sqrt();
     }
 
-    /** Get the square of the norm for the vector.
+    /**
+     * Get the square of the norm for the vector.
+     *
      * @return square of the Euclidean norm for the vector
      */
     public T getNormSq() {
@@ -365,7 +420,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return x.multiply(x).add(y.multiply(y)).add(z.multiply(z));
     }
 
-    /** Get the L<sub>&infin;</sub> norm for the vector.
+    /**
+     * Get the L<sub>&infin;</sub> norm for the vector.
+     *
      * @return L<sub>&infin;</sub> norm for the vector
      */
     public T getNormInf() {
@@ -387,7 +444,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         }
     }
 
-    /** Get the azimuth of the vector.
+    /**
+     * Get the azimuth of the vector.
+     *
      * @return azimuth (&alpha;) of the vector, between -&pi; and +&pi;
      * @see #FieldVector3D(RealFieldElement, RealFieldElement)
      */
@@ -395,7 +454,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return y.atan2(x);
     }
 
-    /** Get the elevation of the vector.
+    /**
+     * Get the elevation of the vector.
+     *
      * @return elevation (&delta;) of the vector, between -&pi;/2 and +&pi;/2
      * @see #FieldVector3D(RealFieldElement, RealFieldElement)
      */
@@ -403,7 +464,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return z.divide(getNorm()).asin();
     }
 
-    /** Add a vector to the instance.
+    /**
+     * Add a vector to the instance.
+     *
      * @param v vector to add
      * @return a new vector
      */
@@ -411,7 +474,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return new FieldVector3D<T>(x.add(v.x), y.add(v.y), z.add(v.z));
     }
 
-    /** Add a vector to the instance.
+    /**
+     * Add a vector to the instance.
+     *
      * @param v vector to add
      * @return a new vector
      */
@@ -419,47 +484,57 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return new FieldVector3D<T>(x.add(v.getX()), y.add(v.getY()), z.add(v.getZ()));
     }
 
-    /** Add a scaled vector to the instance.
+    /**
+     * Add a scaled vector to the instance.
+     *
      * @param factor scale factor to apply to v before adding it
-     * @param v vector to add
+     * @param v      vector to add
      * @return a new vector
      */
     public FieldVector3D<T> add(final T factor, final FieldVector3D<T> v) {
         return new FieldVector3D<T>(x.getField().getOne(), this, factor, v);
     }
 
-    /** Add a scaled vector to the instance.
+    /**
+     * Add a scaled vector to the instance.
+     *
      * @param factor scale factor to apply to v before adding it
-     * @param v vector to add
+     * @param v      vector to add
      * @return a new vector
      */
     public FieldVector3D<T> add(final T factor, final Vector3D v) {
         return new FieldVector3D<T>(x.add(factor.multiply(v.getX())),
-                                    y.add(factor.multiply(v.getY())),
-                                    z.add(factor.multiply(v.getZ())));
+                y.add(factor.multiply(v.getY())),
+                z.add(factor.multiply(v.getZ())));
     }
 
-    /** Add a scaled vector to the instance.
+    /**
+     * Add a scaled vector to the instance.
+     *
      * @param factor scale factor to apply to v before adding it
-     * @param v vector to add
+     * @param v      vector to add
      * @return a new vector
      */
     public FieldVector3D<T> add(final double factor, final FieldVector3D<T> v) {
         return new FieldVector3D<T>(1.0, this, factor, v);
     }
 
-    /** Add a scaled vector to the instance.
+    /**
+     * Add a scaled vector to the instance.
+     *
      * @param factor scale factor to apply to v before adding it
-     * @param v vector to add
+     * @param v      vector to add
      * @return a new vector
      */
     public FieldVector3D<T> add(final double factor, final Vector3D v) {
         return new FieldVector3D<T>(x.add(factor * v.getX()),
-                                    y.add(factor * v.getY()),
-                                    z.add(factor * v.getZ()));
+                y.add(factor * v.getY()),
+                z.add(factor * v.getZ()));
     }
 
-    /** Subtract a vector from the instance.
+    /**
+     * Subtract a vector from the instance.
+     *
      * @param v vector to subtract
      * @return a new vector
      */
@@ -467,7 +542,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return new FieldVector3D<T>(x.subtract(v.x), y.subtract(v.y), z.subtract(v.z));
     }
 
-    /** Subtract a vector from the instance.
+    /**
+     * Subtract a vector from the instance.
+     *
      * @param v vector to subtract
      * @return a new vector
      */
@@ -475,49 +552,59 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return new FieldVector3D<T>(x.subtract(v.getX()), y.subtract(v.getY()), z.subtract(v.getZ()));
     }
 
-    /** Subtract a scaled vector from the instance.
+    /**
+     * Subtract a scaled vector from the instance.
+     *
      * @param factor scale factor to apply to v before subtracting it
-     * @param v vector to subtract
+     * @param v      vector to subtract
      * @return a new vector
      */
     public FieldVector3D<T> subtract(final T factor, final FieldVector3D<T> v) {
         return new FieldVector3D<T>(x.getField().getOne(), this, factor.negate(), v);
     }
 
-    /** Subtract a scaled vector from the instance.
+    /**
+     * Subtract a scaled vector from the instance.
+     *
      * @param factor scale factor to apply to v before subtracting it
-     * @param v vector to subtract
+     * @param v      vector to subtract
      * @return a new vector
      */
     public FieldVector3D<T> subtract(final T factor, final Vector3D v) {
         return new FieldVector3D<T>(x.subtract(factor.multiply(v.getX())),
-                                    y.subtract(factor.multiply(v.getY())),
-                                    z.subtract(factor.multiply(v.getZ())));
+                y.subtract(factor.multiply(v.getY())),
+                z.subtract(factor.multiply(v.getZ())));
     }
 
-    /** Subtract a scaled vector from the instance.
+    /**
+     * Subtract a scaled vector from the instance.
+     *
      * @param factor scale factor to apply to v before subtracting it
-     * @param v vector to subtract
+     * @param v      vector to subtract
      * @return a new vector
      */
     public FieldVector3D<T> subtract(final double factor, final FieldVector3D<T> v) {
         return new FieldVector3D<T>(1.0, this, -factor, v);
     }
 
-    /** Subtract a scaled vector from the instance.
+    /**
+     * Subtract a scaled vector from the instance.
+     *
      * @param factor scale factor to apply to v before subtracting it
-     * @param v vector to subtract
+     * @param v      vector to subtract
      * @return a new vector
      */
     public FieldVector3D<T> subtract(final double factor, final Vector3D v) {
         return new FieldVector3D<T>(x.subtract(factor * v.getX()),
-                                    y.subtract(factor * v.getY()),
-                                    z.subtract(factor * v.getZ()));
+                y.subtract(factor * v.getY()),
+                z.subtract(factor * v.getZ()));
     }
 
-    /** Get a normalized vector aligned with the instance.
+    /**
+     * Get a normalized vector aligned with the instance.
+     *
      * @return a new normalized vector
-     * @exception MathArithmeticException if the norm is zero
+     * @throws MathArithmeticException if the norm is zero
      */
     public FieldVector3D<T> normalize() throws MathArithmeticException {
         final T s = getNorm();
@@ -527,7 +614,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return scalarMultiply(s.reciprocal());
     }
 
-    /** Get a vector orthogonal to the instance.
+    /**
+     * Get a vector orthogonal to the instance.
      * <p>There are an infinite number of normalized vectors orthogonal
      * to the instance. This method picks up one of them almost
      * arbitrarily. It is useful when one needs to compute a reference
@@ -539,8 +627,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      *   Vector3D i = k.orthogonal();
      *   Vector3D j = Vector3D.crossProduct(k, i);
      * </code></pre></p>
+     *
      * @return a new normalized vector orthogonal to the instance
-     * @exception MathArithmeticException if the norm of the instance is null
+     * @throws MathArithmeticException if the norm of the instance is null
      */
     public FieldVector3D<T> orthogonal() throws MathArithmeticException {
 
@@ -550,32 +639,34 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         }
 
         if (FastMath.abs(x.getReal()) <= threshold) {
-            final T inverse  = y.multiply(y).add(z.multiply(z)).sqrt().reciprocal();
+            final T inverse = y.multiply(y).add(z.multiply(z)).sqrt().reciprocal();
             return new FieldVector3D<T>(inverse.getField().getZero(), inverse.multiply(z), inverse.multiply(y).negate());
         } else if (FastMath.abs(y.getReal()) <= threshold) {
-            final T inverse  = x.multiply(x).add(z.multiply(z)).sqrt().reciprocal();
+            final T inverse = x.multiply(x).add(z.multiply(z)).sqrt().reciprocal();
             return new FieldVector3D<T>(inverse.multiply(z).negate(), inverse.getField().getZero(), inverse.multiply(x));
         } else {
-            final T inverse  = x.multiply(x).add(y.multiply(y)).sqrt().reciprocal();
+            final T inverse = x.multiply(x).add(y.multiply(y)).sqrt().reciprocal();
             return new FieldVector3D<T>(inverse.multiply(y), inverse.multiply(x).negate(), inverse.getField().getZero());
         }
 
     }
 
-    /** Compute the angular separation between two vectors.
+    /**
+     * Compute the angular separation between two vectors.
      * <p>This method computes the angular separation between two
      * vectors using the dot product for well separated vectors and the
      * cross product for almost aligned vectors. This allows to have a
      * good accuracy in all cases, even for vectors very close to each
      * other.</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
-     * @exception MathArithmeticException if either vector has a null norm
+     * @throws MathArithmeticException if either vector has a null norm
      */
     public static <T extends RealFieldElement<T>> T angle(final FieldVector3D<T> v1, final FieldVector3D<T> v2)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
         if (normProduct.getReal() == 0) {
@@ -598,20 +689,22 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Compute the angular separation between two vectors.
+    /**
+     * Compute the angular separation between two vectors.
      * <p>This method computes the angular separation between two
      * vectors using the dot product for well separated vectors and the
      * cross product for almost aligned vectors. This allows to have a
      * good accuracy in all cases, even for vectors very close to each
      * other.</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
-     * @exception MathArithmeticException if either vector has a null norm
+     * @throws MathArithmeticException if either vector has a null norm
      */
     public static <T extends RealFieldElement<T>> T angle(final FieldVector3D<T> v1, final Vector3D v2)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
         if (normProduct.getReal() == 0) {
@@ -634,31 +727,37 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Compute the angular separation between two vectors.
+    /**
+     * Compute the angular separation between two vectors.
      * <p>This method computes the angular separation between two
      * vectors using the dot product for well separated vectors and the
      * cross product for almost aligned vectors. This allows to have a
      * good accuracy in all cases, even for vectors very close to each
      * other.</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
-     * @exception MathArithmeticException if either vector has a null norm
+     * @throws MathArithmeticException if either vector has a null norm
      */
     public static <T extends RealFieldElement<T>> T angle(final Vector3D v1, final FieldVector3D<T> v2)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
         return angle(v2, v1);
     }
 
-    /** Get the opposite of the instance.
+    /**
+     * Get the opposite of the instance.
+     *
      * @return a new vector which is opposite to the instance
      */
     public FieldVector3D<T> negate() {
         return new FieldVector3D<T>(x.negate(), y.negate(), z.negate());
     }
 
-    /** Multiply the instance by a scalar.
+    /**
+     * Multiply the instance by a scalar.
+     *
      * @param a scalar
      * @return a new vector
      */
@@ -666,7 +765,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return new FieldVector3D<T>(x.multiply(a), y.multiply(a), z.multiply(a));
     }
 
-    /** Multiply the instance by a scalar.
+    /**
+     * Multiply the instance by a scalar.
+     *
      * @param a scalar
      * @return a new vector
      */
@@ -676,7 +777,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
     /**
      * Returns true if any coordinate of this vector is NaN; false otherwise
-     * @return  true if any coordinate of this vector is NaN; false otherwise
+     *
+     * @return true if any coordinate of this vector is NaN; false otherwise
      */
     public boolean isNaN() {
         return Double.isNaN(x.getReal()) || Double.isNaN(y.getReal()) || Double.isNaN(z.getReal());
@@ -685,7 +787,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
     /**
      * Returns true if any coordinate of this vector is infinite and none are NaN;
      * false otherwise
-     * @return  true if any coordinate of this vector is infinite and none are NaN;
+     *
+     * @return true if any coordinate of this vector is infinite and none are NaN;
      * false otherwise
      */
     public boolean isInfinite() {
@@ -707,9 +810,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      *
      * @param other Object to test for equality to this
      * @return true if two 3D vector objects are equal, false if
-     *         object is null, not an instance of Vector3D, or
-     *         not equal to this Vector3D instance
-     *
+     * object is null, not an instance of Vector3D, or
+     * not equal to this Vector3D instance
      */
     @Override
     public boolean equals(Object other) {
@@ -719,8 +821,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         }
 
         if (other instanceof FieldVector3D) {
-            @SuppressWarnings("unchecked")
-            final FieldVector3D<T> rhs = (FieldVector3D<T>) other;
+            @SuppressWarnings("unchecked") final FieldVector3D<T> rhs = (FieldVector3D<T>) other;
             if (rhs.isNaN()) {
                 return this.isNaN();
             }
@@ -743,61 +844,71 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         if (isNaN()) {
             return 409;
         }
-        return 311 * (107 * x.hashCode() + 83 * y.hashCode() +  z.hashCode());
+        return 311 * (107 * x.hashCode() + 83 * y.hashCode() + z.hashCode());
     }
 
-    /** Compute the dot-product of the instance and another vector.
+    /**
+     * Compute the dot-product of the instance and another vector.
      * <p>
      * The implementation uses specific multiplication and addition
      * algorithms to preserve accuracy and reduce cancellation effects.
      * It should be very accurate even for nearly orthogonal vectors.
      * </p>
-     * @see MathArrays#linearCombination(double, double, double, double, double, double)
+     *
      * @param v second vector
      * @return the dot product this.v
+     * @see MathArrays#linearCombination(double, double, double, double, double, double)
      */
     public T dotProduct(final FieldVector3D<T> v) {
         return x.linearCombination(x, v.x, y, v.y, z, v.z);
     }
 
-    /** Compute the dot-product of the instance and another vector.
+    /**
+     * Compute the dot-product of the instance and another vector.
      * <p>
      * The implementation uses specific multiplication and addition
      * algorithms to preserve accuracy and reduce cancellation effects.
      * It should be very accurate even for nearly orthogonal vectors.
      * </p>
-     * @see MathArrays#linearCombination(double, double, double, double, double, double)
+     *
      * @param v second vector
      * @return the dot product this.v
+     * @see MathArrays#linearCombination(double, double, double, double, double, double)
      */
     public T dotProduct(final Vector3D v) {
         return x.linearCombination(v.getX(), x, v.getY(), y, v.getZ(), z);
     }
 
-    /** Compute the cross-product of the instance with another vector.
+    /**
+     * Compute the cross-product of the instance with another vector.
+     *
      * @param v other vector
      * @return the cross product this ^ v as a new Vector3D
      */
     public FieldVector3D<T> crossProduct(final FieldVector3D<T> v) {
         return new FieldVector3D<T>(x.linearCombination(y, v.z, z.negate(), v.y),
-                                    y.linearCombination(z, v.x, x.negate(), v.z),
-                                    z.linearCombination(x, v.y, y.negate(), v.x));
+                y.linearCombination(z, v.x, x.negate(), v.z),
+                z.linearCombination(x, v.y, y.negate(), v.x));
     }
 
-    /** Compute the cross-product of the instance with another vector.
+    /**
+     * Compute the cross-product of the instance with another vector.
+     *
      * @param v other vector
      * @return the cross product this ^ v as a new Vector3D
      */
     public FieldVector3D<T> crossProduct(final Vector3D v) {
         return new FieldVector3D<T>(x.linearCombination(v.getZ(), y, -v.getY(), z),
-                                    y.linearCombination(v.getX(), z, -v.getZ(), x),
-                                    z.linearCombination(v.getY(), x, -v.getX(), y));
+                y.linearCombination(v.getX(), z, -v.getZ(), x),
+                z.linearCombination(v.getY(), x, -v.getX(), y));
     }
 
-    /** Compute the distance between the instance and another vector according to the L<sub>1</sub> norm.
+    /**
+     * Compute the distance between the instance and another vector according to the L<sub>1</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>q.subtract(p).getNorm1()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param v second vector
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
@@ -808,10 +919,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return dx.add(dy).add(dz);
     }
 
-    /** Compute the distance between the instance and another vector according to the L<sub>1</sub> norm.
+    /**
+     * Compute the distance between the instance and another vector according to the L<sub>1</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>q.subtract(p).getNorm1()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param v second vector
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
@@ -822,10 +935,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return dx.add(dy).add(dz);
     }
 
-    /** Compute the distance between the instance and another vector according to the L<sub>2</sub> norm.
+    /**
+     * Compute the distance between the instance and another vector according to the L<sub>2</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>q.subtract(p).getNorm()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param v second vector
      * @return the distance between the instance and p according to the L<sub>2</sub> norm
      */
@@ -836,10 +951,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz)).sqrt();
     }
 
-    /** Compute the distance between the instance and another vector according to the L<sub>2</sub> norm.
+    /**
+     * Compute the distance between the instance and another vector according to the L<sub>2</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>q.subtract(p).getNorm()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param v second vector
      * @return the distance between the instance and p according to the L<sub>2</sub> norm
      */
@@ -850,10 +967,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz)).sqrt();
     }
 
-    /** Compute the distance between the instance and another vector according to the L<sub>&infin;</sub> norm.
+    /**
+     * Compute the distance between the instance and another vector according to the L<sub>&infin;</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>q.subtract(p).getNormInf()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param v second vector
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
@@ -876,10 +995,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         }
     }
 
-    /** Compute the distance between the instance and another vector according to the L<sub>&infin;</sub> norm.
+    /**
+     * Compute the distance between the instance and another vector according to the L<sub>&infin;</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>q.subtract(p).getNormInf()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param v second vector
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
@@ -902,10 +1023,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         }
     }
 
-    /** Compute the square of the distance between the instance and another vector.
+    /**
+     * Compute the square of the distance between the instance and another vector.
      * <p>Calling this method is equivalent to calling:
      * <code>q.subtract(p).getNormSq()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param v second vector
      * @return the square of the distance between the instance and p
      */
@@ -916,10 +1039,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz));
     }
 
-    /** Compute the square of the distance between the instance and another vector.
+    /**
+     * Compute the square of the distance between the instance and another vector.
      * <p>Calling this method is equivalent to calling:
      * <code>q.subtract(p).getNormSq()</code> except that no intermediate
      * vector is built</p>
+     *
      * @param v second vector
      * @return the square of the distance between the instance and p
      */
@@ -930,243 +1055,281 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz));
     }
 
-    /** Compute the dot-product of two vectors.
-     * @param v1 first vector
-     * @param v2 second vector
+    /**
+     * Compute the dot-product of two vectors.
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the dot product v1.v2
      */
     public static <T extends RealFieldElement<T>> T dotProduct(final FieldVector3D<T> v1,
-                                                                   final FieldVector3D<T> v2) {
+                                                               final FieldVector3D<T> v2) {
         return v1.dotProduct(v2);
     }
 
-    /** Compute the dot-product of two vectors.
-     * @param v1 first vector
-     * @param v2 second vector
+    /**
+     * Compute the dot-product of two vectors.
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the dot product v1.v2
      */
     public static <T extends RealFieldElement<T>> T dotProduct(final FieldVector3D<T> v1,
-                                                                   final Vector3D v2) {
+                                                               final Vector3D v2) {
         return v1.dotProduct(v2);
     }
 
-    /** Compute the dot-product of two vectors.
-     * @param v1 first vector
-     * @param v2 second vector
+    /**
+     * Compute the dot-product of two vectors.
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the dot product v1.v2
      */
     public static <T extends RealFieldElement<T>> T dotProduct(final Vector3D v1,
-                                                                   final FieldVector3D<T> v2) {
+                                                               final FieldVector3D<T> v2) {
         return v2.dotProduct(v1);
     }
 
-    /** Compute the cross-product of two vectors.
-     * @param v1 first vector
-     * @param v2 second vector
+    /**
+     * Compute the cross-product of two vectors.
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the cross product v1 ^ v2 as a new Vector
      */
     public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final FieldVector3D<T> v1,
-                                                                                    final FieldVector3D<T> v2) {
+                                                                                final FieldVector3D<T> v2) {
         return v1.crossProduct(v2);
     }
 
-    /** Compute the cross-product of two vectors.
-     * @param v1 first vector
-     * @param v2 second vector
+    /**
+     * Compute the cross-product of two vectors.
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the cross product v1 ^ v2 as a new Vector
      */
     public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final FieldVector3D<T> v1,
-                                                                                    final Vector3D v2) {
+                                                                                final Vector3D v2) {
         return v1.crossProduct(v2);
     }
 
-    /** Compute the cross-product of two vectors.
-     * @param v1 first vector
-     * @param v2 second vector
+    /**
+     * Compute the cross-product of two vectors.
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the cross product v1 ^ v2 as a new Vector
      */
     public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final Vector3D v1,
-                                                                                    final FieldVector3D<T> v2) {
+                                                                                final FieldVector3D<T> v2) {
         return new FieldVector3D<T>(v2.x.linearCombination(v1.getY(), v2.z, -v1.getZ(), v2.y),
-                                    v2.y.linearCombination(v1.getZ(), v2.x, -v1.getX(), v2.z),
-                                    v2.z.linearCombination(v1.getX(), v2.y, -v1.getY(), v2.x));
+                v2.y.linearCombination(v1.getZ(), v2.x, -v1.getX(), v2.z),
+                v2.z.linearCombination(v1.getX(), v2.y, -v1.getY(), v2.x));
     }
 
-    /** Compute the distance between two vectors according to the L<sub>1</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>1</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNorm1()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance1(final FieldVector3D<T> v1,
-                                                                  final FieldVector3D<T> v2) {
+                                                              final FieldVector3D<T> v2) {
         return v1.distance1(v2);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>1</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>1</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNorm1()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance1(final FieldVector3D<T> v1,
-                                                                  final Vector3D v2) {
+                                                              final Vector3D v2) {
         return v1.distance1(v2);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>1</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>1</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNorm1()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance1(final Vector3D v1,
-                                                                  final FieldVector3D<T> v2) {
+                                                              final FieldVector3D<T> v2) {
         return v2.distance1(v1);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>2</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNorm()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance(final FieldVector3D<T> v1,
-                                                                 final FieldVector3D<T> v2) {
+                                                             final FieldVector3D<T> v2) {
         return v1.distance(v2);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>2</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNorm()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance(final FieldVector3D<T> v1,
-                                                                 final Vector3D v2) {
+                                                             final Vector3D v2) {
         return v1.distance(v2);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>2</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNorm()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance(final Vector3D v1,
-                                                                 final FieldVector3D<T> v2) {
+                                                             final FieldVector3D<T> v2) {
         return v2.distance(v1);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNormInf()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector3D<T> v1,
-                                                                    final FieldVector3D<T> v2) {
+                                                                final FieldVector3D<T> v2) {
         return v1.distanceInf(v2);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNormInf()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector3D<T> v1,
-                                                                    final Vector3D v2) {
+                                                                final Vector3D v2) {
         return v1.distanceInf(v2);
     }
 
-    /** Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
+    /**
+     * Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNormInf()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final Vector3D v1,
-                                                                    final FieldVector3D<T> v2) {
+                                                                final FieldVector3D<T> v2) {
         return v2.distanceInf(v1);
     }
 
-    /** Compute the square of the distance between two vectors.
+    /**
+     * Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNormSq()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the square of the distance between v1 and v2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector3D<T> v1,
-                                                                   final FieldVector3D<T> v2) {
+                                                               final FieldVector3D<T> v2) {
         return v1.distanceSq(v2);
     }
 
-    /** Compute the square of the distance between two vectors.
+    /**
+     * Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNormSq()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the square of the distance between v1 and v2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector3D<T> v1,
-                                                                   final Vector3D v2) {
+                                                               final Vector3D v2) {
         return v1.distanceSq(v2);
     }
 
-    /** Compute the square of the distance between two vectors.
+    /**
+     * Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
      * <code>v1.subtract(v2).getNormSq()</code> except that no intermediate
      * vector is built</p>
-     * @param v1 first vector
-     * @param v2 second vector
+     *
+     * @param v1  first vector
+     * @param v2  second vector
      * @param <T> the type of the field elements
      * @return the square of the distance between v1 and v2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final Vector3D v1,
-                                                                   final FieldVector3D<T> v2) {
+                                                               final FieldVector3D<T> v2) {
         return v2.distanceSq(v1);
     }
 
-    /** Get a string representation of this vector.
+    /**
+     * Get a string representation of this vector.
+     *
      * @return a string representation of this vector
      */
     @Override
@@ -1174,7 +1337,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return Vector3DFormat.getInstance().format(toVector3D());
     }
 
-    /** Get a string representation of this vector.
+    /**
+     * Get a string representation of this vector.
+     *
      * @param format the custom format for components
      * @return a string representation of this vector
      */

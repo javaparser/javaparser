@@ -43,7 +43,9 @@ import java.util.TreeMap;
  */
 public class TreeBag<E> extends AbstractMapBag<E> implements SortedBag<E>, Serializable {
 
-    /** Serial version lock */
+    /**
+     * Serial version lock
+     */
     private static final long serialVersionUID = -7740146511091606676L;
 
     /**
@@ -75,22 +77,23 @@ public class TreeBag<E> extends AbstractMapBag<E> implements SortedBag<E>, Seria
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * {@inheritDoc}
      *
      * @throws IllegalArgumentException if the object to be added does not implement
-     * {@link Comparable} and the {@link TreeBag} is using natural ordering
-     * @throws NullPointerException if the specified key is null and this bag uses
-     * natural ordering, or its comparator does not permit null keys
+     *                                  {@link Comparable} and the {@link TreeBag} is using natural ordering
+     * @throws NullPointerException     if the specified key is null and this bag uses
+     *                                  natural ordering, or its comparator does not permit null keys
      */
     @Override
     public boolean add(final E object) {
-        if(comparator() == null && !(object instanceof Comparable)) {
+        if (comparator() == null && !(object instanceof Comparable)) {
             if (object == null) {
                 throw new NullPointerException();
             }
             throw new IllegalArgumentException("Objects of type " + object.getClass() + " cannot be added to " +
-                                               "a naturally ordered TreeBag as it does not implement Comparable");
+                    "a naturally ordered TreeBag as it does not implement Comparable");
         }
         return super.add(object);
     }
@@ -118,10 +121,11 @@ public class TreeBag<E> extends AbstractMapBag<E> implements SortedBag<E>, Seria
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the bag out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -133,8 +137,8 @@ public class TreeBag<E> extends AbstractMapBag<E> implements SortedBag<E>, Seria
     /**
      * Read the bag in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {

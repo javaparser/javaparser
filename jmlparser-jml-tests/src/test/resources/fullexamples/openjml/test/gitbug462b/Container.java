@@ -5,7 +5,8 @@ public class Container {
       @   assignable \nothing;
       @   ensures true;
       @*/
-    private /*@ helper @*/ Container() {}
+    private /*@ helper @*/ Container() {
+    }
 
     /*@ public normal_behavior
       @   assignable \nothing;
@@ -24,7 +25,7 @@ public class Container {
     public /*@ pure @*/ boolean equals(Object obj) {
         return (obj instanceof Container) && ((Container) obj).a == a;
     }
-    
+
     public static class ContainerUser {
         private /*@ spec_public non_null @*/ Container c;
 
@@ -32,7 +33,9 @@ public class Container {
           @   assignable \nothing;
           @   ensures true;
           @*/
-        private /*@ helper @*/ ContainerUser() { c = new Container(); }
+        private /*@ helper @*/ ContainerUser() {
+            c = new Container();
+        }
 
         /*@ public normal_behavior
           @   assignable \nothing;
@@ -57,7 +60,7 @@ public class Container {
             //@ assert user.c instanceof Container;   // fails - fixed
         }
     }
-} 
+}
 // The original buggy example surfaced two problems:
 // 1) assignment to user.c was not allowed, even though user was a fresh object
 // 2) user.c could not be shown to have type Container, even though it is declared to be that type

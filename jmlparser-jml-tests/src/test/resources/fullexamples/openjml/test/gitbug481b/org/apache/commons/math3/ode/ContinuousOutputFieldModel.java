@@ -72,53 +72,66 @@ import java.util.List;
  * org.apache.commons.math3.ode.nonstiff.AdaptiveStepsizeFieldIntegrator adaptive
  * step size integrators}).</p>
  *
+ * @param <T> the type of the field elements
  * @see FieldStepHandler
  * @see FieldStepInterpolator
- * @param <T> the type of the field elements
  * @since 3.6
  */
 
 public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
-    implements FieldStepHandler<T> {
+        implements FieldStepHandler<T> {
 
-    /** Initial integration time. */
+    /**
+     * Initial integration time.
+     */
     private T initialTime;
 
-    /** Final integration time. */
+    /**
+     * Final integration time.
+     */
     private T finalTime;
 
-    /** Integration direction indicator. */
+    /**
+     * Integration direction indicator.
+     */
     private boolean forward;
 
-    /** Current interpolator index. */
+    /**
+     * Current interpolator index.
+     */
     private int index;
 
-    /** Steps table. */
+    /**
+     * Steps table.
+     */
     private List<FieldStepInterpolator<T>> steps;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      * Build an empty continuous output model.
      */
     public ContinuousOutputFieldModel() {
-        steps       = new ArrayList<FieldStepInterpolator<T>>();
+        steps = new ArrayList<FieldStepInterpolator<T>>();
         initialTime = null;
-        finalTime   = null;
-        forward     = true;
-        index       = 0;
+        finalTime = null;
+        forward = true;
+        index = 0;
     }
 
-    /** Append another model at the end of the instance.
+    /**
+     * Append another model at the end of the instance.
+     *
      * @param model model to add at the end of the instance
-     * @exception MathIllegalArgumentException if the model to append is not
-     * compatible with the instance (dimension of the state vector,
-     * propagation direction, hole between the dates)
-     * @exception DimensionMismatchException if the dimensions of the states or
-     * the number of secondary states do not match
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * during step finalization
+     * @throws MathIllegalArgumentException if the model to append is not
+     *                                      compatible with the instance (dimension of the state vector,
+     *                                      propagation direction, hole between the dates)
+     * @throws DimensionMismatchException   if the dimensions of the states or
+     *                                      the number of secondary states do not match
+     * @throws MaxCountExceededException    if the number of functions evaluations is exceeded
+     *                                      during step finalization
      */
     public void append(final ContinuousOutputFieldModel<T> model)
-        throws MathIllegalArgumentException, MaxCountExceededException {
+            throws MathIllegalArgumentException, MaxCountExceededException {
 
         if (model.steps.size() == 0) {
             return;
@@ -126,7 +139,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
 
         if (steps.size() == 0) {
             initialTime = model.initialTime;
-            forward     = model.forward;
+            forward = model.forward;
         } else {
 
             // safety checks
@@ -143,13 +156,13 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
             }
 
             final FieldStepInterpolator<T> lastInterpolator = steps.get(index);
-            final T current  = lastInterpolator.getCurrentState().getTime();
+            final T current = lastInterpolator.getCurrentState().getTime();
             final T previous = lastInterpolator.getPreviousState().getTime();
             final T step = current.subtract(previous);
             final T gap = model.getInitialTime().subtract(current);
             if (gap.abs().subtract(step.abs().multiply(1.0e-3)).getReal() > 0) {
                 throw new MathIllegalArgumentException(LocalizedFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,
-                                                       gap.abs().getReal());
+                        gap.abs().getReal());
             }
 
         }
@@ -163,54 +176,61 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
 
     }
 
-    /** Check dimensions equality.
+    /**
+     * Check dimensions equality.
+     *
      * @param d1 first dimension
      * @param d2 second dimansion
-     * @exception DimensionMismatchException if dimensions do not match
+     * @throws DimensionMismatchException if dimensions do not match
      */
     private void checkDimensionsEquality(final int d1, final int d2)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         if (d1 != d2) {
             throw new DimensionMismatchException(d2, d1);
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void init(final FieldODEStateAndDerivative<T> initialState, final T t) {
         initialTime = initialState.getTime();
-        finalTime   = t;
-        forward     = true;
-        index       = 0;
+        finalTime = t;
+        forward = true;
+        index = 0;
         steps.clear();
     }
 
-    /** Handle the last accepted step.
+    /**
+     * Handle the last accepted step.
      * A copy of the information provided by the last step is stored in
      * the instance for later use.
+     *
      * @param interpolator interpolator for the last accepted step.
-     * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * during step finalization
+     * @param isLast       true if the step is the last one
+     * @throws MaxCountExceededException if the number of functions evaluations is exceeded
+     *                                   during step finalization
      */
     public void handleStep(final FieldStepInterpolator<T> interpolator, final boolean isLast)
-        throws MaxCountExceededException {
+            throws MaxCountExceededException {
 
         if (steps.size() == 0) {
             initialTime = interpolator.getPreviousState().getTime();
-            forward     = interpolator.isForward();
+            forward = interpolator.isForward();
         }
 
         steps.add(interpolator);
 
         if (isLast) {
             finalTime = interpolator.getCurrentState().getTime();
-            index     = steps.size() - 1;
+            index = steps.size() - 1;
         }
 
     }
 
     /**
      * Get the initial integration time.
+     *
      * @return initial integration time
      */
     public T getInitialTime() {
@@ -219,6 +239,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
 
     /**
      * Get the final integration time.
+     *
      * @return final integration time
      */
     public T getFinalTime() {
@@ -227,6 +248,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
 
     /**
      * Get the state at interpolated time.
+     *
      * @param time time of the interpolated point
      * @return state at interpolated time
      */
@@ -275,7 +297,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
             final T tMed = sMed.getPreviousState().getTime().add(sMed.getCurrentState().getTime()).multiply(0.5);
 
             if (tMed.subtract(tMin).abs().subtract(1.0e-6).getReal() < 0 ||
-                tMax.subtract(tMed).abs().subtract(1.0e-6).getReal() < 0) {
+                    tMax.subtract(tMed).abs().subtract(1.0e-6).getReal() < 0) {
                 // too close to the bounds, we estimate using a simple dichotomy
                 index = iMed;
             } else {
@@ -288,15 +310,15 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
                 final T dt1 = time.subtract(tMax);
                 final T dt2 = time.subtract(tMed);
                 final T dt3 = time.subtract(tMin);
-                final T iLagrange =           dt2.multiply(dt3).multiply(d23).multiply(iMax).
-                                     subtract(dt1.multiply(dt3).multiply(d13).multiply(iMed)).
-                                     add(     dt1.multiply(dt2).multiply(d12).multiply(iMin)).
-                                     divide(d12.multiply(d23).multiply(d13));
+                final T iLagrange = dt2.multiply(dt3).multiply(d23).multiply(iMax).
+                        subtract(dt1.multiply(dt3).multiply(d13).multiply(iMed)).
+                        add(dt1.multiply(dt2).multiply(d12).multiply(iMin)).
+                        divide(d12.multiply(d23).multiply(d13));
                 index = (int) FastMath.rint(iLagrange.getReal());
             }
 
             // force the next size reduction to be at least one tenth
-            final int low  = FastMath.max(iMin + 1, (9 * iMin + iMax) / 10);
+            final int low = FastMath.max(iMin + 1, (9 * iMin + iMax) / 10);
             final int high = FastMath.min(iMax - 1, (iMin + 9 * iMax) / 10);
             if (index < low) {
                 index = low;
@@ -316,8 +338,10 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
 
     }
 
-    /** Compare a step interval and a double.
-     * @param time point to locate
+    /**
+     * Compare a step interval and a double.
+     *
+     * @param time     point to locate
      * @param interval step interval
      * @return -1 if the double is before the interval, 0 if it is in
      * the interval, and +1 if it is after the interval, according to

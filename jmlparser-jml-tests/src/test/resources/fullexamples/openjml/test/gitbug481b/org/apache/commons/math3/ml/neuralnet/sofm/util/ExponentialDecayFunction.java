@@ -30,9 +30,13 @@ import org.apache.commons.math3.util.FastMath;
  * @since 3.3
  */
 public class ExponentialDecayFunction {
-    /** Factor {@code a}. */
+    /**
+     * Factor {@code a}.
+     */
     private final double a;
-    /** Factor {@code 1 / b}. */
+    /**
+     * Factor {@code 1 / b}.
+     */
     private final double oneOverB;
 
     /**
@@ -42,13 +46,13 @@ public class ExponentialDecayFunction {
      *  <li>{@code b = -numCall / ln(valueAtNumCall / initValue)}</li>
      * </ul>
      *
-     * @param initValue Initial value, i.e. {@link #value(long) value(0)}.
+     * @param initValue      Initial value, i.e. {@link #value(long) value(0)}.
      * @param valueAtNumCall Value of the function at {@code numCall}.
-     * @param numCall Argument for which the function returns
-     * {@code valueAtNumCall}.
+     * @param numCall        Argument for which the function returns
+     *                       {@code valueAtNumCall}.
      * @throws NotStrictlyPositiveException if {@code initValue <= 0}.
      * @throws NotStrictlyPositiveException if {@code valueAtNumCall <= 0}.
-     * @throws NumberIsTooLargeException if {@code valueAtNumCall >= initValue}.
+     * @throws NumberIsTooLargeException    if {@code valueAtNumCall >= initValue}.
      * @throws NotStrictlyPositiveException if {@code numCall <= 0}.
      */
     public ExponentialDecayFunction(double initValue,

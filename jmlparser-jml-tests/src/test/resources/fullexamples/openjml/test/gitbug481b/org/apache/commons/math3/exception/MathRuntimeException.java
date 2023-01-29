@@ -30,34 +30,44 @@ import org.apache.commons.math3.exception.util.Localizable;
  * @since 3.1
  */
 public class MathRuntimeException extends RuntimeException
-    implements ExceptionContextProvider {
-    /** Serializable version Id. */
+        implements ExceptionContextProvider {
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = 20120926L;
-    /** Context. */
+    /**
+     * Context.
+     */
     private final ExceptionContext context;
 
     /**
      * @param pattern Message pattern explaining the cause of the error.
-     * @param args Arguments.
+     * @param args    Arguments.
      */
     public MathRuntimeException(Localizable pattern,
-                                Object ... args) {
+                                Object... args) {
         context = new ExceptionContext(this);
         context.addMessage(pattern, args);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public ExceptionContext getContext() {
         return context;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return context.getMessage();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getLocalizedMessage() {
         return context.getLocalizedMessage();

@@ -33,20 +33,22 @@ import java.util.Iterator;
  * <p>
  * The method javadoc highlights the differences compared to the original Bag interface.
  *
- * @see Bag
  * @param <E> the type of elements in this bag
+ * @see Bag
  * @since 4.0
  */
 public final class CollectionBag<E> extends AbstractBagDecorator<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -2560033712679053143L;
 
     /**
      * Factory method to create a bag that complies to the Collection contract.
      *
      * @param <E> the type of the elements in the bag
-     * @param bag  the bag to decorate, must not be null
+     * @param bag the bag to decorate, must not be null
      * @return a Bag that complies to the Collection contract
      * @throws NullPointerException if bag is null
      */
@@ -55,10 +57,11 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param bag  the bag to decorate, must not be null
+     * @param bag the bag to decorate, must not be null
      * @throws NullPointerException if bag is null
      */
     public CollectionBag(final Bag<E> bag) {
@@ -66,10 +69,11 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the collection out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -80,10 +84,10 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
     /**
      * Read the collection in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
-     * @throws ClassCastException if deserialised object has wrong type
+     * @throws ClassCastException     if deserialised object has wrong type
      */
     @SuppressWarnings("unchecked") // will throw CCE, see Javadoc
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -102,14 +106,14 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
      * if the given collection <code>coll</code> contains at least one of
      * every object contained in this object.
      *
-     * @param coll  the collection to check against
+     * @param coll the collection to check against
      * @return <code>true</code> if the Bag contains at least one of every object in the collection
      */
     @Override
     public boolean containsAll(final Collection<?> coll) {
         final Iterator<?> e = coll.iterator();
         while (e.hasNext()) {
-            if(!contains(e.next())) {
+            if (!contains(e.next())) {
                 return false;
             }
         }
@@ -123,7 +127,7 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
      * Since this method always increases the size of the bag, it
      * will always return <code>true</code>.
      *
-     * @param object  the object to add
+     * @param object the object to add
      * @return <code>true</code>, always
      */
     @Override
@@ -149,7 +153,7 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
      * This will also remove the object from the {@link #uniqueSet()} if the
      * bag contains no occurrence anymore of the object after this operation.
      *
-     * @param object  the object to remove
+     * @param object the object to remove
      * @return <code>true</code> if this call changed the collection
      */
     @Override
@@ -163,7 +167,7 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
      * <b>not</b> respecting cardinality. That is, remove <i>all</i>
      * occurrences of every object contained in the given collection.
      *
-     * @param coll  the collection to remove
+     * @param coll the collection to remove
      * @return <code>true</code> if this call changed the collection
      */
     @Override
@@ -196,7 +200,7 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
      * it is advised to use a collection type for <code>coll</code> that provides
      * a fast (e.g. O(1)) implementation of {@link Collection#contains(Object)}.
      *
-     * @param coll  the collection to retain
+     * @param coll the collection to retain
      * @return <code>true</code> if this call changed the collection
      */
     @Override
@@ -227,7 +231,7 @@ public final class CollectionBag<E> extends AbstractBagDecorator<E> {
      * Since this method always increases the size of the bag, it
      * will always return <code>true</code>.
      *
-     * @param object  the object to add
+     * @param object the object to add
      * @param count  the number of copies to add
      * @return <code>true</code>, always
      */

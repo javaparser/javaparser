@@ -47,12 +47,16 @@ import java.util.*;
  * @since 3.0
  */
 public class ListOrderedSet<E>
-    extends AbstractSerializableSetDecorator<E> {
+        extends AbstractSerializableSetDecorator<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -228664372470420141L;
 
-    /** Internal list to hold the sequence of objects */
+    /**
+     * Internal list to hold the sequence of objects
+     */
     private final List<E> setOrder;
 
     /**
@@ -60,11 +64,11 @@ public class ListOrderedSet<E>
      * <p>
      * The list and set must both be empty.
      *
-     * @param <E> the element type
-     * @param set the set to decorate, must be empty and not null
+     * @param <E>  the element type
+     * @param set  the set to decorate, must be empty and not null
      * @param list the list to decorate, must be empty and not null
      * @return a new ordered set
-     * @throws NullPointerException if set or list is null
+     * @throws NullPointerException     if set or list is null
      * @throws IllegalArgumentException if either the set or list is not empty
      * @since 4.0
      */
@@ -104,7 +108,7 @@ public class ListOrderedSet<E>
      * NOTE: If the list contains duplicates, the duplicates are removed,
      * altering the specified list.
      *
-     * @param <E> the element type
+     * @param <E>  the element type
      * @param list the list to decorate, must not be null
      * @return a new ordered set
      * @throws NullPointerException if list is null
@@ -121,6 +125,7 @@ public class ListOrderedSet<E>
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Constructs a new empty <code>ListOrderedSet</code> using a
      * <code>HashSet</code> and an <code>ArrayList</code> internally.
@@ -149,7 +154,7 @@ public class ListOrderedSet<E>
      * <p>
      * The set and list must both be correctly initialised to the same elements.
      *
-     * @param set the set to decorate, must not be null
+     * @param set  the set to decorate, must not be null
      * @param list the list to decorate, must not be null
      * @throws NullPointerException if set or list is null
      */
@@ -162,6 +167,7 @@ public class ListOrderedSet<E>
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Gets an unmodifiable view of the order of the Set.
      *
@@ -237,7 +243,7 @@ public class ListOrderedSet<E>
         if (decorated().size() == 0) {
             setOrder.clear();
         } else {
-            for (final Iterator<E> it = setOrder.iterator(); it.hasNext();) {
+            for (final Iterator<E> it = setOrder.iterator(); it.hasNext(); ) {
                 if (!decorated().contains(it.next())) {
                     it.remove();
                 }
@@ -277,7 +283,7 @@ public class ListOrderedSet<E>
      *
      * @param object the element to search for
      * @return the index of the first occurrence of the object, or {@code -1} if
-     *         this ordered set does not contain this object
+     * this ordered set does not contain this object
      * @see List#indexOf(Object)
      */
     public int indexOf(final Object object) {
@@ -289,7 +295,7 @@ public class ListOrderedSet<E>
      * contained in this ordered set (optional operation). Shifts the element
      * currently at this position and any subsequent elements to the right.
      *
-     * @param index the index at which the element is to be inserted
+     * @param index  the index at which the element is to be inserted
      * @param object the element to be inserted
      * @see List#add(int, Object)
      */
@@ -307,7 +313,7 @@ public class ListOrderedSet<E>
      * right.
      *
      * @param index the position to insert the elements
-     * @param coll the collection containing the elements to be inserted
+     * @param coll  the collection containing the elements to be inserted
      * @return {@code true} if this ordered set changed as a result of the call
      * @see List#addAll(int, Collection)
      */
@@ -359,17 +365,22 @@ public class ListOrderedSet<E>
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Internal iterator handle remove.
      */
     static class OrderedSetIterator<E>
-        extends AbstractIteratorDecorator<E>
-        implements OrderedIterator<E> {
+            extends AbstractIteratorDecorator<E>
+            implements OrderedIterator<E> {
 
-        /** Object we iterate on */
+        /**
+         * Object we iterate on
+         */
         private final Collection<E> set;
 
-        /** Last object retrieved */
+        /**
+         * Last object retrieved
+         */
         private E last;
 
         private OrderedSetIterator(final ListIterator<E> iterator, final Collection<E> set) {

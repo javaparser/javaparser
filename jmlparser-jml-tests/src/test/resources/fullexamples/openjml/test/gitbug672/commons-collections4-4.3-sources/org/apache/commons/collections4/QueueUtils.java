@@ -40,7 +40,8 @@ public class QueueUtils {
     /**
      * <code>QueueUtils</code> should not normally be instantiated.
      */
-    private QueueUtils() {}
+    private QueueUtils() {
+    }
 
     //-----------------------------------------------------------------------
 
@@ -62,10 +63,10 @@ public class QueueUtils {
      *     }
      * }
      * </pre>
-     *
+     * <p>
      * Failure to follow this advice may result in non-deterministic behavior.
      *
-     * @param <E> the element type
+     * @param <E>   the element type
      * @param queue the queue to synchronize, must not be null
      * @return a synchronized queue backed by that queue
      * @throws NullPointerException if the queue is null
@@ -78,8 +79,8 @@ public class QueueUtils {
     /**
      * Returns an unmodifiable queue backed by the given queue.
      *
-     * @param <E> the type of the elements in the queue
-     * @param queue  the queue to make unmodifiable, must not be null
+     * @param <E>   the type of the elements in the queue
+     * @param queue the queue to make unmodifiable, must not be null
      * @return an unmodifiable queue backed by that queue
      * @throws NullPointerException if the queue is null
      */
@@ -95,9 +96,9 @@ public class QueueUtils {
      * It is important not to use the original queue after invoking this method,
      * as it is a backdoor for adding invalid objects.
      *
-     * @param <E> the type of the elements in the queue
-     * @param queue  the queue to predicate, must not be null
-     * @param predicate  the predicate used to evaluate new elements, must not be null
+     * @param <E>       the type of the elements in the queue
+     * @param queue     the queue to predicate, must not be null
+     * @param predicate the predicate used to evaluate new elements, must not be null
      * @return a predicated queue
      * @throws NullPointerException if the queue or predicate is null
      */
@@ -115,9 +116,9 @@ public class QueueUtils {
      * Existing entries in the specified queue will not be transformed.
      * If you want that behaviour, see {@link TransformedQueue#transformedQueue}.
      *
-     * @param <E> the type of the elements in the queue
-     * @param queue  the queue to predicate, must not be null
-     * @param transformer  the transformer for the queue, must not be null
+     * @param <E>         the type of the elements in the queue
+     * @param queue       the queue to predicate, must not be null
+     * @param transformer the transformer for the queue, must not be null
      * @return a transformed queue backed by the given queue
      * @throws NullPointerException if the queue or transformer is null
      */

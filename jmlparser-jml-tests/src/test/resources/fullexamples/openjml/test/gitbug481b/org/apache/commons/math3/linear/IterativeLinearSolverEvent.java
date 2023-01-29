@@ -26,17 +26,19 @@ import org.apache.commons.math3.util.IterationEvent;
  * @since 3.0
  */
 public abstract class IterativeLinearSolverEvent
-    extends IterationEvent {
-    /** Serialization identifier. */
+        extends IterationEvent {
+    /**
+     * Serialization identifier.
+     */
     private static final long serialVersionUID = 20120129L;
 
     /**
      * Creates a new instance of this class.
      *
-     * @param source the iterative algorithm on which the event initially
-     * occurred
+     * @param source     the iterative algorithm on which the event initially
+     *                   occurred
      * @param iterations the number of iterations performed at the time
-     * {@code this} event is created
+     *                   {@code this} event is created
      */
     public IterativeLinearSolverEvent(final Object source, final int iterations) {
         super(source, iterations);

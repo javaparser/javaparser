@@ -117,17 +117,17 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     void testAsClass() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        modifier.asClass();
-    });
-}
+            modifier.asClass();
+        });
+    }
 
     @Test
     void testAsInterface() {
         assertThrows(UnsupportedOperationException.class, () -> {
             JavaParserEnumDeclaration modifier = (JavaParserEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        modifier.asInterface();
-    });
-}
+            modifier.asInterface();
+        });
+    }
 
     @Test
     void testAsEnum() {
@@ -351,9 +351,9 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     @Test
     void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        
+
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
-        
+
         assertEquals(12, ancestors.size());
 
         ResolvedReferenceType ancestor;
@@ -431,10 +431,10 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
     void testGetFieldForUnexistingField() {
         assertThrows(UnsolvedSymbolException.class, () -> {
             JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        constructorDeclaration.getField("unexisting");
-    });
+            constructorDeclaration.getField("unexisting");
+        });
 
-}
+    }
 
     @Test
     void testGetAllFields() {
@@ -744,7 +744,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
         ));
 
         // Temporary workaround to allow tests to pass on JDK14
-        if(TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
+        if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
 
@@ -917,7 +917,7 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
                         + "    public enum Weekend { SUNDAY, SATURDAY }"
                         + "    private Weekend weekend;"
                         + "}"
-        )).getResult().get();
+                )).getResult().get();
         FieldDeclaration field = cu.getClassByName("Employee").get().getMembers().get(1).asFieldDeclaration();
         ResolvedReferenceTypeDeclaration dec = field.getElementType().resolve().asReferenceType().getTypeDeclaration().get();
         assertEquals(false, dec.hasDirectlyAnnotation("javax.persistence.Embeddable"));

@@ -18,7 +18,9 @@ package org.apache.commons.math3.geometry;
 
 import java.io.Serializable;
 
-/** This interface represents a generic geometrical point.
+/**
+ * This interface represents a generic geometrical point.
+ *
  * @param <S> Type of the space.
  * @see Space
  * @see Vector
@@ -26,18 +28,23 @@ import java.io.Serializable;
  */
 public interface Point<S extends Space> extends Serializable {
 
-    /** Get the space to which the point belongs.
+    /**
+     * Get the space to which the point belongs.
+     *
      * @return containing space
      */
     Space getSpace();
 
     /**
      * Returns true if any coordinate of this point is NaN; false otherwise
-     * @return  true if any coordinate of this point is NaN; false otherwise
+     *
+     * @return true if any coordinate of this point is NaN; false otherwise
      */
     boolean isNaN();
 
-    /** Compute the distance between the instance and another point.
+    /**
+     * Compute the distance between the instance and another point.
+     *
      * @param p second point
      * @return the distance between the instance and p
      */

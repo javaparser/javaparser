@@ -16,21 +16,26 @@
  */
 package java.awt.event;
 
-public class ActionEvent extends java.awt.AWTEvent
-{
-   public final static int SHIFT_MASK = 1;
-   public final static int CTRL_MASK = 2;
-   public final static int META_MASK = 4;
-   public final static int ALT_MASK = 8;
-   public final static int ACTION_FIRST = 1001;
-   public final static int ACTION_LAST = 1001;
-   public final static int ACTION_PERFORMED = 1001;
+public class ActionEvent extends java.awt.AWTEvent {
+    public final static int SHIFT_MASK = 1;
+    public final static int CTRL_MASK = 2;
+    public final static int META_MASK = 4;
+    public final static int ALT_MASK = 8;
+    public final static int ACTION_FIRST = 1001;
+    public final static int ACTION_LAST = 1001;
+    public final static int ACTION_PERFORMED = 1001;
 
-   public ActionEvent(java.lang.Object arg0, int arg1, java.lang.String arg2);
-   public ActionEvent(java.lang.Object arg0, int arg1, java.lang.String arg2, int arg3);
-   public ActionEvent(java.lang.Object arg0, int arg1, java.lang.String arg2, long arg3, int arg4);
-   public java.lang.String getActionCommand();
-   public long getWhen();
-   public int getModifiers();
-   public java.lang.String paramString();
+    public ActionEvent(java.lang.Object arg0, int arg1, java.lang.String arg2);
+
+    public ActionEvent(java.lang.Object arg0, int arg1, java.lang.String arg2, int arg3);
+
+    public ActionEvent(java.lang.Object arg0, int arg1, java.lang.String arg2, long arg3, int arg4);
+
+    public java.lang.String getActionCommand();
+
+    public long getWhen();
+
+    public int getModifiers();
+
+    public java.lang.String paramString();
 }

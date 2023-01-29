@@ -13,10 +13,10 @@ public class SMTEnv {
       @*/
     //@ helper
     public static /*@ nullable */ byte[] send(int message_length,
-                                                           int sender_id,
-                                                           int recipient_id,
-                                                           Server server,
-                                                           int port) {
+                                              int sender_id,
+                                              int recipient_id,
+                                              Server server,
+                                              int port) {
         Environment.untrustedOutput(7803);
         Environment.untrustedOutput(message_length);
         Environment.untrustedOutput(sender_id);

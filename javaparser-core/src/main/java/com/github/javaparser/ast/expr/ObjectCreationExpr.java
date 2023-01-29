@@ -81,8 +81,8 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     /**
      * Defines a call to a constructor.
      *
-     * @param scope may be null
-     * @param type this is the class that the constructor is being called for.
+     * @param scope     may be null
+     * @param type      this is the class that the constructor is being called for.
      * @param arguments Any arguments to pass to the constructor
      */
     public ObjectCreationExpr(final Expression scope, final ClassOrInterfaceType type, final NodeList<Expression> arguments) {

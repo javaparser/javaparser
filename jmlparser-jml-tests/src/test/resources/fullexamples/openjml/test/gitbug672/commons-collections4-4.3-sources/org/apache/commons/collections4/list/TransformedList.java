@@ -38,7 +38,9 @@ import java.util.ListIterator;
  */
 public class TransformedList<E> extends TransformedCollection<E> implements List<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 1077193035000013141L;
 
     /**
@@ -48,9 +50,9 @@ public class TransformedList<E> extends TransformedCollection<E> implements List
      * are NOT transformed.
      * Contrast this with {@link #transformedList(List, Transformer)}.
      *
-     * @param <E> the type of the elements in the list
-     * @param list  the list to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the type of the elements in the list
+     * @param list        the list to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed list
      * @throws NullPointerException if list or transformer is null
      * @since 4.0
@@ -68,9 +70,9 @@ public class TransformedList<E> extends TransformedCollection<E> implements List
      * will be transformed by this method.
      * Contrast this with {@link #transformingList(List, Transformer)}.
      *
-     * @param <E> the type of the elements in the list
-     * @param list  the list to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param <E>         the type of the elements in the list
+     * @param list        the list to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @return a new transformed List
      * @throws NullPointerException if list or transformer is null
      * @since 4.0
@@ -90,14 +92,15 @@ public class TransformedList<E> extends TransformedCollection<E> implements List
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the list being decorated, they
      * are NOT transformed.
      *
-     * @param list  the list to decorate, must not be null
-     * @param transformer  the transformer to use for conversion, must not be null
+     * @param list        the list to decorate, must not be null
+     * @param transformer the transformer to use for conversion, must not be null
      * @throws NullPointerException if list or transformer is null
      */
     protected TransformedList(final List<E> list, final Transformer<? super E, ? extends E> transformer) {
@@ -189,7 +192,7 @@ public class TransformedList<E> extends TransformedCollection<E> implements List
         /**
          * Create a new transformed list iterator.
          *
-         * @param iterator  the list iterator to decorate
+         * @param iterator the list iterator to decorate
          */
         protected TransformedListIterator(final ListIterator<E> iterator) {
             super(iterator);

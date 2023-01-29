@@ -35,6 +35,5 @@
  *   <li>ListOrdered - ensures that insertion order is retained
  *   <li>MapBackedSet - a set formed by decorating a Map
  * </ul>
- *
  */
 package org.apache.commons.collections4.set;

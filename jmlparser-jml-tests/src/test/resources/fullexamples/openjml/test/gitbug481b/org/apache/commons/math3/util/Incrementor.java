@@ -61,12 +61,12 @@ public class Incrementor {
      */
     public Incrementor(int max) {
         this(max,
-             new MaxCountExceededCallback() {
-                 /** {@inheritDoc} */
-                 public void trigger(int max) throws MaxCountExceededException {
-                     throw new MaxCountExceededException(max);
-                 }
-             });
+                new MaxCountExceededCallback() {
+                    /** {@inheritDoc} */
+                    public void trigger(int max) throws MaxCountExceededException {
+                        throw new MaxCountExceededException(max);
+                    }
+                });
     }
 
     /**
@@ -74,12 +74,12 @@ public class Incrementor {
      * counter exhaustion.
      *
      * @param max Maximal count.
-     * @param cb Function to be called when the maximal count has been reached.
+     * @param cb  Function to be called when the maximal count has been reached.
      * @throws NullArgumentException if {@code cb} is {@code null}
      */
     public Incrementor(int max, MaxCountExceededCallback cb)
-        throws NullArgumentException {
-        if (cb == null){
+            throws NullArgumentException {
+        if (cb == null) {
             throw new NullArgumentException();
         }
         maximalCount = max;
@@ -144,13 +144,13 @@ public class Incrementor {
      * At counter exhaustion, this method will call the
      * {@link MaxCountExceededCallback#trigger(int) trigger} method of the
      * callback object passed to the
-     * {@link #Incrementor(int,MaxCountExceededCallback) constructor}.
+     * {@link #Incrementor(int, MaxCountExceededCallback) constructor}.
      * If not explictly set, a default callback is used that will throw
      * a {@code MaxCountExceededException}.
      *
      * @throws MaxCountExceededException at counter exhaustion, unless a
-     * custom {@link MaxCountExceededCallback callback} has been set at
-     * construction.
+     *                                   custom {@link MaxCountExceededCallback callback} has been set at
+     *                                   construction.
      */
     public void incrementCount() throws MaxCountExceededException {
         if (++count > maximalCount) {
@@ -179,7 +179,8 @@ public class Incrementor {
         void trigger(int maximalCount) throws MaxCountExceededException;
     }
 
-    /** Create an instance that delegates everything to a {@link IntegerSequence.Incrementor}.
+    /**
+     * Create an instance that delegates everything to a {@link IntegerSequence.Incrementor}.
      * <p>
      * This factory method is intended only as a temporary hack for internal use in
      * Apache Commons Math 3.X series, when {@code Incrementor} is required in
@@ -194,6 +195,7 @@ public class Incrementor {
      * of the {@link IntegerSequence.Incrementor} used at creation. The rationale is that
      * {@link IntegerSequence.Incrementor} cannot change their maximal count and cannot be reset.
      * </p>
+     *
      * @param incrementor wrapped {@link IntegerSequence.Incrementor}
      * @return an incrementor wrapping an {@link IntegerSequence.Incrementor}
      * @since 3.6

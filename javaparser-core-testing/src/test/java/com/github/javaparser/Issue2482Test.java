@@ -35,7 +35,7 @@ public class Issue2482Test {
     public void commentBeforeLambda() {
         LambdaExpr le = StaticJavaParser.parseExpression(
                 "// a comment before parent" + System.lineSeparator() +
-                "()->{return 1;}");
+                        "()->{return 1;}");
 
         assertTrue(le.getComment().isPresent());
         assertTrue(le.getOrphanComments().isEmpty());
@@ -46,7 +46,7 @@ public class Issue2482Test {
     public void commentBeforeBlock() {
         Statement st = StaticJavaParser.parseBlock(
                 "// a comment before parent" + System.lineSeparator() +
-                "{ if (file != null) {} }");
+                        "{ if (file != null) {} }");
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());
         assertEquals(0, st.getAllContainedComments().size());
@@ -66,7 +66,7 @@ public class Issue2482Test {
     public void commentBeforeAssignment() {
         Statement st = StaticJavaParser.parseStatement(
                 "// a comment" + System.lineSeparator() +
-                "int x = 3;");
+                        "int x = 3;");
 
         assertTrue(st.getComment().isPresent());
         assertTrue(st.getOrphanComments().isEmpty());

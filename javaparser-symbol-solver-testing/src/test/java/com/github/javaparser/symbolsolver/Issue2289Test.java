@@ -42,30 +42,30 @@ public class Issue2289Test extends AbstractSymbolResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(config);
 
-        String s = 
-                "public class Test \n" + 
-                "{\n" + 
-                "    public class InnerClass \n" + 
-                "    {\n" + 
-                "        public InnerClass(int i, int j) {  \n" + 
-                "        }\n" + 
-                "\n" + 
-                "        public InnerClass(int i, int ...j) {  \n" + 
-                "        } \n" + 
-                "    }\n" + 
-                " \n" + 
-                "    public Test() { \n" + 
-                "        new InnerClass(1,2);\n" + 
-                "        new InnerClass(1,2,3);\n" + 
-                "    } \n" + 
-                "}";
-        
+        String s =
+                "public class Test \n" +
+                        "{\n" +
+                        "    public class InnerClass \n" +
+                        "    {\n" +
+                        "        public InnerClass(int i, int j) {  \n" +
+                        "        }\n" +
+                        "\n" +
+                        "        public InnerClass(int i, int ...j) {  \n" +
+                        "        } \n" +
+                        "    }\n" +
+                        " \n" +
+                        "    public Test() { \n" +
+                        "        new InnerClass(1,2);\n" +
+                        "        new InnerClass(1,2,3);\n" +
+                        "    } \n" +
+                        "}";
+
         CompilationUnit cu = StaticJavaParser.parse(s);
-        List<ObjectCreationExpr> exprs = cu.findAll(ObjectCreationExpr .class);
-        
+        List<ObjectCreationExpr> exprs = cu.findAll(ObjectCreationExpr.class);
+
         assertEquals("Test.InnerClass.InnerClass(int, int)", exprs.get(0).resolve().getQualifiedSignature());
         assertEquals("Test.InnerClass.InnerClass(int, int...)", exprs.get(1).resolve().getQualifiedSignature());
 
     }
-    
+
 }

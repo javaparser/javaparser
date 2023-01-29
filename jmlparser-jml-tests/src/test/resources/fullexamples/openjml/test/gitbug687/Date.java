@@ -15,6 +15,6 @@ public interface Date {
 
     // Original submission had == instead of <==> 
     /*@ ensures \result <==> (this.year == birth.year) && this.month == birth.month && this.day == birth.day; @*/
-   public /*@ pure @*/ boolean equals(Date birth);
+    public /*@ pure @*/ boolean equals(Date birth);
 
 }

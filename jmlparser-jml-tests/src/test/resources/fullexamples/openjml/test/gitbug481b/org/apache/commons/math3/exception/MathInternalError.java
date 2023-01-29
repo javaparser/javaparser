@@ -25,9 +25,13 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class MathInternalError extends MathIllegalStateException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -6276776513966934846L;
-    /** URL for reporting problems. */
+    /**
+     * URL for reporting problems.
+     */
     private static final String REPORT_URL = "https://issues.apache.org/jira/browse/MATH";
 
     /**
@@ -39,6 +43,7 @@ public class MathInternalError extends MathIllegalStateException {
 
     /**
      * Simple constructor.
+     *
      * @param cause root cause
      */
     public MathInternalError(final Throwable cause) {
@@ -49,9 +54,9 @@ public class MathInternalError extends MathIllegalStateException {
      * Constructor accepting a localized message.
      *
      * @param pattern Message pattern explaining the cause of the error.
-     * @param args Arguments.
+     * @param args    Arguments.
      */
-    public MathInternalError(Localizable pattern, Object ... args) {
+    public MathInternalError(Localizable pattern, Object... args) {
         super(pattern, args);
     }
 }

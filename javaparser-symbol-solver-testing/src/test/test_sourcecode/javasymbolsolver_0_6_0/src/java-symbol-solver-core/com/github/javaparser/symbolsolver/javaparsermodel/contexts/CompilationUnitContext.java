@@ -80,15 +80,15 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         // Look among statically imported values
         if (wrappedNode.getImports() != null) {
             for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-                if(importDecl.isStatic()){
-                    if(importDecl.isAsterisk()) {
+                if (importDecl.isStatic()) {
+                    if (importDecl.isAsterisk()) {
                         String qName = importDecl.getNameAsString();
                         com.github.javaparser.symbolsolver.model.declarations.TypeDeclaration importedType = typeSolver.solveType(qName);
                         SymbolReference<? extends ValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
                         if (ref.isSolved()) {
                             return ref;
                         }
-                    } else{
+                    } else {
                         String whole = importDecl.getNameAsString();
 
                         // split in field/method name and type name
@@ -226,8 +226,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     @Override
     public SymbolReference<MethodDeclaration> solveMethod(String name, List<Type> argumentsTypes, boolean staticOnly, TypeSolver typeSolver) {
         for (ImportDeclaration importDecl : wrappedNode.getImports()) {
-            if(importDecl.isStatic()){
-                if(importDecl.isAsterisk()){
+            if (importDecl.isStatic()) {
+                if (importDecl.isAsterisk()) {
                     String importString = importDecl.getNameAsString();
 
                     if (this.wrappedNode.getPackageDeclaration().isPresent()
@@ -244,7 +244,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     if (method.isSolved()) {
                         return method;
                     }
-                } else{
+                } else {
                     String qName = importDecl.getNameAsString();
 
                     if (qName.equals(name) || qName.endsWith("." + name)) {

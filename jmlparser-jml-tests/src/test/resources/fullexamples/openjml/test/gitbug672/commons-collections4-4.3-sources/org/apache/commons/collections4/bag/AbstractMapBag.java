@@ -39,13 +39,21 @@ import java.util.Map.Entry;
  */
 public abstract class AbstractMapBag<E> implements Bag<E> {
 
-    /** The map to use to store the data */
+    /**
+     * The map to use to store the data
+     */
     private transient Map<E, MutableInteger> map;
-    /** The current total size of the bag */
+    /**
+     * The current total size of the bag
+     */
     private int size;
-    /** The modification count for fail fast iterators */
+    /**
+     * The modification count for fail fast iterators
+     */
     private transient int modCount;
-    /** Unique view of the elements */
+    /**
+     * Unique view of the elements
+     */
     private transient Set<E> uniqueSet;
 
     /**
@@ -77,6 +85,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns the number of elements in this bag.
      *
@@ -114,6 +123,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Determines if the bag contains the given element by checking if the
      * underlying map contains the element as a key.
@@ -159,6 +169,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets an iterator over the bag elements. Elements present in the Bag more
      * than once will be returned repeatedly.
@@ -194,13 +205,17 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
             this.canRemove = false;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean hasNext() {
             return itemCount > 0 || entryIterator.hasNext();
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public E next() {
             if (parent.modCount != mods) {
@@ -215,7 +230,9 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
             return current.getKey();
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void remove() {
             if (parent.modCount != mods) {
@@ -236,6 +253,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Adds a new element to the bag, incrementing its count in the underlying map.
      *
@@ -250,7 +268,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     /**
      * Adds a new element to the bag, incrementing its count in the map.
      *
-     * @param object the object to search for
+     * @param object  the object to search for
      * @param nCopies the number of copies to add
      * @return <code>true</code> if the object was not already in the <code>uniqueSet</code>
      */
@@ -288,6 +306,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Clears the bag by clearing the underlying map.
      */
@@ -319,7 +338,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     /**
      * Removes a specified number of copies of an object from the bag.
      *
-     * @param object the object to remove
+     * @param object  the object to remove
      * @param nCopies the number of copies to remove
      * @return true if the bag changed
      */
@@ -381,10 +400,10 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     /**
      * Remove any members of the bag that are not in the given bag, respecting
      * cardinality.
-     * @see #retainAll(Collection)
      *
      * @param other the bag to retain
      * @return <code>true</code> if this call changed the collection
+     * @see #retainAll(Collection)
      */
     boolean retainAll(final Bag<?> other) {
         boolean result = false;
@@ -407,15 +426,19 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Mutable integer class for storing the data.
      */
     protected static class MutableInteger {
-        /** The value of this mutable. */
+        /**
+         * The value of this mutable.
+         */
         protected int value;
 
         /**
          * Constructor.
+         *
          * @param value the initial value
          */
         MutableInteger(final int value) {
@@ -437,6 +460,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns an array of all of this bag's elements.
      *
@@ -461,11 +485,11 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
      * If the input array has more elements than are in the bag,
      * trailing elements will be set to null.
      *
-     * @param <T> the type of the array elements
+     * @param <T>   the type of the array elements
      * @param array the array to populate
      * @return an array of all of this bag's elements
-     * @throws ArrayStoreException if the runtime type of the specified array is not
-     *   a supertype of the runtime type of the elements in this list
+     * @throws ArrayStoreException  if the runtime type of the specified array is not
+     *                              a supertype of the runtime type of the elements in this list
      * @throws NullPointerException if the specified array is null
      */
     @Override
@@ -483,8 +507,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
             final E current = it.next();
             for (int index = getCount(current); index > 0; index--) {
                 // unsafe, will throw ArrayStoreException if types are not compatible, see javadoc
-                @SuppressWarnings("unchecked")
-                final T unchecked = (T) current;
+                @SuppressWarnings("unchecked") final T unchecked = (T) current;
                 array[i++] = unchecked;
             }
         }
@@ -502,14 +525,16 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     @Override
     public Set<E> uniqueSet() {
         if (uniqueSet == null) {
-            uniqueSet = UnmodifiableSet.<E> unmodifiableSet(map.keySet());
+            uniqueSet = UnmodifiableSet.<E>unmodifiableSet(map.keySet());
         }
         return uniqueSet;
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
+     *
      * @param out the output stream
      * @throws IOException any of the usual I/O related exceptions
      */
@@ -523,11 +548,12 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
 
     /**
      * Read the map in using a custom routine.
+     *
      * @param map the map to use
-     * @param in the input stream
-     * @throws IOException any of the usual I/O related exceptions
+     * @param in  the input stream
+     * @throws IOException            any of the usual I/O related exceptions
      * @throws ClassNotFoundException if the stream contains an object which class can not be loaded
-     * @throws ClassCastException if the stream does not contain the correct objects
+     * @throws ClassCastException     if the stream does not contain the correct objects
      */
     protected void doReadObject(final Map<E, MutableInteger> map, final ObjectInputStream in)
             throws IOException, ClassNotFoundException {
@@ -543,6 +569,7 @@ public abstract class AbstractMapBag<E> implements Bag<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Compares this Bag to another. This Bag equals another Bag if it contains
      * the same number of occurrences of the same elements.

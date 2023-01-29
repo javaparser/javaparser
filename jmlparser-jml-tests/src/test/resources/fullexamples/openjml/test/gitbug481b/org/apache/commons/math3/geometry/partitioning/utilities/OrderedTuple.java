@@ -20,7 +20,8 @@ import org.apache.commons.math3.util.FastMath;
 
 import java.util.Arrays;
 
-/** This class implements an ordering operation for T-uples.
+/**
+ * This class implements an ordering operation for T-uples.
  *
  * <p>Ordering is done by encoding all components of the T-uple into a
  * single scalar value and using this value as the sorting
@@ -95,49 +96,73 @@ import java.util.Arrays;
 @Deprecated
 public class OrderedTuple implements Comparable<OrderedTuple> {
 
-    /** Sign bit mask. */
-    private static final long SIGN_MASK     = 0x8000000000000000L;
+    /**
+     * Sign bit mask.
+     */
+    private static final long SIGN_MASK = 0x8000000000000000L;
 
-    /** Exponent bits mask. */
+    /**
+     * Exponent bits mask.
+     */
     private static final long EXPONENT_MASK = 0x7ff0000000000000L;
 
-    /** Mantissa bits mask. */
+    /**
+     * Mantissa bits mask.
+     */
     private static final long MANTISSA_MASK = 0x000fffffffffffffL;
 
-    /** Implicit MSB for normalized numbers. */
-    private static final long IMPLICIT_ONE  = 0x0010000000000000L;
+    /**
+     * Implicit MSB for normalized numbers.
+     */
+    private static final long IMPLICIT_ONE = 0x0010000000000000L;
 
-    /** Double components of the T-uple. */
+    /**
+     * Double components of the T-uple.
+     */
     private double[] components;
 
-    /** Offset scale. */
+    /**
+     * Offset scale.
+     */
     private int offset;
 
-    /** Least Significant Bit scale. */
+    /**
+     * Least Significant Bit scale.
+     */
     private int lsb;
 
-    /** Ordering encoding of the double components. */
+    /**
+     * Ordering encoding of the double components.
+     */
     private long[] encoding;
 
-    /** Positive infinity marker. */
+    /**
+     * Positive infinity marker.
+     */
     private boolean posInf;
 
-    /** Negative infinity marker. */
+    /**
+     * Negative infinity marker.
+     */
     private boolean negInf;
 
-    /** Not A Number marker. */
+    /**
+     * Not A Number marker.
+     */
     private boolean nan;
 
-    /** Build an ordered T-uple from its components.
+    /**
+     * Build an ordered T-uple from its components.
+     *
      * @param components double components of the T-uple
      */
-    public OrderedTuple(final double ... components) {
+    public OrderedTuple(final double... components) {
         this.components = components.clone();
         int msb = Integer.MIN_VALUE;
-        lsb     = Integer.MAX_VALUE;
-        posInf  = false;
-        negInf  = false;
-        nan     = false;
+        lsb = Integer.MAX_VALUE;
+        posInf = false;
+        negInf = false;
+        nan = false;
         for (int i = 0; i < components.length; ++i) {
             if (Double.isInfinite(components[i])) {
                 if (components[i] < 0) {
@@ -162,28 +187,30 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
             // instance cannot be sorted logically
             posInf = false;
             negInf = false;
-            nan    = true;
+            nan = true;
         }
 
         if (lsb <= msb) {
             // encode the T-upple with the specified offset
             encode(msb + 16);
         } else {
-            encoding = new long[] {
-                0x0L
+            encoding = new long[]{
+                    0x0L
             };
         }
 
     }
 
-    /** Encode the T-uple with a given offset.
+    /**
+     * Encode the T-uple with a given offset.
+     *
      * @param minOffset minimal scale of the offset to add to all
-     * components (must be greater than the MSBs of all components)
+     *                  components (must be greater than the MSBs of all components)
      */
     private void encode(final int minOffset) {
 
         // choose an offset with some margins
-        offset  = minOffset + 31;
+        offset = minOffset + 31;
         offset -= offset % 32;
 
         if ((encoding != null) && (encoding.length == 1) && (encoding[0] == 0x0L)) {
@@ -193,14 +220,14 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
 
         // allocate an integer array to encode the components (we use only
         // 63 bits per element because there is no unsigned long in Java)
-        final int neededBits  = offset + 1 - lsb;
+        final int neededBits = offset + 1 - lsb;
         final int neededLongs = (neededBits + 62) / 63;
         encoding = new long[components.length * neededLongs];
 
         // mix the bits from all components
-        int  eIndex = 0;
-        int  shift  = 62;
-        long word   = 0x0L;
+        int eIndex = 0;
+        int shift = 62;
+        long word = 0x0L;
         for (int k = offset; eIndex < encoding.length; --k) {
             for (int vIndex = 0; vIndex < components.length; ++vIndex) {
                 if (getBit(vIndex, k) != 0) {
@@ -208,7 +235,7 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
                 }
                 if (shift-- == 0) {
                     encoding[eIndex++] = word;
-                    word  = 0x0L;
+                    word = 0x0L;
                     shift = 62;
                 }
             }
@@ -216,16 +243,17 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
 
     }
 
-    /** Compares this ordered T-uple with the specified object.
-
+    /**
+     * Compares this ordered T-uple with the specified object.
+     *
      * <p>The ordering method is detailed in the general description of
      * the class. Its main property is to be consistent with distance:
      * geometrically close T-uples stay close to each other when stored
      * in a sorted collection using this comparison method.</p>
-
+     *
      * <p>T-uples with negative infinite, positive infinite are sorted
      * logically.</p>
-
+     *
      * <p>Some arbitrary choices have been made to handle specific
      * cases. The rationale for these choices is to keep
      * <em>normal</em> and consistent T-uples together.</p>
@@ -239,12 +267,11 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
      * are considered as if they had {@code Double.NaN}
      * components</li>
      * </ul>
-
+     *
      * @param ot T-uple to compare instance with
      * @return a negative integer if the instance is less than the
      * object, zero if they are equal, or a positive integer if the
      * instance is greater than the object
-
      */
     public int compareTo(final OrderedTuple ot) {
         if (components.length == ot.components.length) {
@@ -288,7 +315,9 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
 
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object other) {
         if (this == other) {
@@ -300,13 +329,15 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         // the following constants are arbitrary small primes
         final int multiplier = 37;
-        final int trueHash   = 97;
-        final int falseHash  = 71;
+        final int trueHash = 97;
+        final int falseHash = 71;
 
         // hash fields and combine them
         // (we rely on the multiplier to have different combined weights
@@ -316,20 +347,24 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
         hash = hash * multiplier + lsb;
         hash = hash * multiplier + (posInf ? trueHash : falseHash);
         hash = hash * multiplier + (negInf ? trueHash : falseHash);
-        hash = hash * multiplier + (nan    ? trueHash : falseHash);
+        hash = hash * multiplier + (nan ? trueHash : falseHash);
 
         return hash;
 
     }
 
-    /** Get the components array.
+    /**
+     * Get the components array.
+     *
      * @return array containing the T-uple components
      */
     public double[] getComponents() {
         return components.clone();
     }
 
-    /** Extract the sign from the bits of a double.
+    /**
+     * Extract the sign from the bits of a double.
+     *
      * @param bits binary representation of the double
      * @return sign bit (zero if positive, non zero if negative)
      */
@@ -337,7 +372,9 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
         return bits & SIGN_MASK;
     }
 
-    /** Extract the exponent from the bits of a double.
+    /**
+     * Extract the exponent from the bits of a double.
+     *
      * @param bits binary representation of the double
      * @return exponent
      */
@@ -345,17 +382,21 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
         return ((int) ((bits & EXPONENT_MASK) >> 52)) - 1075;
     }
 
-    /** Extract the mantissa from the bits of a double.
+    /**
+     * Extract the mantissa from the bits of a double.
+     *
      * @param bits binary representation of the double
      * @return mantissa
      */
     private static long mantissa(final long bits) {
         return ((bits & EXPONENT_MASK) == 0) ?
-               ((bits & MANTISSA_MASK) << 1) :          // subnormal number
-               (IMPLICIT_ONE | (bits & MANTISSA_MASK)); // normal number
+                ((bits & MANTISSA_MASK) << 1) :          // subnormal number
+                (IMPLICIT_ONE | (bits & MANTISSA_MASK)); // normal number
     }
 
-    /** Compute the most significant bit of a long.
+    /**
+     * Compute the most significant bit of a long.
+     *
      * @param l long from which the most significant bit is requested
      * @return scale of the most significant bit of {@code l},
      * or 0 if {@code l} is zero
@@ -364,9 +405,9 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
     private static int computeMSB(final long l) {
 
         long ll = l;
-        long mask  = 0xffffffffL;
-        int  scale = 32;
-        int  msb   = 0;
+        long mask = 0xffffffffL;
+        int scale = 32;
+        int msb = 0;
 
         while (scale != 0) {
             if ((ll & mask) != ll) {
@@ -381,7 +422,9 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
 
     }
 
-    /** Compute the least significant bit of a long.
+    /**
+     * Compute the least significant bit of a long.
+     *
      * @param l long from which the least significant bit is requested
      * @return scale of the least significant bit of {@code l},
      * or 63 if {@code l} is zero
@@ -390,9 +433,9 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
     private static int computeLSB(final long l) {
 
         long ll = l;
-        long mask  = 0xffffffff00000000L;
-        int  scale = 32;
-        int  lsb   = 0;
+        long mask = 0xffffffff00000000L;
+        int scale = 32;
+        int lsb = 0;
 
         while (scale != 0) {
             if ((ll & mask) == ll) {
@@ -407,7 +450,9 @@ public class OrderedTuple implements Comparable<OrderedTuple> {
 
     }
 
-    /** Get a bit from the mantissa of a double.
+    /**
+     * Get a bit from the mantissa of a double.
+     *
      * @param i index of the component
      * @param k scale of the requested bit
      * @return the specified bit (either 0 or 1), after the offset has

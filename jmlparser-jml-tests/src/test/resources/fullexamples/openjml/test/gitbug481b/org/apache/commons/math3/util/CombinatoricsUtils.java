@@ -31,21 +31,28 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public final class CombinatoricsUtils {
 
-    /** All long-representable factorials */
-    static final long[] FACTORIALS = new long[] {
-                       1l,                  1l,                   2l,
-                       6l,                 24l,                 120l,
-                     720l,               5040l,               40320l,
-                  362880l,            3628800l,            39916800l,
-               479001600l,         6227020800l,         87178291200l,
-           1307674368000l,     20922789888000l,     355687428096000l,
-        6402373705728000l, 121645100408832000l, 2432902008176640000l };
+    /**
+     * All long-representable factorials
+     */
+    static final long[] FACTORIALS = new long[]{
+            1l, 1l, 2l,
+            6l, 24l, 120l,
+            720l, 5040l, 40320l,
+            362880l, 3628800l, 39916800l,
+            479001600l, 6227020800l, 87178291200l,
+            1307674368000l, 20922789888000l, 355687428096000l,
+            6402373705728000l, 121645100408832000l, 2432902008176640000l};
 
-    /** Stirling numbers of the second kind. */
-    static final AtomicReference<long[][]> STIRLING_S2 = new AtomicReference<long[][]> (null);
+    /**
+     * Stirling numbers of the second kind.
+     */
+    static final AtomicReference<long[][]> STIRLING_S2 = new AtomicReference<long[][]>(null);
 
-    /** Private constructor (class contains only static methods). */
-    private CombinatoricsUtils() {}
+    /**
+     * Private constructor (class contains only static methods).
+     */
+    private CombinatoricsUtils() {
+    }
 
 
     /**
@@ -69,13 +76,13 @@ public final class CombinatoricsUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws NotPositiveException      if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
-     * represented by a long integer.
+     * @throws MathArithmeticException   if the result is too large to be
+     *                                   represented by a long integer.
      */
     public static long binomialCoefficient(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+            throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1;
@@ -150,13 +157,13 @@ public final class CombinatoricsUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws NotPositiveException      if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
-     * represented by a long integer.
+     * @throws MathArithmeticException   if the result is too large to be
+     *                                   represented by a long integer.
      */
     public static double binomialCoefficientDouble(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+            throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1d;
@@ -164,16 +171,16 @@ public final class CombinatoricsUtils {
         if ((k == 1) || (k == n - 1)) {
             return n;
         }
-        if (k > n/2) {
+        if (k > n / 2) {
             return binomialCoefficientDouble(n, n - k);
         }
         if (n < 67) {
-            return binomialCoefficient(n,k);
+            return binomialCoefficient(n, k);
         }
 
         double result = 1d;
         for (int i = 1; i <= k; i++) {
-             result *= (double)(n - k + i) / (double)i;
+            result *= (double) (n - k + i) / (double) i;
         }
 
         return FastMath.floor(result + 0.5);
@@ -195,13 +202,13 @@ public final class CombinatoricsUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws NotPositiveException      if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
-     * represented by a long integer.
+     * @throws MathArithmeticException   if the result is too large to be
+     *                                   represented by a long integer.
      */
     public static double binomialCoefficientLog(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+            throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 0;
@@ -215,7 +222,7 @@ public final class CombinatoricsUtils {
          * return the log of the exact value
          */
         if (n < 67) {
-            return FastMath.log(binomialCoefficient(n,k));
+            return FastMath.log(binomialCoefficient(n, k));
         }
 
         /*
@@ -267,15 +274,15 @@ public final class CombinatoricsUtils {
      * @param n argument
      * @return {@code n!}
      * @throws MathArithmeticException if the result is too large to be represented
-     * by a {@code long}.
-     * @throws NotPositiveException if {@code n < 0}.
+     *                                 by a {@code long}.
+     * @throws NotPositiveException    if {@code n < 0}.
      * @throws MathArithmeticException if {@code n > 20}: The factorial value is too
-     * large to fit in a {@code long}.
+     *                                 large to fit in a {@code long}.
      */
     public static long factorial(final int n) throws NotPositiveException, MathArithmeticException {
         if (n < 0) {
             throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
-                                           n);
+                    n);
         }
         if (n > 20) {
             throw new MathArithmeticException();
@@ -299,7 +306,7 @@ public final class CombinatoricsUtils {
     public static double factorialDouble(final int n) throws NotPositiveException {
         if (n < 0) {
             throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
-                                           n);
+                    n);
         }
         if (n < 21) {
             return FACTORIALS[n];
@@ -317,7 +324,7 @@ public final class CombinatoricsUtils {
     public static double factorialLog(final int n) throws NotPositiveException {
         if (n < 0) {
             throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
-                                           n);
+                    n);
         }
         if (n < 21) {
             return FastMath.log(FACTORIALS[n]);
@@ -339,17 +346,18 @@ public final class CombinatoricsUtils {
      * The preconditions are {@code 0 <= k <= n } (otherwise
      * {@code NotPositiveException} is thrown)
      * </p>
+     *
      * @param n the size of the set
      * @param k the number of non-empty subsets
      * @return {@code S(n,k)}
-     * @throws NotPositiveException if {@code k < 0}.
+     * @throws NotPositiveException      if {@code k < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if some overflow happens, typically for n exceeding 25 and
-     * k between 20 and n-2 (S(n,n-1) is handled specifically and does not overflow)
+     * @throws MathArithmeticException   if some overflow happens, typically for n exceeding 25 and
+     *                                   k between 20 and n-2 (S(n,n-1) is handled specifically and does not overflow)
      * @since 3.1
      */
     public static long stirlingS2(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+            throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
         if (k < 0) {
             throw new NotPositiveException(k);
         }
@@ -367,7 +375,7 @@ public final class CombinatoricsUtils {
             // we must stop computation at row 26
             final int maxIndex = 26;
             stirlingS2 = new long[maxIndex][];
-            stirlingS2[0] = new long[] { 1l };
+            stirlingS2[0] = new long[]{1l};
             for (int i = 1; i < stirlingS2.length; ++i) {
                 stirlingS2[i] = new long[i + 1];
                 stirlingS2[i][0] = 0;
@@ -406,7 +414,7 @@ public final class CombinatoricsUtils {
                     if (sum < 0) {
                         // there was an overflow somewhere
                         throw new MathArithmeticException(LocalizedFormats.ARGUMENT_OUTSIDE_DOMAIN,
-                                                          n, 0, stirlingS2.length - 1);
+                                n, 0, stirlingS2.length - 1);
                     }
                 }
                 return sum / factorial(k);
@@ -432,7 +440,7 @@ public final class CombinatoricsUtils {
      * @param n Size of the set from which subsets are selected.
      * @param k Size of the subsets to be enumerated.
      * @return an {@link Iterator iterator} over the k-sets in n.
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws NotPositiveException      if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
      */
     public static Iterator<int[]> combinationsIterator(int n, int k) {
@@ -444,16 +452,16 @@ public final class CombinatoricsUtils {
      *
      * @param n Size of the set.
      * @param k Size of the subsets to be counted.
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws NotPositiveException      if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
      */
     public static void checkBinomial(final int n,
                                      final int k)
-        throws NumberIsTooLargeException,
-               NotPositiveException {
+            throws NumberIsTooLargeException,
+            NotPositiveException {
         if (n < k) {
             throw new NumberIsTooLargeException(LocalizedFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
-                                                k, n, true);
+                    k, n, true);
         }
         if (n < 0) {
             throw new NotPositiveException(LocalizedFormats.BINOMIAL_NEGATIVE_PARAMETER, n);

@@ -97,7 +97,7 @@ class CloneVisitorTest {
             }
         }
     }
-    
+
     @Test
     void cloneAnnotationOnWildcardTypeArgument() {
         Type type = parseType("List<@C ? extends Object>").clone();

@@ -33,9 +33,11 @@ import org.apache.commons.math3.util.MathArrays;
  */
 @Deprecated
 public class BicubicSplineInterpolator
-    implements BivariateGridInterpolator {
-    /** Whether to initialize internal data used to compute the analytical
-        derivatives of the splines. */
+        implements BivariateGridInterpolator {
+    /**
+     * Whether to initialize internal data used to compute the analytical
+     * derivatives of the splines.
+     */
     private final boolean initializeDerivatives;
 
     /**
@@ -51,9 +53,9 @@ public class BicubicSplineInterpolator
      * Creates an interpolator.
      *
      * @param initializeDerivatives Whether to initialize the internal data
-     * needed for calling any of the methods that compute the partial derivatives
-     * of the {@link BicubicSplineInterpolatingFunction function} returned from
-     * the call to {@link #interpolate(double[],double[],double[][]) interpolate}.
+     *                              needed for calling any of the methods that compute the partial derivatives
+     *                              of the {@link BicubicSplineInterpolatingFunction function} returned from
+     *                              the call to {@link #interpolate(double[], double[], double[][]) interpolate}.
      */
     public BicubicSplineInterpolator(boolean initializeDerivatives) {
         this.initializeDerivatives = initializeDerivatives;
@@ -65,8 +67,8 @@ public class BicubicSplineInterpolator
     public BicubicSplineInterpolatingFunction interpolate(final double[] xval,
                                                           final double[] yval,
                                                           final double[][] fval)
-        throws NoDataException, DimensionMismatchException,
-               NonMonotonicSequenceException, NumberIsTooSmallException {
+            throws NoDataException, DimensionMismatchException,
+            NonMonotonicSequenceException, NumberIsTooSmallException {
         if (xval.length == 0 || yval.length == 0 || fval.length == 0) {
             throw new NoDataException();
         }
@@ -131,29 +133,29 @@ public class BicubicSplineInterpolator
 
         // Cross partial derivatives
         final double[][] d2FdXdY = new double[xLen][yLen];
-        for (int i = 0; i < xLen ; i++) {
+        for (int i = 0; i < xLen; i++) {
             final int nI = nextIndex(i, xLen);
             final int pI = previousIndex(i);
             for (int j = 0; j < yLen; j++) {
                 final int nJ = nextIndex(j, yLen);
                 final int pJ = previousIndex(j);
                 d2FdXdY[i][j] = (fval[nI][nJ] - fval[nI][pJ] -
-                                 fval[pI][nJ] + fval[pI][pJ]) /
-                    ((xval[nI] - xval[pI]) * (yval[nJ] - yval[pJ]));
+                        fval[pI][nJ] + fval[pI][pJ]) /
+                        ((xval[nI] - xval[pI]) * (yval[nJ] - yval[pJ]));
             }
         }
 
         // Create the interpolating splines
         return new BicubicSplineInterpolatingFunction(xval, yval, fval,
-                                                      dFdX, dFdY, d2FdXdY,
-                                                      initializeDerivatives);
+                dFdX, dFdY, d2FdXdY,
+                initializeDerivatives);
     }
 
     /**
      * Computes the next index of an array, clipping if necessary.
      * It is assumed (but not checked) that {@code i >= 0}.
      *
-     * @param i Index.
+     * @param i   Index.
      * @param max Upper limit of the array.
      * @return the next index.
      */
@@ -161,6 +163,7 @@ public class BicubicSplineInterpolator
         final int index = i + 1;
         return index < max ? index : index - 1;
     }
+
     /**
      * Computes the previous index of an array, clipping if necessary.
      * It is assumed (but not checked) that {@code i} is smaller than the size

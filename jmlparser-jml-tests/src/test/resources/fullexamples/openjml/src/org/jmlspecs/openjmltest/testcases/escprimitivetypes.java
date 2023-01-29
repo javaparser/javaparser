@@ -10,9 +10,9 @@ import org.openjml.runners.ParameterizedWithNames;
 public class escprimitivetypes extends EscBase {
 
     public escprimitivetypes(String options, String solver) {
-        super(options,solver);
+        super(options, solver);
     }
-    
+
 //    @Test
 //    public void testIntset() {
 //        helpTCX("tt.TestJava","package tt; \n"
@@ -310,20 +310,20 @@ public class escprimitivetypes extends EscBase {
 //                ,"/tt/TestJava.java:5: warning: The prover cannot establish an assertion (PossiblyTooLargeIndex) in method m1",19
 //                );
 //    }
-    
+
     @Test
     public void testX() {
         main.addOptions("-method=m1");
-        helpTCX("tt.TestJava","package tt; \n"
-                                +"public class TestJava { \n"
-                                
-                                +"  public void m1(Object o) {\n"
-                                +"    //@ ghost array<Object> a; \n"
-                                +"    //@ set a[3] = o;\n"
-                                +"  }\n"
-                                +"}"
-                                );
-        
+        helpTCX("tt.TestJava", "package tt; \n"
+                + "public class TestJava { \n"
+
+                + "  public void m1(Object o) {\n"
+                + "    //@ ghost array<Object> a; \n"
+                + "    //@ set a[3] = o;\n"
+                + "  }\n"
+                + "}"
+        );
+
     }
 
 }

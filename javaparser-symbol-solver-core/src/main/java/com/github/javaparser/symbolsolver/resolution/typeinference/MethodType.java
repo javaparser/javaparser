@@ -33,7 +33,7 @@ import java.util.List;
  * 2. argument types: a list of the types of the arguments to the method member.
  * 3. return type: the return type of the method member.
  * 4. throws clause: exception types declared in the throws clause of the method member.
- *
+ * <p>
  * See JLS 8.2
  *
  * @author Federico Tomassetti

@@ -31,43 +31,50 @@ import org.apache.commons.math3.random.UnitSphereRandomVectorGenerator;
  * @since 3.6
  */
 public class MicrosphereProjectionInterpolator
-    implements MultivariateInterpolator {
-    /** Brightness exponent. */
+        implements MultivariateInterpolator {
+    /**
+     * Brightness exponent.
+     */
     private final double exponent;
-    /** Microsphere. */
+    /**
+     * Microsphere.
+     */
     private final InterpolatingMicrosphere microsphere;
-    /** Whether to share the sphere. */
+    /**
+     * Whether to share the sphere.
+     */
     private final boolean sharedSphere;
-    /** Tolerance value below which no interpolation is necessary. */
+    /**
+     * Tolerance value below which no interpolation is necessary.
+     */
     private final double noInterpolationTolerance;
 
     /**
      * Create a microsphere interpolator.
      *
-     * @param dimension Space dimension.
-     * @param elements Number of surface elements of the microsphere.
-     * @param exponent Exponent used in the power law that computes the
-     * @param maxDarkFraction Maximum fraction of the facets that can be dark.
-     * If the fraction of "non-illuminated" facets is larger, no estimation
-     * of the value will be performed, and the {@code background} value will
-     * be returned instead.
-     * @param darkThreshold Value of the illumination below which a facet is
-     * considered dark.
-     * @param background Value returned when the {@code maxDarkFraction}
-     * threshold is exceeded.
-     * @param sharedSphere Whether the sphere can be shared among the
-     * interpolating function instances.  If {@code true}, the instances
-     * will share the same data, and thus will <em>not</em> be thread-safe.
+     * @param dimension                Space dimension.
+     * @param elements                 Number of surface elements of the microsphere.
+     * @param exponent                 Exponent used in the power law that computes the
+     * @param maxDarkFraction          Maximum fraction of the facets that can be dark.
+     *                                 If the fraction of "non-illuminated" facets is larger, no estimation
+     *                                 of the value will be performed, and the {@code background} value will
+     *                                 be returned instead.
+     * @param darkThreshold            Value of the illumination below which a facet is
+     *                                 considered dark.
+     * @param background               Value returned when the {@code maxDarkFraction}
+     *                                 threshold is exceeded.
+     * @param sharedSphere             Whether the sphere can be shared among the
+     *                                 interpolating function instances.  If {@code true}, the instances
+     *                                 will share the same data, and thus will <em>not</em> be thread-safe.
      * @param noInterpolationTolerance When the distance between an
-     * interpolated point and one of the sample points is less than this
-     * value, no interpolation will be performed (the value of the sample
-     * will be returned).
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code dimension <= 0} or {@code elements <= 0}.
-     * @throws NotPositiveException if {@code exponent < 0}.
-     * @throws NotPositiveException if {@code darkThreshold < 0}.
-     * @throws org.apache.commons.math3.exception.OutOfRangeException if
-     * {@code maxDarkFraction} does not belong to the interval {@code [0, 1]}.
+     *                                 interpolated point and one of the sample points is less than this
+     *                                 value, no interpolation will be performed (the value of the sample
+     *                                 will be returned).
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code dimension <= 0} or {@code elements <= 0}.
+     * @throws NotPositiveException                                            if {@code exponent < 0}.
+     * @throws NotPositiveException                                            if {@code darkThreshold < 0}.
+     * @throws org.apache.commons.math3.exception.OutOfRangeException          if
+     *                                                                         {@code maxDarkFraction} does not belong to the interval {@code [0, 1]}.
      */
     public MicrosphereProjectionInterpolator(int dimension,
                                              int elements,
@@ -78,36 +85,36 @@ public class MicrosphereProjectionInterpolator
                                              boolean sharedSphere,
                                              double noInterpolationTolerance) {
         this(new InterpolatingMicrosphere(dimension,
-                                          elements,
-                                          maxDarkFraction,
-                                          darkThreshold,
-                                          background,
-                                          new UnitSphereRandomVectorGenerator(dimension)),
-             exponent,
-             sharedSphere,
-             noInterpolationTolerance);
+                        elements,
+                        maxDarkFraction,
+                        darkThreshold,
+                        background,
+                        new UnitSphereRandomVectorGenerator(dimension)),
+                exponent,
+                sharedSphere,
+                noInterpolationTolerance);
     }
 
     /**
      * Create a microsphere interpolator.
      *
-     * @param microsphere Microsphere.
-     * @param exponent Exponent used in the power law that computes the
-     * weights (distance dimming factor) of the sample data.
-     * @param sharedSphere Whether the sphere can be shared among the
-     * interpolating function instances.  If {@code true}, the instances
-     * will share the same data, and thus will <em>not</em> be thread-safe.
+     * @param microsphere              Microsphere.
+     * @param exponent                 Exponent used in the power law that computes the
+     *                                 weights (distance dimming factor) of the sample data.
+     * @param sharedSphere             Whether the sphere can be shared among the
+     *                                 interpolating function instances.  If {@code true}, the instances
+     *                                 will share the same data, and thus will <em>not</em> be thread-safe.
      * @param noInterpolationTolerance When the distance between an
-     * interpolated point and one of the sample points is less than this
-     * value, no interpolation will be performed (the value of the sample
-     * will be returned).
+     *                                 interpolated point and one of the sample points is less than this
+     *                                 value, no interpolation will be performed (the value of the sample
+     *                                 will be returned).
      * @throws NotPositiveException if {@code exponent < 0}.
      */
     public MicrosphereProjectionInterpolator(InterpolatingMicrosphere microsphere,
                                              double exponent,
                                              boolean sharedSphere,
                                              double noInterpolationTolerance)
-        throws NotPositiveException {
+            throws NotPositiveException {
         if (exponent < 0) {
             throw new NotPositiveException(exponent);
         }
@@ -122,15 +129,15 @@ public class MicrosphereProjectionInterpolator
      * {@inheritDoc}
      *
      * @throws DimensionMismatchException if the space dimension of the
-     * given samples does not match the space dimension of the microsphere.
+     *                                    given samples does not match the space dimension of the microsphere.
      */
     public MultivariateFunction interpolate(final double[][] xval,
                                             final double[] yval)
-        throws DimensionMismatchException,
-               NoDataException,
-               NullArgumentException {
+            throws DimensionMismatchException,
+            NoDataException,
+            NullArgumentException {
         if (xval == null ||
-            yval == null) {
+                yval == null) {
             throw new NullArgumentException();
         }
         if (xval.length == 0) {
@@ -154,10 +161,10 @@ public class MicrosphereProjectionInterpolator
             /** {inheritDoc} */
             public double value(double[] point) {
                 return m.value(point,
-                               xval,
-                               yval,
-                               exponent,
-                               noInterpolationTolerance);
+                        xval,
+                        yval,
+                        exponent,
+                        noInterpolationTolerance);
             }
         };
     }

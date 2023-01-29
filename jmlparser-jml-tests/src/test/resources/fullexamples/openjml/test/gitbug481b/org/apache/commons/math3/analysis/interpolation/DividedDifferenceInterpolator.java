@@ -37,8 +37,10 @@ import java.io.Serializable;
  * @since 1.2
  */
 public class DividedDifferenceInterpolator
-    implements UnivariateInterpolator, Serializable {
-    /** serializable version identifier */
+        implements UnivariateInterpolator, Serializable {
+    /**
+     * serializable version identifier
+     */
     private static final long serialVersionUID = 107049519551235069L;
 
     /**
@@ -47,15 +49,15 @@ public class DividedDifferenceInterpolator
      * @param x Interpolating points array.
      * @param y Interpolating values array.
      * @return a function which interpolates the dataset.
-     * @throws DimensionMismatchException if the array lengths are different.
-     * @throws NumberIsTooSmallException if the number of points is less than 2.
+     * @throws DimensionMismatchException    if the array lengths are different.
+     * @throws NumberIsTooSmallException     if the number of points is less than 2.
      * @throws NonMonotonicSequenceException if {@code x} is not sorted in
-     * strictly increasing order.
+     *                                       strictly increasing order.
      */
     public PolynomialFunctionNewtonForm interpolate(double x[], double y[])
-        throws DimensionMismatchException,
-               NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+            throws DimensionMismatchException,
+            NumberIsTooSmallException,
+            NonMonotonicSequenceException {
         /**
          * a[] and c[] are defined in the general formula of Newton form:
          * p(x) = a[0] + a[1](x-c[0]) + a[2](x-c[0])(x-c[1]) + ... +
@@ -71,7 +73,7 @@ public class DividedDifferenceInterpolator
          * <p>
          * Note x[], y[], a[] have the same length but c[]'s size is one less.</p>
          */
-        final double[] c = new double[x.length-1];
+        final double[] c = new double[x.length - 1];
         System.arraycopy(x, 0, c, 0, c.length);
 
         final double[] a = computeDividedDifference(x, y);
@@ -92,26 +94,25 @@ public class DividedDifferenceInterpolator
      * @param x Interpolating points array.
      * @param y Interpolating values array.
      * @return a fresh copy of the divided difference array.
-     * @throws DimensionMismatchException if the array lengths are different.
-     * @throws NumberIsTooSmallException if the number of points is less than 2.
-     * @throws NonMonotonicSequenceException
-     * if {@code x} is not sorted in strictly increasing order.
+     * @throws DimensionMismatchException    if the array lengths are different.
+     * @throws NumberIsTooSmallException     if the number of points is less than 2.
+     * @throws NonMonotonicSequenceException if {@code x} is not sorted in strictly increasing order.
      */
     protected static double[] computeDividedDifference(final double x[], final double y[])
-        throws DimensionMismatchException,
-               NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+            throws DimensionMismatchException,
+            NumberIsTooSmallException,
+            NonMonotonicSequenceException {
         PolynomialFunctionLagrangeForm.verifyInterpolationArray(x, y, true);
 
         final double[] divdiff = y.clone(); // initialization
 
         final int n = x.length;
-        final double[] a = new double [n];
+        final double[] a = new double[n];
         a[0] = divdiff[0];
         for (int i = 1; i < n; i++) {
-            for (int j = 0; j < n-i; j++) {
-                final double denominator = x[j+i] - x[j];
-                divdiff[j] = (divdiff[j+1] - divdiff[j]) / denominator;
+            for (int j = 0; j < n - i; j++) {
+                final double denominator = x[j + i] - x[j];
+                divdiff[j] = (divdiff[j + 1] - divdiff[j]) / denominator;
             }
             a[i] = divdiff[0];
         }

@@ -33,14 +33,16 @@ public class MultiSetUtils {
      */
     @SuppressWarnings("rawtypes") // OK, empty multiset is compatible with any type
     public static final MultiSet EMPTY_MULTISET =
-        UnmodifiableMultiSet.unmodifiableMultiSet(new HashMultiSet<>());
+            UnmodifiableMultiSet.unmodifiableMultiSet(new HashMultiSet<>());
 
     /**
      * Instantiation of MultiSetUtils is not intended or required.
      */
-    private MultiSetUtils() {}
+    private MultiSetUtils() {
+    }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns a synchronized (thread-safe) multiset backed by the given multiset.
      * In order to guarantee serial access, it is critical that all access to the
@@ -59,10 +61,10 @@ public class MultiSetUtils {
      *     }
      * }
      * </pre>
-     *
+     * <p>
      * Failure to follow this advice may result in non-deterministic behavior.
      *
-     * @param <E> the element type
+     * @param <E>      the element type
      * @param multiset the multiset to synchronize, must not be null
      * @return a synchronized multiset backed by that multiset
      * @throws NullPointerException if the MultiSet is null
@@ -75,7 +77,7 @@ public class MultiSetUtils {
      * Returns an unmodifiable view of the given multiset. Any modification attempts
      * to the returned multiset will raise an {@link UnsupportedOperationException}.
      *
-     * @param <E> the element type
+     * @param <E>      the element type
      * @param multiset the multiset whose unmodifiable view is to be returned, must not be null
      * @return an unmodifiable view of that multiset
      * @throws NullPointerException if the MultiSet is null
@@ -93,14 +95,14 @@ public class MultiSetUtils {
      * after invoking this method, as it is a backdoor for adding invalid
      * objects.
      *
-     * @param <E> the element type
-     * @param multiset the multiset to predicate, must not be null
+     * @param <E>       the element type
+     * @param multiset  the multiset to predicate, must not be null
      * @param predicate the predicate for the multiset, must not be null
      * @return a predicated multiset backed by the given multiset
      * @throws NullPointerException if the MultiSet or Predicate is null
      */
     public static <E> MultiSet<E> predicatedMultiSet(final MultiSet<E> multiset,
-            final Predicate<? super E> predicate) {
+                                                     final Predicate<? super E> predicate) {
         return PredicatedMultiSet.predicatedMultiSet(multiset, predicate);
     }
 

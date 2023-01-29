@@ -16,7 +16,8 @@
  */
 package org.apache.commons.math3.geometry.partitioning.utilities;
 
-/** This class implements AVL trees.
+/**
+ * This class implements AVL trees.
  *
  * <p>The purpose of this class is to sort elements while allowing
  * duplicate elements (i.e. such that {@code a.equals(b)} is
@@ -40,7 +41,6 @@ package org.apache.commons.math3.geometry.partitioning.utilities;
  * to exist any more.</p>
  *
  * @param <T> the type of the elements
- *
  * @since 3.0
  * @deprecated as of 3.4, this class is not used anymore and considered
  * to be out of scope of Apache Commons Math
@@ -48,16 +48,21 @@ package org.apache.commons.math3.geometry.partitioning.utilities;
 @Deprecated
 public class AVLTree<T extends Comparable<T>> {
 
-    /** Top level node. */
+    /**
+     * Top level node.
+     */
     private Node top;
 
-    /** Build an empty tree.
+    /**
+     * Build an empty tree.
      */
     public AVLTree() {
         top = null;
     }
 
-    /** Insert an element in the tree.
+    /**
+     * Insert an element in the tree.
+     *
      * @param element element to insert (silently ignored if null)
      */
     public void insert(final T element) {
@@ -70,13 +75,15 @@ public class AVLTree<T extends Comparable<T>> {
         }
     }
 
-    /** Delete an element from the tree.
+    /**
+     * Delete an element from the tree.
      * <p>The element is deleted only if there is a node {@code n}
      * containing exactly the element instance specified, i.e. for which
      * {@code n.getElement() == element}. This is purposely
      * <em>different</em> from the specification of the
      * {@code java.util.Set} {@code remove} method (in fact,
      * this is the reason why a specific class has been developed).</p>
+     *
      * @param element element to delete (silently ignored if null)
      * @return true if the element was deleted from the tree
      */
@@ -98,7 +105,9 @@ public class AVLTree<T extends Comparable<T>> {
         return false;
     }
 
-    /** Check if the tree is empty.
+    /**
+     * Check if the tree is empty.
+     *
      * @return true if the tree is empty
      */
     public boolean isEmpty() {
@@ -106,14 +115,18 @@ public class AVLTree<T extends Comparable<T>> {
     }
 
 
-    /** Get the number of elements of the tree.
+    /**
+     * Get the number of elements of the tree.
+     *
      * @return number of elements contained in the tree
      */
     public int size() {
         return (top == null) ? 0 : top.size();
     }
 
-    /** Get the node whose element is the smallest one in the tree.
+    /**
+     * Get the node whose element is the smallest one in the tree.
+     *
      * @return the tree node containing the smallest element in the tree
      * or null if the tree is empty
      * @see #getLargest
@@ -126,7 +139,9 @@ public class AVLTree<T extends Comparable<T>> {
         return (top == null) ? null : top.getSmallest();
     }
 
-    /** Get the node whose element is the largest one in the tree.
+    /**
+     * Get the node whose element is the largest one in the tree.
+     *
      * @return the tree node containing the largest element in the tree
      * or null if the tree is empty
      * @see #getSmallest
@@ -139,7 +154,9 @@ public class AVLTree<T extends Comparable<T>> {
         return (top == null) ? null : top.getLargest();
     }
 
-    /** Get the node whose element is not smaller than the reference object.
+    /**
+     * Get the node whose element is not smaller than the reference object.
+     *
      * @param reference reference object (may not be in the tree)
      * @return the tree node containing the smallest element not smaller
      * than the reference object or null if either the tree is empty or
@@ -152,7 +169,7 @@ public class AVLTree<T extends Comparable<T>> {
      */
     public Node getNotSmaller(final T reference) {
         Node candidate = null;
-        for (Node node = top; node != null;) {
+        for (Node node = top; node != null; ) {
             if (node.element.compareTo(reference) < 0) {
                 if (node.right == null) {
                     return candidate;
@@ -169,7 +186,9 @@ public class AVLTree<T extends Comparable<T>> {
         return null;
     }
 
-    /** Get the node whose element is not larger than the reference object.
+    /**
+     * Get the node whose element is not larger than the reference object.
+     *
      * @param reference reference object (may not be in the tree)
      * @return the tree node containing the largest element not larger
      * than the reference object (in which case the node is guaranteed
@@ -183,7 +202,7 @@ public class AVLTree<T extends Comparable<T>> {
      */
     public Node getNotLarger(final T reference) {
         Node candidate = null;
-        for (Node node = top; node != null;) {
+        for (Node node = top; node != null; ) {
             if (node.element.compareTo(reference) > 0) {
                 if (node.left == null) {
                     return candidate;
@@ -200,19 +219,28 @@ public class AVLTree<T extends Comparable<T>> {
         return null;
     }
 
-    /** Enum for tree skew factor. */
+    /**
+     * Enum for tree skew factor.
+     */
     private enum Skew {
-        /** Code for left high trees. */
+        /**
+         * Code for left high trees.
+         */
         LEFT_HIGH,
 
-        /** Code for right high trees. */
+        /**
+         * Code for right high trees.
+         */
         RIGHT_HIGH,
 
-        /** Code for Skew.BALANCED trees. */
+        /**
+         * Code for Skew.BALANCED trees.
+         */
         BALANCED;
     }
 
-    /** This class implements AVL trees nodes.
+    /**
+     * This class implements AVL trees nodes.
      * <p>AVL tree nodes implement all the logical structure of the
      * tree. Nodes are created by the {@link AVLTree AVLTree} class.</p>
      * <p>The nodes are not independant from each other but must obey
@@ -221,53 +249,72 @@ public class AVLTree<T extends Comparable<T>> {
      * creation, modification and tree-related navigation methods have
      * therefore restricted access. Only the order-related navigation,
      * reading and delete methods are public.</p>
+     *
      * @see AVLTree
      */
     public class Node {
 
-        /** Element contained in the current node. */
+        /**
+         * Element contained in the current node.
+         */
         private T element;
 
-        /** Left sub-tree. */
+        /**
+         * Left sub-tree.
+         */
         private Node left;
 
-        /** Right sub-tree. */
+        /**
+         * Right sub-tree.
+         */
         private Node right;
 
-        /** Parent tree. */
+        /**
+         * Parent tree.
+         */
         private Node parent;
 
-        /** Skew factor. */
+        /**
+         * Skew factor.
+         */
         private Skew skew;
 
-        /** Build a node for a specified element.
+        /**
+         * Build a node for a specified element.
+         *
          * @param element element
-         * @param parent parent node
+         * @param parent  parent node
          */
         Node(final T element, final Node parent) {
             this.element = element;
-            left         = null;
-            right        = null;
-            this.parent  = parent;
-            skew         = Skew.BALANCED;
+            left = null;
+            right = null;
+            this.parent = parent;
+            skew = Skew.BALANCED;
         }
 
-        /** Get the contained element.
+        /**
+         * Get the contained element.
+         *
          * @return element contained in the node
          */
         public T getElement() {
             return element;
         }
 
-        /** Get the number of elements of the tree rooted at this node.
+        /**
+         * Get the number of elements of the tree rooted at this node.
+         *
          * @return number of elements contained in the tree rooted at this node
          */
         int size() {
-            return 1 + ((left  == null) ? 0 : left.size()) + ((right == null) ? 0 : right.size());
+            return 1 + ((left == null) ? 0 : left.size()) + ((right == null) ? 0 : right.size());
         }
 
-        /** Get the node whose element is the smallest one in the tree
+        /**
+         * Get the node whose element is the smallest one in the tree
          * rooted at this node.
+         *
          * @return the tree node containing the smallest element in the
          * tree rooted at this node or null if the tree is empty
          * @see #getLargest
@@ -280,8 +327,10 @@ public class AVLTree<T extends Comparable<T>> {
             return node;
         }
 
-        /** Get the node whose element is the largest one in the tree
+        /**
+         * Get the node whose element is the largest one in the tree
          * rooted at this node.
+         *
          * @return the tree node containing the largest element in the
          * tree rooted at this node or null if the tree is empty
          * @see #getSmallest
@@ -294,7 +343,9 @@ public class AVLTree<T extends Comparable<T>> {
             return node;
         }
 
-        /** Get the node containing the next smaller or equal element.
+        /**
+         * Get the node containing the next smaller or equal element.
+         *
          * @return node containing the next smaller or equal element or
          * null if there is no smaller or equal element in the tree
          * @see #getNext
@@ -318,7 +369,9 @@ public class AVLTree<T extends Comparable<T>> {
 
         }
 
-        /** Get the node containing the next larger or equal element.
+        /**
+         * Get the node containing the next larger or equal element.
+         *
          * @return node containing the next larger or equal element (in
          * which case the node is guaranteed not to be empty) or null if
          * there is no larger or equal element in the tree
@@ -343,7 +396,9 @@ public class AVLTree<T extends Comparable<T>> {
 
         }
 
-        /** Insert an element in a sub-tree.
+        /**
+         * Insert an element in a sub-tree.
+         *
          * @param newElement element to insert
          * @return true if the parent tree should be re-Skew.BALANCED
          */
@@ -366,28 +421,29 @@ public class AVLTree<T extends Comparable<T>> {
 
         }
 
-        /** Delete the node from the tree.
+        /**
+         * Delete the node from the tree.
          */
         public void delete() {
             if ((parent == null) && (left == null) && (right == null)) {
                 // this was the last node, the tree is now empty
                 element = null;
-                top     = null;
+                top = null;
             } else {
 
                 Node node;
                 Node child;
                 boolean leftShrunk;
                 if ((left == null) && (right == null)) {
-                    node       = this;
-                    element    = null;
+                    node = this;
+                    element = null;
                     leftShrunk = node == node.parent.left;
-                    child      = null;
+                    child = null;
                 } else {
-                    node       = (left != null) ? left.getLargest() : right.getSmallest();
-                    element    = node.element;
+                    node = (left != null) ? left.getLargest() : right.getSmallest();
+                    element = node.element;
                     leftShrunk = node == node.parent.left;
-                    child      = (node.left != null) ? node.left : node.right;
+                    child = (node.left != null) ? node.left : node.right;
                 }
 
                 node = node.parent;
@@ -411,189 +467,198 @@ public class AVLTree<T extends Comparable<T>> {
             }
         }
 
-        /** Re-balance the instance as left sub-tree has grown.
+        /**
+         * Re-balance the instance as left sub-tree has grown.
+         *
          * @return true if the parent tree should be reSkew.BALANCED too
          */
         private boolean rebalanceLeftGrown() {
             switch (skew) {
-            case LEFT_HIGH:
-                if (left.skew == Skew.LEFT_HIGH) {
-                    rotateCW();
-                    skew       = Skew.BALANCED;
-                    right.skew = Skew.BALANCED;
-                } else {
-                    final Skew s = left.right.skew;
-                    left.rotateCCW();
-                    rotateCW();
-                    switch(s) {
-                    case LEFT_HIGH:
-                        left.skew  = Skew.BALANCED;
-                        right.skew = Skew.RIGHT_HIGH;
-                        break;
-                    case RIGHT_HIGH:
-                        left.skew  = Skew.LEFT_HIGH;
+                case LEFT_HIGH:
+                    if (left.skew == Skew.LEFT_HIGH) {
+                        rotateCW();
+                        skew = Skew.BALANCED;
                         right.skew = Skew.BALANCED;
-                        break;
-                    default:
-                        left.skew  = Skew.BALANCED;
-                        right.skew = Skew.BALANCED;
+                    } else {
+                        final Skew s = left.right.skew;
+                        left.rotateCCW();
+                        rotateCW();
+                        switch (s) {
+                            case LEFT_HIGH:
+                                left.skew = Skew.BALANCED;
+                                right.skew = Skew.RIGHT_HIGH;
+                                break;
+                            case RIGHT_HIGH:
+                                left.skew = Skew.LEFT_HIGH;
+                                right.skew = Skew.BALANCED;
+                                break;
+                            default:
+                                left.skew = Skew.BALANCED;
+                                right.skew = Skew.BALANCED;
+                        }
+                        skew = Skew.BALANCED;
                     }
+                    return false;
+                case RIGHT_HIGH:
                     skew = Skew.BALANCED;
-                }
-                return false;
-            case RIGHT_HIGH:
-                skew = Skew.BALANCED;
-                return false;
-            default:
-                skew = Skew.LEFT_HIGH;
-                return true;
+                    return false;
+                default:
+                    skew = Skew.LEFT_HIGH;
+                    return true;
             }
         }
 
-        /** Re-balance the instance as right sub-tree has grown.
+        /**
+         * Re-balance the instance as right sub-tree has grown.
+         *
          * @return true if the parent tree should be reSkew.BALANCED too
          */
         private boolean rebalanceRightGrown() {
             switch (skew) {
-            case LEFT_HIGH:
-                skew = Skew.BALANCED;
-                return false;
-            case RIGHT_HIGH:
-                if (right.skew == Skew.RIGHT_HIGH) {
-                    rotateCCW();
-                    skew      = Skew.BALANCED;
-                    left.skew = Skew.BALANCED;
-                } else {
-                    final Skew s = right.left.skew;
-                    right.rotateCW();
-                    rotateCCW();
-                    switch (s) {
-                    case LEFT_HIGH:
-                        left.skew  = Skew.BALANCED;
-                        right.skew = Skew.RIGHT_HIGH;
-                        break;
-                    case RIGHT_HIGH:
-                        left.skew  = Skew.LEFT_HIGH;
-                        right.skew = Skew.BALANCED;
-                        break;
-                    default:
-                        left.skew  = Skew.BALANCED;
-                        right.skew = Skew.BALANCED;
-                    }
+                case LEFT_HIGH:
                     skew = Skew.BALANCED;
-                }
-                return false;
-            default:
-                skew = Skew.RIGHT_HIGH;
-                return true;
+                    return false;
+                case RIGHT_HIGH:
+                    if (right.skew == Skew.RIGHT_HIGH) {
+                        rotateCCW();
+                        skew = Skew.BALANCED;
+                        left.skew = Skew.BALANCED;
+                    } else {
+                        final Skew s = right.left.skew;
+                        right.rotateCW();
+                        rotateCCW();
+                        switch (s) {
+                            case LEFT_HIGH:
+                                left.skew = Skew.BALANCED;
+                                right.skew = Skew.RIGHT_HIGH;
+                                break;
+                            case RIGHT_HIGH:
+                                left.skew = Skew.LEFT_HIGH;
+                                right.skew = Skew.BALANCED;
+                                break;
+                            default:
+                                left.skew = Skew.BALANCED;
+                                right.skew = Skew.BALANCED;
+                        }
+                        skew = Skew.BALANCED;
+                    }
+                    return false;
+                default:
+                    skew = Skew.RIGHT_HIGH;
+                    return true;
             }
         }
 
-        /** Re-balance the instance as left sub-tree has shrunk.
+        /**
+         * Re-balance the instance as left sub-tree has shrunk.
+         *
          * @return true if the parent tree should be reSkew.BALANCED too
          */
         private boolean rebalanceLeftShrunk() {
             switch (skew) {
-            case LEFT_HIGH:
-                skew = Skew.BALANCED;
-                return true;
-            case RIGHT_HIGH:
-                if (right.skew == Skew.RIGHT_HIGH) {
-                    rotateCCW();
-                    skew      = Skew.BALANCED;
-                    left.skew = Skew.BALANCED;
-                    return true;
-                } else if (right.skew == Skew.BALANCED) {
-                    rotateCCW();
-                    skew      = Skew.LEFT_HIGH;
-                    left.skew = Skew.RIGHT_HIGH;
-                    return false;
-                } else {
-                    final Skew s = right.left.skew;
-                    right.rotateCW();
-                    rotateCCW();
-                    switch (s) {
-                    case LEFT_HIGH:
-                        left.skew  = Skew.BALANCED;
-                        right.skew = Skew.RIGHT_HIGH;
-                        break;
-                    case RIGHT_HIGH:
-                        left.skew  = Skew.LEFT_HIGH;
-                        right.skew = Skew.BALANCED;
-                        break;
-                    default:
-                        left.skew  = Skew.BALANCED;
-                        right.skew = Skew.BALANCED;
-                    }
+                case LEFT_HIGH:
                     skew = Skew.BALANCED;
                     return true;
-                }
-            default:
-                skew = Skew.RIGHT_HIGH;
-                return false;
+                case RIGHT_HIGH:
+                    if (right.skew == Skew.RIGHT_HIGH) {
+                        rotateCCW();
+                        skew = Skew.BALANCED;
+                        left.skew = Skew.BALANCED;
+                        return true;
+                    } else if (right.skew == Skew.BALANCED) {
+                        rotateCCW();
+                        skew = Skew.LEFT_HIGH;
+                        left.skew = Skew.RIGHT_HIGH;
+                        return false;
+                    } else {
+                        final Skew s = right.left.skew;
+                        right.rotateCW();
+                        rotateCCW();
+                        switch (s) {
+                            case LEFT_HIGH:
+                                left.skew = Skew.BALANCED;
+                                right.skew = Skew.RIGHT_HIGH;
+                                break;
+                            case RIGHT_HIGH:
+                                left.skew = Skew.LEFT_HIGH;
+                                right.skew = Skew.BALANCED;
+                                break;
+                            default:
+                                left.skew = Skew.BALANCED;
+                                right.skew = Skew.BALANCED;
+                        }
+                        skew = Skew.BALANCED;
+                        return true;
+                    }
+                default:
+                    skew = Skew.RIGHT_HIGH;
+                    return false;
             }
         }
 
-        /** Re-balance the instance as right sub-tree has shrunk.
+        /**
+         * Re-balance the instance as right sub-tree has shrunk.
+         *
          * @return true if the parent tree should be reSkew.BALANCED too
          */
         private boolean rebalanceRightShrunk() {
             switch (skew) {
-            case RIGHT_HIGH:
-                skew = Skew.BALANCED;
-                return true;
-            case LEFT_HIGH:
-                if (left.skew == Skew.LEFT_HIGH) {
-                    rotateCW();
-                    skew       = Skew.BALANCED;
-                    right.skew = Skew.BALANCED;
-                    return true;
-                } else if (left.skew == Skew.BALANCED) {
-                    rotateCW();
-                    skew       = Skew.RIGHT_HIGH;
-                    right.skew = Skew.LEFT_HIGH;
-                    return false;
-                } else {
-                    final Skew s = left.right.skew;
-                    left.rotateCCW();
-                    rotateCW();
-                    switch (s) {
-                    case LEFT_HIGH:
-                        left.skew  = Skew.BALANCED;
-                        right.skew = Skew.RIGHT_HIGH;
-                        break;
-                    case RIGHT_HIGH:
-                        left.skew  = Skew.LEFT_HIGH;
-                        right.skew = Skew.BALANCED;
-                        break;
-                    default:
-                        left.skew  = Skew.BALANCED;
-                        right.skew = Skew.BALANCED;
-                    }
+                case RIGHT_HIGH:
                     skew = Skew.BALANCED;
                     return true;
-                }
-            default:
-                skew = Skew.LEFT_HIGH;
-                return false;
+                case LEFT_HIGH:
+                    if (left.skew == Skew.LEFT_HIGH) {
+                        rotateCW();
+                        skew = Skew.BALANCED;
+                        right.skew = Skew.BALANCED;
+                        return true;
+                    } else if (left.skew == Skew.BALANCED) {
+                        rotateCW();
+                        skew = Skew.RIGHT_HIGH;
+                        right.skew = Skew.LEFT_HIGH;
+                        return false;
+                    } else {
+                        final Skew s = left.right.skew;
+                        left.rotateCCW();
+                        rotateCW();
+                        switch (s) {
+                            case LEFT_HIGH:
+                                left.skew = Skew.BALANCED;
+                                right.skew = Skew.RIGHT_HIGH;
+                                break;
+                            case RIGHT_HIGH:
+                                left.skew = Skew.LEFT_HIGH;
+                                right.skew = Skew.BALANCED;
+                                break;
+                            default:
+                                left.skew = Skew.BALANCED;
+                                right.skew = Skew.BALANCED;
+                        }
+                        skew = Skew.BALANCED;
+                        return true;
+                    }
+                default:
+                    skew = Skew.LEFT_HIGH;
+                    return false;
             }
         }
 
-        /** Perform a clockwise rotation rooted at the instance.
+        /**
+         * Perform a clockwise rotation rooted at the instance.
          * <p>The skew factor are not updated by this method, they
          * <em>must</em> be updated by the caller</p>
          */
         private void rotateCW() {
 
-            final T tmpElt       = element;
-            element              = left.element;
-            left.element         = tmpElt;
+            final T tmpElt = element;
+            element = left.element;
+            left.element = tmpElt;
 
-            final Node tmpNode   = left;
-            left                 = tmpNode.left;
-            tmpNode.left         = tmpNode.right;
-            tmpNode.right        = right;
-            right                = tmpNode;
+            final Node tmpNode = left;
+            left = tmpNode.left;
+            tmpNode.left = tmpNode.right;
+            tmpNode.right = right;
+            right = tmpNode;
 
             if (left != null) {
                 left.parent = this;
@@ -604,21 +669,22 @@ public class AVLTree<T extends Comparable<T>> {
 
         }
 
-        /** Perform a counter-clockwise rotation rooted at the instance.
+        /**
+         * Perform a counter-clockwise rotation rooted at the instance.
          * <p>The skew factor are not updated by this method, they
          * <em>must</em> be updated by the caller</p>
          */
         private void rotateCCW() {
 
-            final T tmpElt        = element;
-            element               = right.element;
-            right.element         = tmpElt;
+            final T tmpElt = element;
+            element = right.element;
+            right.element = tmpElt;
 
-            final Node tmpNode    = right;
-            right                 = tmpNode.right;
-            tmpNode.right         = tmpNode.left;
-            tmpNode.left          = left;
-            left                  = tmpNode;
+            final Node tmpNode = right;
+            right = tmpNode.right;
+            tmpNode.right = tmpNode.left;
+            tmpNode.left = left;
+            left = tmpNode;
 
             if (right != null) {
                 right.parent = this;

@@ -25,17 +25,19 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class NotFiniteNumberException extends MathIllegalNumberException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -6100997100383932834L;
 
     /**
      * Construct the exception.
      *
      * @param wrong Value that is infinite or NaN.
-     * @param args Optional arguments.
+     * @param args  Optional arguments.
      */
     public NotFiniteNumberException(Number wrong,
-                                    Object ... args) {
+                                    Object... args) {
         this(LocalizedFormats.NOT_FINITE_NUMBER, wrong, args);
     }
 
@@ -43,12 +45,12 @@ public class NotFiniteNumberException extends MathIllegalNumberException {
      * Construct the exception with a specific context.
      *
      * @param specific Specific context pattern.
-     * @param wrong Value that is infinite or NaN.
-     * @param args Optional arguments.
+     * @param wrong    Value that is infinite or NaN.
+     * @param args     Optional arguments.
      */
     public NotFiniteNumberException(Localizable specific,
                                     Number wrong,
-                                    Object ... args) {
+                                    Object... args) {
         super(specific, wrong, args);
     }
 }

@@ -75,7 +75,7 @@ public class CloneVisitorGenerator extends VisitorGenerator {
         }
 
         body.addStatement(builder.toString());
-        if(node instanceof CompilationUnitMetaModel) {
+        if (node instanceof CompilationUnitMetaModel) {
             body.addStatement("n.getStorage().ifPresent(s -> r.setStorage(s.getPath(), s.getEncoding()));");
         }
         body.addStatement("r.setComment(comment);");

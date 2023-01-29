@@ -1,9 +1,9 @@
 public class Fib extends ThreadSpec {
 
-        //@ accessible<heap> \inv : \nothing;
-        //@ accessible<permissions> \inv : \nothing;
+    //@ accessible<heap> \inv : \nothing;
+    //@ accessible<permissions> \inv : \nothing;
 
-        private int number;
+    private int number;
 
         /*@ helper model boolean preStart(Object contextThread) {
               return \dl_writePermissionObject(contextThread, \permission(this.number));
@@ -31,22 +31,25 @@ public class Fib extends ThreadSpec {
                 \dl_returnPermission(this, \dl_currentThread(), \old(\permission(this.number)));
             } @*/
 
-        public /*@ helper @*/ void run() {
-            if(number >= 2) {
-                Fib f1 = new Fib(number - 1);
-                Fib f2 = new Fib(number - 2);
-                f1.start();
-                f2.start();
-                f1.join();
-                f2.join();
-                number = f1.number + f2.number;
-          }
+    public /*@ helper @*/ void run() {
+        if (number >= 2) {
+            Fib f1 = new Fib(number - 1);
+            Fib f2 = new Fib(number - 2);
+            f1.start();
+            f2.start();
+            f1.join();
+            f2.join();
+            number = f1.number + f2.number;
         }
+    }
 
-        /*@ normal_behavior
-            ensures \dl_writePermission(\permission(this.canJoin));
-            ensures initPost();
-            assignable \nothing;
-            assignable<permissions> \nothing; @*/
-        /*@ helper @*/ public Fib(int n) { this.number = n; }
+    /*@ normal_behavior
+        ensures \dl_writePermission(\permission(this.canJoin));
+        ensures initPost();
+        assignable \nothing;
+        assignable<permissions> \nothing; @*/
+    /*@ helper @*/
+    public Fib(int n) {
+        this.number = n;
+    }
 }

@@ -32,14 +32,17 @@ import java.util.List;
  * mixture model</a> distributions.
  *
  * @param <T> Type of the mixture components.
- *
  * @since 3.1
  */
 public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistribution>
-    extends AbstractMultivariateRealDistribution {
-    /** Normalized weight of each mixture component. */
+        extends AbstractMultivariateRealDistribution {
+    /**
+     * Normalized weight of each mixture component.
+     */
     private final double[] weight;
-    /** Mixture components. */
+    /**
+     * Mixture components.
+     */
     private final List<T> distribution;
 
     /**
@@ -63,11 +66,11 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
      * Creates a mixture model from a list of distributions and their
      * associated weights.
      *
-     * @param rng Random number generator.
+     * @param rng        Random number generator.
      * @param components Distributions from which to sample.
-     * @throws NotPositiveException if any of the weights is negative.
+     * @throws NotPositiveException       if any of the weights is negative.
      * @throws DimensionMismatchException if not all components have the same
-     * number of variables.
+     *                                    number of variables.
      */
     public MixtureMultivariateRealDistribution(RandomGenerator rng,
                                                List<Pair<Double, T>> components) {
@@ -102,7 +105,9 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(final double[] values) {
         double p = 0;
         for (int i = 0; i < weight.length; i++) {
@@ -111,7 +116,9 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
         return p;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double[] sample() {
         // Sampled values.
@@ -140,7 +147,9 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
         return vals;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reseedRandomGenerator(long seed) {
         // Seed needs to be propagated to underlying components

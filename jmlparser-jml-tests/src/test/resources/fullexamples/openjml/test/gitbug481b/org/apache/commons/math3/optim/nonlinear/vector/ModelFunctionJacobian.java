@@ -30,7 +30,9 @@ import org.apache.commons.math3.optim.OptimizationData;
  */
 @Deprecated
 public class ModelFunctionJacobian implements OptimizationData {
-    /** Function to be optimized. */
+    /**
+     * Function to be optimized.
+     */
     private final MultivariateMatrixFunction jacobian;
 
     /**

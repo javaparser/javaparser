@@ -29,6 +29,7 @@ public class EmptyOrderedIterator<E> extends AbstractEmptyIterator<E>
 
     /**
      * Singleton instance of the iterator.
+     *
      * @since 3.1
      */
     @SuppressWarnings("rawtypes")
@@ -36,6 +37,7 @@ public class EmptyOrderedIterator<E> extends AbstractEmptyIterator<E>
 
     /**
      * Typed instance of the iterator.
+     *
      * @param <E> the element type
      * @return OrderedIterator&lt;E&gt;
      */

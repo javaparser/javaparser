@@ -11,18 +11,18 @@
 // Public License. See LICENSE.TXT for details.
 // 
 
-public class A{
+public class A {
 
-    public int i=0;
+    public int i = 0;
 
-    class InnerA{
-	
-	/*@ public normal_behavior
-	  @  ensures \result==A.this.i;
-	  @*/
-	public int m(){
-	    return i;
-	}
+    class InnerA {
+
+        /*@ public normal_behavior
+          @  ensures \result==A.this.i;
+          @*/
+        public int m() {
+            return i;
+        }
 
     }
 

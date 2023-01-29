@@ -49,11 +49,12 @@ class ReflectionMethodResolutionLogic {
 
     static SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly,
                                                                   TypeSolver typeSolver, ResolvedReferenceTypeDeclaration scopeType,
-                                                                  Class clazz){
+                                                                  Class clazz) {
         List<ResolvedMethodDeclaration> methods = new ArrayList<>();
         Predicate<Method> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (Method method : clazz.getMethods()) {
-            if (method.isBridge() || method.isSynthetic() || !method.getName().equals(name)|| !staticOnlyCheck.test(method)) continue;
+            if (method.isBridge() || method.isSynthetic() || !method.getName().equals(name) || !staticOnlyCheck.test(method))
+                continue;
             ResolvedMethodDeclaration methodDeclaration = new ReflectionMethodDeclaration(method, typeSolver);
             methods.add(methodDeclaration);
         }
@@ -67,7 +68,7 @@ class ReflectionMethodResolutionLogic {
             });
         }
 
-        if (scopeType.getAncestors().isEmpty()){
+        if (scopeType.getAncestors().isEmpty()) {
             ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
             objectClass.getTypeDeclaration().ifPresent(objectTypeDeclaration -> {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectTypeDeclaration, name, parameterTypes, staticOnly);
@@ -144,7 +145,7 @@ class ReflectionMethodResolutionLogic {
         int i = 0;
 
         // Only replace if we have enough values provided
-        if (typeParameterValues.size() == typeParametrizable.getTypeParameters().size()){
+        if (typeParameterValues.size() == typeParametrizable.getTypeParameters().size()) {
             for (ResolvedTypeParameterDeclaration tp : typeParametrizable.getTypeParameters()) {
                 methodUsage = methodUsage.replaceTypeParameter(tp, typeParameterValues.get(i));
                 i++;

@@ -44,7 +44,7 @@ class JavaParserJsonSerializerTest {
         String serialized = serialize(cu, true);
 
         InputStream is = getClass().getResourceAsStream("/example.json");
-        byte[] buffer = new byte[1024*1024];
+        byte[] buffer = new byte[1024 * 1024];
         int len = is.read(buffer);
         Assume.assumeTrue(len > 0);
         String expected = new String(buffer, 0, len);

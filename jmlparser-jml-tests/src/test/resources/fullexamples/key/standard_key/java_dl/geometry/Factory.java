@@ -18,8 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class Factory
-{
+public class Factory {
 
     /*@ public instance invariant routes != null;
       @ public instance invariant (\forall int i; 0<=i && i<routes.length;  
@@ -40,12 +39,15 @@ public class Factory
       @              (\forall int i; li.list.length > i) && li.end >= 0);
       @*/
 
-    private LinkedHashMap routeToSegments = null;	
-    
+    private LinkedHashMap routeToSegments = null;
+
     Object[][] dummy;
 
     private Object[] routes;
-    private Factory(Object[] routes) { this.routes = routes; }
+
+    private Factory(Object[] routes) {
+        this.routes = routes;
+    }
 
 
     /*@ public normal_behavior
@@ -68,9 +70,9 @@ public class Factory
       @       ensures true; //to prove just termination
       @   |}
       @*/
-    public void copyArrayToList(Object[] segments, LinkedList l){
-	int j=0, sz=segments.length;
-	boolean dummy;
+    public void copyArrayToList(Object[] segments, LinkedList l) {
+        int j = 0, sz = segments.length;
+        boolean dummy;
 	/*@ maintaining (\forall int k; k>0 && k<=j; 
 	  @              l.list[l.end-k] == segments[j-k]) && j >= 0 &&
 	  @              (\forall int i; l.list.length > i) && l.end >= 0 &&
@@ -79,16 +81,17 @@ public class Factory
 	  @ assignable j, l.list[l.end .. l.end+segments.length-1], 
 	  @            l.end;
 	  @*/
-	while(j<sz && j>=0){
-	    Object o = segments[j];
-	    try{
-		dummy = l.add(o);
-	    }catch(Exception e){}
-	    j++;
-	}
+        while (j < sz && j >= 0) {
+            Object o = segments[j];
+            try {
+                dummy = l.add(o);
+            } catch (Exception e) {
+            }
+            j++;
+        }
     }
-    
-    
+
+
     /*@ public normal_behavior
       @   requires routeStart <= routeEnd;
       @   requires 0 <= routeStart;
@@ -107,9 +110,9 @@ public class Factory
       @            \is_initialized(java.util.List);
       @*/
     public /*@ pure@*/ List getSegments(int routeStart, int routeEnd) {
-	LinkedList l = new LinkedList();
-	int i = routeStart;
-	int index = routeStart;
+        LinkedList l = new LinkedList();
+        int i = routeStart;
+        int index = routeStart;
 	/*@ //maintaining (\forall int j; j>=routeStart && j<i; 
 	    //              (\exists SegmentList seg; 
 	    //		   seg == routeToSegments.get(routes.get(j)) && 
@@ -119,14 +122,14 @@ public class Factory
 	  @ decreases routeEnd-i+1; 
 	  @ assignable i;
 	  @*/
-	while(i<=routeEnd && i>=routeStart) {
-	    index = i;
-	    Object route = routes[index];
-	    Object[] segments = (Object[]) routeToSegments.get(route);
-	    copyArrayToList(segments, l);
-	    i++;
-	}
-	return l;
+        while (i <= routeEnd && i >= routeStart) {
+            index = i;
+            Object route = routes[index];
+            Object[] segments = (Object[]) routeToSegments.get(route);
+            copyArrayToList(segments, l);
+            i++;
+        }
+        return l;
     }
 
 }

@@ -82,7 +82,7 @@ public final class CodeGenerationUtils {
      * Calculates the path to a file in a package.
      *
      * @param root the root directory in which the package resides
-     * @param pkg the package in which the file resides, like "com.laamella.parser"
+     * @param pkg  the package in which the file resides, like "com.laamella.parser"
      * @param file the filename of the file in the package.
      */
     public static Path fileInPackageAbsolutePath(String root, String pkg, String file) {
@@ -114,7 +114,7 @@ public final class CodeGenerationUtils {
      * Calculates the path of a package.
      *
      * @param root the root directory in which the package resides
-     * @param pkg the package, like "com.laamella.parser"
+     * @param pkg  the package, like "com.laamella.parser"
      */
     public static Path packageAbsolutePath(String root, String pkg) {
         pkg = packageToPath(pkg);

@@ -53,13 +53,18 @@ public class TreeList<E> extends AbstractList<E> {
 //   ArrayList =  220;1480;1760; 6870;    50;1540; 7200;
 //  LinkedList =  270;7360;3350;55860;290720;2910;55200;
 
-    /** The root node in the AVL tree */
+    /**
+     * The root node in the AVL tree
+     */
     private AVLNode<E> root;
 
-    /** The current size of the list */
+    /**
+     * The current size of the list
+     */
     private int size;
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs a new empty list.
      */
@@ -70,7 +75,7 @@ public class TreeList<E> extends AbstractList<E> {
     /**
      * Constructs a new empty list that copies the specified collection.
      *
-     * @param coll  the collection to copy
+     * @param coll the collection to copy
      * @throws NullPointerException if the collection is null
      */
     public TreeList(final Collection<? extends E> coll) {
@@ -82,10 +87,11 @@ public class TreeList<E> extends AbstractList<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the element at the specified index.
      *
-     * @param index  the index to retrieve
+     * @param index the index to retrieve
      * @return the element at the specified index
      */
     @Override
@@ -129,7 +135,7 @@ public class TreeList<E> extends AbstractList<E> {
     /**
      * Gets a ListIterator over the list.
      *
-     * @param fromIndex  the index to start from
+     * @param fromIndex the index to start from
      * @return the new iterator
      */
     @Override
@@ -143,7 +149,7 @@ public class TreeList<E> extends AbstractList<E> {
     /**
      * Searches for the index of an object in the list.
      *
-     * @param object  the object to search
+     * @param object the object to search
      * @return the index of the object, -1 if not found
      */
     @Override
@@ -158,7 +164,7 @@ public class TreeList<E> extends AbstractList<E> {
     /**
      * Searches for the presence of an object in the list.
      *
-     * @param object  the object to check
+     * @param object the object to check
      * @return true if the object is found
      */
     @Override
@@ -182,11 +188,12 @@ public class TreeList<E> extends AbstractList<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Adds a new element to the list.
      *
-     * @param index  the index to add before
-     * @param obj  the element to add
+     * @param index the index to add before
+     * @param obj   the element to add
      */
     @Override
     public void add(final int index, final E obj) {
@@ -207,7 +214,7 @@ public class TreeList<E> extends AbstractList<E> {
      * This method runs in O(n + log m) time, where m is
      * the size of this list and n is the size of {@code c}.
      *
-     * @param c  the collection to be added to this list
+     * @param c the collection to be added to this list
      * @return {@code true} if this list changed as a result of the call
      * @throws NullPointerException {@inheritDoc}
      */
@@ -226,8 +233,8 @@ public class TreeList<E> extends AbstractList<E> {
     /**
      * Sets the element at the specified index.
      *
-     * @param index  the index to set
-     * @param obj  the object to store at the specified index
+     * @param index the index to set
+     * @param obj   the object to store at the specified index
      * @return the previous object at that index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
@@ -243,7 +250,7 @@ public class TreeList<E> extends AbstractList<E> {
     /**
      * Removes the element at the specified index.
      *
-     * @param index  the index to remove
+     * @param index the index to remove
      * @return the previous object at that index
      */
     @Override
@@ -267,12 +274,13 @@ public class TreeList<E> extends AbstractList<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Checks whether the index is valid.
      *
-     * @param index  the index to check
-     * @param startIndex  the first allowed index
-     * @param endIndex  the last allowed index
+     * @param index      the index to check
+     * @param startIndex the first allowed index
+     * @param endIndex   the last allowed index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
     private void checkInterval(final int index, final int startIndex, final int endIndex) {
@@ -282,6 +290,7 @@ public class TreeList<E> extends AbstractList<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implements an AVLNode which keeps the offset updated.
      * <p>
@@ -295,28 +304,42 @@ public class TreeList<E> extends AbstractList<E> {
      * to indicate if they are a child (false) or a link as in linked list (true).
      */
     static class AVLNode<E> {
-        /** The left child node or the predecessor if {@link #leftIsPrevious}.*/
+        /**
+         * The left child node or the predecessor if {@link #leftIsPrevious}.
+         */
         private AVLNode<E> left;
-        /** Flag indicating that left reference is not a subtree but the predecessor. */
+        /**
+         * Flag indicating that left reference is not a subtree but the predecessor.
+         */
         private boolean leftIsPrevious;
-        /** The right child node or the successor if {@link #rightIsNext}. */
+        /**
+         * The right child node or the successor if {@link #rightIsNext}.
+         */
         private AVLNode<E> right;
-        /** Flag indicating that right reference is not a subtree but the successor. */
+        /**
+         * Flag indicating that right reference is not a subtree but the successor.
+         */
         private boolean rightIsNext;
-        /** How many levels of left/right are below this one. */
+        /**
+         * How many levels of left/right are below this one.
+         */
         private int height;
-        /** The relative position, root holds absolute position. */
+        /**
+         * The relative position, root holds absolute position.
+         */
         private int relativePosition;
-        /** The stored element. */
+        /**
+         * The stored element.
+         */
         private E value;
 
         /**
          * Constructs a new node with a relative position.
          *
-         * @param relativePosition  the relative position of the node
-         * @param obj  the value for the node
-         * @param rightFollower the node with the value following this one
-         * @param leftFollower the node with the value leading this one
+         * @param relativePosition the relative position of the node
+         * @param obj              the value for the node
+         * @param rightFollower    the node with the value following this one
+         * @param leftFollower     the node with the value leading this one
          */
         private AVLNode(final int relativePosition, final E obj,
                         final AVLNode<E> rightFollower, final AVLNode<E> leftFollower) {
@@ -333,7 +356,7 @@ public class TreeList<E> extends AbstractList<E> {
          * <p>
          * The collection must be nonempty.
          *
-         * @param coll  a nonempty collection
+         * @param coll a nonempty collection
          */
         private AVLNode(final Collection<? extends E> coll) {
             this(coll.iterator(), 0, coll.size() - 1, 0, null, null);
@@ -347,18 +370,18 @@ public class TreeList<E> extends AbstractList<E> {
          * through {@code end} of the collection, assuming the iterator
          * {@code e} already points at element {@code start}.
          *
-         * @param iterator  an iterator over the collection, which should already point
-         *          to the element at index {@code start} within the collection
-         * @param start  the index of the first element in the collection that
-         *          should be in this subtree
-         * @param end  the index of the last element in the collection that
-         *          should be in this subtree
-         * @param absolutePositionOfParent  absolute position of this node's
-         *          parent, or 0 if this node is the root
-         * @param prev  the {@code AVLNode} corresponding to element (start - 1)
-         *          of the collection, or null if start is 0
-         * @param next  the {@code AVLNode} corresponding to element (end + 1)
-         *          of the collection, or null if end is the last element of the collection
+         * @param iterator                 an iterator over the collection, which should already point
+         *                                 to the element at index {@code start} within the collection
+         * @param start                    the index of the first element in the collection that
+         *                                 should be in this subtree
+         * @param end                      the index of the last element in the collection that
+         *                                 should be in this subtree
+         * @param absolutePositionOfParent absolute position of this node's
+         *                                 parent, or 0 if this node is the root
+         * @param prev                     the {@code AVLNode} corresponding to element (start - 1)
+         *                                 of the collection, or null if start is 0
+         * @param next                     the {@code AVLNode} corresponding to element (end + 1)
+         *                                 of the collection, or null if end is the last element of the collection
          */
         private AVLNode(final Iterator<? extends E> iterator, final int start, final int end,
                         final int absolutePositionOfParent, final AVLNode<E> prev, final AVLNode<E> next) {
@@ -392,7 +415,7 @@ public class TreeList<E> extends AbstractList<E> {
         /**
          * Sets the value.
          *
-         * @param obj  the value to store
+         * @param obj the value to store
          */
         void setValue(final E obj) {
             this.value = obj;
@@ -479,8 +502,8 @@ public class TreeList<E> extends AbstractList<E> {
          * Inserts a node at the position index.
          *
          * @param index is the index of the position relative to the position of
-         * the parent node.
-         * @param obj is the object to be stored in the position.
+         *              the parent node.
+         * @param obj   is the object to be stored in the position.
          */
         AVLNode<E> insert(final int index, final E obj) {
             final int indexRelativeToMe = index - relativePosition;
@@ -521,6 +544,7 @@ public class TreeList<E> extends AbstractList<E> {
         }
 
         //-----------------------------------------------------------------------
+
         /**
          * Gets the left node, returning null if its a faedelung.
          */
@@ -557,7 +581,7 @@ public class TreeList<E> extends AbstractList<E> {
          * Removes the node at a given position.
          *
          * @param index is the index of the element to be removed relative to the position of
-         * the parent node of the current node.
+         *              the parent node of the current node.
          */
         AVLNode<E> remove(final int index) {
             final int indexRelativeToMe = index - relativePosition;
@@ -661,26 +685,27 @@ public class TreeList<E> extends AbstractList<E> {
         }
 
         //-----------------------------------------------------------------------
+
         /**
          * Balances according to the AVL algorithm.
          */
         private AVLNode<E> balance() {
             switch (heightRightMinusLeft()) {
-                case 1 :
-                case 0 :
-                case -1 :
+                case 1:
+                case 0:
+                case -1:
                     return this;
-                case -2 :
+                case -2:
                     if (left.heightRightMinusLeft() > 0) {
                         setLeft(left.rotateLeft(), null);
                     }
                     return rotateRight();
-                case 2 :
+                case 2:
                     if (right.heightRightMinusLeft() < 0) {
                         setRight(right.rotateRight(), null);
                     }
                     return rotateLeft();
-                default :
+                default:
                     throw new RuntimeException("tree inconsistent!");
             }
         }
@@ -712,8 +737,8 @@ public class TreeList<E> extends AbstractList<E> {
          */
         private void recalcHeight() {
             height = Math.max(
-                getLeftSubTree() == null ? -1 : getLeftSubTree().height,
-                getRightSubTree() == null ? -1 : getRightSubTree().height) + 1;
+                    getLeftSubTree() == null ? -1 : getLeftSubTree().height,
+                    getRightSubTree() == null ? -1 : getRightSubTree().height) + 1;
         }
 
         /**
@@ -767,8 +792,8 @@ public class TreeList<E> extends AbstractList<E> {
         /**
          * Sets the left field to the node, or the previous node if that is null
          *
-         * @param node  the new left subtree node
-         * @param previous  the previous node in the linked list
+         * @param node     the new left subtree node
+         * @param previous the previous node in the linked list
          */
         private void setLeft(final AVLNode<E> node, final AVLNode<E> previous) {
             leftIsPrevious = node == null;
@@ -779,8 +804,8 @@ public class TreeList<E> extends AbstractList<E> {
         /**
          * Sets the right field to the node, or the next node if that is null
          *
-         * @param node  the new left subtree node
-         * @param next  the next node in the linked list
+         * @param node the new left subtree node
+         * @param next the next node in the linked list
          */
         private void setRight(final AVLNode<E> node, final AVLNode<E> next) {
             rightIsNext = node == null;
@@ -793,10 +818,8 @@ public class TreeList<E> extends AbstractList<E> {
          * merging the two AVL trees. This operation is destructive to both trees and
          * runs in O(log(m + n)) time.
          *
-         * @param otherTree
-         *            the root of the AVL tree to merge with this one
-         * @param currentSize
-         *            the number of elements in this AVL tree
+         * @param otherTree   the root of the AVL tree to merge with this one
+         * @param currentSize the number of elements in this AVL tree
          * @return the root of the new, merged AVL tree
          */
         private AVLNode<E> addAll(AVLNode<E> otherTree, final int currentSize) {
@@ -952,18 +975,18 @@ public class TreeList<E> extends AbstractList<E> {
         @Override
         public String toString() {
             return new StringBuilder()
-                .append("AVLNode(")
-                .append(relativePosition)
-                .append(',')
-                .append(left != null)
-                .append(',')
-                .append(value)
-                .append(',')
-                .append(getRightSubTree() != null)
-                .append(", faedelung ")
-                .append(rightIsNext)
-                .append(" )")
-                .toString();
+                    .append("AVLNode(")
+                    .append(relativePosition)
+                    .append(',')
+                    .append(left != null)
+                    .append(',')
+                    .append(value)
+                    .append(',')
+                    .append(getRightSubTree() != null)
+                    .append(", faedelung ")
+                    .append(rightIsNext)
+                    .append(" )")
+                    .toString();
         }
     }
 
@@ -971,7 +994,9 @@ public class TreeList<E> extends AbstractList<E> {
      * A list iterator over the linked list.
      */
     static class TreeListIterator<E> implements ListIterator<E>, OrderedIterator<E> {
-        /** The parent list */
+        /**
+         * The parent list
+         */
         private final TreeList<E> parent;
         /**
          * Cache of the next node that will be returned by {@link #next()}.
@@ -1001,8 +1026,8 @@ public class TreeList<E> extends AbstractList<E> {
         /**
          * Create a ListIterator for a list.
          *
-         * @param parent  the parent list
-         * @param fromIndex  the index to start at
+         * @param parent    the parent list
+         * @param fromIndex the index to start at
          */
         protected TreeListIterator(final TreeList<E> parent, final int fromIndex) throws IndexOutOfBoundsException {
             super();
@@ -1018,7 +1043,7 @@ public class TreeList<E> extends AbstractList<E> {
          * object expects.
          *
          * @throws ConcurrentModificationException If the list's modification
-         * count isn't the value that was expected.
+         *                                         count isn't the value that was expected.
          */
         protected void checkModCount() {
             if (parent.modCount != expectedModCount) {

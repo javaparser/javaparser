@@ -63,7 +63,7 @@ class ArrayExprTest {
         CompilationUnit cu = new JavaParser(parserConfiguration).parse(ParseStart.COMPILATION_UNIT, new StringProvider(code)).getResult().get();
         FieldDeclaration field = cu.getClassByName("A").get().getFieldByName("l").get();
 
-        ResolvedValueDeclaration resolvedValueDeclaration = ((FieldAccessExpr)field.getVariables().get(0).getInitializer().get()).resolve();
+        ResolvedValueDeclaration resolvedValueDeclaration = ((FieldAccessExpr) field.getVariables().get(0).getInitializer().get()).resolve();
         assertEquals("length", resolvedValueDeclaration.getName());
         assertEquals(ResolvedPrimitiveType.INT, resolvedValueDeclaration.getType());
     }

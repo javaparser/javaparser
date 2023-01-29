@@ -186,14 +186,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 return solveDotExpressionType(
                         typeAccessedStatically.getCorrespondingDeclaration().asReferenceType(), node);
             }
-        } else if (node.getScope()instanceof ThisExpr){
+        } else if (node.getScope() instanceof ThisExpr) {
             // If we are accessing through a 'this' expression, first resolve the type
             // corresponding to 'this'
             SymbolReference<TypeDeclaration> solve = facade.solve((ThisExpr) node.getScope());
             // If found get it's declaration and get the field in there
-            if (solve.isSolved()){
+            if (solve.isSolved()) {
                 TypeDeclaration correspondingDeclaration = solve.getCorrespondingDeclaration();
-                if (correspondingDeclaration instanceof ReferenceTypeDeclaration){
+                if (correspondingDeclaration instanceof ReferenceTypeDeclaration) {
                     return solveDotExpressionType(correspondingDeclaration.asReferenceType(), node);
                 }
             }
@@ -297,19 +297,19 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public Type visit(ThisExpr node, Boolean solveLambdas) {
         // If 'this' is prefixed by a class eg. MyClass.this
-        if (node.getClassExpr().isPresent()){
+        if (node.getClassExpr().isPresent()) {
             // Get the class name
             String className = node.getClassExpr().get().toString();
             // Attempt to resolve using a typeSolver
             SymbolReference<ReferenceTypeDeclaration> clazz = typeSolver.tryToSolveType(className);
-            if (clazz.isSolved()){
-                return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(),typeSolver);
+            if (clazz.isSolved()) {
+                return new ReferenceTypeImpl(clazz.getCorrespondingDeclaration(), typeSolver);
             }
             // Attempt to resolve locally in Compilation unit
             Optional<CompilationUnit> cu = node.getAncestorOfType(CompilationUnit.class);
-            if (cu.isPresent()){
+            if (cu.isPresent()) {
                 Optional<ClassOrInterfaceDeclaration> classByName = cu.get().getClassByName(className);
-                if (classByName.isPresent()){
+                if (classByName.isPresent()) {
                     return new ReferenceTypeImpl(facade.getTypeDeclaration(classByName.get()), typeSolver);
                 }
             }
@@ -379,7 +379,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                         NameExpr nameExpr = (NameExpr) scope;
                         try {
                             SymbolReference<TypeDeclaration> type = JavaParserFactory.getContext(nameExpr, typeSolver).solveType(nameExpr.getName().getId(), typeSolver);
-                            if (type.isSolved()){
+                            if (type.isSolved()) {
                                 staticCall = true;
                             }
                         } catch (Exception e) {
@@ -419,7 +419,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     Type actualType;
 
                     if (lambdaExpr.getBody() instanceof ExpressionStmt) {
-                        actualType = facade.getType(((ExpressionStmt)lambdaExpr.getBody()).getExpression());
+                        actualType = facade.getType(((ExpressionStmt) lambdaExpr.getBody()).getExpression());
                     } else if (lambdaExpr.getBody() instanceof BlockStmt) {
                         BlockStmt blockStmt = (BlockStmt) lambdaExpr.getBody();
                         NodeList<Statement> statements = blockStmt.getStatements();
@@ -427,20 +427,20 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                         // Get all the return statements in the lambda block
                         List<ReturnStmt> returnStmts = blockStmt.getNodesByType(ReturnStmt.class);
 
-                        if (returnStmts.size() > 0){
+                        if (returnStmts.size() > 0) {
 
                             actualType = returnStmts.stream()
-                            .map(returnStmt -> {
-                                Optional<Expression> expression = returnStmt.getExpression();
-                                if (expression.isPresent()){
-                                    return facade.getType(expression.get());
-                                } else{
-                                    return VoidType.INSTANCE;
-                                }
-                            })
-                            .filter(x -> x != null && !x.isVoid() && !x.isNull())
-                            .findFirst()
-                            .orElse(VoidType.INSTANCE);
+                                    .map(returnStmt -> {
+                                        Optional<Expression> expression = returnStmt.getExpression();
+                                        if (expression.isPresent()) {
+                                            return facade.getType(expression.get());
+                                        } else {
+                                            return VoidType.INSTANCE;
+                                        }
+                                    })
+                                    .filter(x -> x != null && !x.isVoid() && !x.isNull())
+                                    .findFirst()
+                                    .orElse(VoidType.INSTANCE);
 
                         } else {
                             return VoidType.INSTANCE;
@@ -460,7 +460,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
                     // if the functional method returns void anyway
                     // we don't need to bother inferring types
-                    if (!(formalType instanceof VoidType)){
+                    if (!(formalType instanceof VoidType)) {
                         lambdaCtx.addPair(result, functionalTypeWithReturn);
                         result = lambdaCtx.resolve(lambdaCtx.addSingle(result));
                     }

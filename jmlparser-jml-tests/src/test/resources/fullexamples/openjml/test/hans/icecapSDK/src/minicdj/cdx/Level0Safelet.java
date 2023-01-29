@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 package minicdj.cdx;
 
@@ -54,12 +55,12 @@ public class Level0Safelet extends CyclicExecutive {
     public CyclicSchedule getSchedule(PeriodicEventHandler[] handlers) {
         Frame[] frames = new Frame[1];
         CyclicSchedule schedule = new CyclicSchedule(frames);
-        
+
         // HSO hack, 29Jan2013: only one handler
         PeriodicEventHandler[] handlerArr = new PeriodicEventHandler[1];
         handlerArr[0] = handlers[0];
         frames[0] = new Frame(new RelativeTime(Constants.DETECTOR_PERIOD, 0), handlerArr);
-        
+
         //frames[0] = new CyclicSchedule.Frame(new RelativeTime(Constants.DETECTOR_PERIOD, 0), handlers);
         //devices.Console.println("MiniCDj.Level0Safelet.getSchedule, n: " + handlerArr.length);
         return schedule;
@@ -71,18 +72,18 @@ public class Level0Safelet extends CyclicExecutive {
         try {
             ImmortalEntry.detectorThreadStart = NanoClock.now();
             AbsoluteTime releaseAt = NanoClock.roundUp(Clock.getRealtimeClock().getTime().add(
-                Constants.DETECTOR_STARTUP_OFFSET_MILLIS, 0));
+                    Constants.DETECTOR_STARTUP_OFFSET_MILLIS, 0));
             ImmortalEntry.detectorFirstRelease = NanoClock.convert(releaseAt);
-            
+
             new CollisionDetectorHandler(this).register();
 
             if (Constants.DEBUG_DETECTOR) {
                 devices.Console.println("Detector thread is " + Thread.currentThread());
                 devices.Console
-                    .println("Entering detector loop, detector thread priority is "
-                            + "Unknown" + " (NORM_PRIORITY is " + Thread.NORM_PRIORITY
-                            + ", MIN_PRIORITY is " + Thread.MIN_PRIORITY + ", MAX_PRIORITY is " + Thread.MAX_PRIORITY
-                            + ")");
+                        .println("Entering detector loop, detector thread priority is "
+                                + "Unknown" + " (NORM_PRIORITY is " + Thread.NORM_PRIORITY
+                                + ", MIN_PRIORITY is " + Thread.MIN_PRIORITY + ", MAX_PRIORITY is " + Thread.MAX_PRIORITY
+                                + ")");
             }
 
         } catch (Throwable e) {
@@ -96,14 +97,14 @@ public class Level0Safelet extends CyclicExecutive {
     }
 
     public static void dumpResults() {
-        
+
         String space = " ";
         String triZero = " 0 0 0 ";
 
         if (Constants.PRINT_RESULTS) {
             devices.Console
-                .println("Dumping output [ timeBefore timeAfter heapFreeBefore heapFreeAfter detectedCollisions ] for "
-                        + ImmortalEntry.recordedRuns + " recorded detector runs, in ns");
+                    .println("Dumping output [ timeBefore timeAfter heapFreeBefore heapFreeAfter detectedCollisions ] for "
+                            + ImmortalEntry.recordedRuns + " recorded detector runs, in ns");
         }
         devices.Console.println("=====DETECTOR-STATS-START-BELOW====");
         for (int i = 0; i < ImmortalEntry.recordedRuns; i++) {

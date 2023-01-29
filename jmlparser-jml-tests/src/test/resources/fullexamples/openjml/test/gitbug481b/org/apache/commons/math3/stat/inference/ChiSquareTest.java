@@ -30,7 +30,6 @@ import org.apache.commons.math3.util.MathArrays;
  * <p>Two samples tests can be used when the distribution is unknown <i>a priori</i>
  * but provided by one sample, or when the hypothesis under test is that the two
  * samples come from the same underlying distribution.</p>
- *
  */
 public class ChiSquareTest {
 
@@ -66,14 +65,14 @@ public class ChiSquareTest {
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
      * @return chiSquare test statistic
-     * @throws NotPositiveException if <code>observed</code> has negative entries
+     * @throws NotPositiveException         if <code>observed</code> has negative entries
      * @throws NotStrictlyPositiveException if <code>expected</code> has entries that are
-     * not strictly positive
-     * @throws DimensionMismatchException if the arrays length is less than 2
+     *                                      not strictly positive
+     * @throws DimensionMismatchException   if the arrays length is less than 2
      */
     public double chiSquare(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException {
 
         if (expected.length < 2) {
             throw new DimensionMismatchException(expected.length, 2);
@@ -139,19 +138,19 @@ public class ChiSquareTest {
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
      * @return p-value
-     * @throws NotPositiveException if <code>observed</code> has negative entries
+     * @throws NotPositiveException         if <code>observed</code> has negative entries
      * @throws NotStrictlyPositiveException if <code>expected</code> has entries that are
-     * not strictly positive
-     * @throws DimensionMismatchException if the arrays length is less than 2
-     * @throws MaxCountExceededException if an error occurs computing the p-value
+     *                                      not strictly positive
+     * @throws DimensionMismatchException   if the arrays length is less than 2
+     * @throws MaxCountExceededException    if an error occurs computing the p-value
      */
     public double chiSquareTest(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, MaxCountExceededException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
-            new ChiSquaredDistribution(null, expected.length - 1.0);
+                new ChiSquaredDistribution(null, expected.length - 1.0);
         return 1.0 - distribution.cumulativeProbability(chiSquare(expected, observed));
     }
 
@@ -184,34 +183,34 @@ public class ChiSquareTest {
      *
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
-     * @param alpha significance level of the test
+     * @param alpha    significance level of the test
      * @return true iff null hypothesis can be rejected with confidence
      * 1 - alpha
-     * @throws NotPositiveException if <code>observed</code> has negative entries
+     * @throws NotPositiveException         if <code>observed</code> has negative entries
      * @throws NotStrictlyPositiveException if <code>expected</code> has entries that are
-     * not strictly positive
-     * @throws DimensionMismatchException if the arrays length is less than 2
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
-     * @throws MaxCountExceededException if an error occurs computing the p-value
+     *                                      not strictly positive
+     * @throws DimensionMismatchException   if the arrays length is less than 2
+     * @throws OutOfRangeException          if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MaxCountExceededException    if an error occurs computing the p-value
      */
     public boolean chiSquareTest(final double[] expected, final long[] observed,
                                  final double alpha)
-        throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
+            throws NotPositiveException, NotStrictlyPositiveException,
+            DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
-                                          alpha, 0, 0.5);
+                    alpha, 0, 0.5);
         }
         return chiSquareTest(expected, observed) < alpha;
 
     }
 
     /**
-     *  Computes the Chi-Square statistic associated with a
+     * Computes the Chi-Square statistic associated with a
      * <a href="http://www.itl.nist.gov/div898/handbook/prc/section4/prc45.htm">
-     *  chi-square test of independence</a> based on the input <code>counts</code>
-     *  array, viewed as a two-way table.
+     * chi-square test of independence</a> based on the input <code>counts</code>
+     * array, viewed as a two-way table.
      * <p>
      * The rows of the 2-way table are
      * <code>count[0], ... , count[count.length - 1] </code></p>
@@ -220,10 +219,10 @@ public class ChiSquareTest {
      * <li>All counts must be &ge; 0.
      * </li>
      * <li>The count array must be rectangular (i.e. all count[i] subarrays
-     *  must have the same length).
+     * must have the same length).
      * </li>
      * <li>The 2-way table represented by <code>counts</code> must have at
-     *  least 2 columns and at least 2 rows.
+     * least 2 columns and at least 2 rows.
      * </li>
      * </li></ul></p><p>
      * If any of the preconditions are not met, an
@@ -231,13 +230,13 @@ public class ChiSquareTest {
      *
      * @param counts array representation of 2-way table
      * @return chiSquare test statistic
-     * @throws NullArgumentException if the array is null
+     * @throws NullArgumentException      if the array is null
      * @throws DimensionMismatchException if the array is not rectangular
-     * @throws NotPositiveException if {@code counts} has negative entries
+     * @throws NotPositiveException       if {@code counts} has negative entries
      */
     public double chiSquare(final long[][] counts)
-        throws NullArgumentException, NotPositiveException,
-        DimensionMismatchException {
+            throws NullArgumentException, NotPositiveException,
+            DimensionMismatchException {
 
         checkArray(counts);
         int nRows = counts.length;
@@ -284,10 +283,10 @@ public class ChiSquareTest {
      * <li>All counts must be &ge; 0.
      * </li>
      * <li>The count array must be rectangular (i.e. all count[i] subarrays must have
-     *     the same length).
+     * the same length).
      * </li>
      * <li>The 2-way table represented by <code>counts</code> must have at least 2
-     *     columns and at least 2 rows.
+     * columns and at least 2 rows.
      * </li>
      * </li></ul></p><p>
      * If any of the preconditions are not met, an
@@ -295,17 +294,17 @@ public class ChiSquareTest {
      *
      * @param counts array representation of 2-way table
      * @return p-value
-     * @throws NullArgumentException if the array is null
+     * @throws NullArgumentException      if the array is null
      * @throws DimensionMismatchException if the array is not rectangular
-     * @throws NotPositiveException if {@code counts} has negative entries
-     * @throws MaxCountExceededException if an error occurs computing the p-value
+     * @throws NotPositiveException       if {@code counts} has negative entries
+     * @throws MaxCountExceededException  if an error occurs computing the p-value
      */
     public double chiSquareTest(final long[][] counts)
-        throws NullArgumentException, DimensionMismatchException,
-        NotPositiveException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            NotPositiveException, MaxCountExceededException {
 
         checkArray(counts);
-        double df = ((double) counts.length -1) * ((double) counts[0].length - 1);
+        double df = ((double) counts.length - 1) * ((double) counts[0].length - 1);
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution = new ChiSquaredDistribution(df);
         return 1 - distribution.cumulativeProbability(chiSquare(counts));
@@ -326,37 +325,37 @@ public class ChiSquareTest {
      * <strong>Example:</strong><br>
      * To test the null hypothesis that the counts in
      * <code>count[0], ... , count[count.length - 1] </code>
-     *  all correspond to the same underlying probability distribution at the 99% level, use</p>
+     * all correspond to the same underlying probability distribution at the 99% level, use</p>
      * <p><code>chiSquareTest(counts, 0.01)</code></p>
      * <p>
      * <strong>Preconditions</strong>: <ul>
      * <li>All counts must be &ge; 0.
      * </li>
      * <li>The count array must be rectangular (i.e. all count[i] subarrays must have the
-     *     same length).</li>
+     * same length).</li>
      * <li>The 2-way table represented by <code>counts</code> must have at least 2 columns and
-     *     at least 2 rows.</li>
+     * at least 2 rows.</li>
      * </li></ul></p><p>
      * If any of the preconditions are not met, an
      * <code>IllegalArgumentException</code> is thrown.</p>
      *
      * @param counts array representation of 2-way table
-     * @param alpha significance level of the test
+     * @param alpha  significance level of the test
      * @return true iff null hypothesis can be rejected with confidence
      * 1 - alpha
-     * @throws NullArgumentException if the array is null
+     * @throws NullArgumentException      if the array is null
      * @throws DimensionMismatchException if the array is not rectangular
-     * @throws NotPositiveException if {@code counts} has any negative entries
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
-     * @throws MaxCountExceededException if an error occurs computing the p-value
+     * @throws NotPositiveException       if {@code counts} has any negative entries
+     * @throws OutOfRangeException        if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MaxCountExceededException  if an error occurs computing the p-value
      */
     public boolean chiSquareTest(final long[][] counts, final double alpha)
-        throws NullArgumentException, DimensionMismatchException,
-        NotPositiveException, OutOfRangeException, MaxCountExceededException {
+            throws NullArgumentException, DimensionMismatchException,
+            NotPositiveException, OutOfRangeException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
-                                          alpha, 0, 0.5);
+                    alpha, 0, 0.5);
         }
         return chiSquareTest(counts) < alpha;
 
@@ -394,15 +393,15 @@ public class ChiSquareTest {
      * @param observed2 array of observed frequency counts of the second data set
      * @return chiSquare test statistic
      * @throws DimensionMismatchException the the length of the arrays does not match
-     * @throws NotPositiveException if any entries in <code>observed1</code> or
-     * <code>observed2</code> are negative
-     * @throws ZeroException if either all counts of <code>observed1</code> or
-     * <code>observed2</code> are zero, or if the count at some index is zero
-     * for both arrays
+     * @throws NotPositiveException       if any entries in <code>observed1</code> or
+     *                                    <code>observed2</code> are negative
+     * @throws ZeroException              if either all counts of <code>observed1</code> or
+     *                                    <code>observed2</code> are zero, or if the count at some index is zero
+     *                                    for both arrays
      * @since 1.2
      */
     public double chiSquareDataSetsComparison(long[] observed1, long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException {
+            throws DimensionMismatchException, NotPositiveException, ZeroException {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
@@ -446,7 +445,7 @@ public class ChiSquareTest {
                 obs1 = observed1[i];
                 obs2 = observed2[i];
                 if (unequalCounts) { // apply weights
-                    dev = obs1/weight - obs2 * weight;
+                    dev = obs1 / weight - obs2 * weight;
                 } else {
                     dev = obs1 - obs2;
                 }
@@ -490,17 +489,17 @@ public class ChiSquareTest {
      * @param observed2 array of observed frequency counts of the second data set
      * @return p-value
      * @throws DimensionMismatchException the the length of the arrays does not match
-     * @throws NotPositiveException if any entries in <code>observed1</code> or
-     * <code>observed2</code> are negative
-     * @throws ZeroException if either all counts of <code>observed1</code> or
-     * <code>observed2</code> are zero, or if the count at the same index is zero
-     * for both arrays
-     * @throws MaxCountExceededException if an error occurs computing the p-value
+     * @throws NotPositiveException       if any entries in <code>observed1</code> or
+     *                                    <code>observed2</code> are negative
+     * @throws ZeroException              if either all counts of <code>observed1</code> or
+     *                                    <code>observed2</code> are zero, or if the count at the same index is zero
+     *                                    for both arrays
+     * @throws MaxCountExceededException  if an error occurs computing the p-value
      * @since 1.2
      */
     public double chiSquareTestDataSetsComparison(long[] observed1, long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException,
-        MaxCountExceededException {
+            throws DimensionMismatchException, NotPositiveException, ZeroException,
+            MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -539,29 +538,29 @@ public class ChiSquareTest {
      *
      * @param observed1 array of observed frequency counts of the first data set
      * @param observed2 array of observed frequency counts of the second data set
-     * @param alpha significance level of the test
+     * @param alpha     significance level of the test
      * @return true iff null hypothesis can be rejected with confidence
      * 1 - alpha
      * @throws DimensionMismatchException the the length of the arrays does not match
-     * @throws NotPositiveException if any entries in <code>observed1</code> or
-     * <code>observed2</code> are negative
-     * @throws ZeroException if either all counts of <code>observed1</code> or
-     * <code>observed2</code> are zero, or if the count at the same index is zero
-     * for both arrays
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
-     * @throws MaxCountExceededException if an error occurs performing the test
+     * @throws NotPositiveException       if any entries in <code>observed1</code> or
+     *                                    <code>observed2</code> are negative
+     * @throws ZeroException              if either all counts of <code>observed1</code> or
+     *                                    <code>observed2</code> are zero, or if the count at the same index is zero
+     *                                    for both arrays
+     * @throws OutOfRangeException        if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MaxCountExceededException  if an error occurs performing the test
      * @since 1.2
      */
     public boolean chiSquareTestDataSetsComparison(final long[] observed1,
                                                    final long[] observed2,
                                                    final double alpha)
-        throws DimensionMismatchException, NotPositiveException,
-        ZeroException, OutOfRangeException, MaxCountExceededException {
+            throws DimensionMismatchException, NotPositiveException,
+            ZeroException, OutOfRangeException, MaxCountExceededException {
 
         if (alpha <= 0 ||
-            alpha > 0.5) {
+                alpha > 0.5) {
             throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
-                                          alpha, 0, 0.5);
+                    alpha, 0, 0.5);
         }
         return chiSquareTestDataSetsComparison(observed1, observed2) < alpha;
 
@@ -572,13 +571,13 @@ public class ChiSquareTest {
      * has at least 2 rows and 2 columns, and has all non-negative entries.
      *
      * @param in input 2-way table to check
-     * @throws NullArgumentException if the array is null
+     * @throws NullArgumentException      if the array is null
      * @throws DimensionMismatchException if the array is not valid
-     * @throws NotPositiveException if the array contains any negative entries
+     * @throws NotPositiveException       if the array contains any negative entries
      */
     private void checkArray(final long[][] in)
-        throws NullArgumentException, DimensionMismatchException,
-        NotPositiveException {
+            throws NullArgumentException, DimensionMismatchException,
+            NotPositiveException {
 
         if (in.length < 2) {
             throw new DimensionMismatchException(in.length, 2);

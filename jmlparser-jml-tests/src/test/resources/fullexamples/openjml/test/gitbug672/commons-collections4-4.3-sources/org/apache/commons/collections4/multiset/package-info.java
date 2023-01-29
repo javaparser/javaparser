@@ -30,6 +30,5 @@
  *   <li>Synchronized - synchronizes method access for multi-threaded environments
  *   <li>Unmodifiable - ensures the multiset cannot be altered
  * </ul>
- *
  */
 package org.apache.commons.collections4.multiset;

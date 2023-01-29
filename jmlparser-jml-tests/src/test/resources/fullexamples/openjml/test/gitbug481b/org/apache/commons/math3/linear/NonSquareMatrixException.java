@@ -25,13 +25,15 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class NonSquareMatrixException extends DimensionMismatchException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -660069396594485772L;
 
     /**
      * Construct an exception from the mismatched dimensions.
      *
-     * @param wrong Row dimension.
+     * @param wrong    Row dimension.
      * @param expected Column dimension.
      */
     public NonSquareMatrixException(int wrong,

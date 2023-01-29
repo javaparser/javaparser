@@ -31,32 +31,30 @@ import java.util.Queue;
  */
 public class SynchronizedQueue<E> extends SynchronizedCollection<E> implements Queue<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 1L;
 
     /**
      * Factory method to create a synchronized queue.
      *
-     * @param <E>
-     *            the type of the elements in the queue
-     * @param queue
-     *            the queue to decorate, must not be null
+     * @param <E>   the type of the elements in the queue
+     * @param queue the queue to decorate, must not be null
      * @return a new synchronized Queue
-     * @throws NullPointerException
-     *             if queue is null
+     * @throws NullPointerException if queue is null
      */
     public static <E> SynchronizedQueue<E> synchronizedQueue(final Queue<E> queue) {
         return new SynchronizedQueue<>(queue);
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param queue
-     *            the queue to decorate, must not be null
-     * @throws NullPointerException
-     *             if queue is null
+     * @param queue the queue to decorate, must not be null
+     * @throws NullPointerException if queue is null
      */
     protected SynchronizedQueue(final Queue<E> queue) {
         super(queue);
@@ -65,12 +63,9 @@ public class SynchronizedQueue<E> extends SynchronizedCollection<E> implements Q
     /**
      * Constructor that wraps (not copies).
      *
-     * @param queue
-     *            the queue to decorate, must not be null
-     * @param lock
-     *            the lock to use, must not be null
-     * @throws NullPointerException
-     *             if queue or lock is null
+     * @param queue the queue to decorate, must not be null
+     * @param lock  the lock to use, must not be null
+     * @throws NullPointerException if queue or lock is null
      */
     protected SynchronizedQueue(final Queue<E> queue, final Object lock) {
         super(queue, lock);

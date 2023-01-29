@@ -32,7 +32,7 @@ import java.util.List;
  * @since 3.2
  */
 public class MixtureMultivariateNormalDistribution
-    extends MixtureMultivariateRealDistribution<MultivariateNormalDistribution> {
+        extends MixtureMultivariateRealDistribution<MultivariateNormalDistribution> {
 
     /**
      * Creates a multivariate normal mixture distribution.
@@ -45,8 +45,8 @@ public class MixtureMultivariateNormalDistribution
      * the appropriate constructors to avoid the additional initialisation
      * overhead.
      *
-     * @param weights Weights of each component.
-     * @param means Mean vector for each component.
+     * @param weights     Weights of each component.
+     * @param means       Mean vector for each component.
      * @param covariances Covariance matrix for each component.
      */
     public MixtureMultivariateNormalDistribution(double[] weights,
@@ -77,21 +77,21 @@ public class MixtureMultivariateNormalDistribution
      * Creates a mixture model from a list of distributions and their
      * associated weights.
      *
-     * @param rng Random number generator.
+     * @param rng        Random number generator.
      * @param components Distributions from which to sample.
-     * @throws NotPositiveException if any of the weights is negative.
+     * @throws NotPositiveException       if any of the weights is negative.
      * @throws DimensionMismatchException if not all components have the same
-     * number of variables.
+     *                                    number of variables.
      */
     public MixtureMultivariateNormalDistribution(RandomGenerator rng,
                                                  List<Pair<Double, MultivariateNormalDistribution>> components)
-        throws NotPositiveException, DimensionMismatchException {
+            throws NotPositiveException, DimensionMismatchException {
         super(rng, components);
     }
 
     /**
-     * @param weights Weights of each component.
-     * @param means Mean vector for each component.
+     * @param weights     Weights of each component.
+     * @param means       Mean vector for each component.
      * @param covariances Covariance matrix for each component.
      * @return the list of components.
      */
@@ -99,11 +99,11 @@ public class MixtureMultivariateNormalDistribution
                                                                                        double[][] means,
                                                                                        double[][][] covariances) {
         final List<Pair<Double, MultivariateNormalDistribution>> mvns
-            = new ArrayList<Pair<Double, MultivariateNormalDistribution>>(weights.length);
+                = new ArrayList<Pair<Double, MultivariateNormalDistribution>>(weights.length);
 
         for (int i = 0; i < weights.length; i++) {
             final MultivariateNormalDistribution dist
-                = new MultivariateNormalDistribution(means[i], covariances[i]);
+                    = new MultivariateNormalDistribution(means[i], covariances[i]);
 
             mvns.add(new Pair<Double, MultivariateNormalDistribution>(weights[i], dist));
         }

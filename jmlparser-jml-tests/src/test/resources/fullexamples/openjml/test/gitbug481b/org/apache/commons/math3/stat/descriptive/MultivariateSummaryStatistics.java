@@ -69,80 +69,103 @@ import java.util.Arrays;
  * @since 1.2
  */
 public class MultivariateSummaryStatistics
-    implements StatisticalMultivariateSummary, Serializable {
+        implements StatisticalMultivariateSummary, Serializable {
 
-    /** Serialization UID */
+    /**
+     * Serialization UID
+     */
     private static final long serialVersionUID = 2271900808994826718L;
 
-    /** Dimension of the data. */
+    /**
+     * Dimension of the data.
+     */
     private int k;
 
-    /** Count of values that have been added */
+    /**
+     * Count of values that have been added
+     */
     private long n = 0;
 
-    /** Sum statistic implementation - can be reset by setter. */
+    /**
+     * Sum statistic implementation - can be reset by setter.
+     */
     private StorelessUnivariateStatistic[] sumImpl;
 
-    /** Sum of squares statistic implementation - can be reset by setter. */
+    /**
+     * Sum of squares statistic implementation - can be reset by setter.
+     */
     private StorelessUnivariateStatistic[] sumSqImpl;
 
-    /** Minimum statistic implementation - can be reset by setter. */
+    /**
+     * Minimum statistic implementation - can be reset by setter.
+     */
     private StorelessUnivariateStatistic[] minImpl;
 
-    /** Maximum statistic implementation - can be reset by setter. */
+    /**
+     * Maximum statistic implementation - can be reset by setter.
+     */
     private StorelessUnivariateStatistic[] maxImpl;
 
-    /** Sum of log statistic implementation - can be reset by setter. */
+    /**
+     * Sum of log statistic implementation - can be reset by setter.
+     */
     private StorelessUnivariateStatistic[] sumLogImpl;
 
-    /** Geometric mean statistic implementation - can be reset by setter. */
+    /**
+     * Geometric mean statistic implementation - can be reset by setter.
+     */
     private StorelessUnivariateStatistic[] geoMeanImpl;
 
-    /** Mean statistic implementation - can be reset by setter. */
+    /**
+     * Mean statistic implementation - can be reset by setter.
+     */
     private StorelessUnivariateStatistic[] meanImpl;
 
-    /** Covariance statistic implementation - cannot be reset. */
+    /**
+     * Covariance statistic implementation - cannot be reset.
+     */
     private VectorialCovariance covarianceImpl;
 
     /**
      * Construct a MultivariateSummaryStatistics instance
-     * @param k dimension of the data
+     *
+     * @param k                         dimension of the data
      * @param isCovarianceBiasCorrected if true, the unbiased sample
-     * covariance is computed, otherwise the biased population covariance
-     * is computed
+     *                                  covariance is computed, otherwise the biased population covariance
+     *                                  is computed
      */
     public MultivariateSummaryStatistics(int k, boolean isCovarianceBiasCorrected) {
         this.k = k;
 
-        sumImpl     = new StorelessUnivariateStatistic[k];
-        sumSqImpl   = new StorelessUnivariateStatistic[k];
-        minImpl     = new StorelessUnivariateStatistic[k];
-        maxImpl     = new StorelessUnivariateStatistic[k];
-        sumLogImpl  = new StorelessUnivariateStatistic[k];
+        sumImpl = new StorelessUnivariateStatistic[k];
+        sumSqImpl = new StorelessUnivariateStatistic[k];
+        minImpl = new StorelessUnivariateStatistic[k];
+        maxImpl = new StorelessUnivariateStatistic[k];
+        sumLogImpl = new StorelessUnivariateStatistic[k];
         geoMeanImpl = new StorelessUnivariateStatistic[k];
-        meanImpl    = new StorelessUnivariateStatistic[k];
+        meanImpl = new StorelessUnivariateStatistic[k];
 
         for (int i = 0; i < k; ++i) {
-            sumImpl[i]     = new Sum();
-            sumSqImpl[i]   = new SumOfSquares();
-            minImpl[i]     = new Min();
-            maxImpl[i]     = new Max();
-            sumLogImpl[i]  = new SumOfLogs();
+            sumImpl[i] = new Sum();
+            sumSqImpl[i] = new SumOfSquares();
+            minImpl[i] = new Min();
+            maxImpl[i] = new Max();
+            sumLogImpl[i] = new SumOfLogs();
             geoMeanImpl[i] = new GeometricMean();
-            meanImpl[i]    = new Mean();
+            meanImpl[i] = new Mean();
         }
 
         covarianceImpl =
-            new VectorialCovariance(k, isCovarianceBiasCorrected);
+                new VectorialCovariance(k, isCovarianceBiasCorrected);
 
     }
 
     /**
      * Add an n-tuple to the data
      *
-     * @param value  the n-tuple to add
+     * @param value the n-tuple to add
      * @throws DimensionMismatchException if the length of the array
-     * does not match the one used at construction
+     *                                    does not match the one used at construction
      */
     public void addValue(double[] value) throws DimensionMismatchException {
         checkDimension(value.length);
@@ -162,6 +185,7 @@ public class MultivariateSummaryStatistics
 
     /**
      * Returns the dimension of the data
+     *
      * @return The dimension of the data
      */
     public int getDimension() {
@@ -170,6 +194,7 @@ public class MultivariateSummaryStatistics
 
     /**
      * Returns the number of available values
+     *
      * @return The number of available values
      */
     public long getN() {
@@ -178,6 +203,7 @@ public class MultivariateSummaryStatistics
 
     /**
      * Returns an array of the results of a statistic.
+     *
      * @param stats univariate statistic array
      * @return results array
      */
@@ -301,6 +327,7 @@ public class MultivariateSummaryStatistics
      * Generates a text report displaying
      * summary statistics from values that
      * have been added.
+     *
      * @return String with line feeds displaying statistics
      */
     @Override
@@ -323,11 +350,12 @@ public class MultivariateSummaryStatistics
 
     /**
      * Append a text representation of an array to a buffer.
-     * @param buffer buffer to fill
-     * @param data data array
-     * @param prefix text prefix
+     *
+     * @param buffer    buffer to fill
+     * @param data      data array
+     * @param prefix    text prefix
      * @param separator elements separator
-     * @param suffix text suffix
+     * @param suffix    text suffix
      */
     private void append(StringBuilder buffer, double[] data,
                         String prefix, String separator, String suffix) {
@@ -361,12 +389,13 @@ public class MultivariateSummaryStatistics
     /**
      * Returns true iff <code>object</code> is a <code>MultivariateSummaryStatistics</code>
      * instance and all statistics have the same values as this.
+     *
      * @param object the object to test equality against.
      * @return true if object equals this
      */
     @Override
     public boolean equals(Object object) {
-        if (object == this ) {
+        if (object == this) {
             return true;
         }
         if (object instanceof MultivariateSummaryStatistics == false) {
@@ -374,14 +403,14 @@ public class MultivariateSummaryStatistics
         }
         MultivariateSummaryStatistics stat = (MultivariateSummaryStatistics) object;
         return MathArrays.equalsIncludingNaN(stat.getGeometricMean(), getGeometricMean()) &&
-               MathArrays.equalsIncludingNaN(stat.getMax(),           getMax())           &&
-               MathArrays.equalsIncludingNaN(stat.getMean(),          getMean())          &&
-               MathArrays.equalsIncludingNaN(stat.getMin(),           getMin())           &&
-               Precision.equalsIncludingNaN(stat.getN(),             getN())             &&
-               MathArrays.equalsIncludingNaN(stat.getSum(),           getSum())           &&
-               MathArrays.equalsIncludingNaN(stat.getSumSq(),         getSumSq())         &&
-               MathArrays.equalsIncludingNaN(stat.getSumLog(),        getSumLog())        &&
-               stat.getCovariance().equals( getCovariance());
+                MathArrays.equalsIncludingNaN(stat.getMax(), getMax()) &&
+                MathArrays.equalsIncludingNaN(stat.getMean(), getMean()) &&
+                MathArrays.equalsIncludingNaN(stat.getMin(), getMin()) &&
+                Precision.equalsIncludingNaN(stat.getN(), getN()) &&
+                MathArrays.equalsIncludingNaN(stat.getSum(), getSum()) &&
+                MathArrays.equalsIncludingNaN(stat.getSumSq(), getSumSq()) &&
+                MathArrays.equalsIncludingNaN(stat.getSumLog(), getSumLog()) &&
+                stat.getCovariance().equals(getCovariance());
     }
 
     /**
@@ -405,18 +434,20 @@ public class MultivariateSummaryStatistics
     }
 
     // Getters and setters for statistics implementations
+
     /**
      * Sets statistics implementations.
+     *
      * @param newImpl new implementations for statistics
      * @param oldImpl old implementations for statistics
      * @throws DimensionMismatchException if the array dimension
-     * does not match the one used at construction
-     * @throws MathIllegalStateException if data has already been added
-     * (i.e. if n > 0)
+     *                                    does not match the one used at construction
+     * @throws MathIllegalStateException  if data has already been added
+     *                                    (i.e. if n > 0)
      */
     private void setImpl(StorelessUnivariateStatistic[] newImpl,
                          StorelessUnivariateStatistic[] oldImpl) throws MathIllegalStateException,
-                         DimensionMismatchException {
+            DimensionMismatchException {
         checkEmpty();
         checkDimension(newImpl.length);
         System.arraycopy(newImpl, 0, oldImpl, 0, newImpl.length);
@@ -438,14 +469,14 @@ public class MultivariateSummaryStatistics
      * otherwise an IllegalStateException will be thrown.</p>
      *
      * @param sumImpl the StorelessUnivariateStatistic instance to use
-     * for computing the Sum
+     *                for computing the Sum
      * @throws DimensionMismatchException if the array dimension
-     * does not match the one used at construction
-     * @throws MathIllegalStateException if data has already been added
-     *  (i.e if n > 0)
+     *                                    does not match the one used at construction
+     * @throws MathIllegalStateException  if data has already been added
+     *                                    (i.e if n > 0)
      */
     public void setSumImpl(StorelessUnivariateStatistic[] sumImpl)
-    throws MathIllegalStateException, DimensionMismatchException {
+            throws MathIllegalStateException, DimensionMismatchException {
         setImpl(sumImpl, this.sumImpl);
     }
 
@@ -465,14 +496,14 @@ public class MultivariateSummaryStatistics
      * otherwise an IllegalStateException will be thrown.</p>
      *
      * @param sumsqImpl the StorelessUnivariateStatistic instance to use
-     * for computing the sum of squares
+     *                  for computing the sum of squares
      * @throws DimensionMismatchException if the array dimension
-     * does not match the one used at construction
-     * @throws MathIllegalStateException if data has already been added
-     *  (i.e if n > 0)
+     *                                    does not match the one used at construction
+     * @throws MathIllegalStateException  if data has already been added
+     *                                    (i.e if n > 0)
      */
     public void setSumsqImpl(StorelessUnivariateStatistic[] sumsqImpl)
-    throws MathIllegalStateException, DimensionMismatchException {
+            throws MathIllegalStateException, DimensionMismatchException {
         setImpl(sumsqImpl, this.sumSqImpl);
     }
 
@@ -492,14 +523,14 @@ public class MultivariateSummaryStatistics
      * otherwise an IllegalStateException will be thrown.</p>
      *
      * @param minImpl the StorelessUnivariateStatistic instance to use
-     * for computing the minimum
+     *                for computing the minimum
      * @throws DimensionMismatchException if the array dimension
-     * does not match the one used at construction
-     * @throws MathIllegalStateException if data has already been added
-     *  (i.e if n > 0)
+     *                                    does not match the one used at construction
+     * @throws MathIllegalStateException  if data has already been added
+     *                                    (i.e if n > 0)
      */
     public void setMinImpl(StorelessUnivariateStatistic[] minImpl)
-    throws MathIllegalStateException, DimensionMismatchException {
+            throws MathIllegalStateException, DimensionMismatchException {
         setImpl(minImpl, this.minImpl);
     }
 
@@ -519,14 +550,14 @@ public class MultivariateSummaryStatistics
      * otherwise an IllegalStateException will be thrown.</p>
      *
      * @param maxImpl the StorelessUnivariateStatistic instance to use
-     * for computing the maximum
+     *                for computing the maximum
      * @throws DimensionMismatchException if the array dimension
-     * does not match the one used at construction
-     * @throws MathIllegalStateException if data has already been added
-     *  (i.e if n > 0)
+     *                                    does not match the one used at construction
+     * @throws MathIllegalStateException  if data has already been added
+     *                                    (i.e if n > 0)
      */
     public void setMaxImpl(StorelessUnivariateStatistic[] maxImpl)
-    throws MathIllegalStateException, DimensionMismatchException{
+            throws MathIllegalStateException, DimensionMismatchException {
         setImpl(maxImpl, this.maxImpl);
     }
 
@@ -546,14 +577,14 @@ public class MultivariateSummaryStatistics
      * otherwise an IllegalStateException will be thrown.</p>
      *
      * @param sumLogImpl the StorelessUnivariateStatistic instance to use
-     * for computing the log sum
+     *                   for computing the log sum
      * @throws DimensionMismatchException if the array dimension
-     * does not match the one used at construction
-     * @throws MathIllegalStateException if data has already been added
-     *  (i.e if n > 0)
+     *                                    does not match the one used at construction
+     * @throws MathIllegalStateException  if data has already been added
+     *                                    (i.e if n > 0)
      */
     public void setSumLogImpl(StorelessUnivariateStatistic[] sumLogImpl)
-    throws MathIllegalStateException, DimensionMismatchException{
+            throws MathIllegalStateException, DimensionMismatchException {
         setImpl(sumLogImpl, this.sumLogImpl);
     }
 
@@ -573,14 +604,14 @@ public class MultivariateSummaryStatistics
      * otherwise an IllegalStateException will be thrown.</p>
      *
      * @param geoMeanImpl the StorelessUnivariateStatistic instance to use
-     * for computing the geometric mean
+     *                    for computing the geometric mean
      * @throws DimensionMismatchException if the array dimension
-     * does not match the one used at construction
-     * @throws MathIllegalStateException if data has already been added
-     *  (i.e if n > 0)
+     *                                    does not match the one used at construction
+     * @throws MathIllegalStateException  if data has already been added
+     *                                    (i.e if n > 0)
      */
     public void setGeoMeanImpl(StorelessUnivariateStatistic[] geoMeanImpl)
-    throws MathIllegalStateException, DimensionMismatchException {
+            throws MathIllegalStateException, DimensionMismatchException {
         setImpl(geoMeanImpl, this.geoMeanImpl);
     }
 
@@ -600,19 +631,20 @@ public class MultivariateSummaryStatistics
      * otherwise an IllegalStateException will be thrown.</p>
      *
      * @param meanImpl the StorelessUnivariateStatistic instance to use
-     * for computing the mean
+     *                 for computing the mean
      * @throws DimensionMismatchException if the array dimension
-     * does not match the one used at construction
-     * @throws MathIllegalStateException if data has already been added
-     *  (i.e if n > 0)
+     *                                    does not match the one used at construction
+     * @throws MathIllegalStateException  if data has already been added
+     *                                    (i.e if n > 0)
      */
     public void setMeanImpl(StorelessUnivariateStatistic[] meanImpl)
-    throws MathIllegalStateException, DimensionMismatchException{
+            throws MathIllegalStateException, DimensionMismatchException {
         setImpl(meanImpl, this.meanImpl);
     }
 
     /**
      * Throws MathIllegalStateException if the statistic is not empty.
+     *
      * @throws MathIllegalStateException if n > 0.
      */
     private void checkEmpty() throws MathIllegalStateException {
@@ -624,6 +656,7 @@ public class MultivariateSummaryStatistics
 
     /**
      * Throws DimensionMismatchException if dimension != k.
+     *
      * @param dimension dimension to check
      * @throws DimensionMismatchException if dimension != k
      */

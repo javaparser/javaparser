@@ -23,45 +23,58 @@ import org.apache.commons.math3.util.Precision;
 import java.io.Serializable;
 
 /**
- *  Value object representing the results of a univariate statistical summary.
- *
+ * Value object representing the results of a univariate statistical summary.
  */
 public class StatisticalSummaryValues implements Serializable,
-    StatisticalSummary {
+        StatisticalSummary {
 
-    /** Serialization id */
+    /**
+     * Serialization id
+     */
     private static final long serialVersionUID = -5108854841843722536L;
 
-    /** The sample mean */
+    /**
+     * The sample mean
+     */
     private final double mean;
 
-    /** The sample variance */
+    /**
+     * The sample variance
+     */
     private final double variance;
 
-    /** The number of observations in the sample */
+    /**
+     * The number of observations in the sample
+     */
     private final long n;
 
-    /** The maximum value */
+    /**
+     * The maximum value
+     */
     private final double max;
 
-    /** The minimum value */
+    /**
+     * The minimum value
+     */
     private final double min;
 
-    /** The sum of the sample values */
+    /**
+     * The sum of the sample values
+     */
     private final double sum;
 
     /**
-      * Constructor
-      *
-      * @param mean  the sample mean
-      * @param variance  the sample variance
-      * @param n  the number of observations in the sample
-      * @param max  the maximum value
-      * @param min  the minimum value
-      * @param sum  the sum of the values
+     * Constructor
+     *
+     * @param mean     the sample mean
+     * @param variance the sample variance
+     * @param n        the number of observations in the sample
+     * @param max      the maximum value
+     * @param min      the minimum value
+     * @param sum      the sum of the values
      */
     public StatisticalSummaryValues(double mean, double variance, long n,
-        double max, double min, double sum) {
+                                    double max, double min, double sum) {
         super();
         this.mean = mean;
         this.variance = variance;
@@ -123,26 +136,26 @@ public class StatisticalSummaryValues implements Serializable,
     /**
      * Returns true iff <code>object</code> is a
      * <code>StatisticalSummaryValues</code> instance and all statistics have
-     *  the same values as this.
+     * the same values as this.
      *
      * @param object the object to test equality against.
      * @return true if object equals this
      */
     @Override
     public boolean equals(Object object) {
-        if (object == this ) {
+        if (object == this) {
             return true;
         }
         if (object instanceof StatisticalSummaryValues == false) {
             return false;
         }
         StatisticalSummaryValues stat = (StatisticalSummaryValues) object;
-        return Precision.equalsIncludingNaN(stat.getMax(),      getMax())  &&
-               Precision.equalsIncludingNaN(stat.getMean(),     getMean()) &&
-               Precision.equalsIncludingNaN(stat.getMin(),      getMin())  &&
-               Precision.equalsIncludingNaN(stat.getN(),        getN())    &&
-               Precision.equalsIncludingNaN(stat.getSum(),      getSum())  &&
-               Precision.equalsIncludingNaN(stat.getVariance(), getVariance());
+        return Precision.equalsIncludingNaN(stat.getMax(), getMax()) &&
+                Precision.equalsIncludingNaN(stat.getMean(), getMean()) &&
+                Precision.equalsIncludingNaN(stat.getMin(), getMin()) &&
+                Precision.equalsIncludingNaN(stat.getN(), getN()) &&
+                Precision.equalsIncludingNaN(stat.getSum(), getSum()) &&
+                Precision.equalsIncludingNaN(stat.getVariance(), getVariance());
     }
 
     /**
@@ -177,7 +190,7 @@ public class StatisticalSummaryValues implements Serializable,
         outBuffer.append("max: ").append(getMax()).append(endl);
         outBuffer.append("mean: ").append(getMean()).append(endl);
         outBuffer.append("std dev: ").append(getStandardDeviation())
-            .append(endl);
+                .append(endl);
         outBuffer.append("variance: ").append(getVariance()).append(endl);
         outBuffer.append("sum: ").append(getSum()).append(endl);
         return outBuffer.toString();

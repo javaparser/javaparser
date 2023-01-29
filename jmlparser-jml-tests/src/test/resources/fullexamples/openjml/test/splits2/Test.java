@@ -7,12 +7,12 @@ public class Test {
         //@ loop_invariant \index == k-i;
         //@ split
         while (i > 0) {
-            i --;
+            i--;
         }
         //@ assert i == 0;
     }
-    
-    
+
+
     public void wh(int i) {
         //@ split
         if (i < 0) {
@@ -26,19 +26,19 @@ public class Test {
             --j;
             //@ loop_invariant 0 <= k <= 10;
             //@ split
-            for (int k=0; k<10; k++) {
+            for (int k = 0; k < 10; k++) {
                 //@ assert k < 0; // FAILS - BAA
             }
-            
-            int[] a = {1,2,3};
+
+            int[] a = {1, 2, 3};
             //@ split
-            for (int k: a) {
+            for (int k : a) {
                 //@ assert i < 1; // FAILS - BABA
             }
-            
+
             //@ assert i < 2; // FAILS - BABB
         }
-        
+
         //@ loop_invariant 0 <= j <= 10;
         //@ split
         while (j < 10) {
@@ -60,19 +60,19 @@ public class Test {
         }
         //@ assert j == k;
     }
-    
+
     public void enfor(int[] k) {
         int j = 0;
         //@ loop_invariant j == \count;
         //@ loop_invariant 0 <= \count <= k.length;
         //@ loop_writes j;
         //@ split
-        for (int i: k) {
+        for (int i : k) {
             j++;
         }
         //@ show j, k.length;
         //@ assert j == k.length;
     }
-    
+
 
 }

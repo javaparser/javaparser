@@ -45,14 +45,16 @@ public class FixedSizeList<E>
         extends AbstractSerializableListDecorator<E>
         implements BoundedCollection<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -2218010673611160319L;
 
     /**
      * Factory method to create a fixed size list.
      *
-     * @param <E> the type of the elements in the list
-     * @param list  the list to decorate, must not be null
+     * @param <E>  the type of the elements in the list
+     * @param list the list to decorate, must not be null
      * @return a new fixed size list
      * @throws NullPointerException if list is null
      * @since 4.0
@@ -62,10 +64,11 @@ public class FixedSizeList<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param list  the list to decorate, must not be null
+     * @param list the list to decorate, must not be null
      * @throws NullPointerException if list is null
      */
     protected FixedSizeList(final List<E> list) {
@@ -166,10 +169,12 @@ public class FixedSizeList<E>
         protected FixedSizeListIterator(final ListIterator<E> iterator) {
             super(iterator);
         }
+
         @Override
         public void remove() {
             throw unsupportedOperationException();
         }
+
         @Override
         public void add(final Object object) {
             throw unsupportedOperationException();

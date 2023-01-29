@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.Node;
@@ -53,7 +52,6 @@ public interface Context {
      */
     Optional<Context> getParent();
 
-
     /* Type resolution */
 
     /**
@@ -74,7 +72,6 @@ public interface Context {
         if (!optionalParentContext.isPresent()) {
             return Optional.empty();
         }
-
         // Delegate solving to the parent context.
         return optionalParentContext.get().solveGenericType(name);
     }
@@ -86,10 +83,9 @@ public interface Context {
      *
      * @param name For example, solving {@code List} or {@code java.util.List}.
      * @return The declaration associated with the given type name.
-     *
      * @deprecated Consider using method {@link #solveType(String, List)} that also consider the type arguments.
-     *             If you want to keep to use the new function, but keep the same behavior consider passing type
-     *             arguments as {@code null}.
+     * If you want to keep to use the new function, but keep the same behavior consider passing type
+     * arguments as {@code null}.
      */
     @Deprecated
     default SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
@@ -111,7 +107,6 @@ public interface Context {
      *
      * @param name          The name to be solved.
      * @param typeArguments The list of expected type arguments.
-     *
      * @return The declaration associated with the given type name.
      */
     default SymbolReference<ResolvedTypeDeclaration> solveType(String name, @Nullable List<ResolvedType> typeArguments) {
@@ -123,12 +118,10 @@ public interface Context {
      * Solve a name in the parent context.
      *
      * @param name The name to be solved.
-     *
      * @return The declaration associated with the given type name.
-     *
      * @deprecated Consider using method {@link #solveTypeInParentContext(String, List)} that also consider the type arguments.
-     *             If you want to keep to use the new function, but keep the same behavior consider passing type
-     *             arguments as {@code null}.
+     * If you want to keep to use the new function, but keep the same behavior consider passing type
+     * arguments as {@code null}.
      */
     @Deprecated
     default SymbolReference<ResolvedTypeDeclaration> solveTypeInParentContext(String name) {
@@ -140,7 +133,6 @@ public interface Context {
      *
      * @param name          The name to be solved.
      * @param typeArguments The list of expected type arguments.
-     *
      * @return The declaration associated with the given type name.
      */
     default SymbolReference<ResolvedTypeDeclaration> solveTypeInParentContext(String name, @Nullable List<ResolvedType> typeArguments) {
@@ -148,7 +140,6 @@ public interface Context {
         if (!optionalParentContext.isPresent()) {
             return SymbolReference.unsolved();
         }
-
         // Delegate solving to the parent context.
         return optionalParentContext.get().solveType(name, typeArguments);
     }
@@ -157,6 +148,7 @@ public interface Context {
 
     /**
      * Used where a symbol is being used (e.g. solving {@code x} when used as an argument {@code doubleThis(x)}, or calculation {@code return x * 2;}).
+     *
      * @param name the variable / reference / identifier used.
      * @return // FIXME: Better documentation on how this is different to solveSymbolAsValue()
      */
@@ -170,13 +162,13 @@ public interface Context {
         if (!optionalParentContext.isPresent()) {
             return SymbolReference.unsolved();
         }
-
         // Delegate solving to the parent context.
         return optionalParentContext.get().solveSymbol(name);
     }
 
     /**
      * Used where a symbol is being used (e.g. solving {@code x} when used as an argument {@code doubleThis(x)}, or calculation {@code return x * 2;}).
+     *
      * @param name the variable / reference / identifier used.
      * @return // FIXME: Better documentation on how this is different to solveSymbol()
      */
@@ -185,7 +177,6 @@ public interface Context {
         if (!ref.isSolved()) {
             return Optional.empty();
         }
-
         return Optional.of(Value.from(ref.getCorrespondingDeclaration()));
     }
 
@@ -194,10 +185,8 @@ public interface Context {
         if (!ref.isSolved()) {
             return Optional.empty();
         }
-
         return Optional.of(Value.from(ref.getCorrespondingDeclaration()));
     }
-
 
     /**
      * The fields that are declared and in this immediate context made visible to a given child.
@@ -232,12 +221,14 @@ public interface Context {
     }
 
     /**
+     *
      */
     default List<PatternExpr> patternExprsExposedFromChildren() {
         return Collections.emptyList();
     }
 
     /**
+     *
      */
     default List<PatternExpr> negatedPatternExprsExposedFromChildren() {
         return Collections.emptyList();
@@ -274,21 +265,13 @@ public interface Context {
         if (!getParent().isPresent()) {
             return Optional.empty();
         }
-
         // First check if the variable is directly declared within this context.
         Node wrappedNode = getWrappedNode();
         Context parentContext = getParent().get();
-        Optional<VariableDeclarator> localResolutionResults = parentContext
-                .localVariablesExposedToChild(wrappedNode)
-                .stream()
-                .filter(vd -> vd.getNameAsString().equals(name))
-                .findFirst();
-
+        Optional<VariableDeclarator> localResolutionResults = parentContext.localVariablesExposedToChild(wrappedNode).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
         if (localResolutionResults.isPresent()) {
             return localResolutionResults;
         }
-
-
         // If we don't find the variable locally, escalate up the scope hierarchy to see if it is declared there.
         return parentContext.localVariableDeclarationInScope(name);
     }
@@ -297,24 +280,16 @@ public interface Context {
         if (!getParent().isPresent()) {
             return Optional.empty();
         }
-
         // First check if the parameter is directly declared within this context.
         Node wrappedNode = getWrappedNode();
         Context parentContext = getParent().get();
-        Optional<Parameter> localResolutionResults = parentContext
-                .parametersExposedToChild(wrappedNode)
-                .stream()
-                .filter(vd -> vd.getNameAsString().equals(name))
-                .findFirst();
-
+        Optional<Parameter> localResolutionResults = parentContext.parametersExposedToChild(wrappedNode).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
         if (localResolutionResults.isPresent()) {
             return localResolutionResults;
         }
-
         // If we don't find the parameter locally, escalate up the scope hierarchy to see if it is declared there.
         return parentContext.parameterDeclarationInScope(name);
     }
-
 
     /**
      * With respect to solving, the AST "parent" of a block statement is not necessarily the same as the scope parent.
@@ -340,22 +315,14 @@ public interface Context {
             return Optional.empty();
         }
         Context parentContext = getParent().get();
-
         // FIXME: "scroll backwards" from the wrapped node
         // FIXME: If there are multiple patterns, throw an error?
-
         // First check if the pattern is directly declared within this context.
         Node wrappedNode = getWrappedNode();
-        Optional<PatternExpr> localResolutionResults = parentContext
-                .patternExprsExposedToChild(wrappedNode)
-                .stream()
-                .filter(vd -> vd.getNameAsString().equals(name))
-                .findFirst();
-
+        Optional<PatternExpr> localResolutionResults = parentContext.patternExprsExposedToChild(wrappedNode).stream().filter(vd -> vd.getNameAsString().equals(name)).findFirst();
         if (localResolutionResults.isPresent()) {
             return localResolutionResults;
         }
-
         // If we don't find the parameter locally, escalate up the scope hierarchy to see if it is declared there.
         return parentContext.patternExprInScope(name);
     }
@@ -367,20 +334,13 @@ public interface Context {
         Context parentContext = getParent().get();
         // First check if the parameter is directly declared within this context.
         Node wrappedNode = getWrappedNode();
-        Optional<ResolvedFieldDeclaration> localResolutionResults = parentContext
-                .fieldsExposedToChild(wrappedNode)
-                .stream()
-                .filter(vd -> vd.getName().equals(name))
-                .findFirst();
-
+        Optional<ResolvedFieldDeclaration> localResolutionResults = parentContext.fieldsExposedToChild(wrappedNode).stream().filter(vd -> vd.getName().equals(name)).findFirst();
         if (localResolutionResults.isPresent()) {
             return localResolutionResults;
         }
-
         // If we don't find the field locally, escalate up the scope hierarchy to see if it is declared there.
         return parentContext.fieldDeclarationInScope(name);
     }
-
 
     /* Constructor resolution */
 
@@ -406,7 +366,6 @@ public interface Context {
         if (!optionalParentContext.isPresent()) {
             return SymbolReference.unsolved();
         }
-
         // Delegate solving to the parent context.
         return optionalParentContext.get().solveMethod(name, argumentsTypes, staticOnly);
     }
@@ -416,5 +375,4 @@ public interface Context {
      * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
      */
     Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes);
-
 }

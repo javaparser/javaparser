@@ -94,17 +94,17 @@ class JavassistEnumDeclarationTest extends AbstractSymbolResolutionTest {
     void testAsClass() {
         assertThrows(UnsupportedOperationException.class, () -> {
             ResolvedEnumDeclaration modifier = (ResolvedEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        modifier.asClass();
-    });
-}
+            modifier.asClass();
+        });
+    }
 
     @Test
     void testAsInterface() {
         assertThrows(UnsupportedOperationException.class, () -> {
             ResolvedEnumDeclaration modifier = (ResolvedEnumDeclaration) typeSolver.solveType("com.github.javaparser.ast.Modifier");
-        modifier.asInterface();
-    });
-}
+            modifier.asInterface();
+        });
+    }
 
     @Test
     void testAsEnum() {
@@ -131,13 +131,13 @@ class JavassistEnumDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
-    void testHasDirectlyAnnotation(){
+    void testHasDirectlyAnnotation() {
         ResolvedEnumDeclaration compilationUnit = (ResolvedEnumDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestEnum");
         assertTrue(compilationUnit.hasDirectlyAnnotation("com.github.javaparser.test.TestAnnotation"));
     }
 
     @Test
-    void testHasAnnotation(){
+    void testHasAnnotation() {
         ResolvedEnumDeclaration compilationUnit = (ResolvedEnumDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestParentEnum");
         assertTrue(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
     }

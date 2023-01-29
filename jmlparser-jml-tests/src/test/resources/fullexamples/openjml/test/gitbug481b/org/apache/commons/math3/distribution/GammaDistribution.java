@@ -32,14 +32,21 @@ import org.apache.commons.math3.util.FastMath;
 public class GammaDistribution extends AbstractRealDistribution {
     /**
      * Default inverse cumulative probability accuracy.
+     *
      * @since 2.1
      */
     public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20120524L;
-    /** The shape parameter. */
+    /**
+     * The shape parameter.
+     */
     private final double shape;
-    /** The scale parameter. */
+    /**
+     * The scale parameter.
+     */
     private final double scale;
     /**
      * The constant value of {@code shape + g + 0.5}, where {@code g} is the
@@ -94,7 +101,9 @@ public class GammaDistribution extends AbstractRealDistribution {
      * {@code log(y) >= maxLogY}, the natural calculation overflows.
      */
     private final double maxLogY;
-    /** Inverse cumulative probability accuracy. */
+    /**
+     * Inverse cumulative probability accuracy.
+     */
     private final double solverAbsoluteAccuracy;
 
     /**
@@ -111,7 +120,7 @@ public class GammaDistribution extends AbstractRealDistribution {
      * @param shape the shape parameter
      * @param scale the scale parameter
      * @throws NotStrictlyPositiveException if {@code shape <= 0} or
-     * {@code scale <= 0}.
+     *                                      {@code scale <= 0}.
      */
     public GammaDistribution(double shape, double scale) throws NotStrictlyPositiveException {
         this(shape, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
@@ -128,53 +137,53 @@ public class GammaDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param shape the shape parameter
-     * @param scale the scale parameter
+     * @param shape              the shape parameter
+     * @param scale              the scale parameter
      * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates (defaults to
+     *                           {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NotStrictlyPositiveException if {@code shape <= 0} or
-     * {@code scale <= 0}.
+     *                                      {@code scale <= 0}.
      * @since 2.1
      */
     public GammaDistribution(double shape, double scale, double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(new Well19937c(), shape, scale, inverseCumAccuracy);
     }
 
     /**
      * Creates a Gamma distribution.
      *
-     * @param rng Random number generator.
+     * @param rng   Random number generator.
      * @param shape the shape parameter
      * @param scale the scale parameter
      * @throws NotStrictlyPositiveException if {@code shape <= 0} or
-     * {@code scale <= 0}.
+     *                                      {@code scale <= 0}.
      * @since 3.3
      */
     public GammaDistribution(RandomGenerator rng, double shape, double scale)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(rng, shape, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
     /**
      * Creates a Gamma distribution.
      *
-     * @param rng Random number generator.
-     * @param shape the shape parameter
-     * @param scale the scale parameter
+     * @param rng                Random number generator.
+     * @param shape              the shape parameter
+     * @param scale              the scale parameter
      * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates (defaults to
+     *                           {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NotStrictlyPositiveException if {@code shape <= 0} or
-     * {@code scale <= 0}.
+     *                                      {@code scale <= 0}.
      * @since 3.1
      */
     public GammaDistribution(RandomGenerator rng,
                              double shape,
                              double scale,
                              double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         super(rng);
 
         if (shape <= 0) {
@@ -191,7 +200,7 @@ public class GammaDistribution extends AbstractRealDistribution {
         final double aux = FastMath.E / (2.0 * FastMath.PI * shiftedShape);
         this.densityPrefactor2 = shape * FastMath.sqrt(aux) / Gamma.lanczos(shape);
         this.logDensityPrefactor2 = FastMath.log(shape) + 0.5 * FastMath.log(aux) -
-                                    FastMath.log(Gamma.lanczos(shape));
+                FastMath.log(Gamma.lanczos(shape));
         this.densityPrefactor1 = this.densityPrefactor2 / scale *
                 FastMath.pow(shiftedShape, -shape) *
                 FastMath.exp(shape + Gamma.LANCZOS_G);
@@ -246,46 +255,48 @@ public class GammaDistribution extends AbstractRealDistribution {
         return scale;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
-       /* The present method must return the value of
-        *
-        *     1       x a     - x
-        * ---------- (-)  exp(---)
-        * x Gamma(a)  b        b
-        *
-        * where a is the shape parameter, and b the scale parameter.
-        * Substituting the Lanczos approximation of Gamma(a) leads to the
-        * following expression of the density
-        *
-        * a              e            1         y      a
-        * - sqrt(------------------) ---- (-----------)  exp(a - y + g),
-        * x      2 pi (a + g + 0.5)  L(a)  a + g + 0.5
-        *
-        * where y = x / b. The above formula is the "natural" computation, which
-        * is implemented when no overflow is likely to occur. If overflow occurs
-        * with the natural computation, the following identity is used. It is
-        * based on the BOOST library
-        * http://www.boost.org/doc/libs/1_35_0/libs/math/doc/sf_and_dist/html/math_toolkit/special/sf_gamma/igamma.html
-        * Formula (15) needs adaptations, which are detailed below.
-        *
-        *       y      a
-        * (-----------)  exp(a - y + g)
-        *  a + g + 0.5
-        *                              y - a - g - 0.5    y (g + 0.5)
-        *               = exp(a log1pm(---------------) - ----------- + g),
-        *                                a + g + 0.5      a + g + 0.5
-        *
-        *  where log1pm(z) = log(1 + z) - z. Therefore, the value to be
-        *  returned is
-        *
-        * a              e            1
-        * - sqrt(------------------) ----
-        * x      2 pi (a + g + 0.5)  L(a)
-        *                              y - a - g - 0.5    y (g + 0.5)
-        *               * exp(a log1pm(---------------) - ----------- + g).
-        *                                a + g + 0.5      a + g + 0.5
-        */
+        /* The present method must return the value of
+         *
+         *     1       x a     - x
+         * ---------- (-)  exp(---)
+         * x Gamma(a)  b        b
+         *
+         * where a is the shape parameter, and b the scale parameter.
+         * Substituting the Lanczos approximation of Gamma(a) leads to the
+         * following expression of the density
+         *
+         * a              e            1         y      a
+         * - sqrt(------------------) ---- (-----------)  exp(a - y + g),
+         * x      2 pi (a + g + 0.5)  L(a)  a + g + 0.5
+         *
+         * where y = x / b. The above formula is the "natural" computation, which
+         * is implemented when no overflow is likely to occur. If overflow occurs
+         * with the natural computation, the following identity is used. It is
+         * based on the BOOST library
+         * http://www.boost.org/doc/libs/1_35_0/libs/math/doc/sf_and_dist/html/math_toolkit/special/sf_gamma/igamma.html
+         * Formula (15) needs adaptations, which are detailed below.
+         *
+         *       y      a
+         * (-----------)  exp(a - y + g)
+         *  a + g + 0.5
+         *                              y - a - g - 0.5    y (g + 0.5)
+         *               = exp(a log1pm(---------------) - ----------- + g),
+         *                                a + g + 0.5      a + g + 0.5
+         *
+         *  where log1pm(z) = log(1 + z) - z. Therefore, the value to be
+         *  returned is
+         *
+         * a              e            1
+         * - sqrt(------------------) ----
+         * x      2 pi (a + g + 0.5)  L(a)
+         *                              y - a - g - 0.5    y (g + 0.5)
+         *               * exp(a log1pm(---------------) - ----------- + g).
+         *                                a + g + 0.5      a + g + 0.5
+         */
         if (x < 0) {
             return 0;
         }
@@ -306,7 +317,9 @@ public class GammaDistribution extends AbstractRealDistribution {
         return densityPrefactor1 * FastMath.exp(-y) * FastMath.pow(y, shape - 1);
     }
 
-    /** {@inheritDoc} **/
+    /**
+     * {@inheritDoc}
+     **/
     @Override
     public double logDensity(double x) {
         /*
@@ -334,7 +347,7 @@ public class GammaDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The implementation of this method is based on:
      * <ul>
      *  <li>
@@ -358,7 +371,9 @@ public class GammaDistribution extends AbstractRealDistribution {
         return ret;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected double getSolverAbsoluteAccuracy() {
         return solverAbsoluteAccuracy;
@@ -366,7 +381,7 @@ public class GammaDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For shape parameter {@code alpha} and scale parameter {@code beta}, the
      * mean is {@code alpha * beta}.
      */
@@ -376,7 +391,7 @@ public class GammaDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For shape parameter {@code alpha} and scale parameter {@code beta}, the
      * variance is {@code alpha * beta^2}.
      *
@@ -388,7 +403,7 @@ public class GammaDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always 0 no matter the parameters.
      *
      * @return lower bound of the support (always 0)
@@ -399,7 +414,7 @@ public class GammaDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is always positive infinity
      * no matter the parameters.
      *
@@ -409,19 +424,23 @@ public class GammaDistribution extends AbstractRealDistribution {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}
@@ -446,7 +465,7 @@ public class GammaDistribution extends AbstractRealDistribution {
      * @return random value sampled from the Gamma(shape, scale) distribution
      */
     @Override
-    public double sample()  {
+    public double sample() {
         if (shape < 1) {
             // [1]: p. 228, Algorithm GS
 

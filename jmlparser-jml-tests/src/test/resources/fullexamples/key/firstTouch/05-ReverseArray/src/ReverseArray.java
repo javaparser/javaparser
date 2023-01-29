@@ -38,8 +38,8 @@ public class ReverseArray {
           @*/
         while (i < length) {
             int tmp = a[i];
-            a[i] = a[a.length - (i+1)];
-            a[a.length - (i+1)] = tmp;
+            a[i] = a[a.length - (i + 1)];
+            a[a.length - (i + 1)] = tmp;
             i++;
         }
     }
@@ -58,7 +58,7 @@ public class ReverseArray {
           @ modifies b[*];
           @*/
         while (i < p_a.length) {
-            b[i] = p_a[p_a.length - (i+1)];
+            b[i] = p_a[p_a.length - (i + 1)];
             i++;
         }
         return b;
@@ -66,7 +66,7 @@ public class ReverseArray {
 
     public static void main(String[] args) {
         ReverseArray ra = new ReverseArray();
-        ra.a = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        ra.a = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
         for (int i = 0; i < ra.a.length; i++) {
             System.out.println(ra.a[i]);
         }

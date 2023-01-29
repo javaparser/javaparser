@@ -24,7 +24,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class TooManyEvaluationsException extends MaxCountExceededException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = 4330003017885151975L;
 
     /**

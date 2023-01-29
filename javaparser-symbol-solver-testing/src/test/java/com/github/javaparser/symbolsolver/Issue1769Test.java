@@ -39,43 +39,43 @@ public class Issue1769Test extends AbstractResolutionTest {
     @Test()
     void testExtendsNestedclass() throws IOException {
         Path rootSourceDir = adaptPath("src/test/resources/issue1769");
-        
+
         String src =
                 "import foo.OtherClass;\n" +
-                "public class MyClass extends OtherClass.InnerClass {\n" +
-                "}\n";
+                        "public class MyClass extends OtherClass.InnerClass {\n" +
+                        "}\n";
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(rootSourceDir.toFile())));
         StaticJavaParser.setConfiguration(config);
 
         CompilationUnit cu = StaticJavaParser.parse(src);
-        
+
         ClassOrInterfaceDeclaration cid = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
-        cid.getExtendedTypes().forEach(t-> {
+        cid.getExtendedTypes().forEach(t -> {
             assertEquals("foo.OtherClass.InnerClass", t.resolve().describe());
         });
 
     }
-    
+
     @Test()
     void testInstanciateNestedClass() throws IOException {
         Path rootSourceDir = adaptPath("src/test/resources/issue1769");
-        
+
         String src =
                 "import foo.OtherClass;\n" +
-                "public class MyClass{\n" +
-                "  public InnerClass myTest() {\n" + 
-                "    return new OtherClass.InnerClass();\n" + 
-                "  }\n" +
-                "}\n";
+                        "public class MyClass{\n" +
+                        "  public InnerClass myTest() {\n" +
+                        "    return new OtherClass.InnerClass();\n" +
+                        "  }\n" +
+                        "}\n";
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(rootSourceDir.toFile())));
         StaticJavaParser.setConfiguration(config);
 
         CompilationUnit cu = StaticJavaParser.parse(src);
-        
+
         ObjectCreationExpr oce = cu.findFirst(ObjectCreationExpr.class).get();
         assertEquals("foo.OtherClass.InnerClass", oce.calculateResolvedType().asReferenceType().getQualifiedName());
         // The qualified name of the method composed by the qualfied name of the declaring type

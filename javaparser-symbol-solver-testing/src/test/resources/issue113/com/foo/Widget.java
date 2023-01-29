@@ -31,7 +31,7 @@ public class Widget extends com.foo.base.Widget {
 
         JavaParserFacade parserFacade = JavaParserFacade.get(combinedTypeSolver);
         MethodDeclaration methodDeclaration = compilationUnit.getNodesByType(MethodDeclaration.class).stream()
-              .filter(node -> node.getName().equals("doSomething")).findAny().orElse(null);
+                .filter(node -> node.getName().equals("doSomething")).findAny().orElse(null);
         methodDeclaration.getNodesByType(MethodCallExpr.class).forEach(parserFacade::solve);
     }
 

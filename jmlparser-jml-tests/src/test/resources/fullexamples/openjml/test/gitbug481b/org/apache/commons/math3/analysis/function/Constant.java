@@ -27,7 +27,9 @@ import org.apache.commons.math3.analysis.differentiation.UnivariateDifferentiabl
  * @since 3.0
  */
 public class Constant implements UnivariateDifferentiableFunction, DifferentiableUnivariateFunction {
-    /** Constant. */
+    /**
+     * Constant.
+     */
     private final double c;
 
     /**
@@ -37,12 +39,16 @@ public class Constant implements UnivariateDifferentiableFunction, Differentiabl
         this.c = c;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x) {
         return c;
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @deprecated as of 3.1, replaced by {@link #value(DerivativeStructure)}
      */
     @Deprecated
@@ -50,7 +56,9 @@ public class Constant implements UnivariateDifferentiableFunction, Differentiabl
         return new Constant(0);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.1
      */
     public DerivativeStructure value(final DerivativeStructure t) {

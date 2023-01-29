@@ -56,12 +56,12 @@ class CompilationUnitTest {
     void testGetSourceRootWithBadPackageDeclaration() {
         assertThrows(RuntimeException.class, () -> {
             Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
-        Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
-        CompilationUnit cu = parse(testFile);
-        cu.getStorage().get().getSourceRoot();
-    });
-        
-        }
+            Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "A.java"));
+            CompilationUnit cu = parse(testFile);
+            cu.getStorage().get().getSourceRoot();
+        });
+
+    }
 
     @Test
     void testGetSourceRootInDefaultPackage() throws IOException {
@@ -72,13 +72,13 @@ class CompilationUnitTest {
         Path sourceRoot1 = cu.getStorage().get().getSourceRoot();
         assertEquals(sourceRoot, sourceRoot1);
     }
-    
+
     @Test
     void testGetPrimaryTypeName() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
         CompilationUnit cu = parse(testFile);
-        
+
         assertEquals("PrimaryType", cu.getPrimaryTypeName().get());
     }
 
@@ -88,13 +88,14 @@ class CompilationUnitTest {
 
         assertFalse(cu.getPrimaryTypeName().isPresent());
     }
+
     @Test
     void testGetPrimaryType() throws IOException {
         Path sourceRoot = mavenModuleRoot(CompilationUnitTest.class).resolve(Paths.get("src", "test", "resources")).normalize();
         Path testFile = sourceRoot.resolve(Paths.get("com", "github", "javaparser", "storage", "PrimaryType.java"));
         CompilationUnit cu = parse(testFile);
 
-        assertEquals("PrimaryType",     cu.getPrimaryType().get().getNameAsString());
+        assertEquals("PrimaryType", cu.getPrimaryType().get().getNameAsString());
     }
 
     @Test

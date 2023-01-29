@@ -52,13 +52,19 @@ public class PredicatedMap<K, V>
         extends AbstractInputCheckedMapDecorator<K, V>
         implements Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 7412622456128415156L;
 
-    /** The key predicate to use */
+    /**
+     * The key predicate to use
+     */
     protected final Predicate<? super K> keyPredicate;
 
-    /** The value predicate to use */
+    /**
+     * The value predicate to use
+     */
     protected final Predicate<? super V> valuePredicate;
 
     /**
@@ -67,11 +73,11 @@ public class PredicatedMap<K, V>
      * If there are any elements already in the list being decorated, they
      * are validated.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
-     * @param keyPredicate  the predicate to validate the keys, null means no check
-     * @param valuePredicate  the predicate to validate to values, null means no check
+     * @param <K>            the key type
+     * @param <V>            the value type
+     * @param map            the map to decorate, must not be null
+     * @param keyPredicate   the predicate to validate the keys, null means no check
+     * @param valuePredicate the predicate to validate to values, null means no check
      * @return a new predicated map
      * @throws NullPointerException if the map is null
      * @since 4.0
@@ -83,12 +89,13 @@ public class PredicatedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
-     * @param keyPredicate  the predicate to validate the keys, null means no check
-     * @param valuePredicate  the predicate to validate to values, null means no check
+     * @param map            the map to decorate, must not be null
+     * @param keyPredicate   the predicate to validate the keys, null means no check
+     * @param valuePredicate the predicate to validate to values, null means no check
      * @throws NullPointerException if the map is null
      */
     protected PredicatedMap(final Map<K, V> map, final Predicate<? super K> keyPredicate,
@@ -105,10 +112,11 @@ public class PredicatedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      * @since 3.1
      */
@@ -120,8 +128,8 @@ public class PredicatedMap<K, V>
     /**
      * Read the map in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      * @since 3.1
      */
@@ -132,11 +140,12 @@ public class PredicatedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Validates a key value pair.
      *
-     * @param key  the key to validate
-     * @param value  the value to validate
+     * @param key   the key to validate
+     * @param value the value to validate
      * @throws IllegalArgumentException if invalid
      */
     protected void validate(final K key, final V value) {
@@ -151,7 +160,7 @@ public class PredicatedMap<K, V>
     /**
      * Override to validate an object set into the map via <code>setValue</code>.
      *
-     * @param value  the value to validate
+     * @param value the value to validate
      * @return the value itself
      * @throws IllegalArgumentException if invalid
      * @since 3.1

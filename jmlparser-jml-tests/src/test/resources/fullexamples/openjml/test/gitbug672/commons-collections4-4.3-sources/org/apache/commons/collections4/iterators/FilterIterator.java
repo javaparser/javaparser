@@ -31,16 +31,25 @@ import java.util.NoSuchElementException;
  */
 public class FilterIterator<E> implements Iterator<E> {
 
-    /** The iterator being used */
+    /**
+     * The iterator being used
+     */
     private Iterator<? extends E> iterator;
-    /** The predicate being used */
+    /**
+     * The predicate being used
+     */
     private Predicate<? super E> predicate;
-    /** The next object in the iteration */
+    /**
+     * The next object in the iteration
+     */
     private E nextObject;
-    /** Whether the next object has been calculated yet */
+    /**
+     * Whether the next object has been calculated yet
+     */
     private boolean nextObjectSet = false;
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs a new <code>FilterIterator</code> that will not function
      * until {@link #setIterator(Iterator) setIterator} is invoked.
@@ -53,7 +62,7 @@ public class FilterIterator<E> implements Iterator<E> {
      * Constructs a new <code>FilterIterator</code> that will not function
      * until {@link #setPredicate(Predicate) setPredicate} is invoked.
      *
-     * @param iterator  the iterator to use
+     * @param iterator the iterator to use
      */
     public FilterIterator(final Iterator<? extends E> iterator) {
         super();
@@ -65,7 +74,7 @@ public class FilterIterator<E> implements Iterator<E> {
      * given iterator and predicate.
      *
      * @param iterator  the iterator to use
-     * @param predicate  the predicate to use
+     * @param predicate the predicate to use
      */
     public FilterIterator(final Iterator<? extends E> iterator, final Predicate<? super E> predicate) {
         super();
@@ -74,6 +83,7 @@ public class FilterIterator<E> implements Iterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns true if the underlying iterator contains an object that
      * matches the predicate.
@@ -90,9 +100,9 @@ public class FilterIterator<E> implements Iterator<E> {
      * Returns the next object that matches the predicate.
      *
      * @return the next object which matches the given predicate
-     * @throws NullPointerException if either the iterator or predicate are null
+     * @throws NullPointerException   if either the iterator or predicate are null
      * @throws NoSuchElementException if there are no more elements that
-     *  match the predicate
+     *                                match the predicate
      */
     @Override
     public E next() {
@@ -112,7 +122,7 @@ public class FilterIterator<E> implements Iterator<E> {
      * changes the base iterator.
      *
      * @throws IllegalStateException if <code>hasNext()</code> has already
-     *  been called.
+     *                               been called.
      */
     @Override
     public void remove() {
@@ -123,6 +133,7 @@ public class FilterIterator<E> implements Iterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the iterator this iterator is using.
      *
@@ -136,7 +147,7 @@ public class FilterIterator<E> implements Iterator<E> {
      * Sets the iterator for this iterator to use.
      * If iteration has started, this effectively resets the iterator.
      *
-     * @param iterator  the iterator to use
+     * @param iterator the iterator to use
      */
     public void setIterator(final Iterator<? extends E> iterator) {
         this.iterator = iterator;
@@ -145,6 +156,7 @@ public class FilterIterator<E> implements Iterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the predicate this iterator is using.
      *
@@ -157,7 +169,7 @@ public class FilterIterator<E> implements Iterator<E> {
     /**
      * Sets the predicate this the iterator to use.
      *
-     * @param predicate  the predicate to use
+     * @param predicate the predicate to use
      */
     public void setPredicate(final Predicate<? super E> predicate) {
         this.predicate = predicate;
@@ -166,6 +178,7 @@ public class FilterIterator<E> implements Iterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Set nextObject to the next object. If there are no more
      * objects then return false. Otherwise, return true.

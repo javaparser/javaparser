@@ -21,23 +21,32 @@ import org.apache.commons.math3.exception.MathUnsupportedOperationException;
 /**
  * A default concrete implementation of the abstract class
  * {@link IterativeLinearSolverEvent}.
- *
  */
 public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEvent {
 
-    /** */
+    /**
+     *
+     */
     private static final long serialVersionUID = 20120129L;
 
-    /** The right-hand side vector. */
+    /**
+     * The right-hand side vector.
+     */
     private final RealVector b;
 
-    /** The current estimate of the residual. */
+    /**
+     * The current estimate of the residual.
+     */
     private final RealVector r;
 
-    /** The current estimate of the norm of the residual. */
+    /**
+     * The current estimate of the norm of the residual.
+     */
     private final double rnorm;
 
-    /** The current estimate of the solution. */
+    /**
+     * The current estimate of the solution.
+     */
     private final RealVector x;
 
     /**
@@ -51,17 +60,17 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
      * {@link MathUnsupportedOperationException}, and
      * {@link #providesResidual()} returns {@code false}.
      *
-     * @param source the iterative solver which fired this event
+     * @param source     the iterative solver which fired this event
      * @param iterations the number of iterations performed at the time
-     * {@code this} event is created
-     * @param x the current estimate of the solution
-     * @param b the right-hand side vector
-     * @param r the current estimate of the residual (can be {@code null})
-     * @param rnorm the norm of the current estimate of the residual
+     *                   {@code this} event is created
+     * @param x          the current estimate of the solution
+     * @param b          the right-hand side vector
+     * @param r          the current estimate of the residual (can be {@code null})
+     * @param rnorm      the norm of the current estimate of the residual
      */
     public DefaultIterativeLinearSolverEvent(final Object source, final int iterations,
-        final RealVector x, final RealVector b, final RealVector r,
-        final double rnorm) {
+                                             final RealVector x, final RealVector b, final RealVector r,
+                                             final double rnorm) {
         super(source, iterations);
         this.x = x;
         this.b = b;
@@ -80,15 +89,15 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
      * {@link MathUnsupportedOperationException}, while
      * {@link #providesResidual()} returns {@code false}.
      *
-     * @param source the iterative solver which fired this event
+     * @param source     the iterative solver which fired this event
      * @param iterations the number of iterations performed at the time
-     * {@code this} event is created
-     * @param x the current estimate of the solution
-     * @param b the right-hand side vector
-     * @param rnorm the norm of the current estimate of the residual
+     *                   {@code this} event is created
+     * @param x          the current estimate of the solution
+     * @param b          the right-hand side vector
+     * @param rnorm      the norm of the current estimate of the residual
      */
     public DefaultIterativeLinearSolverEvent(final Object source, final int iterations,
-        final RealVector x, final RealVector b, final double rnorm) {
+                                             final RealVector x, final RealVector b, final double rnorm) {
         super(source, iterations);
         this.x = x;
         this.b = b;
@@ -96,7 +105,9 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
         this.rnorm = rnorm;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double getNormOfResidual() {
         return rnorm;
@@ -104,7 +115,7 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * This implementation throws an {@link MathUnsupportedOperationException}
      * if no residual vector {@code r} was provided at construction time.
      */
@@ -116,13 +127,17 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
         throw new MathUnsupportedOperationException();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RealVector getRightHandSideVector() {
         return b;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RealVector getSolution() {
         return x;
@@ -130,7 +145,7 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * This implementation returns {@code true} if a non-{@code null} value was
      * specified for the residual vector {@code r} at construction time.
      *

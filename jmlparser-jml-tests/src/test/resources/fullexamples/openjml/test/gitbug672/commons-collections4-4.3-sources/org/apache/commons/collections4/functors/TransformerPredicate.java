@@ -29,17 +29,21 @@ import java.io.Serializable;
  */
 public final class TransformerPredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -2407966402920578741L;
 
-    /** The transformer to call */
+    /**
+     * The transformer to call
+     */
     private final Transformer<? super T, Boolean> iTransformer;
 
     /**
      * Factory to create the predicate.
      *
-     * @param <T> the type that the predicate queries
-     * @param transformer  the transformer to decorate
+     * @param <T>         the type that the predicate queries
+     * @param transformer the transformer to decorate
      * @return the predicate
      * @throws NullPointerException if the transformer is null
      */
@@ -54,7 +58,7 @@ public final class TransformerPredicate<T> implements Predicate<T>, Serializable
      * Constructor that performs no validation.
      * Use <code>transformerPredicate</code> if you want that.
      *
-     * @param transformer  the transformer to decorate
+     * @param transformer the transformer to decorate
      */
     public TransformerPredicate(final Transformer<? super T, Boolean> transformer) {
         super();
@@ -64,7 +68,7 @@ public final class TransformerPredicate<T> implements Predicate<T>, Serializable
     /**
      * Evaluates the predicate returning the result of the decorated transformer.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if decorated transformer returns Boolean.TRUE
      * @throws FunctorException if the transformer returns an invalid type
      */

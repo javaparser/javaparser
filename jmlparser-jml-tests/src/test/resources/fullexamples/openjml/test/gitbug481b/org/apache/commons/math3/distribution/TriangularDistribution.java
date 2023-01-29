@@ -30,19 +30,28 @@ import org.apache.commons.math3.util.FastMath;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Triangular_distribution">
  * Triangular distribution (Wikipedia)</a>
- *
  * @since 3.0
  */
 public class TriangularDistribution extends AbstractRealDistribution {
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = 20120112L;
-    /** Lower limit of this distribution (inclusive). */
+    /**
+     * Lower limit of this distribution (inclusive).
+     */
     private final double a;
-    /** Upper limit of this distribution (inclusive). */
+    /**
+     * Upper limit of this distribution (inclusive).
+     */
     private final double b;
-    /** Mode of this distribution. */
+    /**
+     * Mode of this distribution.
+     */
     private final double c;
-    /** Inverse cumulative probability accuracy. */
+    /**
+     * Inverse cumulative probability accuracy.
+     */
     private final double solverAbsoluteAccuracy;
 
     /**
@@ -63,7 +72,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
      * @throws NumberIsTooSmallException if {@code c < a}.
      */
     public TriangularDistribution(double a, double c, double b)
-        throws NumberIsTooLargeException, NumberIsTooSmallException {
+            throws NumberIsTooLargeException, NumberIsTooSmallException {
         this(new Well19937c(), a, c, b);
     }
 
@@ -71,9 +80,9 @@ public class TriangularDistribution extends AbstractRealDistribution {
      * Creates a triangular distribution.
      *
      * @param rng Random number generator.
-     * @param a Lower limit of this distribution (inclusive).
-     * @param b Upper limit of this distribution (inclusive).
-     * @param c Mode of this distribution.
+     * @param a   Lower limit of this distribution (inclusive).
+     * @param b   Upper limit of this distribution (inclusive).
+     * @param c   Mode of this distribution.
      * @throws NumberIsTooLargeException if {@code a >= b} or if {@code c > b}.
      * @throws NumberIsTooSmallException if {@code c < a}.
      * @since 3.1
@@ -82,13 +91,13 @@ public class TriangularDistribution extends AbstractRealDistribution {
                                   double a,
                                   double c,
                                   double b)
-        throws NumberIsTooLargeException, NumberIsTooSmallException {
+            throws NumberIsTooLargeException, NumberIsTooSmallException {
         super(rng);
 
         if (a >= b) {
             throw new NumberIsTooLargeException(
-                            LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
-                            a, b, false);
+                    LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+                    a, b, false);
         }
         if (c < a) {
             throw new NumberIsTooSmallException(
@@ -134,7 +143,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For lower limit {@code a}, upper limit {@code b} and mode {@code c}, the
      * PDF is given by
      * <ul>
@@ -166,7 +175,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For lower limit {@code a}, upper limit {@code b} and mode {@code c}, the
      * CDF is given by
      * <ul>
@@ -177,7 +186,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
      * <li>{@code 1} if {@code x > b}.</li>
      * </ul>
      */
-    public double cumulativeProbability(double x)  {
+    public double cumulativeProbability(double x) {
         if (x < a) {
             return 0;
         }
@@ -199,7 +208,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For lower limit {@code a}, upper limit {@code b}, and mode {@code c},
      * the mean is {@code (a + b + c) / 3}.
      */
@@ -209,7 +218,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For lower limit {@code a}, upper limit {@code b}, and mode {@code c},
      * the variance is {@code (a^2 + b^2 + c^2 - a * b - a * c - b * c) / 18}.
      */
@@ -219,7 +228,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is equal to the lower limit parameter
      * {@code a} of the distribution.
      *
@@ -231,7 +240,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is equal to the upper limit parameter
      * {@code b} of the distribution.
      *
@@ -241,19 +250,23 @@ public class TriangularDistribution extends AbstractRealDistribution {
         return b;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return true;
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}
@@ -262,10 +275,12 @@ public class TriangularDistribution extends AbstractRealDistribution {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double inverseCumulativeProbability(double p)
-        throws OutOfRangeException {
+            throws OutOfRangeException {
         if (p < 0 || p > 1) {
             throw new OutOfRangeException(p, 0, 1);
         }

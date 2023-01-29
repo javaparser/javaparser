@@ -30,7 +30,9 @@ import org.apache.commons.math3.util.FastMath;
  */
 public abstract class AbstractEvaluation implements Evaluation {
 
-    /** number of observations */
+    /**
+     * number of observations
+     */
     private final int observationSize;
 
     /**
@@ -43,7 +45,9 @@ public abstract class AbstractEvaluation implements Evaluation {
         this.observationSize = observationSize;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getCovariances(double threshold) {
         // Set up the Jacobian.
         final RealMatrix j = this.getJacobian();
@@ -57,24 +61,30 @@ public abstract class AbstractEvaluation implements Evaluation {
         return solver.getInverse();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealVector getSigma(double covarianceSingularityThreshold) {
         final RealMatrix cov = this.getCovariances(covarianceSingularityThreshold);
         final int nC = cov.getColumnDimension();
         final RealVector sig = new ArrayRealVector(nC);
         for (int i = 0; i < nC; ++i) {
-            sig.setEntry(i, FastMath.sqrt(cov.getEntry(i,i)));
+            sig.setEntry(i, FastMath.sqrt(cov.getEntry(i, i)));
         }
         return sig;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getRMS() {
         final double cost = this.getCost();
         return FastMath.sqrt(cost * cost / this.observationSize);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double getCost() {
         final ArrayRealVector r = new ArrayRealVector(this.getResiduals());
         return FastMath.sqrt(r.dotProduct(r));

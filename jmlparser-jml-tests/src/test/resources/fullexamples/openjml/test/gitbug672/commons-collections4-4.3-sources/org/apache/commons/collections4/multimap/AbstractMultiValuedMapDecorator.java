@@ -35,22 +35,25 @@ import java.util.Set;
  *
  * @param <K> the type of key elements
  * @param <V> the type of value elements
- *
  * @since 4.1
  */
 public abstract class AbstractMultiValuedMapDecorator<K, V>
         implements MultiValuedMap<K, V>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150612L;
 
-    /** MultiValuedMap to decorate */
+    /**
+     * MultiValuedMap to decorate
+     */
     private final MultiValuedMap<K, V> map;
 
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if the map is null
      */
     protected AbstractMultiValuedMapDecorator(final MultiValuedMap<K, V> map) {
@@ -61,6 +64,7 @@ public abstract class AbstractMultiValuedMapDecorator<K, V>
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * The decorated multi-valued map.
      *

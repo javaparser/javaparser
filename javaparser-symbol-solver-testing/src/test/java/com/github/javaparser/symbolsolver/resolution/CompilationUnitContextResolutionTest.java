@@ -55,8 +55,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
     @Test
     void solveMethodInReceiver() throws IOException {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
-            new ReflectionTypeSolver(),
-            new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/00_receiver")))));
+                new ReflectionTypeSolver(),
+                new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/00_receiver")))));
 
         CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/00_receiver/main/Main.java"));
         MethodCallExpr mce = Navigator.findMethodCall(cu, "method").get();
@@ -67,8 +67,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
     @Test
     void solveMethodInParent() throws IOException {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
-            new ReflectionTypeSolver(),
-            new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/01_parent")))));
+                new ReflectionTypeSolver(),
+                new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/01_parent")))));
 
         CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/01_parent/main/Main.java"));
         MethodCallExpr mce = Navigator.findMethodCall(cu, "method").get();
@@ -79,8 +79,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
     @Test
     void solveMethodInNested() throws IOException {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
-            new ReflectionTypeSolver(),
-            new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/02_nested")))));
+                new ReflectionTypeSolver(),
+                new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/02_nested")))));
 
         CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/02_nested/main/Main.java"));
         MethodCallExpr mce = Navigator.findMethodCall(cu, "method").get();
@@ -91,8 +91,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
     @Test
     void solveSymbol() throws IOException {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
-            new ReflectionTypeSolver(),
-            new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/03_symbol")))));
+                new ReflectionTypeSolver(),
+                new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/03_symbol")))));
 
         CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/03_symbol/main/Main.java"));
         NameExpr ne = Navigator.findNameExpression(cu, "A").get();
@@ -103,8 +103,8 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
     @Test
     void solveMyself() throws IOException {
         StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
-            new ReflectionTypeSolver(),
-            new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/04_reviewComment")))));
+                new ReflectionTypeSolver(),
+                new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/04_reviewComment")))));
 
         CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/04_reviewComment/main/Main.java"));
 

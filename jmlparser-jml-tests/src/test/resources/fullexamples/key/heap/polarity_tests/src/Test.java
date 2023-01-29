@@ -2,5 +2,7 @@ public class Test {
     int x;
 
     //@ requires true;
-    void m(){x=5;}
+    void m() {
+        x = 5;
+    }
 }

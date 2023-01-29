@@ -2,58 +2,57 @@ package devices;
 
 public class Console {
 
-	private static final int DEFAULT_LENGTH = 512;  //256; //128; // HSO: June 2014
-	private static byte[] bytes;
+    private static final int DEFAULT_LENGTH = 512;  //256; //128; // HSO: June 2014
+    private static byte[] bytes;
 
-	static {
-		bytes = new byte[DEFAULT_LENGTH + 1];
-	}
+    static {
+        bytes = new byte[DEFAULT_LENGTH + 1];
+    }
 
-	public static Writer writer;
-	
-	static
-	{
-		writer = new X86Writer();
-	}
+    public static Writer writer;
 
-	public static void println(String string) {
-		println(string, true);
-	}
+    static {
+        writer = new X86Writer();
+    }
 
-	private static void println(String string, boolean addNewLine) {
-		short length = (short) string.length();
-		if (addNewLine) {
-			length++;
-		}
-		getBytes(string, addNewLine);
-		writer.write(bytes, length);
-	}
+    public static void println(String string) {
+        println(string, true);
+    }
 
-	private static byte[] getBytes(String string, boolean addNewLine) {
-		int index = 0;
-		int length = string.length();
+    private static void println(String string, boolean addNewLine) {
+        short length = (short) string.length();
+        if (addNewLine) {
+            length++;
+        }
+        getBytes(string, addNewLine);
+        writer.write(bytes, length);
+    }
 
-		while ((index < length) && (index < DEFAULT_LENGTH - 1)) {
-			bytes[index] = (byte) string.charAt(index);
-			index++;
-		}
-		if (addNewLine) {
-			bytes[index] = '\n';
-		}
-		return bytes;
-	}
+    private static byte[] getBytes(String string, boolean addNewLine) {
+        int index = 0;
+        int length = string.length();
 
-	public static void print(long l) {
-		print("" + l);
-	}
+        while ((index < length) && (index < DEFAULT_LENGTH - 1)) {
+            bytes[index] = (byte) string.charAt(index);
+            index++;
+        }
+        if (addNewLine) {
+            bytes[index] = '\n';
+        }
+        return bytes;
+    }
 
-	public static void print(String space) {
-		println(space, false);
-	}
+    public static void print(long l) {
+        print("" + l);
+    }
 
-	public static void println(int i) {
-		println("" + i);
+    public static void print(String space) {
+        println(space, false);
+    }
 
-	}
+    public static void println(int i) {
+        println("" + i);
+
+    }
 
 }

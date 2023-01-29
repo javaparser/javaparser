@@ -39,12 +39,12 @@ public interface ReplacementsHandler<T> {
      * The replacement is defined as replacing the <code>from</code>
      * sub-sequence into the <code>to</code> sub-sequence.
      *
-     * @param skipped  number of tokens skipped since the last call (i.e. number of
-     *   tokens that were in both sequences), this number should be strictly positive
-     *   except on the very first call where it can be zero (if the first object of
-     *   the two sequences are different)
-     * @param from  sub-sequence of objects coming from the first sequence
-     * @param to  sub-sequence of objects coming from the second sequence
+     * @param skipped number of tokens skipped since the last call (i.e. number of
+     *                tokens that were in both sequences), this number should be strictly positive
+     *                except on the very first call where it can be zero (if the first object of
+     *                the two sequences are different)
+     * @param from    sub-sequence of objects coming from the first sequence
+     * @param to      sub-sequence of objects coming from the second sequence
      */
     void handleReplacement(int skipped, List<T> from, List<T> to);
 

@@ -47,19 +47,25 @@ import java.util.List;
  * @since 3.3
  */
 public class HarmonicCurveFitter extends AbstractCurveFitter {
-    /** Parametric function to be fitted. */
+    /**
+     * Parametric function to be fitted.
+     */
     private static final HarmonicOscillator.Parametric FUNCTION = new HarmonicOscillator.Parametric();
-    /** Initial guess. */
+    /**
+     * Initial guess.
+     */
     private final double[] initialGuess;
-    /** Maximum number of iterations of the optimization algorithm. */
+    /**
+     * Maximum number of iterations of the optimization algorithm.
+     */
     private final int maxIter;
 
     /**
      * Contructor used by the factory methods.
      *
      * @param initialGuess Initial guess. If set to {@code null}, the initial guess
-     * will be estimated using the {@link ParameterGuesser}.
-     * @param maxIter Maximum number of iterations of the optimization algorithm.
+     *                     will be estimated using the {@link ParameterGuesser}.
+     * @param maxIter      Maximum number of iterations of the optimization algorithm.
      */
     private HarmonicCurveFitter(double[] initialGuess,
                                 int maxIter) {
@@ -74,7 +80,6 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
      * optimization algorithm is set to {@link Integer#MAX_VALUE}.
      *
      * @return a curve fitter.
-     *
      * @see #withStartPoint(double[])
      * @see #withMaxIterations(int)
      */
@@ -84,47 +89,51 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
 
     /**
      * Configure the start point (initial guess).
+     *
      * @param newStart new start point (initial guess)
      * @return a new instance.
      */
     public HarmonicCurveFitter withStartPoint(double[] newStart) {
         return new HarmonicCurveFitter(newStart.clone(),
-                                       maxIter);
+                maxIter);
     }
 
     /**
      * Configure the maximum number of iterations.
+     *
      * @param newMaxIter maximum number of iterations
      * @return a new instance.
      */
     public HarmonicCurveFitter withMaxIterations(int newMaxIter) {
         return new HarmonicCurveFitter(initialGuess,
-                                       newMaxIter);
+                newMaxIter);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected LeastSquaresProblem getProblem(Collection<WeightedObservedPoint> observations) {
         // Prepare least-squares problem.
         final int len = observations.size();
-        final double[] target  = new double[len];
+        final double[] target = new double[len];
         final double[] weights = new double[len];
 
         int i = 0;
         for (WeightedObservedPoint obs : observations) {
-            target[i]  = obs.getY();
+            target[i] = obs.getY();
             weights[i] = obs.getWeight();
             ++i;
         }
 
         final AbstractCurveFitter.TheoreticalValuesFunction model
-            = new AbstractCurveFitter.TheoreticalValuesFunction(FUNCTION,
-                                                                observations);
+                = new AbstractCurveFitter.TheoreticalValuesFunction(FUNCTION,
+                observations);
 
         final double[] startPoint = initialGuess != null ?
-            initialGuess :
-            // Compute estimation.
-            new ParameterGuesser(observations).guess();
+                initialGuess :
+                // Compute estimation.
+                new ParameterGuesser(observations).guess();
 
         // Return a new optimizer set up to fit a Gaussian curve to the
         // observed points.
@@ -150,31 +159,31 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
      *
      * <p>From the analytical expression, we can compute two primitives :
      * \[
-     *     If2(t) = \int f^2 dt  = a^2 (t + S(t)) / 2
+     * If2(t) = \int f^2 dt  = a^2 (t + S(t)) / 2
      * \]
      * \[
-     *     If'2(t) = \int f'^2 dt = a^2 \omega^2 (t - S(t)) / 2
+     * If'2(t) = \int f'^2 dt = a^2 \omega^2 (t - S(t)) / 2
      * \]
      * where \(S(t) = \frac{\sin(2 (\omega t + \phi))}{2\omega}\)
      * </p>
      *
      * <p>We can remove \(S\) between these expressions :
      * \[
-     *     If'2(t) = a^2 \omega^2 t - \omega^2 If2(t)
+     * If'2(t) = a^2 \omega^2 t - \omega^2 If2(t)
      * \]
      * </p>
      *
      * <p>The preceding expression shows that \(If'2 (t)\) is a linear
      * combination of both \(t\) and \(If2(t)\):
      * \[
-     *   If'2(t) = A t + B If2(t)
+     * If'2(t) = A t + B If2(t)
      * \]
      * </p>
      *
      * <p>From the primitive, we can deduce the same form for definite
      * integrals between \(t_1\) and \(t_i\) for each \(t_i\) :
      * \[
-     *   If2(t_i) - If2(t_1) = A (t_i - t_1) + B (If2 (t_i) - If2(t_1))
+     * If2(t_i) - If2(t_1) = A (t_i - t_1) + B (If2 (t_i) - If2(t_1))
      * \]
      * </p>
      *
@@ -187,19 +196,19 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
      * coefficients \(A\) and \(B\) that minimize a least-squares criterion
      * \(\sum (z_i - z(x_i, y_i))^2\) are given by these expressions:</p>
      * \[
-     *   A = \frac{\sum y_i y_i \sum x_i z_i - \sum x_i y_i \sum y_i z_i}
-     *            {\sum x_i x_i \sum y_i y_i - \sum x_i y_i \sum x_i y_i}
+     * A = \frac{\sum y_i y_i \sum x_i z_i - \sum x_i y_i \sum y_i z_i}
+     * {\sum x_i x_i \sum y_i y_i - \sum x_i y_i \sum x_i y_i}
      * \]
      * \[
-     *   B = \frac{\sum x_i x_i \sum y_i z_i - \sum x_i y_i \sum x_i z_i}
-     *            {\sum x_i x_i \sum y_i y_i - \sum x_i y_i \sum x_i y_i}
-     *
+     * B = \frac{\sum x_i x_i \sum y_i z_i - \sum x_i y_i \sum x_i z_i}
+     * {\sum x_i x_i \sum y_i y_i - \sum x_i y_i \sum x_i y_i}
+     * <p>
      * \]
      *
      * <p>In fact, we can assume that both \(a\) and \(\omega\) are positive and
      * compute them directly, knowing that \(A = a^2 \omega^2\) and that
      * \(B = -\omega^2\). The complete algorithm is therefore:</p>
-     *
+     * <p>
      * For each \(t_i\) from \(t_1\) to \(t_{n-1}\), compute:
      * \[ f(t_i) \]
      * \[ f'(t_i) = \frac{f (t_{i+1}) - f(t_{i-1})}{t_{i+1} - t_{i-1}} \]
@@ -208,23 +217,23 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
      * \[ z_i = \int_{t_1}^{t_i} f'^2(t) dt \]
      * and update the sums:
      * \[ \sum x_i x_i, \sum y_i y_i, \sum x_i y_i, \sum x_i z_i, \sum y_i z_i \]
-     *
+     * <p>
      * Then:
      * \[
-     *  a = \sqrt{\frac{\sum y_i y_i  \sum x_i z_i - \sum x_i y_i \sum y_i z_i }
-     *                 {\sum x_i y_i  \sum x_i z_i - \sum x_i x_i \sum y_i z_i }}
+     * a = \sqrt{\frac{\sum y_i y_i  \sum x_i z_i - \sum x_i y_i \sum y_i z_i }
+     * {\sum x_i y_i  \sum x_i z_i - \sum x_i x_i \sum y_i z_i }}
      * \]
      * \[
-     *  \omega = \sqrt{\frac{\sum x_i y_i \sum x_i z_i - \sum x_i x_i \sum y_i z_i}
-     *                      {\sum x_i x_i \sum y_i y_i - \sum x_i y_i \sum x_i y_i}}
+     * \omega = \sqrt{\frac{\sum x_i y_i \sum x_i z_i - \sum x_i x_i \sum y_i z_i}
+     * {\sum x_i x_i \sum y_i y_i - \sum x_i y_i \sum x_i y_i}}
      * \]
      *
      * <p>Once we know \(\omega\) we can compute:
      * \[
-     *    fc = \omega f(t) \cos(\omega t) - f'(t) \sin(\omega t)
+     * fc = \omega f(t) \cos(\omega t) - f'(t) \sin(\omega t)
      * \]
      * \[
-     *    fs = \omega f(t) \sin(\omega t) + f'(t) \cos(\omega t)
+     * fs = \omega f(t) \sin(\omega t) + f'(t) \cos(\omega t)
      * \]
      * </p>
      *
@@ -239,11 +248,17 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
      * number of measurements.</p>
      */
     public static class ParameterGuesser {
-        /** Amplitude. */
+        /**
+         * Amplitude.
+         */
         private final double a;
-        /** Angular frequency. */
+        /**
+         * Angular frequency.
+         */
         private final double omega;
-        /** Phase. */
+        /**
+         * Phase.
+         */
         private final double phi;
 
         /**
@@ -251,18 +266,18 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
          *
          * @param observations Sampled observations.
          * @throws NumberIsTooSmallException if the sample is too short.
-         * @throws ZeroException if the abscissa range is zero.
+         * @throws ZeroException             if the abscissa range is zero.
          * @throws MathIllegalStateException when the guessing procedure cannot
-         * produce sensible results.
+         *                                   produce sensible results.
          */
         public ParameterGuesser(Collection<WeightedObservedPoint> observations) {
             if (observations.size() < 4) {
                 throw new NumberIsTooSmallException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
-                                                    observations.size(), 4, true);
+                        observations.size(), 4, true);
             }
 
             final WeightedObservedPoint[] sorted
-                = sortObservations(observations).toArray(new WeightedObservedPoint[0]);
+                    = sortObservations(observations).toArray(new WeightedObservedPoint[0]);
 
             final double aOmega[] = guessAOmega(sorted);
             a = aOmega[0];
@@ -282,7 +297,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
          * </ul>
          */
         public double[] guess() {
-            return new double[] { a, omega, phi };
+            return new double[]{a, omega, phi};
         }
 
         /**
@@ -324,11 +339,11 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
          * Estimate a first guess of the amplitude and angular frequency.
          *
          * @param observations Observations, sorted w.r.t. abscissa.
-         * @throws ZeroException if the abscissa range is zero.
-         * @throws MathIllegalStateException when the guessing procedure cannot
-         * produce sensible results.
          * @return the guessed amplitude (at index 0) and circular frequency
          * (at index 1).
+         * @throws ZeroException             if the abscissa range is zero.
+         * @throws MathIllegalStateException when the guessing procedure cannot
+         *                                   produce sensible results.
          */
         private double[] guessAOmega(WeightedObservedPoint[] observations) {
             final double[] aOmega = new double[2];
@@ -357,7 +372,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
                 final double dx = currentX - previousX;
                 final double dy = currentY - previousY;
                 final double f2StepIntegral =
-                    dx * (previousY * previousY + previousY * currentY + currentY * currentY) / 3;
+                        dx * (previousY * previousY + previousY * currentY + currentY * currentY) / 3;
                 final double fPrime2StepIntegral = dy * dy / dx;
 
                 final double x = currentX - startX;

@@ -108,7 +108,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     @Deprecated
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
         return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
-                typeSolver,this, clazz);
+                typeSolver, this, clazz);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
             }
             try {
                 ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
-                for (int j=0;j<parameters.size();j++) {
+                for (int j = 0; j < parameters.size(); j++) {
                     methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
                 }
                 methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
@@ -220,7 +220,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         if (type instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
-            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+            if (otherTypeDeclaration.getTypeDeclaration().isPresent()) {
                 return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(this);
             }
         }
@@ -288,7 +288,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         return res;
     }
-    
+
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return reflectionClassAdapter.containerType();

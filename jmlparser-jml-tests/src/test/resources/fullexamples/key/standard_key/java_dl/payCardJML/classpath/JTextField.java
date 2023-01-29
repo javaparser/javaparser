@@ -16,42 +16,74 @@
  */
 package javax.swing;
 
-public class JTextField extends javax.swing.text.JTextComponent implements javax.swing.SwingConstants
-{
-   public final static java.lang.String notifyAction = "notify-field-accept";
+public class JTextField extends javax.swing.text.JTextComponent implements javax.swing.SwingConstants {
+    public final static java.lang.String notifyAction = "notify-field-accept";
 
-   public JTextField();
-   public JTextField(java.lang.String arg0);
-   public JTextField(int arg0);
-   public JTextField(java.lang.String arg0, int arg1);
-   public JTextField(javax.swing.text.Document arg0, java.lang.String arg1, int arg2);
-   public java.lang.String getUIClassID();
-   public void setDocument(javax.swing.text.Document arg0);
-   public boolean isValidateRoot();
-   public int getHorizontalAlignment();
-   public void setHorizontalAlignment(int arg0);
-   protected javax.swing.text.Document createDefaultModel();
-   public int getColumns();
-   public void setColumns(int arg0);
-   protected int getColumnWidth();
-   public java.awt.Dimension getPreferredSize();
-   public void setFont(java.awt.Font arg0);
-   public void addActionListener(java.awt.event.ActionListener arg0);
-   public void removeActionListener(java.awt.event.ActionListener arg0);
-   public java.awt.event.ActionListener[] getActionListeners();
-   protected void fireActionPerformed();
-   public void setActionCommand(java.lang.String arg0);
-   public void setAction(javax.swing.Action arg0);
-   public javax.swing.Action getAction();
-   protected void configurePropertiesFromAction(javax.swing.Action arg0);
-   protected void actionPropertyChanged(javax.swing.Action arg0, java.lang.String arg1);
-   protected java.beans.PropertyChangeListener createActionPropertyChangeListener(javax.swing.Action arg0);
-   public javax.swing.Action[] getActions();
-   public void postActionEvent();
-   public javax.swing.BoundedRangeModel getHorizontalVisibility();
-   public int getScrollOffset();
-   public void setScrollOffset(int arg0);
-   public void scrollRectToVisible(java.awt.Rectangle arg0);
-   protected java.lang.String paramString();
-   public javax.accessibility.AccessibleContext getAccessibleContext();
+    public JTextField();
+
+    public JTextField(java.lang.String arg0);
+
+    public JTextField(int arg0);
+
+    public JTextField(java.lang.String arg0, int arg1);
+
+    public JTextField(javax.swing.text.Document arg0, java.lang.String arg1, int arg2);
+
+    public java.lang.String getUIClassID();
+
+    public void setDocument(javax.swing.text.Document arg0);
+
+    public boolean isValidateRoot();
+
+    public int getHorizontalAlignment();
+
+    public void setHorizontalAlignment(int arg0);
+
+    protected javax.swing.text.Document createDefaultModel();
+
+    public int getColumns();
+
+    public void setColumns(int arg0);
+
+    protected int getColumnWidth();
+
+    public java.awt.Dimension getPreferredSize();
+
+    public void setFont(java.awt.Font arg0);
+
+    public void addActionListener(java.awt.event.ActionListener arg0);
+
+    public void removeActionListener(java.awt.event.ActionListener arg0);
+
+    public java.awt.event.ActionListener[] getActionListeners();
+
+    protected void fireActionPerformed();
+
+    public void setActionCommand(java.lang.String arg0);
+
+    public void setAction(javax.swing.Action arg0);
+
+    public javax.swing.Action getAction();
+
+    protected void configurePropertiesFromAction(javax.swing.Action arg0);
+
+    protected void actionPropertyChanged(javax.swing.Action arg0, java.lang.String arg1);
+
+    protected java.beans.PropertyChangeListener createActionPropertyChangeListener(javax.swing.Action arg0);
+
+    public javax.swing.Action[] getActions();
+
+    public void postActionEvent();
+
+    public javax.swing.BoundedRangeModel getHorizontalVisibility();
+
+    public int getScrollOffset();
+
+    public void setScrollOffset(int arg0);
+
+    public void scrollRectToVisible(java.awt.Rectangle arg0);
+
+    protected java.lang.String paramString();
+
+    public javax.accessibility.AccessibleContext getAccessibleContext();
 }

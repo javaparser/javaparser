@@ -279,7 +279,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration impl
         Set<ReferenceTypeDeclaration> res = new HashSet<>();
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration) member));
             }
         }
         return res;

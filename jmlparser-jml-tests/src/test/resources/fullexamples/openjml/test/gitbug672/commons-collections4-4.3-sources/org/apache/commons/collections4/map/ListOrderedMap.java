@@ -70,10 +70,14 @@ public class ListOrderedMap<K, V>
         extends AbstractMapDecorator<K, V>
         implements OrderedMap<K, V>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 2728177751851003750L;
 
-    /** Internal list to hold the sequence of objects */
+    /**
+     * Internal list to hold the sequence of objects
+     */
     private final List<K> insertOrder = new ArrayList<>();
 
     /**
@@ -81,9 +85,9 @@ public class ListOrderedMap<K, V>
      * <p>
      * An <code>ArrayList</code> is used to retain order.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map to decorate, must not be null
      * @return a new list ordered map
      * @throws NullPointerException if map is null
      * @since 4.0
@@ -93,6 +97,7 @@ public class ListOrderedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs a new empty <code>ListOrderedMap</code> that decorates
      * a <code>HashMap</code>.
@@ -106,7 +111,7 @@ public class ListOrderedMap<K, V>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if map is null
      */
     protected ListOrderedMap(final Map<K, V> map) {
@@ -115,10 +120,11 @@ public class ListOrderedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      * @since 3.1
      */
@@ -130,8 +136,8 @@ public class ListOrderedMap<K, V>
     /**
      * Read the map in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      * @since 3.1
      */
@@ -180,7 +186,7 @@ public class ListOrderedMap<K, V>
      * Gets the next key to the one specified using insert order.
      * This method performs a list search to find the key and is O(n).
      *
-     * @param key  the key to find previous for
+     * @param key the key to find previous for
      * @return the next key, null if no match or at start
      */
     @Override
@@ -196,7 +202,7 @@ public class ListOrderedMap<K, V>
      * Gets the previous key to the one specified using insert order.
      * This method performs a list search to find the key and is O(n).
      *
-     * @param key  the key to find previous for
+     * @param key the key to find previous for
      * @return the previous key, null if no match or at start
      */
     @Override
@@ -233,7 +239,7 @@ public class ListOrderedMap<K, V>
      * the specified index.
      *
      * @param index the index in the Map to start at.
-     * @param map the Map containing the entries to be added.
+     * @param map   the Map containing the entries to be added.
      * @throws IndexOutOfBoundsException if the index is out of range [0, size]
      */
     public void putAll(int index, final Map<? extends K, ? extends V> map) {
@@ -273,13 +279,14 @@ public class ListOrderedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets a view over the keys in the map.
      * <p>
      * The Collection will be ordered by object insertion into the map.
      *
-     * @see #keyList()
      * @return the fully modifiable collection view over the keys
+     * @see #keyList()
      */
     @Override
     public Set<K> keySet() {
@@ -292,8 +299,8 @@ public class ListOrderedMap<K, V>
      * The List will be ordered by object insertion into the map.
      * The List is unmodifiable.
      *
-     * @see #keySet()
      * @return the unmodifiable list view over the keys
+     * @see #keySet()
      * @since 3.2
      */
     public List<K> keyList() {
@@ -308,8 +315,8 @@ public class ListOrderedMap<K, V>
      * From Commons Collections 3.2, this Collection can be cast
      * to a list, see {@link #valueList()}
      *
-     * @see #valueList()
      * @return the fully modifiable collection view over the values
+     * @see #valueList()
      */
     @Override
     public Collection<V> values() {
@@ -322,8 +329,8 @@ public class ListOrderedMap<K, V>
      * The List will be ordered by object insertion into the map.
      * The List supports remove and set, but does not support add.
      *
-     * @see #values()
      * @return the partially modifiable list view over the values
+     * @see #values()
      * @since 3.2
      */
     public List<V> valueList() {
@@ -343,6 +350,7 @@ public class ListOrderedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns the Map as a string.
      *
@@ -373,10 +381,11 @@ public class ListOrderedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the key at the specified index.
      *
-     * @param index  the index to retrieve
+     * @param index the index to retrieve
      * @return the key at the specified index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
@@ -387,7 +396,7 @@ public class ListOrderedMap<K, V>
     /**
      * Gets the value at the specified index.
      *
-     * @param index  the index to retrieve
+     * @param index the index to retrieve
      * @return the key at the specified index
      * @throws IndexOutOfBoundsException if the index is invalid
      */
@@ -398,7 +407,7 @@ public class ListOrderedMap<K, V>
     /**
      * Gets the index of the specified key.
      *
-     * @param key  the key to find the index of
+     * @param key the key to find the index of
      * @return the index, or -1 if not found
      */
     public int indexOf(final Object key) {
@@ -408,8 +417,8 @@ public class ListOrderedMap<K, V>
     /**
      * Sets the value at the specified index.
      *
-     * @param index  the index of the value to set
-     * @param value  the new value to set
+     * @param index the index of the value to set
+     * @param value the new value to set
      * @return the previous value at that index
      * @throws IndexOutOfBoundsException if the index is invalid
      * @since 3.2
@@ -431,9 +440,9 @@ public class ListOrderedMap<K, V>
      * then (2) insert the new key-value mapping at the position it
      * would have been inserted had the remove not occurred.
      *
-     * @param index  the index at which the mapping should be inserted
-     * @param key  the key
-     * @param value  the value
+     * @param index the index at which the mapping should be inserted
+     * @param key   the key
+     * @param value the value
      * @return the value previously mapped to the key
      * @throws IndexOutOfBoundsException if the index is out of range [0, size]
      * @since 3.2
@@ -463,7 +472,7 @@ public class ListOrderedMap<K, V>
     /**
      * Removes the element at the specified index.
      *
-     * @param index  the index of the object to remove
+     * @param index the index of the object to remove
      * @return the removed value, or <code>null</code> if none existed
      * @throws IndexOutOfBoundsException if the index is invalid
      */
@@ -484,9 +493,9 @@ public class ListOrderedMap<K, V>
      * An alternative to this method is to use the better named
      * {@link #keyList()} or {@link #keySet()}.
      *
+     * @return The ordered list of keys.
      * @see #keyList()
      * @see #keySet()
-     * @return The ordered list of keys.
      */
     public List<K> asList() {
         return keyList();
@@ -602,6 +611,7 @@ public class ListOrderedMap<K, V>
         public int size() {
             return this.parent.size();
         }
+
         @Override
         public boolean isEmpty() {
             return this.parent.isEmpty();

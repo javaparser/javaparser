@@ -13,6 +13,7 @@ import java.util.Optional;
  * @version 1 (12/9/21)
  */
 public interface NodeWithContracts<T extends Node> {
+
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     Optional<NodeList<JmlContract>> getContracts();
 

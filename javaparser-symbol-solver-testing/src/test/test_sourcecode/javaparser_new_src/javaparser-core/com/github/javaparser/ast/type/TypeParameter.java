@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.type;
 
 import com.github.javaparser.Range;
@@ -42,88 +42,89 @@ import static com.github.javaparser.utils.Utils.ensureNotNull;
  * TypeParameter ::= <IDENTIFIER> ( "extends" }{@link ClassOrInterfaceType}{@code ( "&" }{@link ClassOrInterfaceType}{@code )* )?
  * }
  * </pre>
+ *
  * @author Julio Vilmar Gesser
  */
 public final class TypeParameter extends ReferenceType<TypeParameter> implements NodeWithName<TypeParameter> {
 
-	private String name;
+    private String name;
 
     private List<AnnotationExpr> annotations;
 
-	private List<ClassOrInterfaceType> typeBound;
+    private List<ClassOrInterfaceType> typeBound;
 
-	public TypeParameter() {
-	}
+    public TypeParameter() {
+    }
 
-	public TypeParameter(final String name, final List<ClassOrInterfaceType> typeBound) {
-		setName(name);
-		setTypeBound(typeBound);
-	}
+    public TypeParameter(final String name, final List<ClassOrInterfaceType> typeBound) {
+        setName(name);
+        setTypeBound(typeBound);
+    }
 
-	public TypeParameter(Range range, final String name, final List<ClassOrInterfaceType> typeBound) {
-		super(range);
-		setName(name);
-		setTypeBound(typeBound);
-	}
+    public TypeParameter(Range range, final String name, final List<ClassOrInterfaceType> typeBound) {
+        super(range);
+        setName(name);
+        setTypeBound(typeBound);
+    }
 
-	public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
-		this(range, name, typeBound);
-		setTypeBound(typeBound);
-		setAnnotations(annotations);
-	}
+    public TypeParameter(Range range, String name, List<ClassOrInterfaceType> typeBound, List<AnnotationExpr> annotations) {
+        this(range, name, typeBound);
+        setTypeBound(typeBound);
+        setAnnotations(annotations);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	/**
-	 * Return the name of the paramenter.
-	 * 
-	 * @return the name of the paramenter
-	 */
-	@Override
-	public String getName() {
-		return name;
-	}
+    /**
+     * Return the name of the paramenter.
+     *
+     * @return the name of the paramenter
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Return the list of {@link ClassOrInterfaceType} that this parameter
-	 * extends. Return <code>null</code> null if there are no type.
-	 * 
-	 * @return list of types that this paramente extends or <code>null</code>
-	 */
-	public List<ClassOrInterfaceType> getTypeBound() {
+    /**
+     * Return the list of {@link ClassOrInterfaceType} that this parameter
+     * extends. Return <code>null</code> null if there are no type.
+     *
+     * @return list of types that this paramente extends or <code>null</code>
+     */
+    public List<ClassOrInterfaceType> getTypeBound() {
         typeBound = ensureNotNull(typeBound);
         return typeBound;
-	}
+    }
 
-	/**
-	 * Sets the name of this type parameter.
-	 * 
-	 * @param name
-	 *            the name to set
-	 */
+    /**
+     * Sets the name of this type parameter.
+     *
+     * @param name the name to set
+     */
     @Override
     public TypeParameter setName(final String name) {
-		this.name = name;
+        this.name = name;
         return this;
-	}
+    }
 
-	/**
-	 * Sets the list o types.
-	 * 
-	 * @param typeBound
-	 *            the typeBound to set
-	 */
-	public TypeParameter setTypeBound(final List<ClassOrInterfaceType> typeBound) {
-		this.typeBound = typeBound;
-		setAsParentNodeOf(typeBound);
-		return this;
-	}
+    /**
+     * Sets the list o types.
+     *
+     * @param typeBound the typeBound to set
+     */
+    public TypeParameter setTypeBound(final List<ClassOrInterfaceType> typeBound) {
+        this.typeBound = typeBound;
+        setAsParentNodeOf(typeBound);
+        return this;
+    }
 
     public List<AnnotationExpr> getAnnotations() {
         annotations = ensureNotNull(annotations);
@@ -132,7 +133,7 @@ public final class TypeParameter extends ReferenceType<TypeParameter> implements
 
     public TypeParameter setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
-	    setAsParentNodeOf(this.annotations);
-		return this;
+        setAsParentNodeOf(this.annotations);
+        return this;
     }
 }

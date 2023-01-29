@@ -39,40 +39,40 @@ import org.apache.commons.math3.util.MathArrays;
  * <p>
  * The interpolating polynomials satisfy: <ol>
  * <li>The value of the PolynomialSplineFunction at each of the input x values equals the
- *  corresponding y value.</li>
+ * corresponding y value.</li>
  * <li>Adjacent polynomials are equal through two derivatives at the knot points (i.e., adjacent polynomials
- *  "match up" at the knot points, as do their first and second derivatives).</li>
+ * "match up" at the knot points, as do their first and second derivatives).</li>
  * </ol>
  * <p>
  * The cubic spline interpolation algorithm implemented is as described in R.L. Burden, J.D. Faires,
  * <u>Numerical Analysis</u>, 4th Ed., 1989, PWS-Kent, ISBN 0-53491-585-X, pp 126-131.
  * </p>
- *
  */
 public class SplineInterpolator implements UnivariateInterpolator {
     /**
      * Computes an interpolating function for the data set.
+     *
      * @param x the arguments for the interpolation points
      * @param y the values for the interpolation points
      * @return a function which interpolates the data set
-     * @throws DimensionMismatchException if {@code x} and {@code y}
-     * have different sizes.
+     * @throws DimensionMismatchException    if {@code x} and {@code y}
+     *                                       have different sizes.
      * @throws NonMonotonicSequenceException if {@code x} is not sorted in
-     * strict increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code x} is smaller
-     * than 3.
+     *                                       strict increasing order.
+     * @throws NumberIsTooSmallException     if the size of {@code x} is smaller
+     *                                       than 3.
      */
     public PolynomialSplineFunction interpolate(double x[], double y[])
-        throws DimensionMismatchException,
-               NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+            throws DimensionMismatchException,
+            NumberIsTooSmallException,
+            NonMonotonicSequenceException {
         if (x.length != y.length) {
             throw new DimensionMismatchException(x.length, y.length);
         }
 
         if (x.length < 3) {
             throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
-                                                x.length, 3, true);
+                    x.length, 3, true);
         }
 
         // Number of intervals.  The number of data points is n + 1.
@@ -92,9 +92,9 @@ public class SplineInterpolator implements UnivariateInterpolator {
         z[0] = 0d;
         double g = 0;
         for (int i = 1; i < n; i++) {
-            g = 2d * (x[i+1]  - x[i - 1]) - h[i - 1] * mu[i -1];
+            g = 2d * (x[i + 1] - x[i - 1]) - h[i - 1] * mu[i - 1];
             mu[i] = h[i] / g;
-            z[i] = (3d * (y[i + 1] * h[i - 1] - y[i] * (x[i + 1] - x[i - 1])+ y[i - 1] * h[i]) /
+            z[i] = (3d * (y[i + 1] * h[i - 1] - y[i] * (x[i + 1] - x[i - 1]) + y[i - 1] * h[i]) /
                     (h[i - 1] * h[i]) - h[i - 1] * z[i - 1]) / g;
         }
 
@@ -106,7 +106,7 @@ public class SplineInterpolator implements UnivariateInterpolator {
         z[n] = 0d;
         c[n] = 0d;
 
-        for (int j = n -1; j >=0; j--) {
+        for (int j = n - 1; j >= 0; j--) {
             c[j] = z[j] - mu[j] * c[j + 1];
             b[j] = (y[j + 1] - y[j]) / h[j] - h[j] * (c[j + 1] + 2d * c[j]) / 3d;
             d[j] = (c[j + 1] - c[j]) / (3d * h[j]);

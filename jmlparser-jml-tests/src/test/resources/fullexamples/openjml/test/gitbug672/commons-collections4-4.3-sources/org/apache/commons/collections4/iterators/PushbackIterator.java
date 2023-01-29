@@ -34,20 +34,25 @@ import java.util.Iterator;
  */
 public class PushbackIterator<E> implements Iterator<E> {
 
-    /** The iterator being decorated. */
+    /**
+     * The iterator being decorated.
+     */
     private final Iterator<? extends E> iterator;
 
-    /** The LIFO queue containing the pushed back items. */
+    /**
+     * The LIFO queue containing the pushed back items.
+     */
     private final Deque<E> items = new ArrayDeque<>();
 
     //-----------------------------------------------------------------------
+
     /**
      * Decorates the specified iterator to support one-element lookahead.
      * <p>
      * If the iterator is already a {@link PushbackIterator} it is returned directly.
      *
-     * @param <E>  the element type
-     * @param iterator  the iterator to decorate
+     * @param <E>      the element type
+     * @param iterator the iterator to decorate
      * @return a new peeking iterator
      * @throws NullPointerException if the iterator is null
      */
@@ -68,7 +73,7 @@ public class PushbackIterator<E> implements Iterator<E> {
     /**
      * Constructor.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      */
     public PushbackIterator(final Iterator<? extends E> iterator) {
         super();
@@ -80,7 +85,7 @@ public class PushbackIterator<E> implements Iterator<E> {
      * <p>
      * Calling {@link #next()} immediately afterwards will return exactly this element.
      *
-     * @param item  the element to push back to the iterator
+     * @param item the element to push back to the iterator
      */
     public void pushback(final E item) {
         items.push(item);

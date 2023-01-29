@@ -32,17 +32,17 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue228Test extends AbstractResolutionTest{
+class Issue228Test extends AbstractResolutionTest {
 
     @Test
     void testSolvingMethodWitPrimitiveParameterTypeAsUsage() {
-        String code = 
-                  "class Test { "
-                + "  long l = call(1); "
-                + "  long call(final long i) { "
-                + "    return i; "
-                + "  }"
-                + "}";
+        String code =
+                "class Test { "
+                        + "  long l = call(1); "
+                        + "  long call(final long i) { "
+                        + "    return i; "
+                        + "  }"
+                        + "}";
         CompilationUnit cu = parse(code);
         MethodCallExpr methodCall = cu.findAll(MethodCallExpr.class).get(0);
         JavaParserFacade parserFacade = JavaParserFacade.get(new ReflectionTypeSolver());

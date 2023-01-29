@@ -27,29 +27,36 @@ import java.io.Serializable;
  *
  * @param <I> The input type for the transformer
  * @param <O> The output type for the transformer
- *
  * @since 4.1
  */
 public class IfTransformer<I, O> implements Transformer<I, O>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 8069309411242014252L;
 
-    /** The test */
+    /**
+     * The test
+     */
     private final Predicate<? super I> iPredicate;
-    /** The transformer to use if true */
+    /**
+     * The transformer to use if true
+     */
     private final Transformer<? super I, ? extends O> iTrueTransformer;
-    /** The transformer to use if false */
+    /**
+     * The transformer to use if false
+     */
     private final Transformer<? super I, ? extends O> iFalseTransformer;
 
     /**
      * Factory method that performs validation.
      *
-     * @param <I>  input type for the transformer
-     * @param <O>  output type for the transformer
-     * @param predicate  predicate to switch on
+     * @param <I>              input type for the transformer
+     * @param <O>              output type for the transformer
+     * @param predicate        predicate to switch on
      * @param trueTransformer  transformer used if true
-     * @param falseTransformer  transformer used if false
+     * @param falseTransformer transformer used if false
      * @return the <code>if</code> transformer
      * @throws NullPointerException if either argument is null
      */
@@ -72,9 +79,9 @@ public class IfTransformer<I, O> implements Transformer<I, O>, Serializable {
      * This factory creates a transformer that just returns the input object when
      * the predicate is false.
      *
-     * @param <T>  input and output type for the transformer
-     * @param predicate  predicate to switch on
-     * @param trueTransformer  transformer used if true
+     * @param <T>             input and output type for the transformer
+     * @param predicate       predicate to switch on
+     * @param trueTransformer transformer used if true
      * @return the <code>if</code> transformer
      * @throws NullPointerException if either argument is null
      */
@@ -96,13 +103,13 @@ public class IfTransformer<I, O> implements Transformer<I, O>, Serializable {
      * Constructor that performs no validation.
      * Use the static factory method <code>ifTransformer</code> if you want that.
      *
-     * @param predicate  predicate to switch on, not null
+     * @param predicate        predicate to switch on, not null
      * @param trueTransformer  transformer used if true, not null
-     * @param falseTransformer  transformer used if false, not null
+     * @param falseTransformer transformer used if false, not null
      */
     public IfTransformer(final Predicate<? super I> predicate,
-        final Transformer<? super I, ? extends O> trueTransformer,
-        final Transformer<? super I, ? extends O> falseTransformer) {
+                         final Transformer<? super I, ? extends O> trueTransformer,
+                         final Transformer<? super I, ? extends O> falseTransformer) {
 
         super();
         iPredicate = predicate;
@@ -113,12 +120,12 @@ public class IfTransformer<I, O> implements Transformer<I, O>, Serializable {
     /**
      * Transforms the input using the true or false transformer based to the result of the predicate.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result
      */
     @Override
     public O transform(final I input) {
-        if(iPredicate.evaluate(input)){
+        if (iPredicate.evaluate(input)) {
             return iTrueTransformer.transform(input);
         }
         return iFalseTransformer.transform(input);
@@ -129,7 +136,7 @@ public class IfTransformer<I, O> implements Transformer<I, O>, Serializable {
      *
      * @return the predicate
      */
-    public Predicate<? super I> getPredicate(){
+    public Predicate<? super I> getPredicate() {
         return iPredicate;
     }
 

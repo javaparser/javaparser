@@ -2,9 +2,9 @@ package devices.NXT;
 
 
 public class NXT {
-	public static Display display;
+    public static Display display;
 
-	static {
-		display = new Display();
-	}
+    static {
+        display = new Display();
+    }
 }

@@ -20,7 +20,8 @@ package org.apache.commons.math3.analysis.solvers;
 import org.apache.commons.math3.RealFieldElement;
 import org.apache.commons.math3.analysis.RealFieldUnivariateFunction;
 
-/** Interface for {@link UnivariateSolver (univariate real) root-finding
+/**
+ * Interface for {@link UnivariateSolver (univariate real) root-finding
  * algorithms} that maintain a bracketed solution. There are several advantages
  * to having such root-finding algorithms:
  * <ul>
@@ -40,8 +41,8 @@ import org.apache.commons.math3.analysis.RealFieldUnivariateFunction;
  * {@link AllowedSolution#ANY_SIDE ANY_SIDE} as default for the allowed
  * solutions.</p>
  *
- * @see AllowedSolution
  * @param <T> the type of the field elements
+ * @see AllowedSolution
  * @since 3.6
  */
 public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T>> {
@@ -102,17 +103,16 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * Solvers that do require bracketing should be able to handle the case
      * where one of the endpoints is itself a root.
      *
-     * @param maxEval Maximum number of evaluations.
-     * @param f Function to solve.
-     * @param min Lower bound for the interval.
-     * @param max Upper bound for the interval.
+     * @param maxEval         Maximum number of evaluations.
+     * @param f               Function to solve.
+     * @param min             Lower bound for the interval.
+     * @param max             Upper bound for the interval.
      * @param allowedSolution The kind of solutions that the root-finding algorithm may
-     * accept as solutions.
+     *                        accept as solutions.
      * @return A value where the function is zero.
-     * @throws org.apache.commons.math3.exception.MathIllegalArgumentException
-     * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if
-     * the allowed number of evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.MathIllegalArgumentException if the arguments do not satisfy the requirements specified by the solver.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException  if
+     *                                                                         the allowed number of evaluations is exceeded.
      */
     T solve(int maxEval, RealFieldUnivariateFunction<T> f, T min, T max,
             AllowedSolution allowedSolution);
@@ -123,18 +123,17 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * Solvers that do require bracketing should be able to handle the case
      * where one of the endpoints is itself a root.
      *
-     * @param maxEval Maximum number of evaluations.
-     * @param f Function to solve.
-     * @param min Lower bound for the interval.
-     * @param max Upper bound for the interval.
-     * @param startValue Start value to use.
+     * @param maxEval         Maximum number of evaluations.
+     * @param f               Function to solve.
+     * @param min             Lower bound for the interval.
+     * @param max             Upper bound for the interval.
+     * @param startValue      Start value to use.
      * @param allowedSolution The kind of solutions that the root-finding algorithm may
-     * accept as solutions.
+     *                        accept as solutions.
      * @return A value where the function is zero.
-     * @throws org.apache.commons.math3.exception.MathIllegalArgumentException
-     * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if
-     * the allowed number of evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.MathIllegalArgumentException if the arguments do not satisfy the requirements specified by the solver.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException  if
+     *                                                                         the allowed number of evaluations is exceeded.
      */
     T solve(int maxEval, RealFieldUnivariateFunction<T> f, T min, T max, T startValue,
             AllowedSolution allowedSolution);

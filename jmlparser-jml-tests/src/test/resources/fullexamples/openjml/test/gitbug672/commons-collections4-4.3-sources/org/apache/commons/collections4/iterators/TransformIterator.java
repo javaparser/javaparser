@@ -27,12 +27,17 @@ import java.util.Iterator;
  */
 public class TransformIterator<I, O> implements Iterator<O> {
 
-    /** The iterator being used */
+    /**
+     * The iterator being used
+     */
     private Iterator<? extends I> iterator;
-    /** The transformer being used */
+    /**
+     * The transformer being used
+     */
     private Transformer<? super I, ? extends O> transformer;
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs a new <code>TransformIterator</code> that will not function
      * until the {@link #setIterator(Iterator) setIterator} and
@@ -46,7 +51,7 @@ public class TransformIterator<I, O> implements Iterator<O> {
      * Constructs a new <code>TransformIterator</code> that won't transform
      * elements from the given iterator.
      *
-     * @param iterator  the iterator to use
+     * @param iterator the iterator to use
      */
     public TransformIterator(final Iterator<? extends I> iterator) {
         super();
@@ -58,8 +63,8 @@ public class TransformIterator<I, O> implements Iterator<O> {
      * given iterator and transformer.  If the given transformer is null,
      * then objects will not be transformed.
      *
-     * @param iterator  the iterator to use
-     * @param transformer  the transformer to use
+     * @param iterator    the iterator to use
+     * @param transformer the transformer to use
      */
     public TransformIterator(final Iterator<? extends I> iterator,
                              final Transformer<? super I, ? extends O> transformer) {
@@ -93,6 +98,7 @@ public class TransformIterator<I, O> implements Iterator<O> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the iterator this iterator is using.
      *
@@ -106,13 +112,14 @@ public class TransformIterator<I, O> implements Iterator<O> {
      * Sets the iterator for this iterator to use.
      * If iteration has started, this effectively resets the iterator.
      *
-     * @param iterator  the iterator to use
+     * @param iterator the iterator to use
      */
     public void setIterator(final Iterator<? extends I> iterator) {
         this.iterator = iterator;
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the transformer this iterator is using.
      *
@@ -126,18 +133,19 @@ public class TransformIterator<I, O> implements Iterator<O> {
      * Sets the transformer this the iterator to use.
      * A null transformer is a no-op transformer.
      *
-     * @param transformer  the transformer to use
+     * @param transformer the transformer to use
      */
     public void setTransformer(final Transformer<? super I, ? extends O> transformer) {
         this.transformer = transformer;
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Transforms the given object using the transformer.
      * If the transformer is null, the original object is returned as-is.
      *
-     * @param source  the object to transform
+     * @param source the object to transform
      * @return the transformed object
      */
     protected O transform(final I source) {

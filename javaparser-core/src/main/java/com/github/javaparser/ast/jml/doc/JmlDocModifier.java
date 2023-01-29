@@ -9,6 +9,7 @@ import com.github.javaparser.ast.NodeList;
  * @version 1 (11/23/21)
  */
 public class JmlDocModifier implements Modifier.Keyword, JmlDocContainer {
+
     private final NodeList<JmlDoc> jmlComments;
 
     @AllFieldsConstructor

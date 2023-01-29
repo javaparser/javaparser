@@ -1,3 +1,3 @@
 class C {
-private java.util.Hashtable<String,String> m;
+    private java.util.Hashtable<String, String> m;
 }

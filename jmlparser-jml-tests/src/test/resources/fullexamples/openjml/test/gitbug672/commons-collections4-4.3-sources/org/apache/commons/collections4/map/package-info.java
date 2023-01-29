@@ -48,7 +48,6 @@
  *   <li>Lazy - creates objects in the map on demand
  *   <li>ListOrdered - ensures that insertion order is retained
  * </ul>
- *
  */
 package org.apache.commons.collections4.map;
 

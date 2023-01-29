@@ -8,13 +8,13 @@ public class StringSet {
 
     /*@ public instance invariant
       @   this.elements != null && this.elements.length == this.size;
-      @*/	
-    public StringSet (int size) {
-	assert (size > 0);
-	this.size = size;
-	elements = new String[size];
+      @*/
+    public StringSet(int size) {
+        assert (size > 0);
+        this.size = size;
+        elements = new String[size];
     }
-	
+
     /*@ public normal_behavior
       @  requires s != null && s.hashCode() >= 0;
       @  requires this.elements[(s.hashCode() % this.size)] == null;
@@ -46,22 +46,22 @@ public class StringSet {
       @  assignable \nothing;
       @  ensures \result == false;
       @*/
-    public boolean insert (/*@ nullable @*/ String s) {
-	if (s==null) return false;
-	int hash = s.hashCode();
-	hash = hash < 0 ? -(hash + 1) : hash; 
-	if (hash % size >= size) {
-	    return false;
-	} else {
-	    if (elements[hash % size] == null) {
-		elements[hash % size] = s;
-		return true;
-	    } else {
-		return elements[hash % size].equals(s);
-	    }
-	}
+    public boolean insert(/*@ nullable @*/ String s) {
+        if (s == null) return false;
+        int hash = s.hashCode();
+        hash = hash < 0 ? -(hash + 1) : hash;
+        if (hash % size >= size) {
+            return false;
+        } else {
+            if (elements[hash % size] == null) {
+                elements[hash % size] = s;
+                return true;
+            } else {
+                return elements[hash % size].equals(s);
+            }
+        }
     }
-	
+
     /*@ public normal_behavior
       @  requires s != null && s.hashCode() >= 0;
       @  assignable \nothing;
@@ -79,15 +79,15 @@ public class StringSet {
       @  assignable \nothing;
       @  ensures \result == false;
       @*/
-    public boolean contains (/*@ nullable @*/ String s) {
-	if (s==null) return false;
-	int hash = s.hashCode();
-	hash = hash < 0 ? -(hash + 1) : hash; 
-	if (hash % size >= size) {
-	    return false;
-	} else { 
-	    return s.equals(elements[hash % size]);
-	}
+    public boolean contains(/*@ nullable @*/ String s) {
+        if (s == null) return false;
+        int hash = s.hashCode();
+        hash = hash < 0 ? -(hash + 1) : hash;
+        if (hash % size >= size) {
+            return false;
+        } else {
+            return s.equals(elements[hash % size]);
+        }
     }
-		
+
 }

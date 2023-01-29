@@ -22,8 +22,8 @@ package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.types.ResolvedType;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,6 +108,20 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
         return getParam(getNumberOfParams() - 1);
     }
 
+    /*
+     * Returns the list of formal parameter types
+     */
+    default List<ResolvedType> formalParameterTypes() {
+        if (getNumberOfParams() == 0) {
+            return Collections.emptyList();
+        }
+        List<ResolvedType> types = new ArrayList<>();
+        for (int i = 0; i < getNumberOfParams(); i++) {
+            types.add(getParam(i).getType());
+        }
+        return types;
+    }
+
     /**
      * Has the method or construcor a variadic parameter?
      * Note that when a method has a variadic parameter it should have an array type.
@@ -138,8 +152,8 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
     /**
      * Type of the corresponding entry in the throws clause.
      *
-     * @throws IllegalArgumentException if the index is negative or it is equal or greater than the value returned by
-     *                                  getNumberOfSpecifiedExceptions
+     * @throws IllegalArgumentException      if the index is negative or it is equal or greater than the value returned by
+     *                                       getNumberOfSpecifiedExceptions
      * @throws UnsupportedOperationException for those types of methods of constructor that do not declare exceptions
      */
     ResolvedType getSpecifiedException(int index);
@@ -147,12 +161,11 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
     default List<ResolvedType> getSpecifiedExceptions() {
         if (getNumberOfSpecifiedExceptions() == 0) {
             return Collections.emptyList();
-        } else {
-            List<ResolvedType> exceptions = new LinkedList<>();
-            for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
-                exceptions.add(getSpecifiedException(i));
-            }
-            return exceptions;
         }
+        List<ResolvedType> exceptions = new ArrayList<>();
+        for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
+            exceptions.add(getSpecifiedException(i));
+        }
+        return exceptions;
     }
 }

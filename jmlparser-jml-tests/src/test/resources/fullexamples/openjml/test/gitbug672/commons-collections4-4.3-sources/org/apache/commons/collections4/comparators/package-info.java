@@ -22,6 +22,5 @@
  * {@link org.apache.commons.collections4.ComparatorUtils ComparatorUtils},
  * which is a single class that uses static methods to construct instances
  * of the classes in this package.
- *
  */
 package org.apache.commons.collections4.comparators;

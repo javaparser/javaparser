@@ -27,23 +27,30 @@ import org.apache.commons.math3.ml.neuralnet.twod.NeuronSquareMesh2D;
  * Visualization of high-dimensional data projection on a 2D-map.
  * The method is described in
  * <quote>
- *  <em>Using Smoothed Data Histograms for Cluster Visualization in Self-Organizing Maps</em>
- *  <br>
- *  by Elias Pampalk, Andreas Rauber and Dieter Merkl.
+ * <em>Using Smoothed Data Histograms for Cluster Visualization in Self-Organizing Maps</em>
+ * <br>
+ * by Elias Pampalk, Andreas Rauber and Dieter Merkl.
  * </quote>
+ *
  * @since 3.6
  */
 public class SmoothedDataHistogram implements MapDataVisualization {
-    /** Smoothing parameter. */
+    /**
+     * Smoothing parameter.
+     */
     private final int smoothingBins;
-    /** Distance. */
+    /**
+     * Distance.
+     */
     private final DistanceMeasure distance;
-    /** Normalization factor. */
+    /**
+     * Normalization factor.
+     */
     private final double membershipNormalization;
 
     /**
      * @param smoothingBins Number of bins.
-     * @param distance Distance.
+     * @param distance      Distance.
      */
     public SmoothedDataHistogram(int smoothingBins,
                                  DistanceMeasure distance) {
@@ -62,8 +69,8 @@ public class SmoothedDataHistogram implements MapDataVisualization {
      * {@inheritDoc}
      *
      * @throws NumberIsTooSmallException if the size of the {@code map}
-     * is smaller than the number of {@link #SmoothedDataHistogram(int,DistanceMeasure)
-     * smoothing bins}.
+     *                                   is smaller than the number of {@link #SmoothedDataHistogram(int, DistanceMeasure)
+     *                                   smoothing bins}.
      */
     public double[][] computeImage(NeuronSquareMesh2D map,
                                    Iterable<double[]> data) {
@@ -82,8 +89,8 @@ public class SmoothedDataHistogram implements MapDataVisualization {
 
         for (double[] sample : data) {
             final Neuron[] sorted = MapUtils.sort(sample,
-                                                  map.getNetwork(),
-                                                  distance);
+                    map.getNetwork(),
+                    distance);
             for (int i = 0; i < smoothingBins; i++) {
                 final LocationFinder.Location loc = finder.getLocation(sorted[i]);
                 final int row = loc.getRow();

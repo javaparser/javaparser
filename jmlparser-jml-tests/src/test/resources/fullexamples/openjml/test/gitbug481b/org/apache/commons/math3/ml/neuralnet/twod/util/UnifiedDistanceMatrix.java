@@ -27,33 +27,38 @@ import java.util.Collection;
 /**
  * <a href="http://en.wikipedia.org/wiki/U-Matrix">U-Matrix</a>
  * visualization of high-dimensional data projection.
+ *
  * @since 3.6
  */
 public class UnifiedDistanceMatrix implements MapVisualization {
-    /** Whether to show distance between each pair of neighbouring units. */
+    /**
+     * Whether to show distance between each pair of neighbouring units.
+     */
     private final boolean individualDistances;
-    /** Distance. */
+    /**
+     * Distance.
+     */
     private final DistanceMeasure distance;
 
     /**
      * Simple constructor.
      *
      * @param individualDistances If {@code true}, the 8 individual
-     * inter-units distances will be {@link #computeImage(NeuronSquareMesh2D)
-     * computed}.  They will be stored in additional pixels around each of
-     * the original units of the 2D-map.  The additional pixels that lie
-     * along a "diagonal" are shared by <em>two</em> pairs of units: their
-     * value will be set to the average distance between the units belonging
-     * to each of the pairs.  The value zero will be stored in the pixel
-     * corresponding to the location of a unit of the 2D-map.
-     * <br>
-     * If {@code false}, only the average distance between a unit and all its
-     * neighbours will be computed (and stored in the pixel corresponding to
-     * that unit of the 2D-map).  In that case, the number of neighbours taken
-     * into account depends on the network's
-     * {@link org.apache.commons.math3.ml.neuralnet.SquareNeighbourhood
-     * neighbourhood type}.
-     * @param distance Distance.
+     *                            inter-units distances will be {@link #computeImage(NeuronSquareMesh2D)
+     *                            computed}.  They will be stored in additional pixels around each of
+     *                            the original units of the 2D-map.  The additional pixels that lie
+     *                            along a "diagonal" are shared by <em>two</em> pairs of units: their
+     *                            value will be set to the average distance between the units belonging
+     *                            to each of the pairs.  The value zero will be stored in the pixel
+     *                            corresponding to the location of a unit of the 2D-map.
+     *                            <br>
+     *                            If {@code false}, only the average distance between a unit and all its
+     *                            neighbours will be computed (and stored in the pixel corresponding to
+     *                            that unit of the 2D-map).  In that case, the number of neighbours taken
+     *                            into account depends on the network's
+     *                            {@link org.apache.commons.math3.ml.neuralnet.SquareNeighbourhood
+     *                            neighbourhood type}.
+     * @param distance            Distance.
      */
     public UnifiedDistanceMatrix(boolean individualDistances,
                                  DistanceMeasure distance) {
@@ -61,7 +66,9 @@ public class UnifiedDistanceMatrix implements MapVisualization {
         this.distance = distance;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double[][] computeImage(NeuronSquareMesh2D map) {
         if (individualDistances) {
             return individualDistances(map);
@@ -104,20 +111,20 @@ public class UnifiedDistanceMatrix implements MapVisualization {
 
                 // Right neighbour.
                 neighbour = map.getNeuron(i, j,
-                                          NeuronSquareMesh2D.HorizontalDirection.RIGHT,
-                                          NeuronSquareMesh2D.VerticalDirection.CENTER);
+                        NeuronSquareMesh2D.HorizontalDirection.RIGHT,
+                        NeuronSquareMesh2D.VerticalDirection.CENTER);
                 if (neighbour != null) {
                     uMatrix[iR][jR + 1] = distance.compute(current,
-                                                           neighbour.getFeatures());
+                            neighbour.getFeatures());
                 }
 
                 // Bottom-center neighbour.
                 neighbour = map.getNeuron(i, j,
-                                          NeuronSquareMesh2D.HorizontalDirection.CENTER,
-                                          NeuronSquareMesh2D.VerticalDirection.DOWN);
+                        NeuronSquareMesh2D.HorizontalDirection.CENTER,
+                        NeuronSquareMesh2D.VerticalDirection.DOWN);
                 if (neighbour != null) {
                     uMatrix[iR + 1][jR] = distance.compute(current,
-                                                           neighbour.getFeatures());
+                            neighbour.getFeatures());
                 }
             }
         }
@@ -137,24 +144,24 @@ public class UnifiedDistanceMatrix implements MapVisualization {
 
                 final Neuron current = map.getNeuron(i, j);
                 final Neuron right = map.getNeuron(i, j,
-                                                   NeuronSquareMesh2D.HorizontalDirection.RIGHT,
-                                                   NeuronSquareMesh2D.VerticalDirection.CENTER);
+                        NeuronSquareMesh2D.HorizontalDirection.RIGHT,
+                        NeuronSquareMesh2D.VerticalDirection.CENTER);
                 final Neuron bottom = map.getNeuron(i, j,
-                                                    NeuronSquareMesh2D.HorizontalDirection.CENTER,
-                                                    NeuronSquareMesh2D.VerticalDirection.DOWN);
+                        NeuronSquareMesh2D.HorizontalDirection.CENTER,
+                        NeuronSquareMesh2D.VerticalDirection.DOWN);
                 final Neuron bottomRight = map.getNeuron(i, j,
-                                                         NeuronSquareMesh2D.HorizontalDirection.RIGHT,
-                                                         NeuronSquareMesh2D.VerticalDirection.DOWN);
+                        NeuronSquareMesh2D.HorizontalDirection.RIGHT,
+                        NeuronSquareMesh2D.VerticalDirection.DOWN);
 
                 final double current2BottomRight = bottomRight == null ?
-                    0 :
-                    distance.compute(current.getFeatures(),
-                                     bottomRight.getFeatures());
+                        0 :
+                        distance.compute(current.getFeatures(),
+                                bottomRight.getFeatures());
                 final double right2Bottom = (right == null ||
-                                             bottom == null) ?
-                    0 :
-                    distance.compute(right.getFeatures(),
-                                     bottom.getFeatures());
+                        bottom == null) ?
+                        0 :
+                        distance.compute(right.getFeatures(),
+                                bottom.getFeatures());
 
                 // Bottom-right slot.
                 uMatrix[iR + 1][jR + 1] = 0.5 * (current2BottomRight + right2Bottom);

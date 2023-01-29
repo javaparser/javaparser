@@ -38,7 +38,9 @@ import java.util.HashMap;
  */
 public class HashBag<E> extends AbstractMapBag<E> implements Serializable {
 
-    /** Serial version lock */
+    /**
+     * Serial version lock
+     */
     private static final long serialVersionUID = -6561115435802554013L;
 
     /**
@@ -51,7 +53,7 @@ public class HashBag<E> extends AbstractMapBag<E> implements Serializable {
     /**
      * Constructs a bag containing all the members of the given collection.
      *
-     * @param coll  a collection to copy into this bag
+     * @param coll a collection to copy into this bag
      */
     public HashBag(final Collection<? extends E> coll) {
         this();
@@ -59,10 +61,11 @@ public class HashBag<E> extends AbstractMapBag<E> implements Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the bag out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -73,8 +76,8 @@ public class HashBag<E> extends AbstractMapBag<E> implements Serializable {
     /**
      * Read the bag in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {

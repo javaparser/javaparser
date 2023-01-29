@@ -28,16 +28,20 @@ import java.io.Serializable;
  */
 public final class StringValueTransformer<T> implements Transformer<T, String>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 7511110693171758606L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     private static final Transformer<Object, String> INSTANCE = new StringValueTransformer<>();
 
     /**
      * Factory returning the singleton instance.
      *
-     * @param <T>  the input type
+     * @param <T> the input type
      * @return the singleton instance
      * @since 3.1
      */
@@ -56,7 +60,7 @@ public final class StringValueTransformer<T> implements Transformer<T, String>, 
     /**
      * Transforms the input to result by calling <code>String.valueOf</code>.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result
      */
     @Override

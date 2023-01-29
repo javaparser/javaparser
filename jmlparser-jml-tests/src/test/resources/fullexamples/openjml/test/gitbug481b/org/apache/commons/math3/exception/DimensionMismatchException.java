@@ -25,16 +25,20 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class DimensionMismatchException extends MathIllegalNumberException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -8415396756375798143L;
-    /** Correct dimension. */
+    /**
+     * Correct dimension.
+     */
     private final int dimension;
 
     /**
      * Construct an exception from the mismatched dimensions.
      *
      * @param specific Specific context information pattern.
-     * @param wrong Wrong dimension.
+     * @param wrong    Wrong dimension.
      * @param expected Expected dimension.
      */
     public DimensionMismatchException(Localizable specific,
@@ -47,7 +51,7 @@ public class DimensionMismatchException extends MathIllegalNumberException {
     /**
      * Construct an exception from the mismatched dimensions.
      *
-     * @param wrong Wrong dimension.
+     * @param wrong    Wrong dimension.
      * @param expected Expected dimension.
      */
     public DimensionMismatchException(int wrong,

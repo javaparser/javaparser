@@ -128,7 +128,7 @@ public class ResolvedTypeVariable implements ResolvedType {
     // / Erasure
     // /
     // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
-    // 
+    //
     @Override
     public ResolvedType erasure() {
         if (typeParameter.isBounded()) {

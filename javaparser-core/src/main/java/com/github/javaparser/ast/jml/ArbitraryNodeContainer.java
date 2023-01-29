@@ -12,6 +12,7 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @version 1 (11/23/21)
  */
 public class ArbitraryNodeContainer extends Node {
+
     private NodeList<Node> children;
 
     public ArbitraryNodeContainer() {
@@ -23,7 +24,6 @@ public class ArbitraryNodeContainer extends Node {
         this.children = children;
     }
 
-
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return null;
@@ -31,7 +31,6 @@ public class ArbitraryNodeContainer extends Node {
 
     @Override
     public <A> void accept(VoidVisitor<A> v, A arg) {
-
     }
 
     public NodeList<Node> getChildren() {

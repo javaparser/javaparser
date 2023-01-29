@@ -1,6 +1,6 @@
 public class ExampleSubject extends Subject {
     private int value;
-    
+
     //@ represents footprint = \locset( value );
 
     /*@ public normal_behaviour
@@ -8,24 +8,24 @@ public class ExampleSubject extends Subject {
       @   ensures observers != null && \fresh(observers) && observers.length == 0;
       @*/
     public /*@pure@*/ ExampleSubject() {
-	value = 33;
+        value = 33;
     }
-    
-    
+
+
     /*@ normal_behaviour
       @  accessible footprint;
       @  ensures \result == value();
       @*/
     public /*@pure helper@*/ int value() {
-	return value;
+        return value;
     }
-    
-    
+
+
     /*@ public normal_behaviour
       @   assignable footprint;
       @   ensures footprint == \old(footprint);
       @*/
     public void change() {
-	value += 981;
+        value += 981;
     }
 }

@@ -38,14 +38,15 @@ import java.util.List;
 public class SumOfClusterVariances<T extends Clusterable> extends ClusterEvaluator<T> {
 
     /**
-     *
      * @param measure the distance measure to use
      */
     public SumOfClusterVariances(final DistanceMeasure measure) {
         super(measure);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double score(final List<? extends Cluster<T>> clusters) {
         double varianceSum = 0.0;

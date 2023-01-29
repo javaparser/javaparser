@@ -30,17 +30,20 @@ import java.util.TreeMap;
  * Subclasses must implement the {@link #computeRule(int) computeRule} method.
  *
  * @param <T> Type of the number used to represent the points and weights of
- * the quadrature rules.
- *
+ *            the quadrature rules.
  * @since 3.1
  */
 public abstract class BaseRuleFactory<T extends Number> {
-    /** List of points and weights, indexed by the order of the rule. */
+    /**
+     * List of points and weights, indexed by the order of the rule.
+     */
     private final Map<Integer, Pair<T[], T[]>> pointsAndWeights
-        = new TreeMap<Integer, Pair<T[], T[]>>();
-    /** Cache for double-precision rules. */
+            = new TreeMap<Integer, Pair<T[], T[]>>();
+    /**
+     * Cache for double-precision rules.
+     */
     private final Map<Integer, Pair<double[], double[]>> pointsAndWeightsDouble
-        = new TreeMap<Integer, Pair<double[], double[]>>();
+            = new TreeMap<Integer, Pair<double[], double[]>>();
 
     /**
      * Gets a copy of the quadrature rule with the given number of integration
@@ -49,15 +52,15 @@ public abstract class BaseRuleFactory<T extends Number> {
      * @param numberOfPoints Number of integration points.
      * @return a copy of the integration rule.
      * @throws NotStrictlyPositiveException if {@code numberOfPoints < 1}.
-     * @throws DimensionMismatchException if the elements of the rule pair do not
-     * have the same length.
+     * @throws DimensionMismatchException   if the elements of the rule pair do not
+     *                                      have the same length.
      */
     public Pair<double[], double[]> getRule(int numberOfPoints)
-        throws NotStrictlyPositiveException, DimensionMismatchException {
+            throws NotStrictlyPositiveException, DimensionMismatchException {
 
         if (numberOfPoints <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_POINTS,
-                                                   numberOfPoints);
+                    numberOfPoints);
         }
 
         // Try to obtain the rule from the cache.
@@ -76,7 +79,7 @@ public abstract class BaseRuleFactory<T extends Number> {
 
         // Return a copy.
         return new Pair<double[], double[]>(cached.getFirst().clone(),
-                                            cached.getSecond().clone());
+                cached.getSecond().clone());
     }
 
     /**
@@ -88,10 +91,10 @@ public abstract class BaseRuleFactory<T extends Number> {
      * @param numberOfPoints Order of the rule to be retrieved.
      * @return the points and weights corresponding to the given order.
      * @throws DimensionMismatchException if the elements of the rule pair do not
-     * have the same length.
+     *                                    have the same length.
      */
     protected synchronized Pair<T[], T[]> getRuleInternal(int numberOfPoints)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         final Pair<T[], T[]> rule = pointsAndWeights.get(numberOfPoints);
         if (rule == null) {
             addRule(computeRule(numberOfPoints));
@@ -106,12 +109,12 @@ public abstract class BaseRuleFactory<T extends Number> {
      *
      * @param rule Rule to be stored.
      * @throws DimensionMismatchException if the elements of the pair do not
-     * have the same length.
+     *                                    have the same length.
      */
     protected void addRule(Pair<T[], T[]> rule) throws DimensionMismatchException {
         if (rule.getFirst().length != rule.getSecond().length) {
             throw new DimensionMismatchException(rule.getFirst().length,
-                                                 rule.getSecond().length);
+                    rule.getSecond().length);
         }
 
         pointsAndWeights.put(rule.getFirst().length, rule);
@@ -123,16 +126,16 @@ public abstract class BaseRuleFactory<T extends Number> {
      * @param numberOfPoints Order of the rule to be computed.
      * @return the computed rule.
      * @throws DimensionMismatchException if the elements of the pair do not
-     * have the same length.
+     *                                    have the same length.
      */
     protected abstract Pair<T[], T[]> computeRule(int numberOfPoints)
-        throws DimensionMismatchException;
+            throws DimensionMismatchException;
 
     /**
      * Converts the from the actual {@code Number} type to {@code double}
      *
-     * @param <T> Type of the number used to represent the points and
-     * weights of the quadrature rules.
+     * @param <T>  Type of the number used to represent the points and
+     *             weights of the quadrature rules.
      * @param rule Points and weights.
      * @return points and weights as {@code double}s.
      */

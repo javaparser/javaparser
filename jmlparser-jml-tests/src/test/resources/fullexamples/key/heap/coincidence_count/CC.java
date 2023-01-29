@@ -2,16 +2,16 @@
  * Solution for the KeY verifier to the coincidence count challenge
  * provided by Rustan Leino at the Dagstuhl-Seminar on Verification
  * Competitions.
- *
+ * <p>
  * The challenge was to count coincidences that is the number of
- * elements that occur in two arrays. Assumption is that both 
+ * elements that occur in two arrays. Assumption is that both
  * are strictly sorted.
- *
+ * <p>
  * To provide a different modelling, we chose to use a
  * \sum-comprehension to model the count. For the coincidence count we
  * sum 1 for the elements a[i] in a for which there is an index j with
  * a[i] == b[j].
- *
+ * <p>
  * The proof in KeY leaves 4 intermediate goals open on which the
  * sum-comprehension needs to be treated manually using
  * interaction. The proof takes c. 17000 steps on 120 branches.
@@ -49,13 +49,13 @@ class CC {
           @
           @ modifies \strictly_nothing;
           @*/
-        while(i < a.length && j < b.length) {
-            if(a[i] < b[j]) {
+        while (i < a.length && j < b.length) {
+            if (a[i] < b[j]) {
                 i++;
-            } else if(b[j] < a[i]) {
+            } else if (b[j] < a[i]) {
                 j++;
             } else {
-                i++; 
+                i++;
                 j++;
                 result++;
             }

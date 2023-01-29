@@ -12,7 +12,7 @@
 // 
 
 public class A {
-  
+
     public char c_1, c_2;
     public byte b_1, b_2;
     public short s_1, s_2;

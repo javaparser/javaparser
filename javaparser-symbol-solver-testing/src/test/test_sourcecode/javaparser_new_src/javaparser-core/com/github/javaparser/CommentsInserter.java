@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -33,7 +33,7 @@ import static com.github.javaparser.ast.Node.NODE_BY_BEGIN_POSITION;
 
 /**
  * Assigns comments to nodes of the AST.
- * 
+ *
  * @author Sebastian Kuerten
  * @author Júlio Vilmar Gesser
  */
@@ -43,7 +43,7 @@ class CommentsInserter {
     CommentsInserter(ParserConfiguration configuration) {
         this.configuration = configuration;
     }
-    
+
     /**
      * Comments are attributed to the thing they comment and are removed from
      * the comments.
@@ -79,9 +79,9 @@ class CommentsInserter {
     void insertComments(Node node, TreeSet<Comment> commentsToAttribute) {
         if (commentsToAttribute.isEmpty())
             return;
-        
-        if(node instanceof CompilationUnit){
-            insertComments((CompilationUnit)node, commentsToAttribute);
+
+        if (node instanceof CompilationUnit) {
+            insertComments((CompilationUnit) node, commentsToAttribute);
         }
 
         // the comments can:
@@ -114,9 +114,9 @@ class CommentsInserter {
             if (comment.isLineComment()) {
                 for (Node child : children) {
                     if (child.getEnd().line == comment.getBegin().line
-                        && attributeLineCommentToNodeOrChild(child,
-                                comment.asLineComment())) {
-                            attributedComments.add(comment);
+                            && attributeLineCommentToNodeOrChild(child,
+                            comment.asLineComment())) {
+                        attributedComments.add(comment);
                     }
                 }
             }
@@ -165,7 +165,7 @@ class CommentsInserter {
         // let's give to it the comment
         if (node.getBegin().line == lineComment.getBegin().line
                 && !node.hasComment()) {
-            if(!(node instanceof Comment)) {
+            if (!(node instanceof Comment)) {
                 node.setComment(lineComment);
             }
             return true;

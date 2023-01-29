@@ -26,23 +26,30 @@ import java.util.Map;
 
 /**
  * Helper class to find the grid coordinates of a neuron.
+ *
  * @since 3.6
  */
 public class LocationFinder {
-    /** Identifier to location mapping. */
+    /**
+     * Identifier to location mapping.
+     */
     private final Map<Long, Location> locations = new HashMap<Long, Location>();
 
     /**
      * Container holding a (row, column) pair.
      */
     public static class Location {
-        /** Row index. */
+        /**
+         * Row index.
+         */
         private final int row;
-        /** Column index. */
+        /**
+         * Column index.
+         */
         private final int column;
 
         /**
-         * @param row Row index.
+         * @param row    Row index.
          * @param column Column index.
          */
         public Location(int row,
@@ -71,11 +78,10 @@ public class LocationFinder {
      * belong to the given {@code map}.
      *
      * @param map Map.
-     *
      * @throws MathIllegalStateException if the network contains non-unique
-     * identifiers.  This indicates an inconsistent state due to a bug in
-     * the construction code of the underlying
-     * {@link org.apache.commons.math3.ml.neuralnet.Network network}.
+     *                                   identifiers.  This indicates an inconsistent state due to a bug in
+     *                                   the construction code of the underlying
+     *                                   {@link org.apache.commons.math3.ml.neuralnet.Network network}.
      */
     public LocationFinder(NeuronSquareMesh2D map) {
         final int nR = map.getNumberOfRows();

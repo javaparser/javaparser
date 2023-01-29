@@ -8,7 +8,8 @@ public abstract class AbsInterval implements IntSet {
     //@ assignable state;
     //@ ensures lb == (long)l && ub == (long)u;
     public AbsInterval(int l, int u) {
-        lb = l; ub = u; 
+        lb = l;
+        ub = u;
     }
 
     //@ also
@@ -34,19 +35,21 @@ public abstract class AbsInterval implements IntSet {
     }
 
     public void remove(int i) {
-        if (!contains(i)) { return; }
+        if (!contains(i)) {
+            return;
+        }
         //@ assert lb <= i && i <= ub;
-        if (i-lb > ub-i) {
-            lb = ((long)i)+1;
+        if (i - lb > ub - i) {
+            lb = ((long) i) + 1;
         } else {
-            ub = ((long)i)-1;
+            ub = ((long) i) - 1;
         }
         //@ assert !contains(i);
     }
 
     /*@ also
       @   ensures \result == ub - lb - 1;
-      @*/   
+      @*/
     public /*@ pure @*/ long size() {
         return ub - lb - 1;
     }

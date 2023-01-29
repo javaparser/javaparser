@@ -111,7 +111,7 @@ public class JavaParserTypeDeclarationAdapter {
                 if (implementedType.getName().getId().equals(name)) {
                     return context.getParent()
                             .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                        .solveType(implementedType.getNameWithScope(), typeArguments);
+                            .solveType(implementedType.getNameWithScope(), typeArguments);
                 }
             }
         }
@@ -129,7 +129,8 @@ public class JavaParserTypeDeclarationAdapter {
         }
 
         // Look into extended classes and implemented interfaces
-        ResolvedTypeDeclaration type = checkAncestorsForType(name, this.typeDeclaration);
+        String typeName = isCompositeName(name) ? innerMostPartOfName(name) : name;
+        ResolvedTypeDeclaration type = checkAncestorsForType(typeName, this.typeDeclaration);
         if (type != null) {
             return SymbolReference.solved(type);
         }
@@ -138,6 +139,14 @@ public class JavaParserTypeDeclarationAdapter {
         return context.getParent()
                 .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
                 .solveType(name, typeArguments);
+    }
+
+    private boolean isCompositeName(String name) {
+        return name.indexOf('.') > -1;
+    }
+
+    private String innerMostPartOfName(String name) {
+        return isCompositeName(name) ? name.substring(name.lastIndexOf(".") + 1) : name;
     }
 
     private <T extends NodeWithTypeArguments<?>> boolean compareTypes(List<? extends Type> types,
@@ -155,7 +164,7 @@ public class JavaParserTypeDeclarationAdapter {
     }
 
     private <T extends NodeWithTypeParameters<?>> boolean compareTypeParameters(T type,
-                                                                               List<ResolvedType> resolvedTypeArguments) {
+                                                                                List<ResolvedType> resolvedTypeArguments) {
         return compareTypes(type.getTypeParameters(), resolvedTypeArguments);
     }
 
@@ -171,6 +180,7 @@ public class JavaParserTypeDeclarationAdapter {
      * Recursively checks the ancestors of the {@param declaration} if an internal type is declared with a name equal
      * to {@param name}.
      * TODO: Edit to remove return of null (favouring a return of optional)
+     *
      * @return A ResolvedTypeDeclaration matching the {@param name}, null otherwise
      */
     private ResolvedTypeDeclaration checkAncestorsForType(String name, ResolvedReferenceTypeDeclaration declaration) {

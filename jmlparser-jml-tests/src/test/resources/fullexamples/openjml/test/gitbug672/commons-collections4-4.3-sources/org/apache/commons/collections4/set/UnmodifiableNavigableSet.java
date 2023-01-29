@@ -39,14 +39,16 @@ public final class UnmodifiableNavigableSet<E>
         extends AbstractNavigableSetDecorator<E>
         implements Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150528L;
 
     /**
      * Factory method to create an unmodifiable set.
      *
      * @param <E> the element type
-     * @param set  the set to decorate, must not be null
+     * @param set the set to decorate, must not be null
      * @return a new unmodifiable {@link NavigableSet}
      * @throws NullPointerException if set is null
      */
@@ -58,10 +60,11 @@ public final class UnmodifiableNavigableSet<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param set  the set to decorate, must not be null
+     * @param set the set to decorate, must not be null
      * @throws NullPointerException if set is null
      */
     private UnmodifiableNavigableSet(final NavigableSet<E> set) {
@@ -138,7 +141,7 @@ public final class UnmodifiableNavigableSet<E>
 
     @Override
     public NavigableSet<E> subSet(final E fromElement, final boolean fromInclusive, final E toElement,
-            final boolean toInclusive) {
+                                  final boolean toInclusive) {
         final NavigableSet<E> sub = decorated().subSet(fromElement, fromInclusive, toElement, toInclusive);
         return unmodifiableNavigableSet(sub);
     }
@@ -156,10 +159,11 @@ public final class UnmodifiableNavigableSet<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the collection out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -170,8 +174,8 @@ public final class UnmodifiableNavigableSet<E>
     /**
      * Read the collection in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     @SuppressWarnings("unchecked") // (1) should only fail if input stream is incorrect

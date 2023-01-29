@@ -25,19 +25,25 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class OutOfRangeException extends MathIllegalNumberException {
-    /** Serializable version Id. */
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = 111601815794403609L;
-    /** Lower bound. */
+    /**
+     * Lower bound.
+     */
     private final Number lo;
-    /** Higher bound. */
+    /**
+     * Higher bound.
+     */
     private final Number hi;
 
     /**
      * Construct an exception from the mismatched dimensions.
      *
      * @param wrong Requested value.
-     * @param lo Lower bound.
-     * @param hi Higher bound.
+     * @param lo    Lower bound.
+     * @param hi    Higher bound.
      */
     public OutOfRangeException(Number wrong,
                                Number lo,
@@ -50,9 +56,9 @@ public class OutOfRangeException extends MathIllegalNumberException {
      * specific context information.
      *
      * @param specific Context information.
-     * @param wrong Requested value.
-     * @param lo Lower bound.
-     * @param hi Higher bound.
+     * @param wrong    Requested value.
+     * @param lo       Lower bound.
+     * @param hi       Higher bound.
      */
     public OutOfRangeException(Localizable specific,
                                Number wrong,
@@ -69,6 +75,7 @@ public class OutOfRangeException extends MathIllegalNumberException {
     public Number getLo() {
         return lo;
     }
+
     /**
      * @return the higher bound.
      */

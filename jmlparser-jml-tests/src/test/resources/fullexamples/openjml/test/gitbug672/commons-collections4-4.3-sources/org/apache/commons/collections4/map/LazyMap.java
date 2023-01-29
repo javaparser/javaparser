@@ -43,7 +43,7 @@ import java.util.Map;
  * Map&lt;String, Date&gt; lazy = LazyMap.lazyMap(new HashMap&lt;String, Date&gt;(), factory);
  * Date date = lazy.get("NOW");
  * </pre>
- *
+ * <p>
  * After the above code is executed, <code>date</code> will refer to
  * a new <code>Date</code> instance. Furthermore, that <code>Date</code>
  * instance is mapped to the "NOW" key in the map.
@@ -62,34 +62,38 @@ import java.util.Map;
  */
 public class LazyMap<K, V> extends AbstractMapDecorator<K, V> implements Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 7990956402564206740L;
 
-    /** The factory to use to construct elements */
+    /**
+     * The factory to use to construct elements
+     */
     protected final Transformer<? super K, ? extends V> factory;
 
     /**
      * Factory method to create a lazily instantiated map.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
-     * @param factory  the factory to use, must not be null
+     * @param <K>     the key type
+     * @param <V>     the value type
+     * @param map     the map to decorate, must not be null
+     * @param factory the factory to use, must not be null
      * @return a new lazy map
      * @throws NullPointerException if map or factory is null
      * @since 4.0
      */
-    public static <K, V> LazyMap<K, V> lazyMap(final Map<K, V> map, final Factory< ? extends V> factory) {
+    public static <K, V> LazyMap<K, V> lazyMap(final Map<K, V> map, final Factory<? extends V> factory) {
         return new LazyMap<>(map, factory);
     }
 
     /**
      * Factory method to create a lazily instantiated map.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
-     * @param factory  the factory to use, must not be null
+     * @param <K>     the key type
+     * @param <V>     the value type
+     * @param map     the map to decorate, must not be null
+     * @param factory the factory to use, must not be null
      * @return a new lazy map
      * @throws NullPointerException if map or factory is null
      * @since 4.0
@@ -99,14 +103,15 @@ public class LazyMap<K, V> extends AbstractMapDecorator<K, V> implements Seriali
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
-     * @param factory  the factory to use, must not be null
+     * @param map     the map to decorate, must not be null
+     * @param factory the factory to use, must not be null
      * @throws NullPointerException if map or factory is null
      */
-    protected LazyMap(final Map<K,V> map, final Factory<? extends V> factory) {
+    protected LazyMap(final Map<K, V> map, final Factory<? extends V> factory) {
         super(map);
         if (factory == null) {
             throw new NullPointerException("Factory must not be null");
@@ -117,11 +122,11 @@ public class LazyMap<K, V> extends AbstractMapDecorator<K, V> implements Seriali
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
-     * @param factory  the factory to use, must not be null
+     * @param map     the map to decorate, must not be null
+     * @param factory the factory to use, must not be null
      * @throws NullPointerException if map or factory is null
      */
-    protected LazyMap(final Map<K,V> map, final Transformer<? super K, ? extends V> factory) {
+    protected LazyMap(final Map<K, V> map, final Transformer<? super K, ? extends V> factory) {
         super(map);
         if (factory == null) {
             throw new NullPointerException("Factory must not be null");
@@ -130,10 +135,11 @@ public class LazyMap<K, V> extends AbstractMapDecorator<K, V> implements Seriali
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      * @since 3.1
      */
@@ -145,8 +151,8 @@ public class LazyMap<K, V> extends AbstractMapDecorator<K, V> implements Seriali
     /**
      * Read the map in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      * @since 3.1
      */
@@ -161,8 +167,7 @@ public class LazyMap<K, V> extends AbstractMapDecorator<K, V> implements Seriali
     public V get(final Object key) {
         // create value for key if key is not currently in the map
         if (map.containsKey(key) == false) {
-            @SuppressWarnings("unchecked")
-            final K castKey = (K) key;
+            @SuppressWarnings("unchecked") final K castKey = (K) key;
             final V value = factory.transform(castKey);
             map.put(castKey, value);
             return value;

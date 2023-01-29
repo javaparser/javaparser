@@ -29,21 +29,27 @@ import java.io.Serializable;
  */
 public final class TransformedPredicate<T> implements PredicateDecorator<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -5596090919668315834L;
 
-    /** The transformer to call */
+    /**
+     * The transformer to call
+     */
     private final Transformer<? super T, ? extends T> iTransformer;
 
-    /** The predicate to call */
+    /**
+     * The predicate to call
+     */
     private final Predicate<? super T> iPredicate;
 
     /**
      * Factory to create the predicate.
      *
-     * @param <T> the type that the predicate queries
-     * @param transformer  the transformer to call
-     * @param predicate  the predicate to call with the result of the transform
+     * @param <T>         the type that the predicate queries
+     * @param transformer the transformer to call
+     * @param predicate   the predicate to call with the result of the transform
      * @return the predicate
      * @throws NullPointerException if the transformer or the predicate is null
      */
@@ -62,8 +68,8 @@ public final class TransformedPredicate<T> implements PredicateDecorator<T>, Ser
      * Constructor that performs no validation.
      * Use <code>transformedPredicate</code> if you want that.
      *
-     * @param transformer  the transformer to use
-     * @param predicate  the predicate to decorate
+     * @param transformer the transformer to use
+     * @param predicate   the predicate to decorate
      */
     public TransformedPredicate(final Transformer<? super T, ? extends T> transformer,
                                 final Predicate<? super T> predicate) {
@@ -75,7 +81,7 @@ public final class TransformedPredicate<T> implements PredicateDecorator<T>, Ser
      * Evaluates the predicate returning the result of the decorated predicate
      * once the input has been transformed
      *
-     * @param object  the input object which will be transformed
+     * @param object the input object which will be transformed
      * @return true if decorated predicate returns true
      */
     @Override
@@ -93,7 +99,7 @@ public final class TransformedPredicate<T> implements PredicateDecorator<T>, Ser
     @Override
     @SuppressWarnings("unchecked")
     public Predicate<? super T>[] getPredicates() {
-        return new Predicate[] {iPredicate};
+        return new Predicate[]{iPredicate};
     }
 
     /**

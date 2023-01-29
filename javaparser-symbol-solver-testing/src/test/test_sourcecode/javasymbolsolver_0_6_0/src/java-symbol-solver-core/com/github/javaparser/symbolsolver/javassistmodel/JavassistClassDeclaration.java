@@ -175,7 +175,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
         Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || (staticOnly && Modifier.isStatic(m.getModifiers()));
         for (CtMethod method : ctClass.getDeclaredMethods()) {
             boolean isSynthetic = method.getMethodInfo().getAttribute(SyntheticAttribute.tag) != null;
-            boolean isNotBridge =  (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
+            boolean isNotBridge = (method.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0;
             if (method.getName().equals(name) && !isSynthetic && isNotBridge && staticOnlyCheck.test(method)) {
                 candidates.add(new JavassistMethodDeclaration(method, typeSolver));
             }
@@ -248,7 +248,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<FieldDeclaration> getAllFields() {
-      return javassistTypeDeclarationAdapter.getDeclaredFields();
+        return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
@@ -339,7 +339,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration {
 
     @Override
     public List<ConstructorDeclaration> getConstructors() {
-      return javassistTypeDeclarationAdapter.getConstructors();
+        return javassistTypeDeclarationAdapter.getConstructors();
     }
 
     @Override

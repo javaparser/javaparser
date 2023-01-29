@@ -1,5 +1,6 @@
 class A {
     private final int test;
+
     public A() {
         this.test = 1;
     }
@@ -7,7 +8,7 @@ class A {
     void m(int i) {
         int outer = 10;
         make(a -> {
-            MyFunctionalInterface<Integer> g = (x) -> (test*2+x) > 0;
+            MyFunctionalInterface<Integer> g = (x) -> (test * 2 + x) > 0;
 
             return g.apply(a) && a > 2;
         });

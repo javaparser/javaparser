@@ -1,15 +1,16 @@
 public class LongArith2 {
 
-    /*@ spec_public @*/ private long ub,lb;
+    /*@ spec_public @*/ private long ub, lb;
     //@ public invariant Integer.MIN_VALUE <= lb && lb <= Integer.MAX_VALUE;
     //@ public invariant Integer.MIN_VALUE <= ub+1 && ub <= Integer.MAX_VALUE;
-    
+
     //@ public normal_behavior
     //@   requires l <= ((long)u)+1;
     //@   assignable \nothing;
     //@   ensures lb == (long)l && ub == (long)u;
     public LongArith2(int l, int u) {
-        lb = l; ub = u; 
+        lb = l;
+        ub = u;
     }
 
     //@ ensures \result == ub;

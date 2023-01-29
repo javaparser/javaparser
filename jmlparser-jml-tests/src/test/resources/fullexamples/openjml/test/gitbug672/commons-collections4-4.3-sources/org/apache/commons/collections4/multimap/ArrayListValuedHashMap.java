@@ -42,9 +42,11 @@ import java.util.Map;
  * @since 4.1
  */
 public class ArrayListValuedHashMap<K, V> extends AbstractListValuedMap<K, V>
-    implements Serializable {
+        implements Serializable {
 
-    /** Serialization Version */
+    /**
+     * Serialization Version
+     */
     private static final long serialVersionUID = 20151118L;
 
     /**
@@ -74,7 +76,7 @@ public class ArrayListValuedHashMap<K, V> extends AbstractListValuedMap<K, V>
      * Creates an empty ArrayListValuedHashMap with the default initial
      * map capacity (16) and the specified initial list capacity.
      *
-     * @param initialListCapacity  the initial capacity used for value collections
+     * @param initialListCapacity the initial capacity used for value collections
      */
     public ArrayListValuedHashMap(final int initialListCapacity) {
         this(DEFAULT_INITIAL_MAP_CAPACITY, initialListCapacity);
@@ -85,7 +87,7 @@ public class ArrayListValuedHashMap<K, V> extends AbstractListValuedMap<K, V>
      * map and list capacities.
      *
      * @param initialMapCapacity  the initial hashmap capacity
-     * @param initialListCapacity  the initial capacity used for value collections
+     * @param initialListCapacity the initial capacity used for value collections
      */
     public ArrayListValuedHashMap(final int initialMapCapacity, final int initialListCapacity) {
         super(new HashMap<K, ArrayList<V>>(initialMapCapacity));
@@ -119,6 +121,7 @@ public class ArrayListValuedHashMap<K, V> extends AbstractListValuedMap<K, V>
     }
 
     // -----------------------------------------------------------------------
+
     /**
      * Trims the capacity of all value collections to their current size.
      */

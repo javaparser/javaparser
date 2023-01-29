@@ -26,7 +26,9 @@ import org.apache.commons.math3.optim.PointValuePair;
  * @since 3.3
  */
 public class SolutionCallback implements OptimizationData {
-    /** The SimplexTableau used by the SimplexSolver. */
+    /**
+     * The SimplexTableau used by the SimplexSolver.
+     */
     private SimplexTableau tableau;
 
     /**
@@ -54,6 +56,7 @@ public class SolutionCallback implements OptimizationData {
 
     /**
      * Returns if the found solution is optimal.
+     *
      * @return {@code true} if the solution is optimal, {@code false} otherwise
      */
     public boolean isSolutionOptimal() {

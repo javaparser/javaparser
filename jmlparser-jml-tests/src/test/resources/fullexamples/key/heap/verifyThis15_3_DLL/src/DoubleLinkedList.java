@@ -2,7 +2,7 @@
 final class DoubleLinkedList {
 
     final static class Node {
-        /*@ nullable @*/ Node l, r; 
+        /*@ nullable @*/ Node l, r;
     }
 
     /*@ nullable @*/ Node head;
@@ -34,7 +34,7 @@ final class DoubleLinkedList {
       @       && (\forall int i; 0 <= i < nodes.length; nodes[i] != null);
       @ ensures s == \dl_array2seq(\old(nodes));
       @*/
-    DoubleLinkedList (Node[] nodes) {
+    DoubleLinkedList(Node[] nodes) {
         head = null;
         if (nodes.length == 0) return;
         int i = 1;
@@ -59,12 +59,12 @@ final class DoubleLinkedList {
           @*/
         for (i = 1; i < nodes.length; i++) {
             //@ set s = \seq_concat(s, \seq_singleton(nodes[i]));
-            nodes[i-1].r = nodes[i];
-            nodes[i].l = nodes[i-1];
+            nodes[i - 1].r = nodes[i];
+            nodes[i].l = nodes[i - 1];
         }
         //@ set len = nodes.length;
         nodes[0].l = null;
-        nodes[nodes.length-1].r = null;
+        nodes[nodes.length - 1].r = null;
         head = nodes[0];
     }
 
@@ -77,7 +77,7 @@ final class DoubleLinkedList {
       @      && x.r != null && (\forall int i; 0 <= i < len; x != (Node)s[i]);
       @ assignable s, len, x.l.r, x.r.l;
       @*/
-    void remove (Node x, int k) {
+    void remove(Node x, int k) {
         //@ set s = \seq_concat(\seq_sub(s,0,k),\seq_sub(s,k+1,len));
         //@ set len = len - 1;
         x.l.r = x.r;
@@ -90,21 +90,21 @@ final class DoubleLinkedList {
       @ ensures s == \old(\seq_concat(\seq_sub(s,0,k),\seq_concat(\seq_singleton(x),\seq_sub(s,k,len)))) && len == \old(len) + 1 && x == (Node)s[k];
       @ assignable s, len, x.l.r, x.r.l;
       @*/
-    void unremove (Node x, int k) {
+    void unremove(Node x, int k) {
         //@ set s = \seq_concat(\seq_sub(s,0,k),\seq_concat(\seq_singleton(x),\seq_sub(s,k,len)));
         //@ set len = len + 1;
         x.l.r = x;
         x.r.l = x;
     }
- 
+
     /*@ normal_behavior
       @ requires 0 < k < len-1;
       @ requires (Node)s[k] == x;
       @ ensures s == \old(s);
       @*/
-    void doUndo (Node x, int k) {
-        remove(x,k);
-        unremove(x,k);
+    void doUndo(Node x, int k) {
+        remove(x, k);
+        unremove(x, k);
     }
-   
+
 }

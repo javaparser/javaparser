@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2016 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.Range;
@@ -30,59 +30,61 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class UnaryExpr extends Expression {
 
-	public enum Operator {
-		positive, // +
-		negative, // -
-		preIncrement, // ++
-		preDecrement, // --
-		not, // !
-		inverse, // ~
-		posIncrement, // ++
-		posDecrement, // --
-	}
+    public enum Operator {
+        positive, // +
+        negative, // -
+        preIncrement, // ++
+        preDecrement, // --
+        not, // !
+        inverse, // ~
+        posIncrement, // ++
+        posDecrement, // --
+    }
 
-	private Expression expr;
+    private Expression expr;
 
-	private Operator op;
+    private Operator op;
 
-	public UnaryExpr() {
-	}
+    public UnaryExpr() {
+    }
 
-	public UnaryExpr(final Expression expr, final Operator op) {
-		setExpr(expr);
-		setOperator(op);
-	}
+    public UnaryExpr(final Expression expr, final Operator op) {
+        setExpr(expr);
+        setOperator(op);
+    }
 
-	public UnaryExpr(final Range range, final Expression expr, final Operator op) {
-		super(range);
-		setExpr(expr);
-		setOperator(op);
-	}
+    public UnaryExpr(final Range range, final Expression expr, final Operator op) {
+        super(range);
+        setExpr(expr);
+        setOperator(op);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Expression getExpr() {
-		return expr;
-	}
+    public Expression getExpr() {
+        return expr;
+    }
 
-	public Operator getOperator() {
-		return op;
-	}
+    public Operator getOperator() {
+        return op;
+    }
 
-	public UnaryExpr setExpr(final Expression expr) {
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
-		return this;
-	}
+    public UnaryExpr setExpr(final Expression expr) {
+        this.expr = expr;
+        setAsParentNodeOf(this.expr);
+        return this;
+    }
 
-	public UnaryExpr setOperator(final Operator op) {
-		this.op = op;
-		return this;
-	}
+    public UnaryExpr setOperator(final Operator op) {
+        this.op = op;
+        return this;
+    }
 }

@@ -11,8 +11,7 @@ public class GreatestCommonDivisor {
       @         (\forall int x; x > 0 && a % x == 0 && b % x == 0; \result % x == 0));
       @ assignable \nothing;
       @*/
-    public static int ofWith(final int a, final int b)
-    {
+    public static int ofWith(final int a, final int b) {
         /*@ normal_behavior
           @ ensures a >= 0 && (a == \before(a) || a == -\before(a));
           @ ensures b >= 0 && (b == \before(b) || b == -\before(b));
@@ -34,8 +33,7 @@ public class GreatestCommonDivisor {
             if (a <= b) {
                 small = a;
                 big = b;
-            }
-            else {
+            } else {
                 small = b;
                 big = a;
             }
@@ -71,8 +69,7 @@ public class GreatestCommonDivisor {
       @         (\forall int x; x > 0 && a % x == 0 && b % x == 0; \result % x == 0));
       @ assignable \nothing;
       @*/
-    public static int ofWithout(final int a, final int b)
-    {
+    public static int ofWithout(final int a, final int b) {
         {
             if (a < 0) a = -a;
             if (b < 0) b = -b;
@@ -83,8 +80,7 @@ public class GreatestCommonDivisor {
             if (a <= b) {
                 small = a;
                 big = b;
-            }
-            else {
+            } else {
                 small = b;
                 big = a;
             }

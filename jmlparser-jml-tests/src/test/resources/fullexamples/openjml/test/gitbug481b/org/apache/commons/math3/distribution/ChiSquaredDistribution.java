@@ -28,14 +28,21 @@ import org.apache.commons.math3.random.Well19937c;
 public class ChiSquaredDistribution extends AbstractRealDistribution {
     /**
      * Default inverse cumulative probability accuracy
+     *
      * @since 2.1
      */
     public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -8352658048349159782L;
-    /** Internal Gamma distribution. */
+    /**
+     * Internal Gamma distribution.
+     */
     private final GammaDistribution gamma;
-    /** Inverse cumulative probability accuracy */
+    /**
+     * Inverse cumulative probability accuracy
+     */
     private final double solverAbsoluteAccuracy;
 
     /**
@@ -58,10 +65,10 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param degreesOfFreedom Degrees of freedom.
+     * @param degreesOfFreedom   Degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates (defaults to
+     *                           {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @since 2.1
      */
     public ChiSquaredDistribution(double degreesOfFreedom,
@@ -72,7 +79,7 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
     /**
      * Create a Chi-Squared distribution with the given degrees of freedom.
      *
-     * @param rng Random number generator.
+     * @param rng              Random number generator.
      * @param degreesOfFreedom Degrees of freedom.
      * @since 3.3
      */
@@ -84,11 +91,11 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
      * Create a Chi-Squared distribution with the given degrees of freedom and
      * inverse cumulative probability accuracy.
      *
-     * @param rng Random number generator.
-     * @param degreesOfFreedom Degrees of freedom.
+     * @param rng                Random number generator.
+     * @param degreesOfFreedom   Degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     *                           cumulative probability estimates (defaults to
+     *                           {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @since 3.1
      */
     public ChiSquaredDistribution(RandomGenerator rng,
@@ -109,23 +116,31 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
         return gamma.getShape() * 2.0;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double density(double x) {
         return gamma.density(x);
     }
 
-    /** {@inheritDoc} **/
+    /**
+     * {@inheritDoc}
+     **/
     @Override
     public double logDensity(double x) {
         return gamma.logDensity(x);
     }
 
-    /** {@inheritDoc} */
-    public double cumulativeProbability(double x)  {
+    /**
+     * {@inheritDoc}
+     */
+    public double cumulativeProbability(double x) {
         return gamma.cumulativeProbability(x);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected double getSolverAbsoluteAccuracy() {
         return solverAbsoluteAccuracy;
@@ -133,7 +148,7 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For {@code k} degrees of freedom, the mean is {@code k}.
      */
     public double getNumericalMean() {
@@ -151,7 +166,7 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always 0 no matter the
      * degrees of freedom.
      *
@@ -163,7 +178,7 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is always positive infinity no matter the
      * degrees of freedom.
      *
@@ -173,19 +188,23 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
         return Double.POSITIVE_INFINITY;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public boolean isSupportUpperBoundInclusive() {
         return false;
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}

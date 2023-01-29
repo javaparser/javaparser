@@ -12,207 +12,189 @@ import java.util.List;
 /**
  * main game component
  */
-public class GamePanel extends JPanel
-{
+public class GamePanel extends JPanel {
 
-	private static final long serialVersionUID = 5209868672877405279L;
+    private static final long serialVersionUID = 5209868672877405279L;
 
-	/**
-	 * board border with letters and numbers
-	 */
-	private static class BorderPanel extends JPanel
-	{
+    /**
+     * board border with letters and numbers
+     */
+    private static class BorderPanel extends JPanel {
 
-		private static final long serialVersionUID = 4355351078893761543L;
-		JPanel board;
+        private static final long serialVersionUID = 4355351078893761543L;
+        JPanel board;
 
-		public BorderPanel(JPanel board)
-		{
-			this.board = board;
-			add(board);
-			setLayout(null);
-			board.setLocation(20, 20);
-			setBackground(Color.WHITE);
-			setPreferredSize(new Dimension(board.getWidth() + 40, board.getHeight() + 40));
-		}
+        public BorderPanel(JPanel board) {
+            this.board = board;
+            add(board);
+            setLayout(null);
+            board.setLocation(20, 20);
+            setBackground(Color.WHITE);
+            setPreferredSize(new Dimension(board.getWidth() + 40, board.getHeight() + 40));
+        }
 
-		public void paint(Graphics g)
-		{
+        public void paint(Graphics g) {
 
-			super.paint(g);
+            super.paint(g);
 
-			if(g instanceof Graphics2D)
-				((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            if (g instanceof Graphics2D)
+                ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-			for(int x = 0; x < Board.width; x++)
-			{
-				g.drawString(Integer.toString(x + 1), x * 32 + 32, 16);
-				g.drawString(Integer.toString(x + 1), x * 32 + 32, board.getHeight() + 32);
-			}
+            for (int x = 0; x < Board.width; x++) {
+                g.drawString(Integer.toString(x + 1), x * 32 + 32, 16);
+                g.drawString(Integer.toString(x + 1), x * 32 + 32, board.getHeight() + 32);
+            }
 
-			for(int y = 0; y < Board.height; y++)
-			{
-				g.drawString(Character.toString((char)(y + 'A')), 8, y * 32 + 32 + 8);
-				g.drawString(Character.toString((char)(y + 'A')), board.getWidth() + 24, y * 32 + 32 + 8);
-			}
+            for (int y = 0; y < Board.height; y++) {
+                g.drawString(Character.toString((char) (y + 'A')), 8, y * 32 + 32 + 8);
+                g.drawString(Character.toString((char) (y + 'A')), board.getWidth() + 24, y * 32 + 32 + 8);
+            }
 
-			g.setColor(Color.BLACK);
-			g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+            g.setColor(Color.BLACK);
+            g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
 
-		}
+        }
 
-	}
+    }
 
-	/**
-	 * Component displaying player controller and clock
-	 */
-	private class PlayerInfoPanel extends JPanel implements BoardListener
-	{
+    /**
+     * Component displaying player controller and clock
+     */
+    private class PlayerInfoPanel extends JPanel implements BoardListener {
 
-		private static final long serialVersionUID = -2691532936608582978L;
-		final String playerName;
-		final Clock clock;
-		final int player;
-		
-		public PlayerInfoPanel(final int player)
-		{
+        private static final long serialVersionUID = -2691532936608582978L;
+        final String playerName;
+        final Clock clock;
+        final int player;
 
-			this.player = player;
-			
-			setLayout(new GridBagLayout());
+        public PlayerInfoPanel(final int player) {
 
-			if(player == 1)
-				playerName = "White";
-			else if(player == -1)
-				playerName = "Black";
-			else
-				throw new IllegalArgumentException();
+            this.player = player;
 
-			setBorder(BorderFactory.createTitledBorder(playerName + ":"));
+            setLayout(new GridBagLayout());
 
-			JComboBox playerController = new JComboBox();
+            if (player == 1)
+                playerName = "White";
+            else if (player == -1)
+                playerName = "Black";
+            else
+                throw new IllegalArgumentException();
 
-			for(Player p : avaliablePlayers)
-			{
-				playerController.addItem(p);
-			}
-			playerController.addItemListener(new ItemListener()
-			{
+            setBorder(BorderFactory.createTitledBorder(playerName + ":"));
 
-				public void itemStateChanged(ItemEvent e)
-				{
-					if(e.getStateChange() == ItemEvent.SELECTED)
-						controller.setPlayer(player, (Player)e.getItem());
-				}
-			});
+            JComboBox playerController = new JComboBox();
 
-			GridBagConstraints constraints = new GridBagConstraints();
-			constraints.fill = GridBagConstraints.VERTICAL;
-			constraints.anchor = GridBagConstraints.NORTH;
-			constraints.insets = new Insets(4, 4, 4, 4);
-			add(playerController,constraints);
+            for (Player p : avaliablePlayers) {
+                playerController.addItem(p);
+            }
+            playerController.addItemListener(new ItemListener() {
 
-			clock = new Clock();
-			constraints.gridy=1;
-			constraints.weighty =1.0;
-			
-			add(clock,constraints);
-			
-			controller.addBoardListener(this);
-		
-			if(controller.getBoard().turnHolder == player)
-				clock.start();
-		
-		}
+                public void itemStateChanged(ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED)
+                        controller.setPlayer(player, (Player) e.getItem());
+                }
+            });
 
-		@Override
-		public void onMove(Board board, Move move)
-		{
-			if(board.turnHolder != player)
-				clock.start();
-			else
-				clock.stop();
-		}
+            GridBagConstraints constraints = new GridBagConstraints();
+            constraints.fill = GridBagConstraints.VERTICAL;
+            constraints.anchor = GridBagConstraints.NORTH;
+            constraints.insets = new Insets(4, 4, 4, 4);
+            add(playerController, constraints);
 
-		@Override
-		public void onNewGame(Board board)
-		{
-			clock.reset();
-			if(board.turnHolder == player)
-				clock.start();
-		
-		}
-	}
+            clock = new Clock();
+            constraints.gridy = 1;
+            constraints.weighty = 1.0;
 
-	private static final List<Player> avaliablePlayers = Arrays.asList(new Player[] {
-			new HumanPlayer(),
-			new RandomPlayer(),
-			new MinMaxPlayer(1),
-			new MinMaxPlayer(3),
-			new MinMaxPlayer(5) });
+            add(clock, constraints);
 
-	private final BoardView view;
+            controller.addBoardListener(this);
 
-	private final BoardController controller;
-	
-	public GamePanel(Board board)
-	{
+            if (controller.getBoard().turnHolder == player)
+                clock.start();
 
-		view = new BoardView(board);
-		controller = new BoardController(view);
+        }
 
-		BorderLayout borderLayout = new BorderLayout(8,8);
-		setLayout(borderLayout);
-		
-		JPanel filler = new JPanel();
-		filler.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-	    constraints.fill = GridBagConstraints.CENTER;
-		filler.add(new BorderPanel(view),constraints);
-		
-		add(filler, BorderLayout.CENTER);
+        @Override
+        public void onMove(Board board, Move move) {
+            if (board.turnHolder != player)
+                clock.start();
+            else
+                clock.stop();
+        }
 
-		JComponent buttonPanel = new JPanel();
+        @Override
+        public void onNewGame(Board board) {
+            clock.reset();
+            if (board.turnHolder == player)
+                clock.start();
 
-		JButton newGame = new JButton("New Game");
-		newGame.addActionListener(new ActionListener()
-		{
+        }
+    }
 
-			public void actionPerformed(ActionEvent e)
-			{
-				controller.newGame();
-			}
-		});
-		buttonPanel.add(newGame);
+    private static final List<Player> avaliablePlayers = Arrays.asList(new Player[]{
+            new HumanPlayer(),
+            new RandomPlayer(),
+            new MinMaxPlayer(1),
+            new MinMaxPlayer(3),
+            new MinMaxPlayer(5)});
 
-		JButton quit = new JButton("Quit");
-		quit.addActionListener(new ActionListener()
-		{
+    private final BoardView view;
 
-			public void actionPerformed(ActionEvent e)
-			{
-				System.exit(0);
-			}
-		});
-		buttonPanel.add(quit);
+    private final BoardController controller;
 
-		add(buttonPanel, BorderLayout.NORTH);
+    public GamePanel(Board board) {
 
-		JPanel rightPanel = new JPanel();
-		rightPanel.setLayout(new GridLayout(0, 1));
-		rightPanel.add(new PlayerInfoPanel(-1));
-		rightPanel.add(new PlayerInfoPanel(1));
+        view = new BoardView(board);
+        controller = new BoardController(view);
 
-		add(rightPanel, BorderLayout.EAST);
+        BorderLayout borderLayout = new BorderLayout(8, 8);
+        setLayout(borderLayout);
 
-		Log log = new Log();
-		
-		JScrollPane logScroll=new JScrollPane(log);
-		logScroll.setBorder(BorderFactory.createTitledBorder("Log:"));
-		add(logScroll, BorderLayout.SOUTH);
-		controller.addBoardListener(log);
-		setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-		
-	}
+        JPanel filler = new JPanel();
+        filler.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.CENTER;
+        filler.add(new BorderPanel(view), constraints);
+
+        add(filler, BorderLayout.CENTER);
+
+        JComponent buttonPanel = new JPanel();
+
+        JButton newGame = new JButton("New Game");
+        newGame.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                controller.newGame();
+            }
+        });
+        buttonPanel.add(newGame);
+
+        JButton quit = new JButton("Quit");
+        quit.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        buttonPanel.add(quit);
+
+        add(buttonPanel, BorderLayout.NORTH);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new GridLayout(0, 1));
+        rightPanel.add(new PlayerInfoPanel(-1));
+        rightPanel.add(new PlayerInfoPanel(1));
+
+        add(rightPanel, BorderLayout.EAST);
+
+        Log log = new Log();
+
+        JScrollPane logScroll = new JScrollPane(log);
+        logScroll.setBorder(BorderFactory.createTitledBorder("Log:"));
+        add(logScroll, BorderLayout.SOUTH);
+        controller.addBoardListener(log);
+        setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+
+    }
 
 }

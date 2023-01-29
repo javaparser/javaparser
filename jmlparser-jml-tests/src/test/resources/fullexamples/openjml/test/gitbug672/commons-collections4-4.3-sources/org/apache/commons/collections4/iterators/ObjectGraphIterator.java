@@ -75,31 +75,46 @@ import java.util.NoSuchElementException;
  */
 public class ObjectGraphIterator<E> implements Iterator<E> {
 
-    /** The stack of iterators */
+    /**
+     * The stack of iterators
+     */
     private final Deque<Iterator<? extends E>> stack = new ArrayDeque<>(8);
-    /** The root object in the tree */
+    /**
+     * The root object in the tree
+     */
     private E root;
-    /** The transformer to use */
+    /**
+     * The transformer to use
+     */
     private final Transformer<? super E, ? extends E> transformer;
 
-    /** Whether there is another element in the iteration */
+    /**
+     * Whether there is another element in the iteration
+     */
     private boolean hasNext = false;
-    /** The current iterator */
+    /**
+     * The current iterator
+     */
     private Iterator<? extends E> currentIterator;
-    /** The current value */
+    /**
+     * The current value
+     */
     private E currentValue;
-    /** The last used iterator, needed for remove() */
+    /**
+     * The last used iterator, needed for remove()
+     */
     private Iterator<? extends E> lastUsedIterator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructs an ObjectGraphIterator using a root object and transformer.
      * <p>
      * The root object can be an iterator, in which case it will be immediately
      * looped around.
      *
-     * @param root  the root object, null will result in an empty iterator
-     * @param transformer  the transformer to use, null will use a no effect transformer
+     * @param root        the root object, null will result in an empty iterator
+     * @param transformer the transformer to use, null will use a no effect transformer
      */
     @SuppressWarnings("unchecked")
     public ObjectGraphIterator(final E root, final Transformer<? super E, ? extends E> transformer) {
@@ -120,7 +135,7 @@ public class ObjectGraphIterator<E> implements Iterator<E> {
      * passed in here contains other iterators, which may in turn contain further
      * iterators.
      *
-     * @param rootIterator  the root iterator, null will result in an empty iterator
+     * @param rootIterator the root iterator, null will result in an empty iterator
      */
     public ObjectGraphIterator(final Iterator<? extends E> rootIterator) {
         super();
@@ -129,6 +144,7 @@ public class ObjectGraphIterator<E> implements Iterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Loops around the iterators to find the next value to return.
      */
@@ -155,7 +171,7 @@ public class ObjectGraphIterator<E> implements Iterator<E> {
     /**
      * Finds the next object in the iteration given any start object.
      *
-     * @param value  the value to start from
+     * @param value the value to start from
      */
     @SuppressWarnings("unchecked")
     protected void findNext(final E value) {
@@ -172,7 +188,7 @@ public class ObjectGraphIterator<E> implements Iterator<E> {
     /**
      * Finds the next object in the iteration given an iterator.
      *
-     * @param iterator  the iterator to start from
+     * @param iterator the iterator to start from
      */
     protected void findNextByIterator(final Iterator<? extends E> iterator) {
         if (iterator != currentIterator) {
@@ -199,6 +215,7 @@ public class ObjectGraphIterator<E> implements Iterator<E> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Checks whether there are any more elements in the iteration to obtain.
      *
@@ -236,11 +253,9 @@ public class ObjectGraphIterator<E> implements Iterator<E> {
      * throw an UnsupportedOperationException if the underlying Iterator
      * does not support this method.
      *
-     * @throws UnsupportedOperationException
-     *   if the remove operator is not supported by the underlying Iterator
-     * @throws IllegalStateException
-     *   if the next method has not yet been called, or the remove method has
-     *   already been called after the last call to the next method.
+     * @throws UnsupportedOperationException if the remove operator is not supported by the underlying Iterator
+     * @throws IllegalStateException         if the next method has not yet been called, or the remove method has
+     *                                       already been called after the last call to the next method.
      */
     @Override
     public void remove() {

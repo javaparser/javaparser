@@ -4,7 +4,12 @@
   ],
   "packageRules": [
     {
-      "updateTypes": ["minor", "patch", "pin", "digest"],
+      "updateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
       "automerge": true
     }
   ],
@@ -13,5 +18,7 @@
   "semanticCommits": true,
   "dependencyDashboard": true,
   "configWarningReuseIssue": false,
-  "labels": ["dependencies"]
+  "labels": [
+    "dependencies"
+  ]
 }

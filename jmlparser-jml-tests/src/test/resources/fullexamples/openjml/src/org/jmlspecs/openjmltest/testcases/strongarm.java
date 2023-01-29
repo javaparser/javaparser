@@ -52,61 +52,73 @@ public class strongarm extends StrongarmBase {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A2.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA3() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A3.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA4() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A4.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA5() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A5.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA6() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A6.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA7() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A7.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA8() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A8.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA9() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A9.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA10() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A10.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA11() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A11.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA12() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A12.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA13() {
         //expectedExit = 1;
         helpSA("test/strongarm/base/A13.java", "test/strongarm/base/");
     }
+
     @Test
     public void testA14() {
         //expectedExit = 1;
@@ -133,7 +145,7 @@ public class strongarm extends StrongarmBase {
 
     @Test
     public void testE1() {
-        expectedExit = 0; 
+        expectedExit = 0;
         helpSA("test/strongarm/base/E1.java", "test/strongarm/base/");
     }
 
@@ -173,8 +185,7 @@ public class strongarm extends StrongarmBase {
     }
 
 
-
-    //////// loop tests. 
+    //////// loop tests.
 
     @Test
     public void testC1() {
@@ -184,7 +195,6 @@ public class strongarm extends StrongarmBase {
 
 
     /// examples
-
 
 
     @Test
@@ -230,7 +240,6 @@ public class strongarm extends StrongarmBase {
     //	//expectedExit = 1;
     //	helpSA("test/strongarm/examples/Next.java", "test/strongarm/examples/");
     //    }
-
 
 
 }

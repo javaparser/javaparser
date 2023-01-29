@@ -26,19 +26,23 @@ import java.util.Comparator;
  * to its {@link #compare(Object, Object) compare} method.
  *
  * @param <E> the type of objects compared by this comparator
- *
- * @since 2.0
  * @see java.util.Collections#reverseOrder()
+ * @since 2.0
  */
 public class ReverseComparator<E> implements Comparator<E>, Serializable {
 
-    /** Serialization version from Collections 2.0. */
+    /**
+     * Serialization version from Collections 2.0.
+     */
     private static final long serialVersionUID = 2858887242028539265L;
 
-    /** The comparator being decorated. */
+    /**
+     * The comparator being decorated.
+     */
     private final Comparator<? super E> comparator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Creates a comparator that compares objects based on the inverse of their
      * natural ordering.  Using this Constructor will create a ReverseComparator
@@ -65,11 +69,12 @@ public class ReverseComparator<E> implements Comparator<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Compares two objects in reverse order.
      *
-     * @param obj1  the first object to compare
-     * @param obj2  the second object to compare
+     * @param obj1 the first object to compare
+     * @param obj2 the second object to compare
      * @return negative if obj1 is less, positive if greater, zero if equal
      */
     @Override
@@ -78,6 +83,7 @@ public class ReverseComparator<E> implements Comparator<E>, Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implement a hash code for this comparator that is consistent with
      * {@link #equals(Object) equals}.
@@ -102,7 +108,7 @@ public class ReverseComparator<E> implements Comparator<E>, Serializable {
      * Subclasses may want to override this behavior to remain consistent
      * with the {@link Comparator#equals(Object) equals} contract.
      *
-     * @param object  the object to compare to
+     * @param object the object to compare to
      * @return true if equal
      * @since 3.0
      */

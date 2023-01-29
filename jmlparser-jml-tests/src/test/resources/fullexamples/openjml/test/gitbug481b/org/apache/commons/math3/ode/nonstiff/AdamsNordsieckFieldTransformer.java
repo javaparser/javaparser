@@ -26,7 +26,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Transformer to Nordsieck vectors for Adams integrators.
+/**
+ * Transformer to Nordsieck vectors for Adams integrators.
  * <p>This class is used by {@link AdamsBashforthIntegrator Adams-Bashforth} and
  * {@link AdamsMoultonIntegrator Adams-Moulton} integrators to convert between
  * classical representation with several previous first derivatives and Nordsieck
@@ -129,26 +130,36 @@ import java.util.Map;
  */
 public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
 
-    /** Cache for already computed coefficients. */
+    /**
+     * Cache for already computed coefficients.
+     */
     private static final Map<Integer,
-                         Map<Field<? extends RealFieldElement<?>>,
-                                   AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>> CACHE =
-        new HashMap<Integer, Map<Field<? extends RealFieldElement<?>>,
-                                 AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>>();
+            Map<Field<? extends RealFieldElement<?>>,
+                    AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>> CACHE =
+            new HashMap<Integer, Map<Field<? extends RealFieldElement<?>>,
+                    AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>>();
 
-    /** Field to which the time and state vector elements belong. */
+    /**
+     * Field to which the time and state vector elements belong.
+     */
     private final Field<T> field;
 
-    /** Update matrix for the higher order derivatives h<sup>2</sup>/2 y'', h<sup>3</sup>/6 y''' ... */
+    /**
+     * Update matrix for the higher order derivatives h<sup>2</sup>/2 y'', h<sup>3</sup>/6 y''' ...
+     */
     private final Array2DRowFieldMatrix<T> update;
 
-    /** Update coefficients of the higher order derivatives wrt y'. */
+    /**
+     * Update coefficients of the higher order derivatives wrt y'.
+     */
     private final T[] c1;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
+     *
      * @param field field to which the time and state vector elements belong
-     * @param n number of steps of the multistep method
-     * (excluding the one being computed)
+     * @param n     number of steps of the multistep method
+     *              (excluding the one being computed)
      */
     private AdamsNordsieckFieldTransformer(final Field<T> field, final int n) {
 
@@ -158,7 +169,7 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
         // compute coefficients
         FieldMatrix<T> bigP = buildP(rows);
         FieldDecompositionSolver<T> pSolver =
-            new FieldLUDecomposition<T>(bigP).getSolver();
+                new FieldLUDecomposition<T>(bigP).getSolver();
 
         T[] u = MathArrays.buildArray(field, rows);
         Arrays.fill(u, field.getOne());
@@ -178,22 +189,24 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
 
     }
 
-    /** Get the Nordsieck transformer for a given field and number of steps.
-     * @param field field to which the time and state vector elements belong
+    /**
+     * Get the Nordsieck transformer for a given field and number of steps.
+     *
+     * @param field  field to which the time and state vector elements belong
      * @param nSteps number of steps of the multistep method
-     * (excluding the one being computed)
+     *               (excluding the one being computed)
+     * @param <T>    the type of the field elements
      * @return Nordsieck transformer for the specified field and number of steps
-     * @param <T> the type of the field elements
      */
     @SuppressWarnings("unchecked")
     public static <T extends RealFieldElement<T>> AdamsNordsieckFieldTransformer<T>
     getInstance(final Field<T> field, final int nSteps) {
-        synchronized(CACHE) {
+        synchronized (CACHE) {
             Map<Field<? extends RealFieldElement<?>>,
-                      AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>> map = CACHE.get(nSteps);
+                    AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>> map = CACHE.get(nSteps);
             if (map == null) {
                 map = new HashMap<Field<? extends RealFieldElement<?>>,
-                                        AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>();
+                        AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>();
                 CACHE.put(nSteps, map);
             }
             @SuppressWarnings("rawtypes") // use rawtype to avoid compilation problems with java 1.5
@@ -207,7 +220,8 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
         }
     }
 
-    /** Build the P matrix.
+    /**
+     * Build the P matrix.
      * <p>The P matrix general terms are shifted (j+1) (-i)<sup>j</sup> terms
      * with i being the row number starting from 1 and j being the column
      * number starting from 1:
@@ -218,6 +232,7 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
      *        [  -8  48 -256 1280  ... ]
      *        [          ...           ]
      * </pre></p>
+     *
      * @param rows number of rows of the matrix
      * @return P matrix
      */
@@ -240,10 +255,12 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
 
     }
 
-    /** Initialize the high order scaled derivatives at step start.
-     * @param h step size to use for scaling
-     * @param t first steps times
-     * @param y first steps states
+    /**
+     * Initialize the high order scaled derivatives at step start.
+     *
+     * @param h    step size to use for scaling
+     * @param t    first steps times
+     * @param y    first steps states
      * @param yDot first steps derivatives
      * @return Nordieck vector at start of first step (h<sup>2</sup>/2 y''<sub>n</sub>,
      * h<sup>3</sup>/6 y'''<sub>n</sub> ... h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub>)
@@ -262,35 +279,35 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
         // The goal is to have s2 to sk as accurate as possible considering the fact the sum is
         // truncated and we don't want the error terms to be included in s2 ... sk, so we need
         // to solve also for the remainder
-        final T[][] a     = MathArrays.buildArray(field, c1.length + 1, c1.length + 1);
-        final T[][] b     = MathArrays.buildArray(field, c1.length + 1, y[0].length);
-        final T[]   y0    = y[0];
-        final T[]   yDot0 = yDot[0];
+        final T[][] a = MathArrays.buildArray(field, c1.length + 1, c1.length + 1);
+        final T[][] b = MathArrays.buildArray(field, c1.length + 1, y[0].length);
+        final T[] y0 = y[0];
+        final T[] yDot0 = yDot[0];
         for (int i = 1; i < y.length; ++i) {
 
-            final T di    = t[i].subtract(t[0]);
+            final T di = t[i].subtract(t[0]);
             final T ratio = di.divide(h);
-            T dikM1Ohk    = h.reciprocal();
+            T dikM1Ohk = h.reciprocal();
 
             // linear coefficients of equations
             // y(ti) - y(t0) - di y'(t0) and y'(ti) - y'(t0)
-            final T[] aI    = a[2 * i - 2];
+            final T[] aI = a[2 * i - 2];
             final T[] aDotI = (2 * i - 1) < a.length ? a[2 * i - 1] : null;
             for (int j = 0; j < aI.length; ++j) {
                 dikM1Ohk = dikM1Ohk.multiply(ratio);
-                aI[j]    = di.multiply(dikM1Ohk);
+                aI[j] = di.multiply(dikM1Ohk);
                 if (aDotI != null) {
-                    aDotI[j]  = dikM1Ohk.multiply(j + 2);
+                    aDotI[j] = dikM1Ohk.multiply(j + 2);
                 }
             }
 
             // expected value of the previous equations
-            final T[] yI    = y[i];
+            final T[] yI = y[i];
             final T[] yDotI = yDot[i];
-            final T[] bI    = b[2 * i - 2];
+            final T[] bI = b[2 * i - 2];
             final T[] bDotI = (2 * i - 1) < b.length ? b[2 * i - 1] : null;
             for (int j = 0; j < yI.length; ++j) {
-                bI[j]    = yI[j].subtract(y0[j]).subtract(di.multiply(yDot0[j]));
+                bI[j] = yI[j].subtract(y0[j]).subtract(di.multiply(yDot0[j]));
                 if (bDotI != null) {
                     bDotI[j] = yDotI[j].subtract(yDot0[j]);
                 }
@@ -305,7 +322,7 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
 
         // extract just the Nordsieck vector [s2 ... sk]
         final Array2DRowFieldMatrix<T> truncatedX =
-                        new Array2DRowFieldMatrix<T>(field, x.getRowDimension() - 1, x.getColumnDimension());
+                new Array2DRowFieldMatrix<T>(field, x.getRowDimension() - 1, x.getColumnDimension());
         for (int i = 0; i < truncatedX.getRowDimension(); ++i) {
             for (int j = 0; j < truncatedX.getColumnDimension(); ++j) {
                 truncatedX.setEntry(i, j, x.getEntry(i, j));
@@ -315,14 +332,16 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
 
     }
 
-    /** Update the high order scaled derivatives for Adams integrators (phase 1).
+    /**
+     * Update the high order scaled derivatives for Adams integrators (phase 1).
      * <p>The complete update of high order derivatives has a form similar to:
      * <pre>
      * r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub>
      * </pre>
      * this method computes the P<sup>-1</sup> A P r<sub>n</sub> part.</p>
+     *
      * @param highOrder high order scaled derivatives
-     * (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
+     *                  (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
      * @return updated high order derivatives
      * @see #updateHighOrderDerivativesPhase2(RealFieldElement[], RealFieldElement[], Array2DRowFieldMatrix)
      */
@@ -330,17 +349,19 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
         return update.multiply(highOrder);
     }
 
-    /** Update the high order scaled derivatives Adams integrators (phase 2).
+    /**
+     * Update the high order scaled derivatives Adams integrators (phase 2).
      * <p>The complete update of high order derivatives has a form similar to:
      * <pre>
      * r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub>
      * </pre>
      * this method computes the (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u part.</p>
      * <p>Phase 1 of the update must already have been performed.</p>
-     * @param start first order scaled derivatives at step start
-     * @param end first order scaled derivatives at step end
+     *
+     * @param start     first order scaled derivatives at step start
+     * @param end       first order scaled derivatives at step end
      * @param highOrder high order scaled derivatives, will be modified
-     * (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
+     *                  (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
      * @see #updateHighOrderDerivativesPhase1(Array2DRowFieldMatrix)
      */
     public void updateHighOrderDerivativesPhase2(final T[] start,

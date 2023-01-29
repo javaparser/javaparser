@@ -11,10 +11,10 @@ package vacid0.redblacktree;
  * Ioannis Kassios: <i>Dynamic frames: Support for framing, dependencies and sharing without restrictions</i></a> and
  * <a href="http://books.google.com/books?hl=en&lr=&id=AJlGLueHYzsC&oi=fnd&pg=PA1&dq=wei%C3%9F+deductive+verification&ots=rMfF5Wn9yd&sig=SL4830OoAPFO3WZd8ZypRrlwJHE">
  * Benjamin Wei&szlig;: <i>Deductive verification of object-oriented software: dynamic frames, dynamic logic and predicate abstraction</i></a>)
- * @author bruns
  *
+ * @author bruns
  */
-public interface AbstractMap{
+public interface AbstractMap {
 
     /*@ protected model instance int defaultValue;
       @ protected model instance \seq contents;
@@ -33,29 +33,35 @@ public interface AbstractMap{
       @ accessible footprint : footprint;
       @*/
 
-    /** Set the value of key; add it if it is not in the map yet */
+    /**
+     * Set the value of key; add it if it is not in the map yet
+     */
     /*@ public normal_behavior
       @ requires 0 <= key && key < contents.length;
       @ ensures contents == \seq_put(\old(contents),key,value);
       @ ensures \new_elems_fresh(footprint);
       @ assignable footprint;
       @*/
-    public void replace (int key, int value);
+    public void replace(int key, int value);
 
-    /** Remove key from the map */
+    /**
+     * Remove key from the map
+     */
     /*@ public normal_behavior
       @ requires 0 <= key && key < contents.length;
       @ ensures contents == \seq_put(\old(contents),key,defaultValue);
       @ ensures \new_elems_fresh(footprint);
       @ assignable footprint;
       @*/
-    public void remove (int key);
+    public void remove(int key);
 
-    /** Lookup the key; if it is not in the map, return the default value */
+    /**
+     * Lookup the key; if it is not in the map, return the default value
+     */
     /*@ public normal_behavior
       @ requires 0 <= key && key < contents.length;
       @ ensures \result == contents[key];
       @ accessible footprint;
       @*/
-    public /*@ pure @*/ int lookup (int key);
+    public /*@ pure @*/ int lookup(int key);
 }

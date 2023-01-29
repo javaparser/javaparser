@@ -1,1 +1,2 @@
-public class TestPathS {}
+public class TestPathS {
+}

@@ -34,21 +34,31 @@ import org.apache.commons.math3.util.MathUtils;
 public class PoissonDistribution extends AbstractIntegerDistribution {
     /**
      * Default maximum number of iterations for cumulative probability calculations.
+     *
      * @since 2.1
      */
     public static final int DEFAULT_MAX_ITERATIONS = 10000000;
     /**
      * Default convergence criterion.
+     *
      * @since 2.1
      */
     public static final double DEFAULT_EPSILON = 1e-12;
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -3349935121172596109L;
-    /** Distribution used to compute normal approximation. */
+    /**
+     * Distribution used to compute normal approximation.
+     */
     private final NormalDistribution normal;
-    /** Distribution needed for the {@link #sample()} method. */
+    /**
+     * Distribution needed for the {@link #sample()} method.
+     */
     private final ExponentialDistribution exponential;
-    /** Mean of the distribution. */
+    /**
+     * Mean of the distribution.
+     */
     private final double mean;
 
     /**
@@ -60,7 +70,9 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      */
     private final int maxIterations;
 
-    /** Convergence criterion for cumulative probability. */
+    /**
+     * Convergence criterion for cumulative probability.
+     */
     private final double epsilon;
 
     /**
@@ -91,15 +103,15 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param p Poisson mean.
-     * @param epsilon Convergence criterion for cumulative probabilities.
+     * @param p             Poisson mean.
+     * @param epsilon       Convergence criterion for cumulative probabilities.
      * @param maxIterations the maximum number of iterations for cumulative
-     * probabilities.
+     *                      probabilities.
      * @throws NotStrictlyPositiveException if {@code p <= 0}.
      * @since 2.1
      */
     public PoissonDistribution(double p, double epsilon, int maxIterations)
-    throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(new Well19937c(), p, epsilon, maxIterations);
     }
 
@@ -107,11 +119,11 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      * Creates a new Poisson distribution with specified mean, convergence
      * criterion and maximum number of iterations.
      *
-     * @param rng Random number generator.
-     * @param p Poisson mean.
-     * @param epsilon Convergence criterion for cumulative probabilities.
+     * @param rng           Random number generator.
+     * @param p             Poisson mean.
+     * @param epsilon       Convergence criterion for cumulative probabilities.
      * @param maxIterations the maximum number of iterations for cumulative
-     * probabilities.
+     *                      probabilities.
      * @throws NotStrictlyPositiveException if {@code p <= 0}.
      * @since 3.1
      */
@@ -119,7 +131,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
                                double p,
                                double epsilon,
                                int maxIterations)
-    throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         super(rng);
 
         if (p <= 0) {
@@ -131,22 +143,22 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
 
         // Use the same RNG instance as the parent class.
         normal = new NormalDistribution(rng, p, FastMath.sqrt(p),
-                                        NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+                NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
         exponential = new ExponentialDistribution(rng, 1,
-                                                  ExponentialDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+                ExponentialDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
     /**
      * Creates a new Poisson distribution with the specified mean and
      * convergence criterion.
      *
-     * @param p Poisson mean.
+     * @param p       Poisson mean.
      * @param epsilon Convergence criterion for cumulative probabilities.
      * @throws NotStrictlyPositiveException if {@code p <= 0}.
      * @since 2.1
      */
     public PoissonDistribution(double p, double epsilon)
-    throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(p, epsilon, DEFAULT_MAX_ITERATIONS);
     }
 
@@ -154,9 +166,9 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      * Creates a new Poisson distribution with the specified mean and maximum
      * number of iterations.
      *
-     * @param p Poisson mean.
+     * @param p             Poisson mean.
      * @param maxIterations Maximum number of iterations for cumulative
-     * probabilities.
+     *                      probabilities.
      * @since 2.1
      */
     public PoissonDistribution(double p, int maxIterations) {
@@ -172,13 +184,17 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
         return mean;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double probability(int x) {
         final double logProbability = logProbability(x);
         return logProbability == Double.NEGATIVE_INFINITY ? 0 : FastMath.exp(logProbability);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double logProbability(int x) {
         double ret;
@@ -188,13 +204,15 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
             ret = -mean;
         } else {
             ret = -SaddlePointExpansion.getStirlingError(x) -
-                  SaddlePointExpansion.getDeviancePart(x, mean) -
-                  0.5 * FastMath.log(MathUtils.TWO_PI) - 0.5 * FastMath.log(x);
+                    SaddlePointExpansion.getDeviancePart(x, mean) -
+                    0.5 * FastMath.log(MathUtils.TWO_PI) - 0.5 * FastMath.log(x);
         }
         return ret;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double cumulativeProbability(int x) {
         if (x < 0) {
             return 0;
@@ -203,7 +221,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
             return 1;
         }
         return Gamma.regularizedGammaQ((double) x + 1, mean, epsilon,
-                                       maxIterations);
+                maxIterations);
     }
 
     /**
@@ -217,14 +235,14 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      * @return the distribution function value calculated using a normal
      * approximation.
      */
-    public double normalApproximateProbability(int x)  {
+    public double normalApproximateProbability(int x) {
         // calculate the probability using half-correction
         return normal.cumulativeProbability(x + 0.5);
     }
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For mean parameter {@code p}, the mean is {@code p}.
      */
     public double getNumericalMean() {
@@ -233,7 +251,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * For mean parameter {@code p}, the variance is {@code p}.
      */
     public double getNumericalVariance() {
@@ -242,7 +260,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The lower bound of the support is always 0 no matter the mean parameter.
      *
      * @return lower bound of the support (always 0)
@@ -253,7 +271,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The upper bound of the support is positive infinity,
      * regardless of the parameter values. There is no integer infinity,
      * so this method returns {@code Integer.MAX_VALUE}.
@@ -267,7 +285,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * The support of this distribution is connected.
      *
      * @return {@code true}
@@ -348,7 +366,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
             double t = 0;
             double qr = 0;
             double qa = 0;
-            for (;;) {
+            for (; ; ) {
                 final double u = random.nextDouble();
                 if (u <= p1) {
                     final double n = random.nextGaussian();

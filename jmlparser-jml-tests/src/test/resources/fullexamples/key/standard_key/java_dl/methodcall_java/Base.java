@@ -11,8 +11,7 @@
 // Public License. See LICENSE.TXT for details.
 // 
 
-public class Base
-{
+public class Base {
     public int m() {
         return 1;
     }

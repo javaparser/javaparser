@@ -102,7 +102,7 @@ public class ReflectionTypeParameter implements TypeParameterDeclaration {
             return ((MethodLikeDeclaration) container).getQualifiedSignature();
         }
     }
-    
+
     @Override
     public TypeParametrizable getContainer() {
         return this.container;

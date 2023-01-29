@@ -46,17 +46,20 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 class ThirdMoment extends SecondMoment implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -7818711964045118679L;
 
-    /** third moment of values that have been added */
+    /**
+     * third moment of values that have been added
+     */
     protected double m3;
 
-     /**
+    /**
      * Square of deviation of most recently added value from previous first
      * moment, normalized by previous sample size.  Retained to prevent
      * repeated computation in higher order moments.  nDevSq = nDev * nDev.
@@ -133,11 +136,11 @@ class ThirdMoment extends SecondMoment implements Serializable {
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source ThirdMoment to copy
-     * @param dest ThirdMoment to copy to
+     * @param dest   ThirdMoment to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(ThirdMoment source, ThirdMoment dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         SecondMoment.copy(source, dest);

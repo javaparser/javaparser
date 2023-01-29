@@ -84,6 +84,6 @@ public class Range {
 
     @Override
     public String toString() {
-        return begin+"-"+end;
+        return begin + "-" + end;
     }
 }

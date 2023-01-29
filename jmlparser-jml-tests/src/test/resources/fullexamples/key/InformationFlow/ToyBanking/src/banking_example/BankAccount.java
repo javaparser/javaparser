@@ -2,7 +2,6 @@ package banking_example;
 
 
 /**
- *
  * @author christoph
  */
 public class BankAccount {
@@ -40,6 +39,7 @@ public class BankAccount {
                     \seq_concat(\seq_singleton(this),
                     \seq_concat(\seq_singleton(balance),
                                 \seq_singleton(id)));
-        */;
+        */
+        ;
     }
 }

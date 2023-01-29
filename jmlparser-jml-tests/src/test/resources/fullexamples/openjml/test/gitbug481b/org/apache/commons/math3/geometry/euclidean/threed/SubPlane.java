@@ -24,13 +24,17 @@ import org.apache.commons.math3.geometry.euclidean.twod.PolygonsSet;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.commons.math3.geometry.partitioning.*;
 
-/** This class represents a sub-hyperplane for {@link Plane}.
+/**
+ * This class represents a sub-hyperplane for {@link Plane}.
+ *
  * @since 3.0
  */
 public class SubPlane extends AbstractSubHyperplane<Euclidean3D, Euclidean2D> {
 
-    /** Simple constructor.
-     * @param hyperplane underlying hyperplane
+    /**
+     * Simple constructor.
+     *
+     * @param hyperplane      underlying hyperplane
      * @param remainingRegion remaining region of the hyperplane
      */
     public SubPlane(final Hyperplane<Euclidean3D> hyperplane,
@@ -38,14 +42,18 @@ public class SubPlane extends AbstractSubHyperplane<Euclidean3D, Euclidean2D> {
         super(hyperplane, remainingRegion);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected AbstractSubHyperplane<Euclidean3D, Euclidean2D> buildNew(final Hyperplane<Euclidean3D> hyperplane,
                                                                        final Region<Euclidean2D> remainingRegion) {
         return new SubPlane(hyperplane, remainingRegion);
     }
 
-    /** Split the instance in two parts by an hyperplane.
+    /**
+     * Split the instance in two parts by an hyperplane.
+     *
      * @param hyperplane splitting hyperplane
      * @return an object containing both the part of the instance
      * on the plus side of the instance and the part of the
@@ -55,8 +63,8 @@ public class SubPlane extends AbstractSubHyperplane<Euclidean3D, Euclidean2D> {
     public SplitSubHyperplane<Euclidean3D> split(Hyperplane<Euclidean3D> hyperplane) {
 
         final Plane otherPlane = (Plane) hyperplane;
-        final Plane thisPlane  = (Plane) getHyperplane();
-        final Line  inter      = otherPlane.intersection(thisPlane);
+        final Plane thisPlane = (Plane) getHyperplane();
+        final Line inter = otherPlane.intersection(thisPlane);
         final double tolerance = thisPlane.getTolerance();
 
         if (inter == null) {
@@ -77,27 +85,27 @@ public class SubPlane extends AbstractSubHyperplane<Euclidean3D, Euclidean2D> {
         Vector3D crossP = Vector3D.crossProduct(inter.getDirection(), thisPlane.getNormal());
         if (crossP.dotProduct(otherPlane.getNormal()) < 0) {
             final Vector2D tmp = p;
-            p           = q;
-            q           = tmp;
+            p = q;
+            q = tmp;
         }
         final SubHyperplane<Euclidean2D> l2DMinus =
-            new org.apache.commons.math3.geometry.euclidean.twod.Line(p, q, tolerance).wholeHyperplane();
+                new org.apache.commons.math3.geometry.euclidean.twod.Line(p, q, tolerance).wholeHyperplane();
         final SubHyperplane<Euclidean2D> l2DPlus =
-            new org.apache.commons.math3.geometry.euclidean.twod.Line(q, p, tolerance).wholeHyperplane();
+                new org.apache.commons.math3.geometry.euclidean.twod.Line(q, p, tolerance).wholeHyperplane();
 
         final BSPTree<Euclidean2D> splitTree = getRemainingRegion().getTree(false).split(l2DMinus);
-        final BSPTree<Euclidean2D> plusTree  = getRemainingRegion().isEmpty(splitTree.getPlus()) ?
-                                               new BSPTree<Euclidean2D>(Boolean.FALSE) :
-                                               new BSPTree<Euclidean2D>(l2DPlus, new BSPTree<Euclidean2D>(Boolean.FALSE),
-                                                                        splitTree.getPlus(), null);
+        final BSPTree<Euclidean2D> plusTree = getRemainingRegion().isEmpty(splitTree.getPlus()) ?
+                new BSPTree<Euclidean2D>(Boolean.FALSE) :
+                new BSPTree<Euclidean2D>(l2DPlus, new BSPTree<Euclidean2D>(Boolean.FALSE),
+                        splitTree.getPlus(), null);
 
         final BSPTree<Euclidean2D> minusTree = getRemainingRegion().isEmpty(splitTree.getMinus()) ?
-                                               new BSPTree<Euclidean2D>(Boolean.FALSE) :
-                                                   new BSPTree<Euclidean2D>(l2DMinus, new BSPTree<Euclidean2D>(Boolean.FALSE),
-                                                                            splitTree.getMinus(), null);
+                new BSPTree<Euclidean2D>(Boolean.FALSE) :
+                new BSPTree<Euclidean2D>(l2DMinus, new BSPTree<Euclidean2D>(Boolean.FALSE),
+                        splitTree.getMinus(), null);
 
         return new SplitSubHyperplane<Euclidean3D>(new SubPlane(thisPlane.copySelf(), new PolygonsSet(plusTree, tolerance)),
-                                                   new SubPlane(thisPlane.copySelf(), new PolygonsSet(minusTree, tolerance)));
+                new SubPlane(thisPlane.copySelf(), new PolygonsSet(minusTree, tolerance)));
 
     }
 

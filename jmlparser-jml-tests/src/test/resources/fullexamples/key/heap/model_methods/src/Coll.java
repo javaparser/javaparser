@@ -27,15 +27,17 @@ class Coll1 implements Coll {
 
     /*@ model boolean add_pre(int x) { return (x > 0); } @*/
 
-    public void add(int x) { }
+    public void add(int x) {
+    }
 
 }
 
 
-final class Coll2 implements Coll { 
+final class Coll2 implements Coll {
 
     /*@ model boolean add_pre(int x) { return true; } @*/
 
-    public void add(int x) { }
+    public void add(int x) {
+    }
 
 }

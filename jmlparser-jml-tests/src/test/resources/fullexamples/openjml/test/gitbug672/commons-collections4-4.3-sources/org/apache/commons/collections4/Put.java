@@ -29,9 +29,8 @@ import java.util.Map;
  *
  * @param <K> the type of the keys in this map
  * @param <V> the type of the values in this map
- *
- * @since 4.0
  * @see Get
+ * @since 4.0
  */
 public interface Put<K, V> {
 
@@ -44,13 +43,13 @@ public interface Put<K, V> {
      * Note that the return type is Object, rather than V as in the Map interface.
      * See the class Javadoc for further info.
      *
-     * @param key key with which the specified value is to be associated
+     * @param key   key with which the specified value is to be associated
      * @param value value to be associated with the specified key
      * @return the previous value associated with <code>key</code>, or
-     *         <code>null</code> if there was no mapping for <code>key</code>.
-     *         (A <code>null</code> return can also indicate that the map
-     *         previously associated <code>null</code> with <code>key</code>,
-     *         if the implementation supports <code>null</code> values.)
+     * <code>null</code> if there was no mapping for <code>key</code>.
+     * (A <code>null</code> return can also indicate that the map
+     * previously associated <code>null</code> with <code>key</code>,
+     * if the implementation supports <code>null</code> values.)
      * @see Map#put(Object, Object)
      */
     Object put(K key, V value);

@@ -19,21 +19,22 @@ package org.apache.commons.math3.ode.events;
 
 import org.apache.commons.math3.exception.MathInternalError;
 
-/** Enumerate for {@link EventFilter filtering events}.
+/**
+ * Enumerate for {@link EventFilter filtering events}.
  *
  * @since 3.2
  */
 
 public enum FilterType {
 
-    /** Constant for triggering only decreasing events.
+    /**
+     * Constant for triggering only decreasing events.
      * <p>When this filter is used, the wrapped {@link EventHandler
      * event handler} {@link EventHandler#eventOccurred(double, double[],
      * boolean) eventOccurred} method will be called <em>only</em> with
      * its {@code increasing} argument set to false.</p>
      */
     TRIGGER_ONLY_DECREASING_EVENTS {
-
         /**  {@inheritDoc} */
         @Override
         protected boolean getTriggeredIncreasing() {
@@ -87,11 +88,11 @@ public enum FilterType {
          * </p>
          */
         @Override
-        protected  Transformer selectTransformer(final Transformer previous,
-                                                 final double g, final boolean forward) {
+        protected Transformer selectTransformer(final Transformer previous,
+                                                final double g, final boolean forward) {
             if (forward) {
                 switch (previous) {
-                    case UNINITIALIZED :
+                    case UNINITIALIZED:
                         // we are initializing the first point
                         if (g > 0) {
                             // initialize as if previous root (i.e. backward one) was an ignored increasing event
@@ -104,7 +105,7 @@ public enum FilterType {
                             // or a decreasing event, we remain in uninitialized state
                             return Transformer.UNINITIALIZED;
                         }
-                    case PLUS  :
+                    case PLUS:
                         if (g >= 0) {
                             // we have crossed the zero line on an ignored increasing event,
                             // we must change the transformer
@@ -113,7 +114,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MINUS :
+                    case MINUS:
                         if (g >= 0) {
                             // we have crossed the zero line on an ignored increasing event,
                             // we must change the transformer
@@ -122,7 +123,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MIN   :
+                    case MIN:
                         if (g <= 0) {
                             // we have crossed the zero line on a triggered decreasing event,
                             // we must change the transformer
@@ -131,7 +132,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MAX   :
+                    case MAX:
                         if (g <= 0) {
                             // we have crossed the zero line on a triggered decreasing event,
                             // we must change the transformer
@@ -140,13 +141,13 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    default    :
+                    default:
                         // this should never happen
                         throw new MathInternalError();
                 }
             } else {
                 switch (previous) {
-                    case UNINITIALIZED :
+                    case UNINITIALIZED:
                         // we are initializing the first point
                         if (g > 0) {
                             // initialize as if previous root (i.e. forward one) was a triggered decreasing event
@@ -159,7 +160,7 @@ public enum FilterType {
                             // or a decreasing event, we remain in uninitialized state
                             return Transformer.UNINITIALIZED;
                         }
-                    case PLUS  :
+                    case PLUS:
                         if (g <= 0) {
                             // we have crossed the zero line on an ignored increasing event,
                             // we must change the transformer
@@ -168,7 +169,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MINUS :
+                    case MINUS:
                         if (g <= 0) {
                             // we have crossed the zero line on an ignored increasing event,
                             // we must change the transformer
@@ -177,7 +178,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MIN   :
+                    case MIN:
                         if (g >= 0) {
                             // we have crossed the zero line on a triggered decreasing event,
                             // we must change the transformer
@@ -186,7 +187,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MAX   :
+                    case MAX:
                         if (g >= 0) {
                             // we have crossed the zero line on a triggered decreasing event,
                             // we must change the transformer
@@ -195,7 +196,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    default    :
+                    default:
                         // this should never happen
                         throw new MathInternalError();
                 }
@@ -204,14 +205,14 @@ public enum FilterType {
 
     },
 
-    /** Constant for triggering only increasing events.
+    /**
+     * Constant for triggering only increasing events.
      * <p>When this filter is used, the wrapped {@link EventHandler
      * event handler} {@link EventHandler#eventOccurred(double, double[],
      * boolean) eventOccurred} method will be called <em>only</em> with
      * its {@code increasing} argument set to true.</p>
      */
     TRIGGER_ONLY_INCREASING_EVENTS {
-
         /**  {@inheritDoc} */
         @Override
         protected boolean getTriggeredIncreasing() {
@@ -265,11 +266,11 @@ public enum FilterType {
          * </p>
          */
         @Override
-        protected  Transformer selectTransformer(final Transformer previous,
-                                                 final double g, final boolean forward) {
+        protected Transformer selectTransformer(final Transformer previous,
+                                                final double g, final boolean forward) {
             if (forward) {
                 switch (previous) {
-                    case UNINITIALIZED :
+                    case UNINITIALIZED:
                         // we are initializing the first point
                         if (g > 0) {
                             // initialize as if previous root (i.e. backward one) was a triggered increasing event
@@ -282,7 +283,7 @@ public enum FilterType {
                             // or a decreasing event, we remain in uninitialized state
                             return Transformer.UNINITIALIZED;
                         }
-                    case PLUS  :
+                    case PLUS:
                         if (g <= 0) {
                             // we have crossed the zero line on an ignored decreasing event,
                             // we must change the transformer
@@ -291,7 +292,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MINUS :
+                    case MINUS:
                         if (g <= 0) {
                             // we have crossed the zero line on an ignored decreasing event,
                             // we must change the transformer
@@ -300,7 +301,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MIN   :
+                    case MIN:
                         if (g >= 0) {
                             // we have crossed the zero line on a triggered increasing event,
                             // we must change the transformer
@@ -309,7 +310,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MAX   :
+                    case MAX:
                         if (g >= 0) {
                             // we have crossed the zero line on a triggered increasing event,
                             // we must change the transformer
@@ -318,13 +319,13 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    default    :
+                    default:
                         // this should never happen
                         throw new MathInternalError();
                 }
             } else {
                 switch (previous) {
-                    case UNINITIALIZED :
+                    case UNINITIALIZED:
                         // we are initializing the first point
                         if (g > 0) {
                             // initialize as if previous root (i.e. forward one) was an ignored decreasing event
@@ -337,7 +338,7 @@ public enum FilterType {
                             // or a decreasing event, we remain in uninitialized state
                             return Transformer.UNINITIALIZED;
                         }
-                    case PLUS  :
+                    case PLUS:
                         if (g >= 0) {
                             // we have crossed the zero line on an ignored decreasing event,
                             // we must change the transformer
@@ -346,7 +347,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MINUS :
+                    case MINUS:
                         if (g >= 0) {
                             // we have crossed the zero line on an ignored decreasing event,
                             // we must change the transformer
@@ -355,7 +356,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MIN   :
+                    case MIN:
                         if (g <= 0) {
                             // we have crossed the zero line on a triggered increasing event,
                             // we must change the transformer
@@ -364,7 +365,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    case MAX   :
+                    case MAX:
                         if (g <= 0) {
                             // we have crossed the zero line on a triggered increasing event,
                             // we must change the transformer
@@ -373,7 +374,7 @@ public enum FilterType {
                             // we are still in the same status
                             return previous;
                         }
-                    default    :
+                    default:
                         // this should never happen
                         throw new MathInternalError();
                 }
@@ -382,16 +383,20 @@ public enum FilterType {
 
     };
 
-    /** Get the increasing status of triggered events.
+    /**
+     * Get the increasing status of triggered events.
+     *
      * @return true if triggered events are increasing events
      */
     protected abstract boolean getTriggeredIncreasing();
 
-    /** Get next function transformer in the specified direction.
+    /**
+     * Get next function transformer in the specified direction.
+     *
      * @param previous transformer active on the previous point with respect
-     * to integration direction (may be null if no previous point is known)
-     * @param g current value of the g function
-     * @param forward true if integration goes forward
+     *                 to integration direction (may be null if no previous point is known)
+     * @param g        current value of the g function
+     * @param forward  true if integration goes forward
      * @return next transformer transformer
      */
     protected abstract Transformer selectTransformer(Transformer previous,

@@ -44,7 +44,7 @@ class Issue1946Test {
     void issueWithInternalEnumConstantReference() {
         String code = "package com.github.javaparser.symbolsolver.testingclasses; class Foo { void foo() { UtilityClass.method(SomeClass.InnerEnum.CONSTANT); } }";
         JavaParser jp = new JavaParser();
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new TypeSolver[] {
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new TypeSolver[]{
                 new ReflectionTypeSolver(false)
         });
         jp.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));

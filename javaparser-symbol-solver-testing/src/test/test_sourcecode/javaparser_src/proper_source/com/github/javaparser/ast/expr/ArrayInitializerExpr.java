@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.visitor.GenericVisitor;
@@ -37,7 +37,7 @@ public final class ArrayInitializerExpr extends Expression {
     }
 
     public ArrayInitializerExpr(List<Expression> values) {
-       setValues(values);
+        setValues(values);
     }
 
     public ArrayInitializerExpr(int beginLine, int beginColumn, int endLine, int endColumn, List<Expression> values) {
@@ -61,6 +61,6 @@ public final class ArrayInitializerExpr extends Expression {
 
     public void setValues(List<Expression> values) {
         this.values = values;
-		setAsParentNodeOf(this.values);
+        setAsParentNodeOf(this.values);
     }
 }

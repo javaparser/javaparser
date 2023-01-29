@@ -24,11 +24,15 @@ package org.apache.commons.math3.genetics;
  *
  * @since 2.0
  */
-public abstract class Chromosome implements Comparable<Chromosome>,Fitness {
-    /** Value assigned when no fitness has been computed yet. */
+public abstract class Chromosome implements Comparable<Chromosome>, Fitness {
+    /**
+     * Value assigned when no fitness has been computed yet.
+     */
     private static final double NO_FITNESS = Double.NEGATIVE_INFINITY;
 
-    /** Cached value of the fitness of this chromosome. */
+    /**
+     * Cached value of the fitness of this chromosome.
+     */
     private double fitness = NO_FITNESS;
 
     /**
@@ -50,8 +54,7 @@ public abstract class Chromosome implements Comparable<Chromosome>,Fitness {
      * Compares two chromosomes based on their fitness. The bigger the fitness, the better the chromosome.
      *
      * @param another another chromosome to compare
-     * @return
-     * <ul>
+     * @return <ul>
      *   <li>-1 if <code>another</code> is better than <code>this</code></li>
      *   <li>1 if <code>another</code> is worse than <code>this</code></li>
      *   <li>0 if the two chromosomes have the same fitness</li>

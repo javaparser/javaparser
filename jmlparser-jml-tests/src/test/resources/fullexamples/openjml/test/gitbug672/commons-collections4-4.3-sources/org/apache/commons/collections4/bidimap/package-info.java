@@ -35,6 +35,5 @@
  * <ul>
  *   <li>Unmodifiable - ensures the map cannot be altered
  * </ul>
- *
  */
 package org.apache.commons.collections4.bidimap;

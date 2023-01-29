@@ -26,7 +26,6 @@ public interface LeastSquaresOptimizer {
     /**
      * Solve the non-linear least squares problem.
      *
-     *
      * @param leastSquaresProblem the problem definition, including model function and
      *                            convergence criteria.
      * @return The optimum.

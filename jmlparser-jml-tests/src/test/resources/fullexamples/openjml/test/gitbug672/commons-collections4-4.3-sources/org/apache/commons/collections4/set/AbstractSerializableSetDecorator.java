@@ -31,13 +31,15 @@ import java.util.Set;
 public abstract class AbstractSerializableSetDecorator<E>
         extends AbstractSetDecorator<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 1229469966212206107L;
 
     /**
      * Constructor.
      *
-     * @param set  the list to decorate, must not be null
+     * @param set the list to decorate, must not be null
      * @throws NullPointerException if set is null
      */
     protected AbstractSerializableSetDecorator(final Set<E> set) {
@@ -45,10 +47,11 @@ public abstract class AbstractSerializableSetDecorator<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the set out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -59,8 +62,8 @@ public abstract class AbstractSerializableSetDecorator<E>
     /**
      * Read the set in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     @SuppressWarnings("unchecked")

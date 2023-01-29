@@ -28,9 +28,13 @@ import java.util.Arrays;
  * @since 3.1
  */
 public class SimpleBounds implements OptimizationData {
-    /** Lower bounds. */
+    /**
+     * Lower bounds.
+     */
     private final double[] lower;
-    /** Upper bounds. */
+    /**
+     * Upper bounds.
+     */
     private final double[] upper;
 
     /**
@@ -51,6 +55,7 @@ public class SimpleBounds implements OptimizationData {
     public double[] getLower() {
         return lower.clone();
     }
+
     /**
      * Gets the upper bounds.
      *

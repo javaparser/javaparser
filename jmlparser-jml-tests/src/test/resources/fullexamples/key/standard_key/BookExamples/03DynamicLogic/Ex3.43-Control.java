@@ -1,7 +1,7 @@
 class Control {
-  Data data;
+    Data data;
 }
 
 class Data {
-  int d;
+    int d;
 }

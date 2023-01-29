@@ -12,9 +12,8 @@
 // 
 
 
-
 public class ArrayMax {
-    
+
     /*@
       @ public normal_behavior
       @ requires a != null;
@@ -25,8 +24,8 @@ public class ArrayMax {
       @                         \result == a[j]);
       @*/
     public static /*@ pure @*/ int max(int[] a) {
-	if ( a.length == 0 ) return 0;
-	int max = a[0], i = 1;
+        if (a.length == 0) return 0;
+        int max = a[0], i = 1;
 	/*@
 	  @ loop_invariant
 	  @      i <= a.length
@@ -37,11 +36,11 @@ public class ArrayMax {
 	  @ modifies \nothing;
 	  @ decreases a.length - i;
 	  @*/
-	while ( i < a.length ) {
-	    if ( a[i] > max ) max = a[i];
-	    ++i;
-	}
-	return max;
+        while (i < a.length) {
+            if (a[i] > max) max = a[i];
+            ++i;
+        }
+        return max;
     }
 
 }

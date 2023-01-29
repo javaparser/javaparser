@@ -25,8 +25,10 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 3.0
  */
 public class SingularOperatorException
-    extends MathIllegalArgumentException {
-    /** Serializable version Id. */
+        extends MathIllegalArgumentException {
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -476049978595245033L;
 
     /**

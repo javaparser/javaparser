@@ -10,13 +10,13 @@ class StrictlyPure {
       @ ensures \result == field;
       @*/
     int strictlyPureMethod() {
-	// assignable means modifies in KeY!
-	// intermediate states may change the values of locations.
-	
-	field ++;
-	field --;
+        // assignable means modifies in KeY!
+        // intermediate states may change the values of locations.
 
-	return field;
+        field++;
+        field--;
+
+        return field;
     }
 
 
@@ -24,7 +24,7 @@ class StrictlyPure {
 
     /*@ ensures \result == field; */
     /*@ strictly_pure*/ int strictlyPureModifierMethod() {
-       return field;
+        return field;
     }
 
     /*@ requires field == 42;
@@ -35,7 +35,7 @@ class StrictlyPure {
       @*/
     int useStrictlyPureMethod(StrictlyPureClass o) {
         o.thisMethodIsStrictlyPureByDefault();
-	return strictlyPureMethod() - strictlyPureModifierMethod();
+        return strictlyPureMethod() - strictlyPureModifierMethod();
     }
 
     /* WARNING: If you use the line

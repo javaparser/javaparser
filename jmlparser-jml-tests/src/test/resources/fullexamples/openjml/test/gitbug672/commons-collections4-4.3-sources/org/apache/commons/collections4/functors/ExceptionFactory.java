@@ -28,17 +28,21 @@ import java.io.Serializable;
  */
 public final class ExceptionFactory<T> implements Factory<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 7179106032121985545L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes") // the static instance works for all types
     public static final Factory INSTANCE = new ExceptionFactory<>();
 
     /**
      * Factory returning the singleton instance.
      *
-     * @param <T>  the type the factory creates
+     * @param <T> the type the factory creates
      * @return the singleton instance
      * @since 3.1
      */

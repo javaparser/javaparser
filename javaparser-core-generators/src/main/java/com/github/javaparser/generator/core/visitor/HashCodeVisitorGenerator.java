@@ -50,7 +50,7 @@ public class HashCodeVisitorGenerator extends VisitorGenerator {
         body.getStatements().clear();
 
         final SeparatedItemStringBuilder builder = new SeparatedItemStringBuilder("return ", "* 31 +", ";");
-        final List<PropertyMetaModel> propertyMetaModels= node.getAllPropertyMetaModels();
+        final List<PropertyMetaModel> propertyMetaModels = node.getAllPropertyMetaModels();
         if (propertyMetaModels.isEmpty()) {
             builder.append("0");
         } else {

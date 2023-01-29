@@ -13,21 +13,21 @@
 
 public class ReverseArray {
 
-    public int[] a;     
-   
+    public int[] a;
+
     public ReverseArray() {
     }
-    
-    
+
+
     /*@ public normal_behavior
       @ requires a!=null && a.length>=0;
       @ ensures (\forall int j; j>=0 && j<a.length; a[j]==\old(a[a.length-(j+1)]));
       @ diverges true;
       @*/
     public void reverse() {
-	int i = 0;
+        int i = 0;
 
-        final int length = (a.length/2) ;
+        final int length = (a.length / 2);
 	/*@ 
 	  @ loop_invariant
 	  @   (\forall int j; j>=0 && j<i; \old(a[a.length-(j+1)])==a[j] && \old(a[j])==a[a.length-(j+1)])
@@ -36,14 +36,13 @@ public class ReverseArray {
 	  @   && i>=0 && i<=length;
 	  @ modifies a[*];
 	  @*/
-	while (i<length) {
-	    int tmp = a[i];
-	    a[i] = a[a.length-(i+1)];
-	    a[a.length-(i+1)] = tmp;
-	    i++;
-	}
+        while (i < length) {
+            int tmp = a[i];
+            a[i] = a[a.length - (i + 1)];
+            a[a.length - (i + 1)] = tmp;
+            i++;
+        }
     }
-
 
 
     /*@ public normal_behavior
@@ -54,29 +53,29 @@ public class ReverseArray {
       @*/
     public int[] reverse2(int[] p_a) {
         int[] b = new int[p_a.length];
-	int i = 0;
+        int i = 0;
 	/*@ 
 	    @ loop_invariant (\forall int j; j>=0 && j<i; b[j]==p_a[p_a.length-(j+1)]) && i>=0 && i<=p_a.length;
 	      @ modifies b[*];
 	      @*/
-	while (i<p_a.length) {      
-	    b[i] = p_a[p_a.length-(i+1)];      
-	    i++;
-	}
-	return b;
+        while (i < p_a.length) {
+            b[i] = p_a[p_a.length - (i + 1)];
+            i++;
+        }
+        return b;
     }
 
     public static void main(String[] args) {
-	ReverseArray ra = new ReverseArray();
-	ra.a = new int[]{1,2,3,4,5,6,7,8,9};
-	for (int i = 0; i<ra.a.length; i++) {
-	    System.out.println(ra.a[i]);
-	}
-	ra.reverse2(ra.a);
-	for (int i = 0; i<ra.a.length; i++) {
-	    System.out.println(ra.a[i]);
-	}
-     
+        ReverseArray ra = new ReverseArray();
+        ra.a = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+        for (int i = 0; i < ra.a.length; i++) {
+            System.out.println(ra.a[i]);
+        }
+        ra.reverse2(ra.a);
+        for (int i = 0; i < ra.a.length; i++) {
+            System.out.println(ra.a[i]);
+        }
+
     }
 
 }

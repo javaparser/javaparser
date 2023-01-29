@@ -30,7 +30,9 @@ import org.apache.commons.math3.optim.OptimizationData;
  */
 @Deprecated
 public class ModelFunction implements OptimizationData {
-    /** Function to be optimized. */
+    /**
+     * Function to be optimized.
+     */
     private final MultivariateVectorFunction model;
 
     /**

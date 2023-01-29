@@ -32,22 +32,27 @@ import java.io.Serializable;
  * <li>If any of the values equals <code>Double.POSITIVE_INFINITY</code>,
  * the result is <code>Double.POSITIVE_INFINITY.</code></li>
  * </ul></p>
-* <p>
+ * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class Max extends AbstractStorelessUnivariateStatistic implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -5593383832225844641L;
 
-    /** Number of values that have been added */
+    /**
+     * Number of values that have been added
+     */
     private long n;
 
-    /** Current value of the statistic */
+    /**
+     * Current value of the statistic
+     */
     private double value;
 
     /**
@@ -120,15 +125,15 @@ public class Max extends AbstractStorelessUnivariateStatistic implements Seriali
      * </ul></p>
      *
      * @param values the input array
-     * @param begin index of the first array element to include
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the maximum of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     @Override
     public double evaluate(final double[] values, final int begin, final int length)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         double max = Double.NaN;
         if (test(values, begin, length)) {
             max = values[begin];
@@ -157,11 +162,11 @@ public class Max extends AbstractStorelessUnivariateStatistic implements Seriali
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source Max to copy
-     * @param dest Max to copy to
+     * @param dest   Max to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(Max source, Max dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

@@ -29,31 +29,28 @@ import org.apache.commons.math3.analysis.MultivariateFunction;
  * </ul>
  *
  * @param <FUNC> Type of the objective function to be optimized.
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public interface BaseMultivariateOptimizer<FUNC extends MultivariateFunction>
-    extends BaseOptimizer<PointValuePair> {
+        extends BaseOptimizer<PointValuePair> {
     /**
      * Optimize an objective function.
      *
-     * @param f Objective function.
-     * @param goalType Type of optimization goal: either
-     * {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
+     * @param f          Objective function.
+     * @param goalType   Type of optimization goal: either
+     *                   {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}.
      * @param startPoint Start point for optimization.
-     * @param maxEval Maximum number of function evaluations.
+     * @param maxEval    Maximum number of function evaluations.
      * @return the point/value pair giving the optimal value for objective
      * function.
-     * @throws org.apache.commons.math3.exception.DimensionMismatchException
-     * if the start point dimension is wrong.
-     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException
-     * if the maximal number of evaluations is exceeded.
-     * @throws org.apache.commons.math3.exception.NullArgumentException if
-     * any argument is {@code null}.
+     * @throws org.apache.commons.math3.exception.DimensionMismatchException  if the start point dimension is wrong.
+     * @throws org.apache.commons.math3.exception.TooManyEvaluationsException if the maximal number of evaluations is exceeded.
+     * @throws org.apache.commons.math3.exception.NullArgumentException       if
+     *                                                                        any argument is {@code null}.
      * @deprecated As of 3.1. In 4.0, it will be replaced by the declaration
-     * corresponding to this {@link org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer#optimize(int,MultivariateFunction,GoalType,OptimizationData[]) method}.
+     * corresponding to this {@link org.apache.commons.math3.optimization.direct.BaseAbstractMultivariateOptimizer#optimize(int, MultivariateFunction, GoalType, OptimizationData[]) method}.
      */
     @Deprecated
     PointValuePair optimize(int maxEval, FUNC f, GoalType goalType,

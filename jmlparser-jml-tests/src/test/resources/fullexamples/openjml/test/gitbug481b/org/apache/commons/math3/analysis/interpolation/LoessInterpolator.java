@@ -42,17 +42,24 @@ import java.util.Arrays;
  * @since 2.0
  */
 public class LoessInterpolator
-    implements UnivariateInterpolator, Serializable {
-    /** Default value of the bandwidth parameter. */
+        implements UnivariateInterpolator, Serializable {
+    /**
+     * Default value of the bandwidth parameter.
+     */
     public static final double DEFAULT_BANDWIDTH = 0.3;
-    /** Default value of the number of robustness iterations. */
+    /**
+     * Default value of the number of robustness iterations.
+     */
     public static final int DEFAULT_ROBUSTNESS_ITERS = 2;
     /**
      * Default value for accuracy.
+     *
      * @since 2.1
      */
     public static final double DEFAULT_ACCURACY = 1e-12;
-    /** serializable version identifier. */
+    /**
+     * serializable version identifier.
+     */
     private static final long serialVersionUID = 5204927143605193821L;
     /**
      * The bandwidth parameter: when computing the loess fit at
@@ -100,17 +107,16 @@ public class LoessInterpolator
      * robustnessIters, LoessInterpolator.DEFAULT_ACCURACY)}
      * </p>
      *
-     * @param bandwidth  when computing the loess fit at
-     * a particular point, this fraction of source points closest
-     * to the current point is taken into account for computing
-     * a least-squares regression.
-     * A sensible value is usually 0.25 to 0.5, the default value is
-     * {@link #DEFAULT_BANDWIDTH}.
+     * @param bandwidth       when computing the loess fit at
+     *                        a particular point, this fraction of source points closest
+     *                        to the current point is taken into account for computing
+     *                        a least-squares regression.
+     *                        A sensible value is usually 0.25 to 0.5, the default value is
+     *                        {@link #DEFAULT_BANDWIDTH}.
      * @param robustnessIters This many robustness iterations are done.
-     * A sensible value is usually 0 (just the initial fit without any
-     * robustness iterations) to 4, the default value is
-     * {@link #DEFAULT_ROBUSTNESS_ITERS}.
-
+     *                        A sensible value is usually 0 (just the initial fit without any
+     *                        robustness iterations) to 4, the default value is
+     *                        {@link #DEFAULT_ROBUSTNESS_ITERS}.
      * @see #LoessInterpolator(double, int, double)
      */
     public LoessInterpolator(double bandwidth, int robustnessIters) {
@@ -121,28 +127,28 @@ public class LoessInterpolator
      * Construct a new {@link LoessInterpolator}
      * with given bandwidth, number of robustness iterations and accuracy.
      *
-     * @param bandwidth  when computing the loess fit at
-     * a particular point, this fraction of source points closest
-     * to the current point is taken into account for computing
-     * a least-squares regression.
-     * A sensible value is usually 0.25 to 0.5, the default value is
-     * {@link #DEFAULT_BANDWIDTH}.
+     * @param bandwidth       when computing the loess fit at
+     *                        a particular point, this fraction of source points closest
+     *                        to the current point is taken into account for computing
+     *                        a least-squares regression.
+     *                        A sensible value is usually 0.25 to 0.5, the default value is
+     *                        {@link #DEFAULT_BANDWIDTH}.
      * @param robustnessIters This many robustness iterations are done.
-     * A sensible value is usually 0 (just the initial fit without any
-     * robustness iterations) to 4, the default value is
-     * {@link #DEFAULT_ROBUSTNESS_ITERS}.
-     * @param accuracy If the median residual at a certain robustness iteration
-     * is less than this amount, no more iterations are done.
-     * @throws OutOfRangeException if bandwidth does not lie in the interval [0,1].
+     *                        A sensible value is usually 0 (just the initial fit without any
+     *                        robustness iterations) to 4, the default value is
+     *                        {@link #DEFAULT_ROBUSTNESS_ITERS}.
+     * @param accuracy        If the median residual at a certain robustness iteration
+     *                        is less than this amount, no more iterations are done.
+     * @throws OutOfRangeException  if bandwidth does not lie in the interval [0,1].
      * @throws NotPositiveException if {@code robustnessIters} is negative.
      * @see #LoessInterpolator(double, int)
      * @since 2.1
      */
     public LoessInterpolator(double bandwidth, int robustnessIters, double accuracy)
-        throws OutOfRangeException,
-               NotPositiveException {
+            throws OutOfRangeException,
+            NotPositiveException {
         if (bandwidth < 0 ||
-            bandwidth > 1) {
+                bandwidth > 1) {
             throw new OutOfRangeException(LocalizedFormats.BANDWIDTH, bandwidth, 0, 1);
         }
         this.bandwidth = bandwidth;
@@ -164,53 +170,53 @@ public class LoessInterpolator
      * @param yval the values for the interpolation points
      * @return A cubic spline built upon a loess fit to the data at the original abscissae
      * @throws NonMonotonicSequenceException if {@code xval} not sorted in
-     * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
-     * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
-     * not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
-     * accomodate the size of the input data (i.e. the bandwidth must be
-     * larger than 2/n).
+     *                                       strictly increasing order.
+     * @throws DimensionMismatchException    if {@code xval} and {@code yval} have
+     *                                       different sizes.
+     * @throws NoDataException               if {@code xval} or {@code yval} has zero size.
+     * @throws NotFiniteNumberException      if any of the arguments and values are
+     *                                       not finite real numbers.
+     * @throws NumberIsTooSmallException     if the bandwidth is too small to
+     *                                       accomodate the size of the input data (i.e. the bandwidth must be
+     *                                       larger than 2/n).
      */
     public final PolynomialSplineFunction interpolate(final double[] xval,
                                                       final double[] yval)
-        throws NonMonotonicSequenceException,
-               DimensionMismatchException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+            throws NonMonotonicSequenceException,
+            DimensionMismatchException,
+            NoDataException,
+            NotFiniteNumberException,
+            NumberIsTooSmallException {
         return new SplineInterpolator().interpolate(xval, smooth(xval, yval));
     }
 
     /**
      * Compute a weighted loess fit on the data at the original abscissae.
      *
-     * @param xval Arguments for the interpolation points.
-     * @param yval Values for the interpolation points.
+     * @param xval    Arguments for the interpolation points.
+     * @param yval    Values for the interpolation points.
      * @param weights point weights: coefficients by which the robustness weight
-     * of a point is multiplied.
+     *                of a point is multiplied.
      * @return the values of the loess fit at corresponding original abscissae.
      * @throws NonMonotonicSequenceException if {@code xval} not sorted in
-     * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
-     * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
-     not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
-     * accomodate the size of the input data (i.e. the bandwidth must be
-     * larger than 2/n).
+     *                                       strictly increasing order.
+     * @throws DimensionMismatchException    if {@code xval} and {@code yval} have
+     *                                       different sizes.
+     * @throws NoDataException               if {@code xval} or {@code yval} has zero size.
+     * @throws NotFiniteNumberException      if any of the arguments and values are
+     *                                       not finite real numbers.
+     * @throws NumberIsTooSmallException     if the bandwidth is too small to
+     *                                       accomodate the size of the input data (i.e. the bandwidth must be
+     *                                       larger than 2/n).
      * @since 2.1
      */
     public final double[] smooth(final double[] xval, final double[] yval,
                                  final double[] weights)
-        throws NonMonotonicSequenceException,
-               DimensionMismatchException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+            throws NonMonotonicSequenceException,
+            DimensionMismatchException,
+            NoDataException,
+            NotFiniteNumberException,
+            NumberIsTooSmallException {
         if (xval.length != yval.length) {
             throw new DimensionMismatchException(xval.length, yval.length);
         }
@@ -239,7 +245,7 @@ public class LoessInterpolator
 
         if (bandwidthInPoints < 2) {
             throw new NumberIsTooSmallException(LocalizedFormats.BANDWIDTH,
-                                                bandwidthInPoints, 2, true);
+                    bandwidthInPoints, 2, true);
         }
 
         final double[] res = new double[n];
@@ -292,11 +298,11 @@ public class LoessInterpolator
                 double sumXY = 0;
                 double denom = FastMath.abs(1.0 / (xval[edge] - x));
                 for (int k = ileft; k <= iright; ++k) {
-                    final double xk   = xval[k];
-                    final double yk   = yval[k];
+                    final double xk = xval[k];
+                    final double yk = yval[k];
                     final double dist = (k < i) ? x - xk : xk - x;
-                    final double w    = tricube(dist * denom) * robustnessWeights[k] * weights[k];
-                    final double xkw  = xk * w;
+                    final double w = tricube(dist * denom) * robustnessWeights[k] * weights[k];
+                    final double xkw = xk * w;
                     sumWeights += w;
                     sumX += xkw;
                     sumXSquared += xk * xkw;
@@ -362,22 +368,22 @@ public class LoessInterpolator
      * @param yval the values for the interpolation points
      * @return values of the loess fit at corresponding original abscissae
      * @throws NonMonotonicSequenceException if {@code xval} not sorted in
-     * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
-     * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
-     * not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
-     * accomodate the size of the input data (i.e. the bandwidth must be
-     * larger than 2/n).
+     *                                       strictly increasing order.
+     * @throws DimensionMismatchException    if {@code xval} and {@code yval} have
+     *                                       different sizes.
+     * @throws NoDataException               if {@code xval} or {@code yval} has zero size.
+     * @throws NotFiniteNumberException      if any of the arguments and values are
+     *                                       not finite real numbers.
+     * @throws NumberIsTooSmallException     if the bandwidth is too small to
+     *                                       accomodate the size of the input data (i.e. the bandwidth must be
+     *                                       larger than 2/n).
      */
     public final double[] smooth(final double[] xval, final double[] yval)
-        throws NonMonotonicSequenceException,
-               DimensionMismatchException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+            throws NonMonotonicSequenceException,
+            DimensionMismatchException,
+            NoDataException,
+            NotFiniteNumberException,
+            NumberIsTooSmallException {
         if (xval.length != yval.length) {
             throw new DimensionMismatchException(xval.length, yval.length);
         }
@@ -394,14 +400,14 @@ public class LoessInterpolator
      * embraces the same number of points closest to {@code xval[i]},
      * ignoring zero weights.
      *
-     * @param xval Arguments array.
-     * @param weights Weights array.
-     * @param i Index around which the new interval should be computed.
+     * @param xval              Arguments array.
+     * @param weights           Weights array.
+     * @param i                 Index around which the new interval should be computed.
      * @param bandwidthInterval a two-element array {left, right} such that:
-     * {@code (left==0 or xval[i] - xval[left-1] > xval[right] - xval[i])}
-     * and
-     * {@code (right==xval.length-1 or xval[right+1] - xval[i] > xval[i] - xval[left])}.
-     * The array will be updated.
+     *                          {@code (left==0 or xval[i] - xval[left-1] > xval[right] - xval[i])}
+     *                          and
+     *                          {@code (right==xval.length-1 or xval[right+1] - xval[i] > xval[i] - xval[left])}.
+     *                          The array will be updated.
      */
     private static void updateBandwidthInterval(final double[] xval, final double[] weights,
                                                 final int i,
@@ -424,12 +430,12 @@ public class LoessInterpolator
      * {@code j > i && (j == weights.length || weights[j] != 0)}.
      *
      * @param weights Weights array.
-     * @param i Index from which to start search.
+     * @param i       Index from which to start search.
      * @return the smallest compliant index.
      */
     private static int nextNonzero(final double[] weights, final int i) {
         int j = i + 1;
-        while(j < weights.length && weights[j] == 0) {
+        while (j < weights.length && weights[j] == 0) {
             ++j;
         }
         return j;
@@ -456,8 +462,7 @@ public class LoessInterpolator
      * Check that all elements of an array are finite real numbers.
      *
      * @param values Values array.
-     * @throws org.apache.commons.math3.exception.NotFiniteNumberException
-     * if one of the values is not a finite real number.
+     * @throws org.apache.commons.math3.exception.NotFiniteNumberException if one of the values is not a finite real number.
      */
     private static void checkAllFiniteReal(final double[] values) {
         for (int i = 0; i < values.length; i++) {

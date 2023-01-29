@@ -35,13 +35,11 @@ package org.apache.commons.math3.optimization;
  * at all.
  *
  * @param <PAIR> Type of the (point, objective value) pair.
- *
  * @see org.apache.commons.math3.optimization.SimplePointChecker
  * @see org.apache.commons.math3.optimization.SimpleValueChecker
  * @see org.apache.commons.math3.optimization.SimpleVectorValueChecker
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public interface ConvergenceChecker<PAIR> {
@@ -49,8 +47,8 @@ public interface ConvergenceChecker<PAIR> {
      * Check if the optimization algorithm has converged.
      *
      * @param iteration Current iteration.
-     * @param previous Best point in the previous iteration.
-     * @param current Best point in the current iteration.
+     * @param previous  Best point in the previous iteration.
+     * @param current   Best point in the current iteration.
      * @return {@code true} if the algorithm is considered to have converged.
      */
     boolean converged(int iteration, PAIR previous, PAIR current);

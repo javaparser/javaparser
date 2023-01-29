@@ -44,12 +44,18 @@ import java.util.Arrays;
 public class MultiKey<K> implements Serializable {
     // This class could implement List, but that would confuse it's purpose
 
-    /** Serialisation version */
+    /**
+     * Serialisation version
+     */
     private static final long serialVersionUID = 4465448607415788805L;
 
-    /** The individual keys */
+    /**
+     * The individual keys
+     */
     private final K[] keys;
-    /** The cached hashCode */
+    /**
+     * The cached hashCode
+     */
     private transient int hashCode;
 
     /**
@@ -58,12 +64,12 @@ public class MultiKey<K> implements Serializable {
      * The keys should be immutable
      * If they are not then they must not be changed after adding to the MultiKey.
      *
-     * @param key1  the first key
-     * @param key2  the second key
+     * @param key1 the first key
+     * @param key2 the second key
      */
     @SuppressWarnings("unchecked")
     public MultiKey(final K key1, final K key2) {
-        this((K[]) new Object[] { key1, key2 }, false);
+        this((K[]) new Object[]{key1, key2}, false);
     }
 
     /**
@@ -72,13 +78,13 @@ public class MultiKey<K> implements Serializable {
      * The keys should be immutable
      * If they are not then they must not be changed after adding to the MultiKey.
      *
-     * @param key1  the first key
-     * @param key2  the second key
-     * @param key3  the third key
+     * @param key1 the first key
+     * @param key2 the second key
+     * @param key3 the third key
      */
     @SuppressWarnings("unchecked")
     public MultiKey(final K key1, final K key2, final K key3) {
-        this((K[]) new Object[] {key1, key2, key3}, false);
+        this((K[]) new Object[]{key1, key2, key3}, false);
     }
 
     /**
@@ -87,14 +93,14 @@ public class MultiKey<K> implements Serializable {
      * The keys should be immutable
      * If they are not then they must not be changed after adding to the MultiKey.
      *
-     * @param key1  the first key
-     * @param key2  the second key
-     * @param key3  the third key
-     * @param key4  the fourth key
+     * @param key1 the first key
+     * @param key2 the second key
+     * @param key3 the third key
+     * @param key4 the fourth key
      */
     @SuppressWarnings("unchecked")
     public MultiKey(final K key1, final K key2, final K key3, final K key4) {
-        this((K[]) new Object[] {key1, key2, key3, key4}, false);
+        this((K[]) new Object[]{key1, key2, key3, key4}, false);
     }
 
     /**
@@ -103,15 +109,15 @@ public class MultiKey<K> implements Serializable {
      * The keys should be immutable
      * If they are not then they must not be changed after adding to the MultiKey.
      *
-     * @param key1  the first key
-     * @param key2  the second key
-     * @param key3  the third key
-     * @param key4  the fourth key
-     * @param key5  the fifth key
+     * @param key1 the first key
+     * @param key2 the second key
+     * @param key3 the third key
+     * @param key4 the fourth key
+     * @param key5 the fifth key
      */
     @SuppressWarnings("unchecked")
     public MultiKey(final K key1, final K key2, final K key3, final K key4, final K key5) {
-        this((K[]) new Object[] {key1, key2, key3, key4, key5}, false);
+        this((K[]) new Object[]{key1, key2, key3, key4, key5}, false);
     }
 
     /**
@@ -122,7 +128,7 @@ public class MultiKey<K> implements Serializable {
      * <p>
      * This is equivalent to <code>new MultiKey(keys, true)</code>.
      *
-     * @param keys  the array of keys, not null
+     * @param keys the array of keys, not null
      * @throws IllegalArgumentException if the key array is null
      */
     public MultiKey(final K[] keys) {
@@ -148,8 +154,8 @@ public class MultiKey<K> implements Serializable {
      * The keys should be immutable
      * If they are not then they must not be changed after adding to the MultiKey.
      *
-     * @param keys  the array of keys, not null
-     * @param makeClone  true to clone the array, false to assign it
+     * @param keys      the array of keys, not null
+     * @param makeClone true to clone the array, false to assign it
      * @throws IllegalArgumentException if the key array is null
      * @since 3.1
      */
@@ -168,6 +174,7 @@ public class MultiKey<K> implements Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets a clone of the array of keys.
      * <p>
@@ -186,7 +193,7 @@ public class MultiKey<K> implements Serializable {
      * The key should be immutable.
      * If it is not then it must not be changed.
      *
-     * @param index  the index to retrieve
+     * @param index the index to retrieve
      * @return the key at the index
      * @throws IndexOutOfBoundsException if the index is invalid
      * @since 3.1
@@ -206,13 +213,14 @@ public class MultiKey<K> implements Serializable {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Compares this object to another.
      * <p>
      * To be equal, the other object must be a <code>MultiKey</code> with the
      * same number of keys which are also equal.
      *
-     * @param other  the other object to compare to
+     * @param other the other object to compare to
      * @return true if equal
      */
     @Override
@@ -254,10 +262,10 @@ public class MultiKey<K> implements Serializable {
 
     /**
      * Calculate the hash code of the instance using the provided keys.
+     *
      * @param keys the keys to calculate the hash code for
      */
-    private void calculateHashCode(final Object[] keys)
-    {
+    private void calculateHashCode(final Object[] keys) {
         int total = 0;
         for (final Object key : keys) {
             if (key != null) {
@@ -271,6 +279,7 @@ public class MultiKey<K> implements Serializable {
      * Recalculate the hash code after deserialization. The hash code of some
      * keys might have change (hash codes based on the system hash code are
      * only stable for the same process).
+     *
      * @return the instance with recalculated hash code
      */
     protected Object readResolve() {

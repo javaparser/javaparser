@@ -21,6 +21,7 @@ import java.util.Map;
  * @version 1 (4/10/20)
  */
 public class JmlAnnotationSupport extends Processor {
+
     public final JmlAnnotationConfiguration configuration;
 
     public JmlAnnotationSupport(JmlAnnotationConfiguration configuration) {
@@ -38,7 +39,9 @@ public class JmlAnnotationSupport extends Processor {
 }
 
 class JmlAnnotationTranslator extends TreeVisitor {
+
     private final Map<String, Modifier.DefaultKeyword> a2m;
+
     private final ProblemReporter problemReport;
 
     public JmlAnnotationTranslator(Map<String, Modifier.DefaultKeyword> a2m, List<Problem> problems) {
@@ -58,10 +61,7 @@ class JmlAnnotationTranslator extends TreeVisitor {
                         NodeWithModifiers<?> m = (NodeWithModifiers<?>) node;
                         m.addModifier(a2m.get(fqn));
                     } catch (ClassCastException e) {
-                        problemReport.report(annotation,
-                                "Could not translate annotation %s into a modifier. " +
-                                        "Target node '%s' does support modifiers.", annotation.getName(),
-                                node.getMetaModel().getTypeName());
+                        problemReport.report(annotation, "Could not translate annotation %s into a modifier. " + "Target node '%s' does support modifiers.", annotation.getName(), node.getMetaModel().getTypeName());
                     }
                 }
             }

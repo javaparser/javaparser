@@ -32,7 +32,7 @@ import java.util.List;
 
 /**
  * Multi-start optimizer for a (vector) model function.
- *
+ * <p>
  * This class wraps an optimizer in order to use it several times in
  * turn with different starting points (trying to avoid being trapped
  * in a local extremum when looking for a global one).
@@ -41,29 +41,33 @@ import java.util.List;
  */
 @Deprecated
 public class MultiStartMultivariateVectorOptimizer
-    extends BaseMultiStartMultivariateOptimizer<PointVectorValuePair> {
-    /** Underlying optimizer. */
+        extends BaseMultiStartMultivariateOptimizer<PointVectorValuePair> {
+    /**
+     * Underlying optimizer.
+     */
     private final MultivariateVectorOptimizer optimizer;
-    /** Found optima. */
+    /**
+     * Found optima.
+     */
     private final List<PointVectorValuePair> optima = new ArrayList<PointVectorValuePair>();
 
     /**
      * Create a multi-start optimizer from a single-start optimizer.
      *
      * @param optimizer Single-start optimizer to wrap.
-     * @param starts Number of starts to perform.
-     * If {@code starts == 1}, the result will be same as if {@code optimizer}
-     * is called directly.
+     * @param starts    Number of starts to perform.
+     *                  If {@code starts == 1}, the result will be same as if {@code optimizer}
+     *                  is called directly.
      * @param generator Random vector generator to use for restarts.
-     * @throws NullArgumentException if {@code optimizer} or {@code generator}
-     * is {@code null}.
+     * @throws NullArgumentException        if {@code optimizer} or {@code generator}
+     *                                      is {@code null}.
      * @throws NotStrictlyPositiveException if {@code starts < 1}.
      */
     public MultiStartMultivariateVectorOptimizer(final MultivariateVectorOptimizer optimizer,
                                                  final int starts,
                                                  final RandomVectorGenerator generator)
-        throws NullArgumentException,
-        NotStrictlyPositiveException {
+            throws NullArgumentException,
+            NotStrictlyPositiveException {
         super(optimizer, starts, generator);
         this.optimizer = optimizer;
     }
@@ -112,7 +116,7 @@ public class MultiStartMultivariateVectorOptimizer
                     return -1;
                 }
                 return Double.compare(weightedResidual(o1),
-                                      weightedResidual(o2));
+                        weightedResidual(o2));
             }
 
             private double weightedResidual(final PointVectorValuePair pv) {

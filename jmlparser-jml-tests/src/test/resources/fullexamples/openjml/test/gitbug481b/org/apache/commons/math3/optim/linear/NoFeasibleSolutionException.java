@@ -25,7 +25,9 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.0
  */
 public class NoFeasibleSolutionException extends MathIllegalStateException {
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -3044253632189082760L;
 
     /**

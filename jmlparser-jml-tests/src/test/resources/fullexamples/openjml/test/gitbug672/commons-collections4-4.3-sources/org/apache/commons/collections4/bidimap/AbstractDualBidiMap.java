@@ -36,7 +36,6 @@ import java.util.Set;
  *
  * @param <K> the type of the keys in the map
  * @param <V> the type of the values in the map
- *
  * @see DualHashBidiMap
  * @see DualTreeBidiMap
  * @since 3.0
@@ -95,7 +94,7 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      * the <code>maps[]</code> instance variable itself.
      *
      * @param normalMap  the normal direction map
-     * @param reverseMap  the reverse direction map
+     * @param reverseMap the reverse direction map
      * @since 3.1
      */
     protected AbstractDualBidiMap(final Map<K, V> normalMap, final Map<V, K> reverseMap) {
@@ -108,9 +107,9 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      * Constructs a map that decorates the specified maps,
      * used by the subclass <code>createBidiMap</code> implementation.
      *
-     * @param normalMap  the normal direction map
-     * @param reverseMap  the reverse direction map
-     * @param inverseBidiMap  the inverse BidiMap
+     * @param normalMap      the normal direction map
+     * @param reverseMap     the reverse direction map
+     * @param inverseBidiMap the inverse BidiMap
      */
     protected AbstractDualBidiMap(final Map<K, V> normalMap, final Map<V, K> reverseMap,
                                   final BidiMap<V, K> inverseBidiMap) {
@@ -124,8 +123,8 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      * Creates a new instance of the subclass.
      *
      * @param normalMap  the normal direction map
-     * @param reverseMap  the reverse direction map
-     * @param inverseMap  this map, which is the inverse in the new map
+     * @param reverseMap the reverse direction map
+     * @param inverseMap this map, which is the inverse in the new map
      * @return the inverse map
      */
     protected abstract BidiMap<V, K> createBidiMap(Map<V, K> normalMap, Map<K, V> reverseMap, BidiMap<K, V> inverseMap);
@@ -214,6 +213,7 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
 
     // BidiMap
     //-----------------------------------------------------------------------
+
     /**
      * Obtains a <code>MapIterator</code> over the map.
      * The iterator implements <code>ResetableMapIterator</code>.
@@ -255,6 +255,7 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
 
     // Map views
     //-----------------------------------------------------------------------
+
     /**
      * Gets a keySet view of the map.
      * Changes made on the view are reflected in the map.
@@ -274,7 +275,7 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      * Creates a key set iterator.
      * Subclasses can override this to return iterators with different properties.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      * @return the keySet iterator
      */
     protected Iterator<K> createKeySetIterator(final Iterator<K> iterator) {
@@ -300,7 +301,7 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      * Creates a values iterator.
      * Subclasses can override this to return iterators with different properties.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      * @return the values iterator
      */
     protected Iterator<V> createValuesIterator(final Iterator<V> iterator) {
@@ -330,7 +331,7 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      * Creates an entry set iterator.
      * Subclasses can override this to return iterators with different properties.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      * @return the entrySet iterator
      */
     protected Iterator<Map.Entry<K, V>> createEntrySetIterator(final Iterator<Map.Entry<K, V>> iterator) {
@@ -338,22 +339,27 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Inner class View.
      */
     protected static abstract class View<K, V, E> extends AbstractCollectionDecorator<E> {
 
-        /** Generated serial version ID. */
+        /**
+         * Generated serial version ID.
+         */
         private static final long serialVersionUID = 4621510560119690639L;
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         protected final AbstractDualBidiMap<K, V> parent;
 
         /**
          * Constructs a new view of the BidiMap.
          *
-         * @param coll  the collection view being decorated
-         * @param parent  the parent BidiMap
+         * @param coll   the collection view being decorated
+         * @param parent the parent BidiMap
          */
         protected View(final Collection<E> coll, final AbstractDualBidiMap<K, V> parent) {
             super(coll);
@@ -419,18 +425,21 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Inner class KeySet.
      */
     protected static class KeySet<K> extends View<K, Object, K> implements Set<K> {
 
-        /** Serialization version */
+        /**
+         * Serialization version
+         */
         private static final long serialVersionUID = -7107935777385040694L;
 
         /**
          * Constructs a new view of the BidiMap.
          *
-         * @param parent  the parent BidiMap
+         * @param parent the parent BidiMap
          */
         @SuppressWarnings("unchecked")
         protected KeySet(final AbstractDualBidiMap<K, ?> parent) {
@@ -463,19 +472,26 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      */
     protected static class KeySetIterator<K> extends AbstractIteratorDecorator<K> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         protected final AbstractDualBidiMap<K, ?> parent;
 
-        /** The last returned key */
+        /**
+         * The last returned key
+         */
         protected K lastKey = null;
 
-        /** Whether remove is allowed at present */
+        /**
+         * Whether remove is allowed at present
+         */
         protected boolean canRemove = false;
 
         /**
          * Constructor.
-         * @param iterator  the iterator to decorate
-         * @param parent  the parent map
+         *
+         * @param iterator the iterator to decorate
+         * @param parent   the parent map
          */
         protected KeySetIterator(final Iterator<K> iterator, final AbstractDualBidiMap<K, ?> parent) {
             super(iterator);
@@ -503,18 +519,21 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Inner class Values.
      */
     protected static class Values<V> extends View<Object, V, V> implements Set<V> {
 
-        /** Serialization version */
+        /**
+         * Serialization version
+         */
         private static final long serialVersionUID = 4023777119829639864L;
 
         /**
          * Constructs a new view of the BidiMap.
          *
-         * @param parent  the parent BidiMap
+         * @param parent the parent BidiMap
          */
         @SuppressWarnings("unchecked")
         protected Values(final AbstractDualBidiMap<?, V> parent) {
@@ -547,19 +566,26 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      */
     protected static class ValuesIterator<V> extends AbstractIteratorDecorator<V> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         protected final AbstractDualBidiMap<Object, V> parent;
 
-        /** The last returned value */
+        /**
+         * The last returned value
+         */
         protected V lastValue = null;
 
-        /** Whether remove is allowed at present */
+        /**
+         * Whether remove is allowed at present
+         */
         protected boolean canRemove = false;
 
         /**
          * Constructor.
-         * @param iterator  the iterator to decorate
-         * @param parent  the parent map
+         *
+         * @param iterator the iterator to decorate
+         * @param parent   the parent map
          */
         @SuppressWarnings("unchecked")
         protected ValuesIterator(final Iterator<V> iterator, final AbstractDualBidiMap<?, V> parent) {
@@ -587,18 +613,21 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Inner class EntrySet.
      */
     protected static class EntrySet<K, V> extends View<K, V, Map.Entry<K, V>> implements Set<Map.Entry<K, V>> {
 
-        /** Serialization version */
+        /**
+         * Serialization version
+         */
         private static final long serialVersionUID = 4040410962603292348L;
 
         /**
          * Constructs a new view of the BidiMap.
          *
-         * @param parent  the parent BidiMap
+         * @param parent the parent BidiMap
          */
         protected EntrySet(final AbstractDualBidiMap<K, V> parent) {
             super(parent.normalMap.entrySet(), parent);
@@ -633,19 +662,26 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      */
     protected static class EntrySetIterator<K, V> extends AbstractIteratorDecorator<Map.Entry<K, V>> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         protected final AbstractDualBidiMap<K, V> parent;
 
-        /** The last returned entry */
+        /**
+         * The last returned entry
+         */
         protected Map.Entry<K, V> last = null;
 
-        /** Whether remove is allowed at present */
+        /**
+         * Whether remove is allowed at present
+         */
         protected boolean canRemove = false;
 
         /**
          * Constructor.
-         * @param iterator  the iterator to decorate
-         * @param parent  the parent map
+         *
+         * @param iterator the iterator to decorate
+         * @param parent   the parent map
          */
         protected EntrySetIterator(final Iterator<Map.Entry<K, V>> iterator, final AbstractDualBidiMap<K, V> parent) {
             super(iterator);
@@ -678,13 +714,16 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      */
     protected static class MapEntry<K, V> extends AbstractMapEntryDecorator<K, V> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         protected final AbstractDualBidiMap<K, V> parent;
 
         /**
          * Constructor.
+         *
          * @param entry  the entry to decorate
-         * @param parent  the parent map
+         * @param parent the parent map
          */
         protected MapEntry(final Map.Entry<K, V> entry, final AbstractDualBidiMap<K, V> parent) {
             super(entry);
@@ -695,7 +734,7 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
         public V setValue(final V value) {
             final K key = MapEntry.this.getKey();
             if (parent.reverseMap.containsKey(value) &&
-                parent.reverseMap.get(value) != key) {
+                    parent.reverseMap.get(value) != key) {
                 throw new IllegalArgumentException(
                         "Cannot use setValue() when the object being set is already in the map");
             }
@@ -709,21 +748,30 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
      */
     protected static class BidiMapIterator<K, V> implements MapIterator<K, V>, ResettableIterator<K> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         protected final AbstractDualBidiMap<K, V> parent;
 
-        /** The iterator being wrapped */
+        /**
+         * The iterator being wrapped
+         */
         protected Iterator<Map.Entry<K, V>> iterator;
 
-        /** The last returned entry */
+        /**
+         * The last returned entry
+         */
         protected Map.Entry<K, V> last = null;
 
-        /** Whether remove is allowed at present */
+        /**
+         * Whether remove is allowed at present
+         */
         protected boolean canRemove = false;
 
         /**
          * Constructor.
-         * @param parent  the parent map
+         *
+         * @param parent the parent map
          */
         protected BidiMapIterator(final AbstractDualBidiMap<K, V> parent) {
             super();
@@ -781,7 +829,7 @@ public abstract class AbstractDualBidiMap<K, V> implements BidiMap<K, V> {
                         "Iterator setValue() can only be called after next() and before remove()");
             }
             if (parent.reverseMap.containsKey(value) &&
-                parent.reverseMap.get(value) != last.getKey()) {
+                    parent.reverseMap.get(value) != last.getKey()) {
                 throw new IllegalArgumentException(
                         "Cannot use setValue() when the object being set is already in the map");
             }

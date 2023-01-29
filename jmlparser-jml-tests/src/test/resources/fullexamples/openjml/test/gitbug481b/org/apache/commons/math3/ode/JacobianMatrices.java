@@ -50,42 +50,62 @@ import java.util.List;
  * @see MainStateJacobianProvider
  * @see ParameterJacobianProvider
  * @see ParameterizedODE
- *
  * @since 3.0
  */
 public class JacobianMatrices {
 
-    /** Expandable first order differential equation. */
+    /**
+     * Expandable first order differential equation.
+     */
     private ExpandableStatefulODE efode;
 
-    /** Index of the instance in the expandable set. */
+    /**
+     * Index of the instance in the expandable set.
+     */
     private int index;
 
-    /** FODE with exact primary Jacobian computation skill. */
+    /**
+     * FODE with exact primary Jacobian computation skill.
+     */
     private MainStateJacobianProvider jode;
 
-    /** FODE without exact parameter Jacobian computation skill. */
+    /**
+     * FODE without exact parameter Jacobian computation skill.
+     */
     private ParameterizedODE pode;
 
-    /** Main state vector dimension. */
+    /**
+     * Main state vector dimension.
+     */
     private int stateDim;
 
-    /** Selected parameters for parameter Jacobian computation. */
+    /**
+     * Selected parameters for parameter Jacobian computation.
+     */
     private ParameterConfiguration[] selectedParameters;
 
-    /** FODE with exact parameter Jacobian computation skill. */
+    /**
+     * FODE with exact parameter Jacobian computation skill.
+     */
     private List<ParameterJacobianProvider> jacobianProviders;
 
-    /** Parameters dimension. */
+    /**
+     * Parameters dimension.
+     */
     private int paramDim;
 
-    /** Boolean for selected parameters consistency. */
+    /**
+     * Boolean for selected parameters consistency.
+     */
     private boolean dirtyParameter;
 
-    /** State and parameters Jacobian matrices in a row. */
+    /**
+     * State and parameters Jacobian matrices in a row.
+     */
     private double[] matricesData;
 
-    /** Simple constructor for a secondary equations set computing Jacobian matrices.
+    /**
+     * Simple constructor for a secondary equations set computing Jacobian matrices.
      * <p>
      * Parameters must belong to the supported ones given by {@link
      * Parameterizable#getParametersNames()}, so the primary set of differential
@@ -93,20 +113,21 @@ public class JacobianMatrices {
      * </p>
      * <p>Note that each selection clears the previous selected parameters.</p>
      *
-     * @param fode the primary first order differential equations set to extend
-     * @param hY step used for finite difference computation with respect to state vector
+     * @param fode       the primary first order differential equations set to extend
+     * @param hY         step used for finite difference computation with respect to state vector
      * @param parameters parameters to consider for Jacobian matrices processing
-     * (may be null if parameters Jacobians is not desired)
-     * @exception DimensionMismatchException if there is a dimension mismatch between
-     * the steps array {@code hY} and the equation dimension
+     *                   (may be null if parameters Jacobians is not desired)
+     * @throws DimensionMismatchException if there is a dimension mismatch between
+     *                                    the steps array {@code hY} and the equation dimension
      */
     public JacobianMatrices(final FirstOrderDifferentialEquations fode, final double[] hY,
                             final String... parameters)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         this(new MainStateJacobianWrapper(fode, hY), parameters);
     }
 
-    /** Simple constructor for a secondary equations set computing Jacobian matrices.
+    /**
+     * Simple constructor for a secondary equations set computing Jacobian matrices.
      * <p>
      * Parameters must belong to the supported ones given by {@link
      * Parameterizable#getParametersNames()}, so the primary set of differential
@@ -114,9 +135,9 @@ public class JacobianMatrices {
      * </p>
      * <p>Note that each selection clears the previous selected parameters.</p>
      *
-     * @param jode the primary first order differential equations set to extend
+     * @param jode       the primary first order differential equations set to extend
      * @param parameters parameters to consider for Jacobian matrices processing
-     * (may be null if parameters Jacobians is not desired)
+     *                   (may be null if parameters Jacobians is not desired)
      */
     public JacobianMatrices(final MainStateJacobianProvider jode,
                             final String... parameters) {
@@ -152,21 +173,23 @@ public class JacobianMatrices {
 
     }
 
-    /** Register the variational equations for the Jacobians matrices to the expandable set.
+    /**
+     * Register the variational equations for the Jacobians matrices to the expandable set.
+     *
      * @param expandable expandable set into which variational equations should be registered
      * @throws DimensionMismatchException if the dimension of the partial state does not
-     * match the selected equations set dimension
-     * @exception MismatchedEquations if the primary set of the expandable set does
-     * not match the one used to build the instance
+     *                                    match the selected equations set dimension
+     * @throws MismatchedEquations        if the primary set of the expandable set does
+     *                                    not match the one used to build the instance
      * @see ExpandableStatefulODE#addSecondaryEquations(SecondaryEquations)
      */
     public void registerVariationalEquations(final ExpandableStatefulODE expandable)
-        throws DimensionMismatchException, MismatchedEquations {
+            throws DimensionMismatchException, MismatchedEquations {
 
         // safety checks
         final FirstOrderDifferentialEquations ode = (jode instanceof MainStateJacobianWrapper) ?
-                                                    ((MainStateJacobianWrapper) jode).ode :
-                                                    jode;
+                ((MainStateJacobianWrapper) jode).ode :
+                jode;
         if (expandable.getPrimary() != ode) {
             throw new MismatchedEquations();
         }
@@ -177,14 +200,18 @@ public class JacobianMatrices {
 
     }
 
-    /** Add a parameter Jacobian provider.
+    /**
+     * Add a parameter Jacobian provider.
+     *
      * @param provider the parameter Jacobian provider to compute exactly the parameter Jacobian matrix
      */
     public void addParameterJacobianProvider(final ParameterJacobianProvider provider) {
         jacobianProviders.add(provider);
     }
 
-    /** Set a parameter Jacobian provider.
+    /**
+     * Set a parameter Jacobian provider.
+     *
      * @param parameterizedOde the parameterized ODE to compute the parameter Jacobian matrix using finite differences
      */
     public void setParameterizedODE(final ParameterizedODE parameterizedOde) {
@@ -192,8 +219,9 @@ public class JacobianMatrices {
         dirtyParameter = true;
     }
 
-    /** Set the step associated to a parameter in order to compute by finite
-     *  difference the Jacobian matrix.
+    /**
+     * Set the step associated to a parameter in order to compute by finite
+     * difference the Jacobian matrix.
      * <p>
      * Needed if and only if the primary ODE set is a {@link ParameterizedODE}.
      * </p>
@@ -204,15 +232,16 @@ public class JacobianMatrices {
      * <p>
      * A zero value for such a step doesn't enable to compute the parameter Jacobian matrix.
      * </p>
+     *
      * @param parameter parameter to consider for Jacobian processing
-     * @param hP step for Jacobian finite difference computation w.r.t. the specified parameter
+     * @param hP        step for Jacobian finite difference computation w.r.t. the specified parameter
+     * @throws UnknownParameterException if the parameter is not supported
      * @see ParameterizedODE
-     * @exception UnknownParameterException if the parameter is not supported
      */
     public void setParameterStep(final String parameter, final double hP)
-        throws UnknownParameterException {
+            throws UnknownParameterException {
 
-        for (ParameterConfiguration param: selectedParameters) {
+        for (ParameterConfiguration param : selectedParameters) {
             if (parameter.equals(param.getParameterName())) {
                 param.setHP(hP);
                 dirtyParameter = true;
@@ -224,16 +253,18 @@ public class JacobianMatrices {
 
     }
 
-    /** Set the initial value of the Jacobian matrix with respect to state.
+    /**
+     * Set the initial value of the Jacobian matrix with respect to state.
      * <p>
      * If this method is not called, the initial value of the Jacobian
      * matrix with respect to state is set to identity.
      * </p>
+     *
      * @param dYdY0 initial Jacobian matrix w.r.t. state
-     * @exception DimensionMismatchException if matrix dimensions are incorrect
+     * @throws DimensionMismatchException if matrix dimensions are incorrect
      */
     public void setInitialMainStateJacobian(final double[][] dYdY0)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         // Check dimensions
         checkDimension(stateDim, dYdY0);
@@ -252,25 +283,27 @@ public class JacobianMatrices {
 
     }
 
-    /** Set the initial value of a column of the Jacobian matrix with respect to one parameter.
+    /**
+     * Set the initial value of a column of the Jacobian matrix with respect to one parameter.
      * <p>
      * If this method is not called for some parameter, the initial value of
      * the column of the Jacobian matrix with respect to this parameter is set to zero.
      * </p>
+     *
      * @param pName parameter name
-     * @param dYdP initial Jacobian column vector with respect to the parameter
-     * @exception UnknownParameterException if a parameter is not supported
+     * @param dYdP  initial Jacobian column vector with respect to the parameter
+     * @throws UnknownParameterException  if a parameter is not supported
      * @throws DimensionMismatchException if the column vector does not match state dimension
      */
     public void setInitialParameterJacobian(final String pName, final double[] dYdP)
-        throws UnknownParameterException, DimensionMismatchException {
+            throws UnknownParameterException, DimensionMismatchException {
 
         // Check dimensions
         checkDimension(stateDim, dYdP);
 
         // store the column in a global single dimension array
         int i = stateDim * stateDim;
-        for (ParameterConfiguration param: selectedParameters) {
+        for (ParameterConfiguration param : selectedParameters) {
             if (pName.equals(param.getParameterName())) {
                 System.arraycopy(dYdP, 0, matricesData, i, stateDim);
                 if (efode != null) {
@@ -285,7 +318,9 @@ public class JacobianMatrices {
 
     }
 
-    /** Get the current value of the Jacobian matrix with respect to state.
+    /**
+     * Get the current value of the Jacobian matrix with respect to state.
+     *
      * @param dYdY0 current Jacobian matrix with respect to state.
      */
     public void getCurrentMainSetJacobian(final double[][] dYdY0) {
@@ -301,9 +336,11 @@ public class JacobianMatrices {
 
     }
 
-    /** Get the current value of the Jacobian matrix with respect to one parameter.
+    /**
+     * Get the current value of the Jacobian matrix with respect to one parameter.
+     *
      * @param pName name of the parameter for the computed Jacobian matrix
-     * @param dYdP current Jacobian matrix with respect to the named parameter
+     * @param dYdP  current Jacobian matrix with respect to the named parameter
      */
     public void getCurrentParameterJacobian(String pName, final double[] dYdP) {
 
@@ -311,7 +348,7 @@ public class JacobianMatrices {
         double[] p = efode.getSecondaryState(index);
 
         int i = stateDim * stateDim;
-        for (ParameterConfiguration param: selectedParameters) {
+        for (ParameterConfiguration param : selectedParameters) {
             if (param.getParameterName().equals(pName)) {
                 System.arraycopy(p, i, dYdP, 0, stateDim);
                 return;
@@ -321,20 +358,23 @@ public class JacobianMatrices {
 
     }
 
-    /** Check array dimensions.
+    /**
+     * Check array dimensions.
+     *
      * @param expected expected dimension
-     * @param array (may be null if expected is 0)
+     * @param array    (may be null if expected is 0)
      * @throws DimensionMismatchException if the array dimension does not match the expected one
      */
     private void checkDimension(final int expected, final Object array)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
         int arrayDimension = (array == null) ? 0 : Array.getLength(array);
         if (arrayDimension != expected) {
             throw new DimensionMismatchException(arrayDimension, expected);
         }
     }
 
-    /** Local implementation of secondary equations.
+    /**
+     * Local implementation of secondary equations.
      * <p>
      * This class is an inner class to ensure proper scheduling of calls
      * by forcing the use of {@link JacobianMatrices#registerVariationalEquations(ExpandableStatefulODE)}.
@@ -342,15 +382,19 @@ public class JacobianMatrices {
      */
     private class JacobiansSecondaryEquations implements SecondaryEquations {
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public int getDimension() {
             return stateDim * (stateDim + paramDim);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void computeDerivatives(final double t, final double[] y, final double[] yDot,
                                        final double[] z, final double[] zDot)
-            throws MaxCountExceededException, DimensionMismatchException {
+                throws MaxCountExceededException, DimensionMismatchException {
 
             // Lazy initialization
             if (dirtyParameter && (paramDim != 0)) {
@@ -384,13 +428,13 @@ public class JacobianMatrices {
                 // compute Jacobian matrices with respect to parameters
                 double[] dFdP = new double[stateDim];
                 int startIndex = stateDim * stateDim;
-                for (ParameterConfiguration param: selectedParameters) {
+                for (ParameterConfiguration param : selectedParameters) {
                     boolean found = false;
-                    for (int k = 0 ; (!found) && (k < jacobianProviders.size()); ++k) {
+                    for (int k = 0; (!found) && (k < jacobianProviders.size()); ++k) {
                         final ParameterJacobianProvider provider = jacobianProviders.get(k);
                         if (provider.isSupported(param.getParameterName())) {
                             provider.computeParameterJacobian(t, y, yDot,
-                                                              param.getParameterName(), dFdP);
+                                    param.getParameterName(), dFdP);
                             for (int i = 0; i < stateDim; ++i) {
                                 final double[] dFdYi = dFdY[i];
                                 int zIndex = startIndex;
@@ -404,7 +448,7 @@ public class JacobianMatrices {
                             found = true;
                         }
                     }
-                    if (! found) {
+                    if (!found) {
                         Arrays.fill(zDot, startIndex, startIndex + stateDim, 0.0);
                     }
                     startIndex += stateDim;
@@ -414,26 +458,33 @@ public class JacobianMatrices {
         }
     }
 
-    /** Wrapper class to compute jacobian matrices by finite differences for ODE
-     *  which do not compute them by themselves.
+    /**
+     * Wrapper class to compute jacobian matrices by finite differences for ODE
+     * which do not compute them by themselves.
      */
     private static class MainStateJacobianWrapper implements MainStateJacobianProvider {
 
-        /** Raw ODE without jacobians computation skill to be wrapped into a MainStateJacobianProvider. */
+        /**
+         * Raw ODE without jacobians computation skill to be wrapped into a MainStateJacobianProvider.
+         */
         private final FirstOrderDifferentialEquations ode;
 
-        /** Steps for finite difference computation of the jacobian df/dy w.r.t. state. */
+        /**
+         * Steps for finite difference computation of the jacobian df/dy w.r.t. state.
+         */
         private final double[] hY;
 
-        /** Wrap a {@link FirstOrderDifferentialEquations} into a {@link MainStateJacobianProvider}.
+        /**
+         * Wrap a {@link FirstOrderDifferentialEquations} into a {@link MainStateJacobianProvider}.
+         *
          * @param ode original ODE problem, without jacobians computation skill
-         * @param hY step sizes to compute the jacobian df/dy
-         * @exception DimensionMismatchException if there is a dimension mismatch between
-         * the steps array {@code hY} and the equation dimension
+         * @param hY  step sizes to compute the jacobian df/dy
+         * @throws DimensionMismatchException if there is a dimension mismatch between
+         *                                    the steps array {@code hY} and the equation dimension
          */
         MainStateJacobianWrapper(final FirstOrderDifferentialEquations ode,
                                  final double[] hY)
-            throws DimensionMismatchException {
+                throws DimensionMismatchException {
             this.ode = ode;
             this.hY = hY.clone();
             if (hY.length != ode.getDimension()) {
@@ -441,20 +492,26 @@ public class JacobianMatrices {
             }
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public int getDimension() {
             return ode.getDimension();
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void computeDerivatives(double t, double[] y, double[] yDot)
-            throws MaxCountExceededException, DimensionMismatchException {
+                throws MaxCountExceededException, DimensionMismatchException {
             ode.computeDerivatives(t, y, yDot);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void computeMainStateJacobian(double t, double[] y, double[] yDot, double[][] dFdY)
-            throws MaxCountExceededException, DimensionMismatchException {
+                throws MaxCountExceededException, DimensionMismatchException {
 
             final int n = ode.getDimension();
             final double[] tmpDot = new double[n];
@@ -474,14 +531,19 @@ public class JacobianMatrices {
 
     /**
      * Special exception for equations mismatch.
+     *
      * @since 3.1
      */
     public static class MismatchedEquations extends MathIllegalArgumentException {
 
-        /** Serializable UID. */
+        /**
+         * Serializable UID.
+         */
         private static final long serialVersionUID = 20120902L;
 
-        /** Simple constructor. */
+        /**
+         * Simple constructor.
+         */
         public MismatchedEquations() {
             super(LocalizedFormats.UNMATCHED_ODE_IN_EXPANDED_SET);
         }

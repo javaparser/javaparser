@@ -34,7 +34,9 @@ import org.apache.commons.math3.optim.OptimizationData;
  */
 @Deprecated
 public class Weight implements OptimizationData {
-    /** Weight matrix. */
+    /**
+     * Weight matrix.
+     */
     private final RealMatrix weightMatrix;
 
     /**
@@ -49,12 +51,12 @@ public class Weight implements OptimizationData {
     /**
      * @param weight Weight matrix.
      * @throws NonSquareMatrixException if the argument is not
-     * a square matrix.
+     *                                  a square matrix.
      */
     public Weight(RealMatrix weight) {
         if (weight.getColumnDimension() != weight.getRowDimension()) {
             throw new NonSquareMatrixException(weight.getColumnDimension(),
-                                               weight.getRowDimension());
+                    weight.getRowDimension());
         }
 
         weightMatrix = weight.copy();

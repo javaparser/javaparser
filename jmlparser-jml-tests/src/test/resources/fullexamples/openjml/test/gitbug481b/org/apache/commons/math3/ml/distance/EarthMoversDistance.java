@@ -24,17 +24,20 @@ import org.apache.commons.math3.util.MathArrays;
  * Calculates the Earh Mover's distance (also known as Wasserstein metric) between two distributions.
  *
  * @see <a href="http://en.wikipedia.org/wiki/Earth_mover's_distance">Earth Mover's distance (Wikipedia)</a>
- *
  * @since 3.3
  */
 public class EarthMoversDistance implements DistanceMeasure {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -5406732779747414922L;
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double compute(double[] a, double[] b)
-    throws DimensionMismatchException {
+            throws DimensionMismatchException {
         MathArrays.checkEqualLength(a, b);
         double lastDistance = 0;
         double totalDistance = 0;

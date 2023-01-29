@@ -82,7 +82,7 @@ public class JavaParserConstructorDeclaration<N extends ResolvedReferenceTypeDec
     public com.github.javaparser.ast.body.ConstructorDeclaration getWrappedNode() {
         return wrappedNode;
     }
-    
+
     @Override
     public AccessSpecifier accessSpecifier() {
         return wrappedNode.getAccessSpecifier();

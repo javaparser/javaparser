@@ -1,6 +1,6 @@
 /**
  * Information flow example.
- *
+ * <p>
  * The example demonstrates precise declassification: the sum of the entries
  * of an array are declassified, nothing else.
  *

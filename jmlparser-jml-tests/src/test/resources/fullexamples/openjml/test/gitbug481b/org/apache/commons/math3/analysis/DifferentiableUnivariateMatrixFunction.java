@@ -24,12 +24,12 @@ package org.apache.commons.math3.analysis;
  */
 @Deprecated
 public interface DifferentiableUnivariateMatrixFunction
-    extends UnivariateMatrixFunction {
+        extends UnivariateMatrixFunction {
 
     /**
      * Returns the derivative of the function
      *
-     * @return  the derivative function
+     * @return the derivative function
      */
     UnivariateMatrixFunction derivative();
 

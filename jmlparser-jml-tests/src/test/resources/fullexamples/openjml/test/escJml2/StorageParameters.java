@@ -1,24 +1,22 @@
+public final class StorageParameters {
+
+    private long[] configurationSizes;
 
 
-public final class StorageParameters 
-{
+    public StorageParameters(long[] sizes) {
 
-	private long[] configurationSizes;
-	
+        this.configurationSizes = sizes;
+    }
 
-	public StorageParameters(long[] sizes) {
 
-		this.configurationSizes = sizes;
-	}
-	
-	
-	long[] getConfigurationSizes() {
-		return configurationSizes;
-	}
-	
-	public static void main(String... args) {
-		StorageParameters a = new StorageParameters(null);
-		/*@ nullable */ long[] b = a.getConfigurationSizes();
-		long[] c = a.getConfigurationSizes();  // OK - c is nullable by default
-	}
+    long[] getConfigurationSizes() {
+        return configurationSizes;
+    }
+
+    public static void main(String... args) {
+        StorageParameters a = new StorageParameters(null);
+        /*@ nullable */
+        long[] b = a.getConfigurationSizes();
+        long[] c = a.getConfigurationSizes();  // OK - c is nullable by default
+    }
 }

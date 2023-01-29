@@ -44,16 +44,11 @@ public class DefaultMeasurementModel implements MeasurementModel {
      * Create a new {@link MeasurementModel}, taking double arrays as input parameters for the
      * respective measurement matrix and noise.
      *
-     * @param measMatrix
-     *            the measurement matrix
-     * @param measNoise
-     *            the measurement noise matrix
-     * @throws NullArgumentException
-     *             if any of the input matrices is {@code null}
-     * @throws NoDataException
-     *             if any row / column dimension of the input matrices is zero
-     * @throws DimensionMismatchException
-     *             if any of the input matrices is non-rectangular
+     * @param measMatrix the measurement matrix
+     * @param measNoise  the measurement noise matrix
+     * @throws NullArgumentException      if any of the input matrices is {@code null}
+     * @throws NoDataException            if any row / column dimension of the input matrices is zero
+     * @throws DimensionMismatchException if any of the input matrices is non-rectangular
      */
     public DefaultMeasurementModel(final double[][] measMatrix, final double[][] measNoise)
             throws NullArgumentException, NoDataException, DimensionMismatchException {
@@ -65,19 +60,23 @@ public class DefaultMeasurementModel implements MeasurementModel {
      * as input parameters for the respective measurement matrix and noise.
      *
      * @param measMatrix the measurement matrix
-     * @param measNoise the measurement noise matrix
+     * @param measNoise  the measurement noise matrix
      */
     public DefaultMeasurementModel(final RealMatrix measMatrix, final RealMatrix measNoise) {
         this.measurementMatrix = measMatrix;
         this.measurementNoise = measNoise;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getMeasurementMatrix() {
         return measurementMatrix;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getMeasurementNoise() {
         return measurementNoise;
     }

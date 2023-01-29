@@ -36,9 +36,13 @@ import java.util.NoSuchElementException;
  */
 public class LoopingIterator<E> implements ResettableIterator<E> {
 
-    /** The collection to base the iterator on */
+    /**
+     * The collection to base the iterator on
+     */
     private final Collection<? extends E> collection;
-    /** The current iterator */
+    /**
+     * The current iterator
+     */
     private Iterator<? extends E> iterator;
 
     /**
@@ -47,7 +51,7 @@ public class LoopingIterator<E> implements ResettableIterator<E> {
      * There is no way to reset an Iterator instance without recreating it from
      * the original source, so the Collection must be passed in.
      *
-     * @param coll  the collection to wrap
+     * @param coll the collection to wrap
      * @throws NullPointerException if the collection is null
      */
     public LoopingIterator(final Collection<? extends E> coll) {
@@ -78,7 +82,7 @@ public class LoopingIterator<E> implements ResettableIterator<E> {
      *
      * @return the next object
      * @throws NoSuchElementException if there are no elements
-     *         at all.  Use {@link #hasNext} to avoid this error.
+     *                                at all.  Use {@link #hasNext} to avoid this error.
      */
     @Override
     public E next() {

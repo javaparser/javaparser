@@ -16,36 +16,60 @@
  */
 package java.lang;
 
-public final class System extends java.lang.Object
-{
-   public final static java.io.InputStream in;
-   public final static java.io.PrintStream out;
-   public final static java.io.PrintStream err;
+public final class System extends java.lang.Object {
+    public final static java.io.InputStream in;
+    public final static java.io.PrintStream out;
+    public final static java.io.PrintStream err;
 
-   public static void setIn(java.io.InputStream arg0);
-   public static void setOut(java.io.PrintStream arg0);
-   public static void setErr(java.io.PrintStream arg0);
-   public static java.io.Console console();
-   public static java.nio.channels.Channel inheritedChannel() throws java.io.IOException;
-   public static void setSecurityManager(java.lang.SecurityManager arg0);
-   public static java.lang.SecurityManager getSecurityManager();
-   public static long currentTimeMillis();
-   public static long nanoTime();
-   public static void arraycopy(java.lang.Object arg0, int arg1, java.lang.Object arg2, int arg3, int arg4);
-   public static int identityHashCode(java.lang.Object arg0);
-   public static java.util.Properties getProperties();
-   public static void setProperties(java.util.Properties arg0);
-   public static java.lang.String getProperty(java.lang.String arg0);
-   public static java.lang.String getProperty(java.lang.String arg0, java.lang.String arg1);
-   public static java.lang.String setProperty(java.lang.String arg0, java.lang.String arg1);
-   public static java.lang.String clearProperty(java.lang.String arg0);
-   public static java.lang.String getenv(java.lang.String arg0);
-   public static java.util.Map getenv();
-   public static void exit(int arg0);
-   public static void gc();
-   public static void runFinalization();
-   public static void runFinalizersOnExit(boolean arg0);
-   public static void load(java.lang.String arg0);
-   public static void loadLibrary(java.lang.String arg0);
-   public static java.lang.String mapLibraryName(java.lang.String arg0);
+    public static void setIn(java.io.InputStream arg0);
+
+    public static void setOut(java.io.PrintStream arg0);
+
+    public static void setErr(java.io.PrintStream arg0);
+
+    public static java.io.Console console();
+
+    public static java.nio.channels.Channel inheritedChannel() throws java.io.IOException;
+
+    public static void setSecurityManager(java.lang.SecurityManager arg0);
+
+    public static java.lang.SecurityManager getSecurityManager();
+
+    public static long currentTimeMillis();
+
+    public static long nanoTime();
+
+    public static void arraycopy(java.lang.Object arg0, int arg1, java.lang.Object arg2, int arg3, int arg4);
+
+    public static int identityHashCode(java.lang.Object arg0);
+
+    public static java.util.Properties getProperties();
+
+    public static void setProperties(java.util.Properties arg0);
+
+    public static java.lang.String getProperty(java.lang.String arg0);
+
+    public static java.lang.String getProperty(java.lang.String arg0, java.lang.String arg1);
+
+    public static java.lang.String setProperty(java.lang.String arg0, java.lang.String arg1);
+
+    public static java.lang.String clearProperty(java.lang.String arg0);
+
+    public static java.lang.String getenv(java.lang.String arg0);
+
+    public static java.util.Map getenv();
+
+    public static void exit(int arg0);
+
+    public static void gc();
+
+    public static void runFinalization();
+
+    public static void runFinalizersOnExit(boolean arg0);
+
+    public static void load(java.lang.String arg0);
+
+    public static void loadLibrary(java.lang.String arg0);
+
+    public static java.lang.String mapLibraryName(java.lang.String arg0);
 }

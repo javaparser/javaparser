@@ -15,15 +15,15 @@ package tests;
 
 public class ClassA2 {
 
-	private/* @ spec_public @ */int i;
+    private/* @ spec_public @ */ int i;
 
-	public/* @pure@ */ClassA2() {
-		i = 20;
-	}
+    public/* @pure@ */ClassA2() {
+        i = 20;
+    }
 
-	public int myFunction() {
+    public int myFunction() {
 
-		return i;
-	}
+        return i;
+    }
 
 }

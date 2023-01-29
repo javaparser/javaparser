@@ -29,25 +29,39 @@ import org.apache.commons.math3.util.Incrementor;
  * Provide a default implementation for several functions useful to generic
  * optimizers.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 2.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public abstract class BaseAbstractUnivariateOptimizer
-    implements UnivariateOptimizer {
-    /** Convergence checker. */
+        implements UnivariateOptimizer {
+    /**
+     * Convergence checker.
+     */
     private final ConvergenceChecker<UnivariatePointValuePair> checker;
-    /** Evaluations counter. */
+    /**
+     * Evaluations counter.
+     */
     private final Incrementor evaluations = new Incrementor();
-    /** Optimization type */
+    /**
+     * Optimization type
+     */
     private GoalType goal;
-    /** Lower end of search interval. */
+    /**
+     * Lower end of search interval.
+     */
     private double searchMin;
-    /** Higher end of search interval. */
+    /**
+     * Higher end of search interval.
+     */
     private double searchMax;
-    /** Initial guess . */
+    /**
+     * Initial guess .
+     */
     private double searchStart;
-    /** Function to optimize. */
+    /**
+     * Function to optimize.
+     */
     private UnivariateFunction function;
 
     /**
@@ -57,12 +71,16 @@ public abstract class BaseAbstractUnivariateOptimizer
         this.checker = checker;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getMaxEvaluations() {
         return evaluations.getMaximalCount();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getEvaluations() {
         return evaluations.getCount();
     }
@@ -73,18 +91,21 @@ public abstract class BaseAbstractUnivariateOptimizer
     public GoalType getGoalType() {
         return goal;
     }
+
     /**
      * @return the lower end of the search interval.
      */
     public double getMin() {
         return searchMin;
     }
+
     /**
      * @return the higher end of the search interval.
      */
     public double getMax() {
         return searchMax;
     }
+
     /**
      * @return the initial guess.
      */
@@ -98,7 +119,7 @@ public abstract class BaseAbstractUnivariateOptimizer
      * @param point Point at which the objective function must be evaluated.
      * @return the objective function value at specified point.
      * @throws TooManyEvaluationsException if the maximal number of evaluations
-     * is exceeded.
+     *                                     is exceeded.
      */
     protected double computeObjectiveValue(double point) {
         try {
@@ -109,7 +130,9 @@ public abstract class BaseAbstractUnivariateOptimizer
         return function.value(point);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public UnivariatePointValuePair optimize(int maxEval, UnivariateFunction f,
                                              GoalType goalType,
                                              double min, double max,
@@ -135,11 +158,13 @@ public abstract class BaseAbstractUnivariateOptimizer
         return doOptimize();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public UnivariatePointValuePair optimize(int maxEval,
                                              UnivariateFunction f,
                                              GoalType goalType,
-                                             double min, double max){
+                                             double min, double max) {
         return optimize(maxEval, f, goalType, min, max, min + 0.5 * (max - min));
     }
 
@@ -156,7 +181,7 @@ public abstract class BaseAbstractUnivariateOptimizer
      *
      * @return the optimum and its corresponding function value.
      * @throws TooManyEvaluationsException if the maximal number of evaluations
-     * is exceeded.
+     *                                     is exceeded.
      */
     protected abstract UnivariatePointValuePair doOptimize();
 }

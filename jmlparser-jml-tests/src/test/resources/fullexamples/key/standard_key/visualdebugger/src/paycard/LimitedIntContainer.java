@@ -13,7 +13,7 @@
 
 package paycard;
 
-public interface LimitedIntContainer{
+public interface LimitedIntContainer {
     /*@
       @ public model int value;
       @ public model boolean regularState;

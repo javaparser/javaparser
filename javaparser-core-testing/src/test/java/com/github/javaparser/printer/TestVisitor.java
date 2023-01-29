@@ -29,7 +29,7 @@ public class TestVisitor extends DefaultPrettyPrinterVisitor {
     public TestVisitor(PrinterConfiguration configuration, SourcePrinter printer) {
         super(configuration, printer);
     }
-    
+
     @Override
     public void visit(final ClassOrInterfaceDeclaration n, final Void arg) {
         printer.print("test");

@@ -28,41 +28,44 @@ import java.io.Serializable;
  * provides some simple conversion capabilities to turn any java.lang.Number
  * into a primitive double or to turn a String representation of a Number into
  * a double.
- *
  */
 public class DefaultTransformer implements NumberTransformer, Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 4019938025047800455L;
 
     /**
-     * @param o  the object that gets transformed.
+     * @param o the object that gets transformed.
      * @return a double primitive representation of the Object o.
-     * @throws NullArgumentException if Object <code>o</code> is {@code null}.
+     * @throws NullArgumentException        if Object <code>o</code> is {@code null}.
      * @throws MathIllegalArgumentException if Object <code>o</code>
-     * cannot successfully be transformed
+     *                                      cannot successfully be transformed
      * @see <a href="http://commons.apache.org/collections/api-release/org/apache/commons/collections/Transformer.html">Commons Collections Transformer</a>
      */
     public double transform(Object o)
-        throws NullArgumentException, MathIllegalArgumentException {
+            throws NullArgumentException, MathIllegalArgumentException {
 
         if (o == null) {
             throw new NullArgumentException(LocalizedFormats.OBJECT_TRANSFORMATION);
         }
 
         if (o instanceof Number) {
-            return ((Number)o).doubleValue();
+            return ((Number) o).doubleValue();
         }
 
         try {
             return Double.parseDouble(o.toString());
         } catch (NumberFormatException e) {
             throw new MathIllegalArgumentException(LocalizedFormats.CANNOT_TRANSFORM_TO_DOUBLE,
-                                                   o.toString());
+                    o.toString());
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -71,7 +74,9 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
         return other instanceof DefaultTransformer;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         // some arbitrary number ...

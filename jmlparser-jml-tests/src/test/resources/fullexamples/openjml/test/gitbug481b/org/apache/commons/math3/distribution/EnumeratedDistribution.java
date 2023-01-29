@@ -48,7 +48,9 @@ import java.util.List;
  */
 public class EnumeratedDistribution<T> implements Serializable {
 
-    /** Serializable UID. */
+    /**
+     * Serializable UID.
+     */
     private static final long serialVersionUID = 20123308L;
 
     /**
@@ -85,14 +87,14 @@ public class EnumeratedDistribution<T> implements Serializable {
      * additional initialisation overhead.
      *
      * @param pmf probability mass function enumerated as a list of <T, probability>
-     * pairs.
-     * @throws NotPositiveException if any of the probabilities are negative.
+     *            pairs.
+     * @throws NotPositiveException     if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
-     * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws NotANumberException      if any of the probabilities are NaN.
+     * @throws MathArithmeticException  all of the probabilities are 0.
      */
     public EnumeratedDistribution(final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathArithmeticException, NotFiniteNumberException, NotANumberException {
+            throws NotPositiveException, MathArithmeticException, NotFiniteNumberException, NotANumberException {
         this(new Well19937c(), pmf);
     }
 
@@ -102,14 +104,14 @@ public class EnumeratedDistribution<T> implements Serializable {
      *
      * @param rng random number generator.
      * @param pmf probability mass function enumerated as a list of <T, probability>
-     * pairs.
-     * @throws NotPositiveException if any of the probabilities are negative.
+     *            pairs.
+     * @throws NotPositiveException     if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
-     * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws NotANumberException      if any of the probabilities are NaN.
+     * @throws MathArithmeticException  all of the probabilities are 0.
      */
     public EnumeratedDistribution(final RandomGenerator rng, final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathArithmeticException, NotFiniteNumberException, NotANumberException {
+            throws NotPositiveException, MathArithmeticException, NotFiniteNumberException, NotANumberException {
         random = rng;
 
         singletons = new ArrayList<T>(pmf.size());
@@ -167,7 +169,7 @@ public class EnumeratedDistribution<T> implements Serializable {
 
         for (int i = 0; i < probabilities.length; i++) {
             if ((x == null && singletons.get(i) == null) ||
-                (x != null && x.equals(singletons.get(i)))) {
+                    (x != null && x.equals(singletons.get(i)))) {
                 probability += probabilities[i];
             }
         }
@@ -205,12 +207,12 @@ public class EnumeratedDistribution<T> implements Serializable {
 
         int index = Arrays.binarySearch(cumulativeProbabilities, randomValue);
         if (index < 0) {
-            index = -index-1;
+            index = -index - 1;
         }
 
         if (index >= 0 &&
-            index < probabilities.length &&
-            randomValue < cumulativeProbabilities[index]) {
+                index < probabilities.length &&
+                randomValue < cumulativeProbabilities[index]) {
             return singletons.get(index);
         }
 
@@ -226,7 +228,7 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param sampleSize the number of random values to generate.
      * @return an array representing the random sample.
      * @throws NotStrictlyPositiveException if {@code sampleSize} is not
-     * positive.
+     *                                      positive.
      */
     public Object[] sample(int sampleSize) throws NotStrictlyPositiveException {
         if (sampleSize <= 0) {
@@ -252,10 +254,10 @@ public class EnumeratedDistribution<T> implements Serializable {
      * the specified array and the size of this collection.
      *
      * @param sampleSize the number of random values to generate.
-     * @param array the array to populate.
+     * @param array      the array to populate.
      * @return an array representing the random sample.
      * @throws NotStrictlyPositiveException if {@code sampleSize} is not positive.
-     * @throws NullArgumentException if {@code array} is null
+     * @throws NullArgumentException        if {@code array} is null
      */
     public T[] sample(int sampleSize, final T[] array) throws NotStrictlyPositiveException {
         if (sampleSize <= 0) {

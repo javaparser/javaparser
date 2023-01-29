@@ -46,7 +46,7 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
         List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
         for (int i = 0; i < patternExprs.size(); i++) {
             PatternExpr patternExpr = patternExprs.get(i);
-            if(patternExpr.getNameAsString().equals(name)) {
+            if (patternExpr.getNameAsString().equals(name)) {
                 return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
             }
         }
@@ -65,7 +65,6 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
         // TODO: Consider pattern exprs
         return Collections.emptyList();
     }
-
 
 
     @Override

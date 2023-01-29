@@ -69,7 +69,7 @@ public class JavaParserConstructorDeclaration implements ConstructorDeclaration 
     public com.github.javaparser.ast.body.ConstructorDeclaration getWrappedNode() {
         return wrappedNode;
     }
-    
+
     @Override
     public AccessLevel accessLevel() {
         return Helper.toAccessLevel(wrappedNode.getModifiers());

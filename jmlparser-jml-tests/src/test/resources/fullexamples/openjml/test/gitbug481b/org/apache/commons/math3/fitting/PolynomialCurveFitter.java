@@ -37,18 +37,24 @@ import java.util.Collection;
  * @since 3.3
  */
 public class PolynomialCurveFitter extends AbstractCurveFitter {
-    /** Parametric function to be fitted. */
+    /**
+     * Parametric function to be fitted.
+     */
     private static final PolynomialFunction.Parametric FUNCTION = new PolynomialFunction.Parametric();
-    /** Initial guess. */
+    /**
+     * Initial guess.
+     */
     private final double[] initialGuess;
-    /** Maximum number of iterations of the optimization algorithm. */
+    /**
+     * Maximum number of iterations of the optimization algorithm.
+     */
     private final int maxIter;
 
     /**
      * Contructor used by the factory methods.
      *
      * @param initialGuess Initial guess.
-     * @param maxIter Maximum number of iterations of the optimization algorithm.
+     * @param maxIter      Maximum number of iterations of the optimization algorithm.
      * @throws MathInternalError if {@code initialGuess} is {@code null}.
      */
     private PolynomialCurveFitter(double[] initialGuess,
@@ -65,7 +71,6 @@ public class PolynomialCurveFitter extends AbstractCurveFitter {
      *
      * @param degree Degree of the polynomial to be fitted.
      * @return a curve fitter.
-     *
      * @see #withStartPoint(double[])
      * @see #withMaxIterations(int)
      */
@@ -75,35 +80,39 @@ public class PolynomialCurveFitter extends AbstractCurveFitter {
 
     /**
      * Configure the start point (initial guess).
+     *
      * @param newStart new start point (initial guess)
      * @return a new instance.
      */
     public PolynomialCurveFitter withStartPoint(double[] newStart) {
         return new PolynomialCurveFitter(newStart.clone(),
-                                         maxIter);
+                maxIter);
     }
 
     /**
      * Configure the maximum number of iterations.
+     *
      * @param newMaxIter maximum number of iterations
      * @return a new instance.
      */
     public PolynomialCurveFitter withMaxIterations(int newMaxIter) {
         return new PolynomialCurveFitter(initialGuess,
-                                         newMaxIter);
+                newMaxIter);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected LeastSquaresProblem getProblem(Collection<WeightedObservedPoint> observations) {
         // Prepare least-squares problem.
         final int len = observations.size();
-        final double[] target  = new double[len];
+        final double[] target = new double[len];
         final double[] weights = new double[len];
 
         int i = 0;
         for (WeightedObservedPoint obs : observations) {
-            target[i]  = obs.getY();
+            target[i] = obs.getY();
             weights[i] = obs.getWeight();
             ++i;
         }

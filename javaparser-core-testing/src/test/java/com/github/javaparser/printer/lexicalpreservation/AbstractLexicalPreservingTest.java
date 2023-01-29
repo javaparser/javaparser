@@ -40,11 +40,11 @@ public abstract class AbstractLexicalPreservingTest {
     protected CompilationUnit cu;
     protected Expression expression;
     protected Statement statement;
-    
+
     @AfterAll
     public static void tearDown() {
     }
-    
+
     @AfterEach
     public void reset() {
         StaticJavaParser.setConfiguration(new ParserConfiguration());

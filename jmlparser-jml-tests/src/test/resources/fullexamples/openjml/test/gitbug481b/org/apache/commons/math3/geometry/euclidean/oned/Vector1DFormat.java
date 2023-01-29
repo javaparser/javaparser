@@ -52,11 +52,12 @@ public class Vector1DFormat extends VectorFormat<Euclidean1D> {
      */
     public Vector1DFormat() {
         super(DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_SEPARATOR,
-              CompositeFormat.getDefaultNumberFormat());
+                CompositeFormat.getDefaultNumberFormat());
     }
 
     /**
      * Create an instance with a custom number format for components.
+     *
      * @param format the custom format for components.
      */
     public Vector1DFormat(final NumberFormat format) {
@@ -65,6 +66,7 @@ public class Vector1DFormat extends VectorFormat<Euclidean1D> {
 
     /**
      * Create an instance with custom prefix, suffix and separator.
+     *
      * @param prefix prefix to use instead of the default "{"
      * @param suffix suffix to use instead of the default "}"
      */
@@ -75,17 +77,19 @@ public class Vector1DFormat extends VectorFormat<Euclidean1D> {
     /**
      * Create an instance with custom prefix, suffix, separator and format
      * for components.
+     *
      * @param prefix prefix to use instead of the default "{"
      * @param suffix suffix to use instead of the default "}"
      * @param format the custom format for components.
      */
     public Vector1DFormat(final String prefix, final String suffix,
-                         final NumberFormat format) {
+                          final NumberFormat format) {
         super(prefix, suffix, DEFAULT_SEPARATOR, format);
     }
 
     /**
      * Returns the default 1D vector format for the current locale.
+     *
      * @return the default 1D vector format.
      */
     public static Vector1DFormat getInstance() {
@@ -94,6 +98,7 @@ public class Vector1DFormat extends VectorFormat<Euclidean1D> {
 
     /**
      * Returns the default 1D vector format for the given locale.
+     *
      * @param locale the specific locale used by the format.
      * @return the 1D vector format specific to the given locale.
      */
@@ -101,7 +106,9 @@ public class Vector1DFormat extends VectorFormat<Euclidean1D> {
         return new Vector1DFormat(CompositeFormat.getDefaultNumberFormat(locale));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StringBuffer format(final Vector<Euclidean1D> vector, final StringBuffer toAppendTo,
                                final FieldPosition pos) {
@@ -109,20 +116,24 @@ public class Vector1DFormat extends VectorFormat<Euclidean1D> {
         return format(toAppendTo, pos, p1.getX());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector1D parse(final String source) throws MathParseException {
         ParsePosition parsePosition = new ParsePosition(0);
         Vector1D result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
             throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         Vector1D.class);
+                    parsePosition.getErrorIndex(),
+                    Vector1D.class);
         }
         return result;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector1D parse(final String source, final ParsePosition pos) {
         final double[] coordinates = parseCoordinates(1, source, pos);

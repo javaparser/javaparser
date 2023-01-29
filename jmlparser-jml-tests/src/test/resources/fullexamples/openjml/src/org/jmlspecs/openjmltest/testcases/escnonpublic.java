@@ -13,15 +13,16 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 
-/** These tests check running ESC on files in the file system, comparing the
- * output against expected files. These tests are a bit easier to create, since 
+/**
+ * These tests check running ESC on files in the file system, comparing the
+ * output against expected files. These tests are a bit easier to create, since
  * the file and output do not have to be converted into Strings; however, they
- * are not as easily read, since the content is tucked away in files, rather 
+ * are not as easily read, since the content is tucked away in files, rather
  * than immediately there in the test class.
- * <P>
+ * <p>
  * To add a new test:
  * <UL>
- * <LI> create a directory containing the test files as a subdirectory of 
+ * <LI> create a directory containing the test files as a subdirectory of
  * 'test'
  * <LI> add a test to this class - typically named similarly to the folder
  * containing the source data
@@ -32,22 +33,22 @@ import java.util.LinkedList;
 @org.junit.FixMethodOrder(org.junit.runners.MethodSorters.NAME_ASCENDING)
 @RunWith(ParameterizedWithNames.class)
 public class escnonpublic extends EscBase {
-    
+
     String dir = "../../OpenJMLDemo/";
 
     boolean enableSubexpressions = false;
-    
+
     public escnonpublic(String options, String solver) {
-        super(options,solver);
-        Assume.assumeTrue( new File(dir).exists() );
+        super(options, solver);
+        Assume.assumeTrue(new File(dir).exists());
     }
-    
+
     @Parameters
     static public Collection<String[]> parameters() {
         return EscBase.parameters();
     }
-    
-    public java.util.List<String> setupForFiles(String sourceDirname, String outDir, String ... opts) {
+
+    public java.util.List<String> setupForFiles(String sourceDirname, String outDir, String... opts) {
         new File(outDir).mkdirs();
         java.util.List<String> args = new LinkedList<String>();
         File source = new File(sourceDirname);
@@ -60,23 +61,25 @@ public class escnonpublic extends EscBase {
         args.add("-code-math=java");
         if (new File(sourceDirname).isDirectory()) args.add("-dir");
         args.add(sourceDirname);
-        if (solver != null) args.add("-prover="+solver);
-        addOptionsToArgs(options,args);        
+        if (solver != null) args.add("-prover=" + solver);
+        addOptionsToArgs(options, args);
         args.addAll(Arrays.asList(opts));
         return args;
     }
 
-    public void helpTCF(String sourceDirname, String outDir, String ... opts) {
-    	escOnFiles(sourceDirname,outDir,opts);
+    public void helpTCF(String sourceDirname, String outDir, String... opts) {
+        escOnFiles(sourceDirname, outDir, opts);
     }
 
 
-    /** This method does the running of a RAC test.  No output is
+    /**
+     * This method does the running of a RAC test.  No output is
      * expected from running openjml to produce the RACed program;
      * the number of expected diagnostics is set by 'expectedErrors'.
+     *
      * @param sourceDirname The directory or file containing the subject material
-     * @param outDir the directory in which to write the results (actual files)
-     * @param list any expected diagnostics from openjml, followed by the error messages from the RACed program, line by line
+     * @param outDir        the directory in which to write the results (actual files)
+     * @param list          any expected diagnostics from openjml, followed by the error messages from the RACed program, line by line
      */
 //    public void helpTCF(String sourceDirname, String outDir, String ... opts) {
 //        boolean print = false;
@@ -128,46 +131,48 @@ public class escnonpublic extends EscBase {
 //            // Should close open objects
 //        }
 //    }
-
-
     @Test
     public void testEscStaticModel() {
         expectedExit = 0;
-        helpTCF(dir + "src/escStaticModel",dir + "src/escStaticModel","-progress");
+        helpTCF(dir + "src/escStaticModel", dir + "src/escStaticModel", "-progress");
     }
 
-    @Test @Ignore // Sometimes times out
+    @Test
+    @Ignore // Sometimes times out
     public void testDMZ() {
         expectedExit = 0;
-        helpTCF(dir + "src/dmz",dir + "src/dmz","-progress");
+        helpTCF(dir + "src/dmz", dir + "src/dmz", "-progress");
     }
 
     @Test
     public void testDMZ2() {
         expectedExit = 0;
-        helpTCF(dir + "src/dmz2",dir + "src/dmz2","-progress");
+        helpTCF(dir + "src/dmz2", dir + "src/dmz2", "-progress");
     }
 
     @Test
     public void testDMZ3() {
         expectedExit = 0;
-        helpTCF(dir + "src/dmz3",dir + "src/dmz3","-progress");
+        helpTCF(dir + "src/dmz3", dir + "src/dmz3", "-progress");
     }
-    
-    @Test @Ignore // not working yet
+
+    @Test
+    @Ignore // not working yet
     public void escSokoban() { // FIXME
         //helpTCF("../../OpenJMLDemo/src/sokoban/Game.java","test/sokoban","-classpath","test/sokoban","-progress","-escMaxWarnings=10","-method=main","-show");
-        helpTCF(dir + "src/sokoban/src",dir + "src/sokoban/src","-progress","-timeout=120");
+        helpTCF(dir + "src/sokoban/src", dir + "src/sokoban/src", "-progress", "-timeout=120");
     }
 
-    @Test @Ignore // not working yet
+    @Test
+    @Ignore // not working yet
     public void escSokoban2() {
-        helpTCF(dir + "src/sokoban2/src",dir + "src/sokoban2/src","-progress","-timeout=120");//,"-escMaxWarnings=1","-method=Game.Game(Board,Player)","-subexpressions","-show");
+        helpTCF(dir + "src/sokoban2/src", dir + "src/sokoban2/src", "-progress", "-timeout=120");//,"-escMaxWarnings=1","-method=Game.Game(Board,Player)","-subexpressions","-show");
     }
 
-    @Test @Ignore // not working yet
+    @Test
+    @Ignore // not working yet
     public void escSokoban3() {
-        helpTCF(dir + "src/sokoban3/src",dir + "src/sokoban3/src","-progress","-timeout=120"); //,"-subexpressions","-show");
+        helpTCF(dir + "src/sokoban3/src", dir + "src/sokoban3/src", "-progress", "-timeout=120"); //,"-subexpressions","-show");
     }
 
 }

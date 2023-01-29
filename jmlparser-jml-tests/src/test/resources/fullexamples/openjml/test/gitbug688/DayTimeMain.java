@@ -1,6 +1,6 @@
 public class DayTimeMain {
 
-public static void main(String[] args) {
+    public static void main(String[] args) {
         DayTime start = new DayTime(6, 5, 30),
                 stop = new DayTime(7, 5, 45);
         int diff;

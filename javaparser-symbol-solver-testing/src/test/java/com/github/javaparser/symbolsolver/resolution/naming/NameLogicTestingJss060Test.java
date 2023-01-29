@@ -516,5 +516,5 @@ class NameLogicTestingJss060Test extends AbstractResolutionTest {
         classifyReferences("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/parametrization/TypeParameterValueProvider");
         classifyReferences("java-symbol-solver-model", "com/github/javaparser/symbolsolver/model/typesystem/parametrization/TypeParametrized");
     }
-    
+
 }

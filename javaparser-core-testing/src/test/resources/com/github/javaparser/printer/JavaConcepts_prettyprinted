@@ -52,7 +52,7 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
 
     List<String> diamond1 = new LinkedList<>();
 
-    @Deprecated()
+    @Deprecated
     static class Ugly {
 
         static int x = 0;
@@ -91,7 +91,7 @@ public class JavaConcepts<T extends List<int[]>, X> extends Base implements Seri
         }
     }
 
-    @Deprecated()
+    @Deprecated
     int[][][][] arr2 = new int[10][2][1][0];
 
     volatile float fff = 0x1.fffeP+127f;

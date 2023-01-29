@@ -39,7 +39,9 @@ import java.util.Set;
 public final class UnmodifiableMultiSet<E>
         extends AbstractMultiSetDecorator<E> implements Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150611L;
 
     /**
@@ -47,8 +49,8 @@ public final class UnmodifiableMultiSet<E>
      * <p>
      * If the multiset passed in is already unmodifiable, it is returned.
      *
-     * @param <E>  the type of the elements in the multiset
-     * @param multiset  the multiset to decorate, may not be null
+     * @param <E>      the type of the elements in the multiset
+     * @param multiset the multiset to decorate, may not be null
      * @return an unmodifiable MultiSet
      * @throws NullPointerException if multiset is null
      */
@@ -62,10 +64,11 @@ public final class UnmodifiableMultiSet<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      *
-     * @param multiset  the multiset to decorate, may not be null
+     * @param multiset the multiset to decorate, may not be null
      * @throws NullPointerException if multiset is null
      */
     @SuppressWarnings("unchecked") // safe to upcast
@@ -74,10 +77,11 @@ public final class UnmodifiableMultiSet<E>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the collection out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -88,10 +92,10 @@ public final class UnmodifiableMultiSet<E>
     /**
      * Read the collection in using a custom routine.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
-     * @throws ClassCastException if deserialised object has wrong type
+     * @throws ClassCastException     if deserialised object has wrong type
      */
     @SuppressWarnings("unchecked") // will throw CCE, see Javadoc
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -102,7 +106,7 @@ public final class UnmodifiableMultiSet<E>
     //-----------------------------------------------------------------------
     @Override
     public Iterator<E> iterator() {
-        return UnmodifiableIterator.<E> unmodifiableIterator(decorated().iterator());
+        return UnmodifiableIterator.<E>unmodifiableIterator(decorated().iterator());
     }
 
     @Override

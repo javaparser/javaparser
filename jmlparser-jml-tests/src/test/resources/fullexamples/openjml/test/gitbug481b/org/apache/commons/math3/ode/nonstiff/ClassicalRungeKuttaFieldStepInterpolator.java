@@ -46,28 +46,30 @@ import org.apache.commons.math3.ode.FieldODEStateAndDerivative;
  *   </li>
  * </ul>
  * </p>
- *
+ * <p>
  * where &theta; belongs to [0 ; 1] and where y'<sub>1</sub> to y'<sub>4</sub> are the four
  * evaluations of the derivatives already computed during the
  * step.</p>
  *
- * @see ClassicalRungeKuttaFieldIntegrator
  * @param <T> the type of the field elements
+ * @see ClassicalRungeKuttaFieldIntegrator
  * @since 3.6
  */
 
 class ClassicalRungeKuttaFieldStepInterpolator<T extends RealFieldElement<T>>
-    extends RungeKuttaFieldStepInterpolator<T> {
+        extends RungeKuttaFieldStepInterpolator<T> {
 
-    /** Simple constructor.
-     * @param field field to which the time and state vector elements belong
-     * @param forward integration direction indicator
-     * @param yDotK slopes at the intermediate points
+    /**
+     * Simple constructor.
+     *
+     * @param field               field to which the time and state vector elements belong
+     * @param forward             integration direction indicator
+     * @param yDotK               slopes at the intermediate points
      * @param globalPreviousState start of the global step
-     * @param globalCurrentState end of the global step
-     * @param softPreviousState start of the restricted step
-     * @param softCurrentState end of the restricted step
-     * @param mapper equations mapper for the all equations
+     * @param globalCurrentState  end of the global step
+     * @param softPreviousState   start of the restricted step
+     * @param softCurrentState    end of the restricted step
+     * @param mapper              equations mapper for the all equations
      */
     ClassicalRungeKuttaFieldStepInterpolator(final Field<T> field, final boolean forward,
                                              final T[][] yDotK,
@@ -77,11 +79,13 @@ class ClassicalRungeKuttaFieldStepInterpolator<T extends RealFieldElement<T>>
                                              final FieldODEStateAndDerivative<T> softCurrentState,
                                              final FieldEquationsMapper<T> mapper) {
         super(field, forward, yDotK,
-              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
-              mapper);
+                globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+                mapper);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected ClassicalRungeKuttaFieldStepInterpolator<T> create(final Field<T> newField, final boolean newForward, final T[][] newYDotK,
                                                                  final FieldODEStateAndDerivative<T> newGlobalPreviousState,
@@ -90,42 +94,44 @@ class ClassicalRungeKuttaFieldStepInterpolator<T extends RealFieldElement<T>>
                                                                  final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                                  final FieldEquationsMapper<T> newMapper) {
         return new ClassicalRungeKuttaFieldStepInterpolator<T>(newField, newForward, newYDotK,
-                                                               newGlobalPreviousState, newGlobalCurrentState,
-                                                               newSoftPreviousState, newSoftCurrentState,
-                                                               newMapper);
+                newGlobalPreviousState, newGlobalCurrentState,
+                newSoftPreviousState, newSoftCurrentState,
+                newMapper);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     protected FieldODEStateAndDerivative<T> computeInterpolatedStateAndDerivatives(final FieldEquationsMapper<T> mapper,
                                                                                    final T time, final T theta,
                                                                                    final T thetaH, final T oneMinusThetaH) {
 
-        final T one                       = time.getField().getOne();
-        final T oneMinusTheta             = one.subtract(theta);
-        final T oneMinus2Theta            = one.subtract(theta.multiply(2));
-        final T coeffDot1                 = oneMinusTheta.multiply(oneMinus2Theta);
-        final T coeffDot23                = theta.multiply(oneMinusTheta).multiply(2);
-        final T coeffDot4                 = theta.multiply(oneMinus2Theta).negate();
+        final T one = time.getField().getOne();
+        final T oneMinusTheta = one.subtract(theta);
+        final T oneMinus2Theta = one.subtract(theta.multiply(2));
+        final T coeffDot1 = oneMinusTheta.multiply(oneMinus2Theta);
+        final T coeffDot23 = theta.multiply(oneMinusTheta).multiply(2);
+        final T coeffDot4 = theta.multiply(oneMinus2Theta).negate();
         final T[] interpolatedState;
         final T[] interpolatedDerivatives;
 
         if (getGlobalPreviousState() != null && theta.getReal() <= 0.5) {
-            final T fourTheta2      = theta.multiply(theta).multiply(4);
-            final T s               = thetaH.divide(6.0);
-            final T coeff1          = s.multiply(fourTheta2.subtract(theta.multiply(9)).add(6));
-            final T coeff23         = s.multiply(theta.multiply(6).subtract(fourTheta2));
-            final T coeff4          = s.multiply(fourTheta2.subtract(theta.multiply(3)));
-            interpolatedState       = previousStateLinearCombination(coeff1, coeff23, coeff23, coeff4);
+            final T fourTheta2 = theta.multiply(theta).multiply(4);
+            final T s = thetaH.divide(6.0);
+            final T coeff1 = s.multiply(fourTheta2.subtract(theta.multiply(9)).add(6));
+            final T coeff23 = s.multiply(theta.multiply(6).subtract(fourTheta2));
+            final T coeff4 = s.multiply(fourTheta2.subtract(theta.multiply(3)));
+            interpolatedState = previousStateLinearCombination(coeff1, coeff23, coeff23, coeff4);
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot23, coeffDot23, coeffDot4);
         } else {
-            final T fourTheta       = theta.multiply(4);
-            final T s               = oneMinusThetaH.divide(6);
-            final T coeff1          = s.multiply(theta.multiply(fourTheta.negate().add(5)).subtract(1));
-            final T coeff23         = s.multiply(theta.multiply(fourTheta.subtract(2)).subtract(2));
-            final T coeff4          = s.multiply(theta.multiply(fourTheta.negate().subtract(1)).subtract(1));
-            interpolatedState       = currentStateLinearCombination(coeff1, coeff23, coeff23, coeff4);
+            final T fourTheta = theta.multiply(4);
+            final T s = oneMinusThetaH.divide(6);
+            final T coeff1 = s.multiply(theta.multiply(fourTheta.negate().add(5)).subtract(1));
+            final T coeff23 = s.multiply(theta.multiply(fourTheta.subtract(2)).subtract(2));
+            final T coeff4 = s.multiply(theta.multiply(fourTheta.negate().subtract(1)).subtract(1));
+            interpolatedState = currentStateLinearCombination(coeff1, coeff23, coeff23, coeff4);
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot23, coeffDot23, coeffDot4);
         }
 

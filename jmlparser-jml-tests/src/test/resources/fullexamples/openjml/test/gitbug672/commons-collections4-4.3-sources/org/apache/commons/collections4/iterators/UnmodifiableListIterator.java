@@ -29,15 +29,18 @@ import java.util.ListIterator;
  */
 public final class UnmodifiableListIterator<E> implements ListIterator<E>, Unmodifiable {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     private final ListIterator<? extends E> iterator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Decorates the specified iterator such that it cannot be modified.
      *
-     * @param <E>  the element type
-     * @param iterator  the iterator to decorate
+     * @param <E>      the element type
+     * @param iterator the iterator to decorate
      * @return a new unmodifiable list iterator
      * @throws NullPointerException if the iterator is null
      */
@@ -54,10 +57,11 @@ public final class UnmodifiableListIterator<E> implements ListIterator<E>, Unmod
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      */
     private UnmodifiableListIterator(final ListIterator<? extends E> iterator) {
         super();

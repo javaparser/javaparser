@@ -34,7 +34,7 @@ import org.apache.commons.math3.ode.sampling.StepInterpolator;
  *   </li>
  * </ul>
  * </p>
- *
+ * <p>
  * where &theta; belongs to [0 ; 1] and where y' is the evaluation of
  * the derivatives already computed during the step.</p>
  *
@@ -43,60 +43,69 @@ import org.apache.commons.math3.ode.sampling.StepInterpolator;
  */
 
 class EulerStepInterpolator
-  extends RungeKuttaStepInterpolator {
+        extends RungeKuttaStepInterpolator {
 
-  /** Serializable version identifier. */
-  private static final long serialVersionUID = 20111120L;
+    /**
+     * Serializable version identifier.
+     */
+    private static final long serialVersionUID = 20111120L;
 
-  /** Simple constructor.
-   * This constructor builds an instance that is not usable yet, the
-   * {@link
-   * org.apache.commons.math3.ode.sampling.AbstractStepInterpolator#reinitialize}
-   * method should be called before using the instance in order to
-   * initialize the internal arrays. This constructor is used only
-   * in order to delay the initialization in some cases. The {@link
-   * RungeKuttaIntegrator} class uses the prototyping design pattern
-   * to create the step interpolators by cloning an uninitialized model
-   * and later initializing the copy.
-   */
-  // CHECKSTYLE: stop RedundantModifier
-  // the public modifier here is needed for serialization
-  public EulerStepInterpolator() {
-  }
-  // CHECKSTYLE: resume RedundantModifier
+    /**
+     * Simple constructor.
+     * This constructor builds an instance that is not usable yet, the
+     * {@link
+     * org.apache.commons.math3.ode.sampling.AbstractStepInterpolator#reinitialize}
+     * method should be called before using the instance in order to
+     * initialize the internal arrays. This constructor is used only
+     * in order to delay the initialization in some cases. The {@link
+     * RungeKuttaIntegrator} class uses the prototyping design pattern
+     * to create the step interpolators by cloning an uninitialized model
+     * and later initializing the copy.
+     */
+    // CHECKSTYLE: stop RedundantModifier
+    // the public modifier here is needed for serialization
+    public EulerStepInterpolator() {
+    }
+    // CHECKSTYLE: resume RedundantModifier
 
-  /** Copy constructor.
-   * @param interpolator interpolator to copy from. The copy is a deep
-   * copy: its arrays are separated from the original arrays of the
-   * instance
-   */
-  EulerStepInterpolator(final EulerStepInterpolator interpolator) {
-    super(interpolator);
-  }
+    /**
+     * Copy constructor.
+     *
+     * @param interpolator interpolator to copy from. The copy is a deep
+     *                     copy: its arrays are separated from the original arrays of the
+     *                     instance
+     */
+    EulerStepInterpolator(final EulerStepInterpolator interpolator) {
+        super(interpolator);
+    }
 
-  /** {@inheritDoc} */
-  @Override
-  protected StepInterpolator doCopy() {
-    return new EulerStepInterpolator(this);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected StepInterpolator doCopy() {
+        return new EulerStepInterpolator(this);
+    }
 
 
-  /** {@inheritDoc} */
-  @Override
-  protected void computeInterpolatedStateAndDerivatives(final double theta,
-                                          final double oneMinusThetaH) {
-      if ((previousState != null) && (theta <= 0.5)) {
-          for (int i = 0; i < interpolatedState.length; ++i) {
-              interpolatedState[i] = previousState[i] + theta * h * yDotK[0][i];
-          }
-          System.arraycopy(yDotK[0], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);
-      } else {
-          for (int i = 0; i < interpolatedState.length; ++i) {
-              interpolatedState[i] = currentState[i] - oneMinusThetaH * yDotK[0][i];
-          }
-          System.arraycopy(yDotK[0], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);
-      }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void computeInterpolatedStateAndDerivatives(final double theta,
+                                                          final double oneMinusThetaH) {
+        if ((previousState != null) && (theta <= 0.5)) {
+            for (int i = 0; i < interpolatedState.length; ++i) {
+                interpolatedState[i] = previousState[i] + theta * h * yDotK[0][i];
+            }
+            System.arraycopy(yDotK[0], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);
+        } else {
+            for (int i = 0; i < interpolatedState.length; ++i) {
+                interpolatedState[i] = currentState[i] - oneMinusThetaH * yDotK[0][i];
+            }
+            System.arraycopy(yDotK[0], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);
+        }
 
-  }
+    }
 
 }

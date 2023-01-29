@@ -75,7 +75,7 @@ public class OwnerPIN implements PIN {
             PINException.throwIt(PINException.ILLEGAL_VALUE);
         }
         _pin = new byte[maxPINSize + 1];
-        short one = (short)1;
+        short one = (short) 1;
         _isValidated = JCSystem.makeTransientBooleanArray(one,
                 JCSystem.CLEAR_ON_RESET);
         _pin[0] = maxTries;
@@ -126,7 +126,7 @@ public class OwnerPIN implements PIN {
         if (length > _maxPINSize) {
             PINException.throwIt(PINException.ILLEGAL_VALUE);
         }
-        short one = (short)1;
+        short one = (short) 1;
         Util.arrayCopy(pin, offset, _pin, one, length);
         _pin[0] = _maxTries;
         setValidatedFlag(false);
@@ -149,8 +149,8 @@ public class OwnerPIN implements PIN {
         setValidatedFlag(false);
         if (getTriesRemaining() == 0)
             return false;
-        short zero = (short)0;
-        short one = (short)1;
+        short zero = (short) 0;
+        short one = (short) 1;
         byte tmp = (byte) (_pin[0] - 1);
         Util.arrayFillNonAtomic(_pin, zero, one, tmp);
         if (length != _maxPINSize)

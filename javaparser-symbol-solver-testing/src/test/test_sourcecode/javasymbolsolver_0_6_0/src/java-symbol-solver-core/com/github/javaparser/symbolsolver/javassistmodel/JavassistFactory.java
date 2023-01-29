@@ -28,57 +28,57 @@ import java.lang.reflect.Modifier;
  */
 public class JavassistFactory {
 
-  public static Type typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {
-    try {
-      if (ctClazz.isArray()) {
-        return new ArrayType(typeUsageFor(ctClazz.getComponentType(), typeSolver));
-      } else if (ctClazz.isPrimitive()) {
-        if (ctClazz.getName().equals("void")) {
-          return VoidType.INSTANCE;
-        } else {
-          return PrimitiveType.byName(ctClazz.getName());
+    public static Type typeUsageFor(CtClass ctClazz, TypeSolver typeSolver) {
+        try {
+            if (ctClazz.isArray()) {
+                return new ArrayType(typeUsageFor(ctClazz.getComponentType(), typeSolver));
+            } else if (ctClazz.isPrimitive()) {
+                if (ctClazz.getName().equals("void")) {
+                    return VoidType.INSTANCE;
+                } else {
+                    return PrimitiveType.byName(ctClazz.getName());
+                }
+            } else {
+                if (ctClazz.isInterface()) {
+                    return new ReferenceTypeImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver),
+                            typeSolver);
+                } else if (ctClazz.isEnum()) {
+                    return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctClazz, typeSolver),
+                            typeSolver);
+                } else {
+                    return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver),
+                            typeSolver);
+                }
+            }
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
         }
-      } else {
+    }
+
+    public static ReferenceTypeDeclaration toTypeDeclaration(CtClass ctClazz, TypeSolver typeSolver) {
         if (ctClazz.isInterface()) {
-          return new ReferenceTypeImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver),
-              typeSolver);
+            return new JavassistInterfaceDeclaration(ctClazz, typeSolver);
         } else if (ctClazz.isEnum()) {
-          return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctClazz, typeSolver),
-              typeSolver);
+            return new JavassistEnumDeclaration(ctClazz, typeSolver);
+        } else if (ctClazz.isAnnotation()) {
+            throw new UnsupportedOperationException("CtClass of annotation not yet supported");
+        } else if (ctClazz.isArray()) {
+            throw new IllegalArgumentException("This method should not be called passing an array");
         } else {
-          return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver),
-              typeSolver);
+            return new JavassistClassDeclaration(ctClazz, typeSolver);
         }
-      }
-    } catch (NotFoundException e) {
-      throw new RuntimeException(e);
     }
-  }
 
-  public static ReferenceTypeDeclaration toTypeDeclaration(CtClass ctClazz, TypeSolver typeSolver) {
-    if (ctClazz.isInterface()) {
-      return new JavassistInterfaceDeclaration(ctClazz, typeSolver);
-    } else if (ctClazz.isEnum()) {
-      return new JavassistEnumDeclaration(ctClazz, typeSolver);
-    } else if (ctClazz.isAnnotation()) {
-      throw new UnsupportedOperationException("CtClass of annotation not yet supported");
-    } else if (ctClazz.isArray()) {
-      throw new IllegalArgumentException("This method should not be called passing an array");
-    } else {
-      return new JavassistClassDeclaration(ctClazz, typeSolver);
+    static AccessLevel modifiersToAccessLevel(final int modifiers) {
+        if (Modifier.isPublic(modifiers)) {
+            return AccessLevel.PUBLIC;
+        } else if (Modifier.isProtected(modifiers)) {
+            return AccessLevel.PROTECTED;
+        } else if (Modifier.isPrivate(modifiers)) {
+            return AccessLevel.PRIVATE;
+        } else {
+            return AccessLevel.PACKAGE_PROTECTED;
+        }
     }
-  }
-
-  static AccessLevel modifiersToAccessLevel(final int modifiers) {
-    if (Modifier.isPublic(modifiers)) {
-      return AccessLevel.PUBLIC;
-    } else if (Modifier.isProtected(modifiers)) {
-      return AccessLevel.PROTECTED;
-    } else if (Modifier.isPrivate(modifiers)) {
-      return AccessLevel.PRIVATE;
-    } else {
-      return AccessLevel.PACKAGE_PROTECTED;
-    }
-  }
 
 }

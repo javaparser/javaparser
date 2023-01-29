@@ -33,17 +33,17 @@ import org.apache.commons.math3.exception.NotStrictlyPositiveException;
  *
  * @since 2.0
  */
-public interface RealTransformer  {
+public interface RealTransformer {
 
     /**
      * Returns the (forward, inverse) transform of the specified real data set.
      *
-     * @param f the real data array to be transformed (signal)
+     * @param f    the real data array to be transformed (signal)
      * @param type the type of transform (forward, inverse) to be performed
      * @return the real transformed array (spectrum)
      * @throws MathIllegalArgumentException if the array cannot be transformed
-     *   with the given type (this may be for example due to array size, which is
-     *   constrained in some transforms)
+     *                                      with the given type (this may be for example due to array size, which is
+     *                                      constrained in some transforms)
      */
     double[] transform(double[] f, TransformType type) throws MathIllegalArgumentException;
 
@@ -51,20 +51,20 @@ public interface RealTransformer  {
      * Returns the (forward, inverse) transform of the specified real function,
      * sampled on the specified interval.
      *
-     * @param f the function to be sampled and transformed
-     * @param min the (inclusive) lower bound for the interval
-     * @param max the (exclusive) upper bound for the interval
-     * @param n the number of sample points
+     * @param f    the function to be sampled and transformed
+     * @param min  the (inclusive) lower bound for the interval
+     * @param max  the (exclusive) upper bound for the interval
+     * @param n    the number of sample points
      * @param type the type of transform (forward, inverse) to be performed
      * @return the real transformed array
      * @throws NonMonotonicSequenceException if the lower bound is greater than, or equal to the upper bound
-     * @throws NotStrictlyPositiveException if the number of sample points is negative
-     * @throws MathIllegalArgumentException if the sample cannot be transformed
-     *   with the given type (this may be for example due to sample size, which is
-     *   constrained in some transforms)
+     * @throws NotStrictlyPositiveException  if the number of sample points is negative
+     * @throws MathIllegalArgumentException  if the sample cannot be transformed
+     *                                       with the given type (this may be for example due to sample size, which is
+     *                                       constrained in some transforms)
      */
     double[] transform(UnivariateFunction f, double min, double max, int n,
                        TransformType type)
-        throws NonMonotonicSequenceException, NotStrictlyPositiveException, MathIllegalArgumentException;
+            throws NonMonotonicSequenceException, NotStrictlyPositiveException, MathIllegalArgumentException;
 
 }

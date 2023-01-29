@@ -1,10 +1,10 @@
 public class Test {
-    
+
     //@ ensures \result >= 0;
-    public static int main(String ... args) {
+    public static int main(String... args) {
         return args.length;
     }
-    
+
 }
 
 // Propblem reported is that this is not the externally-invokable main

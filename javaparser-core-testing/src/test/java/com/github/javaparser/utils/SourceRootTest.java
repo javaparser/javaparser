@@ -72,9 +72,9 @@ class SourceRootTest {
     void fileAsRootIsNotAllowed() {
         assertThrows(IllegalArgumentException.class, () -> {
             Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/Bla.java");
-        new SourceRoot(path);
-    });
-}
+            new SourceRoot(path);
+        });
+    }
 
     @Test
     void dotsInRootDirectoryAreAllowed() throws IOException {

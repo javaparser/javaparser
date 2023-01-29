@@ -34,7 +34,9 @@ import org.apache.commons.math3.util.MathUtils;
  */
 public class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
 
-    /** Serialization UID */
+    /**
+     * Serialization UID
+     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -47,9 +49,10 @@ public class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
 
     /**
      * Construct an instance with finite window
+     *
      * @param window the finite window size.
      * @throws MathIllegalArgumentException if window size is less than 1 but
-     * not equal to {@link #INFINITE_WINDOW}
+     *                                      not equal to {@link #INFINITE_WINDOW}
      */
     public SynchronizedDescriptiveStatistics(int window) throws MathIllegalArgumentException {
         super(window);
@@ -62,7 +65,7 @@ public class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
      * @throws NullArgumentException if original is null
      */
     public SynchronizedDescriptiveStatistics(SynchronizedDescriptiveStatistics original)
-    throws NullArgumentException {
+            throws NullArgumentException {
         copy(original, this);
     }
 
@@ -163,7 +166,7 @@ public class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
     @Override
     public synchronized SynchronizedDescriptiveStatistics copy() {
         SynchronizedDescriptiveStatistics result =
-            new SynchronizedDescriptiveStatistics();
+                new SynchronizedDescriptiveStatistics();
         // No try-catch or advertised exception because arguments are guaranteed non-null
         copy(this, result);
         return result;
@@ -175,12 +178,12 @@ public class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
      * <p>Acquires synchronization lock on source, then dest before copying.</p>
      *
      * @param source SynchronizedDescriptiveStatistics to copy
-     * @param dest SynchronizedDescriptiveStatistics to copy to
+     * @param dest   SynchronizedDescriptiveStatistics to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(SynchronizedDescriptiveStatistics source,
                             SynchronizedDescriptiveStatistics dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         synchronized (source) {

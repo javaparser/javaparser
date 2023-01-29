@@ -57,7 +57,7 @@ abstract class AbstractInputCheckedMapDecorator<K, V>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if map is null
      */
     protected AbstractInputCheckedMapDecorator(final Map<K, V> map) {
@@ -65,6 +65,7 @@ abstract class AbstractInputCheckedMapDecorator<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Hook method called when a value is being set using <code>setValue</code>.
      * <p>
@@ -75,12 +76,12 @@ abstract class AbstractInputCheckedMapDecorator<K, V>
      * This implementation returns the input value.
      * </p>
      *
-     * @param value  the value to check
+     * @param value the value to check
      * @return the input value
      * @throws UnsupportedOperationException if the map may not be changed by setValue
-     * @throws IllegalArgumentException if the specified value is invalid
-     * @throws ClassCastException if the class of the specified value is invalid
-     * @throws NullPointerException if the specified value is null and nulls are invalid
+     * @throws IllegalArgumentException      if the specified value is invalid
+     * @throws ClassCastException            if the class of the specified value is invalid
+     * @throws NullPointerException          if the specified value is null and nulls are invalid
      */
     protected abstract V checkSetValue(V value);
 
@@ -108,15 +109,20 @@ abstract class AbstractInputCheckedMapDecorator<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Implementation of an entry set that checks additions via setValue.
      */
     private class EntrySet extends AbstractSetDecorator<Map.Entry<K, V>> {
 
-        /** Generated serial version ID. */
+        /**
+         * Generated serial version ID.
+         */
         private static final long serialVersionUID = 4354731610923110264L;
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         private final AbstractInputCheckedMapDecorator<K, V> parent;
 
         protected EntrySet(final Set<Map.Entry<K, V>> set, final AbstractInputCheckedMapDecorator<K, V> parent) {
@@ -172,7 +178,9 @@ abstract class AbstractInputCheckedMapDecorator<K, V>
      */
     private class EntrySetIterator extends AbstractIteratorDecorator<Map.Entry<K, V>> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         private final AbstractInputCheckedMapDecorator<K, V> parent;
 
         protected EntrySetIterator(final Iterator<Map.Entry<K, V>> iterator,
@@ -193,7 +201,9 @@ abstract class AbstractInputCheckedMapDecorator<K, V>
      */
     private class MapEntry extends AbstractMapEntryDecorator<K, V> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         private final AbstractInputCheckedMapDecorator<K, V> parent;
 
         protected MapEntry(final Map.Entry<K, V> entry, final AbstractInputCheckedMapDecorator<K, V> parent) {

@@ -15,29 +15,29 @@ package paycard;
 
 public class PayCardJunior extends PayCard {
 
-   /* @invariants (self.balance >= 0) 
-    *             and (self.balance < juniorLimit) 
-    *             and (juniorLimit<limit) 
-    */
+    /* @invariants (self.balance >= 0)
+     *             and (self.balance < juniorLimit)
+     *             and (juniorLimit<limit)
+     */
 
-    private final static int juniorLimit=100;
-    private int unsuccessfulOperations=0;
+    private final static int juniorLimit = 100;
+    private int unsuccessfulOperations = 0;
 
     // @preconditions cardLimit<juniorLimit 
     public PayCardJunior(int cardLimit) {
-	super(cardLimit);
+        super(cardLimit);
     }
 
     // @postconditions result.limit=10
     public static PayCardJunior createCard() {
-		return new PayCardJunior(100);
+        return new PayCardJunior(100);
     }
 
     /* @preconditions amount>0
      * @postconditions if (balance@pre+amount<juniorLimit)
      *                 then (balance=balance@pre+amount)
-     *                 else ((balance=balance@pre) 
-     *                       and (unsuccessfulOperations=unsuccessfulOperations@pre+1)) 
+     *                 else ((balance=balance@pre)
+     *                       and (unsuccessfulOperations=unsuccessfulOperations@pre+1))
      *                 endif
      */
     public void charge(int amount) {
@@ -56,7 +56,7 @@ public class PayCardJunior extends PayCard {
             this.balance = this.balance + amount;
         }
     }
-    
+
     /* @postconditions if (result=1) then (sum<juniorLimit)
      *                               else (sum>=juniorLimit) endif
      */
@@ -71,8 +71,8 @@ public class PayCardJunior extends PayCard {
     /* @preconditions amount>0
      * @postconditions if (balance@pre+amount<limit)
      *                 then (amount=balance-balance@pre)
-     *                 else (balance=balance@pre) 
-     *                       and (unsuccessfulOperations=unsuccessfulOperations@pre+1) 
+     *                 else (balance=balance@pre)
+     *                       and (unsuccessfulOperations=unsuccessfulOperations@pre+1)
      *                 endif
      */
     public void complexCharge(int amount) {

@@ -61,14 +61,22 @@ import java.util.Map;
 public class LRUMap<K, V>
         extends AbstractLinkedMap<K, V> implements BoundedMap<K, V>, Serializable, Cloneable {
 
-    /** Serialisation version */
+    /**
+     * Serialisation version
+     */
     private static final long serialVersionUID = -612114643488955218L;
-    /** Default maximum size */
+    /**
+     * Default maximum size
+     */
     protected static final int DEFAULT_MAX_SIZE = 100;
 
-    /** Maximum size */
+    /**
+     * Maximum size
+     */
     private transient int maxSize;
-    /** Scan behaviour */
+    /**
+     * Scan behaviour
+     */
     private boolean scanUntilRemovable;
 
     /**
@@ -81,7 +89,7 @@ public class LRUMap<K, V>
     /**
      * Constructs a new, empty map with the specified maximum size.
      *
-     * @param maxSize  the maximum size of the map
+     * @param maxSize the maximum size of the map
      * @throws IllegalArgumentException if the maximum size is less than one
      */
     public LRUMap(final int maxSize) {
@@ -91,8 +99,8 @@ public class LRUMap<K, V>
     /**
      * Constructs a new, empty map with the specified maximum size.
      *
-     * @param maxSize  the maximum size of the map
-     * @param initialSize  the initial size of the map
+     * @param maxSize     the maximum size of the map
+     * @param initialSize the initial size of the map
      * @throws IllegalArgumentException if the maximum size is less than one
      * @throws IllegalArgumentException if the initial size is negative or larger than the maximum size
      * @since 4.1
@@ -104,8 +112,8 @@ public class LRUMap<K, V>
     /**
      * Constructs a new, empty map with the specified maximum size.
      *
-     * @param maxSize  the maximum size of the map
-     * @param scanUntilRemovable  scan until a removeable entry is found, default false
+     * @param maxSize            the maximum size of the map
+     * @param scanUntilRemovable scan until a removeable entry is found, default false
      * @throws IllegalArgumentException if the maximum size is less than one
      * @since 3.1
      */
@@ -117,8 +125,8 @@ public class LRUMap<K, V>
      * Constructs a new, empty map with the specified max capacity and
      * load factor.
      *
-     * @param maxSize  the maximum size of the map
-     * @param loadFactor  the load factor
+     * @param maxSize    the maximum size of the map
+     * @param loadFactor the load factor
      * @throws IllegalArgumentException if the maximum size is less than one
      * @throws IllegalArgumentException if the load factor is less than zero
      */
@@ -130,8 +138,8 @@ public class LRUMap<K, V>
      * Constructs a new, empty map with the specified max / initial capacity and
      * load factor.
      *
-     * @param maxSize  the maximum size of the map
-     * @param initialSize  the initial size of the map
+     * @param maxSize     the maximum size of the map
+     * @param initialSize the initial size of the map
      * @param loadFactor  the load factor
      * @throws IllegalArgumentException if the maximum size is less than one
      * @throws IllegalArgumentException if the initial size is negative or larger than the maximum size
@@ -145,9 +153,9 @@ public class LRUMap<K, V>
     /**
      * Constructs a new, empty map with the specified max capacity and load factor.
      *
-     * @param maxSize  the maximum size of the map
-     * @param loadFactor  the load factor
-     * @param scanUntilRemovable  scan until a removeable entry is found, default false
+     * @param maxSize            the maximum size of the map
+     * @param loadFactor         the load factor
+     * @param scanUntilRemovable scan until a removeable entry is found, default false
      * @throws IllegalArgumentException if the maximum size is less than one
      * @throws IllegalArgumentException if the load factor is less than zero
      * @since 3.1
@@ -159,10 +167,10 @@ public class LRUMap<K, V>
     /**
      * Constructs a new, empty map with the specified max / initial capacity and load factor.
      *
-     * @param maxSize  the maximum size of the map
-     * @param initialSize  the initial size of the map
-     * @param loadFactor  the load factor
-     * @param scanUntilRemovable  scan until a removeable entry is found, default false
+     * @param maxSize            the maximum size of the map
+     * @param initialSize        the initial size of the map
+     * @param loadFactor         the load factor
+     * @param scanUntilRemovable scan until a removeable entry is found, default false
      * @throws IllegalArgumentException if the maximum size is less than one
      * @throws IllegalArgumentException if the initial size is negative or larger than the maximum size
      * @throws IllegalArgumentException if the load factor is less than zero
@@ -189,8 +197,8 @@ public class LRUMap<K, V>
      * <p>
      * The maximum size is set from the map's size.
      *
-     * @param map  the map to copy
-     * @throws NullPointerException if the map is null
+     * @param map the map to copy
+     * @throws NullPointerException     if the map is null
      * @throws IllegalArgumentException if the map is empty
      */
     public LRUMap(final Map<? extends K, ? extends V> map) {
@@ -202,9 +210,9 @@ public class LRUMap<K, V>
      *
      * <p>The maximum size is set from the map's size.</p>
      *
-     * @param map  the map to copy
-     * @param scanUntilRemovable  scan until a removeable entry is found, default false
-     * @throws NullPointerException if the map is null
+     * @param map                the map to copy
+     * @param scanUntilRemovable scan until a removeable entry is found, default false
+     * @throws NullPointerException     if the map is null
      * @throws IllegalArgumentException if the map is empty
      * @since 3.1
      */
@@ -214,13 +222,14 @@ public class LRUMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the value mapped to the key specified.
      * <p>
      * This operation changes the position of the key in the map to the
      * most recently used position (last).
      *
-     * @param key  the key
+     * @param key the key
      * @return the mapped value, null if no match
      */
     @Override
@@ -235,9 +244,9 @@ public class LRUMap<K, V>
      * is changed to the most recently used position (last), otherwise the iteration
      * order is not changed by this operation.
      *
-     * @param key  the key
-     * @param updateToMRU  whether the key shall be updated to the
-     *   most recently used position
+     * @param key         the key
+     * @param updateToMRU whether the key shall be updated to the
+     *                    most recently used position
      * @return the mapped value, null if no match
      * @since 4.1
      */
@@ -253,21 +262,22 @@ public class LRUMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Moves an entry to the MRU position at the end of the list.
      * <p>
      * This implementation moves the updated entry to the end of the list.
      *
-     * @param entry  the entry to update
+     * @param entry the entry to update
      */
     protected void moveToMRU(final LinkEntry<K, V> entry) {
         if (entry.after != header) {
             modCount++;
             // remove
-            if(entry.before == null) {
+            if (entry.before == null) {
                 throw new IllegalStateException("Entry.before is null." +
-                    " Please check that your keys are immutable, and that you have used synchronization properly." +
-                    " If so, then please report this to dev@commons.apache.org as a bug.");
+                        " Please check that your keys are immutable, and that you have used synchronization properly." +
+                        " If so, then please report this to dev@commons.apache.org as a bug.");
             }
             entry.before.after = entry.after;
             entry.after.before = entry.before;
@@ -278,7 +288,7 @@ public class LRUMap<K, V>
             header.before = entry;
         } else if (entry == header) {
             throw new IllegalStateException("Can't move header to MRU" +
-                " (please report this to dev@commons.apache.org)");
+                    " (please report this to dev@commons.apache.org)");
         }
     }
 
@@ -288,8 +298,8 @@ public class LRUMap<K, V>
      * This implementation moves the updated entry to the end of the list
      * using {@link #moveToMRU(AbstractLinkedMap.LinkEntry)}.
      *
-     * @param entry  the entry to update
-     * @param newValue  the new value to store
+     * @param entry    the entry to update
+     * @param newValue the new value to store
      */
     @Override
     protected void updateEntry(final HashEntry<K, V> entry, final V newValue) {
@@ -307,10 +317,10 @@ public class LRUMap<K, V>
      * than accessing <code>size</code> and <code>maxSize</code> directly.
      * It also handles the scanUntilRemovable functionality.
      *
-     * @param hashIndex  the index into the data array to store at
+     * @param hashIndex the index into the data array to store at
      * @param hashCode  the hash code of the key to add
-     * @param key  the key to add
-     * @param value  the value to add
+     * @param key       the key to add
+     * @param value     the value to add
      */
     @Override
     protected void addMapping(final int hashIndex, final int hashCode, final K key, final V value) {
@@ -327,10 +337,10 @@ public class LRUMap<K, V>
                 }
                 if (reuse == null) {
                     throw new IllegalStateException(
-                        "Entry.after=null, header.after" + header.after + " header.before" + header.before +
-                        " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
-                        " Please check that your keys are immutable, and that you have used synchronization properly." +
-                        " If so, then please report this to dev@commons.apache.org as a bug.");
+                            "Entry.after=null, header.after" + header.after + " header.before" + header.before +
+                                    " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
+                                    " Please check that your keys are immutable, and that you have used synchronization properly." +
+                                    " If so, then please report this to dev@commons.apache.org as a bug.");
                 }
             } else {
                 removeLRUEntry = removeLRU(reuse);
@@ -339,10 +349,10 @@ public class LRUMap<K, V>
             if (removeLRUEntry) {
                 if (reuse == null) {
                     throw new IllegalStateException(
-                        "reuse=null, header.after=" + header.after + " header.before" + header.before +
-                        " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
-                        " Please check that your keys are immutable, and that you have used synchronization properly." +
-                        " If so, then please report this to dev@commons.apache.org as a bug.");
+                            "reuse=null, header.after=" + header.after + " header.before" + header.before +
+                                    " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
+                                    " Please check that your keys are immutable, and that you have used synchronization properly." +
+                                    " If so, then please report this to dev@commons.apache.org as a bug.");
                 }
                 reuseMapping(reuse, hashIndex, hashCode, key, value);
             } else {
@@ -358,11 +368,11 @@ public class LRUMap<K, V>
      * <p>
      * This method uses {@link #removeEntry}, {@link #reuseEntry} and {@link #addEntry}.
      *
-     * @param entry  the entry to reuse
-     * @param hashIndex  the index into the data array to store at
+     * @param entry     the entry to reuse
+     * @param hashIndex the index into the data array to store at
      * @param hashCode  the hash code of the key to add
-     * @param key  the key to add
-     * @param value  the value to add
+     * @param key       the key to add
+     * @param value     the value to add
      */
     protected void reuseMapping(final LinkEntry<K, V> entry, final int hashIndex, final int hashCode,
                                 final K key, final V value) {
@@ -380,10 +390,10 @@ public class LRUMap<K, V>
             }
             if (loop == null) {
                 throw new IllegalStateException(
-                    "Entry.next=null, data[removeIndex]=" + data[removeIndex] + " previous=" + previous +
-                    " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
-                    " Please check that your keys are immutable, and that you have used synchronization properly." +
-                    " If so, then please report this to dev@commons.apache.org as a bug.");
+                        "Entry.next=null, data[removeIndex]=" + data[removeIndex] + " previous=" + previous +
+                                " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
+                                " Please check that your keys are immutable, and that you have used synchronization properly." +
+                                " If so, then please report this to dev@commons.apache.org as a bug.");
             }
 
             // reuse the entry
@@ -393,10 +403,10 @@ public class LRUMap<K, V>
             addEntry(entry, hashIndex);
         } catch (final NullPointerException ex) {
             throw new IllegalStateException(
-                    "NPE, entry=" + entry + " entryIsHeader=" + (entry==header) +
-                    " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
-                    " Please check that your keys are immutable, and that you have used synchronization properly." +
-                    " If so, then please report this to dev@commons.apache.org as a bug.");
+                    "NPE, entry=" + entry + " entryIsHeader=" + (entry == header) +
+                            " key=" + key + " value=" + value + " size=" + size + " maxSize=" + maxSize +
+                            " Please check that your keys are immutable, and that you have used synchronization properly." +
+                            " If so, then please report this to dev@commons.apache.org as a bug.");
         }
     }
 
@@ -431,7 +441,7 @@ public class LRUMap<K, V>
      * NOTE: Commons Collections 3.0 passed the wrong entry to this method.
      * This is fixed in version 3.1 onwards.
      *
-     * @param entry  the entry to be removed
+     * @param entry the entry to be removed
      * @return {@code true}
      */
     protected boolean removeLRU(final LinkEntry<K, V> entry) {
@@ -439,6 +449,7 @@ public class LRUMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns true if this map is full and no new mappings can be added.
      *
@@ -471,6 +482,7 @@ public class LRUMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Clones the map without cloning the keys or values.
      *
@@ -484,7 +496,7 @@ public class LRUMap<K, V>
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
@@ -496,7 +508,7 @@ public class LRUMap<K, V>
      * Read the map in using a custom routine.
      *
      * @param in the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -507,7 +519,7 @@ public class LRUMap<K, V>
     /**
      * Writes the data necessary for <code>put()</code> to work in deserialization.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     @Override
@@ -519,8 +531,8 @@ public class LRUMap<K, V>
     /**
      * Reads the data necessary for <code>put()</code> to work in the superclass.
      *
-     * @param in  the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @param in the input stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     @Override

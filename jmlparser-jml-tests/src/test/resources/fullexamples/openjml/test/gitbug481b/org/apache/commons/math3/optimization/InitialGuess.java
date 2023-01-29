@@ -22,12 +22,14 @@ package org.apache.commons.math3.optimization;
  * <br/>
  * Immutable class.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.1
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class InitialGuess implements OptimizationData {
-    /** Initial guess. */
+    /**
+     * Initial guess.
+     */
     private final double[] init;
 
     /**

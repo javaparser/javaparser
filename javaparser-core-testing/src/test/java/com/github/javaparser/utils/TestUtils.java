@@ -251,6 +251,7 @@ public class TestUtils {
 
     /**
      * Assert that "actual" equals "expected", ignoring line separators.
+     *
      * @deprecated Use {@link #assertEqualsStringIgnoringEol(String, String)}
      */
     @Deprecated
@@ -260,6 +261,7 @@ public class TestUtils {
 
     /**
      * Assert that "actual" equals "expected", ignoring line separators.
+     *
      * @deprecated Use {@link #assertEqualsStringIgnoringEol(String, String, String)}
      */
     @Deprecated
@@ -271,7 +273,7 @@ public class TestUtils {
      * Assert that "actual" equals "expected".
      * <br>First checks if the content is equal ignoring line separators.
      * <br>If this passes, then we check if the content is equal - if this fails then we can
-     *  advise that the difference is <em>only</em> in the line separators.
+     * advise that the difference is <em>only</em> in the line separators.
      */
     public static void assertEqualsString(String expected, String actual) {
         assertEqualsString(expected, actual, "");
@@ -281,7 +283,7 @@ public class TestUtils {
      * Assert that "actual" equals "expected".
      * <br>First checks if the content is equal ignoring line separators.
      * <br>If this passes, then we check if the content is equal - if this fails then we can
-     *  advise that the difference is <em>only</em> in the line separators.
+     * advise that the difference is <em>only</em> in the line separators.
      */
     public static void assertEqualsString(String expected, String actual, String message) {
         // First test equality ignoring EOL chars
@@ -361,7 +363,7 @@ public class TestUtils {
             }
             return parse.getResult()
                     .orElseThrow(() -> new IllegalArgumentException("No result when attempting to parse " + filePath));
-            } catch (IOException ex) {
+        } catch (IOException ex) {
             throw new IllegalStateException("Error while parsing " + filePath, ex);
         }
     }

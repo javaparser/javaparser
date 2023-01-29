@@ -8,7 +8,7 @@ public final class Server {
     /*@ spec_public @*/ final int[] votesForCandidates;
 
 
-    Server (int n, int m) {
+    Server(int n, int m) {
         //@ set rep = \set_union(\all_fields(this), \set_union(\singleton(Setup.numberOfVoters), \singleton(Setup.numberOfCandidates)));
         numberOfVoters = n;
         numberOfCandidates = m;
@@ -54,10 +54,10 @@ public final class Server {
         if (msg == null) return;
         int voterID = msg.id;
         int voteFor = msg.ballot;
-        if( voterID<0 || voterID>=numberOfVoters ) return;  // invalid  voter ID
-        if( ballotCast[voterID] ) return;  // the voter has already voted
+        if (voterID < 0 || voterID >= numberOfVoters) return;  // invalid  voter ID
+        if (ballotCast[voterID]) return;  // the voter has already voted
         ballotCast[voterID] = true;
-        if (voteFor < 0 || voteFor >= numberOfCandidates ) return;
+        if (voteFor < 0 || voteFor >= numberOfCandidates) return;
         else votesForCandidates[voteFor]++;
     }
 
@@ -83,8 +83,8 @@ public final class Server {
           @ assignable  \strictly_nothing;
           @ decreases   numberOfVoters-i;
           @*/
-        for( int i=0; i<numberOfVoters; i++ ) {
-            if( !ballotCast[i] )
+        for (int i = 0; i < numberOfVoters; i++) {
+            if (!ballotCast[i])
                 return false;
         }
         return true;

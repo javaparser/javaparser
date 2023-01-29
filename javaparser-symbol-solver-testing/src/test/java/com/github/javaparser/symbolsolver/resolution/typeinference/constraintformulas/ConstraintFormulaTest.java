@@ -43,7 +43,7 @@ class ConstraintFormulaTest {
 
     /**
      * From JLS 18.1.2
-     *
+     * <p>
      * From Collections.singleton("hi"), we have the constraint formula ‹"hi" → α›.
      * Through reduction, this will become the constraint formula: ‹String <: α›.
      */

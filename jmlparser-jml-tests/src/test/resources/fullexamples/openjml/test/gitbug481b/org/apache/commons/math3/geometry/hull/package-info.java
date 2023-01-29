@@ -15,10 +15,8 @@
  * limitations under the License.
  */
 /**
- *
  * <p>
  * This package provides interfaces and classes related to the convex hull problem.
  * </p>
- *
  */
 package org.apache.commons.math3.geometry.hull;

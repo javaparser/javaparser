@@ -23,15 +23,20 @@ import java.util.List;
 
 /**
  * Cluster holding a set of {@link Clusterable} points.
+ *
  * @param <T> the type of points that can be clustered
  * @since 3.2
  */
 public class Cluster<T extends Clusterable> implements Serializable {
 
-    /** Serializable version identifier. */
+    /**
+     * Serializable version identifier.
+     */
     private static final long serialVersionUID = -3442297081515880464L;
 
-    /** The points contained in this cluster. */
+    /**
+     * The points contained in this cluster.
+     */
     private final List<T> points;
 
     /**
@@ -43,6 +48,7 @@ public class Cluster<T extends Clusterable> implements Serializable {
 
     /**
      * Add a point to this cluster.
+     *
      * @param point point to add
      */
     public void addPoint(final T point) {
@@ -51,6 +57,7 @@ public class Cluster<T extends Clusterable> implements Serializable {
 
     /**
      * Get the points contained in the cluster.
+     *
      * @return points contained in the cluster
      */
     public List<T> getPoints() {

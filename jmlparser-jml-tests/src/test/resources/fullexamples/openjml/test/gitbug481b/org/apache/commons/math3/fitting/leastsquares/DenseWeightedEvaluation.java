@@ -27,9 +27,13 @@ import org.apache.commons.math3.linear.RealVector;
  */
 class DenseWeightedEvaluation extends AbstractEvaluation {
 
-    /** the unweighted evaluation */
+    /**
+     * the unweighted evaluation
+     */
     private final Evaluation unweighted;
-    /** reference to the weight square root matrix */
+    /**
+     * reference to the weight square root matrix
+     */
     private final RealMatrix weightSqrt;
 
     /**
@@ -48,19 +52,25 @@ class DenseWeightedEvaluation extends AbstractEvaluation {
 
     /* apply weights */
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealMatrix getJacobian() {
         return weightSqrt.multiply(this.unweighted.getJacobian());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealVector getResiduals() {
         return this.weightSqrt.operate(this.unweighted.getResiduals());
     }
 
     /* delegate */
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public RealVector getPoint() {
         return unweighted.getPoint();
     }

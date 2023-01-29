@@ -46,7 +46,9 @@ public class TransformedSortedMap<K, V>
         extends TransformedMap<K, V>
         implements SortedMap<K, V> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -8751771676410385778L;
 
     /**
@@ -55,18 +57,18 @@ public class TransformedSortedMap<K, V>
      * If there are any elements already in the map being decorated, they are NOT transformed.
      * Contrast this with {@link #transformedSortedMap(SortedMap, Transformer, Transformer)}.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
-     * @param keyTransformer  the predicate to validate the keys, null means no transformation
-     * @param valueTransformer  the predicate to validate to values, null means no transformation
+     * @param <K>              the key type
+     * @param <V>              the value type
+     * @param map              the map to decorate, must not be null
+     * @param keyTransformer   the predicate to validate the keys, null means no transformation
+     * @param valueTransformer the predicate to validate to values, null means no transformation
      * @return a new transformed sorted map
      * @throws NullPointerException if the map is null
      * @since 4.0
      */
     public static <K, V> TransformedSortedMap<K, V> transformingSortedMap(final SortedMap<K, V> map,
-            final Transformer<? super K, ? extends K> keyTransformer,
-            final Transformer<? super V, ? extends V> valueTransformer) {
+                                                                          final Transformer<? super K, ? extends K> keyTransformer,
+                                                                          final Transformer<? super V, ? extends V> valueTransformer) {
         return new TransformedSortedMap<>(map, keyTransformer, valueTransformer);
     }
 
@@ -78,18 +80,18 @@ public class TransformedSortedMap<K, V>
      * will be transformed by this method.
      * Contrast this with {@link #transformingSortedMap(SortedMap, Transformer, Transformer)}.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param map  the map to decorate, must not be null
-     * @param keyTransformer  the transformer to use for key conversion, null means no transformation
-     * @param valueTransformer  the transformer to use for value conversion, null means no transformation
+     * @param <K>              the key type
+     * @param <V>              the value type
+     * @param map              the map to decorate, must not be null
+     * @param keyTransformer   the transformer to use for key conversion, null means no transformation
+     * @param valueTransformer the transformer to use for value conversion, null means no transformation
      * @return a new transformed sorted map
      * @throws NullPointerException if map is null
      * @since 4.0
      */
     public static <K, V> TransformedSortedMap<K, V> transformedSortedMap(final SortedMap<K, V> map,
-            final Transformer<? super K, ? extends K> keyTransformer,
-            final Transformer<? super V, ? extends V> valueTransformer) {
+                                                                         final Transformer<? super K, ? extends K> keyTransformer,
+                                                                         final Transformer<? super V, ? extends V> valueTransformer) {
 
         final TransformedSortedMap<K, V> decorated =
                 new TransformedSortedMap<>(map, keyTransformer, valueTransformer);
@@ -102,24 +104,26 @@ public class TransformedSortedMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
      * If there are any elements already in the collection being decorated, they
      * are NOT transformed.</p>
      *
-     * @param map  the map to decorate, must not be null
-     * @param keyTransformer  the predicate to validate the keys, null means no transformation
-     * @param valueTransformer  the predicate to validate to values, null means no transformation
+     * @param map              the map to decorate, must not be null
+     * @param keyTransformer   the predicate to validate the keys, null means no transformation
+     * @param valueTransformer the predicate to validate to values, null means no transformation
      * @throws NullPointerException if the map is null
      */
     protected TransformedSortedMap(final SortedMap<K, V> map,
-            final Transformer<? super K, ? extends K> keyTransformer,
-            final Transformer<? super V, ? extends V> valueTransformer) {
+                                   final Transformer<? super K, ? extends K> keyTransformer,
+                                   final Transformer<? super V, ? extends V> valueTransformer) {
         super(map, keyTransformer, valueTransformer);
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the map being decorated.
      *

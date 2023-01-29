@@ -32,11 +32,14 @@ public abstract class AbstractSortedSetDecorator<E>
         extends AbstractSetDecorator<E>
         implements SortedSet<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -3462240946294214398L;
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
+     *
      * @since 3.1
      */
     protected AbstractSortedSetDecorator() {
@@ -46,7 +49,7 @@ public abstract class AbstractSortedSetDecorator<E>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param set  the set to decorate, must not be null
+     * @param set the set to decorate, must not be null
      * @throws NullPointerException if set is null
      */
     protected AbstractSortedSetDecorator(final Set<E> set) {

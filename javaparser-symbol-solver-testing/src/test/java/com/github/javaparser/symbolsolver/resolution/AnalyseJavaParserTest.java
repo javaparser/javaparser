@@ -66,7 +66,7 @@ class AnalyseJavaParserTest extends AbstractSymbolResolutionTest {
     private static final boolean DEBUG = true;
 
     private void parse(String fileName) throws IOException {
-        Path sourceFile = properSrc.resolve( fileName + ".java");
+        Path sourceFile = properSrc.resolve(fileName + ".java");
         SourceFileInfoExtractor sourceFileInfoExtractor = getSourceFileInfoExtractor();
         OutputStream outErrStream = new ByteArrayOutputStream();
         PrintStream outErr = new PrintStream(outErrStream);

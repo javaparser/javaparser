@@ -58,15 +58,18 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.
- *
  */
 public class Mean extends AbstractStorelessUnivariateStatistic
-    implements Serializable, WeightedEvaluation {
+        implements Serializable, WeightedEvaluation {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = -1296043746617791564L;
 
-    /** First moment on which this statistic is based. */
+    /**
+     * First moment on which this statistic is based.
+     */
     protected FirstMoment moment;
 
     /**
@@ -77,7 +80,9 @@ public class Mean extends AbstractStorelessUnivariateStatistic
      */
     protected boolean incMoment;
 
-    /** Constructs a Mean. */
+    /**
+     * Constructs a Mean.
+     */
     public Mean() {
         incMoment = true;
         moment = new FirstMoment();
@@ -152,15 +157,15 @@ public class Mean extends AbstractStorelessUnivariateStatistic
      * See {@link Mean} for details on the computing algorithm.</p>
      *
      * @param values the input array
-     * @param begin index of the first array element to include
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the mean of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     @Override
-    public double evaluate(final double[] values,final int begin, final int length)
-    throws MathIllegalArgumentException {
+    public double evaluate(final double[] values, final int begin, final int length)
+            throws MathIllegalArgumentException {
         if (test(values, begin, length)) {
             Sum sum = new Sum();
             double sampleSize = length;
@@ -173,7 +178,7 @@ public class Mean extends AbstractStorelessUnivariateStatistic
             for (int i = begin; i < begin + length; i++) {
                 correction += values[i] - xbar;
             }
-            return xbar + (correction/sampleSize);
+            return xbar + (correction / sampleSize);
         }
         return Double.NaN;
     }
@@ -199,10 +204,10 @@ public class Mean extends AbstractStorelessUnivariateStatistic
      *     <li>the start and length arguments do not determine a valid array</li>
      * </ul></p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
-     * @param begin index of the first array element to include
-     * @param length the number of elements to include
+     * @param begin   index of the first array element to include
+     * @param length  the number of elements to include
      * @return the mean of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
@@ -213,7 +218,7 @@ public class Mean extends AbstractStorelessUnivariateStatistic
             Sum sum = new Sum();
 
             // Compute initial estimate using definitional formula
-            double sumw = sum.evaluate(weights,begin,length);
+            double sumw = sum.evaluate(weights, begin, length);
             double xbarw = sum.evaluate(values, weights, begin, length) / sumw;
 
             // Compute correction factor in second pass
@@ -221,7 +226,7 @@ public class Mean extends AbstractStorelessUnivariateStatistic
             for (int i = begin; i < begin + length; i++) {
                 correction += weights[i] * (values[i] - xbarw);
             }
-            return xbarw + (correction/sumw);
+            return xbarw + (correction / sumw);
         }
         return Double.NaN;
     }
@@ -244,14 +249,14 @@ public class Mean extends AbstractStorelessUnivariateStatistic
      *     <li>the weights array contains negative values</li>
      * </ul></p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
      * @return the mean of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         return evaluate(values, weights, 0, values.length);
     }
 
@@ -272,11 +277,11 @@ public class Mean extends AbstractStorelessUnivariateStatistic
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source Mean to copy
-     * @param dest Mean to copy to
+     * @param dest   Mean to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(Mean source, Mean dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

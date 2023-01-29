@@ -39,15 +39,25 @@ import org.apache.commons.math3.util.Precision;
  * @since 3.1
  */
 class HessenbergTransformer {
-    /** Householder vectors. */
+    /**
+     * Householder vectors.
+     */
     private final double householderVectors[][];
-    /** Temporary storage vector. */
+    /**
+     * Temporary storage vector.
+     */
     private final double ort[];
-    /** Cached value of P. */
+    /**
+     * Cached value of P.
+     */
     private RealMatrix cachedP;
-    /** Cached value of Pt. */
+    /**
+     * Cached value of Pt.
+     */
     private RealMatrix cachedPt;
-    /** Cached value of H. */
+    /**
+     * Cached value of H.
+     */
     private RealMatrix cachedH;
 
     /**

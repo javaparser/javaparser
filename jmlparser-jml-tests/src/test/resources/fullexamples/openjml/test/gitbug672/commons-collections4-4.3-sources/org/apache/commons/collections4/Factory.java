@@ -27,7 +27,6 @@ package org.apache.commons.collections4;
  * a copy of a prototype or a new instance.
  *
  * @param <T> the type that the factory creates
- *
  * @since 2.1
  */
 public interface Factory<T> {

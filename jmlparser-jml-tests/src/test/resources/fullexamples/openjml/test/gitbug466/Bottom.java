@@ -1,1 +1,2 @@
-public interface Bottom extends Middle {}
+public interface Bottom extends Middle {
+}

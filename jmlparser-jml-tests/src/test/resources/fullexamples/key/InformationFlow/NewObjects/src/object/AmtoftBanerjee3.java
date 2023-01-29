@@ -2,7 +2,6 @@ package object;
 
 
 /**
- *
  * @author christoph
  */
 public class AmtoftBanerjee3 {

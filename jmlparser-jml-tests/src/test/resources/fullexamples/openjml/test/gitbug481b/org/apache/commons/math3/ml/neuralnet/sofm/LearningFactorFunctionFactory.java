@@ -27,8 +27,11 @@ import org.apache.commons.math3.ml.neuralnet.sofm.util.QuasiSigmoidDecayFunction
  * @since 3.3
  */
 public class LearningFactorFunctionFactory {
-    /** Class contains only static methods. */
-    private LearningFactorFunctionFactory() {}
+    /**
+     * Class contains only static methods.
+     */
+    private LearningFactorFunctionFactory() {
+    }
 
     /**
      * Creates an exponential decay {@link LearningFactorFunction function}.
@@ -39,33 +42,29 @@ public class LearningFactorFunctionFactory {
      *  <li><code>b = -numCall / ln(valueAtNumCall / initValue)</code>
      * </ul>
      *
-     * @param initValue Initial value, i.e.
-     * {@link LearningFactorFunction#value(long) value(0)}.
+     * @param initValue      Initial value, i.e.
+     *                       {@link LearningFactorFunction#value(long) value(0)}.
      * @param valueAtNumCall Value of the function at {@code numCall}.
-     * @param numCall Argument for which the function returns
-     * {@code valueAtNumCall}.
+     * @param numCall        Argument for which the function returns
+     *                       {@code valueAtNumCall}.
      * @return the learning factor function.
-     * @throws org.apache.commons.math3.exception.OutOfRangeException
-     * if {@code initValue <= 0} or {@code initValue > 1}.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code valueAtNumCall <= 0}.
-     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException
-     * if {@code valueAtNumCall >= initValue}.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code numCall <= 0}.
+     * @throws org.apache.commons.math3.exception.OutOfRangeException          if {@code initValue <= 0} or {@code initValue > 1}.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code valueAtNumCall <= 0}.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException    if {@code valueAtNumCall >= initValue}.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code numCall <= 0}.
      */
     public static LearningFactorFunction exponentialDecay(final double initValue,
                                                           final double valueAtNumCall,
                                                           final long numCall) {
         if (initValue <= 0 ||
-            initValue > 1) {
+                initValue > 1) {
             throw new OutOfRangeException(initValue, 0, 1);
         }
 
         return new LearningFactorFunction() {
             /** DecayFunction. */
             private final ExponentialDecayFunction decay
-                = new ExponentialDecayFunction(initValue, valueAtNumCall, numCall);
+                    = new ExponentialDecayFunction(initValue, valueAtNumCall, numCall);
 
             /** {@inheritDoc} */
             public double value(long n) {
@@ -84,29 +83,26 @@ public class LearningFactorFunctionFactory {
      * </ul>
      *
      * @param initValue Initial value, i.e.
-     * {@link LearningFactorFunction#value(long) value(0)}.
-     * @param slope Value of the function derivative at {@code numCall}.
-     * @param numCall Inflexion point.
+     *                  {@link LearningFactorFunction#value(long) value(0)}.
+     * @param slope     Value of the function derivative at {@code numCall}.
+     * @param numCall   Inflexion point.
      * @return the learning factor function.
-     * @throws org.apache.commons.math3.exception.OutOfRangeException
-     * if {@code initValue <= 0} or {@code initValue > 1}.
-     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException
-     * if {@code slope >= 0}.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code numCall <= 0}.
+     * @throws org.apache.commons.math3.exception.OutOfRangeException          if {@code initValue <= 0} or {@code initValue > 1}.
+     * @throws org.apache.commons.math3.exception.NumberIsTooLargeException    if {@code slope >= 0}.
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code numCall <= 0}.
      */
     public static LearningFactorFunction quasiSigmoidDecay(final double initValue,
                                                            final double slope,
                                                            final long numCall) {
         if (initValue <= 0 ||
-            initValue > 1) {
+                initValue > 1) {
             throw new OutOfRangeException(initValue, 0, 1);
         }
 
         return new LearningFactorFunction() {
             /** DecayFunction. */
             private final QuasiSigmoidDecayFunction decay
-                = new QuasiSigmoidDecayFunction(initValue, slope, numCall);
+                    = new QuasiSigmoidDecayFunction(initValue, slope, numCall);
 
             /** {@inheritDoc} */
             public double value(long n) {

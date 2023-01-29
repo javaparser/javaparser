@@ -32,50 +32,61 @@ import java.util.Comparator;
 /**
  * Special implementation of the {@link UnivariateOptimizer} interface
  * adding multi-start features to an existing optimizer.
- *
+ * <p>
  * This class wraps a classical optimizer to use it several times in
  * turn with different starting points in order to avoid being trapped
  * into a local extremum when looking for a global one.
  *
  * @param <FUNC> Type of the objective function to be optimized.
- *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public class UnivariateMultiStartOptimizer<FUNC extends UnivariateFunction>
-    implements BaseUnivariateOptimizer<FUNC> {
-    /** Underlying classical optimizer. */
+        implements BaseUnivariateOptimizer<FUNC> {
+    /**
+     * Underlying classical optimizer.
+     */
     private final BaseUnivariateOptimizer<FUNC> optimizer;
-    /** Maximal number of evaluations allowed. */
+    /**
+     * Maximal number of evaluations allowed.
+     */
     private int maxEvaluations;
-    /** Number of evaluations already performed for all starts. */
+    /**
+     * Number of evaluations already performed for all starts.
+     */
     private int totalEvaluations;
-    /** Number of starts to go. */
+    /**
+     * Number of starts to go.
+     */
     private int starts;
-    /** Random generator for multi-start. */
+    /**
+     * Random generator for multi-start.
+     */
     private RandomGenerator generator;
-    /** Found optima. */
+    /**
+     * Found optima.
+     */
     private UnivariatePointValuePair[] optima;
 
     /**
      * Create a multi-start optimizer from a single-start optimizer.
      *
      * @param optimizer Single-start optimizer to wrap.
-     * @param starts Number of starts to perform. If {@code starts == 1},
-     * the {@code optimize} methods will return the same solution as
-     * {@code optimizer} would.
+     * @param starts    Number of starts to perform. If {@code starts == 1},
+     *                  the {@code optimize} methods will return the same solution as
+     *                  {@code optimizer} would.
      * @param generator Random generator to use for restarts.
-     * @throws NullArgumentException if {@code optimizer} or {@code generator}
-     * is {@code null}.
+     * @throws NullArgumentException        if {@code optimizer} or {@code generator}
+     *                                      is {@code null}.
      * @throws NotStrictlyPositiveException if {@code starts < 1}.
      */
     public UnivariateMultiStartOptimizer(final BaseUnivariateOptimizer<FUNC> optimizer,
-                                             final int starts,
-                                             final RandomGenerator generator) {
+                                         final int starts,
+                                         final RandomGenerator generator) {
         if (optimizer == null ||
                 generator == null) {
-                throw new NullArgumentException();
+            throw new NullArgumentException();
         }
         if (starts < 1) {
             throw new NotStrictlyPositiveException(starts);
@@ -93,24 +104,28 @@ public class UnivariateMultiStartOptimizer<FUNC extends UnivariateFunction>
         return optimizer.getConvergenceChecker();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getMaxEvaluations() {
         return maxEvaluations;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int getEvaluations() {
         return totalEvaluations;
     }
 
     /**
      * Get all the optima found during the last call to {@link
-     * #optimize(int,UnivariateFunction,GoalType,double,double) optimize}.
+     * #optimize(int, UnivariateFunction, GoalType, double, double) optimize}.
      * The optimizer stores all the optima found during a set of
-     * restarts. The {@link #optimize(int,UnivariateFunction,GoalType,double,double) optimize}
+     * restarts. The {@link #optimize(int, UnivariateFunction, GoalType, double, double) optimize}
      * method returns the best point only. This method returns all the points
      * found at the end of each starts, including the best one already
-     * returned by the {@link #optimize(int,UnivariateFunction,GoalType,double,double) optimize}
+     * returned by the {@link #optimize(int, UnivariateFunction, GoalType, double, double) optimize}
      * method.
      * <br/>
      * The returned array as one element for each start as specified
@@ -120,15 +135,15 @@ public class UnivariateMultiStartOptimizer<FUNC extends UnivariateFunction>
      * descending order if maximizing), followed by {@code null} elements
      * corresponding to the runs that did not converge. This means all
      * elements will be {@code null} if the {@link
-     * #optimize(int,UnivariateFunction,GoalType,double,double) optimize}
+     * #optimize(int, UnivariateFunction, GoalType, double, double) optimize}
      * method did throw an exception.
      * This also means that if the first element is not {@code null}, it is
      * the best point found across all starts.
      *
      * @return an array containing the optima.
      * @throws MathIllegalStateException if {@link
-     * #optimize(int,UnivariateFunction,GoalType,double,double) optimize}
-     * has not been called.
+     *                                   #optimize(int, UnivariateFunction, GoalType, double, double) optimize}
+     *                                   has not been called.
      */
     public UnivariatePointValuePair[] getOptima() {
         if (optima == null) {
@@ -137,18 +152,22 @@ public class UnivariateMultiStartOptimizer<FUNC extends UnivariateFunction>
         return optima.clone();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public UnivariatePointValuePair optimize(int maxEval, final FUNC f,
-                                                 final GoalType goal,
-                                                 final double min, final double max) {
+                                             final GoalType goal,
+                                             final double min, final double max) {
         return optimize(maxEval, f, goal, min, max, min + 0.5 * (max - min));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public UnivariatePointValuePair optimize(int maxEval, final FUNC f,
-                                                 final GoalType goal,
-                                                 final double min, final double max,
-                                                 final double startValue) {
+                                             final GoalType goal,
+                                             final double min, final double max,
+                                             final double startValue) {
         RuntimeException lastException = null;
         optima = new UnivariatePointValuePair[starts];
         totalEvaluations = 0;
@@ -185,19 +204,19 @@ public class UnivariateMultiStartOptimizer<FUNC extends UnivariateFunction>
      */
     private void sortPairs(final GoalType goal) {
         Arrays.sort(optima, new Comparator<UnivariatePointValuePair>() {
-                /** {@inheritDoc} */
-                public int compare(final UnivariatePointValuePair o1,
-                                   final UnivariatePointValuePair o2) {
-                    if (o1 == null) {
-                        return (o2 == null) ? 0 : 1;
-                    } else if (o2 == null) {
-                        return -1;
-                    }
-                    final double v1 = o1.getValue();
-                    final double v2 = o2.getValue();
-                    return (goal == GoalType.MINIMIZE) ?
-                        Double.compare(v1, v2) : Double.compare(v2, v1);
+            /** {@inheritDoc} */
+            public int compare(final UnivariatePointValuePair o1,
+                               final UnivariatePointValuePair o2) {
+                if (o1 == null) {
+                    return (o2 == null) ? 0 : 1;
+                } else if (o2 == null) {
+                    return -1;
                 }
-            });
+                final double v1 = o1.getValue();
+                final double v2 = o2.getValue();
+                return (goal == GoalType.MINIMIZE) ?
+                        Double.compare(v1, v2) : Double.compare(v2, v1);
+            }
+        });
     }
 }

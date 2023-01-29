@@ -39,22 +39,33 @@ import java.io.Serializable;
 
 public class FieldRotation<T extends RealFieldElement<T>> implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 20130224l;
 
-    /** Scalar coordinate of the quaternion. */
+    /**
+     * Scalar coordinate of the quaternion.
+     */
     private final T q0;
 
-    /** First coordinate of the vectorial part of the quaternion. */
+    /**
+     * First coordinate of the vectorial part of the quaternion.
+     */
     private final T q1;
 
-    /** Second coordinate of the vectorial part of the quaternion. */
+    /**
+     * Second coordinate of the vectorial part of the quaternion.
+     */
     private final T q2;
 
-    /** Third coordinate of the vectorial part of the quaternion. */
+    /**
+     * Third coordinate of the vectorial part of the quaternion.
+     */
     private final T q3;
 
-    /** Build a rotation from the quaternion coordinates.
+    /**
+     * Build a rotation from the quaternion coordinates.
      * <p>A rotation can be built from a <em>normalized</em> quaternion,
      * i.e. a quaternion for which q<sub>0</sub><sup>2</sup> +
      * q<sub>1</sub><sup>2</sup> + q<sub>2</sub><sup>2</sup> +
@@ -64,13 +75,14 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * as the 4<sup>th</sup> component and the vector part as the first three
      * components. This is <em>not</em> our convention. We put the scalar part
      * as the first component.</p>
-     * @param q0 scalar part of the quaternion
-     * @param q1 first coordinate of the vectorial part of the quaternion
-     * @param q2 second coordinate of the vectorial part of the quaternion
-     * @param q3 third coordinate of the vectorial part of the quaternion
+     *
+     * @param q0                 scalar part of the quaternion
+     * @param q1                 first coordinate of the vectorial part of the quaternion
+     * @param q2                 second coordinate of the vectorial part of the quaternion
+     * @param q3                 third coordinate of the vectorial part of the quaternion
      * @param needsNormalization if true, the coordinates are considered
-     * not to be normalized, a normalization preprocessing step is performed
-     * before using them
+     *                           not to be normalized, a normalization preprocessing step is performed
+     *                           before using them
      */
     public FieldRotation(final T q0, final T q1, final T q2, final T q3, final boolean needsNormalization) {
 
@@ -91,7 +103,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Build a rotation from an axis and an angle.
+    /**
+     * Build a rotation from an axis and an angle.
      * <p>We use the convention that angles are oriented according to
      * the effect of the rotation on vectors around the axis. That means
      * that if (i, j, k) is a direct frame and if we first provide +k as
@@ -108,19 +121,21 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * is different from conventions with a frame perspective (fixed vectors
      * viewed from different frames) like the ones used for example in spacecraft
      * attitude community or in the graphics community.</p>
-     * @param axis axis around which to rotate
+     *
+     * @param axis  axis around which to rotate
      * @param angle rotation angle.
-     * @exception MathIllegalArgumentException if the axis norm is zero
+     * @throws MathIllegalArgumentException if the axis norm is zero
      * @deprecated as of 3.6, replaced with {@link
      * #FieldRotation(FieldVector3D, RealFieldElement, RotationConvention)}
      */
     @Deprecated
     public FieldRotation(final FieldVector3D<T> axis, final T angle)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         this(axis, angle, RotationConvention.VECTOR_OPERATOR);
     }
 
-    /** Build a rotation from an axis and an angle.
+    /**
+     * Build a rotation from an axis and an angle.
      * <p>We use the convention that angles are oriented according to
      * the effect of the rotation on vectors around the axis. That means
      * that if (i, j, k) is a direct frame and if we first provide +k as
@@ -137,14 +152,15 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * is different from conventions with a frame perspective (fixed vectors
      * viewed from different frames) like the ones used for example in spacecraft
      * attitude community or in the graphics community.</p>
-     * @param axis axis around which to rotate
-     * @param angle rotation angle.
+     *
+     * @param axis       axis around which to rotate
+     * @param angle      rotation angle.
      * @param convention convention to use for the semantics of the angle
-     * @exception MathIllegalArgumentException if the axis norm is zero
+     * @throws MathIllegalArgumentException if the axis norm is zero
      * @since 3.6
      */
     public FieldRotation(final FieldVector3D<T> axis, final T angle, final RotationConvention convention)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
 
         final T norm = axis.getNorm();
         if (norm.getReal() == 0) {
@@ -161,14 +177,15 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Build a rotation from a 3X3 matrix.
-
+    /**
+     * Build a rotation from a 3X3 matrix.
+     *
      * <p>Rotation matrices are orthogonal matrices, i.e. unit matrices
      * (which are matrices for which m.m<sup>T</sup> = I) with real
      * coefficients. The module of the determinant of unit matrices is
      * 1, among the orthogonal 3X3 matrices, only the ones having a
      * positive determinant (+1) are rotation matrices.</p>
-
+     *
      * <p>When a rotation is defined by a matrix with truncated values
      * (typically when it is extracted from a technical sheet where only
      * four to five significant digits are available), the matrix is not
@@ -178,28 +195,26 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * the Frobenius norm of the correction needed is above the given
      * threshold, then the matrix is considered to be too far from a
      * true rotation matrix and an exception is thrown.<p>
-
-     * @param m rotation matrix
+     *
+     * @param m         rotation matrix
      * @param threshold convergence threshold for the iterative
-     * orthogonality correction (convergence is reached when the
-     * difference between two steps of the Frobenius norm of the
-     * correction is below this threshold)
-
-     * @exception NotARotationMatrixException if the matrix is not a 3X3
-     * matrix, or if it cannot be transformed into an orthogonal matrix
-     * with the given threshold, or if the determinant of the resulting
-     * orthogonal matrix is negative
-
+     *                  orthogonality correction (convergence is reached when the
+     *                  difference between two steps of the Frobenius norm of the
+     *                  correction is below this threshold)
+     * @throws NotARotationMatrixException if the matrix is not a 3X3
+     *                                     matrix, or if it cannot be transformed into an orthogonal matrix
+     *                                     with the given threshold, or if the determinant of the resulting
+     *                                     orthogonal matrix is negative
      */
     public FieldRotation(final T[][] m, final double threshold)
-        throws NotARotationMatrixException {
+            throws NotARotationMatrixException {
 
         // dimension check
         if ((m.length != 3) || (m[0].length != 3) ||
                 (m[1].length != 3) || (m[2].length != 3)) {
             throw new NotARotationMatrixException(
-                                                  LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
-                                                  m.length, m[0].length);
+                    LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
+                    m.length, m[0].length);
         }
 
         // compute a "close" orthogonal matrix
@@ -213,8 +228,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 ort[0][0].multiply(d0).subtract(ort[1][0].multiply(d1)).add(ort[2][0].multiply(d2));
         if (det.getReal() < 0.0) {
             throw new NotARotationMatrixException(
-                                                  LocalizedFormats.CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT,
-                                                  det);
+                    LocalizedFormats.CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT,
+                    det);
         }
 
         final T[] quat = mat2quat(ort);
@@ -225,27 +240,28 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Build the rotation that transforms a pair of vectors into another pair.
-
+    /**
+     * Build the rotation that transforms a pair of vectors into another pair.
+     *
      * <p>Except for possible scale factors, if the instance were applied to
      * the pair (u<sub>1</sub>, u<sub>2</sub>) it will produce the pair
      * (v<sub>1</sub>, v<sub>2</sub>).</p>
-
+     *
      * <p>If the angular separation between u<sub>1</sub> and u<sub>2</sub> is
      * not the same as the angular separation between v<sub>1</sub> and
      * v<sub>2</sub>, then a corrected v'<sub>2</sub> will be used rather than
      * v<sub>2</sub>, the corrected vector will be in the (&pm;v<sub>1</sub>,
      * +v<sub>2</sub>) half-plane.</p>
-
+     *
      * @param u1 first vector of the origin pair
      * @param u2 second vector of the origin pair
      * @param v1 desired image of u1 by the rotation
      * @param v2 desired image of u2 by the rotation
-     * @exception MathArithmeticException if the norm of one of the vectors is zero,
-     * or if one of the pair is degenerated (i.e. the vectors of the pair are collinear)
+     * @throws MathArithmeticException if the norm of one of the vectors is zero,
+     *                                 or if one of the pair is degenerated (i.e. the vectors of the pair are collinear)
      */
     public FieldRotation(FieldVector3D<T> u1, FieldVector3D<T> u2, FieldVector3D<T> v1, FieldVector3D<T> v2)
-        throws MathArithmeticException {
+            throws MathArithmeticException {
 
         // build orthonormalized base from u1, u2
         // this fails when vectors are null or collinear, which is forbidden to define a rotation
@@ -279,18 +295,19 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Build one of the rotations that transform one vector into another one.
-
+    /**
+     * Build one of the rotations that transform one vector into another one.
+     *
      * <p>Except for a possible scale factor, if the instance were
      * applied to the vector u it will produce the vector v. There is an
      * infinite number of such rotations, this constructor choose the
      * one with the smallest associated angle (i.e. the one whose axis
      * is orthogonal to the (u, v) plane). If u and v are collinear, an
      * arbitrary rotation axis is chosen.</p>
-
+     *
      * @param u origin vector
      * @param v desired image of u by the rotation
-     * @exception MathArithmeticException if the norm of one of the vectors is zero
+     * @throws MathArithmeticException if the norm of one of the vectors is zero
      */
     public FieldRotation(final FieldVector3D<T> u, final FieldVector3D<T> v) throws MathArithmeticException {
 
@@ -322,8 +339,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Build a rotation from three Cardan or Euler elementary rotations.
-
+    /**
+     * Build a rotation from three Cardan or Euler elementary rotations.
+     *
      * <p>Cardan rotations are three successive rotations around the
      * canonical axes X, Y and Z, each axis being used once. There are
      * 6 such sets of rotations (XYZ, XZY, YXZ, YZX, ZXY and ZYX). Euler
@@ -335,8 +353,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * for what really are Cardan angles (this confusion is especially
      * widespread in the aerospace business where Roll, Pitch and Yaw angles
      * are often wrongly tagged as Euler angles).</p>
-
-     * @param order order of rotations to use
+     *
+     * @param order  order of rotations to use
      * @param alpha1 angle of the first elementary rotation
      * @param alpha2 angle of the second elementary rotation
      * @param alpha3 angle of the third elementary rotation
@@ -349,8 +367,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         this(order, RotationConvention.VECTOR_OPERATOR, alpha1, alpha2, alpha3);
     }
 
-    /** Build a rotation from three Cardan or Euler elementary rotations.
-
+    /**
+     * Build a rotation from three Cardan or Euler elementary rotations.
+     *
      * <p>Cardan rotations are three successive rotations around the
      * canonical axes X, Y and Z, each axis being used once. There are
      * 6 such sets of rotations (XYZ, XZY, YXZ, YZX, ZXY and ZYX). Euler
@@ -362,13 +381,13 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * for what really are Cardan angles (this confusion is especially
      * widespread in the aerospace business where Roll, Pitch and Yaw angles
      * are often wrongly tagged as Euler angles).</p>
-
-     * @param order order of rotations to compose, from left to right
-     * (i.e. we will use {@code r1.compose(r2.compose(r3, convention), convention)})
+     *
+     * @param order      order of rotations to compose, from left to right
+     *                   (i.e. we will use {@code r1.compose(r2.compose(r3, convention), convention)})
      * @param convention convention to use for the semantics of the angle
-     * @param alpha1 angle of the first elementary rotation
-     * @param alpha2 angle of the second elementary rotation
-     * @param alpha3 angle of the third elementary rotation
+     * @param alpha1     angle of the first elementary rotation
+     * @param alpha2     angle of the second elementary rotation
+     * @param alpha3     angle of the third elementary rotation
      * @since 3.6
      */
     public FieldRotation(final RotationOrder order, final RotationConvention convention,
@@ -384,7 +403,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         q3 = composed.q3;
     }
 
-    /** Convert an orthogonal rotation matrix to a quaternion.
+    /**
+     * Convert an orthogonal rotation matrix to a quaternion.
+     *
      * @param ort orthogonal rotation matrix
      * @return quaternion corresponding to the matrix
      */
@@ -445,10 +466,12 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Revert a rotation.
+    /**
+     * Revert a rotation.
      * Build a rotation which reverse the effect of another
      * rotation. This means that if r(u) = v, then r.revert(v) = u. The
      * instance is not changed.
+     *
      * @return a new rotation whose effect is the reverse of the effect
      * of the instance
      */
@@ -456,35 +479,45 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return new FieldRotation<T>(q0.negate(), q1, q2, q3, false);
     }
 
-    /** Get the scalar coordinate of the quaternion.
+    /**
+     * Get the scalar coordinate of the quaternion.
+     *
      * @return scalar coordinate of the quaternion
      */
     public T getQ0() {
         return q0;
     }
 
-    /** Get the first coordinate of the vectorial part of the quaternion.
+    /**
+     * Get the first coordinate of the vectorial part of the quaternion.
+     *
      * @return first coordinate of the vectorial part of the quaternion
      */
     public T getQ1() {
         return q1;
     }
 
-    /** Get the second coordinate of the vectorial part of the quaternion.
+    /**
+     * Get the second coordinate of the vectorial part of the quaternion.
+     *
      * @return second coordinate of the vectorial part of the quaternion
      */
     public T getQ2() {
         return q2;
     }
 
-    /** Get the third coordinate of the vectorial part of the quaternion.
+    /**
+     * Get the third coordinate of the vectorial part of the quaternion.
+     *
      * @return third coordinate of the vectorial part of the quaternion
      */
     public T getQ3() {
         return q3;
     }
 
-    /** Get the normalized axis of the rotation.
+    /**
+     * Get the normalized axis of the rotation.
+     *
      * @return normalized axis of the rotation
      * @see #FieldRotation(FieldVector3D, RealFieldElement)
      * @deprecated as of 3.6, replaced with {@link #getAxis(RotationConvention)}
@@ -494,12 +527,14 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return getAxis(RotationConvention.VECTOR_OPERATOR);
     }
 
-    /** Get the normalized axis of the rotation.
+    /**
+     * Get the normalized axis of the rotation.
      * <p>
      * Note that as {@link #getAngle()} always returns an angle
      * between 0 and &pi;, changing the convention changes the
      * direction of the axis, not the sign of the angle.
      * </p>
+     *
      * @param convention convention to use for the semantics of the angle
      * @return normalized axis of the rotation
      * @see #FieldRotation(FieldVector3D, RealFieldElement)
@@ -509,9 +544,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T squaredSine = q1.multiply(q1).add(q2.multiply(q2)).add(q3.multiply(q3));
         if (squaredSine.getReal() == 0) {
             final Field<T> field = squaredSine.getField();
-            return new FieldVector3D<T>(convention == RotationConvention.VECTOR_OPERATOR ? field.getOne(): field.getOne().negate(),
-                                        field.getZero(),
-                                        field.getZero());
+            return new FieldVector3D<T>(convention == RotationConvention.VECTOR_OPERATOR ? field.getOne() : field.getOne().negate(),
+                    field.getZero(),
+                    field.getZero());
         } else {
             final double sgn = convention == RotationConvention.VECTOR_OPERATOR ? +1 : -1;
             if (q0.getReal() < 0) {
@@ -523,7 +558,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         }
     }
 
-    /** Get the angle of the rotation.
+    /**
+     * Get the angle of the rotation.
+     *
      * @return angle of the rotation (between 0 and &pi;)
      * @see #FieldRotation(FieldVector3D, RealFieldElement)
      */
@@ -536,8 +573,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return q0.acos().multiply(2);
     }
 
-    /** Get the Cardan or Euler angles corresponding to the instance.
-
+    /**
+     * Get the Cardan or Euler angles corresponding to the instance.
+     *
      * <p>The equations show that each rotation can be defined by two
      * different values of the Cardan or Euler angles set. For example
      * if Cardan angles are used, the rotation defined by the angles
@@ -552,7 +590,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      *   <li>for Euler angles, the chosen set is the one for which the
      *   second angle is between 0 and &pi; (i.e its sine is positive).</li>
      * </ul>
-
+     *
      * <p>Cardan and Euler angle have a very disappointing drawback: all
      * of them have singularities. This means that if the instance is
      * too close to the singularities corresponding to the given
@@ -565,21 +603,22 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * -&pi;/2 or +&pi;/2, for Euler angle singularities occur when the
      * second angle is close to 0 or &pi;, this implies that the identity
      * rotation is always singular for Euler angles!</p>
-
+     *
      * @param order rotation order to use
      * @return an array of three angles, in the order specified by the set
-     * @exception CardanEulerSingularityException if the rotation is
-     * singular with respect to the angles set specified
+     * @throws CardanEulerSingularityException if the rotation is
+     *                                         singular with respect to the angles set specified
      * @deprecated as of 3.6, replaced with {@link #getAngles(RotationOrder, RotationConvention)}
      */
     @Deprecated
     public T[] getAngles(final RotationOrder order)
-        throws CardanEulerSingularityException {
+            throws CardanEulerSingularityException {
         return getAngles(order, RotationConvention.VECTOR_OPERATOR);
     }
 
-    /** Get the Cardan or Euler angles corresponding to the instance.
-
+    /**
+     * Get the Cardan or Euler angles corresponding to the instance.
+     *
      * <p>The equations show that each rotation can be defined by two
      * different values of the Cardan or Euler angles set. For example
      * if Cardan angles are used, the rotation defined by the angles
@@ -594,7 +633,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      *   <li>for Euler angles, the chosen set is the one for which the
      *   second angle is between 0 and &pi; (i.e its sine is positive).</li>
      * </ul>
-
+     *
      * <p>Cardan and Euler angle have a very disappointing drawback: all
      * of them have singularities. This means that if the instance is
      * too close to the singularities corresponding to the given
@@ -607,16 +646,16 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * -&pi;/2 or +&pi;/2, for Euler angle singularities occur when the
      * second angle is close to 0 or &pi;, this implies that the identity
      * rotation is always singular for Euler angles!</p>
-
-     * @param order rotation order to use
+     *
+     * @param order      rotation order to use
      * @param convention convention to use for the semantics of the angle
      * @return an array of three angles, in the order specified by the set
-     * @exception CardanEulerSingularityException if the rotation is
-     * singular with respect to the angles set specified
+     * @throws CardanEulerSingularityException if the rotation is
+     *                                         singular with respect to the angles set specified
      * @since 3.6
      */
     public T[] getAngles(final RotationOrder order, RotationConvention convention)
-        throws CardanEulerSingularityException {
+            throws CardanEulerSingularityException {
 
         if (convention == RotationConvention.VECTOR_OPERATOR) {
             if (order == RotationOrder.XYZ) {
@@ -628,12 +667,12 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                if  ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
+                if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v1.getY().negate().atan2(v1.getZ()),
-                                  v2.getZ().asin(),
-                                  v2.getY().negate().atan2(v2.getX()));
+                        v2.getZ().asin(),
+                        v2.getY().negate().atan2(v2.getX()));
 
             } else if (order == RotationOrder.XZY) {
 
@@ -648,8 +687,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v1.getZ().atan2(v1.getY()),
-                                  v2.getY().asin().negate(),
-                                  v2.getZ().atan2(v2.getX()));
+                        v2.getY().asin().negate(),
+                        v2.getZ().atan2(v2.getX()));
 
             } else if (order == RotationOrder.YXZ) {
 
@@ -664,8 +703,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v1.getX().atan2(v1.getZ()),
-                                  v2.getZ().asin().negate(),
-                                  v2.getX().atan2(v2.getY()));
+                        v2.getZ().asin().negate(),
+                        v2.getX().atan2(v2.getY()));
 
             } else if (order == RotationOrder.YZX) {
 
@@ -680,8 +719,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v1.getZ().negate().atan2(v1.getX()),
-                                  v2.getX().asin(),
-                                  v2.getZ().negate().atan2(v2.getY()));
+                        v2.getX().asin(),
+                        v2.getZ().negate().atan2(v2.getY()));
 
             } else if (order == RotationOrder.ZXY) {
 
@@ -696,8 +735,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v1.getX().negate().atan2(v1.getY()),
-                                  v2.getY().asin(),
-                                  v2.getX().negate().atan2(v2.getZ()));
+                        v2.getY().asin(),
+                        v2.getX().negate().atan2(v2.getZ()));
 
             } else if (order == RotationOrder.ZYX) {
 
@@ -712,8 +751,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v1.getY().atan2(v1.getX()),
-                                  v2.getX().asin().negate(),
-                                  v2.getY().atan2(v2.getZ()));
+                        v2.getX().asin().negate(),
+                        v2.getY().atan2(v2.getZ()));
 
             } else if (order == RotationOrder.XYX) {
 
@@ -728,8 +767,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v1.getY().atan2(v1.getZ().negate()),
-                                  v2.getX().acos(),
-                                  v2.getY().atan2(v2.getZ()));
+                        v2.getX().acos(),
+                        v2.getY().atan2(v2.getZ()));
 
             } else if (order == RotationOrder.XZX) {
 
@@ -744,8 +783,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v1.getZ().atan2(v1.getY()),
-                                  v2.getX().acos(),
-                                  v2.getZ().atan2(v2.getY().negate()));
+                        v2.getX().acos(),
+                        v2.getZ().atan2(v2.getY().negate()));
 
             } else if (order == RotationOrder.YXY) {
 
@@ -760,8 +799,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v1.getX().atan2(v1.getZ()),
-                                  v2.getY().acos(),
-                                  v2.getX().atan2(v2.getZ().negate()));
+                        v2.getY().acos(),
+                        v2.getX().atan2(v2.getZ().negate()));
 
             } else if (order == RotationOrder.YZY) {
 
@@ -776,8 +815,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v1.getZ().atan2(v1.getX().negate()),
-                                  v2.getY().acos(),
-                                  v2.getZ().atan2(v2.getX()));
+                        v2.getY().acos(),
+                        v2.getZ().atan2(v2.getX()));
 
             } else if (order == RotationOrder.ZXZ) {
 
@@ -792,8 +831,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v1.getX().atan2(v1.getY().negate()),
-                                  v2.getZ().acos(),
-                                  v2.getX().atan2(v2.getY()));
+                        v2.getZ().acos(),
+                        v2.getX().atan2(v2.getY()));
 
             } else { // last possibility is ZYZ
 
@@ -808,8 +847,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v1.getY().atan2(v1.getX()),
-                                  v2.getZ().acos(),
-                                  v2.getY().atan2(v2.getX().negate()));
+                        v2.getZ().acos(),
+                        v2.getY().atan2(v2.getX().negate()));
 
             }
         } else {
@@ -826,8 +865,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v2.getY().negate().atan2(v2.getZ()),
-                                  v2.getX().asin(),
-                                  v1.getY().negate().atan2(v1.getX()));
+                        v2.getX().asin(),
+                        v1.getY().negate().atan2(v1.getX()));
 
             } else if (order == RotationOrder.XZY) {
 
@@ -842,8 +881,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v2.getZ().atan2(v2.getY()),
-                                  v2.getX().asin().negate(),
-                                  v1.getZ().atan2(v1.getX()));
+                        v2.getX().asin().negate(),
+                        v1.getZ().atan2(v1.getX()));
 
             } else if (order == RotationOrder.YXZ) {
 
@@ -858,8 +897,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v2.getX().atan2(v2.getZ()),
-                                  v2.getY().asin().negate(),
-                                  v1.getX().atan2(v1.getY()));
+                        v2.getY().asin().negate(),
+                        v1.getX().atan2(v1.getY()));
 
             } else if (order == RotationOrder.YZX) {
 
@@ -874,8 +913,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v2.getZ().negate().atan2(v2.getX()),
-                                  v2.getY().asin(),
-                                  v1.getZ().negate().atan2(v1.getY()));
+                        v2.getY().asin(),
+                        v1.getZ().negate().atan2(v1.getY()));
 
             } else if (order == RotationOrder.ZXY) {
 
@@ -890,8 +929,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v2.getX().negate().atan2(v2.getY()),
-                                  v2.getZ().asin(),
-                                  v1.getX().negate().atan2(v1.getZ()));
+                        v2.getZ().asin(),
+                        v1.getX().negate().atan2(v1.getZ()));
 
             } else if (order == RotationOrder.ZYX) {
 
@@ -902,12 +941,12 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                if  ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
+                if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
                     throw new CardanEulerSingularityException(true);
                 }
                 return buildArray(v2.getY().atan2(v2.getX()),
-                                  v2.getZ().asin().negate(),
-                                  v1.getY().atan2(v1.getZ()));
+                        v2.getZ().asin().negate(),
+                        v1.getY().atan2(v1.getZ()));
 
             } else if (order == RotationOrder.XYX) {
 
@@ -922,8 +961,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v2.getY().atan2(v2.getZ().negate()),
-                                  v2.getX().acos(),
-                                  v1.getY().atan2(v1.getZ()));
+                        v2.getX().acos(),
+                        v1.getY().atan2(v1.getZ()));
 
             } else if (order == RotationOrder.XZX) {
 
@@ -938,8 +977,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v2.getZ().atan2(v2.getY()),
-                                  v2.getX().acos(),
-                                  v1.getZ().atan2(v1.getY().negate()));
+                        v2.getX().acos(),
+                        v1.getZ().atan2(v1.getY().negate()));
 
             } else if (order == RotationOrder.YXY) {
 
@@ -954,8 +993,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v2.getX().atan2(v2.getZ()),
-                                  v2.getY().acos(),
-                                  v1.getX().atan2(v1.getZ().negate()));
+                        v2.getY().acos(),
+                        v1.getX().atan2(v1.getZ().negate()));
 
             } else if (order == RotationOrder.YZY) {
 
@@ -970,8 +1009,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v2.getZ().atan2(v2.getX().negate()),
-                                  v2.getY().acos(),
-                                  v1.getZ().atan2(v1.getX()));
+                        v2.getY().acos(),
+                        v1.getZ().atan2(v1.getX()));
 
             } else if (order == RotationOrder.ZXZ) {
 
@@ -986,8 +1025,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v2.getX().atan2(v2.getY().negate()),
-                                  v2.getZ().acos(),
-                                  v1.getX().atan2(v1.getY()));
+                        v2.getZ().acos(),
+                        v1.getX().atan2(v1.getY()));
 
             } else { // last possibility is ZYZ
 
@@ -1002,15 +1041,17 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                     throw new CardanEulerSingularityException(false);
                 }
                 return buildArray(v2.getY().atan2(v2.getX()),
-                                  v2.getZ().acos(),
-                                  v1.getY().atan2(v1.getX().negate()));
+                        v2.getZ().acos(),
+                        v1.getY().atan2(v1.getX().negate()));
 
             }
         }
 
     }
 
-    /** Create a dimension 3 array.
+    /**
+     * Create a dimension 3 array.
+     *
      * @param a0 first array element
      * @param a1 second array element
      * @param a2 third array element
@@ -1024,7 +1065,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return array;
     }
 
-    /** Create a constant vector.
+    /**
+     * Create a constant vector.
+     *
      * @param x abscissa
      * @param y ordinate
      * @param z height
@@ -1035,50 +1078,56 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return new FieldVector3D<T>(zero.add(x), zero.add(y), zero.add(z));
     }
 
-    /** Get the 3X3 matrix corresponding to the instance
+    /**
+     * Get the 3X3 matrix corresponding to the instance
+     *
      * @return the matrix corresponding to the instance
      */
     public T[][] getMatrix() {
 
         // products
-        final T q0q0  = q0.multiply(q0);
-        final T q0q1  = q0.multiply(q1);
-        final T q0q2  = q0.multiply(q2);
-        final T q0q3  = q0.multiply(q3);
-        final T q1q1  = q1.multiply(q1);
-        final T q1q2  = q1.multiply(q2);
-        final T q1q3  = q1.multiply(q3);
-        final T q2q2  = q2.multiply(q2);
-        final T q2q3  = q2.multiply(q3);
-        final T q3q3  = q3.multiply(q3);
+        final T q0q0 = q0.multiply(q0);
+        final T q0q1 = q0.multiply(q1);
+        final T q0q2 = q0.multiply(q2);
+        final T q0q3 = q0.multiply(q3);
+        final T q1q1 = q1.multiply(q1);
+        final T q1q2 = q1.multiply(q2);
+        final T q1q3 = q1.multiply(q3);
+        final T q2q2 = q2.multiply(q2);
+        final T q2q3 = q2.multiply(q3);
+        final T q3q3 = q3.multiply(q3);
 
         // create the matrix
         final T[][] m = MathArrays.buildArray(q0.getField(), 3, 3);
 
-        m [0][0] = q0q0.add(q1q1).multiply(2).subtract(1);
-        m [1][0] = q1q2.subtract(q0q3).multiply(2);
-        m [2][0] = q1q3.add(q0q2).multiply(2);
+        m[0][0] = q0q0.add(q1q1).multiply(2).subtract(1);
+        m[1][0] = q1q2.subtract(q0q3).multiply(2);
+        m[2][0] = q1q3.add(q0q2).multiply(2);
 
-        m [0][1] = q1q2.add(q0q3).multiply(2);
-        m [1][1] = q0q0.add(q2q2).multiply(2).subtract(1);
-        m [2][1] = q2q3.subtract(q0q1).multiply(2);
+        m[0][1] = q1q2.add(q0q3).multiply(2);
+        m[1][1] = q0q0.add(q2q2).multiply(2).subtract(1);
+        m[2][1] = q2q3.subtract(q0q1).multiply(2);
 
-        m [0][2] = q1q3.subtract(q0q2).multiply(2);
-        m [1][2] = q2q3.add(q0q1).multiply(2);
-        m [2][2] = q0q0.add(q3q3).multiply(2).subtract(1);
+        m[0][2] = q1q3.subtract(q0q2).multiply(2);
+        m[1][2] = q2q3.add(q0q1).multiply(2);
+        m[2][2] = q0q0.add(q3q3).multiply(2).subtract(1);
 
         return m;
 
     }
 
-    /** Convert to a constant vector without derivatives.
+    /**
+     * Convert to a constant vector without derivatives.
+     *
      * @return a constant vector
      */
     public Rotation toRotation() {
         return new Rotation(q0.getReal(), q1.getReal(), q2.getReal(), q3.getReal(), false);
     }
 
-    /** Apply the rotation to a vector.
+    /**
+     * Apply the rotation to a vector.
+     *
      * @param u vector to apply the rotation to
      * @return a new vector which is the image of u by the rotation
      */
@@ -1091,12 +1140,14 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T s = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
 
         return new FieldVector3D<T>(q0.multiply(x.multiply(q0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    q0.multiply(y.multiply(q0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    q0.multiply(z.multiply(q0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+                q0.multiply(y.multiply(q0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
+                q0.multiply(z.multiply(q0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
 
     }
 
-    /** Apply the rotation to a vector.
+    /**
+     * Apply the rotation to a vector.
+     *
      * @param u vector to apply the rotation to
      * @return a new vector which is the image of u by the rotation
      */
@@ -1109,15 +1160,17 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T s = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
 
         return new FieldVector3D<T>(q0.multiply(q0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    q0.multiply(q0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    q0.multiply(q0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+                q0.multiply(q0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
+                q0.multiply(q0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
 
     }
 
-    /** Apply the rotation to a vector stored in an array.
-     * @param in an array with three items which stores vector to rotate
+    /**
+     * Apply the rotation to a vector stored in an array.
+     *
+     * @param in  an array with three items which stores vector to rotate
      * @param out an array with three items to put result to (it can be the same
-     * array as in)
+     *            array as in)
      */
     public void applyTo(final T[] in, final T[] out) {
 
@@ -1133,8 +1186,10 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Apply the rotation to a vector stored in an array.
-     * @param in an array with three items which stores vector to rotate
+    /**
+     * Apply the rotation to a vector stored in an array.
+     *
+     * @param in  an array with three items which stores vector to rotate
      * @param out an array with three items to put result to
      */
     public void applyTo(final double[] in, final T[] out) {
@@ -1151,9 +1206,11 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Apply a rotation to a vector.
-     * @param r rotation to apply
-     * @param u vector to apply the rotation to
+    /**
+     * Apply a rotation to a vector.
+     *
+     * @param r   rotation to apply
+     * @param u   vector to apply the rotation to
      * @param <T> the type of the field elements
      * @return a new vector which is the image of u by the rotation
      */
@@ -1166,12 +1223,14 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T s = x.multiply(r.getQ1()).add(y.multiply(r.getQ2())).add(z.multiply(r.getQ3()));
 
         return new FieldVector3D<T>(x.multiply(r.getQ0()).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(r.getQ0()).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
-                                    y.multiply(r.getQ0()).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(r.getQ0()).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
-                                    z.multiply(r.getQ0()).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(r.getQ0()).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
+                y.multiply(r.getQ0()).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(r.getQ0()).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
+                z.multiply(r.getQ0()).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(r.getQ0()).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
 
     }
 
-    /** Apply the inverse of the rotation to a vector.
+    /**
+     * Apply the inverse of the rotation to a vector.
+     *
      * @param u vector to apply the inverse of the rotation to
      * @return a new vector which such that u is its image by the rotation
      */
@@ -1181,16 +1240,18 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T y = u.getY();
         final T z = u.getZ();
 
-        final T s  = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
+        final T s = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
         final T m0 = q0.negate();
 
         return new FieldVector3D<T>(m0.multiply(x.multiply(m0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    m0.multiply(y.multiply(m0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    m0.multiply(z.multiply(m0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+                m0.multiply(y.multiply(m0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
+                m0.multiply(z.multiply(m0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
 
     }
 
-    /** Apply the inverse of the rotation to a vector.
+    /**
+     * Apply the inverse of the rotation to a vector.
+     *
      * @param u vector to apply the inverse of the rotation to
      * @return a new vector which such that u is its image by the rotation
      */
@@ -1200,19 +1261,21 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final double y = u.getY();
         final double z = u.getZ();
 
-        final T s  = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
+        final T s = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
         final T m0 = q0.negate();
 
         return new FieldVector3D<T>(m0.multiply(m0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    m0.multiply(m0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    m0.multiply(m0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+                m0.multiply(m0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
+                m0.multiply(m0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
 
     }
 
-    /** Apply the inverse of the rotation to a vector stored in an array.
-     * @param in an array with three items which stores vector to rotate
+    /**
+     * Apply the inverse of the rotation to a vector stored in an array.
+     *
+     * @param in  an array with three items which stores vector to rotate
      * @param out an array with three items to put result to (it can be the same
-     * array as in)
+     *            array as in)
      */
     public void applyInverseTo(final T[] in, final T[] out) {
 
@@ -1229,8 +1292,10 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Apply the inverse of the rotation to a vector stored in an array.
-     * @param in an array with three items which stores vector to rotate
+    /**
+     * Apply the inverse of the rotation to a vector stored in an array.
+     *
+     * @param in  an array with three items which stores vector to rotate
      * @param out an array with three items to put result to
      */
     public void applyInverseTo(final double[] in, final T[] out) {
@@ -1248,9 +1313,11 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
-    /** Apply the inverse of a rotation to a vector.
-     * @param r rotation to apply
-     * @param u vector to apply the inverse of the rotation to
+    /**
+     * Apply the inverse of a rotation to a vector.
+     *
+     * @param r   rotation to apply
+     * @param u   vector to apply the inverse of the rotation to
      * @param <T> the type of the field elements
      * @return a new vector which such that u is its image by the rotation
      */
@@ -1260,21 +1327,23 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T y = u.getY();
         final T z = u.getZ();
 
-        final T s  = x.multiply(r.getQ1()).add(y.multiply(r.getQ2())).add(z.multiply(r.getQ3()));
+        final T s = x.multiply(r.getQ1()).add(y.multiply(r.getQ2())).add(z.multiply(r.getQ3()));
         final double m0 = -r.getQ0();
 
         return new FieldVector3D<T>(x.multiply(m0).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(m0).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
-                                    y.multiply(m0).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(m0).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
-                                    z.multiply(m0).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(m0).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
+                y.multiply(m0).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(m0).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
+                z.multiply(m0).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(m0).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
 
     }
 
-    /** Apply the instance to another rotation.
+    /**
+     * Apply the instance to another rotation.
      * <p>
      * Calling this method is equivalent to call
      * {@link #compose(FieldRotation, RotationConvention)
      * compose(r, RotationConvention.VECTOR_OPERATOR)}.
      * </p>
+     *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the instance
      */
@@ -1282,7 +1351,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return compose(r, RotationConvention.VECTOR_OPERATOR);
     }
 
-    /** Compose the instance with another rotation.
+    /**
+     * Compose the instance with another rotation.
      * <p>
      * If the semantics of the rotations composition corresponds to a
      * {@link RotationConvention#VECTOR_OPERATOR vector operator} convention,
@@ -1302,34 +1372,39 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * and  {@code comp} as above, {@code comp} could also be computed as
      * {@code comp = r1.compose(r2, RotationConvention.FRAME_TRANSFORM)}.
      * </p>
-     * @param r rotation to apply the rotation to
+     *
+     * @param r          rotation to apply the rotation to
      * @param convention convention to use for the semantics of the angle
      * @return a new rotation which is the composition of r by the instance
      */
     public FieldRotation<T> compose(final FieldRotation<T> r, final RotationConvention convention) {
         return convention == RotationConvention.VECTOR_OPERATOR ?
-                             composeInternal(r) : r.composeInternal(this);
+                composeInternal(r) : r.composeInternal(this);
     }
 
-    /** Compose the instance with another rotation using vector operator convention.
+    /**
+     * Compose the instance with another rotation using vector operator convention.
+     *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the instance
      * using vector operator convention
      */
     private FieldRotation<T> composeInternal(final FieldRotation<T> r) {
         return new FieldRotation<T>(r.q0.multiply(q0).subtract(r.q1.multiply(q1).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))),
-                                    r.q1.multiply(q0).add(r.q0.multiply(q1)).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))),
-                                    r.q2.multiply(q0).add(r.q0.multiply(q2)).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))),
-                                    r.q3.multiply(q0).add(r.q0.multiply(q3)).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))),
-                                    false);
+                r.q1.multiply(q0).add(r.q0.multiply(q1)).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))),
+                r.q2.multiply(q0).add(r.q0.multiply(q2)).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))),
+                r.q3.multiply(q0).add(r.q0.multiply(q3)).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))),
+                false);
     }
 
-    /** Apply the instance to another rotation.
+    /**
+     * Apply the instance to another rotation.
      * <p>
      * Calling this method is equivalent to call
      * {@link #compose(Rotation, RotationConvention)
      * compose(r, RotationConvention.VECTOR_OPERATOR)}.
      * </p>
+     *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the instance
      */
@@ -1337,7 +1412,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return compose(r, RotationConvention.VECTOR_OPERATOR);
     }
 
-    /** Compose the instance with another rotation.
+    /**
+     * Compose the instance with another rotation.
      * <p>
      * If the semantics of the rotations composition corresponds to a
      * {@link RotationConvention#VECTOR_OPERATOR vector operator} convention,
@@ -1357,53 +1433,60 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * and  {@code comp} as above, {@code comp} could also be computed as
      * {@code comp = r1.compose(r2, RotationConvention.FRAME_TRANSFORM)}.
      * </p>
-     * @param r rotation to apply the rotation to
+     *
+     * @param r          rotation to apply the rotation to
      * @param convention convention to use for the semantics of the angle
      * @return a new rotation which is the composition of r by the instance
      */
     public FieldRotation<T> compose(final Rotation r, final RotationConvention convention) {
         return convention == RotationConvention.VECTOR_OPERATOR ?
-                             composeInternal(r) : applyTo(r, this);
+                composeInternal(r) : applyTo(r, this);
     }
 
-    /** Compose the instance with another rotation using vector operator convention.
+    /**
+     * Compose the instance with another rotation using vector operator convention.
+     *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the instance
      * using vector operator convention
      */
     private FieldRotation<T> composeInternal(final Rotation r) {
         return new FieldRotation<T>(q0.multiply(r.getQ0()).subtract(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))),
-                        q0.multiply(r.getQ1()).add(q1.multiply(r.getQ0())).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))),
-                        q0.multiply(r.getQ2()).add(q2.multiply(r.getQ0())).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))),
-                        q0.multiply(r.getQ3()).add(q3.multiply(r.getQ0())).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))),
-                        false);
+                q0.multiply(r.getQ1()).add(q1.multiply(r.getQ0())).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))),
+                q0.multiply(r.getQ2()).add(q2.multiply(r.getQ0())).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))),
+                q0.multiply(r.getQ3()).add(q3.multiply(r.getQ0())).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))),
+                false);
     }
 
-    /** Apply a rotation to another rotation.
+    /**
+     * Apply a rotation to another rotation.
      * Applying a rotation to another rotation is computing the composition
      * in an order compliant with the following rule : let u be any
      * vector and v its image by rInner (i.e. rInner.applyTo(u) = v), let w be the image
      * of v by rOuter (i.e. rOuter.applyTo(v) = w), then w = comp.applyTo(u),
      * where comp = applyTo(rOuter, rInner).
-     * @param r1 rotation to apply
+     *
+     * @param r1     rotation to apply
      * @param rInner rotation to apply the rotation to
-     * @param <T> the type of the field elements
+     * @param <T>    the type of the field elements
      * @return a new rotation which is the composition of r by the instance
      */
     public static <T extends RealFieldElement<T>> FieldRotation<T> applyTo(final Rotation r1, final FieldRotation<T> rInner) {
         return new FieldRotation<T>(rInner.q0.multiply(r1.getQ0()).subtract(rInner.q1.multiply(r1.getQ1()).add(rInner.q2.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ3()))),
-                                    rInner.q1.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ1())).add(rInner.q2.multiply(r1.getQ3()).subtract(rInner.q3.multiply(r1.getQ2()))),
-                                    rInner.q2.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ1()).subtract(rInner.q1.multiply(r1.getQ3()))),
-                                    rInner.q3.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ3())).add(rInner.q1.multiply(r1.getQ2()).subtract(rInner.q2.multiply(r1.getQ1()))),
-                                    false);
+                rInner.q1.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ1())).add(rInner.q2.multiply(r1.getQ3()).subtract(rInner.q3.multiply(r1.getQ2()))),
+                rInner.q2.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ1()).subtract(rInner.q1.multiply(r1.getQ3()))),
+                rInner.q3.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ3())).add(rInner.q1.multiply(r1.getQ2()).subtract(rInner.q2.multiply(r1.getQ1()))),
+                false);
     }
 
-    /** Apply the inverse of the instance to another rotation.
+    /**
+     * Apply the inverse of the instance to another rotation.
      * <p>
      * Calling this method is equivalent to call
      * {@link #composeInverse(FieldRotation, RotationConvention)
      * composeInverse(r, RotationConvention.VECTOR_OPERATOR)}.
      * </p>
+     *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the inverse
      * of the instance
@@ -1412,7 +1495,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return composeInverse(r, RotationConvention.VECTOR_OPERATOR);
     }
 
-    /** Compose the inverse of the instance with another rotation.
+    /**
+     * Compose the inverse of the instance with another rotation.
      * <p>
      * If the semantics of the rotations composition corresponds to a
      * {@link RotationConvention#VECTOR_OPERATOR vector operator} convention,
@@ -1433,36 +1517,41 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * and  {@code comp} as above, {@code comp} could also be computed as
      * {@code comp = r1.revert().composeInverse(r2.revert(), RotationConvention.FRAME_TRANSFORM)}.
      * </p>
-     * @param r rotation to apply the rotation to
+     *
+     * @param r          rotation to apply the rotation to
      * @param convention convention to use for the semantics of the angle
      * @return a new rotation which is the composition of r by the inverse
      * of the instance
      */
     public FieldRotation<T> composeInverse(final FieldRotation<T> r, final RotationConvention convention) {
         return convention == RotationConvention.VECTOR_OPERATOR ?
-                             composeInverseInternal(r) : r.composeInternal(revert());
+                composeInverseInternal(r) : r.composeInternal(revert());
     }
 
-    /** Compose the inverse of the instance with another rotation
+    /**
+     * Compose the inverse of the instance with another rotation
      * using vector operator convention.
+     *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the inverse
      * of the instance using vector operator convention
      */
     private FieldRotation<T> composeInverseInternal(FieldRotation<T> r) {
         return new FieldRotation<T>(r.q0.multiply(q0).add(r.q1.multiply(q1).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))).negate(),
-                                    r.q0.multiply(q1).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))).subtract(r.q1.multiply(q0)),
-                                    r.q0.multiply(q2).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))).subtract(r.q2.multiply(q0)),
-                                    r.q0.multiply(q3).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))).subtract(r.q3.multiply(q0)),
-                                    false);
+                r.q0.multiply(q1).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))).subtract(r.q1.multiply(q0)),
+                r.q0.multiply(q2).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))).subtract(r.q2.multiply(q0)),
+                r.q0.multiply(q3).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))).subtract(r.q3.multiply(q0)),
+                false);
     }
 
-    /** Apply the inverse of the instance to another rotation.
+    /**
+     * Apply the inverse of the instance to another rotation.
      * <p>
      * Calling this method is equivalent to call
      * {@link #composeInverse(Rotation, RotationConvention)
      * composeInverse(r, RotationConvention.VECTOR_OPERATOR)}.
      * </p>
+     *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the inverse
      * of the instance
@@ -1471,7 +1560,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         return composeInverse(r, RotationConvention.VECTOR_OPERATOR);
     }
 
-    /** Compose the inverse of the instance with another rotation.
+    /**
+     * Compose the inverse of the instance with another rotation.
      * <p>
      * If the semantics of the rotations composition corresponds to a
      * {@link RotationConvention#VECTOR_OPERATOR vector operator} convention,
@@ -1492,63 +1582,70 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * and  {@code comp} as above, {@code comp} could also be computed as
      * {@code comp = r1.revert().composeInverse(r2.revert(), RotationConvention.FRAME_TRANSFORM)}.
      * </p>
-     * @param r rotation to apply the rotation to
+     *
+     * @param r          rotation to apply the rotation to
      * @param convention convention to use for the semantics of the angle
      * @return a new rotation which is the composition of r by the inverse
      * of the instance
      */
     public FieldRotation<T> composeInverse(final Rotation r, final RotationConvention convention) {
         return convention == RotationConvention.VECTOR_OPERATOR ?
-                             composeInverseInternal(r) : applyTo(r, revert());
+                composeInverseInternal(r) : applyTo(r, revert());
     }
 
-    /** Compose the inverse of the instance with another rotation
+    /**
+     * Compose the inverse of the instance with another rotation
      * using vector operator convention.
+     *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the inverse
      * of the instance using vector operator convention
      */
     private FieldRotation<T> composeInverseInternal(Rotation r) {
         return new FieldRotation<T>(q0.multiply(r.getQ0()).add(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))).negate(),
-                                    q1.multiply(r.getQ0()).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))).subtract(q0.multiply(r.getQ1())),
-                                    q2.multiply(r.getQ0()).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))).subtract(q0.multiply(r.getQ2())),
-                                    q3.multiply(r.getQ0()).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))).subtract(q0.multiply(r.getQ3())),
-                                    false);
+                q1.multiply(r.getQ0()).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))).subtract(q0.multiply(r.getQ1())),
+                q2.multiply(r.getQ0()).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))).subtract(q0.multiply(r.getQ2())),
+                q3.multiply(r.getQ0()).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))).subtract(q0.multiply(r.getQ3())),
+                false);
     }
 
-    /** Apply the inverse of a rotation to another rotation.
+    /**
+     * Apply the inverse of a rotation to another rotation.
      * Applying the inverse of a rotation to another rotation is computing
      * the composition in an order compliant with the following rule :
      * let u be any vector and v its image by rInner (i.e. rInner.applyTo(u) = v),
      * let w be the inverse image of v by rOuter
      * (i.e. rOuter.applyInverseTo(v) = w), then w = comp.applyTo(u), where
      * comp = applyInverseTo(rOuter, rInner).
+     *
      * @param rOuter rotation to apply the rotation to
      * @param rInner rotation to apply the rotation to
-     * @param <T> the type of the field elements
+     * @param <T>    the type of the field elements
      * @return a new rotation which is the composition of r by the inverse
      * of the instance
      */
     public static <T extends RealFieldElement<T>> FieldRotation<T> applyInverseTo(final Rotation rOuter, final FieldRotation<T> rInner) {
         return new FieldRotation<T>(rInner.q0.multiply(rOuter.getQ0()).add(rInner.q1.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ2())).add(rInner.q3.multiply(rOuter.getQ3()))).negate(),
-                                    rInner.q0.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ3()).subtract(rInner.q3.multiply(rOuter.getQ2()))).subtract(rInner.q1.multiply(rOuter.getQ0())),
-                                    rInner.q0.multiply(rOuter.getQ2()).add(rInner.q3.multiply(rOuter.getQ1()).subtract(rInner.q1.multiply(rOuter.getQ3()))).subtract(rInner.q2.multiply(rOuter.getQ0())),
-                                    rInner.q0.multiply(rOuter.getQ3()).add(rInner.q1.multiply(rOuter.getQ2()).subtract(rInner.q2.multiply(rOuter.getQ1()))).subtract(rInner.q3.multiply(rOuter.getQ0())),
-                                    false);
+                rInner.q0.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ3()).subtract(rInner.q3.multiply(rOuter.getQ2()))).subtract(rInner.q1.multiply(rOuter.getQ0())),
+                rInner.q0.multiply(rOuter.getQ2()).add(rInner.q3.multiply(rOuter.getQ1()).subtract(rInner.q1.multiply(rOuter.getQ3()))).subtract(rInner.q2.multiply(rOuter.getQ0())),
+                rInner.q0.multiply(rOuter.getQ3()).add(rInner.q1.multiply(rOuter.getQ2()).subtract(rInner.q2.multiply(rOuter.getQ1()))).subtract(rInner.q3.multiply(rOuter.getQ0())),
+                false);
     }
 
-    /** Perfect orthogonality on a 3X3 matrix.
-     * @param m initial matrix (not exactly orthogonal)
+    /**
+     * Perfect orthogonality on a 3X3 matrix.
+     *
+     * @param m         initial matrix (not exactly orthogonal)
      * @param threshold convergence threshold for the iterative
-     * orthogonality correction (convergence is reached when the
-     * difference between two steps of the Frobenius norm of the
-     * correction is below this threshold)
+     *                  orthogonality correction (convergence is reached when the
+     *                  difference between two steps of the Frobenius norm of the
+     *                  correction is below this threshold)
      * @return an orthogonal matrix close to m
-     * @exception NotARotationMatrixException if the matrix cannot be
-     * orthogonalized with the given threshold after 10 iterations
+     * @throws NotARotationMatrixException if the matrix cannot be
+     *                                     orthogonalized with the given threshold after 10 iterations
      */
     private T[][] orthogonalizeMatrix(final T[][] m, final double threshold)
-        throws NotARotationMatrixException {
+            throws NotARotationMatrixException {
 
         T x00 = m[0][0];
         T x01 = m[0][1];
@@ -1603,8 +1700,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
             // Frobenius norm of the correction
             fn1 = corr00 * corr00 + corr01 * corr01 + corr02 * corr02 +
-                  corr10 * corr10 + corr11 * corr11 + corr12 * corr12 +
-                  corr20 * corr20 + corr21 * corr21 + corr22 * corr22;
+                    corr10 * corr10 + corr11 * corr11 + corr12 * corr12 +
+                    corr20 * corr20 + corr21 * corr21 + corr22 * corr22;
 
             // convergence test
             if (FastMath.abs(fn1 - fn) <= threshold) {
@@ -1621,17 +1718,18 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
             x20 = o[2][0];
             x21 = o[2][1];
             x22 = o[2][2];
-            fn  = fn1;
+            fn = fn1;
 
         }
 
         // the algorithm did not converge after 10 iterations
         throw new NotARotationMatrixException(LocalizedFormats.UNABLE_TO_ORTHOGONOLIZE_MATRIX,
-                                              i - 1);
+                i - 1);
 
     }
 
-    /** Compute the <i>distance</i> between two rotations.
+    /**
+     * Compute the <i>distance</i> between two rotations.
      * <p>The <i>distance</i> is intended here as a way to check if two
      * rotations are almost similar (i.e. they transform vectors the same way)
      * or very different. It is mathematically defined as the angle of
@@ -1651,8 +1749,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * components is error prone since for example quaternions (0.36, 0.48, -0.48, -0.64)
      * and (-0.36, -0.48, 0.48, 0.64) represent exactly the same rotation despite
      * their components are different (they are exact opposites).</p>
-     * @param r1 first rotation
-     * @param r2 second rotation
+     *
+     * @param r1  first rotation
+     * @param r2  second rotation
      * @param <T> the type of the field elements
      * @return <i>distance</i> between r1 and r2
      */

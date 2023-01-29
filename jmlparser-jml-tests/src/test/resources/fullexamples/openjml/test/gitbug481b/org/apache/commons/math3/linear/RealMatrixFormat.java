@@ -53,31 +53,57 @@ import java.util.Locale;
  */
 public class RealMatrixFormat {
 
-    /** The default prefix: "{". */
+    /**
+     * The default prefix: "{".
+     */
     private static final String DEFAULT_PREFIX = "{";
-    /** The default suffix: "}". */
+    /**
+     * The default suffix: "}".
+     */
     private static final String DEFAULT_SUFFIX = "}";
-    /** The default row prefix: "{". */
+    /**
+     * The default row prefix: "{".
+     */
     private static final String DEFAULT_ROW_PREFIX = "{";
-    /** The default row suffix: "}". */
+    /**
+     * The default row suffix: "}".
+     */
     private static final String DEFAULT_ROW_SUFFIX = "}";
-    /** The default row separator: ",". */
+    /**
+     * The default row separator: ",".
+     */
     private static final String DEFAULT_ROW_SEPARATOR = ",";
-    /** The default column separator: ",". */
+    /**
+     * The default column separator: ",".
+     */
     private static final String DEFAULT_COLUMN_SEPARATOR = ",";
-    /** Prefix. */
+    /**
+     * Prefix.
+     */
     private final String prefix;
-    /** Suffix. */
+    /**
+     * Suffix.
+     */
     private final String suffix;
-    /** Row prefix. */
+    /**
+     * Row prefix.
+     */
     private final String rowPrefix;
-    /** Row suffix. */
+    /**
+     * Row suffix.
+     */
     private final String rowSuffix;
-    /** Row separator. */
+    /**
+     * Row separator.
+     */
     private final String rowSeparator;
-    /** Column separator. */
+    /**
+     * Column separator.
+     */
     private final String columnSeparator;
-    /** The format used for components. */
+    /**
+     * The format used for components.
+     */
     private final NumberFormat format;
 
     /**
@@ -92,6 +118,7 @@ public class RealMatrixFormat {
 
     /**
      * Create an instance with a custom number format for components.
+     *
      * @param format the custom format for components.
      */
     public RealMatrixFormat(final NumberFormat format) {
@@ -101,11 +128,12 @@ public class RealMatrixFormat {
 
     /**
      * Create an instance with custom prefix, suffix and separator.
-     * @param prefix prefix to use instead of the default "{"
-     * @param suffix suffix to use instead of the default "}"
-     * @param rowPrefix row prefix to use instead of the default "{"
-     * @param rowSuffix row suffix to use instead of the default "}"
-     * @param rowSeparator tow separator to use instead of the default ";"
+     *
+     * @param prefix          prefix to use instead of the default "{"
+     * @param suffix          suffix to use instead of the default "}"
+     * @param rowPrefix       row prefix to use instead of the default "{"
+     * @param rowSuffix       row suffix to use instead of the default "}"
+     * @param rowSeparator    tow separator to use instead of the default ";"
      * @param columnSeparator column separator to use instead of the default ", "
      */
     public RealMatrixFormat(final String prefix, final String suffix,
@@ -118,25 +146,26 @@ public class RealMatrixFormat {
     /**
      * Create an instance with custom prefix, suffix, separator and format
      * for components.
-     * @param prefix prefix to use instead of the default "{"
-     * @param suffix suffix to use instead of the default "}"
-     * @param rowPrefix row prefix to use instead of the default "{"
-     * @param rowSuffix row suffix to use instead of the default "}"
-     * @param rowSeparator tow separator to use instead of the default ";"
+     *
+     * @param prefix          prefix to use instead of the default "{"
+     * @param suffix          suffix to use instead of the default "}"
+     * @param rowPrefix       row prefix to use instead of the default "{"
+     * @param rowSuffix       row suffix to use instead of the default "}"
+     * @param rowSeparator    tow separator to use instead of the default ";"
      * @param columnSeparator column separator to use instead of the default ", "
-     * @param format the custom format for components.
+     * @param format          the custom format for components.
      */
     public RealMatrixFormat(final String prefix, final String suffix,
                             final String rowPrefix, final String rowSuffix,
                             final String rowSeparator, final String columnSeparator,
                             final NumberFormat format) {
-        this.prefix            = prefix;
-        this.suffix            = suffix;
-        this.rowPrefix         = rowPrefix;
-        this.rowSuffix         = rowSuffix;
-        this.rowSeparator      = rowSeparator;
-        this.columnSeparator   = columnSeparator;
-        this.format            = format;
+        this.prefix = prefix;
+        this.suffix = suffix;
+        this.rowPrefix = rowPrefix;
+        this.rowSuffix = rowSuffix;
+        this.rowSeparator = rowSeparator;
+        this.columnSeparator = columnSeparator;
+        this.format = format;
         // disable grouping to prevent parsing problems
         this.format.setGroupingUsed(false);
     }
@@ -144,6 +173,7 @@ public class RealMatrixFormat {
     /**
      * Get the set of locales for which real vectors formats are available.
      * <p>This is the same set as the {@link NumberFormat} set.</p>
+     *
      * @return available real vector format locales.
      */
     public static Locale[] getAvailableLocales() {
@@ -152,6 +182,7 @@ public class RealMatrixFormat {
 
     /**
      * Get the format prefix.
+     *
      * @return format prefix.
      */
     public String getPrefix() {
@@ -160,6 +191,7 @@ public class RealMatrixFormat {
 
     /**
      * Get the format suffix.
+     *
      * @return format suffix.
      */
     public String getSuffix() {
@@ -168,6 +200,7 @@ public class RealMatrixFormat {
 
     /**
      * Get the format prefix.
+     *
      * @return format prefix.
      */
     public String getRowPrefix() {
@@ -176,6 +209,7 @@ public class RealMatrixFormat {
 
     /**
      * Get the format suffix.
+     *
      * @return format suffix.
      */
     public String getRowSuffix() {
@@ -184,6 +218,7 @@ public class RealMatrixFormat {
 
     /**
      * Get the format separator between rows of the matrix.
+     *
      * @return format separator for rows.
      */
     public String getRowSeparator() {
@@ -192,6 +227,7 @@ public class RealMatrixFormat {
 
     /**
      * Get the format separator between components.
+     *
      * @return format separator between components.
      */
     public String getColumnSeparator() {
@@ -200,6 +236,7 @@ public class RealMatrixFormat {
 
     /**
      * Get the components format.
+     *
      * @return components format.
      */
     public NumberFormat getFormat() {
@@ -208,6 +245,7 @@ public class RealMatrixFormat {
 
     /**
      * Returns the default real vector format for the current locale.
+     *
      * @return the default real vector format.
      */
     public static RealMatrixFormat getInstance() {
@@ -216,6 +254,7 @@ public class RealMatrixFormat {
 
     /**
      * Returns the default real vector format for the given locale.
+     *
      * @param locale the specific locale used by the format.
      * @return the real vector format specific to the given locale.
      */
@@ -224,7 +263,7 @@ public class RealMatrixFormat {
     }
 
     /**
-     * This method calls {@link #format(RealMatrix,StringBuffer,FieldPosition)}.
+     * This method calls {@link #format(RealMatrix, StringBuffer, FieldPosition)}.
      *
      * @param m RealMatrix object to format.
      * @return a formatted matrix.
@@ -235,10 +274,11 @@ public class RealMatrixFormat {
 
     /**
      * Formats a {@link RealMatrix} object to produce a string.
-     * @param matrix the object to format.
+     *
+     * @param matrix     the object to format.
      * @param toAppendTo where the text is to be appended
-     * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * @param pos        On input: an alignment field, if desired. On output: the
+     *                   offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
     public StringBuffer format(RealMatrix matrix, StringBuffer toAppendTo,
@@ -278,15 +318,15 @@ public class RealMatrixFormat {
      * @param source String to parse.
      * @return the parsed {@link RealMatrix} object.
      * @throws MathParseException if the beginning of the specified string
-     * cannot be parsed.
+     *                            cannot be parsed.
      */
     public RealMatrix parse(String source) {
         final ParsePosition parsePosition = new ParsePosition(0);
         final RealMatrix result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
             throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         Array2DRowRealMatrix.class);
+                    parsePosition.getErrorIndex(),
+                    Array2DRowRealMatrix.class);
         }
         return result;
     }
@@ -295,7 +335,7 @@ public class RealMatrixFormat {
      * Parse a string to produce a {@link RealMatrix} object.
      *
      * @param source String to parse.
-     * @param pos input/ouput parsing parameter.
+     * @param pos    input/ouput parsing parameter.
      * @return the parsed {@link RealMatrix} object.
      */
     public RealMatrix parse(String source, ParsePosition pos) {
@@ -317,13 +357,13 @@ public class RealMatrixFormat {
         // parse components
         List<List<Number>> matrix = new ArrayList<List<Number>>();
         List<Number> rowComponents = new ArrayList<Number>();
-        for (boolean loop = true; loop;){
+        for (boolean loop = true; loop; ) {
 
             if (!rowComponents.isEmpty()) {
                 CompositeFormat.parseAndIgnoreWhitespace(source, pos);
                 if (!CompositeFormat.parseFixedstring(source, trimmedColumnSeparator, pos)) {
                     if (trimmedRowSuffix.length() != 0 &&
-                        !CompositeFormat.parseFixedstring(source, trimmedRowSuffix, pos)) {
+                            !CompositeFormat.parseFixedstring(source, trimmedRowSuffix, pos)) {
                         return null;
                     } else {
                         CompositeFormat.parseAndIgnoreWhitespace(source, pos);
@@ -339,7 +379,7 @@ public class RealMatrixFormat {
             } else {
                 CompositeFormat.parseAndIgnoreWhitespace(source, pos);
                 if (trimmedRowPrefix.length() != 0 &&
-                    !CompositeFormat.parseFixedstring(source, trimmedRowPrefix, pos)) {
+                        !CompositeFormat.parseFixedstring(source, trimmedRowPrefix, pos)) {
                     return null;
                 }
             }

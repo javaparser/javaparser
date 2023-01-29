@@ -109,23 +109,36 @@ import java.util.Arrays;
  */
 public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
-    /** Twice the "epsilon machine". */
+    /**
+     * Twice the "epsilon machine".
+     */
     private static final double TWO_EPS = 2 * Precision.EPSILON;
 
     /* configuration parameters */
-    /** Positive input variable used in determining the initial step bound. */
+    /**
+     * Positive input variable used in determining the initial step bound.
+     */
     private final double initialStepBoundFactor;
-    /** Desired relative error in the sum of squares. */
+    /**
+     * Desired relative error in the sum of squares.
+     */
     private final double costRelativeTolerance;
-    /**  Desired relative error in the approximate solution parameters. */
+    /**
+     * Desired relative error in the approximate solution parameters.
+     */
     private final double parRelativeTolerance;
-    /** Desired max cosine on the orthogonality between the function vector
-     * and the columns of the jacobian. */
+    /**
+     * Desired max cosine on the orthogonality between the function vector
+     * and the columns of the jacobian.
+     */
     private final double orthoTolerance;
-    /** Threshold for QR ranking. */
+    /**
+     * Threshold for QR ranking.
+     */
     private final double qrRankingThreshold;
 
-    /** Default constructor.
+    /**
+     * Default constructor.
      * <p>
      * The default values for the algorithm settings are:
      * <ul>
@@ -166,12 +179,12 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
     /**
      * @param newInitialStepBoundFactor Positive input variable used in
-     * determining the initial step bound. This bound is set to the
-     * product of initialStepBoundFactor and the euclidean norm of
-     * {@code diag * x} if non-zero, or else to {@code newInitialStepBoundFactor}
-     * itself. In most cases factor should lie in the interval
-     * {@code (0.1, 100.0)}. {@code 100} is a generally recommended value.
-     * of the matrix is reduced.
+     *                                  determining the initial step bound. This bound is set to the
+     *                                  product of initialStepBoundFactor and the euclidean norm of
+     *                                  {@code diag * x} if non-zero, or else to {@code newInitialStepBoundFactor}
+     *                                  itself. In most cases factor should lie in the interval
+     *                                  {@code (0.1, 100.0)}. {@code 100} is a generally recommended value.
+     *                                  of the matrix is reduced.
      * @return a new instance.
      */
     public LevenbergMarquardtOptimizer withInitialStepBoundFactor(double newInitialStepBoundFactor) {
@@ -198,7 +211,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
     /**
      * @param newParRelativeTolerance Desired relative error in the approximate solution
-     * parameters.
+     *                                parameters.
      * @return a new instance.
      */
     public LevenbergMarquardtOptimizer withParameterRelativeTolerance(double newParRelativeTolerance) {
@@ -214,7 +227,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
      * Modifies the given parameter.
      *
      * @param newOrthoTolerance Desired max cosine on the orthogonality between
-     * the function vector and the columns of the Jacobian.
+     *                          the function vector and the columns of the Jacobian.
      * @return a new instance.
      */
     public LevenbergMarquardtOptimizer withOrthoTolerance(double newOrthoTolerance) {
@@ -228,9 +241,9 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
     /**
      * @param newQRRankingThreshold Desired threshold for QR ranking.
-     * If the squared norm of a column vector is smaller or equal to this
-     * threshold during QR decomposition, it is considered to be a zero vector
-     * and hence the rank of the matrix is reduced.
+     *                              If the squared norm of a column vector is smaller or equal to this
+     *                              threshold during QR decomposition, it is considered to be a zero vector
+     *                              and hence the rank of the matrix is reduced.
      * @return a new instance.
      */
     public LevenbergMarquardtOptimizer withRankingThreshold(double newQRRankingThreshold) {
@@ -244,9 +257,9 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Gets the value of a tuning parameter.
-     * @see #withInitialStepBoundFactor(double)
      *
      * @return the parameter's value.
+     * @see #withInitialStepBoundFactor(double)
      */
     public double getInitialStepBoundFactor() {
         return initialStepBoundFactor;
@@ -254,9 +267,9 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Gets the value of a tuning parameter.
-     * @see #withCostRelativeTolerance(double)
      *
      * @return the parameter's value.
+     * @see #withCostRelativeTolerance(double)
      */
     public double getCostRelativeTolerance() {
         return costRelativeTolerance;
@@ -264,9 +277,9 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Gets the value of a tuning parameter.
-     * @see #withParameterRelativeTolerance(double)
      *
      * @return the parameter's value.
+     * @see #withParameterRelativeTolerance(double)
      */
     public double getParameterRelativeTolerance() {
         return parRelativeTolerance;
@@ -274,9 +287,9 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Gets the value of a tuning parameter.
-     * @see #withOrthoTolerance(double)
      *
      * @return the parameter's value.
+     * @see #withOrthoTolerance(double)
      */
     public double getOrthoTolerance() {
         return orthoTolerance;
@@ -284,15 +297,17 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Gets the value of a tuning parameter.
-     * @see #withRankingThreshold(double)
      *
      * @return the parameter's value.
+     * @see #withRankingThreshold(double)
      */
     public double getRankingThreshold() {
         return qrRankingThreshold;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Optimum optimize(final LeastSquaresProblem problem) {
         // Pull in relevant data from the problem as locals.
         final int nR = problem.getObservationSize(); // Number of observed data.
@@ -304,22 +319,22 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
         final ConvergenceChecker<Evaluation> checker = problem.getConvergenceChecker();
 
         // arrays shared with the other private methods
-        final int solvedCols  = FastMath.min(nR, nC);
+        final int solvedCols = FastMath.min(nR, nC);
         /* Parameters evolution direction associated with lmPar. */
         double[] lmDir = new double[nC];
         /* Levenberg-Marquardt parameter. */
         double lmPar = 0;
 
         // local point
-        double   delta   = 0;
-        double   xNorm   = 0;
-        double[] diag    = new double[nC];
-        double[] oldX    = new double[nC];
-        double[] oldRes  = new double[nR];
-        double[] qtf     = new double[nR];
-        double[] work1   = new double[nC];
-        double[] work2   = new double[nC];
-        double[] work3   = new double[nC];
+        double delta = 0;
+        double xNorm = 0;
+        double[] diag = new double[nC];
+        double[] oldX = new double[nC];
+        double[] oldRes = new double[nR];
+        double[] qtf = new double[nR];
+        double[] work1 = new double[nC];
+        double[] work2 = new double[nC];
+        double[] work3 = new double[nC];
 
 
         // Evaluate the function at the starting point and calculate its norm.
@@ -371,7 +386,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                         dk = 1.0;
                     }
                     double xk = dk * currentPoint[k];
-                    xNorm  += xk * xk;
+                    xNorm += xk * xk;
                     diag[k] = dk;
                 }
                 xNorm = FastMath.sqrt(xNorm);
@@ -384,8 +399,8 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
             double maxCosine = 0;
             if (currentCost != 0) {
                 for (int j = 0; j < solvedCols; ++j) {
-                    int    pj = permutation[j];
-                    double s  = jacNorm[pj];
+                    int pj = permutation[j];
+                    double s = jacNorm[pj];
                     if (s != 0) {
                         double sum = 0;
                         for (int i = 0; i <= j; ++i) {
@@ -409,7 +424,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
             }
 
             // Inner loop.
-            for (double ratio = 0; ratio < 1.0e-4;) {
+            for (double ratio = 0; ratio < 1.0e-4; ) {
 
                 // save the state
                 for (int j = 0; j < solvedCols; ++j) {
@@ -419,12 +434,12 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 final double previousCost = currentCost;
                 double[] tmpVec = weightedResidual;
                 weightedResidual = oldRes;
-                oldRes    = tmpVec;
+                oldRes = tmpVec;
 
                 // determine the Levenberg-Marquardt parameter
                 lmPar = determineLMParameter(qtf, delta, diag,
-                                     internalData, solvedCols,
-                                     work1, work2, work3, lmDir, lmPar);
+                        internalData, solvedCols,
+                        work1, work2, work3, lmDir, lmPar);
 
                 // compute the new point and the norm of the evolution direction
                 double lmNorm = 0;
@@ -433,7 +448,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                     lmDir[pj] = -lmDir[pj];
                     currentPoint[pj] = oldX[pj] + lmDir[pj];
                     double s = diag[pj] * lmDir[pj];
-                    lmNorm  += s * s;
+                    lmNorm += s * s;
                 }
                 lmNorm = FastMath.sqrt(lmNorm);
                 // on the first iteration, adjust the initial step bound.
@@ -481,12 +496,12 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 // update the step bound
                 if (ratio <= 0.25) {
                     double tmp =
-                        (actRed < 0) ? (0.5 * dirDer / (dirDer + 0.5 * actRed)) : 0.5;
-                        if ((0.1 * currentCost >= previousCost) || (tmp < 0.1)) {
-                            tmp = 0.1;
-                        }
-                        delta = tmp * FastMath.min(delta, 10.0 * lmNorm);
-                        lmPar /= tmp;
+                            (actRed < 0) ? (0.5 * dirDer / (dirDer + 0.5 * actRed)) : 0.5;
+                    if ((0.1 * currentCost >= previousCost) || (tmp < 0.1)) {
+                        tmp = 0.1;
+                    }
+                    delta = tmp * FastMath.min(delta, 10.0 * lmNorm);
+                    lmPar /= tmp;
                 } else if ((lmPar == 0) || (ratio >= 0.75)) {
                     delta = 2 * lmNorm;
                     lmPar *= 0.5;
@@ -514,33 +529,33 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                         int pj = permutation[j];
                         currentPoint[pj] = oldX[pj];
                     }
-                    tmpVec    = weightedResidual;
+                    tmpVec = weightedResidual;
                     weightedResidual = oldRes;
-                    oldRes    = tmpVec;
+                    oldRes = tmpVec;
                     // Reset "current" to previous values.
                     current = previous;
                 }
 
                 // Default convergence criteria.
                 if ((FastMath.abs(actRed) <= costRelativeTolerance &&
-                     preRed <= costRelativeTolerance &&
-                     ratio <= 2.0) ||
-                    delta <= parRelativeTolerance * xNorm) {
+                        preRed <= costRelativeTolerance &&
+                        ratio <= 2.0) ||
+                        delta <= parRelativeTolerance * xNorm) {
                     return new OptimumImpl(current, evaluationCounter.getCount(), iterationCounter.getCount());
                 }
 
                 // tests for termination and stringent tolerances
                 if (FastMath.abs(actRed) <= TWO_EPS &&
-                    preRed <= TWO_EPS &&
-                    ratio <= 2.0) {
+                        preRed <= TWO_EPS &&
+                        ratio <= 2.0) {
                     throw new ConvergenceException(LocalizedFormats.TOO_SMALL_COST_RELATIVE_TOLERANCE,
-                                                   costRelativeTolerance);
+                            costRelativeTolerance);
                 } else if (delta <= TWO_EPS * xNorm) {
                     throw new ConvergenceException(LocalizedFormats.TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE,
-                                                   parRelativeTolerance);
+                            parRelativeTolerance);
                 } else if (maxCosine <= TWO_EPS) {
                     throw new ConvergenceException(LocalizedFormats.TOO_SMALL_ORTHOGONALITY_TOLERANCE,
-                                                   orthoTolerance);
+                            orthoTolerance);
                 }
             }
         }
@@ -553,26 +568,38 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
      * that will modified in-place (cf. "work" arrays).
      */
     private static class InternalData {
-        /** Weighted Jacobian. */
+        /**
+         * Weighted Jacobian.
+         */
         private final double[][] weightedJacobian;
-        /** Columns permutation array. */
+        /**
+         * Columns permutation array.
+         */
         private final int[] permutation;
-        /** Rank of the Jacobian matrix. */
+        /**
+         * Rank of the Jacobian matrix.
+         */
         private final int rank;
-        /** Diagonal elements of the R matrix in the QR decomposition. */
+        /**
+         * Diagonal elements of the R matrix in the QR decomposition.
+         */
         private final double[] diagR;
-        /** Norms of the columns of the jacobian matrix. */
+        /**
+         * Norms of the columns of the jacobian matrix.
+         */
         private final double[] jacNorm;
-        /** Coefficients of the Householder transforms vectors. */
+        /**
+         * Coefficients of the Householder transforms vectors.
+         */
         private final double[] beta;
 
         /**
          * @param weightedJacobian Weighted Jacobian.
-         * @param permutation Columns permutation array.
-         * @param rank Rank of the Jacobian matrix.
-         * @param diagR Diagonal elements of the R matrix in the QR decomposition.
-         * @param jacNorm Norms of the columns of the jacobian matrix.
-         * @param beta Coefficients of the Householder transforms vectors.
+         * @param permutation      Columns permutation array.
+         * @param rank             Rank of the Jacobian matrix.
+         * @param diagR            Diagonal elements of the R matrix in the QR decomposition.
+         * @param jacNorm          Norms of the columns of the jacobian matrix.
+         * @param beta             Coefficients of the Householder transforms vectors.
          */
         InternalData(double[][] weightedJacobian,
                      int[] permutation,
@@ -605,22 +632,22 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
      * </ul>
      * <p>Luc Maisonobe did the Java translation.</p>
      *
-     * @param qy Array containing qTy.
-     * @param delta Upper bound on the euclidean norm of diagR * lmDir.
-     * @param diag Diagonal matrix.
+     * @param qy           Array containing qTy.
+     * @param delta        Upper bound on the euclidean norm of diagR * lmDir.
+     * @param diag         Diagonal matrix.
      * @param internalData Data (modified in-place in this method).
-     * @param solvedCols Number of solved point.
-     * @param work1 work array
-     * @param work2 work array
-     * @param work3 work array
-     * @param lmDir the "returned" LM direction will be stored in this array.
-     * @param lmPar the value of the LM parameter from the previous iteration.
+     * @param solvedCols   Number of solved point.
+     * @param work1        work array
+     * @param work2        work array
+     * @param work3        work array
+     * @param lmDir        the "returned" LM direction will be stored in this array.
+     * @param lmPar        the value of the LM parameter from the previous iteration.
      * @return the new LM parameter
      */
     private double determineLMParameter(double[] qy, double delta, double[] diag,
-                                      InternalData internalData, int solvedCols,
-                                      double[] work1, double[] work2, double[] work3,
-                                      double[] lmDir, double lmPar) {
+                                        InternalData internalData, int solvedCols,
+                                        double[] work1, double[] work2, double[] work3,
+                                        double[] lmDir, double lmPar) {
         final double[][] weightedJacobian = internalData.weightedJacobian;
         final int[] permutation = internalData.permutation;
         final int rank = internalData.rank;
@@ -736,9 +763,9 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
             // if the function is small enough, accept the current value
             // of lmPar, also test for the exceptional cases where parl is zero
             if (FastMath.abs(fp) <= 0.1 * delta ||
-                (parl == 0 &&
-                 fp <= previousFP &&
-                 previousFP < 0)) {
+                    (parl == 0 &&
+                            fp <= previousFP &&
+                            previousFP < 0)) {
                 return lmPar;
             }
 
@@ -791,13 +818,13 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
      * </ul>
      * <p>Luc Maisonobe did the Java translation.</p>
      *
-     * @param qy array containing qTy
-     * @param diag diagonal matrix
-     * @param lmDiag diagonal elements associated with lmDir
+     * @param qy           array containing qTy
+     * @param diag         diagonal matrix
+     * @param lmDiag       diagonal elements associated with lmDir
      * @param internalData Data (modified in-place in this method).
-     * @param solvedCols Number of sloved point.
-     * @param work work array
-     * @param lmDir the "returned" LM direction is stored in this array
+     * @param solvedCols   Number of sloved point.
+     * @param work         work array
+     * @param lmDir        the "returned" LM direction is stored in this array
      */
     private void determineLMDirection(double[] qy, double[] diag,
                                       double[] lmDiag,
@@ -817,7 +844,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 weightedJacobian[i][pj] = weightedJacobian[j][permutation[i]];
             }
             lmDir[j] = diagR[pj];
-            work[j]  = qy[j];
+            work[j] = qy[j];
         }
 
         // eliminate the diagonal matrix d using a Givens rotation
@@ -848,8 +875,8 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                     double rkk = weightedJacobian[k][pk];
                     if (FastMath.abs(rkk) < FastMath.abs(lmDiag[k])) {
                         final double cotan = rkk / lmDiag[k];
-                        sin   = 1.0 / FastMath.sqrt(1.0 + cotan * cotan);
-                        cos   = sin * cotan;
+                        sin = 1.0 / FastMath.sqrt(1.0 + cotan * cotan);
+                        cos = sin * cotan;
                     } else {
                         final double tan = lmDiag[k] / rkk;
                         cos = 1.0 / FastMath.sqrt(1.0 + tan * tan);
@@ -928,7 +955,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
      * pivoting. The diagonal elements of the R matrix are therefore also in
      * non-increasing absolute values order.</p>
      *
-     * @param jacobian Weighted Jacobian matrix at the current point.
+     * @param jacobian   Weighted Jacobian matrix at the current point.
      * @param solvedCols Number of solved point.
      * @return data used in other methods of this class.
      * @throws ConvergenceException if the decomposition cannot be performed.
@@ -972,11 +999,11 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 }
                 if (Double.isInfinite(norm2) || Double.isNaN(norm2)) {
                     throw new ConvergenceException(LocalizedFormats.UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN,
-                                                   nR, nC);
+                            nR, nC);
                 }
                 if (norm2 > ak2) {
                     nextColumn = i;
-                    ak2        = norm2;
+                    ak2 = norm2;
                 }
             }
             if (ak2 <= qrRankingThreshold) {
@@ -1015,7 +1042,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
     /**
      * Compute the product Qt.y for some Q.R. decomposition.
      *
-     * @param y vector to multiply (will be overwritten with the result)
+     * @param y            vector to multiply (will be overwritten with the result)
      * @param internalData Data.
      */
     private void qTy(double[] y,

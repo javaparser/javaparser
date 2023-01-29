@@ -36,5 +36,5 @@ public interface RankingAlgorithm {
      * @param data array of data to be ranked
      * @return an array of ranks corresponding to the elements of the input array
      */
-    double[] rank (double[] data);
+    double[] rank(double[] data);
 }

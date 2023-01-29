@@ -139,10 +139,10 @@ private suspend fun PipelineContext<Unit, ApplicationCall>.renderPage(params: Pa
                 }
 
                 val problems = Collections.emptyList<Problem>()
-                    /*if (result.isSuccessful)
-                        //JmlLintingFacade.lint(JmlLintingConfig(), Collections.singleton(result.result.get()))
-                    else
-                        Collections.emptyList()*/
+                /*if (result.isSuccessful)
+                    //JmlLintingFacade.lint(JmlLintingConfig(), Collections.singleton(result.result.get()))
+                else
+                    Collections.emptyList()*/
 
                 accordion("Linting Issues (${problems.size})", isOpen = problems.isNotEmpty()) {
                     if (result.isSuccessful) {

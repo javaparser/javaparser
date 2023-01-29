@@ -114,7 +114,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         }
 
         ClassDeclaration superclass = (ClassDeclaration) this.getSuperClass().getTypeDeclaration();
-        if (superclass!=this)
+        if (superclass != this)
             fields.addAll(superclass.getAllFields());
 
         getInterfaces().forEach(interf -> interf.getTypeDeclaration().getAllFields().forEach(f -> {
@@ -338,7 +338,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration {
         Set<ReferenceTypeDeclaration> res = new HashSet<>();
         for (BodyDeclaration member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration)member));
+                res.add(JavaParserFacade.get(typeSolver).getTypeDeclaration((com.github.javaparser.ast.body.TypeDeclaration) member));
             }
         }
         return res;

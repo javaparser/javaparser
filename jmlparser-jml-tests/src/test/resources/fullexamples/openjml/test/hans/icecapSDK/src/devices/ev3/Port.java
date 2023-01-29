@@ -1,9 +1,9 @@
 package devices.ev3;
 
 public class Port {
-	protected byte port;
+    protected byte port;
 
-	public byte getPort() {
-		return port;
-	}
+    public byte getPort() {
+        return port;
+    }
 }

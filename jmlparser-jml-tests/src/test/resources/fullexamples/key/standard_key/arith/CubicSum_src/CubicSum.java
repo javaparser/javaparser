@@ -19,16 +19,16 @@ public class CubicSum {
      @ diverges true;
      @*/
     public static int cubicSum(int n) {
-	int i = 0;
-	int res = 0;
+        int i = 0;
+        int res = 0;
 	/*@
 	  @ loop_invariant 0<= i && i<=n && 4 * res == i*i * (i+1)*(i+1);
 	  @ assignable \nothing;
 	  @ */
-	while (i < n) {
-	    i++;
-	    res += i*i*i;
-	}
-	return res;
+        while (i < n) {
+            i++;
+            res += i * i * i;
+        }
+        return res;
     }
 }

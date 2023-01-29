@@ -10,10 +10,10 @@ import java.util.List;
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
  * As of Java 8 it is used in casts or while expressing bounds for generic types.
- *
+ * <p>
  * For example:
  * public class A&gt;T extends Serializable &amp; Cloneable&lt; { }
- *
+ * <p>
  * Or:
  * void foo((Serializable &amp; Cloneable)myObject);
  *
@@ -49,7 +49,7 @@ public class IntersectionType extends Type<IntersectionType> implements NodeWith
 
     public IntersectionType setElements(List<ReferenceType> elements) {
         if (this.elements != null) {
-            for (ReferenceType element : elements){
+            for (ReferenceType element : elements) {
                 element.setParentNode(null);
             }
         }

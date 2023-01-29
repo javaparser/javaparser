@@ -27,7 +27,7 @@
 
  */
 
-enum Month { JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC};
+enum Month {JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC};
 
 
 class Example {
@@ -40,26 +40,26 @@ class Example {
       @   ensures \result > 0 && \result <= 31;
       @*/
     int daysInMoth(Month month) {
-	switch(month) {
-	case Month.JAN:
-	case Month.MAR:
-	case Month.MAY:
-	case Month.JUL:
-	case Month.AUG:
-	case Month.OCT:
-	case Month.DEC:
-	    return 31;
+        switch (month) {
+            case Month.JAN:
+            case Month.MAR:
+            case Month.MAY:
+            case Month.JUL:
+            case Month.AUG:
+            case Month.OCT:
+            case Month.DEC:
+                return 31;
 
-	case Month.APR:
-	case Month.JUN:
-	case Month.SEP:
-	case Month.NOV:
-	    return 30;
+            case Month.APR:
+            case Month.JUN:
+            case Month.SEP:
+            case Month.NOV:
+                return 30;
 
-	case Month.FEB:
-	    return leapYear ? 29 : 28;
-	}
-	throw new Error();
+            case Month.FEB:
+                return leapYear ? 29 : 28;
+        }
+        throw new Error();
     }
 
 }

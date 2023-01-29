@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -18,7 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
- 
+
 package com.github.javaparser.ast.comments;
 
 import java.io.*;
@@ -51,7 +51,7 @@ public class CommentsParser {
         CommentsCollection comments = new CommentsCollection();
         int r;
 
-        Deque prevTwoChars = new LinkedList<Character>(Arrays.asList('z','z'));
+        Deque prevTwoChars = new LinkedList<Character>(Arrays.asList('z', 'z'));
 
         State state = State.CODE;
         LineComment currentLineComment = null;
@@ -59,17 +59,17 @@ public class CommentsParser {
         StringBuffer currentContent = null;
 
         int currLine = 1;
-        int currCol  = 1;
+        int currCol = 1;
 
-        while ((r=br.read()) != -1){
-            char c = (char)r;
-            if (c=='\r'){
+        while ((r = br.read()) != -1) {
+            char c = (char) r;
+            if (c == '\r') {
                 lastWasASlashR = true;
-            } else if (c=='\n'&&lastWasASlashR){
-                lastWasASlashR=false;
+            } else if (c == '\n' && lastWasASlashR) {
+                lastWasASlashR = false;
                 continue;
             } else {
-                lastWasASlashR=false;
+                lastWasASlashR = false;
             }
             switch (state) {
                 case CODE:
@@ -94,7 +94,7 @@ public class CommentsParser {
                     }
                     break;
                 case IN_LINE_COMMENT:
-                    if (c=='\n' || c=='\r'){
+                    if (c == '\n' || c == '\r') {
                         currentLineComment.setContent(currentContent.toString());
                         currentLineComment.setEndLine(currLine);
                         currentLineComment.setEndColumn(currCol);
@@ -105,28 +105,28 @@ public class CommentsParser {
                     }
                     break;
                 case IN_BLOCK_COMMENT:
-                    if (prevTwoChars.peekLast().equals('*') && c=='/' && !prevTwoChars.peekFirst().equals('/')){
+                    if (prevTwoChars.peekLast().equals('*') && c == '/' && !prevTwoChars.peekFirst().equals('/')) {
 
                         // delete last character
-                        String content = currentContent.deleteCharAt(currentContent.toString().length()-1).toString();
+                        String content = currentContent.deleteCharAt(currentContent.toString().length() - 1).toString();
 
-                        if (content.startsWith("*")){
+                        if (content.startsWith("*")) {
                             JavadocComment javadocComment = new JavadocComment();
                             javadocComment.setContent(content.substring(1));
                             javadocComment.setBeginLine(currentBlockComment.getBeginLine());
                             javadocComment.setBeginColumn(currentBlockComment.getBeginColumn());
                             javadocComment.setEndLine(currLine);
-                            javadocComment.setEndColumn(currCol+1);
+                            javadocComment.setEndColumn(currCol + 1);
                             comments.addComment(javadocComment);
                         } else {
                             currentBlockComment.setContent(content);
                             currentBlockComment.setEndLine(currLine);
-                            currentBlockComment.setEndColumn(currCol+1);
+                            currentBlockComment.setEndColumn(currCol + 1);
                             comments.addComment(currentBlockComment);
                         }
                         state = State.CODE;
                     } else {
-                        currentContent.append(c=='\r'?'\n':c);
+                        currentContent.append(c == '\r' ? '\n' : c);
                     }
                     break;
                 case IN_STRING:
@@ -142,23 +142,23 @@ public class CommentsParser {
                 default:
                     throw new RuntimeException("Unexpected");
             }
-            switch (c){
+            switch (c) {
                 case '\n':
                 case '\r':
-                    currLine+=1;
+                    currLine += 1;
                     currCol = 1;
                     break;
                 case '\t':
-                    currCol+=COLUMNS_PER_TAB;
+                    currCol += COLUMNS_PER_TAB;
                     break;
                 default:
-                    currCol+=1;
+                    currCol += 1;
             }
             prevTwoChars.remove();
             prevTwoChars.add(c);
         }
 
-        if (state==State.IN_LINE_COMMENT){
+        if (state == State.IN_LINE_COMMENT) {
             currentLineComment.setContent(currentContent.toString());
             currentLineComment.setEndLine(currLine);
             currentLineComment.setEndColumn(currCol);

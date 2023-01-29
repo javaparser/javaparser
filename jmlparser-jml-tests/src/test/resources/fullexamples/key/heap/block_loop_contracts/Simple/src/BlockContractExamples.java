@@ -13,8 +13,7 @@ public class BlockContractExamples {
         );
       @ assignable \nothing;
       @*/
-    public int sum(int[] numbers, int from)
-    {
+    public int sum(int[] numbers, int from) {
         /*@ requires numbers != null;
           @ ensures 0 <= from && from < numbers.length
               && (\before(from) < 0 ==> from == 0)
@@ -29,12 +28,12 @@ public class BlockContractExamples {
             if (from < 0) {
                 from = 0;
             }
-                
+
             if (from >= numbers.length) {
                 return 0;
             }
         }
-            
+
         int result = 0;
             
         /*@ maintaining from <= i && i <= numbers.length

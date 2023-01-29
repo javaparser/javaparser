@@ -47,20 +47,23 @@ import java.util.Collection;
  * the constraints, the x<sub>i</sub> are the coordinates of the current point and
  * v is the value of the constraint.
  * </p>
- * @deprecated As of 3.1 (to be removed in 4.0).
+ *
  * @since 2.0
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
 public interface LinearOptimizer {
 
     /**
      * Set the maximal number of iterations of the algorithm.
+     *
      * @param maxIterations maximal number of function calls
      */
     void setMaxIterations(int maxIterations);
 
     /**
      * Get the maximal number of iterations of the algorithm.
+     *
      * @return maximal number of iterations
      */
     int getMaxIterations();
@@ -72,21 +75,23 @@ public interface LinearOptimizer {
      * {@link #optimize(LinearObjectiveFunction, Collection, GoalType, boolean) optimize}
      * method. It is 0 if the method has not been called yet.
      * </p>
+     *
      * @return number of iterations
      */
     int getIterations();
 
     /**
      * Optimizes an objective function.
-     * @param f linear objective function
-     * @param constraints linear constraints
-     * @param goalType type of optimization goal: either {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}
+     *
+     * @param f                     linear objective function
+     * @param constraints           linear constraints
+     * @param goalType              type of optimization goal: either {@link GoalType#MAXIMIZE} or {@link GoalType#MINIMIZE}
      * @param restrictToNonNegative whether to restrict the variables to non-negative values
      * @return point/value pair giving the optimal value for objective function
-     * @exception MathIllegalStateException if no solution fulfilling the constraints
-     *   can be found in the allowed number of iterations
+     * @throws MathIllegalStateException if no solution fulfilling the constraints
+     *                                   can be found in the allowed number of iterations
      */
-   PointValuePair optimize(LinearObjectiveFunction f, Collection<LinearConstraint> constraints,
-                               GoalType goalType, boolean restrictToNonNegative) throws MathIllegalStateException;
+    PointValuePair optimize(LinearObjectiveFunction f, Collection<LinearConstraint> constraints,
+                            GoalType goalType, boolean restrictToNonNegative) throws MathIllegalStateException;
 
 }

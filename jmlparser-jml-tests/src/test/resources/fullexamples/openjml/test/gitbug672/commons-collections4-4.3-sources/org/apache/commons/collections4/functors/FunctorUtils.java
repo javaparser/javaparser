@@ -41,7 +41,7 @@ class FunctorUtils {
      * Due to the {@link Predicate#evaluate(T)} method, Predicate<? super T> is
      * able to be coerced to Predicate<T> without casting issues.
      *
-     * @param predicates  the predicates to copy
+     * @param predicates the predicates to copy
      * @return the cloned predicates
      */
     @SuppressWarnings("unchecked")
@@ -60,7 +60,7 @@ class FunctorUtils {
      * simply as centralised documentation and atomic unchecked warning
      * suppression.
      *
-     * @param <T> the type of object the returned predicate should "accept"
+     * @param <T>       the type of object the returned predicate should "accept"
      * @param predicate the predicate to coerce.
      * @return the coerced predicate.
      */
@@ -72,7 +72,7 @@ class FunctorUtils {
     /**
      * Validate the predicates to ensure that all is well.
      *
-     * @param predicates  the predicates to validate
+     * @param predicates the predicates to validate
      */
     static void validate(final Predicate<?>... predicates) {
         if (predicates == null) {
@@ -89,7 +89,7 @@ class FunctorUtils {
     /**
      * Validate the predicates to ensure that all is well.
      *
-     * @param predicates  the predicates to validate
+     * @param predicates the predicates to validate
      * @return predicate array
      */
     static <T> Predicate<? super T>[] validate(final Collection<? extends Predicate<? super T>> predicates) {
@@ -114,7 +114,7 @@ class FunctorUtils {
     /**
      * Clone the closures to ensure that the internal reference can't be messed with.
      *
-     * @param closures  the closures to copy
+     * @param closures the closures to copy
      * @return the cloned closures
      */
     @SuppressWarnings("unchecked")
@@ -128,7 +128,7 @@ class FunctorUtils {
     /**
      * Validate the closures to ensure that all is well.
      *
-     * @param closures  the closures to validate
+     * @param closures the closures to validate
      */
     static void validate(final Closure<?>... closures) {
         if (closures == null) {
@@ -148,7 +148,7 @@ class FunctorUtils {
      * simply as centralised documentation and atomic unchecked warning
      * suppression.
      *
-     * @param <T> the type of object the returned closure should "accept"
+     * @param <T>     the type of object the returned closure should "accept"
      * @param closure the closure to coerce.
      * @return the coerced closure.
      */
@@ -160,7 +160,7 @@ class FunctorUtils {
     /**
      * Copy method
      *
-     * @param transformers  the transformers to copy
+     * @param transformers the transformers to copy
      * @return a clone of the transformers
      */
     @SuppressWarnings("unchecked")
@@ -174,7 +174,7 @@ class FunctorUtils {
     /**
      * Validate method
      *
-     * @param transformers  the transformers to validate
+     * @param transformers the transformers to validate
      */
     static void validate(final Transformer<?, ?>... transformers) {
         if (transformers == null) {
@@ -183,7 +183,7 @@ class FunctorUtils {
         for (int i = 0; i < transformers.length; i++) {
             if (transformers[i] == null) {
                 throw new NullPointerException(
-                    "The transformer array must not contain a null transformer, index " + i + " was null");
+                        "The transformer array must not contain a null transformer, index " + i + " was null");
             }
         }
     }
@@ -194,8 +194,8 @@ class FunctorUtils {
      * simply as centralised documentation and atomic unchecked warning
      * suppression.
      *
-     * @param <I> the type of object the returned transformer should "accept"
-     * @param <O> the type of object the returned transformer should "produce"
+     * @param <I>         the type of object the returned transformer should "accept"
+     * @param <O>         the type of object the returned transformer should "produce"
      * @param transformer the transformer to coerce.
      * @return the coerced transformer.
      */

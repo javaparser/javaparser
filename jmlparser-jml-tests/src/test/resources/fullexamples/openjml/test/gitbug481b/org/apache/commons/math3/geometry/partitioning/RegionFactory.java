@@ -27,28 +27,33 @@ import org.apache.commons.math3.geometry.partitioning.SubHyperplane.SplitSubHype
 import java.util.HashMap;
 import java.util.Map;
 
-/** This class is a factory for {@link Region}.
-
+/**
+ * This class is a factory for {@link Region}.
+ *
  * @param <S> Type of the space.
-
  * @since 3.0
  */
 public class RegionFactory<S extends Space> {
 
-    /** Visitor removing internal nodes attributes. */
+    /**
+     * Visitor removing internal nodes attributes.
+     */
     private final NodesCleaner nodeCleaner;
 
-    /** Simple constructor.
+    /**
+     * Simple constructor.
      */
     public RegionFactory() {
         nodeCleaner = new NodesCleaner();
     }
 
-    /** Build a convex region from a collection of bounding hyperplanes.
+    /**
+     * Build a convex region from a collection of bounding hyperplanes.
+     *
      * @param hyperplanes collection of bounding hyperplanes
      * @return a new convex region, or null if the collection is empty
      */
-    public Region<S> buildConvex(final Hyperplane<S> ... hyperplanes) {
+    public Region<S> buildConvex(final Hyperplane<S>... hyperplanes) {
         if ((hyperplanes == null) || (hyperplanes.length == 0)) {
             return null;
         }
@@ -71,10 +76,10 @@ public class RegionFactory<S extends Space> {
                 // are wrong), or it is parallel to a previous hyperplane
                 SubHyperplane<S> s = hyperplane.wholeHyperplane();
                 for (BSPTree<S> tree = node; tree.getParent() != null && s != null; tree = tree.getParent()) {
-                    final Hyperplane<S>         other = tree.getParent().getCut().getHyperplane();
+                    final Hyperplane<S> other = tree.getParent().getCut().getHyperplane();
                     final SplitSubHyperplane<S> split = s.split(other);
                     switch (split.getSide()) {
-                        case HYPER :
+                        case HYPER:
                             // the hyperplane is parallel to a previous hyperplane
                             if (!hyperplane.sameOrientationAs(other)) {
                                 // this hyperplane is opposite to the other one,
@@ -83,11 +88,11 @@ public class RegionFactory<S extends Space> {
                             }
                             // the hyperplane is an extension of an already known hyperplane, we just ignore it
                             break;
-                        case PLUS :
-                        // the hyperplane is outside of the current convex zone,
-                        // the input hyperplanes are inconsistent
-                        throw new MathIllegalArgumentException(LocalizedFormats.NOT_CONVEX_HYPERPLANES);
-                        default :
+                        case PLUS:
+                            // the hyperplane is outside of the current convex zone,
+                            // the input hyperplanes are inconsistent
+                            throw new MathIllegalArgumentException(LocalizedFormats.NOT_CONVEX_HYPERPLANES);
+                        default:
                             s = split.getMinus();
                     }
                 }
@@ -98,58 +103,66 @@ public class RegionFactory<S extends Space> {
 
     }
 
-    /** Compute the union of two regions.
+    /**
+     * Compute the union of two regions.
+     *
      * @param region1 first region (will be unusable after the operation as
-     * parts of it will be reused in the new region)
+     *                parts of it will be reused in the new region)
      * @param region2 second region (will be unusable after the operation as
-     * parts of it will be reused in the new region)
+     *                parts of it will be reused in the new region)
      * @return a new region, result of {@code region1 union region2}
      */
     public Region<S> union(final Region<S> region1, final Region<S> region2) {
         final BSPTree<S> tree =
-            region1.getTree(false).merge(region2.getTree(false), new UnionMerger());
+                region1.getTree(false).merge(region2.getTree(false), new UnionMerger());
         tree.visit(nodeCleaner);
         return region1.buildNew(tree);
     }
 
-    /** Compute the intersection of two regions.
+    /**
+     * Compute the intersection of two regions.
+     *
      * @param region1 first region (will be unusable after the operation as
-     * parts of it will be reused in the new region)
+     *                parts of it will be reused in the new region)
      * @param region2 second region (will be unusable after the operation as
-     * parts of it will be reused in the new region)
+     *                parts of it will be reused in the new region)
      * @return a new region, result of {@code region1 intersection region2}
      */
     public Region<S> intersection(final Region<S> region1, final Region<S> region2) {
         final BSPTree<S> tree =
-            region1.getTree(false).merge(region2.getTree(false), new IntersectionMerger());
+                region1.getTree(false).merge(region2.getTree(false), new IntersectionMerger());
         tree.visit(nodeCleaner);
         return region1.buildNew(tree);
     }
 
-    /** Compute the symmetric difference (exclusive or) of two regions.
+    /**
+     * Compute the symmetric difference (exclusive or) of two regions.
+     *
      * @param region1 first region (will be unusable after the operation as
-     * parts of it will be reused in the new region)
+     *                parts of it will be reused in the new region)
      * @param region2 second region (will be unusable after the operation as
-     * parts of it will be reused in the new region)
+     *                parts of it will be reused in the new region)
      * @return a new region, result of {@code region1 xor region2}
      */
     public Region<S> xor(final Region<S> region1, final Region<S> region2) {
         final BSPTree<S> tree =
-            region1.getTree(false).merge(region2.getTree(false), new XorMerger());
+                region1.getTree(false).merge(region2.getTree(false), new XorMerger());
         tree.visit(nodeCleaner);
         return region1.buildNew(tree);
     }
 
-    /** Compute the difference of two regions.
+    /**
+     * Compute the difference of two regions.
+     *
      * @param region1 first region (will be unusable after the operation as
-     * parts of it will be reused in the new region)
+     *                parts of it will be reused in the new region)
      * @param region2 second region (will be unusable after the operation as
-     * parts of it will be reused in the new region)
+     *                parts of it will be reused in the new region)
      * @return a new region, result of {@code region1 minus region2}
      */
     public Region<S> difference(final Region<S> region1, final Region<S> region2) {
         final BSPTree<S> tree =
-            region1.getTree(false).merge(region2.getTree(false), new DifferenceMerger(region1, region2));
+                region1.getTree(false).merge(region2.getTree(false), new DifferenceMerger(region1, region2));
         tree.visit(nodeCleaner);
         return region1.buildNew(tree);
     }
@@ -159,16 +172,20 @@ public class RegionFactory<S extends Space> {
      * region independent region will be built
      * @return a new region, complement of the specified one
      */
-    /** Get the complement of the region (exchanged interior/exterior).
+    /**
+     * Get the complement of the region (exchanged interior/exterior).
+     *
      * @param region region to complement, it will not modified, a new
-     * region independent region will be built
+     *               region independent region will be built
      * @return a new region, complement of the specified one
      */
     public Region<S> getComplement(final Region<S> region) {
         return region.buildNew(recurseComplement(region.getTree(false)));
     }
 
-    /** Recursively build the complement of a BSP tree.
+    /**
+     * Recursively build the complement of a BSP tree.
+     *
      * @param node current node of the original tree
      * @return new tree, complement of the node
      */
@@ -197,9 +214,11 @@ public class RegionFactory<S extends Space> {
 
     }
 
-    /** Recursively build the complement of a BSP tree.
+    /**
+     * Recursively build the complement of a BSP tree.
+     *
      * @param node current node of the original tree
-     * @param map transformed nodes map
+     * @param map  transformed nodes map
      * @return new tree, complement of the node
      */
     private BSPTree<S> recurseComplement(final BSPTree<S> node,
@@ -215,16 +234,16 @@ public class RegionFactory<S extends Space> {
             if (attribute != null) {
                 final SubHyperplane<S> plusOutside =
                         (attribute.getPlusInside() == null) ? null : attribute.getPlusInside().copySelf();
-                final SubHyperplane<S> plusInside  =
+                final SubHyperplane<S> plusInside =
                         (attribute.getPlusOutside() == null) ? null : attribute.getPlusOutside().copySelf();
                 // we start with an empty list of splitters, it will be filled in out of recursion
                 attribute = new BoundaryAttribute<S>(plusOutside, plusInside, new NodesSet<S>());
             }
 
             transformedNode = new BSPTree<S>(node.getCut().copySelf(),
-                                             recurseComplement(node.getPlus(),  map),
-                                             recurseComplement(node.getMinus(), map),
-                                             attribute);
+                    recurseComplement(node.getPlus(), map),
+                    recurseComplement(node.getMinus(), map),
+                    attribute);
         }
 
         map.put(node, transformedNode);
@@ -232,9 +251,13 @@ public class RegionFactory<S extends Space> {
 
     }
 
-    /** BSP tree leaf merger computing union of two regions. */
+    /**
+     * BSP tree leaf merger computing union of two regions.
+     */
     private class UnionMerger implements BSPTree.LeafMerger<S> {
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public BSPTree<S> merge(final BSPTree<S> leaf, final BSPTree<S> tree,
                                 final BSPTree<S> parentTree,
                                 final boolean isPlusChild, final boolean leafFromInstance) {
@@ -249,9 +272,13 @@ public class RegionFactory<S extends Space> {
         }
     }
 
-    /** BSP tree leaf merger computing intersection of two regions. */
+    /**
+     * BSP tree leaf merger computing intersection of two regions.
+     */
     private class IntersectionMerger implements BSPTree.LeafMerger<S> {
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public BSPTree<S> merge(final BSPTree<S> leaf, final BSPTree<S> tree,
                                 final BSPTree<S> parentTree,
                                 final boolean isPlusChild, final boolean leafFromInstance) {
@@ -266,9 +293,13 @@ public class RegionFactory<S extends Space> {
         }
     }
 
-    /** BSP tree leaf merger computing symmetric difference (exclusive or) of two regions. */
+    /**
+     * BSP tree leaf merger computing symmetric difference (exclusive or) of two regions.
+     */
     private class XorMerger implements BSPTree.LeafMerger<S> {
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public BSPTree<S> merge(final BSPTree<S> leaf, final BSPTree<S> tree,
                                 final BSPTree<S> parentTree, final boolean isPlusChild,
                                 final boolean leafFromInstance) {
@@ -282,16 +313,24 @@ public class RegionFactory<S extends Space> {
         }
     }
 
-    /** BSP tree leaf merger computing difference of two regions. */
+    /**
+     * BSP tree leaf merger computing difference of two regions.
+     */
     private class DifferenceMerger implements BSPTree.LeafMerger<S>, VanishingCutHandler<S> {
 
-        /** Region to subtract from. */
+        /**
+         * Region to subtract from.
+         */
         private final Region<S> region1;
 
-        /** Region to subtract. */
+        /**
+         * Region to subtract.
+         */
         private final Region<S> region2;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param region1 region to subtract from
          * @param region2 region to subtract
          */
@@ -300,69 +339,89 @@ public class RegionFactory<S extends Space> {
             this.region2 = region2.copySelf();
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public BSPTree<S> merge(final BSPTree<S> leaf, final BSPTree<S> tree,
                                 final BSPTree<S> parentTree, final boolean isPlusChild,
                                 final boolean leafFromInstance) {
             if ((Boolean) leaf.getAttribute()) {
                 // the leaf node represents an inside cell
                 final BSPTree<S> argTree =
-                    recurseComplement(leafFromInstance ? tree : leaf);
+                        recurseComplement(leafFromInstance ? tree : leaf);
                 argTree.insertInTree(parentTree, isPlusChild, this);
                 return argTree;
             }
             // the leaf node represents an outside cell
             final BSPTree<S> instanceTree =
-                leafFromInstance ? leaf : tree;
+                    leafFromInstance ? leaf : tree;
             instanceTree.insertInTree(parentTree, isPlusChild, this);
             return instanceTree;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public BSPTree<S> fixNode(final BSPTree<S> node) {
             // get a representative point in the degenerate cell
             final BSPTree<S> cell = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
             final Region<S> r = region1.buildNew(cell);
             final Point<S> p = r.getBarycenter();
             return new BSPTree<S>(region1.checkPoint(p) == Location.INSIDE &&
-                                  region2.checkPoint(p) == Location.OUTSIDE);
+                    region2.checkPoint(p) == Location.OUTSIDE);
         }
 
     }
 
-    /** Visitor removing internal nodes attributes. */
-    private class NodesCleaner implements  BSPTreeVisitor<S> {
+    /**
+     * Visitor removing internal nodes attributes.
+     */
+    private class NodesCleaner implements BSPTreeVisitor<S> {
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public Order visitOrder(final BSPTree<S> node) {
             return Order.PLUS_SUB_MINUS;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void visitInternalNode(final BSPTree<S> node) {
             node.setAttribute(null);
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public void visitLeafNode(final BSPTree<S> node) {
         }
 
     }
 
-    /** Handler replacing nodes with vanishing cuts with leaf nodes. */
+    /**
+     * Handler replacing nodes with vanishing cuts with leaf nodes.
+     */
     private class VanishingToLeaf implements VanishingCutHandler<S> {
 
-        /** Inside/outside indocator to use for ambiguous nodes. */
+        /**
+         * Inside/outside indocator to use for ambiguous nodes.
+         */
         private final boolean inside;
 
-        /** Simple constructor.
+        /**
+         * Simple constructor.
+         *
          * @param inside inside/outside indicator to use for ambiguous nodes
          */
         VanishingToLeaf(final boolean inside) {
             this.inside = inside;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         public BSPTree<S> fixNode(final BSPTree<S> node) {
             if (node.getPlus().getAttribute().equals(node.getMinus().getAttribute())) {
                 // no ambiguity

@@ -34,42 +34,45 @@ import org.apache.commons.math3.ode.FieldODEStateAndDerivative;
  * last one, store the points in an ephemeris, or forward them to
  * specialized processing or output methods.</p>
  *
+ * @param <T> the type of the field elements
  * @see org.apache.commons.math3.ode.FirstOrderFieldIntegrator
  * @see FieldStepInterpolator
- * @param <T> the type of the field elements
  * @since 3.6
  */
 
 public interface FieldStepHandler<T extends RealFieldElement<T>> {
 
-    /** Initialize step handler at the start of an ODE integration.
+    /**
+     * Initialize step handler at the start of an ODE integration.
      * <p>
      * This method is called once at the start of the integration. It
      * may be used by the step handler to initialize some internal data
      * if needed.
      * </p>
+     *
      * @param initialState initial time, state vector and derivative
-     * @param finalTime target time for the integration
+     * @param finalTime    target time for the integration
      */
     void init(FieldODEStateAndDerivative<T> initialState, T finalTime);
 
     /**
      * Handle the last accepted step
+     *
      * @param interpolator interpolator for the last accepted step. For
-     * efficiency purposes, the various integrators reuse the same
-     * object on each call, so if the instance wants to keep it across
-     * all calls (for example to provide at the end of the integration a
-     * continuous model valid throughout the integration range, as the
-     * {@link org.apache.commons.math3.ode.ContinuousOutputModel
-     * ContinuousOutputModel} class does), it should build a local copy
-     * using the clone method of the interpolator and store this copy.
-     * Keeping only a reference to the interpolator and reusing it will
-     * result in unpredictable behavior (potentially crashing the application).
-     * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
+     *                     efficiency purposes, the various integrators reuse the same
+     *                     object on each call, so if the instance wants to keep it across
+     *                     all calls (for example to provide at the end of the integration a
+     *                     continuous model valid throughout the integration range, as the
+     *                     {@link org.apache.commons.math3.ode.ContinuousOutputModel
+     *                     ContinuousOutputModel} class does), it should build a local copy
+     *                     using the clone method of the interpolator and store this copy.
+     *                     Keeping only a reference to the interpolator and reusing it will
+     *                     result in unpredictable behavior (potentially crashing the application).
+     * @param isLast       true if the step is the last one
+     * @throws MaxCountExceededException if the interpolator throws one because
+     *                                   the number of functions evaluations is exceeded
      */
     void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
-        throws MaxCountExceededException;
+            throws MaxCountExceededException;
 
 }

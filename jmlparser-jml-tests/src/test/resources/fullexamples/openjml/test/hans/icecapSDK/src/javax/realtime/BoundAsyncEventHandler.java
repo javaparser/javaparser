@@ -1,6 +1,6 @@
 /**************************************************************************
  * File name  : BoundAsyncEventHandler.java
- * 
+ *
  * This file is part a SCJ Level 0 and Level 1 implementation, 
  * based on SCJ Draft, Version 0.94 25 June 2013.
  *
@@ -19,7 +19,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  * Copyright 2012 
- * @authors  Anders P. Ravn, Aalborg University, DK
+ * @authors Anders P. Ravn, Aalborg University, DK
  *           Stephan E. Korsholm and Hans S&oslash;ndergaard, 
  *             VIA University College, DK
  *************************************************************************/
@@ -28,19 +28,18 @@ package javax.realtime;
 import javax.safetycritical.annotate.SCJAllowed;
 
 /**
- * The <code>BoundAsyncEventHandler</code> class is not directly available 
- * to the Safety-Critical Java application developers. Hence none of its 
+ * The <code>BoundAsyncEventHandler</code> class is not directly available
+ * to the Safety-Critical Java application developers. Hence none of its
  * methods or constructors are publicly available.
- * 
- *  @version 1.2; - December 2013
- * 
- * @author Anders P. Ravn, Aalborg University, 
+ *
+ * @author Anders P. Ravn, Aalborg University,
  * <A HREF="mailto:apr@cs.aau.dk">apr@cs.aau.dk</A>, <br>
- * Hans S&oslash;ndergaard, VIA University College, Denmark, 
+ * Hans S&oslash;ndergaard, VIA University College, Denmark,
  * <A HREF="mailto:hso@viauc.dk">hso@via.dk</A>
+ * @version 1.2; - December 2013
  */
 @SCJAllowed
-public class BoundAsyncEventHandler extends AsyncEventHandler 
-	implements BoundAbstractAsyncEventHandler {
+public class BoundAsyncEventHandler extends AsyncEventHandler
+        implements BoundAbstractAsyncEventHandler {
 
 }

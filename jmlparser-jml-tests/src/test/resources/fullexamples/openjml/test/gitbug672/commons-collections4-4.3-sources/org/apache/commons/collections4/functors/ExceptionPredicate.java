@@ -28,17 +28,21 @@ import java.io.Serializable;
  */
 public final class ExceptionPredicate<T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 7179106032121985545L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
     @SuppressWarnings("rawtypes") // the static instance works for all types
     public static final Predicate INSTANCE = new ExceptionPredicate<>();
 
     /**
      * Factory returning the singleton instance.
      *
-     * @param <T>  the object type
+     * @param <T> the object type
      * @return the singleton instance
      * @since 3.1
      */
@@ -57,7 +61,7 @@ public final class ExceptionPredicate<T> implements Predicate<T>, Serializable {
     /**
      * Evaluates the predicate always throwing an exception.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return never
      * @throws FunctorException always
      */

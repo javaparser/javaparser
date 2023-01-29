@@ -69,8 +69,6 @@ public class TypeUtils {
             return prim.get().toDescriptor();
         }
         prim = Primitive.byBoxedTypeName(className);
-        return prim.map(pType -> pType.toDescriptor())
-                .orElseThrow(
-                        () -> new IllegalArgumentException(String.format("Unknown primitive type \"%s\"", className)));
+        return prim.map(pType -> pType.toDescriptor()).orElseThrow(() -> new IllegalArgumentException(String.format("Unknown primitive type \"%s\"", className)));
     }
 }

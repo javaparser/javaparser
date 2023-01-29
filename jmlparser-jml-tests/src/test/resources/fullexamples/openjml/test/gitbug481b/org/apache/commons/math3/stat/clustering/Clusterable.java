@@ -21,6 +21,7 @@ import java.util.Collection;
 
 /**
  * Interface for points that can be clustered together.
+ *
  * @param <T> the type of point that can be clustered
  * @since 2.0
  * @deprecated As of 3.2 (to be removed in 4.0),

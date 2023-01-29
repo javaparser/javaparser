@@ -37,19 +37,19 @@ class Issue1713Test extends AbstractResolutionTest {
 
     @Test()
     void test() throws IOException {
-        
-        String src = 
-                "class X {\n" + 
-                "  @SuppressWarnings(value = \"unchecked\")\n" +
-                "  void x() {}\n" +
-                "}";
+
+        String src =
+                "class X {\n" +
+                        "  @SuppressWarnings(value = \"unchecked\")\n" +
+                        "  void x() {}\n" +
+                        "}";
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
         StaticJavaParser.setConfiguration(config);
 
         CompilationUnit cu = StaticJavaParser.parse(src);
-        
+
         NormalAnnotationExpr nae = cu.findFirst(NormalAnnotationExpr.class).get();
         assertEquals("java.lang.SuppressWarnings", nae.resolve().getQualifiedName());
 

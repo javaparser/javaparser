@@ -35,7 +35,9 @@ import java.util.Locale;
  */
 public class FractionFormat extends AbstractFormat {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 3008655719530972611L;
 
     /**
@@ -48,6 +50,7 @@ public class FractionFormat extends AbstractFormat {
     /**
      * Create an improper formatting instance with a custom number format for
      * both the numerator and denominator.
+     *
      * @param format the custom format for both the numerator and denominator.
      */
     public FractionFormat(final NumberFormat format) {
@@ -57,7 +60,8 @@ public class FractionFormat extends AbstractFormat {
     /**
      * Create an improper formatting instance with a custom number format for
      * the numerator and a custom number format for the denominator.
-     * @param numeratorFormat the custom format for the numerator.
+     *
+     * @param numeratorFormat   the custom format for the numerator.
      * @param denominatorFormat the custom format for the denominator.
      */
     public FractionFormat(final NumberFormat numeratorFormat,
@@ -68,6 +72,7 @@ public class FractionFormat extends AbstractFormat {
     /**
      * Get the set of locales for which complex formats are available.  This
      * is the same set as the {@link NumberFormat} set.
+     *
      * @return available complex format locales.
      */
     public static Locale[] getAvailableLocales() {
@@ -87,6 +92,7 @@ public class FractionFormat extends AbstractFormat {
 
     /**
      * Returns the default complex format for the current locale.
+     *
      * @return the default complex format.
      */
     public static FractionFormat getImproperInstance() {
@@ -95,6 +101,7 @@ public class FractionFormat extends AbstractFormat {
 
     /**
      * Returns the default complex format for the given locale.
+     *
      * @param locale the specific locale used by the format.
      * @return the complex format specific to the given locale.
      */
@@ -104,6 +111,7 @@ public class FractionFormat extends AbstractFormat {
 
     /**
      * Returns the default complex format for the current locale.
+     *
      * @return the default complex format.
      */
     public static FractionFormat getProperInstance() {
@@ -112,6 +120,7 @@ public class FractionFormat extends AbstractFormat {
 
     /**
      * Returns the default complex format for the given locale.
+     *
      * @param locale the specific locale used by the format.
      * @return the complex format specific to the given locale.
      */
@@ -123,6 +132,7 @@ public class FractionFormat extends AbstractFormat {
      * Create a default number format.  The default number format is based on
      * {@link NumberFormat#getNumberInstance(java.util.Locale)} with the only
      * customizing is the maximum number of fraction digits, which is set to 0.
+     *
      * @return the default number format.
      */
     protected static NumberFormat getDefaultNumberFormat() {
@@ -133,10 +143,10 @@ public class FractionFormat extends AbstractFormat {
      * Formats a {@link Fraction} object to produce a string.  The fraction is
      * output in improper format.
      *
-     * @param fraction the object to format.
+     * @param fraction   the object to format.
      * @param toAppendTo where the text is to be appended
-     * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * @param pos        On input: an alignment field, if desired. On output: the
+     *                   offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
     public StringBuffer format(final Fraction fraction,
@@ -148,7 +158,7 @@ public class FractionFormat extends AbstractFormat {
         getNumeratorFormat().format(fraction.getNumerator(), toAppendTo, pos);
         toAppendTo.append(" / ");
         getDenominatorFormat().format(fraction.getDenominator(), toAppendTo,
-            pos);
+                pos);
 
         return toAppendTo;
     }
@@ -158,19 +168,19 @@ public class FractionFormat extends AbstractFormat {
      * {@link Fraction} object or a {@link Number} object.  Any other type of
      * object will result in an {@link IllegalArgumentException} being thrown.
      *
-     * @param obj the object to format.
+     * @param obj        the object to format.
      * @param toAppendTo where the text is to be appended
-     * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * @param pos        On input: an alignment field, if desired. On output: the
+     *                   offsets of the alignment field
      * @return the value passed in as toAppendTo.
-     * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
-     * @throws FractionConversionException if the number cannot be converted to a fraction
+     * @throws FractionConversionException  if the number cannot be converted to a fraction
      * @throws MathIllegalArgumentException if <code>obj</code> is not a valid type.
+     * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
      */
     @Override
     public StringBuffer format(final Object obj,
                                final StringBuffer toAppendTo, final FieldPosition pos)
-        throws FractionConversionException, MathIllegalArgumentException {
+            throws FractionConversionException, MathIllegalArgumentException {
         StringBuffer ret = null;
 
         if (obj instanceof Fraction) {
@@ -186,10 +196,11 @@ public class FractionFormat extends AbstractFormat {
 
     /**
      * Parses a string to produce a {@link Fraction} object.
+     *
      * @param source the string to parse
      * @return the parsed {@link Fraction} object.
-     * @exception MathParseException if the beginning of the specified string
-     *            cannot be parsed.
+     * @throws MathParseException if the beginning of the specified string
+     *                            cannot be parsed.
      */
     @Override
     public Fraction parse(final String source) throws MathParseException {
@@ -204,8 +215,9 @@ public class FractionFormat extends AbstractFormat {
     /**
      * Parses a string to produce a {@link Fraction} object.  This method
      * expects the string to be formatted as an improper fraction.
+     *
      * @param source the string to parse
-     * @param pos input/output parsing parameter.
+     * @param pos    input/output parsing parameter.
      * @return the parsed {@link Fraction} object.
      */
     @Override
@@ -229,20 +241,20 @@ public class FractionFormat extends AbstractFormat {
         final int startIndex = pos.getIndex();
         final char c = parseNextCharacter(source, pos);
         switch (c) {
-        case 0 :
-            // no '/'
-            // return num as a fraction
-            return new Fraction(num.intValue(), 1);
-        case '/' :
-            // found '/', continue parsing denominator
-            break;
-        default :
-            // invalid '/'
-            // set index back to initial, error index should be the last
-            // character examined.
-            pos.setIndex(initialIndex);
-            pos.setErrorIndex(startIndex);
-            return null;
+            case 0:
+                // no '/'
+                // return num as a fraction
+                return new Fraction(num.intValue(), 1);
+            case '/':
+                // found '/', continue parsing denominator
+                break;
+            default:
+                // invalid '/'
+                // set index back to initial, error index should be the last
+                // character examined.
+                pos.setIndex(initialIndex);
+                pos.setErrorIndex(startIndex);
+                return null;
         }
 
         // parse whitespace

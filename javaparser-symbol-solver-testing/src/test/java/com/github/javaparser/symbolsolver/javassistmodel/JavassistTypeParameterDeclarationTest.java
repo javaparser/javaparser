@@ -52,7 +52,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JavassistTypeParameterDeclarationTest  extends AbstractResolutionTest {
+public class JavassistTypeParameterDeclarationTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
 
@@ -70,7 +70,7 @@ public class JavassistTypeParameterDeclarationTest  extends AbstractResolutionTe
         for (ResolvedMethodDeclaration method : compilationUnit.getDeclaredMethods()) {
             switch (method.getName()) {
                 case "sortByBeginPosition":
-                    List<ResolvedTypeParameterDeclaration> typeParams =  method.getTypeParameters();
+                    List<ResolvedTypeParameterDeclaration> typeParams = method.getTypeParameters();
                     assertEquals(1, typeParams.size());
                     assertEquals("T", typeParams.get(0).getName());
 
@@ -92,7 +92,7 @@ public class JavassistTypeParameterDeclarationTest  extends AbstractResolutionTe
 
         for (ResolvedMethodDeclaration method : compilationUnit.getDeclaredMethods()) {
             if ("complexGenerics".equals(method.getName())) {
-                List<ResolvedTypeParameterDeclaration> typeParams =  method.getTypeParameters();
+                List<ResolvedTypeParameterDeclaration> typeParams = method.getTypeParameters();
 
                 assertEquals(1, typeParams.size());
                 assertEquals("T", typeParams.get(0).getName());

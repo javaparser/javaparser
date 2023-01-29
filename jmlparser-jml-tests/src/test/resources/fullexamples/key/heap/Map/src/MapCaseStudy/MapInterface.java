@@ -7,11 +7,11 @@ public interface MapInterface {
     //@ public instance invariant \subset(\singleton(this.map), footprint);
     //@ public instance invariant \subset(\singleton(this.footprint), footprint);
     //@ public instance invariant \is_finite(map);
-    
+
     // --------
     // Method signatures and specifications
     // --------
-    
+
     /*@ normal_behaviour
      @ ensures map == \map_empty;
      @ assignable footprint;

@@ -35,9 +35,11 @@ import java.io.Serializable;
  * @since 1.2
  */
 public class NevilleInterpolator implements UnivariateInterpolator,
-    Serializable {
+        Serializable {
 
-    /** serializable version identifier */
+    /**
+     * serializable version identifier
+     */
     static final long serialVersionUID = 3003707660147873733L;
 
     /**
@@ -46,15 +48,15 @@ public class NevilleInterpolator implements UnivariateInterpolator,
      * @param x Interpolating points.
      * @param y Interpolating values.
      * @return a function which interpolates the data set
-     * @throws DimensionMismatchException if the array lengths are different.
-     * @throws NumberIsTooSmallException if the number of points is less than 2.
+     * @throws DimensionMismatchException    if the array lengths are different.
+     * @throws NumberIsTooSmallException     if the number of points is less than 2.
      * @throws NonMonotonicSequenceException if two abscissae have the same
-     * value.
+     *                                       value.
      */
     public PolynomialFunctionLagrangeForm interpolate(double x[], double y[])
-        throws DimensionMismatchException,
-               NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+            throws DimensionMismatchException,
+            NumberIsTooSmallException,
+            NonMonotonicSequenceException {
         return new PolynomialFunctionLagrangeForm(x, y);
     }
 }

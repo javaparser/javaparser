@@ -16,30 +16,51 @@
  */
 package javax.swing;
 
-public class BorderFactory extends java.lang.Object
-{
+public class BorderFactory extends java.lang.Object {
 
-   public static javax.swing.border.Border createLineBorder(java.awt.Color arg0);
-   public static javax.swing.border.Border createLineBorder(java.awt.Color arg0, int arg1);
-   public static javax.swing.border.Border createRaisedBevelBorder();
-   public static javax.swing.border.Border createLoweredBevelBorder();
-   public static javax.swing.border.Border createBevelBorder(int arg0);
-   public static javax.swing.border.Border createBevelBorder(int arg0, java.awt.Color arg1, java.awt.Color arg2);
-   public static javax.swing.border.Border createBevelBorder(int arg0, java.awt.Color arg1, java.awt.Color arg2, java.awt.Color arg3, java.awt.Color arg4);
-   public static javax.swing.border.Border createEtchedBorder();
-   public static javax.swing.border.Border createEtchedBorder(java.awt.Color arg0, java.awt.Color arg1);
-   public static javax.swing.border.Border createEtchedBorder(int arg0);
-   public static javax.swing.border.Border createEtchedBorder(int arg0, java.awt.Color arg1, java.awt.Color arg2);
-   public static javax.swing.border.TitledBorder createTitledBorder(java.lang.String arg0);
-   public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0);
-   public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0, java.lang.String arg1);
-   public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0, java.lang.String arg1, int arg2, int arg3);
-   public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0, java.lang.String arg1, int arg2, int arg3, java.awt.Font arg4);
-   public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0, java.lang.String arg1, int arg2, int arg3, java.awt.Font arg4, java.awt.Color arg5);
-   public static javax.swing.border.Border createEmptyBorder();
-   public static javax.swing.border.Border createEmptyBorder(int arg0, int arg1, int arg2, int arg3);
-   public static javax.swing.border.CompoundBorder createCompoundBorder();
-   public static javax.swing.border.CompoundBorder createCompoundBorder(javax.swing.border.Border arg0, javax.swing.border.Border arg1);
-   public static javax.swing.border.MatteBorder createMatteBorder(int arg0, int arg1, int arg2, int arg3, java.awt.Color arg4);
-   public static javax.swing.border.MatteBorder createMatteBorder(int arg0, int arg1, int arg2, int arg3, javax.swing.Icon arg4);
+    public static javax.swing.border.Border createLineBorder(java.awt.Color arg0);
+
+    public static javax.swing.border.Border createLineBorder(java.awt.Color arg0, int arg1);
+
+    public static javax.swing.border.Border createRaisedBevelBorder();
+
+    public static javax.swing.border.Border createLoweredBevelBorder();
+
+    public static javax.swing.border.Border createBevelBorder(int arg0);
+
+    public static javax.swing.border.Border createBevelBorder(int arg0, java.awt.Color arg1, java.awt.Color arg2);
+
+    public static javax.swing.border.Border createBevelBorder(int arg0, java.awt.Color arg1, java.awt.Color arg2, java.awt.Color arg3, java.awt.Color arg4);
+
+    public static javax.swing.border.Border createEtchedBorder();
+
+    public static javax.swing.border.Border createEtchedBorder(java.awt.Color arg0, java.awt.Color arg1);
+
+    public static javax.swing.border.Border createEtchedBorder(int arg0);
+
+    public static javax.swing.border.Border createEtchedBorder(int arg0, java.awt.Color arg1, java.awt.Color arg2);
+
+    public static javax.swing.border.TitledBorder createTitledBorder(java.lang.String arg0);
+
+    public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0);
+
+    public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0, java.lang.String arg1);
+
+    public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0, java.lang.String arg1, int arg2, int arg3);
+
+    public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0, java.lang.String arg1, int arg2, int arg3, java.awt.Font arg4);
+
+    public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border arg0, java.lang.String arg1, int arg2, int arg3, java.awt.Font arg4, java.awt.Color arg5);
+
+    public static javax.swing.border.Border createEmptyBorder();
+
+    public static javax.swing.border.Border createEmptyBorder(int arg0, int arg1, int arg2, int arg3);
+
+    public static javax.swing.border.CompoundBorder createCompoundBorder();
+
+    public static javax.swing.border.CompoundBorder createCompoundBorder(javax.swing.border.Border arg0, javax.swing.border.Border arg1);
+
+    public static javax.swing.border.MatteBorder createMatteBorder(int arg0, int arg1, int arg2, int arg3, java.awt.Color arg4);
+
+    public static javax.swing.border.MatteBorder createMatteBorder(int arg0, int arg1, int arg2, int arg3, javax.swing.Icon arg4);
 }

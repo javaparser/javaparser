@@ -54,14 +54,19 @@ import java.util.Iterator;
 public abstract class AbstractCollectionDecorator<E>
         implements Collection<E>, Serializable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 6249888059822088500L;
 
-    /** The collection being decorated */
+    /**
+     * The collection being decorated
+     */
     private Collection<E> collection;
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
+     *
      * @since 3.1
      */
     protected AbstractCollectionDecorator() {
@@ -71,7 +76,7 @@ public abstract class AbstractCollectionDecorator<E>
     /**
      * Constructor that wraps (not copies).
      *
-     * @param coll  the collection to decorate, must not be null
+     * @param coll the collection to decorate, must not be null
      * @throws NullPointerException if the collection is null
      */
     protected AbstractCollectionDecorator(final Collection<E> coll) {
@@ -96,7 +101,7 @@ public abstract class AbstractCollectionDecorator<E>
      * <p>
      * <b>NOTE:</b> this method should only be used during deserialization
      *
-     * @param coll  the decorated collection
+     * @param coll the decorated collection
      */
     protected void setCollection(final Collection<E> coll) {
         this.collection = coll;

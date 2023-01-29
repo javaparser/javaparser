@@ -29,21 +29,24 @@ import java.io.Serializable;
  * Returns the product of the available values.
  * <p>
  * If there are no values in the dataset, then 1 is returned.
- *  If any of the values are
+ * If any of the values are
  * <code>NaN</code>, then <code>NaN</code> is returned.</p>
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class Product extends AbstractStorelessUnivariateStatistic implements Serializable, WeightedEvaluation {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 2824226005990582538L;
 
-    /**The number of values that have been added */
+    /**
+     * The number of values that have been added
+     */
     private long n;
 
     /**
@@ -64,7 +67,7 @@ public class Product extends AbstractStorelessUnivariateStatistic implements Ser
      * to the {@code original}
      *
      * @param original the {@code Product} instance to copy
-     * @throws NullArgumentException  if original is null
+     * @throws NullArgumentException if original is null
      */
     public Product(Product original) throws NullArgumentException {
         copy(original, this);
@@ -111,15 +114,15 @@ public class Product extends AbstractStorelessUnivariateStatistic implements Ser
      * Throws <code>MathIllegalArgumentException</code> if the array is null.</p>
      *
      * @param values the input array
-     * @param begin index of the first array element to include
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the product of the values or 1 if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     @Override
     public double evaluate(final double[] values, final int begin, final int length)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         double product = Double.NaN;
         if (test(values, begin, length, true)) {
             product = 1.0;
@@ -150,16 +153,16 @@ public class Product extends AbstractStorelessUnivariateStatistic implements Ser
      * </pre>
      * that is, the weights are applied as exponents when computing the weighted product.</p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
-     * @param begin index of the first array element to include
-     * @param length the number of elements to include
+     * @param begin   index of the first array element to include
+     * @param length  the number of elements to include
      * @return the product of the values or 1 if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights,
-        final int begin, final int length) throws MathIllegalArgumentException {
+                           final int begin, final int length) throws MathIllegalArgumentException {
         double product = Double.NaN;
         if (test(values, weights, begin, length, true)) {
             product = 1.0;
@@ -187,14 +190,14 @@ public class Product extends AbstractStorelessUnivariateStatistic implements Ser
      * </pre>
      * that is, the weights are applied as exponents when computing the weighted product.</p>
      *
-     * @param values the input array
+     * @param values  the input array
      * @param weights the weights array
      * @return the product of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights)
-    throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         return evaluate(values, weights, 0, values.length);
     }
 
@@ -215,11 +218,11 @@ public class Product extends AbstractStorelessUnivariateStatistic implements Ser
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source Product to copy
-     * @param dest Product to copy to
+     * @param dest   Product to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(Product source, Product dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

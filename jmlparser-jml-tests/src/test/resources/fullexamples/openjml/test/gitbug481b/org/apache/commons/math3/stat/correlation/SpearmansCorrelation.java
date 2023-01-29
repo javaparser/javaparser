@@ -44,13 +44,19 @@ import java.util.Set;
  */
 public class SpearmansCorrelation {
 
-    /** Input data */
+    /**
+     * Input data
+     */
     private final RealMatrix data;
 
-    /** Ranking algorithm  */
+    /**
+     * Ranking algorithm
+     */
     private final RankingAlgorithm rankingAlgorithm;
 
-    /** Rank correlation */
+    /**
+     * Rank correlation
+     */
     private final PearsonsCorrelation rankCorrelation;
 
     /**
@@ -79,7 +85,7 @@ public class SpearmansCorrelation {
      * Create a SpearmansCorrelation from the given data matrix.
      *
      * @param dataMatrix matrix of data with columns representing
-     * variables to correlate
+     *                   variables to correlate
      */
     public SpearmansCorrelation(final RealMatrix dataMatrix) {
         this(dataMatrix, new NaturalRanking());
@@ -92,8 +98,8 @@ public class SpearmansCorrelation {
      * From version 4.0 onwards this constructor will throw an exception
      * if the provided {@link NaturalRanking} uses a {@link NaNStrategy#REMOVED} strategy.
      *
-     * @param dataMatrix matrix of data with columns representing
-     * variables to correlate
+     * @param dataMatrix       matrix of data with columns representing
+     *                         variables to correlate
      * @param rankingAlgorithm ranking algorithm
      */
     public SpearmansCorrelation(final RealMatrix dataMatrix, final RankingAlgorithm rankingAlgorithm) {
@@ -151,7 +157,7 @@ public class SpearmansCorrelation {
      * @return correlation matrix
      */
     public RealMatrix computeCorrelationMatrix(final double[][] matrix) {
-       return computeCorrelationMatrix(new BlockRealMatrix(matrix));
+        return computeCorrelationMatrix(new BlockRealMatrix(matrix));
     }
 
     /**
@@ -160,7 +166,7 @@ public class SpearmansCorrelation {
      * @param xArray first data array
      * @param yArray second data array
      * @return Returns Spearman's rank correlation coefficient for the two arrays
-     * @throws DimensionMismatchException if the arrays lengths do not match
+     * @throws DimensionMismatchException   if the arrays lengths do not match
      * @throws MathIllegalArgumentException if the array length is less than 2
      */
     public double correlation(final double[] xArray, final double[] yArray) {
@@ -168,12 +174,12 @@ public class SpearmansCorrelation {
             throw new DimensionMismatchException(xArray.length, yArray.length);
         } else if (xArray.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION,
-                                                   xArray.length, 2);
+                    xArray.length, 2);
         } else {
             double[] x = xArray;
             double[] y = yArray;
             if (rankingAlgorithm instanceof NaturalRanking &&
-                NaNStrategy.REMOVED == ((NaturalRanking) rankingAlgorithm).getNanStrategy()) {
+                    NaNStrategy.REMOVED == ((NaturalRanking) rankingAlgorithm).getNanStrategy()) {
                 final Set<Integer> nanPositions = new HashSet<Integer>();
 
                 nanPositions.addAll(getNaNPositions(xArray));
@@ -206,7 +212,7 @@ public class SpearmansCorrelation {
             // if we have found NaN values, we have to update the matrix size
             if (!nanPositions.isEmpty()) {
                 transformed = new BlockRealMatrix(matrix.getRowDimension() - nanPositions.size(),
-                                                  matrix.getColumnDimension());
+                        matrix.getColumnDimension());
                 for (int i = 0; i < transformed.getColumnDimension(); i++) {
                     transformed.setColumn(i, removeValues(matrix.getColumn(i), nanPositions));
                 }
@@ -243,7 +249,7 @@ public class SpearmansCorrelation {
     /**
      * Removes all values from the input array at the specified indices.
      *
-     * @param input the input array
+     * @param input   the input array
      * @param indices a set containing the indices to be removed
      * @return the input array without the values at the specified indices
      */

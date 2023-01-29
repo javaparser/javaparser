@@ -70,9 +70,9 @@ class YamlPrinterTest {
 
     @Test
     void testParsingJavadocWithQuoteAndNewline() {
-        String code = "/**\n" + 
+        String code = "/**\n" +
                 " * \" this comment contains a quote and newlines\n" +
-                " */\n" + 
+                " */\n" +
                 "public class Dog {}";
 
         YamlPrinter yamlPrinter = new YamlPrinter(true);

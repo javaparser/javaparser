@@ -34,15 +34,15 @@ public class SymmetricGaussIntegrator extends GaussIntegrator {
      * The integration interval is defined by the first and last value of
      * {@code points} which must be sorted in increasing order.
      *
-     * @param points Integration points.
+     * @param points  Integration points.
      * @param weights Weights of the corresponding integration nodes.
      * @throws NonMonotonicSequenceException if the {@code points} are not
-     * sorted in increasing order.
-     * @throws DimensionMismatchException if points and weights don't have the same length
+     *                                       sorted in increasing order.
+     * @throws DimensionMismatchException    if points and weights don't have the same length
      */
     public SymmetricGaussIntegrator(double[] points,
                                     double[] weights)
-        throws NonMonotonicSequenceException, DimensionMismatchException {
+            throws NonMonotonicSequenceException, DimensionMismatchException {
         super(points, weights);
     }
 
@@ -52,12 +52,11 @@ public class SymmetricGaussIntegrator extends GaussIntegrator {
      *
      * @param pointsAndWeights Integration points and corresponding weights.
      * @throws NonMonotonicSequenceException if the {@code points} are not
-     * sorted in increasing order.
-     *
+     *                                       sorted in increasing order.
      * @see #SymmetricGaussIntegrator(double[], double[])
      */
     public SymmetricGaussIntegrator(Pair<double[], double[]> pointsAndWeights)
-        throws NonMonotonicSequenceException {
+            throws NonMonotonicSequenceException {
         this(pointsAndWeights.getFirst(), pointsAndWeights.getSecond());
     }
 

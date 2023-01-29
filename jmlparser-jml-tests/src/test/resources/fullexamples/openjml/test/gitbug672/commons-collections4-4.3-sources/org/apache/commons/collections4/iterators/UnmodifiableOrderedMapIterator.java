@@ -29,16 +29,19 @@ import org.apache.commons.collections4.Unmodifiable;
 public final class UnmodifiableOrderedMapIterator<K, V> implements OrderedMapIterator<K, V>,
         Unmodifiable {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     private final OrderedMapIterator<? extends K, ? extends V> iterator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Decorates the specified iterator such that it cannot be modified.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @param iterator  the iterator to decorate
+     * @param <K>      the key type
+     * @param <V>      the value type
+     * @param iterator the iterator to decorate
      * @return a new unmodifiable ordered map iterator
      * @throws NullPointerException if the iterator is null
      */
@@ -57,10 +60,11 @@ public final class UnmodifiableOrderedMapIterator<K, V> implements OrderedMapIte
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor.
      *
-     * @param iterator  the iterator to decorate
+     * @param iterator the iterator to decorate
      */
     private UnmodifiableOrderedMapIterator(final OrderedMapIterator<K, ? extends V> iterator) {
         super();

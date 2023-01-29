@@ -29,14 +29,22 @@ import java.io.Serializable;
  */
 public class IfClosure<E> implements Closure<E>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = 3518477308466486130L;
 
-    /** The test */
+    /**
+     * The test
+     */
     private final Predicate<? super E> iPredicate;
-    /** The closure to use if true */
+    /**
+     * The closure to use if true
+     */
     private final Closure<? super E> iTrueClosure;
-    /** The closure to use if false */
+    /**
+     * The closure to use if false
+     */
     private final Closure<? super E> iFalseClosure;
 
     /**
@@ -45,9 +53,9 @@ public class IfClosure<E> implements Closure<E>, Serializable {
      * This factory creates a closure that performs no action when
      * the predicate is false.
      *
-     * @param <E> the type that the closure acts on
-     * @param predicate  predicate to switch on
-     * @param trueClosure  closure used if true
+     * @param <E>         the type that the closure acts on
+     * @param predicate   predicate to switch on
+     * @param trueClosure closure used if true
      * @return the <code>if</code> closure
      * @throws NullPointerException if either argument is null
      * @since 3.2
@@ -59,10 +67,10 @@ public class IfClosure<E> implements Closure<E>, Serializable {
     /**
      * Factory method that performs validation.
      *
-     * @param <E> the type that the closure acts on
-     * @param predicate  predicate to switch on
+     * @param <E>          the type that the closure acts on
+     * @param predicate    predicate to switch on
      * @param trueClosure  closure used if true
-     * @param falseClosure  closure used if false
+     * @param falseClosure closure used if false
      * @return the <code>if</code> closure
      * @throws NullPointerException if any argument is null
      */
@@ -85,8 +93,8 @@ public class IfClosure<E> implements Closure<E>, Serializable {
      * This constructor creates a closure that performs no action when
      * the predicate is false.
      *
-     * @param predicate  predicate to switch on, not null
-     * @param trueClosure  closure used if true, not null
+     * @param predicate   predicate to switch on, not null
+     * @param trueClosure closure used if true, not null
      * @since 3.2
      */
     public IfClosure(final Predicate<? super E> predicate, final Closure<? super E> trueClosure) {
@@ -97,9 +105,9 @@ public class IfClosure<E> implements Closure<E>, Serializable {
      * Constructor that performs no validation.
      * Use <code>ifClosure</code> if you want that.
      *
-     * @param predicate  predicate to switch on, not null
+     * @param predicate    predicate to switch on, not null
      * @param trueClosure  closure used if true, not null
-     * @param falseClosure  closure used if false, not null
+     * @param falseClosure closure used if false, not null
      */
     public IfClosure(final Predicate<? super E> predicate, final Closure<? super E> trueClosure,
                      final Closure<? super E> falseClosure) {
@@ -112,7 +120,7 @@ public class IfClosure<E> implements Closure<E>, Serializable {
     /**
      * Executes the true or false closure according to the result of the predicate.
      *
-     * @param input  the input object
+     * @param input the input object
      */
     @Override
     public void execute(final E input) {

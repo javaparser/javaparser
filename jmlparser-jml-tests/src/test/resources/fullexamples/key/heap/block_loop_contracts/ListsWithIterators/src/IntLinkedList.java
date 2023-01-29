@@ -1,5 +1,5 @@
 public final class IntLinkedList implements IntList {
-        
+
     /*@nullable@*/ IntNode first;
     /*@nullable@*/ IntNode last;
     int size;
@@ -21,11 +21,11 @@ public final class IntLinkedList implements IntList {
       @
       @ invariant size == seq.length && size == nodeseq.length;
       @*/
-    
+
     public IntIterator iterator() {
         return new IntIterator(this);
     }
-    
+
     /*@ public normal_behavior
       @ ensures \result == (\sum int i; 0 <= i && i < seq.length; (int)seq[i]);
       @ assignable \nothing;
@@ -45,10 +45,10 @@ public final class IntLinkedList implements IntList {
         for (MyInteger i : this) {
             result += i.intValue();
         }
-        
+
         return result;
     }
-    
+
     /*@ public normal_behavior
       @ ensures \result == (\sum int i; 0 <= i && i < seq.length; (int)seq[i]);
       @ assignable \nothing;
@@ -63,7 +63,7 @@ public final class IntLinkedList implements IntList {
         for (MyInteger i : this) {
             result += i.intValue();
         }
-        
+
         return result;
     }
 }

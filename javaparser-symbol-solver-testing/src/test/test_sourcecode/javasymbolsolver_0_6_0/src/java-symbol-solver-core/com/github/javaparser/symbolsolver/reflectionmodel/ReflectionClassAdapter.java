@@ -180,7 +180,7 @@ class ReflectionClassAdapter {
                 .map(m -> new ReflectionConstructorDeclaration(m, typeSolver))
                 .collect(Collectors.toList());
     }
-    
+
     public Optional<ReferenceTypeDeclaration> containerType() {
         Class<?> declaringClass = clazz.getDeclaringClass();
         return declaringClass == null ?

@@ -3,12 +3,12 @@
  * Copyright (C) 2011, 2013-2015 The JavaParser Team.
  *
  * This file is part of JavaParser.
- * 
+ *
  * JavaParser can be used either under the terms of
  * a) the GNU Lesser General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
- * b) the terms of the Apache License 
+ * b) the terms of the Apache License
  *
  * You should have received a copy of both licenses in LICENCE.LGPL and
  * LICENCE.APACHE. Please refer to those files for details.
@@ -100,9 +100,9 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     /**
      * Return the modifiers of this member declaration.
-     * 
-     * @see ModifierSet
+     *
      * @return modifiers
+     * @see ModifierSet
      */
     public int getModifiers() {
         return modifiers;
@@ -168,7 +168,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
 
     /**
      * The declaration returned has this schema:
-     *
+     * <p>
      * [accessSpecifier] className ([paramType [paramName]])
      * [throws exceptionsList]
      */
@@ -184,8 +184,7 @@ public final class ConstructorDeclaration extends BodyDeclaration implements Doc
         sb.append(getName());
         sb.append("(");
         boolean firstParam = true;
-        for (Parameter param : getParameters())
-        {
+        for (Parameter param : getParameters()) {
             if (firstParam) {
                 firstParam = false;
             } else {

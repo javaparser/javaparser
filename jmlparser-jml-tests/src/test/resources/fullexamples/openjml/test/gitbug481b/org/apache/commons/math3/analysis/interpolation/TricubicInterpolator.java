@@ -28,7 +28,7 @@ import org.apache.commons.math3.util.MathArrays;
  * @since 3.4
  */
 public class TricubicInterpolator
-    implements TrivariateGridInterpolator {
+        implements TrivariateGridInterpolator {
     /**
      * {@inheritDoc}
      */
@@ -36,8 +36,8 @@ public class TricubicInterpolator
                                                      final double[] yval,
                                                      final double[] zval,
                                                      final double[][][] fval)
-        throws NoDataException, NumberIsTooSmallException,
-               DimensionMismatchException, NonMonotonicSequenceException {
+            throws NoDataException, NumberIsTooSmallException,
+            DimensionMismatchException, NonMonotonicSequenceException {
         if (xval.length == 0 || yval.length == 0 || zval.length == 0 || fval.length == 0) {
             throw new NoDataException();
         }
@@ -112,27 +112,27 @@ public class TricubicInterpolator
                     final double deltaXYZ = deltaXY * deltaZ;
 
                     d3FdXdYdZ[i][j][k] = (fval[nI][nJ][nK] - fval[nI][pJ][nK] -
-                                          fval[pI][nJ][nK] + fval[pI][pJ][nK] -
-                                          fval[nI][nJ][pK] + fval[nI][pJ][pK] +
-                                          fval[pI][nJ][pK] - fval[pI][pJ][pK]) / deltaXYZ;
+                            fval[pI][nJ][nK] + fval[pI][pJ][nK] -
+                            fval[nI][nJ][pK] + fval[nI][pJ][pK] +
+                            fval[pI][nJ][pK] - fval[pI][pJ][pK]) / deltaXYZ;
                 }
             }
         }
 
         // Create the interpolating function.
         return new TricubicInterpolatingFunction(xval, yval, zval, fval,
-                                                 dFdX, dFdY, dFdZ,
-                                                 d2FdXdY, d2FdXdZ, d2FdYdZ,
-                                                 d3FdXdYdZ) {
+                dFdX, dFdY, dFdZ,
+                d2FdXdY, d2FdXdZ, d2FdYdZ,
+                d3FdXdYdZ) {
             /** {@inheritDoc} */
             @Override
             public boolean isValidPoint(double x, double y, double z) {
                 if (x < xval[1] ||
-                    x > xval[xval.length - 2] ||
-                    y < yval[1] ||
-                    y > yval[yval.length - 2] ||
-                    z < zval[1] ||
-                    z > zval[zval.length - 2]) {
+                        x > xval[xval.length - 2] ||
+                        y < yval[1] ||
+                        y > yval[yval.length - 2] ||
+                        z < zval[1] ||
+                        z > zval[zval.length - 2]) {
                     return false;
                 } else {
                     return true;

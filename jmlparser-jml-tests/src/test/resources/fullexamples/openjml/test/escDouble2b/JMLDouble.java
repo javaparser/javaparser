@@ -19,19 +19,21 @@
 // Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 // 02110-1301  USA.
 
-/** A reflection of {@link java.lang.Double} that implements {@link JMLType}.
+/**
+ * A reflection of {@link java.lang.Double} that implements {@link JMLType}.
  *
- * @version $Revision: 1.34 $
  * @author Brandon Shilling
  * @author Gary T. Leavens
  * @author David Cok
+ * @version $Revision: 1.34 $
  * @see java.lang.Double
  * @see JMLDouble
  */
 //-@ immutable
 public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
 
-    /** The double that is the abstract value of this object.
+    /**
+     * The double that is the abstract value of this object.
      */
     //@ model public double theDouble;
 
@@ -41,18 +43,20 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
 
     //@ public invariant owner == null;
 
-    /** Initialize this object to contain zero.
+    /**
+     * Initialize this object to contain zero.
      */
     /*@ public normal_behavior
       @   ensures theDouble == 0.0d;
       @ pure
       @*/
-    public JMLDouble ( ) {
+    public JMLDouble() {
         doubleValue = 0.0d;
         //@ set owner = null;
-    } 
-   
-    /** Initialize this object to contain the given double.
+    }
+
+    /**
+     * Initialize this object to contain the given double.
      */
     /*@   public normal_behavior
       @     requires !Double.isNaN(inDouble);
@@ -62,25 +66,27 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @     requires Double.isNaN(inDouble);
       @     ensures Double.isNaN(theDouble);
       @ pure
-      @*/ 
-    public JMLDouble (double inDouble) {
+      @*/
+    public JMLDouble(double inDouble) {
         doubleValue = inDouble;
         //@ set owner = null;
-    } 
+    }
 
-    /** Initialize this object to contain an approximation to the
+    /**
+     * Initialize this object to contain an approximation to the
      * given integer.
      */
     /*@ public normal_behavior
       @   ensures theDouble == (double)inInt;
       @ pure
       @*/
-    public JMLDouble (int inInt) {
-        doubleValue = (double)inInt;
+    public JMLDouble(int inInt) {
+        doubleValue = (double) inInt;
         //@ set owner = null;
-    } 
+    }
 
-    /** Initialize this object to contain the value of the given
+    /**
+     * Initialize this object to contain the value of the given
      * Double.
      */
     /*@   public normal_behavior
@@ -97,7 +103,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         //@ set owner = null;
     }
 
-    /** Initialize this object to contain the value given by the
+    /**
+     * Initialize this object to contain the value given by the
      * string argument.
      */
     /*@ public normal_behavior
@@ -111,39 +118,42 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @     signals (NumberFormatException) !Double.parseable(s);
       @ pure
       @*/
-    public JMLDouble (/*@ non_null @*/ String s) throws NumberFormatException {
+    public JMLDouble(/*@ non_null @*/ String s) throws NumberFormatException {
         doubleValue = new Double(s).doubleValue();
         //@ set owner = null;
     }
 
-    /** Tell if this object contains either positive or negative infinity.
+    /**
+     * Tell if this object contains either positive or negative infinity.
      */
     /*@ public normal_behavior
       @   ensures \result <==> (theDouble == Double.POSITIVE_INFINITY) 
       @                   || (theDouble == Double.NEGATIVE_INFINITY);
       @*/
     public boolean isInfinite() {
-  	return (doubleValue == Double.POSITIVE_INFINITY)
-            || (doubleValue == Double.NEGATIVE_INFINITY);
+        return (doubleValue == Double.POSITIVE_INFINITY)
+                || (doubleValue == Double.NEGATIVE_INFINITY);
     }
 
-    /** Tell if this object contains NaN (not a number).
+    /**
+     * Tell if this object contains NaN (not a number).
      */
     /*@ public normal_behavior
     @   ensures \result <==> Double.isNaN(theDouble); 
     @*/
     public boolean isNaN() {
-	    return Double.isNaN(doubleValue);
+        return Double.isNaN(doubleValue);
     }
 
     /*@ public normal_behavior
       @   ensures \result <==> Double.isFinite(theDouble); 
       @*/
     public boolean isFinite() {
-      return Double.isFinite(doubleValue);
+        return Double.isFinite(doubleValue);
     }
 
-    /** Return a clone of this object.
+    /**
+     * Return a clone of this object.
      */
     /*@ also
       @   public normal_behavior
@@ -159,19 +169,22 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
     public Object clone() {
         return new JMLDouble(this.doubleValue);
     }
-   
-    /** Compare this to op2, returning a comparison code.
-     *  @param op2 the object this is compared to.
-     *  @exception ClassCastException when o is not a JMLDouble.
+
+    /**
+     * Compare this to op2, returning a comparison code.
+     *
+     * @param op2 the object this is compared to.
+     * @throws ClassCastException when o is not a JMLDouble.
      */
     public int compareTo(/*@ non_null @*/ JMLComparable op2) throws ClassCastException {
-    	//@ assume (op2 instanceof JMLDouble) <==> (\typeof(op2) <: \typeof(this));
-    	if (!(op2 instanceof JMLDouble)) throw new ClassCastException();
+        //@ assume (op2 instanceof JMLDouble) <==> (\typeof(op2) <: \typeof(this));
+        if (!(op2 instanceof JMLDouble)) throw new ClassCastException();
         return Double.valueOf(doubleValue)
-            .compareTo(Double.valueOf(((JMLDouble)op2).doubleValue));
+                .compareTo(Double.valueOf(((JMLDouble) op2).doubleValue));
     }
 
-    /** Tell if the argument is zero (either positive or negative).
+    /**
+     * Tell if the argument is zero (either positive or negative).
      */
     /*@ public normal_behavior
       @   requires !Double.isNaN(d);
@@ -180,8 +193,9 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
     public static /*@ pure @*/ boolean isZero(double d) {
         return d == +0.0d || d == -0.0d;
     }
-  
-    /** Tell if this object contains zero (either positive or negative).
+
+    /**
+     * Tell if this object contains zero (either positive or negative).
      */
     /*@ public normal_behavior
       @   ensures \result <==> (theDouble == +0.0d || theDouble == -0.0d);
@@ -191,7 +205,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return doubleValue == +0.0d || doubleValue == -0.0d;
     }
 
-    /** Tell whether this object is equal to the argument.
+    /**
+     * Tell whether this object is equal to the argument.
      */
     /*@ also
       @   public normal_behavior
@@ -208,7 +223,7 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         if (!(op2 instanceof JMLDouble)) {
             return false;
         }
-        JMLDouble jmld2 = (JMLDouble)op2;
+        JMLDouble jmld2 = (JMLDouble) op2;
         // @ assert \invariant_for(jmld2);  // FIXME - why does this not prove, given the preconditions
         //@ assume \invariant_for(jmld2);
         if (isNaN() && jmld2.isNaN()) {
@@ -219,17 +234,19 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
             double dv2 = jmld2.doubleValue;
             return doubleValue == dv2;
         } else {
-        	return false;
+            return false;
         }
-    } 
+    }
 
-    /** Return a hash code for this object.
+    /**
+     * Return a hash code for this object.
      */
     public int hashCode() {
         return new Double(doubleValue).hashCode();
     }
 
-    /** Return the double contained in this object.
+    /**
+     * Return the double contained in this object.
      */
     /*@ public normal_behavior
       @   requires !isNaN();
@@ -242,7 +259,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return doubleValue;
     }
 
-    /** Return a Double containing the double contained in this object.
+    /**
+     * Return a Double containing the double contained in this object.
      */
     /*@ public normal_behavior
       @   ensures \result != null;
@@ -252,7 +270,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return new Double(doubleValue);
     }
 
-    /** Return the negation of this.
+    /**
+     * Return the negation of this.
      */
     /*@ public normal_behavior
       @   requires !isNaN() && !Double.isNaN(-this.theDouble);
@@ -260,11 +279,12 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @   ensures \result.theDouble == -this.theDouble;
       @*/
     public /*@ non_null @*/ JMLDouble negated() {
-    	double x = -doubleValue;
+        double x = -doubleValue;
         return new JMLDouble(-doubleValue);
     }
 
-    /** Return the sum of this and the given argument.
+    /**
+     * Return the sum of this and the given argument.
      */
     /*@ public normal_behavior
       @   requires isFinite() && d2.isFinite() && !Double.isNaN(theDouble + d2.theDouble);
@@ -275,7 +295,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return new JMLDouble(doubleValue + d2.doubleValue);
     }
 
-    /** Return the difference between this and the given argument.
+    /**
+     * Return the difference between this and the given argument.
      */
     /*@ public normal_behavior
       @   requires isFinite() && d2.isFinite() && !Double.isNaN(theDouble - d2.theDouble);
@@ -286,7 +307,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return new JMLDouble(doubleValue - d2.doubleValue);
     }
 
-    /** Return the product of this and the given argument.
+    /**
+     * Return the product of this and the given argument.
      */
     /*@ public normal_behavior
       @   requires isFinite() && d2.isFinite() && !Double.isNaN(theDouble * d2.theDouble);
@@ -297,7 +319,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return new JMLDouble(doubleValue * d2.doubleValue);
     }
 
-    /** Return the quotient of this divided by the given argument.
+    /**
+     * Return the quotient of this divided by the given argument.
      */
     /*@ public normal_behavior
       @     requires isFinite() && d2.isFinite();
@@ -305,11 +328,12 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @      ensures \result.theDouble == theDouble / d2.theDouble;
       @*/
     public /*@ non_null @*/
-        JMLDouble dividedBy(/*@ non_null */ JMLDouble d2) {
+    JMLDouble dividedBy(/*@ non_null */ JMLDouble d2) {
         return new JMLDouble(doubleValue / d2.doubleValue);
     }
 
-    /** Return the remainder of this divided by the given argument.
+    /**
+     * Return the remainder of this divided by the given argument.
      */
     /*@ public normal_behavior
       @   requires isFinite() && d2.isFinite() && !Double.isNaN(theDouble % d2.theDouble);
@@ -317,13 +341,14 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @      ensures \result.theDouble == theDouble % d2.theDouble;
       @*/
     public /*@ non_null @*/
-        JMLDouble remainderBy(/*@ non_null @*/ JMLDouble d2) {
+    JMLDouble remainderBy(/*@ non_null @*/ JMLDouble d2) {
         JMLDouble r = new JMLDouble(doubleValue % d2.doubleValue());
         //@ show this, d2, r, this.theDouble, d2.theDouble, r.theDouble;
         return r;
     }
 
-    /** Tell whether this is strictly greater than the given argument.
+    /**
+     * Tell whether this is strictly greater than the given argument.
      */
     /*@ public normal_behavior
       @   requires !isNaN() && !d2.isNaN();
@@ -333,7 +358,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return (doubleValue > d2.doubleValue());
     }
 
-    /** Tell whether this is strictly less than the given argument.
+    /**
+     * Tell whether this is strictly less than the given argument.
      */
     /*@ public normal_behavior
       @   requires !isNaN() && !d2.isNaN();
@@ -343,7 +369,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return (doubleValue < d2.doubleValue());
     }
 
-    /** Tell whether this is greater than or equal to the given argument.
+    /**
+     * Tell whether this is greater than or equal to the given argument.
      */
     /*@ public normal_behavior
       @   requires !isNaN() && !d2.isNaN();
@@ -353,7 +380,8 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
         return (doubleValue >= d2.doubleValue());
     }
 
-    /** Tell whether this is less than or equal to the given argument.
+    /**
+     * Tell whether this is less than or equal to the given argument.
      */
     /*@ public normal_behavior
       @   requires !isNaN() && !d2.isNaN();
@@ -362,16 +390,18 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
     public boolean lessThanOrEqualTo(/*@ non_null */ JMLDouble d2) {
         return (doubleValue <= d2.doubleValue());
     }
-    
-    /** Return a string representation of this object.
+
+    /**
+     * Return a string representation of this object.
      */
     // specification inherited from Object
     public String toString() {
         return String.valueOf(doubleValue);
     }
 
-    /** Tell whether absolute value of difference of this JMLDouble and the arg
-     *  is within the given epsilon.
+    /**
+     * Tell whether absolute value of difference of this JMLDouble and the arg
+     * is within the given epsilon.
      */
     /*@ public normal_behavior
       @    requires d2 != null && !Double.isNaN(theDouble) && !Double.isNaN(d2.theDouble) && !Double.isNaN(theDouble - d2.theDouble) && !Double.isNaN(epsilon);
@@ -380,13 +410,15 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @             StrictMath.abs(theDouble - d2.theDouble) <= epsilon;
       @*/
     public boolean withinEpsilonOf(/*@ non_null @*/ JMLDouble d2,
-                                   double epsilon) {
-        return StrictMath.abs(doubleValue()-d2.doubleValue()) <= epsilon;
+                                                    double epsilon) {
+        return StrictMath.abs(doubleValue() - d2.doubleValue()) <= epsilon;
     }
-    
-    /** Tell whether relative difference of this JMLDouble and the arg is 
-     *   within the given epsilon.
-     *  @see #approximatelyEqualTo(double, double, double)
+
+    /**
+     * Tell whether relative difference of this JMLDouble and the arg is
+     * within the given epsilon.
+     *
+     * @see #approximatelyEqualTo(double, double, double)
      */
     /*@ public normal_behavior
       @    requires d2 != null && !Double.isNaN(theDouble - d2.theDouble);
@@ -396,12 +428,13 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @       <==> approximatelyEqualTo(theDouble, d2.theDouble, epsilon);
       @*/
     public boolean approximatelyEqualTo(/*@ non_null @*/ JMLDouble d2,
-                                        double epsilon) {
+                                                         double epsilon) {
         return approximatelyEqualTo(doubleValue(), d2.doubleValue(), epsilon);
     }
-    
-    /** Tell whether absolute value of difference of this JMLDouble and the arg
-     *  is within the given epsilon.
+
+    /**
+     * Tell whether absolute value of difference of this JMLDouble and the arg
+     * is within the given epsilon.
      */
     /*@ public normal_behavior
       @    requires d2 != null && !Double.isNaN(theDouble) && !Double.isNaN(d2.theDouble) && !Double.isNaN(theDouble - d2.theDouble) && !Double.isNaN(epsilon);
@@ -410,13 +443,15 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @             (StrictMath.abs(theDouble - d2.doubleValue()) <= epsilon);
       @*/
     public boolean withinEpsilonOf(/*@ non_null @*/ Double d2,
-                                   double epsilon) {
-        return StrictMath.abs(doubleValue()-d2.doubleValue()) <= epsilon;
+                                                    double epsilon) {
+        return StrictMath.abs(doubleValue() - d2.doubleValue()) <= epsilon;
     }
-    
-    /** Tell whether relative difference of this JMLDouble and the arg is 
-     *   within the given epsilon.
-     *  @see #approximatelyEqualTo(double, double, double)
+
+    /**
+     * Tell whether relative difference of this JMLDouble and the arg is
+     * within the given epsilon.
+     *
+     * @see #approximatelyEqualTo(double, double, double)
      */
     /*@ public normal_behavior
       @    requires d2 != null && !Double.isNaN(theDouble) && !Double.isNaN(d2.theDouble) && !Double.isNaN(theDouble - d2.theDouble);
@@ -426,12 +461,13 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @       <==> approximatelyEqualTo(theDouble, d2.doubleValue(), epsilon);
       @*/
     public boolean approximatelyEqualTo(/*@ non_null @*/ Double d2,
-                                        double epsilon) {
+                                                         double epsilon) {
         return approximatelyEqualTo(doubleValue(), d2.doubleValue(), epsilon);
     }
-    
-    /** Tell whether absolute value of difference of this JMLDouble and the arg
-     *  is within the given epsilon.
+
+    /**
+     * Tell whether absolute value of difference of this JMLDouble and the arg
+     * is within the given epsilon.
      */
     /*@ public normal_behavior
       @    requires !isNaN() && !Double.isNaN(d2) && !Double.isNaN(theDouble - d2) && !Double.isNaN(epsilon);
@@ -440,12 +476,14 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @         StrictMath.abs(theDouble - d2) <= epsilon;
       @*/
     public boolean withinEpsilonOf(double d2, double epsilon) {
-        return StrictMath.abs(doubleValue()-d2) <= epsilon;
+        return StrictMath.abs(doubleValue() - d2) <= epsilon;
     }
 
-    /** Tell whether relative difference of this JMLDouble and the arg is 
-     *   within the given epsilon.
-     *  @see #approximatelyEqualTo(double, double, double)
+    /**
+     * Tell whether relative difference of this JMLDouble and the arg is
+     * within the given epsilon.
+     *
+     * @see #approximatelyEqualTo(double, double, double)
      */
     /*@ public normal_behavior
       @    requires !isNaN() && !Double.isNaN(d2) && !Double.isNaN(theDouble - d2) && !Double.isNaN(epsilon);
@@ -456,10 +494,11 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @*/
     public boolean approximatelyEqualTo(double d2, double epsilon) {
         return approximatelyEqualTo(doubleValue(), d2, epsilon);
-    }    
-    
-    /** Tell whether absolute value of difference of the two arguments
-     *  is within the given epsilon.
+    }
+
+    /**
+     * Tell whether absolute value of difference of the two arguments
+     * is within the given epsilon.
      */
     /*@ public normal_behavior
       @    requires !Double.isNaN(d1) && !Double.isNaN(d2) && !Double.isNaN(d1 - d2) && !Double.isNaN(epsilon);
@@ -468,13 +507,13 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @         StrictMath.abs(d1 - d2) <= epsilon;
       @*/
     public static /*@ pure @*/ boolean withinEpsilonOf(double d1, double d2,
-                                                         double epsilon)
-    {
-        return StrictMath.abs(d1-d2) <= epsilon;
+                                                       double epsilon) {
+        return StrictMath.abs(d1 - d2) <= epsilon;
     }
 
-    /** Tell whether relative difference of the two arguments is 
-     *   within the given epsilon.
+    /**
+     * Tell whether relative difference of the two arguments is
+     * within the given epsilon.
      */
     /*@ public normal_behavior
       @    requires !Double.isNaN(d1) && !Double.isNaN(d2) && !Double.isNaN(d1 - d2) && !Double.isNaN(epsilon);
@@ -488,17 +527,17 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @               * epsilon;
       @*/
     public static /*@ pure @*/ boolean approximatelyEqualTo(
-        double d1, double d2, double epsilon)
-    {
+            double d1, double d2, double epsilon) {
         return d1 == d2
-            || StrictMath.abs(d1-d2)
-               <= StrictMath.max(StrictMath.abs(d1),
-                                 StrictMath.abs(d2))
-                  * epsilon;
-    }    
+                || StrictMath.abs(d1 - d2)
+                <= StrictMath.max(StrictMath.abs(d1),
+                StrictMath.abs(d2))
+                * epsilon;
+    }
 
-    /** Tell whether absolute value of difference of this JMLDouble and the arg
-     *  is within the given epsilon.
+    /**
+     * Tell whether absolute value of difference of this JMLDouble and the arg
+     * is within the given epsilon.
      */
     /*@ public normal_behavior
       @    requires d1 != null && d2 != null && !Double.isNaN(d1.theDouble) && !Double.isNaN(d2.theDouble) && !Double.isNaN(d1.theDouble - d2.theDouble) && !Double.isNaN(epsilon);
@@ -507,15 +546,17 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @             StrictMath.abs(d1.theDouble - d2.theDouble) <= epsilon;
       @*/
     public static /*@ pure @*/ boolean withinEpsilonOf(
-                                          /*@ non_null @*/ JMLDouble d1,
-                                          /*@ non_null @*/ JMLDouble d2,
-                                          double epsilon) {
-        return StrictMath.abs(d1.doubleValue()-d2.doubleValue()) <= epsilon;
+            /*@ non_null @*/ JMLDouble d1,
+            /*@ non_null @*/ JMLDouble d2,
+                             double epsilon) {
+        return StrictMath.abs(d1.doubleValue() - d2.doubleValue()) <= epsilon;
     }
-    
-    /** Tell whether relative difference of this JMLDouble and the arg is 
-     *   within the given epsilon.
-     *  @see #approximatelyEqualTo(double, double, double)
+
+    /**
+     * Tell whether relative difference of this JMLDouble and the arg is
+     * within the given epsilon.
+     *
+     * @see #approximatelyEqualTo(double, double, double)
      */
     /*@ public normal_behavior
       @    requires d1 != null && d2 != null && !Double.isNaN(d1.theDouble) && !Double.isNaN(d2.theDouble) && !Double.isNaN(d1.theDouble - d2.theDouble) && !Double.isNaN(epsilon);
@@ -525,15 +566,16 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @       <==> approximatelyEqualTo(d1.theDouble, d2.theDouble, epsilon);
       @*/
     public static /*@ pure @*/ boolean approximatelyEqualTo(
-                                               /*@ non_null @*/ JMLDouble d1,
-                                               /*@ non_null @*/ JMLDouble d2,
-                                               double epsilon) {
+            /*@ non_null @*/ JMLDouble d1,
+            /*@ non_null @*/ JMLDouble d2,
+                             double epsilon) {
         return approximatelyEqualTo(d1.doubleValue(), d2.doubleValue(),
-                                    epsilon);
+                epsilon);
     }
-    
-    /** Tell whether absolute value of difference of this JMLDouble and the arg
-     *  is within the given epsilon.
+
+    /**
+     * Tell whether absolute value of difference of this JMLDouble and the arg
+     * is within the given epsilon.
      */
     /*@ public normal_behavior
       @    requires d1 != null && d2 != null && !Double.isNaN(d1.theDouble) && !Double.isNaN(d2.theDouble) && !Double.isNaN(d1.theDouble - d2.theDouble) && !Double.isNaN(epsilon);
@@ -543,15 +585,17 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @         StrictMath.abs(d1.theDouble - d2.doubleValue()) <= epsilon;
       @*/
     public static /*@ pure @*/ boolean withinEpsilonOf(
-                                          /*@ non_null @*/ JMLDouble d1,
-                                          /*@ non_null @*/ Double d2,
-                                          double epsilon) {
-        return StrictMath.abs(d1.doubleValue()-d2.doubleValue()) <= epsilon;
+            /*@ non_null @*/ JMLDouble d1,
+            /*@ non_null @*/ Double d2,
+                             double epsilon) {
+        return StrictMath.abs(d1.doubleValue() - d2.doubleValue()) <= epsilon;
     }
-    
-    /** Tell whether relative difference of this JMLDouble and the arg is 
-     *   within the given epsilon.
-     *  @see #approximatelyEqualTo(double, double, double)
+
+    /**
+     * Tell whether relative difference of this JMLDouble and the arg is
+     * within the given epsilon.
+     *
+     * @see #approximatelyEqualTo(double, double, double)
      */
     /*@ public normal_behavior
       @    requires d1 != null && d2 != null && !Double.isNaN(d1.theDouble) && !Double.isNaN(d2.theDouble) && !Double.isNaN(d1.theDouble - d2.theDouble) && !Double.isNaN(epsilon);
@@ -560,15 +604,16 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @     <==> approximatelyEqualTo(d1.theDouble, d2.doubleValue(), epsilon);
       @*/
     public static /*@ pure @*/ boolean approximatelyEqualTo(
-                                               /*@ non_null @*/ JMLDouble d1,
-                                               /*@ non_null @*/ Double d2,
-                                               double epsilon) {
+            /*@ non_null @*/ JMLDouble d1,
+            /*@ non_null @*/ Double d2,
+                             double epsilon) {
         return approximatelyEqualTo(d1.doubleValue(), d2.doubleValue(),
-                                    epsilon);
+                epsilon);
     }
-    
-    /** Tell whether absolute value of difference of this JMLDouble and the arg
-     *  is within the given epsilon.
+
+    /**
+     * Tell whether absolute value of difference of this JMLDouble and the arg
+     * is within the given epsilon.
      */
     /*@ public normal_behavior
       @    requires d1 != null && !Double.isNaN(d1.theDouble) && !Double.isNaN(d2) && !Double.isNaN(d1.theDouble - d2) && !Double.isNaN(epsilon);
@@ -576,15 +621,17 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @    ensures \result <==> StrictMath.abs(d1.theDouble - d2) <= epsilon;
       @*/
     public static /*@ pure @*/ boolean withinEpsilonOf(
-                                          /*@ non_null @*/ JMLDouble d1,
-                                          double d2,
-                                          double epsilon) {
-        return StrictMath.abs(d1.doubleValue()-d2) <= epsilon;
+            /*@ non_null @*/ JMLDouble d1,
+                             double d2,
+                             double epsilon) {
+        return StrictMath.abs(d1.doubleValue() - d2) <= epsilon;
     }
-    
-    /** Tell whether relative difference of this JMLDouble and the arg is 
-     *   within the given epsilon.
-     *  @see #approximatelyEqualTo(double, double, double)
+
+    /**
+     * Tell whether relative difference of this JMLDouble and the arg is
+     * within the given epsilon.
+     *
+     * @see #approximatelyEqualTo(double, double, double)
      */
     /*@ public normal_behavior
       @    requires d1 != null && !Double.isNaN(d1.theDouble) && !Double.isNaN(d2) && !Double.isNaN(d1.theDouble - d2) && !Double.isNaN(epsilon);
@@ -593,9 +640,9 @@ public /*@ pure @*/ strictfp class JMLDouble implements JMLComparable {
       @       <==> approximatelyEqualTo(d1.theDouble, d2, epsilon);
       @*/
     public static /*@ pure @*/ boolean approximatelyEqualTo(
-                                               /*@ non_null @*/ JMLDouble d1,
-                                               double d2,
-                                               double epsilon) {
+            /*@ non_null @*/ JMLDouble d1,
+                             double d2,
+                             double epsilon) {
         return approximatelyEqualTo(d1.doubleValue(), d2, epsilon);
     }
 }

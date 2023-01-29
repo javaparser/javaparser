@@ -20,12 +20,14 @@ package org.apache.commons.math3.linear;
 
 /**
  * Interface defining very basic matrix operations.
+ *
  * @since 2.0
  */
 public interface AnyMatrix {
 
     /**
      * Is this a square matrix?
+     *
      * @return true if the matrix is square (rowDimension = columnDimension)
      */
     boolean isSquare();

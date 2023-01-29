@@ -29,16 +29,26 @@ import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
  * @since 3.1
  */
 public abstract class UnivariateOptimizer
-    extends BaseOptimizer<UnivariatePointValuePair> {
-    /** Objective function. */
+        extends BaseOptimizer<UnivariatePointValuePair> {
+    /**
+     * Objective function.
+     */
     private UnivariateFunction function;
-    /** Type of optimization. */
+    /**
+     * Type of optimization.
+     */
     private GoalType goal;
-    /** Initial guess. */
+    /**
+     * Initial guess.
+     */
     private double start;
-    /** Lower bound. */
+    /**
+     * Lower bound.
+     */
     private double min;
-    /** Upper bound. */
+    /**
+     * Upper bound.
+     */
     private double max;
 
     /**
@@ -52,20 +62,20 @@ public abstract class UnivariateOptimizer
      * {@inheritDoc}
      *
      * @param optData Optimization data. In addition to those documented in
-     * {@link BaseOptimizer#parseOptimizationData(OptimizationData[])
-     * BaseOptimizer}, this method will register the following data:
-     * <ul>
-     *  <li>{@link GoalType}</li>
-     *  <li>{@link SearchInterval}</li>
-     *  <li>{@link UnivariateObjectiveFunction}</li>
-     * </ul>
+     *                {@link BaseOptimizer#parseOptimizationData(OptimizationData[])
+     *                BaseOptimizer}, this method will register the following data:
+     *                <ul>
+     *                 <li>{@link GoalType}</li>
+     *                 <li>{@link SearchInterval}</li>
+     *                 <li>{@link UnivariateObjectiveFunction}</li>
+     *                </ul>
      * @return {@inheritDoc}
      * @throws TooManyEvaluationsException if the maximal number of
-     * evaluations is exceeded.
+     *                                     evaluations is exceeded.
      */
     @Override
     public UnivariatePointValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException {
+            throws TooManyEvaluationsException {
         // Perform computation.
         return super.optimize(optData);
     }
@@ -82,12 +92,12 @@ public abstract class UnivariateOptimizer
      * characterize the problem.
      *
      * @param optData Optimization data.
-     * The following data will be looked for:
-     * <ul>
-     *  <li>{@link GoalType}</li>
-     *  <li>{@link SearchInterval}</li>
-     *  <li>{@link UnivariateObjectiveFunction}</li>
-     * </ul>
+     *                The following data will be looked for:
+     *                <ul>
+     *                 <li>{@link GoalType}</li>
+     *                 <li>{@link SearchInterval}</li>
+     *                 <li>{@link UnivariateObjectiveFunction}</li>
+     *                </ul>
      */
     @Override
     protected void parseOptimizationData(OptimizationData... optData) {
@@ -121,12 +131,14 @@ public abstract class UnivariateOptimizer
     public double getStartValue() {
         return start;
     }
+
     /**
      * @return the lower bounds.
      */
     public double getMin() {
         return min;
     }
+
     /**
      * @return the upper bounds.
      */
@@ -142,7 +154,7 @@ public abstract class UnivariateOptimizer
      * @param x Point at which the objective function must be evaluated.
      * @return the objective function value at the specified point.
      * @throws TooManyEvaluationsException if the maximal number of
-     * evaluations is exceeded.
+     *                                     evaluations is exceeded.
      */
     protected double computeObjectiveValue(double x) {
         super.incrementEvaluationCount();

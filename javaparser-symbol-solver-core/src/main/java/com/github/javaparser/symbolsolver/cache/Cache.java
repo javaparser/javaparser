@@ -51,7 +51,6 @@ public interface Cache<K, V> {
      * or empty if there is no cached value for {@code key}.
      *
      * @param key The key to look for.
-     *
      * @return The value stored in cache if present.
      */
     Optional<V> get(K key);
@@ -73,7 +72,6 @@ public interface Cache<K, V> {
      * or {@code False} if there is none.
      *
      * @param key The key to be verified.
-     *
      * @return {@code True} if the key is present.
      */
     boolean contains(K key);

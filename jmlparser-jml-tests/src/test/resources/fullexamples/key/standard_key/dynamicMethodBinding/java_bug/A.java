@@ -13,10 +13,10 @@
 
 public class A {
 
-   public abstract boolean f();
+    public abstract boolean f();
 
-   public boolean g() {
-	return f();
-   }
+    public boolean g() {
+        return f();
+    }
 
 }

@@ -30,10 +30,14 @@ import java.util.concurrent.TimeUnit;
  * @since 3.1
  */
 public class FixedElapsedTime implements StoppingCondition {
-    /** Maximum allowed time period (in nanoseconds). */
+    /**
+     * Maximum allowed time period (in nanoseconds).
+     */
     private final long maxTimePeriod;
 
-    /** The predetermined termination time (stopping condition). */
+    /**
+     * The predetermined termination time (stopping condition).
+     */
     private long endTime = -1;
 
     /**
@@ -50,7 +54,7 @@ public class FixedElapsedTime implements StoppingCondition {
      * Create a new {@link FixedElapsedTime} instance.
      *
      * @param maxTime maximum time generations are allowed to evolve
-     * @param unit {@link TimeUnit} of the maxTime argument
+     * @param unit    {@link TimeUnit} of the maxTime argument
      * @throws NumberIsTooSmallException if the provided time is &lt; 0
      */
     public FixedElapsedTime(final long maxTime, final TimeUnit unit) throws NumberIsTooSmallException {

@@ -51,14 +51,14 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
         it.setModifiers(createModifierList(PUBLIC));
         assertTransformedToString("public int A;", it);
     }
-    
+
     @Test
     void removingModifiers() {
         FieldDeclaration it = consider("public int A;");
         it.setModifiers(new NodeList<>());
         assertTransformedToString("int A;", it);
     }
-    
+
     @Test
     void removingModifiersFromNonPrimitiveType() {
         FieldDeclaration it = consider("public String A;");
@@ -93,7 +93,7 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
     // Annotations
     @Test
     void removingAnnotations() {
-        FieldDeclaration it = consider( SYSTEM_EOL +
+        FieldDeclaration it = consider(SYSTEM_EOL +
                 "@Annotation" + SYSTEM_EOL +
                 "public int A;");
         it.getAnnotationByName("Annotation").get().remove();
@@ -102,7 +102,7 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
 
     @Test
     void removingAnnotationsWithSpaces() {
-        FieldDeclaration it = consider( SYSTEM_EOL +
+        FieldDeclaration it = consider(SYSTEM_EOL +
                 "  @Annotation " + SYSTEM_EOL +
                 "public int A;");
         it.getAnnotationByName("Annotation").get().remove();

@@ -43,6 +43,7 @@ public abstract class AbstractSortedMapDecorator<K, V> extends AbstractMapDecora
 
     /**
      * Constructor only used in deserialization, do not use otherwise.
+     *
      * @since 3.1
      */
     protected AbstractSortedMapDecorator() {
@@ -52,7 +53,7 @@ public abstract class AbstractSortedMapDecorator<K, V> extends AbstractMapDecora
     /**
      * Constructor that wraps (not copies).
      *
-     * @param map  the map to decorate, must not be null
+     * @param map the map to decorate, must not be null
      * @throws NullPointerException if the map is null
      */
     public AbstractSortedMapDecorator(final SortedMap<K, V> map) {
@@ -124,15 +125,16 @@ public abstract class AbstractSortedMapDecorator<K, V> extends AbstractMapDecora
     /**
      * OrderedMapIterator implementation.
      *
-     * @param <K>  the key type
-     * @param <V>  the value type
+     * @param <K> the key type
+     * @param <V> the value type
      */
     protected static class SortedMapIterator<K, V> extends EntrySetToMapIteratorAdapter<K, V>
             implements OrderedMapIterator<K, V> {
 
         /**
          * Create a new AbstractSortedMapDecorator.SortedMapIterator.
-         * @param entrySet  the entrySet to iterate
+         *
+         * @param entrySet the entrySet to iterate
          */
         protected SortedMapIterator(final Set<Map.Entry<K, V>> entrySet) {
             super(entrySet);

@@ -41,9 +41,11 @@ public class BagUtils {
     /**
      * Instantiation of BagUtils is not intended or required.
      */
-    private BagUtils() {}
+    private BagUtils() {
+    }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns a synchronized (thread-safe) bag backed by the given bag. In
      * order to guarantee serial access, it is critical that all access to the
@@ -62,7 +64,7 @@ public class BagUtils {
      *     }
      * }
      * </pre>
-     *
+     * <p>
      * Failure to follow this advice may result in non-deterministic behavior.
      *
      * @param <E> the element type
@@ -96,8 +98,8 @@ public class BagUtils {
      * after invoking this method, as it is a backdoor for adding invalid
      * objects.
      *
-     * @param <E> the element type
-     * @param bag the bag to predicate, must not be null
+     * @param <E>       the element type
+     * @param bag       the bag to predicate, must not be null
      * @param predicate the predicate for the bag, must not be null
      * @return a predicated bag backed by the given bag
      * @throws NullPointerException if the Bag or Predicate is null
@@ -116,8 +118,8 @@ public class BagUtils {
      * Existing entries in the specified bag will not be transformed.
      * If you want that behaviour, see {@link TransformedBag#transformedBag(Bag, Transformer)}.
      *
-     * @param <E> the element type
-     * @param bag the bag to predicate, must not be null
+     * @param <E>         the element type
+     * @param bag         the bag to predicate, must not be null
      * @param transformer the transformer for the bag, must not be null
      * @return a transformed bag backed by the given bag
      * @throws NullPointerException if the Bag or Transformer is null
@@ -140,6 +142,7 @@ public class BagUtils {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Returns a synchronized (thread-safe) sorted bag backed by the given
      * sorted bag. In order to guarantee serial access, it is critical that all
@@ -158,7 +161,7 @@ public class BagUtils {
      *     }
      * }
      * </pre>
-     *
+     * <p>
      * Failure to follow this advice may result in non-deterministic behavior.
      *
      * @param <E> the element type
@@ -194,14 +197,14 @@ public class BagUtils {
      * after invoking this method, as it is a backdoor for adding invalid
      * objects.
      *
-     * @param <E> the element type
-     * @param bag the sorted bag to predicate, must not be null
+     * @param <E>       the element type
+     * @param bag       the sorted bag to predicate, must not be null
      * @param predicate the predicate for the bag, must not be null
      * @return a predicated bag backed by the given bag
      * @throws NullPointerException if the SortedBag or Predicate is null
      */
     public static <E> SortedBag<E> predicatedSortedBag(final SortedBag<E> bag,
-            final Predicate<? super E> predicate) {
+                                                       final Predicate<? super E> predicate) {
         return PredicatedSortedBag.predicatedSortedBag(bag, predicate);
     }
 
@@ -216,8 +219,8 @@ public class BagUtils {
      * If you want that behaviour, see
      * {@link TransformedSortedBag#transformedSortedBag(SortedBag, Transformer)}.
      *
-     * @param <E> the element type
-     * @param bag the bag to predicate, must not be null
+     * @param <E>         the element type
+     * @param bag         the bag to predicate, must not be null
      * @param transformer the transformer for the bag, must not be null
      * @return a transformed bag backed by the given bag
      * @throws NullPointerException if the Bag or Transformer is null

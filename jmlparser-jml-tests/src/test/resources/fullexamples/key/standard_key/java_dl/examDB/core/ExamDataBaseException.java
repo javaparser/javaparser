@@ -1,10 +1,10 @@
 package core;
 
-public class ExamDataBaseException extends Exception{
+public class ExamDataBaseException extends Exception {
     public ExamDataBaseException(String message) {
-	super(message);
+        super(message);
     }
 
-    public ExamDataBaseException(){
+    public ExamDataBaseException() {
     }
 }

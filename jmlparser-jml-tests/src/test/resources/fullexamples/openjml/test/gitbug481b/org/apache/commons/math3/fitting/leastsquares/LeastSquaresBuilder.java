@@ -33,19 +33,33 @@ import org.apache.commons.math3.optim.PointVectorValuePair;
  */
 public class LeastSquaresBuilder {
 
-    /** max evaluations */
+    /**
+     * max evaluations
+     */
     private int maxEvaluations;
-    /** max iterations */
+    /**
+     * max iterations
+     */
     private int maxIterations;
-    /** convergence checker */
+    /**
+     * convergence checker
+     */
     private ConvergenceChecker<Evaluation> checker;
-    /** model function */
+    /**
+     * model function
+     */
     private MultivariateJacobianFunction model;
-    /** observed values */
+    /**
+     * observed values
+     */
     private RealVector target;
-    /** initial guess */
+    /**
+     * initial guess
+     */
     private RealVector start;
-    /** weight matrix */
+    /**
+     * weight matrix
+     */
     private RealMatrix weight;
     /**
      * Lazy evaluation.
@@ -53,7 +67,8 @@ public class LeastSquaresBuilder {
      * @since 3.4
      */
     private boolean lazyEvaluation;
-    /** Validator.
+    /**
+     * Validator.
      *
      * @since 3.4
      */
@@ -67,14 +82,14 @@ public class LeastSquaresBuilder {
      */
     public LeastSquaresProblem build() {
         return LeastSquaresFactory.create(model,
-                                          target,
-                                          start,
-                                          weight,
-                                          checker,
-                                          maxEvaluations,
-                                          maxIterations,
-                                          lazyEvaluation,
-                                          paramValidator);
+                target,
+                start,
+                weight,
+                checker,
+                maxEvaluations,
+                maxIterations,
+                lazyEvaluation,
+                paramValidator);
     }
 
     /**
@@ -125,7 +140,7 @@ public class LeastSquaresBuilder {
     /**
      * Configure the model function.
      *
-     * @param value the model function value
+     * @param value    the model function value
      * @param jacobian the Jacobian of {@code value}
      * @return this
      */
@@ -203,7 +218,6 @@ public class LeastSquaresBuilder {
      *
      * @param newValue Whether to perform lazy evaluation.
      * @return this object.
-     *
      * @since 3.4
      */
     public LeastSquaresBuilder lazyEvaluation(final boolean newValue) {
@@ -216,7 +230,6 @@ public class LeastSquaresBuilder {
      *
      * @param newValidator Parameter validator.
      * @return this object.
-     *
      * @since 3.4
      */
     public LeastSquaresBuilder parameterValidator(final ParameterValidator newValidator) {

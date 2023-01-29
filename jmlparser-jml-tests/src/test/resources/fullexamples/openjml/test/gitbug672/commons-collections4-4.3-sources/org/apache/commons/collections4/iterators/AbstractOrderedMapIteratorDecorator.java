@@ -27,14 +27,17 @@ import org.apache.commons.collections4.OrderedMapIterator;
  */
 public class AbstractOrderedMapIteratorDecorator<K, V> implements OrderedMapIterator<K, V> {
 
-    /** The iterator being decorated */
+    /**
+     * The iterator being decorated
+     */
     private final OrderedMapIterator<K, V> iterator;
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that decorates the specified iterator.
      *
-     * @param iterator  the iterator to decorate, must not be null
+     * @param iterator the iterator to decorate, must not be null
      * @throws NullPointerException if the iterator is null
      */
     public AbstractOrderedMapIteratorDecorator(final OrderedMapIterator<K, V> iterator) {
@@ -56,49 +59,65 @@ public class AbstractOrderedMapIteratorDecorator<K, V> implements OrderedMapIter
 
     //-----------------------------------------------------------------------
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasNext() {
         return iterator.hasNext();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public K next() {
         return iterator.next();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPrevious() {
         return iterator.hasPrevious();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public K previous() {
         return iterator.previous();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void remove() {
         iterator.remove();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public K getKey() {
         return iterator.getKey();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V getValue() {
         return iterator.getValue();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public V setValue(final V obj) {
         return iterator.setValue(obj);

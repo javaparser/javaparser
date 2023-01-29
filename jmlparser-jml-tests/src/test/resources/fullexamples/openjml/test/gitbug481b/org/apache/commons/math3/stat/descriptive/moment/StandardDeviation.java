@@ -38,15 +38,18 @@ import java.io.Serializable;
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.</p>
- *
  */
 public class StandardDeviation extends AbstractStorelessUnivariateStatistic
-    implements Serializable {
+        implements Serializable {
 
-    /** Serializable version identifier */
+    /**
+     * Serializable version identifier
+     */
     private static final long serialVersionUID = 5728716329662425188L;
 
-    /** Wrapped Variance instance */
+    /**
+     * Wrapped Variance instance
+     */
     private Variance variance = null;
 
     /**
@@ -84,8 +87,8 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * use the bias-corrected, or "sample" formula.  See {@link Variance} for
      * details.
      *
-     * @param isBiasCorrected  whether or not the variance computation will use
-     * the bias-corrected formula
+     * @param isBiasCorrected whether or not the variance computation will use
+     *                        the bias-corrected formula
      */
     public StandardDeviation(boolean isBiasCorrected) {
         variance = new Variance(isBiasCorrected);
@@ -98,9 +101,9 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * {@link Variance} used in computing results will use the bias-corrected,
      * or "sample" formula.  See {@link Variance} for details.
      *
-     * @param isBiasCorrected  whether or not the variance computation will use
-     * the bias-corrected formula
-      * @param m2 the external moment
+     * @param isBiasCorrected whether or not the variance computation will use
+     *                        the bias-corrected formula
+     * @param m2              the external moment
      */
     public StandardDeviation(boolean isBiasCorrected, SecondMoment m2) {
         variance = new Variance(isBiasCorrected, m2);
@@ -152,7 +155,7 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * @throws MathIllegalArgumentException if the array is null
      */
     @Override
-    public double evaluate(final double[] values) throws MathIllegalArgumentException  {
+    public double evaluate(final double[] values) throws MathIllegalArgumentException {
         return FastMath.sqrt(variance.evaluate(values));
     }
 
@@ -168,16 +171,16 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * Does not change the internal state of the statistic.</p>
      *
      * @param values the input array
-     * @param begin index of the first array element to include
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the standard deviation of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     @Override
     public double evaluate(final double[] values, final int begin, final int length)
-    throws MathIllegalArgumentException  {
-       return FastMath.sqrt(variance.evaluate(values, begin, length));
+            throws MathIllegalArgumentException {
+        return FastMath.sqrt(variance.evaluate(values, begin, length));
     }
 
     /**
@@ -197,15 +200,15 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * Does not change the internal state of the statistic.</p>
      *
      * @param values the input array
-     * @param mean the precomputed mean value
-     * @param begin index of the first array element to include
+     * @param mean   the precomputed mean value
+     * @param begin  index of the first array element to include
      * @param length the number of elements to include
      * @return the standard deviation of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the array is null or the array index
-     *  parameters are not valid
+     *                                      parameters are not valid
      */
     public double evaluate(final double[] values, final double mean,
-            final int begin, final int length) throws MathIllegalArgumentException  {
+                           final int begin, final int length) throws MathIllegalArgumentException {
         return FastMath.sqrt(variance.evaluate(values, mean, begin, length));
     }
 
@@ -226,12 +229,12 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * Does not change the internal state of the statistic.</p>
      *
      * @param values the input array
-     * @param mean the precomputed mean value
+     * @param mean   the precomputed mean value
      * @return the standard deviation of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the array is null
      */
     public double evaluate(final double[] values, final double mean)
-    throws MathIllegalArgumentException  {
+            throws MathIllegalArgumentException {
         return FastMath.sqrt(variance.evaluate(values, mean));
     }
 
@@ -266,11 +269,11 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * <p>Neither source nor dest can be null.</p>
      *
      * @param source StandardDeviation to copy
-     * @param dest StandardDeviation to copy to
+     * @param dest   StandardDeviation to copy to
      * @throws NullArgumentException if either source or dest is null
      */
     public static void copy(StandardDeviation source, StandardDeviation dest)
-        throws NullArgumentException {
+            throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
         dest.setData(source.getDataRef());

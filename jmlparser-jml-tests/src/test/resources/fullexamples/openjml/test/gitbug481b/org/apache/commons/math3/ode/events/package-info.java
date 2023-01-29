@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 /**
- *
  * <p>
  * This package provides classes to handle discrete events occurring during
  * Ordinary Differential Equations integration.
@@ -90,7 +89,5 @@
  *  }
  * </pre>
  * </p>
- *
- *
  */
 package org.apache.commons.math3.ode.events;

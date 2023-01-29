@@ -20,7 +20,7 @@ import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 
 /**
  * Base interface for multivariate distributions on the reals.
- *
+ * <p>
  * This is based largely on the RealDistribution interface, but cumulative
  * distribution functions are not required because they are often quite
  * difficult to compute for multivariate distributions.
@@ -69,9 +69,7 @@ public interface MultivariateRealDistribution {
      *
      * @param sampleSize the number of random vectors to generate.
      * @return an array representing the random samples.
-     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException
-     * if {@code sampleSize} is not positive.
-     *
+     * @throws org.apache.commons.math3.exception.NotStrictlyPositiveException if {@code sampleSize} is not positive.
      * @see #sample()
      */
     double[][] sample(int sampleSize) throws NotStrictlyPositiveException;

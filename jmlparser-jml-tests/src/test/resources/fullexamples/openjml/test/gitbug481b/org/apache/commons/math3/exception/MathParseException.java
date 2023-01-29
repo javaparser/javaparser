@@ -25,32 +25,34 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class MathParseException extends MathIllegalStateException
-    implements ExceptionContextProvider {
-    /** Serializable version Id. */
+        implements ExceptionContextProvider {
+    /**
+     * Serializable version Id.
+     */
     private static final long serialVersionUID = -6024911025449780478L;
 
     /**
-     * @param wrong Bad string representation of the object.
+     * @param wrong    Bad string representation of the object.
      * @param position Index, in the {@code wrong} string, that caused the
-     * parsing to fail.
-     * @param type Class of the object supposedly represented by the
-     * {@code wrong} string.
+     *                 parsing to fail.
+     * @param type     Class of the object supposedly represented by the
+     *                 {@code wrong} string.
      */
     public MathParseException(String wrong,
                               int position,
                               Class<?> type) {
         getContext().addMessage(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
-                                wrong, Integer.valueOf(position), type.getName());
+                wrong, Integer.valueOf(position), type.getName());
     }
 
     /**
-     * @param wrong Bad string representation of the object.
+     * @param wrong    Bad string representation of the object.
      * @param position Index, in the {@code wrong} string, that caused the
-     * parsing to fail.
+     *                 parsing to fail.
      */
     public MathParseException(String wrong,
                               int position) {
         getContext().addMessage(LocalizedFormats.CANNOT_PARSE,
-                                wrong, Integer.valueOf(position));
+                wrong, Integer.valueOf(position));
     }
 }

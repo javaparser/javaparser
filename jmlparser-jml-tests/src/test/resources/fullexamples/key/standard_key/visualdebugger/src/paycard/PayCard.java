@@ -13,7 +13,7 @@
 
 package paycard;
 
-public class PayCard implements LimitedIntContainer{
+public class PayCard implements LimitedIntContainer {
 
     /*@ 
       @ public instance invariant log != null; 
@@ -30,10 +30,10 @@ public class PayCard implements LimitedIntContainer{
       @ public represents regularState  = (unsuccessfulOperations <= 3);
       @*/
 
-    /*@ spec_public @*/ int limit=1000;
+    /*@ spec_public @*/ int limit = 1000;
     /*@ spec_public @*/ int unsuccessfulOperations;
     /*@ spec_public @*/ int id;
-    /*@ spec_public @*/ int balance=0;
+    /*@ spec_public @*/ int balance = 0;
     /*@ spec_public @*/ protected LogFile log;
 
     /*@
@@ -43,10 +43,10 @@ public class PayCard implements LimitedIntContainer{
       @*/
     public PayCard(int limit) {
         balance = 0;
-        unsuccessfulOperations=0;
-        this.limit=limit;
-	this.log = new LogFile();
-	log.addRecord(balance);
+        unsuccessfulOperations = 0;
+        this.limit = limit;
+        this.log = new LogFile();
+        log.addRecord(balance);
     }
 
     /*@
@@ -54,10 +54,10 @@ public class PayCard implements LimitedIntContainer{
       @  assignable LogRecord.transactionCounter;
       @*/
     public PayCard() {
-	balance=0;
-        unsuccessfulOperations=0;
-	this.log = new LogFile();
-	log.addRecord(balance);
+        balance = 0;
+        unsuccessfulOperations = 0;
+        this.log = new LogFile();
+        log.addRecord(balance);
     }
 
     /*@
@@ -65,16 +65,16 @@ public class PayCard implements LimitedIntContainer{
        requires amount>0;
        ensures balance >= \old(balance);
       @*/
-   public void charge(int amount) {
-        if (this.balance+amount>=this.limit || amount <= 0) {
+    public void charge(int amount) {
+        if (this.balance + amount >= this.limit || amount <= 0) {
             this.unsuccessfulOperations++;
         } else {
-            this.balance=this.balance+amount;
-	    try{
-		log.addRecord(balance);
-	    }catch(CardException e){
-		throw new IllegalStateException();
-	    }
+            this.balance = this.balance + amount;
+            try {
+                log.addRecord(balance);
+            } catch (CardException e) {
+                throw new IllegalStateException();
+            }
         }
     }
 
@@ -84,14 +84,14 @@ public class PayCard implements LimitedIntContainer{
        ensures \result == balance || unsuccessfulOperations > 3;
       @*/
     public /*@pure@*/ int available() {
-	if (unsuccessfulOperations<=3) {
-	    return this.balance;
+        if (unsuccessfulOperations <= 3) {
+            return this.balance;
         }
         return 0;
     }
 
     public String infoCardMsg() {
-	return (" Current balance on card is " + balance);
+        return (" Current balance on card is " + balance);
     }
 
 }

@@ -65,7 +65,7 @@ public class Issue2397Test extends AbstractSymbolResolutionTest {
         JavaParser parser = new JavaParser(parserConfiguration);
 
         ParseResult<CompilationUnit> cu = parser.parse(sourceCode);
-        cu.ifSuccessful( c -> c.accept(new VoidVisitorAdapter<Void>() {
+        cu.ifSuccessful(c -> c.accept(new VoidVisitorAdapter<Void>() {
             @Override
             public void visit(ClassOrInterfaceType classOrInterfaceType, Void arg) {
                 super.visit(classOrInterfaceType, arg);

@@ -13,7 +13,8 @@ import org.junit.runners.model.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 
-/** This runner is a duplicate of org.junit.runners.Parameterized except that
+/**
+ * This runner is a duplicate of org.junit.runners.Parameterized except that
  * tests whose assumptions are false are recorded as ignored rather than as a
  * success.
  */
@@ -63,25 +64,27 @@ public class Ignorable extends org.junit.runners.Suite {
 //
 //    }
 
-    private final ArrayList<Runner> runners= new ArrayList<Runner>();
+    private final ArrayList<Runner> runners = new ArrayList<Runner>();
+
     {
-    	runners.clear();
+        runners.clear();
     }
+
     /**
      * Only called reflectively. Do not use programmatically.
      */
     public Ignorable(Class<?> klass) throws Throwable {
         super(klass, Collections.<Runner>emptyList());
-    	runners.add(new BlockJUnit4ClassRunner(getTestClass().getJavaClass()) {
+        runners.add(new BlockJUnit4ClassRunner(getTestClass().getJavaClass()) {
             @Override
             protected void runChild(final FrameworkMethod method, RunNotifier notifier) {
-                Description description= describeChild(method);
+                Description description = describeChild(method);
                 if (method.getAnnotation(Ignore.class) != null) {
                     notifier.fireTestIgnored(description);
                 } else {
                     //runLeaf(methodBlock(method), description, notifier);
                     Statement statement = methodBlock(method);
-                    EachTestNotifier eachNotifier= new EachTestNotifier(notifier, description);
+                    EachTestNotifier eachNotifier = new EachTestNotifier(notifier, description);
                     eachNotifier.fireTestStarted();
                     try {
                         statement.evaluate();
@@ -94,8 +97,8 @@ public class Ignorable extends org.junit.runners.Suite {
                     }
                 }
             }
-    	});
+        });
     }
 
-    
+
 }

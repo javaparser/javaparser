@@ -51,6 +51,6 @@ public class bigint {
         //@ assert (\lbl TRUE bix == bxx);
         //@ assert (\lbl TRUE ((\bigint)bx) == bxx);
         //@ assert (\lbl TRUE bx == (\bigint)bxx);
-        
+
     }
 }

@@ -28,16 +28,20 @@ import java.io.Serializable;
  */
 public final class InstanceofPredicate implements Predicate<Object>, Serializable {
 
-    /** Serial version UID */
+    /**
+     * Serial version UID
+     */
     private static final long serialVersionUID = -6682656911025165584L;
 
-    /** The type to compare to */
+    /**
+     * The type to compare to
+     */
     private final Class<?> iType;
 
     /**
      * Factory to create the identity predicate.
      *
-     * @param type  the type to check for, may not be null
+     * @param type the type to check for, may not be null
      * @return the predicate
      * @throws NullPointerException if the class is null
      */
@@ -52,7 +56,7 @@ public final class InstanceofPredicate implements Predicate<Object>, Serializabl
      * Constructor that performs no validation.
      * Use <code>instanceOfPredicate</code> if you want that.
      *
-     * @param type  the type to check for
+     * @param type the type to check for
      */
     public InstanceofPredicate(final Class<?> type) {
         super();
@@ -62,7 +66,7 @@ public final class InstanceofPredicate implements Predicate<Object>, Serializabl
     /**
      * Evaluates the predicate returning true if the input object is of the correct type.
      *
-     * @param object  the input object
+     * @param object the input object
      * @return true if input is of stored type
      */
     @Override

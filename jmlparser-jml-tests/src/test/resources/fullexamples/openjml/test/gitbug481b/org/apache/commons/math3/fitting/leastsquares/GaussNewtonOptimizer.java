@@ -39,7 +39,9 @@ import org.apache.commons.math3.util.Pair;
  */
 public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
 
-    /** The decomposition algorithm to use to solve the normal equations. */
+    /**
+     * The decomposition algorithm to use to solve the normal equations.
+     */
     //TODO move to linear package and expand options?
     public enum Decomposition {
         /**
@@ -152,7 +154,9 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
      */
     private static final double SINGULARITY_THRESHOLD = 1e-11;
 
-    /** Indicator for using LU decomposition. */
+    /**
+     * Indicator for using LU decomposition.
+     */
     private final Decomposition decomposition;
 
     /**
@@ -194,7 +198,9 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
         return new GaussNewtonOptimizer(newDecomposition);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Optimum optimize(final LeastSquaresProblem lsp) {
         //create local evaluation and iteration counts
         final Incrementor evaluationCounter = lsp.getEvaluationCounter();
@@ -225,10 +231,10 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
 
             // Check convergence.
             if (previous != null &&
-                checker.converged(iterationCounter.getCount(), previous, current)) {
+                    checker.converged(iterationCounter.getCount(), previous, current)) {
                 return new OptimumImpl(current,
-                                       evaluationCounter.getCount(),
-                                       iterationCounter.getCount());
+                        evaluationCounter.getCount(),
+                        iterationCounter.getCount());
             }
 
             // solve the linearized least squares problem
@@ -238,7 +244,9 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         return "GaussNewtonOptimizer{" +
@@ -251,7 +259,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
      *
      * @param jacobian  the m by n jacobian matrix, J. Input.
      * @param residuals the m by 1 residual vector, r. Input.
-     * @return  the n by n normal matrix and  the n by 1 J<sup>Tr vector.
+     * @return the n by n normal matrix and  the n by 1 J<sup>Tr vector.
      */
     private static Pair<RealMatrix, RealVector> computeNormalMatrix(final RealMatrix jacobian,
                                                                     final RealVector residuals) {

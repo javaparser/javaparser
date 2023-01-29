@@ -43,8 +43,8 @@ import java.util.stream.Stream;
  * @author Malte Skoruppa
  */
 public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration implements ResolvedAnnotationDeclaration,
-                                                                                        MethodUsageResolutionCapability,
-                                                                                        MethodResolutionCapability {
+        MethodUsageResolutionCapability,
+        MethodResolutionCapability {
 
     ///
     /// Fields
@@ -83,7 +83,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public String getClassName() {
         String qualifiedName = getQualifiedName();
-        if(qualifiedName.contains(".")) {
+        if (qualifiedName.contains(".")) {
             return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1);
         } else {
             return qualifiedName;
@@ -98,8 +98,8 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{" +
-               "clazz=" + clazz.getCanonicalName() +
-               '}';
+                "clazz=" + clazz.getCanonicalName() +
+                '}';
     }
 
     @Override
@@ -176,8 +176,8 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
         return Arrays.stream(this.clazz.getDeclaredClasses())
-            .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
-            .collect(Collectors.toSet());
+                .map(ic -> ReflectionFactory.typeDeclarationFor(ic, typeSolver))
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -188,8 +188,8 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers() {
         return Stream.of(clazz.getDeclaredMethods())
-                       .map(m -> new ReflectionAnnotationMemberDeclaration(m, typeSolver))
-                       .collect(Collectors.toList());
+                .map(m -> new ReflectionAnnotationMemberDeclaration(m, typeSolver))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -198,7 +198,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
                                                     final Context invokationContext,
                                                     final List<ResolvedType> typeParameterValues) {
         Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
-            typeParameterValues, this, clazz);
+                typeParameterValues, this, clazz);
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
             InferenceContext inferenceContext = new InferenceContext(typeSolver);
@@ -214,7 +214,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
             }
             try {
                 ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
-                for (int j=0;j<parameters.size();j++) {
+                for (int j = 0; j < parameters.size(); j++) {
                     methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
                 }
                 methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
@@ -232,7 +232,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
                                                                   final List<ResolvedType> argumentsTypes,
                                                                   final boolean staticOnly) {
         return ReflectionMethodResolutionLogic.solveMethod(name, argumentsTypes, staticOnly,
-            typeSolver,this, clazz);
+                typeSolver, this, clazz);
     }
 
     @Override

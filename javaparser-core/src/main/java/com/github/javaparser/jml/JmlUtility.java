@@ -5,6 +5,7 @@ import com.github.javaparser.ast.jml.NodeWithContracts;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.quality.Preconditions;
 import com.github.javaparser.resolution.types.ResolvedType;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,15 +19,13 @@ import java.util.stream.StreamSupport;
  * @version 1 (13.10.22)
  */
 public class JmlUtility {
+
     public static void fixRangeContracts(@NotNull NodeWithContracts<? extends Node> n) {
+        Preconditions.checkNotNull(n, "Parameter n can't be null.");
         Optional<JmlContract> first;
         var m = ((Node) n);
         var r = m.getRange();
-
-        if (n.getContracts().isPresent()
-                && r.isPresent()
-                && (first = n.getContracts().get().getFirst()).isPresent()
-                && first.get().getRange().isPresent()) {
+        if (n.getContracts().isPresent() && r.isPresent() && (first = n.getContracts().get().getFirst()).isPresent() && first.get().getRange().isPresent()) {
             m.setRange(r.get().withBegin(first.get().getRange().get().begin));
         }
     }
@@ -43,7 +42,9 @@ public class JmlUtility {
 }
 
 class NodeSpliterator implements Spliterator<Node> {
+
     private final Queue<Node> toExplore = new LinkedList<>();
+
     private final Queue<Node> toSupply = new LinkedList<>();
 
     public NodeSpliterator(Node node) {
@@ -58,18 +59,15 @@ class NodeSpliterator implements Spliterator<Node> {
         }
     }
 
-
     @Override
     public boolean tryAdvance(Consumer<? super Node> action) {
         if (toSupply.isEmpty()) {
             explore();
         }
-
         if (!toSupply.isEmpty()) {
             action.accept(toSupply.poll());
             return true;
         }
-
         return false;
     }
 
@@ -93,7 +91,9 @@ class NodeSpliterator implements Spliterator<Node> {
 }
 
 class NodeIterator implements Iterator<Node> {
+
     private final Queue<Node> toExplore = new LinkedList<>();
+
     private final Queue<Node> toSupply = new LinkedList<>();
 
     public NodeIterator(Node node) {
@@ -105,10 +105,8 @@ class NodeIterator implements Iterator<Node> {
         if (toSupply.isEmpty()) {
             explore();
         }
-
         if (!toSupply.isEmpty())
             return toSupply.poll();
-
         throw new IllegalStateException("no more elements");
     }
 
@@ -124,6 +122,4 @@ class NodeIterator implements Iterator<Node> {
             toSupply.add(n);
         }
     }
-
-
 }

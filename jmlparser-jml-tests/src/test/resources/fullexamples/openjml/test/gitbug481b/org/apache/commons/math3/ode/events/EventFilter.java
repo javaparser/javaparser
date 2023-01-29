@@ -19,7 +19,8 @@ package org.apache.commons.math3.ode.events;
 
 import java.util.Arrays;
 
-/** Wrapper used to detect only increasing or decreasing events.
+/**
+ * Wrapper used to detect only increasing or decreasing events.
  *
  * <p>General {@link EventHandler events} are defined implicitly
  * by a {@link EventHandler#g(double, double[]) g function} crossing
@@ -54,53 +55,73 @@ import java.util.Arrays;
 
 public class EventFilter implements EventHandler {
 
-    /** Number of past transformers updates stored. */
+    /**
+     * Number of past transformers updates stored.
+     */
     private static final int HISTORY_SIZE = 100;
 
-    /** Wrapped event handler. */
+    /**
+     * Wrapped event handler.
+     */
     private final EventHandler rawHandler;
 
-    /** Filter to use. */
+    /**
+     * Filter to use.
+     */
     private final FilterType filter;
 
-    /** Transformers of the g function. */
+    /**
+     * Transformers of the g function.
+     */
     private final Transformer[] transformers;
 
-    /** Update time of the transformers. */
+    /**
+     * Update time of the transformers.
+     */
     private final double[] updates;
 
-    /** Indicator for forward integration. */
+    /**
+     * Indicator for forward integration.
+     */
     private boolean forward;
 
-    /** Extreme time encountered so far. */
+    /**
+     * Extreme time encountered so far.
+     */
     private double extremeT;
 
-    /** Wrap an {@link EventHandler event handler}.
+    /**
+     * Wrap an {@link EventHandler event handler}.
+     *
      * @param rawHandler event handler to wrap
-     * @param filter filter to use
+     * @param filter     filter to use
      */
     public EventFilter(final EventHandler rawHandler, final FilterType filter) {
-        this.rawHandler   = rawHandler;
-        this.filter       = filter;
+        this.rawHandler = rawHandler;
+        this.filter = filter;
         this.transformers = new Transformer[HISTORY_SIZE];
-        this.updates      = new double[HISTORY_SIZE];
+        this.updates = new double[HISTORY_SIZE];
     }
 
-    /**  {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void init(double t0, double[] y0, double t) {
 
         // delegate to raw handler
         rawHandler.init(t0, y0, t);
 
         // initialize events triggering logic
-        forward  = t >= t0;
+        forward = t >= t0;
         extremeT = forward ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
         Arrays.fill(transformers, Transformer.UNINITIALIZED);
         Arrays.fill(updates, extremeT);
 
     }
 
-    /**  {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double g(double t, double[] y) {
 
         final double rawG = rawHandler.g(t, y);
@@ -113,7 +134,7 @@ public class EventFilter implements EventHandler {
 
                 // check if a new rough root has been crossed
                 final Transformer previous = transformers[last];
-                final Transformer next     = filter.selectTransformer(previous, rawG, forward);
+                final Transformer next = filter.selectTransformer(previous, rawG, forward);
                 if (next != previous) {
                     // there is a root somewhere between extremeT and t.
                     // the new transformer is valid for t (this is how we have just computed
@@ -121,9 +142,9 @@ public class EventFilter implements EventHandler {
                     // it was already valid before t and even up to previous time. We store
                     // the switch at extremeT for safety, to ensure the previous transformer
                     // is not applied too close of the root
-                    System.arraycopy(updates,      1, updates,      0, last);
+                    System.arraycopy(updates, 1, updates, 0, last);
                     System.arraycopy(transformers, 1, transformers, 0, last);
-                    updates[last]      = extremeT;
+                    updates[last] = extremeT;
                     transformers[last] = next;
                 }
 
@@ -152,7 +173,7 @@ public class EventFilter implements EventHandler {
 
                 // check if a new rough root has been crossed
                 final Transformer previous = transformers[0];
-                final Transformer next     = filter.selectTransformer(previous, rawG, forward);
+                final Transformer next = filter.selectTransformer(previous, rawG, forward);
                 if (next != previous) {
                     // there is a root somewhere between extremeT and t.
                     // the new transformer is valid for t (this is how we have just computed
@@ -160,9 +181,9 @@ public class EventFilter implements EventHandler {
                     // it was already valid before t and even up to previous time. We store
                     // the switch at extremeT for safety, to ensure the previous transformer
                     // is not applied too close of the root
-                    System.arraycopy(updates,      0, updates,      1, updates.length - 1);
+                    System.arraycopy(updates, 0, updates, 1, updates.length - 1);
                     System.arraycopy(transformers, 0, transformers, 1, transformers.length - 1);
-                    updates[0]      = extremeT;
+                    updates[0] = extremeT;
                     transformers[0] = next;
                 }
 
@@ -185,17 +206,21 @@ public class EventFilter implements EventHandler {
                 return transformers[updates.length - 1].transformed(rawG);
 
             }
-       }
+        }
 
     }
 
-    /**  {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Action eventOccurred(double t, double[] y, boolean increasing) {
         // delegate to raw handler, fixing increasing status on the fly
         return rawHandler.eventOccurred(t, y, filter.getTriggeredIncreasing());
     }
 
-    /**  {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void resetState(double t, double[] y) {
         // delegate to raw handler
         rawHandler.resetState(t, y);

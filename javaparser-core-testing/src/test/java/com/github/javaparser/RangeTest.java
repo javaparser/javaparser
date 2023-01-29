@@ -203,7 +203,8 @@ class RangeTest {
         Range r = arbitraryRange;
         assertFalse(r.strictlyContains(r.end));
     }
-@Test
+
+    @Test
     void touchingLineColumnRangesOverlap() {
         Range r1 = Range.range(1, 1, 3, 10);
         Range r2 = Range.range(3, 10, 5, 10);
@@ -218,6 +219,7 @@ class RangeTest {
         assertFalse(r1.overlapsWith(r2));
         assertFalse(r2.overlapsWith(r1));
     }
+
     @Test
     void rangePair_equalBeginEnd_overlap_true() {
         Range r1 = rangePair_equalBeginEnd[0];

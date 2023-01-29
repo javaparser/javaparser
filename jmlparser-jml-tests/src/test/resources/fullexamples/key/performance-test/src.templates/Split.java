@@ -1,5 +1,4 @@
 /**
- *
  * @author christoph
  */
 public class Split {
@@ -21,7 +20,7 @@ public class Split {
         requires    x33 == (x34 ? (x35 ? (x36 ? true : false) : false) : false);
         ensures     x1 == (x4 ? (x3 ? (x2 ? true : false) : false) : false);
      */
-    void split(){
+    void split() {
     }
 
 }

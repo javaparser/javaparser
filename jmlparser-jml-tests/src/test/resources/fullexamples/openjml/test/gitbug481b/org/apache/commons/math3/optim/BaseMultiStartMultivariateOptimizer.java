@@ -30,21 +30,30 @@ import org.apache.commons.math3.random.RandomVectorGenerator;
  * <em>It is not a "user" class.</em>
  *
  * @param <PAIR> Type of the point/value pair returned by the optimization
- * algorithm.
- *
+ *               algorithm.
  * @since 3.0
  */
 public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
-    extends BaseMultivariateOptimizer<PAIR> {
-    /** Underlying classical optimizer. */
+        extends BaseMultivariateOptimizer<PAIR> {
+    /**
+     * Underlying classical optimizer.
+     */
     private final BaseMultivariateOptimizer<PAIR> optimizer;
-    /** Number of evaluations already performed for all starts. */
+    /**
+     * Number of evaluations already performed for all starts.
+     */
     private int totalEvaluations;
-    /** Number of starts to go. */
+    /**
+     * Number of starts to go.
+     */
     private int starts;
-    /** Random generator for multi-start. */
+    /**
+     * Random generator for multi-start.
+     */
     private RandomVectorGenerator generator;
-    /** Optimization data. */
+    /**
+     * Optimization data.
+     */
     private OptimizationData[] optimData;
     /**
      * Location in {@link #optimData} where the updated maximum
@@ -68,10 +77,11 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
      * generating a proper restart point. Users must be take great care of the <a
      * href="http://en.wikipedia.org/wiki/Curse_of_dimensionality">curse of dimensionality</a>.
      * </p>
+     *
      * @param optimizer Single-start optimizer to wrap.
-     * @param starts Number of starts to perform. If {@code starts == 1},
-     * the {@link #optimize(OptimizationData[]) optimize} will return the
-     * same solution as the given {@code optimizer} would return.
+     * @param starts    Number of starts to perform. If {@code starts == 1},
+     *                  the {@link #optimize(OptimizationData[]) optimize} will return the
+     *                  same solution as the given {@code optimizer} would return.
      * @param generator Random vector generator to use for restarts.
      * @throws NotStrictlyPositiveException if {@code starts < 1}.
      */
@@ -89,7 +99,9 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
         this.generator = generator;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getEvaluations() {
         return totalEvaluations;
@@ -124,17 +136,19 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
      * {@inheritDoc}
      *
      * @throws MathIllegalStateException if {@code optData} does not contain an
-     * instance of {@link MaxEval} or {@link InitialGuess}.
+     *                                   instance of {@link MaxEval} or {@link InitialGuess}.
      */
     @Override
     public PAIR optimize(OptimizationData... optData) {
         // Store arguments in order to pass them to the internal optimizer.
-       optimData = optData;
+        optimData = optData;
         // Set up base class and perform computations.
         return super.optimize(optData);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected PAIR doOptimize() {
         // Remove all instances of "MaxEval" and "InitialGuess" from the
@@ -222,6 +236,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
      * @param optimum Result of an optimization run.
      */
     protected abstract void store(PAIR optimum);
+
     /**
      * Method that will called in order to clear all stored optima.
      */

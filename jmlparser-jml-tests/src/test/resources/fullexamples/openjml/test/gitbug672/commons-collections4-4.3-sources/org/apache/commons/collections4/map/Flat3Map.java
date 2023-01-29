@@ -67,30 +67,54 @@ import java.util.*;
  */
 public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -6701087419741928296L;
 
-    /** The size of the map, used while in flat mode */
+    /**
+     * The size of the map, used while in flat mode
+     */
     private transient int size;
-    /** Hash, used while in flat mode */
+    /**
+     * Hash, used while in flat mode
+     */
     private transient int hash1;
-    /** Hash, used while in flat mode */
+    /**
+     * Hash, used while in flat mode
+     */
     private transient int hash2;
-    /** Hash, used while in flat mode */
+    /**
+     * Hash, used while in flat mode
+     */
     private transient int hash3;
-    /** Key, used while in flat mode */
+    /**
+     * Key, used while in flat mode
+     */
     private transient K key1;
-    /** Key, used while in flat mode */
+    /**
+     * Key, used while in flat mode
+     */
     private transient K key2;
-    /** Key, used while in flat mode */
+    /**
+     * Key, used while in flat mode
+     */
     private transient K key3;
-    /** Value, used while in flat mode */
+    /**
+     * Value, used while in flat mode
+     */
     private transient V value1;
-    /** Value, used while in flat mode */
+    /**
+     * Value, used while in flat mode
+     */
     private transient V value2;
-    /** Value, used while in flat mode */
+    /**
+     * Value, used while in flat mode
+     */
     private transient V value3;
-    /** Map, used while in delegate mode */
+    /**
+     * Map, used while in delegate mode
+     */
     private transient AbstractHashedMap<K, V> delegateMap;
 
     /**
@@ -103,7 +127,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     /**
      * Constructor copying elements from another map.
      *
-     * @param map  the map to copy
+     * @param map the map to copy
      * @throws NullPointerException if the map is null
      */
     public Flat3Map(final Map<? extends K, ? extends V> map) {
@@ -112,10 +136,11 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets the value mapped to the key specified.
      *
-     * @param key  the key
+     * @param key the key
      * @return the mapped value, null if no match
      */
     @Override
@@ -186,10 +211,11 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Checks whether the map contains the specified key.
      *
-     * @param key  the key to search for
+     * @param key the key to search for
      * @return true if the map contains the key
      */
     @Override
@@ -237,7 +263,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     /**
      * Checks whether the map contains the specified value.
      *
-     * @param value  the value to search for
+     * @param value the value to search for
      * @return true if the map contains the key
      */
     @Override
@@ -280,11 +306,12 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Puts a key-value mapping into this map.
      *
-     * @param key  the key to add
-     * @param value  the value to add
+     * @param key   the key to add
+     * @param value the value to add
      * @return the value previously mapped to this key, null if none
      */
     @Override
@@ -369,7 +396,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     /**
      * Puts all the values from the specified map into this map.
      *
-     * @param map  the map to add
+     * @param map the map to add
      * @throws NullPointerException if the map is null
      */
     @Override
@@ -433,7 +460,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     /**
      * Removes the specified mapping from this map.
      *
-     * @param key  the mapping to remove
+     * @param key the mapping to remove
      * @return the value mapped to the removed key, null if key not in map
      */
     @Override
@@ -599,6 +626,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Gets an iterator over the map.
      * Changes made to the iterator affect this map.
@@ -881,7 +909,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
             final Object key = getKey();
             final Object value = getValue();
             return (key == null ? other.getKey() == null : key.equals(other.getKey())) &&
-                   (value == null ? other.getValue() == null : value.equals(other.getValue()));
+                    (value == null ? other.getValue() == null : value.equals(other.getValue()));
         }
 
         @Override
@@ -892,7 +920,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
             final Object key = getKey();
             final Object value = getValue();
             return (key == null ? 0 : key.hashCode()) ^
-                   (value == null ? 0 : value.hashCode());
+                    (value == null ? 0 : value.hashCode());
         }
 
         @Override
@@ -1018,7 +1046,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     /**
      * KeySetIterator
      */
-    static class KeySetIterator<K> extends EntryIterator<K, Object> implements Iterator<K>{
+    static class KeySetIterator<K> extends EntryIterator<K, Object> implements Iterator<K> {
 
         @SuppressWarnings("unchecked")
         KeySetIterator(final Flat3Map<K, ?> parent) {
@@ -1101,16 +1129,17 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Write the map out using a custom routine.
      *
-     * @param out  the output stream
+     * @param out the output stream
      * @throws IOException if an error occurs while writing to the stream
      */
     private void writeObject(final ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
         out.writeInt(size());
-        for (final MapIterator<?, ?> it = mapIterator(); it.hasNext();) {
+        for (final MapIterator<?, ?> it = mapIterator(); it.hasNext(); ) {
             out.writeObject(it.next());  // key
             out.writeObject(it.getValue());  // value
         }
@@ -1120,7 +1149,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
      * Read the map in using a custom routine.
      *
      * @param in the input stream
-     * @throws IOException if an error occurs while reading from the stream
+     * @throws IOException            if an error occurs while reading from the stream
      * @throws ClassNotFoundException if an object read from the stream can not be loaded
      */
     @SuppressWarnings("unchecked")
@@ -1136,6 +1165,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Clones the map without cloning the keys or values.
      *
@@ -1159,7 +1189,7 @@ public class Flat3Map<K, V> implements IterableMap<K, V>, Serializable, Cloneabl
     /**
      * Compares this map with another.
      *
-     * @param obj  the object to compare to
+     * @param obj the object to compare to
      * @return true if equal
      */
     @Override

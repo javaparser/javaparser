@@ -23,8 +23,9 @@ package org.apache.commons.math3.optimization;
  * arguments and perform the appropriate cast in order to access the data
  * they need.
  *
- * @deprecated As of 3.1 (to be removed in 4.0).
  * @since 3.1
+ * @deprecated As of 3.1 (to be removed in 4.0).
  */
 @Deprecated
-public interface OptimizationData {}
+public interface OptimizationData {
+}

@@ -39,12 +39,12 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
      * The list of all the ancestors of the current declaration, direct and indirect.
      * This list does not contains duplicates with the exacting same type parameters.
      */
-    default List<ReferenceType> getAllAncestors() {     
+    default List<ReferenceType> getAllAncestors() {
         List<ReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
-        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {       
+        if (!(Object.class.getCanonicalName().equals(getQualifiedName()))) {
             for (ReferenceType ancestor : getAncestors()) {
-                ancestors.add(ancestor);    
+                ancestors.add(ancestor);
                 for (ReferenceType inheritedAncestor : ancestor.getAllAncestors()) {
                     if (!ancestors.contains(inheritedAncestor)) {
                         ancestors.add(inheritedAncestor);
@@ -107,7 +107,7 @@ public interface ReferenceTypeDeclaration extends TypeDeclaration, TypeParametri
 
     /**
      * Return a list of all fields, either declared in this declaration or inherited.
-     *
+     * <p>
      * Note that they could refer to inherited type variables.
      */
     List<FieldDeclaration> getAllFields();

@@ -38,7 +38,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Arrays;
 import java.util.Collection;
 
-class Issue235Test extends AbstractResolutionTest{
+class Issue235Test extends AbstractResolutionTest {
 
     static Collection<String> data() {
         return Arrays.asList(

@@ -22,32 +22,32 @@ final class List {
 	  @ decreases a.length - i;
 	  @ assignable \nothing;
 	  @*/
-        for(int i = 0; i < a.length; i++) {
-            if(array[i] > tmp) {
+        for (int i = 0; i < a.length; i++) {
+            if (array[i] > tmp) {
                 tmp = array[i];
             }
         }
 
         max = tmp;
     }
-    
+
     //@ public invariant 0 <= p && p <= a.length;
     //@ public invariant a != null;
     //@ public invariant (\forall int i; 0<=i && i < a.length; max >= a[i]);
     //@ public invariant (\forall int i; 0<=i && i < a.length; a[i] >= 0);
 
     //@ accessible \inv : this.*, this.a[*];
-    
+
     //@ pure
     boolean isEmpty() {
         return p == a.length;
     }
-    
+
     //@ pure
     int head() {
         return a[p];
     }
-    
+
     /*@ requires p < a.length;
       @ ensures p == \old(p) + 1;
       @ assignable p;

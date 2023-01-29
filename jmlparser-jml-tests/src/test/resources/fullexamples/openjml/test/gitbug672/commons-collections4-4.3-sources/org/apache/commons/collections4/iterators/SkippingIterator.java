@@ -26,10 +26,14 @@ import java.util.Iterator;
  */
 public class SkippingIterator<E> extends AbstractIteratorDecorator<E> {
 
-    /** The offset to bound the first element return */
+    /**
+     * The offset to bound the first element return
+     */
     private final long offset;
 
-    /** The position of the current element */
+    /**
+     * The position of the current element
+     */
     private long pos;
 
     //-----------------------------------------------------------------------
@@ -41,9 +45,9 @@ public class SkippingIterator<E> extends AbstractIteratorDecorator<E> {
      * The iterator is immediately advanced until it reaches the position at {@code offset},
      * incurring O(n) time.
      *
-     * @param iterator  the iterator to be decorated
-     * @param offset  the index of the first element of the decorated iterator to return
-     * @throws NullPointerException if iterator is null
+     * @param iterator the iterator to be decorated
+     * @param offset   the index of the first element of the decorated iterator to return
+     * @throws NullPointerException     if iterator is null
      * @throws IllegalArgumentException if offset is negative
      */
     public SkippingIterator(final Iterator<E> iterator, final long offset) {

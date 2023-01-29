@@ -26,7 +26,9 @@ import org.apache.commons.math3.util.FastMath;
  * @since 3.0
  */
 public class Pow implements BivariateFunction {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x, double y) {
         return FastMath.pow(x, y);
     }

@@ -1,5 +1,5 @@
 public class PreOld {
-    
+
     //@ public normal_behavior a:
     //@  old int y = i + 2;
     //@ also public normal_behavior b:
@@ -11,7 +11,7 @@ public class PreOld {
         //@ assert \old(y,b) == i + 1;
         //@ assert \old(y,a) == i + 2;
     }
-    
+
     //@ public normal_behavior a:
     //@   requires b;
     //@   old int x = i + 1;
@@ -22,7 +22,7 @@ public class PreOld {
         //@ assert \old(x,a) == i + 1;
         //@ assert \old(x,b) == i - 1;
     }
-    
+
     //@ public normal_behavior a:
     //@   requires b;
     //@   old int x = i + 1;
@@ -36,6 +36,7 @@ public class PreOld {
             //@ assert \old(x,b) == i - 1;
         }
     }
+
     //@ public normal_behavior a:
     //@   requires b;
     //@   old int x = i + 1;

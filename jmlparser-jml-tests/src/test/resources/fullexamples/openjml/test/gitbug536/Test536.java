@@ -17,27 +17,27 @@ public class Test536 {
     public static void doesNothingButRequiresSortedInteger(int[] array) {
     }
 
-  public static void main(String[] args) {
-      int[] array0 = {0,1,2,3};
-      int[] array1 = {0,1,2,-3};
-      Integer[] array2 = {0,1,2,3};
-      Integer[] array3 = {0,1,2,-3};
+    public static void main(String[] args) {
+        int[] array0 = {0, 1, 2, 3};
+        int[] array1 = {0, 1, 2, -3};
+        Integer[] array2 = {0, 1, 2, 3};
+        Integer[] array3 = {0, 1, 2, -3};
 
-      // Succeeds
-      doesNothingButRequiresSorted(array0);
-      // Fails
-      doesNothingButRequiresSorted(array1);
-      // Succeeds
-      doesNothingButRequiresSortedC(array0);
-      // Fails
-      doesNothingButRequiresSortedC(array1);
-      // Succeeds
-      doesNothingButRequiresSortedInteger(array2);
-      // Fails
-      doesNothingButRequiresSortedInteger(array3);
-      // Succeeds
-      doesNothingButRequiresSortedInteger(array0);
-      // Fails
-      doesNothingButRequiresSortedInteger(array1);
-  }
+        // Succeeds
+        doesNothingButRequiresSorted(array0);
+        // Fails
+        doesNothingButRequiresSorted(array1);
+        // Succeeds
+        doesNothingButRequiresSortedC(array0);
+        // Fails
+        doesNothingButRequiresSortedC(array1);
+        // Succeeds
+        doesNothingButRequiresSortedInteger(array2);
+        // Fails
+        doesNothingButRequiresSortedInteger(array3);
+        // Succeeds
+        doesNothingButRequiresSortedInteger(array0);
+        // Fails
+        doesNothingButRequiresSortedInteger(array1);
+    }
 }

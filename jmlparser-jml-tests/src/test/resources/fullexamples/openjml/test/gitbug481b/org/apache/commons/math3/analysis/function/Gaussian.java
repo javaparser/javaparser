@@ -33,52 +33,60 @@ import java.util.Arrays;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Gaussian_function">
- *  Gaussian</a> function.
+ * Gaussian</a> function.
  *
  * @since 3.0
  */
 public class Gaussian implements UnivariateDifferentiableFunction, DifferentiableUnivariateFunction {
-    /** Mean. */
+    /**
+     * Mean.
+     */
     private final double mean;
-    /** Inverse of the standard deviation. */
+    /**
+     * Inverse of the standard deviation.
+     */
     private final double is;
-    /** Inverse of twice the square of the standard deviation. */
+    /**
+     * Inverse of twice the square of the standard deviation.
+     */
     private final double i2s2;
-    /** Normalization factor. */
+    /**
+     * Normalization factor.
+     */
     private final double norm;
 
     /**
      * Gaussian with given normalization factor, mean and standard deviation.
      *
-     * @param norm Normalization factor.
-     * @param mean Mean.
+     * @param norm  Normalization factor.
+     * @param mean  Mean.
      * @param sigma Standard deviation.
      * @throws NotStrictlyPositiveException if {@code sigma <= 0}.
      */
     public Gaussian(double norm,
                     double mean,
                     double sigma)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         if (sigma <= 0) {
             throw new NotStrictlyPositiveException(sigma);
         }
 
         this.norm = norm;
         this.mean = mean;
-        this.is   = 1 / sigma;
+        this.is = 1 / sigma;
         this.i2s2 = 0.5 * is * is;
     }
 
     /**
      * Normalized gaussian with given mean and standard deviation.
      *
-     * @param mean Mean.
+     * @param mean  Mean.
      * @param sigma Standard deviation.
      * @throws NotStrictlyPositiveException if {@code sigma <= 0}.
      */
     public Gaussian(double mean,
                     double sigma)
-        throws NotStrictlyPositiveException {
+            throws NotStrictlyPositiveException {
         this(1 / (sigma * FastMath.sqrt(2 * Math.PI)), mean, sigma);
     }
 
@@ -89,12 +97,16 @@ public class Gaussian implements UnivariateDifferentiableFunction, Differentiabl
         this(0, 1);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x) {
         return value(x - mean, norm, i2s2);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @deprecated as of 3.1, replaced by {@link #value(DerivativeStructure)}
      */
     @Deprecated
@@ -115,18 +127,18 @@ public class Gaussian implements UnivariateDifferentiableFunction, Differentiabl
         /**
          * Computes the value of the Gaussian at {@code x}.
          *
-         * @param x Value for which the function must be computed.
+         * @param x     Value for which the function must be computed.
          * @param param Values of norm, mean and standard deviation.
          * @return the value of the function.
-         * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
-         * not 3.
+         * @throws NullArgumentException        if {@code param} is {@code null}.
+         * @throws DimensionMismatchException   if the size of {@code param} is
+         *                                      not 3.
          * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
          */
-        public double value(double x, double ... param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+        public double value(double x, double... param)
+                throws NullArgumentException,
+                DimensionMismatchException,
+                NotStrictlyPositiveException {
             validateParameters(param);
 
             final double diff = x - param[1];
@@ -140,18 +152,18 @@ public class Gaussian implements UnivariateDifferentiableFunction, Differentiabl
          * derivatives of the function with respect to each of the
          * <em>parameters</em> (norm, mean and standard deviation).
          *
-         * @param x Value at which the gradient must be computed.
+         * @param x     Value at which the gradient must be computed.
          * @param param Values of norm, mean and standard deviation.
          * @return the gradient vector at {@code x}.
-         * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
-         * not 3.
+         * @throws NullArgumentException        if {@code param} is {@code null}.
+         * @throws DimensionMismatchException   if the size of {@code param} is
+         *                                      not 3.
          * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
          */
-        public double[] gradient(double x, double ... param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+        public double[] gradient(double x, double... param)
+                throws NullArgumentException,
+                DimensionMismatchException,
+                NotStrictlyPositiveException {
             validateParameters(param);
 
             final double norm = param[0];
@@ -163,24 +175,24 @@ public class Gaussian implements UnivariateDifferentiableFunction, Differentiabl
             final double m = norm * n * 2 * i2s2 * diff;
             final double s = m * diff / sigma;
 
-            return new double[] { n, m, s };
+            return new double[]{n, m, s};
         }
 
         /**
          * Validates parameters to ensure they are appropriate for the evaluation of
-         * the {@link #value(double,double[])} and {@link #gradient(double,double[])}
+         * the {@link #value(double, double[])} and {@link #gradient(double, double[])}
          * methods.
          *
          * @param param Values of norm, mean and standard deviation.
-         * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
-         * not 3.
+         * @throws NullArgumentException        if {@code param} is {@code null}.
+         * @throws DimensionMismatchException   if the size of {@code param} is
+         *                                      not 3.
          * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
          */
         private void validateParameters(double[] param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+                throws NullArgumentException,
+                DimensionMismatchException,
+                NotStrictlyPositiveException {
             if (param == null) {
                 throw new NullArgumentException();
             }
@@ -195,8 +207,8 @@ public class Gaussian implements UnivariateDifferentiableFunction, Differentiabl
 
     /**
      * @param xMinusMean {@code x - mean}.
-     * @param norm Normalization factor.
-     * @param i2s2 Inverse of twice the square of the standard deviation.
+     * @param norm       Normalization factor.
+     * @param i2s2       Inverse of twice the square of the standard deviation.
      * @return the value of the Gaussian at {@code x}.
      */
     private static double value(double xMinusMean,
@@ -205,11 +217,13 @@ public class Gaussian implements UnivariateDifferentiableFunction, Differentiabl
         return norm * FastMath.exp(-xMinusMean * xMinusMean * i2s2);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @since 3.1
      */
     public DerivativeStructure value(final DerivativeStructure t)
-        throws DimensionMismatchException {
+            throws DimensionMismatchException {
 
         final double u = is * (t.getValue() - mean);
         double[] f = new double[t.getOrder() + 1];

@@ -34,19 +34,25 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class InstantiateTransformer<T> implements Transformer<Class<? extends T>, T> {
 
-    /** Singleton instance that uses the no arg constructor */
+    /**
+     * Singleton instance that uses the no arg constructor
+     */
     @SuppressWarnings("rawtypes")
     private static final Transformer NO_ARG_INSTANCE = new InstantiateTransformer<>();
 
-    /** The constructor parameter types */
+    /**
+     * The constructor parameter types
+     */
     private final Class<?>[] iParamTypes;
-    /** The constructor arguments */
+    /**
+     * The constructor arguments
+     */
     private final Object[] iArgs;
 
     /**
      * Get a typed no-arg instance.
      *
-     * @param <T>  the type of the objects to be created
+     * @param <T> the type of the objects to be created
      * @return Transformer&lt;Class&lt;? extends T&gt;, T&gt;
      */
     @SuppressWarnings("unchecked")
@@ -57,17 +63,17 @@ public class InstantiateTransformer<T> implements Transformer<Class<? extends T>
     /**
      * Transformer method that performs validation.
      *
-     * @param <T>  the type of the objects to be created
-     * @param paramTypes  the constructor parameter types
-     * @param args  the constructor arguments
+     * @param <T>        the type of the objects to be created
+     * @param paramTypes the constructor parameter types
+     * @param args       the constructor arguments
      * @return an instantiate transformer
      * @throws IllegalArgumentException if paramTypes does not match args
      */
     public static <T> Transformer<Class<? extends T>, T> instantiateTransformer(final Class<?>[] paramTypes,
                                                                                 final Object[] args) {
         if (((paramTypes == null) && (args != null))
-            || ((paramTypes != null) && (args == null))
-            || ((paramTypes != null) && (args != null) && (paramTypes.length != args.length))) {
+                || ((paramTypes != null) && (args == null))
+                || ((paramTypes != null) && (args != null) && (paramTypes.length != args.length))) {
             throw new IllegalArgumentException("Parameter types must match the arguments");
         }
 
@@ -92,8 +98,8 @@ public class InstantiateTransformer<T> implements Transformer<Class<? extends T>
      * <p>
      * Note: from 4.0, the input parameters will be cloned
      *
-     * @param paramTypes  the constructor parameter types
-     * @param args  the constructor arguments
+     * @param paramTypes the constructor parameter types
+     * @param args       the constructor arguments
      */
     public InstantiateTransformer(final Class<?>[] paramTypes, final Object[] args) {
         super();
@@ -104,7 +110,7 @@ public class InstantiateTransformer<T> implements Transformer<Class<? extends T>
     /**
      * Transforms the input Class object to a result by instantiation.
      *
-     * @param input  the input object to transform
+     * @param input the input object to transform
      * @return the transformed result
      */
     @Override
@@ -112,7 +118,7 @@ public class InstantiateTransformer<T> implements Transformer<Class<? extends T>
         try {
             if (input == null) {
                 throw new FunctorException(
-                    "InstantiateTransformer: Input object was not an instanceof Class, it was a null object");
+                        "InstantiateTransformer: Input object was not an instanceof Class, it was a null object");
             }
             final Constructor<? extends T> con = input.getConstructor(iParamTypes);
             return con.newInstance(iArgs);

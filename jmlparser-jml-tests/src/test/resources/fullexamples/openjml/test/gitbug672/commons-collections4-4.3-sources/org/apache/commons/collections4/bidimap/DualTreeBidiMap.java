@@ -45,13 +45,19 @@ import java.util.*;
 public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
         implements SortedBidiMap<K, V>, Serializable {
 
-    /** Ensure serialization compatibility */
+    /**
+     * Ensure serialization compatibility
+     */
     private static final long serialVersionUID = 721969328361809L;
 
-    /** The key comparator to use */
+    /**
+     * The key comparator to use
+     */
     private final Comparator<? super K> comparator;
 
-    /** The value comparator to use */
+    /**
+     * The value comparator to use
+     */
     private final Comparator<? super V> valueComparator;
 
     /**
@@ -67,7 +73,7 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
      * Constructs a <code>DualTreeBidiMap</code> and copies the mappings from
      * specified <code>Map</code>.
      *
-     * @param map  the map whose mappings are to be placed in this map
+     * @param map the map whose mappings are to be placed in this map
      */
     public DualTreeBidiMap(final Map<? extends K, ? extends V> map) {
         super(new TreeMap<K, V>(), new TreeMap<V, K>());
@@ -79,8 +85,8 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
     /**
      * Constructs a {@link DualTreeBidiMap} using the specified {@link Comparator}.
      *
-     * @param keyComparator  the comparator
-     * @param valueComparator  the values comparator to use
+     * @param keyComparator   the comparator
+     * @param valueComparator the values comparator to use
      */
     public DualTreeBidiMap(final Comparator<? super K> keyComparator, final Comparator<? super V> valueComparator) {
         super(new TreeMap<K, V>(keyComparator), new TreeMap<V, K>(valueComparator));
@@ -91,9 +97,9 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
     /**
      * Constructs a {@link DualTreeBidiMap} that decorates the specified maps.
      *
-     * @param normalMap  the normal direction map
-     * @param reverseMap  the reverse direction map
-     * @param inverseBidiMap  the inverse BidiMap
+     * @param normalMap      the normal direction map
+     * @param reverseMap     the reverse direction map
+     * @param inverseBidiMap the inverse BidiMap
      */
     protected DualTreeBidiMap(final Map<K, V> normalMap, final Map<V, K> reverseMap,
                               final BidiMap<V, K> inverseBidiMap) {
@@ -106,8 +112,8 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
      * Creates a new instance of this object.
      *
      * @param normalMap  the normal direction map
-     * @param reverseMap  the reverse direction map
-     * @param inverseMap  the inverse BidiMap
+     * @param reverseMap the reverse direction map
+     * @param inverseMap the inverse BidiMap
      * @return new bidi map
      */
     @Override
@@ -172,6 +178,7 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Obtains an ordered map iterator.
      * <p>
@@ -219,14 +226,16 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Internal sorted map view.
      */
     protected static class ViewMap<K, V> extends AbstractSortedMapDecorator<K, V> {
         /**
          * Constructor.
-         * @param bidi  the parent bidi map
-         * @param sm  the subMap sorted map
+         *
+         * @param bidi the parent bidi map
+         * @param sm   the subMap sorted map
          */
         protected ViewMap(final DualTreeBidiMap<K, V> bidi, final SortedMap<K, V> sm) {
             // the implementation is not great here...
@@ -244,7 +253,7 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
         @Override
         public void clear() {
             // override as default implementation uses reverseMap
-            for (final Iterator<K> it = keySet().iterator(); it.hasNext();) {
+            for (final Iterator<K> it = keySet().iterator(); it.hasNext(); ) {
                 it.next();
                 it.remove();
             }
@@ -282,23 +291,31 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Inner class MapIterator.
      */
     protected static class BidiOrderedMapIterator<K, V> implements OrderedMapIterator<K, V>, ResettableIterator<K> {
 
-        /** The parent map */
+        /**
+         * The parent map
+         */
         private final AbstractDualBidiMap<K, V> parent;
 
-        /** The iterator being decorated */
+        /**
+         * The iterator being decorated
+         */
         private ListIterator<Map.Entry<K, V>> iterator;
 
-        /** The last returned entry */
+        /**
+         * The last returned entry
+         */
         private Map.Entry<K, V> last = null;
 
         /**
          * Constructor.
-         * @param parent  the parent map
+         *
+         * @param parent the parent map
          */
         protected BidiOrderedMapIterator(final AbstractDualBidiMap<K, V> parent) {
             super();
@@ -360,7 +377,7 @@ public class DualTreeBidiMap<K, V> extends AbstractDualBidiMap<K, V>
                         "Iterator setValue() can only be called after next() and before remove()");
             }
             if (parent.reverseMap.containsKey(value) &&
-                parent.reverseMap.get(value) != last.getKey()) {
+                    parent.reverseMap.get(value) != last.getKey()) {
                 throw new IllegalArgumentException(
                         "Cannot use setValue() when the object being set is already in the map");
             }

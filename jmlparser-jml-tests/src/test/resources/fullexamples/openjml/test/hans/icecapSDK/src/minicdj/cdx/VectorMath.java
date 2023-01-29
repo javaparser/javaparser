@@ -1,24 +1,25 @@
 /**
- *  This file is part of miniCDx benchmark of oSCJ.
+ * This file is part of miniCDx benchmark of oSCJ.
+ * <p>
+ * miniCDx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * miniCDx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * <p>
+ * Copyright 2009, 2010
  *
- *   miniCDx is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   miniCDx is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with miniCDx.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *   Copyright 2009, 2010 
- *   @authors  Daniel Tang, Ales Plsek
- *
- *   See: http://sss.cs.purdue.edu/projects/oscj/
+ * @authors Daniel Tang, Ales Plsek
+ * <p>
+ * See: http://sss.cs.purdue.edu/projects/oscj/
  */
 package minicdj.cdx;
 
@@ -29,7 +30,7 @@ import minicdj.collision.Vector3d;
  * dimensions. Its operators are patterned after three address code machines, specifying two operands and a destination
  * operand. This machine is optimized for performance, thus the methods are static, contain no calls, create no objects,
  * and do not perform error checking or synchronization.
- * 
+ *
  * @author Ben L. Titzer
  */
 final class VectorMath {
@@ -40,7 +41,7 @@ final class VectorMath {
 
     /**
      * The <code>add</code> method takes two vectors and adds them, placing the result in a third vector.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -56,7 +57,7 @@ final class VectorMath {
 
     /**
      * The <code>subtract</code> method takes two vectors and subtracts them, placing the result in a third vector.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -73,7 +74,7 @@ final class VectorMath {
     /**
      * The <code>scale</code> method takes a <code>Vector3d</code> and a scalar float value multiplies each component of
      * the Vector, storing the result in the third parameter.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param scale
@@ -90,7 +91,7 @@ final class VectorMath {
     /**
      * The <code>normalize</code> method takes a <code>Vector3d</code> and if it is non-zero, will normalize it so that
      * its magnitude will be 1.
-     * 
+     *
      * @param a
      *            the value of the vector to normalize
      * @param dest
@@ -107,7 +108,7 @@ final class VectorMath {
     /**
      * The <code>magnitude</code> method takes a <code>Vector3d</code> and computes its magnitude according the
      * Euclidean norm.
-     * 
+     *
      * @param a
      *            the value of the vector of which to compute the magnitude
      * @returns the magnitude of the vector
@@ -118,7 +119,7 @@ final class VectorMath {
 
     /**
      * The <code>distance</code> method takes two vectors and computes their (Euclidean) distance.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -136,7 +137,7 @@ final class VectorMath {
      * The <code>sqDistance</code> method takes two vectors and computes the square of their (Euclidean) distance. This
      * is just an optimization for the <code>distance</code> method that avoids an expensive floating point square root
      * computation.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -153,7 +154,7 @@ final class VectorMath {
     /**
      * The <code>dotProduct</code> method computes the dot product between two vectors using the standard inner product
      * formula.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -167,7 +168,7 @@ final class VectorMath {
     /**
      * The <code>rotate</code> method takes a <code>Vector3d</code> and a scalar float value and will rotate the vector
      * in the xy plane.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param radians
@@ -187,7 +188,7 @@ final class VectorMath {
     /**
      * The <code>theta</code> method takes a <code>Vector3d</code> and calculates the angle between the X-axis and the
      * vector, ignoring the z component of the vector.
-     * 
+     *
      * @param a
      *            the vector of which to calculate the theta angle
      * @returns the radian value in the range [0, 2*pi] that represents the angle between the x axis and this vector (in
@@ -213,7 +214,7 @@ final class VectorMath {
     /**
      * The <code>phi</code> method takes a <code>Vector3d</code> and calculates the elevation between the XY-plane and
      * the vector.
-     * 
+     *
      * @param a
      *            the vector of which to calculate the phi angle
      * @returns the radian value in the range [-pi/2, pi/2] that represents the angle between the x axis and this vector
@@ -240,7 +241,7 @@ final class VectorMath {
 
     /**
      * The <code>add</code> method takes two vectors and adds them, placing the result in a third vector.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -255,7 +256,7 @@ final class VectorMath {
 
     /**
      * The <code>subtract</code> method takes two vectors and subtracts them, placing the result in a third vector.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -271,7 +272,7 @@ final class VectorMath {
     /**
      * The <code>scale</code> method takes a <code>Vector2d</code> and a scalar float value multiplies each component of
      * the Vector, storing the result in the third parameter.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param scale
@@ -287,7 +288,7 @@ final class VectorMath {
     /**
      * The <code>normalize</code> method takes a <code>Vector2d</code> and if it is non-zero, will normalize it so that
      * its magnitude will be 1.
-     * 
+     *
      * @param a
      *            the value of the vector to normalize
      * @param dest
@@ -304,7 +305,7 @@ final class VectorMath {
     /**
      * The <code>magnitude</code> method takes a <code>Vector2d</code> and computes its magnitude according the
      * Euclidean norm.
-     * 
+     *
      * @param a
      *            the value of the vector of which to compute the magnitude
      * @returns the magnitude of the vector
@@ -315,7 +316,7 @@ final class VectorMath {
 
     /**
      * The <code>distance</code> method takes two vectors and computes their (Euclidean) distance.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -332,7 +333,7 @@ final class VectorMath {
      * The <code>sqDistance</code> method takes two vectors and computes the square of their (Euclidean) distance. This
      * is just an optimization for the <code>distance</code> method that avoids an expensive floating point square root
      * computation.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -348,7 +349,7 @@ final class VectorMath {
     /**
      * The <code>dotProduct</code> method computes the dot product between two vectors using the standard inner product
      * formula.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -362,7 +363,7 @@ final class VectorMath {
     /**
      * The <code>quadrant</code> method is a utility function for two dimensional vectors that takes a vector as a
      * parameter and will return an integer describing what quadrant of the xy plane the vector lies in.
-     * 
+     *
      * @param a
      *            the vector to compute the quadrant of
      * @returns the integer VectorConstants.XX_QUADRANT value corresponding to which quadrant the vector lies in
@@ -389,7 +390,7 @@ final class VectorMath {
     /**
      * The <code>convert</code> methods have been overridden to allow 2d vectors to be converted to 3d vectors and vice
      * versa.
-     * 
+     *
      * @param src
      *            the value of the source vector
      * @param dest
@@ -403,7 +404,7 @@ final class VectorMath {
     /**
      * The <code>convert</code> methods have been overridden to allow 2d vectors to be converted to 3d vectors and vice
      * versa.
-     * 
+     *
      * @param src
      *            the value of the source vector
      * @param dest
@@ -418,7 +419,7 @@ final class VectorMath {
     /**
      * The <code>distance</code> method takes two vectors and computes their (Euclidean) distance. It has been
      * overloaded to allow the computation of the distance between a 3d vector and a 2d vector.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -434,7 +435,7 @@ final class VectorMath {
     /**
      * The <code>distance</code> method takes two vectors and computes their (Euclidean) distance. It has been
      * overloaded to allow the computation of the distance between a 3d vector and a 2d vector.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -451,7 +452,7 @@ final class VectorMath {
      * The <code>sqDistance</code> method takes two vectors and computes the square of their (Euclidean) distance. This
      * is just an optimization for the <code>distance</code> method that avoids an expensive floating point square root
      * computation. It has been overloaded to allow the computation of the distance between a 3d vector and a 2d vector.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b
@@ -468,7 +469,7 @@ final class VectorMath {
      * The <code>sqDistance</code> method takes two vectors and computes the square of their (Euclidean) distance. This
      * is just an optimization for the <code>distance</code> method that avoids an expensive floating point square root
      * computation. It has been overloaded to allow the computation of the distance between a 3d vector and a 2d vector.
-     * 
+     *
      * @param a
      *            the value of the first vector
      * @param b

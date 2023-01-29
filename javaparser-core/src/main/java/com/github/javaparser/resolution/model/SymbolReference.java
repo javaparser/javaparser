@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.model;
 
 import com.github.javaparser.quality.Nullable;
@@ -44,9 +43,8 @@ public class SymbolReference<S extends ResolvedDeclaration> {
     /**
      * Create a reference for an unsolved symbol.
      *
-     * @return The created unsolved symbol reference.
-     *
      * @param <S> The symbol reference type.
+     * @return The created unsolved symbol reference.
      */
     public static <S extends ResolvedDeclaration> SymbolReference<S> unsolved() {
         return new SymbolReference<>(null);
@@ -67,24 +65,18 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      *
      * @param ref   The reference to be adapted.
      * @param clazz The final type to be used.
-     *
+     * @param <I>   The Symbol Reference before adapting.
+     * @param <O>   The Symbol Reference after adapting.
      * @return The adapted symbol reference.
-     *
-     * @param <I> The Symbol Reference before adapting.
-     * @param <O> The Symbol Reference after adapting.
      */
     public static <I extends ResolvedDeclaration, O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<I> ref, Class<O> clazz) {
-
         Optional<I> declaration = ref.getDeclaration();
         if (declaration.isPresent()) {
-
             I symbol = declaration.get();
             if (clazz.isInstance(symbol)) {
                 return solved(clazz.cast(symbol));
             }
-
         }
-
         return unsolved();
     }
 
@@ -107,12 +99,10 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
      */
     public S getCorrespondingDeclaration() {
-
         Optional<S> declaration = getDeclaration();
         if (declaration.isPresent()) {
             return declaration.get();
         }
-
         throw new UnsupportedOperationException("CorrespondingDeclaration not available for unsolved symbol.");
     }
 
@@ -127,5 +117,4 @@ public class SymbolReference<S extends ResolvedDeclaration> {
     public String toString() {
         return "SymbolReference{" + correspondingDeclaration + "}";
     }
-
 }

@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 /**
- *
- *     Univariate real functions interpolation algorithms.
- *
+ * Univariate real functions interpolation algorithms.
  */
 package org.apache.commons.math3.analysis.interpolation;

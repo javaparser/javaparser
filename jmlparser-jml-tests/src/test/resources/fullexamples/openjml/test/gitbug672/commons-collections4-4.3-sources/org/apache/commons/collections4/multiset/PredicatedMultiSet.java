@@ -43,7 +43,9 @@ import java.util.Set;
  */
 public class PredicatedMultiSet<E> extends PredicatedCollection<E> implements MultiSet<E> {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = 20150629L;
 
     /**
@@ -52,11 +54,11 @@ public class PredicatedMultiSet<E> extends PredicatedCollection<E> implements Mu
      * If there are any elements already in the multiset being decorated, they
      * are validated.
      *
-     * @param <E> the type of the elements in the multiset
+     * @param <E>       the type of the elements in the multiset
      * @param multiset  the multiset to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
+     * @param predicate the predicate to use for validation, must not be null
      * @return a new predicated MultiSet
-     * @throws NullPointerException if multiset or predicate is null
+     * @throws NullPointerException     if multiset or predicate is null
      * @throws IllegalArgumentException if the multiset contains invalid elements
      */
     public static <E> PredicatedMultiSet<E> predicatedMultiSet(final MultiSet<E> multiset,
@@ -65,6 +67,7 @@ public class PredicatedMultiSet<E> extends PredicatedCollection<E> implements Mu
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * Constructor that wraps (not copies).
      * <p>
@@ -72,8 +75,8 @@ public class PredicatedMultiSet<E> extends PredicatedCollection<E> implements Mu
      * are validated.
      *
      * @param multiset  the multiset to decorate, must not be null
-     * @param predicate  the predicate to use for validation, must not be null
-     * @throws NullPointerException if multiset or predicate is null
+     * @param predicate the predicate to use for validation, must not be null
+     * @throws NullPointerException     if multiset or predicate is null
      * @throws IllegalArgumentException if the multiset contains invalid elements
      */
     protected PredicatedMultiSet(final MultiSet<E> multiset, final Predicate<? super E> predicate) {

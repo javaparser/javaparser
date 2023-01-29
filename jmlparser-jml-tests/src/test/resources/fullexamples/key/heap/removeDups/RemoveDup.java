@@ -12,14 +12,14 @@
 // 
 
 /**
- * This class provides the static method removeDup. 
- * 
+ * This class provides the static method removeDup.
+ * <p>
  * It takes an int-array and returns an array containing the same integer
  * values but no duplicates.
- *
+ * <p>
  * The specification for removeDup was part of a KIT Formal Systems exam
  * in Feb 2014.
- * 
+ *
  * @author Mattias Ulbrich
  */
 class RemoveDup {
@@ -44,8 +44,8 @@ class RemoveDup {
           @ decreases a.length-k;
           @ assignable result[*];
           @*/
-        for(int k = 0; k < a.length; k++) {
-            if(!contains(result, p, a[k])) {
+        for (int k = 0; k < a.length; k++) {
+            if (!contains(result, p, a[k])) {
                 result[p] = a[k];
                 p++;
             }
@@ -64,8 +64,8 @@ class RemoveDup {
           @ decreases a.length-i;
           @ assignable \strictly_nothing;
           @*/
-        for(int i = 0; i < len; i++) {
-            if(a[i] == v) {
+        for (int i = 0; i < len; i++) {
+            if (a[i] == v) {
                 return true;
             }
         }
@@ -89,7 +89,7 @@ class RemoveDup {
           @ assignable result[*];
           @ decreases length - i;
           @*/
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             result[i] = a[i];
         }
         return result;

@@ -30,15 +30,19 @@ import org.apache.commons.math3.util.FastMath;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Logit">
- *  Logit</a> function.
+ * Logit</a> function.
  * It is the inverse of the {@link Sigmoid sigmoid} function.
  *
  * @since 3.0
  */
 public class Logit implements UnivariateDifferentiableFunction, DifferentiableUnivariateFunction {
-    /** Lower bound. */
+    /**
+     * Lower bound.
+     */
     private final double lo;
-    /** Higher bound. */
+    /**
+     * Higher bound.
+     */
     private final double hi;
 
     /**
@@ -61,13 +65,17 @@ public class Logit implements UnivariateDifferentiableFunction, DifferentiableUn
         this.hi = hi;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public double value(double x)
-        throws OutOfRangeException {
+            throws OutOfRangeException {
         return value(x, lo, hi);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
      * @deprecated as of 3.1, replaced by {@link #value(DerivativeStructure)}
      */
     @Deprecated
@@ -87,16 +95,16 @@ public class Logit implements UnivariateDifferentiableFunction, DifferentiableUn
         /**
          * Computes the value of the logit at {@code x}.
          *
-         * @param x Value for which the function must be computed.
+         * @param x     Value for which the function must be computed.
          * @param param Values of lower bound and higher bounds.
          * @return the value of the function.
-         * @throws NullArgumentException if {@code param} is {@code null}.
+         * @throws NullArgumentException      if {@code param} is {@code null}.
          * @throws DimensionMismatchException if the size of {@code param} is
-         * not 2.
+         *                                    not 2.
          */
-        public double value(double x, double ... param)
-            throws NullArgumentException,
-                   DimensionMismatchException {
+        public double value(double x, double... param)
+                throws NullArgumentException,
+                DimensionMismatchException {
             validateParameters(param);
             return Logit.value(x, param[0], param[1]);
         }
@@ -107,37 +115,37 @@ public class Logit implements UnivariateDifferentiableFunction, DifferentiableUn
          * derivatives of the function with respect to each of the
          * <em>parameters</em> (lower bound and higher bound).
          *
-         * @param x Value at which the gradient must be computed.
+         * @param x     Value at which the gradient must be computed.
          * @param param Values for lower and higher bounds.
          * @return the gradient vector at {@code x}.
-         * @throws NullArgumentException if {@code param} is {@code null}.
+         * @throws NullArgumentException      if {@code param} is {@code null}.
          * @throws DimensionMismatchException if the size of {@code param} is
-         * not 2.
+         *                                    not 2.
          */
-        public double[] gradient(double x, double ... param)
-            throws NullArgumentException,
-                   DimensionMismatchException {
+        public double[] gradient(double x, double... param)
+                throws NullArgumentException,
+                DimensionMismatchException {
             validateParameters(param);
 
             final double lo = param[0];
             final double hi = param[1];
 
-            return new double[] { 1 / (lo - x), 1 / (hi - x) };
+            return new double[]{1 / (lo - x), 1 / (hi - x)};
         }
 
         /**
          * Validates parameters to ensure they are appropriate for the evaluation of
-         * the {@link #value(double,double[])} and {@link #gradient(double,double[])}
+         * the {@link #value(double, double[])} and {@link #gradient(double, double[])}
          * methods.
          *
          * @param param Values for lower and higher bounds.
-         * @throws NullArgumentException if {@code param} is {@code null}.
+         * @throws NullArgumentException      if {@code param} is {@code null}.
          * @throws DimensionMismatchException if the size of {@code param} is
-         * not 2.
+         *                                    not 2.
          */
         private void validateParameters(double[] param)
-            throws NullArgumentException,
-                   DimensionMismatchException {
+                throws NullArgumentException,
+                DimensionMismatchException {
             if (param == null) {
                 throw new NullArgumentException();
             }
@@ -148,7 +156,7 @@ public class Logit implements UnivariateDifferentiableFunction, DifferentiableUn
     }
 
     /**
-     * @param x Value at which to compute the logit.
+     * @param x  Value at which to compute the logit.
      * @param lo Lower bound.
      * @param hi Higher bound.
      * @return the value of the logit function at {@code x}.
@@ -157,19 +165,21 @@ public class Logit implements UnivariateDifferentiableFunction, DifferentiableUn
     private static double value(double x,
                                 double lo,
                                 double hi)
-        throws OutOfRangeException {
+            throws OutOfRangeException {
         if (x < lo || x > hi) {
             throw new OutOfRangeException(x, lo, hi);
         }
         return FastMath.log((x - lo) / (hi - x));
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
+     *
+     * @throws OutOfRangeException if parameter is outside of function domain
      * @since 3.1
-     * @exception OutOfRangeException if parameter is outside of function domain
      */
     public DerivativeStructure value(final DerivativeStructure t)
-        throws OutOfRangeException {
+            throws OutOfRangeException {
         final double x = t.getValue();
         if (x < lo || x > hi) {
             throw new OutOfRangeException(x, lo, hi);
@@ -202,8 +212,8 @@ public class Logit implements UnivariateDifferentiableFunction, DifferentiableUn
             double xH = invH;
             for (int i = 1; i < f.length; ++i) {
                 f[i] = xL + xH;
-                xL  *= -i * invL;
-                xH  *=  i * invH;
+                xL *= -i * invL;
+                xH *= i * invH;
             }
         }
 

@@ -20,13 +20,13 @@ public class TestAVR {
     public static void main(String[] args) {
         Port portA = new Port(Port.DDRA);
         portA.ddr = (byte) 0xff;
-        
+
         Timer2Handler handler = new Timer2Handler(portA);
-        
+
         handler.register();
-        
+
         Timer.timerInit();
-        
+
         while (true) {
             byte msbNibble = (byte) (portA.data & 0xf0);
             byte lsbNibble = (byte) (portA.data & 0x0f);

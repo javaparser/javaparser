@@ -23,36 +23,37 @@ import org.apache.commons.math3.util.FastMath;
 /**
  * Simple implementation of the {@link ConvergenceChecker} interface using
  * only objective function values.
- *
+ * <p>
  * Convergence is considered to have been reached if either the relative
  * difference between the objective function values is smaller than a
  * threshold or if either the absolute difference between the objective
  * function values is smaller than another threshold.
  * <br/>
- * The {@link #converged(int,PointValuePair,PointValuePair) converged}
+ * The {@link #converged(int, PointValuePair, PointValuePair) converged}
  * method will also return {@code true} if the number of iterations has been set
- * (see {@link #SimpleValueChecker(double,double,int) this constructor}).
+ * (see {@link #SimpleValueChecker(double, double, int) this constructor}).
  *
  * @since 3.0
  */
 public class SimpleValueChecker
-    extends AbstractConvergenceChecker<PointValuePair> {
+        extends AbstractConvergenceChecker<PointValuePair> {
     /**
      * If {@link #maxIterationCount} is set to this value, the number of
      * iterations will never cause
-     * {@link #converged(int,PointValuePair,PointValuePair)}
+     * {@link #converged(int, PointValuePair, PointValuePair)}
      * to return {@code true}.
      */
     private static final int ITERATION_CHECK_DISABLED = -1;
     /**
      * Number of iterations after which the
-     * {@link #converged(int,PointValuePair,PointValuePair)} method
+     * {@link #converged(int, PointValuePair, PointValuePair)} method
      * will return true (unless the check is disabled).
      */
     private final int maxIterationCount;
 
-    /** Build an instance with specified thresholds.
-     *
+    /**
+     * Build an instance with specified thresholds.
+     * <p>
      * In order to perform only relative checks, the absolute tolerance
      * must be set to a negative value. In order to perform only absolute
      * checks, the relative tolerance must be set to a negative value.
@@ -68,16 +69,15 @@ public class SimpleValueChecker
 
     /**
      * Builds an instance with specified thresholds.
-     *
+     * <p>
      * In order to perform only relative checks, the absolute tolerance
      * must be set to a negative value. In order to perform only absolute
      * checks, the relative tolerance must be set to a negative value.
      *
      * @param relativeThreshold relative tolerance threshold
      * @param absoluteThreshold absolute tolerance threshold
-     * @param maxIter Maximum iteration count.
+     * @param maxIter           Maximum iteration count.
      * @throws NotStrictlyPositiveException if {@code maxIter <= 0}.
-     *
      * @since 3.1
      */
     public SimpleValueChecker(final double relativeThreshold,
@@ -103,8 +103,8 @@ public class SimpleValueChecker
      * not only for the best or worst ones.
      *
      * @param iteration Index of current iteration
-     * @param previous Best point in the previous iteration.
-     * @param current Best point in the current iteration.
+     * @param previous  Best point in the previous iteration.
+     * @param current   Best point in the current iteration.
      * @return {@code true} if the algorithm has converged.
      */
     @Override
@@ -120,6 +120,6 @@ public class SimpleValueChecker
         final double difference = FastMath.abs(p - c);
         final double size = FastMath.max(FastMath.abs(p), FastMath.abs(c));
         return difference <= size * getRelativeThreshold() ||
-            difference <= getAbsoluteThreshold();
+                difference <= getAbsoluteThreshold();
     }
 }

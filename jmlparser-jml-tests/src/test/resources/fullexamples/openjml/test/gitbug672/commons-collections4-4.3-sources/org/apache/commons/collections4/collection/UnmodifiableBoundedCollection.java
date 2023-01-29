@@ -43,14 +43,16 @@ import java.util.Iterator;
 public final class UnmodifiableBoundedCollection<E> extends AbstractCollectionDecorator<E>
         implements BoundedCollection<E>, Unmodifiable {
 
-    /** Serialization version */
+    /**
+     * Serialization version
+     */
     private static final long serialVersionUID = -7112672385450340330L;
 
     /**
      * Factory method to create an unmodifiable bounded collection.
      *
-     * @param <E> the type of the elements in the collection
-     * @param coll  the <code>BoundedCollection</code> to decorate, must not be null
+     * @param <E>  the type of the elements in the collection
+     * @param coll the <code>BoundedCollection</code> to decorate, must not be null
      * @return a new unmodifiable bounded collection
      * @throws NullPointerException if {@code coll} is {@code null}
      * @since 4.0
@@ -70,10 +72,10 @@ public final class UnmodifiableBoundedCollection<E> extends AbstractCollectionDe
      * This method is capable of drilling down through up to 1000 other decorators
      * to find a suitable BoundedCollection.
      *
-     * @param <E> the type of the elements in the collection
-     * @param coll  the <code>BoundedCollection</code> to decorate, must not be null
+     * @param <E>  the type of the elements in the collection
+     * @param coll the <code>BoundedCollection</code> to decorate, must not be null
      * @return a new unmodifiable bounded collection
-     * @throws NullPointerException if coll is null
+     * @throws NullPointerException     if coll is null
      * @throws IllegalArgumentException if coll is not a {@code BoundedCollection}
      * @since 4.0
      */
@@ -104,7 +106,7 @@ public final class UnmodifiableBoundedCollection<E> extends AbstractCollectionDe
     /**
      * Constructor that wraps (not copies).
      *
-     * @param coll  the collection to decorate, must not be null
+     * @param coll the collection to decorate, must not be null
      * @throws NullPointerException if coll is null
      */
     @SuppressWarnings("unchecked") // safe to upcast
