@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>jmlparser-parent</artifactId>
-		<groupId>io.github.wadoon</groupId>
+		<groupId>io.github.jmltoolkit</groupId>
 		<version>3.24.9-SNAPSHOT</version>
 	</parent>
 
@@ -23,18 +23,18 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>io.github.wadoon</groupId>
+			<groupId>io.github.jmltoolkit</groupId>
 			<artifactId>jmlparser-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.github.wadoon</groupId>
+			<groupId>io.github.jmltoolkit</groupId>
 			<artifactId>jmlparser-symbol-solver-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.wadoon</groupId>
+			<groupId>io.github.jmltoolkit</groupId>
 			<artifactId>jmlparser-jml-tools</artifactId>
 			<version>${project.version}</version>
 		</dependency>

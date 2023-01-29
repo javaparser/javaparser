@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
 	<parent>
 		<artifactId>jmlparser-parent</artifactId>
-		<groupId>io.github.wadoon</groupId>
+		<groupId>io.github.jmltoolkit</groupId>
 		<version>3.24.11-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -112,13 +112,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>io.github.wadoon</groupId>
+			<groupId>io.github.jmltoolkit</groupId>
 			<artifactId>jmlparser-core</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.github.wadoon</groupId>
+			<groupId>io.github.jmltoolkit</groupId>
 			<artifactId>jmlparser-symbol-solver-core</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
@@ -126,21 +126,21 @@
 
 
 		<dependency>
-			<groupId>io.github.wadoon</groupId>
+			<groupId>io.github.jmltoolkit</groupId>
 			<artifactId>jmlparser-core-testing</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.wadoon</groupId>
+			<groupId>io.github.jmltoolkit</groupId>
 			<artifactId>jmlparser-core-testing-bdd</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>io.github.wadoon</groupId>
+			<groupId>io.github.jmltoolkit</groupId>
 			<artifactId>jmlparser-symbol-solver-testing</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>

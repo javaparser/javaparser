@@ -15,7 +15,7 @@
 		<!--<module>jmlparser-web</module>-->
 	</modules>
 
-	<groupId>io.github.wadoon</groupId>
+	<groupId>io.github.jmltoolkit</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>3.24.11-SNAPSHOT</version>
