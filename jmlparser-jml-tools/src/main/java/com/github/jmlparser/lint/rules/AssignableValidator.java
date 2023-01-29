@@ -1,8 +1,10 @@
 package com.github.jmlparser.lint.rules;
 
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.jml.clauses.JmlClauseKind;
 import com.github.javaparser.ast.jml.clauses.JmlMultiExprClause;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.jmlparser.lint.LintProblemReporter;
 import com.github.jmlparser.lint.LintRuleVisitor;
 
@@ -31,7 +33,7 @@ public class AssignableValidator extends LintRuleVisitor {
                     arg.error(e, "", "Enum constants are not re-assignable!");
                 } else if (value.isField()) {
                     var ast = value.asField().toAst();
-                    if (ast.isPresent() && ast.get().isFinal()) {
+                    if (ast.isPresent() && ast.get() instanceof FieldDeclaration f && f.isFinal()) {
                         arg.error(e, "", "This variable is final, so cannot be assigned");
                     }
                 }

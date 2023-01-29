@@ -58,6 +58,9 @@ class ProvidersTest {
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);
+        if (!parse.isSuccessful()) {
+            parse.getProblems().forEach(System.out::println);
+        }
         assertTrue(parse.isSuccessful());
     }
 }

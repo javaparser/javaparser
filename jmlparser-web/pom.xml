@@ -17,8 +17,8 @@
 		<kotlin.code.style>official</kotlin.code.style>
 		<ktor.version>1.6.8</ktor.version>
 		<logback_version>1.2.10</logback_version>
-		<kotlin.compiler.jvmTarget>8</kotlin.compiler.jvmTarget>
-		<kotlin.version>1.6.21</kotlin.version>
+		<kotlin.compiler.jvmTarget>11</kotlin.compiler.jvmTarget>
+		<kotlin.version>1.8.0</kotlin.version>
 	</properties>
 
 	<dependencies>

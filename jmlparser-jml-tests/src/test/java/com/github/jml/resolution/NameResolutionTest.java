@@ -5,12 +5,10 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.symbolsolver.JavaRefersToJmlException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
@@ -162,7 +160,7 @@ class NameResolutionTest {
             try {
                 var rtype = n.resolve();
 
-                var t = ((AssociableToAST<Node>) rtype).toAst().get();
+                var t = rtype.toAst().get();
                 var target = t.getRange().map(it -> it.begin.toString()).orElse("_");
 
                 messages.add("name: %s@%s to %s@%s"

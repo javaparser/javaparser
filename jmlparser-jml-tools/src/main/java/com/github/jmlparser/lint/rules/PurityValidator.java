@@ -8,6 +8,7 @@ import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.ast.jml.body.JmlClassExprDeclaration;
 import com.github.javaparser.ast.jml.clauses.JmlSimpleExprClause;
 import com.github.javaparser.ast.jml.stmt.JmlExpressionStmt;
+import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.jmlparser.lint.LintProblemReporter;
 import com.github.jmlparser.lint.LintRuleVisitor;
@@ -80,9 +81,9 @@ public class PurityValidator extends LintRuleVisitor {
         @Override
         public void visit(MethodCallExpr n, Void arg) {
             var r = n.resolve().toAst();
-            if (r.isPresent()
-                    && (r.get().hasModifier(Modifier.DefaultKeyword.JML_PURE)
-                    || r.get().hasModifier(Modifier.DefaultKeyword.JML_STRICTLY_PURE))) {
+            if (r.isPresent() && r.get() instanceof NodeWithModifiers<?> mods
+                    && (mods.hasModifier(Modifier.DefaultKeyword.JML_PURE)
+                    || mods.hasModifier(Modifier.DefaultKeyword.JML_STRICTLY_PURE))) {
                 super.visit(n, arg);
             } else {
                 reason = n;

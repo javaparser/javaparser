@@ -19,6 +19,14 @@
 package groovy.transform.builder;
 
 import groovy.transform.Undefined;
+import org.codehaus.groovy.ast.AnnotatedNode;
+import org.codehaus.groovy.ast.AnnotationNode;
+import org.codehaus.groovy.ast.ClassNode;
+import org.codehaus.groovy.ast.ConstructorNode;
+import org.codehaus.groovy.ast.FieldNode;
+import org.codehaus.groovy.ast.InnerClassNode;
+import org.codehaus.groovy.ast.MethodNode;
+import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.expr.Expression;
 import org.codehaus.groovy.ast.stmt.BlockStatement;
 import org.codehaus.groovy.transform.BuilderASTTransformation;
@@ -30,18 +38,36 @@ import java.util.Map;
 import static org.apache.groovy.ast.tools.ClassNodeUtils.addGeneratedInnerClass;
 import static org.apache.groovy.ast.tools.ClassNodeUtils.addGeneratedMethod;
 import static org.codehaus.groovy.ast.ClassHelper.OBJECT_TYPE;
-import static org.codehaus.groovy.ast.tools.GeneralUtils.*;
-import static org.codehaus.groovy.ast.tools.GenericsUtils.*;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.args;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.assignX;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.block;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.callX;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.constX;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.ctorX;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.declS;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.localVarX;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.param;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.params;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.propX;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.returnS;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.stmt;
+import static org.codehaus.groovy.ast.tools.GeneralUtils.varX;
+import static org.codehaus.groovy.ast.tools.GenericsUtils.correctToGenericsSpecRecurse;
+import static org.codehaus.groovy.ast.tools.GenericsUtils.createGenericsSpec;
+import static org.codehaus.groovy.ast.tools.GenericsUtils.extractSuperClassGenerics;
+import static org.codehaus.groovy.ast.tools.GenericsUtils.newClass;
 import static org.codehaus.groovy.transform.AbstractASTTransformation.getMemberStringValue;
 import static org.codehaus.groovy.transform.BuilderASTTransformation.NO_EXCEPTIONS;
 import static org.codehaus.groovy.transform.BuilderASTTransformation.NO_PARAMS;
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
 /**
  * This strategy is used with the {@link Builder} AST transform to create a builder helper class
  * for the fluent creation of instances of a specified class.&nbsp;It can be used at the class,
  * static method or constructor levels.
- * <p>
+ *
  * You use it as follows:
  * <pre class="groovyTestCase">
  * import groovy.transform.builder.*
@@ -72,7 +98,7 @@ import static org.objectweb.asm.Opcodes.*;
  * <pre>
  * def p3 = Person.builder().withFirstName("Robert").withLastName("Lewandowski").withAge(21).build()
  * </pre>
- * <p>
+ *
  * You can also use the {@code @Builder} annotation in combination with this strategy on one or more constructor or
  * static method instead of or in addition to using it at the class level. An example with a constructor follows:
  * <pre class="groovyTestCase">
@@ -97,7 +123,7 @@ import static org.objectweb.asm.Opcodes.*;
  * in the builder. For the case of a static method, the return type of the static method becomes the
  * class of the instance being created. For static factory methods, this is normally the class containing the
  * static method but in general it can be any class.
- * <p>
+ *
  * Note: if using more than one {@code @Builder} annotation, which is only possible when using static method
  * or constructor variants, it is up to you to ensure that any generated helper classes or builder methods
  * have unique names. E.g.&nbsp;we can modify the previous example to have three builders. At least two of the builders
@@ -133,7 +159,7 @@ import static org.objectweb.asm.Opcodes.*;
  * assert Person.byRoleBuilder().roleName("Jack Sparrow").build().toString() == 'Person(Johnny, Depp, 1963)'
  * assert Person.builder().first("Johnny").last('Depp').born(1963).build().toString() == 'Person(Johnny, Depp, 1963)'
  * </pre>
- * <p>
+ *
  * The 'forClass' annotation attribute for the {@code @Builder} transform isn't applicable for this strategy.
  * The 'useSetters' annotation attribute for the {@code @Builder} transform is ignored by this strategy which always uses setters.
  */

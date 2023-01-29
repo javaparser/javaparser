@@ -38,7 +38,7 @@ import java.util.Map;
 
 import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.*;
 

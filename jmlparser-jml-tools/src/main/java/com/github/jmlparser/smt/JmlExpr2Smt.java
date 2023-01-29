@@ -5,6 +5,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.jml.NodeWithContracts;
 import com.github.javaparser.ast.jml.expr.*;
 import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr.JmlDefaultBinder;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
@@ -222,9 +223,9 @@ public class JmlExpr2Smt extends GenericVisitorAdapter<SExpr, Object> {
         var method = n.resolve();
         var variable = translator.makeVar(method.getReturnType());
         final var ast = method.toAst();
-        if (ast.isPresent()) {
+        if (ast.isPresent() && ast.get() instanceof NodeWithContracts<?> hasContracts) {
             var contract =
-                    JMLUtils.createJointContract(ast.get().getContracts().get());
+                    JMLUtils.createJointContract(hasContracts.getContracts().get());
             //TODO weigl add assertion for the return variable
             //TODO weigl add assertion for each parameter
             // smtLog.addAssert();

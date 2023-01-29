@@ -2,6 +2,6 @@ package com.github.javaparser;
 
 public class TestFile {
 
-    public String strï¿½ng ="Strange attribute name [check the i]";
+    public String strïng = "Strange attribute name [check the i]";
 
 }
