@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.Context;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.List;
 import java.util.Map;
+
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * A wildcard can be:
@@ -67,11 +67,13 @@ public class ResolvedWildcard implements ResolvedType {
         return "WildcardUsage{" + "type=" + type + ", boundedType=" + boundedType + '}';
     }
 
-    public boolean isWildcard() {
+    @Override
+	public boolean isWildcard() {
         return true;
     }
 
-    public ResolvedWildcard asWildcard() {
+    @Override
+	public ResolvedWildcard asWildcard() {
         return this;
     }
 
@@ -178,7 +180,7 @@ public class ResolvedWildcard implements ResolvedType {
 
         SUPER, EXTENDS
     }
-    
+
     /*
      * Returns the bounded resolved type.
      */
@@ -194,4 +196,15 @@ public class ResolvedWildcard implements ResolvedType {
         }
     	return this;
     }
+
+	//
+	// Erasure
+	//
+	// The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
+	// This method returns null if no bound is declared. This is probably a limitation.
+	//
+	@Override
+	public ResolvedType erasure() {
+		return boundedType;
+	}
 }
