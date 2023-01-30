@@ -31,6 +31,7 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * This class can be used to easily retrieve nodes from a JavaParser AST.
@@ -145,6 +146,19 @@ public final class Navigator {
 
     public static Node demandParentNode(Node node) {
         return node.getParentNode().orElseThrow(() -> new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST"));
+    }
+
+    /**
+     * Traverses the parent chain starting at {@code node} and returns the
+     * first Node that returns make {@code isAcceptedParentNode} evaluate to
+     * {@code true}.
+     */
+    public static Node demandParentNode(Node node, Predicate<Node> isAcceptedParentNode) {
+        Node parent = node;
+        do {
+            parent = demandParentNode(parent);
+        } while (!isAcceptedParentNode.test(parent));
+        return parent;
     }
 
     public static ReturnStmt demandReturnStmt(MethodDeclaration method) {
