@@ -18,8 +18,9 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.resolution.promotion;
+package com.github.javaparser.symbolsolver.resolution.promotion;
 
+import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 /*

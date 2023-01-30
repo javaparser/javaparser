@@ -18,14 +18,17 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.resolution.promotion;
+package com.github.javaparser.symbolsolver.resolution.promotion;
 
+import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 /*
- * The conditional operator has three operand expressions. ? appears between the first and second expressions, and : appears between the second and third expressions.
- * There are three kinds of conditional expressions, classified according to the second and third operand expressions: boolean conditional expressions, numeric conditional expressions, and reference conditional expressions. 
+ * The conditional operator has three operand expressions.
+ * ? appears between the first and second expressions,
+ * and : appears between the second and third expressions.
+ * There are three kinds of conditional expressions, classified according to the second and third operand expressions: boolean conditional expressions, numeric conditional expressions, and reference conditional expressions.
  * The classification rules are as follows:
  * 1/ If both the second and the third operand expressions are boolean expressions, the conditional expression is a boolean conditional expression.
  * 2/ If both the second and the third operand expressions are numeric expressions, the conditional expression is a numeric conditional expression.
