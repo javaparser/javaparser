@@ -1,7 +1,7 @@
 
-Next Release (Version 3.24.11)
+Next Release (Version 3.25.1)
 ------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/195?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/197?closed=1)
 
 ### Added
 ### Changed
@@ -10,6 +10,71 @@ Next Release (Version 3.24.11)
 ### Fixed
 ### Security
 
+
+Version 3.25.0
+--------------
+
+[issues resolved](https://github.com/javaparser/javaparser/milestone/196?closed=1)
+
+### Added
+
+* First part of the implementation of least upper bound logic (PR [#3880](https://github.com/javaparser/javaparser/pull/3880) by [@jlerbsc](https://github.com/jlerbsc))
+* feat: Improved support for calculating the type of an object creation… (PR [#3877](https://github.com/javaparser/javaparser/pull/3877) by [@jlerbsc](https://github.com/jlerbsc))
+* feat: Implement addRecord & getRecordByName for CompilationUnit (PR [#3836](https://github.com/javaparser/javaparser/pull/3836) by [@marcluque](https://github.com/marcluque))
+* Support Jigsaw requires static (PR [#3826](https://github.com/javaparser/javaparser/pull/3826) by [@jlerbsc](https://github.com/jlerbsc))
+* Add toDescriptor to ResolvedMethodDeclaration (PR [#3819](https://github.com/javaparser/javaparser/pull/3819) by [@vanHekthor](https://github.com/vanHekthor))
+* Refactoring context (WIP) (PR [#3792](https://github.com/javaparser/javaparser/pull/3792) by [@jlerbsc](https://github.com/jlerbsc))
+* Refactoring context (WIP) (PR [#3782](https://github.com/javaparser/javaparser/pull/3782) by [@jlerbsc](https://github.com/jlerbsc))
+* Refactoring convert to usage (PR [#3774](https://github.com/javaparser/javaparser/pull/3774) by [@jlerbsc](https://github.com/jlerbsc))
+* Simplified usage of class AssociableToAST (PR [#3063](https://github.com/javaparser/javaparser/pull/3063) by [@4everTheOne](https://github.com/4everTheOne))
+
+### Changed
+
+* Revert import related checkstyle rule from error to warning (PR [#3881](https://github.com/javaparser/javaparser/pull/3881) by [@jlerbsc](https://github.com/jlerbsc))
+* Minor refactoring for example to get all parameter types (PR [#3879](https://github.com/javaparser/javaparser/pull/3879) by [@jlerbsc](https://github.com/jlerbsc))
+* Add header and footer methods in comments instead of using literal st… (PR [#3876](https://github.com/javaparser/javaparser/pull/3876) by [@jlerbsc](https://github.com/jlerbsc))
+* In the context of lexical preservation, the CSM token must be added m… (PR [#3874](https://github.com/javaparser/javaparser/pull/3874) by [@jlerbsc](https://github.com/jlerbsc))
+* Refactoring: remove useless code that is already implemented (PR [#3869](https://github.com/javaparser/javaparser/pull/3869) by [@jlerbsc](https://github.com/jlerbsc))
+* Memory usage improvement when printing a node from the LexicalPreserv… (PR [#3858](https://github.com/javaparser/javaparser/pull/3858) by [@jlerbsc](https://github.com/jlerbsc))
+* chore(deps-dev): bump assertj-core from 3.24.1 to 3.24.2 (PR [#3852](https://github.com/javaparser/javaparser/pull/3852) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-checkstyle-plugin from 3.2.0 to 3.2.1 (PR [#3846](https://github.com/javaparser/javaparser/pull/3846) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-dependency-plugin from 3.4.0 to 3.5.0 (PR [#3845](https://github.com/javaparser/javaparser/pull/3845) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update junit5 monorepo to v5.9.2 (PR [#3840](https://github.com/javaparser/javaparser/pull/3840) by [@renovate[bot]](https://github.com/apps/renovate))
+* Minor refactoring on Difference class (PR [#3839](https://github.com/javaparser/javaparser/pull/3839) by [@jlerbsc](https://github.com/jlerbsc))
+* chore(deps-dev): bump assertj-core from 3.23.1 to 3.24.1 (PR [#3837](https://github.com/javaparser/javaparser/pull/3837) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump actions/checkout from 3.2.0 to 3.3.0 (PR [#3834](https://github.com/javaparser/javaparser/pull/3834) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 10.5.0 to 10.6.0 (PR [#3829](https://github.com/javaparser/javaparser/pull/3829) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Fixed
+
+* Fix: Method hasScope must return true on NodeWithOptionalScope and No… (PR [#3875](https://github.com/javaparser/javaparser/pull/3875) by [@jlerbsc](https://github.com/jlerbsc))
+* fix #3859 UnsupportedOperationException when trying to resolve a type… (PR [#3873](https://github.com/javaparser/javaparser/pull/3873) by [@abego](https://github.com/abego))
+* Fix: issue 3866 Symbol solver is unable to resolve inner classes of ancestors when they are prefixed with a subclass (PR [#3868](https://github.com/javaparser/javaparser/pull/3868) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3703 Allow removing empty parentheses after removing all pairs from an annotation (PR [#3865](https://github.com/javaparser/javaparser/pull/3865) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: One must be able to know if any resolved type is a boxed primiti… (PR [#3864](https://github.com/javaparser/javaparser/pull/3864) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Issue 2374 Comments of added Nodes are ignored in LexicalPreserv… (PR [#3856](https://github.com/javaparser/javaparser/pull/3856) by [@jlerbsc](https://github.com/jlerbsc))
+* Checkstyle for unused import (PR [#3841](https://github.com/javaparser/javaparser/pull/3841) by [@4everTheOne](https://github.com/4everTheOne))
+* Update bnd file (PR [#3783](https://github.com/javaparser/javaparser/pull/3783) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* Update javaparser copyright headers (PR [#3862](https://github.com/javaparser/javaparser/pull/3862) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Uncategorised
+
+* Add test case to verify range calculation on ArrayType (PR [#3828](https://github.com/javaparser/javaparser/pull/3828) by [@jlerbsc](https://github.com/jlerbsc))
+* Add test case to verify that LexicalPreservation supports TextBlock (PR [#3827](https://github.com/javaparser/javaparser/pull/3827) by [@jlerbsc](https://github.com/jlerbsc))
+* Refactoring: Removing useless method convertToUsage in JavaParserFacade (PR [#3780](https://github.com/javaparser/javaparser/pull/3780) by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@vanHekthor](https://github.com/vanHekthor)
+* [@abego](https://github.com/abego)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@marcluque](https://github.com/marcluque)
+* [@4everTheOne](https://github.com/4everTheOne)
 
 
 Version 3.24.10
