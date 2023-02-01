@@ -1,13 +1,10 @@
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -30,11 +27,8 @@ public class Issue3859Test extends AbstractResolutionTest {
                 "        foo((s->print(s)));\n" +
                 "    }\n" +
                 "}\n";
-        ParserConfiguration configuration = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
-        StaticJavaParser.setConfiguration(configuration);
-
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(
+                createParserWithResolver(defaultTypeSolver())).parse(code);
 
         List<LambdaExpr> lambdas = cu.findAll(LambdaExpr.class);
         assertEquals(2, lambdas.size());

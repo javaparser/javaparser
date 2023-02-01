@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import static com.github.javaparser.ast.expr.Expression.EXCLUDE_ENCLOSED_EXPR;
+import static com.github.javaparser.ast.expr.Expression.IS_NOT_ENCLOSED_EXPR;
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import java.util.List;
@@ -65,11 +67,6 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
-    /**
-     * Returns {@code true} when the Node to be tested is not an
-     * {@link EnclosedExpr}, {@code false} otherwise.
-     */
-    private static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
     private final ResolvedType stringReferenceType;
 
@@ -460,12 +457,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(LambdaExpr node, Boolean solveLambdas) {
-        if (demandParentNode(node, IS_NOT_ENCLOSED_EXPR) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
+        Node parentNode = demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
+        if (parentNode instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) parentNode;
             int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
-                throw new UnsolvedSymbolException(demandParentNode(node, IS_NOT_ENCLOSED_EXPR).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(parentNode.toString(), callExpr.getName().getId());
             }
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
 
@@ -593,12 +591,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     	if ("new".equals(node.getIdentifier())) {
 			return node.getScope().calculateResolvedType();
 		}
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
+        Node parentNode = demandParentNode(node);
+        if (parentNode instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) parentNode;
             int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
-                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(parentNode.toString(), callExpr.getName().getId());
             }
             Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
@@ -651,17 +650,11 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
     }
 
-    private static int getParamPos(Node node) {
-        if (demandParentNode(node, IS_NOT_ENCLOSED_EXPR) instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
-            for (int i = 0; i < call.getArguments().size(); i++) {
-                Expression expression = call.getArguments().get(i);
-                while (expression instanceof EnclosedExpr) {
-                    expression = ((EnclosedExpr) expression).getInner();
-                }
-                if (expression == node) return i;
-            }
-            throw new IllegalStateException();
+    private static int getParamPos(Expression node) {
+        Node parentNode = demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
+        if (parentNode instanceof MethodCallExpr) {
+            MethodCallExpr call = (MethodCallExpr) parentNode;
+            return call.getArgumentPosition(node, EXCLUDE_ENCLOSED_EXPR);
         }
         throw new IllegalArgumentException();
     }
