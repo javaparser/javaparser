@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -34,15 +38,12 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
+
 import javassist.CtBehavior;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.Modifier;
 import javassist.bytecode.*;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -234,10 +235,18 @@ class JavassistUtils {
                     .tag);
             if (attr != null) {
                 int pos = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
-                return Optional.ofNullable(attr.variableName(paramNumber + pos));
+                return getVariableName(attr, paramNumber + pos);
             }
         }
         return Optional.empty();
+    }
+
+    private static Optional<String> getVariableName(LocalVariableAttribute attr, int pos) {
+    	try {
+            return Optional.of(attr.variableNameByIndex(pos));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return Optional.empty();
+        }
     }
 
 }
