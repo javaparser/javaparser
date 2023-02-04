@@ -27,6 +27,9 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -55,15 +58,10 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
+import com.github.javaparser.symbolsolver.resolution.typeinference.LeastUpperBoundLogic;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
@@ -554,11 +552,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 List<ReturnStmt> returnStmts = blockStmt.findAll(ReturnStmt.class);
 
                 if (returnStmts.size() > 0) {
-                    actualType = returnStmts.stream()
-                            .map(returnStmt -> returnStmt.getExpression().map(e -> facade.getType(e)).orElse(ResolvedVoidType.INSTANCE))
-                            .filter(x -> x != null && !x.isVoid() && !x.isNull())
-                            .findFirst()
-                            .orElse(ResolvedVoidType.INSTANCE);
+                	Set<ResolvedType> resolvedTypes = returnStmts.stream()
+                          .map(returnStmt -> returnStmt.getExpression()
+                        		  .map(e -> facade.getType(e))
+                        		  .orElse(ResolvedVoidType.INSTANCE))
+                                  .collect(Collectors.toSet());
+                	actualType = new LeastUpperBoundLogic().lub(resolvedTypes);
 
                 } else {
                     actualType = ResolvedVoidType.INSTANCE;
