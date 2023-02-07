@@ -21,11 +21,8 @@
 
 package com.github.javaparser.resolution.logic;
 
-import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
@@ -33,11 +30,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
+
 /**
  * @author Federico Tomassetti
  */
 public final class FunctionalInterfaceLogic {
-    
+
     private static String JAVA_LANG_FUNCTIONAL_INTERFACE = FunctionalInterface.class.getCanonicalName();
 
     private FunctionalInterfaceLogic() {
@@ -70,7 +71,7 @@ public final class FunctionalInterfaceLogic {
                 .filter(m -> m.getDeclaration().isAbstract())
                 // Remove methods inherited by Object:
                 // Consider the case of Comparator which define equals. It would be considered a functional method.
-                .filter(m -> !declaredOnObject(m))
+                .filter(m -> !isPublicMemberOfObject(m))
                 .collect(Collectors.toSet());
 
         if (methods.size() == 1) {
@@ -98,11 +99,12 @@ public final class FunctionalInterfaceLogic {
         return p.getType().getCanonicalName();
     }
 
-    private static List<String> OBJECT_METHODS_SIGNATURES = Arrays.stream(Object.class.getDeclaredMethods())
+    private static List<String> OBJECT_PUBLIC_METHODS_SIGNATURES = Arrays.stream(Object.class.getDeclaredMethods())
+    		.filter(m -> Modifier.isPublic(m.getModifiers()))
             .map(method -> getSignature(method))
             .collect(Collectors.toList());
 
-    private static boolean declaredOnObject(MethodUsage m) {
-        return OBJECT_METHODS_SIGNATURES.contains(m.getDeclaration().getSignature());
+    private static boolean isPublicMemberOfObject(MethodUsage m) {
+        return OBJECT_PUBLIC_METHODS_SIGNATURES.contains(m.getDeclaration().getSignature());
     }
 }
