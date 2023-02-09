@@ -206,7 +206,7 @@ public class TypeHelper {
      * any other shared supertype (that is, no other shared supertype is a subtype of the least upper bound).
      */
     public static ResolvedType leastUpperBound(Set<ResolvedType> types) {
-    	LeastUpperBoundLogic logic = new LeastUpperBoundLogic();
+    	LeastUpperBoundLogic logic = LeastUpperBoundLogic.of();
     	return logic.lub(types);
     }
 

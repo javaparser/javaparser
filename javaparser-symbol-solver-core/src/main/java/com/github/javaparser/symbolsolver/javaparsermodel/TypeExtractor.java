@@ -28,7 +28,6 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -557,7 +556,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                         		  .map(e -> facade.getType(e))
                         		  .orElse(ResolvedVoidType.INSTANCE))
                                   .collect(Collectors.toSet());
-                	actualType = new LeastUpperBoundLogic().lub(resolvedTypes);
+                	actualType = LeastUpperBoundLogic.of().lub(resolvedTypes);
 
                 } else {
                     actualType = ResolvedVoidType.INSTANCE;

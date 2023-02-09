@@ -22,6 +22,12 @@ public class LeastUpperBoundLogic {
 
     private Set<Set<ResolvedType>> lubCache = new HashSet<>();
 
+    public static LeastUpperBoundLogic of() {
+    	return new LeastUpperBoundLogic();
+    }
+
+    private LeastUpperBoundLogic() {}
+
     /**
      * See JLS 4.10.4. Least Upper Bound.
      */
