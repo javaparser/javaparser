@@ -21,6 +21,14 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
+import java.nio.file.Path;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -31,13 +39,6 @@ import com.github.javaparser.symbolsolver.javassistmodel.JavassistInterfaceDecla
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTest {
     private TypeSolver typeSolver;
@@ -77,14 +78,9 @@ class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTes
 
         assertFalse(solvedSymbol.isSolved());
 
-        try {
-            solvedSymbol.getCorrespondingDeclaration();
-        } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-            assertEquals("CorrespondingDeclaration not available for unsolved symbol.", e.getMessage());
-            return;
-        }
-        fail("Expected UnsupportedOperationException when requesting CorrespondingDeclaration on unsolved SymbolRefernce");
+        assertThrows(UnsolvedSymbolException.class, () -> {
+        	solvedSymbol.getCorrespondingDeclaration();
+        }, "Expected UnsolvedSymbolException when requesting CorrespondingDeclaration on unsolved SymbolRefernce");
     }
 
     @Test
