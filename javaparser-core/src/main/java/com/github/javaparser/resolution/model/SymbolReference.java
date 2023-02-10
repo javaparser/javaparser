@@ -21,10 +21,11 @@
 
 package com.github.javaparser.resolution.model;
 
-import com.github.javaparser.quality.Nullable;
-import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
-
 import java.util.Optional;
+
+import com.github.javaparser.quality.Nullable;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 
 /**
  * A reference to a symbol. It can solved or not solved. If solved the corresponding
@@ -113,7 +114,7 @@ public class SymbolReference<S extends ResolvedDeclaration> {
             return declaration.get();
         }
 
-        throw new UnsupportedOperationException("CorrespondingDeclaration not available for unsolved symbol.");
+        throw new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol.");
     }
 
     /**
