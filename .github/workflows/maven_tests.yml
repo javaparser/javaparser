@@ -94,7 +94,7 @@ jobs:
         if: success() || failure()
         with:
           name: Test Report
-          path: "*/target/surefire-reports/*.xml"
+          path: "**/target/surefire-reports/*.xml"
           reporter: java-junit
 
   # Run checkstyle validations for pipeline
