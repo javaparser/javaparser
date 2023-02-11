@@ -1,4 +1,4 @@
-package com.github.jmlparser.validators;
+package com.github.jmlparser.lint.rules;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.validator.ProblemReporter;

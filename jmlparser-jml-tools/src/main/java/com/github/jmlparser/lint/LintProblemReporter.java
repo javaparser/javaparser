@@ -18,20 +18,20 @@ public class LintProblemReporter {
         this.problemConsumer = problemConsumer;
     }
 
-    public void warn(NodeWithTokenRange<?> node, String category, String message, Object... args) {
-        report(LintRule.WARN, node.getTokenRange().orElse(null), category, message, args);
+    public void warn(NodeWithTokenRange<?> node, String category, String ruleId, String message, Object... args) {
+        report(LintRule.WARN, node.getTokenRange().orElse(null), category, ruleId, message, args);
     }
 
-    public void hint(NodeWithTokenRange<?> node, String category, String message, Object... args) {
-        report(LintRule.HINT, node.getTokenRange().orElse(null), category, message, args);
+    public void hint(NodeWithTokenRange<?> node, String category, String ruleId, String message, Object... args) {
+        report(LintRule.HINT, node.getTokenRange().orElse(null), category, ruleId, message, args);
     }
 
-    public void error(NodeWithTokenRange<?> node, String category, String message, Object... args) {
-        report(LintRule.ERROR, node.getTokenRange().orElse(null), category, message, args);
+    public void error(NodeWithTokenRange<?> node, String category, String ruleId, String message, Object... args) {
+        report(LintRule.ERROR, node.getTokenRange().orElse(null), category, ruleId, message, args);
     }
 
-    public void report(String level, TokenRange range, String category, String message, Object... args) {
-        problemConsumer.accept(new LintProblem(level, f(message, args), range, null, category));
+    public void report(String level, TokenRange range, String category, String ruleId, String message, Object... args) {
+        problemConsumer.accept(new LintProblem(level, f(message, args), range, null, category, ruleId));
     }
 
     public void report(LintProblem lintProblem) {

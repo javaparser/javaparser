@@ -5,12 +5,23 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import org.w3c.dom.*;
 
 import java.util.List;
+import java.util.ServiceLoader;
 
 /**
  * @author Alexander Weigl
  * @version 1 (30.11.22)
  */
 public class DocumentFactories {
+    private static List<PseudoAttributeProvider> providerList = null;
+
+    public static List<PseudoAttributeProvider> getAttributeProviders() {
+        if (providerList == null) {
+            var sl = ServiceLoader.load(PseudoAttributeProvider.class);
+            return providerList = sl.stream().map(ServiceLoader.Provider::get).toList();
+        }
+        return providerList;
+    }
+
     public static boolean isNodeProperty(PropertyMetaModel mm) {
         return mm.isNode() || mm.isNodeList();
     }

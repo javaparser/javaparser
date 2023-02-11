@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.*;
 
 /**
+ * Wraps a class attribute into the XML world.
+ *
  * @author Alexander Weigl
  * @version 1 (30.11.22)
  */

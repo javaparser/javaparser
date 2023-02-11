@@ -1,5 +1,6 @@
 package com.github.jmlparser.redux;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
@@ -10,15 +11,16 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.jmlparser.utils.Helper;
 
 /**
  * @author Alexander Weigl
  * @version 1 (08.02.22)
  */
-public class AddForeachCountVariable {
+public class AddForeachCountVariable implements Transformer {
     public static final String VARIABLE_NAME_COUNT = "\\count";
 
-    public static void addCountVariableInForeach(ForEachStmt forEachStmt) {
+    public static BlockStmt addCountVariableInForeach(ForEachStmt forEachStmt) {
         BlockStmt stmt = new BlockStmt();
         forEachStmt.replace(stmt);
         VariableDeclarationExpr vdecl = new VariableDeclarationExpr(PrimitiveType.intType(), VARIABLE_NAME_COUNT);
@@ -35,6 +37,11 @@ public class AddForeachCountVariable {
             newLoopBody.addStatement(increment);
             newLoopBody.addStatement(loopBody);
         }
+        return stmt;
     }
 
+    @Override
+    public Node apply(Node a) {
+        return Helper.findAndApply(ForEachStmt.class, a, AddForeachCountVariable::addCountVariableInForeach);
+    }
 }

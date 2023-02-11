@@ -1,12 +1,17 @@
 package com.github.jmlparser.lint;
 
 import com.github.javaparser.ast.Node;
+import com.github.jmlparser.lint.sarif.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.Exception;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author Alexander Weigl
@@ -14,6 +19,8 @@ import java.util.function.Consumer;
  */
 public class JmlLintingFacade {
     private static final Logger LOGGER = LoggerFactory.getLogger(JmlLintingFacade.class);
+    private static final String VERSION = JmlLintingFacade.class.getPackage().getImplementationVersion();
+    private static final String NAME = "JML-lint";
 
     private List<LintRule> linters;
 
@@ -21,7 +28,21 @@ public class JmlLintingFacade {
         linters = getLinter(config);
     }
 
-    public List<LintRule> getLinter(JmlLintingConfig config) {
+    public List<LintRule> getLinters() {
+        return linters;
+    }
+
+    private Tool getSarifTool() {
+        return new Tool(
+                new ToolComponent().withVersion(VERSION).withName(NAME)
+                        .withShortDescription(new MultiformatMessageString().withText("Linting for the Java Modeling Language")),
+                linters.stream().map(it -> new ToolComponent().withFullName(it.getClass().getName())).collect(Collectors.toSet()),
+                new PropertyBag()
+        );
+    }
+
+
+    private static List<LintRule> getLinter(JmlLintingConfig config) {
         ServiceLoader<LintRule> loader = ServiceLoader.load(LintRule.class);
         List<LintRule> validators = new ArrayList<>(64);
         for (LintRule lintRule : loader) {
@@ -52,4 +73,17 @@ public class JmlLintingFacade {
         return problems;
     }
 
+    public SarifSchema asSarif(Collection<LintProblem> problems) throws URISyntaxException {
+        List<Result> results = problems.stream().map(this::asSarif).toList();
+        List<Run> runs = List.of(new Run().withTool(getSarifTool()).withResults(results));
+        return new SarifSchema(
+                new URI("http://json.schemastore.org/sarif-2.1.0-rtm.4"),
+                "2.1.0",
+                runs, Set.of(), new PropertyBag());
+    }
+
+    private Result asSarif(LintProblem it) {
+        return new Result().withRuleId(it.ruleId()).withKind(it.category()).withLevel(it.level())
+                .withLocations(List.of(new Location())).withMessage(new Message().withText(it.message()));
+    }
 }

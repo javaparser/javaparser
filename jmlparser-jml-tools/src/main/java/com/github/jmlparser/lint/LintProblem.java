@@ -21,18 +21,22 @@ public final class LintProblem {
     private final Throwable cause;
     @Nullable
     private final String category;
+    @NotNull
+    private final String ruleId;
 
-    public LintProblem(@NotNull String level, @NotNull String message, @Nullable TokenRange location) {
-        this(level, message, location, null, null);
+
+    public LintProblem(@NotNull String level, @NotNull String message, @Nullable TokenRange location, @NotNull String ruleId) {
+        this(level, message, location, null, null, ruleId);
     }
 
     public LintProblem(@NotNull String level, @NotNull String message,
-                       @Nullable TokenRange location, @Nullable Throwable cause, @Nullable String category) {
+                       @Nullable TokenRange location, @Nullable Throwable cause, @Nullable String category, @NotNull String ruleId) {
         this.level = level;
         this.message = message;
         this.location = location;
         this.cause = cause;
         this.category = category;
+        this.ruleId = ruleId;
     }
 
 
@@ -59,6 +63,10 @@ public final class LintProblem {
     @Nullable
     public String category() {
         return category;
+    }
+
+    public String ruleId() {
+        return ruleId;
     }
 
     @Override

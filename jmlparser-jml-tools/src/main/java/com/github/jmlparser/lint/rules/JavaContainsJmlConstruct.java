@@ -1,4 +1,4 @@
-package com.github.jmlparser.validators;
+package com.github.jmlparser.lint.rules;
 
 import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;

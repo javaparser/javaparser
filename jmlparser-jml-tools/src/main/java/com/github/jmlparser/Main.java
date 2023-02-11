@@ -11,7 +11,8 @@ import com.github.javaparser.ast.Node;
 import com.github.jmlparser.lint.JmlLintingConfig;
 import com.github.jmlparser.lint.JmlLintingFacade;
 import com.github.jmlparser.lint.LintProblem;
-import com.github.jmlparser.redux.ReduxPipeline;
+import com.github.jmlparser.redux.ReduxConfig;
+import com.github.jmlparser.redux.ReduxFacade;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,7 +42,7 @@ public class Main {
         }
 
         if (args.transform) {
-            ReduxPipeline pipeline = new ReduxPipeline();
+            ReduxFacade pipeline = ReduxFacade.create(new ReduxConfig());
             //TODO weigl writing to output directory
         }
     }

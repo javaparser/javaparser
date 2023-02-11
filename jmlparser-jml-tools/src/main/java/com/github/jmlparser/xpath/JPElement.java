@@ -1,6 +1,5 @@
 package com.github.jmlparser.xpath;
 
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import org.jetbrains.annotations.NotNull;
@@ -73,9 +72,11 @@ class JPElement implements Element {
                     .map(Attr.class::cast)
                     .toList();
             attributes = new ArrayList<>(attr);
-
-            if (astNode instanceof NodeWithSimpleName<?> nwsn) {
-                attributes.add(new JPAttrPseudo("name", nwsn::getNameAsString, this));
+            for (PseudoAttributeProvider provider : DocumentFactories.getAttributeProviders()) {
+                var seq = provider.attributeForNode(astNode, this);
+                if (seq != null) {
+                    attributes.addAll(seq);
+                }
             }
         }
         return attributes;

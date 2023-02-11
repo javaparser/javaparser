@@ -1,4 +1,4 @@
-package com.github.jmlparser.validators;
+package com.github.jmlparser.lint.rules;
 
 /**
  * @author Alexander Weigl
