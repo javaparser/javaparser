@@ -18,7 +18,7 @@
 	<groupId>io.github.jmltoolkit</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.24.11-SNAPSHOT</version>
+    <version>3.25.1-SNAPSHOT</version>
 
 	<name>jmlparser-parent</name>
 	<url>https://github.com/wadoon/jmlparser</url>
@@ -313,7 +313,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.0.0-M7</version>
+                    <version>3.0.0-M8</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -323,7 +323,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
-					<version>3.0.0</version>
+                    <version>3.1.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -361,7 +361,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-							<version>10.6.0</version>
+                            <version>10.7.0</version>
 						</dependency>
 					</dependencies>
 				</plugin>

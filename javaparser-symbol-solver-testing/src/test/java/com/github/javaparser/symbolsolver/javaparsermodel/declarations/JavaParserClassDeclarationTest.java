@@ -21,6 +21,19 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
@@ -47,18 +60,6 @@ import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -755,6 +756,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.isAnnotationPresent(java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.createBody()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.setBody(com.github.javaparser.ast.stmt.BlockStmt)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc.setJavaDocComment(java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.addModifier(com.github.javaparser.ast.Modifier...)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isAbstract()",
@@ -768,6 +770,8 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isSynchronized()",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isTransient()",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isVolatile()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.setModifiers(java.util.EnumSet<com.github.javaparser.ast.Modifier>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithName.setName(java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.body.Parameter)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.type.Type, java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(java.lang.Class<?>, java.lang.String)",
@@ -779,10 +783,13 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByName(java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByType(java.lang.Class<?>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByType(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.setParameters(java.util.List<com.github.javaparser.ast.body.Parameter>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.addThrows(com.github.javaparser.ast.type.ReferenceType)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.addThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.setThrows(java.util.List<com.github.javaparser.ast.type.ReferenceType>)",
+                "java.lang.Object.clone()",
                 "java.lang.Object.finalize()",
                 "java.lang.Object.getClass()",
                 "java.lang.Object.notify()",
@@ -797,8 +804,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         if (TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
-
-        assertTrue(signatures.size() == expected.size());
+        assertEquals(expected.size(), signatures.size());
         assertThat(signatures, containsInAnyOrder(expected.toArray()));
     }
 

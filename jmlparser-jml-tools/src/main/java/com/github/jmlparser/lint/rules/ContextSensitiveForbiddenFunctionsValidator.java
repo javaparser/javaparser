@@ -29,7 +29,7 @@ public class ContextSensitiveForbiddenFunctionsValidator extends LintRuleVisitor
                 signalsOnlyCounter++;
 
             if (signalsOnlyCounter > 1) {
-                arg.warn(clause, "", MULTIPLE_SIGNALS_ONLY);
+                arg.warn(clause, "", "", MULTIPLE_SIGNALS_ONLY);
             }
         }
 

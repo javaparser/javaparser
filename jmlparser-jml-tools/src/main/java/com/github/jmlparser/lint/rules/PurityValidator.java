@@ -26,7 +26,7 @@ public class PurityValidator extends LintRuleVisitor {
         final var r = new PurityVisitor();
         n.getExpression().accept(r, null);
         if (r.reason != null) {
-            arg.error(r.reason, "", "Expression in JML clause must be pure." + r.text);
+            arg.error(r.reason, "", "", "Expression in JML clause must be pure." + r.text);
         }
     }
 
@@ -36,7 +36,7 @@ public class PurityValidator extends LintRuleVisitor {
         final var r = new PurityVisitor();
         n.getInvariant().accept(r, null);
         if (r.reason != null) {
-            arg.error(r.reason, "", "Expression in JML invariant clause must be pure." + r.text);
+            arg.error(r.reason, "", "", "Expression in JML invariant clause must be pure." + r.text);
         }
     }
 
@@ -45,7 +45,7 @@ public class PurityValidator extends LintRuleVisitor {
         final var r = new PurityVisitor();
         n.getExpression().accept(r, null);
         if (r.reason != null) {
-            arg.error(r.reason, "", "Expression in JML statements must be pure." + r.text);
+            arg.error(r.reason, "", "", "Expression in JML statements must be pure." + r.text);
         }
     }
 

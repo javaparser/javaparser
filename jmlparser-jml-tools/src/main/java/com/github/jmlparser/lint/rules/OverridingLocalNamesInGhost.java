@@ -36,7 +36,7 @@ public class OverridingLocalNamesInGhost extends LintRuleVisitor {
                 var value = s.getSymbolResolver().resolveDeclaration(name, ResolvedValueDeclaration.class);
                 name.setParentNode(null);
                 if (value != null) {
-                    arg.error(variable, "Variable %s already declared in Java.", variable.getNameAsString());
+                    arg.error(variable, "", "", "Variable %s already declared in Java.", variable.getNameAsString());
                 }
             }
         }

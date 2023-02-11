@@ -20,16 +20,17 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ConditionalExprTest extends AbstractResolutionTest {
 
@@ -141,9 +142,6 @@ class ConditionalExprTest extends AbstractResolutionTest {
 
     }
 
-    /*
-     * These test cases must evolved when least upper bound willbe implemented
-     */
     @Test
     void test_reference_conditional_expression() {
         // If the second and third operands have the same type, then that is the type of the conditional expression.
@@ -154,23 +152,28 @@ class ConditionalExprTest extends AbstractResolutionTest {
         // results from applying boxing conversion to S1, and let T2 be the type that results from applying boxing
         // conversion to S2. The type of the conditional expression is the result of applying capture conversion
         // (§5.1.10) to lub(T1, T2).
-        code = "class A { public void m() { String r = true ? java.util.Collections.emptyList() : java.util.Collections.emptyList();}}";
+        code = "class A { public void m() { java.util.List list = true ? java.util.Collections.emptyList() : java.util.Collections.emptyList();}}";
         ResolvedType rt2 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
         assertEquals("java.util.List<T>", rt2.describe());
-        code = "class A { public void m() { String r = true ? new java.util.ArrayList<String>() : java.util.Collections.emptyList();}}";
-        ResolvedType rt3 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
-        assertEquals("java.util.ArrayList<java.lang.String>", rt3.describe());
-
-        // TODO resolve lub conversion in TypeHelper.leastUpperBound
-        code = "class A { public void m() { String r = true ?  java.util.Collections.emptyList() : new java.util.ArrayList<String>();}}";
-        ResolvedType rt4 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
-//        assertEquals("java.util.ArrayList<java.lang.String>", rt4.describe()); ???
-        code = "class A { public void m() { String r = true ?  String.class : StringBuilder.class;}}";
+        code = "class A { public void m() { Class clazz = true ?  String.class : StringBuilder.class;}}";
         ResolvedType rt5 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
-//        assertEquals("java.lang.Class<java.io.Serializable>", rt5.describe()); ???
-        code = "class A { public void m() { String r = true ?  Integer.valueOf(1) : \"\";}}";
+        assertEquals("java.lang.Class<? extends java.io.Serializable>", rt5.describe());
+        code = "class A { public void m() { java.io.Serializable r = true ?  Integer.valueOf(1) : \"\";}}";
         ResolvedType rt6 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
-//        assertEquals("java.io.Serializable", rt6.describe()); ???
+        assertEquals("java.io.Serializable", rt6.describe());
+    }
+
+    @Test
+    void test_reference_conditional_expression_with_type_variable() {
+        // require that type variable T in the returned type of this method call java.util.Collections.emptyList()
+        // can be translated into String type
+        String code = "class A { public void m() { java.util.List list = true ? new java.util.ArrayList<String>() : java.util.Collections.emptyList();}}";
+        ResolvedType rt3 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
+        assertEquals("java.util.List<java.lang.String>", rt3.describe());
+
+        code = "class A { public void m() { java.util.List list = true ?  java.util.Collections.emptyList() : new java.util.ArrayList<String>();}}";
+        ResolvedType rt4 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
+        assertEquals("java.util.List<java.lang.String>", rt4.describe());
     }
 
 }

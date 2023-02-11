@@ -20,6 +20,10 @@
  */
 package com.github.javaparser.resolution.types;
 
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -32,10 +36,6 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -258,6 +258,7 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * Get the type associated with the type parameter with the given name.
      * It returns Optional.empty unless the type declaration declares a type parameter with the given name.
      */
+    @Override
     public Optional<ResolvedType> getGenericParameterByName(String name) {
         for (ResolvedTypeParameterDeclaration tp : typeDeclaration.getTypeParameters()) {
             if (tp.getName().equals(name)) {
@@ -365,6 +366,7 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
         return false;
     }
 
+    @Override
     public Optional<ResolvedType> typeParamValue(ResolvedTypeParameterDeclaration typeParameterDeclaration) {
         if (typeParameterDeclaration.declaredOnMethod()) {
             throw new IllegalArgumentException();
@@ -578,13 +580,19 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
         List<ResolvedType> erasedParameters = new ArrayList<ResolvedType>();
         if (!typeParametersMap.isEmpty()) {
             // add erased type except java.lang.object
-            erasedParameters.addAll(typeParametersMap.getTypes().stream().filter(type -> !type.isReferenceType()).map(type -> type.erasure()).filter(erasedType -> !(isJavaObject(erasedType))).collect(Collectors.toList()));
+            List<ResolvedType> parameters = typeParametersMap.getTypes().stream()
+                    .filter(type -> !type.isReferenceType())
+                    .map(type -> type.erasure())
+                    .filter(erasedType -> !(isJavaObject(erasedType)))
+                    .filter(erasedType -> erasedType != null)
+                    .collect(Collectors.toList());
+            erasedParameters.addAll(parameters);
         }
         return erasedParameters;
     }
 
     private boolean isJavaObject(ResolvedType rt) {
-        return rt.isReferenceType() && rt.asReferenceType().isJavaLangObject();
+        return rt != null && rt.isReferenceType() && rt.asReferenceType().isJavaLangObject();
     }
 
     @Override

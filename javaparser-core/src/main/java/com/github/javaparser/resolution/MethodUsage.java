@@ -200,7 +200,63 @@ public class MethodUsage implements ResolvedTypeParametrized {
         return sb.toString();
     }
 
+    /**
+     * The erased signature of the method.
+     */
+    public String getErasedSignature() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getName());
+        sb.append("(");
+        for (int i = 0; i < getNoParams(); i++) {
+            if (i != 0) {
+                sb.append(", ");
+            }
+            ResolvedType type = getParamType(i).erasure();
+            if (type.isArray() && getDeclaration().getParam(i).isVariadic()) {
+                sb.append(type.asArrayType().getComponentType().describe()).append("...");
+            } else {
+                sb.append(type.describe());
+            }
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
     public List<ResolvedType> exceptionTypes() {
         return exceptionTypes;
+    }
+
+    /*
+     * Two methods or constructors, M and N, have the same signature if they have
+     * the same name, the same type parameters (if any) (§8.4.4), and, after
+     * adapting the formal parameter types of N to the the type parameters of M, the
+     * same formal parameter types.
+     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html
+     * This method returns an approximation of this rule.
+     */
+    public boolean isSameSignature(MethodUsage otherMethodUsage) {
+        return getSignature().equals(otherMethodUsage.getSignature());
+    }
+
+    /*
+     * The signature of a method m1 is a subsignature of the signature of a method m2 if either:
+     * m2 has the same signature as m1, or
+     * the signature of m1 is the same as the erasure (§4.6) of the signature of m2.
+     */
+    public boolean isSubSignature(MethodUsage otherMethodUsage) {
+        return getErasedSignature().equals(otherMethodUsage.getErasedSignature());
+    }
+
+    /*
+     * A method declaration d1 with return type R1 is return-type-substitutable for another method d2 with return type R2 iff any of the following is true:
+     * If R1 is void then R2 is void.
+     * If R1 is a primitive type then R2 is identical to R1.
+     * If R1 is a reference type then one of the following is true:
+     * R1, adapted to the type parameters of d2 (§8.4.4), is a subtype of R2.
+     * R1 can be converted to a subtype of R2 by unchecked conversion (§5.1.9).
+     * d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
+     */
+    public boolean isReturnTypeSubstituable(MethodUsage otherMethodUsage) {
+        return getDeclaration().isReturnTypeSubstituable(otherMethodUsage.getDeclaration().getReturnType());
     }
 }

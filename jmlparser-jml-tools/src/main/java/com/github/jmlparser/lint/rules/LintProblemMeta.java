@@ -11,6 +11,6 @@ import com.github.jmlparser.lint.LintProblem;
 public record LintProblemMeta(String id, String message, String level) {
 
     public LintProblem create(NodeWithTokenRange<Node> n) {
-        return new LintProblem(level(), message(), n.getTokenRange().orElse(null), null, id, ruleId);
+        return new LintProblem(level(), message(), n.getTokenRange().orElse(null), null, id, "");
     }
 }

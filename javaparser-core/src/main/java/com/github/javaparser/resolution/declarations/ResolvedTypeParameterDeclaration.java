@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * Declaration of a type parameter.
@@ -105,6 +105,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
     /**
      * Name of the type parameter.
      */
+    @Override
     String getName();
 
     /**
@@ -132,6 +133,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * The package name of the type bound(s).
      * This is unsupported because there is no package for a Type Parameter, only for its container.
      */
+    @Override
     default String getPackageName() {
         throw new UnsupportedOperationException();
     }
@@ -140,6 +142,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * The class(es) wrapping the type bound(s).
      * This is unsupported because there is no class for a Type Parameter, only for its container.
      */
+    @Override
     default String getClassName() {
         throw new UnsupportedOperationException();
     }
@@ -149,6 +152,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * It is composed by the qualified name of the container followed by a dot and the name of the Type Parameter.
      * The qualified name of a method is its qualified signature.
      */
+    @Override
     default String getQualifiedName() {
         return String.format("%s.%s", getContainerId(), getName());
     }
@@ -174,6 +178,13 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * "extends A" or "super B"
      */
     List<Bound> getBounds();
+
+    /**
+     * Has the type parameter a bound?
+     */
+    default boolean hasBound() {
+        return hasLowerBound() || hasUpperBound();
+    }
 
     /**
      * Has the type parameter a lower bound?

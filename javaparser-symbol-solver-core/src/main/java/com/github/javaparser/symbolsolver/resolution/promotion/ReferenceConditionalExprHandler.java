@@ -17,9 +17,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.resolution.promotion;
+package com.github.javaparser.symbolsolver.resolution.promotion;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
+import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
 
 public class ReferenceConditionalExprHandler implements ConditionalExprHandler {
 
@@ -41,6 +46,6 @@ public class ReferenceConditionalExprHandler implements ConditionalExprHandler {
         if (elseExpr.isNull()) {
             return thenExpr;
         }
-        throw new UnsupportedOperationException("resolving a reference conditional expression");
+        return TypeHelper.leastUpperBound(new HashSet<>(Arrays.asList(thenExpr, elseExpr)));
     }
 }
