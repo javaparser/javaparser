@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -127,7 +127,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(Modifier.class, attribute(ObservableProperty.KEYWORD));
         concreteSyntaxModelByClass.put(Name.class, sequence(comment(), conditional(ObservableProperty.QUALIFIER, IS_PRESENT, sequence(child(ObservableProperty.QUALIFIER), token(GeneratedJavaParserConstants.DOT))), attribute(ObservableProperty.IDENTIFIER), orphanCommentsEnding()));
         concreteSyntaxModelByClass.put(NameExpr.class, sequence(comment(), child(ObservableProperty.NAME), orphanCommentsEnding()));
-        concreteSyntaxModelByClass.put(NormalAnnotationExpr.class, sequence(comment(), token(GeneratedJavaParserConstants.AT), child(ObservableProperty.NAME), token(GeneratedJavaParserConstants.LPAREN), list(ObservableProperty.PAIRS, sequence(comma(), space())), token(GeneratedJavaParserConstants.RPAREN)));
+        concreteSyntaxModelByClass.put(NormalAnnotationExpr.class, sequence(comment(), token(GeneratedJavaParserConstants.AT), child(ObservableProperty.NAME), conditional(ObservableProperty.PAIRS, IS_NOT_EMPTY, token(GeneratedJavaParserConstants.LPAREN)), list(ObservableProperty.PAIRS, sequence(comma(), space())), conditional(ObservableProperty.PAIRS, IS_NOT_EMPTY, token(GeneratedJavaParserConstants.RPAREN))));
         concreteSyntaxModelByClass.put(NullLiteralExpr.class, sequence(comment(), token(GeneratedJavaParserConstants.NULL)));
         concreteSyntaxModelByClass.put(ObjectCreationExpr.class, sequence(comment(), conditional(ObservableProperty.SCOPE, IS_PRESENT, sequence(child(ObservableProperty.SCOPE), token(GeneratedJavaParserConstants.DOT))), token(GeneratedJavaParserConstants.NEW), space(), list(ObservableProperty.TYPE_ARGUMENTS, sequence(comma(), space()), token(LT), token(GT)), conditional(ObservableProperty.TYPE_ARGUMENTS, IS_NOT_EMPTY, space()), child(ObservableProperty.TYPE), token(GeneratedJavaParserConstants.LPAREN), list(ObservableProperty.ARGUMENTS, sequence(comma(), space()), none(), none()), token(GeneratedJavaParserConstants.RPAREN), conditional(ObservableProperty.ANONYMOUS_CLASS_BODY, IS_PRESENT, sequence(space(), token(LBRACE), newline(), indent(), list(ObservableProperty.ANONYMOUS_CLASS_BODY, newline(), newline(), newline(), newline()), unindent(), token(RBRACE)))));
         concreteSyntaxModelByClass.put(SimpleName.class, attribute(ObservableProperty.IDENTIFIER));

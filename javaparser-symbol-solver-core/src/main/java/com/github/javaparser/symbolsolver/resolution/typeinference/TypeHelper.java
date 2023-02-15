@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import java.util.*;
+
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.resolution.MethodUsage;
@@ -34,8 +36,6 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.utils.Pair;
-
-import java.util.*;
 
 /**
  * The term "type" is used loosely in this chapter to include type-like syntax that contains inference variables.
@@ -163,7 +163,7 @@ public class TypeHelper {
     public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType) {
         throw new UnsupportedOperationException();
     }
-    
+
     // get the resolved boxed type of the specified primitive type
     public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver ) {
         SymbolReference<ResolvedReferenceTypeDeclaration> typeDeclaration =  typeSolver.tryToSolveType(primitiveType.getBoxTypeQName());
@@ -202,105 +202,12 @@ public class TypeHelper {
 
     /**
      * See JLS 4.10.4. Least Upper Bound.
+     * The least upper bound, or "lub", of a set of reference types is a shared supertype that is more specific than
+     * any other shared supertype (that is, no other shared supertype is a subtype of the least upper bound).
      */
     public static ResolvedType leastUpperBound(Set<ResolvedType> types) {
-        if (types.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-
-        // The least upper bound, or "lub", of a set of reference types is a shared supertype that is more specific than
-        // any other shared supertype (that is, no other shared supertype is a subtype of the least upper bound).
-        // This type, lub(U1, ..., Uk), is determined as follows.
-        //
-        // If k = 1, then the lub is the type itself: lub(U) = U.
-
-        if (types.size() == 1) {
-            return types.stream().findFirst().get();
-        }
-
-        //
-        //Otherwise:
-        //
-        //For each Ui (1 ≤ i ≤ k):
-        //
-        //Let ST(Ui) be the set of supertypes of Ui.
-        //
-        //Let EST(Ui), the set of erased supertypes of Ui, be:
-        //
-        //EST(Ui) = { |W| | W in ST(Ui) } where |W| is the erasure of W.
-        //
-        //The reason for computing the set of erased supertypes is to deal with situations where the set of types includes several distinct parameterizations of a generic type.
-        //
-        //For example, given List<String> and List<Object>, simply intersecting the sets ST(List<String>) = { List<String>, Collection<String>, Object } and ST(List<Object>) = { List<Object>, Collection<Object>, Object } would yield a set { Object }, and we would have lost track of the fact that the upper bound can safely be assumed to be a List.
-        //
-        //In contrast, intersecting EST(List<String>) = { List, Collection, Object } and EST(List<Object>) = { List, Collection, Object } yields { List, Collection, Object }, which will eventually enable us to produce List<?>.
-        //
-        //Let EC, the erased candidate set for U1 ... Uk, be the intersection of all the sets EST(Ui) (1 ≤ i ≤ k).
-        //
-        //Let MEC, the minimal erased candidate set for U1 ... Uk, be:
-        //
-        //MEC = { V | V in EC, and for all W ≠ V in EC, it is not the case that W <: V }
-        //
-        //Because we are seeking to infer more precise types, we wish to filter out any candidates that are supertypes of other candidates. This is what computing MEC accomplishes. In our running example, we had EC = { List, Collection, Object }, so MEC = { List }. The next step is to recover type arguments for the erased types in MEC.
-        //
-        //For any element G of MEC that is a generic type:
-        //
-        //Let the "relevant" parameterizations of G, Relevant(G), be:
-        //
-        //Relevant(G) = { V | 1 ≤ i ≤ k: V in ST(Ui) and V = G<...> }
-        //
-        //In our running example, the only generic element of MEC is List, and Relevant(List) = { List<String>, List<Object> }. We will now seek to find a type argument for List that contains (§4.5.1) both String and Object.
-        //
-        //This is done by means of the least containing parameterization (lcp) operation defined below. The first line defines lcp() on a set, such as Relevant(List), as an operation on a list of the elements of the set. The next line defines the operation on such lists, as a pairwise reduction on the elements of the list. The third line is the definition of lcp() on pairs of parameterized types, which in turn relies on the notion of least containing type argument (lcta). lcta() is defined for all possible cases.
-        //
-        //Let the "candidate" parameterization of G, Candidate(G), be the most specific parameterization of the generic type G that contains all the relevant parameterizations of G:
-        //
-        //Candidate(G) = lcp(Relevant(G))
-        //
-        //where lcp(), the least containing invocation, is:
-        //
-        //lcp(S) = lcp(e1, ..., en) where ei (1 ≤ i ≤ n) in S
-        //
-        //lcp(e1, ..., en) = lcp(lcp(e1, e2), e3, ..., en)
-        //
-        //lcp(G<X1, ..., Xn>, G<Y1, ..., Yn>) = G<lcta(X1, Y1), ..., lcta(Xn, Yn)>
-        //
-        //lcp(G<X1, ..., Xn>) = G<lcta(X1), ..., lcta(Xn)>
-        //
-        //and where lcta(), the least containing type argument, is: (assuming U and V are types)
-        //
-        //lcta(U, V) = U if U = V, otherwise ? extends lub(U, V)
-        //
-        //lcta(U, ? extends V) = ? extends lub(U, V)
-        //
-        //lcta(U, ? super V) = ? super glb(U, V)
-        //
-        //lcta(? extends U, ? extends V) = ? extends lub(U, V)
-        //
-        //lcta(? extends U, ? super V) = U if U = V, otherwise ?
-        //
-        //lcta(? super U, ? super V) = ? super glb(U, V)
-        //
-        //lcta(U) = ? if U's upper bound is Object, otherwise ? extends lub(U,Object)
-        //
-        //and where glb() is as defined in §5.1.10.
-        //
-        //Let lub(U1 ... Uk) be:
-        //
-        //Best(W1) & ... & Best(Wr)
-        //
-        //where Wi (1 ≤ i ≤ r) are the elements of MEC, the minimal erased candidate set of U1 ... Uk;
-        //
-        //and where, if any of these elements are generic, we use the candidate parameterization (so as to recover type arguments):
-        //
-        //Best(X) = Candidate(X) if X is generic; X otherwise.
-        //
-        //Strictly speaking, this lub() function only approximates a least upper bound. Formally, there may exist some other type T such that all of U1 ... Uk are subtypes of T and T is a subtype of lub(U1, ..., Uk). However, a compiler for the Java programming language must implement lub() as specified above.
-        //
-        //It is possible that the lub() function yields an infinite type. This is permissible, and a compiler for the Java programming language must recognize such situations and represent them appropriately using cyclic data structures.
-        //
-        //The possibility of an infinite type stems from the recursive calls to lub(). Readers familiar with recursive types should note that an infinite type is not the same as a recursive type
-        throw new UnsupportedOperationException();
+    	LeastUpperBoundLogic logic = LeastUpperBoundLogic.of();
+    	return logic.lub(types);
     }
 
     /**

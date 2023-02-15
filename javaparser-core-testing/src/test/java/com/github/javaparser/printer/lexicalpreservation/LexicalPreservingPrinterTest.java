@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -634,7 +634,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                         }));
         assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
-                "   @Override()" + SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
                 "   @Override" + SYSTEM_EOL +
@@ -1013,10 +1013,10 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                                 methodDeclaration -> methodDeclaration.addAnnotation("Override"))));
         assertEquals("public class TestPage extends Page {" + SYSTEM_EOL +
                 SYSTEM_EOL +
-                "   @Override()" + SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
                 "   protected void test() {}" + SYSTEM_EOL +
                 SYSTEM_EOL +
-                "   @Override()" + SYSTEM_EOL +
+                "   @Override" + SYSTEM_EOL +
                 "   protected void initializePage() {}" + SYSTEM_EOL +
                 "}", LexicalPreservingPrinter.print(cu));
     }
@@ -1037,7 +1037,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
-        assertEquals("@Deprecated()" + SYSTEM_EOL +
+        assertEquals("@Deprecated" + SYSTEM_EOL +
                 "public final class A {}", LexicalPreservingPrinter.print(cu));
 
     }
@@ -1048,7 +1048,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
-        assertEquals("@Deprecated()" + SYSTEM_EOL +
+        assertEquals("@Deprecated" + SYSTEM_EOL +
                 "public abstract class A {}", LexicalPreservingPrinter.print(cu));
     }
 

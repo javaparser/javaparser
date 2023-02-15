@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -30,10 +34,6 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.Pair;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
  * Common ancestor for most types.
  *
@@ -41,6 +41,12 @@ import java.util.Set;
  */
 public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDeclaration {
 
+	/*
+	 * Returns all methods which have distinct "enhanced" signature declared in this type and all members.
+	 * An "enhanced" signature include the return type which is used sometimes to identify functional interfaces.
+	 * This is a different implementation from the previous one which returned all methods which have a distinct
+	 * signature (based on method name and qualified parameter types)
+	 */
     @Override
     public final Set<MethodUsage> getAllMethods() {
         Set<MethodUsage> methods = new HashSet<>();
@@ -50,7 +56,10 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
         for (ResolvedMethodDeclaration methodDeclaration : getDeclaredMethods()) {
             MethodUsage methodUsage = new MethodUsage(methodDeclaration);
             methods.add(methodUsage);
-            methodsSignatures.add(methodUsage.getSignature());
+            String signature = methodUsage.getSignature();
+            String returnType = methodUsage.getDeclaration().getReturnType().describe();
+            String enhancedSignature = String.format("%s %s", returnType, signature);
+            methodsSignatures.add(enhancedSignature);
         }
 
         for (ResolvedReferenceType ancestor : getAllAncestors()) {
@@ -62,8 +71,10 @@ public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDe
                     methodUsage = methodUsage.replaceTypeParameter(p.a, p.b);
                 }
                 String signature = methodUsage.getSignature();
-                if (!methodsSignatures.contains(signature)) {
-                    methodsSignatures.add(signature);
+                String returnType = methodUsage.getDeclaration().getReturnType().describe();
+                String enhancedSignature = String.format("%s %s", returnType, signature);
+                if (!methodsSignatures.contains(enhancedSignature)) {
+                    methodsSignatures.add(enhancedSignature);
                     methods.add(mu);
                 }
             }

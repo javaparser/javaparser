@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
 public class Issue2374Test extends AbstractLexicalPreservingTest {
     
@@ -42,6 +43,14 @@ public class Issue2374Test extends AbstractLexicalPreservingTest {
                 "    }\n" + 
                 "}"
                 );
+        String expected =
+        		"public class Bar {\n"
+        		+ "    public void foo() {\n"
+        		+ "        System.out.print(\"Hello\");\n"
+        		+ "        //Example comment\n"
+        		+ "        System.out.println(\"World!\");\n"
+        		+ "    }\n"
+        		+ "}";
         // contruct a statement with a comment
         Statement stmt = StaticJavaParser.parseStatement("System.out.println(\"World!\");");
         stmt.setLineComment(lineComment);
@@ -51,6 +60,6 @@ public class Issue2374Test extends AbstractLexicalPreservingTest {
         // print the result from LexicalPreservingPrinter
         String result = LexicalPreservingPrinter.print(cu);
         // verify that the LexicalPreservingPrinter don't forget the comment
-        assertTrue(result.contains(lineComment));
+        assertEqualsStringIgnoringEol(expected, result);
     }
 }

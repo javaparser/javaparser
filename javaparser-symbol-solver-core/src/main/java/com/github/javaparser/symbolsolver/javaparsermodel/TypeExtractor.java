@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,15 @@
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
+
+import static com.github.javaparser.ast.expr.Expression.EXCLUDE_ENCLOSED_EXPR;
+import static com.github.javaparser.ast.expr.Expression.IS_NOT_ENCLOSED_EXPR;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -42,20 +51,16 @@ import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
-import com.github.javaparser.resolution.promotion.ConditionalExprResolver;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.promotion.ConditionalExprResolver;
+import com.github.javaparser.symbolsolver.resolution.typeinference.LeastUpperBoundLogic;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.Pair;
 import com.google.common.collect.ImmutableList;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class TypeExtractor extends DefaultVisitorAdapter {
 
@@ -64,7 +69,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     private TypeSolver typeSolver;
     private JavaParserFacade facade;
-    
+
 
     public TypeExtractor(TypeSolver typeSolver, JavaParserFacade facade) {
         this.typeSolver = typeSolver;
@@ -191,7 +196,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
         return node.getThenExpr().accept(this, solveLambdas);
     }
-    
+
     private boolean isCompatible(ResolvedType resolvedType, ResolvedPrimitiveType primitiveType) {
         return (resolvedType.isPrimitive() && resolvedType.asPrimitive().equals(primitiveType))
         || (resolvedType.isReferenceType() && resolvedType.asReferenceType().isUnboxableTo(primitiveType));
@@ -449,12 +454,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(LambdaExpr node, Boolean solveLambdas) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
+        Node parentNode = demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
+        if (parentNode instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) parentNode;
             int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr);
             if (!refMethod.isSolved()) {
-                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(parentNode.toString(), callExpr.getName().getId());
             }
             Log.trace("getType on lambda expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
 
@@ -545,11 +551,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 List<ReturnStmt> returnStmts = blockStmt.findAll(ReturnStmt.class);
 
                 if (returnStmts.size() > 0) {
-                    actualType = returnStmts.stream()
-                            .map(returnStmt -> returnStmt.getExpression().map(e -> facade.getType(e)).orElse(ResolvedVoidType.INSTANCE))
-                            .filter(x -> x != null && !x.isVoid() && !x.isNull())
-                            .findFirst()
-                            .orElse(ResolvedVoidType.INSTANCE);
+                	Set<ResolvedType> resolvedTypes = returnStmts.stream()
+                          .map(returnStmt -> returnStmt.getExpression()
+                        		  .map(e -> facade.getType(e))
+                        		  .orElse(ResolvedVoidType.INSTANCE))
+                                  .collect(Collectors.toSet());
+                	actualType = LeastUpperBoundLogic.of().lub(resolvedTypes);
 
                 } else {
                     actualType = ResolvedVoidType.INSTANCE;
@@ -579,12 +586,16 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodReferenceExpr node, Boolean solveLambdas) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr callExpr = (MethodCallExpr) demandParentNode(node);
+    	if ("new".equals(node.getIdentifier())) {
+			return node.getScope().calculateResolvedType();
+		}
+        Node parentNode = demandParentNode(node);
+        if (parentNode instanceof MethodCallExpr) {
+            MethodCallExpr callExpr = (MethodCallExpr) parentNode;
             int pos = getParamPos(node);
             SymbolReference<ResolvedMethodDeclaration> refMethod = facade.solve(callExpr, false);
             if (!refMethod.isSolved()) {
-                throw new UnsolvedSymbolException(demandParentNode(node).toString(), callExpr.getName().getId());
+                throw new UnsolvedSymbolException(parentNode.toString(), callExpr.getName().getId());
             }
             Log.trace("getType on method reference expr %s", ()-> refMethod.getCorrespondingDeclaration().getName());
             if (solveLambdas) {
@@ -636,14 +647,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         }
         throw new IllegalArgumentException("Cannot resolve the type of a field with multiple variable declarations. Pick one");
     }
-    
-    private static int getParamPos(Node node) {
-        if (demandParentNode(node) instanceof MethodCallExpr) {
-            MethodCallExpr call = (MethodCallExpr) demandParentNode(node);
-            for (int i = 0; i < call.getArguments().size(); i++) {
-                if (call.getArguments().get(i) == node) return i;
-            }
-            throw new IllegalStateException();
+
+    private static int getParamPos(Expression node) {
+        Node parentNode = demandParentNode(node, IS_NOT_ENCLOSED_EXPR);
+        if (parentNode instanceof MethodCallExpr) {
+            MethodCallExpr call = (MethodCallExpr) parentNode;
+            return call.getArgumentPosition(node, EXCLUDE_ENCLOSED_EXPR);
         }
         throw new IllegalArgumentException();
     }

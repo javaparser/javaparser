@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+import static java.util.Collections.singletonList;
+
+import java.util.*;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
@@ -36,11 +41,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
-import java.util.*;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-import static java.util.Collections.singletonList;
-
 /**
  * @author Federico Tomassetti
  */
@@ -52,7 +52,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     ///
     /// Static methods
     ///
-    
+
     protected static boolean isQualifiedName(String name) {
         return name.contains(".");
     }
@@ -121,7 +121,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
         }
         Node notMethodNode = parentNode;
-        // to avoid an infinite loop if parent scope is the same as wrapped node 
+        // to avoid an infinite loop if parent scope is the same as wrapped node
         while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr
                 || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode)) ) {
             notMethodNode = notMethodNode.getParentNode().orElse(null);
@@ -132,8 +132,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         Context parentContext = JavaParserFactory.getContext(notMethodNode, typeSolver);
         return Optional.of(parentContext);
     }
-    
-    // before to call this method verify the node has a scope 
+
+    // before to call this method verify the node has a scope
     protected Node getScope(Node node) {
         return (Node) ((NodeWithOptionalScope)node).getScope().get();
     }
@@ -237,13 +237,15 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 return result;
             } else if (typeOfScope.isConstraint()) {
                 // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
-                return singletonList(
-                        typeOfScope.asConstraintType()
-                                .getBound()
-                                .asReferenceType()
-                                .getTypeDeclaration()
-                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
-                );
+            	ResolvedType type = typeOfScope.asConstraintType().getBound();
+            	if (type.isReferenceType()) {
+	                return singletonList(
+	                        type.asReferenceType().getTypeDeclaration()
+	                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+	                );
+            	} else {
+            		throw new UnsupportedOperationException("The type declaration cannot be found on constraint "+ type.describe());
+            	}
             } else if (typeOfScope.isUnionType()) {
                 return typeOfScope.asUnionType().getCommonAncestor()
                         .flatMap(ResolvedReferenceType::getTypeDeclaration)
@@ -268,12 +270,13 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                         .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
         );
     }
-    
+
     /**
      * Similar to solveMethod but we return a MethodUsage.
      * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
      */
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
+    @Override
+	public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
         if (methodSolved.isSolved()) {
             ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();

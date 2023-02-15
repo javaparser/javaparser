@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
+
+public interface Predicate<T> {
+    boolean test(T t);
+}
+
 interface Function<T, R> {
     R apply(T t);
 }
@@ -109,7 +114,7 @@ public class MethodReferences extends SuperClass {
         return super::print;
     }
 
-    Consumer<Integer> instanceMethod() {
+    Function<Integer, Boolean> instanceMethod() {
         return list::add;
     }
 

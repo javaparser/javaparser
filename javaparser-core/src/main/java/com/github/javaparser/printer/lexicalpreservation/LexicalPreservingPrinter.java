@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,39 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.BOOLEAN;
+import static com.github.javaparser.GeneratedJavaParserConstants.BYTE;
+import static com.github.javaparser.GeneratedJavaParserConstants.CHAR;
+import static com.github.javaparser.GeneratedJavaParserConstants.DOUBLE;
+import static com.github.javaparser.GeneratedJavaParserConstants.FLOAT;
+import static com.github.javaparser.GeneratedJavaParserConstants.INT;
+import static com.github.javaparser.GeneratedJavaParserConstants.JAVADOC_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.LBRACKET;
+import static com.github.javaparser.GeneratedJavaParserConstants.LONG;
+import static com.github.javaparser.GeneratedJavaParserConstants.MULTI_LINE_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.RBRACKET;
+import static com.github.javaparser.GeneratedJavaParserConstants.SHORT;
+import static com.github.javaparser.GeneratedJavaParserConstants.SINGLE_LINE_COMMENT;
+import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.decapitalize;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Optional;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DataKey;
@@ -38,24 +71,14 @@ import com.github.javaparser.ast.observer.PropagatingAstObserver;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
+import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.util.*;
-
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.decapitalize;
-import static java.util.Comparator.comparing;
-import static java.util.stream.Collectors.toList;
 
 /**
  * A Lexical Preserving Printer is used to capture all the lexical information while parsing, update them when
@@ -244,13 +267,13 @@ public class LexicalPreservingPrinter {
         
         private TokenTextElement makeCommentToken(Comment newComment) {
             if (newComment.isJavadocComment()) {
-                return new TokenTextElement(JAVADOC_COMMENT, "/**" + newComment.getContent() + "*/");
+                return new TokenTextElement(JAVADOC_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
             }
             if (newComment.isLineComment()) {
-                return new TokenTextElement(SINGLE_LINE_COMMENT, "//" + newComment.getContent());
+                return new TokenTextElement(SINGLE_LINE_COMMENT, newComment.getHeader() + newComment.getContent());
             }
             if (newComment.isBlockComment()) {
-                return new TokenTextElement(MULTI_LINE_COMMENT, "/*" + newComment.getContent() + "*/");
+                return new TokenTextElement(MULTI_LINE_COMMENT, newComment.getHeader() + newComment.getContent() + newComment.getFooter());
             }
             throw new UnsupportedOperationException("Unknown type of comment: " + newComment.getClass().getSimpleName());
         }
@@ -307,11 +330,11 @@ public class LexicalPreservingPrinter {
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
             if (oldValue instanceof JavadocComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals("/**" + oldValue.getContent() + "*/")).collect(toList());
+                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.getHeader() + oldValue.getContent() + oldValue.getFooter())).collect(toList());
             } else if (oldValue instanceof BlockComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(MULTI_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals("/*" + oldValue.getContent() + "*/")).collect(toList());
+                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(MULTI_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.getHeader() + oldValue.getContent() + oldValue.getFooter())).collect(toList());
             } else {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(SINGLE_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().trim().equals(("//" + oldValue.getContent()).trim())).collect(toList());
+                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(SINGLE_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().trim().equals((oldValue.getHeader() + oldValue.getContent()).trim())).collect(toList());
             }
             if (matchingTokens.size() > 1) {
                 // Duplicate comments found, refine the result
@@ -406,13 +429,13 @@ public class LexicalPreservingPrinter {
                 @Override
                 public void process(Node node) {
                     if (!node.isPhantom()) {
-                        LexicalPreservingPrinter.storeInitialTextForOneNode(node, tokensByNode.get(node));
+                        storeInitialTextForOneNode(node, tokensByNode.get(node));
                     }
                 }
             }.visitBreadthFirst(root);
         });
     }
-
+    
     private static Optional<Node> findNodeForToken(Node node, Range tokenRange) {
         if (node.isPhantom()) {
             return Optional.empty();
@@ -482,24 +505,11 @@ public class LexicalPreservingPrinter {
      * Print a Node into a String, preserving the lexical information.
      */
     public static String print(Node node) {
-        StringWriter writer = new StringWriter();
-        try {
-            print(node, writer);
-        } catch (IOException e) {
-            throw new RuntimeException("Unexpected IOException on a StringWriter", e);
-        }
-        return writer.toString();
-    }
-
-    /**
-     * Print a Node into a Writer, preserving the lexical information.
-     */
-    public static void print(Node node, Writer writer) throws IOException {
-        if (!node.containsData(NODE_TEXT_DATA)) {
-            getOrCreateNodeText(node);
-        }
-        final NodeText text = node.getData(NODE_TEXT_DATA);
-        writer.append(text.expand());
+    	LexicalPreservingVisitor visitor = new LexicalPreservingVisitor();
+    	final NodeText nodeText = getOrCreateNodeText(node);
+    	nodeText.getElements().forEach(element -> element.accept(visitor));
+        return visitor.toString();
+																					  
     }
 
     // 
@@ -539,15 +549,18 @@ public class LexicalPreservingPrinter {
             return;
         }
         if (node instanceof JavadocComment) {
-            nodeText.addToken(JAVADOC_COMMENT, "/**" + ((JavadocComment) node).getContent() + "*/");
+        	Comment comment = (JavadocComment) node;
+            nodeText.addToken(JAVADOC_COMMENT, comment.getHeader() + ((JavadocComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof BlockComment) {
-            nodeText.addToken(MULTI_LINE_COMMENT, "/*" + ((BlockComment) node).getContent() + "*/");
+        	Comment comment = (BlockComment) node;
+            nodeText.addToken(MULTI_LINE_COMMENT, comment.getHeader() + ((BlockComment) node).getContent() + comment.getFooter());
             return;
         }
         if (node instanceof LineComment) {
-            nodeText.addToken(SINGLE_LINE_COMMENT, "//" + ((LineComment) node).getContent());
+        	Comment comment = (LineComment) node;
+            nodeText.addToken(SINGLE_LINE_COMMENT, comment.getHeader() + comment.getContent());
             return;
         }
         if (node instanceof Modifier) {
@@ -565,6 +578,15 @@ public class LexicalPreservingPrinter {
         LexicalDifferenceCalculator.CalculatedSyntaxModel calculatedSyntaxModel = new LexicalDifferenceCalculator().calculatedSyntaxModelForNode(csm, node);
         List<TextElement> indentation = findIndentation(node);
         boolean pendingIndentation = false;
+        // Add a comment and line separator if necessary
+        node.getComment().ifPresent(comment -> {
+        	// new comment has no range so in this case we want to force the comment before the node 
+        	if (!comment.hasRange()) {
+        		LineSeparator lineSeparator = node.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
+        		calculatedSyntaxModel.elements.add(0,new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
+        		calculatedSyntaxModel.elements.add(0,new CsmChild(comment));
+        	}
+        });
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
                 int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);

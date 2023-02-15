@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.Context;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.List;
 import java.util.Map;
+
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * From JLS 4.4: A type variable is introduced by the declaration of a type parameter of a generic class,
@@ -128,7 +128,8 @@ public class ResolvedTypeVariable implements ResolvedType {
     // / Erasure
     // /
     // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
-    // 
+    // If no bound is declared for a type variable, Object is assumed.
+    //
     @Override
     public ResolvedType erasure() {
         if (typeParameter.isBounded()) {
@@ -136,7 +137,7 @@ public class ResolvedTypeVariable implements ResolvedType {
         }
         return typeParameter.object();
     }
-    
+
     /*
      * Returns the resolved type for a type variable.
      */
