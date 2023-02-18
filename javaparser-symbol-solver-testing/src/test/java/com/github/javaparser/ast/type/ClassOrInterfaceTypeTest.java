@@ -54,6 +54,11 @@ class ClassOrInterfaceTypeTest {
     }
 
     @Test
+    void TestBranchCoverage()
+    {
+        StaticJavaParser.BranchCoverageApplyKeptDiffElement.printCoverage();
+    }
+    @Test
     void resolveClassType() {
         ParseResult<CompilationUnit> compilationUnit = javaParser.parse("class A {}");
         assertTrue(compilationUnit.getResult().isPresent());

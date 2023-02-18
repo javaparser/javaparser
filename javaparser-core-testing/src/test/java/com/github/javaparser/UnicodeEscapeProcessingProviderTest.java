@@ -120,6 +120,12 @@ public class UnicodeEscapeProcessingProviderTest {
 	void testPushBackWithBufferShift() throws IOException {
 		assertEquals("12345678\\uuxx", new String(read("12345678\\uuxx")));
 	}
+
+	@Test
+	void BranchCoverage()
+	{
+		StaticJavaParser.BranchCoverageApplyKeptDiffElement.printCoverage();
+	}
 	
 	static String read(String source) throws IOException {
 		return process(provider(source));

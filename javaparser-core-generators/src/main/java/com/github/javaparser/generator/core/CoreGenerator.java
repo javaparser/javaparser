@@ -36,6 +36,7 @@ import java.nio.file.Paths;
 
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
 
+
 /**
  * Generates all generated visitors in the javaparser-core module.
  * Suggested usage is by running the run_core_generators.sh script.
@@ -48,6 +49,8 @@ public class CoreGenerator {
 //                                .setAttributeComments(false)
 //                                .setLexicalPreservationEnabled(true)
             ;
+
+
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {

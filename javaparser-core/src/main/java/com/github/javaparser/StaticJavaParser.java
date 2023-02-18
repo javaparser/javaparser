@@ -50,8 +50,26 @@ import java.nio.file.Path;
  */
 public final class StaticJavaParser {
 
+    public static boolean[] branchReached = new boolean[26];
     // use ThreadLocal to resolve possible concurrency issues.
     private static final ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(ParserConfiguration::new);
+
+
+    public static class BranchCoverageApplyKeptDiffElement
+    {
+        public static void printCoverage() {
+            for (int i = 0; i < 26; i++)
+            {
+                System.out.print("Branch " + i + ": ");
+                if (branchReached[i])
+                    System.out.print("reached");
+                else
+                    System.out.print("not reached");
+                System.out.println();
+            }
+        }
+    }
+
 
     /**
      * Get the configuration for the parse... methods. Deprecated method.
