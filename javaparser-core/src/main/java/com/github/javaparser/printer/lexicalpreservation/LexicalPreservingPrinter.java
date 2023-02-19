@@ -522,36 +522,36 @@ public class LexicalPreservingPrinter {
             PrimitiveType primitiveType = (PrimitiveType) node;
             switch(primitiveType.getType()) {
                 case BOOLEAN:
-                    nodeText.addToken(BOOLEAN, node.toString());
                     CodeCoverage.setFlag(3); //branch
+                    nodeText.addToken(BOOLEAN, node.toString());
                     break;
                 case CHAR:
-                    nodeText.addToken(CHAR, node.toString());
                     CodeCoverage.setFlag(4); //branch 4
+                    nodeText.addToken(CHAR, node.toString());
                     break;
                 case BYTE:
-                    nodeText.addToken(BYTE, node.toString());
                     CodeCoverage.setFlag(5); //branch 5
+                    nodeText.addToken(BYTE, node.toString());
                     break;
                 case SHORT:
-                    nodeText.addToken(SHORT, node.toString());
                     CodeCoverage.setFlag(6); //branch 6
+                    nodeText.addToken(SHORT, node.toString());
                     break;
                 case INT:
-                    nodeText.addToken(INT, node.toString());
                     CodeCoverage.setFlag(7); //branch 7
+                    nodeText.addToken(INT, node.toString());
                     break;
                 case LONG:
-                    nodeText.addToken(LONG, node.toString());
                     CodeCoverage.setFlag(8); //branch 8
+                    nodeText.addToken(LONG, node.toString());
                     break;
                 case FLOAT:
-                    nodeText.addToken(FLOAT, node.toString());
                     CodeCoverage.setFlag(9); //branch 9
+                    nodeText.addToken(FLOAT, node.toString());
                     break;
                 case DOUBLE:
-                    nodeText.addToken(DOUBLE, node.toString());
                     CodeCoverage.setFlag(10); //branch 10
+                    nodeText.addToken(DOUBLE, node.toString());
                     break;
                 default:
                     CodeCoverage.setFlag(11); //branch 11
