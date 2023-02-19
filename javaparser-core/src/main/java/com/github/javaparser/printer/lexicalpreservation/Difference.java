@@ -965,14 +965,14 @@ public class Difference {
         boolean used = false;
         boolean isPreviousElementNewline = (originalIndex > 0) && originalElements.get(originalIndex - 1).isNewline();
         // Id7
-        StaticJavaParser.branchReached[7] = isPreviousElementNewline;
+        StaticJavaParser.branchReached[7] = StaticJavaParser.branchReached[7] || isPreviousElementNewline;
         if (isPreviousElementNewline) {
             // Id8
             StaticJavaParser.branchReached[8] = true;
             List<TextElement> elements = processIndentation(indentation, originalElements.subList(0, originalIndex - 1));
             boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
             // Id9
-            StaticJavaParser.branchReached[9] = nextIsRightBrace;
+            StaticJavaParser.branchReached[9] = StaticJavaParser.branchReached[9] || nextIsRightBrace;
             for (TextElement e : elements) {
                 // Id10
                 StaticJavaParser.branchReached[10] = true;
@@ -1037,19 +1037,19 @@ public class Difference {
 					&& nodeText.getTextElement(originalIndex).getRange()
 							.map(range -> range.isBefore(addedTextElement.getRange().get())).orElse(false);
             // Id20
-            StaticJavaParser.branchReached[20] = sufficientTokensRemainToSkip;
+            StaticJavaParser.branchReached[20] = sufficientTokensRemainToSkip || StaticJavaParser.branchReached[20];
             // Id21
-            StaticJavaParser.branchReached[21] = currentIsAComment;
+            StaticJavaParser.branchReached[21] = currentIsAComment || StaticJavaParser.branchReached[21];
             // Id22
-            StaticJavaParser.branchReached[22] = previousIsAComment;
+            StaticJavaParser.branchReached[22] = previousIsAComment || StaticJavaParser.branchReached[22];
             // Id23
-            StaticJavaParser.branchReached[23] = currentIsNewline;
+            StaticJavaParser.branchReached[23] = currentIsNewline || StaticJavaParser.branchReached[23];
             // Id24
-            StaticJavaParser.branchReached[24] = isFirstElement;
+            StaticJavaParser.branchReached[24] = isFirstElement || StaticJavaParser.branchReached[24];
             // Id25
-            StaticJavaParser.branchReached[25] = previousIsWhiteSpace;
+            StaticJavaParser.branchReached[25] = previousIsWhiteSpace || StaticJavaParser.branchReached[25];
             // Id26
-            StaticJavaParser.branchReached[26] = commentIsBeforeAddedElement;
+            StaticJavaParser.branchReached[26] = commentIsBeforeAddedElement || StaticJavaParser.branchReached[26];
             if (sufficientTokensRemainToSkip && currentIsAComment && commentIsBeforeAddedElement) {
                 // Id27
                 StaticJavaParser.branchReached[27] = true;
@@ -1112,11 +1112,11 @@ public class Difference {
             boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
             boolean nextIsNewLine = originalElements.get(originalIndex).isNewline();
             // Id34
-            StaticJavaParser.branchReached[34] = followedByUnindent;
+            StaticJavaParser.branchReached[34] = followedByUnindent || StaticJavaParser.branchReached[34];
             // Id35
-            StaticJavaParser.branchReached[35] = nextIsRightBrace;
+            StaticJavaParser.branchReached[35] = nextIsRightBrace || StaticJavaParser.branchReached[35];
             // Id36
-            StaticJavaParser.branchReached[36] = nextIsNewLine;
+            StaticJavaParser.branchReached[36] = nextIsNewLine || StaticJavaParser.branchReached[36];
             if ((!nextIsNewLine && !nextIsRightBrace) || followedByUnindent) {
                 // Id37
                 StaticJavaParser.branchReached[37] = true;
