@@ -28,11 +28,17 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
+import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.type.VoidType;
+import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -44,8 +50,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.type.PrimitiveType.Primitive.*;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
@@ -66,7 +74,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @BeforeAll
     public static void beforeAllTest() {
         CodeCoverage.clearFlagArr();
-        testInfoArr =  new String[100];
+        testInfoArr =  new String[200];
         testIndex = 0;
     }
 
@@ -115,6 +123,117 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertEquals(GeneratedJavaParserConstants.EOF,
                 ((TokenTextElement) getTextForNode(classA).getTextElement(6)).getTokenKind());
     }
+
+
+    //---------------------------------------ADDED TESTS----------------------------------------------------
+    //Test the creation of nodeText for the primitive datatype CHAR
+    @Test
+    void checkNodeTextCreatedForCharType() {
+
+        String code = "class A {int i;}"; //Example code
+        CompilationUnit cu = parse(code); //Parse code
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+
+        classA.addPrivateField(new PrimitiveType(CHAR),"t"); //Add private field of type char
+        FieldDeclaration fd = classA.getFieldByName("t").get(); //get private field declaration
+        Type vd = fd.getElementType();                          //get the type
+
+        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(vd); //Generate node text for primitive type i.e. use prettyPrintingTextNode(node, nodeText);
+
+        assertEquals(Arrays.asList("char"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList())); //check that we have produced the right node text.
+
+
+    }
+
+    //Test the creation of nodeText for the primitive datatype BYTE
+    @Test
+    void checkNodeTextCreatedForByteType() {
+
+        String code = "class A {int i;}"; //Example code
+        CompilationUnit cu = parse(code); //Parse code
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+
+        classA.addPrivateField(new PrimitiveType(BYTE),"t"); //Add private field of type byte.
+        FieldDeclaration fd = classA.getFieldByName("t").get(); //get private field declaration
+        Type vd = fd.getElementType();                          //get the type
+
+        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(vd); //Generate node text for primitive type i.e. use prettyPrintingTextNode(node, nodeText);
+
+        assertEquals(Arrays.asList("byte"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList())); //check that we have produced the right node text.
+
+
+    }
+
+    //Test the creation of nodeText for the primitive datatype SHORT
+    @Test
+    void checkNodeTextCreatedForShortType() {
+
+        String code = "class A {int i;}"; //Example code
+        CompilationUnit cu = parse(code); //Parse code
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+
+        classA.addPrivateField(new PrimitiveType(SHORT),"t"); //Add private field of type short
+        FieldDeclaration fd = classA.getFieldByName("t").get(); //get private field declaration
+        Type vd = fd.getElementType();                          //get the type
+
+        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(vd); //Generate node text for primitive type i.e. use prettyPrintingTextNode(node, nodeText);
+
+        assertEquals(Arrays.asList("short"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList())); //check that we have produced the right node text.
+
+
+    }
+
+    //Test the creation of nodeText for the primitive datatype LONG
+    @Test
+    void checkNodeTextCreatedForLongType() {
+
+        String code = "class A {int i;}"; //Example code
+        CompilationUnit cu = parse(code); //Parse code
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+
+        classA.addPrivateField(new PrimitiveType(LONG),"t"); //Add private field of type long
+        FieldDeclaration fd = classA.getFieldByName("t").get(); //get private field declaration
+        Type vd = fd.getElementType();                          //get the type
+
+        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(vd); //Generate node text for primitive type i.e. use prettyPrintingTextNode(node, nodeText);
+
+        assertEquals(Arrays.asList("long"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList())); //check that we have produced the right node text.
+
+
+    }
+
+    //Test the creation of nodeText for the primitive datatype DOUBLE
+    @Test
+    void checkNodeTextCreatedForDoubleType() {
+
+        String code = "class A {int i;}"; //Example code
+        CompilationUnit cu = parse(code); //Parse code
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+
+        classA.addPrivateField(new PrimitiveType(DOUBLE),"t"); //Add private field of type double
+        FieldDeclaration fd = classA.getFieldByName("t").get(); //get private field declaration
+        Type vd = fd.getElementType();                          //get the type
+
+        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(vd); //Generate node text for primitive type i.e. use prettyPrintingTextNode(node, nodeText);
+
+        assertEquals(Arrays.asList("double"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList())); //check that we have produced the right node text.
+
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------
+
+
 
     @Test
     void checkNodeTextCreatedForField() {
