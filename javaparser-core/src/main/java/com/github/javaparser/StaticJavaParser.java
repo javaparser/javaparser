@@ -50,18 +50,18 @@ import java.nio.file.Path;
  */
 public final class StaticJavaParser {
 
-    public static boolean[] branchReached = new boolean[47];
+    public static boolean[] branchReachedApplyKeptDiffElement = new boolean[47];
     // use ThreadLocal to resolve possible concurrency issues.
     private static final ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(ParserConfiguration::new);
 
 
-    public static class BranchCoverageApplyKeptDiffElement
+    public static class BranchCoverage
     {
-        public static void printCoverage() {
+        public static void printCoverageApplyKeptDiffElement() {
             for (int i = 1; i < 47; i++)
             {
                 System.out.print("Branch " + i + ": ");
-                if (branchReached[i])
+                if (branchReachedApplyKeptDiffElement[i])
                     System.out.print("reached");
                 else
                     System.out.print("not reached");

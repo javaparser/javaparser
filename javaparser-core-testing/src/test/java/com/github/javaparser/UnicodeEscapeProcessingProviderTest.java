@@ -124,7 +124,7 @@ public class UnicodeEscapeProcessingProviderTest {
 	@Test
 	void BranchCoverage()
 	{
-		StaticJavaParser.BranchCoverageApplyKeptDiffElement.printCoverage();
+		StaticJavaParser.BranchCoverage.printCoverageApplyKeptDiffElement();
 	}
 	
 	static String read(String source) throws IOException {
