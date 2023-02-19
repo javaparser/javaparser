@@ -945,11 +945,11 @@ public class Difference {
             diffIndex++;
             return;
         }
-        // Id3
-        StaticJavaParser.branchReached[3] = true;
         if (added.isUnindent()) {
-            // Id4
-            StaticJavaParser.branchReached[4] = true;
+            // Id3
+            StaticJavaParser.branchReached[3] = true;
+            //id4
+            StaticJavaParser.branchReached[4] = StaticJavaParser.branchReached[4] || STANDARD_INDENTATION_SIZE > 0;
             for (int i = 0; i < STANDARD_INDENTATION_SIZE && !indentation.isEmpty(); i++) {
                 // Id5
                 StaticJavaParser.branchReached[5] = true;
@@ -959,30 +959,30 @@ public class Difference {
             diffIndex++;
             return;
         }
-        // Id6
-        StaticJavaParser.branchReached[6] = true;
         TextElement addedTextElement = added.toTextElement();
         boolean used = false;
         boolean isPreviousElementNewline = (originalIndex > 0) && originalElements.get(originalIndex - 1).isNewline();
+        // Id6
+        StaticJavaParser.branchReached[6] = StaticJavaParser.branchReached[6] || (originalIndex > 0);
         // Id7
         StaticJavaParser.branchReached[7] = StaticJavaParser.branchReached[7] || isPreviousElementNewline;
+        // Id 12
+        StaticJavaParser.branchReached[12] = isAfterLBrace(nodeText, originalIndex) ||StaticJavaParser.branchReached[12];
         if (isPreviousElementNewline) {
-            // Id8
-            StaticJavaParser.branchReached[8] = true;
             List<TextElement> elements = processIndentation(indentation, originalElements.subList(0, originalIndex - 1));
             boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
-            // Id9
-            StaticJavaParser.branchReached[9] = StaticJavaParser.branchReached[9] || nextIsRightBrace;
+            // Id8
+            StaticJavaParser.branchReached[8] = StaticJavaParser.branchReached[9] || nextIsRightBrace;
             for (TextElement e : elements) {
-                // Id10
-                StaticJavaParser.branchReached[10] = true;
+                // Id9
+                StaticJavaParser.branchReached[9] = true;
+                // Id 10
+                StaticJavaParser.branchReached[10] = !nextIsRightBrace || StaticJavaParser.branchReached[10];
                 if (!nextIsRightBrace && e instanceof TokenTextElement && originalElements.get(originalIndex).isToken(((TokenTextElement) e).getTokenKind())) {
                     // Id11
                     StaticJavaParser.branchReached[11] = true;
                     originalIndex++;
                 } else {
-                    // Id12
-                    StaticJavaParser.branchReached[12] = true;
                     nodeText.addElement(originalIndex++, e);
                 }
             }
@@ -997,15 +997,17 @@ public class Difference {
             }
             nodeText.addElement(originalIndex++, new TokenTextElement(TokenTypes.eolTokenKind()));
             // This remove the space in "{ }" when adding a new line
+            // Id 15
+            StaticJavaParser.branchReached[15] = StaticJavaParser.branchReached[15] || originalIndex >= 2;
             while (originalIndex >= 2 && originalElements.get(originalIndex - 2).isSpaceOrTab()) {
-                // Id15
-                StaticJavaParser.branchReached[15] = true;
+                // Id16
+                StaticJavaParser.branchReached[16] = true;
                 originalElements.remove(originalIndex - 2);
                 originalIndex--;
             }
             for (TextElement e : processIndentation(indentation, originalElements.subList(0, originalIndex - 1))) {
-                // Id16
-                StaticJavaParser.branchReached[16] = true;
+                // Id17
+                StaticJavaParser.branchReached[17] = true;
                 nodeText.addElement(originalIndex++, e);
             }
             // Indentation is painful...
@@ -1014,44 +1016,44 @@ public class Difference {
             // not there, so when adding new elements we force it. However if the indentation has been
             // inserted by us in this transformation we do not want to insert it again
             if (!addedIndentation) {
-                // Id17
-                StaticJavaParser.branchReached[17] = true;
+                // Id18
+                StaticJavaParser.branchReached[18] = true;
                 for (TextElement e : indentationBlock()) {
-                    // Id18
-                    StaticJavaParser.branchReached[18] = true;
+                    // Id19
+                    StaticJavaParser.branchReached[19] = true;
                     nodeText.addElement(originalIndex++, e);
                 }
             }
         }
         if (!used) {
-            // Id19
-            StaticJavaParser.branchReached[19] = true;
+            // Id20
+            StaticJavaParser.branchReached[20] = true;
             // Handling trailing comments
-            boolean sufficientTokensRemainToSkip = nodeText.numberOfElements() > originalIndex + 2;
-            boolean currentIsAComment = nodeText.getTextElement(originalIndex).isComment();
-            boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment();
-            boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
-            boolean isFirstElement = originalIndex == 0;
-            boolean previousIsWhiteSpace = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isWhiteSpace();
-			boolean commentIsBeforeAddedElement = currentIsAComment && addedTextElement.getRange().isPresent()
+            boolean sufficientTokensRemainToSkip = nodeText.numberOfElements() > originalIndex + 2;                         // Id21
+            boolean currentIsAComment = nodeText.getTextElement(originalIndex).isComment();                                 // Id22
+            boolean previousIsAComment = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isComment(); // Id23, Id24
+            boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();                                  // Id25
+            boolean isFirstElement = originalIndex == 0;                                                                    // Id26
+            boolean previousIsWhiteSpace = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isWhiteSpace(); // Id27
+			boolean commentIsBeforeAddedElement = currentIsAComment && addedTextElement.getRange().isPresent()              // Id 28, 29
 					&& nodeText.getTextElement(originalIndex).getRange()
 							.map(range -> range.isBefore(addedTextElement.getRange().get())).orElse(false);
-            // Id20
-            StaticJavaParser.branchReached[20] = sufficientTokensRemainToSkip || StaticJavaParser.branchReached[20];
-            // Id21
-            StaticJavaParser.branchReached[21] = currentIsAComment || StaticJavaParser.branchReached[21];
-            // Id22
-            StaticJavaParser.branchReached[22] = previousIsAComment || StaticJavaParser.branchReached[22];
-            // Id23
-            StaticJavaParser.branchReached[23] = currentIsNewline || StaticJavaParser.branchReached[23];
-            // Id24
-            StaticJavaParser.branchReached[24] = isFirstElement || StaticJavaParser.branchReached[24];
-            // Id25
-            StaticJavaParser.branchReached[25] = previousIsWhiteSpace || StaticJavaParser.branchReached[25];
-            // Id26
-            StaticJavaParser.branchReached[26] = commentIsBeforeAddedElement || StaticJavaParser.branchReached[26];
+            StaticJavaParser.branchReached[21] = sufficientTokensRemainToSkip || StaticJavaParser.branchReached[21];
+            StaticJavaParser.branchReached[22] = currentIsAComment || StaticJavaParser.branchReached[22];
+            StaticJavaParser.branchReached[23] = originalIndex > 0 || StaticJavaParser.branchReached[23];
+            StaticJavaParser.branchReached[24] = previousIsAComment || StaticJavaParser.branchReached[24];
+            StaticJavaParser.branchReached[25] = currentIsNewline || StaticJavaParser.branchReached[25];
+            StaticJavaParser.branchReached[26] = isFirstElement || StaticJavaParser.branchReached[26];
+            StaticJavaParser.branchReached[27] = previousIsWhiteSpace || StaticJavaParser.branchReached[27];
+            StaticJavaParser.branchReached[28] = (currentIsAComment && nodeText.getTextElement(originalIndex - 1).isWhiteSpace() ) || StaticJavaParser.branchReached[28];
+            StaticJavaParser.branchReached[29] = commentIsBeforeAddedElement || StaticJavaParser.branchReached[29];
+            // Id30, 31 (33)
+            StaticJavaParser.branchReached[33] = currentIsNewline || StaticJavaParser.branchReached[33];
+            StaticJavaParser.branchReached[30] = sufficientTokensRemainToSkip || StaticJavaParser.branchReached[30];
+            StaticJavaParser.branchReached[31] = currentIsAComment || StaticJavaParser.branchReached[31];
             if (sufficientTokensRemainToSkip && currentIsAComment && commentIsBeforeAddedElement) {
-                // Id27
+                // Id32
+                StaticJavaParser.branchReached[32] = commentIsBeforeAddedElement || StaticJavaParser.branchReached[32];
                 StaticJavaParser.branchReached[27] = true;
                 // Need to get behind the comment:
                 // FIXME: Why 2? This comment and the next newline?
@@ -1063,8 +1065,8 @@ public class Difference {
                 // Now we can increment
                 originalIndex++;
             } else if (currentIsNewline && previousIsAComment) {
-                // Id28
-                StaticJavaParser.branchReached[28] = true;
+                // Id34
+                StaticJavaParser.branchReached[34] = true;
                 /*
                  * Manage the case where we want to add an element, after an expression which is followed by a comment on the same line.
                  * This is not the same case as the one who handles the trailing comments, because in this case the node text element is a new line (not a comment)
@@ -1079,8 +1081,8 @@ public class Difference {
                 // Now we can increment.
                 originalIndex++;
             } else if (currentIsNewline && addedTextElement.isChild()) {
-                // Id29
-                StaticJavaParser.branchReached[29] = true;
+                // Id35
+                StaticJavaParser.branchReached[35] = true;
                 // here we want to place the new child element after the current new line character.
                 // Except if indentation has been inserted just before this step (in the case where isPreviousElementNewline is true)
                 // or if the previous character is a space (it could be the case if we want to replace a statement)
@@ -1088,38 +1090,37 @@ public class Difference {
                 // we want to have this result <code>  value();\n  value();\n</code> not <code>  value();\n  \nvalue();</code>
                 // Example 2 : if we want to insert a statement after this one <code>  \n</code> we want to have <code>  value();\n</code>
                 // not <code>  \nvalue();</code> --> this case appears on member replacement for example
+                // Id36, 37
+                StaticJavaParser.branchReached[36] = !isPreviousElementNewline || StaticJavaParser.branchReached[36];
+                StaticJavaParser.branchReached[37] = !isFirstElement || StaticJavaParser.branchReached[36];
                 if (!isPreviousElementNewline && !isFirstElement && !previousIsWhiteSpace) {
-                    // Id30
-                    StaticJavaParser.branchReached[30] = true;
+                    // Id38
+                    StaticJavaParser.branchReached[38] = true;
                     // Insert after the new line
                     originalIndex++;
                 }
                 nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;
             } else {
-                // Id31
-                StaticJavaParser.branchReached[31] = true;
                 nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;
             }
         }
-        // Id32
-        StaticJavaParser.branchReached[32] = true;
         if (addedTextElement.isNewline()) {
-            // Id33
-            StaticJavaParser.branchReached[33] = true;
-            boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex);
-            boolean nextIsRightBrace = nextIsRightBrace(originalIndex);
-            boolean nextIsNewLine = originalElements.get(originalIndex).isNewline();
-            // Id34
-            StaticJavaParser.branchReached[34] = followedByUnindent || StaticJavaParser.branchReached[34];
-            // Id35
-            StaticJavaParser.branchReached[35] = nextIsRightBrace || StaticJavaParser.branchReached[35];
-            // Id36
-            StaticJavaParser.branchReached[36] = nextIsNewLine || StaticJavaParser.branchReached[36];
+            // Id39
+            StaticJavaParser.branchReached[39] = true;
+            boolean followedByUnindent = isFollowedByUnindent(diffElements, diffIndex); // Id 40
+            boolean nextIsRightBrace = nextIsRightBrace(originalIndex);                 // Id 41
+            boolean nextIsNewLine = originalElements.get(originalIndex).isNewline();    // Id 42
+            // Id 43, 44
+            StaticJavaParser.branchReached[40] = followedByUnindent || StaticJavaParser.branchReached[40];
+            StaticJavaParser.branchReached[41] = nextIsRightBrace || StaticJavaParser.branchReached[41];
+            StaticJavaParser.branchReached[42] = nextIsNewLine || StaticJavaParser.branchReached[42];
+            StaticJavaParser.branchReached[43] = !nextIsNewLine || StaticJavaParser.branchReached[43];
+            StaticJavaParser.branchReached[44] = !nextIsRightBrace || StaticJavaParser.branchReached[44];
             if ((!nextIsNewLine && !nextIsRightBrace) || followedByUnindent) {
-                // Id37
-                StaticJavaParser.branchReached[37] = true;
+                // Id45
+                StaticJavaParser.branchReached[45] = true;
                 originalIndex = adjustIndentation(indentation, nodeText, originalIndex, followedByUnindent);
             }
         }
