@@ -53,6 +53,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
 
+import com.github.javaparser.CodeCoverage;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DataKey;
@@ -517,56 +518,80 @@ public class LexicalPreservingPrinter {
     // 
     private static void prettyPrintingTextNode(Node node, NodeText nodeText) {
         if (node instanceof PrimitiveType) {
+            CodeCoverage.setFlag(1); //branch 1
             PrimitiveType primitiveType = (PrimitiveType) node;
             switch(primitiveType.getType()) {
                 case BOOLEAN:
                     nodeText.addToken(BOOLEAN, node.toString());
+                    CodeCoverage.setFlag(3); //branch
                     break;
                 case CHAR:
                     nodeText.addToken(CHAR, node.toString());
+                    CodeCoverage.setFlag(4); //branch 4
                     break;
                 case BYTE:
                     nodeText.addToken(BYTE, node.toString());
+                    CodeCoverage.setFlag(5); //branch 5
                     break;
                 case SHORT:
                     nodeText.addToken(SHORT, node.toString());
+                    CodeCoverage.setFlag(6); //branch 6
                     break;
                 case INT:
                     nodeText.addToken(INT, node.toString());
+                    CodeCoverage.setFlag(7); //branch 7
                     break;
                 case LONG:
                     nodeText.addToken(LONG, node.toString());
+                    CodeCoverage.setFlag(8); //branch 8
                     break;
                 case FLOAT:
                     nodeText.addToken(FLOAT, node.toString());
+                    CodeCoverage.setFlag(9); //branch 9
                     break;
                 case DOUBLE:
                     nodeText.addToken(DOUBLE, node.toString());
+                    CodeCoverage.setFlag(10); //branch 10
                     break;
                 default:
+                    CodeCoverage.setFlag(11); //branch 11
                     throw new IllegalArgumentException();
             }
             return;
+        } else {
+            CodeCoverage.setFlag(2); //branch 2
         }
         if (node instanceof JavadocComment) {
+            CodeCoverage.setFlag(12); //branch 12
         	Comment comment = (JavadocComment) node;
             nodeText.addToken(JAVADOC_COMMENT, comment.getHeader() + ((JavadocComment) node).getContent() + comment.getFooter());
             return;
+        } else {
+            CodeCoverage.setFlag(13); //branch 13
         }
         if (node instanceof BlockComment) {
+            CodeCoverage.setFlag(14); //branch 14
         	Comment comment = (BlockComment) node;
             nodeText.addToken(MULTI_LINE_COMMENT, comment.getHeader() + ((BlockComment) node).getContent() + comment.getFooter());
             return;
+        } else {
+            CodeCoverage.setFlag(15); //branch 15
         }
         if (node instanceof LineComment) {
+            CodeCoverage.setFlag(16); //branch 16
         	Comment comment = (LineComment) node;
             nodeText.addToken(SINGLE_LINE_COMMENT, comment.getHeader() + comment.getContent());
             return;
+        } else {
+            CodeCoverage.setFlag(17); //branch 17
         }
         if (node instanceof Modifier) {
+            CodeCoverage.setFlag(18); //branch 18
             Modifier modifier = (Modifier) node;
             nodeText.addToken(LexicalDifferenceCalculator.toToken(modifier), modifier.getKeyword().asString());
             return;
+        } else {
+            CodeCoverage.setFlag(19); //branch 19
         }
         interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
     }

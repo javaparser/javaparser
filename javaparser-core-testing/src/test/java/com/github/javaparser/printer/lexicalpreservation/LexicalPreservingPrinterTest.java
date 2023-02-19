@@ -21,10 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
@@ -37,6 +34,9 @@ import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -59,6 +59,37 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     //
     // Tests on TextNode definition
     //
+
+    private static String[] testInfoArr;
+    private static int testIndex;
+
+    @BeforeAll
+    public static void beforeAllTest() {
+        CodeCoverage.clearFlagArr();
+        testInfoArr =  new String[100];
+        testIndex = 0;
+    }
+
+    @AfterEach
+    public void afterEachTest() {
+        String testInfo = CodeCoverage.getTestInfo();
+        if(testInfo != "") {
+            testInfoArr[testIndex] = testInfo;
+        }
+        CodeCoverage.clearFlagArr();
+        testIndex++;
+
+
+    }
+
+    @AfterAll
+    public static void afterAllTests(){
+        try {
+            CodeCoverage.writeBranchCoverage("lexicalPreservingPrinterTest.txt",testInfoArr);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
     void checkNodeTextCreatedForSimplestClass() {
