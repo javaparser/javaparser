@@ -48,7 +48,7 @@ public class TypeSameAsType extends ConstraintFormula {
 
     public static void printReachedBranches(){
         for (int i = 1; i < 19; i++)
-            System.out.print("Reduce Branch " + i + (reduceBranchesReached[i] ? "Reached" : "not Reached"));
+            System.out.println("Reduce Branch " + i + (reduceBranchesReached[i] ? "Reached" : "not Reached"));
     }
 
     @Override
