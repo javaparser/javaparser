@@ -513,50 +513,59 @@ public class LexicalPreservingPrinter {
 																					  
     }
 
+    /**
+     * Helper method used by prettyPrintingTextNode, to set nodeText of nodes with primitive types
+     * @param node
+     * @param nodeText
+     */
+    private static void checkNodePrimitiveType(Node node, NodeText nodeText) {
+        PrimitiveType primitiveType = (PrimitiveType) node;
+        switch(primitiveType.getType()) {
+            case BOOLEAN:
+                CodeCoverage.setFlag(3); //branch 3
+                nodeText.addToken(BOOLEAN, node.toString());
+                break;
+            case CHAR:
+                CodeCoverage.setFlag(4); //branch 4
+                nodeText.addToken(CHAR, node.toString());
+                break;
+            case BYTE:
+                CodeCoverage.setFlag(5); //branch 5
+                nodeText.addToken(BYTE, node.toString());
+                break;
+            case SHORT:
+                CodeCoverage.setFlag(6); //branch 6
+                nodeText.addToken(SHORT, node.toString());
+                break;
+            case INT:
+                CodeCoverage.setFlag(7); //branch 7
+                nodeText.addToken(INT, node.toString());
+                break;
+            case LONG:
+                CodeCoverage.setFlag(8); //branch 8
+                nodeText.addToken(LONG, node.toString());
+                break;
+            case FLOAT:
+                CodeCoverage.setFlag(9); //branch 9
+                nodeText.addToken(FLOAT, node.toString());
+                break;
+            case DOUBLE:
+                CodeCoverage.setFlag(10); //branch 10
+                nodeText.addToken(DOUBLE, node.toString());
+                break;
+            default:
+                CodeCoverage.setFlag(11); //branch 11
+                throw new IllegalArgumentException();
+        }
+    }
+
     // 
     // Methods to handle transformations
     // 
     private static void prettyPrintingTextNode(Node node, NodeText nodeText) {
         if (node instanceof PrimitiveType) {
             CodeCoverage.setFlag(1); //branch 1
-            PrimitiveType primitiveType = (PrimitiveType) node;
-            switch(primitiveType.getType()) {
-                case BOOLEAN:
-                    CodeCoverage.setFlag(3); //branch
-                    nodeText.addToken(BOOLEAN, node.toString());
-                    break;
-                case CHAR:
-                    CodeCoverage.setFlag(4); //branch 4
-                    nodeText.addToken(CHAR, node.toString());
-                    break;
-                case BYTE:
-                    CodeCoverage.setFlag(5); //branch 5
-                    nodeText.addToken(BYTE, node.toString());
-                    break;
-                case SHORT:
-                    CodeCoverage.setFlag(6); //branch 6
-                    nodeText.addToken(SHORT, node.toString());
-                    break;
-                case INT:
-                    CodeCoverage.setFlag(7); //branch 7
-                    nodeText.addToken(INT, node.toString());
-                    break;
-                case LONG:
-                    CodeCoverage.setFlag(8); //branch 8
-                    nodeText.addToken(LONG, node.toString());
-                    break;
-                case FLOAT:
-                    CodeCoverage.setFlag(9); //branch 9
-                    nodeText.addToken(FLOAT, node.toString());
-                    break;
-                case DOUBLE:
-                    CodeCoverage.setFlag(10); //branch 10
-                    nodeText.addToken(DOUBLE, node.toString());
-                    break;
-                default:
-                    CodeCoverage.setFlag(11); //branch 11
-                    throw new IllegalArgumentException();
-            }
+            checkNodePrimitiveType(node, nodeText);
             return;
         } else {
             CodeCoverage.setFlag(2); //branch 2
