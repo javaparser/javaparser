@@ -717,7 +717,14 @@ public class LexicalPreservingPrinter {
         java.lang.reflect.Type optionalArgument = parameterizedType.getActualTypeArguments()[0];
         return (optionalArgument.getTypeName().startsWith(JAVAPARSER_AST_NODELIST));
     }
-
+    /*
+    Linus Below Blomkvist
+     * Refactoring:
+     * The second if-statement is repeated later in the method.
+     * So this section could be refactored into a separate method.
+     * So instead of having to write this whole section again it could call the other method.
+     * This would reduce the CC with 2 points from 15 to 13.
+     * */
     private static ObservableProperty findNodeListName(NodeList<?> nodeList) {
         Node parent = nodeList.getParentNodeForChildren();
         for (Method m : parent.getClass().getMethods()) {
