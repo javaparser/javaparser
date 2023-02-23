@@ -21,6 +21,11 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
@@ -46,10 +51,6 @@ import com.github.javaparser.resolution.types.ResolvedUnionType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
@@ -226,7 +227,29 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
         assertEquals("java.lang.String", resolvedType.describe());
     }
-    
+
+ // See issue 3911
+    @Test
+    void resolveTypeParameterFromPrimitiveArrayArgument() {
+        String sourceCode = "" +
+                "import java.util.Arrays;\n" +
+                "\n" +
+                "public class Main {\n" +
+                "    public void main(int[] args) {\n" +
+                "        Arrays.asList(args);\n" +
+                "    }\n" +
+                "}";
+
+        JavaParser parser = createParserWithResolver(defaultTypeSolver());
+        CompilationUnit cu = parser.parse(sourceCode).getResult().get();
+
+        MethodCallExpr mce = cu.findFirst(MethodCallExpr.class).get();
+
+        ResolvedType resolvedType = mce.calculateResolvedType();
+
+        assertEquals("java.util.List<int[]>", resolvedType.describe());
+    }
+
     // See issue 3725
     @Test
     void resolveVarTypeInForEachLoopFromIterableExpression2() {
@@ -251,7 +274,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
 
         assertEquals("java.lang.String", resolvedType.describe());
     }
-    
+
     // See issue 3725
     @Test
     void resolveVarTypeInForEachLoopFromIterableExpression_withRawType() {
@@ -271,7 +294,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
             Expression toStringCallScope = scopeOfFirstHashCodeCall(sourceCode);
 
             ResolvedType resolvedType = toStringCallScope.calculateResolvedType();
-            
+
             assertEquals("java.lang.Object", resolvedType.describe());
     }
 
