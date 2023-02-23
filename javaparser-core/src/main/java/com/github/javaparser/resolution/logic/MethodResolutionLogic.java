@@ -21,6 +21,12 @@
 
 package com.github.javaparser.resolution.logic;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -29,17 +35,11 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 /**
  * @author Federico Tomassetti
  */
 public class MethodResolutionLogic {
-    
+
     private static String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     private static List<ResolvedType> groupVariadicParamValues(List<ResolvedType> argumentsTypes, int startVariadic, ResolvedType variadicType) {
@@ -102,7 +102,7 @@ public class MethodResolutionLogic {
                 //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
                 return false;
             }
-            
+
             // If the method declaration we're considering has a variadic parameter,
             // attempt to convert the given list of arguments to fit this pattern
             // e.g. foo(String s, String... s2) {} --- consider the first argument, then group the remainder as an array
@@ -111,7 +111,7 @@ public class MethodResolutionLogic {
             for (ResolvedTypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
                 expectedVariadicParameterType = replaceTypeParam(expectedVariadicParameterType, tp, typeSolver);
             }
-            
+
             if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
                 // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a valid type. (Maybe this is also done later..?)
@@ -148,7 +148,7 @@ public class MethodResolutionLogic {
                 matchedParameters.put(expectedDeclaredType.asTypeParameter().getName(), actualArgumentType);
                 continue;
             }
-            
+
             boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType) ||
                     (methodDeclaration.getParam(i).isVariadic() && new ResolvedArrayType(expectedDeclaredType).isAssignableBy(actualArgumentType));
 
@@ -206,7 +206,7 @@ public class MethodResolutionLogic {
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
         int lastNeedleArgumentIndex = getLastParameterIndex(countOfNeedleArgumentsPassed);
-        
+
         if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
             // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
             // Here we are sure that all of these grouped "trailing" arguments have the required type
@@ -240,6 +240,10 @@ public class MethodResolutionLogic {
                                                           Map<String, ResolvedType> matchedParameters) {
         if (expected.isReferenceType() && actual.isReferenceType()) {
             return isAssignableMatchTypeParameters(expected.asReferenceType(), actual.asReferenceType(), matchedParameters);
+        }
+        if (expected.isReferenceType() && ResolvedPrimitiveType.isBoxType(expected) && actual.isPrimitive()) {
+        	ResolvedPrimitiveType expectedType = ResolvedPrimitiveType.byBoxTypeQName(expected.asReferenceType().getQualifiedName()).get().asPrimitive();
+            return expected.isAssignableBy(actual);
         }
         if (expected.isTypeVariable()) {
             matchedParameters.put(expected.asTypeParameter().getName(), actual);
@@ -287,7 +291,14 @@ public class MethodResolutionLogic {
                 ResolvedReferenceType r1 = expectedParam.asReferenceType();
                 ResolvedReferenceType r2 = actualParam.asReferenceType();
                 // we can have r1=A and r2=A.B (with B extends A and B is an inner class of A)
-                // in this case we want to verify expected parameter from the actual parameter ancestors 
+                // in this case we want to verify expected parameter from the actual parameter ancestors
+                return isAssignableMatchTypeParameters(r1, r2, matchedParameters);
+            }
+
+            if (expectedParam.isArray() && actualParam.isArray()) {
+                ResolvedType r1 = expectedParam.asArrayType().getComponentType();
+                ResolvedType r2 = actualParam.asArrayType().getComponentType();
+                // try to verify the component type of each array
                 return isAssignableMatchTypeParameters(r1, r2, matchedParameters);
             }
 
@@ -576,7 +587,7 @@ public class MethodResolutionLogic {
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
         }
-        
+
         // Examine the applicable methods found, and evaluate each to determine the "best" one
         ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
         ResolvedMethodDeclaration other = null;
@@ -593,7 +604,7 @@ public class MethodResolutionLogic {
                 // One applicable method m1 is more specific than another applicable method m2, for an invocation with argument
                 // expressions e1, ..., ek, if any of the following are true:
                 // m2 is generic, and m1 is inferred to be more specific than m2 for argument expressions e1, ..., ek by §18.5.4.
-                // 18.5.4. More Specific Method Inference should be verified 
+                // 18.5.4. More Specific Method Inference should be verified
                 // ...
                 if (winningCandidate.isGeneric() && !other.isGeneric()) {
                     winningCandidate = other;
@@ -606,7 +617,7 @@ public class MethodResolutionLogic {
                 }
             }
         }
-        
+
         if (possibleAmbiguity) {
             // pick the first exact match if it exists
             if (!isExactMatch(winningCandidate, argumentsTypes)) {
@@ -667,7 +678,7 @@ public class MethodResolutionLogic {
                 !isLastArgArray))) {
             return false;
         }
-        
+
         // If both methods are variadic but the calling method omits any varArgs, bump the omitted args to
         // ensure the varargs type is considered when determining which method is more specific
         if (aVariadic && bVariadic && aNumberOfParams == bNumberOfParams && numberOfArgs == aNumberOfParams - 1) {
@@ -678,7 +689,7 @@ public class MethodResolutionLogic {
         for (int i = 0; i < numberOfArgs + omittedArgs; i++) {
             ResolvedType paramTypeA = getMethodsExplicitAndVariadicParameterType(methodA, i);
             ResolvedType paramTypeB = getMethodsExplicitAndVariadicParameterType(methodB, i);
-            
+
             ResolvedType argType = null;
             if (i < argumentTypes.size()) {
             	argType = argumentTypes.get(i);
@@ -750,7 +761,7 @@ public class MethodResolutionLogic {
 
         return isMethodAMoreSpecific;
     }
-    
+
     private static boolean isJavaLangObject(ResolvedType paramType ) {
         return paramType.isReferenceType() && paramType.asReferenceType().getQualifiedName().equals("java.lang.Object");
     }
