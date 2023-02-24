@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.Map;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * Array Type.
@@ -85,17 +85,25 @@ public class ResolvedArrayType implements ResolvedType {
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType other) {
-        if (other.isArray()) {
-            if (baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive()) {
-                return baseType.equals(other.asArrayType().getComponentType());
-            }
-            return baseType.isAssignableBy(other.asArrayType().getComponentType());
-        } else if (other.isNull()) {
-            return true;
-        }
-        return false;
-    }
+    // https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.2
+	public boolean isAssignableBy(ResolvedType other) {
+		if (other.isNull()) {
+			return true;
+		}
+		if (other.isArray()) {
+			if (baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive()) {
+				return baseType.equals(other.asArrayType().getComponentType());
+			}
+			if ((baseType.isPrimitive() && !other.asArrayType().getComponentType().isPrimitive())
+					|| (!baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive())) {
+				return false;
+			}
+			// An array can be assigned only to a variable of a compatible array type, or to
+			// a variable of type Object, Cloneable or java.io.Serializable.
+			return baseType.isAssignableBy(other.asArrayType().getComponentType());
+		}
+		return false;
+	}
 
     @Override
     public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
