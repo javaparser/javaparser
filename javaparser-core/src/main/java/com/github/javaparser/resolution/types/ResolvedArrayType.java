@@ -94,8 +94,8 @@ public class ResolvedArrayType implements ResolvedType {
 			if (baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive()) {
 				return baseType.equals(other.asArrayType().getComponentType());
 			}
-			if ((baseType.isPrimitive() && !other.asArrayType().getComponentType().isPrimitive())
-					|| (!baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive())) {
+			if ((baseType.isPrimitive() && other.asArrayType().getComponentType().isReferenceType())
+					|| (baseType.isReferenceType() && other.asArrayType().getComponentType().isPrimitive())) {
 				return false;
 			}
 			// An array can be assigned only to a variable of a compatible array type, or to
