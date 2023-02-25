@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -43,10 +47,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -128,11 +128,19 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        // Look into extended classes and implemented interfaces
-        String typeName = isCompositeName(name) ?  innerMostPartOfName(name) : name;
-        ResolvedTypeDeclaration type = checkAncestorsForType(typeName, this.typeDeclaration);
-        if (type != null) {
-            return SymbolReference.solved(type);
+		// Before looking at extended classes and implemented interfaces
+		// we need to ensure that if the type declaration package name is empty, the
+		// type is not a composite name or an inner class prefixed by the outer class
+		// name
+        String packageName = this.typeDeclaration.getPackageName();
+        if (packageName.isEmpty() &&
+        		(!isCompositeName(name)
+        				|| outerMostPartOfName(name).equals(this.typeDeclaration.getName()))) {
+        	String typeName = isCompositeName(name) ?  innerMostPartOfName(name) : name;
+	        ResolvedTypeDeclaration type = checkAncestorsForType(typeName, this.typeDeclaration);
+	        if (type != null) {
+	            return SymbolReference.solved(type);
+	        }
         }
 
         // Else check parents
@@ -140,13 +148,17 @@ public class JavaParserTypeDeclarationAdapter {
                 .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
                 .solveType(name, typeArguments);
     }
-    
+
     private boolean isCompositeName(String name) {
     	return name.indexOf('.') > -1;
     }
-    
+
     private String innerMostPartOfName(String name) {
     	return isCompositeName(name) ? name.substring(name.lastIndexOf(".")+1) : name;
+    }
+
+    private String outerMostPartOfName(String name) {
+    	return isCompositeName(name) ? name.substring(0, name.lastIndexOf(".")) : name;
     }
 
     private <T extends NodeWithTypeArguments<?>> boolean compareTypes(List<? extends Type> types,
