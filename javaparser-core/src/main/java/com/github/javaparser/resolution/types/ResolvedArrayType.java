@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.Map;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * Array Type.
@@ -85,16 +85,31 @@ public class ResolvedArrayType implements ResolvedType {
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType other) {
-        if (other.isArray()) {
-            if (baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive()) {
-                return baseType.equals(other.asArrayType().getComponentType());
-            }
-            return baseType.isAssignableBy(other.asArrayType().getComponentType());
-        } else if (other.isNull()) {
-            return true;
-        }
-        return false;
+    // https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.2
+	public boolean isAssignableBy(ResolvedType other) {
+		if (other.isNull()) {
+			return true;
+		}
+		if (other.isArray()) {
+			if (baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive()) {
+				return baseType.equals(other.asArrayType().getComponentType());
+			}
+			// an array of Object is assignable by any array of primitive type
+			// but an array of primitive type is not assignable by an array of boxed type nor the reverse
+			if (!isJavaLangObject(baseType)
+					&& ((baseType.isPrimitive() && other.asArrayType().getComponentType().isReferenceType())
+							|| (baseType.isReferenceType() && other.asArrayType().getComponentType().isPrimitive()))) {
+				return false;
+			}
+			// An array can be assigned only to a variable of a compatible array type, or to
+			// a variable of type Object, Cloneable or java.io.Serializable.
+			return baseType.isAssignableBy(other.asArrayType().getComponentType());
+		}
+		return false;
+	}
+
+    private boolean isJavaLangObject(ResolvedType type) {
+    	return type.isReferenceType() && type.asReferenceType().isJavaLangObject();
     }
 
     @Override
