@@ -128,20 +128,22 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-		// Before looking at extended classes and implemented interfaces
-		// we need to ensure that if the type declaration package name is empty, the
-		// type is not a composite name or an inner class prefixed by the outer class
-		// name
-        String packageName = this.typeDeclaration.getPackageName();
-        if (packageName.isEmpty() &&
-        		(!isCompositeName(name)
-        				|| outerMostPartOfName(name).equals(this.typeDeclaration.getName()))) {
-        	String typeName = isCompositeName(name) ?  innerMostPartOfName(name) : name;
-	        ResolvedTypeDeclaration type = checkAncestorsForType(typeName, this.typeDeclaration);
-	        if (type != null) {
-	            return SymbolReference.solved(type);
-	        }
-        }
+		// Looking at extended classes and implemented interfaces
+		String typeName = isCompositeName(name) ? innerMostPartOfName(name) : name;
+		ResolvedTypeDeclaration type = checkAncestorsForType(typeName, this.typeDeclaration);
+		// Before accepting this value we need to ensure that
+		// - the name is not a composite name (this is probably a local class which is discovered
+		//   by the check of ancestors
+		// - or the outer most part of the name is equals to the type declaration name.
+		//   it could be the case when the name is prefixed by the outer class name (eg outerclass.innerClass)
+		// - or the qualified name of the type is the same as the name (in case when the name is
+		//   a fully qualified class name like java.util.Iterator
+		if (type != null
+				&& (!isCompositeName(name)
+						|| outerMostPartOfName(name).equals(this.typeDeclaration.getName())
+						|| type.getQualifiedName().equals(name))) {
+			return SymbolReference.solved(type);
+		}
 
         // Else check parents
         return context.getParent()
