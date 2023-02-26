@@ -37,8 +37,8 @@ public class Issue3866Test extends AbstractResolutionTest {
 
 	@Test
 	void test() {
-		
-		String code = 
+
+		String code =
 				"public interface MyActivity {\n"
 				+ "  class MyTimestamps {}\n"
 				+ "    MyTimestamps getTimestamps();\n"
@@ -47,12 +47,13 @@ public class Issue3866Test extends AbstractResolutionTest {
 				+ "  public interface MyRichPresence extends MyActivity { }\n"
 				+ "\n"
 				+ "  class MyActivityImpl implements MyActivity {\n"
+				+ "    MyActivity.MyTimestamps timestamps;\n"
 				+ "    @Override\n"
-				+ "    public MyActivityImpl.MyTimestamps getTimestamps() {\n"
+				+ "    public MyActivity.MyTimestamps getTimestamps() {\n"
 				+ "      return timestamps;\n"
 				+ "  }\n"
 				+ "}";
-		
+
 		final JavaSymbolSolver solver = new JavaSymbolSolver(new ReflectionTypeSolver(false));
 		StaticJavaParser.getParserConfiguration().setSymbolResolver(solver);
         final CompilationUnit compilationUnit = StaticJavaParser.parse(code);
