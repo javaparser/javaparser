@@ -1160,7 +1160,7 @@ PackageDeclaration PackageDeclaration():
 	AnnotationExpr ann;
 }
 {
-    ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
+	( ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); } )*
     "package" {begin = orIfInvalid(begin, token());}  name = Name() ";"
     { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
