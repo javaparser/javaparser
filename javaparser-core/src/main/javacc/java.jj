@@ -1156,11 +1156,12 @@ PackageDeclaration PackageDeclaration():
 {
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     Name name;
-    JavaToken begin;
+    JavaToken begin = INVALID;
+	AnnotationExpr ann;
 }
 {
-    annotations = Annotations()
-    "package" {begin = token();}  name = Name() ";"
+    ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); }
+    "package" {begin = orIfInvalid(begin, token());}  name = Name() ";"
     { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
 
