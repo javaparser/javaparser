@@ -164,6 +164,18 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 		// An array of primitive type cannot be assigned to a Boxed type variable,
 		// because Boxed type is a class type other than Object
 		assertFalse(array(ResolvedPrimitiveType.LONG).isAssignableBy(rLong));
+		assertTrue(array(rObject).isAssignableBy(array(rLong)));
+		assertFalse(array(rObject).isAssignableBy(array(ResolvedPrimitiveType.LONG)));
+	}
+
+	@Test
+	void ArrayOfObjectIsAssignableByArrayOfReference() {
+		assertTrue(array(rObject).isAssignableBy(array(rLong)));
+	}
+
+	@Test
+	void ArrayOfObjectIsNotAssignableByArrayOfPrimitiveType() {
+		assertFalse(array(rObject).isAssignableBy(array(ResolvedPrimitiveType.LONG)));
 	}
 
 	private boolean isAssignableBy(ResolvedType type, ResolvedType... types) {
