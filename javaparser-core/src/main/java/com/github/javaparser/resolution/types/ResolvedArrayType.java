@@ -107,10 +107,6 @@ public class ResolvedArrayType implements ResolvedType {
 		return false;
 	}
 
-    private boolean isJavaLangObject(ResolvedType type) {
-    	return type.isReferenceType() && type.asReferenceType().isJavaLangObject();
-    }
-
     @Override
     public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         ResolvedType baseTypeReplaced = baseType.replaceTypeVariables(tpToReplace, replaced, inferredTypes);

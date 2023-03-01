@@ -50,7 +50,7 @@ public class MethodResolutionLogic {
             res.add(variadicType);
         } else {
             ResolvedType componentType = findCommonType(variadicValues);
-            res.add(new ResolvedArrayType(componentType));
+            res.add(convertToVariadicParameter(componentType));
         }
         return res;
     }
@@ -149,8 +149,21 @@ public class MethodResolutionLogic {
                 continue;
             }
 
+            // if this is a variable arity method and we are trying to evaluate the last parameter
+            // then we consider that an array of objects can be assigned by any array
+            // for example:
+            // The method call expression String.format("%d", new int[] {1})
+            // must refer to the method String.format(String, Object...)
+            // even if an array of primitive type cannot be assigned to an array of Object
+            if (methodDeclaration.getParam(i).isVariadic()
+            		&& (i == countOfMethodParametersDeclared - 1)
+            		&& isArrayOfObject(expectedDeclaredType)
+            		&& actualArgumentType.isArray()) {
+            	continue;
+            }
+
             boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType) ||
-                    (methodDeclaration.getParam(i).isVariadic() && new ResolvedArrayType(expectedDeclaredType).isAssignableBy(actualArgumentType));
+                    (methodDeclaration.getParam(i).isVariadic() && convertToVariadicParameter(expectedDeclaredType).isAssignableBy(actualArgumentType));
 
             if (!isAssignableWithoutSubstitution && expectedDeclaredType.isReferenceType() && actualArgumentType.isReferenceType()) {
                 isAssignableWithoutSubstitution = isAssignableMatchTypeParameters(
@@ -178,7 +191,7 @@ public class MethodResolutionLogic {
                         continue;
                     }
                     if (methodIsDeclaredWithVariadicParameter && i == countOfMethodParametersDeclared - 1) {
-                        if (new ResolvedArrayType(expectedDeclaredType).isAssignableBy(actualArgumentType)) {
+                        if (convertToVariadicParameter(expectedDeclaredType).isAssignableBy(actualArgumentType)) {
                             continue;
                         }
                     }
@@ -188,6 +201,16 @@ public class MethodResolutionLogic {
         }
         return !withWildcardTolerance || needForWildCardTolerance;
     }
+
+    private static boolean isArrayOfObject(ResolvedType type) {
+    	return type.isArray()
+    			&& type.asArrayType().getComponentType().isReferenceType()
+    			&& type.asArrayType().getComponentType().asReferenceType().isJavaLangObject();
+    }
+
+	private static ResolvedArrayType convertToVariadicParameter(ResolvedType type) {
+		return type.isArray() ? type.asArrayType() : new ResolvedArrayType(type);
+	}
 
     /*
      * Returns the last parameter index
