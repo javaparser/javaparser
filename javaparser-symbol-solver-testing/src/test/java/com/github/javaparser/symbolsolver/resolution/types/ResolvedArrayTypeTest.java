@@ -58,7 +58,7 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 	@Test
 	// An array of primitive type can be assigned another array of primitive type
 	// if primitive type are the same.
-	void isAssignablePrimitiveType() {
+	void arrayOfPrimitiveIsAssignableByArrayOfSamePrimitiveType() {
 		assertTrue(array(ResolvedPrimitiveType.DOUBLE).isAssignableBy(array(ResolvedPrimitiveType.DOUBLE)));
 		assertTrue(array(ResolvedPrimitiveType.FLOAT).isAssignableBy(array(ResolvedPrimitiveType.FLOAT)));
 		assertTrue(array(ResolvedPrimitiveType.LONG).isAssignableBy(array(ResolvedPrimitiveType.LONG)));
@@ -69,7 +69,7 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	void isNotAssignablePrimitiveType() {
+	void arrayOfPrimitiveIsNotAssignableByArrayOfDifferentPrimitiveType() {
 		assertFalse(isAssignableBy(array(ResolvedPrimitiveType.DOUBLE),
 				arrays(ResolvedPrimitiveType.FLOAT, ResolvedPrimitiveType.LONG, ResolvedPrimitiveType.INT,
 						ResolvedPrimitiveType.BYTE, ResolvedPrimitiveType.SHORT, ResolvedPrimitiveType.CHAR)));
@@ -94,7 +94,9 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	void isNotAssignablePrimitiveTypeAndBoxedType() {
+	// An array of primitive type cannot be assigned to a Boxed type variable,
+	// because Boxed type is a class type other than Object
+	void arrayOfPrimitiveIsNotAssignableByArrayOfBoxedType() {
 		assertFalse(array(ResolvedPrimitiveType.DOUBLE).isAssignableBy(array(rDouble)));
 		assertFalse(array(ResolvedPrimitiveType.FLOAT).isAssignableBy(array(rFloat)));
 		assertFalse(array(ResolvedPrimitiveType.LONG).isAssignableBy(array(rLong)));
@@ -105,7 +107,7 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	void isAssignableWithNullType() {
+	void arrayOfPrimitiveIsAssignableByNullType() {
 		assertTrue(array(ResolvedPrimitiveType.DOUBLE).isAssignableBy(NullType.INSTANCE));
 		assertTrue(array(ResolvedPrimitiveType.FLOAT).isAssignableBy(NullType.INSTANCE));
 		assertTrue(array(ResolvedPrimitiveType.LONG).isAssignableBy(NullType.INSTANCE));
@@ -118,7 +120,7 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 	@Test
 	// An array can be assigned only to a variable of a compatible array type, or to
 	// a variable of type Object, Cloneable or java.io.Serializable.
-	void isAssignableWithObject() {
+	void objectIsAssignableByAnyArrayOfPrimitiveTypeOrReference() {
 		assertTrue(rObject.isAssignableBy(array(ResolvedPrimitiveType.DOUBLE)));
 		assertTrue(rObject.isAssignableBy(array(ResolvedPrimitiveType.FLOAT)));
 		assertTrue(rObject.isAssignableBy(array(ResolvedPrimitiveType.LONG)));
@@ -130,7 +132,7 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	void isAssignableWithCloneable() {
+	void cloneableIsAssignableByAnyArrayOfPrimitiveTypeOrReference() {
 		assertTrue(rCloneable.isAssignableBy(array(ResolvedPrimitiveType.DOUBLE)));
 		assertTrue(rCloneable.isAssignableBy(array(ResolvedPrimitiveType.FLOAT)));
 		assertTrue(rCloneable.isAssignableBy(array(ResolvedPrimitiveType.LONG)));
@@ -142,7 +144,7 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	void isAssignableWithSerializable() {
+	void serializableIsAssignableByAnyArrayOfPrimitiveTypeOrReference() {
 		assertTrue(rSerializable.isAssignableBy(array(ResolvedPrimitiveType.DOUBLE)));
 		assertTrue(rSerializable.isAssignableBy(array(ResolvedPrimitiveType.FLOAT)));
 		assertTrue(rSerializable.isAssignableBy(array(ResolvedPrimitiveType.LONG)));
@@ -154,16 +156,23 @@ class ResolvedArrayTypeTest extends AbstractResolutionTest {
 	}
 
 	@Test
-	void isAssignableWithReference() {
+	void arrayOfSubTypeIsAssignableByArrayOfSuperType() {
 		assertTrue(array(rCharSequence).isAssignableBy(array(rString)));
 	}
 
 	@Test
-	void isNotAssignableWithreference() {
+	void arrayOfReferenceIsNotAssignableByArrayOfOtherReference() {
 		assertFalse(array(rString).isAssignableBy(array(rCharSequence)));
-		// An array of primitive type cannot be assigned to a Boxed type variable,
-		// because Boxed type is a class type other than Object
-		assertFalse(array(ResolvedPrimitiveType.LONG).isAssignableBy(rLong));
+	}
+
+	@Test
+	void arrayOfObjectIsAssignableByArrayOfReference() {
+		assertTrue(array(rObject).isAssignableBy(array(rLong)));
+	}
+
+	@Test
+	void arrayOfObjectIsNotAssignableByArrayOfPrimitiveType() {
+		assertFalse(array(rObject).isAssignableBy(array(ResolvedPrimitiveType.LONG)));
 	}
 
 	private boolean isAssignableBy(ResolvedType type, ResolvedType... types) {

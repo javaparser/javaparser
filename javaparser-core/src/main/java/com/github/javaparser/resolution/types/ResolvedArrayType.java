@@ -94,11 +94,10 @@ public class ResolvedArrayType implements ResolvedType {
 			if (baseType.isPrimitive() && other.asArrayType().getComponentType().isPrimitive()) {
 				return baseType.equals(other.asArrayType().getComponentType());
 			}
-			// an array of Object is assignable by any array of primitive type
-			// but an array of primitive type is not assignable by an array of boxed type nor the reverse
-			if (!isJavaLangObject(baseType)
-					&& ((baseType.isPrimitive() && other.asArrayType().getComponentType().isReferenceType())
-							|| (baseType.isReferenceType() && other.asArrayType().getComponentType().isPrimitive()))) {
+			// An array of primitive type is not assignable by an array of boxed type nor the reverse
+			// An array of primitive type cannot be assigned to an array of Object
+			if ((baseType.isPrimitive() && other.asArrayType().getComponentType().isReferenceType())
+							|| (baseType.isReferenceType() && other.asArrayType().getComponentType().isPrimitive())) {
 				return false;
 			}
 			// An array can be assigned only to a variable of a compatible array type, or to
@@ -107,10 +106,6 @@ public class ResolvedArrayType implements ResolvedType {
 		}
 		return false;
 	}
-
-    private boolean isJavaLangObject(ResolvedType type) {
-    	return type.isReferenceType() && type.asReferenceType().isJavaLangObject();
-    }
 
     @Override
     public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
