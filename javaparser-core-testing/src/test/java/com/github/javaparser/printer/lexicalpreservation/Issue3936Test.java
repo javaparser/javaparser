@@ -28,7 +28,7 @@ import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import org.junit.jupiter.api.Test;
 
 public class Issue3936Test extends AbstractLexicalPreservingTest {
-	static final String given = "package eu.solven.cleanthat.engine.java.refactorer.cases.do_not_format_me;\n"
+	static final String given = "package some.project;\n"
 			+ "\n"
 			+ "import java.util.Optional;\n"
 			+ "\n"
@@ -48,7 +48,7 @@ public class Issue3936Test extends AbstractLexicalPreservingTest {
     void test() {
 		considerCode(given);
 
-		String newText = "firstRow\nsecondRow\nthirdRow";
+		String newText = "\tfirstRow\n\tsecondRow\n\tthirdRow";
 
 		LexicalPreservingPrinter.setup(cu);
 
@@ -56,16 +56,16 @@ public class Issue3936Test extends AbstractLexicalPreservingTest {
 		expr.setInitializer(new TextBlockLiteralExpr(newText));
 
 		String actual = LexicalPreservingPrinter.print(cu);
-		String expected ="package eu.solven.cleanthat.engine.java.refactorer.cases.do_not_format_me;\n"
+		String expected ="package some.project;\n"
 				+ "\n"
 				+ "import java.util.Optional;\n"
 				+ "\n"
 				+ "public class SomeClass {\n"
 				+ "\n"
 				+ "	String html = \"\"\"\n"
-				+ "firstRow\n"
-				+ "secondRow\n"
-				+ "thirdRow\"\"\";\n"
+				+ "\tfirstRow\n"
+				+ "\tsecondRow\n"
+				+ "\tthirdRow\"\"\";\n"
 				+ "}";
 		assertEqualsStringIgnoringEol(expected, actual);
     }
