@@ -31,7 +31,7 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
 public class Issue3937Test extends AbstractLexicalPreservingTest {
-	static final String given = "package eu.solven.cleanthat.code_provider.inmemory;\n" + "\n"
+	static final String given = "package custom.project;\n" + "\n"
 			+ "import java.util.stream.Stream;\n"
 			+ "\n"
 			+ "class TestFileSystemCodeProvider {\n"
@@ -57,7 +57,7 @@ public class Issue3937Test extends AbstractLexicalPreservingTest {
 		lambdaExpr.setBody(new ExpressionStmt(exprStmt.getExpression()));
 
 		String actual = LexicalPreservingPrinter.print(cu);
-		String expected = "package eu.solven.cleanthat.code_provider.inmemory;\n" + "\n"
+		String expected = "package custom.project;\n" + "\n"
 				+ "import java.util.stream.Stream;\n"
 				+ "\n"
 				+ "class TestFileSystemCodeProvider {\n"
