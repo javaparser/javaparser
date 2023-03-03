@@ -26,9 +26,9 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEo
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.stmt.Statement;
 
 public class Issue3937Test extends AbstractLexicalPreservingTest {
 	static final String given = "package custom.project;\n" + "\n"
@@ -51,19 +51,17 @@ public class Issue3937Test extends AbstractLexicalPreservingTest {
 		LexicalPreservingPrinter.setup(cu);
 
 		LambdaExpr lambdaExpr = cu.findFirst(LambdaExpr.class).get();
-		Statement body = lambdaExpr.getBody();
-		BlockStmt lambdaBLockStmt = (BlockStmt) body;
-		ExpressionStmt exprStmt = (ExpressionStmt) lambdaBLockStmt.getStatement(0);
-		lambdaExpr.setBody(new ExpressionStmt(exprStmt.getExpression()));
+		lambdaExpr.setBody(new ExpressionStmt(new MethodCallExpr(new NameExpr("SomeClass"), "someMethod")));
 
 		String actual = LexicalPreservingPrinter.print(cu);
-		String expected = "package custom.project;\n" + "\n"
+		String expected = "package custom.project;\n"
+				+ "\n"
 				+ "import java.util.stream.Stream;\n"
 				+ "\n"
 				+ "class TestFileSystemCodeProvider {\n"
 				+ "	void testInMemoryFileSystem() {\n"
 				+ "\n"
-				+ "		Stream.of(\"\").listFilesForContent(file -> System.out.println(s));\n"
+				+ "		Stream.of(\"\").listFilesForContent(file -> SomeClass.someMethod());\n"
 				+ "	}\n"
 				+ "}\n"
 				+ "";
