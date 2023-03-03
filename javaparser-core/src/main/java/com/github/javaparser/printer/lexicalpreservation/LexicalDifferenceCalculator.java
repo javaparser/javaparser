@@ -25,9 +25,12 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.Stringable;
@@ -187,6 +190,9 @@ class LexicalDifferenceCalculator {
             Node child;
             if (change instanceof PropertyChange && ((PropertyChange) change).getProperty() == csmSingleReference.getProperty()) {
                 child = (Node) ((PropertyChange) change).getNewValue();
+            	if (node instanceof LambdaExpr && child instanceof ExpressionStmt) {
+            		child = ((ExpressionStmt) child).getExpression();
+            	}
             } else {
                 child = csmSingleReference.getProperty().getValueAsSingleReference(node);
             }
@@ -261,7 +267,7 @@ class LexicalDifferenceCalculator {
             CsmConditional csmConditional = (CsmConditional) csm;
             boolean satisfied = change.evaluate(csmConditional, node);
             if (satisfied) {
-                calculatedSyntaxModelForNode(csmConditional.getThenElement(), node, elements, change);
+            	calculatedSyntaxModelForNode(csmConditional.getThenElement(), node, elements, change);
             } else {
                 calculatedSyntaxModelForNode(csmConditional.getElseElement(), node, elements, change);
             }
