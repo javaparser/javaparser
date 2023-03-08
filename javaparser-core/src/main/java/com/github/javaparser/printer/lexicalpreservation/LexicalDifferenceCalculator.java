@@ -190,6 +190,7 @@ class LexicalDifferenceCalculator {
             if (change instanceof PropertyChange && ((PropertyChange) change).getProperty() == csmSingleReference.getProperty()) {
                 child = (Node) ((PropertyChange) change).getNewValue();
             	if (node instanceof LambdaExpr && child instanceof ExpressionStmt) {
+                    // Same edge-case as in DefaultPrettyPrinterVisitor.visit(LambdaExpr, Void) 
             		child = ((ExpressionStmt) child).getExpression();
             	}
             } else {
@@ -266,7 +267,7 @@ class LexicalDifferenceCalculator {
             CsmConditional csmConditional = (CsmConditional) csm;
             boolean satisfied = change.evaluate(csmConditional, node);
             if (satisfied) {
-            	calculatedSyntaxModelForNode(csmConditional.getThenElement(), node, elements, change);
+                calculatedSyntaxModelForNode(csmConditional.getThenElement(), node, elements, change);
             } else {
                 calculatedSyntaxModelForNode(csmConditional.getElseElement(), node, elements, change);
             }
