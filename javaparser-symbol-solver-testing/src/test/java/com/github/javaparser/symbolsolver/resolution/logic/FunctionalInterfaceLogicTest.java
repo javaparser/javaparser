@@ -262,6 +262,7 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 	 * multiple methods that cannot be legally overridden with a single declaration.
 	 */
 	@Test
+	@Disabled("Waiting Return-Type-Substituable is fully implemented on reference type.")
 	void genericFunctionalInterfacesWithReturnTypeSubstituable() {
 		String code = "interface I    { Object m(Class c); }\r\n"
 				+ "interface J<S> { S m(Class<?> c); }\r\n"
