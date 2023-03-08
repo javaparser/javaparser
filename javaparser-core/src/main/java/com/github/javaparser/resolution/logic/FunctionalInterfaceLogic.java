@@ -77,9 +77,6 @@ public final class FunctionalInterfaceLogic {
         }
         Iterator<MethodUsage> iterator = methods.iterator();
         MethodUsage methodUsage = iterator.next();
-        if (methods.size() == 1) {
-            return Optional.of(methodUsage);
-        }
         while (iterator.hasNext()) {
         	MethodUsage otherMethodUsage = iterator.next();
         	if (!(methodUsage.isSameSignature(otherMethodUsage)

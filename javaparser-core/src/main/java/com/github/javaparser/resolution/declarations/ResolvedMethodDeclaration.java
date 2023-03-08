@@ -81,10 +81,18 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
     	// If R1 is a reference type then one of the following is true:
 
     	// R1, adapted to the type parameters of d2 (§8.4.4), is a subtype of R2.
+    	// Below we are trying to compare a reference type for example an Object to a type variable let's say T
+    	// we can certainly simplify by saying that this is always true.
+    	if (otherResolvedType.isTypeVariable()) {
+    		return true;
+    	}
 
     	// R1 can be converted to a subtype of R2 by unchecked conversion (§5.1.9).
 
     	// d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
+    	if (returnType.describe().equals(otherResolvedType.erasure().describe())) {
+    		return true;
+    	}
     	throw new UnsupportedOperationException("Return-Type-Substituable must be implemented on reference type.");
     }
 }

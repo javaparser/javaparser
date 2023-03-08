@@ -294,11 +294,13 @@ class LexicalDifferenceCalculator {
                 elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL, "\"" + ((StringLiteralExpr) node).getValue() + "\""));
             }
         } else if ((csm instanceof CsmString) && (node instanceof TextBlockLiteralExpr)) {
-            // FIXME: csm should be CsmTextBlock -- See also #2677
+            // Per https://openjdk.java.net/jeps/378#1--Line-terminators, any 'CRLF' and 'CR' are turned into 'LF' before interpreting the text
+        	String eol = node.getLineEndingStyle().toString();
+        	// FIXME: csm should be CsmTextBlock -- See also #2677
             if (change instanceof PropertyChange) {
-                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + ((PropertyChange) change).getNewValue() + "\"\"\""));
+                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + eol + ((PropertyChange) change).getNewValue() + "\"\"\""));
             } else {
-                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + ((TextBlockLiteralExpr) node).getValue() + "\"\"\""));
+                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + eol + ((TextBlockLiteralExpr) node).getValue() + "\"\"\""));
             }
         } else if ((csm instanceof CsmChar) && (node instanceof CharLiteralExpr)) {
             if (change instanceof PropertyChange) {
