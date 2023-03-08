@@ -191,7 +191,7 @@ class LexicalDifferenceCalculator {
                 child = (Node) ((PropertyChange) change).getNewValue();
             	if (node instanceof LambdaExpr && child instanceof ExpressionStmt) {
                     // Same edge-case as in DefaultPrettyPrinterVisitor.visit(LambdaExpr, Void) 
-            		child = ((ExpressionStmt) child).getExpression();
+            	    child = ((ExpressionStmt) child).getExpression();
             	}
             } else {
                 child = csmSingleReference.getProperty().getValueAsSingleReference(node);
