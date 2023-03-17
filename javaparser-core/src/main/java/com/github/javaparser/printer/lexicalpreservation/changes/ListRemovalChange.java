@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
-import java.util.Optional;
 
 /**
  * The removal of an element from a list.
@@ -64,4 +64,9 @@ public class ListRemovalChange implements Change {
             return new NoChange().getValue(property, node);
         }
     }
+
+    @Override
+	public ObservableProperty getProperty() {
+		return observableProperty;
+	}
 }
