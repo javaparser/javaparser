@@ -45,7 +45,7 @@ jobs:
     steps:
       ## Checkout the current version of the code from the repo.
       - name: Checkout latest code
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3.4.0
         with:
           fetch-depth: "0"
 
@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout latest code
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3.4.0
         with:
           fetch-depth: "0"
       - name: Set up JDK 11
