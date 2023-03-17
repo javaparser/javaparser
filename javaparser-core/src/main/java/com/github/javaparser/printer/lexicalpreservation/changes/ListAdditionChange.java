@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
-import java.util.Optional;
 
 /**
  * The Addition of an element to a list.
@@ -66,4 +66,9 @@ public class ListAdditionChange implements Change {
             return new NoChange().getValue(property, node);
         }
     }
+
+	@Override
+	public ObservableProperty getProperty() {
+		return observableProperty;
+	}
 }
