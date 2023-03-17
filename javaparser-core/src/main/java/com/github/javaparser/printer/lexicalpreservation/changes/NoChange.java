@@ -32,4 +32,9 @@ public class NoChange implements Change {
     public Object getValue(ObservableProperty property, Node node) {
         return property.getRawValue(node);
     }
+
+    @Override
+	public ObservableProperty getProperty() {
+		return null;
+	}
 }

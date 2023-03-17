@@ -39,11 +39,69 @@ public interface Change {
             case IS_EMPTY:
                 return Utils.valueIsNullOrEmpty(getValue(csmConditional.getProperty(), node));
             case IS_PRESENT:
-                return !Utils.valueIsNullOrEmptyStringOrOptional(getValue(csmConditional.getProperty(), node));
+                return !Utils.valueIsNullOrEmptyStringOrOptional(getValue(csmConditional.getProperty(), node))
+                		&& !isEvaluatedOnDerivedProperty(csmConditional.getProperty());
             default:
                 throw new UnsupportedOperationException("" + csmConditional.getProperty() + " " + csmConditional.getCondition());
         }
     }
+
+	/*
+	 * Evaluate on derived property.
+	 *
+	 * Currently the evaluation of the conditions is carried out in relation to the
+	 * presence of value in the attributes of a class but this is not quite correct.
+	 *
+	 * Indeed, there are attributes that are derived. The meaning of a derived
+	 * attribute (annotated with the DerivedProperty annotation) is not very clear.
+	 *
+	 * Assuming that it is an existing attribute and accessible by another property,
+	 * for example this is the case for the EXPRESSION_BODY property which allows
+	 * access to a derived field (which is also accessible by the BODY property).
+	 *
+	 * The 2 properties EXPRESSION_BODY and BODY have a different meaning because
+	 * one references a simple expression while the other references a list of
+	 * expressions (this distinction is particularly interesting in the case of
+	 * lambda expressions).
+	 *
+	 * In this particular case, the verification of the condition must not succeed
+	 * if the nature of the property is modified. So if we modify a lamba expression
+	 * composed of a single expression by replacing it with a list of expressions,
+	 * the evaluation of a condition relating to the presence of the EXPRESSION_BODY
+	 * property, which makes it possible to determine the nature of the change,
+	 * cannot not lead to a verified proposition which could be the case if we only
+	 * consider that the field referenced by the EXPRESSION_BODY property has an
+	 * acceptable value before the actual modification.
+	 *
+	 * This is why we also check if it is a derived property whose name coincides
+	 * with the updated property. If this is the case, we admit that the
+	 * verification of the condition must fail so that we can execute the else
+	 * clause of the condition. I'm not sure this issue #3949 is completely resolved by
+	 * this change.
+	 */
+    default boolean isEvaluatedOnDerivedProperty(ObservableProperty property) {
+    	ObservableProperty currentProperty = getProperty();
+		/*
+		 * Assuming that by convention the derived property is suffixed with the name of
+		 * the property it derives from (e.g. EXPRESSION_BODY which matches an
+		 * expression would derive from BODY which matches a list of expressions), we
+		 * could deduce that EXPRESSION_BODY and BODY actually represent the same
+		 * field but the validation condition must not be checked.
+		 * Be careful because NoChange property must not affect this evaluation.
+		 */
+    	return currentProperty != null
+    			&& (property.isDerived()
+    					&& property.name().endsWith(currentProperty.name()));
+    }
+
+	/*
+	 * Assuming that by convention the derived property is suffixed
+	 * with the name of the property it derives from (e.g. EXPRESSION_BODY which
+	 * matches an expression vs a list of expressions would derive from BODY) We
+	 * could deduce that EXPRESSION_BODY and BODY actually represent the same
+	 * property but the validation condition is not checked.
+	 */
+    ObservableProperty getProperty();
 
     Object getValue(ObservableProperty property, Node node);
 }
