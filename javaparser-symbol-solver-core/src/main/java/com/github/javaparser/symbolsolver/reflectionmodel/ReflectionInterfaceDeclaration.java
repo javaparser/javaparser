@@ -27,7 +27,7 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.logic.ConfilictingGenericTypesException;
+import com.github.javaparser.resolution.logic.ConflictingGenericTypesException;
 import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
@@ -167,7 +167,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
                 }
                 methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
                 return Optional.of(methodUsage);
-            } catch (ConfilictingGenericTypesException e) {
+            } catch (ConflictingGenericTypesException e) {
                 return Optional.empty();
             }
         } else {

@@ -90,7 +90,7 @@ public class InferenceContext {
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
                     List<ResolvedType> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
                     if (correspondingActualType.isEmpty()) {
-                        throw new ConfilictingGenericTypesException(formalType, actualType);
+                        throw new ConflictingGenericTypesException(formalType, actualType);
                     }
                     correspondingFormalType = correspondingActualType;
 
