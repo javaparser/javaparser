@@ -1,7 +1,7 @@
 
-Next Release (Version 3.25.2-snapshot)
-------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/198?closed=1)
+Next Release (Version 3.25.3-snapshot)
+--------------------------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/199?closed=1)
 
 ### Added
 ### Changed
@@ -10,6 +10,37 @@ Next Release (Version 3.25.2-snapshot)
 ### Fixed
 ### Security
 
+Version 3.25.2
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/198?closed=1)
+
+### Changed
+
+* chore(deps): bump maven-scm-plugin from 1.13.0 to 2.0.0 (PR [#3961](https://github.com/javaparser/javaparser/pull/3961) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 10.8.1 to 10.9.1 (PR [#3958](https://github.com/javaparser/javaparser/pull/3958) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump actions/checkout from 3.3.0 to 3.4.0 (PR [#3954](https://github.com/javaparser/javaparser/pull/3954) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Fixed
+
+* Fix: issue 3947 MANIFEST.MF points to non-existent URL (PR [#3966](https://github.com/javaparser/javaparser/pull/3966) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3951 ConfilictingGenericTypesException is thrown when an Object type is expected as a parameter and an interface is provided as the actual parameter (PR [#3963](https://github.com/javaparser/javaparser/pull/3963) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3949 LexicalPreservingPrinter Ignores Changes to LambdaExp… (PR [#3959](https://github.com/javaparser/javaparser/pull/3959) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Unit test since Return-Type-Substituable is fully implemented on reference type (PR [#3943](https://github.com/javaparser/javaparser/pull/3943) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue on FunctionalInterfaceLogic but waiting for Return-Type-Su… (PR [#3941](https://github.com/javaparser/javaparser/pull/3941) by [@jlerbsc](https://github.com/jlerbsc))
+* Suggested fix: hardcoded specific LambdaExpr case in LexicalDifferenc… (PR [#3938](https://github.com/javaparser/javaparser/pull/3938) by [@blacelle](https://github.com/blacelle))
+* Fix TextBlockLiteralExpr in LexicalDifferenceCalculator (PR [#3937](https://github.com/javaparser/javaparser/pull/3937) by [@blacelle](https://github.com/blacelle))
+* Fix: issue 3919 An array of primitive type cannot be assigned to an array of object (PR [#3933](https://github.com/javaparser/javaparser/pull/3933) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): update actions/checkout action to v3.5.0 (PR [#3953](https://github.com/javaparser/javaparser/pull/3953) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@blacelle](https://github.com/blacelle)
+* [@jlerbsc](https://github.com/jlerbsc)
 
 
 Version 3.25.1
