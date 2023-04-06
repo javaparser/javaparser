@@ -14,7 +14,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<logback_version>1.4.4</logback_version>
+		<logback_version>1.4.6</logback_version>
 	</properties>
 
 	<dependencies>
