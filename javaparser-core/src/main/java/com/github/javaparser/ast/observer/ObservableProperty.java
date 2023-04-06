@@ -20,15 +20,15 @@
  */
 package com.github.javaparser.ast.observer;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.utils.Utils;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.utils.Utils;
 
 /**
  * Properties considered by the AstObserver
@@ -310,14 +310,7 @@ public enum ObservableProperty {
     }
 
     public boolean isNullOrNotPresent(Node node) {
-        Object result = getRawValue(node);
-        if (result == null) {
-            return true;
-        }
-        if (result instanceof Optional) {
-            return !((Optional) result).isPresent();
-        }
-        return false;
+    	return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
     }
 
     public boolean isNullOrEmpty(Node node) {

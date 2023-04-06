@@ -26,7 +26,7 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.logic.ConfilictingGenericTypesException;
+import com.github.javaparser.resolution.logic.ConflictingGenericTypesException;
 import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
@@ -189,23 +189,23 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
                 ResolvedType formalType = methodUsage.getParamType(i);
                 // We need to replace the class type typeParametersValues (while we derive the method ones)
 
-                parameters.add(inferenceContext.addPair(formalType, actualType));
-                i++;
-            }
-            try {
-                ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
-                for (int j = 0; j < parameters.size(); j++) {
-                    methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
-                }
-                methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
-                return Optional.of(methodUsage);
-            } catch (ConfilictingGenericTypesException e) {
-                return Optional.empty();
-            }
-        } else {
-            return res;
+            parameters.add(inferenceContext.addPair(formalType, actualType));
+            i++;
         }
+        try {
+          ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
+            for (int j=0;j<parameters.size();j++) {
+                methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
+            }
+            methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
+            return Optional.of(methodUsage);
+        } catch (ConflictingGenericTypesException e) {
+            return Optional.empty();
+        }
+    } else {
+        return res;
     }
+}
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {

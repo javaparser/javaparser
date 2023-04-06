@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import java.util.*;
+
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -37,8 +39,6 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.utils.Pair;
-
-import java.util.*;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
 
@@ -337,10 +337,16 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 ResolvedType expectedType =
                         methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
                 // the varargs corresponding type can be either T or Array<T>
+                // for example
+                // Arrays.aslist(int[]{1}) must returns List<int[]>
+                // but Arrays.aslist(String[]{""}) must returns List<String>
+                // May be the result depends on the component type of the array
+                ResolvedType lastActualParamType =
+                        actualParamTypes.get(actualParamTypes.size() - 1);
                 ResolvedType actualType =
-                        actualParamTypes.get(actualParamTypes.size() - 1).isArray() ?
-                                actualParamTypes.get(actualParamTypes.size() - 1).asArrayType().getComponentType() :
-                                actualParamTypes.get(actualParamTypes.size() - 1);
+                		lastActualParamType.isArray() && lastActualParamType.asArrayType().getComponentType().isReferenceType() ?
+                				lastActualParamType.asArrayType().getComponentType() :
+                					lastActualParamType;
                 if (!expectedType.isAssignableBy(actualType)) {
                     for (ResolvedTypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);
@@ -417,7 +423,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.getSolvedJavaLangObject();
                 type = new ReferenceTypeImpl(resolvedTypedeclaration);
             }
-            if (!type.isTypeVariable() && !type.isReferenceType()) {
+            if (!type.isTypeVariable() && !type.isReferenceType() && !type.isArray()) {
                 throw new UnsupportedOperationException(type.getClass().getCanonicalName());
             }
             matchedTypeParameters.put(expectedType.asTypeParameter(), type);

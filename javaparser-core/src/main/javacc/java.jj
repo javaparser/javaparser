@@ -913,14 +913,14 @@ TOKEN :
           // starts off with unicode backslash
           ("\\u005" ["c", "C"]
               // regular escape sequences
-              (["n","t","b","r","f","\\","'","\""]
+              (["s","n","t","b","r","f","\\","'","\""]
                   // escapes another unicode backslash
                   | ("\\u005" ["c", "C"])))
        |
           ( // TODO: Could these escape sequences be extracted out?
               "\\"
               (
-                  ["n","t","b","r","f","\\","'","\""]
+                  ["s","n","t","b","r","f","\\","'","\""]
                |
                   ["0"-"7"] ( ["0"-"7"] )?
                |
@@ -986,7 +986,7 @@ TOKEN :
           ( // TODO: Could these escape sequences be extracted out?
               "\\"
               (
-                  ["n","t","b","r","f","\\","'","\""]
+                  ["s","n","t","b","r","f","\\","'","\""]
                |
                   ["0"-"7"] ( ["0"-"7"] )?
                |
@@ -1449,11 +1449,12 @@ PackageDeclaration PackageDeclaration():
 {
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     Name name;
-    JavaToken begin;
+    JavaToken begin = INVALID;
+	AnnotationExpr ann;
 }
 {
-    annotations = Annotations()
-    "package" {begin = token();}  name = Name() ";"
+	( ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); } )*
+    "package" {begin = orIfInvalid(begin, token());}  name = Name() ";"
     { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
 

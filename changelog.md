@@ -1,6 +1,7 @@
-Next Release (Version 3.25.1)
-------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/197?closed=1)
+
+Next Release (Version 3.25.3-snapshot)
+--------------------------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/199?closed=1)
 
 ### Added
 
@@ -13,6 +14,82 @@ Next Release (Version 3.25.1)
 ### Fixed
 
 ### Security
+
+Version 3.25.2
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/198?closed=1)
+
+### Changed
+
+* chore(deps): bump maven-scm-plugin from 1.13.0 to 2.0.0 (PR [#3961](https://github.com/javaparser/javaparser/pull/3961) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 10.8.1 to 10.9.1 (PR [#3958](https://github.com/javaparser/javaparser/pull/3958) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump actions/checkout from 3.3.0 to 3.4.0 (PR [#3954](https://github.com/javaparser/javaparser/pull/3954) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Fixed
+
+* Fix: issue 3947 MANIFEST.MF points to non-existent URL (PR [#3966](https://github.com/javaparser/javaparser/pull/3966) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3951 ConfilictingGenericTypesException is thrown when an Object type is expected as a parameter and an interface is provided as the actual parameter (PR [#3963](https://github.com/javaparser/javaparser/pull/3963) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3949 LexicalPreservingPrinter Ignores Changes to LambdaExp… (PR [#3959](https://github.com/javaparser/javaparser/pull/3959) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Unit test since Return-Type-Substituable is fully implemented on reference type (PR [#3943](https://github.com/javaparser/javaparser/pull/3943) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue on FunctionalInterfaceLogic but waiting for Return-Type-Su… (PR [#3941](https://github.com/javaparser/javaparser/pull/3941) by [@jlerbsc](https://github.com/jlerbsc))
+* Suggested fix: hardcoded specific LambdaExpr case in LexicalDifferenc… (PR [#3938](https://github.com/javaparser/javaparser/pull/3938) by [@blacelle](https://github.com/blacelle))
+* Fix TextBlockLiteralExpr in LexicalDifferenceCalculator (PR [#3937](https://github.com/javaparser/javaparser/pull/3937) by [@blacelle](https://github.com/blacelle))
+* Fix: issue 3919 An array of primitive type cannot be assigned to an array of object (PR [#3933](https://github.com/javaparser/javaparser/pull/3933) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): update actions/checkout action to v3.5.0 (PR [#3953](https://github.com/javaparser/javaparser/pull/3953) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@blacelle](https://github.com/blacelle)
+* [@jlerbsc](https://github.com/jlerbsc)
+
+
+Version 3.25.1
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/197?closed=1)
+
+### API or Behaviour Change
+
+* Fix: Issue 3045 Unexpected exception when solving type inside an Anonymous class (PR [#3896](https://github.com/javaparser/javaparser/pull/3896) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Added
+
+* Improved search for functional interfaces (PR [#3894](https://github.com/javaparser/javaparser/pull/3894) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Changed
+
+* chore(deps): bump maven-compiler-plugin from 3.10.1 to 3.11.0 (PR [#3928](https://github.com/javaparser/javaparser/pull/3928) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 10.7.0 to 10.8.0 (PR [#3927](https://github.com/javaparser/javaparser/pull/3927) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump versions-maven-plugin from 2.14.2 to 2.15.0 (PR [#3914](https://github.com/javaparser/javaparser/pull/3914) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-javadoc-plugin from 3.4.1 to 3.5.0 (PR [#3906](https://github.com/javaparser/javaparser/pull/3906) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Refactor: cleanup/refactor code after fixing #3859 (PR [#3886](https://github.com/javaparser/javaparser/pull/3886) by [@abego](https://github.com/abego))
+
+### Fixed
+
+* Fix: issue 3924 Removing ImportDeclaration with Annotated package thr… (PR [#3926](https://github.com/javaparser/javaparser/pull/3926) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3918 JavaParserTypeDeclarationAdapter resolving wrong Type via Ancestor (PR [#3921](https://github.com/javaparser/javaparser/pull/3921) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3919 ResolvedType::isAssignableBy(ResolvedType) is wrong f… (PR [#3920](https://github.com/javaparser/javaparser/pull/3920) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3911 java.lang.UnsupportedOperationException: T[] while resolving generic method with type parameter with arrays like List<T[]> (PR [#3917](https://github.com/javaparser/javaparser/pull/3917) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: \s escape gives lexical error but should be valid since Java 15 (PR [#3903](https://github.com/javaparser/javaparser/pull/3903) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Issue 3045 Unexpected exception when solving type inside an Anonymous class (PR [#3896](https://github.com/javaparser/javaparser/pull/3896) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue 1883 Finding lambda return type (PR [#3890](https://github.com/javaparser/javaparser/pull/3890) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 1815 ArrayIndexOutOfBoundsException when resolving lambda parameter. This fix is offered by Blackgen (PR [#3888](https://github.com/javaparser/javaparser/pull/3888) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump checkstyle from 10.6.0 to 10.7.0 (PR [#3885](https://github.com/javaparser/javaparser/pull/3885) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@abego](https://github.com/abego)
+* [@jlerbsc](https://github.com/jlerbsc)
+
 
 Version 3.25.0
 --------------

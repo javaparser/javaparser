@@ -25,9 +25,9 @@ import com.github.javaparser.resolution.types.ResolvedType;
 /**
  * @author Federico Tomassetti
  */
-public class ConfilictingGenericTypesException extends RuntimeException {
+public class ConflictingGenericTypesException extends RuntimeException {
 
-    public ConfilictingGenericTypesException(ResolvedType formalType, ResolvedType actualType) {
+    public ConflictingGenericTypesException(ResolvedType formalType, ResolvedType actualType) {
         super(String.format("No matching between %s (formal) and %s (actual)", formalType, actualType));
     }
 }
