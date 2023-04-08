@@ -20,8 +20,16 @@
  */
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.AssignExpr.Operator;
@@ -44,12 +52,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-
-import java.util.Optional;
-import java.util.function.Consumer;
-
-import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * The declaration of a field in a class. "private static int a=15*15;" in this example: {@code class X { private static
@@ -124,17 +126,20 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      * @return modifiers
      * @see Modifier
      */
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -148,7 +153,8 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
@@ -231,6 +237,38 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
 
     public FieldDeclaration setVolatile(boolean set) {
         return setModifier(Modifier.Keyword.VOLATILE, set);
+    }
+
+    /*
+     * Every field declaration in the body of an interface is implicitly public, static, and final.
+     */
+    @Override
+    public boolean isStatic() {
+    	return hasModifier(STATIC) || isDeclaredInInterface();
+    }
+
+    /*
+     * Every field declaration in the body of an interface is implicitly public, static, and final.
+     */
+    @Override
+    public boolean isFinal() {
+    	return hasModifier(Keyword.FINAL) || isDeclaredInInterface();
+    }
+
+    /*
+     * Every field declaration in the body of an interface is implicitly public, static, and final.
+     */
+    @Override
+    public boolean isPublic() {
+    	return hasModifier(Keyword.PUBLIC) || isDeclaredInInterface();
+    }
+
+    /*
+     * Returns true if the field is declared in an interface
+     */
+    private boolean isDeclaredInInterface() {
+    	Optional<ClassOrInterfaceDeclaration> parentClass = findAncestor(ClassOrInterfaceDeclaration.class);
+    	return parentClass.map(parent -> parent.isInterface()).orElse(false);
     }
 
     @Override
