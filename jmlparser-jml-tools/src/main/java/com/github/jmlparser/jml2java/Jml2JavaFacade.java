@@ -6,11 +6,14 @@ import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.utils.Pair;
 
 import java.util.Stack;
 
 /**
+ * Transformation of JML expressions into equivalent Java code.
+ *
  * @author Alexander Weigl
  * @version 1 (04.10.22)
  */
@@ -22,10 +25,8 @@ public class Jml2JavaFacade {
         return new Pair<>(result, e);
     }
 
-    public BlockStmt translate(JmlContract expression) {
-        Jml2JavaTranslator j2jt = new Jml2JavaTranslator();
-        BlockStmt result = new BlockStmt();
-        return result;
+    public static BlockStmt embeddLoopInvariant(ForStmt stmt) {
+        return null;
     }
 
     public static boolean containsJmlExpression(Expression expression) {

@@ -447,6 +447,26 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
+     * Finds the first parent of the given class.
+     *
+     * @param clazz
+     * @param node
+     * @param <T>
+     * @return
+     * @author weigl
+     */
+    public <T extends Node> Optional<T> getParentNodeOfType(Class<T> clazz) {
+        Node cur = this;
+        while (cur.hasParentNode()) {
+            cur = cur.getParentNode().get();
+            if (clazz.isAssignableFrom(cur.getClass())) {
+                return Optional.of((T) cur);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
      * @deprecated Use {@link Position#ABSOLUTE_BEGIN_LINE}
      */
     @Deprecated

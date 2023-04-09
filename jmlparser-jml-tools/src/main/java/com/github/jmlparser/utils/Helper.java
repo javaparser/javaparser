@@ -1,6 +1,8 @@
 package com.github.jmlparser.utils;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.expr.LambdaExpr;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -34,4 +36,6 @@ public class Helper {
 
         return node;
     }
+
+
 }

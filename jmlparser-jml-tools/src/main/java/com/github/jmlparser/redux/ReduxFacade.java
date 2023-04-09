@@ -10,7 +10,7 @@ import java.util.ServiceLoader;
  * @author Alexander Weigl
  * @version 1 (12/29/21)
  */
-public class ReduxFacade {
+public class ReduxFacade  {
     private final List<Transformer> transformers = new ArrayList<>();
     private final ReduxConfig config;
 
@@ -25,7 +25,9 @@ public class ReduxFacade {
 
     public static ReduxFacade create(ReduxConfig config) {
         var sl = ServiceLoader.load(Transformer.class);
-        return new ReduxFacade(config, sl.stream().map(ServiceLoader.Provider::get).toList());
+        return new ReduxFacade(config, sl.stream()
+                .filter(it -> config.isEnabled(it.type().toString()))
+                .map(ServiceLoader.Provider::get).toList());
     }
 
     public List<? extends Node> apply(List<? extends Node> nodes) {
