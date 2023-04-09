@@ -1,11 +1,9 @@
 package com.github.jmlparser.utils;
 
+import com.github.javaparser.ast.Jmlish;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.LambdaExpr;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -37,5 +35,18 @@ public class Helper {
         return node;
     }
 
-
+    public static List<Node> findAllJmlContainers(Node cu) {
+        var queue = new LinkedList<Node>();
+        queue.add(cu);
+        List<Node> res = new ArrayList<>(128);
+        while (!queue.isEmpty()) {
+            var n = queue.pollLast();
+            if (n instanceof Jmlish) {
+                res.add(n);
+            } else {
+                queue.addAll(n.getChildNodes());
+            }
+        }
+        return res;
+    }
 }

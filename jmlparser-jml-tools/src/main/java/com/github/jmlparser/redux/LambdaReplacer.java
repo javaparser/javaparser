@@ -19,6 +19,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Replaces lambda expression by an internal named class.
+ * <p>
+ * Code was donated by Carsten Czisky @ciskar
+ */
 public class LambdaReplacer implements Transformer {
     private final NameGenerator nameGenerator;
 
@@ -76,9 +81,8 @@ public class LambdaReplacer implements Transformer {
 
         if (body instanceof BlockStmt bs) {
             var last = bs.getStatements().getLast();
-            returnType =
-                    last.map(it -> it.asReturnStmt().getExpression()
-                            .map(b -> b.calculateResolvedType().toString()));
+            returnType = last.flatMap(it -> it.asReturnStmt().getExpression())
+                    .map(b -> b.calculateResolvedType().toString()).orElse(null);
         }
 
         if (body instanceof ExpressionStmt es) {
@@ -99,10 +103,10 @@ public class LambdaReplacer implements Transformer {
             case 1 -> {
                 var firstParam = lambdaExpr.getParameters().getFirst().get().getTypeAsString();
                 if (returnType == null) {
-                    interfaze = "java.util.function.Consumer<$firstParam>";
+                    interfaze = "java.util.function.Consumer<" + firstParam + ">";
                     md.setName("get");
                 } else {
-                    interfaze = "java.util.function.Function<$firstParam, $returnType>";
+                    interfaze = "java.util.function.Function<" + firstParam + ", " + returnType + ">";
                     md.setName("invoke");
                 }
             }
@@ -111,7 +115,7 @@ public class LambdaReplacer implements Transformer {
                 var firstParam = lambdaExpr.getParameters().getFirst().map(Parameter::getTypeAsString).orElse(null);
                 var secondParam = lambdaExpr.getParameters().get(1).getTypeAsString();
                 if (returnType == null) {
-                    interfaze = "java.util.function.Consumer<$firstParam>";
+                    interfaze = "java.util.function.Consumer<" + firstParam + ">";
                     md.setName("get");
                 } else {
                     interfaze = "java.util.function.BiFunction<$firstParam, $secondParam, $returnType>";

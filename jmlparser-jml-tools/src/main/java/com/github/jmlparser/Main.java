@@ -8,11 +8,15 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Problem;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.jmlparser.jml2java.J2JCommand;
 import com.github.jmlparser.lint.JmlLintingConfig;
 import com.github.jmlparser.lint.JmlLintingFacade;
+import com.github.jmlparser.lint.LintCommand;
 import com.github.jmlparser.lint.LintProblem;
-import com.github.jmlparser.redux.ReduxConfig;
-import com.github.jmlparser.redux.ReduxFacade;
+import com.github.jmlparser.pp.PrettyPrintCommand;
+import com.github.jmlparser.stat.StatCommand;
+import com.github.jmlparser.wd.WdCommand;
+import com.github.jmlparser.xpath.XPathCommand;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,23 +31,42 @@ public class Main {
     private static final Args args = new Args();
 
     public static void main(String[] argv) {
-        JCommander.newBuilder()
+        final var j2j = new J2JCommand();
+        final var lint = new LintCommand();
+        final var pp = new PrettyPrintCommand();
+        final var stat = new StatCommand();
+        final var xpath = new XPathCommand();
+        final var wd = new WdCommand();
+        var jc = JCommander.newBuilder()
+                .addCommand(j2j)
+                .addCommand(lint)
+                .addCommand(pp)
+                .addCommand(stat)
+                .addCommand(xpath)
+                .addCommand(wd)
                 .addObject(args)
-                .build()
-                .parse(argv);
-        run();
-    }
+                .build();
+        jc.parse(argv);
 
-    private static void run() {
         ParserConfiguration config = createParserConfiguration(args);
-        Collection<? extends Node> nodes = parse(args.files, config);
-        if (args.lint) {
-            lint(nodes);
-        }
+        //Collection<? extends Node> nodes = parse(args.files, config);
 
-        if (args.transform) {
-            ReduxFacade pipeline = ReduxFacade.create(new ReduxConfig());
-            //TODO weigl writing to output directory
+        String parsedCmdStr = jc.getParsedCommand();
+        if (parsedCmdStr == null) {
+            System.err.println("Invalid command: " + parsedCmdStr);
+            jc.usage();
+        } else {
+            switch (parsedCmdStr) {
+                case "pp":
+                    pp.run();
+                    break;
+                case "wd":
+                    wd.run();
+                    break;
+                default:
+                    System.err.println("Invalid command: " + parsedCmdStr);
+                    jc.usage();
+            }
         }
     }
 
@@ -130,23 +153,14 @@ public class Main {
     }
 
     static class Args {
-        @Parameter
-        public boolean lint = true;
-
-        @Parameter
-        public boolean transform;
-
-        @Parameter
-        private final List<String> files = new ArrayList<>();
-
-        @Parameter()
-        private final List<String> activeJmlKeys = new ArrayList<>();
+        @Parameter(names = {"--jml-keys"})
+        private List<String> activeJmlKeys = new ArrayList<>();
 
 
         @Parameter(names = {"-verbose"}, description = "Level of verbosity")
-        private final Integer verbose = 1;
+        private Integer verbose = 1;
 
-        @Parameter()
-        private final boolean disableJml = false;
+        @Parameter(names = {"--disable-jml"})
+        private boolean disableJml = false;
     }
 }
