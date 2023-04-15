@@ -101,7 +101,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         KEY_BIGINT("BigInt", "_BI"),
         KEY_SEQ("SEQ", "_S"),
         KEY_FREE("Free", "_F"),
-        KEY_MAP("Double", "_D");
+        KEY_MAP("Map", "_M");
 
         final String nameOfBoxedType;
 
