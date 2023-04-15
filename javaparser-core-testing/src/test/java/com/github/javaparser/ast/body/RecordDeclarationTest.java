@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2013-2023 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.ast.body;
 
 import com.github.javaparser.ParserConfiguration;
@@ -16,10 +36,7 @@ import java.util.List;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RecordDeclarationTest {
 
@@ -272,6 +289,26 @@ public class RecordDeclarationTest {
         String s = "record Point(int x, int y) { static int z; }";
         CompilationUnit cu = TestParser.parseCompilationUnit(s);
         assertOneRecordDeclaration(cu);
+    }
+
+    @Test
+    void record_permitPublicStaticFieldInRecord1() {
+        String s = "public final record RecordPublicField() {" +
+                   "  public static final Object EMPTY = new Object();" +
+                   "}\n";
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        assertOneRecordDeclaration(cu);
+    }
+
+    @Test
+    void record_permitPublicStaticFieldInNestedRecord() {
+        String s = "public final record RecordTopLevel(Object member) {\n" +
+                   "    private static record RecordNested() {\n" +
+                   "        public static final RecordNested EMPTY = new RecordNested();\n" +
+                   "    }\n" +
+                   "}\n";
+        CompilationUnit cu = TestParser.parseCompilationUnit(s);
+        assertTwoRecordDeclarations(cu);
     }
 
     @Test
@@ -719,5 +756,10 @@ public class RecordDeclarationTest {
     private void assertOneRecordDeclaration(CompilationUnit cu) {
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         assertEquals(1, recordDeclarations.size());
+    }
+
+    private void assertTwoRecordDeclarations(CompilationUnit cu) {
+        List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
+        assertEquals(2, recordDeclarations.size());
     }
 }

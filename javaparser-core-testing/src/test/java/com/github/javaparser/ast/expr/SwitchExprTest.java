@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,7 +24,6 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.SwitchEntry;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
@@ -114,6 +113,101 @@ class SwitchExprTest {
                 "    default:\n" +
                 "        System.out.println(\"Neither Foo nor Bar, hmmm...\");\n" +
                 "        yield 0;\n" +
+                "};");
+    }
+
+    @Test
+    void yieldMethodCall() {
+        parseStatement("int randomNumber = switch (5) {\n" +
+                "    default -> {\n" +
+                "        yield a.randomNumberGenerator();\n" +
+                "    }\n" +
+                "    case 1 -> {\n" +
+                "        yield method();\n" +
+                "    }\n" +
+                "    case 2 -> {\n" +
+                "        yield method(args);\n" +
+                "    }\n" +
+                "    case 3 -> {\n" +
+                "        yield this.method();\n" +
+                "    }\n" +
+                "    case 4 -> {\n" +
+                "        yield Clazz.this.method(args);\n" +
+                "    }\n" +
+                "};");
+    }
+
+    @Test
+    void yieldExpression1() {
+        parseStatement("int randomNumber = switch (5) {\n" +
+                "    default -> {\n" +
+                "        yield 1 * 1;\n" +
+                "    }\n" +
+                "    case 1 -> {\n" +
+                "        yield (5 + 5);\n" +
+                "    }\n" +
+                "    case 2 -> {\n" +
+                "        yield (5 + 5) * 3;\n" +
+                "    }\n" +
+                "};");
+    }
+
+    @Test
+    void yieldExpression2() {
+        parseStatement("boolean b = switch (5) {\n" +
+                "    case 3 -> {\n" +
+                "        yield true || false;\n" +
+                "    }\n" +
+                "    default -> {\n" +
+                "        yield !true;\n" +
+                "    }\n" +
+                "};");
+    }
+
+    @Test
+    void yieldAssignment() {
+        parseStatement("int randomNumber = switch (5) {\n" +
+                "    default -> {\n" +
+                "        int x;\n" +
+                "        yield (x = 5);\n" +
+                "    }\n" +
+                "    case 'a' -> {\n" +
+                "        int x;\n" +
+                "        yield x = 3;\n" +
+                "    }\n" +
+                "};");
+    }
+
+    @Test
+    void yieldConditional() {
+        parseStatement("int randomNumber = switch (5) {\n" +
+                "    default -> {\n" +
+                "        yield x ? 1 : 2;\n" +
+                "    }\n" +
+                "    case 1 -> {\n" +
+                "        yield (x ? 1 : 2);\n" +
+                "    }\n" +
+                "    case 2 -> {\n" +
+                "        yield x < 0 ? 0 : x > y ? y : x;\n" +
+                "    }\n" +
+                "};");
+    }
+
+    @Test
+    void yieldYield() {
+        parseStatement("yield = switch (yield) {\n" +
+                "    default -> {\n" +
+                "        yield yield;\n" +
+                "    }\n" +
+                "    case yield -> {\n" +
+                "        yield Clazz.yield();\n" +
+                "    }\n" +
+                "    case enumValue2 -> {\n" +
+                "        yield yield = yield;\n" +
+                "    }\n" +
+                "    case enumValue3 -> {\n" +
+                "        yield yield == yield ? yield : yield;\n" +
+                "    }\n" +
                 "};");
     }
 }

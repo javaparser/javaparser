@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,18 +21,14 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.cache.Cache;
-import com.github.javaparser.symbolsolver.cache.NoCache;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.cache.InMemoryCache;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -76,7 +72,7 @@ public class CombinedTypeSolver implements TypeSolver {
 
     /** @see #exceptionHandler */
     public CombinedTypeSolver(Predicate<Exception> exceptionHandler, Iterable<TypeSolver> elements) {
-        this(exceptionHandler, elements, NoCache.create());
+        this(exceptionHandler, elements, InMemoryCache.create());
     }
 
     /**
@@ -175,7 +171,7 @@ public class CombinedTypeSolver implements TypeSolver {
         }
 
         // When unable to solve, cache the value with unsolved symbol
-        SymbolReference<ResolvedReferenceTypeDeclaration> unsolvedSymbol = SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+        SymbolReference<ResolvedReferenceTypeDeclaration> unsolvedSymbol = SymbolReference.unsolved();
         typeCache.put(name, unsolvedSymbol);
         return unsolvedSymbol;
     }

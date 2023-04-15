@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -80,7 +80,6 @@ public class Issue1511Test {
 
         CompilationUnit foo = javaParser.parse("class A {}").getResult().orElseThrow(IllegalStateException::new);
         ResolvedReferenceType a = foo.getClassByName("A").orElseThrow(IllegalStateException::new).resolve().asClass().getSuperClass().get();
-        System.out.println("a = " + a);
 
         assertEquals("java.lang.Object", a.getQualifiedName());
     }

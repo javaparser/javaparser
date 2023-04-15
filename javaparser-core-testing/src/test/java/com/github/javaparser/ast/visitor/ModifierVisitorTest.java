@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,14 +21,13 @@
 
 package com.github.javaparser.ast.visitor;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
+import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +37,7 @@ import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class ModifierVisitorTest {
+class ModifierVisitorTest extends AbstractLexicalPreservingTest {
     @Test
     void makeSureParentListsCanBeModified() {
         NodeList<StringLiteralExpr> list = new NodeList<>();
@@ -132,14 +131,14 @@ class ModifierVisitorTest {
     @Test
     void issue2124() {
         ModifierVisitor<Void> modifier = new ModifierVisitor<>();
-        CompilationUnit cu = StaticJavaParser.parse("\n" +
+        considerCode("\n" +
                 "public class ModifierVisitorTest {\n" +
                 "    private void causesException() {\n" +
                 "        String[] listWithExtraCommaAndEqualElements = {\"a\", \"a\",};\n" +
                 "    }\n" +
                 "}");
-        LexicalPreservingPrinter.setup(cu);
         cu.accept(modifier, null);
-        System.out.println(LexicalPreservingPrinter.print(cu));
+        //there should be no exception
+        LexicalPreservingPrinter.print(cu);
     }
 }

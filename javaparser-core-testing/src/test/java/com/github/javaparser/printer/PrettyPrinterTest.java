@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,28 +21,7 @@
 
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
-import static com.github.javaparser.StaticJavaParser.parseStatement;
-import static com.github.javaparser.printer.configuration.Indentation.IndentType.TABS;
-import static com.github.javaparser.printer.configuration.Indentation.IndentType.TABS_WITH_SPACE_ALIGN;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Optional;
-import java.util.function.Function;
-
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -51,13 +30,22 @@ import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.ConfigurationOption;
-import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
-import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
+import com.github.javaparser.printer.configuration.*;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
-import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+import java.util.function.Function;
+
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.printer.configuration.Indentation.IndentType.TABS;
+import static com.github.javaparser.printer.configuration.Indentation.IndentType.TABS_WITH_SPACE_ALIGN;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PrettyPrinterTest {
 
@@ -351,6 +339,21 @@ class PrettyPrinterTest {
                 "\t}\n" +
                 "}\n", printed);
     }
+    
+    @Test
+    void initializeWithSpecificConfiguration() {
+        CompilationUnit cu = parse("class Foo { // this is a comment \n"
+                + "}");
+        PrinterConfiguration config = new DefaultPrinterConfiguration()
+                .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+        
+        Printer printer = new DefaultPrettyPrinter(config);
+        assertFalse(printer.getConfiguration().get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS)).isPresent());
+        String printed = printer.print(cu);
+        assertEqualsStringIgnoringEol("class Foo {\n"
+                + "}\n", printed);
+    }
+                
 
     @Test
     void indentWithTabsAlignWithSpaces() {
@@ -516,7 +519,6 @@ class PrettyPrinterTest {
         TypeDeclaration td = cu.findFirst(TypeDeclaration.class).get();
         assertEquals(2, td.getAllContainedComments().size());
         td.setPublic(true); // --- simple AST change -----
-        System.out.println(cu.toString()); // orphan and /*orphan*/ must be printed
         assertEquals(2, td.getAllContainedComments().size()); // the orphaned comments exist
     }
     

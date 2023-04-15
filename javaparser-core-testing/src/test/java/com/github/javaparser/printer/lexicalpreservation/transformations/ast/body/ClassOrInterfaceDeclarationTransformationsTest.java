@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -176,7 +176,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     void removingField() {
         ClassOrInterfaceDeclaration cid = consider("public class A { int foo; }");
         cid.getMembers().remove(0);
-        assertTransformedToString("public class A {  }", cid);
+        assertTransformedToString("public class A { }", cid);
     }
 
     @Test

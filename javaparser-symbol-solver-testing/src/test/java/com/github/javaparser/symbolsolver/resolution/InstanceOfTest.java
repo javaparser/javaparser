@@ -1,33 +1,46 @@
+/*
+ * Copyright (C) 2013-2023 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.symbolsolver.resolution;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParseStart;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StringProvider;
+import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InstanceOfTest {
 
@@ -232,8 +245,6 @@ public class InstanceOfTest {
             // Expected to not be able to resolve s, as out of scope within an else block.
             assertThrows(UnsolvedSymbolException.class, () -> {
                 final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                // Note: Only printed if the above line doesn't error...
-                System.out.println("resolve = " + resolve);
             });
 
         }
@@ -252,9 +263,6 @@ public class InstanceOfTest {
                     UnsolvedSymbolException.class,
                     () -> {
                         final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                        // Note: Only printed if the above line doesn't error...
-                        System.out.println("resolve = " + resolve);
-                        System.out.println("erroneously solved:: outOfScopeMethodCall = " + outOfScopeMethodCall);
                     },
                     "Error: Variable defined within a pattern expression is used before it is declared - should not be resolved, but is."
             );
@@ -275,7 +283,6 @@ public class InstanceOfTest {
 
                 // Resolving the method call .contains()
                 final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
                 assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
                 assertEquals("boolean", resolve.getReturnType().describe());
@@ -306,9 +313,6 @@ public class InstanceOfTest {
                         UnsolvedSymbolException.class,
                         () -> {
                             final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                            // Note: Only printed if the above line doesn't error...
-                            System.out.println("resolve = " + resolve);
-                            System.out.println("erroneously solved:: outOfScopeMethodCall = " + outOfScopeMethodCall);
                         },
                         "Error: Variable defined within a pattern expression should not be available on the right hand side of an || operator."
                 );
@@ -333,7 +337,6 @@ public class InstanceOfTest {
 
                 // Resolving the method call .contains()
                 final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
                 assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
                 assertEquals("boolean", resolve.getReturnType().describe());
@@ -372,7 +375,6 @@ public class InstanceOfTest {
 
                 NameExpr nameExpr = nameExprs.get(0);
                 ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
-                System.out.println(resolvedNameExpr);
             }
 
 
@@ -395,10 +397,8 @@ public class InstanceOfTest {
 
                 MethodCallExpr methodCallExpr = methodCallExprs.get(0);
                 ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
-                System.out.println("resolvedType = " + resolvedType);
 
                 ResolvedMethodDeclaration resolvedMethodDeclaration = methodCallExpr.resolve();
-                System.out.println("resolvedMethodDeclaration = " + resolvedMethodDeclaration);
             }
 
 
@@ -413,8 +413,6 @@ public class InstanceOfTest {
                 // Expected to not be able to resolve s, as out of scope within an else block.
                 assertThrows(UnsolvedSymbolException.class, () -> {
                     final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                    // Note: Only printed if the above line doesn't error...
-                    System.out.println("resolve = " + resolve);
                 });
             }
         }
@@ -443,9 +441,6 @@ public class InstanceOfTest {
                 // Expected to not be able to resolve s, as out of scope within an else block.
                 assertThrows(UnsolvedSymbolException.class, () -> {
                     final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                    // Note: Only printed if the above line doesn't error...
-                    System.out.println("resolve = " + resolve);
-                    System.out.println("erroneously solved:: outOfScopeMethodCall = " + outOfScopeMethodCall);
                 });
             }
 
@@ -461,7 +456,6 @@ public class InstanceOfTest {
 
                 // Resolving the method call .contains()
                 final ResolvedMethodDeclaration resolve = inScopeMethodCall.resolve();
-                System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
                 assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
                 assertEquals("boolean", resolve.getReturnType().describe());
@@ -490,7 +484,6 @@ public class InstanceOfTest {
 
             // Resolving the method call .contains()
             final ResolvedMethodDeclaration resolve = methodCallExprInElse.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
             // The method call in the else block should be in scope of the pattern (String) due to the negated condition
             assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
@@ -511,7 +504,6 @@ public class InstanceOfTest {
 
             // Resolving the method call .contains()
             final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
             // Should resolve to the field (List.contains()), not the pattern expression (String.contains())
             assertEquals("java.util.List.contains(java.lang.Object)", resolve.getQualifiedSignature());
@@ -532,7 +524,6 @@ public class InstanceOfTest {
 
             // Resolving the method call .contains()
             final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-            System.out.println("resolve.getQualifiedSignature() = " + resolve.getQualifiedSignature());
 
             // Should resolve to the field (List.contains()), not the pattern expression (String.contains())
             assertEquals("java.util.List.contains(java.lang.Object)", resolve.getQualifiedSignature());
@@ -555,8 +546,6 @@ public class InstanceOfTest {
             // Expected to not be able to resolve s, as out of scope within an else block.
             assertThrows(UnsolvedSymbolException.class, () -> {
                 final ResolvedMethodDeclaration resolve = outOfScopeMethodCall.resolve();
-                // Note: Only printed if the above line doesn't error...
-                System.out.println("resolve = " + resolve);
             });
         }
 
@@ -571,16 +560,12 @@ public class InstanceOfTest {
             MethodDeclaration methodDeclaration = getMethodByName("localVariable_shouldNotResolve");
 
             List<NameExpr> nameExprs = methodDeclaration.findAll(NameExpr.class);
-            System.out.println("nameExprs = " + nameExprs);
 
             assertEquals(2, nameExprs.size());
 
             NameExpr nameExpr = nameExprs.get(0);
             ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
             ResolvedType resolvedNameExprType = nameExpr.calculateResolvedType();
-
-            System.out.println("resolvedNameExpr = " + resolvedNameExpr);
-            System.out.println("resolvedNameExprType = " + resolvedNameExprType);
 
         }
     }

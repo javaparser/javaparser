@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -44,10 +44,10 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.steps.SharedSteps.getMemberByTypeAndPosition;
 import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
 import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ParsingSteps {
 

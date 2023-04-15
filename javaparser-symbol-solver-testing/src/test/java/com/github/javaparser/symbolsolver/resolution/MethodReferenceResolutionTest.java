@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,14 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -28,18 +36,13 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
@@ -443,10 +446,7 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         for (MethodCallExpr expr : methodCallExpr) {
             try {
                 ResolvedMethodDeclaration rd = expr.resolve();
-                System.out.println("\t Solved : " + rd.getQualifiedSignature());
             } catch (UnsolvedSymbolException e) {
-                System.out.println("\t UNSOLVED: " + expr.toString());
-                e.printStackTrace();
                 errorCount++;
             }
         }
@@ -482,7 +482,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
         for (MethodCallExpr expr : methodCallExpr) {
             ResolvedMethodDeclaration rd = expr.resolve();
-            System.out.println("\t Solved : " + rd.getQualifiedSignature());
         }
 
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
@@ -525,7 +524,6 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
 
         for (MethodCallExpr expr : methodCallExpr) {
             ResolvedMethodDeclaration rd = expr.resolve();
-            System.out.println("\t Solved : " + rd.getQualifiedSignature());
         }
 
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
@@ -560,15 +558,69 @@ class MethodReferenceResolutionTest extends AbstractResolutionTest {
         for (MethodReferenceExpr expr : methodeRefExpr) {
             try {
                 ResolvedMethodDeclaration md = expr.resolve();
-                System.out.println("\t Solved : " + md.getQualifiedSignature());
             } catch (UnsolvedSymbolException e) {
-                System.out.println("\t UNSOLVED: " + expr.toString());
-                e.printStackTrace();
                 errorCount++;
             }
         }
 
         assertEquals(0, errorCount, "Expected zero UnsolvedSymbolException s");
+    }
+
+    @Test
+    @Disabled(value = "Waiting for constructor calls to be resolvable")
+    void zeroArgumentConstructor_resolveToDeclaration() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method reference expression
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "zeroArgumentConstructor");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        // resolve method reference expression
+        ResolvedMethodDeclaration resolvedMethodDeclaration = methodReferenceExpr.resolve();
+
+        // check that the expected method declaration equals the resolved method declaration
+        assertEquals("Supplier<SuperClass>", resolvedMethodDeclaration.getQualifiedSignature());
+    }
+
+    @Test
+    void zeroArgumentConstructor() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method reference expression
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "zeroArgumentConstructor");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        ResolvedType resolvedType = methodReferenceExpr.calculateResolvedType();
+
+        // check that the expected revolved type equals the resolved type
+        assertEquals("SuperClass", resolvedType.describe());
+    }
+
+    @Test
+    void singleArgumentConstructor() {
+        // configure symbol solver before parsing
+        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+
+        // parse compilation unit and get method reference expression
+        CompilationUnit cu = parseSample("MethodReferences");
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodReferences");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "zeroArgumentConstructor");
+        ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
+        MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr) returnStmt.getExpression().get();
+
+        ResolvedType resolvedType = methodReferenceExpr.calculateResolvedType();
+
+        // check that the expected revolved type equals the resolved type
+        System.out.println(resolvedType.describe());
+        assertEquals("SuperClass", resolvedType.describe());
     }
 
 }

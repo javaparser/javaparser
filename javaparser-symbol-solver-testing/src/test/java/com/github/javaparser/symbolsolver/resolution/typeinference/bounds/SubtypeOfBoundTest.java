@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,13 +21,16 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.resolution.typeinference.*;
+import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
+import com.github.javaparser.symbolsolver.resolution.typeinference.ProperLowerBound;
+import com.github.javaparser.symbolsolver.resolution.typeinference.ProperUpperBound;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
@@ -42,11 +45,11 @@ import static org.mockito.Mockito.mock;
 class SubtypeOfBoundTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver();
-    private ResolvedReferenceType iterableType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Iterable.class.getCanonicalName()), typeSolver);
-    private ResolvedReferenceType listType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(List.class.getCanonicalName()), typeSolver);
-    private ResolvedType integerType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Integer.class.getCanonicalName()), typeSolver);
-    private ResolvedType doubleType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Double.class.getCanonicalName()), typeSolver);
-    private ResolvedType objectType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Object.class.getCanonicalName()), typeSolver);
+    private ResolvedReferenceType iterableType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Iterable.class.getCanonicalName()));
+    private ResolvedReferenceType listType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(List.class.getCanonicalName()));
+    private ResolvedType integerType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Integer.class.getCanonicalName()));
+    private ResolvedType doubleType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Double.class.getCanonicalName()));
+    private ResolvedType objectType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(Object.class.getCanonicalName()));
 
     @Test
     void recognizeProperLowerBound1() {
@@ -92,8 +95,8 @@ class SubtypeOfBoundTest {
 
         InferenceVariable alpha = new InferenceVariable("α", typeParameterDeclaration1);
         InferenceVariable beta = new InferenceVariable("β", typeParameterDeclaration2);
-        ResolvedType iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration().get(), Arrays.asList(ResolvedWildcard.UNBOUNDED), typeSolver);
-        ResolvedType listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration().get(), Arrays.asList(beta), typeSolver);
+        ResolvedType iterableOfWildcard = new ReferenceTypeImpl(iterableType.getTypeDeclaration().get(), Arrays.asList(ResolvedWildcard.UNBOUNDED));
+        ResolvedType listOfBeta = new ReferenceTypeImpl(listType.getTypeDeclaration().get(), Arrays.asList(beta));
 
         Bound bound1 = new SubtypeOfBound(alpha, iterableOfWildcard);
         Bound bound2 = new SubtypeOfBound(beta, objectType);

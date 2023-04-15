@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,11 +28,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.CallableDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -60,7 +56,7 @@ public abstract class AbstractGenerator {
 
     protected static final String COPYRIGHT_NOTICE_JP_CORE = "\n" +
             " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
-            " * Copyright (C) 2011, 2013-2021 The JavaParser Team.\n" +
+            " * Copyright (C) 2011, 2013-2023 The JavaParser Team.\n" +
             " *\n" +
             " * This file is part of JavaParser.\n" +
             " *\n" +
@@ -81,7 +77,7 @@ public abstract class AbstractGenerator {
 
     protected static final String COPYRIGHT_NOTICE_JP_SS = "\n" +
             " * Copyright (C) 2015-2016 Federico Tomassetti\n" +
-            " * Copyright (C) 2017-2020 The JavaParser Team.\n" +
+            " * Copyright (C) 2017-2023 The JavaParser Team.\n" +
             " *\n" +
             " * This file is part of JavaParser.\n" +
             " *\n" +

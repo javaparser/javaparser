@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,13 +21,14 @@
 
 package com.github.javaparser.symbolsolver.logic;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.InferenceVariableType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -56,8 +57,8 @@ class InferenceContextTest {
     @BeforeEach
     void setup() {
         typeSolver = new ReflectionTypeSolver();
-        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver), typeSolver);
-        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+        string = new ReferenceTypeImpl(new ReflectionClassDeclaration(String.class, typeSolver));
+        object = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
         listOfString = listOf(string);
         tpE = mock(ResolvedTypeParameterDeclaration.class);
         when(tpE.getName()).thenReturn("T");
@@ -66,25 +67,25 @@ class InferenceContextTest {
     }
 
     private ResolvedReferenceType listOf(ResolvedType elementType) {
-        return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(elementType), typeSolver);
+        return new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(elementType));
     }
 
     @Test
     void noVariablesArePlacedWhenNotNeeded() {
-        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(object, string);
+        ResolvedType result = new InferenceContext(typeSolver).addPair(object, string);
         assertEquals(object, result);
     }
 
     @Test
     void placingASingleVariableTopLevel() {
-        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(new ResolvedTypeVariable(tpE), listOfString);
-        assertEquals(new InferenceVariableType(0, MyObjectProvider.INSTANCE), result);
+        ResolvedType result = new InferenceContext(typeSolver).addPair(new ResolvedTypeVariable(tpE), listOfString);
+        assertEquals(new InferenceVariableType(0, typeSolver), result);
     }
 
     @Test
     void placingASingleVariableInside() {
-        ResolvedType result = new InferenceContext(MyObjectProvider.INSTANCE).addPair(listOfE, listOfString);
-        assertEquals(listOf(new InferenceVariableType(0, MyObjectProvider.INSTANCE)), result);
+        ResolvedType result = new InferenceContext(typeSolver).addPair(listOfE, listOfString);
+        assertEquals(listOf(new InferenceVariableType(0, typeSolver)), result);
     }
 
 }

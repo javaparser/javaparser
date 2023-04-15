@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -58,7 +58,7 @@ options {
 PARSER_BEGIN(GeneratedJavaParser)
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -704,14 +704,14 @@ TOKEN :
           // starts off with unicode backslash
           ("\\u005" ["c", "C"]
               // regular escape sequences
-              (["n","t","b","r","f","\\","'","\""]
+              (["s","n","t","b","r","f","\\","'","\""]
                   // escapes another unicode backslash
                   | ("\\u005" ["c", "C"])))
        |
           ( // TODO: Could these escape sequences be extracted out?
               "\\"
               (
-                  ["n","t","b","r","f","\\","'","\""]
+                  ["s","n","t","b","r","f","\\","'","\""]
                |
                   ["0"-"7"] ( ["0"-"7"] )?
                |
@@ -777,7 +777,7 @@ TOKEN :
           ( // TODO: Could these escape sequences be extracted out?
               "\\"
               (
-                  ["n","t","b","r","f","\\","'","\""]
+                  ["s","n","t","b","r","f","\\","'","\""]
                |
                   ["0"-"7"] ( ["0"-"7"] )?
                |
@@ -1237,11 +1237,12 @@ PackageDeclaration PackageDeclaration():
 {
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
     Name name;
-    JavaToken begin;
+    JavaToken begin = INVALID;
+	AnnotationExpr ann;
 }
 {
-    annotations = Annotations()
-    "package" {begin = token();}  name = Name() ";"
+	( ann = Annotation() { annotations = add(annotations, ann); begin = orIfInvalid(begin, ann); } )*
+    "package" {begin = orIfInvalid(begin, token());}  name = Name() ";"
     { return new PackageDeclaration(range(begin, token()), annotations, name); }
 }
 
@@ -1381,13 +1382,14 @@ ModifierHolder Modifiers():
  * Also note that JavaParser handles the hierarchy/specialisations of classes, interfaces, and enums differently to the JLS.
  * <ul>
  *   <li>This {@code ClassOrInterfaceDeclaration} refers to the {@code NormalClassDeclaration} and {@code NormalInterfaceDeclaration},</li>
- *   <li>while {@code AnnotationTypeDeclaration} and {@code EnumDeclaration} are handled separately within this grammar.</li>
+ *   <li>while {@code AnnotationTypeDeclaration}, {@code EnumDeclaration}, and {@code RecordDeclaration} are handled separately within this grammar.</li>
  * </ul>
- * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1
+ * https://docs.oracle.com/javase/specs/jls/se17/html/jls-8.html#jls-8.1
  * <pre>{@code
  *     ClassDeclaration:
  *         NormalClassDeclaration
  *         EnumDeclaration
+ *         RecordDeclaration
  *     NormalClassDeclaration:
  *         {ClassModifier} class TypeIdentifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
  * }</pre>
@@ -1428,11 +1430,11 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
 }
 
 /**
- * https://openjdk.java.net/jeps/395#Java-grammar
+ * https://docs.oracle.com/javase/specs/jls/se17/html/jls-8.html#jls-8.10
  * <pre>{@code
  *     RecordDeclaration:
  *        {ClassModifier} `record` TypeIdentifier [TypeParameters]
- *          RecordHeader [SuperInterfaces] RecordBody
+ *          RecordHeader [ClassImplements] RecordBody
  *
  *      RecordHeader:
  *       `(` [RecordComponentList] `)`
@@ -1441,11 +1443,14 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
  *       RecordComponent { `,` RecordComponent}
  *
  *      RecordComponent:
- *       {Annotation} UnannType Identifier
+ *       {RecordComponentModifier} UnannType Identifier
  *       VariableArityRecordComponent
  *
  *      VariableArityRecordComponent:
- *       {Annotation} UnannType {Annotation} `...` Identifier
+ *       {RecordComponentModifier} UnannType {Annotation} `...` Identifier
+ *
+ *      RecordComponentModifier:
+ *       Annotation
  *
  *      RecordBody:
  *        `{` {RecordBodyDeclaration} `}`
@@ -1870,6 +1875,9 @@ BodyDeclaration<?> RecordBodyDeclaration():
          |
             LOOKAHEAD("enum")
             ret = EnumDeclaration(modifiers)
+         |
+            LOOKAHEAD("record")
+            ret = RecordDeclaration(modifiers)
          |
             LOOKAHEAD("@" "interface")
             ret = AnnotationTypeDeclaration(modifiers)
@@ -3382,13 +3390,15 @@ Expression EqualityExpression():
  */
 PatternExpr PatternExpression():
 {
+    ModifierHolder modifier;
     ReferenceType type;
     SimpleName name;
 }
 {
-    type = AnnotatedReferenceType()
+    modifier = Modifiers()
+    type = ReferenceType(modifier.annotations)
     name = SimpleName()
-    { return new PatternExpr(range(type, token()), type, name); }
+    { return new PatternExpr(range(type, token()), modifier.modifiers, type, name); }
 }
 
 
@@ -4464,6 +4474,11 @@ Statement BlockStatement():
             LOOKAHEAD( Modifiers() "record" SimpleName() [ TypeParameters() ] Parameters() )
             modifier = Modifiers()
             recordDeclaration = RecordDeclaration(modifier) { ret = new LocalRecordDeclarationStmt(range(recordDeclaration, token()), recordDeclaration); }
+         |
+            // try yield statement separate from more general Statement() because yield is not a keyword but
+            // just a restricted identifier and a yield statement can be confused with VariableDeclarationExpression sometimes
+            LOOKAHEAD( YieldStatement() )
+            ret = YieldStatement()
          |
             LOOKAHEAD( VariableDeclarationExpression() )
             expr = VariableDeclarationExpression()

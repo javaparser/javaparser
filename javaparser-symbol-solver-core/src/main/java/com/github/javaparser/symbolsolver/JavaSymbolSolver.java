@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,16 +27,19 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.quality.NotNull;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * This implementation of the SymbolResolver wraps the functionality of the library to make them easily usable
@@ -72,7 +75,7 @@ public class JavaSymbolSolver implements SymbolResolver {
 
     private TypeSolver typeSolver;
 
-    public JavaSymbolSolver(TypeSolver typeSolver) {
+    public JavaSymbolSolver(@NotNull TypeSolver typeSolver) {
         this.typeSolver = typeSolver;
     }
 
@@ -90,13 +93,13 @@ public class JavaSymbolSolver implements SymbolResolver {
             return resultClass.cast(new JavaParserMethodDeclaration((MethodDeclaration) node, typeSolver));
         }
         if (node instanceof ClassOrInterfaceDeclaration) {
-            ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
+            ResolvedReferenceTypeDeclaration resolved = toTypeDeclaration(node);
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
         }
         if (node instanceof EnumDeclaration) {
-            ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
+            ResolvedReferenceTypeDeclaration resolved = toTypeDeclaration(node);
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
@@ -122,7 +125,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof AnnotationDeclaration) {
-            ResolvedReferenceTypeDeclaration resolved = JavaParserFactory.toTypeDeclaration(node, typeSolver);
+            ResolvedReferenceTypeDeclaration resolved = toTypeDeclaration(node);
             if (resultClass.isInstance(resolved)) {
                 return resultClass.cast(resolved);
             }
@@ -278,7 +281,7 @@ public class JavaSymbolSolver implements SymbolResolver {
 
     @Override
     public <T> T toResolvedType(Type javaparserType, Class<T> resultClass) {
-        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(javaparserType, javaparserType);
+        ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(javaparserType);
         if (resultClass.isInstance(resolvedType)) {
             return resultClass.cast(resolvedType);
         }
@@ -289,5 +292,28 @@ public class JavaSymbolSolver implements SymbolResolver {
     @Override
     public ResolvedType calculateType(Expression expression) {
         return JavaParserFacade.get(typeSolver).getType(expression);
+    }
+    
+    @Override
+    public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
+        if (node instanceof ClassOrInterfaceDeclaration) {
+            if (((ClassOrInterfaceDeclaration) node).isInterface()) {
+                return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
+            }
+            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
+        }
+        if (node instanceof TypeParameter) {
+            return new JavaParserTypeParameter((TypeParameter) node, typeSolver);
+        }
+        if (node instanceof EnumDeclaration) {
+            return new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
+        }
+        if (node instanceof AnnotationDeclaration) {
+            return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
+        }
+        if (node instanceof EnumConstantDeclaration) {
+            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode((EnumConstantDeclaration) node), typeSolver);
+        }
+        throw new IllegalArgumentException("Cannot get a reference type declaration from " + node.getClass().getCanonicalName());
     }
 }

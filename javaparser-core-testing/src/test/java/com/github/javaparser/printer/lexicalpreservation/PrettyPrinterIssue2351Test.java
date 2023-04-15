@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,13 +21,12 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ast.body.EnumDeclaration;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // manage java.lang.UnsupportedOperationException: Csm token token(}) NodeText TOKEN ";"   <102>   (line 1,col 39)-(line 1,col 39)
 class PrettyPrinterIssue2351Test extends AbstractLexicalPreservingTest  {
@@ -41,7 +40,6 @@ class PrettyPrinterIssue2351Test extends AbstractLexicalPreservingTest  {
         considerCode(def2);
         Optional<EnumDeclaration> decl = cu.findFirst(EnumDeclaration.class);
         if (decl.isPresent()) decl.get().addEnumConstant("SOMETHING");
-        System.out.println(LexicalPreservingPrinter.print(cu));
         assertTrue(decl.get().getEntries().size() == 2);
     }
 

@@ -1,7 +1,7 @@
 
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,34 +22,29 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
-
-class Issue2806Test {
+class Issue2806Test extends AbstractLexicalPreservingTest{
 
     private JavaParser javaParser;
 
     @Test
     void importIsAddedOnTheSameLine() {
-        String junit4 = "import java.lang.IllegalArgumentException;\n" +
+        considerCode("import java.lang.IllegalArgumentException;\n" +
                 "\n" +
                 "public class A {\n" +
-                "}";
+                "}");
         String junit5 = "import java.lang.IllegalArgumentException;\n" +
                 "import java.nio.file.Paths;\n" +
                 "\n" +
                 "public class A {\n" +
                 "}";
-        JavaParser parser = new JavaParser(new ParserConfiguration().setLexicalPreservationEnabled(true));
-        CompilationUnit cu = parser.parse(junit4).getResult().get();
-        LexicalPreservingPrinter.setup(cu);
         ImportDeclaration importDeclaration = new ImportDeclaration("java.nio.file.Paths", false, false);
         CompilationUnit compilationUnit = cu.addImport(importDeclaration);
         String out = LexicalPreservingPrinter.print(compilationUnit);

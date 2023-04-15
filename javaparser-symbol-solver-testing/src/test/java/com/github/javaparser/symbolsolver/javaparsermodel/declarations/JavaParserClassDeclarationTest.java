@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,18 +24,11 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -47,22 +40,18 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.javaparser.Navigator;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -99,10 +88,10 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         typeSolverNewCode = combinedTypeSolverNewCode;
 
         TypeSolver ts = new ReflectionTypeSolver();
-        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()), ts);
-        ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()), ts);
-        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC), ts);
-        
+        string = new ReferenceTypeImpl(ts.solveType(String.class.getCanonicalName()));
+        ResolvedReferenceType booleanC = new ReferenceTypeImpl(ts.solveType(Boolean.class.getCanonicalName()));
+        listOfBoolean = new ReferenceTypeImpl(ts.solveType(List.class.getCanonicalName()), ImmutableList.of(booleanC));
+
         // init parser
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
@@ -332,9 +321,9 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     @Test
     void testGetAncestorsWithTypeParameters() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        
+
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAncestors();
-        
+
         assertEquals(8, ancestors.size());
 
         ResolvedReferenceType ancestor;
@@ -378,9 +367,19 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    void testGetAllAncestorsWithDepthFirstTraversalOrder() {
+        ResolvedReferenceTypeDeclaration integer = typeSolver.solveType(Integer.class.getCanonicalName());
+        List<ResolvedReferenceType> ancestors = integer.getAllAncestors();
+        assertEquals("java.lang.Number", ancestors.get(0).getQualifiedName());
+        assertEquals("java.lang.Object", ancestors.get(1).getQualifiedName());
+        assertEquals("java.io.Serializable", ancestors.get(2).getQualifiedName());
+        assertEquals("java.lang.Comparable", ancestors.get(3).getQualifiedName());
+    }
+
+    @Test
     void testGetAllAncestorsWithTypeParametersWithDepthFirstTraversalOrder() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
-        
+
         List<ResolvedReferenceType> ancestors = constructorDeclaration.getAllAncestors();
         assertEquals(12, ancestors.size());
 
@@ -394,14 +393,14 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals("com.github.javaparser.ast.Node", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(2);
-        assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
+        assertEquals("java.lang.Object", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(3);
-        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
-        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.T").get().asReferenceType().getQualifiedName());
+        assertEquals("java.lang.Cloneable", ancestor.getQualifiedName());
 
         ancestor = ancestors.get(4);
-        assertEquals("java.lang.Object", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations", ancestor.getQualifiedName());
+        assertEquals("com.github.javaparser.ast.body.ConstructorDeclaration", ancestor.typeParametersMap().getValueBySignature("com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.T").get().asReferenceType().getQualifiedName());
 
         ancestor = ancestors.get(5);
         assertEquals("com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc", ancestor.getQualifiedName());
@@ -531,7 +530,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
         assertEquals(3, classDeclaration.getAllFields().size());
 
-        ReferenceTypeImpl rtClassDeclaration = new ReferenceTypeImpl(classDeclaration, typeSolver);
+        ReferenceTypeImpl rtClassDeclaration = new ReferenceTypeImpl(classDeclaration);
 
         assertEquals("s", classDeclaration.getAllFields().get(0).getName());
         assertEquals(string, classDeclaration.getAllFields().get(0).getType());
@@ -757,6 +756,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.isAnnotationPresent(java.lang.Class<? extends java.lang.annotation.Annotation>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithAnnotations.isAnnotationPresent(java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.createBody()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.setBody(com.github.javaparser.ast.stmt.BlockStmt)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithJavaDoc.setJavaDocComment(java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.addModifier(com.github.javaparser.ast.Modifier...)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isAbstract()",
@@ -770,6 +770,8 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isSynchronized()",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isTransient()",
                 "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.isVolatile()",
+                "com.github.javaparser.ast.nodeTypes.NodeWithModifiers.setModifiers(java.util.EnumSet<com.github.javaparser.ast.Modifier>)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithName.setName(java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.body.Parameter)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(com.github.javaparser.ast.type.Type, java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.addAndGetParameter(java.lang.Class<?>, java.lang.String)",
@@ -781,10 +783,13 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByName(java.lang.String)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByType(java.lang.Class<?>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithParameters.getParamByType(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithParameters.setParameters(java.util.List<com.github.javaparser.ast.body.Parameter>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.addThrows(com.github.javaparser.ast.type.ReferenceType)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.addThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.Class<? extends java.lang.Throwable>)",
                 "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.isThrows(java.lang.String)",
+                "com.github.javaparser.ast.nodeTypes.NodeWithThrowable.setThrows(java.util.List<com.github.javaparser.ast.type.ReferenceType>)",
+                "java.lang.Object.clone()",
                 "java.lang.Object.finalize()",
                 "java.lang.Object.getClass()",
                 "java.lang.Object.notify()",
@@ -799,8 +804,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         if(TestJdk.getCurrentHostJdk().getMajorVersion() >= 14) {
             expected.remove("java.lang.Object.registerNatives()");
         }
-
-        assertTrue(signatures.size() == expected.size());
+        assertEquals(expected.size(), signatures.size());
         assertThat(signatures, containsInAnyOrder(expected.toArray()));
     }
 
@@ -976,7 +980,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         // Assign "independent" -- Assign to a interface with a completely separate/independent hierarchy tree (up to Object, down to other) -- should be rejected
         assertFalse(compilationUnit.canBeAssignedTo(serializableTypeDeclaration), "CompilationUnit should not be reported as assignable to Serializable");
     }
-    
+
     @Test
     // issue #3436 getAncestors()/getAllAncestors() does not work if base class starts with the same name
     public void getAncestors_with_child_name_is_part_of_ancestor_name() {
@@ -988,12 +992,12 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertTrue(ancestors.size() == 1);
         assertEquals("FooBase", ancestors.get(0).getQualifiedName());
     }
-    
+
     private List<ResolvedType> declaredTypes(String... lines) {
         CompilationUnit tree = treeOf(lines);
         List<ResolvedType> results = Lists.newLinkedList();
         for (ClassOrInterfaceDeclaration classTree : tree.findAll(ClassOrInterfaceDeclaration.class)) {
-            results.add(new ReferenceTypeImpl(classTree.resolve(), typeSolver));
+            results.add(new ReferenceTypeImpl(classTree.resolve()));
         }
         return results;
     }

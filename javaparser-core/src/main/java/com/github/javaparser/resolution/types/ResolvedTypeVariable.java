@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,12 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
 
 import java.util.List;
 import java.util.Map;
 
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
@@ -51,15 +51,17 @@ public class ResolvedTypeVariable implements ResolvedType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ResolvedTypeVariable that = (ResolvedTypeVariable) o;
-
-        if (!typeParameter.getName().equals(that.typeParameter.getName())) return false;
-        if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType()) return false;
-        if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod()) return false;
-
+        if (!typeParameter.getName().equals(that.typeParameter.getName()))
+            return false;
+        if (typeParameter.declaredOnType() != that.typeParameter.declaredOnType())
+            return false;
+        if (typeParameter.declaredOnMethod() != that.typeParameter.declaredOnMethod())
+            return false;
         return true;
     }
 
@@ -74,13 +76,8 @@ public class ResolvedTypeVariable implements ResolvedType {
     }
 
     @Override
-    public boolean isPrimitive() {
-        return false;
-    }
-
-    @Override
     public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToBeReplaced, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
-        if(tpToBeReplaced.getName().equals(this.typeParameter.getName())){
+        if (tpToBeReplaced.getName().equals(this.typeParameter.getName())) {
             inferredTypes.put(this.asTypeParameter(), replaced);
             return replaced;
         } else {
@@ -126,11 +123,12 @@ public class ResolvedTypeVariable implements ResolvedType {
     public boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
         return typeParameters.contains(typeParameter);
     }
-    
-    ///
-    /// Erasure
-    ///
+
+    // /
+    // / Erasure
+    // /
     // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
+    // If no bound is declared for a type variable, Object is assumed.
     //
     @Override
     public ResolvedType erasure() {
@@ -138,5 +136,18 @@ public class ResolvedTypeVariable implements ResolvedType {
             return typeParameter.getBounds().get(0).getType();
         }
         return typeParameter.object();
+    }
+
+    /*
+     * Returns the resolved type for a type variable.
+     */
+    @Override
+    public ResolvedType solveGenericTypes(Context context) {
+    	return context.solveGenericType(describe()).orElse(this);
+    }
+
+    @Override
+    public String toDescriptor() {
+        return String.format("L%s;", qualifiedName());
     }
 }

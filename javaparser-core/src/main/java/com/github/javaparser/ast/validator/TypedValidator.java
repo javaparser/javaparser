@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,10 +18,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Processor;
 import com.github.javaparser.ast.Node;
 
 import java.util.function.BiConsumer;
@@ -30,17 +31,21 @@ import java.util.function.BiConsumer;
  * A validator that validates a known node type.
  */
 public interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemReporter> {
+
     /**
-     * @param node the node that wants to be validated
+     * @param node            the node that wants to be validated
      * @param problemReporter when found, validation errors can be reported here
      */
     void accept(N node, ProblemReporter problemReporter);
 
     @SuppressWarnings("unchecked")
-    default ParseResult.PostProcessor postProcessor() {
-        return (result, configuration) ->
-                result.getResult().ifPresent(node ->
-                        accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem)))
-                );
+    default Processor processor() {
+        return new Processor() {
+
+            @Override
+            public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+                result.getResult().ifPresent(node -> accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem))));
+            }
+        };
     }
 }

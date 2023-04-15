@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,21 +21,18 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Inherited;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import static org.junit.jupiter.api.Assertions.*;
 
 @interface OuterAnnotation {
   @interface InnerAnnotation {}
@@ -96,6 +93,14 @@ class ReflectionAnnotationDeclarationTest {
                     "com.github.javaparser.symbolsolver.reflectionmodel.WithField");
     assertEquals(Collections.singleton("FIELD_DECLARATION"),
             annotation.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
+  }
+  
+  @Test
+  void getClassName_shouldReturnCorrectValue() {
+    ReflectionAnnotationDeclaration annotation =
+        (ReflectionAnnotationDeclaration) typeSolver.solveType(
+            "com.github.javaparser.symbolsolver.reflectionmodel.WithField");
+    assertEquals("WithField", annotation.getClassName());
   }
   
   @Test

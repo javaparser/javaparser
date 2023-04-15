@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,10 +18,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
 import java.util.List;
@@ -35,8 +33,7 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclaration,
-        ResolvedTypeParametrizable, HasAccessSpecifier, AssociableToAST<Node> {
+public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
 
     /**
      * This method should always return true.
@@ -77,15 +74,13 @@ public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclarati
      */
     List<ResolvedReferenceType> getAllInterfaces();
 
-    ///
-    /// Constructors
-    ///
-
+    // /
+    // / Constructors
+    // /
     /**
      * List of constructors available for the class.
      * This list should also include the default constructor.
      */
     @Override
     List<ResolvedConstructorDeclaration> getConstructors();
-
 }

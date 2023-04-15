@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types.parametrization;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -52,7 +51,6 @@ public interface ResolvedTypeParameterValueProvider {
                 }
             }
         }
-
         if (type.isWildcard() && type.asWildcard().isBounded()) {
             if (type.asWildcard().isExtends()) {
                 return ResolvedWildcard.extendsBound(useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
@@ -60,11 +58,9 @@ public interface ResolvedTypeParameterValueProvider {
                 return ResolvedWildcard.superBound(useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
             }
         }
-
         if (type.isReferenceType()) {
             type = type.asReferenceType().transformTypeParameters(this::useThisTypeParametersOnTheGivenType);
         }
-
         return type;
     }
 

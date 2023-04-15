@@ -2,7 +2,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,11 +21,10 @@ package com.github.javaparser.printer.lexicalpreservation;
  * GNU Lesser General Public License for more details.
  */
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.utils.TestUtils;
+import org.junit.jupiter.api.Test;
 
 public class Issue3440Test extends AbstractLexicalPreservingTest {
 
@@ -33,7 +32,6 @@ public class Issue3440Test extends AbstractLexicalPreservingTest {
     void test3440() {
         considerCode("public class Foo { public void bar() { switch(1) {case 1: break; } } }");
         String expected = "public class Foo { public void bar() { switch(1) {case 1:  } } }";
-        LexicalPreservingPrinter.setup(cu);
         SwitchEntry entry = cu.findFirst(SwitchEntry.class).get();
         entry.setStatements(new NodeList<>());
         TestUtils.assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));

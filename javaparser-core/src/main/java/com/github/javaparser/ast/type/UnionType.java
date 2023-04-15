@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,9 +34,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.UnionTypeMetaModel;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
@@ -192,4 +198,12 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     public Optional<UnionType> toUnionType() {
         return Optional.of(this);
     }
+
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		List<ResolvedType> resolvedElements = getElements().stream()
+                .map(el -> el.convertToUsage(context))
+                .collect(Collectors.toList());
+        return new ResolvedUnionType(resolvedElements);
+	}
 }

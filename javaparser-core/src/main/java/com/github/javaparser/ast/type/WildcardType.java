@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,7 +34,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.WildcardTypeMetaModel;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -254,4 +257,26 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     public Optional<WildcardType> toWildcardType() {
         return Optional.of(this);
     }
+
+    /**
+     * Convert a {@link WildcardType} into a {@link ResolvedType}.
+     *
+     * @param wildcardType  The wildcard type to be converted.
+     * @param context       The current context.
+     *
+     * @return The type resolved.
+     */
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		if (getExtendedType().isPresent() && !getSuperType().isPresent()) {
+			return ResolvedWildcard.extendsBound(getExtendedType().get().convertToUsage(context)); // removed (ReferenceTypeImpl)
+		}
+		if (!getExtendedType().isPresent() && getSuperType().isPresent()) {
+			return ResolvedWildcard.superBound(getSuperType().get().convertToUsage(context)); // removed (ReferenceTypeImpl)
+		}
+		if (!getExtendedType().isPresent() && !getSuperType().isPresent()) {
+			return ResolvedWildcard.UNBOUNDED;
+		}
+		throw new UnsupportedOperationException(toString());
+	}
 }

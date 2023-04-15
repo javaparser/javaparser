@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -256,6 +256,38 @@ class RangeTest {
         Range r2 = rangePair_strictlyContained[1];
         assertTrue(r1.overlapsWith(r2));
         assertTrue(r2.overlapsWith(r1));
+    }
+    
+    @Test
+    void rangePair_is_before() {
+        Range r1 = Range.range(new Position(1,1), new Position(1,2));
+        Range r2 = Range.range(new Position(1,3), new Position(1,4));
+        assertTrue(r1.isBefore(r2));
+    }
+    
+    @Test
+    void rangePair_is_not_before() {
+        Range r1 = Range.range(new Position(1,1), new Position(1,2));
+        Range r2 = Range.range(new Position(1,3), new Position(1,4));
+        Range r3 = Range.range(new Position(1,1), new Position(1,4));
+        assertFalse(r2.isBefore(r1));
+        assertFalse(r3.isBefore(r1));
+    }
+    
+    @Test
+    void rangePair_is_after() {
+        Range r1 = Range.range(new Position(1,1), new Position(1,2));
+        Range r2 = Range.range(new Position(1,3), new Position(1,4));
+        assertTrue(r2.isAfter(r1));
+    }
+    
+    @Test
+    void rangePair_is_not_after() {
+        Range r1 = Range.range(new Position(1,1), new Position(1,2));
+        Range r2 = Range.range(new Position(1,3), new Position(1,4));
+        Range r3 = Range.range(new Position(1,1), new Position(1,4));
+        assertFalse(r1.isAfter(r2));
+        assertFalse(r1.isAfter(r3));
     }
 
 }

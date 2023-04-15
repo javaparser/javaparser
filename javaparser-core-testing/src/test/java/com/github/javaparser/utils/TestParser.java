@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,7 +33,7 @@ import com.github.javaparser.ast.stmt.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.javaparser.ParserConfiguration.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.BLEEDING_EDGE;
 import static org.junit.jupiter.api.Assertions.fail;
 

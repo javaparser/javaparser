@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,10 +20,6 @@
  */
 package com.github.javaparser.ast.type;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.joining;
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -41,7 +37,23 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ClassOrInterfaceTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * A class or an interface type.
@@ -318,4 +330,30 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
     public Optional<ClassOrInterfaceType> toClassOrInterfaceType() {
         return Optional.of(this);
     }
+
+    /**
+     * Convert a {@link ClassOrInterfaceType} into a {@link ResolvedType}.
+     *
+     * @param classOrInterfaceType  The class of interface type to be converted.
+     * @param context               The current context.
+     *
+     * @return The type resolved.
+     */
+	@Override
+	public ResolvedType convertToUsage(Context context) {
+		String name = getNameWithScope();
+        SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name);
+        if (!ref.isSolved()) {
+            throw new UnsolvedSymbolException(name);
+        }
+        ResolvedTypeDeclaration typeDeclaration = ref.getCorrespondingDeclaration();
+        List<ResolvedType> typeParameters = Collections.emptyList();
+        if (getTypeArguments().isPresent()) {
+            typeParameters = getTypeArguments().get().stream().map((pt) -> pt.convertToUsage(context)).collect(Collectors.toList());
+        }
+        if (typeDeclaration.isTypeParameter()) {
+            return new ResolvedTypeVariable(typeDeclaration.asTypeParameter());
+        }
+        return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters);
+	}
 }

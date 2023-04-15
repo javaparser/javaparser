@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,9 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
 import java.util.Objects;
@@ -86,12 +86,12 @@ public class ClassLoaderTypeSolver implements TypeSolver {
                 // java.lang.NoClassDefFoundError: com/github/javaparser/printer/ConcreteSyntaxModel
                 // (wrong name: com/github/javaparser/printer/concretesyntaxmodel)
                 // note that this exception seems to be thrown only on certain platform (mac yes, linux no)
-                return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+                return SymbolReference.unsolved();
             } catch (ClassNotFoundException e) {
                 // it could be an inner class
                 int lastDot = name.lastIndexOf('.');
                 if (lastDot == -1) {
-                    return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+                    return SymbolReference.unsolved();
                 } else {
                     String parentName = name.substring(0, lastDot);
                     String childName = name.substring(lastDot + 1);
@@ -101,14 +101,14 @@ public class ClassLoaderTypeSolver implements TypeSolver {
                                 .internalTypes()
                                 .stream().filter(it -> it.getName().equals(childName)).findFirst();
                         return innerClass.map(SymbolReference::solved)
-                                .orElseGet(() -> SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class));
+                                .orElseGet(() -> SymbolReference.unsolved());
                     } else {
-                        return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+                        return SymbolReference.unsolved();
                     }
                 }
             }
         } else {
-            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved();
         }
     }
 

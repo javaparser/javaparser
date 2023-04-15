@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser;
 
 import java.util.List;
@@ -31,6 +30,7 @@ import static java.util.Collections.singletonList;
  * Thrown when parsing problems occur during parsing with the static methods on JavaParser.
  */
 public class ParseProblemException extends RuntimeException {
+
     /**
      * The problems that were encountered during parsing
      */

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -83,7 +83,6 @@ public class Issue1526Test extends AbstractSymbolResolutionTest {
 
         cu.getResult().get().findAll(MethodCallExpr.class)
             .forEach(methodCallExpr -> {
-                System.out.println(methodCallExpr);
                 methodCallExpr.resolve();
                 methodCallExpr.calculateResolvedType();
             });

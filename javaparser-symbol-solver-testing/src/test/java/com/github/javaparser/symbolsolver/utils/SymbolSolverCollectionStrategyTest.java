@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,8 +21,13 @@
 
 package com.github.javaparser.symbolsolver.utils;
 
-import static com.github.javaparser.utils.CodeGenerationUtils.classLoaderRoot;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.utils.Log;
+import com.github.javaparser.utils.ProjectRoot;
+import com.github.javaparser.utils.SourceRoot;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,14 +37,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.utils.Log;
-import com.github.javaparser.utils.ProjectRoot;
-import com.github.javaparser.utils.SourceRoot;
+import static com.github.javaparser.utils.CodeGenerationUtils.classLoaderRoot;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SymbolSolverCollectionStrategyTest {
 

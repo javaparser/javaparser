@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,14 +20,15 @@
  */
 package com.github.javaparser.ast.observer;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.utils.Utils;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.Arrays;
+
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.utils.Utils;
 
 /**
  * Properties considered by the AstObserver
@@ -305,14 +306,7 @@ public enum ObservableProperty {
     }
 
     public boolean isNullOrNotPresent(Node node) {
-        Object result = getRawValue(node);
-        if (result == null) {
-            return true;
-        }
-        if (result instanceof Optional) {
-            return !((Optional) result).isPresent();
-        }
-        return false;
+    	return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
     }
 
     public boolean isNullOrEmpty(Node node) {

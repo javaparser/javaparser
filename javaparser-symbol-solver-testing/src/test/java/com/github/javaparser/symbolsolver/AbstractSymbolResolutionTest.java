@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,22 +30,25 @@ import org.junit.jupiter.api.AfterEach;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.CodeGenerationUtils;
 
 public abstract class AbstractSymbolResolutionTest {
-
-    @AfterAll
-    public static void tearDown() {
-        // clear internal caches
-        JavaParserFacade.clearInstances();
-    }
 
     @AfterEach
     public void reset() {
         // reset configuration to not potentially disturb others tests.
         // So we have to set specific configuration between each test.
-        StaticJavaParser.setConfiguration(new ParserConfiguration());
+        StaticJavaParser.setConfiguration(new ParserConfiguration().setSymbolResolver(symbolResolver(defaultTypeSolver())));
+    }
+
+    @AfterAll
+    static public void tearDown() {
+        // clear internal caches
+        JavaParserFacade.clearInstances();
     }
 
     /**
@@ -143,5 +146,13 @@ public abstract class AbstractSymbolResolutionTest {
 
     protected static Path adaptPath(String path) {
         return adaptPath(Paths.get(path));
+    }
+
+    protected SymbolResolver symbolResolver(TypeSolver typeSolver) {
+    	return new JavaSymbolSolver(typeSolver);
+    }
+
+    protected TypeSolver defaultTypeSolver() {
+    	return new ReflectionTypeSolver();
     }
 }

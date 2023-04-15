@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast;
 
 import java.lang.annotation.Retention;
@@ -34,9 +33,9 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * and will be overwritten the next time the generators are run.
  */
 @Retention(SOURCE)
-@Target({PACKAGE, TYPE, ANNOTATION_TYPE, METHOD, CONSTRUCTOR, FIELD,
-        LOCAL_VARIABLE, PARAMETER})
+@Target({ PACKAGE, TYPE, ANNOTATION_TYPE, METHOD, CONSTRUCTOR, FIELD, LOCAL_VARIABLE, PARAMETER })
 public @interface Generated {
+
     /**
      * The value element must have the name of the code generator.
      * The recommended convention is to use the fully qualified name of the

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator;
 
 import com.github.javaparser.ast.Node;
@@ -27,7 +26,9 @@ import com.github.javaparser.ast.Node;
  * Runs a validator on all nodes of a certain type.
  */
 public class SingleNodeTypeValidator<N extends Node> implements Validator {
+
     private final Class<N> type;
+
     private final TypedValidator<N> validator;
 
     public SingleNodeTypeValidator(Class<N> type, TypedValidator<N> validator) {

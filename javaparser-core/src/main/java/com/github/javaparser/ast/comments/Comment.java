@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -29,8 +29,10 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CommentMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -219,5 +221,22 @@ public abstract class Comment extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LineComment> toLineComment() {
         return Optional.empty();
+    }
+    
+    /*
+     * Header is "//" for line comment 
+     */
+    abstract public String getHeader(); 
+    
+    /*
+     * 
+     */
+    abstract public String getFooter();
+    
+    /*
+     * Returns the content of the comment with header and footer
+     */
+    public String asString() {
+    	return getHeader()+getContent()+getFooter();
     }
 }

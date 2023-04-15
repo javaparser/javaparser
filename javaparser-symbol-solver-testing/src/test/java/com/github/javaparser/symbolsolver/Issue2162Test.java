@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,14 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.Providers.provider;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -28,17 +36,11 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static com.github.javaparser.Providers.provider;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @see <a href="https://github.com/javaparser/javaparser/issues/2162">https://github.com/javaparser/javaparser/issues/2162</a>
@@ -103,8 +105,7 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
         );
 
 
-        System.out.println("parseResult = " + parseResult);
-        parseResult.getProblems().forEach(problem -> System.out.println("problem.getVerboseMessage() = " + problem.getVerboseMessage()));
+//        parseResult.getProblems().forEach(problem -> System.out.println("problem.getVerboseMessage() = " + problem.getVerboseMessage()));
 
         assertTrue(parseResult.isSuccessful());
         assertEquals(0, parseResult.getProblems().size(), "Expected zero errors when attempting to parse the input code.");
@@ -136,7 +137,7 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
 
         // b3.getView()
         assertEquals("D", javaParserFacade.solve(methodCallExprs.get(4)).getCorrespondingDeclaration().getReturnType().describe());
-        assertThrows(UnsupportedOperationException.class, () -> {
+        assertThrows(UnsolvedSymbolException.class, () -> {
             // b3.getView().getView() -- causing error
             assertEquals("V", javaParserFacade.solve(methodCallExprs.get(3)).getCorrespondingDeclaration().getReturnType().describe());
         }, "Exected this resolution to fail due to the chained methods -- `getView()` shouldn't exist on the return value from the first call to `getView()`.");

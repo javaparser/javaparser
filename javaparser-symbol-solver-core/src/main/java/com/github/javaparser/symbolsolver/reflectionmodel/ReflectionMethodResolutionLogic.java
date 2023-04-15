@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,18 +21,18 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -68,7 +68,7 @@ class ReflectionMethodResolutionLogic {
         }
 
         if (scopeType.getAncestors().isEmpty()){
-            ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver);
+            ReferenceTypeImpl objectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver));
             objectClass.getTypeDeclaration().ifPresent(objectTypeDeclaration -> {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(objectTypeDeclaration, name, parameterTypes, staticOnly);
                 if (ref.isSolved()) {
@@ -88,7 +88,7 @@ class ReflectionMethodResolutionLogic {
                 // Parameters not specified, so default to Object
                 typeParameterValues = new ArrayList<>();
                 for (int i = 0; i < scopeType.getTypeParameters().size(); i++) {
-                    typeParameterValues.add(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver));
+                    typeParameterValues.add(new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)));
                 }
             }
         }
@@ -102,7 +102,9 @@ class ReflectionMethodResolutionLogic {
 
         }
 
-        for(ResolvedReferenceType ancestor : scopeType.getAncestors()){
+        List<ResolvedReferenceType> ancestors = scopeType.getAncestors();
+        
+        for(ResolvedReferenceType ancestor : ancestors){
             if(ancestor.getTypeDeclaration().isPresent()) {
                 ResolvedReferenceTypeDeclaration ancestorTypeDeclaration = ancestor.getTypeDeclaration().get();
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(ancestorTypeDeclaration, name, argumentsTypes);
@@ -114,8 +116,8 @@ class ReflectionMethodResolutionLogic {
             }
         }
 
-        if (scopeType.getAncestors().isEmpty()) {
-            Optional<ResolvedReferenceTypeDeclaration> optionalObjectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver), typeSolver).getTypeDeclaration();
+        if (ancestors.isEmpty()) {
+            Optional<ResolvedReferenceTypeDeclaration> optionalObjectClass = new ReferenceTypeImpl(new ReflectionClassDeclaration(Object.class, typeSolver)).getTypeDeclaration();
             if (optionalObjectClass.isPresent()) {
                 SymbolReference<ResolvedMethodDeclaration> ref = MethodResolutionLogic.solveMethodInType(optionalObjectClass.get(), name, argumentsTypes);
                 if (ref.isSolved()) {

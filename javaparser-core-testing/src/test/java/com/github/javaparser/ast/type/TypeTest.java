@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,12 +30,11 @@ import com.github.javaparser.ast.validator.language_level_validations.Java5Valid
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.VARIABLE_DECLARATION_EXPR;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.RAW;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TypeTest {
     @Test
@@ -55,9 +54,9 @@ class TypeTest {
     void primitiveTypeArgumentLenientValidator() {
         ParserConfiguration config = new ParserConfiguration()
                 .setLanguageLevel(RAW);
-        config.getPostProcessors().add(new Java5Validator() {{
+        config.getProcessors().add(() -> new Java5Validator() {{
             remove(noPrimitiveGenericArguments);
-        }}.postProcessor());
+        }}.processor());
 
         ParseResult<VariableDeclarationExpr> result = new JavaParser(config).parse(
                 VARIABLE_DECLARATION_EXPR, provider("List<long> x"));

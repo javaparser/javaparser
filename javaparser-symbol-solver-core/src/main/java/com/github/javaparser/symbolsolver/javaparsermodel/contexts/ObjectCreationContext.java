@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,22 +21,22 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
-import java.util.List;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+
+import java.util.List;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -48,7 +48,7 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
     }
 
     @Override
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
         if (wrappedNode.hasScope()) {
             Expression scope = wrappedNode.getScope().get();
             ResolvedType scopeType = JavaParserFacade.get(typeSolver).getType(scope);
@@ -67,7 +67,7 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
         while (parentNode instanceof ObjectCreationExpr) {
             parentNode = demandParentNode(parentNode);
         }
-        return JavaParserFactory.getContext(parentNode, typeSolver).solveType(name);
+        return JavaParserFactory.getContext(parentNode, typeSolver).solveType(name, typeArguments);
     }
 
     @Override

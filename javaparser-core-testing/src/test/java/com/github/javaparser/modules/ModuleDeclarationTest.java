@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -237,5 +237,23 @@ class ModuleDeclarationTest {
                 "    exports foo.bar to other.foo, other.bar;\n" +
                 "    exports foo.bar.x to other.foo, other.bar;\n" +
                 "}\n", moduleDeclaration.toString());
+    }
+    
+    @Test
+    void testModifierRequire() {
+        ModuleDeclaration moduleDeclaration = new CompilationUnit()
+                .setModule("com.laamella.base")
+                .addDirective("requires transitive java.desktop;");
+        ModuleRequiresDirective moduleRequiresStmt = moduleDeclaration.getDirectives().get(0).asModuleRequiresStmt();
+        assertTrue(moduleRequiresStmt.isTransitive());
+    }
+    
+    @Test
+    void testModifierStatic() {
+        ModuleDeclaration moduleDeclaration = new CompilationUnit()
+                .setModule("com.laamella.base")
+                .addDirective("requires static java.desktop;");
+        ModuleRequiresDirective moduleRequiresStmt = moduleDeclaration.getDirectives().get(0).asModuleRequiresStmt();
+        assertTrue(moduleRequiresStmt.isStatic());
     }
 }

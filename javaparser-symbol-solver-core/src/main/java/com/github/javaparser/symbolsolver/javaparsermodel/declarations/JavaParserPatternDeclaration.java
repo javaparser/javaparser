@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,12 +21,12 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.PatternExpr;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedPatternDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 
 import java.util.Optional;
 
@@ -35,7 +35,7 @@ import java.util.Optional;
  *
  * @author Roger Howell
  */
-public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration, AssociableToAST<PatternExpr> {
+public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration {
 
     private final PatternExpr wrappedNode;
     private final TypeSolver typeSolver;
@@ -65,7 +65,7 @@ public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration,
     }
 
     @Override
-    public Optional<PatternExpr> toAst() {
+    public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
 

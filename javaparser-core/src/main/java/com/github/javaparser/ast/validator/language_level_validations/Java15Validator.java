@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -30,8 +29,8 @@ public class Java15Validator extends Java14Validator {
 
     public Java15Validator() {
         super();
-
         // Released Language Features
-        remove(noTextBlockLiteral); // Text Block Literals - released within Java 15 - https://openjdk.java.net/jeps/378
+        // Text Block Literals - released within Java 15 - https://openjdk.java.net/jeps/378
+        remove(noTextBlockLiteral);
     }
 }

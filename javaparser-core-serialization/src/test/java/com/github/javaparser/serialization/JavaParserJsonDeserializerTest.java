@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,7 +20,10 @@
  */
 package com.github.javaparser.serialization;
 
-import com.github.javaparser.*;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Range;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -31,6 +34,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.resolution.SymbolResolver;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.AfterAll;
@@ -167,7 +171,7 @@ class JavaParserJsonDeserializerTest {
 
         CompilationUnit deserialized = (CompilationUnit) deserializer.deserializeObject(Json.createReader(new StringReader(serialized)));
 
-        assertTrue(deserialized.getRange().isPresent());
+        assertTrue(deserialized.hasRange());
         Range range = deserialized.getRange().get();
         assertEquals(1, range.begin.line);
         assertEquals(1, range.begin.line);
@@ -196,6 +200,11 @@ class JavaParserJsonDeserializerTest {
             public ResolvedType calculateType(Expression expression) {
                 return null;
             }
+
+			@Override
+			public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
+				return null;
+			}
         };
         StaticJavaParser.getConfiguration().setSymbolResolver(stubResolver);
         CompilationUnit cu = parse("public class X{} class Z{}");

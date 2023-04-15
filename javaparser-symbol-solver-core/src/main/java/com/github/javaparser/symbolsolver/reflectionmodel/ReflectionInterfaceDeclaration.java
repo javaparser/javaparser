@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,22 +23,22 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.ConflictingGenericTypesException;
+import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.NullType;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
-import com.github.javaparser.symbolsolver.javaparsermodel.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.logic.ConfilictingGenericTypesException;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.logic.MethodResolutionCapability;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.NullType;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -48,7 +48,8 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
-        implements ResolvedInterfaceDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
+        implements ResolvedInterfaceDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
+        SymbolResolutionCapability {
 
     ///
     /// Fields
@@ -78,7 +79,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     @Override
@@ -118,7 +119,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     public ResolvedType getUsage(Node node) {
-        return new ReferenceTypeImpl(this, typeSolver);
+        return new ReferenceTypeImpl(this);
     }
 
     @Override
@@ -148,7 +149,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
                 typeParameterValues, this, clazz);
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
-            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+            InferenceContext inferenceContext = new InferenceContext(typeSolver);
             MethodUsage methodUsage = res.get();
             int i = 0;
             List<ResolvedType> parameters = new LinkedList<>();
@@ -166,7 +167,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
                 }
                 methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
                 return Optional.of(methodUsage);
-            } catch (ConfilictingGenericTypesException e) {
+            } catch (ConflictingGenericTypesException e) {
                 return Optional.empty();
             }
         } else {
@@ -242,14 +243,14 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         return reflectionClassAdapter.getAllFields();
     }
 
-    @Deprecated
+    @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : clazz.getFields()) {
             if (field.getName().equals(name)) {
                 return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
         }
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     @Override
@@ -283,7 +284,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     public List<ResolvedReferenceType> getInterfacesExtended() {
         List<ResolvedReferenceType> res = new ArrayList<>();
         for (Class i : clazz.getInterfaces()) {
-            res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver), typeSolver));
+            res.add(new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(i, typeSolver)));
         }
         return res;
     }
@@ -325,8 +326,4 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         return Collections.emptyList();
     }
 
-    @Override
-    public Optional<ClassOrInterfaceDeclaration> toAst() {
-        return Optional.empty();
-    }
 }

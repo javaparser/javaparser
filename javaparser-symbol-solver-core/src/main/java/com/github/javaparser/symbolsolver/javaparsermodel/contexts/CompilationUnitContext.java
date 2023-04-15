@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,14 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 
-
-import static com.github.javaparser.symbolsolver.javaparsermodel.contexts.AbstractJavaParserContext.isQualifiedName;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -39,27 +31,28 @@ import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserEnumDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
 public class CompilationUnitContext extends AbstractJavaParserContext<CompilationUnit> {
+
+    private static final String DEFAULT_PACKAGE = "java.lang";
 
     ///
     /// Static methods
@@ -122,11 +115,11 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
-        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     @Override
-    public SymbolReference<ResolvedTypeDeclaration> solveType(String name) {
+    public SymbolReference<ResolvedTypeDeclaration> solveType(String name, List<ResolvedType> typeArguments) {
 
         if (wrappedNode.getTypes() != null) {
             // Look for types in this compilation unit. For instance, if the given name is "A", there may be a class or
@@ -199,7 +192,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
         // Look in current package
         if (this.wrappedNode.getPackageDeclaration().isPresent()) {
-            String qName = this.wrappedNode.getPackageDeclaration().get().getName().toString() + "." + name;
+            String qName = this.wrappedNode.getPackageDeclaration().get().getNameAsString() + "." + name;
             SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(qName);
             if (ref != null && ref.isSolved()) {
                 return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
@@ -225,7 +218,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         }
 
         // Look in the java.lang package
-        SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType("java.lang." + name);
+        SymbolReference<ResolvedReferenceTypeDeclaration> ref = typeSolver.tryToSolveType(DEFAULT_PACKAGE+ "." + name);
         if (ref != null && ref.isSolved()) {
             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
         }
@@ -234,7 +227,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         if (isQualifiedName(name)) {
             return SymbolReference.adapt(typeSolver.tryToSolveType(name), ResolvedTypeDeclaration.class);
         } else {
-            return SymbolReference.unsolved(ResolvedReferenceTypeDeclaration.class);
+            return SymbolReference.unsolved();
         }
     }
 
@@ -280,7 +273,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         && this.wrappedNode.getTypes().stream().anyMatch(it -> it.getName().getIdentifier().equals(toSimpleName(importString)))) {
                         // We are using a static import on a type defined in this file. It means the value was not found at
                         // a lower level so this will fail
-                        return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+                        return SymbolReference.unsolved();
                     }
 
                     ResolvedTypeDeclaration ref = typeSolver.solveType(importString);
@@ -301,13 +294,13 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         if (method.isSolved()) {
                             return method;
                         } else {
-                            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+                            return SymbolReference.unsolved();
                         }
                     }
                 }
             }
         }
-        return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     @Override
@@ -351,18 +344,9 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
     }
 
     private boolean isAncestorOf(ResolvedTypeDeclaration descendant) {
-        if (descendant instanceof AssociableToAST) {
-            Optional<Node> astOpt = ((AssociableToAST<Node>) descendant).toAst();
-            if (astOpt.isPresent()) {
-                return wrappedNode.isAncestorOf(astOpt.get());
-            } else {
-                return false;
-            }
-        } else if (descendant instanceof JavaParserEnumDeclaration) {
-            return wrappedNode.isAncestorOf(((JavaParserEnumDeclaration) descendant).getWrappedNode());
-        } else {
-            throw new UnsupportedOperationException();
-        }
+        return descendant.toAst()
+                .filter(node -> wrappedNode.isAncestorOf(node))
+                .isPresent();
     }
 
 }

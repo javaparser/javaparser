@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,22 +22,25 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 
 import java.util.*;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration implements AssociableToAST<TypeParameter> {
+public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
 
     private TypeParameter wrappedNode;
     private TypeSolver typeSolver;
@@ -49,7 +52,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration i
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     @Override
@@ -117,7 +120,26 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration i
 
     @Override
     public List<ResolvedReferenceType> getAncestors(boolean acceptIncompleteList) {
-        throw new UnsupportedOperationException();
+        if (wrappedNode.getTypeBound().isEmpty()) {
+            // Every type variable declared as a type parameter has a bound.
+            // If no bound is declared for a type variable, Object is assumed.
+            // https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4
+            return Collections.singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
+        } else {
+            List<ResolvedReferenceType> ancestors = new ArrayList<>();
+            for (ClassOrInterfaceType type : wrappedNode.getTypeBound()) {
+                try {
+                    ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(type);
+                    ancestors.add(resolvedType.asReferenceType());
+                } catch (UnsolvedSymbolException e) {
+                    if (!acceptIncompleteList) {
+                        // Only throw if an incomplete ancestor list is unacceptable.
+                        throw e;
+                    }
+                }
+            }
+            return ancestors;
+        }
     }
 
     @Override
@@ -180,7 +202,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration i
     }
 
     @Override
-    public Optional<TypeParameter> toAst() {
+    public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
 

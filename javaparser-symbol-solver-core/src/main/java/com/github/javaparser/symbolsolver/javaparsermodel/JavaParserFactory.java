@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,8 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
@@ -32,12 +30,12 @@ import com.github.javaparser.ast.key.KeyExecutionContext;
 import com.github.javaparser.ast.key.KeyMethodCallStatement;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
@@ -53,6 +51,9 @@ import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarators.*;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -205,25 +206,4 @@ public class JavaParserFactory {
         return new NoSymbolDeclarator<>(node, typeSolver);
     }
 
-    public static ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node, TypeSolver typeSolver) {
-        if (node instanceof ClassOrInterfaceDeclaration) {
-            if (((ClassOrInterfaceDeclaration) node).isInterface()) {
-                return new JavaParserInterfaceDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-            }
-            return new JavaParserClassDeclaration((ClassOrInterfaceDeclaration) node, typeSolver);
-        }
-        if (node instanceof TypeParameter) {
-            return new JavaParserTypeParameter((TypeParameter) node, typeSolver);
-        }
-        if (node instanceof EnumDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
-        }
-        if (node instanceof AnnotationDeclaration) {
-            return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
-        }
-        if (node instanceof EnumConstantDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode((EnumConstantDeclaration) node), typeSolver);
-        }
-        throw new IllegalArgumentException(node.getClass().getCanonicalName());
-    }
 }

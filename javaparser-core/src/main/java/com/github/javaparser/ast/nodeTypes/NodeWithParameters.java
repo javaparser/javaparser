@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -160,8 +160,8 @@ public interface NodeWithParameters<N extends Node> {
      * @return {@code true} if all parameters match one by one, in the given order.
      */
     default boolean hasParametersOfType(Class<?>... paramTypes) {
-        return // if p.getType() is a class or interface type, we want to consider its erasure, i.e., if the parameter
+        return getParameters().stream().// if p.getType() is a class or interface type, we want to consider its erasure, i.e., if the parameter
         // is "List<String>", we want to consider it as "List", so we need to call getName()
-        getParameters().stream().map(p -> p.getType().toClassOrInterfaceType().map(NodeWithSimpleName::getNameAsString).orElse(p.getType().asString())).collect(toList()).equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toList()));
+        map(p -> p.getType().toClassOrInterfaceType().map(NodeWithSimpleName::getNameAsString).orElse(p.getType().asString())).collect(toList()).equals(Stream.of(paramTypes).map(Class::getSimpleName).collect(toList()));
     }
 }

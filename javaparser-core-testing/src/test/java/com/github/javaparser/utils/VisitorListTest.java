@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,19 +21,18 @@
 
 package com.github.javaparser.utils;
 
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
+import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
-import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VisitorListTest {
 

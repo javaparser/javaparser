@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -64,6 +64,15 @@ public interface ResolvedTypeDeclarationTest extends ResolvedDeclarationTest {
             assertDoesNotThrow(resolvedDeclaration::asTypeParameter);
         else
             assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asTypeParameter);
+    }
+
+    @Test
+    default void whenDeclarationIsAReferenceTypeTheCallToTheMethodAsReferenceTypeShouldNotThrow() {
+        ResolvedTypeDeclaration resolvedDeclaration = createValue();
+        if (resolvedDeclaration.isReferenceType())
+            assertDoesNotThrow(resolvedDeclaration::asReferenceType);
+        else
+            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asReferenceType);
     }
 
     @Test

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,26 +28,22 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
-import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.types.*;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.logic.MethodResolutionLogic;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
-import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class MethodReferenceExprContext extends AbstractJavaParserContext<MethodReferenceExpr> {
 
@@ -95,7 +91,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             }
         }
 
-        return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     ///
@@ -117,11 +113,11 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                 List<ResolvedType> resolvedTypes = new ArrayList<>();
 
                 for (ResolvedType type : functionalMethod.getParamTypes()) {
-                    InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                    InferenceContext inferenceContext = new InferenceContext(typeSolver);
 
                     // Resolve each type variable of the lambda, and use this later to infer the type of each
                     // implicit parameter
-                    inferenceContext.addPair(new ReferenceTypeImpl(functionalMethod.declaringType(), typeSolver), lambdaType);
+                    inferenceContext.addPair(new ReferenceTypeImpl(functionalMethod.declaringType()), lambdaType);
 
                     // Now resolve the argument type using the inference context
                     ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(type));
@@ -142,7 +138,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             }
         } else if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) demandParentNode(wrappedNode);
-            ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
+            ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
             Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
             if (functionalMethod.isPresent()) {
                 List<ResolvedType> resolvedTypes = new ArrayList<>();

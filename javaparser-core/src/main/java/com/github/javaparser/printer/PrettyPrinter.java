@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer;
 
 import java.util.function.Function;
@@ -26,8 +25,10 @@ import com.github.javaparser.ast.key.*;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
+import com.github.javaparser.printer.configuration.PrinterConfiguration;
+
+import java.util.function.Function;
 
 /**
  * Pretty printer for AST nodes.
@@ -37,24 +38,24 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
  */
 @Deprecated
 public class PrettyPrinter implements Printer {
-    
+
     private PrinterConfiguration configuration;
-    
+
     private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory;
 
     public PrettyPrinter() {
         this(new PrettyPrinterConfiguration());
     }
-    
+
     public PrettyPrinter(PrettyPrinterConfiguration configuration) {
         this(configuration, PrettyPrintVisitor::new);
     }
-    
+
     public PrettyPrinter(PrettyPrinterConfiguration configuration, Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }
-    
+
     /*
      * Returns the PrettyPrinter configuration
      */
@@ -74,9 +75,8 @@ public class PrettyPrinter implements Printer {
 
     @Override
     public String print(Node node) {
-        final VoidVisitor<Void> visitor = visitorFactory.apply((PrettyPrinterConfiguration)configuration);
+        final VoidVisitor<Void> visitor = visitorFactory.apply((PrettyPrinterConfiguration) configuration);
         node.accept(visitor, null);
         return visitor.toString();
     }
-
 }

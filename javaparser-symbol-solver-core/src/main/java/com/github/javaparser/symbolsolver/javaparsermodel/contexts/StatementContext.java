@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -28,16 +28,16 @@ import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.SymbolDeclarator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +56,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
     public static SymbolReference<? extends ResolvedValueDeclaration> solveInBlock(String name, TypeSolver typeSolver, Statement stmt) {
         Optional<Node> optionalParentNode = stmt.getParentNode();
         if(!optionalParentNode.isPresent()) {
-             return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+             return SymbolReference.unsolved();
         }
 
         Node parentOfWrappedNode = optionalParentNode.get();
@@ -174,8 +174,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             }
         }
 
-        // If nothing is found we should ask the parent context.
-        return solveSymbolAsValueInParentContext(name);
+        // If nothing is found we should ask the grand parent context.
+         return parentContext.getParent().map(context -> context.solveSymbolAsValue(name)).orElse(Optional.empty());
     }
 
     @Override
@@ -225,7 +225,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
         Optional<Node> optionalParentNode = wrappedNode.getParentNode();
         if(!optionalParentNode.isPresent()) {
-            return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+            return SymbolReference.unsolved();
         }
 
         Node parentOfWrappedNode = optionalParentNode.get();
@@ -246,7 +246,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             // Further below is a more detailed explanation for why we may want to disable this visitation of adjacent statements
             // to prevent revisiting the same contexts over and over again.
             if (!iterateAdjacentStmts) {
-                return SymbolReference.unsolved(ResolvedValueDeclaration.class);
+                return SymbolReference.unsolved();
             }
 
             NodeWithStatements<?> nodeWithStmt = (NodeWithStatements<?>) parentOfWrappedNode;
@@ -261,6 +261,22 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             ListIterator<Statement> statementListIterator = nodeWithStmt.getStatements().listIterator(position);
             while(statementListIterator.hasPrevious()) {
                 Context prevContext = JavaParserFactory.getContext(statementListIterator.previous(), typeSolver);
+                if (prevContext instanceof BlockStmtContext) {
+                    // Issue #3631
+                    // We have an explicit check for "BlockStmtContext" to avoid resolving the variable x with the
+                    // declaration defined in the block preceding the use of the variable
+                    // For example consider the following:
+                    //
+                    // int x = 0;
+                    // void method() {
+                    // {
+                    // var x = 1;
+                    // System.out.println(x); // prints 1
+                    // }
+                    // System.out.println(x); // prints 0
+                    // }
+                    continue;
+                }
                 if (prevContext instanceof StatementContext) {
                     // We have an explicit check for "StatementContext" to prevent a factorial increase of visited statements.
                     //

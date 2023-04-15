@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,13 +18,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.types;
-
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 import java.util.List;
 import java.util.Map;
+
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * A wildcard can be:
@@ -40,6 +40,7 @@ public class ResolvedWildcard implements ResolvedType {
     public static ResolvedWildcard UNBOUNDED = new ResolvedWildcard(null, null);
 
     private BoundType type;
+
     private ResolvedType boundedType;
 
     private ResolvedWildcard(BoundType type, ResolvedType boundedType) {
@@ -63,30 +64,30 @@ public class ResolvedWildcard implements ResolvedType {
 
     @Override
     public String toString() {
-        return "WildcardUsage{" +
-                "type=" + type +
-                ", boundedType=" + boundedType +
-                '}';
+        return "WildcardUsage{" + "type=" + type + ", boundedType=" + boundedType + '}';
     }
 
-    public boolean isWildcard() {
+    @Override
+	public boolean isWildcard() {
         return true;
     }
 
-    public ResolvedWildcard asWildcard() {
+    @Override
+	public ResolvedWildcard asWildcard() {
         return this;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ResolvedWildcard)) return false;
-
+        if (this == o)
+            return true;
+        if (!(o instanceof ResolvedWildcard))
+            return false;
         ResolvedWildcard that = (ResolvedWildcard) o;
-
-        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null) return false;
-        if (type != that.type) return false;
-
+        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null)
+            return false;
+        if (type != that.type)
+            return false;
         return true;
     }
 
@@ -132,7 +133,7 @@ public class ResolvedWildcard implements ResolvedType {
     @Override
     public boolean isAssignableBy(ResolvedType other) {
         if (boundedType == null) {
-            //return other.isReferenceType() && other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
+            // return other.isReferenceType() && other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
             return false;
         } else if (type == BoundType.SUPER) {
             return boundedType.isAssignableBy(other);
@@ -176,8 +177,34 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     public enum BoundType {
-        SUPER,
-        EXTENDS
+
+        SUPER, EXTENDS
     }
 
+    /*
+     * Returns the bounded resolved type.
+     */
+    @Override
+    public ResolvedType solveGenericTypes(Context context) {
+    	if (isExtends() || isSuper()) {
+            ResolvedType boundResolved = getBoundedType().solveGenericTypes(context);
+            if (isExtends()) {
+                return ResolvedWildcard.extendsBound(boundResolved);
+            } else {
+                return ResolvedWildcard.superBound(boundResolved);
+            }
+        }
+    	return this;
+    }
+
+	//
+	// Erasure
+	//
+	// The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
+	// This method returns null if no bound is declared. This is probably a limitation.
+	//
+	@Override
+	public ResolvedType erasure() {
+		return boundedType;
+	}
 }

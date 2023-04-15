@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.types;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -35,6 +29,9 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
 
@@ -94,6 +91,28 @@ class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
         
         assertTrue(ResolvedPrimitiveType.unp(ResolvedPrimitiveType.BOOLEAN).equals(ResolvedPrimitiveType.BOOLEAN));
         assertTrue(ResolvedPrimitiveType.unp(rString).equals(rString));
+    }
+    
+    @Test
+    void isBoxType() {
+        StaticJavaParser.setConfiguration(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false))));
+        ResolvedType rByte = getType("class A {java.lang.Byte x;}");
+        ResolvedType rShort = getType("class A {java.lang.Short x;}");
+        ResolvedType rChar = getType("class A {java.lang.Character x;}");
+        ResolvedType rInteger = getType("class A {java.lang.Integer x;}");
+        ResolvedType rLong = getType("class A {java.lang.Long x;}");
+        ResolvedType rFloat = getType("class A {java.lang.Float x;}");
+        ResolvedType rDouble = getType("class A {java.lang.Double x;}");
+        ResolvedType rString = getType("class A {java.lang.String x;}");
+        
+        assertTrue(ResolvedPrimitiveType.isBoxType(rByte));
+        assertTrue(ResolvedPrimitiveType.isBoxType(rShort));
+        assertTrue(ResolvedPrimitiveType.isBoxType(rChar));
+        assertTrue(ResolvedPrimitiveType.isBoxType(rInteger));
+        assertTrue(ResolvedPrimitiveType.isBoxType(rLong));
+        assertTrue(ResolvedPrimitiveType.isBoxType(rFloat));
+        assertTrue(ResolvedPrimitiveType.isBoxType(rDouble));
+        assertFalse(ResolvedPrimitiveType.isBoxType(rString));
     }
     
     private ResolvedType getType(String code) {

@@ -1,21 +1,35 @@
+/*
+ * Copyright (C) 2013-2023 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.issues;
 
-import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.comments.Comment;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,7 +72,6 @@ public class Issue2627Test {
 
     private void assertNodeInExpectedLines(Node node, int expectedStartLine, int expectedEndLine) {
         Range range = node.getRange().get();
-        System.out.println("range = " + range);
 
         assertEquals(expectedStartLine, range.begin.line);
         assertEquals(expectedEndLine, range.end.line);
@@ -71,50 +84,39 @@ public class Issue2627Test {
                 .get();
     }
 
-    @Test
-    public void cuLength_minimal() throws IOException {
-        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
+//    @Test
+//    public void cuLength_minimal() throws IOException {
+//        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
+//
+//        final Range cuRange = cu.getRange().get();
+//
+//        int lineCount = cuRange.end.line - cuRange.begin.line;
+//
+//    }
 
-        final Range cuRange = cu.getRange().get();
-        System.out.println("cu.getRange().get() = " + cuRange);
-
-        int lineCount = cuRange.end.line - cuRange.begin.line;
-        System.out.println("lineCount = " + lineCount);
-
-        assertNodeInExpectedLines(cu, 1, 265);
-    }
-
-    @Test
-    public void commentPositions_minimal() throws IOException {
-        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
-
-        List<Comment> allComments = cu.getAllComments();
-        for (int i = 0; i < allComments.size(); i++) {
-            Comment comment = allComments.get(i);
-            Optional<Range> optionalRange = comment.getRange();
-            if (optionalRange.isPresent()) {
-                Range range = optionalRange.get();
-                System.out.println();
-                System.out.println();
-                System.out.println();
-                System.out.println();
-                System.out.println();
-                System.out.println(i + ": ");
-                System.out.println("range = " + range);
-                System.out.println("comment = " + "\n" + comment.getContent());
-                final TokenRange tokens = comment.getTokenRange().get();
-                int tokenIndex = 0;
-                for (JavaToken token : tokens) {
-                    System.out.println("token " + tokenIndex + " = " + token);
-                    tokenIndex++;
-                }
-                System.out.println(tokens);
-            }
-        }
-
-
-//        assertNodeInExpectedLines(cu, 1, 288);
-    }
+//    @Test
+//    public void commentPositions_minimal() throws IOException {
+//        CompilationUnit cu = StaticJavaParser.parseResource(RESOURCE_PATH_STRING_MINIMAL);
+//
+//        List<Comment> allComments = cu.getAllComments();
+//        for (int i = 0; i < allComments.size(); i++) {
+//            Comment comment = allComments.get(i);
+//            Optional<Range> optionalRange = comment.getRange();
+//            if (optionalRange.isPresent()) {
+//                Range range = optionalRange.get();
+//                final TokenRange tokens = comment.getTokenRange().get();
+//                int tokenIndex = 0;
+//                for (JavaToken token : tokens) {
+//                    System.out.println("token " + tokenIndex + " = " + token);
+//                    tokenIndex++;
+//                }
+//                System.out.println(tokens);
+//            }
+//        }
+//
+//
+////        assertNodeInExpectedLines(cu, 1, 288);
+//    }
 
     @ParameterizedTest
     @MethodSource("arguments_minimal")

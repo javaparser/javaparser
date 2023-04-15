@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,10 +22,13 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.types.*;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.*;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedArrayType;
+import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedVoidType;
 import javassist.CtClass;
 import javassist.NotFoundException;
 
@@ -48,14 +51,11 @@ public class JavassistFactory {
         }
       } else {
         if (ctClazz.isInterface()) {
-          return new ReferenceTypeImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver),
-              typeSolver);
+          return new ReferenceTypeImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver));
         } else if (ctClazz.isEnum()) {
-          return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctClazz, typeSolver),
-              typeSolver);
+          return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctClazz, typeSolver));
         } else {
-          return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver),
-              typeSolver);
+          return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver));
         }
       }
     } catch (NotFoundException e) {
@@ -85,7 +85,7 @@ public class JavassistFactory {
     } else if (Modifier.isPrivate(modifiers)) {
       return AccessSpecifier.PRIVATE;
     } else {
-      return AccessSpecifier.PACKAGE_PRIVATE;
+      return AccessSpecifier.NONE;
     }
   }
 

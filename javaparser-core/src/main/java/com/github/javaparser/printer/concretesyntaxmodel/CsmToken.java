@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,11 +18,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.concretesyntaxmodel;
-
-import static com.github.javaparser.TokenTypes.isEndOfLineToken;
-import static com.github.javaparser.TokenTypes.isWhitespaceButNotEndOfLine;
 
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
@@ -30,12 +26,19 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.utils.LineSeparator;
 
+import static com.github.javaparser.TokenTypes.isEndOfLineToken;
+import static com.github.javaparser.TokenTypes.isWhitespaceButNotEndOfLine;
+
 public class CsmToken implements CsmElement {
+
     private final int tokenType;
+
     private String content;
+
     private TokenContentCalculator tokenContentCalculator;
 
     public interface TokenContentCalculator {
+
         String calculate(Node node);
     }
 
@@ -56,9 +59,8 @@ public class CsmToken implements CsmElement {
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
         }
-
         // Replace "raw" values with escaped textual counterparts (e.g. newlines {@code \r\n})
-        //  and "placeholder" values ({@code <SPACE>}) with their textual counterparts
+        // and "placeholder" values ({@code <SPACE>}) with their textual counterparts
         if (isEndOfLineToken(tokenType)) {
             // Use the unescaped version
             content = LineSeparator.lookupEscaped(this.content).get().asRawString();
@@ -93,13 +95,15 @@ public class CsmToken implements CsmElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         CsmToken csmToken = (CsmToken) o;
-
-        if (tokenType != csmToken.tokenType) return false;
-        if (content != null ? !content.equals(csmToken.content) : csmToken.content != null) return false;
+        if (tokenType != csmToken.tokenType)
+            return false;
+        if (content != null ? !content.equals(csmToken.content) : csmToken.content != null)
+            return false;
         return tokenContentCalculator != null ? tokenContentCalculator.equals(csmToken.tokenContentCalculator) : csmToken.tokenContentCalculator == null;
     }
 
@@ -113,6 +117,10 @@ public class CsmToken implements CsmElement {
 
     public boolean isWhiteSpace() {
         return TokenTypes.isWhitespace(tokenType);
+    }
+    
+    public boolean isWhiteSpaceNotEol() {
+        return isWhiteSpace() && !isNewLine();
     }
 
     public boolean isNewLine() {

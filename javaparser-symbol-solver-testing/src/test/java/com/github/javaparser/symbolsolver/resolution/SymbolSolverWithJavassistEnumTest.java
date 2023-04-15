@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,26 +21,28 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
-import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.resolution.Solver;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.javassistmodel.JavassistEnumDeclaration;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 class SymbolSolverWithJavassistEnumTest extends AbstractSymbolResolutionTest {
     private TypeSolver typeSolver;
-    private SymbolSolver symbolSolver;
+    private Solver symbolSolver;
     private JavassistEnumDeclaration enumDeclarationConcrete;
     private JavassistEnumDeclaration enumDeclarationInterfaceUserOwnJar;
     private JavassistEnumDeclaration enumDeclarationInterfaceUserIncludedJar;
@@ -86,14 +88,10 @@ class SymbolSolverWithJavassistEnumTest extends AbstractSymbolResolutionTest {
 
         assertFalse(solvedSymbol.isSolved());
 
-        try {
-            solvedSymbol.getCorrespondingDeclaration();
-        } catch (Exception e) {
-            assertTrue(e instanceof UnsupportedOperationException);
-            assertEquals("CorrespondingDeclaration not available for unsolved symbol.", e.getMessage());
-            return;
-        }
-        fail("Expected UnsupportedOperationException when requesting CorrespondingDeclaration on unsolved SymbolRefernce");
+        assertThrows(UnsolvedSymbolException.class, () -> {
+        	solvedSymbol.getCorrespondingDeclaration();
+        }, "Expected UnsolvedSymbolException when requesting CorrespondingDeclaration on unsolved SymbolRefernce");
+
     }
 
     @Test

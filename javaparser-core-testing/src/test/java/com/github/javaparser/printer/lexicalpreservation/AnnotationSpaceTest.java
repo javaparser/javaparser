@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,31 +21,25 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationSpaceTest {
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class AnnotationSpaceTest extends AbstractLexicalPreservingTest {
     /** Tests that inserted annotations on types are followed by a space. */
     @Test
     public void test() {
-        CompilationUnit cu =
-                StaticJavaParser.parse(
-                        "public class Foo {\n" +
+        considerCode("public class Foo {\n" +
                         "    void myMethod(String param);\n" +
-                        "}"
-                        );
-        LexicalPreservingPrinter.setup(cu);
+                        "}");
         // Insert the annotation onto the String parameter type.
         Optional<ClassOrInterfaceType> type = cu.findFirst(ClassOrInterfaceType.class);
         type.get().addAnnotation(new MarkerAnnotationExpr("Nullable"));
         String result = LexicalPreservingPrinter.print(cu);
-        System.out.println(result);
         // Verify that there's a space between the annotation and the String type.
         assertTrue(result.contains("@Nullable String"));
     }

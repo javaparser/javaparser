@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -26,70 +26,67 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.CastExpr;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.SymbolDeclarator;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
+import com.github.javaparser.resolution.logic.InferenceContext;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.logic.FunctionalInterfaceLogic;
-import com.github.javaparser.symbolsolver.logic.InferenceContext;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.resolution.Value;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.symbolsolver.reflectionmodel.MyObjectProvider;
-import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
-import static com.github.javaparser.symbolsolver.javaparser.Navigator.demandParentNode;
+import static com.github.javaparser.ast.expr.Expression.EXCLUDE_ENCLOSED_EXPR;
+import static com.github.javaparser.ast.expr.Expression.IS_NOT_ENCLOSED_EXPR;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
  */
 public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
-
+    
     public LambdaExprContext(LambdaExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
     @Override
     public Optional<Value> solveSymbolAsValue(String name) {
+        int index = -1;
         for (Parameter parameter : wrappedNode.getParameters()) {
+            index++;
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            int index = 0;
             for (ResolvedValueDeclaration decl : sb.getSymbolDeclarations()) {
                 if (decl.getName().equals(name)) {
-                    Node parentNode = demandParentNode(wrappedNode);
+                    Node parentNode = demandParentNode(wrappedNode, IS_NOT_ENCLOSED_EXPR);
                     if (parentNode instanceof MethodCallExpr) {
                         MethodCallExpr methodCallExpr = (MethodCallExpr) parentNode;
                         MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
-                        int i = pos(methodCallExpr, wrappedNode);
+                        int i = methodCallExpr.getArgumentPosition(wrappedNode, EXCLUDE_ENCLOSED_EXPR);
                         ResolvedType lambdaType = methodUsage.getParamTypes().get(i);
 
                         // Get the functional method in order for us to resolve it's type arguments properly
                         Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
                         if (functionalMethodOpt.isPresent()){
                             MethodUsage functionalMethod = functionalMethodOpt.get();
-                            InferenceContext inferenceContext = new InferenceContext(MyObjectProvider.INSTANCE);
+                            InferenceContext inferenceContext = new InferenceContext(typeSolver);
 
                             // Resolve each type variable of the lambda, and use this later to infer the type of each
                             // implicit parameter
                             lambdaType.asReferenceType().getTypeDeclaration().ifPresent(typeDeclaration -> {
                                 inferenceContext.addPair(
                                         lambdaType,
-                                        new ReferenceTypeImpl(typeDeclaration, typeSolver)
+                                        new ReferenceTypeImpl(typeDeclaration)
                                 );
                             });
 
@@ -120,7 +117,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         }
                     } else if (parentNode instanceof VariableDeclarator) {
                         VariableDeclarator variableDeclarator = (VariableDeclarator) parentNode;
-                        ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsageVariableType(variableDeclarator);
+                        ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
                         if (functionalMethod.isPresent()) {
                             ResolvedType lambdaType = functionalMethod.get().getParamType(index);
@@ -202,7 +199,6 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         throw new UnsupportedOperationException();
                     }
                 }
-                index++;
             }
         }
 
@@ -251,20 +247,5 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             }
         }
         return Optional.empty();
-    }
-
-    ///
-    /// Private methods
-    ///
-
-    private int pos(MethodCallExpr callExpr, Expression param) {
-        int i = 0;
-        for (Expression p : callExpr.getArguments()) {
-            if (p == param) {
-                return i;
-            }
-            i++;
-        }
-        throw new IllegalArgumentException();
     }
 }

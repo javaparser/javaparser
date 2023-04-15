@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,34 +23,23 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
-import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Federico Tomassetti
@@ -84,7 +73,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
 
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         List<ResolvedReferenceType> ancestorsOfOther = other.getAllAncestors();
-        ancestorsOfOther.add(new ReferenceTypeImpl(other, typeSolver));
+        ancestorsOfOther.add(new ReferenceTypeImpl(other));
         for (ResolvedReferenceType ancestorOfOther : ancestorsOfOther) {
             if (ancestorOfOther.getQualifiedName().equals(this.getQualifiedName())) {
                 return true;
@@ -128,7 +117,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
                 com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
-                String prefix = internalType.getName() + ".";
+                String prefix = internalType.getName().asString() + ".";
                 if (internalType.getName().getId().equals(name)) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
@@ -160,13 +149,13 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                 }
             }
         }
-        return SymbolReference.unsolved(ResolvedTypeDeclaration.class);
+        return SymbolReference.unsolved();
     }
 
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return wrappedNode
                 .getParentNode()
-                .map(node -> JavaParserFactory.toTypeDeclaration(node, typeSolver));
+                .map(node -> node.getSymbolResolver().toTypeDeclaration(node));
     }
     
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {

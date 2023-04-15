@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -713,6 +713,7 @@ class HashCodeVisitorTest {
 	void testVisitPatternExpr() {
 		PatternExpr node = spy(new PatternExpr());
 		HashCodeVisitor.hashCode(node);
+		verify(node, times(1)).getModifiers();
 		verify(node, times(1)).getName();
 		verify(node, times(1)).getType();
 		verify(node, times(1)).getComment();

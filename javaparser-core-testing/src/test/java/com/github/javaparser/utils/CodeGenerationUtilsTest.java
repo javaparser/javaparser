@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,7 +24,8 @@ package com.github.javaparser.utils;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CodeGenerationUtilsTest {
     @Test
@@ -40,6 +41,17 @@ class CodeGenerationUtilsTest {
         assertEquals("isBlue", getterName(boolean.class, "blue"));
         assertEquals("getBlue", getterName(Boolean.class, "blue"));
         assertEquals("getIsBlue", getterName(Boolean.class, "isBlue"));
+    }
+
+    @Test
+    void testGetterToPropertyName() {
+        assertEquals("value", getterToPropertyName("getValue"));
+        assertEquals("blue", getterToPropertyName("isBlue"));
+        assertEquals("value", getterToPropertyName("hasValue"));
+
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class,
+                () -> getterToPropertyName("value"));
+        assertEquals("Unexpected getterName 'value'", thrown.getMessage());
     }
 
 }

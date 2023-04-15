@@ -1,7 +1,7 @@
 
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,16 +22,14 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Issue1793Test {
+class Issue1793Test extends AbstractLexicalPreservingTest {
     
     @AfterEach
     public void reset() {
@@ -40,7 +38,7 @@ class Issue1793Test {
 
     @Test
     void importIsAddedOnTheSameLine() {
-        String src = 
+        considerCode( 
                 "public class Test {\n" + 
                 "  public void foo(Bar x, Bar y) {\n" + 
                 "    x.barf(); // expected to be wrapped\n" + 
@@ -48,10 +46,7 @@ class Issue1793Test {
                 "    y.barf(); // expected to be wrapped\n" + 
                 "    y.bark(); // expected to be wrapped\n" + 
                 "  }\n" + 
-                "}";
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setLexicalPreservationEnabled(true));
-        CompilationUnit cu = StaticJavaParser.parse(src);
-        LexicalPreservingPrinter.setup(cu);
+                "}");
         assertEquals(LexicalPreservingPrinter.print(cu), LexicalPreservingPrinter.print(cu.clone()));
     }
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
@@ -30,15 +29,11 @@ public class Java17PreviewValidator extends Java17Validator {
 
     public Java17PreviewValidator() {
         super();
-
         // Incubator
         // No new incubator language features added in Java 17
-
         // Preview
         // No new preview language features added in Java 17
-
         // 2nd Preview
         // No new 2nd preview language features added in Java 17
-
     }
 }

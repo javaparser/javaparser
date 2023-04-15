@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,37 +21,27 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Issue2290Test extends AbstractLexicalPreservingTest  {
     
     @Test
     public void test() {
 
-        ParserConfiguration config = new ParserConfiguration()
-                .setLexicalPreservationEnabled(true)
-                .setStoreTokens(true);
-        StaticJavaParser.setConfiguration(config);
-
-        String s = 
+        considerCode( 
                 "public class Clone1 {\n" + 
                 "  public static void main(String[] args) {\n" + 
                 "    System.out.println(\"I'm a clone10\");\n" +
                 "    System.out.println(\"I'm not a clone!\");\n" + 
                 "    System.out.println(\"I'm a clone10\");\n" + 
                 "  }\n" + 
-                "}";
-        CompilationUnit cu = StaticJavaParser.parse(s);
+                "}");
         List<ExpressionStmt> exprs = cu.findAll(ExpressionStmt.class);
         ExpressionStmt es = exprs.get(exprs.size()-1);
         es.getParentNode().get().remove(es);

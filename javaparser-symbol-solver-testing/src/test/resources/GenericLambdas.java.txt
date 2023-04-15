@@ -1,0 +1,9 @@
+import java.util.function.BiConsumer;
+
+class GenericLambdas {
+  public static void sink(Float f, String s) {}
+
+  public static BiConsumer<Float, String> foo() {
+    return (i1, i2) -> sink(i1, i2);
+  }
+}

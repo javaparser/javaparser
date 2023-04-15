@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,16 +21,14 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import org.junit.jupiter.api.Test;
 
-public class Issue2610Test {
+import java.util.Optional;
+
+public class Issue2610Test extends AbstractLexicalPreservingTest {
     
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
@@ -38,7 +36,7 @@ public class Issue2610Test {
     @Test
     public void test() {
       
-        CompilationUnit cu = StaticJavaParser.parse(
+        considerCode(
                 "public class Bar {\n" + 
                 "    public void foo() {\n" + 
                 "          // comment\n" +
@@ -46,11 +44,11 @@ public class Issue2610Test {
                 "    }\n" +
                 "}"
                 );
-        LexicalPreservingPrinter.setup(cu);
         // contruct a statement with a comment
         Expression expr = StaticJavaParser.parseExpression("System.out.println(\"warning\")");
         // Replace the method expression
         Optional<MethodCallExpr> mce = cu.findFirst(MethodCallExpr.class);
         mce.get().getParentNode().get().replace(mce.get(), expr);
+        // TODO assert something
     }
 }

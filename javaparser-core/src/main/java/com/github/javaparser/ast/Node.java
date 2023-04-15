@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -29,6 +29,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
+import com.github.javaparser.ast.nodeTypes.NodeWithScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -46,12 +47,14 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
 import static java.util.Collections.emptySet;
@@ -91,7 +94,7 @@ import static java.util.Spliterator.NONNULL;
  * like where braces or comma's are exactly.
  * Therefore there is no position information on everything in the original source file.
  * <h2>Observers</h2>
- * <p>It is possible to add observers to the the tree.
+ * <p>It is possible to add observers to the tree.
  * Any change in the tree is sent as an event to any observers watching.
  * <h2>Visitors</h2>
  * <p>The most comfortable way of working with an abstract syntax tree is using visitors.
@@ -804,7 +807,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return LineSeparator.SYSTEM;
     }
 
-    protected SymbolResolver getSymbolResolver() {
+    public SymbolResolver getSymbolResolver() {
         return findCompilationUnit().map(cu -> {
             if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
                 return cu.getData(SYMBOL_RESOLVER_KEY);
@@ -1154,7 +1157,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * returns true if the node defines a scope
      */
     public boolean hasScope() {
-        return NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent();
+        return (NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent())
+        		|| (NodeWithScope.class.isAssignableFrom(this.getClass()) && ((NodeWithScope) this).getScope() != null);
     }
 
     /*
