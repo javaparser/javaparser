@@ -5,7 +5,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.24.1-K2-SNAPSHOT</version>
+        <version>3.25.2-K2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -146,10 +146,6 @@
             <artifactId>okhttp</artifactId>
             <version>4.9.2</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.truth</groupId>
