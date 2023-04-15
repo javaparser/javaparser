@@ -340,7 +340,7 @@ public final class JavaParserMetaModel {
         keyPassiveExpressionMetaModel.getConstructorParameters().add(keyPassiveExpressionMetaModel.exprPropertyMetaModel);
         keyProgramVariableSVMetaModel.getConstructorParameters().add(keyProgramVariableSVMetaModel.textPropertyMetaModel);
         keyStatementSVMetaModel.getConstructorParameters().add(keyStatementSVMetaModel.textPropertyMetaModel);
-        keyTypeSVMetaModel.getConstructorParameters().add(keyTypeSVMetaModel.namePropertyMetaModel);
+        keyTypeSVMetaModel.getConstructorParameters().add(keyTypeSVMetaModel.textPropertyMetaModel);
         keyCcatchSVMetaModel.getConstructorParameters().add(keyCcatchSVMetaModel.textPropertyMetaModel);
         keyExecutionContextSVMetaModel.getConstructorParameters().add(keyExecutionContextSVMetaModel.textPropertyMetaModel);
     }
@@ -1026,8 +1026,8 @@ public final class JavaParserMetaModel {
         keyProgramVariableSVMetaModel.getDeclaredPropertyMetaModels().add(keyProgramVariableSVMetaModel.textPropertyMetaModel);
         keyStatementSVMetaModel.textPropertyMetaModel = new PropertyMetaModel(keyStatementSVMetaModel, "text", java.lang.String.class, Optional.empty(), false, false, false, false);
         keyStatementSVMetaModel.getDeclaredPropertyMetaModels().add(keyStatementSVMetaModel.textPropertyMetaModel);
-        keyTypeSVMetaModel.namePropertyMetaModel = new PropertyMetaModel(keyTypeSVMetaModel, "name", java.lang.String.class, Optional.empty(), false, false, false, false);
-        keyTypeSVMetaModel.getDeclaredPropertyMetaModels().add(keyTypeSVMetaModel.namePropertyMetaModel);
+        keyTypeSVMetaModel.textPropertyMetaModel = new PropertyMetaModel(keyTypeSVMetaModel, "text", java.lang.String.class, Optional.empty(), false, false, false, false);
+        keyTypeSVMetaModel.getDeclaredPropertyMetaModels().add(keyTypeSVMetaModel.textPropertyMetaModel);
         keyCcatchSVMetaModel.textPropertyMetaModel = new PropertyMetaModel(keyCcatchSVMetaModel, "text", java.lang.String.class, Optional.empty(), false, false, false, false);
         keyCcatchSVMetaModel.getDeclaredPropertyMetaModels().add(keyCcatchSVMetaModel.textPropertyMetaModel);
         keyExecutionContextSVMetaModel.textPropertyMetaModel = new PropertyMetaModel(keyExecutionContextSVMetaModel, "text", java.lang.String.class, Optional.empty(), false, false, false, false);

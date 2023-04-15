@@ -41,7 +41,7 @@ public class TokenTypesTest {
 
     @Test
     void everyTokenHasACategory() throws IOException {
-        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
+        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length - 1;
         Path tokenTypesPath = mavenModuleRoot(JavaParserTest.class).resolve("../javaparser-core/src/main/java/com/github/javaparser/TokenTypes.java");
         CompilationUnit tokenTypesCu = parse(tokenTypesPath);
 

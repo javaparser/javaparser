@@ -267,9 +267,13 @@ TOKEN_MGR_DECLS :
 
 /* COMMENTS */
 
+/*TOKEN : {
+    <SPECIAL_KEY_COMMENT: "//🔑" (~["\n","\r"])*>
+}*/
+
 SPECIAL_TOKEN :
 {
-  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
+    <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
 }
 
 MORE :
@@ -376,10 +380,10 @@ TOKEN :
 | < RETURNTYPE: "\\Return" >
 | < SEQ: "\\seq" >
 | < SET: "\\set" >
-| < LOOPSCOPE: "loop-scope" >
+| < LOOPSCOPE: "loop-scope" | "$loopScope" >
 | < MAP: "\\map" >
-| < MERGE_POINT: "merge_point" >
-| < METHODFRAME: "method-frame" >
+| < MERGE_POINT: "merge_point" | "$mergePoint" >
+| < METHODFRAME: "method-frame" | "$methodFrame" >
 | < LOCSET: "\\locset">
 | < FREE: "\\free" >
 | < EXEC: "exec" >
@@ -430,7 +434,7 @@ TOKEN :
 | <MODEL: "model">
 | <TWO_STATE: "two_state">
 | <NO_STATE: "no_state">
-| <RESULTARROW: "result->">
+| <RESULTARROW: "result->"> // $result =
 }
 
 /* LITERALS */
@@ -4316,6 +4320,8 @@ Statement Statement():
             | ret = ThrowStatement()
             | ret = SynchronizedStatement()
             | ret = TryStatement()
+            // KEY
+            //| ret = KeyActiveCommentStatement()
             | ret = KeyTransactionStatement()
             | ret = KeyMergePointStatement()
             | ret = KeyLoopScope()
@@ -6197,7 +6203,7 @@ KeyAbstractExecutionContext KeyExecutionContext() :
   KeyMethodSignature methodSignature;
 }
 {
-  "source" "=" {begin = token(); }
+  "source" {begin = token(); } "="
   methodSignature = KeyMethodSignature() "@" classContext = Type(emptyNodeList())
   [ "," "this" "=" runtimeInstance = Expression() ]
 
@@ -6225,6 +6231,19 @@ KeyMethodSignature KeyMethodSignature() :
      }
 }
 
+/*
+KeyActiveCommentStatement KeyActiveCommentStatement() :
+{
+  JavaToken begin;
+}
+{
+  <SPECIAL_KEY_COMMENT>
+  {begin=token();}
+  { return new KeyActiveCommentStatement(begin); }
+}
+ */
+
+
 
 KeyTransactionStatement KeyTransactionStatement() :
 {
@@ -6249,7 +6268,7 @@ KeyLoopScopeBlock KeyLoopScope() :
     JavaToken begin;
 }
 {
-  "loop-scope" { begin = token(); }
+  <LOOPSCOPE> { begin = token(); }
   "(" indexPV = Expression() ")"
   block = Block()
   { return new KeyLoopScopeBlock(range(begin, token()), indexPV, block); }
@@ -6262,7 +6281,7 @@ KeyMergePointStatement KeyMergePointStatement() :
     JavaToken begin;
 }
 {
-  "merge_point"  { begin = token(); }
+  <MERGE_POINT>  { begin = token(); }
   "(" expr = Expression() ")"
   ";"
   { return new KeyMergePointStatement(range(begin, token()), expr); }

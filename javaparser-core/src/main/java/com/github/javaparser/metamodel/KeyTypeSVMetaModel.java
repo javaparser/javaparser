@@ -41,5 +41,5 @@ public class KeyTypeSVMetaModel extends TypeMetaModel {
         super(superBaseNodeMetaModel, KeyTypeSV.class, "KeyTypeSV", "com.github.javaparser.ast.key.sv", false, false);
     }
 
-    public PropertyMetaModel namePropertyMetaModel;
+    public PropertyMetaModel textPropertyMetaModel;
 }

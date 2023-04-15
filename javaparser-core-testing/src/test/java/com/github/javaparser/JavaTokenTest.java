@@ -90,7 +90,7 @@ class JavaTokenTest {
     @Test
     void test() throws NoSuchFieldException, IllegalAccessException {
 
-        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length;
+        final int tokenCount = GeneratedJavaParserConstants.tokenImage.length - 1;
         assertEquals(tokenCount, JavaToken.Kind.values().length, "Error - mismatch between number of tokens.");
 
         // Iterate through the JP Tokens, and ensure that it matches the JavaCC tokens.

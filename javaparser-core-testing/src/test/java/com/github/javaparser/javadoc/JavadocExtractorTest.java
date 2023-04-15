@@ -25,6 +25,7 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -42,6 +43,7 @@ class JavadocExtractorTest {
 
     private void processFile(File file) throws FileNotFoundException {
         try {
+            System.out.println(file);
             CompilationUnit cu = parse(file);
             new VoidVisitorAdapter<Object>() {
                 @Override

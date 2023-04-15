@@ -27,10 +27,16 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.KeyAbstractExecutionContext;
+import com.github.javaparser.ast.key.KeyExecutionContext;
+import com.github.javaparser.ast.key.KeyMethodCallStatement;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.Context;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
@@ -43,8 +49,13 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarators.NoSymbolDe
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.ParameterSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.PatternSymbolDeclarator;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.VariableSymbolDeclarator;
+import com.github.javaparser.symbolsolver.model.resolution.SymbolReference;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.resolution.MethodResolutionLogic;
 import com.github.javaparser.symbolsolver.resolution.SymbolDeclarator;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -55,6 +66,31 @@ public class JavaParserFactory {
         if (node == null) {
             throw new NullPointerException("Node should not be null");
         }
+
+        //region KEY
+        if(node instanceof KeyMethodCallStatement) {
+            KeyAbstractExecutionContext n = ((KeyMethodCallStatement) node).getContext();
+            return getContext(n, typeSolver);
+        }
+
+        if(node instanceof KeyExecutionContext) {
+            KeyExecutionContext c = ((KeyExecutionContext) node);
+            // TODO weigl: cast not required in new versions
+            ResolvedClassDeclaration rt = (ResolvedClassDeclaration) typeSolver.solveType(c.getContext().asString());
+            String name = c.getSignature().getName().asString();
+            JavaParserFacade facade = JavaParserFacade.get(typeSolver);
+            Context clazzContext = getContext(rt.toAst().get(), typeSolver);
+            List<ResolvedType> argumentTypes = c.getSignature().getParamTypes().stream().map(
+                    it -> facade.convertToUsage(it, clazzContext)
+            ).collect(Collectors.toList());
+            SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(rt, name, argumentTypes);
+            if(method.isSolved()) {
+                return getContext(method.getCorrespondingDeclaration().toAst().get(), typeSolver);
+            }
+            return null;
+        }
+        //endregion
+
 
         // TODO: Is order important here?
         if (node instanceof ArrayAccessExpr) {
