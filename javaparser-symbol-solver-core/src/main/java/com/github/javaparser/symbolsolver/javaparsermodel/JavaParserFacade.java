@@ -34,6 +34,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.KeyExecutionContext;
+import com.github.javaparser.ast.key.KeyMethodCallStatement;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.type.Type;
@@ -557,7 +559,11 @@ public class JavaParserFacade {
         boolean detachFlag = false;
         while (true) {
             parent = demandParentNode(parent);
-            if (parent instanceof BodyDeclaration) {
+            if (parent instanceof KeyMethodCallStatement) { //weigl: fun with KeY name resolution.
+                Type type = ((KeyExecutionContext) ((KeyMethodCallStatement) parent).getContext()).getContext();
+                ResolvedReferenceTypeDeclaration rt = typeSolver.solveType(type.asString());
+                return rt.toAst().get();
+            } else if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration) {
                     return parent;
                 } else {

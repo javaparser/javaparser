@@ -18,6 +18,7 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class MethodFrameTests {
@@ -54,22 +57,22 @@ public class MethodFrameTests {
         final ResolveAllVisitor v = new ResolveAllVisitor();
         cu.getResult().get().accept(v, null);
 
-        List<String> errorLines = Files.readAllLines(file.toPath()).stream()
+        Set<String> errorLines = Files.readAllLines(file.toPath()).stream()
                 .filter(it -> it.trim().startsWith("//?"))
                 .map(it -> it.trim().substring(4).trim())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         errorLines.stream().sorted().forEach(errorLine ->
                 System.out.format("//? %s%n", errorLine));
-
+        System.out.println("---");
         v.messages.stream().sorted().forEach(errorLine ->
                 System.out.format("//? %s%n", errorLine));
 
-        Assertions.assertLinesMatch(errorLines, v.messages);
+        Truth.assertThat(v.messages).isEqualTo(errorLines);
     }
 
     private static class ResolveAllVisitor extends VoidVisitorAdapter<Void> {
-        final List<String> messages = new ArrayList<>(1024);
+        final Set<String> messages = new TreeSet<>();
 
         @Override
         public void visit(NameExpr n, Void arg) {
@@ -100,7 +103,7 @@ public class MethodFrameTests {
                 }
             } catch (UnsolvedSymbolException e) {
                 messages.add(String.format("e name: %s@%s", n, pos));
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
