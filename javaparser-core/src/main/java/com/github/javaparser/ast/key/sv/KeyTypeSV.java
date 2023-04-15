@@ -7,6 +7,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -114,5 +115,10 @@ public class KeyTypeSV extends Type {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyTypeSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyTypeSVMetaModel;
+    }
+
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        return null;//TODO weigl
     }
 }
