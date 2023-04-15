@@ -904,7 +904,7 @@ public class JavaToken {
                 case 0:
                     return EOF;
                 default:
-                    throw new IllegalArgumentException("Token kind "+kind+" is unknown.");
+                    throw new IllegalArgumentException("Token kind " + kind + " is unknown.");
             }
         }
 
