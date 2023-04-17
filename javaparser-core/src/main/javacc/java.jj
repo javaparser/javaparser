@@ -2504,6 +2504,7 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
     JavaToken begin = modifier.begin;
     JavaToken blockBegin = INVALID;
     ReferenceType throwType;
+    BlockStmt block = null;
 }
 {
     [ typeParameters = TypeParameters() { begin = orIfInvalid(begin, typeParameters.range.getBegin()); } ]
@@ -2525,12 +2526,16 @@ ConstructorDeclaration ConstructorDeclaration(ModifierHolder modifier):
 	    "}"
 	|
 		";"
+		{block = new BlockStmt(range(token(),token()),new NodeList<>());}
 	)
     {
         if (exConsInv != null) {
             stmts = prepend(stmts, exConsInv);
         }
-        return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, new BlockStmt(range(blockBegin, token()), stmts), parameters.b);
+        if(block == null){
+            block = new BlockStmt(range(blockBegin, token()), stmts);
+        }
+        return new ConstructorDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, typeParameters.list, name, parameters.a, throws_, block, parameters.b);
     }
 }
 
