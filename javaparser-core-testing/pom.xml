@@ -2,7 +2,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.25.2-K2-SNAPSHOT</version>
+        <version>3.25.2-K3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

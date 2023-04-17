@@ -1,3 +1,61 @@
+# KeY Changes 
+
+## K3
+
+* Allow empty constructors
+  ```java
+  class String {
+    public String();
+  }
+  ```
+  For method this is already covered by the grammar.
+
+## K2
+
+* key-javaparser is version JP-3.25.2 
+
+## K1
+
+Initial release
+
+* Statements 
+  * KeyMetaConstructStatement
+  * StatementSV
+  * KeyMethodCallStatement
+  * KeyMethodBodyStatement
+  * KeyTransactionStatement
+  * KeyMergePointStatement
+  * KeyLoopScope
+  * KeyCatchAllStatement
+  * KeyExecStatement
+  * KeyMethodCallStatement
+* Expression
+  * UnaryExpression 
+    * KeyGeneralEscapeExpression
+    * KeyCreateObjectSV
+    * KeyLengthReferenceSV   
+  * Cast expression allows schema type variables and meta constructs.
+  * PrimaryExpression
+    * PassiveExpression
+    * KeyStaticEvaluate
+    * IsStaticMC
+* Primitive types
+  * `\bigint`
+  * `\real`
+  * `\\locset`
+  * `\seq`
+  * `\free`
+  * `\map`
+* Types
+  * Schema type
+  * Meta-type 
+* Modifiers
+  * ghost
+  * model
+  * no_state
+  * two_state
+* A lot of new tokens
+
 
 Next Release (Version 3.25.3-snapshot)
 --------------------------------------
