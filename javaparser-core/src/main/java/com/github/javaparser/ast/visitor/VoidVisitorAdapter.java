@@ -150,6 +150,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final ClassOrInterfaceDeclaration n, final A arg) {
         n.getExtendedTypes().forEach(p -> p.accept(this, arg));
         n.getImplementedTypes().forEach(p -> p.accept(this, arg));
+        n.getPermittedTypes().forEach(p -> p.accept(this, arg));
         n.getTypeParameters().forEach(p -> p.accept(this, arg));
         n.getMembers().forEach(p -> p.accept(this, arg));
         n.getModifiers().forEach(p -> p.accept(this, arg));
