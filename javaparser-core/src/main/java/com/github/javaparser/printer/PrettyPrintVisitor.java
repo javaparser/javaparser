@@ -43,12 +43,10 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
@@ -1462,10 +1460,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.println(" {");
         printer.indent();
         if (n.getEntries().isNonEmpty()) {
-            final // Either we hit the constant amount limit in the configurations, or...
-            boolean // Either we hit the constant amount limit in the configurations, or...
-                    alignVertically = // any of the constants has a comment.
-                    n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() || n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
+            final boolean // Either we hit the constant amount limit in the configurations, or...
+                    // Either we hit the constant amount limit in the configurations, or...
+                    // any of the constants has a comment.
+                    alignVertically = n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() || n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();

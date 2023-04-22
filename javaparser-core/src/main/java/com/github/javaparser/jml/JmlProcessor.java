@@ -22,7 +22,6 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.*;
 
 /**

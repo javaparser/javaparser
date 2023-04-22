@@ -27,7 +27,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.InternalProperty;
-
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;

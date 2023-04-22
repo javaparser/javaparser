@@ -9,9 +9,10 @@ import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClassLevelMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl

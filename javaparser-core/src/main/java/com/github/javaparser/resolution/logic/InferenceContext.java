@@ -23,7 +23,6 @@ package com.github.javaparser.resolution.logic;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -81,11 +80,7 @@ public class InferenceContext {
                 // Interfaces do not extend the class Object,
                 // which means that if the formal parameter is of type Object,
                 // all types can match including the actual type.
-                List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName) ?
-                		Stream.concat(new ArrayList<ResolvedType>(Arrays.asList(actualType)).stream(),
-                				ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()).stream())
-                				.collect(Collectors.toList()):
-                		ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+                List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName) ? Stream.concat(new ArrayList<ResolvedType>(Arrays.asList(actualType)).stream(), ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()).stream()).collect(Collectors.toList()) : ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();

@@ -2,7 +2,6 @@ package com.github.javaparser.ast.jml.body;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
-
 import java.util.Set;
 
 /**

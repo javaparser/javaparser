@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import com.github.javaparser.ast.Node;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 public interface NodeWithIdentifier<N extends Node> {

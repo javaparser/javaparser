@@ -27,7 +27,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.ClassExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.VarType;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

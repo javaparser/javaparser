@@ -21,7 +21,6 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,7 +36,6 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
     // /
     // / Containment
     // /
-
     /**
      * Get the list of types defined inside the current type.
      */
@@ -70,7 +68,6 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
     // /
     // / Misc
     // /
-
     /**
      * Is this the declaration of a class?
      * Note that an Enum is not considered a Class in this case.

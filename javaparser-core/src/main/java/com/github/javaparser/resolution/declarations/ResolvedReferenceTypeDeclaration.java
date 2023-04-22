@@ -25,7 +25,6 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -52,7 +51,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     // /
     // / Ancestors
     // /
-
     /**
      * Resolves the types of all direct ancestors (i.e., the directly extended class and the directly implemented
      * interfaces) and returns the list of ancestors as a list of resolved reference types.
@@ -161,7 +159,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     // /
     // / Fields
     // /
-
     /**
      * Note that the type of the field should be expressed using the type variables of this particular type.
      * Consider for example:
@@ -244,7 +241,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     // /
     // / Methods
     // /
-
     /**
      * Return a list of all the methods declared in this type declaration.
      */
@@ -259,7 +255,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     // /
     // / Assignability
     // /
-
     /**
      * Can we assign instances of the given type to variables having the type defined
      * by this declaration?
@@ -283,7 +278,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     // /
     // / Annotations
     // /
-
     /**
      * Has the type at least one annotation declared having the specified qualified name?
      */

@@ -23,7 +23,6 @@ package com.github.javaparser.ast.nodeTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
 /**

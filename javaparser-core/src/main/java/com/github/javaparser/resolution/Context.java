@@ -29,7 +29,6 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +52,6 @@ public interface Context {
     Optional<Context> getParent();
 
     /* Type resolution */
-
     /**
      * Default to no generics available in this context, delegating solving to the parent context.
      * Contexts which have generics available to it will override this method.
@@ -145,7 +143,6 @@ public interface Context {
     }
 
     /* Symbol resolution */
-
     /**
      * Used where a symbol is being used (e.g. solving {@code x} when used as an argument {@code doubleThis(x)}, or calculation {@code return x * 2;}).
      *
@@ -221,14 +218,12 @@ public interface Context {
     }
 
     /**
-     *
      */
     default List<PatternExpr> patternExprsExposedFromChildren() {
         return Collections.emptyList();
     }
 
     /**
-     *
      */
     default List<PatternExpr> negatedPatternExprsExposedFromChildren() {
         return Collections.emptyList();
@@ -343,7 +338,6 @@ public interface Context {
     }
 
     /* Constructor resolution */
-
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */
@@ -352,7 +346,6 @@ public interface Context {
     }
 
     /* Methods resolution */
-
     /**
      * We find the method declaration which is the best match for the given name and list of typeParametersValues.
      */

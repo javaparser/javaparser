@@ -24,7 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
-
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -112,6 +111,7 @@ public enum ObservableProperty {
     PARAMETER(Type.SINGLE_REFERENCE),
     PARAMETERS(Type.MULTIPLE_REFERENCE),
     PATTERN(Type.SINGLE_REFERENCE),
+    PERMITTED_TYPES(Type.MULTIPLE_REFERENCE),
     PREDICATE(Type.SINGLE_REFERENCE),
     QUALIFIER(Type.SINGLE_REFERENCE),
     RECEIVER_PARAMETER(Type.SINGLE_REFERENCE),
@@ -310,7 +310,7 @@ public enum ObservableProperty {
     }
 
     public boolean isNullOrNotPresent(Node node) {
-    	return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
+        return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
     }
 
     public boolean isNullOrEmpty(Node node) {

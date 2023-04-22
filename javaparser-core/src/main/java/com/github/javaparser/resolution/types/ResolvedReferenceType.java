@@ -23,7 +23,6 @@ package com.github.javaparser.resolution.types;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -159,7 +158,6 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     // /
     // / TypeParameters
     // /
-
     /**
      * Execute a transformation on all the type parameters of this element.
      */
@@ -201,7 +199,6 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     // /
     // / Assignability
     // /
-
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */
@@ -211,7 +208,6 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     // /
     // / Ancestors
     // /
-
     /**
      * Return all ancestors, that means all superclasses and interfaces.
      * This list should always include Object (unless this is a reference to Object).
@@ -253,7 +249,6 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     // /
     // / Type parameters
     // /
-
     /**
      * Get the type associated with the type parameter with the given name.
      * It returns Optional.empty unless the type declaration declares a type parameter with the given name.
@@ -298,7 +293,6 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     // /
     // / Other methods introduced by ReferenceType
     // /
-
     /**
      * Corresponding TypeDeclaration
      */
@@ -580,12 +574,7 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
         List<ResolvedType> erasedParameters = new ArrayList<ResolvedType>();
         if (!typeParametersMap.isEmpty()) {
             // add erased type except java.lang.object
-            List<ResolvedType> parameters = typeParametersMap.getTypes().stream()
-                    .filter(type -> !type.isReferenceType())
-                    .map(type -> type.erasure())
-                    .filter(erasedType -> !(isJavaObject(erasedType)))
-                    .filter(erasedType -> erasedType != null)
-                    .collect(Collectors.toList());
+            List<ResolvedType> parameters = typeParametersMap.getTypes().stream().filter(type -> !type.isReferenceType()).map(type -> type.erasure()).filter(erasedType -> !(isJavaObject(erasedType))).filter(erasedType -> erasedType != null).collect(Collectors.toList());
             erasedParameters.addAll(parameters);
         }
         return erasedParameters;

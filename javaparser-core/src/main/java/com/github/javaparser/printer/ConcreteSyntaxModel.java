@@ -38,10 +38,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
-
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.ast.observer.ObservableProperty.*;
 import static com.github.javaparser.ast.observer.ObservableProperty.TYPE;
@@ -102,11 +100,13 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(MethodDeclaration.class, sequence(orphanCommentsBeforeThis(), comment(), mix(memberAnnotations(), modifiers()), typeParameters(), child(ObservableProperty.TYPE), space(), child(ObservableProperty.NAME), token(GeneratedJavaParserConstants.LPAREN), conditional(ObservableProperty.RECEIVER_PARAMETER, IS_PRESENT, sequence(child(ObservableProperty.RECEIVER_PARAMETER), comma(), space())), list(ObservableProperty.PARAMETERS, sequence(comma(), space()), none(), none()), token(GeneratedJavaParserConstants.RPAREN), list(ObservableProperty.THROWN_EXCEPTIONS, sequence(comma(), space()), sequence(space(), token(GeneratedJavaParserConstants.THROWS), space()), none()), conditional(ObservableProperty.BODY, IS_PRESENT, sequence(space(), child(ObservableProperty.BODY)), semicolon())));
         concreteSyntaxModelByClass.put(Parameter.class, sequence(comment(), list(ObservableProperty.ANNOTATIONS, space(), none(), space()), modifiers(), child(ObservableProperty.TYPE), conditional(ObservableProperty.VAR_ARGS, FLAG, sequence(list(ObservableProperty.VAR_ARGS_ANNOTATIONS, space(), none(), none()), token(GeneratedJavaParserConstants.ELLIPSIS))), space(), child(ObservableProperty.NAME)));
         concreteSyntaxModelByClass.put(ReceiverParameter.class, sequence(comment(), list(ObservableProperty.ANNOTATIONS, space(), none(), space()), child(ObservableProperty.TYPE), space(), child(ObservableProperty.NAME)));
-        concreteSyntaxModelByClass.put(VariableDeclarator.class, // FIXME: we should introduce a derived property
+        // FIXME: we should introduce a derived property
+        concreteSyntaxModelByClass.// FIXME: we should introduce a derived property
+                put(// FIXME: we should introduce a derived property
+                VariableDeclarator.class, // FIXME: we should introduce a derived property
                 sequence(// FIXME: we should introduce a derived property
-                        comment(), // FIXME: we should introduce a derived property
-                        child(ObservableProperty.NAME), // list(ObservableProperty.EXTRA_ARRAY_LEVELS),
-                        conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), token(GeneratedJavaParserConstants.ASSIGN), space(), child(ObservableProperty.INITIALIZER)))));
+                        comment(), // list(ObservableProperty.EXTRA_ARRAY_LEVELS),
+                        child(ObservableProperty.NAME), conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), token(GeneratedJavaParserConstants.ASSIGN), space(), child(ObservableProperty.INITIALIZER)))));
         // /
         // / Expressions
         // /
@@ -204,89 +204,22 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(ModuleProvidesDirective.class, sequence(token(GeneratedJavaParserConstants.PROVIDES), space(), child(ObservableProperty.NAME), list(ObservableProperty.WITH, sequence(comma(), space()), sequence(space(), token(GeneratedJavaParserConstants.WITH), space()), none()), semicolon(), newline()));
         concreteSyntaxModelByClass.put(ModuleRequiresDirective.class, sequence(token(GeneratedJavaParserConstants.REQUIRES), space(), modifiers(), child(ObservableProperty.NAME), semicolon(), newline()));
         concreteSyntaxModelByClass.put(ModuleUsesDirective.class, sequence(token(GeneratedJavaParserConstants.USES), space(), child(ObservableProperty.NAME), semicolon(), newline()));
-
         //region JML
-        concreteSyntaxModelByClass.put(JmlForallClause.class, sequence(
-                token(GeneratedJavaParserConstants.FORALL),
-                space(),
-                child(ObservableProperty.VARIABLES),
-                semicolon(),
-                newline()
-        ));
-
-        concreteSyntaxModelByClass.put(JmlLabelStmt.class, sequence(
-                child(LABEL),
-                token(SEMICOLON)
-        ));
-
-        concreteSyntaxModelByClass.put(JmlSimpleExprClause.class, sequence(
-                child(ObservableProperty.KIND),
-                child(HEAPS),
-                space(),
-                child(EXPRESSION),
-                semicolon(),
-                newline()
-        ));
-        concreteSyntaxModelByClass.put(JmlMultiExprClause.class, sequence(
-                child(ObservableProperty.KIND),
-                child(HEAPS),
-                space(),
-                child(EXPRESSION),
-                semicolon(),
-                newline()
-        ));
-        concreteSyntaxModelByClass.put(JmlClauseLabel.class, sequence(
-                child(ObservableProperty.KIND),
-                token(LPAREN),
-                child(LABEL),
-                token(RPAREN),
-                space(),
-                child(EXPRESSION),
-                semicolon(),
-                newline()
-        ));
-
-        concreteSyntaxModelByClass.put(JmlCallableClause.class, sequence(
-                child(MODIFIERS),
-                token(CALLABLE),
-                //space(),
+        concreteSyntaxModelByClass.put(JmlForallClause.class, sequence(token(GeneratedJavaParserConstants.FORALL), space(), child(ObservableProperty.VARIABLES), semicolon(), newline()));
+        concreteSyntaxModelByClass.put(JmlLabelStmt.class, sequence(child(LABEL), token(SEMICOLON)));
+        concreteSyntaxModelByClass.put(JmlSimpleExprClause.class, sequence(child(ObservableProperty.KIND), child(HEAPS), space(), child(EXPRESSION), semicolon(), newline()));
+        concreteSyntaxModelByClass.put(JmlMultiExprClause.class, sequence(child(ObservableProperty.KIND), child(HEAPS), space(), child(EXPRESSION), semicolon(), newline()));
+        concreteSyntaxModelByClass.put(JmlClauseLabel.class, sequence(child(ObservableProperty.KIND), token(LPAREN), child(LABEL), token(RPAREN), space(), child(EXPRESSION), semicolon(), newline()));
+        concreteSyntaxModelByClass.put(JmlCallableClause.class, sequence(child(MODIFIERS), token(CALLABLE), //space(),
                 //child(EXPRESSION),
                 semicolon()));
-        concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class, sequence(
-                child(MODIFIERS),
-                attribute(KIND),
-                space(),
-                attribute(NAME),
-                token(COLON),
-                child(EXPRESSION),
-                semicolon()));
-
+        concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class, sequence(child(MODIFIERS), attribute(KIND), space(), attribute(NAME), token(COLON), child(EXPRESSION), semicolon()));
         concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlContract.class, sequence());
-        concreteSyntaxModelByClass.put(JmlGhostStmt.class, sequence(
-
-        ));
-        concreteSyntaxModelByClass.put(JmlLabelExpr.class,
-                sequence(
-                        token(LPAREN),
-                        attribute(KIND),
-                        space(),
-                        child(LABEL),
-                        space(),
-                        child(EXPRESSION),
-                        token(RPAREN)
-                ));
-        concreteSyntaxModelByClass.put(JmlLetExpr.class, sequence(
-                token(LPAREN),
-                token(LET),
-                space(),
-                list(VARIABLES),
-                space(),
-                child(BODY),
-                token(RPAREN)
-        ));
-
+        concreteSyntaxModelByClass.put(JmlGhostStmt.class, sequence());
+        concreteSyntaxModelByClass.put(JmlLabelExpr.class, sequence(token(LPAREN), attribute(KIND), space(), child(LABEL), space(), child(EXPRESSION), token(RPAREN)));
+        concreteSyntaxModelByClass.put(JmlLetExpr.class, sequence(token(LPAREN), token(LET), space(), list(VARIABLES), space(), child(BODY), token(RPAREN)));
         concreteSyntaxModelByClass.put(JmlMultiCompareExpr.class, (node, printer) -> {
             NodeList<Expression> exprs = ((JmlMultiCompareExpr) node).getExpressions();
             JmlMultiCompareExpr.Operators ops = ((JmlMultiCompareExpr) node).getOperators();
@@ -297,77 +230,27 @@ public class ConcreteSyntaxModel {
             }
             ConcreteSyntaxModel.genericPrettyPrint(exprs.get(i), printer);
         });
-
-        concreteSyntaxModelByClass.put(JmlQuantifiedExpr.class,
-                sequence(
-                        token(LPAREN),
-                        attribute(BINDER),
-                        space(),
-                        list(VARIABLES, sequence(comma(), space())),
-                        token(SEMICOLON),
-                        space(),
-                        list(EXPRESSIONS, sequence(semicolon(), space())),
-                        token(RPAREN)
-                ));
-
+        concreteSyntaxModelByClass.put(JmlQuantifiedExpr.class, sequence(token(LPAREN), attribute(BINDER), space(), list(VARIABLES, sequence(comma(), space())), token(SEMICOLON), space(), list(EXPRESSIONS, sequence(semicolon(), space())), token(RPAREN)));
         concreteSyntaxModelByClass.put(JmlRefiningStmt.class, sequence());
         concreteSyntaxModelByClass.put(JmlRepresentsDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlSetComprehension.class, sequence());
-        concreteSyntaxModelByClass.put(JmlExpressionStmt.class, sequence(
-                child(KIND),
-                space(),
-                child(EXPRESSION),
-                semicolon()
-        ));
-
+        concreteSyntaxModelByClass.put(JmlExpressionStmt.class, sequence(child(KIND), space(), child(EXPRESSION), semicolon()));
         concreteSyntaxModelByClass.put(JmlTypeExpr.class, sequence(child(TYPE)));
-
-
         concreteSyntaxModelByClass.put(JmlUnreachableStmt.class, sequence(token(UNREACHABLE), semicolon()));
-        concreteSyntaxModelByClass.put(JmlBinaryInfixExpr.class, sequence(
-                token(LPAREN),
-                child(LEFT),
-                space(),
-                child(OPERATOR),
-                space(),
-                child(RIGHT),
-                token(RPAREN)
-        ));
-
+        concreteSyntaxModelByClass.put(JmlBinaryInfixExpr.class, sequence(token(LPAREN), child(LEFT), space(), child(OPERATOR), space(), child(RIGHT), token(RPAREN)));
         concreteSyntaxModelByClass.put(JmlDocDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlDocModifier.class, sequence());
-        concreteSyntaxModelByClass.put(JmlOldClause.class, sequence(
-                token(OLD),
-                space(),
-                child(DECLARATIONS),
-                semicolon()
-        ));
+        concreteSyntaxModelByClass.put(JmlOldClause.class, sequence(token(OLD), space(), child(DECLARATIONS), semicolon()));
         concreteSyntaxModelByClass.put(JmlDocType.class, sequence());
         concreteSyntaxModelByClass.put(JmlDoc.class, sequence());
         concreteSyntaxModelByClass.put(JmlDocStmt.class, sequence());
         concreteSyntaxModelByClass.put(JmlFieldDeclaration.class, sequence(child(DECL)));
-        concreteSyntaxModelByClass.put(JmlSignalsClause.class, sequence(
-                child(KIND),
-                token(LPAREN),
-                child(TYPE),
-                child(NAME),
-                token(RPAREN),
-                child(EXPR),
-                semicolon()
-        ));
-
+        concreteSyntaxModelByClass.put(JmlSignalsClause.class, sequence(child(KIND), token(LPAREN), child(TYPE), child(NAME), token(RPAREN), child(EXPR), semicolon()));
         concreteSyntaxModelByClass.put(JmlEndStmt.class, token(END));
         concreteSyntaxModelByClass.put(JmlBeginStmt.class, token(BEGIN));
-
         concreteSyntaxModelByClass.put(JmlMethodDeclaration.class, sequence(child(CONTRACT), child(METHOD_DECLARATION)));
-        concreteSyntaxModelByClass.put(JmlSignalsOnlyClause.class, sequence(
-                token(SIGNALS_ONLY),
-                child(TYPES),
-                semicolon(),
-                newline()
-        ));
+        concreteSyntaxModelByClass.put(JmlSignalsOnlyClause.class, sequence(token(SIGNALS_ONLY), child(TYPES), semicolon(), newline()));
         //endregion
-
         List<String> unsupportedNodeClassNames = JavaParserMetaModel.getNodeMetaModels().stream().filter(c -> !c.isAbstract() && !Comment.class.isAssignableFrom(c.getType()) && !concreteSyntaxModelByClass.containsKey(c.getType())).map(nm -> nm.getType().getSimpleName()).collect(Collectors.toList());
         if (unsupportedNodeClassNames.isEmpty()) {
             initializationError = Optional.empty();

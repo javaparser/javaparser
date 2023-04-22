@@ -21,9 +21,7 @@
 package com.github.javaparser.javadoc;
 
 import com.github.javaparser.javadoc.description.JavadocDescription;
-
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.nextWord;
 import static com.github.javaparser.utils.Utils.screamingToCamelCase;
 

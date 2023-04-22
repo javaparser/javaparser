@@ -21,7 +21,6 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +76,6 @@ public interface ResolvedClassDeclaration extends ResolvedReferenceTypeDeclarati
     // /
     // / Constructors
     // /
-
     /**
      * List of constructors available for the class.
      * This list should also include the default constructor.

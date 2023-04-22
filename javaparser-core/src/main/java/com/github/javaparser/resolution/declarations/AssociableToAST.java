@@ -21,7 +21,6 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.Node;
-
 import java.util.Optional;
 
 /**

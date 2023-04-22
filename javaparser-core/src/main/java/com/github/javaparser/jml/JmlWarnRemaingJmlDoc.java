@@ -10,7 +10,6 @@ import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
-
 import java.util.List;
 import java.util.Optional;
 

@@ -22,7 +22,6 @@ package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +52,6 @@ public interface ResolvedType {
     // /
     // / Relation with other types
     // /
-
     /**
      * @return true, if this type represent an array - otherwise false.
      */
@@ -175,7 +173,6 @@ public interface ResolvedType {
     // /
     // / TypeParameters
     // /
-
     /**
      * Replace all variables referring to the given TypeParameter with the given value.
      * By replacing these values I could also infer some type equivalence.
@@ -202,7 +199,6 @@ public interface ResolvedType {
     // /
     // / Assignability
     // /
-
     /**
      * This method checks if ThisType t = new OtherType() would compile.
      */

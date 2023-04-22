@@ -23,7 +23,6 @@ package com.github.javaparser.resolution.types.parametrization;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-
 import java.util.*;
 
 /**

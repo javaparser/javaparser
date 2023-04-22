@@ -26,7 +26,6 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.DerivedProperty;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

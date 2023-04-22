@@ -35,13 +35,12 @@ import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * A primitive type.

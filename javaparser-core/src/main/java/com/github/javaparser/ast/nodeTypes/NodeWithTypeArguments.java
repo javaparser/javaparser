@@ -24,9 +24,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.DerivedProperty;
-
 import java.util.Optional;
-
 import static com.github.javaparser.ast.NodeList.nodeList;
 
 /**

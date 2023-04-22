@@ -21,7 +21,6 @@
 package com.github.javaparser;
 
 import com.github.javaparser.utils.LineSeparator;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

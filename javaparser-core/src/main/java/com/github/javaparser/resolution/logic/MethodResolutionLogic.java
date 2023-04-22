@@ -25,7 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.MethodAmbiguityException;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -38,7 +37,6 @@ import com.github.javaparser.resolution.types.*;
  * @author Federico Tomassetti
  */
 public class MethodResolutionLogic {
-
 
     private static String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
@@ -95,7 +93,6 @@ public class MethodResolutionLogic {
                 //  (thus being short of only 1 argument is fine, but being short of 2 or more is not).
                 return false;
             }
-
             // If the method declaration we're considering has a variadic parameter,
             // attempt to convert the given list of arguments to fit this pattern
             // e.g. foo(String s, String... s2) {} --- consider the first argument, then group the remainder as an array
@@ -103,7 +100,6 @@ public class MethodResolutionLogic {
             for (ResolvedTypeParameterDeclaration tp : methodDeclaration.getTypeParameters()) {
                 expectedVariadicParameterType = replaceTypeParam(expectedVariadicParameterType, tp, typeSolver);
             }
-
             if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
                 // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
                 // Confirm all of these grouped "trailing" arguments have the required type -- if not, this is not a valid type. (Maybe this is also done later..?)
@@ -135,23 +131,16 @@ public class MethodResolutionLogic {
                 matchedParameters.put(expectedDeclaredType.asTypeParameter().getName(), actualArgumentType);
                 continue;
             }
-
             // if this is a variable arity method and we are trying to evaluate the last parameter
             // then we consider that an array of objects can be assigned by any array
             // for example:
             // The method call expression String.format("%d", new int[] {1})
             // must refer to the method String.format(String, Object...)
             // even if an array of primitive type cannot be assigned to an array of Object
-            if (methodDeclaration.getParam(i).isVariadic()
-            		&& (i == countOfMethodParametersDeclared - 1)
-            		&& isArrayOfObject(expectedDeclaredType)
-            		&& actualArgumentType.isArray()) {
-            	continue;
+            if (methodDeclaration.getParam(i).isVariadic() && (i == countOfMethodParametersDeclared - 1) && isArrayOfObject(expectedDeclaredType) && actualArgumentType.isArray()) {
+                continue;
             }
-
-            boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType) ||
-                    (methodDeclaration.getParam(i).isVariadic() && convertToVariadicParameter(expectedDeclaredType).isAssignableBy(actualArgumentType));
-
+            boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType) || (methodDeclaration.getParam(i).isVariadic() && convertToVariadicParameter(expectedDeclaredType).isAssignableBy(actualArgumentType));
             if (!isAssignableWithoutSubstitution && expectedDeclaredType.isReferenceType() && actualArgumentType.isReferenceType()) {
                 isAssignableWithoutSubstitution = isAssignableMatchTypeParameters(expectedDeclaredType.asReferenceType(), actualArgumentType.asReferenceType(), matchedParameters);
             }
@@ -186,14 +175,12 @@ public class MethodResolutionLogic {
     }
 
     private static boolean isArrayOfObject(ResolvedType type) {
-    	return type.isArray()
-    			&& type.asArrayType().getComponentType().isReferenceType()
-    			&& type.asArrayType().getComponentType().asReferenceType().isJavaLangObject();
+        return type.isArray() && type.asArrayType().getComponentType().isReferenceType() && type.asArrayType().getComponentType().asReferenceType().isJavaLangObject();
     }
 
-	private static ResolvedArrayType convertToVariadicParameter(ResolvedType type) {
-		return type.isArray() ? type.asArrayType() : new ResolvedArrayType(type);
-	}
+    private static ResolvedArrayType convertToVariadicParameter(ResolvedType type) {
+        return type.isArray() ? type.asArrayType() : new ResolvedArrayType(type);
+    }
 
     /*
      * Returns the last parameter index
@@ -209,7 +196,6 @@ public class MethodResolutionLogic {
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassed = needleArgumentTypes.size();
         int lastNeedleArgumentIndex = getLastParameterIndex(countOfNeedleArgumentsPassed);
-
         if (countOfNeedleArgumentsPassed > countOfMethodParametersDeclared) {
             // If it is variadic, and we have an "excess" of arguments, group the "trailing" arguments into an array.
             // Here we are sure that all of these grouped "trailing" arguments have the required type
@@ -243,7 +229,7 @@ public class MethodResolutionLogic {
             return isAssignableMatchTypeParameters(expected.asReferenceType(), actual.asReferenceType(), matchedParameters);
         }
         if (expected.isReferenceType() && ResolvedPrimitiveType.isBoxType(expected) && actual.isPrimitive()) {
-        	ResolvedPrimitiveType expectedType = ResolvedPrimitiveType.byBoxTypeQName(expected.asReferenceType().getQualifiedName()).get().asPrimitive();
+            ResolvedPrimitiveType expectedType = ResolvedPrimitiveType.byBoxTypeQName(expected.asReferenceType().getQualifiedName()).get().asPrimitive();
             return expected.isAssignableBy(actual);
         }
         if (expected.isTypeVariable()) {
@@ -291,14 +277,12 @@ public class MethodResolutionLogic {
                 // in this case we want to verify expected parameter from the actual parameter ancestors
                 return isAssignableMatchTypeParameters(r1, r2, matchedParameters);
             }
-
             if (expectedParam.isArray() && actualParam.isArray()) {
                 ResolvedType r1 = expectedParam.asArrayType().getComponentType();
                 ResolvedType r2 = actualParam.asArrayType().getComponentType();
                 // try to verify the component type of each array
                 return isAssignableMatchTypeParameters(r1, r2, matchedParameters);
             }
-
             if (expectedParam.isTypeVariable()) {
                 String expectedParamName = expectedParam.asTypeParameter().getName();
                 if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
@@ -513,10 +497,10 @@ public class MethodResolutionLogic {
     }
 
     public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(List<ResolvedMethodDeclaration> methods, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
-        List<ResolvedMethodDeclaration> applicableMethods = methods.stream().// Only consider methods with a matching name
-                filter(m -> m.getName().equals(name)).// Filters out duplicate ResolvedMethodDeclaration by their signature.
-                filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)).// Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
-                filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
+        List<ResolvedMethodDeclaration> applicableMethods = // Only consider methods with a matching name
+                methods.stream().filter(// Filters out duplicate ResolvedMethodDeclaration by their signature.
+                        m -> m.getName().equals(name)).filter(// Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
+                        distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)).filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
         // If no applicable methods found, return as unsolved.
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved();
@@ -550,7 +534,6 @@ public class MethodResolutionLogic {
         if (applicableMethods.size() == 1) {
             return SymbolReference.solved(applicableMethods.get(0));
         }
-
         // Examine the applicable methods found, and evaluate each to determine the "best" one
         ResolvedMethodDeclaration winningCandidate = applicableMethods.get(0);
         ResolvedMethodDeclaration other = null;
@@ -580,7 +563,6 @@ public class MethodResolutionLogic {
                 }
             }
         }
-
         if (possibleAmbiguity) {
             // pick the first exact match if it exists
             if (!isExactMatch(winningCandidate, argumentsTypes)) {
@@ -632,7 +614,6 @@ public class MethodResolutionLogic {
         if (!bVariadic && bNumberOfParams == numberOfArgs && (aVariadic && (aNumberOfParams != numberOfArgs || !isLastArgArray))) {
             return false;
         }
-
         // If both methods are variadic but the calling method omits any varArgs, bump the omitted args to
         // ensure the varargs type is considered when determining which method is more specific
         if (aVariadic && bVariadic && aNumberOfParams == bNumberOfParams && numberOfArgs == aNumberOfParams - 1) {
@@ -642,7 +623,6 @@ public class MethodResolutionLogic {
         for (int i = 0; i < numberOfArgs + omittedArgs; i++) {
             ResolvedType paramTypeA = getMethodsExplicitAndVariadicParameterType(methodA, i);
             ResolvedType paramTypeB = getMethodsExplicitAndVariadicParameterType(methodB, i);
-
             ResolvedType argType = null;
             if (i < argumentTypes.size()) {
                 argType = argumentTypes.get(i);
@@ -701,7 +681,7 @@ public class MethodResolutionLogic {
         return isMethodAMoreSpecific;
     }
 
-    private static boolean isJavaLangObject(ResolvedType paramType ) {
+    private static boolean isJavaLangObject(ResolvedType paramType) {
         return paramType.isReferenceType() && paramType.asReferenceType().getQualifiedName().equals("java.lang.Object");
     }
 

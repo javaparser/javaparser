@@ -22,12 +22,10 @@ package com.github.javaparser.utils;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.UnaryExpr;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.function.Function;
-
 import static java.util.Arrays.asList;
 
 /**

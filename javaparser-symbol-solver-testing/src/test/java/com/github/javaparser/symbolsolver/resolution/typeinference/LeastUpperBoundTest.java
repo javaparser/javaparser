@@ -9,6 +9,7 @@ import java.rmi.AlreadyBoundException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import net.bytebuddy.jar.asm.ClassTooLargeException;
 import org.junit.jupiter.api.*;
 
 import com.github.javaparser.ParserConfiguration;
@@ -147,7 +148,7 @@ class LeastUpperBoundTest {
         // java.lang.Object/java.lang.Throwable/java.lang.Exception/java.rmi.AlreadyBoundException
         ResolvedType alreadyBoundException = type(AlreadyBoundException.class.getCanonicalName());
         // java.lang.Object//java.lang.Throwable/java.lang.Exception/java.rmi.activation.ActivationException/java.rmi.activation.UnknownGroupException
-        ResolvedType unknownGroupException = type(UnknownGroupException.class.getCanonicalName());
+        ResolvedType unknownGroupException = type(ClassTooLargeException.class.getCanonicalName());
         ResolvedType lub = leastUpperBound(alreadyBoundException, unknownGroupException);
         assertEquals(expected, lub);
     }

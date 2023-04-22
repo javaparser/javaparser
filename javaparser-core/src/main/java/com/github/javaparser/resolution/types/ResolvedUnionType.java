@@ -21,7 +21,6 @@
 package com.github.javaparser.resolution.types;
 
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -25,7 +25,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;

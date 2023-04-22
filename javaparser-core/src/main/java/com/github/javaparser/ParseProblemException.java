@@ -21,7 +21,6 @@
 package com.github.javaparser;
 
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.singletonList;

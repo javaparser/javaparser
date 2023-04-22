@@ -29,12 +29,11 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.StringLiteralExprMetaModel;
 import com.github.javaparser.utils.Utils;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.StringEscapeUtils.escapeJava;
 import static com.github.javaparser.utils.StringEscapeUtils.unescapeJava;
+import com.github.javaparser.ast.Node;
 
 /**
  * A literal string.

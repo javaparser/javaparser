@@ -42,12 +42,10 @@ import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Pair;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -79,7 +77,6 @@ public class LexicalPreservingPrinter {
     //
     // Factory methods
     //
-
     /**
      * Prepares the node so it can be used in the print methods.
      * The correct order is:
@@ -134,13 +131,15 @@ public class LexicalPreservingPrinter {
             }
             if (property == ObservableProperty.COMMENT) {
                 Optional<Node> parentNode = observedNode.getParentNode();
-                NodeText nodeText = // We're at the root node.
-                        parentNode.map(parent -> getOrCreateNodeText(parentNode.get())).orElse(getOrCreateNodeText(observedNode));
+                // We're at the root node.
+                NodeText // We're at the root node.
+                        nodeText = parentNode.map(parent -> getOrCreateNodeText(parentNode.get())).orElse(getOrCreateNodeText(observedNode));
                 if (oldValue == null) {
                     // this case corresponds to the addition of a comment
-                    int index = // Find the position of the comment node and put in front of it the [...]
-                            parentNode.isPresent() ? //
-                                    nodeText.findChild(observedNode) : 0;
+                    // Find the position of the comment node and put in front of it the [...]
+                    int // Find the position of the comment node and put in front of it the [...]
+                            index = //
+                            parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
                     // Add the same indent depth of the comment to the following node
                     fixIndentOfMovedNode(nodeText, index);
                     LineSeparator lineSeparator = observedNode.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
@@ -483,7 +482,6 @@ public class LexicalPreservingPrinter {
     //
     // Printing methods
     //
-
     /**
      * Print a Node into a String, preserving the lexical information.
      */

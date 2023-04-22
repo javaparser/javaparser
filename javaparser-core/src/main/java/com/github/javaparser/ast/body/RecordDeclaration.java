@@ -40,11 +40,9 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.RecordDeclarationMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
@@ -178,7 +176,6 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
     }
 
     // TODO document and remove duplication between here and com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
-
     /**
      * @return is this class's parent a LocalRecordDeclarationStmt ?
      */

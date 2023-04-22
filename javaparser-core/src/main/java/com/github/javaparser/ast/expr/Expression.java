@@ -31,12 +31,10 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -51,7 +49,6 @@ public abstract class Expression extends Node {
      * {@link EnclosedExpr}, {@code false} otherwise.
      */
     public static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
-
 
     /**
      * A {@link Function} that returns its argument (an {@link Expression}) when

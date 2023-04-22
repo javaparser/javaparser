@@ -6,7 +6,6 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.IntSummaryStatistics;

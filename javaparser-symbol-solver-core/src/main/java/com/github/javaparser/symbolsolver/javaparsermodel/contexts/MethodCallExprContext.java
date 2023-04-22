@@ -340,13 +340,24 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 // for example
                 // Arrays.aslist(int[]{1}) must returns List<int[]>
                 // but Arrays.aslist(String[]{""}) must returns List<String>
-                // May be the result depends on the component type of the array
+                // Arrays.asList() accept generic type T. Since Java generics work only on
+                // reference types (object types), not on primitives, and int[] is an object
+                // then Arrays.aslist(int[]{1}) returns List<int[]>
                 ResolvedType lastActualParamType =
                         actualParamTypes.get(actualParamTypes.size() - 1);
-                ResolvedType actualType =
-                		lastActualParamType.isArray() && lastActualParamType.asArrayType().getComponentType().isReferenceType() ?
-                				lastActualParamType.asArrayType().getComponentType() :
-                					lastActualParamType;
+                ResolvedType actualType = lastActualParamType;
+                if (lastActualParamType.isArray()) {
+                    ResolvedType componentType = lastActualParamType.asArrayType().getComponentType();
+                    // in cases where, the expected type is a generic type (Arrays.asList(T... a)) and the component type of the array type is a reference type
+                    // or the expected type is not a generic (IntStream.of(int... values)) and the component type is not a reference type
+                    // then the actual type is the component type (in the example above 'int')
+                    if ((componentType.isReferenceType()
+                            && ResolvedTypeVariable.class.isInstance(expectedType))
+                            || (!componentType.isReferenceType()
+                            && !ResolvedTypeVariable.class.isInstance(expectedType))) {
+                        actualType = lastActualParamType.asArrayType().getComponentType();
+                    }
+                }
                 if (!expectedType.isAssignableBy(actualType)) {
                     for (ResolvedTypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
                         expectedType = MethodResolutionLogic.replaceTypeParam(expectedType, tp, typeSolver);

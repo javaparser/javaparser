@@ -38,10 +38,8 @@ import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static java.util.Arrays.asList;
 
@@ -80,19 +78,19 @@ public class ModifierValidator extends VisitorValidator {
 
     private void validateClassModifiers(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP, JML_NULLABLE_BY_DEFAULT, JML_PURE, JML_STRICTLY_PURE);
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP, SEALED, NON_SEALED, JML_NULLABLE_BY_DEFAULT, JML_PURE, JML_STRICTLY_PURE);
         } else if (n.isNestedType()) {
-            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP, JML_NULLABLE_BY_DEFAULT, JML_PURE, JML_STRICTLY_PURE);
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP, SEALED, NON_SEALED, JML_NULLABLE_BY_DEFAULT, JML_PURE, JML_STRICTLY_PURE);
         } else if (n.isLocalClassDeclaration()) {
-            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP, JML_NULLABLE_BY_DEFAULT, JML_PURE, JML_STRICTLY_PURE);
+            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP, SEALED, NON_SEALED, JML_NULLABLE_BY_DEFAULT, JML_PURE, JML_STRICTLY_PURE);
         }
     }
 
     private void validateInterfaceModifiers(TypeDeclaration<?> n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, ABSTRACT, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, STRICTFP, SEALED, NON_SEALED);
         } else if (n.isNestedType()) {
-            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, STRICTFP, SEALED, NON_SEALED);
         }
     }
 

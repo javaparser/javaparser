@@ -23,7 +23,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
-
 import java.util.Optional;
 
 /**

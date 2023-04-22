@@ -22,7 +22,6 @@ package com.github.javaparser;
 
 import java.util.Iterator;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**

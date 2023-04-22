@@ -21,7 +21,6 @@
 package com.github.javaparser.resolution.model;
 
 import java.util.Optional;
-
 import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;

@@ -38,7 +38,6 @@ import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -426,6 +425,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getImplementedTypes().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getPermittedTypes().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

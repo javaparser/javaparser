@@ -22,7 +22,6 @@ package com.github.javaparser.resolution.types;
 
 import java.util.List;
 import java.util.Map;
-
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 

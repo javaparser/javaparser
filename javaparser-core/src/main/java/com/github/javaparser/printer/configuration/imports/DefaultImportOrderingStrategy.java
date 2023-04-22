@@ -23,11 +23,9 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.printer.configuration.ImportOrderingStrategy;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import static java.util.Comparator.comparingInt;
 
 public class DefaultImportOrderingStrategy implements ImportOrderingStrategy {

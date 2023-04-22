@@ -38,7 +38,6 @@ import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.Optional;
 
 public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable> {
@@ -152,6 +151,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getImplementedTypes(), n2.getImplementedTypes()))
             return false;
         if (!objEquals(n.isInterface(), n2.isInterface()))
+            return false;
+        if (!nodesEquals(n.getPermittedTypes(), n2.getPermittedTypes()))
             return false;
         if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
             return false;

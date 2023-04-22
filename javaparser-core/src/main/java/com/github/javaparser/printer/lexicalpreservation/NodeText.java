@@ -21,7 +21,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.ast.Node;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,7 +51,6 @@ class NodeText {
     //
     // Adding elements
     //
-
     /**
      * Add an element at the end.
      */
@@ -166,7 +164,6 @@ class NodeText {
     //
     // Other methods
     //
-
     /**
      * Generate the corresponding string.
      */

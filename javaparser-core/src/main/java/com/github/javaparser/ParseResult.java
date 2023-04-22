@@ -21,11 +21,9 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.comments.CommentsCollection;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**

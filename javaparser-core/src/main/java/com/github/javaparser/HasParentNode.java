@@ -22,7 +22,6 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.Observable;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;

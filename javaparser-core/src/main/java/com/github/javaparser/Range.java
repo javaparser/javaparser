@@ -140,8 +140,9 @@ public class Range {
      */
     public boolean contains(Range other) {
         boolean beginResult = (begin.isBeforeOrEqual(other.begin));
-        boolean endResult = (end.isAfterOrEqual(other.end));
-        return beginResult && endResult;
+        if (!beginResult)
+            return false;
+        return end.isAfterOrEqual(other.end);
     }
 
     /**

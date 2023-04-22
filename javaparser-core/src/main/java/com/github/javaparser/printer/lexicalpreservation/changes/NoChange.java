@@ -34,7 +34,7 @@ public class NoChange implements Change {
     }
 
     @Override
-	public ObservableProperty getProperty() {
-		return null;
-	}
+    public ObservableProperty getProperty() {
+        return null;
+    }
 }

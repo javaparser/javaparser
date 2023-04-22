@@ -40,11 +40,9 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.utils.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.removeElementByObjectIdentity;
 import static com.github.javaparser.utils.Utils.replaceElementByObjectIdentity;
 
@@ -252,6 +250,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<ClassOrInterfaceType> extendedTypes = modifyList(n.getExtendedTypes(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = modifyList(n.getImplementedTypes(), arg);
+        NodeList<ClassOrInterfaceType> permittedTypes = modifyList(n.getPermittedTypes(), arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
@@ -262,6 +261,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setModifiers(modifiers);
         n.setExtendedTypes(extendedTypes);
         n.setImplementedTypes(implementedTypes);
+        n.setPermittedTypes(permittedTypes);
         n.setTypeParameters(typeParameters);
         n.setMembers(members);
         n.setName(name);

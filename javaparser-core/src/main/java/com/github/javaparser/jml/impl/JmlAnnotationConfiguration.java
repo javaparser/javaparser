@@ -1,7 +1,6 @@
 package com.github.javaparser.jml.impl;
 
 import com.github.javaparser.ast.Modifier;
-
 import java.util.HashMap;
 import java.util.Map;
 

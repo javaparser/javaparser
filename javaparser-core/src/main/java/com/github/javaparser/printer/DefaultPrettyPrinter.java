@@ -24,7 +24,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
-
 import java.util.function.Function;
 
 /**
@@ -47,7 +46,6 @@ public class DefaultPrettyPrinter implements Printer {
     }
 
     // Constructors
-
     /**
      * Build a new DefaultPrettyPrinter with a default configuration and a default factory
      */

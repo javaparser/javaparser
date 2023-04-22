@@ -44,45 +44,47 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-javaparser-core-classes</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<encoding>UTF-8</encoding>
-							<outputDirectory>${basedir}/target/classes</outputDirectory>
-							<resources>
-								<resource>
-									<directory>../javaparser-core/target/classes</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-javaparser-core-generated-sources</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<encoding>UTF-8</encoding>
-							<outputDirectory>${basedir}/target/generated-sources/</outputDirectory>
-							<resources>
-								<resource>
-									<directory>../javaparser-core/target/generated-sources</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+			<!--
+		<plugin>
+			<artifactId>maven-resources-plugin</artifactId>
+			<executions>
+				<execution>
+					<id>copy-javaparser-core-classes</id>
+					<phase>test-compile</phase>
+					<goals>
+						<goal>copy-resources</goal>
+					</goals>
+					<configuration>
+						<encoding>UTF-8</encoding>
+						<outputDirectory>${basedir}/target/classes</outputDirectory>
+						<resources>
+							<resource>
+								<directory>../javaparser-core/target/classes</directory>
+								<filtering>false</filtering>
+							</resource>
+						</resources>
+					</configuration>
+				</execution>
+				<execution>
+					<id>copy-javaparser-core-generated-sources</id>
+					<phase>test-compile</phase>
+					<goals>
+						<goal>copy-resources</goal>
+					</goals>
+					<configuration>
+						<encoding>UTF-8</encoding>
+						<outputDirectory>${basedir}/target/generated-sources/</outputDirectory>
+						<resources>
+							<resource>
+								<directory>../javaparser-core/target/generated-sources</directory>
+								<filtering>false</filtering>
+							</resource>
+						</resources>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>
+		-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
@@ -95,7 +97,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<reportFormat>plain</reportFormat>
+					<reportFormat>html</reportFormat>
 					<failIfNoTests>true</failIfNoTests>
 				</configuration>
 			</plugin>

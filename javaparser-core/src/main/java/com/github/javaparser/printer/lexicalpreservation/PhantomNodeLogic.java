@@ -24,10 +24,8 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.AstObserverAdapter;
 import com.github.javaparser.ast.type.UnknownType;
-
 import java.util.IdentityHashMap;
 import java.util.Map;
-
 import static java.util.Collections.synchronizedMap;
 
 /**

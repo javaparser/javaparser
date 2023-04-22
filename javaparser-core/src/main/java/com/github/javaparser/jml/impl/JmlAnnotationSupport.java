@@ -12,7 +12,6 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.visitor.TreeVisitor;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.List;
 import java.util.Map;
 

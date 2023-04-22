@@ -40,7 +40,6 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.quality.NotNull;
 import com.github.javaparser.quality.Preconditions;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
