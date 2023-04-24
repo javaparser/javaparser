@@ -103,7 +103,9 @@ public class Modifier extends Node {
         SYNCHRONIZED("synchronized"),
         NATIVE("native"),
         STRICTFP("strictfp"),
-        TRANSITIVE("transitive");
+        TRANSITIVE("transitive"),
+        SEALED("sealed"),
+        NON_SEALED("non-sealed");
 
         private final String codeRepresentation;
 

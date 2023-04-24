@@ -48,5 +48,7 @@ public class ClassOrInterfaceDeclarationMetaModel extends TypeDeclarationMetaMod
 
     public PropertyMetaModel isInterfacePropertyMetaModel;
 
+    public PropertyMetaModel permittedTypesPropertyMetaModel;
+
     public PropertyMetaModel typeParametersPropertyMetaModel;
 }
