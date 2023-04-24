@@ -20,6 +20,12 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
@@ -33,12 +39,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.IntStream;
-
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
@@ -89,11 +89,11 @@ public class Difference {
         indentation = takeWhile(prevElements.subList(eolIndex + 1, prevElements.size()), element -> element.isWhiteSpace());
         return indentation;
     }
-    
+
     /*
      * returns only the elements that match the given predicate.
      * takeWhile takes elements from the initial stream while the predicate holds true.
-     * Meaning that when an element is encountered that does not match the predicate, the rest of the list is discarded. 
+     * Meaning that when an element is encountered that does not match the predicate, the rest of the list is discarded.
      */
     List<TextElement> takeWhile(List<TextElement> prevElements, Predicate<TextElement> predicate) {
     	List<TextElement> spaces = new ArrayList<>();
@@ -106,8 +106,8 @@ public class Difference {
     	}
     	return spaces;
     }
-    
-    
+
+
     int lastIndexOfEol(List<TextElement> source) {
         return IntStream.range(0, source.size())
                        .map(i -> source.size() - i - 1)
@@ -137,14 +137,14 @@ public class Difference {
         }
         return -1;
     }
-    
+
     /*
      * Returns true if the next element in the list (starting from @{code fromIndex}) is a comment
      */
     private boolean isFollowedByComment(int fromIndex, List<TextElement> elements) {
     	return posOfNextComment(fromIndex, elements) != -1;
     }
-    
+
     /*
      * Removes all elements in the list starting from @{code fromIndex}) ending to @{code toIndex})
      */
@@ -160,13 +160,13 @@ public class Difference {
             count++;
         }
     }
-    
+
     private boolean isValidIndex(int index, List<?> elements) {
     	return index >= 0 && index <= elements.size();
     }
 
     /*
-     * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement 
+     * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement
      */
     int lastIndexOfEolWithoutGPT(List<TextElement> source) {
         ListIterator listIterator = source.listIterator(source.size());
@@ -204,25 +204,25 @@ public class Difference {
      * If we are at the beginning of a line, with just spaces or tabs before/after the position of the deleted element
      * we should force the space to be the same as the current indentation.
      * This method handles the following case if we remove the modifier {@code public} ([ ] is an indent character)
-     * {@code 
+     * {@code
      * [ ][ ]public[ ][ ][ ]void[ ]m{}
      * <-1-->      <---2--->
      * 1/ current indentation
      * 2/ these whitespaces must be removed
      * }
      * should produce
-     * {@code 
-     * [ ][ ]void[ ]m{} 
+     * {@code
+     * [ ][ ]void[ ]m{}
      * }
      */
     private int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
         return considerIndentation(nodeText, nodeTextIndex, indentation.size());
     }
-    
+
     private int considerRemovingIndentation(NodeText nodeText, int nodeTextIndex) {
         return considerIndentation(nodeText, nodeTextIndex, 0);
     }
-    
+
     private int considerIndentation(NodeText nodeText, int nodeTextIndex, int numberOfCharactersToPreserve) {
         EnforcingIndentationContext enforcingIndentationContext = defineEnforcingIndentationContext(nodeText, nodeTextIndex);
         // the next position in the list (by default the current position)
@@ -238,29 +238,40 @@ public class Difference {
         }
         return res;
     }
-    
+
     private boolean isEnforcingIndentationActivable(RemovedGroup removedGroup) {
-		return (diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1).isAdded()))
+		return (isLastElement(diffElements, diffIndex) || !(nextDiffElement(diffElements,diffIndex).isAdded()))
 				&& originalIndex < originalElements.size()
 				&& !removedGroup.isACompleteLine();
 	}
 
     private boolean isRemovingIndentationActivable(RemovedGroup removedGroup) {
-		return (diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1).isAdded())) 
+		return (isLastElement(diffElements, diffIndex) || !(nextDiffElement(diffElements,diffIndex).isAdded()))
 				&& originalIndex < originalElements.size()
 				&& removedGroup.isACompleteLine();
 	}
-    
+
+    private boolean isLastElement(List<?> list, int index) {
+		return index + 1 >= list.size();
+	}
+
+    private DifferenceElement nextDiffElement(List<DifferenceElement> list, int index) {
+    	return list.get(index + 1);
+    }
+
     /*
-     * This data structure class hold the starting position of the first whitespace char 
+     * This data structure class hold the starting position of the first whitespace char
      * and the number of consecutive whitespace (or tab) characters
      */
     private class EnforcingIndentationContext {
     	int start;
     	int extraCharacters;
     	public EnforcingIndentationContext(int start) {
+    		this(start,0);
+    	}
+    	public EnforcingIndentationContext(int start, int extraCharacters) {
     		this.start=start;
-    		this.extraCharacters=0;
+    		this.extraCharacters=extraCharacters;
     	}
     }
 
@@ -280,7 +291,7 @@ public class Difference {
     }
 
     /**
-     * Starting at {@code nodeTextIndex} this method tries to determine how many contiguous spaces there are between 
+     * Starting at {@code nodeTextIndex} this method tries to determine how many contiguous spaces there are between
      * the previous end of line and the next non whitespace (or tab) character
      * @param nodeText List of elements to analyze
      * @param nodeTextIndex Starting position in the input list
@@ -296,7 +307,7 @@ public class Difference {
 				if (nodeText.getTextElement(i).isNewline()) {
 					break;
 				}
-				if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+				if (!isSpaceOrTabElement(nodeText, i)) {
 					ctx = new EnforcingIndentationContext(startIndex);
 					break;
 				}
@@ -305,20 +316,28 @@ public class Difference {
 			}
 		}
 		// compute space after the deleted element
-		if (nodeText.getTextElement(startIndex).isSpaceOrTab()) {
+		if (isSpaceOrTabElement(nodeText, startIndex)) {
+//			int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
 			for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
 				if (nodeText.getTextElement(i).isNewline()) {
 					break;
 				}
-				if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+				if (!isSpaceOrTabElement(nodeText, i)) {
 					break;
 				}
 				ctx.extraCharacters++;
 			}
 		}
-        
+
         return ctx;
     }
+
+    /*
+     * Returns true if the indexed element is a space or a tab
+     */
+	private boolean isSpaceOrTabElement(NodeText nodeText, int i) {
+		return nodeText.getTextElement(i).isSpaceOrTab();
+	}
 
     /**
      * Node that we have calculate the Difference we can apply to a concrete NodeText, modifying it according
@@ -528,7 +547,7 @@ public class Difference {
                 }
             } else {
                 nodeText.removeElement(originalIndex);
-                // When we don't try to remove a complete line 
+                // When we don't try to remove a complete line
                 // and removing the element is not the first action of a replacement (removal followed by addition)
                 // (in the latter case we keep the indentation)
                 // then we want to enforce the indentation.
@@ -578,7 +597,7 @@ public class Difference {
         }else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
             originalIndex++;
             // skip the newline token which may be generated unnecessarily by the concrete syntax pattern
-            if (removed.isNewLine()) { 
+            if (removed.isNewLine()) {
             	diffIndex++;
             }
         } else if (originalElement.isLiteral()) {
@@ -615,8 +634,8 @@ public class Difference {
         }
         // we dont want to remove the indentation if the last removed element is a newline
         // because in this case we are trying to remove the indentation of the next child element
-        if (!removedGroup.isProcessed() 
-        		&& removedGroup.isLastElement(removed) 
+        if (!removedGroup.isProcessed()
+        		&& removedGroup.isLastElement(removed)
         		&& removedGroup.isACompleteLine()
         		&& !removed.isNewLine()) {
             Integer lastElementIndex = removedGroup.getLastElementIndex();
@@ -777,7 +796,7 @@ public class Difference {
     }
 
     /*
-     * Try to resolve the number of token to skip in the original list to match 
+     * Try to resolve the number of token to skip in the original list to match
      * a ClassOrInterfaceType with a list of tokens like "java", ".", "lang", ".", "Object"
      */
     private int getIndexToNextTokenElement(TokenTextElement element, DifferenceElement kept) {
@@ -1058,12 +1077,12 @@ public class Difference {
 	 * Considering that the lists of elements are ordered, We can find the common
 	 * elements by starting with the list before the modifications and, for each
 	 * element, by going through the list of elements containing the modifications.
-	 * 
+	 *
 	 * We can find the common elements by starting with the list before the
 	 * modifications (L1) and, for each element, by going through the list of elements
 	 * containing the modifications (L2).
-	 * 
-	 * If element A in list L1 is not found in list L2, it is a deleted element. 
+	 *
+	 * If element A in list L1 is not found in list L2, it is a deleted element.
 	 * If element A of list L1 is found in list L2, it is a kept element. In this
 	 * case the search for the next element of the list L1 must start from the
 	 * position of the last element kept {@code syncNextIndex}.
@@ -1085,24 +1104,24 @@ public class Difference {
 					correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(),
 							previousOrderElementsIterator.index());
 					// set the position to start on the next {@code nextOrderElementsIterator} iteration
-					syncNextIndex = nextOrderElementsIterator.index(); 
+					syncNextIndex = nextOrderElementsIterator.index();
 					break;
 				}
 			}
 		}
 		return correspondanceBetweenNextOrderAndPreviousOrder;
 	}
-    
+
     /*
-     * A list iterator which does not allow to modify the list 
-     * and which provides a method to know the current positioning 
+     * A list iterator which does not allow to modify the list
+     * and which provides a method to know the current positioning
      */
     private class ReadOnlyListIterator<T> implements ListIterator<T> {
     	ListIterator<T> elements;
     	public ReadOnlyListIterator(List<T> elements) {
     		this(elements, 0);
     	}
-    	
+
     	public ReadOnlyListIterator(List<T> elements, int index) {
     		this.elements = elements.listIterator(index);
     	}
@@ -1136,14 +1155,14 @@ public class Difference {
 		public int previousIndex() {
 			return elements.previousIndex();
 		}
-		
+
 		/*
 		 * Returns the current index in the underlying list
 		 */
 		public int index() {
 			return elements.nextIndex() - 1;
 		}
-		
+
 		@Override
 		public void remove() {
 			throw new UnsupportedOperationException();
@@ -1158,7 +1177,7 @@ public class Difference {
 		public void add(T e) {
 			throw new UnsupportedOperationException();
 		}
-    	
+
     }
 
     /*
