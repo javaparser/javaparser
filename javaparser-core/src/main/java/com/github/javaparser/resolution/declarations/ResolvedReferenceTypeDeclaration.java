@@ -20,15 +20,15 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -286,13 +286,45 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     /**
      * Has the type at least one annotation declared or inherited having the specified qualified name?
+     * By default, the subclasses do not inherit the annotation declared on the parent class.
+     * However, there is a way to propagate particular annotations throughout the class hierarchy using the @Inherited annotation.
      */
     default boolean hasAnnotation(String qualifiedName) {
         if (hasDirectlyAnnotation(qualifiedName)) {
             return true;
         }
-        return getAllAncestors().stream().filter(it -> it.asReferenceType().getTypeDeclaration().isPresent()).anyMatch(it -> it.asReferenceType().getTypeDeclaration().get().hasDirectlyAnnotation(qualifiedName));
+        return isClass() && getAllAncestors().stream()
+        		.filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+        		.filter(it -> it.asReferenceType().getTypeDeclaration().get().isClass())
+        		.map(it -> it.asReferenceType().getTypeDeclaration().get())
+        		.anyMatch(rrtd -> rrtd.hasDirectlyAnnotation(qualifiedName)
+        				&& rrtd.isInheritedAnnotation(qualifiedName));
     }
+
+    /**
+     * Returns true if the specified annotation is inheritable.
+     */
+    default boolean isInheritedAnnotation(String name) {
+    	Optional<ResolvedAnnotationDeclaration> declaration = getDeclaredAnnotation(name);
+    	return declaration.isPresent() && declaration.get().isInheritable();
+    }
+
+    /**
+     * Returns the resolved annotation corresponding to the specified name and declared in this type declaration.
+     */
+    default Optional<ResolvedAnnotationDeclaration> getDeclaredAnnotation(String name) {
+    	return getDeclaredAnnotations().stream()
+    			.filter(annotation -> annotation.getQualifiedName().endsWith(name))
+    			.findFirst();
+    }
+
+    /**
+     * Return a collection of all annotations declared in this type declaration.
+     */
+    default Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+    	throw new UnsupportedOperationException("Getting declared annotation is not supproted on this type " + this.getName());
+    }
+
 
     /**
      * This means that the type has a functional method. Conceptually, a functional interface has exactly one abstract method.

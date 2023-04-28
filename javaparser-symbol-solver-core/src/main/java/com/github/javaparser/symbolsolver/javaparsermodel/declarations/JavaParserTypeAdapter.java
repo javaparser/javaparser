@@ -21,14 +21,19 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -39,12 +44,10 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
-import java.util.*;
-
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T>> {
+public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T> & NodeWithAnnotations<T>> {
 
     private T wrappedNode;
     private TypeSolver typeSolver;
@@ -157,7 +160,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                 .getParentNode()
                 .map(node -> node.getSymbolResolver().toTypeDeclaration(node));
     }
-    
+
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {
         List<ResolvedFieldDeclaration> fields = new ArrayList<>();
         if (wrappedNode.getMembers() != null) {
@@ -171,6 +174,15 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
             }
         }
         return fields;
+    }
+
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+    	return wrappedNode.getAnnotations().stream()
+    		.map(annotation -> annotation.resolve())
+    		.collect(Collectors.toSet());
     }
 
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
