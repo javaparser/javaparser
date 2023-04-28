@@ -80,3 +80,7 @@ class CH {
 public @interface InheritedAnnotation {
 }
 
+@InheritedAnnotation
+class Parent {}
+class Child extends Parent {}
+
