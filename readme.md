@@ -14,7 +14,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667378.svg)](https://doi.org/10.5281/zenodo.2667378)
 
 
-This project contains a set of libraries implementing a Java 1.0 - Java 15 Parser with advanced analysis functionalities. This includes preview features to Java 13, with Java 14 preview features work-in-progress.
+This project contains a set of libraries implementing a Java 1.0 - Java 17 Parser with advanced analysis functionalities.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
@@ -121,7 +121,7 @@ Make sure that `javaparser-core` at least compiles before you run these.
 
 ## More information
 
-#### [JavaParser.org](https://javaparser.org) is the main information site.
+#### [JavaParser.org](https://javaparser.org) is the main information site or see the wiki page https://github.com/javaparser/javaparser/wiki.
 
 ## License
 
