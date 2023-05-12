@@ -22,12 +22,12 @@
 package com.github.javaparser;
 
 import com.github.javaparser.steps.PrettyPrintingSteps;
-import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
+import org.jbehave.core.junit.JUnit4StoryRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.junit.runner.RunWith;
 
-@RunWith(JUnitReportingRunner.class)
+@RunWith(JUnit4StoryRunner.class)
 public class PrettyPrintingTest extends BasicJBehaveTest {
 
     @Override
