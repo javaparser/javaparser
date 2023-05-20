@@ -189,6 +189,9 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
+        if(hasEnumConstant(name)) {
+            return SymbolReference.solved(getEnumConstant(name));
+        }
         for (CtField field : ctClass.getDeclaredFields()) {
             if (field.getName().equals(name)) {
                 return SymbolReference.solved(new JavassistFieldDeclaration(field, typeSolver));
