@@ -23,10 +23,7 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotation;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -37,10 +34,7 @@ import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 import javassist.bytecode.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -61,9 +55,12 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
     private CtMethod annotationMember;
     private TypeSolver typeSolver;
 
-    public JavassistAnnotationMemberDeclaration(CtMethod annotationMember, TypeSolver typeSolver) {
+    private ResolvedTypeParametrizable container;
+
+    public JavassistAnnotationMemberDeclaration(CtMethod annotationMember, TypeSolver typeSolver, ResolvedTypeParametrizable container) {
         this.annotationMember = annotationMember;
         this.typeSolver = typeSolver;
+        this.container = container;
     }
 
     @Override
@@ -75,21 +72,25 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
          if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
          return fn.apply(memberValue);
     }
-    
+
+    @Override
+    public Optional<Object> getComputedDefaultValue() {
+        AnnotationDefaultAttribute defaultAttribute = (AnnotationDefaultAttribute) annotationMember.getMethodInfo().getAttribute(AnnotationDefaultAttribute.tag);
+        if (defaultAttribute == null) return Optional.empty();
+        MemberValue memberValue = defaultAttribute.getDefaultValue();
+        return Optional.of(JavassistUtils.computeMemberValue(memberValue, typeSolver));
+    }
+
     @Override
     public ResolvedType getType() {
         try {
             String descriptor = annotationMember.getMethodInfo().getDescriptor();
             SignatureAttribute.MethodSignature signature = SignatureAttribute.toMethodSignature(descriptor);
-            SymbolReference<ResolvedReferenceTypeDeclaration> returnType = typeSolver.tryToSolveType(signature.getReturnType().jvmTypeName());
-            if (returnType.isSolved()) {
-                return new ReferenceTypeImpl(returnType.getCorrespondingDeclaration());
-            }
+            return JavassistUtils.signatureTypeToType(signature.getReturnType(), typeSolver, container);
         } catch (BadBytecode e) {
             // We don't expect this to happen, but we handle it anyway.
             throw new IllegalStateException("An invalid descriptor was received from JavaAssist.", e);
         }
-        throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getLongName()));
     }
 
     @Override

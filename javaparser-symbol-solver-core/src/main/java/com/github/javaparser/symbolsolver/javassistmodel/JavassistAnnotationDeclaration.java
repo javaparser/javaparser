@@ -148,7 +148,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     @Override
     public List<ResolvedAnnotationMemberDeclaration> getAnnotationMembers() {
         return Stream.of(ctClass.getDeclaredMethods())
-                .map(m -> new JavassistAnnotationMemberDeclaration(m, typeSolver))
+                .map(m -> new JavassistAnnotationMemberDeclaration(m, typeSolver, this))
                 .collect(Collectors.toList());
     }
 

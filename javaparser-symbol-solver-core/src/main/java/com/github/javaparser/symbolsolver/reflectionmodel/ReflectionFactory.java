@@ -23,11 +23,13 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -35,6 +37,7 @@ import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * @author Federico Tomassetti
@@ -123,6 +126,22 @@ public class ReflectionFactory {
             return AccessSpecifier.PRIVATE;
         } else {
             return AccessSpecifier.NONE;
+        }
+    }
+
+    public static Object convertAnnotationMemberValue(Object value, TypeSolver typeSolver) {
+        if (value instanceof Annotation) {
+            return new ReflectionAnnotation((Annotation) value, typeSolver);
+        } else if (value instanceof Object[]) {
+            return Stream.of((Object[]) value).map(it -> convertAnnotationMemberValue(it, typeSolver)).toArray();
+        } else if (value instanceof Class<?>) {
+            return ReflectionFactory.typeUsageFor((Class<?>) value, typeSolver);
+        } else if(value instanceof Enum<?>) {
+            Class<?> tempClass = value.getClass();
+            ResolvedEnumDeclaration tempEnumDecl = (ResolvedEnumDeclaration) ReflectionFactory.typeDeclarationFor(tempClass, typeSolver);
+            return tempEnumDecl.getEnumConstant(((Enum<?>) value).name());
+        } else {
+            return value;
         }
     }
 }

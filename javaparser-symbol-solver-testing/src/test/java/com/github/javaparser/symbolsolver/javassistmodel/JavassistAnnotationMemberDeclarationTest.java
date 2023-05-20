@@ -45,7 +45,7 @@ class JavassistAnnotationMemberDeclarationTest implements ResolvedAnnotationMemb
                     ClassPool.getDefault().get("java.lang.Object")
             };
             CtMethod method = clazz.getDeclaredMethod("append", args);
-            return new JavassistAnnotationMemberDeclaration(method, typeSolver);
+            return new JavassistAnnotationMemberDeclaration(method, typeSolver, null);
         } catch (NotFoundException e) {
             throw new RuntimeException("Unexpected error.", e);
         }

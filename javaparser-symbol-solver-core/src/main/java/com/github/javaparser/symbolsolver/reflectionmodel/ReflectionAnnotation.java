@@ -59,7 +59,7 @@ public class ReflectionAnnotation extends AbstractAnnotation {
         Class<? extends Annotation> tempType = annotation.annotationType();
         for (Method tempMethod : tempType.getDeclaredMethods()) {
             try {
-                Object tempResult = convert(tempMethod.invoke(annotation));
+                Object tempResult = ReflectionFactory.convertAnnotationMemberValue(tempMethod.invoke(annotation), typeSolver);
                 tempMap.put(new ReflectionAnnotationMemberDeclaration(tempMethod, typeSolver), tempResult);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalStateException("Could not read annotation value of " + tempMethod.getName() + " via reflection from " + tempType.getName(), e);
@@ -67,22 +67,6 @@ public class ReflectionAnnotation extends AbstractAnnotation {
         }
 
         return tempMap;
-    }
-
-    private Object convert(Object value) {
-        if (value instanceof Annotation) {
-            return new ReflectionAnnotation((Annotation) value, typeSolver);
-        } else if (value instanceof Object[]) {
-            return Stream.of((Object[]) value).map(this::convert).toArray();
-        } else if (value instanceof Class<?>) {
-            return ReflectionFactory.typeUsageFor((Class<?>) value, typeSolver);
-        } else if(value instanceof Enum<?>) {
-            Class<?> tempClass = value.getClass();
-            ResolvedEnumDeclaration tempEnumDecl = (ResolvedEnumDeclaration) ReflectionFactory.typeDeclarationFor(tempClass, typeSolver);
-            return tempEnumDecl.getEnumConstant(((Enum<?>) value).name());
-        } else {
-            return value;
-        }
     }
 
     @Override

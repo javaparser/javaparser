@@ -26,18 +26,12 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotation;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.model.SymbolReference;
-import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
-import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Type;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -72,16 +66,14 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
     }
 
     @Override
+    public Optional<Object> getComputedDefaultValue() {
+       return Optional.ofNullable(annotationMember.getDefaultValue()).map(it -> ReflectionFactory.convertAnnotationMemberValue(it, typeSolver));
+    }
+
+    @Override
     public ResolvedType getType() {
-        Class returnType = annotationMember.getReturnType();
-        if (returnType.isPrimitive()) {
-            return ResolvedPrimitiveType.byName(returnType.getName());
-        }
-        SymbolReference<ResolvedReferenceTypeDeclaration> rrtd = typeSolver.tryToSolveType(returnType.getName());
-        if (rrtd.isSolved()) {
-            return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration());
-        }
-        throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        Type returnType = annotationMember.getGenericReturnType();
+        return ReflectionFactory.typeUsageFor(returnType, typeSolver);
     }
 
     @Override

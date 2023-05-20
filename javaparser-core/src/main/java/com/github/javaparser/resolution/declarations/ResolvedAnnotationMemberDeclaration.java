@@ -21,6 +21,9 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.resolution.types.ResolvedType;
+
+import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
@@ -28,4 +31,10 @@ import com.github.javaparser.ast.expr.Expression;
 public interface ResolvedAnnotationMemberDeclaration extends ResolvedValueDeclaration {
 
     Expression getDefaultValue();
+
+    /**
+     * The value can either be a primitive (or its wrapper classes), a {@link String}, a {@link ResolvedTypeDeclaration}, a {@link ResolvedType}, {@link ResolvedEnumConstantDeclaration} or an array of those types.
+     * If this member has no default value {@link Optional#empty()} is returned.
+     */
+    Optional<Object> getComputedDefaultValue();
 }

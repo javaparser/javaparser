@@ -32,6 +32,7 @@ import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDec
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.utils.JavaParserConstantValueEvaluationUtil;
 import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.util.List;
@@ -58,6 +59,11 @@ public class JavaParserAnnotationMemberDeclaration implements ResolvedAnnotation
     @Override
     public Expression getDefaultValue() {
         return wrappedNode.getDefaultValue().orElse(null);
+    }
+
+    @Override
+    public Optional<Object> getComputedDefaultValue() {
+        return wrappedNode.getDefaultValue().map(it -> JavaParserConstantValueEvaluationUtil.evaluateConstantExpression(it, typeSolver, getType()));
     }
 
     @Override

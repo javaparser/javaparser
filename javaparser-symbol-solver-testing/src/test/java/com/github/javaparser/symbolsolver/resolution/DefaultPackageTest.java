@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.*;
 
+import com.github.javaparser.ast.Modifier;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.ast.AccessSpecifier;
@@ -150,8 +151,18 @@ class DefaultPackageTest {
 
 		@Override
 		public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-			return new HashSet<>();
+			return Collections.emptySet();
 		}
+
+        @Override
+        public List<? extends ResolvedAnnotation> getAnnotations() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public boolean hasModifier(Modifier.Keyword keyword) {
+            return false;
+        }
     }
 
     @Test
