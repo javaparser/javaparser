@@ -26,10 +26,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
@@ -38,6 +35,7 @@ import javassist.CtMethod;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Federico Tomassetti
@@ -152,5 +150,15 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     @Override
     public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(ctMethod, ctMethod.getModifiers(), keyword);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return methodLikeAdaper.getAnnotations();
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return methodLikeAdaper.getDeclaredAnnotations();
     }
 }

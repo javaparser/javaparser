@@ -23,15 +23,13 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import javassist.CtConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Fred Lefévère-Laoide
@@ -113,5 +111,15 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
     @Override
     public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(ctConstructor, ctConstructor.getModifiers(), keyword);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return methodLikeAdaper.getAnnotations();
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return methodLikeAdaper.getDeclaredAnnotations();
     }
 }

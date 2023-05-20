@@ -34,6 +34,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.lang.annotation.Inherited;
 import java.util.*;
@@ -244,5 +245,15 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(clazz, clazz.getModifiers(), keyword);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(clazz, typeSolver);
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(clazz, typeSolver);
     }
 }

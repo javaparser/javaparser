@@ -22,12 +22,10 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedMethodLikeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import javassist.CtBehavior;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.ExceptionsAttribute;
@@ -116,5 +114,13 @@ public class JavassistMethodLikeDeclarationAdapter {
 
     public ResolvedType getReturnType() {
         return JavassistUtils.signatureTypeToType(methodSignature.getReturnType(), typeSolver, declaration);
+    }
+
+    public List<? extends JavassistAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(ctBehavior, typeSolver);
+    }
+
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(ctBehavior, typeSolver);
     }
 }

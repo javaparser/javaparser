@@ -32,7 +32,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier, HasModifier {
+public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier, HasModifier, HasAnnotations {
 
     /**
      * The package name of the declaring type.

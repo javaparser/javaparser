@@ -40,6 +40,7 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import javassist.CtClass;
 import javassist.CtField;
 
@@ -140,14 +141,6 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
         return ctClass.hasAnnotation(canonicalName);
     }
 
-    /*
-     * Returns a set of the declared annotation on this type
-     */
-    @Override
-    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-        return javassistTypeDeclarationAdapter.getDeclaredAnnotations();
-    }
-
     @Override
     public String getName() {
         String[] nameElements = ctClass.getSimpleName().replace('$', '.').split("\\.");
@@ -240,5 +233,13 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(ctClass, ctClass.getModifiers(), keyword);
+    }
+
+    public List<? extends JavassistAnnotation> getAnnotations() {
+        return javassistTypeDeclarationAdapter.getAnnotations();
+    }
+
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return javassistTypeDeclarationAdapter.getDeclaredAnnotations();
     }
 }

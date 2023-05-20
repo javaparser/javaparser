@@ -23,16 +23,15 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -103,5 +102,15 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     @Override
     public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(constructor, constructor.getModifiers(), keyword);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(constructor, typeSolver);
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(constructor, typeSolver);
     }
 }

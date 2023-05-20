@@ -24,17 +24,17 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -118,5 +118,16 @@ public class JavaParserConstructorDeclaration<N extends ResolvedReferenceTypeDec
     @Override
     public boolean hasModifier(Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(wrappedNode, keyword);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        NodeList<AnnotationExpr> tempAnnotations = wrappedNode.getAnnotations();
+        return tempAnnotations.stream().map(ann -> new JavaParserAnnotation(ann, typeSolver)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return wrappedNode.getAnnotations().stream().map(AnnotationExpr::resolve).collect(Collectors.toSet());
     }
 }

@@ -24,9 +24,11 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -49,6 +51,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.io.Serializable;
 import java.util.*;
@@ -449,6 +452,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                     return false;
             }
         }
+
+        @Override
+        public List<? extends ResolvedAnnotation> getAnnotations() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+            return Collections.emptySet();
+        }
     }
 
     /**
@@ -588,6 +601,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                     return false;
             }
         }
+
+        @Override
+        public List<? extends ResolvedAnnotation> getAnnotations() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+            return Collections.emptySet();
+        }
     }
 
     @Override
@@ -618,5 +641,15 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     @Override
     public boolean hasModifier(Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(wrappedNode, keyword);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(wrappedNode, typeSolver);
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(wrappedNode);
     }
 }

@@ -23,13 +23,19 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotation;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Federico Tomassetti
@@ -109,5 +115,58 @@ public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(field, field.getModifiers(), keyword);
+    }
+
+    @Override
+    public Optional<Object> constantValue() {
+        Object tempValue = null;
+        if (Modifier.isFinal(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
+            try {
+                tempValue = tryGet(field::getBoolean);
+                if(tempValue == null) {
+                    tempValue = tryGet(field::getInt);
+                }
+                if(tempValue == null) {
+                    tempValue = tryGet(field::getLong);
+                }
+                if(tempValue == null) {
+                    tempValue = tryGet(field::getDouble);
+                }
+                if(tempValue == null) {
+                    tempValue = tryGet(field::getFloat);
+                }
+                if(tempValue == null) {
+                    tempValue = tryGet(field::get);
+                    if(!(tempValue instanceof String)) {
+                        tempValue = null;
+                    }
+                }
+            } catch (Throwable ignore) {
+
+            }
+        }
+        return Optional.ofNullable(tempValue);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(field, typeSolver);
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(field, typeSolver);
+    }
+
+    private Object tryGet(EFunction<Object, Object, Throwable> function) {
+        try {
+            return function.apply(null);
+        } catch (Throwable ignore) {
+            return null;
+        }
+    }
+
+    private interface EFunction<P, R, T extends Throwable> {
+        R apply(P param) throws T;
     }
 }

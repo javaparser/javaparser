@@ -33,7 +33,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable, HasModifier {
+public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable, HasModifier, HasAnnotations {
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
 
@@ -316,13 +316,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     	return getDeclaredAnnotations().stream()
     			.filter(annotation -> annotation.getQualifiedName().endsWith(name))
     			.findFirst();
-    }
-
-    /**
-     * Return a collection of all annotations declared in this type declaration.
-     */
-    default Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-    	throw new UnsupportedOperationException("Getting declared annotation is not supproted on this type " + this.getName());
     }
 
 

@@ -35,6 +35,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.util.*;
 
@@ -210,5 +211,15 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     @Override
     public boolean hasModifier(Modifier.Keyword keyword) {
         return false;
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(wrappedNode, typeSolver);
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(wrappedNode);
     }
 }

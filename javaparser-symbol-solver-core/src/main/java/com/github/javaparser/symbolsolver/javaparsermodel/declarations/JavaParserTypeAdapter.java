@@ -27,16 +27,14 @@ import java.util.stream.Collectors;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -174,15 +172,6 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
             }
         }
         return fields;
-    }
-
-    /*
-     * Returns a set of the declared annotation on this type
-     */
-    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-    	return wrappedNode.getAnnotations().stream()
-    		.map(annotation -> annotation.resolve())
-    		.collect(Collectors.toSet());
     }
 
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {

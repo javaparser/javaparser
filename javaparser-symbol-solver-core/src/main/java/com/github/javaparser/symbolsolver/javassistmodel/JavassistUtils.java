@@ -29,10 +29,7 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -44,6 +41,7 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.Modifier;
 import javassist.bytecode.*;
+import javassist.bytecode.annotation.*;
 
 /**
  * @author Federico Tomassetti
@@ -249,4 +247,42 @@ class JavassistUtils {
         }
     }
 
+    public static Object computeMemberValue(MemberValue member, TypeSolver typeSolver) {
+        if (member instanceof FloatMemberValue) {
+            return ((FloatMemberValue) member).getValue();
+        } else if (member instanceof ShortMemberValue) {
+            return ((ShortMemberValue) member).getValue();
+        } else if (member instanceof DoubleMemberValue) {
+            return ((DoubleMemberValue) member).getValue();
+        } else if (member instanceof StringMemberValue) {
+            return ((StringMemberValue) member).getValue();
+        } else if (member instanceof IntegerMemberValue) {
+            return ((IntegerMemberValue) member).getValue();
+        } else if (member instanceof LongMemberValue) {
+            return ((LongMemberValue) member).getValue();
+        } else if (member instanceof CharMemberValue) {
+            return ((CharMemberValue) member).getValue();
+        } else if (member instanceof ByteMemberValue) {
+            return ((ByteMemberValue) member).getValue();
+        } else if (member instanceof BooleanMemberValue) {
+            return ((BooleanMemberValue) member).getValue();
+        } else if (member instanceof ClassMemberValue) {
+            //TODO can also be an array (byte[].class) and then we would not be able to resolve it with the typeSolver alone.
+            return new ReferenceTypeImpl(typeSolver.solveType(((ClassMemberValue) member).getValue()));
+        } else if (member instanceof AnnotationMemberValue) {
+            return new JavassistAnnotation(((AnnotationMemberValue) member).getValue(), typeSolver);
+        } else if (member instanceof ArrayMemberValue) {
+            return Arrays.stream(((ArrayMemberValue) member).getValue()).map(it -> computeMemberValue(it, typeSolver)).toArray();
+        } else if (member instanceof EnumMemberValue) {
+            String tempTypeName = ((EnumMemberValue) member).getType();
+            String tempEnumValueName = ((EnumMemberValue) member).getValue();
+
+            ResolvedReferenceTypeDeclaration tempEnumType = typeSolver.solveType(tempTypeName);
+            if (tempEnumType instanceof ResolvedEnumDeclaration) {
+                return ((ResolvedEnumDeclaration) tempEnumType).getEnumConstant(tempEnumValueName);
+            }
+        }
+
+        throw new IllegalStateException("Unrecognized MemberValue: " + member);
+    }
 }

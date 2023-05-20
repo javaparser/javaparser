@@ -45,6 +45,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ObjectCreationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -271,5 +272,15 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     @Override
     public boolean hasModifier(Modifier.Keyword keyword) {
         return false;
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return Collections.emptySet();
     }
 }

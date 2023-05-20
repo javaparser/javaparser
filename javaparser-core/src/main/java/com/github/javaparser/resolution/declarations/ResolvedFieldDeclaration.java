@@ -25,7 +25,7 @@ package com.github.javaparser.resolution.declarations;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier, HasModifier {
+public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier, HasModifier, HasAnnotations {
 
     /**
      * Is the field static?
@@ -51,4 +51,20 @@ public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasA
      * The type on which this field has been declared
      */
     ResolvedTypeDeclaration declaringType();
+
+    /**
+     * Returns the value of this field if it is a constant field.
+     * This method works only if the field type is a primitive type
+     * or <code>String</code> type.  Otherwise, it returns <code>null</code>.
+     * A constant field is <code>static</code> and <code>final</code>.
+     *
+     * @return  a <code>Integer</code>, <code>Long</code>, <code>Float</code>,
+     *          <code>Double</code>, <code>Boolean</code>,
+     *          or <code>String</code> object
+     *          representing the constant value.
+     *          <code>null</code> if it is not a constant field
+     *          or if the field type is not a primitive type
+     *          or <code>String</code>.
+     */
+    Object constantValue();
 }

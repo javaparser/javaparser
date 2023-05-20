@@ -23,16 +23,20 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import javassist.CtField;
+import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.annotation.Annotation;
 
 import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Federico Tomassetti
@@ -103,5 +107,24 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(ctField, ctField.getModifiers(), keyword);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(ctField, typeSolver);
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(ctField, typeSolver);
+    }
+
+    @Override
+    public Object constantValue() {
+        if(Modifier.isStatic(ctField.getModifiers()) && Modifier.isFinal(ctField.getModifiers())) {
+            return ctField.getConstantValue();
+        } else {
+            return null;
+        }
     }
 }

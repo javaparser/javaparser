@@ -82,6 +82,9 @@ public class ModifierUtils {
     public static boolean hasModifier(Object reflectionObject, int modifiers, Keyword keyword) {
         switch (keyword) {
             case DEFAULT:
+                if(reflectionObject instanceof Method) {
+                    return ((Method) reflectionObject).isDefault();
+                }
                 break;
             case PUBLIC:
                 return Modifier.isPublic(modifiers);

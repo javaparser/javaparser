@@ -48,6 +48,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 /**
  * @author Federico Tomassetti
@@ -155,6 +156,21 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
                                 public boolean hasModifier(Modifier.Keyword keyword) {
                                     return f.hasModifier(keyword);
                                 }
+
+                                @Override
+                                public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+                                    return f.getDeclaredAnnotations();
+                                }
+
+                                @Override
+                                public List<? extends ResolvedAnnotation> getAnnotations() {
+                                    return f.getAnnotations();
+                                }
+
+                                @Override
+                                public Object constantValue() {
+                                    return f.constantValue();
+                                }
                             });
                         }));
 
@@ -228,14 +244,6 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
-    }
-
-    /*
-     * Returns a set of the declared annotation on this type
-     */
-    @Override
-    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-        return javaParserTypeAdapter.getDeclaredAnnotations();
     }
 
     @Override
@@ -504,5 +512,15 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     @Override
     public boolean hasModifier(Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(wrappedNode, keyword);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(wrappedNode, typeSolver);
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(wrappedNode);
     }
 }

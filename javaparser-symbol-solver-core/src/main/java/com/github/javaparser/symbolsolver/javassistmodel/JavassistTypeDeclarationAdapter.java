@@ -35,6 +35,7 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
@@ -181,36 +182,6 @@ public class JavassistTypeDeclarationAdapter {
         return fields;
     }
 
-    /*
-     * Returns a set of the declared annotation on this type
-     */
-    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-    	try {
-			Object[] annotations = ctClass.getAnnotations();
-			return Stream.of(annotations)
-	    			.map(annotation -> getAnnotationType(annotation))
-	    			.filter(annotationType -> annotationType != null)
-	    			.map(annotationType -> typeSolver.solveType(annotationType))
-	    			.map(rrtd -> rrtd.asAnnotation())
-	    			.collect(Collectors.toSet());
-		} catch (ClassNotFoundException e) {
-			// There is nothing to do except returns an empty set
-		}
-    	return Collections.EMPTY_SET;
-
-    }
-
-    private String getAnnotationType(Object annotation) {
-    	String typeName = null;
-    	try {
-    		Class<?> annotationClass = (Class<?>) Proxy.getInvocationHandler(annotation)
-					.invoke(annotation, JDK_ANNOTATION_TYPE_METHOD, null);
-    		typeName = annotationClass.getTypeName();
-		} catch (Throwable e) {
-		}
-    	return typeName;
-    }
-
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         if (null == ctClass.getGenericSignature()) {
             return Collections.emptyList();
@@ -328,5 +299,13 @@ public class JavassistTypeDeclarationAdapter {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    public List<? extends JavassistAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(ctClass, typeSolver);
+    }
+
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(ctClass, typeSolver);
     }
 }

@@ -78,14 +78,6 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
         return ctClass.hasAnnotation(canonicalName);
     }
 
-    /*
-     * Returns a set of the declared annotation on this type
-     */
-    @Override
-    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-        return javassistTypeDeclarationAdapter.getDeclaredAnnotations();
-    }
-
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         return javassistTypeDeclarationAdapter.getDeclaredMethods();
@@ -331,5 +323,13 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
     @Override
     public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
         return ModifierUtils.hasModifier(ctClass, ctClass.getModifiers(), keyword);
+    }
+
+    public List<? extends JavassistAnnotation> getAnnotations() {
+        return javassistTypeDeclarationAdapter.getAnnotations();
+    }
+
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return javassistTypeDeclarationAdapter.getDeclaredAnnotations();
     }
 }
