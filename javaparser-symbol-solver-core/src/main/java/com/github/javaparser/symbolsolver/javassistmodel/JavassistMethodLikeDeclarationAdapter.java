@@ -29,7 +29,9 @@ import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import javassist.CtBehavior;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.ExceptionsAttribute;
+import javassist.bytecode.ParameterAnnotationsAttribute;
 import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.annotation.Annotation;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,7 +72,14 @@ public class JavassistMethodLikeDeclarationAdapter {
 
         Optional<String> paramName = JavassistUtils.extractParameterName(ctBehavior, i);
         ResolvedType type = JavassistUtils.signatureTypeToType(methodSignature.getParameterTypes()[i], typeSolver, declaration);
-        return new JavassistParameterDeclaration(type, typeSolver, variadic, paramName.orElse(null));
+
+        ParameterAnnotationsAttribute paramAnnotationsInfo = (ParameterAnnotationsAttribute) ctBehavior.getMethodInfo().getAttribute(ParameterAnnotationsAttribute.visibleTag);
+
+        Annotation[] tempVisibleAnnotations = paramAnnotationsInfo != null ? paramAnnotationsInfo.getAnnotations()[i] : new Annotation[0];
+
+        List<Annotation> tempAnnotation = Arrays.asList(tempVisibleAnnotations);
+
+        return new JavassistParameterDeclaration(type, typeSolver, variadic, paramName.orElse(null), tempAnnotation);
     }
 
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {

@@ -22,9 +22,16 @@
 package com.github.javaparser.symbolsolver.javassistmodel;
 
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotation;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import javassist.CtClass;
+import javassist.bytecode.annotation.Annotation;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -35,15 +42,18 @@ public class JavassistParameterDeclaration implements ResolvedParameterDeclarati
     private boolean variadic;
     private String name;
 
-    public JavassistParameterDeclaration(CtClass type, TypeSolver typeSolver, boolean variadic, String name) {
-        this(JavassistFactory.typeUsageFor(type, typeSolver), typeSolver, variadic, name);
+    private List<Annotation> annotations;
+
+    public JavassistParameterDeclaration(CtClass type, TypeSolver typeSolver, boolean variadic, String name, List<Annotation> annotations) {
+        this(JavassistFactory.typeUsageFor(type, typeSolver), typeSolver, variadic, name, annotations);
     }
 
-    public JavassistParameterDeclaration(ResolvedType type, TypeSolver typeSolver, boolean variadic, String name) {
+    public JavassistParameterDeclaration(ResolvedType type, TypeSolver typeSolver, boolean variadic, String name, List<Annotation> annotations) {
         this.name = name;
         this.type = type;
         this.typeSolver = typeSolver;
         this.variadic = variadic;
+        this.annotations = annotations;
     }
 
     @Override
@@ -88,5 +98,15 @@ public class JavassistParameterDeclaration implements ResolvedParameterDeclarati
     @Override
     public ResolvedType getType() {
         return type;
+    }
+
+    @Override
+    public List<ResolvedAnnotation> getAnnotations() {
+        return annotations.stream().map(it -> new JavassistAnnotation(it, typeSolver)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return getAnnotations().stream().map(ResolvedAnnotation::getAnnotationType).collect(Collectors.toSet());
     }
 }

@@ -22,8 +22,14 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotation;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedPatternDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
@@ -82,4 +88,13 @@ public class ReflectionPatternDeclaration implements ResolvedPatternDeclaration 
         return ReflectionFactory.typeUsageFor(type, typeSolver);
     }
 
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return Collections.emptySet();
+    }
 }

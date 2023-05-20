@@ -22,12 +22,17 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotation;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Set;
 
 public class ReflectionEnumConstantDeclaration implements ResolvedEnumConstantDeclaration {
 
@@ -52,5 +57,15 @@ public class ReflectionEnumConstantDeclaration implements ResolvedEnumConstantDe
         Class<?> enumClass = enumConstant.getDeclaringClass();
         ResolvedReferenceTypeDeclaration typeDeclaration = new ReflectionEnumDeclaration(enumClass, typeSolver);
         return new ReferenceTypeImpl(typeDeclaration);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return ResolvedAnnotationsUtil.getAnnotations(enumConstant, typeSolver);
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(enumConstant, typeSolver);
     }
 }

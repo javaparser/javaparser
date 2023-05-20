@@ -40,6 +40,7 @@ import javassist.bytecode.AnnotationsAttribute;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -61,7 +62,7 @@ public class ResolvedAnnotationsUtil {
         AnnotationsAttribute visibleAnnotations = (AnnotationsAttribute) ctBehavior.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
 
         if (visibleAnnotations != null) {
-            return Stream.of(visibleAnnotations.getAnnotations()).map(ann -> new JavassistAnnotation(ann, typeSolver)).collect(Collectors.toList());
+            return Arrays.stream(visibleAnnotations.getAnnotations()).map(ann -> new JavassistAnnotation(ann, typeSolver)).collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }
@@ -71,7 +72,7 @@ public class ResolvedAnnotationsUtil {
         AnnotationsAttribute visibleAnnotations = (AnnotationsAttribute) ctBehavior.getMethodInfo().getAttribute(AnnotationsAttribute.visibleTag);
 
         if (visibleAnnotations != null) {
-            return Stream.of(visibleAnnotations.getAnnotations()).map(ann -> (ResolvedAnnotationDeclaration) typeSolver.solveType(ann.getTypeName())).collect(Collectors.toSet());
+            return Arrays.stream(visibleAnnotations.getAnnotations()).map(ann -> (ResolvedAnnotationDeclaration) typeSolver.solveType(ann.getTypeName())).collect(Collectors.toSet());
         } else {
             return Collections.emptySet();
         }
@@ -81,7 +82,7 @@ public class ResolvedAnnotationsUtil {
         AnnotationsAttribute visibleAnnotations = (AnnotationsAttribute) ctClass.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
 
         if (visibleAnnotations != null) {
-            return Stream.of(visibleAnnotations.getAnnotations()).map(ann -> new JavassistAnnotation(ann, typeSolver)).collect(Collectors.toList());
+            return Arrays.stream(visibleAnnotations.getAnnotations()).map(ann -> new JavassistAnnotation(ann, typeSolver)).collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }
@@ -91,7 +92,7 @@ public class ResolvedAnnotationsUtil {
         AnnotationsAttribute visibleAnnotations = (AnnotationsAttribute) ctClass.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
 
         if (visibleAnnotations != null) {
-            return Stream.of(visibleAnnotations.getAnnotations()).map(ann -> (ResolvedAnnotationDeclaration) typeSolver.solveType(ann.getTypeName())).collect(Collectors.toSet());
+            return Arrays.stream(visibleAnnotations.getAnnotations()).map(ann -> (ResolvedAnnotationDeclaration) typeSolver.solveType(ann.getTypeName())).collect(Collectors.toSet());
         } else {
             return Collections.emptySet();
         }
@@ -101,7 +102,7 @@ public class ResolvedAnnotationsUtil {
         AnnotationsAttribute visibleAnnotations = (AnnotationsAttribute) ctField.getFieldInfo().getAttribute(AnnotationsAttribute.visibleTag);
 
         if (visibleAnnotations != null) {
-            return Stream.of(visibleAnnotations.getAnnotations()).map(ann -> new JavassistAnnotation(ann, typeSolver)).collect(Collectors.toList());
+            return Arrays.stream(visibleAnnotations.getAnnotations()).map(ann -> new JavassistAnnotation(ann, typeSolver)).collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }
@@ -111,17 +112,17 @@ public class ResolvedAnnotationsUtil {
         AnnotationsAttribute visibleAnnotations = (AnnotationsAttribute) ctField.getFieldInfo().getAttribute(AnnotationsAttribute.visibleTag);
 
         if (visibleAnnotations != null) {
-            return Stream.of(visibleAnnotations.getAnnotations()).map(ann -> (ResolvedAnnotationDeclaration) typeSolver.solveType(ann.getTypeName())).collect(Collectors.toSet());
+            return Arrays.stream(visibleAnnotations.getAnnotations()).map(ann -> (ResolvedAnnotationDeclaration) typeSolver.solveType(ann.getTypeName())).collect(Collectors.toSet());
         } else {
             return Collections.emptySet();
         }
     }
 
     public static List<? extends ReflectionAnnotation> getAnnotations(AnnotatedElement reflectionObject, TypeSolver typeSolver) {
-        return Stream.of(reflectionObject.getAnnotations()).map(ann -> new ReflectionAnnotation(ann, typeSolver)).collect(Collectors.toList());
+        return Arrays.stream(reflectionObject.getAnnotations()).map(ann -> new ReflectionAnnotation(ann, typeSolver)).collect(Collectors.toList());
     }
 
     public static Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations(AnnotatedElement reflectionObject, TypeSolver typeSolver) {
-        return Stream.of(reflectionObject.getAnnotations()).map(Annotation::getClass).map(clazz -> (ResolvedAnnotationDeclaration) ReflectionFactory.typeDeclarationFor(clazz, typeSolver)).collect(Collectors.toSet());
+        return Arrays.stream(reflectionObject.getAnnotations()).map(Annotation::getClass).map(clazz -> (ResolvedAnnotationDeclaration) ReflectionFactory.typeDeclarationFor(clazz, typeSolver)).collect(Collectors.toSet());
     }
 }

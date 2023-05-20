@@ -22,10 +22,19 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotation;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Federico Tomassetti
@@ -37,6 +46,8 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     private boolean variadic;
     private String name;
 
+    private Annotation[] annotations;
+
     /**
      *
      * @param type
@@ -46,12 +57,13 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
      * @param name can potentially be null
      */
     public ReflectionParameterDeclaration(Class<?> type, java.lang.reflect.Type genericType, TypeSolver typeSolver,
-                                          boolean variadic, String name) {
+                                          boolean variadic, String name, Annotation[] annotations) {
         this.type = type;
         this.genericType = genericType;
         this.typeSolver = typeSolver;
         this.variadic = variadic;
         this.name = name;
+        this.annotations = annotations;
     }
 
     /**
@@ -116,5 +128,15 @@ public class ReflectionParameterDeclaration implements ResolvedParameterDeclarat
     @Override
     public int hashCode() {
         return Objects.hash(type, genericType, typeSolver, variadic, name);
+    }
+
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return Arrays.stream(annotations).map(ann -> new ReflectionAnnotation(ann, typeSolver)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return Arrays.stream(annotations).map(Annotation::getClass).map(clazz -> (ResolvedAnnotationDeclaration) ReflectionFactory.typeDeclarationFor(clazz, typeSolver)).collect(Collectors.toSet());
     }
 }

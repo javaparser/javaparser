@@ -523,6 +523,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
                         return enumDeclaration.toAst();
                     }
 
+                    @Override
+                    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+                        return Collections.emptySet();
+                    }
+
+                    @Override
+                    public List<? extends ResolvedAnnotation> getAnnotations() {
+                        return Collections.emptyList();
+                    }
+
                 };
             }
 

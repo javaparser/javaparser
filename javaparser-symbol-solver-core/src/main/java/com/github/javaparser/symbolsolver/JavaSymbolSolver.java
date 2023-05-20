@@ -39,6 +39,10 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
@@ -70,6 +74,16 @@ public class JavaSymbolSolver implements SymbolResolver {
         @Override
         public ResolvedType getType() {
             return ResolvedPrimitiveType.INT;
+        }
+
+        @Override
+        public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+            return Collections.emptySet();
+        }
+
+        @Override
+        public List<? extends ResolvedAnnotation> getAnnotations() {
+            return Collections.emptyList();
         }
     }
 

@@ -33,6 +33,7 @@ import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import com.github.javaparser.utils.TypeUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -111,8 +112,11 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         if (method.isVarArgs()) {
             variadic = i == (method.getParameterCount() - 1);
         }
+
+        Annotation[] tempAnnotations = method.getParameterAnnotations()[i];
+
         return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i],
-                typeSolver, variadic, method.getParameters()[i].getName());
+                typeSolver, variadic, method.getParameters()[i].getName(), tempAnnotations);
     }
 
     @Override

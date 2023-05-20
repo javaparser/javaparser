@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
@@ -66,9 +67,12 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
         if (constructor.isVarArgs()) {
             variadic = i == (constructor.getParameterCount() - 1);
         }
+
+        Annotation[] tempAnnotations = constructor.getParameterAnnotations()[i];
+
         return new ReflectionParameterDeclaration(constructor.getParameterTypes()[i],
                 constructor.getGenericParameterTypes()[i], typeSolver, variadic,
-                constructor.getParameters()[i].getName());
+                constructor.getParameters()[i].getName(), tempAnnotations);
     }
 
     @Override

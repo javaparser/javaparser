@@ -107,41 +107,4 @@ public class JavaParserAnnotation extends AbstractAnnotation implements Associab
     public int hashCode() {
         return wrappedNode.hashCode();
     }
-
-    //
-    /// Utility
-    ///
-
-    private Object resolveExpression(Expression expression) {
-        if (expression.isClassExpr()) {
-            ClassExpr tempClassExpr = expression.asClassExpr();
-            return JavaParserFacade.get(typeSolver).convert(tempClassExpr.getType(), wrappedNode);
-        } else if (expression.isAnnotationExpr()) {
-            return new JavaParserAnnotation(expression.asAnnotationExpr(), typeSolver);
-        } else if (expression.isLiteralExpr()) {
-            if (expression.isLiteralStringValueExpr()) {
-                return expression.asLiteralStringValueExpr().getValue();
-            } else if (expression.isLongLiteralExpr()) {
-                return expression.asLongLiteralExpr().asNumber().longValue();
-            } else if (expression.isIntegerLiteralExpr()) {
-                return expression.asIntegerLiteralExpr().asNumber().intValue();
-            } else if (expression.isDoubleLiteralExpr()) {
-                return expression.asDoubleLiteralExpr().asDouble();
-            } else if (expression.isBooleanLiteralExpr()) {
-                return expression.asBooleanLiteralExpr().getValue();
-            }
-        } else if (expression.isFieldAccessExpr()) {
-            ResolvedValueDeclaration tempResolvedExpr = expression.asFieldAccessExpr().resolve();
-            if (tempResolvedExpr.isField()) {
-
-            } else if (tempResolvedExpr.isEnumConstant()) {
-                return tempResolvedExpr.asEnumConstant();
-            }
-        } else if (expression.isArrayInitializerExpr()) {
-            ArrayInitializerExpr tempArrInitExpr = expression.asArrayInitializerExpr();
-            return tempArrInitExpr.getValues().stream().map(this::resolveExpression).toArray();
-        }
-
-        throw new IllegalStateException("Unrecognized expression for annotation member: " + expression);
-    }
 }

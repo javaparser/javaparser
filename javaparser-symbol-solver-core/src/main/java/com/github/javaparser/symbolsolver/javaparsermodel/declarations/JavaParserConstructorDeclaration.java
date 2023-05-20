@@ -24,13 +24,12 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -122,12 +121,11 @@ public class JavaParserConstructorDeclaration<N extends ResolvedReferenceTypeDec
 
     @Override
     public List<? extends ResolvedAnnotation> getAnnotations() {
-        NodeList<AnnotationExpr> tempAnnotations = wrappedNode.getAnnotations();
-        return tempAnnotations.stream().map(ann -> new JavaParserAnnotation(ann, typeSolver)).collect(Collectors.toList());
+        return ResolvedAnnotationsUtil.getAnnotations(wrappedNode, typeSolver);
     }
 
     @Override
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-        return wrappedNode.getAnnotations().stream().map(AnnotationExpr::resolve).collect(Collectors.toSet());
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(wrappedNode);
     }
 }

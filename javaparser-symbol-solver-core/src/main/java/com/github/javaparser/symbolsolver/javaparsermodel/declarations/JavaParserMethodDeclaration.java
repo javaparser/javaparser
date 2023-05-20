@@ -39,6 +39,7 @@ import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationC
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
 import java.util.List;
 import java.util.Optional;
@@ -185,12 +186,11 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
 
     @Override
     public List<? extends ResolvedAnnotation> getAnnotations() {
-        NodeList<AnnotationExpr> tempAnnotations = wrappedNode.getAnnotations();
-        return tempAnnotations.stream().map(ann -> new JavaParserAnnotation(ann, typeSolver)).collect(Collectors.toList());
+        return ResolvedAnnotationsUtil.getAnnotations(wrappedNode, typeSolver);
     }
 
     @Override
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-        return wrappedNode.getAnnotations().stream().map(AnnotationExpr::resolve).collect(Collectors.toSet());
+        return ResolvedAnnotationsUtil.getDeclaredAnnotations(wrappedNode);
     }
 }

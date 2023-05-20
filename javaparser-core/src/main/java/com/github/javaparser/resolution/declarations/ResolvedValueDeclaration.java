@@ -27,7 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedValueDeclaration extends ResolvedDeclaration {
+public interface ResolvedValueDeclaration extends ResolvedDeclaration, HasAnnotations {
 
     /**
      * Type of the declaration.

@@ -24,11 +24,17 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotation;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedPatternDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
@@ -69,4 +75,13 @@ public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration 
         return Optional.of(wrappedNode);
     }
 
+    @Override
+    public List<? extends ResolvedAnnotation> getAnnotations() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return Collections.emptySet();
+    }
 }
