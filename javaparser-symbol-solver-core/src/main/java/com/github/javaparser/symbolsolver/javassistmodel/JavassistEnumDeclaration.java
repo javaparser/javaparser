@@ -35,6 +35,7 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.bytecode.AccessFlag;
@@ -237,5 +238,10 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
                 "ctClass=" + ctClass.getName() +
                 ", typeSolver=" + typeSolver +
                 '}';
+    }
+
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(ctClass, ctClass.getModifiers(), keyword);
     }
 }

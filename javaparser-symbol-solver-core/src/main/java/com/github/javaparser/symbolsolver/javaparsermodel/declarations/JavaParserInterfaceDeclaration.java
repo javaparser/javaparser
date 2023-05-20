@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -46,6 +47,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 /**
  * @author Federico Tomassetti
@@ -245,6 +247,11 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                                 public Optional<Node> toAst() {
                                     return f.toAst();
                                 }
+
+                                @Override
+                                public boolean hasModifier(Modifier.Keyword keyword) {
+                                    return f.hasModifier(keyword);
+                                }
                             });
                         })
                 );
@@ -409,5 +416,10 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                 .stream().map(ta -> new LazyType(v -> JavaParserFacade.get(typeSolver).convert(ta, ta)))
                 .collect(Collectors.toList());
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters);
+    }
+
+    @Override
+    public boolean hasModifier(Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(wrappedNode, keyword);
     }
 }

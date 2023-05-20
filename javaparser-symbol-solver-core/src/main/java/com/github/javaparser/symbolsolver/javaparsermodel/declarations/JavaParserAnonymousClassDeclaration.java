@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -267,4 +268,8 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
         return Optional.of(wrappedNode);
     }
 
+    @Override
+    public boolean hasModifier(Modifier.Keyword keyword) {
+        return false;
+    }
 }

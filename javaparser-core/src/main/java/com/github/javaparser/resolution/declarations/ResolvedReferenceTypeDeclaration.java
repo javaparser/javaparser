@@ -33,7 +33,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable {
+public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable, HasModifier {
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
 

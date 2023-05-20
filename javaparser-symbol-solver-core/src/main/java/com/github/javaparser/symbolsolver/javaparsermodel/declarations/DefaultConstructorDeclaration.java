@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -30,6 +31,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This represents the default constructor added by the compiler for objects not declaring one.
@@ -85,4 +87,11 @@ public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclar
         throw new UnsupportedOperationException("The default constructor does not throw exceptions");
     }
 
+    /**
+     * A default constructor can only and will always be public.
+     */
+    @Override
+    public boolean hasModifier(Modifier.Keyword keyword) {
+        return Objects.requireNonNull(keyword) == Modifier.Keyword.PUBLIC;
+    }
 }

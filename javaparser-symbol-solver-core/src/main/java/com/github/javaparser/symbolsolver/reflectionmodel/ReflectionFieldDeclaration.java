@@ -26,6 +26,7 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -103,5 +104,10 @@ public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public AccessSpecifier accessSpecifier() {
         return ReflectionFactory.modifiersToAccessLevel(field.getModifiers());
+    }
+
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(field, field.getModifiers(), keyword);
     }
 }
