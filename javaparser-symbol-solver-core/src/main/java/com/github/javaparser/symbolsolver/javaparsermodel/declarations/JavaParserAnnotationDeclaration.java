@@ -25,6 +25,7 @@ import java.lang.annotation.Inherited;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -34,6 +35,7 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 /**
  * @author Federico Tomassetti
@@ -162,5 +164,10 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
+    }
+
+    @Override
+    public boolean hasModifier(Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(wrappedNode, keyword);
     }
 }

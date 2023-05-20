@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
@@ -47,6 +48,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -433,6 +435,20 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         public String toDescriptor() {
             return String.format("()%s", getReturnType().toDescriptor());
         }
+
+        /**
+         * The values method is always public and static.
+         */
+        @Override
+        public boolean hasModifier(Modifier.Keyword keyword) {
+            switch(keyword) {
+                case PUBLIC:
+                case STATIC:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 
     /**
@@ -558,6 +574,20 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         public String toDescriptor() {
             return String.format("(Ljava/lang/String;)%s", getReturnType().toDescriptor());
         }
+
+        /**
+         * The valueOf method is always public and static.
+         */
+        @Override
+        public boolean hasModifier(Modifier.Keyword keyword) {
+            switch(keyword) {
+                case PUBLIC:
+                case STATIC:
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 
     @Override
@@ -585,4 +615,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         return Optional.of(wrappedNode);
     }
 
+    @Override
+    public boolean hasModifier(Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(wrappedNode, keyword);
+    }
 }

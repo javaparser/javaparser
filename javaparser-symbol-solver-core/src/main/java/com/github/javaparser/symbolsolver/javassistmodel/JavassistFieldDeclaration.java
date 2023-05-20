@@ -27,6 +27,7 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import javassist.CtField;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
@@ -97,5 +98,10 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public ResolvedTypeDeclaration declaringType() {
         return JavassistFactory.toTypeDeclaration(ctField.getDeclaringClass(), typeSolver);
+    }
+
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(ctField, ctField.getModifiers(), keyword);
     }
 }

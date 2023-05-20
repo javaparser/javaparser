@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -204,4 +205,8 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
         return Optional.of(wrappedNode);
     }
 
+    @Override
+    public boolean hasModifier(Modifier.Keyword keyword) {
+        return false;
+    }
 }

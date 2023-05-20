@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import javassist.CtConstructor;
 
 import java.util.List;
@@ -109,4 +110,8 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
         return methodLikeAdaper.getSpecifiedException(index);
     }
 
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(ctConstructor, ctConstructor.getModifiers(), keyword);
+    }
 }

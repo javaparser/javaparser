@@ -42,6 +42,7 @@ import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapabi
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import javassist.CtClass;
 import javassist.CtField;
 
@@ -326,4 +327,8 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
     }
 
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(ctClass, ctClass.getModifiers(), keyword);
+    }
 }

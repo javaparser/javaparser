@@ -28,6 +28,7 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -99,4 +100,8 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
         return ReflectionFactory.typeUsageFor(this.constructor.getExceptionTypes()[index], typeSolver);
     }
 
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(constructor, constructor.getModifiers(), keyword);
+    }
 }

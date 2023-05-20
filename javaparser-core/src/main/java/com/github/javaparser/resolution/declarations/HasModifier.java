@@ -20,35 +20,15 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.Modifier;
+
 /**
- * Declaration of a field.
- *
- * @author Federico Tomassetti
+ * A declaration that can have modifiers, like classes, methods, fields and so on.
  */
-public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier, HasModifier {
+public interface HasModifier {
 
     /**
-     * Is the field static?
+     * Returns whether that element has the modifier with the specified keyword associated explicitly or implicitly.
      */
-    boolean isStatic();
-
-    /**
-     * Is the field volatile?
-     */
-    boolean isVolatile();
-
-    @Override
-    default boolean isField() {
-        return true;
-    }
-
-    @Override
-    default ResolvedFieldDeclaration asField() {
-        return this;
-    }
-
-    /**
-     * The type on which this field has been declared
-     */
-    ResolvedTypeDeclaration declaringType();
+    boolean hasModifier(Modifier.Keyword keyword);
 }

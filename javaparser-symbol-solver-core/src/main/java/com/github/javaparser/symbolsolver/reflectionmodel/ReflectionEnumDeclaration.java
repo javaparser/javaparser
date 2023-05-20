@@ -36,6 +36,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -234,5 +235,10 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   @Override
   public List<ResolvedConstructorDeclaration> getConstructors() {
     return reflectionClassAdapter.getConstructors();
+  }
+
+  @Override
+  public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+    return ModifierUtils.hasModifier(clazz, clazz.getModifiers(), keyword);
   }
 }
