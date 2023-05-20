@@ -111,8 +111,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        // TODO #1838
-        throw new UnsupportedOperationException();
+        return javassistTypeDeclarationAdapter.getDeclaredMethods();
     }
 
     @Override

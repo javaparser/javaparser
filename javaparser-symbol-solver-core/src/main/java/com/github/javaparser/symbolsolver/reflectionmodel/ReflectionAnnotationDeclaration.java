@@ -149,8 +149,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        // TODO #1838
-        throw new UnsupportedOperationException();
+        return reflectionClassAdapter.getDeclaredMethods();
     }
 
     @Override
