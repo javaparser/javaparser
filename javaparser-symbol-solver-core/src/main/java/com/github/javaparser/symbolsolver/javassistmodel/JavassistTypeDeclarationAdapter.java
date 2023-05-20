@@ -38,9 +38,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
-import javassist.bytecode.AccessFlag;
-import javassist.bytecode.BadBytecode;
-import javassist.bytecode.SignatureAttribute;
+import javassist.bytecode.*;
+import javassist.bytecode.annotation.Annotation;
 
 /**
  * @author Federico Tomassetti
@@ -234,7 +233,30 @@ public class JavassistTypeDeclarationAdapter {
                     Optional.empty() :
                     Optional.of(JavassistFactory.toTypeDeclaration(ctClass.getDeclaringClass(), typeSolver));
         } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+            //Now we try by resolving the name only!
+            //This is more or less a copy of javassist.CtClassType#getDeclaringClass
+            ClassFile cf = ctClass.getClassFile2();
+            InnerClassesAttribute innerClassAttr = (InnerClassesAttribute) cf.getAttribute(InnerClassesAttribute.tag);
+            if (innerClassAttr == null) return Optional.empty();
+
+            String name = ctClass.getName();
+            int n = innerClassAttr.tableLength();
+            for (int i = 0; i < n; ++i) {
+                if (name.equals(innerClassAttr.innerClass(i))) {
+                    String outName = innerClassAttr.outerClass(i);
+                    if (outName != null) {
+                        return Optional.of(typeSolver.solveType(outName));
+                    }
+
+                    // maybe anonymous or local class.
+                    EnclosingMethodAttribute ema = (EnclosingMethodAttribute) cf.getAttribute(EnclosingMethodAttribute.tag);
+                    if (ema != null) {
+                        return Optional.of(typeSolver.solveType(ema.className()));
+                    }
+                }
+            }
+
+            return Optional.empty();
         }
     }
 
@@ -269,9 +291,42 @@ public class JavassistTypeDeclarationAdapter {
                     .map(clazz -> JavassistFactory.toTypeDeclaration(clazz, typeSolver))
                     .collect(Collectors.toSet());
         } catch (NotFoundException e) {
-            // This should never happen, since the nested type is defined in the current class
-            throw new UnsupportedOperationException("Please report this issue at https://github.com/javaparser/javaparser/issues/new/choose", e);
+            //Now we try by resolving the names only!
+            //This is more or less a copy of javassist.CtClass#getNestedClasses
+            ClassFile cf = ctClass.getClassFile2();
+            InnerClassesAttribute ica = (InnerClassesAttribute) cf.getAttribute(InnerClassesAttribute.tag);
+            if (ica == null) {
+                return Collections.emptySet();
+            }
+
+            String thisName = cf.getName() + "$";
+            int n = ica.tableLength();
+            List<String> list = new ArrayList<>(n);
+            for (int i = 0; i < n; i++) {
+                String name = ica.innerClass(i);
+                if (name != null) {
+                    if (name.startsWith(thisName)) {
+                        // if it is an immediate nested class
+                        if (name.lastIndexOf('$') < thisName.length()) {
+                            list.add(name);
+                        }
+                    }
+                }
+            }
+
+            return list.stream()
+                    .map(clazz -> typeSolver.solveType(clazz))
+                    .collect(Collectors.toSet());
         }
     }
 
+    private List<Annotation>  getRawAnnotations() {
+        AnnotationsAttribute visibleAnnotations = (AnnotationsAttribute) ctClass.getClassFile().getAttribute(AnnotationsAttribute.visibleTag);
+
+        if(visibleAnnotations != null) {
+            return Arrays.asList(visibleAnnotations.getAnnotations());
+        } else {
+            return Collections.emptyList();
+        }
+    }
 }
