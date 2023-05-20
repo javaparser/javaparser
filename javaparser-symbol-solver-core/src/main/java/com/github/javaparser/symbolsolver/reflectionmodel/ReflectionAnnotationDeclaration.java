@@ -160,8 +160,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
-        // TODO #1841
-        throw new UnsupportedOperationException("containerType() is not supported for " + this.getClass().getCanonicalName());
+        return reflectionClassAdapter.containerType();
     }
 
     /**

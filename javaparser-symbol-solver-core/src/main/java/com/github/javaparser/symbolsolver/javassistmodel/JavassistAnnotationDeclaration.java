@@ -138,8 +138,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
-        // TODO #1841
-        throw new UnsupportedOperationException("containerType() is not supported for " + this.getClass().getCanonicalName());
+        return javassistTypeDeclarationAdapter.containerType();
     }
 
     @Override
