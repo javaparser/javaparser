@@ -170,6 +170,9 @@ public class TokenTypes {
             case EXPORTS:
             case PROVIDES:
             case TRANSITIVE:
+            case PERMITS:
+            case SEALED:
+            case NON_SEALED:
             case TRANSACTIONBEGIN:
             case TRANSACTIONCOMMIT:
             case TRANSACTIONFINISH:

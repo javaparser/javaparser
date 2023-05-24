@@ -30,6 +30,8 @@ public class Java17Validator extends Java16Validator {
     public Java17Validator() {
         super();
         // Released Language Features
-        // No new released language features added in Java 17
+        // Sealed Classes - https://openjdk.java.net/jeps/409
+        remove(noSealedClasses);
+        remove(noPermitsListInClasses);
     }
 }

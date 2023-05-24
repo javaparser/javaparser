@@ -508,6 +508,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
                 result.addAll(tmp);
         }
         {
+            tmp = n.getPermittedTypes().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
             tmp = n.getTypeParameters().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);

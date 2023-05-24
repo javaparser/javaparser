@@ -21,6 +21,7 @@
 package com.github.javaparser.ast.validator.language_level_validations;
 
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
@@ -106,6 +107,10 @@ public class Java1_0Validator extends Validators {
 
     final Validator noRecordDeclaration = new SimpleValidator<>(RecordDeclaration.class, n -> true, (n, reporter) -> reporter.report(n, "Record Declarations are not supported."));
 
+    final Validator noSealedClasses = new SimpleValidator<>(ClassOrInterfaceDeclaration.class, n -> n.hasModifier(Modifier.Keyword.SEALED) || n.hasModifier(Modifier.Keyword.NON_SEALED), (n, reporter) -> reporter.report(n, "Sealed classes are not supported."));
+
+    final Validator noPermitsListInClasses = new SimpleValidator<>(ClassOrInterfaceDeclaration.class, n -> n.getPermittedTypes().isNonEmpty(), (n, reporter) -> reporter.report(n, "Permitted sub-classes are not supported."));
+
     public Java1_0Validator() {
         super(new CommonValidators());
         add(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
@@ -130,5 +135,7 @@ public class Java1_0Validator extends Validators {
         add(noPatternMatchingInstanceOf);
         add(noTextBlockLiteral);
         add(noRecordDeclaration);
+        add(noSealedClasses);
+        add(noPermitsListInClasses);
     }
 }

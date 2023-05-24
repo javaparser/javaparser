@@ -338,13 +338,16 @@ TOKEN :
 | < LONG: "long" >
 | < NATIVE: "native" >
 | < NEW: "new" >
+| < NON_SEALED: "non-sealed" >
 | < NULL: "null" >
 | < PACKAGE: "package">
+| < PERMITS: "permits">
 | < PRIVATE: "private" >
 | < PROTECTED: "protected" >
 | < PUBLIC: "public" >
 | < RECORD: "record" >
 | < RETURN: "return" >
+| < SEALED: "sealed" >
 | < SHORT: "short" >
 | < STATIC: "static" >
 | < STRICTFP: "strictfp" >
@@ -1353,6 +1356,10 @@ ModifierHolder Modifiers():
          |
             "default" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.DEFAULT));  begin = orIfInvalid(begin, token()); }
          |
+            "sealed" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.SEALED));  begin = orIfInvalid(begin, token()); }
+         |
+            "non-sealed" { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.NON_SEALED));  begin = orIfInvalid(begin, token()); }
+         |
             "ghost"   { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.GHOST));  begin = orIfInvalid(begin, token()); }
          |
             "model"   { add(modifiers, new Modifier(tokenRange(), Modifier.Keyword.MODEL));  begin = orIfInvalid(begin, token()); }
@@ -1409,6 +1416,7 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     RangedList<TypeParameter> typePar = new RangedList<TypeParameter>(emptyNodeList());
     NodeList<ClassOrInterfaceType> extList = emptyNodeList();
     NodeList<ClassOrInterfaceType> impList = emptyNodeList();
+    NodeList<ClassOrInterfaceType> permitsList = emptyNodeList();
     NodeList<BodyDeclaration<?>> members = emptyNodeList();
     JavaToken begin = modifier.begin;
 }
@@ -1423,10 +1431,11 @@ ClassOrInterfaceDeclaration ClassOrInterfaceDeclaration(ModifierHolder modifier)
     [ typePar = TypeParameters() ]
     [ extList = ExtendsList() ]
     [ impList = ImplementsList() ]
+    [ permitsList = PermitsList() ]
 
     members = ClassOrInterfaceBody()
 
-    { return new ClassOrInterfaceDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, members); }
+    { return new ClassOrInterfaceDeclaration(range(begin, token()), modifier.modifiers, modifier.annotations, isInterface, name, typePar.list, extList, impList, permitsList, members); }
 }
 
 /**
@@ -1547,6 +1556,37 @@ NodeList<ClassOrInterfaceType> ImplementsList():
 }
 {
     "implements" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
+    ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
+    { return ret; }
+}
+
+/**
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-8.html#jls-8.1.5
+ * <pre>{@code
+ *     ClassPermits:
+ *         permits TypeName {, TypeName}
+ * }</pre>
+ * For convenience:
+ * https://docs.oracle.com/javase/specs/jls/se15/html/jls-4.html#jls-4.3
+ * <pre>{@code
+ *     ClassOrInterfaceType:
+ *         ClassType
+ *         InterfaceType
+ *     ClassType:
+ *         {Annotation} TypeIdentifier [TypeArguments]
+ *         PackageName . {Annotation} TypeIdentifier [TypeArguments]
+ *         ClassOrInterfaceType . {Annotation} TypeIdentifier [TypeArguments]
+ *     InterfaceType:
+ *         ClassType
+ * }</pre>
+ */
+NodeList<ClassOrInterfaceType> PermitsList():
+{
+    NodeList<ClassOrInterfaceType> ret = new NodeList<ClassOrInterfaceType>();
+    ClassOrInterfaceType cit;
+}
+{
+    "permits" cit = AnnotatedClassOrInterfaceType() { ret.add(cit); }
     ( "," cit = AnnotatedClassOrInterfaceType() { ret.add(cit); } )*
     { return ret; }
 }
@@ -3636,7 +3676,7 @@ Expression UnaryExpression():
      |
        ret = KeyCreateObjectSV()
      |
-       ret = KeyLengthReferenceSV()       
+       ret = KeyLengthReferenceSV()
     )
     { return ret; }
 }
@@ -6189,7 +6229,7 @@ KeyMethodCallStatement KeyMethodCallStatement() :
      [LOOKAHEAD(3) ["result->"] qn = Name() ","]
      (ec=KeyExecutionContext() | ec=KeyExecutionContextSV())
     ")"
-  ":"?
+    [":"]
   block = Block()
   {   return new KeyMethodCallStatement(range(begin, token()), qn, ec, block); }
 }
@@ -6560,8 +6600,8 @@ KeyMetaConstruct KeyMetaConstructStatement() :
             return new KeyMetaConstruct(range(begin, token()), begin, stat, sv);
         }
   |
-        "#method-call" {begin=token();} "(" 
-            [  LOOKAHEAD(2) sv = VariableSV() ","] 
+        "#method-call" {begin=token();} "("
+            [  LOOKAHEAD(2) sv = VariableSV() ","]
             [  LOOKAHEAD(2) execsv = ExecutionContextSV() ","]
             methRef = PrimaryExpression()
         ")" ";"
@@ -6692,7 +6732,7 @@ KeyMethodSignatureSV MethodSignatureSV() : {}
     }
 }
 
-KeyMetaConstructExpression KeyStaticEvaluate(): 
+KeyMetaConstructExpression KeyStaticEvaluate():
 {
     JavaToken begin; Expression child;
 }
@@ -6722,7 +6762,7 @@ KeyMetaConstructExpression KeyLengthReferenceSV():
     "#length-reference"  {begin=token();} "(" child = ExpressionSV()  ")"
     {
         return new KeyMetaConstructExpression(range(begin, token()), "#length-reference", child);
-    }    
+    }
 }
 
 KeyCcatchSV CcatchSV() :

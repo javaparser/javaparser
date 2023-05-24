@@ -152,6 +152,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
             return false;
         if (!objEquals(n.isInterface(), n2.isInterface()))
             return false;
+        if (!nodesEquals(n.getPermittedTypes(), n2.getPermittedTypes()))
+            return false;
         if (!nodesEquals(n.getTypeParameters(), n2.getTypeParameters()))
             return false;
         if (!nodesEquals(n.getMembers(), n2.getMembers()))

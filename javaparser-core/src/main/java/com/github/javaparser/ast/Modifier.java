@@ -104,6 +104,8 @@ public class Modifier extends Node {
         NATIVE("native"),
         STRICTFP("strictfp"),
         TRANSITIVE("transitive"),
+        SEALED("sealed"),
+        NON_SEALED("non-sealed"),
         // KEY
         GHOST("ghost"),
         MODEL("model"),
