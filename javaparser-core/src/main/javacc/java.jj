@@ -6189,7 +6189,7 @@ KeyMethodCallStatement KeyMethodCallStatement() :
      [LOOKAHEAD(3) ["result->"] qn = Name() ","]
      (ec=KeyExecutionContext() | ec=KeyExecutionContextSV())
     ")"
-  ":"
+  ":"?
   block = Block()
   {   return new KeyMethodCallStatement(range(begin, token()), qn, ec, block); }
 }
@@ -6650,7 +6650,7 @@ KeyContextStatementBlock StartBlock() :
 		         pm=MethodSignatureSV() "@" tr = TypeSV(emptyNodeList())  "(" (sv = ExpressionSV())? ")"
 		       |
 	             ec = ExecutionContextSV() )
-	         )?
+	       )?
            <CONTEXTSTART>
            (stat = BlockStatement() { sl.add(stat); } )*
            <ELLIPSIS>
