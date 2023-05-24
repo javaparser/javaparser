@@ -21,7 +21,6 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-
 import java.util.Optional;
 import java.util.Set;
 

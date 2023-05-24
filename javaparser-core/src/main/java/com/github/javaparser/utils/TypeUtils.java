@@ -22,7 +22,6 @@ package com.github.javaparser.utils;
 
 import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 import com.github.javaparser.ast.type.VoidType;
-
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -69,8 +68,6 @@ public class TypeUtils {
             return prim.get().toDescriptor();
         }
         prim = Primitive.byBoxedTypeName(className);
-        return prim.map(pType -> pType.toDescriptor())
-                .orElseThrow(
-                        () -> new IllegalArgumentException(String.format("Unknown primitive type \"%s\"", className)));
+        return prim.map(pType -> pType.toDescriptor()).orElseThrow(() -> new IllegalArgumentException(String.format("Unknown primitive type \"%s\"", className)));
     }
 }

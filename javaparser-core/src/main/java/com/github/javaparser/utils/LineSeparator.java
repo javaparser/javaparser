@@ -17,7 +17,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.utils;
 
 import java.util.Optional;
@@ -166,18 +165,17 @@ public enum LineSeparator {
         return text;
     }
 
-//    // TODO: Determine if this should be used within TokenTypes.java -- thus leaving this as private for now.
-//    private Optional<JavaToken.Kind> asJavaTokenKind() {
-//        if (this == CR) {
-//            return Optional.of(JavaToken.Kind.OLD_MAC_EOL);
-//        } else if (this == LF) {
-//            return Optional.of(JavaToken.Kind.UNIX_EOL);
-//        } else if (this == CRLF) {
-//            return Optional.of(JavaToken.Kind.WINDOWS_EOL);
-//        }
-//        return Optional.empty();
-//    }
-
+    //    // TODO: Determine if this should be used within TokenTypes.java -- thus leaving this as private for now.
+    //    private Optional<JavaToken.Kind> asJavaTokenKind() {
+    //        if (this == CR) {
+    //            return Optional.of(JavaToken.Kind.OLD_MAC_EOL);
+    //        } else if (this == LF) {
+    //            return Optional.of(JavaToken.Kind.UNIX_EOL);
+    //        } else if (this == CRLF) {
+    //            return Optional.of(JavaToken.Kind.WINDOWS_EOL);
+    //        }
+    //        return Optional.empty();
+    //    }
     @Override
     public String toString() {
         return asRawString();

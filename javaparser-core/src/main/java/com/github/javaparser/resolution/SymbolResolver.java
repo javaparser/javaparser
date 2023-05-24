@@ -42,7 +42,7 @@ public interface SymbolResolver {
      * For an expression it would find the corresponding resolved type.
      */
     ResolvedType calculateType(Expression expression);
-    
+
     /**
      * For a node it would find the corresponding reference type declaration.
      */

@@ -21,7 +21,6 @@
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import java.util.Optional;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -66,7 +65,7 @@ public class ListRemovalChange implements Change {
     }
 
     @Override
-	public ObservableProperty getProperty() {
-		return observableProperty;
-	}
+    public ObservableProperty getProperty() {
+        return observableProperty;
+    }
 }

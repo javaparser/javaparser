@@ -25,7 +25,6 @@ import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.utils.LineSeparator;
-
 import static com.github.javaparser.TokenTypes.isEndOfLineToken;
 import static com.github.javaparser.TokenTypes.isWhitespaceButNotEndOfLine;
 
@@ -118,7 +117,7 @@ public class CsmToken implements CsmElement {
     public boolean isWhiteSpace() {
         return TokenTypes.isWhitespace(tokenType);
     }
-    
+
     public boolean isWhiteSpaceNotEol() {
         return isWhiteSpace() && !isNewLine();
     }

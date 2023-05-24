@@ -37,7 +37,6 @@ import com.github.javaparser.metamodel.WildcardTypeMetaModel;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -266,17 +265,19 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      *
      * @return The type resolved.
      */
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		if (getExtendedType().isPresent() && !getSuperType().isPresent()) {
-			return ResolvedWildcard.extendsBound(getExtendedType().get().convertToUsage(context)); // removed (ReferenceTypeImpl)
-		}
-		if (!getExtendedType().isPresent() && getSuperType().isPresent()) {
-			return ResolvedWildcard.superBound(getSuperType().get().convertToUsage(context)); // removed (ReferenceTypeImpl)
-		}
-		if (!getExtendedType().isPresent() && !getSuperType().isPresent()) {
-			return ResolvedWildcard.UNBOUNDED;
-		}
-		throw new UnsupportedOperationException(toString());
-	}
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        if (getExtendedType().isPresent() && !getSuperType().isPresent()) {
+            // removed (ReferenceTypeImpl)
+            return ResolvedWildcard.extendsBound(getExtendedType().get().convertToUsage(context));
+        }
+        if (!getExtendedType().isPresent() && getSuperType().isPresent()) {
+            // removed (ReferenceTypeImpl)
+            return ResolvedWildcard.superBound(getSuperType().get().convertToUsage(context));
+        }
+        if (!getExtendedType().isPresent() && !getSuperType().isPresent()) {
+            return ResolvedWildcard.UNBOUNDED;
+        }
+        throw new UnsupportedOperationException(toString());
+    }
 }

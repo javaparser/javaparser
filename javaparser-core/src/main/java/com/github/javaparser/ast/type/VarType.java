@@ -40,7 +40,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -54,8 +53,8 @@ import java.util.function.Consumer;
  * </ol>
  */
 public class VarType extends Type {
-	
-	private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
+
+    private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     @AllFieldsConstructor
     public VarType() {
@@ -134,9 +133,9 @@ public class VarType extends Type {
         action.accept(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		Node parent = getParentNode().get();
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        Node parent = getParentNode().get();
         if (!(parent instanceof VariableDeclarator)) {
             throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
         }
@@ -152,30 +151,24 @@ public class VarType extends Type {
                 if (iterType instanceof ResolvedArrayType) {
                     // The type of a variable in a for-each loop with an array
                     // is the component type of the array.
-                    return ((ResolvedArrayType)iterType).getComponentType();
+                    return ((ResolvedArrayType) iterType).getComponentType();
                 }
                 if (iterType.isReferenceType()) {
                     // The type of a variable in a for-each loop with an
                     // Iterable with parameter type
-                	List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
-					if (parametersType.isEmpty()) {
-						Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT)
-								.getDeclaration();
-						return oObjectDeclaration
-								.map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
-								.orElseThrow(() -> new UnsupportedOperationException());
-					}
+                    List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
+                    if (parametersType.isEmpty()) {
+                        Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT).getDeclaration();
+                        return oObjectDeclaration.map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType())).orElseThrow(() -> new UnsupportedOperationException());
+                    }
                     return parametersType.get(0);
                 }
             }
         }
-        return initializer
-                .map(Expression::calculateResolvedType)
-                .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
-	}
-	
-	private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(
-            VariableDeclarator variableDeclarator) {
+        return initializer.map(Expression::calculateResolvedType).orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
+    }
+
+    private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(VariableDeclarator variableDeclarator) {
         Optional<Node> node = variableDeclarator.getParentNode();
         if (!node.isPresent() || !(node.get() instanceof VariableDeclarationExpr)) {
             return Optional.empty();
@@ -184,7 +177,7 @@ public class VarType extends Type {
         if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
             return Optional.empty();
         } else {
-            return Optional.of((ForEachStmt)node.get());
+            return Optional.of((ForEachStmt) node.get());
         }
     }
 }

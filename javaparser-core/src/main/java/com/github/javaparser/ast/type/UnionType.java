@@ -37,12 +37,10 @@ import com.github.javaparser.metamodel.UnionTypeMetaModel;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedUnionType;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
@@ -199,11 +197,9 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return Optional.of(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		List<ResolvedType> resolvedElements = getElements().stream()
-                .map(el -> el.convertToUsage(context))
-                .collect(Collectors.toList());
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        List<ResolvedType> resolvedElements = getElements().stream().map(el -> el.convertToUsage(context)).collect(Collectors.toList());
         return new ResolvedUnionType(resolvedElements);
-	}
+    }
 }

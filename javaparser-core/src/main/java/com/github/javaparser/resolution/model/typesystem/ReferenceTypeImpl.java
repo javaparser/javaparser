@@ -18,14 +18,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.model.typesystem;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -44,13 +42,10 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
  */
 public class ReferenceTypeImpl extends ResolvedReferenceType {
 
-	private static final String[] ASSIGNABLE_REFERENCE_TYPE = { "java.lang.Object", "java.lang.Cloneable",
-	"java.io.Serializable" };
+    private static final String[] ASSIGNABLE_REFERENCE_TYPE = { "java.lang.Object", "java.lang.Cloneable", "java.io.Serializable" };
 
     public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration) {
-        return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
-                ResolvedTypeVariable::new
-        ).collect(Collectors.toList()));
+        return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(ResolvedTypeVariable::new).collect(Collectors.toList()));
     }
 
     @Override
@@ -73,7 +68,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
     @Override
     public ResolvedTypeParameterDeclaration asTypeParameter() {
-    	return this.typeDeclaration.asTypeParameter();
+        return this.typeDeclaration.asTypeParameter();
     }
 
     /**
@@ -93,10 +88,9 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             if (this.isJavaLangObject()) {
                 return true;
             }
-
             // Check if 'other' can be boxed to match this type
-            if (isCorrespondingBoxingType(other.describe())) return true;
-
+            if (isCorrespondingBoxingType(other.describe()))
+                return true;
             // All numeric types extend Number
             return other.isNumericType() && this.isReferenceType() && this.asReferenceType().getQualifiedName().equals(Number.class.getCanonicalName());
         }
@@ -104,7 +98,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return FunctionalInterfaceLogic.isFunctionalInterfaceType(this);
         }
         if (other.isReferenceType()) {
-            ResolvedReferenceType otherRef =  other.asReferenceType();
+            ResolvedReferenceType otherRef = other.asReferenceType();
             if (compareConsideringTypeParameters(otherRef)) {
                 return true;
             }
@@ -125,7 +119,7 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             }
             return false;
         }
-        if (other.isConstraint()){
+        if (other.isConstraint()) {
             return isAssignableBy(other.asConstraintType().getBound());
         }
         if (other.isWildcard()) {
@@ -138,33 +132,31 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return false;
         }
         if (other.isUnionType()) {
-        	Optional<ResolvedReferenceType> common = other.asUnionType().getCommonAncestor();
+            Optional<ResolvedReferenceType> common = other.asUnionType().getCommonAncestor();
             return common.map(ancestor -> isAssignableBy(ancestor)).orElse(false);
         }
         // An array can be assigned only to a variable of a compatible array type,
         // or to a variable of type Object, Cloneable or java.io.Serializable.
         if (other.isArray()) {
-			return isAssignableByReferenceType(getQualifiedName());
-		}
+            return isAssignableByReferenceType(getQualifiedName());
+        }
         return false;
     }
 
     private boolean isAssignableByReferenceType(String qname) {
-    	return Stream.of(ASSIGNABLE_REFERENCE_TYPE).anyMatch(ref -> ref.equals(qname));
+        return Stream.of(ASSIGNABLE_REFERENCE_TYPE).anyMatch(ref -> ref.equals(qname));
     }
 
     @Override
     public Set<MethodUsage> getDeclaredMethods() {
         // TODO replace variables
         Set<MethodUsage> methods = new HashSet<>();
-
         getTypeDeclaration().ifPresent(referenceTypeDeclaration -> {
             for (ResolvedMethodDeclaration methodDeclaration : referenceTypeDeclaration.getDeclaredMethods()) {
                 MethodUsage methodUsage = new MethodUsage(methodDeclaration);
                 methods.add(methodUsage);
             }
         });
-
         return methods;
     }
 
@@ -210,30 +202,20 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     }
 
     @Override
-	public List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
+    public List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         // We need to go through the inheritance line and propagate the type parameters
-
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors(traverser);
-
-        ancestors = ancestors.stream()
-                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
-                .collect(Collectors.toList());
-
+        ancestors = ancestors.stream().map(a -> typeParametersMap().replaceAll(a).asReferenceType()).collect(Collectors.toList());
         return ancestors;
     }
 
     @Override
-	public List<ResolvedReferenceType> getDirectAncestors() {
+    public List<ResolvedReferenceType> getDirectAncestors() {
         // We need to go through the inheritance line and propagate the type parameters
-
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors();
-
-        ancestors = ancestors.stream()
-                .map(a -> typeParametersMap().replaceAll(a).asReferenceType())
-                .collect(Collectors.toList());
-
+        ancestors = ancestors.stream().map(a -> typeParametersMap().replaceAll(a).asReferenceType()).collect(Collectors.toList());
         // Conditionally re-insert java.lang.Object as an ancestor.
-        if(this.getTypeDeclaration().isPresent()) {
+        if (this.getTypeDeclaration().isPresent()) {
             ResolvedReferenceTypeDeclaration thisTypeDeclaration = this.getTypeDeclaration().get();
             // The superclass of interfaces is always null
             if (thisTypeDeclaration.isClass()) {
@@ -241,27 +223,24 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
                 boolean superClassIsJavaLangObject = optionalSuperClass.isPresent() && optionalSuperClass.get().isJavaLangObject();
                 boolean thisIsJavaLangObject = thisTypeDeclaration.asClass().isJavaLangObject();
                 if (superClassIsJavaLangObject && !thisIsJavaLangObject) {
-                	ancestors.add(optionalSuperClass.get());
+                    ancestors.add(optionalSuperClass.get());
                 }
             }
         }
-
         return ancestors;
     }
 
     @Override
-	public ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap) {
+    public ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap) {
         return create(typeDeclaration, typeParametersMap);
     }
 
     @Override
     public Set<ResolvedFieldDeclaration> getDeclaredFields() {
         Set<ResolvedFieldDeclaration> allFields = new LinkedHashSet<>();
-
         if (getTypeDeclaration().isPresent()) {
             allFields.addAll(getTypeDeclaration().get().getDeclaredFields());
         }
-
         return allFields;
     }
 }

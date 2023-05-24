@@ -24,7 +24,6 @@ import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-
 import java.util.Optional;
 
 class TokenTextElement extends TextElement {
@@ -146,8 +145,8 @@ class TokenTextElement extends TextElement {
         return token.getRange();
     }
 
-	@Override
-	public void accept(LexicalPreservingVisitor visitor) {
-		visitor.visit(this);
-	}
+    @Override
+    public void accept(LexicalPreservingVisitor visitor) {
+        visitor.visit(this);
+    }
 }

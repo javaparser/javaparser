@@ -30,12 +30,10 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
@@ -46,20 +44,18 @@ import com.github.javaparser.ast.key.sv.*;
  * @author Julio Vilmar Gesser
  */
 public abstract class Expression extends Node {
-    
+
     /**
      * Returns {@code true} when the Node to be tested is not an
      * {@link EnclosedExpr}, {@code false} otherwise.
      */
     public static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
 
-
     /**
-     * A {@link Function} that returns its argument (an {@link Expression}) when 
-     * the argument is not an {@link EnclosedExpr}, otherwise the first 
-     * {@link Expression} down the argument's 'inner' path that is not an 
+     * A {@link Function} that returns its argument (an {@link Expression}) when
+     * the argument is not an {@link EnclosedExpr}, otherwise the first
+     * {@link Expression} down the argument's 'inner' path that is not an
      * {@link EnclosedExpr}.
-     * 
      */
     public static final Function<Expression, Expression> EXCLUDE_ENCLOSED_EXPR = expr -> {
         while (expr.isEnclosedExpr()) {
@@ -67,7 +63,7 @@ public abstract class Expression extends Node {
         }
         return expr;
     };
-    
+
     @AllFieldsConstructor
     public Expression() {
         this(null);

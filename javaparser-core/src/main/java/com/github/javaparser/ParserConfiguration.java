@@ -30,7 +30,6 @@ import com.github.javaparser.ast.validator.postprocessors.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.*;
-
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.POPULAR;
 
 /**

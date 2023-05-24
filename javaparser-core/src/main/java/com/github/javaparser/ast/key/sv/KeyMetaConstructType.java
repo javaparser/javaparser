@@ -156,6 +156,7 @@ public class KeyMetaConstructType extends Type {
 
     @Override
     public ResolvedType convertToUsage(Context context) {
-        return null;//TODO weigl
+        //TODO weigl
+        return null;
     }
 }

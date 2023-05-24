@@ -30,10 +30,8 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-
 import java.util.Comparator;
 import java.util.List;
-
 import static java.lang.Integer.signum;
 
 public final class PositionUtils {
@@ -184,7 +182,7 @@ public final class PositionUtils {
         // let's not consider it contained (i.e. it must be "strictly contained").
         Node nodeWithoutAnnotations = firstNonAnnotationNode(container);
         Range rangeWithoutAnnotations = container.getRange().get().withBegin(nodeWithoutAnnotations.getBegin().get());
-        return rangeWithoutAnnotations.// .contains(other.getRange().get());
-        strictlyContains(other.getRange().get());
+        return // .contains(other.getRange().get());
+        rangeWithoutAnnotations.strictlyContains(other.getRange().get());
     }
 }

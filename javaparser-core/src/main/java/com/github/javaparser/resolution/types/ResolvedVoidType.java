@@ -43,12 +43,12 @@ public class ResolvedVoidType implements ResolvedType {
         // """
         // Note that the Java programming language does not allow a "cast to void" - void is not a type - so the
         // traditional C trick of writing an expression statement such as:
-        // 
+        //
         // (void)... ;  // incorrect!
-        // 
+        //
         // does not work.
         // """
-        // 
+        //
         // In short, nothing can be assign to "void".
         return false;
     }

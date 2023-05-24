@@ -31,10 +31,8 @@ import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static java.util.Arrays.asList;
 
@@ -150,9 +148,7 @@ public class ModifierValidator extends VisitorValidator {
                         validateModifiers(n, reporter, interfaceWithNothingSpecial);
                     }
                 } else {
-                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED,
-                            NATIVE, STRICTFP,
-                            MODEL, GHOST);
+                    validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, MODEL, GHOST);
                 }
             }
         }

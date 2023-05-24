@@ -21,10 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Node;
-
 import java.lang.reflect.Field;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.getterName;
 import static com.github.javaparser.utils.CodeGenerationUtils.setterName;
 

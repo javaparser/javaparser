@@ -108,7 +108,7 @@ public class Removed implements DifferenceElement {
         }
         return false;
     }
-    
+
     public boolean isWhiteSpaceNotEol() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;

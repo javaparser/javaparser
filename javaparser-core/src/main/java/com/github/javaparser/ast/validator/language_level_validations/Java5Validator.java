@@ -31,7 +31,6 @@ import com.github.javaparser.ast.validator.ReservedKeywordValidator;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 import com.github.javaparser.ast.validator.TreeVisitorValidator;
 import com.github.javaparser.ast.validator.Validator;
-
 import java.util.Optional;
 
 /**

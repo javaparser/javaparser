@@ -22,12 +22,10 @@ package com.github.javaparser.printer;
 
 import java.util.function.Function;
 import com.github.javaparser.ast.key.*;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
-
 import java.util.function.Function;
 
 /**

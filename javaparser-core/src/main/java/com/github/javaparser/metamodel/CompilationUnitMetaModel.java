@@ -20,10 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
+import java.util.Optional;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Generated;
-
-import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:

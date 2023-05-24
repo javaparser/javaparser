@@ -21,7 +21,6 @@
 package com.github.javaparser.utils;
 
 import java.util.Objects;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**

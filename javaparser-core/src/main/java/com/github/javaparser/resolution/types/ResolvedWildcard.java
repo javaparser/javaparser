@@ -22,7 +22,6 @@ package com.github.javaparser.resolution.types;
 
 import java.util.List;
 import java.util.Map;
-
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
@@ -68,12 +67,12 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     @Override
-	public boolean isWildcard() {
+    public boolean isWildcard() {
         return true;
     }
 
     @Override
-	public ResolvedWildcard asWildcard() {
+    public ResolvedWildcard asWildcard() {
         return this;
     }
 
@@ -186,7 +185,7 @@ public class ResolvedWildcard implements ResolvedType {
      */
     @Override
     public ResolvedType solveGenericTypes(Context context) {
-    	if (isExtends() || isSuper()) {
+        if (isExtends() || isSuper()) {
             ResolvedType boundResolved = getBoundedType().solveGenericTypes(context);
             if (isExtends()) {
                 return ResolvedWildcard.extendsBound(boundResolved);
@@ -194,17 +193,17 @@ public class ResolvedWildcard implements ResolvedType {
                 return ResolvedWildcard.superBound(boundResolved);
             }
         }
-    	return this;
+        return this;
     }
 
-	//
-	// Erasure
-	//
-	// The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
-	// This method returns null if no bound is declared. This is probably a limitation.
-	//
-	@Override
-	public ResolvedType erasure() {
-		return boundedType;
-	}
+    //
+    // Erasure
+    //
+    // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
+    // This method returns null if no bound is declared. This is probably a limitation.
+    //
+    @Override
+    public ResolvedType erasure() {
+        return boundedType;
+    }
 }

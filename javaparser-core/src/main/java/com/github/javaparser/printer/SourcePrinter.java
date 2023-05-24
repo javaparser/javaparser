@@ -25,7 +25,6 @@ import com.github.javaparser.printer.configuration.*;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.utils.Utils;
-
 import java.util.Deque;
 import java.util.LinkedList;
 

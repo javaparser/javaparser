@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -29,7 +28,6 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
-
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -55,9 +53,7 @@ public final class Navigator {
     }
 
     public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String qualifiedName) {
-        return findType(compilationUnit, qualifiedName)
-            .map(res -> res.toClassOrInterfaceDeclaration().orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is " + res.getClass().getCanonicalName())))
-            .orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
+        return findType(compilationUnit, qualifiedName).map(res -> res.toClassOrInterfaceDeclaration().orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is " + res.getClass().getCanonicalName()))).orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
     }
 
     /**
@@ -213,7 +209,6 @@ public final class Navigator {
         if (node instanceof SwitchStmt) {
             return Optional.of((SwitchStmt) node);
         }
-
         return node.findFirst(SwitchStmt.class);
     }
 
@@ -227,10 +222,8 @@ public final class Navigator {
         if (cu.getTypes().isEmpty()) {
             return Optional.empty();
         }
-
         final String typeName = getOuterTypeName(qualifiedName);
         Optional<TypeDeclaration<?>> type = cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)).findFirst();
-
         final String innerTypeName = getInnerTypeName(qualifiedName);
         if (type.isPresent() && !innerTypeName.isEmpty()) {
             return findType(type.get(), innerTypeName);
@@ -246,7 +239,6 @@ public final class Navigator {
      */
     public static Optional<TypeDeclaration<?>> findType(TypeDeclaration<?> td, String qualifiedName) {
         final String typeName = getOuterTypeName(qualifiedName);
-
         Optional<TypeDeclaration<?>> type = Optional.empty();
         for (Node n : td.getMembers()) {
             if (n instanceof TypeDeclaration && ((TypeDeclaration<?>) n).getName().getId().equals(typeName)) {
@@ -279,5 +271,4 @@ public final class Navigator {
     public static Node requireParentNode(Node node) {
         return demandParentNode(node);
     }
-
 }

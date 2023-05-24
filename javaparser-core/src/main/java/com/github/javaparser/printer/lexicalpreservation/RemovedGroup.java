@@ -25,7 +25,6 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -122,10 +121,9 @@ final class RemovedGroup implements Iterable<Removed> {
     final Removed getLastElement() {
         return removedList.get(removedList.size() - 1);
     }
-    
+
     /**
      * Returns true if the specified element is the last element of this RemovedGroup
-     *
      */
     final boolean isLastElement(Removed element) {
         return getLastElement().equals(element);

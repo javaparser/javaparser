@@ -43,11 +43,9 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.ImportOrderingStrategy;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.imports.DefaultImportOrderingStrategy;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
-
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
@@ -213,9 +211,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if (n.getPackageDeclaration().isPresent()) {
             n.getPackageDeclaration().get().accept(this, arg);
         }
-
         printImports(n.getImports(), arg);
-
         for (final Iterator<TypeDeclaration<?>> i = n.getTypes().iterator(); i.hasNext(); ) {
             i.next().accept(this, arg);
             printer.println();
@@ -730,16 +726,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
     @Override
     public void visit(KeyCcatchBreak n, Void arg) {
-        printCCatch(n, "\\Break",
-                n.getLabel(), n.getBlock(),
-                arg);
+        printCCatch(n, "\\Break", n.getLabel(), n.getBlock(), arg);
     }
 
-    private void printCCatch(KeyCcatchBranch n,
-                             String kind,
-                             Optional<? extends Node> label,
-                             Optional<? extends Node> body,
-                             Void arg) {
+    private void printCCatch(KeyCcatchBranch n, String kind, Optional<? extends Node> label, Optional<? extends Node> body, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print("ccatch(");
@@ -808,7 +798,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(KeyExecutionContext n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("source =");
         n.getSignature().accept(this, arg);
         printer.print("@");
@@ -898,7 +887,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         printer.print("{");
         printer.indent();
-
         if (n.getContext().isPresent()) {
             printer.print(".");
             n.getContext().ifPresent(it -> it.accept(this, arg));
@@ -914,7 +902,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 printer.print(")");
             }
             printer.println();
-
         }
         printer.print("..");
         n.getStatements().accept(this, arg);
@@ -948,7 +935,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(KeyMetaConstructExpression n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
         printer.print("");
         n.getChild().accept(this, arg);
@@ -1595,9 +1581,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.println(" {");
         printer.indent();
         if (n.getEntries().isNonEmpty()) {
-            final boolean alignVertically = // Either we hit the constant amount limit in the configurations, or...
-                    n.getEntries().size() > getOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger() || // any of the constants has a comment.
-                            n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
+            final // Either we hit the constant amount limit in the configurations, or...
+            boolean // Either we hit the constant amount limit in the configurations, or...
+            alignVertically = // any of the constants has a comment.
+            n.getEntries().size() > getOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger() || n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();
@@ -1659,7 +1646,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getCondition().accept(this, arg);
         final boolean thenBlock = n.getThenStmt() instanceof BlockStmt;
         if (// block statement should start on the same line
-                thenBlock)
+        thenBlock)
             printer.print(") ");
         else {
             printer.println(")");
@@ -1676,7 +1663,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             final boolean elseIf = n.getElseStmt().orElse(null) instanceof IfStmt;
             final boolean elseBlock = n.getElseStmt().orElse(null) instanceof BlockStmt;
             if (// put chained if and start of block statement on a same level
-                    elseIf || elseBlock)
+            elseIf || elseBlock)
                 printer.print("else ");
             else {
                 printer.println("else");
@@ -2070,9 +2057,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     private void printImports(NodeList<ImportDeclaration> imports, Void arg) {
-
         ImportOrderingStrategy strategy = new DefaultImportOrderingStrategy();
-
         // Get Import strategy from configuration
         Optional<ConfigurationOption> optionalStrategy = getOption(ConfigOption.SORT_IMPORTS_STRATEGY);
         if (optionalStrategy.isPresent()) {
@@ -2081,13 +2066,11 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 strategy = strategyOption.asValue();
             }
         }
-
         // Keep retro-compatibility with option ORDER_IMPORTS.
         Optional<ConfigurationOption> orderImportsOption = getOption(ConfigOption.ORDER_IMPORTS);
         if (orderImportsOption.isPresent()) {
             strategy.setSortImportsAlphabetically(true);
         }
-
         // Sort the imports according to the strategy
         List<NodeList<ImportDeclaration>> groupOrderedImports = strategy.sortImports(imports);
         for (NodeList<ImportDeclaration> importGroup : groupOrderedImports) {

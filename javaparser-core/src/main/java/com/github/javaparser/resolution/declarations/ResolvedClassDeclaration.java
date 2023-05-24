@@ -21,7 +21,6 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-
 import java.util.List;
 import java.util.Optional;
 

@@ -24,7 +24,6 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import static com.github.javaparser.utils.Utils.capitalize;
 import static com.github.javaparser.utils.Utils.decapitalize;
 

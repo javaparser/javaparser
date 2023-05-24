@@ -21,7 +21,6 @@
 package com.github.javaparser;
 
 import com.github.javaparser.utils.LineSeparator;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 /**

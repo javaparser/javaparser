@@ -38,10 +38,8 @@ import com.github.javaparser.metamodel.TypeParameterMetaModel;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
@@ -245,8 +243,8 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         return Optional.of(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		throw new UnsupportedOperationException(getClass().getCanonicalName());
-	}
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        throw new UnsupportedOperationException(getClass().getCanonicalName());
+    }
 }

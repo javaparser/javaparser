@@ -22,7 +22,6 @@ package com.github.javaparser;
 
 import java.util.Comparator;
 import java.util.Optional;
-
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 

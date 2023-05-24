@@ -17,14 +17,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.configuration.imports;
 
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.printer.configuration.ImportOrderingStrategy;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -35,18 +33,15 @@ public class IntelliJImportOrderingStrategy implements ImportOrderingStrategy {
 
     @Override
     public List<NodeList<ImportDeclaration>> sortImports(NodeList<ImportDeclaration> nodes) {
-
         NodeList<ImportDeclaration> otherImports = new NodeList<>();
         NodeList<ImportDeclaration> javaImports = new NodeList<>();
         NodeList<ImportDeclaration> staticImports = new NodeList<>();
-
         for (ImportDeclaration importDeclaration : nodes) {
             // Check if is a static import
             if (importDeclaration.isStatic()) {
                 staticImports.add(importDeclaration);
                 continue;
             }
-
             String importName = importDeclaration.getNameAsString();
             if (importName.startsWith("java.") || importName.startsWith("javax.")) {
                 javaImports.add(importDeclaration);
@@ -54,16 +49,12 @@ public class IntelliJImportOrderingStrategy implements ImportOrderingStrategy {
                 otherImports.add(importDeclaration);
             }
         }
-
         if (sortImportsAlphabetically) {
-
             Comparator<ImportDeclaration> sortLogic = Comparator.comparing(NodeWithName::getNameAsString);
-
             otherImports.sort(sortLogic);
             javaImports.sort(sortLogic);
             staticImports.sort(sortLogic);
         }
-
         return Arrays.asList(otherImports, javaImports, staticImports);
     }
 
@@ -76,5 +67,4 @@ public class IntelliJImportOrderingStrategy implements ImportOrderingStrategy {
     public boolean isSortImportsAlphabetically() {
         return sortImportsAlphabetically;
     }
-
 }

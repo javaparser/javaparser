@@ -20,11 +20,10 @@
  */
 package com.github.javaparser.metamodel;
 
+import java.util.Optional;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.Expression;
-
-import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:

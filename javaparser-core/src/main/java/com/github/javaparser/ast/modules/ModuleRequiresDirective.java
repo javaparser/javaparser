@@ -31,10 +31,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.ast.Modifier.Keyword.TRANSITIVE;
 import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -124,7 +122,7 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     public boolean isStatic() {
         return hasModifier(STATIC);
     }
-    
+
     /*
      * Requires transitive—implied readability. 
      * To specify a dependency on another module and to ensure that other modules reading your module also read that dependency

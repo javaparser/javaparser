@@ -22,10 +22,8 @@ package com.github.javaparser.javadoc;
 
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
-
 import java.util.LinkedList;
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**

@@ -35,13 +35,11 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
-
 import static com.github.javaparser.ParseStart.*;
 import static com.github.javaparser.Problem.PROBLEM_BY_BEGIN_POSITION;
 import static com.github.javaparser.Providers.provider;
@@ -555,14 +553,10 @@ public final class JavaParser {
     public ParseResult<NodeList<Statement>> parseStatements(String statements) {
         ParseStart<BlockStmt> start = GeneratedJavaParser::StatementsParseStart;
         ParseResult<BlockStmt> result = parse(start, provider(statements));
-
         NodeList<Statement> s = null;
         if (result.getResult().isPresent()) {
             s = result.getResult().get().getStatements();
         }
-        return new ParseResult<>(s, result.getProblems(),
-                result.getCommentsCollection().orElse(null));
+        return new ParseResult<>(s, result.getProblems(), result.getCommentsCollection().orElse(null));
     }
-
-
 }

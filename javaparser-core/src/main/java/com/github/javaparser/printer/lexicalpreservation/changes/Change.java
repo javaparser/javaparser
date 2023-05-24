@@ -39,14 +39,13 @@ public interface Change {
             case IS_EMPTY:
                 return Utils.valueIsNullOrEmpty(getValue(csmConditional.getProperty(), node));
             case IS_PRESENT:
-                return !Utils.valueIsNullOrEmptyStringOrOptional(getValue(csmConditional.getProperty(), node))
-                		&& !isEvaluatedOnDerivedProperty(csmConditional.getProperty());
+                return !Utils.valueIsNullOrEmptyStringOrOptional(getValue(csmConditional.getProperty(), node)) && !isEvaluatedOnDerivedProperty(csmConditional.getProperty());
             default:
                 throw new UnsupportedOperationException("" + csmConditional.getProperty() + " " + csmConditional.getCondition());
         }
     }
 
-	/*
+    /*
 	 * Evaluate on derived property.
 	 *
 	 * Currently the evaluation of the conditions is carried out in relation to the
@@ -88,8 +87,8 @@ public interface Change {
 	 * but the validation condition must not be checked.
 	 */
     default boolean isEvaluatedOnDerivedProperty(ObservableProperty property) {
-    	ObservableProperty currentProperty = getProperty();
-		/*
+        ObservableProperty currentProperty = getProperty();
+        /*
 		 * By convention we admit that the derived property is suffixed with the name of
 		 * the property it derives from (e.g. EXPRESSION_BODY which matches an
 		 * expression would derive from BODY which matches a list of expressions), so we
@@ -97,12 +96,10 @@ public interface Change {
 		 * field but the validation condition must not be checked.
 		 * Be careful because NoChange property must not affect this evaluation.
 		 */
-    	return currentProperty != null
-    			&& (property.isDerived()
-    					&& property.name().endsWith(currentProperty.name()));
+        return currentProperty != null && (property.isDerived() && property.name().endsWith(currentProperty.name()));
     }
 
-	/*
+    /*
 	 * Assuming that by convention the derived property is suffixed
 	 * with the name of the property it derives from (e.g. EXPRESSION_BODY which
 	 * matches an expression vs a list of expressions would derive from BODY) We

@@ -9,6 +9,7 @@ import com.github.javaparser.ast.stmt.CatchClause;
  * @version 1 (10/31/21)
  */
 public class KeyCatchClauseSV extends CatchClause {
+
     public KeyCatchClauseSV(TokenRange range, String text) {
     }
 }

@@ -22,7 +22,6 @@ package com.github.javaparser.resolution.types;
 
 import java.util.List;
 import java.util.Map;
-
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
@@ -143,7 +142,7 @@ public class ResolvedTypeVariable implements ResolvedType {
      */
     @Override
     public ResolvedType solveGenericTypes(Context context) {
-    	return context.solveGenericType(describe()).orElse(this);
+        return context.solveGenericType(describe()).orElse(this);
     }
 
     @Override

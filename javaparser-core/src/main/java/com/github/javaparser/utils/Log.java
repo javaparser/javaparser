@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.function.Supplier;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**

@@ -53,9 +53,7 @@ public class CommonValidators extends Validators {
             while (target instanceof EnclosedExpr) {
                 target = ((EnclosedExpr) target).getInner();
             }
-            if (target instanceof NameExpr || target instanceof KeyExpressionSV
-                            || target instanceof KeyPassiveExpression
-                            || target instanceof ArrayAccessExpr || target instanceof FieldAccessExpr) {
+            if (target instanceof NameExpr || target instanceof KeyExpressionSV || target instanceof KeyPassiveExpression || target instanceof ArrayAccessExpr || target instanceof FieldAccessExpr) {
                 return;
             }
             reporter.report(n.getTarget(), "Illegal left hand side of an assignment.");

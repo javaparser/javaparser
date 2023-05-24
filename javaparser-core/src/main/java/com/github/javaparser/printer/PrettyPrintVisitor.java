@@ -25,12 +25,10 @@ import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
@@ -51,11 +49,9 @@ import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
@@ -73,7 +69,7 @@ import static java.util.stream.Collectors.joining;
 @Deprecated
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
-	private static Pattern RTRIM = Pattern.compile("\\s+$");
+    private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     protected PrettyPrinterConfiguration configuration;
 
@@ -408,7 +404,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
                     printer.println(line);
                 }
             }
-            printer.println(" "+n.getFooter());
+            printer.println(" " + n.getFooter());
         }
     }
 
@@ -754,7 +750,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyCcatchBreak n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("ccatch (\\Break");
         if (n.getLabel().isPresent()) {
             n.getLabel().get().accept(this, arg);
@@ -769,7 +764,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyCcatchContinue n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("ccatch (\\Continue");
         if (n.getLabel().isPresent()) {
             n.getLabel().get().accept(this, arg);
@@ -784,7 +778,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyCcatchParameter n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("ccatch (");
         if (n.getParameter().isPresent()) {
             n.getParameter().get().accept(this, arg);
@@ -793,14 +786,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         if (n.getBlock().isPresent()) {
             n.getBlock().get().accept(this, arg);
         }
-
     }
 
     @Override
     public void visit(KeyCcatchReturn n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("ccatch (\\Return");
         if (n.getParameter().isPresent()) {
             n.getParameter().get().accept(this, arg);
@@ -815,7 +806,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyCatchAllStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("#catchAll");
         printer.print("(");
         n.getLabel().accept(this, arg);
@@ -827,10 +817,8 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyEscapeExpression n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         n.getCallee().accept(this, arg);
-        if(n.getArguments().isPresent())
-        {
+        if (n.getArguments().isPresent()) {
             printer.print("(");
             n.getArguments().get().accept(this, arg);
             printer.print(")");
@@ -841,7 +829,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyExecStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("exec");
         n.getExecBlock().accept(this, arg);
         for (KeyCcatchBranch branch : n.getBranches()) {
@@ -853,13 +840,11 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyExecutionContext n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("source");
         printer.print("=");
         n.getSignature().accept(this, arg);
         printer.print("@");
         n.getContext().accept(this, arg);
-
         if (n.getInstance().isPresent()) {
             printer.print(",");
             printer.print("this");
@@ -872,7 +857,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyLoopScopeBlock n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("loop-scope");
         printer.print("(");
         n.getIndexPV().accept(this, arg);
@@ -884,7 +868,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyMergePointStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("merge_point");
         printer.print("(");
         n.getExpr().accept(this, arg);
@@ -895,7 +878,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyMethodBodyStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         if (n.getName().isPresent()) {
             n.getName().get().accept(this, arg);
             printer.print("=");
@@ -910,7 +892,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyMethodCallStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("method-frame");
         printer.print("(");
         if (n.getName().isPresent()) {
@@ -927,12 +908,12 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyMethodSignature n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         n.getName().accept(this, arg);
         printer.print("(");
         for (Type paramType : n.getParamTypes()) {
             paramType.accept(this, arg);
-            printer.print(","); //TODO
+            //TODO
+            printer.print(",");
         }
         printer.print(")");
     }
@@ -941,7 +922,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyRangeExpression n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         n.getLower().accept(this, arg);
         printer.print("..");
         n.getUpper().accept(this, arg);
@@ -951,7 +931,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyTransactionStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getType().symbol);
         printer.print(";");
     }
@@ -960,7 +939,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyContextStatementBlock n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("{");
         if (n.getSignature().isPresent()) {
             printer.print(".");
@@ -971,7 +949,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             n.getExpression().get().accept(this, arg);
             printer.print(")");
         }
-
         if (n.getComment().isPresent()) {
             n.getContext().get().accept(this, arg);
         }
@@ -987,7 +964,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyExecCtxtSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -995,7 +971,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyExpressionSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -1003,7 +978,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyJumpLabelSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -1011,7 +985,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyMetaConstructExpression n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
         printer.print("(");
         n.getChild().accept(this, arg);
@@ -1022,7 +995,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyMetaConstruct n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getKind());
         printer.print("(");
         for (Node schema : n.getSchemas()) {
@@ -1037,7 +1009,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyMetaConstructType n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getKind());
     }
 
@@ -1045,7 +1016,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyMethodSignatureSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -1053,7 +1023,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyPassiveExpression n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print("@(");
         n.accept(this, arg);
         printer.print(")");
@@ -1063,7 +1032,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyProgramVariableSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -1071,7 +1039,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyStatementSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -1079,7 +1046,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyTypeSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -1087,7 +1053,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyCcatchSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -1095,7 +1060,6 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
     public void visit(KeyExecutionContextSV n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
         printer.print(n.getText());
     }
 
@@ -1664,9 +1628,10 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
         printer.println(" {");
         printer.indent();
         if (n.getEntries().isNonEmpty()) {
-            final boolean alignVertically = // Either we hit the constant amount limit in the configurations, or...
-            n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() || // any of the constants has a comment.
-            n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
+            final // Either we hit the constant amount limit in the configurations, or...
+            boolean // Either we hit the constant amount limit in the configurations, or...
+            alignVertically = // any of the constants has a comment.
+            n.getEntries().size() > configuration.getMaxEnumConstantsToAlignHorizontally() || n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();
