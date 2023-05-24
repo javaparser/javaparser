@@ -19,17 +19,6 @@
  */
 package com.github.javaparser.printer;
 
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.*;
-import static java.util.stream.Collectors.joining;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Pattern;
-
-import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -39,11 +28,6 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.key.*;
 import com.github.javaparser.ast.key.sv.*;
-import com.github.javaparser.ast.modules.*;
-import com.github.javaparser.ast.nodeTypes.*;
-import com.github.javaparser.ast.stmt.*;
-import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithTraversableScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
@@ -62,11 +46,11 @@ import com.github.javaparser.printer.configuration.imports.DefaultImportOrdering
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 import static com.github.javaparser.utils.Utils.*;
-import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -74,7 +58,7 @@ import static java.util.stream.Collectors.joining;
  */
 public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
-	private static Pattern RTRIM = Pattern.compile("\\s+$");
+    private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     protected final PrinterConfiguration configuration;
 
@@ -402,7 +386,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                     printer.println(line);
                 }
             }
-            printer.println(" "+n.getFooter());
+            printer.println(" " + n.getFooter());
         }
     }
 
@@ -825,27 +809,45 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
 
+        printer.print("source =");
+        n.getSignature().accept(this, arg);
+        printer.print("@");
+        n.getContext().accept(this, arg);
+        if (n.getInstance().isPresent()) {
+            printer.print(", this = ");
+            n.getInstance().get().accept(this, arg);
+        }
     }
 
     @Override
     public void visit(KeyLoopScopeBlock n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
+        printer.print("$loopScope( ");
+        n.getIndexPV().accept(this, arg);
+        printer.print(") ");
+        n.getBlock().accept(this, arg);
+        printer.print("}");
     }
 
     @Override
     public void visit(KeyMergePointStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
+        printer.print("merge_point");
     }
 
     @Override
     public void visit(KeyMethodBodyStatement n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-
+        n.getName().ifPresent(it -> {
+            it.accept(this, arg);
+            printer.print(" = ");
+        });
+        n.getExpr().accept(this, arg);
+        printer.print("@");
+        n.getSource().accept(this, arg);
     }
 
     @Override
@@ -1594,8 +1596,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.indent();
         if (n.getEntries().isNonEmpty()) {
             final boolean alignVertically = // Either we hit the constant amount limit in the configurations, or...
-            n.getEntries().size() > getOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger() || // any of the constants has a comment.
-            n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
+                    n.getEntries().size() > getOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asInteger() || // any of the constants has a comment.
+                            n.getEntries().stream().anyMatch(e -> e.getComment().isPresent());
             printer.println();
             for (final Iterator<EnumConstantDeclaration> i = n.getEntries().iterator(); i.hasNext(); ) {
                 final EnumConstantDeclaration e = i.next();
@@ -1657,7 +1659,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getCondition().accept(this, arg);
         final boolean thenBlock = n.getThenStmt() instanceof BlockStmt;
         if (// block statement should start on the same line
-        thenBlock)
+                thenBlock)
             printer.print(") ");
         else {
             printer.println(")");
@@ -1674,7 +1676,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             final boolean elseIf = n.getElseStmt().orElse(null) instanceof IfStmt;
             final boolean elseBlock = n.getElseStmt().orElse(null) instanceof BlockStmt;
             if (// put chained if and start of block statement on a same level
-            elseIf || elseBlock)
+                    elseIf || elseBlock)
                 printer.print("else ");
             else {
                 printer.println("else");
