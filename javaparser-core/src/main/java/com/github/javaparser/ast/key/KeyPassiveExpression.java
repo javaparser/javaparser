@@ -21,7 +21,7 @@ public class KeyPassiveExpression extends Expression {
 
     @AllFieldsConstructor
     public KeyPassiveExpression(Expression expr) {
-        this.expr = expr;
+        this(null, expr);
     }
 
     /**
