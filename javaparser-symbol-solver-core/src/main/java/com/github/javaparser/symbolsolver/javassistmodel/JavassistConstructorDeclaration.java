@@ -122,4 +122,19 @@ public class JavassistConstructorDeclaration implements ResolvedConstructorDecla
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return methodLikeAdaper.getDeclaredAnnotations();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavassistConstructorDeclaration that = (JavassistConstructorDeclaration) o;
+
+        return ctConstructor.equals(that.ctConstructor);
+    }
+
+    @Override
+    public int hashCode() {
+        return ctConstructor.hashCode();
+    }
 }

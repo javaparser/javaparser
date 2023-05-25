@@ -117,4 +117,21 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(constructor, typeSolver);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReflectionConstructorDeclaration that = (ReflectionConstructorDeclaration) o;
+
+        if (!constructor.equals(that.constructor)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return constructor.hashCode();
+    }
 }

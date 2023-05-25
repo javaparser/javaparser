@@ -173,4 +173,19 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return javassistTypeDeclarationAdapter.getDeclaredAnnotations();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavassistAnnotationDeclaration that = (JavassistAnnotationDeclaration) o;
+
+        return ctClass.equals(that.ctClass);
+    }
+
+    @Override
+    public int hashCode() {
+        return ctClass.hashCode();
+    }
 }

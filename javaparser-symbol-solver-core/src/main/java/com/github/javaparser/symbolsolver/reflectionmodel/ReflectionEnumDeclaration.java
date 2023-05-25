@@ -252,4 +252,21 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
     return ResolvedAnnotationsUtil.getDeclaredAnnotations(clazz, typeSolver);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    ReflectionEnumDeclaration that = (ReflectionEnumDeclaration) o;
+
+    if (!clazz.getCanonicalName().equals(that.clazz.getCanonicalName())) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    return clazz.hashCode();
+  }
 }

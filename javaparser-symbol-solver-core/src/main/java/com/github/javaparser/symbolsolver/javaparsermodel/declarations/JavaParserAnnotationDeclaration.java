@@ -174,4 +174,21 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(wrappedNode);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavaParserAnnotationDeclaration that = (JavaParserAnnotationDeclaration) o;
+
+        if (!wrappedNode.equals(that.wrappedNode)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return wrappedNode.hashCode();
+    }
 }

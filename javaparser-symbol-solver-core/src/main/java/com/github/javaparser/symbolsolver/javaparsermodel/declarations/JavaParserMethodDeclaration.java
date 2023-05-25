@@ -193,4 +193,21 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(wrappedNode);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavaParserMethodDeclaration that = (JavaParserMethodDeclaration) o;
+
+        if (!wrappedNode.equals(that.wrappedNode)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return wrappedNode.hashCode();
+    }
 }

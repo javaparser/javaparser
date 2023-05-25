@@ -180,4 +180,21 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(method, typeSolver);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReflectionMethodDeclaration that = (ReflectionMethodDeclaration) o;
+
+        if (!method.equals(that.method)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return method.hashCode();
+    }
 }

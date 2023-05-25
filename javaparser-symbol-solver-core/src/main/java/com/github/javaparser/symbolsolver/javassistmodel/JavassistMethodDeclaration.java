@@ -161,4 +161,19 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return methodLikeAdaper.getDeclaredAnnotations();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavassistMethodDeclaration that = (JavassistMethodDeclaration) o;
+
+        return ctMethod.equals(that.ctMethod);
+    }
+
+    @Override
+    public int hashCode() {
+        return ctMethod.hashCode();
+    }
 }

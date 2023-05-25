@@ -127,4 +127,19 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
             return null;
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavassistFieldDeclaration that = (JavassistFieldDeclaration) o;
+
+        return ctField.equals(that.ctField);
+    }
+
+    @Override
+    public int hashCode() {
+        return ctField.hashCode();
+    }
 }

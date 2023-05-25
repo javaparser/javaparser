@@ -107,4 +107,19 @@ public class JavassistAnnotationMemberDeclaration implements ResolvedAnnotationM
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(annotationMember, typeSolver);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavassistAnnotationMemberDeclaration that = (JavassistAnnotationMemberDeclaration) o;
+
+        return annotationMember.equals(that.annotationMember);
+    }
+
+    @Override
+    public int hashCode() {
+        return annotationMember.hashCode();
+    }
 }

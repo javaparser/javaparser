@@ -87,4 +87,19 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(ctField, typeSolver);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        JavassistEnumConstantDeclaration that = (JavassistEnumConstantDeclaration) o;
+
+        return ctField.equals(that.ctField);
+    }
+
+    @Override
+    public int hashCode() {
+        return ctField.hashCode();
+    }
 }

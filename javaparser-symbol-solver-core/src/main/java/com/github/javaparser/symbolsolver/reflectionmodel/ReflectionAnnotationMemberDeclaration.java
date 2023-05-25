@@ -90,4 +90,21 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(annotationMember, typeSolver);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReflectionAnnotationMemberDeclaration that = (ReflectionAnnotationMemberDeclaration) o;
+
+        if (!annotationMember.equals(that.annotationMember)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return annotationMember.hashCode();
+    }
 }

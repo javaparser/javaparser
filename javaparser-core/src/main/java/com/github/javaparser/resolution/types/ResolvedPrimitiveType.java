@@ -57,7 +57,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
         this.promotionTypes = promotionTypes;
     }
 
-    public static ResolvedType byName(String name) {
+    public static ResolvedPrimitiveType byName(String name) {
         name = name.toLowerCase();
         for (ResolvedPrimitiveType ptu : values()) {
             if (ptu.describe().equals(name)) {

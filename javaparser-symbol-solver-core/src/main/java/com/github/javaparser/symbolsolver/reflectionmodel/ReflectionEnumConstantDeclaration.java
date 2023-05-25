@@ -68,4 +68,21 @@ public class ReflectionEnumConstantDeclaration implements ResolvedEnumConstantDe
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(enumConstant, typeSolver);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReflectionEnumConstantDeclaration that = (ReflectionEnumConstantDeclaration) o;
+
+        if (!enumConstant.equals(that.enumConstant)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return enumConstant.hashCode();
+    }
 }

@@ -169,4 +169,21 @@ public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
     private interface EFunction<P, R, T extends Throwable> {
         R apply(P param) throws T;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReflectionFieldDeclaration that = (ReflectionFieldDeclaration) o;
+
+        if (!field.equals(that.field)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return field.hashCode();
+    }
 }
