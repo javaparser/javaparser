@@ -167,12 +167,15 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
         JavaParserFieldDeclaration that = (JavaParserFieldDeclaration) o;
 
         if (!wrappedNode.equals(that.wrappedNode)) return false;
+        if(!variableDeclarator.equals(that.variableDeclarator)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return wrappedNode.hashCode();
+        int result = variableDeclarator.hashCode();
+        result = 31 * result + wrappedNode.hashCode();
+        return result;
     }
 }
