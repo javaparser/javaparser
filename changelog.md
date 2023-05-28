@@ -15,6 +15,11 @@ Version 3.25.3
 --------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/199?closed=1)
 
+
+### Added
+
+* add Java 17 sealed/non-sealed classes (PR [#3997](https://github.com/javaparser/javaparser/pull/3997) by [@kris-scheibe](https://github.com/kris-scheibe))
+
 ### Changed
 
 * Minor simplification of the Difference class (PR [#4008](https://github.com/javaparser/javaparser/pull/4008) by [@jlerbsc](https://github.com/jlerbsc))
