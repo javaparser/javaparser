@@ -32,4 +32,14 @@ public interface ResolvedConstructorDeclaration extends ResolvedMethodLikeDeclar
      */
     @Override
     ResolvedReferenceTypeDeclaration declaringType();
+
+    @Override
+    default boolean isConstructor() {
+        return true;
+    }
+
+    @Override
+    default ResolvedConstructorDeclaration asConstructor() {
+        return this;
+    }
 }

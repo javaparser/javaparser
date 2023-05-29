@@ -50,7 +50,17 @@ public interface ResolvedMethodDeclaration extends ResolvedMethodLikeDeclaration
      */
     boolean isStatic();
 
-    /*
+	@Override
+	default boolean isMethod() {
+		return true;
+	}
+
+	@Override
+	default ResolvedMethodDeclaration asMethod() {
+		return this;
+	}
+
+	/*
      * Returns the method descriptor (https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3)
      * The method descriptor for the method: {@code Object m(int i, double d, Thread t) {...}}
      * is {@code (IDLjava/lang/Thread;)Ljava/lang/Object;}
