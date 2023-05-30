@@ -649,7 +649,7 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
     void testGetDeclaredMethods() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolverNewCode.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
-        Set<ResolvedMethodDeclaration> allMethods = constructorDeclaration.getDeclaredMethods();
+        List<ResolvedMethodDeclaration> allMethods = constructorDeclaration.getDeclaredMethods();
         assertEquals(20, allMethods.size());
 
         List<ResolvedMethodDeclaration> sortedMethods = allMethods.stream()

@@ -602,7 +602,7 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
     void testGetDeclaredMethods() {
         JavaParserClassDeclaration constructorDeclaration = (JavaParserClassDeclaration) typeSolver.solveType("com.github.javaparser.ast.body.ConstructorDeclaration");
 
-        Set<ResolvedMethodDeclaration> allMethods = constructorDeclaration.getDeclaredMethods();
+        List<ResolvedMethodDeclaration> allMethods = constructorDeclaration.getDeclaredMethods();
         assertEquals(20, allMethods.size());
 
         List<ResolvedMethodDeclaration> sortedMethods = allMethods.stream()

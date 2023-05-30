@@ -245,7 +245,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     /**
      * Return a list of all the methods declared in this type declaration.
      */
-    Set<ResolvedMethodDeclaration> getDeclaredMethods();
+    List<ResolvedMethodDeclaration> getDeclaredMethods();
 
     /**
      * Return a list of all the methods declared of this type declaration, either declared or inherited.

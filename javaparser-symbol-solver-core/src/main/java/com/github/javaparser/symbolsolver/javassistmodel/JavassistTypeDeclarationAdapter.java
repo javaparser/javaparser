@@ -151,11 +151,11 @@ public class JavassistTypeDeclarationAdapter {
         return ancestors;
     }
 
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(ctClass.getDeclaredMethods())
                 .filter(m -> ((m.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0)
                         && ((m.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0))
-                .map(m -> new JavassistMethodDeclaration(m, typeSolver)).collect(Collectors.toSet());
+                .map(m -> new JavassistMethodDeclaration(m, typeSolver)).collect(Collectors.toList());
     }
 
     public List<ResolvedConstructorDeclaration> getConstructors() {

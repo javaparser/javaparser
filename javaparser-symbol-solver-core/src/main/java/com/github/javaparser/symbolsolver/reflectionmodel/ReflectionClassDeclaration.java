@@ -92,7 +92,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
     ///
 
     @Override
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
         return reflectionClassAdapter.getDeclaredMethods();
     }
 

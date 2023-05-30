@@ -40,7 +40,6 @@ import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import com.github.javaparser.symbolsolver.utils.ModifierUtils;
-import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import javassist.CtClass;
 import javassist.CtField;
 
@@ -130,10 +129,8 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        return Arrays.stream(ctClass.getDeclaredMethods())
-                .map(m -> new JavassistMethodDeclaration(m, typeSolver))
-                .collect(Collectors.toSet());
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
+        return javassistTypeDeclarationAdapter.getDeclaredMethods();
     }
 
     @Override

@@ -79,7 +79,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
     }
 
     @Override
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
         return javassistTypeDeclarationAdapter.getDeclaredMethods();
     }
 

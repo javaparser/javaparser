@@ -195,8 +195,8 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         return res;
     }
 
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        Set<ResolvedMethodDeclaration> methods = new HashSet<>();
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
+        List<ResolvedMethodDeclaration> methods = new ArrayList<>();
         for (BodyDeclaration<?> member : wrappedNode.getMembers()) {
             if (member instanceof MethodDeclaration) {
                 methods.add(new JavaParserMethodDeclaration((MethodDeclaration) member, typeSolver));

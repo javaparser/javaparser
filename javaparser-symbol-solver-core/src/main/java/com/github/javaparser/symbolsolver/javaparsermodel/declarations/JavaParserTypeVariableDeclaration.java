@@ -145,8 +145,8 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     }
 
     @Override
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        return Collections.emptySet();
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
+        return Collections.emptyList();
     }
 
     @Override

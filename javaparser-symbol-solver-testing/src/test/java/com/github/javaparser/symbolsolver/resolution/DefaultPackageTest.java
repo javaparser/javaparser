@@ -85,7 +85,7 @@ class DefaultPackageTest {
         }
 
         @Override
-        public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+        public List<ResolvedMethodDeclaration> getDeclaredMethods() {
             throw new UnsupportedOperationException();
         }
 

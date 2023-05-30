@@ -156,11 +156,11 @@ class ReflectionClassAdapter {
         return fields;
     }
 
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
         return Arrays.stream(clazz.getDeclaredMethods())
                 .filter(m -> !m.isSynthetic() && !m.isBridge())
                 .map(m -> new ReflectionMethodDeclaration(m, typeSolver))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {

@@ -45,7 +45,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ObjectCreationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
-import com.github.javaparser.symbolsolver.utils.ResolvedAnnotationsUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -197,12 +196,11 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
     }
 
     @Override
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
-        return
-                findMembersOfKind(MethodDeclaration.class)
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
+        return findMembersOfKind(MethodDeclaration.class)
                         .stream()
                         .map(method -> new JavaParserMethodDeclaration(method, typeSolver))
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toList());
     }
 
     @Override

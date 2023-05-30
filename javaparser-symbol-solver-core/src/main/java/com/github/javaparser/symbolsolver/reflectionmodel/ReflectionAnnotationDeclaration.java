@@ -148,7 +148,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     }
 
     @Override
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
         return reflectionClassAdapter.getDeclaredMethods();
     }
 

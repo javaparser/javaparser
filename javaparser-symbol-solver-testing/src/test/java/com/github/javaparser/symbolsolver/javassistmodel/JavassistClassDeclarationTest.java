@@ -192,7 +192,7 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     @Test
     void testGetDeclaredMethods() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.Position");
-        Set<ResolvedMethodDeclaration> methodsSet = compilationUnit.getDeclaredMethods();
+        List<ResolvedMethodDeclaration> methodsSet = compilationUnit.getDeclaredMethods();
         assertEquals(12, methodsSet.size());
 
         Map<String, MethodUsage> methods = new HashMap<>();

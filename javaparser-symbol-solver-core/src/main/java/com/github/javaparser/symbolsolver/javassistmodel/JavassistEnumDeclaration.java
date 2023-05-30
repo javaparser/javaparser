@@ -116,7 +116,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+    public List<ResolvedMethodDeclaration> getDeclaredMethods() {
         return javassistTypeDeclarationAdapter.getDeclaredMethods();
     }
 

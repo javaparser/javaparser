@@ -142,7 +142,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   }
 
   @Override
-  public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
+  public List<ResolvedMethodDeclaration> getDeclaredMethods() {
     return reflectionClassAdapter.getDeclaredMethods();
   }
 
