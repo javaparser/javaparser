@@ -635,7 +635,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
                 return result;
             }
-            return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+			// Since variable parameters are represented by an array, in case we deal with
+			// the variadic parameter we have to take into account the base type of the
+			// array.
+			ResolvedMethodDeclaration rmd = refMethod.getCorrespondingDeclaration();
+			if (rmd.hasVariadicParameter() && pos >= rmd.getNumberOfParams() - 1) {
+				return rmd.getLastParam().getType().asArrayType().getComponentType();
+			}
+            return rmd.getParam(pos).getType();
         }
         throw new UnsupportedOperationException("The type of a method reference expr depends on the position and its return value");
     }
