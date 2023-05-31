@@ -21,6 +21,12 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -28,6 +34,7 @@ import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
@@ -35,18 +42,28 @@ import javassist.bytecode.AccessFlag;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 /**
  * @author Federico Tomassetti
  */
 public class JavassistTypeDeclarationAdapter {
 
-    private final CtClass ctClass;
-    private final TypeSolver typeSolver;
-    private final ResolvedReferenceTypeDeclaration typeDeclaration;
+    // this a workaround to get the annotation type (taken from Javassist AnnotationImpl class)
+    private static final String JDK_ANNOTATION_CLASS_NAME = "java.lang.annotation.Annotation";
+    private static Method JDK_ANNOTATION_TYPE_METHOD = null;
+
+    static {
+        // Try to resolve the JDK annotation type method
+        try {
+            Class<?> clazz = Class.forName(JDK_ANNOTATION_CLASS_NAME);
+            JDK_ANNOTATION_TYPE_METHOD = clazz.getMethod("annotationType", (Class[]) null);
+        } catch (Exception ignored) {
+            // Probably not JDK5+
+        }
+    }
+
+    private CtClass ctClass;
+    private TypeSolver typeSolver;
+    private ResolvedReferenceTypeDeclaration typeDeclaration;
 
     public JavassistTypeDeclarationAdapter(CtClass ctClass, TypeSolver typeSolver, ResolvedReferenceTypeDeclaration typeDeclaration) {
         this.ctClass = ctClass;
@@ -164,6 +181,36 @@ public class JavassistTypeDeclarationAdapter {
         return fields;
     }
 
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        try {
+            Object[] annotations = ctClass.getAnnotations();
+            return Stream.of(annotations)
+                    .map(annotation -> getAnnotationType(annotation))
+                    .filter(annotationType -> annotationType != null)
+                    .map(annotationType -> typeSolver.solveType(annotationType))
+                    .map(rrtd -> rrtd.asAnnotation())
+                    .collect(Collectors.toSet());
+        } catch (ClassNotFoundException e) {
+            // There is nothing to do except returns an empty set
+        }
+        return Collections.EMPTY_SET;
+
+    }
+
+    private String getAnnotationType(Object annotation) {
+        String typeName = null;
+        try {
+            Class<?> annotationClass = (Class<?>) Proxy.getInvocationHandler(annotation)
+                    .invoke(annotation, JDK_ANNOTATION_TYPE_METHOD, null);
+            typeName = annotationClass.getTypeName();
+        } catch (Throwable e) {
+        }
+        return typeName;
+    }
+
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         if (null == ctClass.getGenericSignature()) {
             return Collections.emptyList();
@@ -171,7 +218,7 @@ public class JavassistTypeDeclarationAdapter {
             try {
                 SignatureAttribute.ClassSignature classSignature =
                         SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.stream(classSignature.getParameters())
+                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters())
                         .map((tp) -> new JavassistTypeParameter(tp, JavassistFactory.toTypeDeclaration(ctClass, typeSolver), typeSolver))
                         .collect(Collectors.toList());
             } catch (BadBytecode badBytecode) {

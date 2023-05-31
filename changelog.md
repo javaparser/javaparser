@@ -1,7 +1,7 @@
 
-Next Release (Version 3.25.3-snapshot)
+Next Release (Version 3.25.4-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/199?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/200?closed=1)
 
 ### Added
 
@@ -15,15 +15,94 @@ Next Release (Version 3.25.3-snapshot)
 
 ### Security
 
+Version 3.25.3
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/199?closed=1)
+
+### Changed
+
+* Minor simplification of the Difference class (PR [#4008](https://github.com/javaparser/javaparser/pull/4008)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Perf: Remove unnecessary methods and quickly return to the Range.cont… (
+  PR [#3996](https://github.com/javaparser/javaparser/pull/3996) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix: issue 1843 Problems with hasAnnotation() and hasDirectlyAnnotati… (
+  PR [#4015](https://github.com/javaparser/javaparser/pull/4015) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Issue 3995 resolving a method call with a variadic argument of p… (
+  PR [#3998](https://github.com/javaparser/javaparser/pull/3998) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3983 why FieldDeclaration in an interface calling isStatic… (
+  PR [#3986](https://github.com/javaparser/javaparser/pull/3986) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump checkstyle from 10.9.3 to 10.10.0 (PR [#4014](https://github.com/javaparser/javaparser/pull/4014)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update junit5 monorepo to v5.9.3 (PR [#4012](https://github.com/javaparser/javaparser/pull/4012)
+  by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): bump jacoco-maven-plugin from 0.8.9 to 0.8.10 (
+  PR [#4011](https://github.com/javaparser/javaparser/pull/4011)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps-dev): bump okhttp from 4.10.0 to 4.11.0 (PR [#4009](https://github.com/javaparser/javaparser/pull/4009)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump codecov/codecov-action from 3.1.2 to 3.1.3 (
+  PR [#4006](https://github.com/javaparser/javaparser/pull/4006)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-checkstyle-plugin from 3.2.1 to 3.2.2 (
+  PR [#4005](https://github.com/javaparser/javaparser/pull/4005)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump actions/checkout from 3.5.1 to 3.5.2 (PR [#3994](https://github.com/javaparser/javaparser/pull/3994)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump actions/checkout from 3.5.0 to 3.5.1 (PR [#3992](https://github.com/javaparser/javaparser/pull/3992)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump codecov/codecov-action from 3.1.1 to 3.1.2 (
+  PR [#3988](https://github.com/javaparser/javaparser/pull/3988)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-deploy-plugin from 3.1.0 to 3.1.1 (
+  PR [#3985](https://github.com/javaparser/javaparser/pull/3985)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump jacoco-maven-plugin from 0.8.8 to 0.8.9 (
+  PR [#3981](https://github.com/javaparser/javaparser/pull/3981)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 10.9.1 to 10.9.3 (PR [#3980](https://github.com/javaparser/javaparser/pull/3980)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-resources-plugin from 3.3.0 to 3.3.1 (
+  PR [#3979](https://github.com/javaparser/javaparser/pull/3979)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-install-plugin from 3.1.0 to 3.1.1 (
+  PR [#3975](https://github.com/javaparser/javaparser/pull/3975)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-release-plugin from 2.5.3 to 3.0.0 (
+  PR [#3965](https://github.com/javaparser/javaparser/pull/3965)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Uncategorised
+
+* add test for showing interface field shall be static & final (
+  PR [#3984](https://github.com/javaparser/javaparser/pull/3984) by [@XenoAmess](https://github.com/XenoAmess))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@kris-scheibe](https://github.com/kris-scheibe)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@XenoAmess](https://github.com/XenoAmess)
+
 Version 3.25.2
 --------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/198?closed=1)
 
 ### Changed
 
-* chore(deps): bump maven-scm-plugin from 1.13.0 to 2.0.0 (PR [#3961](https://github.com/javaparser/javaparser/pull/3961) by [@dependabot[bot]](https://github.com/apps/dependabot))
-* chore(deps): bump checkstyle from 10.8.1 to 10.9.1 (PR [#3958](https://github.com/javaparser/javaparser/pull/3958) by [@dependabot[bot]](https://github.com/apps/dependabot))
-* chore(deps): bump actions/checkout from 3.3.0 to 3.4.0 (PR [#3954](https://github.com/javaparser/javaparser/pull/3954) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-scm-plugin from 1.13.0 to 2.0.0 (
+  PR [#3961](https://github.com/javaparser/javaparser/pull/3961)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 10.8.1 to 10.9.1 (PR [#3958](https://github.com/javaparser/javaparser/pull/3958)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump actions/checkout from 3.3.0 to 3.4.0 (PR [#3954](https://github.com/javaparser/javaparser/pull/3954)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
 
 ### Fixed
 

@@ -21,6 +21,17 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -39,19 +50,10 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
 
@@ -162,7 +164,8 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     @Test
     void testHasAnnotation() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestChildClass");
-        assertTrue(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
+        //TestChildClass has no TestAnnotation annotation declared even though parent class is annotated with this annotation because TestAnnotation annotation is not inheritable
+        assertFalse(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
     }
 
     @Test

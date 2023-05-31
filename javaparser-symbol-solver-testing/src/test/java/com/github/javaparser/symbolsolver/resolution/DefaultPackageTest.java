@@ -21,6 +21,14 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.*;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -31,13 +39,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import java.util.*;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * See issue #16
@@ -145,6 +146,11 @@ class DefaultPackageTest {
         @Override
         public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
             throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+            return new HashSet<>();
         }
     }
 

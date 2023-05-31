@@ -20,6 +20,12 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.GeneratedJavaParserConstants.*;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
@@ -33,11 +39,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.IntStream;
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
-
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
  * to remove or to add and follow by another sequence of elements.
@@ -233,11 +234,19 @@ public class Difference {
     }
 
     private boolean isEnforcingIndentationActivable(RemovedGroup removedGroup) {
-        return (diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1).isAdded())) && originalIndex < originalElements.size() && !removedGroup.isACompleteLine();
+        return (isLastElement(diffElements, diffIndex) || !(nextDiffElement(diffElements, diffIndex).isAdded())) && originalIndex < originalElements.size() && !removedGroup.isACompleteLine();
     }
 
     private boolean isRemovingIndentationActivable(RemovedGroup removedGroup) {
-        return (diffIndex + 1 >= diffElements.size() || !(diffElements.get(diffIndex + 1).isAdded())) && originalIndex < originalElements.size() && removedGroup.isACompleteLine();
+        return (isLastElement(diffElements, diffIndex) || !(nextDiffElement(diffElements, diffIndex).isAdded())) && originalIndex < originalElements.size() && removedGroup.isACompleteLine();
+    }
+
+    private boolean isLastElement(List<?> list, int index) {
+        return index + 1 >= list.size();
+    }
+
+    private DifferenceElement nextDiffElement(List<DifferenceElement> list, int index) {
+        return list.get(index + 1);
     }
 
     /*
@@ -251,8 +260,12 @@ public class Difference {
         int extraCharacters;
 
         public EnforcingIndentationContext(int start) {
+            this(start, 0);
+        }
+
+        public EnforcingIndentationContext(int start, int extraCharacters) {
             this.start = start;
-            this.extraCharacters = 0;
+            this.extraCharacters = extraCharacters;
         }
     }
 
@@ -290,7 +303,7 @@ public class Difference {
                 if (nodeText.getTextElement(i).isNewline()) {
                     break;
                 }
-                if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+                if (!isSpaceOrTabElement(nodeText, i)) {
                     ctx = new EnforcingIndentationContext(startIndex);
                     break;
                 }
@@ -299,18 +312,26 @@ public class Difference {
             }
         }
         // compute space after the deleted element
-        if (nodeText.getTextElement(startIndex).isSpaceOrTab()) {
+        if (isSpaceOrTabElement(nodeText, startIndex)) {
+//			int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
             for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
                 if (nodeText.getTextElement(i).isNewline()) {
                     break;
                 }
-                if (!nodeText.getTextElement(i).isSpaceOrTab()) {
+                if (!isSpaceOrTabElement(nodeText, i)) {
                     break;
                 }
                 ctx.extraCharacters++;
             }
         }
         return ctx;
+    }
+
+    /*
+     * Returns true if the indexed element is a space or a tab
+     */
+    private boolean isSpaceOrTabElement(NodeText nodeText, int i) {
+        return nodeText.getTextElement(i).isSpaceOrTab();
     }
 
     /**

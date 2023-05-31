@@ -18,7 +18,7 @@
 	<groupId>io.github.jmltoolkit</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-    <version>3.25.3-SNAPSHOT</version>
+    <version>3.25.3</version>
 
 	<name>jmlparser-parent</name>
 	<url>https://github.com/wadoon/jmlparser</url>
@@ -282,7 +282,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.9</version>
+					<version>0.8.10</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -361,7 +361,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>10.9.3</version>
+	                        <version>10.10.0</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -403,19 +403,19 @@
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-engine</artifactId>
-				<version>5.9.2</version>
+				<version>5.9.3</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-params</artifactId>
-				<version>5.9.2</version>
+				<version>5.9.3</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.junit.vintage</groupId>
 				<artifactId>junit-vintage-engine</artifactId>
-				<version>5.9.2</version>
+				<version>5.9.3</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>

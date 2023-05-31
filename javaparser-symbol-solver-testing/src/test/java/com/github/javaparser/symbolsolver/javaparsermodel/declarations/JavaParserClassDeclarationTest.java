@@ -927,10 +927,20 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertFalse(ca.hasAnnotation("foo.bar.MyUnexistingAnnotation"));
 
         JavaParserClassDeclaration cb = new JavaParserClassDeclaration(Navigator.demandClass(cu, "CB"), typeSolver);
-        assertTrue(cb.hasAnnotation("foo.bar.MyAnnotation"));
+        assertFalse(cb.hasAnnotation("foo.bar.MyAnnotation"));
         assertTrue(cb.hasAnnotation("foo.bar.MyAnnotation2"));
         assertFalse(cb.hasAnnotation("MyAnnotation"));
         assertFalse(cb.hasAnnotation("foo.bar.MyUnexistingAnnotation"));
+    }
+
+    @Test
+    void testHasInheritedAnnotation() throws IOException {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+
+        CompilationUnit cu = parse(adaptPath("src/test/resources/Annotations.java.txt"));
+
+        JavaParserClassDeclaration child = new JavaParserClassDeclaration(Navigator.demandClass(cu, "Child"), typeSolver);
+        assertTrue(child.hasAnnotation("foo.bar.InheritedAnnotation"));
     }
 
     ///

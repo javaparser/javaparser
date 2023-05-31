@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.Context;
@@ -37,12 +41,9 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
 import javassist.CtClass;
 import javassist.CtField;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author Federico Tomassetti
@@ -74,6 +75,14 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return ctClass.hasAnnotation(canonicalName);
+    }
+
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return javassistTypeDeclarationAdapter.getDeclaredAnnotations();
     }
 
     @Override
@@ -120,6 +129,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
         return ctClass.getName().replace('$', '.');
     }
 
+    @Override
     @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {

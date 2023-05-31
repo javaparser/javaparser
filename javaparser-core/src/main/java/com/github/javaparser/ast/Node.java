@@ -20,6 +20,20 @@
  */
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.NONNULL;
+
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -47,18 +61,6 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-import static com.github.javaparser.ast.Node.Parsedness.PARSED;
-import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Spliterator.DISTINCT;
-import static java.util.Spliterator.NONNULL;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -235,6 +237,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * @return the range of characters in the source code that this node covers.
      */
+    @Override
     public Optional<Range> getRange() {
         return Optional.ofNullable(range);
     }
@@ -242,10 +245,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * @return the range of tokens that this node covers.
      */
+    @Override
     public Optional<TokenRange> getTokenRange() {
         return Optional.ofNullable(tokenRange);
     }
 
+    @Override
     public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
         if (tokenRange == null || !(tokenRange.getBegin().hasRange() && tokenRange.getEnd().hasRange())) {
@@ -260,6 +265,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @param range the range of characters in the source code that this node covers. null can be used to indicate that
      *              no range information is known, or that it is not of interest.
      */
+    @Override
     public Node setRange(Range range) {
         if (this.range == range) {
             return this;
@@ -803,7 +809,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return LineSeparator.SYSTEM;
     }
 
-    public final SymbolResolver getSymbolResolver() {
+    public SymbolResolver getSymbolResolver() {
         return findCompilationUnit().map(cu -> {
             if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
                 return cu.getData(SYMBOL_RESOLVER_KEY);
@@ -1150,10 +1156,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /*
-     * returns true if the node defines a scope
+     * Returns true if the node has an (optional) scope expression eg. method calls (object.method())
      */
     public boolean hasScope() {
-        return (NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent()) || (NodeWithScope.class.isAssignableFrom(this.getClass()) && ((NodeWithScope) this).getScope() != null);
+        return (NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent())
+                || (NodeWithScope.class.isAssignableFrom(this.getClass()) && ((NodeWithScope) this).getScope() != null);
     }
 
     /*
