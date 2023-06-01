@@ -1152,7 +1152,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(final BlockStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-        printer.println("{");
+        boolean isSwitchEntry = n.hasParentNode() && n.getParentNode().get() instanceof SwitchEntry;
+        if (!isSwitchEntry) {
+            printer.println("{");
+        }
         if (n.getStatements() != null) {
             printer.indent();
             for (final Statement s : n.getStatements()) {
@@ -1162,7 +1165,9 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
         printOrphanCommentsEnding(n);
         printer.unindent();
-        printer.print("}");
+        if (!isSwitchEntry) {
+            printer.print("}");
+        }
     }
 
     @Override
