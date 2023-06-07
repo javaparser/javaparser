@@ -31,8 +31,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FieldDeclarationTest {
@@ -124,6 +122,10 @@ class FieldDeclarationTest {
         FieldDeclaration i = cu.getTypes().get(0).asClassOrInterfaceDeclaration()
                 .getMembers().get(0).asEnumDeclaration()
                 .getFields().get(0);
-        assertFalse(i.isPublic());
+        assertAll(
+                () -> assertFalse(i.isPublic()),
+                () -> assertFalse(i.isStatic()),
+                () -> assertFalse(i.isFinal())
+        );
     }
 }
