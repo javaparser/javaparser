@@ -58,7 +58,9 @@ public class JavaParserConstantValueEvaluationUtil {
         } else if (expression.isCharLiteralExpr()) {
             return expression.asCharLiteralExpr().asChar();
         } else if (expression.isStringLiteralExpr()) {
-            return expression.asStringLiteralExpr().getValue();
+            return expression.asStringLiteralExpr().asString();
+        } else if(expression.isTextBlockLiteralExpr()) {
+            return expression.asTextBlockLiteralExpr().asString();
         } else if (expression.isClassExpr()) {
             return expression.asClassExpr().getType().resolve();
         } else if (expression.isAnnotationExpr()) {
