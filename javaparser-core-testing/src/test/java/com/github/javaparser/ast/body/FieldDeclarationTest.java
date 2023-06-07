@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.body;
 
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Modifier.Keyword;
@@ -30,8 +31,9 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FieldDeclarationTest {
     @Test
@@ -100,4 +102,28 @@ class FieldDeclarationTest {
         }
     }
 
+    /**
+     * Regression test for issue #4056.
+     */
+    @Test
+    void testEnumWithPrivateFieldInsideInterface() {
+        String source = "interface Outer {\n" +
+                        "  enum Numbers {\n" +
+                        "    ONE(1),\n" +
+                        "    TWO(2),\n" +
+                        "    THREE(3);\n" +
+                        "\n" +
+                        "    Numbers(int i) {\n" +
+                        "      this.i = i;\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    private int i;\n" +
+                        "  }\n" +
+                        "}";
+        CompilationUnit cu = StaticJavaParser.parse(source);
+        FieldDeclaration i = cu.getTypes().get(0).asClassOrInterfaceDeclaration()
+                .getMembers().get(0).asEnumDeclaration()
+                .getFields().get(0);
+        assertFalse(i.isPublic());
+    }
 }
