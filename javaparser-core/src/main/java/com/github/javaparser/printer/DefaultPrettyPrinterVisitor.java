@@ -297,6 +297,17 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 }
             }
         }
+        if(!n.getPermittedTypes().isEmpty()){
+            printer.print(" permits ");
+            for (final Iterator<ClassOrInterfaceType> i = n.getPermittedTypes().iterator(); i.hasNext(); ) {
+                final ClassOrInterfaceType c = i.next();
+                c.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
+
         printer.println(" {");
         printer.indent();
         if (!isNullOrEmpty(n.getMembers())) {
