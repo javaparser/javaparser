@@ -86,14 +86,6 @@ public class Modifier extends Node {
         return new Modifier(Keyword.TRANSITIVE);
     }
 
-    public static Modifier sealedModifier() {
-        return new Modifier(Keyword.SEALED);
-    }
-
-    public static Modifier nonSealedModifier() {
-        return new Modifier(Keyword.NON_SEALED);
-    }
-
     /**
      * The Java modifier keywords.
      */
