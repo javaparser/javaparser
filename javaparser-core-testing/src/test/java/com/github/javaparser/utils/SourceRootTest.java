@@ -25,6 +25,9 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -41,7 +44,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class SourceRootTest {
     private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/");
     private final SourceRoot sourceRoot = new SourceRoot(root);
-
+    {
+        // In this Test class multiple committed files are saved (see
+        // `saveInCallback()` and `saveInCallbackParallelized()`). Make sure 
+        // the files are always saved with the End-of-line separator that is 
+        // also used for the committed files ("\r\n"). 
+        // 
+        // Without this configuration Git will mark those files as modified 
+        // after running the tests on a non-Windows platform (Unix/MacOS). 
+        DefaultPrinterConfiguration printerConfiguration = new DefaultPrinterConfiguration();
+        printerConfiguration.addOption(new DefaultConfigurationOption(
+                DefaultPrinterConfiguration.ConfigOption.END_OF_LINE_CHARACTER,
+                "\r\n"));
+        DefaultPrettyPrinter defaultPrettyPrinter = new DefaultPrettyPrinter(printerConfiguration);
+        sourceRoot.setPrinter(defaultPrettyPrinter::print);
+    }
+    
     @BeforeEach
     void before() {
         sourceRoot.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
