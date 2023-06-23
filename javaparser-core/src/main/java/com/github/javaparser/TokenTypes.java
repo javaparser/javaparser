@@ -177,17 +177,12 @@ public class TokenTypes {
             case TRANSACTIONFINISH:
             case TRANSACTIONABORT:
             case RETURNTYPE:
-            case SEQ:
-            case SET:
             case LOOPSCOPE:
-            case MAP:
             case MERGE_POINT:
             case METHODFRAME:
             case NO_STATE:
             case TWO_STATE:
             case SHARP:
-            case LOCSET:
-            case FREE:
             case EXEC:
             case CONTINUETYPE:
             case CCATCH:
@@ -195,8 +190,6 @@ public class TokenTypes {
             case GHOST:
             case CCAT:
             case BREAKTYPE:
-            case BIGINT:
-            case REAL:
             case CONTEXTSTART:
             case TYPEOF:
             case SWITCHTOIF:

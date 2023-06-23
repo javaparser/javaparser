@@ -31,8 +31,10 @@ import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 import com.github.javaparser.utils.SeparatedItemStringBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static com.github.javaparser.ast.Modifier.Keyword.*;
 import static java.util.Arrays.asList;
 
@@ -41,11 +43,11 @@ import static java.util.Arrays.asList;
  */
 public class ModifierValidator extends VisitorValidator {
 
-    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[] { PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP };
+    private final Modifier.Keyword[] interfaceWithNothingSpecial = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, MODEL, GHOST, NO_STATE, TWO_STATE};
 
-    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[] { PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT };
+    private final Modifier.Keyword[] interfaceWithStaticAndDefault = new Modifier.Keyword[]{PUBLIC, PROTECTED, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT, MODEL, GHOST, NO_STATE, TWO_STATE};
 
-    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[] { PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT };
+    private final Modifier.Keyword[] interfaceWithStaticAndDefaultAndPrivate = new Modifier.Keyword[]{PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, SYNCHRONIZED, NATIVE, STRICTFP, DEFAULT, MODEL, GHOST, NO_STATE, TWO_STATE};
 
     private final boolean hasStrictfp;
 
@@ -118,7 +120,7 @@ public class ModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(FieldDeclaration n, ProblemReporter reporter) {
-        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL, TRANSIENT, VOLATILE);
+        validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, FINAL, TRANSIENT, VOLATILE, GHOST, MODEL);
         super.visit(n, reporter);
     }
 

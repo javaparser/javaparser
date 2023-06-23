@@ -93,20 +93,15 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         INT("Integer", "I"),
         LONG("Long", "J"),
         FLOAT("Float", "F"),
-        DOUBLE("Double", "D"),
-        // KEY
-        KEY_REAL("Real", "_R"),
-        KEY_LOCSET("Locset", "_L"),
-        KEY_BIGINT("BigInt", "_BI"),
-        KEY_SEQ("SEQ", "_S"),
-        KEY_FREE("Free", "_F"),
-        KEY_MAP("Map", "_M");
+        DOUBLE("Double", "D");
 
         final String nameOfBoxedType;
 
         final String descriptor;
 
         private String codeRepresentation;
+
+
 
         /*
         * Returns the Primitive constant corresponding to the specified type name (e.g. "boolean", "int",

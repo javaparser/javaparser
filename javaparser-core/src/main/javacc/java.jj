@@ -381,23 +381,14 @@ TOKEN :
 | < TRANSACTIONFINISH: "#finishJavaCardTransaction" >
 | < TRANSACTIONABORT: "#abortJavaCardTransaction" >
 | < RETURNTYPE: "\\Return" >
-| < SEQ: "\\seq" >
-| < SET: "\\set" >
 | < LOOPSCOPE: "loop-scope" | "$loopScope" >
-| < MAP: "\\map" >
 | < MERGE_POINT: "merge_point" | "$mergePoint" >
 | < METHODFRAME: "method-frame" | "$methodFrame" >
-| < LOCSET: "\\locset">
-| < FREE: "\\free" >
 | < EXEC: "exec" >
 | < CONTINUETYPE: "\\Continue" >
 | < CCATCH: "ccatch" >
 | < CCAT: "ccat" >
 | < BREAKTYPE: "\\Break" >
-| < BIGINT: "\\bigint">
-| < REAL: "\\real">
-//| <MAP_FUNCTION: "\\map_get" | "\\map_singleton" | "\\map_override" | "\\seq_2_map"
-//    | "\\map_remove" | "\\map_update" | "\\in_domain" | "\\domain_implies_created" | "\\map_size" | "\\is_finite">
 | < CONTEXTSTART: ".." >
 | < TYPEOF: "#typeof" >
 | < SWITCHTOIF: "#switch-to-if" >
@@ -2838,7 +2829,10 @@ ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotati
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-    name = SimpleName() { begin=token(); }
+	( name = SimpleName() { begin=token(); }
+	| <JMLIDENTIFIER> { begin=token(); name = new SimpleName(tokenRange(), token().getText()); }
+    )
+    //name = SimpleName() { begin=token(); }
     [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
     {
         ret = new ClassOrInterfaceType(range(begin, token()), null, name, typeArgs.list, firstAnnotations);
@@ -2979,12 +2973,6 @@ PrimitiveType PrimitiveType(NodeList<AnnotationExpr> annotations):
         "float" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.FLOAT, annotations); }
      |
         "double" { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.DOUBLE, annotations); }
-     | "\\bigint"  { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_BIGINT, annotations); }
-     | "\\real"    { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_REAL, annotations); }
-     | "\\locset"  { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_LOCSET, annotations); }
-     | "\\seq"     { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_SEQ, annotations); }
-     | "\\free"    { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_FREE, annotations); }
-     | "\\map"     { ret = new PrimitiveType(tokenRange(), PrimitiveType.Primitive.KEY_MAP, annotations); }
     )
     { return ret; }
 }
