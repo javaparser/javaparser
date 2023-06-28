@@ -67,9 +67,8 @@ public interface ResolvedType {
     default int arrayLevel() {
         if (isArray()) {
             return 1 + this.asArrayType().getComponentType().arrayLevel();
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     /**

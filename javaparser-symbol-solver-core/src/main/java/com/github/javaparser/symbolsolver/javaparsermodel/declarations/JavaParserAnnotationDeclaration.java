@@ -115,9 +115,8 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
         String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
-        } else {
-            return containerName + "." + wrappedNode.getName();
         }
+        return containerName + "." + wrappedNode.getName();
     }
 
     @Override

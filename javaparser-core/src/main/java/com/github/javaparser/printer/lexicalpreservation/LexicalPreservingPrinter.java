@@ -489,11 +489,8 @@ public class LexicalPreservingPrinter {
         if (index == NodeText.NOT_FOUND) {
             if (node.getParentNode().get() instanceof VariableDeclarator) {
                 return tokensPreceeding(node.getParentNode().get());
-            } else {
-            	// comment node can be removed at this stage.
-            	return new TextElementIteratorsFactory.EmptyIterator<TokenTextElement>();
-//                throw new IllegalArgumentException(String.format("I could not find child '%s' in parent '%s'. parentNodeText: %s", node, node.getParentNode().get(), parentNodeText));
             }
+            return new TextElementIteratorsFactory.EmptyIterator<TokenTextElement>();
         }
         return new TextElementIteratorsFactory.CascadingIterator<>(TextElementIteratorsFactory.partialReverseIterator(parentNodeText, index - 1), () -> tokensPreceeding(node.getParentNode().get()));
     }
@@ -656,9 +653,8 @@ public class LexicalPreservingPrinter {
             TokenTextElement tte = it.next();
             if (tte.getTokenKind() == SINGLE_LINE_COMMENT || tte.isNewline()) {
                 break;
-            } else {
-                followingNewlines.add(tte);
             }
+            followingNewlines.add(tte);
         }
         Collections.reverse(followingNewlines);
         for (int i = 0; i < followingNewlines.size(); i++) {

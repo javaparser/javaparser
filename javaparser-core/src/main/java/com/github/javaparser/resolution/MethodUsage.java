@@ -123,9 +123,8 @@ public class MethodUsage implements ResolvedTypeParametrized {
     public MethodUsage replaceReturnType(ResolvedType returnType) {
         if (returnType == this.returnType) {
             return this;
-        } else {
-            return new MethodUsage(declaration, paramTypes, returnType, exceptionTypes, typeParametersMap);
         }
+        return new MethodUsage(declaration, paramTypes, returnType, exceptionTypes, typeParametersMap);
     }
 
     /**

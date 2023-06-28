@@ -90,10 +90,9 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                         methodUsage = resolveMethodTypeParametersFromExplicitList(typeSolver, methodUsage);
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
                         return Optional.of(methodUsage);
-                    } else {
-                        throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
-                                "Method '" + name + "' with parameterTypes " + argumentsTypes);
                     }
+					throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
+							"Method '" + name + "' with parameterTypes " + argumentsTypes);
                 }
             }
 
@@ -229,9 +228,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 methodUsage = methodUsage.replaceParamType(i, replaced);
             }
             return Optional.of(methodUsage);
-        } else {
-            return ref;
         }
+		return ref;
     }
 
     private void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
@@ -491,35 +489,39 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
     private Optional<MethodUsage> solveMethodAsUsage(ResolvedType type, String name, List<ResolvedType> argumentsTypes, Context invokationContext) {
         if (type instanceof ResolvedReferenceType) {
             return solveMethodAsUsage((ResolvedReferenceType) type, name, argumentsTypes, invokationContext);
-        } else if (type instanceof LazyType) {
+        }
+        if (type instanceof LazyType) {
             return solveMethodAsUsage(type.asReferenceType(), name, argumentsTypes, invokationContext);
-        } else if (type instanceof ResolvedTypeVariable) {
+        }
+        if (type instanceof ResolvedTypeVariable) {
             return solveMethodAsUsage((ResolvedTypeVariable) type, name, argumentsTypes, invokationContext);
-        } else if (type instanceof ResolvedWildcard) {
+        }
+        if (type instanceof ResolvedWildcard) {
             ResolvedWildcard wildcardUsage = (ResolvedWildcard) type;
             if (wildcardUsage.isSuper()) {
                 return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
-            } else if (wildcardUsage.isExtends()) {
-                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
-            } else {
-                return solveMethodAsUsage(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()), name, argumentsTypes, invokationContext);
             }
-        } else if (type instanceof ResolvedLambdaConstraintType){
+            if (wildcardUsage.isExtends()) {
+                return solveMethodAsUsage(wildcardUsage.getBoundedType(), name, argumentsTypes, invokationContext);
+            }
+            return solveMethodAsUsage(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()), name, argumentsTypes, invokationContext);
+        }
+        if (type instanceof ResolvedLambdaConstraintType){
             ResolvedLambdaConstraintType constraintType = (ResolvedLambdaConstraintType) type;
             return solveMethodAsUsage(constraintType.getBound(), name, argumentsTypes, invokationContext);
-        } else if (type instanceof ResolvedArrayType) {
+        }
+        if (type instanceof ResolvedArrayType) {
             // An array inherits methods from Object not from it's component type
             return solveMethodAsUsage(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()), name, argumentsTypes, invokationContext);
-        } else if (type instanceof ResolvedUnionType) {
+        }
+        if (type instanceof ResolvedUnionType) {
             Optional<ResolvedReferenceType> commonAncestor = type.asUnionType().getCommonAncestor();
             if (commonAncestor.isPresent()) {
                 return solveMethodAsUsage(commonAncestor.get(), name, argumentsTypes, invokationContext);
-            } else {
-                throw new UnsupportedOperationException("no common ancestor available for " + type.describe());
             }
-        } else {
-            throw new UnsupportedOperationException("type usage: " + type.getClass().getCanonicalName());
+            throw new UnsupportedOperationException("no common ancestor available for " + type.describe());
         }
+        throw new UnsupportedOperationException("type usage: " + type.getClass().getCanonicalName());
     }
 
     private ResolvedType usingParameterTypesFromScope(ResolvedType scope, ResolvedType type, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
@@ -529,10 +531,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                     type = type.replaceTypeVariables(entry.a, scope.asReferenceType().getGenericParameterByName(entry.a.getName()).get(), inferredTypes);
                 }
             }
-            return type;
-        } else {
-            return type;
         }
+        return type;
     }
 
     private ResolvedType applyInferredTypes(ResolvedType type, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {

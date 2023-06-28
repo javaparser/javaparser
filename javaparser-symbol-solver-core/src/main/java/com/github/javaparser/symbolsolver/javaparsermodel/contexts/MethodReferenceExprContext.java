@@ -81,14 +81,11 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             SymbolReference<ResolvedMethodDeclaration> firstResAttempt = MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
             if (firstResAttempt.isSolved()) {
                 return firstResAttempt;
-            } else {
-                // If has not already been solved above then will be solved here if single argument type same as
-                // (or subclass of) rrtd, as call is actually performed on the argument itself with zero params
-                SymbolReference<ResolvedMethodDeclaration> secondResAttempt = MethodResolutionLogic.solveMethodInType(rrtd, name, Collections.emptyList(), false);
-                if (secondResAttempt.isSolved()) {
+            }
+            SymbolReference<ResolvedMethodDeclaration> secondResAttempt = MethodResolutionLogic.solveMethodInType(rrtd, name, Collections.emptyList(), false);
+            if (secondResAttempt.isSolved()) {
                     return secondResAttempt;
                 }
-            }
         }
 
         return SymbolReference.unsolved();
@@ -139,10 +136,10 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                 }
 
                 return resolvedTypes;
-            } else {
-                throw new UnsupportedOperationException();
             }
-        } else if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
+            throw new UnsupportedOperationException();
+        }
+            if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) demandParentNode(wrappedNode);
             ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
             Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
@@ -165,10 +162,10 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                 }
 
                 return resolvedTypes;
-            } else {
-                throw new UnsupportedOperationException();
             }
-        } else if (demandParentNode(wrappedNode) instanceof ReturnStmt) {
+            throw new UnsupportedOperationException();
+        }
+            if (demandParentNode(wrappedNode) instanceof ReturnStmt) {
             ReturnStmt returnStmt = (ReturnStmt) demandParentNode(wrappedNode);
             Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
             if (optDeclaration.isPresent()) {
@@ -193,14 +190,12 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                     }
 
                     return resolvedTypes;
-                } else {
-                    throw new UnsupportedOperationException();
                 }
+                throw new UnsupportedOperationException();
             }
             throw new UnsupportedOperationException();
-        } else {
-            throw new UnsupportedOperationException();
         }
+        throw new UnsupportedOperationException();
     }
 
     private int pos(MethodCallExpr callExpr, Expression param) {

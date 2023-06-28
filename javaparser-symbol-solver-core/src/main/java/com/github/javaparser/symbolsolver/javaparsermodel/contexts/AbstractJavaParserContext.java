@@ -157,10 +157,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     .findFirst();
 
             if (localResolutionResults.isPresent()) {
-                if(patternExprs.size() == 1) {
+                if (patternExprs.size() == 1) {
                     JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(localResolutionResults.get(), typeSolver);
                     return SymbolReference.solved(decl);
-                } else if(patternExprs.size() > 1) {
+                }
+                if(patternExprs.size() > 1) {
                     throw new IllegalStateException("Unexpectedly more than one reference in scope");
                 }
             }
@@ -217,13 +218,14 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                                     .getTypeDeclaration()
                                     .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
                     );
-                } else {
-                    return singletonList(typeSolver.getSolvedJavaLangObject());
                 }
-            } else if (typeOfScope.isArray()) {
+                return singletonList(typeSolver.getSolvedJavaLangObject());
+            }
+                    if (typeOfScope.isArray()) {
                 // method call on array are Object methods
                 return singletonList(typeSolver.getSolvedJavaLangObject());
-            } else if (typeOfScope.isTypeVariable()) {
+            }
+                    if (typeOfScope.isTypeVariable()) {
                 Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {
                     // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
@@ -235,7 +237,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     );
                 }
                 return result;
-            } else if (typeOfScope.isConstraint()) {
+            }
+                    if (typeOfScope.isConstraint()) {
                 // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
             	ResolvedType type = typeOfScope.asConstraintType().getBound();
             	if (type.isReferenceType()) {
@@ -243,10 +246,10 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 	                        type.asReferenceType().getTypeDeclaration()
 	                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
 	                );
-            	} else {
-            		throw new UnsupportedOperationException("The type declaration cannot be found on constraint "+ type.describe());
             	}
-            } else if (typeOfScope.isUnionType()) {
+            	throw new UnsupportedOperationException("The type declaration cannot be found on constraint "+ type.describe());
+            }
+            if (typeOfScope.isUnionType()) {
                 return typeOfScope.asUnionType().getCommonAncestor()
                         .flatMap(ResolvedReferenceType::getTypeDeclaration)
                         .map(Collections::singletonList)
@@ -289,9 +292,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
             MethodUsage methodUsage = ((TypeVariableResolutionCapability) methodDeclaration).resolveTypeVariables(this, argumentsTypes);
             return Optional.of(methodUsage);
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override

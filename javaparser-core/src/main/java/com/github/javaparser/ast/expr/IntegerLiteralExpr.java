@@ -128,17 +128,11 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
      * @return the literal value as a number while respecting different number representations
      */
     public Number asNumber() {
-        /*
-         * we need to handle the special case for the literal 2147483648, which is used to
-         * represent Integer.MIN_VALUE (-2147483648) as a combination of a UnaryExpr and an
-         * IntegerLiteralExpr. However 2147483648 cannot be represented in an integer, so we
-         * need to return a long
-         */
+
         if (Objects.equals(value, MAX_31_BIT_UNSIGNED_VALUE_AS_STRING) && hasUnaryMinusAsParent(this)) {
             return MAX_31_BIT_UNSIGNED_VALUE_AS_LONG;
-        } else {
-            return asInt();
         }
+        return asInt();
     }
 
     /**
