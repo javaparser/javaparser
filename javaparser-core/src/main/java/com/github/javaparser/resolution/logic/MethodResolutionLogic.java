@@ -337,15 +337,15 @@ public class MethodResolutionLogic {
                 if (!expectedParam.equals(actualParam)) {
                     return false;
                 }
-            } else if (expectedParam.isWildcard()) {
+            }
+            if (expectedParam.isWildcard()) {
                 if (expectedParam.asWildcard().isExtends()) {
                     return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actual, matchedParameters);
                 }
                 // TODO verify super bound
                 return true;
-            } else {
-                throw new UnsupportedOperationException(expectedParam.describe());
             }
+            throw new UnsupportedOperationException(expectedParam.describe());
         }
         return true;
     }
@@ -356,7 +356,8 @@ public class MethodResolutionLogic {
             ResolvedType matchedParameter = matchedParameters.get(typeParameterName);
             if (matchedParameter.isAssignableBy(type)) {
                 return true;
-            } else if (type.isAssignableBy(matchedParameter)) {
+            }
+            if (type.isAssignableBy(matchedParameter)) {
                 // update matchedParameters to contain the more general type
                 matchedParameters.put(typeParameterName, type);
                 return true;
@@ -823,9 +824,9 @@ public class MethodResolutionLogic {
         }
         if (applicableMethods.size() == 1) {
             return Optional.of(applicableMethods.get(0));
-        } else {
-            MethodUsage winningCandidate = applicableMethods.get(0);
-            for (int i = 1; i < applicableMethods.size(); i++) {
+        }
+        MethodUsage winningCandidate = applicableMethods.get(0);
+        for (int i = 1; i < applicableMethods.size(); i++) {
                 MethodUsage other = applicableMethods.get(i);
                 if (isMoreSpecific(winningCandidate, other)) {
                     // nothing to do
@@ -842,8 +843,7 @@ public class MethodResolutionLogic {
                     }
                 }
             }
-            return Optional.of(winningCandidate);
-        }
+        return Optional.of(winningCandidate);
     }
 
     private static boolean areOverride(MethodUsage winningCandidate, MethodUsage other) {

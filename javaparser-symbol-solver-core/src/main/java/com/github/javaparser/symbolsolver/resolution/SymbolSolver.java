@@ -118,9 +118,8 @@ public class SymbolSolver implements Solver {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver).toString(), name);
             }
             return ref.getCorrespondingDeclaration();
-        } else {
-            throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException(type.getClass().getCanonicalName());
     }
 
     @Override

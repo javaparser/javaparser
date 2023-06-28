@@ -470,9 +470,11 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
                             List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
                             List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
-                        } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
+                        }
+                                            if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
                             return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable) otherParam);
-                        } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
+                        }
+                        if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
                             return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
                         }
                         return false;

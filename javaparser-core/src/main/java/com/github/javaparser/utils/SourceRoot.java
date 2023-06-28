@@ -595,9 +595,8 @@ public class SourceRoot {
                             w.fork();
                             walks.add(w);
                             return SKIP_SUBTREE;
-                        } else {
-                            return CONTINUE;
                         }
+                        return CONTINUE;
                     }
 
                     @Override

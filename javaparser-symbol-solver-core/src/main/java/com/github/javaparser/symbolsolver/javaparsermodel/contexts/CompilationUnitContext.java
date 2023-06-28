@@ -81,9 +81,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             SymbolReference<ResolvedTypeDeclaration> type = this.solveType(typeName);
             if (type.isSolved()) {
                 return new SymbolSolver(typeSolver).solveSymbolInType(type.getCorrespondingDeclaration(), memberName);
-            } else {
-                itName = typeName;
             }
+            itName = typeName;
         }
 
         // Look among statically imported values
@@ -129,13 +128,16 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                     || type.getFullyQualifiedName().map(qualified -> qualified.equals(name)).orElse(false)) {
                     if (type instanceof ClassOrInterfaceDeclaration) {
                         return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration((ClassOrInterfaceDeclaration) type));
-                    } else if (type instanceof AnnotationDeclaration) {
-                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((AnnotationDeclaration) type, typeSolver));
-                    } else if (type instanceof EnumDeclaration) {
-                        return SymbolReference.solved(new JavaParserEnumDeclaration((EnumDeclaration) type, typeSolver));
-                    } else {
-                        throw new UnsupportedOperationException(type.getClass().getCanonicalName());
                     }
+                    
+                    if (type instanceof AnnotationDeclaration) {
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((AnnotationDeclaration) type, typeSolver));
+                    }
+                    
+                    if (type instanceof EnumDeclaration) {
+                        return SymbolReference.solved(new JavaParserEnumDeclaration((EnumDeclaration) type, typeSolver));
+                    }
+                    throw new UnsupportedOperationException(type.getClass().getCanonicalName());
                 }
             }
 
@@ -223,28 +225,25 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             return SymbolReference.adapt(ref, ResolvedTypeDeclaration.class);
         }
 
-        // DO NOT look for absolute name if this name is not qualified: you cannot import classes from the default package
+
         if (isQualifiedName(name)) {
             return SymbolReference.adapt(typeSolver.tryToSolveType(name), ResolvedTypeDeclaration.class);
-        } else {
-            return SymbolReference.unsolved();
         }
+        return SymbolReference.unsolved();
     }
 
     private String qName(ClassOrInterfaceType type) {
         if (type.getScope().isPresent()) {
             return qName(type.getScope().get()) + "." + type.getName().getId();
-        } else {
-            return type.getName().getId();
         }
+        return type.getName().getId();
     }
 
     private String qName(Name name) {
         if (name.getQualifier().isPresent()) {
             return qName(name.getQualifier().get()) + "." + name.getId();
-        } else {
-            return name.getId();
         }
+        return name.getId();
     }
 
     private String toSimpleName(String qName) {
@@ -256,9 +255,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         int lastDot = qName.lastIndexOf('.');
         if (lastDot == -1) {
             throw new UnsupportedOperationException();
-        } else {
-            return qName.substring(0, lastDot);
         }
+        return qName.substring(0, lastDot);
     }
 
     @Override
@@ -293,9 +291,8 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
                         if (method.isSolved()) {
                             return method;
-                        } else {
-                            return SymbolReference.unsolved();
                         }
+                        return SymbolReference.unsolved();
                     }
                 }
             }

@@ -168,11 +168,11 @@ public class ConstructorResolutionLogic {
         }
         if (applicableConstructors.size() == 1) {
             return SymbolReference.solved(applicableConstructors.get(0));
-        } else {
-            ResolvedConstructorDeclaration winningCandidate = applicableConstructors.get(0);
-            ResolvedConstructorDeclaration other = null;
-            boolean possibleAmbiguity = false;
-            for (int i = 1; i < applicableConstructors.size(); i++) {
+        }
+        ResolvedConstructorDeclaration winningCandidate = applicableConstructors.get(0);
+        ResolvedConstructorDeclaration other = null;
+        boolean possibleAmbiguity = false;
+        for (int i = 1; i < applicableConstructors.size(); i++) {
                 other = applicableConstructors.get(i);
                 if (isMoreSpecific(winningCandidate, other, typeSolver)) {
                     possibleAmbiguity = false;
@@ -198,9 +198,7 @@ public class ConstructorResolutionLogic {
                     }
                 }
             }
-            
-            return SymbolReference.solved(winningCandidate);
-        }
+        return SymbolReference.solved(winningCandidate);
     }
 
     private static boolean isMoreSpecific(ResolvedConstructorDeclaration constructorA,

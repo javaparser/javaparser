@@ -86,9 +86,8 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
                     .filter(node -> memberClass.isAssignableFrom(node.getClass()))
                     .map(memberClass::cast)
                     .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     public Context getContext() {
@@ -233,9 +232,8 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
         String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
         if (containerName.isEmpty()) {
             return getName();
-        } else {
-            return containerName + "." + getName();
         }
+        return containerName + "." + getName();
     }
 
     @Override

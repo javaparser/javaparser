@@ -793,9 +793,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return findCompilationUnit().map(cu -> {
             if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
                 return cu.getData(SYMBOL_RESOLVER_KEY);
-            } else {
-                throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
             }
+            throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
         }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
     }
 
@@ -1116,15 +1115,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
                 Node node = nodes.get(cursor);
                 fillStackToLeaf(node);
                 return nextFromLevel();
-            } else {
-                nodesStack.pop();
-                cursorStack.pop();
-                hasNext = !nodesStack.empty();
-                if (hasNext) {
+            }
+            nodesStack.pop();
+            cursorStack.pop();
+            hasNext = !nodesStack.empty();
+            if (hasNext) {
                     return nextFromLevel();
                 }
-                return root;
-            }
+            return root;
         }
 
         private Node nextFromLevel() {

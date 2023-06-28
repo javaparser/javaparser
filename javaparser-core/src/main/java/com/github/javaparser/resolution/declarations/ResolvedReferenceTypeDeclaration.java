@@ -175,9 +175,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst();
         if (field.isPresent()) {
             return field.get();
-        } else {
-            throw new UnsolvedSymbolException("Field not found: " + name);
         }
+        throw new UnsolvedSymbolException("Field not found: " + name);
     }
 
     /**
@@ -187,9 +186,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         Optional<ResolvedFieldDeclaration> field = getVisibleFields().stream().filter(f -> f.getName().equals(name)).findFirst();
         if (field.isPresent()) {
             return field.get();
-        } else {
-            throw new IllegalArgumentException();
         }
+        throw new IllegalArgumentException();
     }
 
     /**

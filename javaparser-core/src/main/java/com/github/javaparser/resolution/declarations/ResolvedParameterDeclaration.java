@@ -56,8 +56,7 @@ public interface ResolvedParameterDeclaration extends ResolvedValueDeclaration {
     default String describeType() {
         if (isVariadic()) {
             return getType().asArrayType().getComponentType().describe() + "...";
-        } else {
-            return getType().describe();
         }
+        return getType().describe();
     }
 }

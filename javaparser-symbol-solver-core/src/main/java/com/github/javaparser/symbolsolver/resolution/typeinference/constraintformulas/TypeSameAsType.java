@@ -56,9 +56,8 @@ public class TypeSameAsType extends ConstraintFormula {
             if (isProperType(S) && isProperType(T)) {
                 if (S.equals(T)) {
                     return ReductionResult.trueResult();
-                } else {
-                    return ReductionResult.falseResult();
                 }
+                return ReductionResult.falseResult();
             }
 
             // - Otherwise, if S or T is the null type, the constraint reduces to false.

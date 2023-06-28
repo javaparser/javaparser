@@ -76,18 +76,16 @@ public final class PositionUtils {
             int signLine = signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b));
             if (signLine == 0) {
                 return signum(beginColumnWithoutConsideringAnnotation(a) - beginColumnWithoutConsideringAnnotation(b));
-            } else {
-                return signLine;
             }
+            return signLine;
         }
         Position aBegin = a.getBegin().get();
         Position bBegin = b.getBegin().get();
         int signLine = signum(aBegin.line - bBegin.line);
         if (signLine == 0) {
             return signum(aBegin.column - bBegin.column);
-        } else {
-            return signLine;
         }
+        return signLine;
     }
 
     public static AnnotationExpr getLastAnnotation(Node node) {
@@ -98,9 +96,8 @@ public final class PositionUtils {
             }
             sortByBeginPosition(annotations);
             return annotations.get(annotations.size() - 1);
-        } else {
-            return null;
         }
+        return null;
     }
 
     private static int beginLineWithoutConsideringAnnotation(Node node) {
@@ -112,37 +109,35 @@ public final class PositionUtils {
     }
 
     private static Node firstNonAnnotationNode(Node node) {
-        // TODO: Consider the remaining "types" of thing that annotations can target ( https://docs.oracle.com/javase/8/docs/api/java/lang/annotation/ElementType.html )
+
         if (node instanceof ClassOrInterfaceDeclaration) {
             // Modifiers appear before the class name --
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;
             Modifier earliestModifier = casted.getModifiers().stream().filter(modifier -> modifier.hasRange()).min(Comparator.comparing(o -> o.getRange().get().begin)).orElse(null);
             if (earliestModifier == null) {
                 return casted.getName();
-            } else {
-                return earliestModifier;
             }
-        } else if (node instanceof MethodDeclaration) {
+            return earliestModifier;
+        }
+            if (node instanceof MethodDeclaration) {
             // Modifiers appear before the class name --
             MethodDeclaration casted = (MethodDeclaration) node;
             Modifier earliestModifier = casted.getModifiers().stream().filter(modifier -> modifier.hasRange()).min(Comparator.comparing(o -> o.getRange().get().begin)).orElse(null);
             if (earliestModifier == null) {
                 return casted.getType();
-            } else {
-                return earliestModifier;
             }
-        } else if (node instanceof FieldDeclaration) {
+            return earliestModifier;
+        }
+            if (node instanceof FieldDeclaration) {
             // Modifiers appear before the class name --
             FieldDeclaration casted = (FieldDeclaration) node;
             Modifier earliestModifier = casted.getModifiers().stream().filter(modifier -> modifier.hasRange()).min(Comparator.comparing(o -> o.getRange().get().begin)).orElse(null);
             if (earliestModifier == null) {
                 return casted.getVariable(0).getType();
-            } else {
-                return earliestModifier;
             }
-        } else {
-            return node;
+            return earliestModifier;
         }
+        return node;
     }
 
     /**
