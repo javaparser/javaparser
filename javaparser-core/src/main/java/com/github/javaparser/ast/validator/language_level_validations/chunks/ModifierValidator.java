@@ -73,11 +73,11 @@ public class ModifierValidator extends VisitorValidator {
 
     private void validateClassModifiers(ClassOrInterfaceDeclaration n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP, SEALED, NON_SEALED);
+            validateModifiers(n, reporter, PUBLIC, ABSTRACT, FINAL, STRICTFP, SEALED, NON_SEALED, MODEL);
         } else if (n.isNestedType()) {
-            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP, SEALED, NON_SEALED);
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, ABSTRACT, STATIC, FINAL, STRICTFP, SEALED, NON_SEALED, MODEL);
         } else if (n.isLocalClassDeclaration()) {
-            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP, SEALED, NON_SEALED);
+            validateModifiers(n, reporter, ABSTRACT, FINAL, STRICTFP, SEALED, NON_SEALED, MODEL);
         }
     }
 
@@ -92,9 +92,9 @@ public class ModifierValidator extends VisitorValidator {
     @Override
     public void visit(EnumDeclaration n, ProblemReporter reporter) {
         if (n.isTopLevelType()) {
-            validateModifiers(n, reporter, PUBLIC, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, STRICTFP, MODEL);
         } else if (n.isNestedType()) {
-            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICTFP);
+            validateModifiers(n, reporter, PUBLIC, PROTECTED, PRIVATE, STATIC, STRICTFP, MODEL);
         }
         super.visit(n, reporter);
     }
@@ -175,7 +175,7 @@ public class ModifierValidator extends VisitorValidator {
 
     @Override
     public void visit(VariableDeclarationExpr n, ProblemReporter reporter) {
-        validateModifiers(n, reporter, FINAL);
+        validateModifiers(n, reporter, FINAL, MODEL, GHOST);
         super.visit(n, reporter);
     }
 

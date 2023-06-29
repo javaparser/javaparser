@@ -733,6 +733,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
         printer.print("ccatch(");
+        printer.print(kind);
+        printer.print(",");
         if (label.isPresent()) {
             printer.print(" ");
             label.get().accept(this, arg);
