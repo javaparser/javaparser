@@ -2829,10 +2829,7 @@ ClassOrInterfaceType ClassOrInterfaceType(NodeList<AnnotationExpr> firstAnnotati
     NodeList<AnnotationExpr> annotations = new NodeList<AnnotationExpr>();
 }
 {
-	( name = SimpleName() { begin=token(); }
-	| <JMLIDENTIFIER> { begin=token(); name = new SimpleName(tokenRange(), token().getText()); }
-    )
-    //name = SimpleName() { begin=token(); }
+    name = SimpleName() { begin=token(); }
     [ LOOKAHEAD(2) typeArgs = TypeArguments() ]
     {
         ret = new ClassOrInterfaceType(range(begin, token()), null, name, typeArgs.list, firstAnnotations);
@@ -3659,8 +3656,6 @@ Expression UnaryExpression():
         { ret = new UnaryExpr(range(begin, token()), ret, op); }
      |
         ret = UnaryExpressionNotPlusMinus()
-     |
-       ret = KeyGeneralEscapeExpression()
      |
        ret = KeyCreateObjectSV()
      |
