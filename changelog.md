@@ -1,7 +1,7 @@
 
-Next Release (Version 3.25.4-snapshot)
+Next Release (Version 3.25.5-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/200?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/201?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,49 @@ Next Release (Version 3.25.4-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+
+Version 3.25.4
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/200?closed=1)
+
+### Changed
+
+* Nested 'if' statements should be simplified (PR [#4085](https://github.com/javaparser/javaparser/pull/4085) by [@jlerbsc](https://github.com/jlerbsc))
+* BDD tests: migarte to JBehave 5 (PR [#4028](https://github.com/javaparser/javaparser/pull/4028) by [@valfirst](https://github.com/valfirst))
+
+### Fixed
+
+* Fix: issue 4077 After building JavaParser (with tests) on MacOS multi… (PR [#4086](https://github.com/javaparser/javaparser/pull/4086) by [@jlerbsc](https://github.com/jlerbsc))
+* fix line separators of selected test files (PR [#4083](https://github.com/javaparser/javaparser/pull/4083) by [@abego](https://github.com/abego))
+* Fix: issue 3978 typesolver can't parse in parallel (PR [#4073](https://github.com/javaparser/javaparser/pull/4073) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix #4056 isDeclaredInInterface() returns true for fields declared inside enumerations contained in an interface (PR [#4057](https://github.com/javaparser/javaparser/pull/4057) by [@Elewyth](https://github.com/Elewyth))
+* Fix: issue 4037 ArrayIndexOutOfBoundsException throws when method param is variadic (PR [#4046](https://github.com/javaparser/javaparser/pull/4046) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4016 Failed to parse variable with name 'sealed' or 'permits' (PR [#4039](https://github.com/javaparser/javaparser/pull/4039) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump guava from 32.1.0-jre to 32.1.1-jre (PR [#4089](https://github.com/javaparser/javaparser/pull/4089) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump guava from 32.0.0-jre to 32.1.0-jre (PR [#4087](https://github.com/javaparser/javaparser/pull/4087) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 10.12.0 to 10.12.1 (PR [#4084](https://github.com/javaparser/javaparser/pull/4084) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump versions-maven-plugin from 2.15.0 to 2.16.0 (PR [#4055](https://github.com/javaparser/javaparser/pull/4055) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-release-plugin from 3.0.0 to 3.0.1 (PR [#4053](https://github.com/javaparser/javaparser/pull/4053) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump guava from 31.1-jre to 32.0.0-jre (PR [#4042](https://github.com/javaparser/javaparser/pull/4042) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-dependency-plugin from 3.5.0 to 3.6.0 (PR [#4035](https://github.com/javaparser/javaparser/pull/4035) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-checkstyle-plugin from 3.2.2 to 3.3.0 (PR [#4033](https://github.com/javaparser/javaparser/pull/4033) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-scm-plugin from 2.0.0 to 2.0.1 (PR [#4031](https://github.com/javaparser/javaparser/pull/4031) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump codecov/codecov-action from 3.1.3 to 3.1.4 (PR [#4030](https://github.com/javaparser/javaparser/pull/4030) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump build-helper-maven-plugin from 3.3.0 to 3.4.0 (PR [#4026](https://github.com/javaparser/javaparser/pull/4026) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency maven to v3.9.2 (PR [#4024](https://github.com/javaparser/javaparser/pull/4024) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@valfirst](https://github.com/valfirst)
+* [@abego](https://github.com/abego)
+* [@Elewyth](https://github.com/Elewyth)
+* [@jlerbsc](https://github.com/jlerbsc)
 
 
 Version 3.25.3
