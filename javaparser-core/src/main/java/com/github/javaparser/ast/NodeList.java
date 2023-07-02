@@ -319,9 +319,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     public boolean remove(Object o) {
         if (o instanceof Node) {
             return remove((Node) o);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

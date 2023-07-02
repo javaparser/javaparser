@@ -935,9 +935,8 @@ public class Difference {
         }
         if (nodeText.getTextElement(index).isWhiteSpace()) {
             return rewindSpace(index - 1);
-        } else {
-            return index;
         }
+        return index;
     }
 
     private boolean nextIsRightBrace(int index) {

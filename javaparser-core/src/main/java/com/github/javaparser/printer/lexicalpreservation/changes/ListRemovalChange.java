@@ -60,9 +60,8 @@ public class ListRemovalChange implements Change {
             // Perform modification -- remove an item from the list
             newNodeList.remove(index);
             return newNodeList;
-        } else {
-            return new NoChange().getValue(property, node);
         }
+        return new NoChange().getValue(property, node);
     }
 
     @Override

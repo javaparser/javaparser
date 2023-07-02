@@ -61,9 +61,8 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
         if (demandParentNode(wrappedNode) instanceof NodeWithStatements) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
-        } else {
-            return solveSymbolInParentContext(name);
         }
+        return solveSymbolInParentContext(name);
     }
 
     @Override

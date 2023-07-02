@@ -52,15 +52,14 @@ public class PhantomNodeLogic {
     static boolean isPhantomNode(Node node) {
         if (isPhantomNodeCache.containsKey(node)) {
             return isPhantomNodeCache.get(node);
-        } else {
-            if (node instanceof UnknownType) {
+        }
+        if (node instanceof UnknownType) {
                 return true;
             }
-            boolean res = (node.getParentNode().isPresent() && node.getParentNode().get().hasRange() && node.hasRange() && !node.getParentNode().get().getRange().get().contains(node.getRange().get()) || inPhantomNode(node, LEVELS_TO_EXPLORE));
-            isPhantomNodeCache.put(node, res);
-            node.register(cacheCleaner);
-            return res;
-        }
+        boolean res = (node.getParentNode().isPresent() && node.getParentNode().get().hasRange() && node.hasRange() && !node.getParentNode().get().getRange().get().contains(node.getRange().get()) || inPhantomNode(node, LEVELS_TO_EXPLORE));
+        isPhantomNodeCache.put(node, res);
+        node.register(cacheCleaner);
+        return res;
     }
 
     /**
