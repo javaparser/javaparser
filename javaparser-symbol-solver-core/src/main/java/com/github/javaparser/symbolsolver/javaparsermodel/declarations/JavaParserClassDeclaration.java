@@ -169,6 +169,16 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
                                 public Object constantValue() {
                                     return f.constantValue();
                                 }
+
+                                @Override
+                                public boolean equals(Object obj) {
+                                    return f.equals(obj);
+                                }
+
+                                @Override
+                                public int hashCode() {
+                                    return f.hashCode();
+                                }
                             });
                         }));
 

@@ -226,12 +226,77 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     public List<ResolvedFieldDeclaration> getAllFields() {
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
 
-        this.getAncestors().forEach(a -> fields.addAll(a.getAllFieldsVisibleToInheritors()));
+        getAncestors(true).stream().filter(ancestor -> ancestor.getTypeDeclaration().isPresent())
+                .forEach(ancestor -> ancestor.getTypeDeclaration().get().getAllFields()
+                        .forEach(f -> {
+                            fields.add(new ResolvedFieldDeclaration() {
 
-        this.wrappedNode.getMembers().stream().filter(m -> m instanceof FieldDeclaration).forEach(m -> {
-                FieldDeclaration fd = (FieldDeclaration)m;
-                fd.getVariables().forEach(v -> fields.add(new JavaParserFieldDeclaration(v, typeSolver)));
-        });
+                                @Override
+                                public AccessSpecifier accessSpecifier() {
+                                    return f.accessSpecifier();
+                                }
+
+                                @Override
+                                public String getName() {
+                                    return f.getName();
+                                }
+
+                                @Override
+                                public ResolvedType getType() {
+                                    return ancestor.useThisTypeParametersOnTheGivenType(f.getType());
+                                }
+
+                                @Override
+                                public boolean isStatic() {
+                                    return f.isStatic();
+                                }
+
+                                @Override
+                                public boolean isVolatile() {
+                                    return f.isVolatile();
+                                }
+
+                                @Override
+                                public ResolvedTypeDeclaration declaringType() {
+                                    return f.declaringType();
+                                }
+
+                                @Override
+                                public Optional<Node> toAst() {
+                                    return f.toAst();
+                                }
+
+                                @Override
+                                public boolean hasModifier(Modifier.Keyword keyword) {
+                                    return f.hasModifier(keyword);
+                                }
+
+                                @Override
+                                public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+                                    return f.getDeclaredAnnotations();
+                                }
+
+                                @Override
+                                public List<? extends ResolvedAnnotation> getAnnotations() {
+                                    return f.getAnnotations();
+                                }
+
+                                @Override
+                                public Object constantValue() {
+                                    return f.constantValue();
+                                }
+
+                                @Override
+                                public boolean equals(Object obj) {
+                                    return f.equals(obj);
+                                }
+
+                                @Override
+                                public int hashCode() {
+                                    return f.hashCode();
+                                }
+                            });
+                        }));
 
         return fields;
     }
@@ -652,5 +717,14 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     @Override
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         return ResolvedAnnotationsUtil.getDeclaredAnnotations(wrappedNode);
+    }
+
+    @Override
+    public List<ResolvedReferenceType> getInterfaces() {
+        List<ResolvedReferenceType> interfaces = new ArrayList<>();
+        for (ClassOrInterfaceType t : wrappedNode.getImplementedTypes()) {
+            interfaces.add(toReferenceType(t));
+        }
+        return interfaces;
     }
 }

@@ -257,6 +257,11 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
+    public List<ResolvedReferenceType> getInterfaces() {
+        return javassistTypeDeclarationAdapter.getInterfaces();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+
 import java.util.List;
 
 /**
@@ -48,4 +50,11 @@ public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaratio
     default ResolvedEnumConstantDeclaration getEnumConstant(final String name) {
         return getEnumConstants().stream().filter(c -> c.getName().equals(name)).findFirst().orElseThrow(() -> new IllegalArgumentException("No constant named " + name));
     }
+
+    /**
+     * Return all the interfaces implemented directly by this class.
+     * It does not include the interfaces implemented by superclasses or extended
+     * by the interfaces implemented.
+     */
+    List<ResolvedReferenceType> getInterfaces();
 }
