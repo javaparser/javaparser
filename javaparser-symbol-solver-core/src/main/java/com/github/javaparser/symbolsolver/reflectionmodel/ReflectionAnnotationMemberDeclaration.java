@@ -21,7 +21,9 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -30,7 +32,9 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -48,6 +52,10 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
         valueAsExpressionConverters.put(Integer.class, (value) -> new IntegerLiteralExpr((Integer) value));
         valueAsExpressionConverters.put(Long.class, (value) -> new LongLiteralExpr((Long) value));
         valueAsExpressionConverters.put(String.class, (value) -> new StringLiteralExpr((String) value));
+        valueAsExpressionConverters.put(Class.class, (value) -> {
+            final ClassOrInterfaceType type = new ClassOrInterfaceType(null, ((Class<?>) value).getSimpleName());
+            return new ClassExpr(type);
+        });
     }
     
     private Method annotationMember;
@@ -61,8 +69,43 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
     @Override
     public Expression getDefaultValue() {
         Object value = annotationMember.getDefaultValue();
+        if (value == null) return null;
+
+        if (value.getClass().isArray()) {
+            Object[] values = (Object[]) value;
+            final NodeList<Expression> expressions = Arrays.stream(values)
+                    .map(this::transformDefaultValue)
+                    .collect(NodeList.toNodeList());
+            return new ArrayInitializerExpr(expressions);
+        }
+
+        return transformDefaultValue(value);
+    }
+
+    private Expression transformDefaultValue(Object value) {
+        if (value instanceof Enum<?>) {
+            final Class<?> declaringClass = ((Enum<?>) value).getDeclaringClass();
+            final String name = ((Enum<?>) value).name();
+            return new FieldAccessExpr(new NameExpr(declaringClass.getSimpleName()), name);
+        } else if (value instanceof Annotation) {
+            final Class<? extends Annotation> annotationType = ((Annotation) value).annotationType();
+            final Method[] declaredMethods = annotationType.getDeclaredMethods();
+            final NodeList<MemberValuePair> pairs = Arrays.stream(declaredMethods)
+                    .map(m -> {
+                        final ReflectionAnnotationMemberDeclaration nestedMemberDeclaration = new ReflectionAnnotationMemberDeclaration(m, typeSolver);
+                        return new MemberValuePair(m.getName(), nestedMemberDeclaration.getDefaultValue());
+                    })
+                    .collect(NodeList.toNodeList());
+
+            return new NormalAnnotationExpr(new Name(annotationType.getSimpleName()), pairs);
+        }
+
         Function<Object, ? extends Expression> fn = valueAsExpressionConverters.get(value.getClass());
-        if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        if (fn == null)
+            throw new UnsupportedOperationException(
+                    String.format("Obtaining the default value of the annotation member %s (of type %s) is not supported yet.",
+                            annotationMember.getName(), value.getClass().getSimpleName())
+            );
         return fn.apply(value);
     }
 
