@@ -40,14 +40,14 @@ import java.util.function.Function;
  */
 public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotationMemberDeclaration {
 
-    private static Map<Class<?>, Function<Object, ? extends Expression>> valueAsExressionConverter = new HashMap<>();
+    private static Map<Class<?>, Function<Object, ? extends Expression>> valueAsExpressionConverters = new HashMap<>();
     static {
-        valueAsExressionConverter.put(Boolean.class, (value) -> new BooleanLiteralExpr(Boolean.class.cast(value)));
-        valueAsExressionConverter.put(Character.class, (value) -> new CharLiteralExpr(Character.class.cast(value)));
-        valueAsExressionConverter.put(Double.class, (value) -> new DoubleLiteralExpr(Double.class.cast(value)));
-        valueAsExressionConverter.put(Integer.class, (value) -> new IntegerLiteralExpr(Integer.class.cast(value)));
-        valueAsExressionConverter.put(Long.class, (value) -> new LongLiteralExpr(Long.class.cast(value)));
-        valueAsExressionConverter.put(String.class, (value) -> new StringLiteralExpr(String.class.cast(value)));
+        valueAsExpressionConverters.put(Boolean.class, (value) -> new BooleanLiteralExpr((Boolean) value));
+        valueAsExpressionConverters.put(Character.class, (value) -> new CharLiteralExpr((Character) value));
+        valueAsExpressionConverters.put(Double.class, (value) -> new DoubleLiteralExpr((Double) value));
+        valueAsExpressionConverters.put(Integer.class, (value) -> new IntegerLiteralExpr((Integer) value));
+        valueAsExpressionConverters.put(Long.class, (value) -> new LongLiteralExpr((Long) value));
+        valueAsExpressionConverters.put(String.class, (value) -> new StringLiteralExpr((String) value));
     }
     
     private Method annotationMember;
@@ -61,7 +61,7 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
     @Override
     public Expression getDefaultValue() {
         Object value = annotationMember.getDefaultValue();
-        Function<Object, ? extends Expression> fn = valueAsExressionConverter.get(value.getClass());
+        Function<Object, ? extends Expression> fn = valueAsExpressionConverters.get(value.getClass());
         if (fn == null) throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
         return fn.apply(value);
     }
