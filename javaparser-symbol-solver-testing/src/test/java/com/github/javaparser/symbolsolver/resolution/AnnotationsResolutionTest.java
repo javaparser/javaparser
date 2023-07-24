@@ -362,7 +362,7 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
     }
 
     @Test
-    void solveReflectionMarkerAnnotationWithDefaultValues() throws IOException {
+    void solveReflectionMarkerAnnotationWithDefaultArrayValue() throws IOException {
         // parse compilation unit and get annotation expression
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CI");
@@ -371,7 +371,7 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
 
         // resolve annotation expression
         ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
-        // get default values
+
         // Class<?>[] - {}
         Expression arrayExpr = findAnnotationMemberByName(resolved, "packagesOf").getDefaultValue();
         assertInstanceOf(ArrayInitializerExpr.class, arrayExpr);
@@ -379,11 +379,35 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         assertTrue(values.isNonEmpty());
         assertTrue(values.get(0).isClassExpr());
         assertEquals("MethodHandle", values.get(0).asClassExpr().getType().asString());
+    }
+
+    @Test
+    void solveReflectionMarkerAnnotationWithDefaultClassValue() throws IOException {
+        // parse compilation unit and get annotation expression
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CI");
+
+        MarkerAnnotationExpr annotationExpr = clazz.getAnnotation(0).asMarkerAnnotationExpr();
+
+        // resolve annotation expression
+        ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // Class<?> - LambdaMetafactory.class
         ClassExpr classExpr = assertInstanceOf(ClassExpr.class, findAnnotationMemberByName(resolved, "clazz").getDefaultValue());
         final ClassOrInterfaceType type = assertInstanceOf(ClassOrInterfaceType.class, classExpr.getType());
         assertEquals("LambdaMetafactory", type.getNameAsString());
+    }
+
+    @Test
+    void solveReflectionMarkerAnnotationWithDefaultEnumValue() throws IOException {
+        // parse compilation unit and get annotation expression
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CI");
+
+        MarkerAnnotationExpr annotationExpr = clazz.getAnnotation(0).asMarkerAnnotationExpr();
+
+        // resolve annotation expression
+        ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // TimeUnit - TimeUnit.HOURS
         Expression enumExpr = findAnnotationMemberByName(resolved, "unit").getDefaultValue();
@@ -391,6 +415,18 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         final NameExpr scopeNameExpr = assertInstanceOf(NameExpr.class, fieldAccessExpr.getScope());
         assertEquals("TimeUnit", scopeNameExpr.asNameExpr().getNameAsString());
         assertEquals("HOURS", fieldAccessExpr.getNameAsString());
+    }
+
+    @Test
+    void solveReflectionMarkerAnnotationWithDefaultNestedAnnotationValue() throws IOException {
+        // parse compilation unit and get annotation expression
+        CompilationUnit cu = parseSample("Annotations");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CI");
+
+        MarkerAnnotationExpr annotationExpr = clazz.getAnnotation(0).asMarkerAnnotationExpr();
+
+        // resolve annotation expression
+        ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // NestedAnnotation - @NestedAnnotation
         Expression nestedExpr = findAnnotationMemberByName(resolved, "nestedAnnotation").getDefaultValue();
