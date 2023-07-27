@@ -1049,6 +1049,9 @@ public class Difference {
                 if (!isPreviousElementNewline && !isFirstElement && !previousIsWhiteSpace) {
                     // Insert after the new line
                     originalIndex++;
+					// We want to adjust the indentation while considering the new element that we
+					// added
+					originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
                 }
                 nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;
