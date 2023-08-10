@@ -366,6 +366,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     public void addOrphanComment(Comment comment) {
+    	notifyPropertyChange(ObservableProperty.COMMENT, null, comment);
         orphanComments.add(comment);
         comment.setParentNode(this);
     }
