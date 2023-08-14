@@ -21,18 +21,19 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.Problem;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.ast.Node.Parsedness.PARSED;
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.Problem;
 
 class ParseResultTest {
     private final JavaParser javaParser = new JavaParser(new ParserConfiguration());
@@ -57,7 +58,7 @@ class ParseResultTest {
         assertThat(result.getProblems().size()).isEqualTo(1);
 
         Problem problem = result.getProblem(0);
-        assertThat(problem.getMessage()).isEqualTo("Parse error. Found \"{\", expected one of  \"enum\" \"exports\" \"module\" \"open\" \"opens\" \"provides\" \"record\" \"requires\" \"strictfp\" \"to\" \"transitive\" \"uses\" \"with\" \"yield\" <IDENTIFIER>");
+        assertThat(problem.getMessage()).isEqualTo("Parse error. Found \"{\", expected one of  \"enum\" \"exports\" \"module\" \"open\" \"opens\" \"permits\" \"provides\" \"record\" \"requires\" \"sealed\" \"strictfp\" \"to\" \"transitive\" \"uses\" \"with\" \"yield\" <IDENTIFIER>");
 
         assertThat(result.toString()).startsWith("Parsing failed:" + SYSTEM_EOL + "(line 1,col 1) Parse error.");
     }

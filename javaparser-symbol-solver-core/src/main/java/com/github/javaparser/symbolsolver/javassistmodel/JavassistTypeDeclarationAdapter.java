@@ -84,17 +84,15 @@ public class JavassistTypeDeclarationAdapter {
                 return Optional.of(new ReferenceTypeImpl(
                         typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass()))
                 ));
-            } else {
-                // If there is a generic signature present, solve the types and return it.
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Optional.ofNullable(
+            }
+            SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+            return Optional.ofNullable(
                         JavassistUtils.signatureTypeToType(
                                 classSignature.getSuperClass(),
                                 typeSolver,
                                 typeDeclaration
                         ).asReferenceType()
                 );
-            }
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
@@ -185,8 +183,8 @@ public class JavassistTypeDeclarationAdapter {
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         if (null == ctClass.getGenericSignature()) {
             return Collections.emptyList();
-        } else {
-            try {
+        }
+        try {
                 SignatureAttribute.ClassSignature classSignature =
                         SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
                 return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters())
@@ -195,7 +193,6 @@ public class JavassistTypeDeclarationAdapter {
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);
             }
-        }
     }
 
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {

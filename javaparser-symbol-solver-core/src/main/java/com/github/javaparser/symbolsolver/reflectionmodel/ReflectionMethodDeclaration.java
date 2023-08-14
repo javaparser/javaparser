@@ -91,9 +91,8 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         }
         if (method.getDeclaringClass().isEnum()) {
             return new ReflectionEnumDeclaration(method.getDeclaringClass(), typeSolver);
-        } else {
-            return new ReflectionClassDeclaration(method.getDeclaringClass(), typeSolver);
         }
+        return new ReflectionClassDeclaration(method.getDeclaringClass(), typeSolver);
     }
 
     @Override

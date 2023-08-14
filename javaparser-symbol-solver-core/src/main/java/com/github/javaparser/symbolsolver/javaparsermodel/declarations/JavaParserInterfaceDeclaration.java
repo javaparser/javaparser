@@ -358,11 +358,10 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         if (this.wrappedNode.getTypeParameters() == null) {
             return Collections.emptyList();
-        } else {
-            return this.wrappedNode.getTypeParameters().stream().map(
+        }
+        return this.wrappedNode.getTypeParameters().stream().map(
                     (tp) -> new JavaParserTypeParameter(tp, typeSolver)
             ).collect(Collectors.toList());
-        }
     }
 
     /**

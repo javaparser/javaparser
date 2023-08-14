@@ -49,17 +49,20 @@ public class ReflectionFactory {
     public static ResolvedReferenceTypeDeclaration typeDeclarationFor(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz.isArray()) {
             throw new IllegalArgumentException("No type declaration available for an Array");
-        } else if (clazz.isPrimitive()) {
-            throw new IllegalArgumentException();
-        } else if (clazz.isAnnotation()) {
-            return new ReflectionAnnotationDeclaration(clazz, typeSolver);
-        } else if (clazz.isInterface()) {
-            return new ReflectionInterfaceDeclaration(clazz, typeSolver);
-        } else if (clazz.isEnum()) {
-            return new ReflectionEnumDeclaration(clazz, typeSolver);
-        } else {
-            return new ReflectionClassDeclaration(clazz, typeSolver);
         }
+            if (clazz.isPrimitive()) {
+            throw new IllegalArgumentException();
+        }
+            if (clazz.isAnnotation()) {
+            return new ReflectionAnnotationDeclaration(clazz, typeSolver);
+        }
+            if (clazz.isInterface()) {
+            return new ReflectionInterfaceDeclaration(clazz, typeSolver);
+        }
+            if (clazz.isEnum()) {
+            return new ReflectionEnumDeclaration(clazz, typeSolver);
+        }
+        return new ReflectionClassDeclaration(clazz, typeSolver);
     }
 
     public static ResolvedType typeUsageFor(java.lang.reflect.Type type, TypeSolver typeSolver) {
@@ -68,7 +71,8 @@ public class ReflectionFactory {
             boolean declaredOnClass = tv.getGenericDeclaration() instanceof java.lang.reflect.Type;
             ResolvedTypeParameterDeclaration typeParameter = new ReflectionTypeParameter(tv, declaredOnClass, typeSolver);
             return new ResolvedTypeVariable(typeParameter);
-        } else if (type instanceof ParameterizedType) {
+        }
+            if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) type;
             ResolvedReferenceType rawType = typeUsageFor(pt.getRawType(), typeSolver).asReferenceType();
             List<java.lang.reflect.Type> actualTypes = new ArrayList<>();
@@ -76,23 +80,25 @@ public class ReflectionFactory {
             // we consume the actual types
             rawType = rawType.transformTypeParameters(tp -> typeUsageFor(actualTypes.remove(0), typeSolver)).asReferenceType();
             return rawType;
-        } else if (type instanceof Class) {
+        }
+            if (type instanceof Class) {
             Class<?> c = (Class<?>) type;
             if (c.isPrimitive()) {
                 if (c.getName().equals(Void.TYPE.getName())) {
                     return ResolvedVoidType.INSTANCE;
-                } else {
-                    return ResolvedPrimitiveType.byName(c.getName());
                 }
-            } else if (c.isArray()) {
-                return new ResolvedArrayType(typeUsageFor(c.getComponentType(), typeSolver));
-            } else {
-                return new ReferenceTypeImpl(typeDeclarationFor(c, typeSolver));
+                return ResolvedPrimitiveType.byName(c.getName());
             }
-        } else if (type instanceof GenericArrayType) {
+                    if (c.isArray()) {
+                return new ResolvedArrayType(typeUsageFor(c.getComponentType(), typeSolver));
+            }
+            return new ReferenceTypeImpl(typeDeclarationFor(c, typeSolver));
+        }
+            if (type instanceof GenericArrayType) {
             GenericArrayType genericArrayType = (GenericArrayType) type;
             return new ResolvedArrayType(typeUsageFor(genericArrayType.getGenericComponentType(), typeSolver));
-        } else if (type instanceof WildcardType) {
+        }
+            if (type instanceof WildcardType) {
             WildcardType wildcardType = (WildcardType) type;
             if (wildcardType.getLowerBounds().length > 0 && wildcardType.getUpperBounds().length > 0) {
                 if (wildcardType.getUpperBounds().length == 1 && wildcardType.getUpperBounds()[0].getTypeName().equals(JAVA_LANG_OBJECT)) {
@@ -112,21 +118,21 @@ public class ReflectionFactory {
                 return ResolvedWildcard.extendsBound(typeUsageFor(wildcardType.getUpperBounds()[0], typeSolver));
             }
             return ResolvedWildcard.UNBOUNDED;
-        } else {
-            throw new UnsupportedOperationException(type.getClass().getCanonicalName() + " " + type);
         }
+        throw new UnsupportedOperationException(type.getClass().getCanonicalName() + " " + type);
     }
 
     static AccessSpecifier modifiersToAccessLevel(final int modifiers) {
         if (Modifier.isPublic(modifiers)) {
             return AccessSpecifier.PUBLIC;
-        } else if (Modifier.isProtected(modifiers)) {
-            return AccessSpecifier.PROTECTED;
-        } else if (Modifier.isPrivate(modifiers)) {
-            return AccessSpecifier.PRIVATE;
-        } else {
-            return AccessSpecifier.NONE;
         }
+            if (Modifier.isProtected(modifiers)) {
+            return AccessSpecifier.PROTECTED;
+        }
+            if (Modifier.isPrivate(modifiers)) {
+            return AccessSpecifier.PRIVATE;
+        }
+        return AccessSpecifier.NONE;
     }
 
     public static Object convertAnnotationMemberValue(Object value, TypeSolver typeSolver) {

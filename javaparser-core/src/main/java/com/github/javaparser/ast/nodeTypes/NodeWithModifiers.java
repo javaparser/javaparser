@@ -72,9 +72,8 @@ public interface NodeWithModifiers<N extends Node> {
     default N setModifier(Modifier.Keyword m, boolean set) {
         if (set) {
             return addModifier(m);
-        } else {
-            return removeModifier(m);
         }
+        return removeModifier(m);
     }
 
     /**

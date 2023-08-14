@@ -91,9 +91,8 @@ public class MemoryTypeSolver implements TypeSolver {
     public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
         if (declarationMap.containsKey(name)) {
             return SymbolReference.solved(declarationMap.get(name));
-        } else {
-            return SymbolReference.unsolved();
         }
+        return SymbolReference.unsolved();
     }
 
 }

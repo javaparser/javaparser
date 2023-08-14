@@ -73,9 +73,8 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
         String qualifiedName = getQualifiedName();
         if (qualifiedName.contains(".")) {
             return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1, qualifiedName.length());
-        } else {
-            return qualifiedName;
         }
+        return qualifiedName;
     }
 
     @Override
