@@ -64,12 +64,12 @@ class SymbolSolverWithJavassistEnumTest extends AbstractSymbolResolutionTest {
 
     @Test
     void testSolveSymbolInTypeCanResolveFirstEnumValue() {
-        assertCanSolveSymbol("ENUM_VAL_ONE", enumDeclarationConcrete);
+        assertCanSolveEnumConstantSymbol("ENUM_VAL_ONE", enumDeclarationConcrete);
     }
 
     @Test
     void testSolveSymbolInTypeCanResolveSecondEnumValue() {
-        assertCanSolveSymbol("ENUM_VAL_TWO", enumDeclarationConcrete);
+        assertCanSolveEnumConstantSymbol("ENUM_VAL_TWO", enumDeclarationConcrete);
     }
 
     @Test
@@ -121,5 +121,12 @@ class SymbolSolverWithJavassistEnumTest extends AbstractSymbolResolutionTest {
 
         assertTrue(solvedSymbol.isSolved());
         assertEquals(symbolName, solvedSymbol.getCorrespondingDeclaration().asField().getName());
+    }
+
+    private void assertCanSolveEnumConstantSymbol(String symbolName, JavassistEnumDeclaration enumDeclaration) {
+        SymbolReference<? extends ResolvedValueDeclaration> solvedSymbol = symbolSolver.solveSymbolInType(enumDeclaration, symbolName);
+
+        assertTrue(solvedSymbol.isSolved());
+        assertEquals(symbolName, solvedSymbol.getCorrespondingDeclaration().asEnumConstant().getName());
     }
 }
