@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
-
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 
 /**
  * An intersection type is defined in java as list of types separates by ampersands.
@@ -73,5 +73,12 @@ public class ResolvedIntersectionType implements ResolvedType {
             return this;
         }
         return new ResolvedIntersectionType(elementsReplaced);
+    }
+
+    /*
+     * Returns the list of the resolved types
+     */
+    public List<ResolvedType> getElements() {
+        return elements;
     }
 }
