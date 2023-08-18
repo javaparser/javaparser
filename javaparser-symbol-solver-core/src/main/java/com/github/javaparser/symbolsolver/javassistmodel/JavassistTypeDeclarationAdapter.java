@@ -30,7 +30,9 @@ import java.util.stream.Stream;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -235,21 +237,39 @@ public class JavassistTypeDeclarationAdapter {
         }
     }
 
-    public boolean isAssignableBy(ResolvedType other) {
+    public boolean isAssignableBy(ResolvedType type) {
 
-        if (other.isNull()) {
+        if (type instanceof NullType) {
             return true;
         }
-
-        if (other instanceof LambdaArgumentTypePlaceholder) {
-            return typeDeclaration.isFunctionalInterface();
+        if (type instanceof LambdaArgumentTypePlaceholder) {
+            return isFunctionalInterface();
+        }
+        if (type.isArray()) {
+            return false;
+        }
+        if (type.isPrimitive()) {
+            return false;
+        }
+        if (type.describe().equals(typeDeclaration.getQualifiedName())) {
+            return true;
+        }
+        if (type instanceof ReferenceTypeImpl) {
+            ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
+            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+                return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(typeDeclaration);
+            }
         }
 
-        return other.isAssignableBy(new ReferenceTypeImpl(typeDeclaration));
+        return false;
     }
 
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other));
+    }
+
+    private final boolean isFunctionalInterface() {
+        return FunctionalInterfaceLogic.getFunctionalMethod(typeDeclaration).isPresent();
     }
 
     /**
