@@ -169,6 +169,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         Type jpType = catchClause.getParameter().getType();
         ResolvedType jssType = jpType.resolve();
         assertTrue(jssType instanceof ResolvedUnionType);
+        assertTrue(jssType.asUnionType().getElements().size()==2);
     }
 
     @Test

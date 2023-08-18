@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.resolution.types;
 
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 
 /**
  * A union type is defined in java as list of types separates by pipes.
@@ -86,5 +86,12 @@ public class ResolvedUnionType implements ResolvedType {
     @Override
     public ResolvedUnionType asUnionType() {
         return this;
+    }
+
+    /*
+     * Returns the list of the resolved types
+     */
+    public List<ResolvedType> getElements() {
+        return elements;
     }
 }
