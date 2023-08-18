@@ -225,8 +225,8 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
             memoryTypeSolver.addDeclaration("B", declarationB);
 
             // Knowing that B extends A we expect:
-            assertFalse(declarationA.isAssignableBy(declarationB), "This should not be allowed: B variable = new A()");
-            assertTrue(declarationB.isAssignableBy(declarationA), "This should be allowed: A variable = new B()");
+            assertTrue(declarationA.isAssignableBy(declarationB), "This should not be allowed: A variable = new B()");
+            assertFalse(declarationB.isAssignableBy(declarationA), "This should be allowed: B variable = new A()");
         }
     }
 
