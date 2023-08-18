@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast.validator.language_level_validations;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -43,7 +44,7 @@ public class Java5Validator extends Java1_4Validator {
         if (node instanceof NodeWithTypeArguments) {
             Optional<NodeList<Type>> typeArguments = ((NodeWithTypeArguments<? extends Node>) node).getTypeArguments();
             if (typeArguments.isPresent() && typeArguments.get().isEmpty()) {
-                reporter.report(node, "The diamond operator is not supported.");
+                reporter.report(node, new UpgradeJavaMessage("The diamond operator is not supported.", ParserConfiguration.LanguageLevel.JAVA_7));
             }
         }
     });
