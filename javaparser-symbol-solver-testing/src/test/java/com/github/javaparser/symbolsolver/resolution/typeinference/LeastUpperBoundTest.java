@@ -2,11 +2,11 @@ package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.Serializable;
-import java.rmi.AlreadyBoundException;
-import java.rmi.activation.UnknownGroupException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -145,11 +145,11 @@ class LeastUpperBoundTest {
     @Test
     public void lub_approximation_with_complexe_inheritance() {
         ResolvedType expected = type(Exception.class.getCanonicalName());
-        // java.lang.Object/java.lang.Throwable/java.lang.Exception/java.rmi.AlreadyBoundException
-        ResolvedType alreadyBoundException = type(AlreadyBoundException.class.getCanonicalName());
-        // java.lang.Object//java.lang.Throwable/java.lang.Exception/java.rmi.activation.ActivationException/java.rmi.activation.UnknownGroupException
-        ResolvedType unknownGroupException = type(UnknownGroupException.class.getCanonicalName());
-        ResolvedType lub = leastUpperBound(alreadyBoundException, unknownGroupException);
+        // java.lang.Object/java.lang.Throwable/java.lang.Exception/java.net.URISyntaxException
+        ResolvedType uriSyntaxException = type(URISyntaxException.class.getCanonicalName());
+        // java.lang.Object//java.lang.Throwable/java.lang.Exception/java.io.IOException/java.io.FileNotFoundException
+        ResolvedType fileNotFoundException = type(FileNotFoundException.class.getCanonicalName());
+        ResolvedType lub = leastUpperBound(uriSyntaxException, fileNotFoundException);
         assertEquals(expected, lub);
     }
 

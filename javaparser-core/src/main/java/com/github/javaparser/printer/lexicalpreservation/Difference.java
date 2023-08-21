@@ -80,7 +80,7 @@ public class Difference {
     /*
      * Returns the indentation used after the last line break
      */
-    private List<TextElement> processIndentation(List<TextElement> indentation, List<TextElement> prevElements) {
+    List<TextElement> processIndentation(List<TextElement> indentation, List<TextElement> prevElements) {
         int eolIndex = lastIndexOfEol(prevElements);
         // Return "indentation" as is if no EOL element was found
         if (eolIndex < 0)
@@ -215,7 +215,7 @@ public class Difference {
      * [ ][ ]void[ ]m{}
      * }
      */
-    private int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
+    int considerEnforcingIndentation(NodeText nodeText, int nodeTextIndex) {
         return considerIndentation(nodeText, nodeTextIndex, indentation.size());
     }
 
@@ -316,7 +316,7 @@ public class Difference {
 			}
 		}
 		// compute space after the deleted element
-		if (isSpaceOrTabElement(nodeText, startIndex)) {
+		if (startIndex < nodeText.numberOfElements() && isSpaceOrTabElement(nodeText, startIndex)) {
 //			int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
 			for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
 				if (nodeText.getTextElement(i).isNewline()) {
@@ -1049,6 +1049,9 @@ public class Difference {
                 if (!isPreviousElementNewline && !isFirstElement && !previousIsWhiteSpace) {
                     // Insert after the new line
                     originalIndex++;
+					// We want to adjust the indentation while considering the new element that we
+					// added
+					originalIndex = adjustIndentation(indentation, nodeText, originalIndex, false);
                 }
                 nodeText.addElement(originalIndex, addedTextElement);
                 originalIndex++;
