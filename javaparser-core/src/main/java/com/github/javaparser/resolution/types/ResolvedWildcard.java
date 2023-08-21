@@ -170,11 +170,11 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     public boolean isUpperBounded() {
-        return isSuper();
+        return isExtends();
     }
 
     public boolean isLowerBounded() {
-        return isExtends();
+        return isSuper();
     }
 
     public enum BoundType {
