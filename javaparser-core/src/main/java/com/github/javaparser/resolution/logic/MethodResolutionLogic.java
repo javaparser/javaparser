@@ -330,6 +330,9 @@ public class MethodResolutionLogic {
                 if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
                     return matchTypeVariable(expectedParam.asTypeVariable(), actualParam, matchedParameters);
                 }
+                // actualParam is a TypeVariable and actualParam has the same name as expectedParamName
+                // We should definitely consider that types are assignable
+                return true;
             } else if (expectedParam.isReferenceType()) {
                 if (actualParam.isTypeVariable()) {
                     return matchTypeVariable(actualParam.asTypeVariable(), expectedParam, matchedParameters);
