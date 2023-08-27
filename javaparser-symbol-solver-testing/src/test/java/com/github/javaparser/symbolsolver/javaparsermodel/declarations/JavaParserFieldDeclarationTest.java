@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -31,10 +32,14 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.utils.CodeGenerationUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Optional;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserFieldDeclarationTest implements ResolvedFieldDeclarationTest {
@@ -64,6 +69,52 @@ class JavaParserFieldDeclarationTest implements ResolvedFieldDeclarationTest {
         ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
         ResolvedFieldDeclaration rfd = new JavaParserFieldDeclaration(fieldDeclaration.getVariable(0), reflectionTypeSolver);
         assertFalse(rfd.isVolatile());
+    }
+
+    @Test
+    void checkModifiersOnInterfaceFields() throws IOException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
+        CompilationUnit cu = parse(rootDir.resolve("InterfaceWithFields.java"));
+        FieldDeclaration field1 = cu.findAll(FieldDeclaration.class).get(0);
+
+        ResolvedFieldDeclaration resolvedField1 = new JavaParserFieldDeclaration(field1.getVariable(0), reflectionTypeSolver);
+
+        assertTrue(resolvedField1.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(resolvedField1.hasModifier(Modifier.Keyword.STATIC));
+        assertTrue(resolvedField1.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.ABSTRACT));
+
+        FieldDeclaration field2 = cu.findAll(FieldDeclaration.class).get(1);
+
+        ResolvedFieldDeclaration resolvedField2 = new JavaParserFieldDeclaration(field2.getVariable(0), reflectionTypeSolver);
+
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.STATIC));
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(resolvedField2.hasModifier(Modifier.Keyword.ABSTRACT));
+    }
+
+    @Test
+    void checkModifiersOnClassFields() throws IOException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
+        CompilationUnit cu = parse(rootDir.resolve("ClassWithFields.java"));
+        FieldDeclaration field1 = cu.findAll(FieldDeclaration.class).get(0);
+        ResolvedFieldDeclaration resolvedField1 = new JavaParserFieldDeclaration(field1.getVariable(0), reflectionTypeSolver);
+
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.ABSTRACT));
+
+        FieldDeclaration field2 = cu.findAll(FieldDeclaration.class).get(1);
+        ResolvedFieldDeclaration resolvedField2 = new JavaParserFieldDeclaration(field2.getVariable(0), reflectionTypeSolver);
+
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.STATIC));
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(resolvedField2.hasModifier(Modifier.Keyword.ABSTRACT));
     }
     
     //
