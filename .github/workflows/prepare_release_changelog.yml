@@ -41,7 +41,9 @@ jobs:
 
           echo "sha_long=$SHA_LONG" >> $GITHUB_OUTPUT
           echo "sha_short=$SHA_SHORT" >> $GITHUB_OUTPUT
-          echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           echo "release_title=$RELEASE_TITLE" >> $GITHUB_OUTPUT
           echo "release_tag_name=$RELEASE_TAG_NAME" >> $GITHUB_OUTPUT
 
