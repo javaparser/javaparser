@@ -21,12 +21,17 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,6 +40,8 @@ import java.nio.file.Path;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JavassistMethodDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -107,5 +114,85 @@ public class JavassistMethodDeclarationTest extends AbstractSymbolResolutionTest
     private JavassistMethodDeclaration findMethodWithName(JavassistClassDeclaration classDecl, String name) {
         return classDecl.getDeclaredMethods().stream().filter(methodDecl -> methodDecl.getName().equals(name))
                 .map(m -> (JavassistMethodDeclaration) m).findAny().get();
+    }
+
+    @Test
+    void checkModifiersOnInterfaceMethods() throws NotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver(false);
+        CtClass tempInterface = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.InterfaceWithMethods");
+        JavassistInterfaceDeclaration jcd = new JavassistInterfaceDeclaration(tempInterface, typeSolver);
+        ResolvedMethodDeclaration method1 = jcd.getDeclaredMethods().stream().filter(it -> it.getName().equals("test")).findFirst().get();
+
+        assertTrue(method1.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.FINAL));
+        assertTrue(method1.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method1.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method2 = jcd.getDeclaredMethods().stream().filter(it -> it.getName().equals("test1")).findFirst().get();
+
+        assertTrue(method2.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method2.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method2.hasModifier(Modifier.Keyword.FINAL));
+        assertTrue(method2.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method2.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method3 = jcd.getDeclaredMethods().stream().filter(it -> it.getName().equals("test2")).findFirst().get();
+
+        assertTrue(method3.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method3.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method3.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method3.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertTrue(method3.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method4 = jcd.getDeclaredMethods().stream().filter(it -> it.getName().equals("test3")).findFirst().get();
+
+        assertTrue(method4.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(method4.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method4.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method4.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method4.hasModifier(Modifier.Keyword.DEFAULT));
+    }
+
+    @Test
+    void checkModifiersOnClassMethods() throws NotFoundException {
+        TypeSolver typeSolver = new ReflectionTypeSolver(false);
+        CtClass tempInterface = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.ClassWithMethods");
+        JavassistClassDeclaration jcd = new JavassistClassDeclaration(tempInterface, typeSolver);
+        ResolvedMethodDeclaration method1 = jcd.getDeclaredMethods().stream().filter(it -> it.getName().equals("test")).findFirst().get();
+
+        assertFalse(method1.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.PRIVATE));
+        assertFalse(method1.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method1.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method1.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method2 = jcd.getDeclaredMethods().stream().filter(it -> it.getName().equals("test1")).findFirst().get();
+
+        assertTrue(method2.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.PRIVATE));
+        assertFalse(method2.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method2.hasModifier(Modifier.Keyword.FINAL));
+        assertTrue(method2.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method2.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method3 = jcd.getDeclaredMethods().stream().filter(it -> it.getName().equals("test2")).findFirst().get();
+
+        assertTrue(method3.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.PRIVATE));
+        assertTrue(method3.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method3.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method3.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method3.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method4 = jcd.getDeclaredMethods().stream().filter(it -> it.getName().equals("test3")).findFirst().get();
+
+        assertFalse(method4.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(method4.hasModifier(Modifier.Keyword.PRIVATE));
+        assertFalse(method4.hasModifier(Modifier.Keyword.STATIC));
+        assertTrue(method4.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method4.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method4.hasModifier(Modifier.Keyword.DEFAULT));
     }
 }

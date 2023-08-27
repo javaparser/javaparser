@@ -22,15 +22,28 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclarationTest;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapabilityTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.utils.CodeGenerationUtils;
+import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Optional;
+
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserMethodDeclarationTest implements ResolvedMethodDeclarationTest, TypeVariableResolutionCapabilityTest {
 
@@ -49,4 +62,106 @@ class JavaParserMethodDeclarationTest implements ResolvedMethodDeclarationTest, 
         return new JavaParserMethodDeclaration(methodDeclaration, typeSolver);
     }
 
+    @Test
+    void checkModifiersOnInterfaceMethods() throws IOException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
+        CompilationUnit cu = parse(rootDir.resolve("InterfaceWithMethods.java"));
+        ResolvedMethodDeclaration method1 = new JavaParserMethodDeclaration(cu.findAll(MethodDeclaration.class).get(0), reflectionTypeSolver);
+
+        assertTrue(method1.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.FINAL));
+        assertTrue(method1.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method1.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method2 = new JavaParserMethodDeclaration(cu.findAll(MethodDeclaration.class).get(1), reflectionTypeSolver);
+
+        assertTrue(method2.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method2.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method2.hasModifier(Modifier.Keyword.FINAL));
+        assertTrue(method2.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method2.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method3 = new JavaParserMethodDeclaration(cu.findAll(MethodDeclaration.class).get(2), reflectionTypeSolver);
+
+        assertTrue(method3.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method3.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method3.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method3.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertTrue(method3.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method4 = new JavaParserMethodDeclaration(cu.findAll(MethodDeclaration.class).get(3), reflectionTypeSolver);
+
+        assertTrue(method4.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(method4.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method4.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method4.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method4.hasModifier(Modifier.Keyword.DEFAULT));
+    }
+
+    @Test
+    void checkModifiersOnClassMethods() throws IOException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
+        CompilationUnit cu = parse(rootDir.resolve("ClassWithMethods.java"));
+
+        ResolvedMethodDeclaration method1 = new JavaParserMethodDeclaration(cu.findAll(MethodDeclaration.class).get(0), reflectionTypeSolver);
+
+        assertFalse(method1.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.PRIVATE));
+        assertFalse(method1.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method1.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method1.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method2 = new JavaParserMethodDeclaration(cu.findAll(MethodDeclaration.class).get(1), reflectionTypeSolver);
+
+        assertTrue(method2.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.PRIVATE));
+        assertFalse(method2.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method2.hasModifier(Modifier.Keyword.FINAL));
+        assertTrue(method2.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method2.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method3 = new JavaParserMethodDeclaration(cu.findAll(MethodDeclaration.class).get(2), reflectionTypeSolver);
+
+        assertTrue(method3.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(method1.hasModifier(Modifier.Keyword.PRIVATE));
+        assertTrue(method3.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(method3.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method3.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method3.hasModifier(Modifier.Keyword.DEFAULT));
+
+        ResolvedMethodDeclaration method4 = new JavaParserMethodDeclaration(cu.findAll(MethodDeclaration.class).get(3), reflectionTypeSolver);
+
+        assertFalse(method4.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(method4.hasModifier(Modifier.Keyword.PRIVATE));
+        assertFalse(method4.hasModifier(Modifier.Keyword.STATIC));
+        assertTrue(method4.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(method4.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(method4.hasModifier(Modifier.Keyword.DEFAULT));
+    }
+
+    @Test
+    void checkModifiersOnClassFields() throws IOException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
+        CompilationUnit cu = parse(rootDir.resolve("ClassWithFields.java"));
+        FieldDeclaration field1 = cu.findAll(FieldDeclaration.class).get(0);
+        ResolvedFieldDeclaration resolvedField1 = new JavaParserFieldDeclaration(field1.getVariable(0), reflectionTypeSolver);
+
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.STATIC));
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.ABSTRACT));
+
+        FieldDeclaration field2 = cu.findAll(FieldDeclaration.class).get(1);
+        ResolvedFieldDeclaration resolvedField2 = new JavaParserFieldDeclaration(field2.getVariable(0), reflectionTypeSolver);
+
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.STATIC));
+        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.FINAL));
+        assertFalse(resolvedField2.hasModifier(Modifier.Keyword.ABSTRACT));
+    }
 }

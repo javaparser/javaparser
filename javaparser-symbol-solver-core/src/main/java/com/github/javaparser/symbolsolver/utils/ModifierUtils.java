@@ -27,6 +27,7 @@ import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 import com.github.javaparser.ast.nodeTypes.modifiers.*;
 import javassist.CtClass;
+import javassist.CtMethod;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -82,6 +83,17 @@ public class ModifierUtils {
     public static boolean hasModifier(Object reflectionObject, int modifiers, Keyword keyword) {
         switch (keyword) {
             case DEFAULT:
+                if(reflectionObject instanceof Method) {
+                    return ((Method) reflectionObject).isDefault();
+                } else if(reflectionObject instanceof CtMethod) {
+                    // Default methods are public non-abstract instance methods
+                    // declared in an interface.
+                    CtMethod ctMethod = (CtMethod) reflectionObject;
+                    return hasModifier(reflectionObject, modifiers, Keyword.PUBLIC)
+                            && !hasModifier(reflectionObject, modifiers, Keyword.ABSTRACT)
+                            && !hasModifier(reflectionObject, modifiers, Keyword.STATIC)
+                            && ctMethod.getDeclaringClass().isInterface();
+                }
                 break;
             case PUBLIC:
                 return Modifier.isPublic(modifiers);
