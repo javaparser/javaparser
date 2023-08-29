@@ -123,7 +123,7 @@ public class Difference {
     private int posOfNextComment(int fromIndex, List<TextElement> elements) {
         if (!isValidIndex(fromIndex, elements))
             return -1;
-        ReadOnlyListIterator<TextElement> iterator = new ReadOnlyListIterator(elements, fromIndex);
+        ArrayIterator<TextElement> iterator = new ArrayIterator(elements, fromIndex);
         // search for the next consecutive space characters
         while (iterator.hasNext()) {
             TextElement element = iterator.next();
@@ -1092,12 +1092,12 @@ public class Difference {
 	private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder,
 			CsmMix elementsFromNextOrder) {
 		Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-		ReadOnlyListIterator<CsmElement> previousOrderElementsIterator = new ReadOnlyListIterator(
+		ArrayIterator<CsmElement> previousOrderElementsIterator = new ArrayIterator(
 				elementsFromPreviousOrder.getElements());
 		int syncNextIndex = 0;
 		while (previousOrderElementsIterator.hasNext()) {
 			CsmElement pe = previousOrderElementsIterator.next();
-			ReadOnlyListIterator<CsmElement> nextOrderElementsIterator = new ReadOnlyListIterator(
+			ArrayIterator<CsmElement> nextOrderElementsIterator = new ArrayIterator(
 					elementsFromNextOrder.getElements(), syncNextIndex);
 			while (nextOrderElementsIterator.hasNext()) {
 				CsmElement ne = nextOrderElementsIterator.next();
@@ -1118,51 +1118,51 @@ public class Difference {
      * A list iterator which does not allow to modify the list
      * and which provides a method to know the current positioning
      */
-    private class ReadOnlyListIterator<T> implements ListIterator<T> {
-    	ListIterator<T> elements;
-    	public ReadOnlyListIterator(List<T> elements) {
+    private class ArrayIterator<T> implements ListIterator<T> {
+    	ListIterator<T> iterator;
+    	public ArrayIterator(List<T> elements) {
     		this(elements, 0);
     	}
 
-    	public ReadOnlyListIterator(List<T> elements, int index) {
-    		this.elements = elements.listIterator(index);
+    	public ArrayIterator(List<T> elements, int index) {
+    		this.iterator = elements.listIterator(index);
     	}
 
 		@Override
 		public boolean hasNext() {
-			return elements.hasNext();
+			return iterator.hasNext();
 		}
 
 		@Override
 		public T next() {
-			return elements.next();
+			return iterator.next();
 		}
 
 		@Override
 		public boolean hasPrevious() {
-			return elements.hasPrevious();
+			return iterator.hasPrevious();
 		}
 
 		@Override
 		public T previous() {
-			return elements.previous();
+			return iterator.previous();
 		}
 
 		@Override
 		public int nextIndex() {
-			return elements.nextIndex();
+			return iterator.nextIndex();
 		}
 
 		@Override
 		public int previousIndex() {
-			return elements.previousIndex();
+			return iterator.previousIndex();
 		}
 
 		/*
 		 * Returns the current index in the underlying list
 		 */
 		public int index() {
-			return elements.nextIndex() - 1;
+			return iterator.nextIndex() - 1;
 		}
 
 		@Override
