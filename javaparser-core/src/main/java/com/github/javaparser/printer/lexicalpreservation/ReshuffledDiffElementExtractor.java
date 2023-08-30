@@ -47,11 +47,12 @@ public class ReshuffledDiffElementExtractor {
                 Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
                 // We now find out which Node Text elements corresponds to the elements in the original CSM
                 List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText);
+                PeekingIterator<Integer> nodeTextIndexOfPreviousElementsIterator = new PeekingIterator<>(nodeTextIndexOfPreviousElements);
                 Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
-                for (int i = 0; i < nodeTextIndexOfPreviousElements.size(); i++) {
-                    int value = nodeTextIndexOfPreviousElements.get(i);
+                while (nodeTextIndexOfPreviousElementsIterator.hasNext()) {
+                	int value = nodeTextIndexOfPreviousElementsIterator.next();
                     if (value != -1) {
-                        nodeTextIndexToPreviousCSMIndex.put(value, i);
+                    	nodeTextIndexToPreviousCSMIndex.put(value, nodeTextIndexOfPreviousElementsIterator.currentIndex());
                     }
                 }
                 int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream().max(Integer::compareTo).orElse(-1);
@@ -159,38 +160,41 @@ public class ReshuffledDiffElementExtractor {
 
 	private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText) {
         List<Integer> correspondingIndices = new ArrayList<>();
-        ListIterator<CsmElement> csmElementListIterator = elements.listIterator();
+        PeekingIterator<CsmElement> csmElementListIterator = new PeekingIterator<>(elements);
         while ( csmElementListIterator.hasNext() ) {
+        	boolean isFirstIterationOnCsmElements = !csmElementListIterator.hasPrevious();
             int previousCsmElementIndex = csmElementListIterator.previousIndex();
             CsmElement csmElement = csmElementListIterator.next();
-            int nextCsmElementIndex = csmElementListIterator.nextIndex();
             Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
-            for (int i = 0; i < nodeText.numberOfElements(); i++) {
-                if (!correspondingIndices.contains(i)) {
-                    TextElement textElement = nodeText.getTextElement(i);
+            PeekingIterator<TextElement> nodeTextListIterator = new PeekingIterator<>(nodeText.getElements());
+            while (nodeTextListIterator.hasNext()) {
+            	boolean isFirstIterationOnNodeTextElements = !nodeTextListIterator.hasPrevious();
+            	TextElement textElement = nodeTextListIterator.next();
+            	int currentTextElementIndex = nodeTextListIterator.currentIndex();
+                if (!correspondingIndices.contains(currentTextElementIndex)) {
                     boolean isCorresponding = csmElement.isCorrespondingElement(textElement);
                     if (isCorresponding) {
                         boolean hasSamePreviousElement = false;
-                        if (i > 0 && previousCsmElementIndex > -1) {
-                            TextElement previousTextElement = nodeText.getTextElement(i - 1);
+                        if (!isFirstIterationOnNodeTextElements && !isFirstIterationOnCsmElements) {
+                            TextElement previousTextElement = nodeText.getTextElement(currentTextElementIndex - 1);
                             hasSamePreviousElement = elements.get(previousCsmElementIndex).isCorrespondingElement(previousTextElement);
                         }
                         boolean hasSameNextElement = false;
-                        if (i < nodeText.numberOfElements() - 1 && nextCsmElementIndex < elements.size()) {
-                            TextElement nextTextElement = nodeText.getTextElement(i + 1);
-                            hasSameNextElement = elements.get(nextCsmElementIndex).isCorrespondingElement(nextTextElement);
+                        if (csmElementListIterator.hasNext()) {
+                            TextElement nextTextElement = nodeTextListIterator.peek();
+                            hasSameNextElement = elements.get(csmElementListIterator.nextIndex()).isCorrespondingElement(nextTextElement);
                         }
                         if (hasSamePreviousElement && hasSameNextElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.ALL, i);
+                            potentialMatches.putIfAbsent(MatchClassification.ALL, currentTextElementIndex);
                         } else if (hasSamePreviousElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.PREVIOUS_AND_SAME, i);
+                            potentialMatches.putIfAbsent(MatchClassification.PREVIOUS_AND_SAME, currentTextElementIndex);
                         } else if (hasSameNextElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.NEXT_AND_SAME, i);
+                            potentialMatches.putIfAbsent(MatchClassification.NEXT_AND_SAME, currentTextElementIndex);
                         } else {
-                            potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, i);
+                            potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, currentTextElementIndex);
                         }
                     } else if (isAlmostCorrespondingElement(textElement, csmElement)) {
-                        potentialMatches.putIfAbsent(MatchClassification.ALMOST, i);
+                        potentialMatches.putIfAbsent(MatchClassification.ALMOST, currentTextElementIndex);
                     }
                 }
             }
