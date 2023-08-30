@@ -20,17 +20,17 @@
  */
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.TokenTypes.spaceTokenKind;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.utils.LineSeparator;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.TokenTypes.spaceTokenKind;
 
 public interface CsmElement {
 
@@ -70,10 +70,6 @@ public interface CsmElement {
 
     static CsmElement token(int tokenType) {
         return new CsmToken(tokenType);
-    }
-
-    static CsmElement token(int tokenType, CsmToken.TokenContentCalculator tokenContentCalculator) {
-        return new CsmToken(tokenType, tokenContentCalculator);
     }
 
     static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {

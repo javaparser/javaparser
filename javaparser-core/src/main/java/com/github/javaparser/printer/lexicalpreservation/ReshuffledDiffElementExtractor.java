@@ -2,7 +2,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import java.util.*;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
@@ -13,8 +12,6 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalcul
 public class ReshuffledDiffElementExtractor {
 
 	private final NodeText nodeText;
-
-    private final Node node;
 
     private enum MatchClassification {
 
@@ -31,13 +28,12 @@ public class ReshuffledDiffElementExtractor {
         }
     }
 
-    static ReshuffledDiffElementExtractor of(NodeText nodeText, Node node) {
-    	return new ReshuffledDiffElementExtractor(nodeText, node);
+    static ReshuffledDiffElementExtractor of(NodeText nodeText) {
+    	return new ReshuffledDiffElementExtractor(nodeText);
     }
 
-	private ReshuffledDiffElementExtractor(NodeText nodeText, Node node) {
+	private ReshuffledDiffElementExtractor(NodeText nodeText) {
 		this.nodeText = nodeText;
-		this.node = node;
 	}
 
 	public void extract(List<DifferenceElement> diffElements) {
@@ -52,7 +48,7 @@ public class ReshuffledDiffElementExtractor {
                 // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
                 Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
                 // We now find out which Node Text elements corresponds to the elements in the original CSM
-                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, node);
+                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText);
                 Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
                 for (int i = 0; i < nodeTextIndexOfPreviousElements.size(); i++) {
                     int value = nodeTextIndexOfPreviousElements.get(i);
@@ -163,7 +159,7 @@ public class ReshuffledDiffElementExtractor {
 		return correspondanceBetweenNextOrderAndPreviousOrder;
 	}
 
-	private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, Node node) {
+	private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText) {
         List<Integer> correspondingIndices = new ArrayList<>();
         for (ListIterator<CsmElement> csmElementListIterator = elements.listIterator(); csmElementListIterator.hasNext(); ) {
             int previousCsmElementIndex = csmElementListIterator.previousIndex();
@@ -173,17 +169,17 @@ public class ReshuffledDiffElementExtractor {
             for (int i = 0; i < nodeText.numberOfElements(); i++) {
                 if (!correspondingIndices.contains(i)) {
                     TextElement textElement = nodeText.getTextElement(i);
-                    boolean isCorresponding = isCorrespondingElement(textElement, csmElement, node);
+                    boolean isCorresponding = isCorrespondingElement(textElement, csmElement);
                     if (isCorresponding) {
                         boolean hasSamePreviousElement = false;
                         if (i > 0 && previousCsmElementIndex > -1) {
                             TextElement previousTextElement = nodeText.getTextElement(i - 1);
-                            hasSamePreviousElement = isCorrespondingElement(previousTextElement, elements.get(previousCsmElementIndex), node);
+                            hasSamePreviousElement = isCorrespondingElement(previousTextElement, elements.get(previousCsmElementIndex));
                         }
                         boolean hasSameNextElement = false;
                         if (i < nodeText.numberOfElements() - 1 && nextCsmElementIndex < elements.size()) {
                             TextElement nextTextElement = nodeText.getTextElement(i + 1);
-                            hasSameNextElement = isCorrespondingElement(nextTextElement, elements.get(nextCsmElementIndex), node);
+                            hasSameNextElement = isCorrespondingElement(nextTextElement, elements.get(nextCsmElementIndex));
                         }
                         if (hasSamePreviousElement && hasSameNextElement) {
                             potentialMatches.putIfAbsent(MatchClassification.ALL, i);
@@ -194,7 +190,7 @@ public class ReshuffledDiffElementExtractor {
                         } else {
                             potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, i);
                         }
-                    } else if (isAlmostCorrespondingElement(textElement, csmElement, node)) {
+                    } else if (isAlmostCorrespondingElement(textElement, csmElement)) {
                         potentialMatches.putIfAbsent(MatchClassification.ALMOST, i);
                     }
                 }
@@ -210,12 +206,12 @@ public class ReshuffledDiffElementExtractor {
         return correspondingIndices;
     }
 
-	private boolean isCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
+	private boolean isCorrespondingElement(TextElement textElement, CsmElement csmElement) {
         if (csmElement instanceof CsmToken) {
             CsmToken csmToken = (CsmToken) csmElement;
             if (textElement instanceof TokenTextElement) {
                 TokenTextElement tokenTextElement = (TokenTextElement) textElement;
-                return tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node));
+                return tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent());
             }
         } else if (csmElement instanceof CsmChild) {
             CsmChild csmChild = (CsmChild) csmElement;
@@ -235,8 +231,8 @@ public class ReshuffledDiffElementExtractor {
         return false;
     }
 
-    private boolean isAlmostCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
-        if (isCorrespondingElement(textElement, csmElement, node)) {
+    private boolean isAlmostCorrespondingElement(TextElement textElement, CsmElement csmElement) {
+        if (isCorrespondingElement(textElement, csmElement)) {
             return false;
         }
         return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken) csmElement).isWhiteSpace();

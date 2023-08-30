@@ -90,7 +90,7 @@ public class Added implements DifferenceElement {
             return new ChildTextElement(((LexicalDifferenceCalculator.CsmChild) element).getChild());
         }
             if (element instanceof CsmToken) {
-            return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent(null));
+            return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent());
         }
         throw new UnsupportedOperationException(element.getClass().getSimpleName());
     }

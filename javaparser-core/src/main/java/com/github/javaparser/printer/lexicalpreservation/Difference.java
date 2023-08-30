@@ -346,7 +346,7 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply() {
-    	ReshuffledDiffElementExtractor.of(nodeText, node).extract(diffElements);
+    	ReshuffledDiffElementExtractor.of(nodeText).extract(diffElements);
         Map<Removed, RemovedGroup> removedGroups = combineRemovedElementsToRemovedGroups();
         do {
             boolean isLeftOverDiffElement = applyLeftOverDiffElements();
