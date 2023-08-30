@@ -125,7 +125,7 @@ public class Difference {
     private int posOfNextComment(int fromIndex, List<TextElement> elements) {
         if (!isValidIndex(fromIndex, elements))
             return -1;
-        ArrayIterator<TextElement> iterator = new ArrayIterator(elements, fromIndex);
+        ArrayIterator<TextElement> iterator = new ArrayIterator<>(elements, fromIndex);
         // search for the next consecutive space characters
         while (iterator.hasNext()) {
             TextElement element = iterator.next();
@@ -157,7 +157,7 @@ public class Difference {
         // removing elements
         int count = fromIndex;
         while (iterator.hasNext() && count <= toIndex) {
-        	TextElement element = iterator.next();
+        	iterator.next();
             iterator.remove();
             count++;
         }
@@ -171,10 +171,10 @@ public class Difference {
      * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement
      */
     int lastIndexOfEolWithoutGPT(List<TextElement> source) {
-        ListIterator listIterator = source.listIterator(source.size());
+        ListIterator<TextElement> listIterator = source.listIterator(source.size());
         int lastIndex = source.size() - 1;
         while (listIterator.hasPrevious()) {
-            TextElement elem = (TextElement) listIterator.previous();
+            TextElement elem = listIterator.previous();
             if (elem.isNewline()) {
                 return lastIndex;
             }
@@ -772,7 +772,7 @@ public class Difference {
         JavaToken nextToken = next.get();
         Kind kind = Kind.valueOf(nextToken.getKind());
         if (isDiamondOperator(kind)) {
-            if (kind.GT.equals(kind))
+            if (Kind.GT.equals(kind))
                 nestedDiamondOperator--;
             else
                 nestedDiamondOperator++;
@@ -801,7 +801,7 @@ public class Difference {
         JavaToken nextToken = next.get();
         Kind kind = Kind.valueOf(nextToken.getKind());
         if (isBracket(kind)) {
-            if (kind.RBRACKET.equals(kind))
+            if (Kind.RBRACKET.equals(kind))
                 arrayLevel--;
         }
         // manage the fact where the first token is not a diamond operator but a whitespace
@@ -817,44 +817,14 @@ public class Difference {
      * Returns true if the token is possibly a diamond operator
      */
     private boolean isDiamondOperator(Kind kind) {
-        return kind.GT.equals(kind) || kind.LT.equals(kind);
+        return Kind.GT.equals(kind) || Kind.LT.equals(kind);
     }
 
     /*
      * Returns true if the token is a bracket
      */
     private boolean isBracket(Kind kind) {
-        return kind.LBRACKET.equals(kind) || kind.RBRACKET.equals(kind);
-    }
-
-    private boolean openBraceWasOnSameLine() {
-        int index = originalIndex;
-        while (index >= 0 && !nodeText.getTextElement(index).isNewline()) {
-            if (nodeText.getTextElement(index).isToken(LBRACE)) {
-                return true;
-            }
-            index--;
-        }
-        return false;
-    }
-
-    private boolean wasSpaceBetweenBraces() {
-        return nodeText.getTextElement(originalIndex).isToken(RBRACE) && doWeHaveLeftBraceFollowedBySpace(originalIndex - 1) && (diffIndex < 2 || !diffElements.get(diffIndex - 2).isRemoved());
-    }
-
-    private boolean doWeHaveLeftBraceFollowedBySpace(int index) {
-        index = rewindSpace(index);
-        return nodeText.getTextElement(index).isToken(LBRACE);
-    }
-
-    private int rewindSpace(int index) {
-        if (index <= 0) {
-            return index;
-        }
-        if (nodeText.getTextElement(index).isWhiteSpace()) {
-            return rewindSpace(index - 1);
-        }
-        return index;
+        return Kind.LBRACKET.equals(kind) || Kind.RBRACKET.equals(kind);
     }
 
     private boolean nextIsRightBrace(int index) {
@@ -987,10 +957,6 @@ public class Difference {
             }
         }
         diffIndex++;
-    }
-
-    private String tokenDescription(int kind) {
-        return GeneratedJavaParserConstants.tokenImage[kind];
     }
 
     /*
