@@ -27,6 +27,8 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.lexicalpreservation.TextElement;
+import com.github.javaparser.printer.lexicalpreservation.TokenTextElement;
 import com.github.javaparser.utils.LineSeparator;
 
 public class CsmToken implements CsmElement {
@@ -109,5 +111,15 @@ public class CsmToken implements CsmElement {
 
     public boolean isNewLine() {
         return TokenTypes.isEndOfLineToken(tokenType);
+    }
+
+    /*
+     * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+     */
+    @Override
+    public boolean isCorrespondingElement(TextElement textElement) {
+    	return (textElement instanceof TokenTextElement)
+    			&& ((TokenTextElement)textElement).getTokenKind() == getTokenType()
+    			&& ((TokenTextElement)textElement).getText().equals(getContent());
     }
 }

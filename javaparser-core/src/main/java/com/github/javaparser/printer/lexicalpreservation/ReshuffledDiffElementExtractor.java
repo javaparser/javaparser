@@ -3,11 +3,9 @@ package com.github.javaparser.printer.lexicalpreservation;
 import java.util.*;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
-import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.lexicalpreservation.Difference.ArrayIterator;
-import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
 public class ReshuffledDiffElementExtractor {
 
@@ -161,7 +159,8 @@ public class ReshuffledDiffElementExtractor {
 
 	private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText) {
         List<Integer> correspondingIndices = new ArrayList<>();
-        for (ListIterator<CsmElement> csmElementListIterator = elements.listIterator(); csmElementListIterator.hasNext(); ) {
+        ListIterator<CsmElement> csmElementListIterator = elements.listIterator();
+        while ( csmElementListIterator.hasNext() ) {
             int previousCsmElementIndex = csmElementListIterator.previousIndex();
             CsmElement csmElement = csmElementListIterator.next();
             int nextCsmElementIndex = csmElementListIterator.nextIndex();
@@ -169,17 +168,17 @@ public class ReshuffledDiffElementExtractor {
             for (int i = 0; i < nodeText.numberOfElements(); i++) {
                 if (!correspondingIndices.contains(i)) {
                     TextElement textElement = nodeText.getTextElement(i);
-                    boolean isCorresponding = isCorrespondingElement(textElement, csmElement);
+                    boolean isCorresponding = csmElement.isCorrespondingElement(textElement);
                     if (isCorresponding) {
                         boolean hasSamePreviousElement = false;
                         if (i > 0 && previousCsmElementIndex > -1) {
                             TextElement previousTextElement = nodeText.getTextElement(i - 1);
-                            hasSamePreviousElement = isCorrespondingElement(previousTextElement, elements.get(previousCsmElementIndex));
+                            hasSamePreviousElement = elements.get(previousCsmElementIndex).isCorrespondingElement(previousTextElement);
                         }
                         boolean hasSameNextElement = false;
                         if (i < nodeText.numberOfElements() - 1 && nextCsmElementIndex < elements.size()) {
                             TextElement nextTextElement = nodeText.getTextElement(i + 1);
-                            hasSameNextElement = isCorrespondingElement(nextTextElement, elements.get(nextCsmElementIndex));
+                            hasSameNextElement = elements.get(nextCsmElementIndex).isCorrespondingElement(nextTextElement);
                         }
                         if (hasSamePreviousElement && hasSameNextElement) {
                             potentialMatches.putIfAbsent(MatchClassification.ALL, i);
@@ -206,33 +205,8 @@ public class ReshuffledDiffElementExtractor {
         return correspondingIndices;
     }
 
-	private boolean isCorrespondingElement(TextElement textElement, CsmElement csmElement) {
-        if (csmElement instanceof CsmToken) {
-            CsmToken csmToken = (CsmToken) csmElement;
-            if (textElement instanceof TokenTextElement) {
-                TokenTextElement tokenTextElement = (TokenTextElement) textElement;
-                return tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent());
-            }
-        } else if (csmElement instanceof CsmChild) {
-            CsmChild csmChild = (CsmChild) csmElement;
-            if (textElement instanceof ChildTextElement) {
-                ChildTextElement childTextElement = (ChildTextElement) textElement;
-                return childTextElement.getChild() == csmChild.getChild();
-            }
-        } else if (csmElement instanceof CsmIndent) {
-        	CsmIndent csmIndent = (CsmIndent) csmElement;
-            if (textElement instanceof TokenTextElement) {
-            	TokenTextElement tokenTextElement = (TokenTextElement) textElement;
-                return tokenTextElement.isSpaceOrTab();
-            }
-        } else {
-            throw new UnsupportedOperationException();
-        }
-        return false;
-    }
-
     private boolean isAlmostCorrespondingElement(TextElement textElement, CsmElement csmElement) {
-        if (isCorrespondingElement(textElement, csmElement)) {
+        if (csmElement.isCorrespondingElement(textElement)) {
             return false;
         }
         return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken) csmElement).isWhiteSpace();

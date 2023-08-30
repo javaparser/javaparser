@@ -30,6 +30,7 @@ import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.lexicalpreservation.TextElement;
 import com.github.javaparser.utils.LineSeparator;
 
 public interface CsmElement {
@@ -147,5 +148,12 @@ public interface CsmElement {
 
     static CsmElement block(CsmElement content) {
         return sequence(token(GeneratedJavaParserConstants.LBRACE), indent(), content, unindent(), token(GeneratedJavaParserConstants.RBRACE));
+    }
+
+    /*
+     * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+     */
+    default boolean isCorrespondingElement(TextElement textElement) {
+    	return false;
     }
 }
