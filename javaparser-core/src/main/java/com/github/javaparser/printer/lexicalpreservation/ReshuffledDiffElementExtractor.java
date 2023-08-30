@@ -41,8 +41,7 @@ public class ReshuffledDiffElementExtractor {
 	}
 
 	public void extract(List<DifferenceElement> diffElements) {
-		int originalIndex = 0;
-    	ArrayIterator<DifferenceElement> iterator = new ArrayIterator(diffElements);
+    	ArrayIterator<DifferenceElement> iterator = new ArrayIterator<>(diffElements);
         while (iterator.hasNext()) {
             DifferenceElement diffElement = iterator.next();
             if (diffElement instanceof Reshuffled) {
@@ -53,7 +52,7 @@ public class ReshuffledDiffElementExtractor {
                 // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
                 Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
                 // We now find out which Node Text elements corresponds to the elements in the original CSM
-                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node);
+                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, node);
                 Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
                 for (int i = 0; i < nodeTextIndexOfPreviousElements.size(); i++) {
                     int value = nodeTextIndexOfPreviousElements.get(i);
@@ -97,7 +96,7 @@ public class ReshuffledDiffElementExtractor {
                 // Remove the whole Reshuffled element
                 iterator.remove();
                 if (lastNodeTextIndex != -1) {
-                    for (int ntIndex = originalIndex; ntIndex <= lastNodeTextIndex; ntIndex++) {
+                    for (int ntIndex = 0; ntIndex <= lastNodeTextIndex; ntIndex++) {
                         if (nodeTextIndexToPreviousCSMIndex.containsKey(ntIndex)) {
                             int indexOfOriginalCSMElement = nodeTextIndexToPreviousCSMIndex.get(ntIndex);
                             if (elementsToAddBeforeGivenOriginalCSMElement.containsKey(indexOfOriginalCSMElement)) {
@@ -164,14 +163,14 @@ public class ReshuffledDiffElementExtractor {
 		return correspondanceBetweenNextOrderAndPreviousOrder;
 	}
 
-	private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
+	private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, Node node) {
         List<Integer> correspondingIndices = new ArrayList<>();
         for (ListIterator<CsmElement> csmElementListIterator = elements.listIterator(); csmElementListIterator.hasNext(); ) {
             int previousCsmElementIndex = csmElementListIterator.previousIndex();
             CsmElement csmElement = csmElementListIterator.next();
             int nextCsmElementIndex = csmElementListIterator.nextIndex();
             Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
-            for (int i = startIndex; i < nodeText.numberOfElements(); i++) {
+            for (int i = 0; i < nodeText.numberOfElements(); i++) {
                 if (!correspondingIndices.contains(i)) {
                     TextElement textElement = nodeText.getTextElement(i);
                     boolean isCorresponding = isCorrespondingElement(textElement, csmElement, node);
