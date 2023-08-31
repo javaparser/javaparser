@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
@@ -157,6 +158,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return wrappedNode
                 .getParentNode()
+                .filter(parentNode -> !(parentNode instanceof CompilationUnit))
                 .map(node -> node.getSymbolResolver().toTypeDeclaration(node));
     }
 
