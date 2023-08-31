@@ -99,15 +99,12 @@ public class ReflectionFactory {
             WildcardType wildcardType = (WildcardType) type;
             if (wildcardType.getLowerBounds().length > 0 && wildcardType.getUpperBounds().length > 0) {
                 if (wildcardType.getUpperBounds().length == 1 && wildcardType.getUpperBounds()[0].getTypeName().equals(JAVA_LANG_OBJECT)) {
-                	return ResolvedWildcard.UNBOUNDED;
+                	// ok, it does not matter
                 }
             }
             if (wildcardType.getLowerBounds().length > 0) {
                 if (wildcardType.getLowerBounds().length > 1) {
                     throw new UnsupportedOperationException();
-                }
-                if (wildcardType.getUpperBounds().length == 1 && wildcardType.getUpperBounds()[0].getTypeName().equals(JAVA_LANG_OBJECT)) {
-                	return ResolvedWildcard.UNBOUNDED;
                 }
                 return ResolvedWildcard.superBound(typeUsageFor(wildcardType.getLowerBounds()[0], typeSolver));
             }
