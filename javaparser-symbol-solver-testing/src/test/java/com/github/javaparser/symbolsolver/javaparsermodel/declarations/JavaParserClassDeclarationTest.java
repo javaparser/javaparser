@@ -974,7 +974,7 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
 
 		List<ClassOrInterfaceDeclaration> declarations = cu.findAll(ClassOrInterfaceDeclaration.class);
 		// top level type
-		assertTrue(declarations.get(0).resolve().asReferenceType().containerType().isEmpty());
+		assertFalse(declarations.get(0).resolve().asReferenceType().containerType().isPresent());
 		assertEquals("Foo", declarations.get(1).resolve().asReferenceType().containerType().get().getQualifiedName());
 		assertEquals("Foo.Bar", declarations.get(2).resolve().asReferenceType().containerType().get().getQualifiedName());
 	}
