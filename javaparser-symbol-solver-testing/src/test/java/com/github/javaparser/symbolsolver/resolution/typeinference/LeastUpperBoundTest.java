@@ -191,7 +191,7 @@ class LeastUpperBoundTest {
         ResolvedType expected = constanteTypes.get(0);
 
         ResolvedType lub = leastUpperBound(constanteTypes.get(0), constanteTypes.get(1));
-        assertEquals(expected.asReferenceType(), lub.asReferenceType());
+        assertEquals(expected.asReferenceType().describe(), lub.asReferenceType().describe());
     }
 
     @Test
