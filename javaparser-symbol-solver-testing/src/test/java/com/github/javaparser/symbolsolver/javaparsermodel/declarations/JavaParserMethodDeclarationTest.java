@@ -148,27 +148,6 @@ class JavaParserMethodDeclarationTest extends AbstractResolutionTest
     }
 
     @Test
-    void checkModifiersOnClassFields() throws IOException {
-        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
-        Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
-        CompilationUnit cu = parse(rootDir.resolve("ClassWithFields.java"));
-        FieldDeclaration field1 = cu.findAll(FieldDeclaration.class).get(0);
-        ResolvedFieldDeclaration resolvedField1 = new JavaParserFieldDeclaration(field1.getVariable(0), reflectionTypeSolver);
-
-        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.PUBLIC));
-        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.STATIC));
-        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.FINAL));
-        assertFalse(resolvedField1.hasModifier(Modifier.Keyword.ABSTRACT));
-
-        FieldDeclaration field2 = cu.findAll(FieldDeclaration.class).get(1);
-        ResolvedFieldDeclaration resolvedField2 = new JavaParserFieldDeclaration(field2.getVariable(0), reflectionTypeSolver);
-
-        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.PUBLIC));
-        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.STATIC));
-        assertTrue(resolvedField2.hasModifier(Modifier.Keyword.FINAL));
-        assertFalse(resolvedField2.hasModifier(Modifier.Keyword.ABSTRACT));
-    }
-    @Test
 	void issue2484() {
 		String code =
 				"public class MyClass {\n"
