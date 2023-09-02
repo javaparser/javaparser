@@ -1,7 +1,7 @@
 
-Next Release (Version 3.25.5-snapshot)
+Next Release (Version 3.25.6-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/201?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/202?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,54 @@ Next Release (Version 3.25.5-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+
+Version 3.25.5
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/201?closed=1)
+
+### Added
+
+* fix: issue 4115 ResolvedUnionType should give access to a list of resolved types (PR [#4119](https://github.com/javaparser/javaparser/pull/4119) by [@jlerbsc](https://github.com/jlerbsc))
+* Support getting more annotation default values using reflection (PR [#4103](https://github.com/javaparser/javaparser/pull/4103) by [@freya022](https://github.com/freya022))
+
+### Changed
+
+* Minor refactoring: Simplifies how to group deleted tokens by extracting a method into an independent class (PR [#4134](https://github.com/javaparser/javaparser/pull/4134) by [@jlerbsc](https://github.com/jlerbsc))
+* Replace deprecated command with environment file (PR [#4122](https://github.com/javaparser/javaparser/pull/4122) by [@70825](https://github.com/70825))
+* Fixes missing named constructor in Modifier.java  (PR [#4092](https://github.com/javaparser/javaparser/pull/4092) by [@Auties00](https://github.com/Auties00))
+
+### Fixed
+
+* Fix: issue 4133 Top-level class containerType() throws an exception instead of Optional.empty() (PR [#4135](https://github.com/javaparser/javaparser/pull/4135) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: apply multiline strings (PR [#4130](https://github.com/javaparser/javaparser/pull/4130) by [@70825](https://github.com/70825))
+* Fix: issue 3976 Issue resolving implicit generic types (PR [#4128](https://github.com/javaparser/javaparser/pull/4128) by [@jlerbsc](https://github.com/jlerbsc))
+* Add unit test for PR 4091 Fixed missing permits in pretty printer (PR [#4126](https://github.com/javaparser/javaparser/pull/4126) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4124 UnsupportedOperationException: 'T' is thrown in MethodCallExpr resolve (PR [#4125](https://github.com/javaparser/javaparser/pull/4125) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4051 Switched upperBounds and lowerBounds on ResolvedTypeP… (PR [#4123](https://github.com/javaparser/javaparser/pull/4123) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix failing test on JDK 17 (PR [#4121](https://github.com/javaparser/javaparser/pull/4121) by [@mahesh-hegde](https://github.com/mahesh-hegde))
+* Fix: issue 3673 isAssignableBy method StackOverflowError (PR [#4118](https://github.com/javaparser/javaparser/pull/4118) by [@jlerbsc](https://github.com/jlerbsc))
+* Orphan comment added when using lexical preservation is not printed (PR [#4114](https://github.com/javaparser/javaparser/pull/4114) by [@jlerbsc](https://github.com/jlerbsc))
+* Fixed missing permits in pretty printer (PR [#4091](https://github.com/javaparser/javaparser/pull/4091) by [@Auties00](https://github.com/Auties00))
+
+### Developer Changes
+
+* chore(deps): update actions/checkout action to v3.6.0 (PR [#4127](https://github.com/javaparser/javaparser/pull/4127) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): bump com.google.guava:guava from 32.1.1-jre to 32.1.2-jre (PR [#4109](https://github.com/javaparser/javaparser/pull/4109) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Uncategorised
+
+* Fix: issue 4104 LPP doesn't handle new switch entries well (PR [#4106](https://github.com/javaparser/javaparser/pull/4106) by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@freya022](https://github.com/freya022)
+* [@Auties00](https://github.com/Auties00)
+* [@mahesh-hegde](https://github.com/mahesh-hegde)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@70825](https://github.com/70825)
 
 
 Version 3.25.4

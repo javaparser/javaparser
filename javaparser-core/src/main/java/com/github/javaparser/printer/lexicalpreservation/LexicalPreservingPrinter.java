@@ -603,7 +603,7 @@ public class LexicalPreservingPrinter {
                 nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
             } else if (element instanceof CsmToken) {
                 CsmToken csmToken = (CsmToken) element;
-                nodeText.addToken(csmToken.getTokenType(), csmToken.getContent(node));
+                nodeText.addToken(csmToken.getTokenType(), csmToken.getContent());
                 if (csmToken.isNewLine()) {
                     pendingIndentation = true;
                 }

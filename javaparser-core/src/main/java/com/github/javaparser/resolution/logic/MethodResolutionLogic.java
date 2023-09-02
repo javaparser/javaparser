@@ -343,6 +343,10 @@ public class MethodResolutionLogic {
             }
             if (expectedParam.isWildcard()) {
                 if (expectedParam.asWildcard().isExtends()) {
+                	// trying to compare with unbounded wildcard type parameter <?>
+                	if (actualParam.isWildcard() && !actualParam.asWildcard().isBounded()) {
+                		return true;
+                	}
                     return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actual, matchedParameters);
                 }
                 // TODO verify super bound

@@ -37,7 +37,9 @@ import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
-import com.github.javaparser.printer.concretesyntaxmodel.*;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
+import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
 
 /**
@@ -123,7 +125,7 @@ public class Difference {
     private int posOfNextComment(int fromIndex, List<TextElement> elements) {
         if (!isValidIndex(fromIndex, elements))
             return -1;
-        ReadOnlyListIterator<TextElement> iterator = new ReadOnlyListIterator(elements, fromIndex);
+        ArrayIterator<TextElement> iterator = new ArrayIterator<>(elements, fromIndex);
         // search for the next consecutive space characters
         while (iterator.hasNext()) {
             TextElement element = iterator.next();
@@ -155,7 +157,7 @@ public class Difference {
         // removing elements
         int count = fromIndex;
         while (iterator.hasNext() && count <= toIndex) {
-        	TextElement element = iterator.next();
+        	iterator.next();
             iterator.remove();
             count++;
         }
@@ -169,10 +171,10 @@ public class Difference {
      * Returns the position of the last new line character or -1 if there is no eol in the specified list of TextElement
      */
     int lastIndexOfEolWithoutGPT(List<TextElement> source) {
-        ListIterator listIterator = source.listIterator(source.size());
+        ListIterator<TextElement> listIterator = source.listIterator(source.size());
         int lastIndex = source.size() - 1;
         while (listIterator.hasPrevious()) {
-            TextElement elem = (TextElement) listIterator.previous();
+            TextElement elem = listIterator.previous();
             if (elem.isNewline()) {
                 return lastIndex;
             }
@@ -344,7 +346,7 @@ public class Difference {
      * to the difference (adding and removing the elements provided).
      */
     void apply() {
-        extractReshuffledDiffElements(diffElements);
+    	ReshuffledDiffElementExtractor.of(nodeText).extract(diffElements);
         Map<Removed, RemovedGroup> removedGroups = combineRemovedElementsToRemovedGroups();
         do {
             boolean isLeftOverDiffElement = applyLeftOverDiffElements();
@@ -402,90 +404,6 @@ public class Difference {
             isLeftOverElement = true;
         }
         return isLeftOverElement;
-    }
-
-    private void extractReshuffledDiffElements(List<DifferenceElement> diffElements) {
-        for (int index = 0; index < diffElements.size(); index++) {
-            DifferenceElement diffElement = diffElements.get(index);
-            if (diffElement instanceof Reshuffled) {
-                Reshuffled reshuffled = (Reshuffled) diffElement;
-                // First, let's see how many tokens we need to attribute to the previous version of the of the CsmMix
-                CsmMix elementsFromPreviousOrder = reshuffled.getPreviousOrder();
-                CsmMix elementsFromNextOrder = reshuffled.getNextOrder();
-                // This contains indexes from elementsFromNextOrder to indexes from elementsFromPreviousOrder
-                Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = getCorrespondanceBetweenNextOrderAndPreviousOrder(elementsFromPreviousOrder, elementsFromNextOrder);
-                // We now find out which Node Text elements corresponds to the elements in the original CSM
-                List<Integer> nodeTextIndexOfPreviousElements = findIndexOfCorrespondingNodeTextElement(elementsFromPreviousOrder.getElements(), nodeText, originalIndex, node);
-                Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
-                for (int i = 0; i < nodeTextIndexOfPreviousElements.size(); i++) {
-                    int value = nodeTextIndexOfPreviousElements.get(i);
-                    if (value != -1) {
-                        nodeTextIndexToPreviousCSMIndex.put(value, i);
-                    }
-                }
-                int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream().max(Integer::compareTo).orElse(-1);
-                // Elements to be added at the end
-                List<CsmElement> elementsToBeAddedAtTheEnd = new LinkedList<>();
-                List<CsmElement> nextOrderElements = elementsFromNextOrder.getElements();
-                Map<Integer, List<CsmElement>> elementsToAddBeforeGivenOriginalCSMElement = new HashMap<>();
-                for (int ni = 0; ni < nextOrderElements.size(); ni++) {
-                    // If it has a mapping, then it is kept
-                    if (!correspondanceBetweenNextOrderAndPreviousOrder.containsKey(ni)) {
-                        // Ok, it is something new. Where to put it? Let's see what is the first following
-                        // element that has a mapping
-                        int originalCsmIndex = -1;
-                        for (int nj = ni + 1; nj < nextOrderElements.size() && originalCsmIndex == -1; nj++) {
-                            if (correspondanceBetweenNextOrderAndPreviousOrder.containsKey(nj)) {
-                                originalCsmIndex = correspondanceBetweenNextOrderAndPreviousOrder.get(nj);
-                                if (!elementsToAddBeforeGivenOriginalCSMElement.containsKey(originalCsmIndex)) {
-                                    elementsToAddBeforeGivenOriginalCSMElement.put(originalCsmIndex, new LinkedList<>());
-                                }
-                                elementsToAddBeforeGivenOriginalCSMElement.get(originalCsmIndex).add(nextOrderElements.get(ni));
-                            }
-                        }
-                        // it does not preceed anything, so it goes at the end
-                        if (originalCsmIndex == -1) {
-                            elementsToBeAddedAtTheEnd.add(nextOrderElements.get(ni));
-                        }
-                    }
-                }
-                // We go over the original node text elements, in the order they appear in the NodeText.
-                // Considering an original node text element (ONE)
-                // * we verify if it corresponds to a CSM element. If it does not we just move on, otherwise
-                // we find the correspond OCE (Original CSM Element)
-                // * we first add new elements that are marked to be added before OCE
-                // * if OCE is marked to be present also in the "after" CSM we add a kept element,
-                // otherwise we add a removed element
-                // Remove the whole Reshuffled element
-                diffElements.remove(index);
-                int diffElIterator = index;
-                if (lastNodeTextIndex != -1) {
-                    for (int ntIndex = originalIndex; ntIndex <= lastNodeTextIndex; ntIndex++) {
-                        if (nodeTextIndexToPreviousCSMIndex.containsKey(ntIndex)) {
-                            int indexOfOriginalCSMElement = nodeTextIndexToPreviousCSMIndex.get(ntIndex);
-                            if (elementsToAddBeforeGivenOriginalCSMElement.containsKey(indexOfOriginalCSMElement)) {
-                                for (CsmElement elementToAdd : elementsToAddBeforeGivenOriginalCSMElement.get(indexOfOriginalCSMElement)) {
-                                    diffElements.add(diffElIterator++, new Added(elementToAdd));
-                                }
-                            }
-                            CsmElement originalCSMElement = elementsFromPreviousOrder.getElements().get(indexOfOriginalCSMElement);
-                            boolean toBeKept = correspondanceBetweenNextOrderAndPreviousOrder.containsValue(indexOfOriginalCSMElement);
-                            if (toBeKept) {
-                                diffElements.add(diffElIterator++, new Kept(originalCSMElement));
-                            } else {
-                                diffElements.add(diffElIterator++, new Removed(originalCSMElement));
-                            }
-                        }
-                        // else we have a simple node text element, without associated csm element, just keep ignore it
-                    }
-                }
-                // Finally we look for the remaining new elements that were not yet added and
-                // add all of them
-                for (CsmElement elementToAdd : elementsToBeAddedAtTheEnd) {
-                    diffElements.add(diffElIterator++, new Added(elementToAdd));
-                }
-            }
-        }
     }
 
     /**
@@ -854,7 +772,7 @@ public class Difference {
         JavaToken nextToken = next.get();
         Kind kind = Kind.valueOf(nextToken.getKind());
         if (isDiamondOperator(kind)) {
-            if (kind.GT.equals(kind))
+            if (Kind.GT.equals(kind))
                 nestedDiamondOperator--;
             else
                 nestedDiamondOperator++;
@@ -883,7 +801,7 @@ public class Difference {
         JavaToken nextToken = next.get();
         Kind kind = Kind.valueOf(nextToken.getKind());
         if (isBracket(kind)) {
-            if (kind.RBRACKET.equals(kind))
+            if (Kind.RBRACKET.equals(kind))
                 arrayLevel--;
         }
         // manage the fact where the first token is not a diamond operator but a whitespace
@@ -899,44 +817,14 @@ public class Difference {
      * Returns true if the token is possibly a diamond operator
      */
     private boolean isDiamondOperator(Kind kind) {
-        return kind.GT.equals(kind) || kind.LT.equals(kind);
+        return Kind.GT.equals(kind) || Kind.LT.equals(kind);
     }
 
     /*
      * Returns true if the token is a bracket
      */
     private boolean isBracket(Kind kind) {
-        return kind.LBRACKET.equals(kind) || kind.RBRACKET.equals(kind);
-    }
-
-    private boolean openBraceWasOnSameLine() {
-        int index = originalIndex;
-        while (index >= 0 && !nodeText.getTextElement(index).isNewline()) {
-            if (nodeText.getTextElement(index).isToken(LBRACE)) {
-                return true;
-            }
-            index--;
-        }
-        return false;
-    }
-
-    private boolean wasSpaceBetweenBraces() {
-        return nodeText.getTextElement(originalIndex).isToken(RBRACE) && doWeHaveLeftBraceFollowedBySpace(originalIndex - 1) && (diffIndex < 2 || !diffElements.get(diffIndex - 2).isRemoved());
-    }
-
-    private boolean doWeHaveLeftBraceFollowedBySpace(int index) {
-        index = rewindSpace(index);
-        return nodeText.getTextElement(index).isToken(LBRACE);
-    }
-
-    private int rewindSpace(int index) {
-        if (index <= 0) {
-            return index;
-        }
-        if (nodeText.getTextElement(index).isWhiteSpace()) {
-            return rewindSpace(index - 1);
-        }
-        return index;
+        return Kind.LBRACKET.equals(kind) || Kind.RBRACKET.equals(kind);
     }
 
     private boolean nextIsRightBrace(int index) {
@@ -1071,113 +959,69 @@ public class Difference {
         diffIndex++;
     }
 
-    private String tokenDescription(int kind) {
-        return GeneratedJavaParserConstants.tokenImage[kind];
-    }
-
-	/*
-	 * Considering that the lists of elements are ordered, We can find the common
-	 * elements by starting with the list before the modifications and, for each
-	 * element, by going through the list of elements containing the modifications.
-	 *
-	 * We can find the common elements by starting with the list before the
-	 * modifications (L1) and, for each element, by going through the list of elements
-	 * containing the modifications (L2).
-	 *
-	 * If element A in list L1 is not found in list L2, it is a deleted element.
-	 * If element A of list L1 is found in list L2, it is a kept element. In this
-	 * case the search for the next element of the list L1 must start from the
-	 * position of the last element kept {@code syncNextIndex}.
-	 */
-	private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder,
-			CsmMix elementsFromNextOrder) {
-		Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-		ReadOnlyListIterator<CsmElement> previousOrderElementsIterator = new ReadOnlyListIterator(
-				elementsFromPreviousOrder.getElements());
-		int syncNextIndex = 0;
-		while (previousOrderElementsIterator.hasNext()) {
-			CsmElement pe = previousOrderElementsIterator.next();
-			ReadOnlyListIterator<CsmElement> nextOrderElementsIterator = new ReadOnlyListIterator(
-					elementsFromNextOrder.getElements(), syncNextIndex);
-			while (nextOrderElementsIterator.hasNext()) {
-				CsmElement ne = nextOrderElementsIterator.next();
-				if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index())
-						&& DifferenceElementCalculator.matching(ne, pe)) {
-					correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(),
-							previousOrderElementsIterator.index());
-					// set the position to start on the next {@code nextOrderElementsIterator} iteration
-					syncNextIndex = nextOrderElementsIterator.index();
-					break;
-				}
-			}
-		}
-		return correspondanceBetweenNextOrderAndPreviousOrder;
-	}
-
     /*
-     * A list iterator which does not allow to modify the list
-     * and which provides a method to know the current positioning
+     * A list iterator which provides a method to know the current positioning
      */
-    private class ReadOnlyListIterator<T> implements ListIterator<T> {
-    	ListIterator<T> elements;
-    	public ReadOnlyListIterator(List<T> elements) {
+    public static class ArrayIterator<T> implements ListIterator<T> {
+    	ListIterator<T> iterator;
+    	public ArrayIterator(List<T> elements) {
     		this(elements, 0);
     	}
 
-    	public ReadOnlyListIterator(List<T> elements, int index) {
-    		this.elements = elements.listIterator(index);
+    	public ArrayIterator(List<T> elements, int index) {
+    		this.iterator = elements.listIterator(index);
     	}
 
 		@Override
 		public boolean hasNext() {
-			return elements.hasNext();
+			return iterator.hasNext();
 		}
 
 		@Override
 		public T next() {
-			return elements.next();
+			return iterator.next();
 		}
 
 		@Override
 		public boolean hasPrevious() {
-			return elements.hasPrevious();
+			return iterator.hasPrevious();
 		}
 
 		@Override
 		public T previous() {
-			return elements.previous();
+			return iterator.previous();
 		}
 
 		@Override
 		public int nextIndex() {
-			return elements.nextIndex();
+			return iterator.nextIndex();
 		}
 
 		@Override
 		public int previousIndex() {
-			return elements.previousIndex();
+			return iterator.previousIndex();
 		}
 
 		/*
 		 * Returns the current index in the underlying list
 		 */
 		public int index() {
-			return elements.nextIndex() - 1;
+			return iterator.nextIndex() - 1;
 		}
 
 		@Override
 		public void remove() {
-			throw new UnsupportedOperationException();
+			iterator.remove();;
 		}
 
 		@Override
 		public void set(T e) {
-			throw new UnsupportedOperationException();
+			iterator.set(e);
 		}
 
 		@Override
 		public void add(T e) {
-			throw new UnsupportedOperationException();
+			iterator.add(e);;
 		}
 
     }
@@ -1188,100 +1032,6 @@ public class Difference {
     private boolean isFollowedByUnindent(List<DifferenceElement> diffElements, int diffIndex) {
         int nextIndexValue = diffIndex + 1;
         return (nextIndexValue) < diffElements.size() && diffElements.get(nextIndexValue).isAdded() && diffElements.get(nextIndexValue).getElement() instanceof CsmUnindent;
-    }
-
-    private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText, int startIndex, Node node) {
-        List<Integer> correspondingIndices = new ArrayList<>();
-        for (ListIterator<CsmElement> csmElementListIterator = elements.listIterator(); csmElementListIterator.hasNext(); ) {
-            int previousCsmElementIndex = csmElementListIterator.previousIndex();
-            CsmElement csmElement = csmElementListIterator.next();
-            int nextCsmElementIndex = csmElementListIterator.nextIndex();
-            Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
-            for (int i = startIndex; i < nodeText.numberOfElements(); i++) {
-                if (!correspondingIndices.contains(i)) {
-                    TextElement textElement = nodeText.getTextElement(i);
-                    boolean isCorresponding = isCorrespondingElement(textElement, csmElement, node);
-                    if (isCorresponding) {
-                        boolean hasSamePreviousElement = false;
-                        if (i > 0 && previousCsmElementIndex > -1) {
-                            TextElement previousTextElement = nodeText.getTextElement(i - 1);
-                            hasSamePreviousElement = isCorrespondingElement(previousTextElement, elements.get(previousCsmElementIndex), node);
-                        }
-                        boolean hasSameNextElement = false;
-                        if (i < nodeText.numberOfElements() - 1 && nextCsmElementIndex < elements.size()) {
-                            TextElement nextTextElement = nodeText.getTextElement(i + 1);
-                            hasSameNextElement = isCorrespondingElement(nextTextElement, elements.get(nextCsmElementIndex), node);
-                        }
-                        if (hasSamePreviousElement && hasSameNextElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.ALL, i);
-                        } else if (hasSamePreviousElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.PREVIOUS_AND_SAME, i);
-                        } else if (hasSameNextElement) {
-                            potentialMatches.putIfAbsent(MatchClassification.NEXT_AND_SAME, i);
-                        } else {
-                            potentialMatches.putIfAbsent(MatchClassification.SAME_ONLY, i);
-                        }
-                    } else if (isAlmostCorrespondingElement(textElement, csmElement, node)) {
-                        potentialMatches.putIfAbsent(MatchClassification.ALMOST, i);
-                    }
-                }
-            }
-            // Prioritize the matches from best to worst
-            Optional<MatchClassification> bestMatchKey = potentialMatches.keySet().stream().min(Comparator.comparing(MatchClassification::getPriority));
-            if (bestMatchKey.isPresent()) {
-                correspondingIndices.add(potentialMatches.get(bestMatchKey.get()));
-            } else {
-                correspondingIndices.add(-1);
-            }
-        }
-        return correspondingIndices;
-    }
-
-    private enum MatchClassification {
-
-        ALL(1), PREVIOUS_AND_SAME(2), NEXT_AND_SAME(3), SAME_ONLY(4), ALMOST(5);
-
-        private final int priority;
-
-        MatchClassification(int priority) {
-            this.priority = priority;
-        }
-
-        int getPriority() {
-            return priority;
-        }
-    }
-
-    private boolean isCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
-        if (csmElement instanceof CsmToken) {
-            CsmToken csmToken = (CsmToken) csmElement;
-            if (textElement instanceof TokenTextElement) {
-                TokenTextElement tokenTextElement = (TokenTextElement) textElement;
-                return tokenTextElement.getTokenKind() == csmToken.getTokenType() && tokenTextElement.getText().equals(csmToken.getContent(node));
-            }
-        } else if (csmElement instanceof CsmChild) {
-            CsmChild csmChild = (CsmChild) csmElement;
-            if (textElement instanceof ChildTextElement) {
-                ChildTextElement childTextElement = (ChildTextElement) textElement;
-                return childTextElement.getChild() == csmChild.getChild();
-            }
-        } else if (csmElement instanceof CsmIndent) {
-        	CsmIndent csmIndent = (CsmIndent) csmElement;
-            if (textElement instanceof TokenTextElement) {
-            	TokenTextElement tokenTextElement = (TokenTextElement) textElement;
-                return tokenTextElement.isSpaceOrTab();
-            }
-        } else {
-            throw new UnsupportedOperationException();
-        }
-        return false;
-    }
-
-    private boolean isAlmostCorrespondingElement(TextElement textElement, CsmElement csmElement, Node node) {
-        if (isCorrespondingElement(textElement, csmElement, node)) {
-            return false;
-        }
-        return textElement.isWhiteSpace() && csmElement instanceof CsmToken && ((CsmToken) csmElement).isWhiteSpace();
     }
 
     private int adjustIndentation(List<TextElement> indentation, NodeText nodeText, int nodeTextIndex, boolean followedByUnindent) {
