@@ -21,17 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -50,10 +40,19 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
 
@@ -575,4 +574,27 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
         return false;
     }
 
+    @Test
+    public void checkModifiersOnClass() throws NotFoundException {
+        CtClass tempClassWithAbstractModifiers = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.ClassWithAbstractModifiers");
+        JavassistClassDeclaration tempResolvedClassWithAbstractModifiers = new JavassistClassDeclaration(tempClassWithAbstractModifiers, typeSolver);
+
+        assertTrue(tempResolvedClassWithAbstractModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedClassWithAbstractModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(tempResolvedClassWithAbstractModifiers.hasModifier(Modifier.Keyword.FINAL));
+
+        CtClass tempClassWithFinalModifiers = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.ClassWithFinalModifiers");
+        JavassistClassDeclaration tempResolvedClassWithFinalModifiers = new JavassistClassDeclaration(tempClassWithFinalModifiers, typeSolver);
+
+        assertTrue(tempResolvedClassWithFinalModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(tempResolvedClassWithFinalModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertTrue(tempResolvedClassWithFinalModifiers.hasModifier(Modifier.Keyword.FINAL));
+
+        CtClass tempClassWithoutModifiers = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.ClassWithoutModifiers");
+        JavassistClassDeclaration tempResolvedClassWithoutModifiers = new JavassistClassDeclaration(tempClassWithoutModifiers, typeSolver);
+
+        assertTrue(tempResolvedClassWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(tempResolvedClassWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(tempResolvedClassWithoutModifiers.hasModifier(Modifier.Keyword.FINAL));
+    }
 }

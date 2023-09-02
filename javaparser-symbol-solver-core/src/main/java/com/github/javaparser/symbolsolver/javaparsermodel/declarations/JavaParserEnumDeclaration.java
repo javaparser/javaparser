@@ -617,6 +617,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean hasModifier(Modifier.Keyword keyword) {
+        //Enums can not have a final modifier, but are always final!
+        if(keyword == Modifier.Keyword.FINAL) return true;
         return ModifierUtils.hasModifier(wrappedNode, keyword);
     }
 }

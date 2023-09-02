@@ -21,23 +21,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.MethodUsage;
@@ -57,8 +45,22 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import com.github.javaparser.utils.CodeGenerationUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
 
@@ -940,5 +942,25 @@ class JavaParserInterfaceDeclarationTest extends AbstractTypeDeclarationTest {
     @Override
     public void containerTypeCantBeNull() {
         super.containerTypeCantBeNull();
+    }
+
+    @Test
+    public void checkModifiersOnInterface() throws IOException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
+        CompilationUnit cu1 = parse(rootDir.resolve("InterfaceWithModifiers.java"));
+
+        ClassOrInterfaceDeclaration tempInterfaceWithModifiers = cu1.findAll(ClassOrInterfaceDeclaration.class).get(0);
+        JavaParserInterfaceDeclaration tempResolvedInterfaceWithModifiers = new JavaParserInterfaceDeclaration(tempInterfaceWithModifiers, reflectionTypeSolver);
+
+        assertTrue(tempResolvedInterfaceWithModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedInterfaceWithModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+
+        CompilationUnit cu2 = parse(rootDir.resolve("InterfaceWithoutModifiers.java"));
+        ClassOrInterfaceDeclaration tempInterfaceWithoutModifiers = cu2.findAll(ClassOrInterfaceDeclaration.class).get(0);
+        JavaParserInterfaceDeclaration tempResolvedInterfaceWithoutModifiers = new JavaParserInterfaceDeclaration(tempInterfaceWithoutModifiers, reflectionTypeSolver);
+
+        assertTrue(tempResolvedInterfaceWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedInterfaceWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
     }
 }

@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
@@ -31,6 +32,8 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.testingclasses.InterfaceWithModifiers;
+import com.github.javaparser.symbolsolver.testingclasses.InterfaceWithoutModifiers;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
@@ -125,4 +128,17 @@ class ReflectionInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 				ancestors.get(5));
 	}
 
+    @Test
+    public void checkModifiersOnInterface() {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        ReflectionInterfaceDeclaration tempResolvedInterfaceWithModifiers = new ReflectionInterfaceDeclaration(InterfaceWithModifiers.class, reflectionTypeSolver);
+
+        assertTrue(tempResolvedInterfaceWithModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedInterfaceWithModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+
+        ReflectionInterfaceDeclaration tempResolvedInterfaceWithoutModifiers = new ReflectionInterfaceDeclaration(InterfaceWithoutModifiers.class, reflectionTypeSolver);
+
+        assertTrue(tempResolvedInterfaceWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedInterfaceWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+    }
 }

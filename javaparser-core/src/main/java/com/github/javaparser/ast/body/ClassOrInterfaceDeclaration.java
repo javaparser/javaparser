@@ -251,6 +251,11 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     }
 
     @Override
+    public boolean isAbstract() {
+        return NodeWithAbstractModifier.super.isAbstract() || isInterface;
+    }
+
+    @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public ClassOrInterfaceDeclaration clone() {
         return (ClassOrInterfaceDeclaration) accept(new CloneVisitor(), null);

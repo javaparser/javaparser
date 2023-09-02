@@ -21,11 +21,14 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.testingclasses.AnnotationWithModifiers;
+import com.github.javaparser.symbolsolver.testingclasses.AnnotationWithoutModifiers;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Inherited;
@@ -119,4 +122,19 @@ class ReflectionAnnotationDeclarationTest {
     assertTrue(annotation.isInheritable());
   }
 
+  @Test
+  public void checkModifiersOnAnnotation() {
+    ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+    ReflectionAnnotationDeclaration tempResolvedAnnotationWithoutModifiers = new ReflectionAnnotationDeclaration(AnnotationWithoutModifiers.class, reflectionTypeSolver);
+
+    assertTrue(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+    assertTrue(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+    assertFalse(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.FINAL));
+
+    ReflectionAnnotationDeclaration tempResolvedAnnotationWithModifiers = new ReflectionAnnotationDeclaration(AnnotationWithModifiers.class, reflectionTypeSolver);
+
+    assertTrue(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+    assertTrue(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+    assertFalse(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.FINAL));
+  }
 }

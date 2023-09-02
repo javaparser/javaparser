@@ -21,15 +21,16 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.testingclasses.EnumWithoutModifiers;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 enum MyModifier {
 
@@ -127,4 +128,13 @@ class ReflectionEnumDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals(Collections.emptySet(), modifier.internalTypes());
     }
 
+    @Test
+    public void checkModifiersOnEnum() {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        ReflectionEnumDeclaration tempResolvedEnumWithoutModifiers = new ReflectionEnumDeclaration(EnumWithoutModifiers.class, reflectionTypeSolver);
+
+        assertTrue(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertTrue(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.FINAL));
+    }
 }

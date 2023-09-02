@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
@@ -150,4 +151,21 @@ class JavassistAnnotationDeclarationTest extends AbstractTypeDeclarationTest
         return new javassist.bytecode.annotation.Annotation(annotationName, constpool);
     }
 
+    @Test
+    public void checkModifiersOnAnnotation() throws NotFoundException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        CtClass tempAnnotationWithoutModifiers = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.AnnotationWithoutModifiers");
+        JavassistAnnotationDeclaration tempResolvedAnnotationWithoutModifiers = new JavassistAnnotationDeclaration(tempAnnotationWithoutModifiers, reflectionTypeSolver);
+
+        assertTrue(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.FINAL));
+
+        CtClass tempAnnotationWithModifiers = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.AnnotationWithModifiers");
+        JavassistAnnotationDeclaration tempResolvedAnnotationWithModifiers = new JavassistAnnotationDeclaration(tempAnnotationWithModifiers, reflectionTypeSolver);
+
+        assertTrue(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.FINAL));
+    }
 }

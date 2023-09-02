@@ -24,17 +24,22 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.utils.CodeGenerationUtils;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
@@ -129,5 +134,27 @@ class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
 
         assertTrue(annotation.get().resolve().isInheritable());
     }
-	
+
+	@Test
+	public void checkModifiersOnAnnotation() throws IOException {
+		ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+		Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
+		CompilationUnit cu1 = parse(rootDir.resolve("AnnotationWithoutModifiers.java"));
+
+		AnnotationDeclaration tempAnnotationWithoutModifiers = cu1.findAll(AnnotationDeclaration.class).get(0);
+		JavaParserAnnotationDeclaration tempResolvedAnnotationWithoutModifiers = new JavaParserAnnotationDeclaration(tempAnnotationWithoutModifiers, reflectionTypeSolver);
+
+		assertTrue(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+		assertTrue(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+		assertFalse(tempResolvedAnnotationWithoutModifiers.hasModifier(Modifier.Keyword.FINAL));
+
+		CompilationUnit cu2 = parse(rootDir.resolve("AnnotationWithModifiers.java"));
+
+		AnnotationDeclaration tempAnnotationWithModifiers = cu2.findAll(AnnotationDeclaration.class).get(0);
+		JavaParserAnnotationDeclaration tempResolvedAnnotationWithModifiers = new JavaParserAnnotationDeclaration(tempAnnotationWithModifiers, reflectionTypeSolver);
+
+		assertTrue(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+		assertTrue(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+		assertFalse(tempResolvedAnnotationWithModifiers.hasModifier(Modifier.Keyword.FINAL));
+	}
 }

@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
@@ -30,6 +31,9 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.github.javaparser.symbolsolver.testingclasses.ClassWithAbstractModifiers;
+import com.github.javaparser.symbolsolver.testingclasses.ClassWithFinalModifiers;
+import com.github.javaparser.symbolsolver.testingclasses.ClassWithoutModifiers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.jupiter.api.Test;
@@ -818,6 +822,28 @@ class ReflectionClassDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals("java.lang.Object", ancestor.getQualifiedName());
 
         assertTrue(ancestors.isEmpty());
+    }
+
+    @Test
+    public void checkModifiersOnClass() {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        ReflectionClassDeclaration tempResolvedClassWithAbstractModifiers = new ReflectionClassDeclaration(ClassWithAbstractModifiers.class, reflectionTypeSolver);
+
+        assertTrue(tempResolvedClassWithAbstractModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedClassWithAbstractModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(tempResolvedClassWithAbstractModifiers.hasModifier(Modifier.Keyword.FINAL));
+
+        ReflectionClassDeclaration tempResolvedClassWithFinalModifiers = new ReflectionClassDeclaration(ClassWithFinalModifiers.class, reflectionTypeSolver);
+
+        assertTrue(tempResolvedClassWithFinalModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(tempResolvedClassWithFinalModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertTrue(tempResolvedClassWithFinalModifiers.hasModifier(Modifier.Keyword.FINAL));
+
+        ReflectionClassDeclaration tempResolvedClassWithoutModifiers = new ReflectionClassDeclaration(ClassWithoutModifiers.class, reflectionTypeSolver);
+
+        assertTrue(tempResolvedClassWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(tempResolvedClassWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertFalse(tempResolvedClassWithoutModifiers.hasModifier(Modifier.Keyword.FINAL));
     }
 
     public static class ClassWithSyntheticConstructor {
