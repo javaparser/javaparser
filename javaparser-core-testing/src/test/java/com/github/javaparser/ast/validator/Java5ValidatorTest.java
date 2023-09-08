@@ -42,7 +42,7 @@ class Java5ValidatorTest {
     @Test
     void genericsWithoutDiamond() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b = new ArrayList<>();}"));
-        assertProblems(result, "(line 1,col 33) The diamond operator is not supported.");
+        assertProblems(result, "(line 1,col 33) The diamond operator is not supported. Pay attention that this feature is supported starting from 'JAVA_7' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
