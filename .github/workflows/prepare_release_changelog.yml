@@ -15,7 +15,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v4.0.0
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java
@@ -39,11 +39,13 @@ jobs:
           RELEASE_TITLE="SNAPSHOT - $SHA_SHORT"
           RELEASE_TAG_NAME="v_snapshot_$SHA_SHORT"
 
-          echo "::set-output name=sha_long::$SHA_LONG"
-          echo "::set-output name=sha_short::$SHA_SHORT"
-          echo "::set-output name=changelog::$CHANGELOG"
-          echo "::set-output name=release_title::$RELEASE_TITLE"
-          echo "::set-output name=release_tag_name::$RELEASE_TAG_NAME"
+          echo "sha_long=$SHA_LONG" >> $GITHUB_OUTPUT
+          echo "sha_short=$SHA_SHORT" >> $GITHUB_OUTPUT
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "release_title=$RELEASE_TITLE" >> $GITHUB_OUTPUT
+          echo "release_tag_name=$RELEASE_TAG_NAME" >> $GITHUB_OUTPUT
 
 
       - name: Output variables

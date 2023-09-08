@@ -539,7 +539,8 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
         void whenSuperClassIsProvided() {
             ResolvedReferenceTypeDeclaration node = newTypeSolver.solveType("com.github.javaparser.ast.Node");
             JavassistClassDeclaration cu = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-            assertTrue(cu.isAssignableBy(node));
+            assertFalse(cu.isAssignableBy(node));
+            assertTrue(node.isAssignableBy(cu));
         }
 
         @Test
@@ -548,7 +549,8 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
                     "com.github.javaparser.ast.nodeTypes.NodeWithImplements");
             JavassistClassDeclaration classDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType(
                     "com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
-            assertTrue(classDeclaration.isAssignableBy(nodeWithImplements));
+            assertFalse(classDeclaration.isAssignableBy(nodeWithImplements));
+            assertTrue(nodeWithImplements.isAssignableBy(classDeclaration));
         }
     }
 

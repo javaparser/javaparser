@@ -96,6 +96,13 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
+        // Check class or interface declared in the compilation unit
+        SymbolReference<ResolvedTypeDeclaration> symbolRef = context.getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name, typeArguments);
+        if (symbolRef.isSolved())
+        	return symbolRef;
+
         // Check if is a type parameter
         if (wrappedNode instanceof NodeWithTypeParameters) {
             NodeWithTypeParameters<?> nodeWithTypeParameters = (NodeWithTypeParameters<?>) wrappedNode;
@@ -147,10 +154,7 @@ public class JavaParserTypeDeclarationAdapter {
 			return SymbolReference.solved(type);
 		}
 
-        // Else check parents
-        return context.getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name, typeArguments);
+        return SymbolReference.unsolved();
     }
 
     private boolean isCompositeName(String name) {

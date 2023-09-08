@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -38,6 +39,7 @@ import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.resolution.typeinference.LeastUpperBoundLogic;
 import com.github.javaparser.utils.Pair;
 
 public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
@@ -408,12 +410,84 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         return methodUsage;
     }
 
+    /*
+     * Replace formal type parameter (e.g. T) by actual type argument
+     * If there is more than one actual type argument for a formal type parameter
+     * then the type parameter list is reduced using LUB fonction.
+     */
 	private MethodUsage replaceTypeParameter(MethodUsage methodUsage,
 			Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
+		// first group all resolved types by type variable
+		Map<String, Set<ResolvedType>> resolvedTypesByTypeVariable = groupResolvedTypeByTypeVariable(matchedTypeParameters);
+		// then reduce the list of resolved types with the least upper bound logic
+		Map<String, ResolvedType> reducedResolvedTypesByTypeVariable = reduceResolvedTypesByTypeVariable(resolvedTypesByTypeVariable);
+		// then replace resolved type by the reduced type for each type variable
+		convertTypesParameters(matchedTypeParameters, reducedResolvedTypesByTypeVariable);
+		// finally replace type parameters
 		for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
             methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
         }
 		return methodUsage;
+	}
+
+	/*
+	 * Update the matchedTypeParameters map from the types in reducedResolvedTypesByTypeVariable map.
+	 */
+	private void convertTypesParameters(
+			Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters,
+			Map<String, ResolvedType> reducedResolvedTypesByTypeVariable) {
+		for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
+			String typeParameterName = tp.getName();
+			boolean replacement = reducedResolvedTypesByTypeVariable.keySet().contains(typeParameterName);
+			if (replacement) {
+				matchedTypeParameters.put(tp, reducedResolvedTypesByTypeVariable.get(typeParameterName));
+			}
+        }
+	}
+
+	/*
+	 * Group resolved type by the variable type. For example in Map.of("k0", 0, "k1",
+	 * 1D) which is solved as static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2)
+	 * the type variable named V that represents the type of the first and fourth parameter
+	 * must reference v1 (Integer type) and v2 (Double type).
+	 */
+	private Map<String, Set<ResolvedType>> groupResolvedTypeByTypeVariable(Map<ResolvedTypeParameterDeclaration, ResolvedType> typeParameters) {
+		Map<String, Set<ResolvedType>> resolvedTypesByTypeVariable = new HashMap<>();
+		for (ResolvedTypeParameterDeclaration tp : typeParameters.keySet()) {
+			String typeParameterName = tp.getName();
+			boolean alreadyCollected = resolvedTypesByTypeVariable.keySet().contains(typeParameterName);
+			if (!alreadyCollected) {
+				Set<ResolvedType> resolvedTypes = findResolvedTypesByTypeVariable(typeParameterName, typeParameters);
+				resolvedTypesByTypeVariable.put(typeParameterName, resolvedTypes);
+			}
+        }
+		return resolvedTypesByTypeVariable;
+	}
+
+	/*
+	 * Collect all resolved type from a type variable name
+	 */
+	private Set<ResolvedType> findResolvedTypesByTypeVariable(String typeVariableName, Map<ResolvedTypeParameterDeclaration, ResolvedType> typeParameters) {
+		return typeParameters.keySet().stream()
+				.filter(resolvedTypeParameterDeclaration -> resolvedTypeParameterDeclaration.getName().equals(typeVariableName))
+				.map(resolvedTypeParameterDeclaration -> typeParameters.get(resolvedTypeParameterDeclaration))
+				.collect(Collectors.toSet());
+	}
+
+	/*
+	 * Reduce all set of resolved type with LUB
+	 */
+	private Map<String, ResolvedType> reduceResolvedTypesByTypeVariable(Map<String, Set<ResolvedType>> typeParameters) {
+		Map<String, ResolvedType> reducedResolvedTypesList = new HashMap<>();
+		for (String typeParameterName : typeParameters.keySet()) {
+			ResolvedType type = reduceResolvedTypesWithLub(typeParameters.get(typeParameterName));
+			reducedResolvedTypesList.put(typeParameterName, type);
+        }
+		return reducedResolvedTypesList;
+	}
+
+	private ResolvedType reduceResolvedTypesWithLub(Set<ResolvedType> resolvedTypes) {
+		return LeastUpperBoundLogic.of().lub(resolvedTypes);
 	}
 
     private void matchTypeParameters(ResolvedType expectedType, ResolvedType actualType, Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
