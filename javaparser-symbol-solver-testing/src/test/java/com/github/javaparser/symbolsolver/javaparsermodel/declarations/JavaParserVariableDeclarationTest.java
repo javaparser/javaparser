@@ -21,8 +21,14 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -30,17 +36,10 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclarationTest;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest {
+class JavaParserVariableDeclarationTest  extends AbstractResolutionTest  implements ResolvedValueDeclarationTest {
 
     @Override
     public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
@@ -52,8 +51,9 @@ class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest 
     @Override
     public JavaParserVariableDeclaration createValue() {
         String code = "class A {a() {String s;}}";
-        CompilationUnit compilationUnit = StaticJavaParser.parse(code);
-        VariableDeclarator variableDeclarator = compilationUnit.findFirst(VariableDeclarator.class).get();
+        CompilationUnit cu = JavaParserAdapter.of(
+                createParserWithResolver(defaultTypeSolver())).parse(code);
+        VariableDeclarator variableDeclarator = cu.findFirst(VariableDeclarator.class).get();
         ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
         return new JavaParserVariableDeclaration(variableDeclarator, reflectionTypeSolver);
     }
@@ -80,11 +80,8 @@ class JavaParserVariableDeclarationTest implements ResolvedValueDeclarationTest 
                 + "    }\n"
                 + "}";
 
-        ParserConfiguration configuration = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
-        StaticJavaParser.setConfiguration(configuration);
-
-        CompilationUnit cu = StaticJavaParser.parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(
+                createParserWithResolver(defaultTypeSolver())).parse(code);
 
         List<NameExpr> names = cu.findAll(NameExpr.class);
         ResolvedValueDeclaration rvd = names.get(3).resolve();

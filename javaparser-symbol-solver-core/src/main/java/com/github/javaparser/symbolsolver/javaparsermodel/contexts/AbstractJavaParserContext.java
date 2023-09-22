@@ -101,17 +101,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     public final Optional<Context> getParent() {
         Node parentNode = wrappedNode.getParentNode().orElse(null);
 
-        // TODO/FiXME: Document why the method call expression is treated differently.
+		// Resolution of the scope of the method call expression is delegated to parent
+		// context.
         if (parentNode instanceof MethodCallExpr) {
             MethodCallExpr parentCall = (MethodCallExpr) parentNode;
-            // TODO: Can this be replaced with: boolean found = parentCall.getArguments().contains(wrappedNode);
-            boolean found = false;
-            for (Expression expression : parentCall.getArguments()) {
-                if (expression == wrappedNode) {
-                    found = true;
-                    break;
-                }
-            }
+            boolean found = parentCall.getArguments().contains(wrappedNode);
             if (found) {
                 Node notMethod = parentNode;
                 while (notMethod instanceof MethodCallExpr) {
@@ -121,7 +115,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
         }
         Node notMethodNode = parentNode;
-        // to avoid an infinite loop if parent scope is the same as wrapped node
+        // To avoid loops JP must ensure that the scope of the parent context
+		// is not the same as the current node.
         while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr
                 || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode)) ) {
             notMethodNode = notMethodNode.getParentNode().orElse(null);
