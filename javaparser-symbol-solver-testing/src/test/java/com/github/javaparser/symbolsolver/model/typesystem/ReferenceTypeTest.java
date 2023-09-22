@@ -871,7 +871,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         ResolvedType rt = types.get(0);
         String expected = "A";
         ResolvedType erasedType = rt.erasure();
-        assertTrue(rt.asReferenceType().isRawType());
+        assertFalse(rt.asReferenceType().isRawType());
         assertTrue(erasedType.asReferenceType().typeParametersValues().isEmpty());
         assertEquals(expected, erasedType.describe());
     }

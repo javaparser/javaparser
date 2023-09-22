@@ -347,7 +347,10 @@ public class MethodResolutionLogic {
                 	if (actualParam.isWildcard() && !actualParam.asWildcard().isBounded()) {
                 		return true;
                 	}
-                    return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actual, matchedParameters);
+                	if (actualParam.isTypeVariable()) {
+                        return matchTypeVariable(actualParam.asTypeVariable(), expectedParam.asWildcard().getBoundedType(), matchedParameters);
+                    }
+                    return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actualParam, matchedParameters);
                 }
                 // TODO verify super bound
                 return true;
