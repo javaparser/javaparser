@@ -21,19 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.Consumer;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -49,9 +37,21 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Pair;
-
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.NotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Consumer;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -258,4 +258,18 @@ class JavassistInterfaceDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals("com.github.javaparser.test.GenericChildInterface.S", genericResolvedType.asTypeParameter().getQualifiedName());
     }
 
+    @Test
+    public void checkModifiersOnInterface() throws NotFoundException {
+        CtClass tempInterfaceWithModifiers = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.InterfaceWithModifiers");
+        JavassistInterfaceDeclaration tempResolvedInterfaceWithModifiers = new JavassistInterfaceDeclaration(tempInterfaceWithModifiers, typeSolver);
+
+        assertTrue(tempResolvedInterfaceWithModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedInterfaceWithModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+
+        CtClass tempInterfaceWithoutModifiers = ClassPool.getDefault().getCtClass("com.github.javaparser.symbolsolver.testingclasses.InterfaceWithoutModifiers");
+        JavassistInterfaceDeclaration tempResolvedInterfaceWithoutModifiers = new JavassistInterfaceDeclaration(tempInterfaceWithoutModifiers, typeSolver);
+
+        assertTrue(tempResolvedInterfaceWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertTrue(tempResolvedInterfaceWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+    }
 }

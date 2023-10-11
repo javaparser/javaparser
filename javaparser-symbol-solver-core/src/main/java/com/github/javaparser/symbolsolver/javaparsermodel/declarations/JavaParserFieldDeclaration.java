@@ -31,6 +31,7 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 import java.util.Optional;
 
@@ -118,5 +119,10 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
     @Override
     public Optional<Node> toAst() {
         return Optional.ofNullable(wrappedNode);
+    }
+
+    @Override
+    public boolean hasModifier(Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(wrappedNode, keyword);
     }
 }

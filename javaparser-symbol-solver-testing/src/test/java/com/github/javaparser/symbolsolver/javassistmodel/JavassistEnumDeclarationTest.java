@@ -21,20 +21,23 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.IOException;
-import java.nio.file.Path;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.NotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistEnumDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -141,6 +144,17 @@ class JavassistEnumDeclarationTest extends AbstractSymbolResolutionTest {
     void testHasAnnotation(){
         ResolvedEnumDeclaration compilationUnit = (ResolvedEnumDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestParentEnum");
         assertFalse(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
+    }
+
+    @Test
+    public void checkModifiersOnEnum() throws NotFoundException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        CtClass tempEnumWithoutModifiers = ClassPool.getDefault().get("com.github.javaparser.symbolsolver.testingclasses.EnumWithoutModifiers");
+        JavassistEnumDeclaration     tempResolvedEnumWithoutModifiers = new JavassistEnumDeclaration(tempEnumWithoutModifiers, reflectionTypeSolver);
+
+        assertTrue(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertTrue(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.FINAL));
     }
 
     ///

@@ -21,21 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.*;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -56,8 +45,22 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import com.github.javaparser.utils.CodeGenerationUtils;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implements ResolvedEnumDeclarationTest,
         MethodResolutionCapabilityTest, MethodUsageResolutionCapabilityTest {
@@ -978,4 +981,17 @@ class JavaParserEnumDeclarationTest extends AbstractTypeDeclarationTest implemen
         super.containerTypeCantBeNull();
     }
 
+    @Test
+    public void checkModifiersOnEnum() throws IOException {
+        ReflectionTypeSolver reflectionTypeSolver = new ReflectionTypeSolver();
+        Path rootDir = CodeGenerationUtils.mavenModuleRoot(JavaParserFieldDeclarationTest.class).resolve("src/test/java/com/github/javaparser/symbolsolver/testingclasses");
+        CompilationUnit cu1 = parse(rootDir.resolve("EnumWithoutModifiers.java"));
+
+        EnumDeclaration tempEnumWithoutModifiers = cu1.findFirst(EnumDeclaration.class).get();
+        JavaParserEnumDeclaration tempResolvedEnumWithoutModifiers = new JavaParserEnumDeclaration(tempEnumWithoutModifiers, reflectionTypeSolver);
+
+        assertTrue(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.PUBLIC));
+        assertFalse(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.ABSTRACT));
+        assertTrue(tempResolvedEnumWithoutModifiers.hasModifier(Modifier.Keyword.FINAL));
+    }
 }

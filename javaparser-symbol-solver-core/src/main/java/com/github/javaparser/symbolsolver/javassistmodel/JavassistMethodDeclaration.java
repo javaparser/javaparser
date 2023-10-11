@@ -33,6 +33,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import javassist.CtMethod;
 
 import java.lang.reflect.Modifier;
@@ -146,5 +147,10 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
     @Override
     public String toDescriptor() {
         return ctMethod.getMethodInfo().getDescriptor();
+    }
+
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(ctMethod, ctMethod.getModifiers(), keyword);
     }
 }

@@ -247,6 +247,31 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return sb.toString();
     }
 
+    /*
+     * Every method declaration in the body of an interface is implicitly public.
+     */
+    @Override
+    public boolean isPublic() {
+        return hasModifier(Modifier.Keyword.PUBLIC) || isDeclaredInInterface();
+    }
+
+    /*
+     * Every method declaration in the body of an interface is implicitly abstract, if it's not a default method.
+     */
+    @Override
+    public boolean isAbstract() {
+        return hasModifier(Modifier.Keyword.ABSTRACT) || (isDeclaredInInterface() && !isDefault() && !isStatic());
+    }
+
+    private boolean isDeclaredInInterface() {
+        Optional<TypeDeclaration> parentType = findAncestor(TypeDeclaration.class);
+        return parentType
+                .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
+                .map(BodyDeclaration::asClassOrInterfaceDeclaration)
+                .map(ClassOrInterfaceDeclaration::isInterface)
+                .orElse(false);
+    }
+
     public boolean isNative() {
         return hasModifier(Modifier.Keyword.NATIVE);
     }

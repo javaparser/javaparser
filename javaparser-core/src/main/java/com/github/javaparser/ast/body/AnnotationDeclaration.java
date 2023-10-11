@@ -126,4 +126,10 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
     public FieldDeclaration addField(Type type, String name, Modifier.Keyword... modifiers) {
         throw new IllegalStateException("Cannot add a field to an annotation declaration.");
     }
+
+    @Override
+    public boolean isAbstract() {
+        //Annotations are always abstract!
+        return true;
+    }
 }

@@ -26,6 +26,7 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 import javassist.CtClass;
 
 import java.lang.annotation.Inherited;
@@ -159,5 +160,10 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(ctClass, ctClass.getModifiers(), keyword);
     }
 }

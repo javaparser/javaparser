@@ -38,6 +38,7 @@ import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapabi
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.comparators.MethodComparator;
+import com.github.javaparser.symbolsolver.utils.ModifierUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -398,5 +399,10 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
     @Override
     protected ResolvedReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
+    }
+
+    @Override
+    public boolean hasModifier(com.github.javaparser.ast.Modifier.Keyword keyword) {
+        return ModifierUtils.hasModifier(clazz, clazz.getModifiers(), keyword);
     }
 }
