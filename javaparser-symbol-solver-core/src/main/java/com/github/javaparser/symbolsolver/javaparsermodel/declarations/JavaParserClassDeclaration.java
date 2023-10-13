@@ -193,7 +193,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             // If this is java.lang.Object, it has no super class.
             return Optional.empty();
         }
-            if (wrappedNode.getExtendedTypes().isEmpty()) {
+        if (wrappedNode.getExtendedTypes().isEmpty()) {
             // All objects implicitly extend java.lang.Object -- inject it here (only when this isn't java.lang.Object)
             return Optional.of(object());
         }

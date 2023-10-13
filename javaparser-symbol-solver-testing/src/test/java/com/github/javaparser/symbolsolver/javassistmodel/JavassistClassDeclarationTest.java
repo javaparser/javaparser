@@ -46,6 +46,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclarationTest;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -551,6 +552,16 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
                     "com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
             assertFalse(classDeclaration.isAssignableBy(nodeWithImplements));
             assertTrue(nodeWithImplements.isAssignableBy(classDeclaration));
+        }
+
+        @Test
+        void issue3673() {
+            ReflectionClassDeclaration optionalDeclaration = (ReflectionClassDeclaration) typeSolver.solveType(
+                    "java.util.Optional");
+            JavassistEnumDeclaration enumDeclaration = (JavassistEnumDeclaration) anotherTypeSolver.solveType(
+                    "com.github.javaparser.test.TestEnum");
+            assertFalse(optionalDeclaration.isAssignableBy(enumDeclaration));
+            assertFalse(enumDeclaration.isAssignableBy(optionalDeclaration));
         }
     }
 

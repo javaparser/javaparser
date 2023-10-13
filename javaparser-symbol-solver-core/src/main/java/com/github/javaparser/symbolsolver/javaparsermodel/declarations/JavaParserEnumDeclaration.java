@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -48,20 +51,12 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
-
 /**
  * @author Federico Tomassetti
  */
 public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
         SymbolResolutionCapability {
-
-    private static String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-    private static String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
-    private static String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
 
     private TypeSolver typeSolver;
     private EnumDeclaration wrappedNode;
@@ -380,7 +375,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
             throw new UnsupportedOperationException();
         }
 
-        public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
+        @Override
+		public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
             return new MethodUsage(this);
         }
 

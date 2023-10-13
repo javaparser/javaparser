@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,7 +37,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable {
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-
+    String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
+	String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     @Override
