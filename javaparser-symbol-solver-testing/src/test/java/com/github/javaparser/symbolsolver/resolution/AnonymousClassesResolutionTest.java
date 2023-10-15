@@ -54,13 +54,13 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
                 cd);
 
         typeSolver.add(memoryTypeSolver);
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
     }
 
     @AfterAll
     static void unConfigureSymbolSolver() {
         // unconfigure symbol solver so as not to potentially disturb tests in other classes
-        StaticJavaParser.getConfiguration().setSymbolResolver(null);
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(null);
     }
 
     // See #1703

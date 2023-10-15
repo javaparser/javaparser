@@ -92,7 +92,7 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         PrintStream outErr = new PrintStream(outErrStream);
         
         // set configuration to ignore comment
-        StaticJavaParser.getConfiguration().setAttributeComments(false);
+        StaticJavaParser.getParserConfiguration().setAttributeComments(false);
 
         sourceFileInfoExtractor.setOut(outErr);
         sourceFileInfoExtractor.setErr(outErr);
