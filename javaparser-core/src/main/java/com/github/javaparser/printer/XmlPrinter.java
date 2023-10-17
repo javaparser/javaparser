@@ -28,7 +28,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-import static java.util.stream.Collectors.toList;
+import java.util.function.Predicate;
 
 /**
  * Outputs an XML file containing the AST meant for inspecting it.
@@ -51,35 +51,55 @@ public class XmlPrinter {
         assertNotNull(node);
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
-        List<PropertyMetaModel> attributes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute).filter(PropertyMetaModel::isSingular).collect(toList());
-        List<PropertyMetaModel> subNodes = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNode).filter(PropertyMetaModel::isSingular).collect(toList());
-        List<PropertyMetaModel> subLists = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList).collect(toList());
+        Predicate<PropertyMetaModel> nonNullNode = propertyMetaModel -> propertyMetaModel.getValue(node) != null;
+        Predicate<PropertyMetaModel> nonEmptyList = propertyMetaModel ->
+                ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
+
         builder.append("<").append(name);
+
+        // Output node type attribute
         if (outputNodeType) {
             builder.append(attribute("type", metaModel.getTypeName()));
         }
-        for (PropertyMetaModel attributeMetaModel : attributes) {
-            builder.append(attribute(attributeMetaModel.getName(), attributeMetaModel.getValue(node).toString()));
-        }
+
+        // Output attributes
+        allPropertyMetaModels.stream()
+                .filter(PropertyMetaModel::isAttribute)
+                .filter(PropertyMetaModel::isSingular)
+                .forEach(attributeMetaModel -> {
+                        final String attributeName = attributeMetaModel.getName();
+                        final String attributeValue = attributeMetaModel.getValue(node).toString();
+                        builder.append(attribute(attributeName, attributeValue));
+                });
+
         builder.append(">");
-        for (PropertyMetaModel subNodeMetaModel : subNodes) {
-            Node value = (Node) subNodeMetaModel.getValue(node);
-            if (value != null) {
-                output(value, subNodeMetaModel.getName(), level + 1, builder);
-            }
-        }
-        for (PropertyMetaModel subListMetaModel : subLists) {
-            NodeList<? extends Node> subList = (NodeList<? extends Node>) subListMetaModel.getValue(node);
-            if (subList != null && !subList.isEmpty()) {
-                String listName = subListMetaModel.getName();
-                builder.append("<").append(listName).append(">");
-                String singular = listName.substring(0, listName.length() - 1);
-                for (Node subListNode : subList) {
-                    output(subListNode, singular, level + 1, builder);
-                }
-                builder.append(close(listName));
-            }
-        }
+
+        // Output singular subNodes
+        allPropertyMetaModels.stream()
+                .filter(PropertyMetaModel::isNode)
+                .filter(PropertyMetaModel::isSingular)
+                .filter(nonNullNode)
+                .forEach(subNodeMetaModel -> {
+                        final Node subNode = (Node) subNodeMetaModel.getValue(node);
+                        final String subNodeName = subNodeMetaModel.getName();
+                        output(subNode, subNodeName, level + 1, builder);
+                });
+
+        // Output list subNodes
+        allPropertyMetaModels.stream()
+                .filter(PropertyMetaModel::isNodeList)
+                .filter(nonNullNode)
+                .filter(nonEmptyList)
+                .forEach(listMetaModel -> {
+                        final String listName = listMetaModel.getName();
+                        String singular = listName.substring(0, listName.length() - 1);
+                        NodeList<? extends Node> nodeList = (NodeList) listMetaModel.getValue(node);
+                        builder.append("<").append(listName).append(">");
+                        for (Node subNode : nodeList) {
+                            output(subNode, singular, level + 1, builder);
+                        }
+                        builder.append(close(listName));
+                });
         builder.append(close(name));
     }
 
