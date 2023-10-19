@@ -153,7 +153,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration()
+			.removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     @InternalProperty
     private Range range;
@@ -334,7 +335,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Formatting can be configured with parameter PrinterConfiguration.
      */
     public final String toString(PrinterConfiguration configuration) {
-        return getPrinter(configuration).print(this);
+    	// save the current configuration
+    	PrinterConfiguration previousConfiguration = getPrinter().getConfiguration();
+    	// print with the new configuration
+    	String result = getPrinter(configuration).print(this);
+    	// restore the previous printer configuration (issue 4163)
+    	getPrinter().setConfiguration(previousConfiguration);
+    	return result;
     }
 
     @Override
