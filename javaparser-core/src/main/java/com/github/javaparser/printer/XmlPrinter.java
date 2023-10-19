@@ -28,7 +28,12 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.function.Predicate;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 /**
  * Outputs an XML file containing the AST meant for inspecting it.
@@ -42,12 +47,38 @@ public class XmlPrinter {
     }
 
     public String output(Node node) {
-        StringBuilder output = new StringBuilder();
-        output(node, "root", 0, output);
-        return output.toString();
+        return stringWriterOutput(node, "root").toString();
     }
 
+    // Kept for backward compatibility
     public void output(Node node, String name, int level, StringBuilder builder) {
+        builder.append(stringWriterOutput(node, name).toString());
+    }
+
+    public StringWriter stringWriterOutput(Node node, String name) {
+        StringWriter stringWriter = new StringWriter();
+        outputDocument(node, name, stringWriter);
+        return stringWriter;
+    }
+
+    public void outputDocument(Node node, String name, Writer writer) {
+        XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+        try {
+            XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(writer);
+            outputDocument(node, name, xmlWriter);
+        } catch (XMLStreamException ex) {
+            throw new RuntimeXMLStreamException(ex);
+        }
+    }
+
+    public void outputDocument(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
+        xmlWriter.writeStartDocument();
+        outputNode(node, name, xmlWriter);
+        xmlWriter.writeEndDocument();
+    }
+
+    public void outputNode(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
+
         assertNotNull(node);
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
@@ -55,63 +86,81 @@ public class XmlPrinter {
         Predicate<PropertyMetaModel> nonEmptyList = propertyMetaModel ->
                 ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
 
-        builder.append("<").append(name);
+        xmlWriter.writeStartElement(name);
 
         // Output node type attribute
         if (outputNodeType) {
-            builder.append(attribute("type", metaModel.getTypeName()));
+            xmlWriter.writeAttribute("type", metaModel.getTypeName());
         }
 
-        // Output attributes
-        allPropertyMetaModels.stream()
-                .filter(PropertyMetaModel::isAttribute)
-                .filter(PropertyMetaModel::isSingular)
-                .forEach(attributeMetaModel -> {
-                        final String attributeName = attributeMetaModel.getName();
-                        final String attributeValue = attributeMetaModel.getValue(node).toString();
-                        builder.append(attribute(attributeName, attributeValue));
-                });
-
-        builder.append(">");
-
-        // Output singular subNodes
-        allPropertyMetaModels.stream()
-                .filter(PropertyMetaModel::isNode)
-                .filter(PropertyMetaModel::isSingular)
-                .filter(nonNullNode)
-                .forEach(subNodeMetaModel -> {
-                        final Node subNode = (Node) subNodeMetaModel.getValue(node);
-                        final String subNodeName = subNodeMetaModel.getName();
-                        output(subNode, subNodeName, level + 1, builder);
-                });
-
-        // Output list subNodes
-        allPropertyMetaModels.stream()
-                .filter(PropertyMetaModel::isNodeList)
-                .filter(nonNullNode)
-                .filter(nonEmptyList)
-                .forEach(listMetaModel -> {
-                        final String listName = listMetaModel.getName();
-                        String singular = listName.substring(0, listName.length() - 1);
-                        NodeList<? extends Node> nodeList = (NodeList) listMetaModel.getValue(node);
-                        builder.append("<").append(listName).append(">");
-                        for (Node subNode : nodeList) {
-                            output(subNode, singular, level + 1, builder);
+        try {
+            // Output attributes
+            allPropertyMetaModels.stream()
+                    .filter(PropertyMetaModel::isAttribute)
+                    .filter(PropertyMetaModel::isSingular)
+                    .forEach(attributeMetaModel -> {
+                        try {
+                            final String attributeName = attributeMetaModel.getName();
+                            final String attributeValue = attributeMetaModel.getValue(node).toString();
+                            xmlWriter.writeAttribute(attributeName, attributeValue);
+                        } catch (XMLStreamException ex) {
+                            throw new RuntimeXMLStreamException(ex);
                         }
-                        builder.append(close(listName));
-                });
-        builder.append(close(name));
-    }
+                    });
 
-    private static String close(String name) {
-        return "</" + name + ">";
-    }
+            // Output singular subNodes
+            allPropertyMetaModels.stream()
+                    .filter(PropertyMetaModel::isNode)
+                    .filter(PropertyMetaModel::isSingular)
+                    .filter(nonNullNode)
+                    .forEach(subNodeMetaModel -> {
+                        try {
+                            final Node subNode = (Node) subNodeMetaModel.getValue(node);
+                            final String subNodeName = subNodeMetaModel.getName();
+                            outputNode(subNode, subNodeName, xmlWriter);
+                        } catch (XMLStreamException ex) {
+                            throw new RuntimeXMLStreamException(ex);
+                        }
+                    });
 
-    private static String attribute(String name, String value) {
-        return " " + name + "='" + value + "'";
+            // Output list subNodes
+            allPropertyMetaModels.stream()
+                    .filter(PropertyMetaModel::isNodeList)
+                    .filter(nonNullNode)
+                    .filter(nonEmptyList)
+                    .forEach(listMetaModel -> {
+                        try {
+                            String listName = listMetaModel.getName();
+                            String singular = listName.substring(0, listName.length() - 1);
+                            NodeList<? extends Node> nodeList = (NodeList) listMetaModel.getValue(node);
+                            xmlWriter.writeStartElement(listName);
+                            for (Node subNode : nodeList) {
+                                outputNode(subNode, singular, xmlWriter);
+                            }
+                            xmlWriter.writeEndElement();
+                        } catch (XMLStreamException ex) {
+                            throw new RuntimeXMLStreamException(ex);
+                        }
+                    });
+        } catch (RuntimeXMLStreamException ex) {
+            throw ex.getXMLStreamCause();
+        }
+
+        xmlWriter.writeEndElement();
     }
 
     public static void print(Node node) {
         System.out.println(new XmlPrinter(true).output(node));
+    }
+}
+
+class RuntimeXMLStreamException extends RuntimeException {
+
+    public RuntimeXMLStreamException(XMLStreamException cause) {
+        super(cause);
+    }
+
+    public XMLStreamException getXMLStreamCause() {
+        return (XMLStreamException) super.getCause();
     }
 }
