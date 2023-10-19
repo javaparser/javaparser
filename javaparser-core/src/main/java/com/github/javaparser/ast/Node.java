@@ -153,8 +153,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
-
     @InternalProperty
     private Range range;
 
