@@ -173,9 +173,9 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
                 sb.append(", ");
             }
             if (includingParameterName) {
-            	sb.append(param);
+            	sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-            	sb.append(param.getType());
+            	sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         sb.append(")");

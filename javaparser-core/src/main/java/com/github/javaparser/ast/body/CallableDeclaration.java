@@ -209,7 +209,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
                 } else {
                     sb.append(", ");
                 }
-                sb.append(thr);
+                sb.append(thr.toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         return sb.toString();

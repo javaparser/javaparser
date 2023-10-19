@@ -262,7 +262,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
                 } else {
                     sb.append(", ");
                 }
-                sb.append(thr);
+                sb.append(thr.toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         return sb.toString();
