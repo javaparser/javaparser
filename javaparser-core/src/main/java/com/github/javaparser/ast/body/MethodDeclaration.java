@@ -211,7 +211,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         }
         sb.append(getType().toString(prettyPrinterNoCommentsConfiguration));
         sb.append(" ");
-        sb.append(getName());
+        sb.append(getName().toString(prettyPrinterNoCommentsConfiguration));
         sb.append("(");
         boolean firstParam = true;
         for (Parameter param : getParameters()) {
