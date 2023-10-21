@@ -28,6 +28,7 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 import java.util.List;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.function.Predicate;
@@ -84,6 +85,9 @@ public class XmlPrinter {
     public void outputNode(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
 
         assertNotNull(node);
+        assertNonEmpty(name);
+        assertNotNull(xmlWriter);
+
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
         Predicate<PropertyMetaModel> nonNullNode = propertyMetaModel -> propertyMetaModel.getValue(node) != null;
