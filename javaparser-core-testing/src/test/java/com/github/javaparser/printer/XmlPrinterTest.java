@@ -27,14 +27,18 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -176,6 +180,30 @@ class XmlPrinterTest {
         String output = xmlOutput.output(expression);
 
         assertXMLEquals("<root type='MethodCallExpr'><name type='SimpleName' identifier='a'></name><arguments><argument type='IntegerLiteralExpr' value='1'></argument><argument type='IntegerLiteralExpr' value='2'></argument></arguments></root>", output);
+    }
+
+    // Demonstrate the use of streaming, without use of temporary strings.
+    @Test
+    void testStreamToFile() throws SAXException, IOException, XMLStreamException {
+
+        File tempFile = createTempFile();
+
+        try (
+            FileWriter fileWriter = new FileWriter(tempFile, StandardCharsets.UTF_8)
+        ) {
+            XmlPrinter xmlOutput = new XmlPrinter(false);
+            xmlOutput.outputDocument(parseExpression("1+1"), "root", fileWriter);
+        }
+
+        assertXMLEquals(""
+                // Expected
+                + "<root operator='PLUS'>"
+                    + "<left value='1'/>"
+                    + "<right value='1'/>"
+                + "</root>",
+                // Actual (Using temporary string for checking results. No one has been used when generating XML)
+                new String(Files.readAllBytes(tempFile.toPath()), StandardCharsets.UTF_8)
+        );
     }
 }
 
