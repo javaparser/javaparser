@@ -32,21 +32,25 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeAll;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 class XmlPrinterTest {
 
-    DocumentBuilderFactory dbf;
-    DocumentBuilder db;
-    {
+    // Used for building XML documents
+    private static DocumentBuilderFactory documentBuilderFactory;
+    private static DocumentBuilder documentBuilder;
+
+    @BeforeAll
+    public static void setupDocumentBuilder() {
         try {
-            dbf = DocumentBuilderFactory.newInstance();
-            dbf.setNamespaceAware(true);
-            dbf.setCoalescing(true);
-            dbf.setIgnoringElementContentWhitespace(true);
-            dbf.setIgnoringComments(true);
-            db = dbf.newDocumentBuilder();
+            documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setNamespaceAware(true);
+            documentBuilderFactory.setCoalescing(true);
+            documentBuilderFactory.setIgnoringElementContentWhitespace(true);
+            documentBuilderFactory.setIgnoringComments(true);
+            documentBuilder = documentBuilderFactory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
             throw new RuntimeException(ex);
         }
@@ -54,7 +58,7 @@ class XmlPrinterTest {
 
     public Document getDocument(String xml) throws SAXException, IOException {
         InputStream inputStream = new ByteArrayInputStream(xml.getBytes());
-        Document result = db.parse(inputStream);
+        Document result = documentBuilder.parse(inputStream);
         result.normalizeDocument();
         return result;
     }
