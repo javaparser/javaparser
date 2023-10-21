@@ -31,7 +31,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
@@ -191,7 +190,7 @@ class XmlPrinterTest {
         File tempFile = createTempFile();
 
         try (
-            FileWriter fileWriter = new FileWriter(tempFile, StandardCharsets.UTF_8)
+            FileWriter fileWriter = new FileWriter(tempFile)
         ) {
             XmlPrinter xmlOutput = new XmlPrinter(false);
             xmlOutput.outputDocument(parseExpression("1+1"), "root", fileWriter);
@@ -204,7 +203,7 @@ class XmlPrinterTest {
                     + "<right value='1'/>"
                 + "</root>",
                 // Actual (Using temporary string for checking results. No one has been used when generating XML)
-                new String(Files.readAllBytes(tempFile.toPath()), StandardCharsets.UTF_8)
+                new String(Files.readAllBytes(tempFile.toPath()))
         );
     }
 
