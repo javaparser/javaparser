@@ -21,9 +21,10 @@
 
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.IntegerLiteralExpr;
-import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,4 +63,111 @@ class AnnotationMemberDeclarationTest {
 
         assertFalse(defaultValue.getParentNode().isPresent());
     }
+
+    @Test
+    void testModifiersSetter() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        NodeList<Modifier> modifiers = new NodeList<>(Modifier.publicModifier(), Modifier.staticModifier());
+        decl.setModifiers(modifiers);
+
+        assertTrue(decl.getModifiers().contains(Modifier.publicModifier()));
+        assertTrue(decl.getModifiers().contains(Modifier.staticModifier()));
+    }
+
+    @Test
+    void testTypeSetter() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        ClassOrInterfaceType type = new ClassOrInterfaceType("String");
+        decl.setType(type);
+
+        assertEquals("String", decl.getType().asString());
+    }
+
+    @Test
+    void testDefaultValueSetter() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        BooleanLiteralExpr defaultValue = new BooleanLiteralExpr(true);
+        decl.setDefaultValue(defaultValue);
+
+        assertTrue(decl.getDefaultValue().isPresent());
+        assertTrue(((BooleanLiteralExpr) decl.getDefaultValue().get()).getValue());
+    }
+
+    @Test
+    void testReplaceMethodForDefaultValue() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        LongLiteralExpr defaultValue = new LongLiteralExpr(123L);
+        decl.setDefaultValue(defaultValue);
+
+        LongLiteralExpr newDefaultValue = new LongLiteralExpr(456L);
+        decl.replace(defaultValue, newDefaultValue);
+
+        assertTrue(decl.getDefaultValue().isPresent());
+        assertEquals(456L, ((LongLiteralExpr) decl.getDefaultValue().get()).asLong());
+    }
+
+    @Test
+    void testReplaceMethodForOtherType() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        ClassOrInterfaceType type = new ClassOrInterfaceType("String");
+        decl.setType(type);
+
+        ClassOrInterfaceType newType = new ClassOrInterfaceType("Integer");
+        assertTrue(decl.replace(type, newType));
+        assertEquals("Integer", decl.getType().asString());
+    }
+
+
+    @Test
+    void testRemoveMethod() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+
+        Modifier publicMod = Modifier.publicModifier();
+        NodeList<Modifier> modifiers = new NodeList<>(publicMod);
+        decl.setModifiers(modifiers);
+
+        assertTrue(decl.remove(publicMod));
+
+        assertFalse(decl.remove(Modifier.protectedModifier()));
+    }
+
+    @Test
+    void testCloneMethod() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        decl.setName(new SimpleName("foo"));
+        decl.setType(new ClassOrInterfaceType("String"));
+        AnnotationMemberDeclaration clonedDecl = decl.clone();
+
+        assertEquals(decl.getName().asString(), clonedDecl.getName().asString());
+        assertEquals(decl.getType().asString(), clonedDecl.getType().asString());
+    }
+
+    @Test
+    void testIsAnnotationMemberDeclaration() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        assertTrue(decl.isAnnotationMemberDeclaration());
+    }
+
+    @Test
+    void testAsAnnotationMemberDeclaration() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        assertEquals(decl, decl.asAnnotationMemberDeclaration());
+    }
+
+    @Test
+    void testIfAnnotationMemberDeclaration() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        decl.ifAnnotationMemberDeclaration(annotationDecl -> assertEquals(decl, annotationDecl));
+    }
+
+    @Test
+    void testToAnnotationMemberDeclaration() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+        assertTrue(decl.toAnnotationMemberDeclaration().isPresent());
+        assertEquals(decl, decl.toAnnotationMemberDeclaration().get());
+    }
+
+
+
+
 }
