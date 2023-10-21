@@ -57,17 +57,21 @@ public class XmlPrinter {
 
     public StringWriter stringWriterOutput(Node node, String name) {
         StringWriter stringWriter = new StringWriter();
-        outputDocument(node, name, stringWriter);
+        try {
+            outputDocument(node, name, stringWriter);
+        } catch (XMLStreamException ex) {
+            throw new RuntimeXMLStreamException(ex);
+        }
         return stringWriter;
     }
 
-    public void outputDocument(Node node, String name, Writer writer) {
+    public void outputDocument(Node node, String name, Writer writer) throws XMLStreamException {
         XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+        XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(writer);
         try {
-            XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(writer);
             outputDocument(node, name, xmlWriter);
-        } catch (XMLStreamException ex) {
-            throw new RuntimeXMLStreamException(ex);
+        } finally {
+            xmlWriter.close();
         }
     }
 
