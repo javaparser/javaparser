@@ -28,10 +28,18 @@ import static com.github.javaparser.StaticJavaParser.parseExpression;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -56,6 +64,21 @@ class XmlPrinterTest {
         }
     }
 
+    // Used for serializing XML documents (Necessary only when doing error reporting)
+    private static TransformerFactory transformerFactory;
+    private static Transformer transformer;
+
+    @BeforeAll
+    public static void setupTransformerFactory() {
+        try {
+            transformerFactory = TransformerFactory.newInstance();
+            transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        } catch (TransformerConfigurationException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public Document getDocument(String xml) throws SAXException, IOException {
         InputStream inputStream = new ByteArrayInputStream(xml.getBytes());
         Document result = documentBuilder.parse(inputStream);
@@ -63,8 +86,27 @@ class XmlPrinterTest {
         return result;
     }
 
-    public void assertXMLEquals(String xml1, String xml2) throws SAXException, IOException {
-        assertTrue(getDocument(xml1).isEqualNode(getDocument(xml2)));
+    public String getXML(Document document) throws TransformerException {
+        StringWriter result = new StringWriter(); // Closing a StringWriter is not needed
+        transformer.transform(new DOMSource(document), new StreamResult(result));
+        return result.toString();
+    }
+
+    public void assertXMLEquals(String expected, String actual) throws SAXException, IOException {
+        final Document expectedDocument = getDocument(expected);
+        final Document actualDocument = getDocument(actual);
+
+        if (!expectedDocument.isEqualNode(actualDocument)) {
+            try {
+                fail(String.format("-- expected:\n%s-- actual:\n%s",
+                        getXML(expectedDocument), getXML(actualDocument)));
+            } catch(TransformerException ex) {
+                fail(String.format(""
+                        + "expected: <%s>, but it was <%s>\n"
+                        + "Additionally, a TransformerException was raised when trying to report XML document contents",
+                        expected, actual), ex);
+            }
+        }
     }
 
     @Test
