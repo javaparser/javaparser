@@ -26,9 +26,12 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,8 +42,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -79,6 +84,32 @@ class XmlPrinterTest {
         }
     }
 
+    /**
+     * Set of cleanups to be done at the end of each test execution.
+     */
+    private Set<Cleanup> cleanupSet;
+
+    /**
+     * Add given runnable to set of elements to be called.
+     *
+     * @param cleanup Object to be called at the end of each test execution
+     */
+    private void onEnd(Cleanup cleanup) {
+        cleanupSet.add(cleanup);
+    }
+
+    @BeforeEach
+    public void clearCleanupSet() {
+        cleanupSet = new HashSet<>();
+    }
+
+    @AfterEach
+    public void runCleanup() throws Exception {
+        for (Cleanup cleanup : cleanupSet) {
+            cleanup.run();
+        }
+    }
+
     public Document getDocument(String xml) throws SAXException, IOException {
         InputStream inputStream = new ByteArrayInputStream(xml.getBytes());
         Document result = documentBuilder.parse(inputStream);
@@ -90,6 +121,12 @@ class XmlPrinterTest {
         StringWriter result = new StringWriter(); // Closing a StringWriter is not needed
         transformer.transform(new DOMSource(document), new StreamResult(result));
         return result.toString();
+    }
+
+    private File createTempFile() throws IOException {
+        File result = File.createTempFile("javaparser", "test.xml");
+        onEnd(result::delete); // Schedule file deletion at the end of Test
+        return result;
     }
 
     public void assertXMLEquals(String expected, String actual) throws SAXException, IOException {
@@ -140,4 +177,8 @@ class XmlPrinterTest {
 
         assertXMLEquals("<root type='MethodCallExpr'><name type='SimpleName' identifier='a'></name><arguments><argument type='IntegerLiteralExpr' value='1'></argument><argument type='IntegerLiteralExpr' value='2'></argument></arguments></root>", output);
     }
+}
+
+interface Cleanup {
+    void run() throws Exception;
 }
