@@ -47,15 +47,42 @@ public class XmlPrinter {
         this.outputNodeType = outputNodeType;
     }
 
+    /**
+     * Generate a xml string for given AST Node. Tag name of root element in the result document will be "root".
+     *
+     * @param node AST node to be converted to XML
+     * @return XML document corresponding to node
+     */
     public String output(Node node) {
         return stringWriterOutput(node, "root").toString();
     }
 
-    // Kept for backward compatibility
+    /**
+     * Output XML data from an AST node to a String Builder. This method is kept for backward compatilibity only and
+     * should be removed in future releases.
+     *
+     * @param node AST node to be converted to XML
+     * @param name Tag name of root element in the resulting document
+     * @param level Nesting level of node in tree. Not used.
+     * @param builder Target object to receive the generated XML
+     */
+    @Deprecated
     public void output(Node node, String name, int level, StringBuilder builder) {
         builder.append(stringWriterOutput(node, name).toString());
     }
 
+    /**
+     * Create a string writer filled with XML document representing an AST node.
+     * <p>
+     * Returned stringWriter is not closed upon return because doing so {@link StringWriter#close() has no effect}.
+     * So users of this method are not required to close it.
+     * </p>
+     * @param node AST node to be converted to XML
+     * @param name Tag name of root element in the resulting document
+     * @return Stringwriter filled with XML document
+     * @throws RuntimeXMLStreamException Unchecked exception wrapping checked {@link XMLStreamException}, when any
+     * error on producing XML output occours
+     */
     public StringWriter stringWriterOutput(Node node, String name) {
         StringWriter stringWriter = new StringWriter();
         try {
@@ -66,6 +93,21 @@ public class XmlPrinter {
         return stringWriter;
     }
 
+    /**
+     * Output the XML Document representing given AST node to given writer.
+     * <p>
+     * This method creates a {@link XMLStreamWriter} that writes to given writer and delegates execution to
+     * {@link #outputDocument(Node, String, XMLStreamWriter)}
+     * </p>
+     * <p>
+     * Provided writer is NOT closed at the end of execution of this method.
+     * </p>
+     *
+     * @param node AST node to be converted to XML
+     * @param name Tag name of root element of document
+     * @param writer Target to get the document writen to
+     * @throws XMLStreamException When any error on outputting XML occours
+     */
     public void outputDocument(Node node, String name, Writer writer) throws XMLStreamException {
         XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
         XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(writer);
@@ -76,12 +118,55 @@ public class XmlPrinter {
         }
     }
 
+    /**
+     * Output the XML Document representing an AST node to given XMLStreamWriter.
+     * <p>
+     * This method outputs the starting of XML document, then delegates to
+     * {@link #outputNode(Node, String, XMLStreamWriter) for writing the root element of XML document, and finally
+     * outputs the ending of XML document.
+     * </p>
+     * <p>
+     * This method is used when the root element of an XML document corresponds to an AST node. Would an element
+     * corresponding to an AST node be written as child of another element, then
+     * {@link #outputNode(String, Node, XMLStreamWriter)} should be used instead. Actually, outputNode is used
+     * recursively for outputting nested elements from AST.
+     * </p>
+     * <p>
+     * Provided xmlWriter is NOT closed at the end of execution of this method.
+     * </p>
+     *
+     * @param node AST node to be converted to XML
+     * @param name Tag name of root element of document
+     * @param xmlWriter Target to get document written to
+     * @throws XMLStreamException When any error on outputting XML occours
+     * @see outputNode(String, Node, XMLStreamWriter)
+     */
     public void outputDocument(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
         xmlWriter.writeStartDocument();
         outputNode(node, name, xmlWriter);
         xmlWriter.writeEndDocument();
     }
 
+    /**
+     * Output the XML Element representing an AST node to given writer.
+     * <p>
+     * This method outputs an XML Element with given tag name to writer. It is used recursively for generating nested
+     * elements corresponding to AST.
+     * </p>
+     * <p>
+     * For generating a complete XML document from an AST node, {@link outputDocument(String, Node, XMLStreamWriter)}
+     * should be used instead.
+     * </p>
+     * <p>
+     * Provided xmlWriter is NOT closed at the end of execution of this method.
+     * </p>
+     *
+     * @param node AST node to be converted to XML
+     * @param name Tag name of element corresponding to node
+     * @param xmlWriter Target to get XML written to
+     * @throws XMLStreamException When any error on outputting XML occours
+     * @see outputDocument(String, Node, XMLStreamWriter)
+     */
     public void outputNode(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
 
         assertNotNull(node);
@@ -162,6 +247,13 @@ public class XmlPrinter {
     }
 }
 
+/**
+ * RuntimeException subclass encapsulationg XMLStreamException.
+ * <p>
+ * Used for generating methods without checked exceptions, but allowing to selectively capture of XMLStreamException at
+ * higher levels.
+ * </p>
+ */
 class RuntimeXMLStreamException extends RuntimeException {
 
     public RuntimeXMLStreamException(XMLStreamException cause) {
