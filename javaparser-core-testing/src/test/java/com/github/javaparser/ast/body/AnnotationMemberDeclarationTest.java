@@ -167,7 +167,4 @@ class AnnotationMemberDeclarationTest {
         assertEquals(decl, decl.toAnnotationMemberDeclaration().get());
     }
 
-
-
-
 }
