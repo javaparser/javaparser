@@ -25,6 +25,10 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -762,4 +766,112 @@ public class RecordDeclarationTest {
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         assertEquals(2, recordDeclarations.size());
     }
+
+    @Test
+    public void testReceiverParameter() {
+        RecordDeclaration record = new RecordDeclaration();
+        ReceiverParameter receiverParameter = new ReceiverParameter();
+        record.setReceiverParameter(receiverParameter);
+        assertEquals(receiverParameter, record.getReceiverParameter().orElse(null));
+    }
+
+
+    @Test
+    public void testIsRecordDeclaration() {
+        RecordDeclaration record = new RecordDeclaration(new NodeList<Modifier>(), "testName");
+        assertTrue(record.isRecordDeclaration());
+    }
+
+    @Test
+    public void testAsRecordDeclaration() {
+        RecordDeclaration record = new RecordDeclaration(new NodeList<Modifier>(), "testName");
+        assertTrue(record.asRecordDeclaration() instanceof RecordDeclaration);
+    }
+
+    @Test
+    public void testToRecordDeclaration() {
+        RecordDeclaration record = new RecordDeclaration(new NodeList<Modifier>(), "testName");
+        assertTrue(record.toRecordDeclaration().isPresent());
+    }
+
+    @Test
+    public void testIfRecordDeclaration() {
+        RecordDeclaration record = new RecordDeclaration(new NodeList<Modifier>(), "testName");
+        record.ifRecordDeclaration(r -> assertEquals("testName", r.getName().asString()));
+    }
+
+    @Test
+    public void testRemoveImplementedTypes() {
+        RecordDeclaration record = new RecordDeclaration();
+        ClassOrInterfaceType type = new ClassOrInterfaceType("Type");
+        record.getImplementedTypes().add(type);
+        assertTrue(record.remove(type));
+        assertFalse(record.getImplementedTypes().contains(type));
+    }
+
+    @Test
+    public void testRemoveParameters() {
+        RecordDeclaration record = new RecordDeclaration();
+        Parameter param = new Parameter(new PrimitiveType(PrimitiveType.Primitive.INT), "intParam");
+        record.getParameters().add(param);
+        assertTrue(record.remove(param));
+        assertFalse(record.getParameters().contains(param));
+    }
+
+    @Test
+    public void testRemoveReceiverParameter() {
+        RecordDeclaration record = new RecordDeclaration();
+        ReceiverParameter receiverParameter = new ReceiverParameter();
+        record.setReceiverParameter(receiverParameter);
+        assertTrue(record.remove(receiverParameter));
+        record.removeReceiverParameter();
+        assertNull(record.getReceiverParameter().orElse(null));
+    }
+
+    @Test
+    public void testRemoveTypeParameters() {
+        RecordDeclaration record = new RecordDeclaration();
+        TypeParameter typeParam = new TypeParameter("T");
+        record.getTypeParameters().add(typeParam);
+
+        assertTrue(record.remove(typeParam));
+        assertFalse(record.getTypeParameters().contains(typeParam));
+    }
+
+    @Test
+    public void testReplaceImplementedTypes() {
+        RecordDeclaration record = new RecordDeclaration();
+        ClassOrInterfaceType oldType = new ClassOrInterfaceType("OldType");
+        ClassOrInterfaceType newType = new ClassOrInterfaceType("NewType");
+        record.getImplementedTypes().add(oldType);
+
+        assertTrue(record.replace(oldType, newType));
+        assertFalse(record.getImplementedTypes().contains(oldType));
+        assertTrue(record.getImplementedTypes().contains(newType));
+    }
+
+    @Test
+    public void testReplaceParameters() {
+        RecordDeclaration record = new RecordDeclaration();
+        Parameter oldParam = new Parameter(new PrimitiveType(PrimitiveType.Primitive.INT), "intParam");
+        Parameter newParam = new Parameter(new PrimitiveType(PrimitiveType.Primitive.DOUBLE), "doubleParam");
+        record.getParameters().add(oldParam);
+
+        assertTrue(record.replace(oldParam, newParam));
+        assertFalse(record.getParameters().contains(oldParam));
+        assertTrue(record.getParameters().contains(newParam));
+    }
+
+    @Test
+    public void testReplaceTypeParameters() {
+        RecordDeclaration record = new RecordDeclaration();
+        TypeParameter oldTypeParam = new TypeParameter("OldT");
+        TypeParameter newTypeParam = new TypeParameter("NewT");
+        record.getTypeParameters().add(oldTypeParam);
+
+        assertTrue(record.replace(oldTypeParam, newTypeParam));
+        assertFalse(record.getTypeParameters().contains(oldTypeParam));
+        assertTrue(record.getTypeParameters().contains(newTypeParam));
+    }
+
 }
