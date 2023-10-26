@@ -392,7 +392,7 @@ public class LexicalPreservingPrinter {
             } else if (type == AstObserver.ListChangeType.ADDITION) {
                 differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
             } else {
-                throw new UnsupportedOperationException("Unknown ListChangeType: " + type);
+                throw new UnsupportedOperationException("Unknown change type: " + type);
             }
             Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
             difference.apply();
