@@ -445,7 +445,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(VariableDeclarationExpr node, Boolean solveLambdas) {
         if (node.getVariables().size() != 1) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("TypeExtractor supports only one variable declaration in a variable declaration expression");
         }
         return facade.convertToUsage(node.getVariables().get(0).getType());
     }
@@ -563,7 +563,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
 
             } else {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot resolve the type of lambda expression body " + lambdaExpr.getBody());
             }
 
             ResolvedType formalType = functionalMethod.get().returnType();
