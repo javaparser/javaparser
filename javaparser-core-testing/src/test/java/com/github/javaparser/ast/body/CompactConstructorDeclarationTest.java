@@ -26,6 +26,12 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.TypeParameter;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.resolution.Context;
+import com.github.javaparser.resolution.types.ResolvedType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -96,17 +102,58 @@ class CompactConstructorDeclarationTest {
     }
 
     @Test
-    void testRemove() {
+    void testRemoveTypeParameter() {
         CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
-        Modifier mod = new Modifier();
-        decl.getModifiers().add(mod);
+        TypeParameter tp = new TypeParameter();
+        decl.getTypeParameters().add(tp);
 
-        boolean removed = decl.remove(mod);
+        boolean removed = decl.remove(tp);
         assertTrue(removed);
 
-        removed = decl.remove(new BlockStmt());
+        removed = decl.remove(new TypeParameter());
         assertFalse(removed);
     }
+
+    @Test
+    void testRemoveThrownException() {
+        CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
+        ReferenceType rt = new ReferenceType() {
+            @Override
+            public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+                return null;
+            }
+
+            @Override
+            public <A> void accept(VoidVisitor<A> v, A arg) {
+
+            }
+
+            @Override
+            public ResolvedType convertToUsage(Context context) {
+                return null;
+            }
+
+            @Override
+            public String toDescriptor() {
+                return null;
+            }
+
+            @Override
+            public String asString() {
+                return null;
+            }
+
+            @Override
+            public ResolvedType resolve() {
+                return null;
+            }
+        };
+        decl.getThrownExceptions().add(rt);
+
+        boolean removed = decl.remove(rt);
+        assertTrue(removed);
+    }
+
 
     @Test
     void testClone() {
@@ -117,7 +164,7 @@ class CompactConstructorDeclarationTest {
 
 
     @Test
-    public void testReplace() {
+    public void testReplaceName() {
         CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
 
         SimpleName newName = new SimpleName("newName");
@@ -125,32 +172,117 @@ class CompactConstructorDeclarationTest {
         assertEquals(newName, decl.getName());
     }
 
-
+    @Test
+    void testReplaceBody() {
+        CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
+        BlockStmt newBody = new BlockStmt();
+        assertTrue(decl.replace(decl.getBody(), newBody));
+        assertEquals(newBody, decl.getBody());
+    }
 
     @Test
-    public void testIsCompactConstructorDeclaration() {
+    void testReplaceTypeParameter() {
         CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
+        TypeParameter oldTp = new TypeParameter();
+        decl.getTypeParameters().add(oldTp);
+
+        TypeParameter newTp = new TypeParameter("NewType");
+        assertTrue(decl.replace(oldTp, newTp));
+        assertEquals(newTp, decl.getTypeParameters().get(0));
+    }
+
+    @Test
+    void testReplaceThrownException() {
+        CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
+        ReferenceType oldRt = new ReferenceType() {
+            @Override
+            public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+                return null;
+            }
+
+            @Override
+            public <A> void accept(VoidVisitor<A> v, A arg) {
+
+            }
+
+            @Override
+            public ResolvedType convertToUsage(Context context) {
+                return null;
+            }
+
+            @Override
+            public String toDescriptor() {
+                return null;
+            }
+
+            @Override
+            public String asString() {
+                return null;
+            }
+
+            @Override
+            public ResolvedType resolve() {
+                return null;
+            }
+        };
+        ReferenceType newRt = new ReferenceType() {
+            @Override
+            public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+                return null;
+            }
+
+            @Override
+            public <A> void accept(VoidVisitor<A> v, A arg) {
+
+            }
+
+            @Override
+            public ResolvedType convertToUsage(Context context) {
+                return null;
+            }
+
+            @Override
+            public String toDescriptor() {
+                return null;
+            }
+
+            @Override
+            public String asString() {
+                return null;
+            }
+
+            @Override
+            public ResolvedType resolve() {
+                return null;
+            }
+        };
+        decl.getThrownExceptions().add(oldRt);
+
+        assertTrue(decl.replace(oldRt, newRt));
+        assertEquals(newRt, decl.getThrownExceptions().get(0));
+    }
+
+    @Test
+    void testRemoveAnnotation() {
+        CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
+        AnnotationExpr annotation = new SingleMemberAnnotationExpr(new Name("MyAnnotation"), new StringLiteralExpr("value"));
+        decl.getAnnotations().add(annotation);
+
+        boolean removed = decl.remove(annotation);
+        assertTrue(removed);
+    }
+
+    @Test
+    public void testTypeCastingMethods() {
+        CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
+
         assertTrue(decl.isCompactConstructorDeclaration());
-    }
-
-    @Test
-    public void testAsCompactConstructorDeclaration() {
-        CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
         assertEquals(decl, decl.asCompactConstructorDeclaration());
-    }
-
-    @Test
-    public void testIfCompactConstructorDeclaration() {
-        CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
-        decl.ifCompactConstructorDeclaration(d -> {
-            assertTrue(d.isCompactConstructorDeclaration());
+        decl.ifCompactConstructorDeclaration(e -> {
+            assertTrue(e instanceof CompactConstructorDeclaration);
         });
+
+        assertTrue(decl.toCompactConstructorDeclaration().isPresent());
     }
 
-    @Test
-    public void testToCompactConstructorDeclaration() {
-        CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
-        assertTrue(decl.toCompactConstructorDeclaration().isPresent());
-        assertEquals(decl,decl.toCompactConstructorDeclaration().get());
-    }
 }
