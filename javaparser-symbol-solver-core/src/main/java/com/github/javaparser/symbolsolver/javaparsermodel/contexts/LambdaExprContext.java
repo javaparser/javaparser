@@ -138,7 +138,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             Value value = new Value(lambdaType, name);
                             return Optional.of(value);
                         }
-                        throw new UnsupportedOperationException();
+                        throw new UnsupportedOperationException("functional method is not present in variable declarator");
                     }
                     if (parentNode instanceof ReturnStmt) {
                         ReturnStmt returnStmt = (ReturnStmt) parentNode;
@@ -166,7 +166,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                                 Value value = new Value(lambdaType, name);
                                 return Optional.of(value);
                             }
-                            throw new UnsupportedOperationException();
+                            throw new UnsupportedOperationException("functional method is not present in return statement");
                         }
                     }
                     if (parentNode instanceof CastExpr) {
@@ -193,9 +193,9 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             Value value = new Value(lambdaType, name);
                             return Optional.of(value);
                         }
-                        throw new UnsupportedOperationException();
+                        throw new UnsupportedOperationException("functional method is not present in cast expression");
                     }
-                    throw new UnsupportedOperationException();
+                    throw new UnsupportedOperationException("Unknown node type: " + parentNode.getClass().getSimpleName());
                 }
             }
         }
