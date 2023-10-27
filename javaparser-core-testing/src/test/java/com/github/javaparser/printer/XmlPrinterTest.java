@@ -183,70 +183,70 @@ class XmlPrinterTest {
         assertXMLEquals("<root type='MethodCallExpr'><name type='SimpleName' identifier='a'></name><arguments><argument type='IntegerLiteralExpr' value='1'></argument><argument type='IntegerLiteralExpr' value='2'></argument></arguments></root>", output);
     }
 
-//    // Demonstrate the use of streaming, without use of temporary strings.
-//    @Test
-//    void testStreamToFile() throws SAXException, IOException, XMLStreamException {
-//
-//        File tempFile = createTempFile();
-//
-//        try (
-//            FileWriter fileWriter = new FileWriter(tempFile)
-//        ) {
-//            XmlPrinter xmlOutput = new XmlPrinter(false);
-//            xmlOutput.outputDocument(parseExpression("1+1"), "root", fileWriter);
-//        }
-//
-//        assertXMLEquals(""
-//                // Expected
-//                + "<root operator='PLUS'>"
-//                    + "<left value='1'/>"
-//                    + "<right value='1'/>"
-//                + "</root>",
-//                // Actual (Using temporary string for checking results. No one has been used when generating XML)
-//                new String(Files.readAllBytes(tempFile.toPath()))
-//        );
-//    }
-//
-//    @Test
-//    void testCustomXML() throws SAXException, IOException, XMLStreamException {
-//
-//        StringWriter stringWriter = new StringWriter();
-//
-//        XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
-//        XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stringWriter);
-//        onEnd(xmlWriter::close);
-//
-//        XmlPrinter xmlOutput = new XmlPrinter(false);
-//
-//        xmlWriter.writeStartDocument();
-//        xmlWriter.writeStartElement("custom");
-//
-//            xmlOutput.outputNode(parseExpression("1+1"), "plusExpr", xmlWriter);
-//            xmlOutput.outputNode(parseExpression("a(1,2)"), "callExpr", xmlWriter);
-//
-//        xmlWriter.writeEndElement();
-//        xmlWriter.writeEndDocument();
-//        xmlWriter.close();
-//
-//        assertXMLEquals(""
-//                // Expected
-//                + "<custom>"
-//                    + "<plusExpr operator='PLUS'>"
-//                        + "<left value='1'/>"
-//                        + "<right value='1'/>"
-//                    + "</plusExpr>"
-//                    + "<callExpr>"
-//                        + "<name identifier='a'/>"
-//                        + "<arguments>"
-//                            + "<argument value='1'/>"
-//                            + "<argument value='2'/>"
-//                        + "</arguments>"
-//                    + "</callExpr>"
-//                + "</custom>",
-//                // Actual
-//                stringWriter.toString()
-//        );
-//    }
+    // Demonstrate the use of streaming, without use of temporary strings.
+    @Test
+    void testStreamToFile() throws SAXException, IOException, XMLStreamException {
+
+        File tempFile = createTempFile();
+
+        try (
+            FileWriter fileWriter = new FileWriter(tempFile)
+        ) {
+            XmlPrinter xmlOutput = new XmlPrinter(false);
+            xmlOutput.outputDocument(parseExpression("1+1"), "root", fileWriter);
+        }
+
+        assertXMLEquals(""
+                // Expected
+                + "<root operator='PLUS'>"
+                    + "<left value='1'/>"
+                    + "<right value='1'/>"
+                + "</root>",
+                // Actual (Using temporary string for checking results. No one has been used when generating XML)
+                new String(Files.readAllBytes(tempFile.toPath()))
+        );
+    }
+
+    @Test
+    void testCustomXML() throws SAXException, IOException, XMLStreamException {
+
+        StringWriter stringWriter = new StringWriter();
+
+        XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+        XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(stringWriter);
+        onEnd(xmlWriter::close);
+
+        XmlPrinter xmlOutput = new XmlPrinter(false);
+
+        xmlWriter.writeStartDocument();
+        xmlWriter.writeStartElement("custom");
+
+            xmlOutput.outputNode(parseExpression("1+1"), "plusExpr", xmlWriter);
+            xmlOutput.outputNode(parseExpression("a(1,2)"), "callExpr", xmlWriter);
+
+        xmlWriter.writeEndElement();
+        xmlWriter.writeEndDocument();
+        xmlWriter.close();
+
+        assertXMLEquals(""
+                // Expected
+                + "<custom>"
+                    + "<plusExpr operator='PLUS'>"
+                        + "<left value='1'/>"
+                        + "<right value='1'/>"
+                    + "</plusExpr>"
+                    + "<callExpr>"
+                        + "<name identifier='a'/>"
+                        + "<arguments>"
+                            + "<argument value='1'/>"
+                            + "<argument value='2'/>"
+                        + "</arguments>"
+                    + "</callExpr>"
+                + "</custom>",
+                // Actual
+                stringWriter.toString()
+        );
+    }
 }
 
 interface Cleanup {
