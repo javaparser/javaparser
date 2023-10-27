@@ -21,10 +21,8 @@
 
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.expr.NameExpr;
-import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.stmt.ExpressionStmt;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,6 +44,23 @@ class EnumConstantDeclarationTest {
         assertTrue(enumConstant.getArguments().isEmpty());
         assertTrue(enumConstant.getClassBody().isEmpty());
     }
+
+    @Test
+    public void testAllFieldsConstructor() {
+        SimpleName name = new SimpleName("TEST");
+        NodeList<Expression> arguments = new NodeList<>(new NameExpr("arg1"), new NameExpr("arg2"));
+        NodeList<AnnotationExpr> annotations = new NodeList<>(new MarkerAnnotationExpr("Override"));
+        MethodDeclaration methodDeclaration = new MethodDeclaration();
+        NodeList<BodyDeclaration<?>> classBody = new NodeList<>(methodDeclaration);
+
+        EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(annotations, name, arguments, classBody);
+
+        assertEquals(name, enumConstant.getName());
+        assertTrue(enumConstant.getAnnotations().containsAll(annotations));
+        assertTrue(enumConstant.getArguments().containsAll(arguments));
+        assertTrue(enumConstant.getClassBody().containsAll(classBody));
+    }
+
 
     @Test
     public void testSetArguments() {
@@ -97,12 +112,18 @@ class EnumConstantDeclarationTest {
         NameExpr arg2 = new NameExpr("arg2");
         enumConstant.getArguments().add(arg1);
 
+        MethodDeclaration methodDeclaration = new MethodDeclaration();
+        enumConstant.getClassBody().add(methodDeclaration);
+
         assertTrue(enumConstant.replace(oldName, newName));
         assertEquals(newName, enumConstant.getName());
 
         assertTrue(enumConstant.replace(arg1, arg2));
         assertFalse(enumConstant.getArguments().contains(arg1));
         assertTrue(enumConstant.getArguments().contains(arg2));
+
+        assertTrue(enumConstant.replace(methodDeclaration, null));
+        assertFalse(enumConstant.getClassBody().contains(methodDeclaration));
     }
 
     @Test
