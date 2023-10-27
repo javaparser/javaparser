@@ -241,7 +241,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         for (ResolvedValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
             if (decl.getName().equals(name)) {
 
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Symbol with name " + name + " already exists in symbol declarator");
             }
         }
         return Optional.empty();
