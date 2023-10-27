@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.utils.TestParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
 import static java.util.stream.Collectors.joining;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TypeDeclarationTest {
     @Test
@@ -81,4 +81,26 @@ class TypeDeclarationTest {
                 .map(td -> td.getFullyQualifiedName().orElse("?"))
                 .collect(joining(",")));
     }
+
+    @Test
+    void testRemove() {
+        TypeDeclaration<?> td = parseBodyDeclaration("class X{ void method(){} }");
+        assertTrue(td.remove(td.getMember(0)));
+    }
+
+    @Test
+    void testReplace() {
+        TypeDeclaration<?> td = parseBodyDeclaration("class X{ void method(){} }");
+        MethodDeclaration md = (MethodDeclaration) td.getMember(0);
+        MethodDeclaration newMd = new MethodDeclaration().setName("newMethod");
+        assertTrue(td.replace(md, newMd));
+    }
+
+
+    @Test
+    void testToTypeDeclaration() {
+        TypeDeclaration<?> td = parseBodyDeclaration("class X{ }");
+        assertTrue(td.toTypeDeclaration().isPresent());
+    }
+
 }
