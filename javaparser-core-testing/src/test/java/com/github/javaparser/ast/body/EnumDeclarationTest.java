@@ -110,34 +110,18 @@ class EnumDeclarationTest {
     }
 
     @Test
-    void testIsEnumDeclaration() {
+    public void testTypeCastingMethods() {
         EnumDeclaration enumDeclaration = new EnumDeclaration();
 
         assertTrue(enumDeclaration.isEnumDeclaration());
-    }
-
-    @Test
-    void testAsEnumDeclaration() {
-        EnumDeclaration enumDeclaration = new EnumDeclaration();
-
         assertEquals(enumDeclaration, enumDeclaration.asEnumDeclaration());
-    }
 
-    @Test
-    void testIfEnumDeclaration() {
-        EnumDeclaration enumDeclaration = new EnumDeclaration();
         enumDeclaration.ifEnumDeclaration(e -> {
-
-            assertEquals("EnumDeclaration", e.getClass().getSimpleName());
+            assertTrue(e instanceof EnumDeclaration);
         });
-    }
-
-    @Test
-    void testToEnumDeclaration() {
-        EnumDeclaration enumDeclaration = new EnumDeclaration();
 
         assertTrue(enumDeclaration.toEnumDeclaration().isPresent());
-        assertEquals(enumDeclaration, enumDeclaration.toEnumDeclaration().get());
     }
+
 
 }

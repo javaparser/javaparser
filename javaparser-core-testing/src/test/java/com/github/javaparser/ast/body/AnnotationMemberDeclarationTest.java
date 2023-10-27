@@ -167,4 +167,18 @@ class AnnotationMemberDeclarationTest {
         assertEquals(decl, decl.toAnnotationMemberDeclaration().get());
     }
 
+    @Test
+    public void testTypeCastingMethods() {
+        AnnotationMemberDeclaration decl = new AnnotationMemberDeclaration();
+
+        assertTrue(decl.isAnnotationMemberDeclaration());
+        assertEquals(decl, decl.asAnnotationMemberDeclaration());
+
+        decl.ifAnnotationMemberDeclaration(e -> {
+            assertTrue(e instanceof AnnotationMemberDeclaration);
+        });
+
+        assertTrue(decl.toAnnotationMemberDeclaration().isPresent());
+    }
+
 }

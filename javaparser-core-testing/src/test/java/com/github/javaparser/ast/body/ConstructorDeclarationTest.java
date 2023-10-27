@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConstructorDeclarationTest {
     @Test
@@ -35,5 +36,18 @@ class ConstructorDeclarationTest {
         assertEquals(String.format("public Cons() {%1$s" +
                 "    super();%1$s" +
                 "}", SYSTEM_EOL), cons.toString());
+    }
+
+    @Test
+    public void testTypeCastingMethods() {
+        ConstructorDeclaration decl = new ConstructorDeclaration();
+
+        assertTrue(decl.isConstructorDeclaration());
+        assertEquals(decl, decl.asConstructorDeclaration());
+        decl.ifConstructorDeclaration(e -> {
+            assertTrue(e instanceof ConstructorDeclaration);
+        });
+
+        assertTrue(decl.toConstructorDeclaration().isPresent());
     }
 }
