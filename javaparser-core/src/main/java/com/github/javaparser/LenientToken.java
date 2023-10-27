@@ -17,7 +17,16 @@ public class LenientToken {
         if (getCategory() == Double || getCategory() == Float) {
             
         }
+
+        if (getCategory() == TokenTypes.getCategory(56)) {
+
+
+        }
+
     }
+
+
+
 
 
 }
