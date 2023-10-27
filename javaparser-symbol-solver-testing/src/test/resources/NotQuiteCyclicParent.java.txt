@@ -1,7 +1,0 @@
-package foo;
-
-public interface NotQuiteCyclicParent extends bar.NotQuiteCyclicParent {
-    default void main() {
-        MyType x = new MyType();
-    }
-}

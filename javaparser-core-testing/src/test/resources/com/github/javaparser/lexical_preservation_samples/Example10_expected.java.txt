@@ -1,3 +1,0 @@
-// This is my class, with my comment
-class A {
-}

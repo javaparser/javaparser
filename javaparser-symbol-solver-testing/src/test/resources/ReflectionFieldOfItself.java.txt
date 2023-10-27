@@ -1,7 +1,0 @@
-import java.lang.reflect.Modifier;
-
-public class MyClass {
-
-    public static final int PUBLIC = Modifier.PUBLIC;
-
-}

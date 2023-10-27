@@ -1,4 +1,0 @@
-package another;
-
-class String {
-}

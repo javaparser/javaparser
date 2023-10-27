@@ -1,3 +1,0 @@
-  Line 49) Utils.escapeEndOfLines(string) ==> com.github.javaparser.utils.Utils.escapeEndOfLines(java.lang.String)
-  Line 54) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.CharLiteralExpr, A)
-  Line 59) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.CharLiteralExpr, A)

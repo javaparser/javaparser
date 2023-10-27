@@ -1,5 +1,0 @@
-class A {
-    public void someMethod() {
-        String test = "";
-    }
-}

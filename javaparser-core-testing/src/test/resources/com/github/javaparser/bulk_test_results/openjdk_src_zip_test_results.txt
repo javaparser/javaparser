@@ -1,4 +1,0 @@
-com/sun/xml/internal/rngom/parse/compact/CompactSyntax.java
-Lexical error at line 244, column 38.  Encountered: "n" (110), after : "\'\\u005c"
-
-1 problems in 1 files
