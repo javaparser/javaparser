@@ -130,14 +130,4 @@ class CallableDeclarationTest {
         assertTrue(decl.isFixedArityMethod());
     }
 
-
-
-
-
-
-
-
-
-
-
 }
