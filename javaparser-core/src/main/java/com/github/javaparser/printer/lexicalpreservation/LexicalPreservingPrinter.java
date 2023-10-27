@@ -392,7 +392,7 @@ public class LexicalPreservingPrinter {
             } else if (type == AstObserver.ListChangeType.ADDITION) {
                 differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
             } else {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Unknown change type: " + type);
             }
             Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
             difference.apply();
@@ -614,7 +614,7 @@ public class LexicalPreservingPrinter {
                 // Indentation should probably be dealt with before because an indentation has effects also on the
                 // following lines
                 if (!(element instanceof CsmIndent) && !(element instanceof CsmUnindent)) {
-                    throw new UnsupportedOperationException(element.getClass().getSimpleName());
+                    throw new UnsupportedOperationException("Unknown element type: " + element.getClass().getSimpleName());
                 }
             }
         }

@@ -92,7 +92,7 @@ public class Added implements DifferenceElement {
             if (element instanceof CsmToken) {
             return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent());
         }
-        throw new UnsupportedOperationException(element.getClass().getSimpleName());
+        throw new UnsupportedOperationException("Unsupported element type: " + element.getClass().getSimpleName());
     }
 
     /*
