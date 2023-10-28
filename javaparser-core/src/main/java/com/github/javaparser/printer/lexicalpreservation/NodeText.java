@@ -137,7 +137,7 @@ class NodeText {
                             elements.remove(i);
                         }
                     } else {
-                        throw new UnsupportedOperationException("There is no element to remove!");
+                        throw new UnsupportedOperationException();
                     }
                 }
                 return;
