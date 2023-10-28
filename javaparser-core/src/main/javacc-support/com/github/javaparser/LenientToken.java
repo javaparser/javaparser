@@ -10,7 +10,7 @@ public class LenientToken {
     }
 
 
-    public LenientToken (TokenTypes token){
+    public LenientToken (JavaToken token){
 
         JavaToken.Category Double = null;
         JavaToken.Category Float = null;
@@ -18,7 +18,12 @@ public class LenientToken {
             
         }
 
-        if (getCategory() == TokenTypes.getCategory(56)) {
+        if (token.getCategory() == TokenTypes.getCategory(56)) {
+
+            JavaToken replacement = new JavaToken(0);
+
+            LenientToken replacementToken = new LenientToken(replacement);
+
 
 
         }
