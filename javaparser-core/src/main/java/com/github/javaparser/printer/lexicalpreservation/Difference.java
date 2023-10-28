@@ -365,7 +365,7 @@ public class Difference {
                         Removed removed = (Removed) diffElement;
                         applyRemovedDiffElement(removedGroups.get(removed), removed, originalElement, originalElementIsChild, originalElementIsToken);
                     } else {
-                        throw new UnsupportedOperationException("Unable to apply operations from " + diffElement.getClass().getSimpleName() + " to " + originalElement.getClass().getSimpleName());
+                        throw new UnsupportedOperationException("" + diffElement + " vs " + originalElement);
                     }
                 }
             }
