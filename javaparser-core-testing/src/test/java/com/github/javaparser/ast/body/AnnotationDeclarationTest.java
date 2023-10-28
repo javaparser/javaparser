@@ -25,8 +25,8 @@ import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.utils.TestParser.parseStatement;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AnnotationDeclarationTest {
     @Test
@@ -38,5 +38,18 @@ class AnnotationDeclarationTest {
     void issue2216() {
         Statement statement = parseStatement("TT tt = new <String> @TypeAnno @TA2 TT( \"S\" );");
         assertEquals("TT tt = new <String> @TypeAnno @TA2 TT(\"S\");", statement.toString());
+    }
+
+    @Test
+    void testTypeCastingMethods() {
+        AnnotationDeclaration decl = new AnnotationDeclaration();
+        assertTrue(decl.isAnnotationDeclaration());
+        assertEquals(decl, decl.asAnnotationDeclaration());
+
+        decl.ifAnnotationDeclaration(e -> {
+            assertTrue(e instanceof AnnotationDeclaration);
+        });
+
+        assertTrue(decl.toAnnotationDeclaration().isPresent());
     }
 }

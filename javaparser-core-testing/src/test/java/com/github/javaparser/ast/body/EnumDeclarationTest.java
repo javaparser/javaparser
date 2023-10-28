@@ -122,6 +122,4 @@ class EnumDeclarationTest {
 
         assertTrue(enumDeclaration.toEnumDeclaration().isPresent());
     }
-
-
 }

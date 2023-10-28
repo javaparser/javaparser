@@ -139,6 +139,4 @@ class EnumConstantDeclarationTest {
 
         assertTrue(enumConstant.toEnumConstantDeclaration().isPresent());
     }
-
-
 }

@@ -165,5 +165,4 @@ class BodyDeclarationTest {
         assertEquals(Optional.empty(), decl.toRecordDeclaration());
         assertEquals(Optional.empty(), decl.toCompactConstructorDeclaration());
     }
-    
 }

@@ -118,4 +118,17 @@ class MethodDeclarationTest {
         MethodDeclaration method2 = parseBodyDeclaration("int x();").asMethodDeclaration();
         assertTrue(method2.isFixedArityMethod());
     }
+
+    @Test
+    public void testTypeCastingMethods() {
+        MethodDeclaration method1 = parseBodyDeclaration("int x(int z);").asMethodDeclaration();
+
+        assertTrue(method1.isMethodDeclaration());
+        assertEquals(method1, method1.asMethodDeclaration());
+        method1.ifMethodDeclaration(e -> {
+            assertTrue(e instanceof MethodDeclaration);
+        });
+
+        assertTrue(method1.toMethodDeclaration().isPresent());
+    }
 }

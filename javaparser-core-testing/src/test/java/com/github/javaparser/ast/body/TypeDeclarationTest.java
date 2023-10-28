@@ -27,7 +27,8 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.utils.TestParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
 import static java.util.stream.Collectors.joining;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TypeDeclarationTest {
     @Test
@@ -80,5 +81,31 @@ class TypeDeclarationTest {
                 .map(td -> (TypeDeclaration<?>) td)
                 .map(td -> td.getFullyQualifiedName().orElse("?"))
                 .collect(joining(",")));
+    }
+
+    @Test
+    void testRemove() {
+        TypeDeclaration<?> td = parseBodyDeclaration("class X{ void method(){} }");
+        assertEquals(1, td.getMembers().size());
+        assertTrue(td.remove(td.getMember(0)));
+        assertTrue(td.getMembers().isEmpty());
+    }
+
+    @Test
+    void testReplace() {
+        TypeDeclaration<?> td = parseBodyDeclaration("class X{ void method(){} }");
+        MethodDeclaration md = (MethodDeclaration) td.getMember(0);
+        assertTrue(td.getMembers().contains(md));
+
+        MethodDeclaration newMd = new MethodDeclaration().setName("newMethod");
+        assertTrue(td.replace(md, newMd));
+        assertFalse(td.getMembers().contains(md));
+        assertTrue(td.getMembers().contains(newMd));
+    }
+
+    @Test
+    void testToTypeDeclaration() {
+        TypeDeclaration<?> td = parseBodyDeclaration("class X{ }");
+        assertTrue(td.toTypeDeclaration().isPresent());
     }
 }

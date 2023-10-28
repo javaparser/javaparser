@@ -154,14 +154,12 @@ class CompactConstructorDeclarationTest {
         assertTrue(removed);
     }
 
-
     @Test
     void testClone() {
         CompactConstructorDeclaration decl = new CompactConstructorDeclaration();
         CompactConstructorDeclaration clone = decl.clone();
         assertNotSame(decl, clone);
     }
-
 
     @Test
     public void testReplaceName() {
@@ -284,5 +282,4 @@ class CompactConstructorDeclarationTest {
 
         assertTrue(decl.toCompactConstructorDeclaration().isPresent());
     }
-
 }

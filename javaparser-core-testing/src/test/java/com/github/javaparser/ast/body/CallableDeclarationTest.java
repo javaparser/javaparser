@@ -111,7 +111,6 @@ class CallableDeclarationTest {
         assertTrue(decl.getTypeParameters().contains(newTypeParam));
     }
 
-
     @Test
     void testVariableArityMethod() {
         ConcreteCallableDeclaration decl = new ConcreteCallableDeclaration();
@@ -129,5 +128,4 @@ class CallableDeclarationTest {
         assertFalse(decl.isVariableArityMethod());
         assertTrue(decl.isFixedArityMethod());
     }
-
 }
