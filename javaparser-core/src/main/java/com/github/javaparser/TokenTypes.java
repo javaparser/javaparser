@@ -56,6 +56,7 @@ public class TokenTypes {
     }
 
     public static boolean isWhitespaceButNotEndOfLine(int kind) {
+
         return getCategory(kind).isWhitespaceButNotEndOfLine();
     }
 
@@ -68,6 +69,7 @@ public class TokenTypes {
      */
     public static int eolTokenKind(LineSeparator lineSeparator) {
         if (lineSeparator.equalsString(LineSeparator.LF)) {
+
             return UNIX_EOL;
         }
         if (lineSeparator.equalsString(LineSeparator.CRLF)) {
@@ -246,7 +248,7 @@ public class TokenTypes {
             case RSIGNEDSHIFT:
             case GT:
                 return JavaToken.Category.OPERATOR;
-            // The following are tokens that are only used internally by the lexer
+            // The following are tokens used only internally by the lexer
             case ENTER_JAVADOC_COMMENT:
             case ENTER_MULTILINE_COMMENT:
             case COMMENT_CONTENT:

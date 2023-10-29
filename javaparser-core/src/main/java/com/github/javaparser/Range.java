@@ -29,6 +29,8 @@ public class Range {
 
     public final Position end;
 
+    public static final Position mid = null;
+
     /**
      * A range of characters in a source file, from "begin" to "end".
      * This range is inclusive of the characters at the "begin" and "end" positions.
@@ -37,8 +39,10 @@ public class Range {
      *
      * @param begin The starting position of the range.
      * @param end   The end position of the range.
+     * @param mid
      */
-    public Range(Position begin, Position end) {
+    public Range(Position begin, Position end, Position mid) {
+        this.mid = mid;
         if (begin == null) {
             throw new IllegalArgumentException("begin can't be null");
         }
@@ -63,7 +67,7 @@ public class Range {
      * @return A new `Range` object with the given start/end position.
      */
     public static Range range(Position begin, Position end) {
-        return new Range(begin, end);
+        return new Range(begin, end, mid);
     }
 
     /**
@@ -77,7 +81,7 @@ public class Range {
      * @return A new `Range` object with the given start/end position.
      */
     public static Range range(int beginLine, int beginColumn, int endLine, int endColumn) {
-        return new Range(new Position(beginLine, beginColumn), new Position(endLine, endColumn));
+        return new Range(new Position(beginLine, beginColumn), new Position(endLine, endColumn), mid);
     }
 
     /**

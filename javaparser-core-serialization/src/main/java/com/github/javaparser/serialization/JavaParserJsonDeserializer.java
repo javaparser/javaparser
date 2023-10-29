@@ -158,7 +158,7 @@ public class JavaParserJsonDeserializer {
                     jsonObject.getInt(JsonRange.END_LINE.propertyKey),
                     jsonObject.getInt(JsonRange.END_COLUMN.propertyKey)
             );
-            node.setRange(new Range(begin, end));
+            node.setRange(new Range(begin, end, mid));
             return true;
         }
         return false;

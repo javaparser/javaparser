@@ -69,7 +69,7 @@ class JavaParserTest {
         CompilationUnit cu = parse(code);
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
         assertTrue(memberDeclaration.hasRange());
-        assertEquals(new Range(new Position(1, 17), new Position(1, 29)), memberDeclaration.getRange().get());
+        assertEquals(new Range(new Position(1, 17), new Position(1, 29), mid), memberDeclaration.getRange().get());
     }
 
     @Test
@@ -78,7 +78,7 @@ class JavaParserTest {
         CompilationUnit cu = parseWithUnicodeEscapes(code).getResult().get();
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
         assertTrue(memberDeclaration.hasRange());
-        assertEquals(new Range(new Position(1, 22), new Position(1, 34)), memberDeclaration.getRange().get());
+        assertEquals(new Range(new Position(1, 22), new Position(1, 34), mid), memberDeclaration.getRange().get());
     }
 
     @Test
@@ -104,7 +104,7 @@ class JavaParserTest {
         CompilationUnit cu = parse(code);
         AnnotationMemberDeclaration memberDeclaration = cu.getAnnotationDeclarationByName("AD").get().getMember(0).asAnnotationMemberDeclaration();
         assertTrue(memberDeclaration.hasRange());
-        assertEquals(new Range(new Position(1, 17), new Position(1, 31)), memberDeclaration.getRange().get());
+        assertEquals(new Range(new Position(1, 17), new Position(1, 31), mid), memberDeclaration.getRange().get());
     }
 
     @Test
@@ -115,11 +115,11 @@ class JavaParserTest {
 
         range = expression.getLevels().get(0).getRange();
         assertTrue(range.isPresent());
-        assertEquals(new Range(new Position(1, 8), new Position(1, 12)), range.get());
+        assertEquals(new Range(new Position(1, 8), new Position(1, 12), mid), range.get());
 
         range = expression.getLevels().get(1).getRange();
         assertTrue(range.isPresent());
-        assertEquals(new Range(new Position(1, 13), new Position(1, 17)), range.get());
+        assertEquals(new Range(new Position(1, 13), new Position(1, 17), mid), range.get());
     }
 
     @Test
@@ -130,11 +130,11 @@ class JavaParserTest {
 
         range = expression.getLevels().get(0).getRange();
         assertTrue(range.isPresent());
-        assertEquals(new Range(new Position(1, 8), new Position(1, 9)), range.get());
+        assertEquals(new Range(new Position(1, 8), new Position(1, 9), mid), range.get());
 
         range = expression.getLevels().get(1).getRange();
         assertTrue(range.isPresent());
-        assertEquals(new Range(new Position(1, 10), new Position(1, 11)), range.get());
+        assertEquals(new Range(new Position(1, 10), new Position(1, 11), mid), range.get());
     }
 
     @Test

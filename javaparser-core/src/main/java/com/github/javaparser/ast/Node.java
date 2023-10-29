@@ -257,7 +257,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (tokenRange == null || !(tokenRange.getBegin().hasRange() && tokenRange.getEnd().hasRange())) {
             range = null;
         } else {
-            range = new Range(tokenRange.getBegin().getRange().get().begin, tokenRange.getEnd().getRange().get().end);
+            range = new Range(tokenRange.getBegin().getRange().get().begin, tokenRange.getEnd().getRange().get().end, mid);
         }
         return this;
     }

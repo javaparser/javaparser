@@ -459,7 +459,7 @@ public class UnicodeEscapeProcessingProvider implements Provider {
                 // No change.
                 return range;
             }
-            return new Range(begin, end);
+            return new Range(begin, end, mid);
         }
     }
 
