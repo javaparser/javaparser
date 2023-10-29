@@ -22,6 +22,7 @@ package com.github.javaparser.printer;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 
@@ -42,6 +43,7 @@ import javax.xml.stream.XMLStreamWriter;
 public class XmlPrinter {
 
     private final boolean outputNodeType;
+    private static final Class<?> TYPE_CLASS = Type.class;
 
     public XmlPrinter(boolean outputNodeType) {
         this.outputNodeType = outputNodeType;
@@ -178,6 +180,8 @@ public class XmlPrinter {
         Predicate<PropertyMetaModel> nonNullNode = propertyMetaModel -> propertyMetaModel.getValue(node) != null;
         Predicate<PropertyMetaModel> nonEmptyList = propertyMetaModel ->
                 ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
+        Predicate<PropertyMetaModel> typeList = propertyMetaModel ->
+                TYPE_CLASS == propertyMetaModel.getType();
 
         xmlWriter.writeStartElement(name);
 
@@ -220,7 +224,7 @@ public class XmlPrinter {
             allPropertyMetaModels.stream()
                     .filter(PropertyMetaModel::isNodeList)
                     .filter(nonNullNode)
-                    .filter(nonEmptyList)
+                    .filter(nonEmptyList.or(typeList))
                     .forEach(listMetaModel -> {
                         try {
                             String listName = listMetaModel.getName();

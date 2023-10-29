@@ -247,6 +247,66 @@ class XmlPrinterTest {
                 stringWriter.toString()
         );
     }
+
+    @Test
+    void testAbsentTypeParameterList() throws SAXException, IOException, XMLStreamException {
+        Expression expression = parseExpression("new HashSet()");
+        XmlPrinter xmlOutput = new XmlPrinter(false);
+        String output = xmlOutput.output(expression);
+        assertXMLEquals(""
+                // Expected
+                + "<root>"
+                    + "<type>"
+                        + "<name identifier='HashSet'/>"
+                    + "</type>"
+                + "</root>",
+                // Actual
+                output
+        );
+    }
+
+    @Test
+    void testEmptyTypeParameterList() throws SAXException, IOException, XMLStreamException {
+        Expression expression = parseExpression("new HashSet<>()");
+        XmlPrinter xmlOutput = new XmlPrinter(false);
+        String output = xmlOutput.output(expression);
+        assertXMLEquals(""
+                // Expected
+                + "<root>"
+                    + "<type>"
+                        + "<name identifier='HashSet'/>"
+                        + "<typeArguments/>"
+                    + "</type>"
+                + "</root>",
+                // Actual
+                output
+        );
+    }
+
+    @Test
+    void testNonEmptyTypeParameterList() throws SAXException, IOException, XMLStreamException {
+        Expression expression = parseExpression("new HashSet<Integer,File>()");
+        XmlPrinter xmlOutput = new XmlPrinter(false);
+        String output = xmlOutput.output(expression);
+        assertXMLEquals(""
+                // Expected
+                + "<root>"
+                    + "<type>"
+                        + "<name identifier='HashSet'/>"
+                        + "<typeArguments>"
+                            + "<typeArgument>"
+                                + "<name identifier='Integer'/>"
+                            + "</typeArgument>"
+                            + "<typeArgument>"
+                                + "<name identifier='File'/>"
+                            + "</typeArgument>"
+                        + "</typeArguments>"
+                    + "</type>"
+                + "</root>",
+                // Actual
+                output
+        );
+    }
 }
 
 interface Cleanup {
