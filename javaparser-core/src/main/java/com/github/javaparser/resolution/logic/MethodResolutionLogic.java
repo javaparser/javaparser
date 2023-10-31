@@ -820,7 +820,7 @@ public class MethodResolutionLogic {
 
             // If B is vararg and A is not, A is more specific
             if (tdB.isArray() && tdB.asArrayType().getComponentType().isAssignableBy(tdA)) {
-                oneMoreSpecificFound = true;
+                return true;
             }
         }
         return oneMoreSpecificFound;
