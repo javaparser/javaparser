@@ -392,7 +392,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         Optional<ResolvedReferenceTypeDeclaration> resolvedReferenceTypeDeclaration = candidateAncestor.getTypeDeclaration();
         if (resolvedReferenceTypeDeclaration.isPresent()) {
             ResolvedTypeDeclaration rtd = resolvedReferenceTypeDeclaration.get().asType();
-            // do not consider an inner or nested class as an ancestor, do not consider same qualified name
+            // do not consider an inner or nested class as an ancestor, do not consider same qualified name 
             return !rtd.hasInternalType(ownQualifiedName) && !ownQualifiedName.equals(rtd.getQualifiedName());
         }
         return false;
