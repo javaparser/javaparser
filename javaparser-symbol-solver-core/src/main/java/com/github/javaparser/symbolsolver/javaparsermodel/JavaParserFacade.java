@@ -405,12 +405,13 @@ public class JavaParserFacade {
         Set<MethodUsage> allMethods = resolvedTypdeDecl.getAllMethods();
 
         if (scope.isTypeExpr()) {
-            // static methods should match all params
-            List<MethodUsage> staticMethodUsages = allMethods.stream()
-                    .filter(it -> it.getDeclaration().isStatic())
+            // default and static methods should match all params
+            List<MethodUsage> nonInstanceMethodUsages = allMethods.stream()
+                    .filter(it -> it.getDeclaration().isStatic() || it.getDeclaration().isDefaultMethod())
                     .collect(Collectors.toList());
 
-            result = MethodResolutionLogic.findMostApplicableUsage(staticMethodUsages, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+            result = MethodResolutionLogic.findMostApplicableUsage(nonInstanceMethodUsages,
+                    methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
 
             if (!paramTypes.isEmpty()) {
                 // instance methods are called on the first param and should match all other params
@@ -419,6 +420,7 @@ public class JavaParserFacade {
                         .collect(Collectors.toList());
 
                 List<ResolvedType> instanceMethodParamTypes = new ArrayList<>(paramTypes);
+
                 instanceMethodParamTypes.remove(0); // remove the first one
 
                 Optional<MethodUsage> instanceResult = MethodResolutionLogic.findMostApplicableUsage(
