@@ -1,7 +1,7 @@
 
-Next Release (Version 3.25.6-snapshot)
+Next Release (Version 3.25.7-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/202?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/203?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,45 @@ Next Release (Version 3.25.6-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+Version 3.25.6
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/202?closed=1)
+
+### Changed
+
+* reformat javaconcept take 2 (PR [#4167](https://github.com/javaparser/javaparser/pull/4167) by [@JimmyGan437](https://github.com/JimmyGan437))
+* Using JAXP on XMLPrinter implementation (PR [#4166](https://github.com/javaparser/javaparser/pull/4166) by [@lcbarcellos](https://github.com/lcbarcellos))
+* replace deprecated methond calls to their replacements (PR [#4157](https://github.com/javaparser/javaparser/pull/4157) by [@JimmyGan437](https://github.com/JimmyGan437))
+* feat(#4075): Improve the validation error messages (PR [#4116](https://github.com/javaparser/javaparser/pull/4116) by [@volodya-lombrozo](https://github.com/volodya-lombrozo))
+
+### Fixed
+
+* Fix: issue #2751 new HashSet()" != "new HashSet<>() (PR [#4183](https://github.com/javaparser/javaparser/pull/4183) by [@lcbarcellos](https://github.com/lcbarcellos))
+* Fixes #2625 Add messages to thrown exceptions (PR [#4177](https://github.com/javaparser/javaparser/pull/4177) by [@oannhpham](https://github.com/oannhpham))
+* Fix: issue 4163 Calling MethodDeclaration.getDeclarationAsString leads to MethodDelaration.getComment returning no comment (PR [#4165](https://github.com/javaparser/javaparser/pull/4165) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3673 isAssignableBy method StackOverflowError (PR [#4156](https://github.com/javaparser/javaparser/pull/4156) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: issue 3184 Unable to get the resolved type of class ResolvedReferenceType from T (PR [#4147](https://github.com/javaparser/javaparser/pull/4147) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue #3269 Test resources containing included interfaces do not compile (PR [#4139](https://github.com/javaparser/javaparser/pull/4139) by [@jlerbsc](https://github.com/jlerbsc))
+* CalculateResolvedType Type error (PR [#4138](https://github.com/javaparser/javaparser/pull/4138) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue #4036 LeastUpperBoundLogic.lub returns null when matches ConditionalExpr (PR [#4137](https://github.com/javaparser/javaparser/pull/4137) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue #2484 SymbolResolver on MethodCallExpr fails if method parameter is of kind Class<? extends y> (PR [#4136](https://github.com/javaparser/javaparser/pull/4136) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump com.google.guava:guava from 32.1.2-jre to 32.1.3-jre (PR [#4154](https://github.com/javaparser/javaparser/pull/4154) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update actions/checkout action to v4 (PR [#4141](https://github.com/javaparser/javaparser/pull/4141) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@lcbarcellos](https://github.com/lcbarcellos)
+* [@volodya-lombrozo](https://github.com/volodya-lombrozo)
+* [@JimmyGan437](https://github.com/JimmyGan437)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@oannhpham](https://github.com/oannhpham)
+
 
 
 Version 3.25.5
