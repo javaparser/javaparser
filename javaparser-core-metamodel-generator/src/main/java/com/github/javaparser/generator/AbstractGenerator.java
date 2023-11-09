@@ -128,7 +128,7 @@ public abstract class AbstractGenerator {
             Optional<Comment> callableComment = callable.getComment();
             Optional<Comment> existingCallableComment = existingCallable.getComment();
 
-            callable.setComment(callableComment.orElse(existingCallable.getComment().orElse(null)));
+            callable.setComment(callableComment.orElseGet(() -> existingCallable.getComment().orElse(null)));
 //            callable.setJavadocComment(callableJavadocComment.orElse(existingCallableJavadocComment.orElse(null)));
 
             // Mark the method as having been fully/partially generated.
