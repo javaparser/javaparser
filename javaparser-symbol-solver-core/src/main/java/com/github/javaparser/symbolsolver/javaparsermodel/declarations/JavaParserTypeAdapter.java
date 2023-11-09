@@ -166,8 +166,8 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         List<ResolvedFieldDeclaration> fields = new ArrayList<>();
         if (wrappedNode.getMembers() != null) {
             for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-                if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                    com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                if (member.isFieldDeclaration()) {
+                    FieldDeclaration field = member.asFieldDeclaration();
                     for (VariableDeclarator vd : field.getVariables()) {
                         fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
                     }

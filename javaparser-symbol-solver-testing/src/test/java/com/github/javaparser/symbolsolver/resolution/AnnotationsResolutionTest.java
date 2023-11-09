@@ -300,7 +300,7 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         AnnotationExpr annotationExpr = method.getAnnotation(0);
 
         // resolve annotation expression @Test
-        JavassistAnnotationDeclaration resolved = (JavassistAnnotationDeclaration) annotationExpr.resolve();
+        ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // check that the annotation @Test has the annotations @Target and @Retention, but not @Documented
         assertEquals("org.junit.Test", resolved.getQualifiedName());
