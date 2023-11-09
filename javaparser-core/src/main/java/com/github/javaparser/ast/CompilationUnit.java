@@ -753,7 +753,7 @@ public class CompilationUnit extends Node {
          */
         public Path getSourceRoot() {
             final Optional<String> pkgAsString = compilationUnit.getPackageDeclaration().map(NodeWithName::getNameAsString);
-            return pkgAsString.map(p -> Paths.get(CodeGenerationUtils.packageToPath(p))).map(pkg -> subtractPaths(getDirectory(), pkg)).orElse(getDirectory());
+            return pkgAsString.map(p -> Paths.get(CodeGenerationUtils.packageToPath(p))).map(pkg -> subtractPaths(getDirectory(), pkg)).orElseGet(() -> getDirectory());
         }
 
         public String getFileName() {
