@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
@@ -20,15 +21,15 @@
 package com.github.javaparser.ast.validator.language_level_validations;
 
 /**
- * This validator validates according to Java 18 syntax rules.
+ * This validator validates according to Java 20 syntax rules.
  *
- * @see <a href="https://openjdk.java.net/projects/jdk/18/">https://openjdk.java.net/projects/jdk/18/</a>
+ * @see <a href="https://openjdk.java.net/projects/jdk/20/">https://openjdk.java.net/projects/jdk/20/</a>
  */
-public class Java18Validator extends Java17Validator {
+public class Java20Validator extends Java19Validator {
 
     // Not implemented yet
 
-    public Java18Validator() {
+    public Java20Validator() {
         super();
     }
 }

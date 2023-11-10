@@ -167,11 +167,52 @@ public class ParserConfiguration {
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
         JAVA_17_PREVIEW(new Java17PreviewValidator(), new Java17PostProcessor()),
-    	/**
+        /**
          * Java 18
          */
-        JAVA_18(new Java18Validator(), new Java18PostProcessor());
-    	
+        JAVA_18(new Java18Validator(), new Java18PostProcessor()),
+        /**
+         * Java 18 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_18_PREVIEW(new Java18PreviewValidator(), new Java18PostProcessor()),
+        /**
+         * Java 19
+         */
+        JAVA_19(new Java19Validator(), new Java19PostProcessor()),
+        /**
+         * Java 19 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_19_PREVIEW(new Java19PreviewValidator(), new Java19PostProcessor()),
+        /**
+         * Java 20
+         */
+        JAVA_20(new Java20Validator(), new Java20PostProcessor()),
+        /**
+         * Java 20 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_20_PREVIEW(new Java20PreviewValidator(), new Java20PostProcessor()),
+        /**
+         * Java 21
+         */
+        JAVA_21(new Java21Validator(), new Java21PostProcessor()),
+        /**
+         * Java 21 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_21_PREVIEW(new Java21PreviewValidator(), new Java21PostProcessor()),
+        /**
+         * Java 22
+         */
+        JAVA_22(new Java22Validator(), new Java22PostProcessor()),
+        /**
+         * Java 22 -- including incubator/preview/second preview features.
+         * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
+         */
+        JAVA_22_PREVIEW(new Java22PreviewValidator(), new Java22PostProcessor());
+
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
          */

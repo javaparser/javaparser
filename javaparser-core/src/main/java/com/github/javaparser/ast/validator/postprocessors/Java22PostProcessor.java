@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
@@ -17,18 +18,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-package com.github.javaparser.ast.validator.language_level_validations;
+package com.github.javaparser.ast.validator.postprocessors;
 
 /**
- * This validator validates according to Java 18 syntax rules.
- *
- * @see <a href="https://openjdk.java.net/projects/jdk/18/">https://openjdk.java.net/projects/jdk/18/</a>
+ * Processes the generic AST into a Java 22 AST and validates it.
  */
-public class Java18Validator extends Java17Validator {
-
-    // Not implemented yet
-
-    public Java18Validator() {
-        super();
-    }
+public class Java22PostProcessor extends Java21PostProcessor {
 }
