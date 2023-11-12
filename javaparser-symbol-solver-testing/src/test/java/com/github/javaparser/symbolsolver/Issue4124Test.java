@@ -32,40 +32,40 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 
 public class Issue4124Test extends AbstractResolutionTest {
 
-	@Test
-	void issue4124_withDifferentTypeParameterName() {
+    @Test
+    void issue4124_withDifferentTypeParameterName() {
 
-		String code =
-				"import java.util.Collections;\n"
-				+ "import java.util.List;\n"
-				+ "public class Foo<E> {\n"
-				+ "    public void test(List<E> ls){\n"
-				+ "        Collections.synchronizedList(ls);\n"
-				+ "    }\n"
-				+ "}\n";
+        String code =
+                "import java.util.Collections;\n"
+                + "import java.util.List;\n"
+                + "public class Foo<E> {\n"
+                + "    public void test(List<E> ls){\n"
+                + "        Collections.synchronizedList(ls);\n"
+                + "    }\n"
+                + "}\n";
 
-		CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(code);
 
-		MethodCallExpr m = cu.findFirst(MethodCallExpr.class).get();
-		ResolvedMethodDeclaration rmd = m.resolve();
-		assertEquals("java.util.Collections.synchronizedList(java.util.List<T>)", rmd.getQualifiedSignature());
-	}
+        MethodCallExpr m = cu.findFirst(MethodCallExpr.class).get();
+        ResolvedMethodDeclaration rmd = m.resolve();
+        assertEquals("java.util.Collections.synchronizedList(java.util.List<T>)", rmd.getQualifiedSignature());
+    }
 
-	@Test
-	void issue4124_withSameTypeParameterName() {
-		String code =
-				"import java.util.Collections;\n"
-				+ "import java.util.List;\n"
-				+ "public class Foo<T> {\n"
-				+ "    public void test(List<T> ls){\n"
-				+ "        Collections.synchronizedList(ls);\n"
-				+ "    }\n"
-				+ "}\n";
+    @Test
+    void issue4124_withSameTypeParameterName() {
+        String code =
+                "import java.util.Collections;\n"
+                + "import java.util.List;\n"
+                + "public class Foo<T> {\n"
+                + "    public void test(List<T> ls){\n"
+                + "        Collections.synchronizedList(ls);\n"
+                + "    }\n"
+                + "}\n";
 
-		CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(code);
 
-		MethodCallExpr m = cu.findFirst(MethodCallExpr.class).get();
-		ResolvedMethodDeclaration rmd = m.resolve();
-		assertEquals("java.util.Collections.synchronizedList(java.util.List<T>)", rmd.getQualifiedSignature());
-	}
+        MethodCallExpr m = cu.findFirst(MethodCallExpr.class).get();
+        ResolvedMethodDeclaration rmd = m.resolve();
+        assertEquals("java.util.Collections.synchronizedList(java.util.List<T>)", rmd.getQualifiedSignature());
+    }
 }

@@ -112,7 +112,7 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
      * Returns the list of formal parameter types
      */
     default List<ResolvedType> formalParameterTypes() {
-    	if (getNumberOfParams() == 0) {
+        if (getNumberOfParams() == 0) {
             return Collections.emptyList();
         }
         List<ResolvedType> types = new ArrayList<>();
@@ -161,10 +161,10 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
         if (getNumberOfSpecifiedExceptions() == 0) {
             return Collections.emptyList();
         }
-		List<ResolvedType> exceptions = new ArrayList<>();
-		for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
-			exceptions.add(getSpecifiedException(i));
-		}
-		return exceptions;
+        List<ResolvedType> exceptions = new ArrayList<>();
+        for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
+            exceptions.add(getSpecifiedException(i));
+        }
+        return exceptions;
     }
 }

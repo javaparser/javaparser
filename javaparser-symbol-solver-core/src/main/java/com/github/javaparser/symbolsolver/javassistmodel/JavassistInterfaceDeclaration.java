@@ -96,7 +96,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-	@Deprecated
+    @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
@@ -125,7 +125,7 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
-    	if (other.isJavaLangObject()) {
+        if (other.isJavaLangObject()) {
             // Everything can be assigned to {@code java.lang.Object}
             return true;
         }
@@ -137,19 +137,19 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
             return true;
         }
         Optional<ResolvedReferenceType> oSuperClass = javassistTypeDeclarationAdapter.getSuperClass();
-		if (oSuperClass.isPresent()) {
-			ResolvedReferenceType superClass = oSuperClass.get();
-			Optional<ResolvedReferenceTypeDeclaration> oDecl = superClass.getTypeDeclaration();
-			if (oDecl.isPresent() && oDecl.get().canBeAssignedTo(other)) {
-				return true;
-			}
-		}
-		for (ResolvedReferenceType interfaze : javassistTypeDeclarationAdapter.getInterfaces()) {
-			if (interfaze.getTypeDeclaration().isPresent()
-					&& interfaze.getTypeDeclaration().get().canBeAssignedTo(other)) {
-				return true;
-			}
-		}
+        if (oSuperClass.isPresent()) {
+            ResolvedReferenceType superClass = oSuperClass.get();
+            Optional<ResolvedReferenceTypeDeclaration> oDecl = superClass.getTypeDeclaration();
+            if (oDecl.isPresent() && oDecl.get().canBeAssignedTo(other)) {
+                return true;
+            }
+        }
+        for (ResolvedReferenceType interfaze : javassistTypeDeclarationAdapter.getInterfaces()) {
+            if (interfaze.getTypeDeclaration().isPresent()
+                    && interfaze.getTypeDeclaration().get().canBeAssignedTo(other)) {
+                return true;
+            }
+        }
 
         return false;
     }

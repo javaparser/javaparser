@@ -17,19 +17,19 @@ public class Issue3976Test extends AbstractResolutionTest {
     @Test
     @EnabledForJreRange(min = JRE.JAVA_9)
     void test() {
-    	String testCase =
-				"import java.util.Map;\n"
-				+ "public class Foo {\n"
-				+ "		public Object m() {\n"
-				+ "			return Map.of(\"k0\", 0, \"k1\", 1D);\n"
-				+ "		}\n"
-				+ "}";
+        String testCase =
+                "import java.util.Map;\n"
+                + "public class Foo {\n"
+                + "        public Object m() {\n"
+                + "            return Map.of(\"k0\", 0, \"k1\", 1D);\n"
+                + "        }\n"
+                + "}";
 
-		CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(testCase);
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(testCase);
 
-		MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).get();
+        MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).get();
 
-		ResolvedType rt = methodCallExpr.calculateResolvedType();
-		assertEquals("java.util.Map<java.lang.String, java.lang.Number>", rt.describe());
+        ResolvedType rt = methodCallExpr.calculateResolvedType();
+        assertEquals("java.util.Map<java.lang.String, java.lang.Number>", rt.describe());
     }
 }

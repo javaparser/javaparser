@@ -201,10 +201,10 @@ class JavaParserJsonDeserializerTest {
                 return null;
             }
 
-			@Override
-			public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
-				return null;
-			}
+            @Override
+            public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
+                return null;
+            }
         };
         StaticJavaParser.getConfiguration().setSymbolResolver(stubResolver);
         CompilationUnit cu = parse("public class X{} class Z{}");

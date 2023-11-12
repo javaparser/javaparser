@@ -89,13 +89,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
      * @see Modifier
      */
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
     public T setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
@@ -111,13 +111,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
     public T setName(final SimpleName name) {
         assertNotNull(name);
@@ -133,13 +133,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> getParameters() {
         return parameters;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
     public T setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
@@ -155,13 +155,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType> getThrownExceptions() {
         return thrownExceptions;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
     public T setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
@@ -177,13 +177,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
     public T setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);

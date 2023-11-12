@@ -342,7 +342,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         c.getMembers().remove(0);
         // This rendering is probably caused by the concret syntax model
         assertEquals("class /*a comment*/ A {\t\t" + SYSTEM_EOL +
-        		SYSTEM_EOL +
+                SYSTEM_EOL +
                 "         void foo(int p  ) { return  'z'  \t; }}", LexicalPreservingPrinter.print(c));
     }
 
@@ -1044,7 +1044,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void handleDeprecatedAnnotationAbstractClass() {
-    	considerCode("public abstract class A {}");
+        considerCode("public abstract class A {}");
 
         cu.getTypes().forEach(type -> type.addAndGetAnnotation(Deprecated.class));
 
@@ -1054,7 +1054,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void issue1244() {
-    	considerCode("public class Foo {" + SYSTEM_EOL + SYSTEM_EOL
+        considerCode("public class Foo {" + SYSTEM_EOL + SYSTEM_EOL
                 + "// Some comment" + SYSTEM_EOL + SYSTEM_EOL // does work with only one \n
                 + "public void writeExternal() {}" + SYSTEM_EOL + "}");
 
@@ -1080,7 +1080,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // See issue 1277
     @Test
     void testInvokeModifierVisitor() {
-    	considerCode("class A {" + SYSTEM_EOL +
+        considerCode("class A {" + SYSTEM_EOL +
                 "  public String message = \"hello\";" + SYSTEM_EOL +
                 "   void bar() {" + SYSTEM_EOL +
                 "     System.out.println(\"hello\");" + SYSTEM_EOL +
@@ -1100,7 +1100,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void invokeModifierVisitorIssue1297() {
-    	considerCode("class A {" + SYSTEM_EOL +
+        considerCode("class A {" + SYSTEM_EOL +
                 "   public void bar() {" + SYSTEM_EOL +
                 "     System.out.println(\"hello\");" + SYSTEM_EOL +
                 "     System.out.println(\"hello\");" + SYSTEM_EOL +
@@ -1113,7 +1113,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void addedBlockCommentsPrinted() {
-    	considerCode("public class Foo { }");
+        considerCode("public class Foo { }");
 
         cu.getClassByName("Foo").get()
                 .addMethod("mymethod")
@@ -1127,7 +1127,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void addedLineCommentsPrinted() {
-    	considerCode("public class Foo { }");
+        considerCode("public class Foo { }");
 
         cu.getClassByName("Foo").get()
                 .addMethod("mymethod")
@@ -1141,7 +1141,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void removedLineCommentsPrinted() {
-    	considerCode("public class Foo {" + SYSTEM_EOL +
+        considerCode("public class Foo {" + SYSTEM_EOL +
                 "//line" + SYSTEM_EOL +
                 "void mymethod() {" + SYSTEM_EOL +
                 "}" + SYSTEM_EOL +
@@ -1157,7 +1157,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // Checks if comments get removed properly with Unix style line endings
     @Test
     void removedLineCommentsPrintedUnix() {
-    	considerCode("public class Foo {" + "\n" +
+        considerCode("public class Foo {" + "\n" +
                 "//line" + "\n" +
                 "void mymethod() {" + "\n" +
                 "}" + "\n" +
@@ -1172,7 +1172,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void removedBlockCommentsPrinted() {
-    	considerCode("public class Foo {" + SYSTEM_EOL +
+        considerCode("public class Foo {" + SYSTEM_EOL +
                 "/*" + SYSTEM_EOL +
                 "Block comment coming through" + SYSTEM_EOL +
                 "*/" + SYSTEM_EOL +
@@ -1190,7 +1190,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     @Test
     void testFixIndentOfMovedNode() {
         try {
-        	considerExample("FixIndentOfMovedNode");
+            considerExample("FixIndentOfMovedNode");
 
             cu.getClassByName("ThisIsASampleClass").get()
                     .getMethodsByName("longerMethod")
@@ -1211,7 +1211,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void issue1321() {
-    	considerCode("class X { X() {} private void testme() {} }");
+        considerCode("class X { X() {} private void testme() {} }");
 
         ClassOrInterfaceDeclaration type = cu.getClassByName("X").get();
         type.getConstructors().get(0).setBody(new BlockStmt().addStatement("testme();"));
@@ -1222,7 +1222,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void issue2001() {
-    	considerCode("class X {void blubb(){X.p(\"blaubb04\");}}");
+        considerCode("class X {void blubb(){X.p(\"blaubb04\");}}");
 
         cu.findAll(MethodCallExpr.class).forEach(Node::removeForced);
 
@@ -1292,7 +1292,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     public void testReplaceClassName() {
-    	considerCode("class A {}");
+        considerCode("class A {}");
 
         assertEquals(1, cu.findAll(ClassOrInterfaceDeclaration.class).size());
         cu.findAll(ClassOrInterfaceDeclaration.class).forEach(coid -> coid.setName("B"));
@@ -1403,32 +1403,32 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
-	void testTextBlockSupport() {
-		String code =
-				"String html = \"\"\"\n" +
+    void testTextBlockSupport() {
+        String code =
+                "String html = \"\"\"\n" +
                 "  <html>\n" +
                 "    <body>\n" +
                 "      <p>Hello, world</p>\n" +
                 "    </body>\n" +
                 "  </html>\n" +
                 "\"\"\";";
-		String expected =
-				"String html = \"\"\"\r\n"
-				+ "  <html>\r\n"
-				+ "    <body>\r\n"
-				+ "      <p>Hello, world</p>\r\n"
-				+ "    </body>\r\n"
-				+ "  </html>\r\n"
-				+ "\"\"\";";
-		final JavaParser javaParser = new JavaParser(
+        String expected =
+                "String html = \"\"\"\r\n"
+                + "  <html>\r\n"
+                + "    <body>\r\n"
+                + "      <p>Hello, world</p>\r\n"
+                + "    </body>\r\n"
+                + "  </html>\r\n"
+                + "\"\"\";";
+        final JavaParser javaParser = new JavaParser(
                 new ParserConfiguration()
                         .setLexicalPreservationEnabled(true)
                         .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_15)
         );
-		Statement stmt = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
-		LexicalPreservingPrinter.setup(stmt);
-		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(stmt));
-	}
+        Statement stmt = javaParser.parseStatement(code).getResult().orElseThrow(AssertionError::new);
+        LexicalPreservingPrinter.setup(stmt);
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(stmt));
+    }
 
     @Test
     void testArrayPreservation_WithSingleLanguageStyle() {
@@ -1688,38 +1688,38 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
     @Test
     void removedIndentationLineCommentsPrinted() {
-		considerCode("public class Foo {\n" +
-    			"  //line \n" +
-    			"  void mymethod() {\n" +
-    			"  }\n" +
-    			"}");
-		String expected =
-				"public class Foo {\n" +
-		    	"  void mymethod() {\n" +
-		    	"  }\n" +
-		    	"}";
-    	cu.getAllContainedComments().get(0).remove();
-    	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        considerCode("public class Foo {\n" +
+                "  //line \n" +
+                "  void mymethod() {\n" +
+                "  }\n" +
+                "}");
+        String expected =
+                "public class Foo {\n" +
+                "  void mymethod() {\n" +
+                "  }\n" +
+                "}";
+        cu.getAllContainedComments().get(0).remove();
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 
     // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
     @Test
     void removedIndentationBlockCommentsPrinted() {
-    	considerCode("public class Foo {\n" +
-    			"  /*\n" +
-    			"  *Block comment coming through\n" +
-    			"  */\n" +
-    			"  void mymethod() {\n" +
-    			"  }\n" +
-    			"}");
-    	String expected =
-    			"public class Foo {\n" +
-    	    	"  void mymethod() {\n" +
-    	    	"  }\n" +
-    	    	"}";
-    	cu.getAllContainedComments().get(0).remove();
+        considerCode("public class Foo {\n" +
+                "  /*\n" +
+                "  *Block comment coming through\n" +
+                "  */\n" +
+                "  void mymethod() {\n" +
+                "  }\n" +
+                "}");
+        String expected =
+                "public class Foo {\n" +
+                "  void mymethod() {\n" +
+                "  }\n" +
+                "}";
+        cu.getAllContainedComments().get(0).remove();
 
-    	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 
  // issue 3216 LexicalPreservingPrinter add Wrong indentation when removing comments
@@ -1733,7 +1733,7 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
                 "  }\n" +
                 "}");
         String expected =
-        		"public class Foo {\n" +
+                "public class Foo {\n" +
                 "  void mymethod() {\n" +
                 "  }\n" +
                 "}";
@@ -1744,82 +1744,82 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 
     @Test
     void addingOrphanCommentToType() {
-    	String actual =
-	            "public class Foo {\n"
-	            + "}" ;
+        String actual =
+                "public class Foo {\n"
+                + "}" ;
 
-	    String expected =
-	    		"//added comment\n"
-	    		+ "public class Foo {\n"
-	    		+ "}";
+        String expected =
+                "//added comment\n"
+                + "public class Foo {\n"
+                + "}";
 
         considerCode(actual);
-	    cu.getTypes().get(0).addOrphanComment(new LineComment("added comment"));
-	    assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        cu.getTypes().get(0).addOrphanComment(new LineComment("added comment"));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void addingOrphanCommentToBlock() {
-    	String actual =
-	            "public class Foo {\n"
-	            + "}" ;
+        String actual =
+                "public class Foo {\n"
+                + "}" ;
 
-	    String expected =
-	    		"//added comment\n"
-	    		+ "public class Foo {\n"
-	    		+ "}";
+        String expected =
+                "//added comment\n"
+                + "public class Foo {\n"
+                + "}";
 
         considerCode(actual);
-	    cu.getTypes().get(0).getChildNodes().get(0).addOrphanComment(new LineComment("added comment"));
-	    assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        cu.getTypes().get(0).getChildNodes().get(0).addOrphanComment(new LineComment("added comment"));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void addingOrphanCommentToBlockInMethodDeclaration() {
-    	String actual =
-	            "public class Foo {\n"
-    			+ "  boolean m() {\n"
-	            + "    return true;\n"
-    			+ "  }\n"
-	            + "}" ;
+        String actual =
+                "public class Foo {\n"
+                + "  boolean m() {\n"
+                + "    return true;\n"
+                + "  }\n"
+                + "}" ;
 
-    	// that's probably not what we want,
-    	// but this is what is implemented in LexicalPreservingPrinter.Observer.concretePropertyChange(..)
-	    String expected =
-	    		"public class Foo {\n"
-	    		+ "  boolean m() //added comment\n"
-	    		+ "{\n"
-	    		+ "    return true;\n"
-	    		+ "  }\n"
-	    		+ "}";
+        // that's probably not what we want,
+        // but this is what is implemented in LexicalPreservingPrinter.Observer.concretePropertyChange(..)
+        String expected =
+                "public class Foo {\n"
+                + "  boolean m() //added comment\n"
+                + "{\n"
+                + "    return true;\n"
+                + "  }\n"
+                + "}";
 
         considerCode(actual);
-	    cu.findAll(BlockStmt.class).get(0).addOrphanComment(new LineComment("added comment"));
-	    assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        cu.findAll(BlockStmt.class).get(0).addOrphanComment(new LineComment("added comment"));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 
     @Test
     void addingOrphanCommentToBlockInMethodDeclaration2() {
-    	String actual =
-	            "public class Foo {\n"
-    			+ "  boolean m() \n"
-	            + "  {\n"
-	            + "    return true;\n"
-    			+ "  }\n"
-	            + "}" ;
+        String actual =
+                "public class Foo {\n"
+                + "  boolean m() \n"
+                + "  {\n"
+                + "    return true;\n"
+                + "  }\n"
+                + "}" ;
 
-	    String expected =
-	    		"public class Foo {\n"
-	    		+ "  boolean m() \n"
-	    		+ "  //added comment\n"
-	    		+ "  {\n"
-	    		+ "    return true;\n"
-	    		+ "  }\n"
-	    		+ "}";
+        String expected =
+                "public class Foo {\n"
+                + "  boolean m() \n"
+                + "  //added comment\n"
+                + "  {\n"
+                + "    return true;\n"
+                + "  }\n"
+                + "}";
 
         considerCode(actual);
-	    cu.findAll(BlockStmt.class).get(0).addOrphanComment(new LineComment("added comment"));
-	    assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        cu.findAll(BlockStmt.class).get(0).addOrphanComment(new LineComment("added comment"));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 
     // issue 3800 determine whether active

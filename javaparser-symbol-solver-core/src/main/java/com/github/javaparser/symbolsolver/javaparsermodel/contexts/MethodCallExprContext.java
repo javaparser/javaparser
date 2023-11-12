@@ -93,8 +93,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                         methodUsage = resolveMethodTypeParameters(methodUsage, argumentsTypes);
                         return Optional.of(methodUsage);
                     }
-					throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
-							"Method '" + name + "' with parameterTypes " + argumentsTypes);
+                    throw new UnsolvedSymbolException(ref.getCorrespondingDeclaration().toString(),
+                            "Method '" + name + "' with parameterTypes " + argumentsTypes);
                 }
             }
 
@@ -231,7 +231,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             return Optional.of(methodUsage);
         }
-		return ref;
+        return ref;
     }
 
     private void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
@@ -242,11 +242,11 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             ResolvedReferenceType sourceRefType = source.asReferenceType();
             ResolvedReferenceType targetRefType = target.asReferenceType();
             if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
-            	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
-	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
-	                    inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
-	                }
-            	}
+                if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
+                    for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
+                        inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
+                    }
+                }
             }
             return;
         }
@@ -341,22 +341,22 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 // Arrays.aslist(int[]{1}) must returns List<int[]>
                 // but Arrays.aslist(String[]{""}) must returns List<String>
                 // Arrays.asList() accept generic type T. Since Java generics work only on
-				// reference types (object types), not on primitives, and int[] is an object
+                // reference types (object types), not on primitives, and int[] is an object
                 // then Arrays.aslist(int[]{1}) returns List<int[]>
                 ResolvedType lastActualParamType =
                         actualParamTypes.get(actualParamTypes.size() - 1);
                 ResolvedType actualType = lastActualParamType;
                 if (lastActualParamType.isArray()) {
-                	ResolvedType componentType = lastActualParamType.asArrayType().getComponentType();
-                	// in cases where, the expected type is a generic type (Arrays.asList(T... a)) and the component type of the array type is a reference type
-                	// or the expected type is not a generic (IntStream.of(int... values)) and the component type is not a reference type
-                	// then the actual type is the component type (in the example above 'int')
-                	if ((componentType.isReferenceType()
-                			&& ResolvedTypeVariable.class.isInstance(expectedType))
-                			|| (!componentType.isReferenceType()
-                        			&& !ResolvedTypeVariable.class.isInstance(expectedType))) {
-                		actualType = lastActualParamType.asArrayType().getComponentType();
-                	}
+                    ResolvedType componentType = lastActualParamType.asArrayType().getComponentType();
+                    // in cases where, the expected type is a generic type (Arrays.asList(T... a)) and the component type of the array type is a reference type
+                    // or the expected type is not a generic (IntStream.of(int... values)) and the component type is not a reference type
+                    // then the actual type is the component type (in the example above 'int')
+                    if ((componentType.isReferenceType()
+                            && ResolvedTypeVariable.class.isInstance(expectedType))
+                            || (!componentType.isReferenceType()
+                                    && !ResolvedTypeVariable.class.isInstance(expectedType))) {
+                        actualType = lastActualParamType.asArrayType().getComponentType();
+                    }
                 }
                 if (!expectedType.isAssignableBy(actualType)) {
                     for (ResolvedTypeParameterDeclaration tp : methodUsage.getDeclaration().getTypeParameters()) {
@@ -375,8 +375,8 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 // match only the varargs type
                 matchTypeParameters(expectedType, actualType, matchedTypeParameters);
             } else if (methodUsage.getDeclaration().getNumberOfParams() == 1) {
-            	// In this case the method declares only one parameter which is a variadic parameter.
-            	// At this stage we can consider that the actual parameters all have the same type.
+                // In this case the method declares only one parameter which is a variadic parameter.
+                // At this stage we can consider that the actual parameters all have the same type.
                 ResolvedType expectedType =
                     methodUsage.getDeclaration().getLastParam().getType().asArrayType().getComponentType();
                 // the varargs corresponding type can not be an Array<T> because of the assumption
@@ -384,7 +384,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 ResolvedType actualType = actualParamTypes.get(actualParamTypes.size() - 1);
                 if (!expectedType.isAssignableBy(actualType)) {
                     throw new UnsupportedOperationException(
-                    		String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
+                            String.format("Unable to resolve the type typeParametersValues in a MethodUsage. Expected type: %s, Actual type: %s. Method Declaration: %s. MethodUsage: %s",
                             expectedType,
                             actualType,
                             methodUsage.getDeclaration(),
@@ -415,87 +415,87 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
      * If there is more than one actual type argument for a formal type parameter
      * then the type parameter list is reduced using LUB fonction.
      */
-	private MethodUsage replaceTypeParameter(MethodUsage methodUsage,
-			Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
-		// first group all resolved types by type variable
-		Map<String, Set<ResolvedType>> resolvedTypesByTypeVariable = groupResolvedTypeByTypeVariable(matchedTypeParameters);
-		// then reduce the list of resolved types with the least upper bound logic
-		Map<String, ResolvedType> reducedResolvedTypesByTypeVariable = reduceResolvedTypesByTypeVariable(resolvedTypesByTypeVariable);
-		// then replace resolved type by the reduced type for each type variable
-		convertTypesParameters(matchedTypeParameters, reducedResolvedTypesByTypeVariable);
-		// finally replace type parameters
-		for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
+    private MethodUsage replaceTypeParameter(MethodUsage methodUsage,
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
+        // first group all resolved types by type variable
+        Map<String, Set<ResolvedType>> resolvedTypesByTypeVariable = groupResolvedTypeByTypeVariable(matchedTypeParameters);
+        // then reduce the list of resolved types with the least upper bound logic
+        Map<String, ResolvedType> reducedResolvedTypesByTypeVariable = reduceResolvedTypesByTypeVariable(resolvedTypesByTypeVariable);
+        // then replace resolved type by the reduced type for each type variable
+        convertTypesParameters(matchedTypeParameters, reducedResolvedTypesByTypeVariable);
+        // finally replace type parameters
+        for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
             methodUsage = methodUsage.replaceTypeParameter(tp, matchedTypeParameters.get(tp));
         }
-		return methodUsage;
-	}
+        return methodUsage;
+    }
 
-	/*
-	 * Update the matchedTypeParameters map from the types in reducedResolvedTypesByTypeVariable map.
-	 */
-	private void convertTypesParameters(
-			Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters,
-			Map<String, ResolvedType> reducedResolvedTypesByTypeVariable) {
-		for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
-			String typeParameterName = tp.getName();
-			boolean replacement = reducedResolvedTypesByTypeVariable.keySet().contains(typeParameterName);
-			if (replacement) {
-				matchedTypeParameters.put(tp, reducedResolvedTypesByTypeVariable.get(typeParameterName));
-			}
+    /*
+     * Update the matchedTypeParameters map from the types in reducedResolvedTypesByTypeVariable map.
+     */
+    private void convertTypesParameters(
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters,
+            Map<String, ResolvedType> reducedResolvedTypesByTypeVariable) {
+        for (ResolvedTypeParameterDeclaration tp : matchedTypeParameters.keySet()) {
+            String typeParameterName = tp.getName();
+            boolean replacement = reducedResolvedTypesByTypeVariable.keySet().contains(typeParameterName);
+            if (replacement) {
+                matchedTypeParameters.put(tp, reducedResolvedTypesByTypeVariable.get(typeParameterName));
+            }
         }
-	}
+    }
 
-	/*
-	 * Group resolved type by the variable type. For example in Map.of("k0", 0, "k1",
-	 * 1D) which is solved as static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2)
-	 * the type variable named V that represents the type of the first and fourth parameter
-	 * must reference v1 (Integer type) and v2 (Double type).
-	 */
-	private Map<String, Set<ResolvedType>> groupResolvedTypeByTypeVariable(Map<ResolvedTypeParameterDeclaration, ResolvedType> typeParameters) {
-		Map<String, Set<ResolvedType>> resolvedTypesByTypeVariable = new HashMap<>();
-		for (ResolvedTypeParameterDeclaration tp : typeParameters.keySet()) {
-			String typeParameterName = tp.getName();
-			boolean alreadyCollected = resolvedTypesByTypeVariable.keySet().contains(typeParameterName);
-			if (!alreadyCollected) {
-				Set<ResolvedType> resolvedTypes = findResolvedTypesByTypeVariable(typeParameterName, typeParameters);
-				resolvedTypesByTypeVariable.put(typeParameterName, resolvedTypes);
-			}
+    /*
+     * Group resolved type by the variable type. For example in Map.of("k0", 0, "k1",
+     * 1D) which is solved as static <K, V> Map<K, V> of(K k1, V v1, K k2, V v2)
+     * the type variable named V that represents the type of the first and fourth parameter
+     * must reference v1 (Integer type) and v2 (Double type).
+     */
+    private Map<String, Set<ResolvedType>> groupResolvedTypeByTypeVariable(Map<ResolvedTypeParameterDeclaration, ResolvedType> typeParameters) {
+        Map<String, Set<ResolvedType>> resolvedTypesByTypeVariable = new HashMap<>();
+        for (ResolvedTypeParameterDeclaration tp : typeParameters.keySet()) {
+            String typeParameterName = tp.getName();
+            boolean alreadyCollected = resolvedTypesByTypeVariable.keySet().contains(typeParameterName);
+            if (!alreadyCollected) {
+                Set<ResolvedType> resolvedTypes = findResolvedTypesByTypeVariable(typeParameterName, typeParameters);
+                resolvedTypesByTypeVariable.put(typeParameterName, resolvedTypes);
+            }
         }
-		return resolvedTypesByTypeVariable;
-	}
+        return resolvedTypesByTypeVariable;
+    }
 
-	/*
-	 * Collect all resolved type from a type variable name
-	 */
-	private Set<ResolvedType> findResolvedTypesByTypeVariable(String typeVariableName, Map<ResolvedTypeParameterDeclaration, ResolvedType> typeParameters) {
-		return typeParameters.keySet().stream()
-				.filter(resolvedTypeParameterDeclaration -> resolvedTypeParameterDeclaration.getName().equals(typeVariableName))
-				.map(resolvedTypeParameterDeclaration -> typeParameters.get(resolvedTypeParameterDeclaration))
-				.collect(Collectors.toSet());
-	}
+    /*
+     * Collect all resolved type from a type variable name
+     */
+    private Set<ResolvedType> findResolvedTypesByTypeVariable(String typeVariableName, Map<ResolvedTypeParameterDeclaration, ResolvedType> typeParameters) {
+        return typeParameters.keySet().stream()
+                .filter(resolvedTypeParameterDeclaration -> resolvedTypeParameterDeclaration.getName().equals(typeVariableName))
+                .map(resolvedTypeParameterDeclaration -> typeParameters.get(resolvedTypeParameterDeclaration))
+                .collect(Collectors.toSet());
+    }
 
-	/*
-	 * Reduce all set of resolved type with LUB
-	 */
-	private Map<String, ResolvedType> reduceResolvedTypesByTypeVariable(Map<String, Set<ResolvedType>> typeParameters) {
-		Map<String, ResolvedType> reducedResolvedTypesList = new HashMap<>();
-		for (String typeParameterName : typeParameters.keySet()) {
-			ResolvedType type = reduceResolvedTypesWithLub(typeParameters.get(typeParameterName));
-			reducedResolvedTypesList.put(typeParameterName, type);
+    /*
+     * Reduce all set of resolved type with LUB
+     */
+    private Map<String, ResolvedType> reduceResolvedTypesByTypeVariable(Map<String, Set<ResolvedType>> typeParameters) {
+        Map<String, ResolvedType> reducedResolvedTypesList = new HashMap<>();
+        for (String typeParameterName : typeParameters.keySet()) {
+            ResolvedType type = reduceResolvedTypesWithLub(typeParameters.get(typeParameterName));
+            reducedResolvedTypesList.put(typeParameterName, type);
         }
-		return reducedResolvedTypesList;
-	}
+        return reducedResolvedTypesList;
+    }
 
-	private ResolvedType reduceResolvedTypesWithLub(Set<ResolvedType> resolvedTypes) {
-		return LeastUpperBoundLogic.of().lub(resolvedTypes);
-	}
+    private ResolvedType reduceResolvedTypesWithLub(Set<ResolvedType> resolvedTypes) {
+        return LeastUpperBoundLogic.of().lub(resolvedTypes);
+    }
 
     private void matchTypeParameters(ResolvedType expectedType, ResolvedType actualType, Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters) {
         if (expectedType.isTypeVariable()) {
             ResolvedType type = actualType;
             // in case of primitive type, the expected type must be compared with the boxed type of the actual type
             if (type.isPrimitive()) {
-            	ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(type.asPrimitive().getBoxTypeQName());
+                ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(type.asPrimitive().getBoxTypeQName());
                 type = new ReferenceTypeImpl(resolvedTypedeclaration);
             }
             /*
@@ -511,7 +511,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             }
             matchedTypeParameters.put(expectedType.asTypeParameter(), type);
         } else if (expectedType.isArray()) {
-        	// Issue 2258 : NullType must not fail this search
+            // Issue 2258 : NullType must not fail this search
             if (!(actualType.isArray() || actualType.isNull())) {
                 throw new UnsupportedOperationException(actualType.getClass().getCanonicalName());
             }

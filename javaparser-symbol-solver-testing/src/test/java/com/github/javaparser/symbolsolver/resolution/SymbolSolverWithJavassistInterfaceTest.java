@@ -79,7 +79,7 @@ class SymbolSolverWithJavassistInterfaceTest extends AbstractSymbolResolutionTes
         assertFalse(solvedSymbol.isSolved());
 
         assertThrows(UnsolvedSymbolException.class, () -> {
-        	solvedSymbol.getCorrespondingDeclaration();
+            solvedSymbol.getCorrespondingDeclaration();
         }, "Expected UnsolvedSymbolException when requesting CorrespondingDeclaration on unsolved SymbolRefernce");
     }
 

@@ -32,45 +32,45 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public class StringLiteralExpr extends LiteralExpr {
 
-	protected String value;
+    protected String value;
 
-	public StringLiteralExpr() {
+    public StringLiteralExpr() {
         this.value = "";
-	}
+    }
 
-	public StringLiteralExpr(final String value) {
+    public StringLiteralExpr(final String value) {
         if (value.contains("\n") || value.contains("\r")) {
             throw new IllegalArgumentException("Illegal literal expression: newlines (line feed or carriage return) have to be escaped");
         }
-		this.value = value;
-	}
+        this.value = value;
+    }
 
-	/**
-	 * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
-	 */
-	public static StringLiteralExpr escape(String string) {
-		return new StringLiteralExpr(Utils.escapeEndOfLines(string));
-	}
+    /**
+     * Utility method that creates a new StringLiteralExpr. Escapes EOL characters.
+     */
+    public static StringLiteralExpr escape(String string) {
+        return new StringLiteralExpr(Utils.escapeEndOfLines(string));
+    }
 
-	public StringLiteralExpr(final Range range, final String value) {
-		super(range);
-		this.value = value;
-	}
+    public StringLiteralExpr(final Range range, final String value) {
+        super(range);
+        this.value = value;
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public final String getValue() {
-		return value;
-	}
+    public final String getValue() {
+        return value;
+    }
 
-	public final StringLiteralExpr setValue(final String value) {
-		this.value = value;
-		return this;
-	}
+    public final StringLiteralExpr setValue(final String value) {
+        this.value = value;
+        return this;
+    }
 }

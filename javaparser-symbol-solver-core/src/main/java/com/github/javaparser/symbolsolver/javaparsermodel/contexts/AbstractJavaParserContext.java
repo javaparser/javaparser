@@ -101,8 +101,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     public final Optional<Context> getParent() {
         Node parentNode = wrappedNode.getParentNode().orElse(null);
 
-		// Resolution of the scope of the method call expression is delegated to parent
-		// context.
+        // Resolution of the scope of the method call expression is delegated to parent
+        // context.
         if (parentNode instanceof MethodCallExpr) {
             MethodCallExpr parentCall = (MethodCallExpr) parentNode;
             boolean found = parentCall.getArguments().contains(wrappedNode);
@@ -116,7 +116,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         }
         Node notMethodNode = parentNode;
         // To avoid loops JP must ensure that the scope of the parent context
-		// is not the same as the current node.
+        // is not the same as the current node.
         while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr
                 || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode)) ) {
             notMethodNode = notMethodNode.getParentNode().orElse(null);
@@ -235,14 +235,14 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
                     if (typeOfScope.isConstraint()) {
                 // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
-            	ResolvedType type = typeOfScope.asConstraintType().getBound();
-            	if (type.isReferenceType()) {
-	                return singletonList(
-	                        type.asReferenceType().getTypeDeclaration()
-	                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
-	                );
-            	}
-            	throw new UnsupportedOperationException("The type declaration cannot be found on constraint "+ type.describe());
+                ResolvedType type = typeOfScope.asConstraintType().getBound();
+                if (type.isReferenceType()) {
+                    return singletonList(
+                            type.asReferenceType().getTypeDeclaration()
+                                    .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+                    );
+                }
+                throw new UnsupportedOperationException("The type declaration cannot be found on constraint "+ type.describe());
             }
             if (typeOfScope.isUnionType()) {
                 return typeOfScope.asUnionType().getCommonAncestor()
@@ -274,7 +274,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
      * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
      */
     @Override
-	public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
         if (methodSolved.isSolved()) {
             ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();

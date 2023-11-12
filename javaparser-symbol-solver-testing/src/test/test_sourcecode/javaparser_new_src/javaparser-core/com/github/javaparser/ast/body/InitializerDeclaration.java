@@ -73,7 +73,7 @@ public final class InitializerDeclaration extends BodyDeclaration<InitializerDec
 
     public InitializerDeclaration setBlock(BlockStmt block) {
         this.block = block;
-		setAsParentNodeOf(this.block);
+        setAsParentNodeOf(this.block);
         return this;
     }
 

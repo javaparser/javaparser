@@ -38,7 +38,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
     String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
-	String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
+    String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     @Override
@@ -138,7 +138,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * In the example above, this method returns B,C,D,E
      */
     Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> breadthFirstFunc = (rrtd) -> {
-    	List<ResolvedReferenceType> ancestors = new ArrayList<>();
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
         // We want to avoid infinite recursion in case of Object having Object as ancestor
         if (!rrtd.isJavaLangObject()) {
             // init direct ancestors
@@ -151,7 +151,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
                     queuedAncestors.add(ancestor);
                     // add this ancestor to the list of ancestors
                     if (!ancestors.contains(ancestor)) {
-                    	ancestors.add(ancestor);
+                        ancestors.add(ancestor);
                     }
                 }));
             }
@@ -294,35 +294,35 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
             return true;
         }
         return isClass() && getAllAncestors().stream()
-        		.filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
-        		.filter(it -> it.asReferenceType().getTypeDeclaration().get().isClass())
-        		.map(it -> it.asReferenceType().getTypeDeclaration().get())
-        		.anyMatch(rrtd -> rrtd.hasDirectlyAnnotation(qualifiedName)
-        				&& rrtd.isInheritedAnnotation(qualifiedName));
+                .filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+                .filter(it -> it.asReferenceType().getTypeDeclaration().get().isClass())
+                .map(it -> it.asReferenceType().getTypeDeclaration().get())
+                .anyMatch(rrtd -> rrtd.hasDirectlyAnnotation(qualifiedName)
+                        && rrtd.isInheritedAnnotation(qualifiedName));
     }
 
     /**
      * Returns true if the specified annotation is inheritable.
      */
     default boolean isInheritedAnnotation(String name) {
-    	Optional<ResolvedAnnotationDeclaration> declaration = getDeclaredAnnotation(name);
-    	return declaration.isPresent() && declaration.get().isInheritable();
+        Optional<ResolvedAnnotationDeclaration> declaration = getDeclaredAnnotation(name);
+        return declaration.isPresent() && declaration.get().isInheritable();
     }
 
     /**
      * Returns the resolved annotation corresponding to the specified name and declared in this type declaration.
      */
     default Optional<ResolvedAnnotationDeclaration> getDeclaredAnnotation(String name) {
-    	return getDeclaredAnnotations().stream()
-    			.filter(annotation -> annotation.getQualifiedName().endsWith(name))
-    			.findFirst();
+        return getDeclaredAnnotations().stream()
+                .filter(annotation -> annotation.getQualifiedName().endsWith(name))
+                .findFirst();
     }
 
     /**
      * Return a collection of all annotations declared in this type declaration.
      */
     default Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-    	throw new UnsupportedOperationException("Getting declared annotation is not supproted on this type " + this.getName());
+        throw new UnsupportedOperationException("Getting declared annotation is not supproted on this type " + this.getName());
     }
 
 

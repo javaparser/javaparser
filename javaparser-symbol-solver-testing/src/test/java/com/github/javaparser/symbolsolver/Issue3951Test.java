@@ -32,36 +32,36 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 
 public class Issue3951Test extends AbstractResolutionTest {
 
-	@Test
-	void test() {
-		final String code = String.join(System.lineSeparator(),
-				"package test;",
-				"import java.util.HashMap;",
-				"import java.util.Map;",
-				"interface Foo {",
-				"    String getFoo();",
-				"    String getBar();",
-				"}",
-				"class FooImpl implements Foo {",
-				"    String getFoo() { return \"foo\"; } ",
-				"    String getBar() { return \"bar\"; } ",
-				"}",
-				"public class Application {",
-				"    public static void main() {",
-				"        Foo f = new FooImpl();",
-				"        Map<Foo, Object> m = new HashMap<>();",
-				"        assertThat(m.containsKey(f));",
-				"    }",
-				"    public static void assertThat(Object m) {",
-				"        assert m != null;",
-				"    }",
-				"}");
+    @Test
+    void test() {
+        final String code = String.join(System.lineSeparator(),
+                "package test;",
+                "import java.util.HashMap;",
+                "import java.util.Map;",
+                "interface Foo {",
+                "    String getFoo();",
+                "    String getBar();",
+                "}",
+                "class FooImpl implements Foo {",
+                "    String getFoo() { return \"foo\"; } ",
+                "    String getBar() { return \"bar\"; } ",
+                "}",
+                "public class Application {",
+                "    public static void main() {",
+                "        Foo f = new FooImpl();",
+                "        Map<Foo, Object> m = new HashMap<>();",
+                "        assertThat(m.containsKey(f));",
+                "    }",
+                "    public static void assertThat(Object m) {",
+                "        assert m != null;",
+                "    }",
+                "}");
 
-		CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(new ReflectionTypeSolver())).parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(new ReflectionTypeSolver())).parse(code);
 
-		MethodCallExpr getOrDefaultCall = cu.findAll(MethodCallExpr.class).stream()
-				.filter(m -> m.getNameAsString().equals("assertThat")).findFirst().get();
+        MethodCallExpr getOrDefaultCall = cu.findAll(MethodCallExpr.class).stream()
+                .filter(m -> m.getNameAsString().equals("assertThat")).findFirst().get();
 
-		assertEquals("test.Application.assertThat", getOrDefaultCall.resolve().getQualifiedName());
-	}
+        assertEquals("test.Application.assertThat", getOrDefaultCall.resolve().getQualifiedName());
+    }
 }

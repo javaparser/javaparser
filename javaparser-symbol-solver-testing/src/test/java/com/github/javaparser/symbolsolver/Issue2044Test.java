@@ -94,18 +94,18 @@ public class Issue2044Test {
 /*
 java.lang.RuntimeException: Method 'hashCode' cannot be resolved in context key.hashCode() (line: 3) MethodCallExprContext{wrapped=key.hashCode()}. Parameter types: []
 
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(JavaParserFacade.java:586)
-	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:267)
-	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:44)
-	at com.github.javaparser.ast.expr.MethodCallExpr.accept(MethodCallExpr.java:115)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(JavaParserFacade.java:447)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:310)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:292)
-	at com.github.javaparser.symbolsolver.JavaSymbolSolver.calculateType(JavaSymbolSolver.java:250)
-	at com.github.javaparser.ast.expr.Expression.calculateResolvedType(Expression.java:564)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:81)
-	at java.util.ArrayList.forEach(ArrayList.java:1249)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$issue2044$1(Issue2044.java:49)
+    at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(JavaParserFacade.java:586)
+    at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:267)
+    at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:44)
+    at com.github.javaparser.ast.expr.MethodCallExpr.accept(MethodCallExpr.java:115)
+    at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(JavaParserFacade.java:447)
+    at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:310)
+    at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:292)
+    at com.github.javaparser.symbolsolver.JavaSymbolSolver.calculateType(JavaSymbolSolver.java:250)
+    at com.github.javaparser.ast.expr.Expression.calculateResolvedType(Expression.java:564)
+    at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:81)
+    at java.util.ArrayList.forEach(ArrayList.java:1249)
+    at com.github.javaparser.symbolsolver.Issue2044.lambda$issue2044$1(Issue2044.java:49)
 */
 
 
@@ -115,9 +115,9 @@ java.lang.RuntimeException: Method 'hashCode' cannot be resolved in context key.
 Unsolved symbol : We are unable to find the method declaration corresponding to key.hashCode()
 UnsolvedSymbolException{context='null', name='We are unable to find the method declaration corresponding to key.hashCode()', cause='null'}
 
-	at com.github.javaparser.symbolsolver.JavaSymbolSolver.resolveDeclaration(JavaSymbolSolver.java:146)
-	at com.github.javaparser.ast.expr.MethodCallExpr.resolve(MethodCallExpr.java:313)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:101)
+    at com.github.javaparser.symbolsolver.JavaSymbolSolver.resolveDeclaration(JavaSymbolSolver.java:146)
+    at com.github.javaparser.ast.expr.MethodCallExpr.resolve(MethodCallExpr.java:313)
+    at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:101)
 */
 
         });
@@ -181,18 +181,18 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
                 /*
 java.lang.RuntimeException: Method 'hashCode' cannot be resolved in context key.hashCode() (line: 3) MethodCallExprContext{wrapped=key.hashCode()}. Parameter types: []
 
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(JavaParserFacade.java:586)
-	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:267)
-	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:44)
-	at com.github.javaparser.ast.expr.MethodCallExpr.accept(MethodCallExpr.java:115)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(JavaParserFacade.java:447)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:310)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:292)
-	at com.github.javaparser.symbolsolver.JavaSymbolSolver.calculateType(JavaSymbolSolver.java:250)
-	at com.github.javaparser.ast.expr.Expression.calculateResolvedType(Expression.java:564)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:81)
-	at java.util.ArrayList.forEach(ArrayList.java:1249)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$issue2044$1(Issue2044.java:49)
+    at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(JavaParserFacade.java:586)
+    at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:267)
+    at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:44)
+    at com.github.javaparser.ast.expr.MethodCallExpr.accept(MethodCallExpr.java:115)
+    at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(JavaParserFacade.java:447)
+    at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:310)
+    at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:292)
+    at com.github.javaparser.symbolsolver.JavaSymbolSolver.calculateType(JavaSymbolSolver.java:250)
+    at com.github.javaparser.ast.expr.Expression.calculateResolvedType(Expression.java:564)
+    at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:81)
+    at java.util.ArrayList.forEach(ArrayList.java:1249)
+    at com.github.javaparser.symbolsolver.Issue2044.lambda$issue2044$1(Issue2044.java:49)
                  */
 
 
@@ -202,9 +202,9 @@ java.lang.RuntimeException: Method 'hashCode' cannot be resolved in context key.
 Unsolved symbol : We are unable to find the method declaration corresponding to key.hashCode()
 UnsolvedSymbolException{context='null', name='We are unable to find the method declaration corresponding to key.hashCode()', cause='null'}
 
-	at com.github.javaparser.symbolsolver.JavaSymbolSolver.resolveDeclaration(JavaSymbolSolver.java:146)
-	at com.github.javaparser.ast.expr.MethodCallExpr.resolve(MethodCallExpr.java:313)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:101)
+    at com.github.javaparser.symbolsolver.JavaSymbolSolver.resolveDeclaration(JavaSymbolSolver.java:146)
+    at com.github.javaparser.ast.expr.MethodCallExpr.resolve(MethodCallExpr.java:313)
+    at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:101)
                  */
 
 

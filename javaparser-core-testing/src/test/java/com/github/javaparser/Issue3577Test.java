@@ -31,10 +31,10 @@ public class Issue3577Test {
     @Test
     public void test() {
         String str = "public class MyClass {\n"
-        		+ "    public static void main(String args[]) {\n"
-        		+ "      System.out.println(\"Hello\\sWorld\");\n"
-        		+ "    }\n"
-        		+ "}";
+                + "    public static void main(String args[]) {\n"
+                + "      System.out.println(\"Hello\\sWorld\");\n"
+                + "    }\n"
+                + "}";
 
         ParserConfiguration config = new ParserConfiguration().setLanguageLevel(LanguageLevel.JAVA_15);
         StaticJavaParser.setConfiguration(config);

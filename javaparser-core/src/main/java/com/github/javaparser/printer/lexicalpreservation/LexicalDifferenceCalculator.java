@@ -93,8 +93,8 @@ class LexicalDifferenceCalculator {
          */
         @Override
         public boolean isCorrespondingElement(TextElement textElement) {
-        	return (textElement instanceof ChildTextElement)
-        			&& ((ChildTextElement)textElement).getChild() == getChild();
+            return (textElement instanceof ChildTextElement)
+                    && ((ChildTextElement)textElement).getChild() == getChild();
         }
 
         @Override
@@ -198,10 +198,10 @@ class LexicalDifferenceCalculator {
             Node child;
             if (change instanceof PropertyChange && ((PropertyChange) change).getProperty() == csmSingleReference.getProperty()) {
                 child = (Node) ((PropertyChange) change).getNewValue();
-            	if (node instanceof LambdaExpr && child instanceof ExpressionStmt) {
+                if (node instanceof LambdaExpr && child instanceof ExpressionStmt) {
                     // Same edge-case as in DefaultPrettyPrinterVisitor.visit(LambdaExpr, Void)
-            	    child = ((ExpressionStmt) child).getExpression();
-            	}
+                    child = ((ExpressionStmt) child).getExpression();
+                }
             } else {
                 child = csmSingleReference.getProperty().getValueAsSingleReference(node);
             }
@@ -304,8 +304,8 @@ class LexicalDifferenceCalculator {
             }
         } else if ((csm instanceof CsmString) && (node instanceof TextBlockLiteralExpr)) {
             // Per https://openjdk.java.net/jeps/378#1--Line-terminators, any 'CRLF' and 'CR' are turned into 'LF' before interpreting the text
-        	String eol = node.getLineEndingStyle().toString();
-        	// FIXME: csm should be CsmTextBlock -- See also #2677
+            String eol = node.getLineEndingStyle().toString();
+            // FIXME: csm should be CsmTextBlock -- See also #2677
             if (change instanceof PropertyChange) {
                 elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + eol + ((PropertyChange) change).getNewValue() + "\"\"\""));
             } else {

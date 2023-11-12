@@ -65,7 +65,7 @@ public class ListRemovalChange implements Change {
     }
 
     @Override
-	public ObservableProperty getProperty() {
-		return observableProperty;
-	}
+    public ObservableProperty getProperty() {
+        return observableProperty;
+    }
 }

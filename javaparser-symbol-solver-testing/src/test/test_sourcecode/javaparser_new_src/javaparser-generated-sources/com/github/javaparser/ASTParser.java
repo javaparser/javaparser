@@ -9022,7 +9022,7 @@ return ret;
   }
   /** Reinitialise. */
   public void ReInit(Provider stream) {
-	if (jj_input_stream == null) {
+    if (jj_input_stream == null) {
       jj_input_stream = new JavaCharStream(stream, 1, 1);
    } else {
       jj_input_stream.ReInit(stream, 1, 1);

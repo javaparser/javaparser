@@ -26,15 +26,15 @@ import com.github.javaparser.quality.Nullable;
 
 class ConstructorParameterTest {
 
-	private final String a;
-	private final String b;
-	private final String c;
+    private final String a;
+    private final String b;
+    private final String c;
 
-	public ConstructorParameterTest(@NotNull String notNullString, @Nullable String nullableString,
-									String otherString) {
-		this.a = notNullString;
-		this.b = nullableString;
-		this.c = otherString;
-	}
+    public ConstructorParameterTest(@NotNull String notNullString, @Nullable String nullableString,
+                                    String otherString) {
+        this.a = notNullString;
+        this.b = nullableString;
+        this.c = otherString;
+    }
 
 }

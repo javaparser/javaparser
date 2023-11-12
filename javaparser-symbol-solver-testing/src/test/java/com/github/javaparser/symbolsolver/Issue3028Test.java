@@ -37,13 +37,13 @@ public class Issue3028Test extends AbstractResolutionTest {
 
     @Test
     void varArgsIssue() {
-    	
-    	TypeSolver typeSolver = new CombinedTypeSolver(
-				new ReflectionTypeSolver());
-		JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
-		
-		StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
-		
+        
+        TypeSolver typeSolver = new CombinedTypeSolver(
+                new ReflectionTypeSolver());
+        JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
+        
+        StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
+        
         CompilationUnit cu = parseSample("Issue3028");
         
         final MethodCallExpr mce = Navigator.findMethodCall(cu, "doSomething").get();

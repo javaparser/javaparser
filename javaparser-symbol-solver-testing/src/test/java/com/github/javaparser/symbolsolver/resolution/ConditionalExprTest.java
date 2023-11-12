@@ -166,7 +166,7 @@ class ConditionalExprTest extends AbstractResolutionTest {
     @Test
     void test_reference_conditional_expression_with_type_variable() {
         // require that type variable T in the returned type of this method call java.util.Collections.emptyList()
-    	// can be translated into String type
+        // can be translated into String type
         String code = "class A { public void m() { java.util.List list = true ? new java.util.ArrayList<String>() : java.util.Collections.emptyList();}}";
         ResolvedType rt3 = StaticJavaParser.parse(code).findFirst(ConditionalExpr.class).get().calculateResolvedType();
         assertEquals("java.util.List<java.lang.String>", rt3.describe());

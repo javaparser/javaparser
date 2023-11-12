@@ -91,14 +91,14 @@ public final class ArrayCreationExpr extends Expression implements NodeWithType<
 
     public ArrayCreationExpr setInitializer(ArrayInitializerExpr initializer) {
         this.initializer = initializer;
-		setAsParentNodeOf(this.initializer);
+        setAsParentNodeOf(this.initializer);
         return this;
     }
 
     @Override
     public ArrayCreationExpr setType(Type type) {
         this.type = type;
-		setAsParentNodeOf(this.type);
+        setAsParentNodeOf(this.type);
         return this;
     }
 

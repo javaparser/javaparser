@@ -46,7 +46,7 @@ class Issue241Test extends AbstractResolutionTest{
     void testSolveStaticallyImportedMemberType() {
         Path src = adaptPath("src/test/resources");
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
-        		
+                
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         
         CompilationUnit cu = parseSample("Issue241");

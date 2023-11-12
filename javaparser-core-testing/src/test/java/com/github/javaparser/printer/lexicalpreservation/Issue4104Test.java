@@ -33,49 +33,49 @@ import com.github.javaparser.ast.stmt.SwitchStmt;
 
 public class Issue4104Test extends AbstractLexicalPreservingTest {
 
-	@Test
+    @Test
     void test() {
-		considerCode(
-				"class Foo {\n"
-				+ "  void foo() {\n"
-				+ "    switch(bar) {\n"
-				+ "      default:\n"
-				+ "        break;\n"
-				+ "    }\n"
-				+ "  }\n"
-				+ "}");
-		// should be this
-//		String expected =
-//				"class Foo {\n"
-//				+ "  void foo() {\n"
-//				+ "    switch(bar) {\n"
-//				+ "      default:\n"
-//				+ "        break;\n"
-//				+ "      case 0:\n"
-//				+ "          break;\n"
-//				+ "    }\n"
-//				+ "  }\n"
-//				+ "}";
+        considerCode(
+                "class Foo {\n"
+                + "  void foo() {\n"
+                + "    switch(bar) {\n"
+                + "      default:\n"
+                + "        break;\n"
+                + "    }\n"
+                + "  }\n"
+                + "}");
+        // should be this
+//        String expected =
+//                "class Foo {\n"
+//                + "  void foo() {\n"
+//                + "    switch(bar) {\n"
+//                + "      default:\n"
+//                + "        break;\n"
+//                + "      case 0:\n"
+//                + "          break;\n"
+//                + "    }\n"
+//                + "  }\n"
+//                + "}";
 
-		String expected =
-				"class Foo {\n"
-				+ "  void foo() {\n"
-				+ "    switch(bar) {\n"
-				+ "      default:\n"
-				+ "        break;\n"
-				+ "      case 0:\n"
-				+ "          break;\n"
-				+ "      }\n"
-				+ "  }\n"
-				+ "}";
+        String expected =
+                "class Foo {\n"
+                + "  void foo() {\n"
+                + "    switch(bar) {\n"
+                + "      default:\n"
+                + "        break;\n"
+                + "      case 0:\n"
+                + "          break;\n"
+                + "      }\n"
+                + "  }\n"
+                + "}";
 
-		SwitchStmt switchStmt = cu.findAll(SwitchStmt.class).stream().findFirst().get();
+        SwitchStmt switchStmt = cu.findAll(SwitchStmt.class).stream().findFirst().get();
 
         SwitchEntry newEntry = new SwitchEntry();
         newEntry.setLabels(NodeList.nodeList(new IntegerLiteralExpr(0)));
         newEntry.setStatements(NodeList.nodeList(new BreakStmt()));
         switchStmt.getEntries().addLast(newEntry);
 
-		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 }

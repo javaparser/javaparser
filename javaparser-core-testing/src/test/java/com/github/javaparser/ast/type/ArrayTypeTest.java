@@ -193,8 +193,8 @@ class ArrayTypeTest {
     }
     
     @Test
-	void range() {
-		Type type = parseType("Long[][]");
-		assertEquals(8, type.getRange().get().end.column);
-	}
+    void range() {
+        Type type = parseType("Long[][]");
+        assertEquals(8, type.getRange().get().end.column);
+    }
 }

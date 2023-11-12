@@ -40,12 +40,12 @@ public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotat
     }
 
     public BodyDeclaration(List<AnnotationExpr> annotations) {
-    	setAnnotations(annotations);
+        setAnnotations(annotations);
     }
 
     public BodyDeclaration(Range range, List<AnnotationExpr> annotations) {
         super(range);
-    	setAnnotations(annotations);
+        setAnnotations(annotations);
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class BodyDeclaration<T> extends Node implements NodeWithAnnotat
     @Override
     public final T setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
-		setAsParentNodeOf(this.annotations);
+        setAsParentNodeOf(this.annotations);
         return (T) this;
     }
 }

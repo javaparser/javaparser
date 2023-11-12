@@ -24,8 +24,8 @@ import com.github.javaparser.quality.Preconditions;
 
 class A {
 
-	public void method(@NotNull String notNull) {}
+    public void method(@NotNull String notNull) {}
 
-	public void method(int age) {}
+    public void method(int age) {}
 
 }

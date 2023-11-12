@@ -59,11 +59,11 @@ class ReflectionTypeSolverTest extends ClassLoaderTypeSolverTest<ReflectionTypeS
     void testInvalidArgumentNumber() throws IOException {
         Path file = adaptPath("src/test/resources/issue2366/Test.java");
 
-        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());	    
+        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());        
 
         ParserConfiguration pc = new ParserConfiguration()
-            	                        .setSymbolResolver(new JavaSymbolSolver(combinedSolver))
-            	                        .setLanguageLevel(LanguageLevel.JAVA_8);
+                                        .setSymbolResolver(new JavaSymbolSolver(combinedSolver))
+                                        .setLanguageLevel(LanguageLevel.JAVA_8);
 
         JavaParser javaParser = new JavaParser(pc);
 
@@ -73,7 +73,7 @@ class ReflectionTypeSolverTest extends ClassLoaderTypeSolverTest<ReflectionTypeS
         Assertions.assertThrows(UnsolvedSymbolException.class, () -> unit.accept(new VoidVisitorAdapter<Object>() {
             @Override
             public void visit(ObjectCreationExpr exp, Object arg) {
-            	super.visit(exp, arg);
+                super.visit(exp, arg);
                 exp.resolve().getSignature();
             }            
         }, null));

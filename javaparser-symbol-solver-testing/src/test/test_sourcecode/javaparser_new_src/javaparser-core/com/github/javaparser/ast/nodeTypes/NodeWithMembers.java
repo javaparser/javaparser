@@ -271,9 +271,9 @@ public interface NodeWithMembers<T> {
     }
 
     /**
-	 * Find all fields in the members of this node.
+     * Find all fields in the members of this node.
      *
-	 * @return the fields found. This list is immutable.
+     * @return the fields found. This list is immutable.
      */
     default List<FieldDeclaration> getFields() {
         return unmodifiableList(getMembers().stream()

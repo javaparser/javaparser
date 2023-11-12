@@ -235,7 +235,7 @@ public interface ResolvedType {
      * Returns the resolved type for a type variable or the bounded resolved type or the type itself.
      */
     default ResolvedType solveGenericTypes(Context context) {
-    	return this;
+        return this;
     }
 
     default String toDescriptor() {

@@ -154,7 +154,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     private static final int LEVELS_TO_EXPLORE = 3;
 
     protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration()
-			.removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+            .removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     @InternalProperty
     private Range range;
@@ -239,7 +239,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @return the range of characters in the source code that this node covers.
      */
     @Override
-	public Optional<Range> getRange() {
+    public Optional<Range> getRange() {
         return Optional.ofNullable(range);
     }
 
@@ -247,12 +247,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @return the range of tokens that this node covers.
      */
     @Override
-	public Optional<TokenRange> getTokenRange() {
+    public Optional<TokenRange> getTokenRange() {
         return Optional.ofNullable(tokenRange);
     }
 
     @Override
-	public Node setTokenRange(TokenRange tokenRange) {
+    public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
         if (tokenRange == null || !(tokenRange.getBegin().hasRange() && tokenRange.getEnd().hasRange())) {
             range = null;
@@ -267,7 +267,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      *              no range information is known, or that it is not of interest.
      */
     @Override
-	public Node setRange(Range range) {
+    public Node setRange(Range range) {
         if (this.range == range) {
             return this;
         }
@@ -335,13 +335,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Formatting can be configured with parameter PrinterConfiguration.
      */
     public final String toString(PrinterConfiguration configuration) {
-    	// save the current configuration
-    	PrinterConfiguration previousConfiguration = getPrinter().getConfiguration();
-    	// print with the new configuration
-    	String result = getPrinter(configuration).print(this);
-    	// restore the previous printer configuration (issue 4163)
-    	getPrinter().setConfiguration(previousConfiguration);
-    	return result;
+        // save the current configuration
+        PrinterConfiguration previousConfiguration = getPrinter().getConfiguration();
+        // print with the new configuration
+        String result = getPrinter(configuration).print(this);
+        // restore the previous printer configuration (issue 4163)
+        getPrinter().setConfiguration(previousConfiguration);
+        return result;
     }
 
     @Override
@@ -373,7 +373,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     public void addOrphanComment(Comment comment) {
-    	notifyPropertyChange(ObservableProperty.COMMENT, null, comment);
+        notifyPropertyChange(ObservableProperty.COMMENT, null, comment);
         orphanComments.add(comment);
         comment.setParentNode(this);
     }
@@ -1146,7 +1146,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     public boolean hasScope() {
         return (NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent())
-        		|| (NodeWithScope.class.isAssignableFrom(this.getClass()) && ((NodeWithScope) this).getScope() != null);
+                || (NodeWithScope.class.isAssignableFrom(this.getClass()) && ((NodeWithScope) this).getScope() != null);
     }
 
     /*

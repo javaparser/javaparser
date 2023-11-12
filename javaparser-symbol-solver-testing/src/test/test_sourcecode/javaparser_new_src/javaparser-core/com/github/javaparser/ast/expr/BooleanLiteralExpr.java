@@ -36,7 +36,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     }
 
     public BooleanLiteralExpr(boolean value) {
-    	setValue(value);
+        setValue(value);
     }
 
     public BooleanLiteralExpr(Range range, boolean value) {

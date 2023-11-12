@@ -275,13 +275,13 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveTypeParameterFromPrimitiveArrayArgumentOnNonGenericExpectedParameter() {
         String sourceCode = "" +
-        		"import java.util.OptionalDouble;\n" +
-				"import java.util.stream.IntStream;\n" +
+                "import java.util.OptionalDouble;\n" +
+                "import java.util.stream.IntStream;\n" +
                 "\n" +
                 "public class Main {\n" +
-                "	OptionalDouble pre(int[] values) {\n" +
-				"		return IntStream.of(values).map(s -> s).average();\n" +
-				"	}\n" +
+                "    OptionalDouble pre(int[] values) {\n" +
+                "        return IntStream.of(values).map(s -> s).average();\n" +
+                "    }\n" +
                 "}";
 
         JavaParser parser = createParserWithResolver(defaultTypeSolver());
@@ -322,7 +322,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
     // See issue 3725
     @Test
     void resolveVarTypeInForEachLoopFromIterableExpression_withRawType() {
-    		String sourceCode = "" +
+            String sourceCode = "" +
                     "import java.util.ArrayList;\n" +
                     "import java.util.List;\n" +
                     "\n" +

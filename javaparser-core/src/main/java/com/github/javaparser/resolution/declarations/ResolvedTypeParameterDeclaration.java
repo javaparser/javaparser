@@ -107,7 +107,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * Name of the type parameter.
      */
     @Override
-	String getName();
+    String getName();
 
     /**
      * Is the type parameter been defined on a type?
@@ -135,7 +135,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * This is unsupported because there is no package for a Type Parameter, only for its container.
      */
     @Override
-	default String getPackageName() {
+    default String getPackageName() {
         throw new UnsupportedOperationException();
     }
 
@@ -144,7 +144,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * This is unsupported because there is no class for a Type Parameter, only for its container.
      */
     @Override
-	default String getClassName() {
+    default String getClassName() {
         throw new UnsupportedOperationException();
     }
 
@@ -154,7 +154,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * The qualified name of a method is its qualified signature.
      */
     @Override
-	default String getQualifiedName() {
+    default String getQualifiedName() {
         return String.format("%s.%s", getContainerId(), getName());
     }
 

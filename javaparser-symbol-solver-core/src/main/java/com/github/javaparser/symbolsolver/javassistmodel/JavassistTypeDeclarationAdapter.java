@@ -49,8 +49,8 @@ import javassist.bytecode.SignatureAttribute;
  */
 public class JavassistTypeDeclarationAdapter {
 
-	// this a workaround to get the annotation type (taken from Javassist AnnotationImpl class)
-	private static final String JDK_ANNOTATION_CLASS_NAME = "java.lang.annotation.Annotation";
+    // this a workaround to get the annotation type (taken from Javassist AnnotationImpl class)
+    private static final String JDK_ANNOTATION_CLASS_NAME = "java.lang.annotation.Annotation";
     private static Method JDK_ANNOTATION_TYPE_METHOD = null;
 
     static {
@@ -186,30 +186,30 @@ public class JavassistTypeDeclarationAdapter {
      * Returns a set of the declared annotation on this type
      */
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-    	try {
-			Object[] annotations = ctClass.getAnnotations();
-			return Stream.of(annotations)
-	    			.map(annotation -> getAnnotationType(annotation))
-	    			.filter(annotationType -> annotationType != null)
-	    			.map(annotationType -> typeSolver.solveType(annotationType))
-	    			.map(rrtd -> rrtd.asAnnotation())
-	    			.collect(Collectors.toSet());
-		} catch (ClassNotFoundException e) {
-			// There is nothing to do except returns an empty set
-		}
-    	return Collections.EMPTY_SET;
+        try {
+            Object[] annotations = ctClass.getAnnotations();
+            return Stream.of(annotations)
+                    .map(annotation -> getAnnotationType(annotation))
+                    .filter(annotationType -> annotationType != null)
+                    .map(annotationType -> typeSolver.solveType(annotationType))
+                    .map(rrtd -> rrtd.asAnnotation())
+                    .collect(Collectors.toSet());
+        } catch (ClassNotFoundException e) {
+            // There is nothing to do except returns an empty set
+        }
+        return Collections.EMPTY_SET;
 
     }
 
     private String getAnnotationType(Object annotation) {
-    	String typeName = null;
-    	try {
-    		Class<?> annotationClass = (Class<?>) Proxy.getInvocationHandler(annotation)
-					.invoke(annotation, JDK_ANNOTATION_TYPE_METHOD, null);
-    		typeName = annotationClass.getTypeName();
-		} catch (Throwable e) {
-		}
-    	return typeName;
+        String typeName = null;
+        try {
+            Class<?> annotationClass = (Class<?>) Proxy.getInvocationHandler(annotation)
+                    .invoke(annotation, JDK_ANNOTATION_TYPE_METHOD, null);
+            typeName = annotationClass.getTypeName();
+        } catch (Throwable e) {
+        }
+        return typeName;
     }
 
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {

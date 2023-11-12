@@ -30,35 +30,35 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class ExpressionStmt extends Statement {
 
-	private Expression expr;
+    private Expression expr;
 
-	public ExpressionStmt() {
-	}
+    public ExpressionStmt() {
+    }
 
-	public ExpressionStmt(final Expression expr) {
-		setExpression(expr);
-	}
+    public ExpressionStmt(final Expression expr) {
+        setExpression(expr);
+    }
 
-	public ExpressionStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
-			final Expression expr) {
-		super(beginLine, beginColumn, endLine, endColumn);
-		setExpression(expr);
-	}
+    public ExpressionStmt(final int beginLine, final int beginColumn, final int endLine, final int endColumn,
+            final Expression expr) {
+        super(beginLine, beginColumn, endLine, endColumn);
+        setExpression(expr);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Expression getExpression() {
-		return expr;
-	}
+    public Expression getExpression() {
+        return expr;
+    }
 
-	public void setExpression(final Expression expr) {
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
-	}
+    public void setExpression(final Expression expr) {
+        this.expr = expr;
+        setAsParentNodeOf(this.expr);
+    }
 }

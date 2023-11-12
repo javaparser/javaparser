@@ -431,55 +431,55 @@ class WildcardUsageTest {
     }*/
 
 //    @Test
-//	void testIsAssignableByGenerics() {
-//		ResolvedType listOfSomethingExtendingNumbers = genericType(List.class.getCanonicalName(),
-//				extendsBound(Number.class.getCanonicalName()));
-//		ResolvedType listOfNumbers = genericType(List.class.getCanonicalName(), Number.class.getCanonicalName());
-//		ResolvedType listOfSomethingExtendingIntegers = genericType(List.class.getCanonicalName(),
-//				extendsBound(Integer.class.getCanonicalName()));
+//    void testIsAssignableByGenerics() {
+//        ResolvedType listOfSomethingExtendingNumbers = genericType(List.class.getCanonicalName(),
+//                extendsBound(Number.class.getCanonicalName()));
+//        ResolvedType listOfNumbers = genericType(List.class.getCanonicalName(), Number.class.getCanonicalName());
+//        ResolvedType listOfSomethingExtendingIntegers = genericType(List.class.getCanonicalName(),
+//                extendsBound(Integer.class.getCanonicalName()));
 //
-//		ResolvedType list1 = genericType(List.class.getCanonicalName(), Integer.class.getCanonicalName());
+//        ResolvedType list1 = genericType(List.class.getCanonicalName(), Integer.class.getCanonicalName());
 //
-//		print(listOfSomethingExtendingIntegers.asReferenceType().getAllAncestors());
+//        print(listOfSomethingExtendingIntegers.asReferenceType().getAllAncestors());
 //
-//		Collection<? extends Number> c1;
-//		Collection<Number> c2 = new ArrayList<>();;
-//		List<? extends Number> lnum = new ArrayList<>();
-//		List<? extends Integer> lint = new ArrayList<>();
-//		c1 = lint;
-//		c1 = lnum;
-//		lnum = lint;
-//		c1 = c2;
-//	}
+//        Collection<? extends Number> c1;
+//        Collection<Number> c2 = new ArrayList<>();;
+//        List<? extends Number> lnum = new ArrayList<>();
+//        List<? extends Integer> lint = new ArrayList<>();
+//        c1 = lint;
+//        c1 = lnum;
+//        lnum = lint;
+//        c1 = c2;
+//    }
 
 
     // Utility methods
 
-	private void print(List<ResolvedReferenceType> ancestors) {
-		for (ResolvedReferenceType ancestor : ancestors) {
-			System.out.println(ancestor.describe());
-		}
-	}
+    private void print(List<ResolvedReferenceType> ancestors) {
+        for (ResolvedReferenceType ancestor : ancestors) {
+            System.out.println(ancestor.describe());
+        }
+    }
 
-	private List<ResolvedType> types(String... types) {
-		return Arrays.stream(types).map(type -> type(type)).collect(Collectors.toList());
-	}
+    private List<ResolvedType> types(String... types) {
+        return Arrays.stream(types).map(type -> type(type)).collect(Collectors.toList());
+    }
 
-	private ResolvedType type(String type) {
-		return new ReferenceTypeImpl(typeSolver.solveType(type));
-	}
+    private ResolvedType type(String type) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type));
+    }
 
-	private ResolvedType genericType(String type, String... parameterTypes) {
-		return new ReferenceTypeImpl(typeSolver.solveType(type), types(parameterTypes));
-	}
+    private ResolvedType genericType(String type, String... parameterTypes) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type), types(parameterTypes));
+    }
 
-	private ResolvedType genericType(String type, ResolvedType... parameterTypes) {
-		return new ReferenceTypeImpl(typeSolver.solveType(type), Arrays.asList(parameterTypes));
-	}
+    private ResolvedType genericType(String type, ResolvedType... parameterTypes) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type), Arrays.asList(parameterTypes));
+    }
 
-	private ResolvedType extendsBound(String type) {
-		return ResolvedWildcard.extendsBound(type(type));
-	}
+    private ResolvedType extendsBound(String type) {
+        return ResolvedWildcard.extendsBound(type(type));
+    }
 
 
 

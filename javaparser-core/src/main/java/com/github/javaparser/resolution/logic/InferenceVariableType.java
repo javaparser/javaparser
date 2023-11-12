@@ -79,7 +79,7 @@ public class InferenceVariableType implements ResolvedType {
     private Set<ResolvedType> superTypes = new HashSet<>();
 
     public InferenceVariableType(int id, TypeSolver typeSolver) {
-    	this.id = id;
+        this.id = id;
         this.typeSolver = typeSolver;
     }
 

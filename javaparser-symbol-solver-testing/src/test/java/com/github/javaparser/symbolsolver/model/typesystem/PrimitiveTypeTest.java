@@ -337,14 +337,14 @@ class PrimitiveTypeTest {
     
     @Test
     void testIsNumeric() {
-    	assertFalse(ResolvedPrimitiveType.BOOLEAN.isNumeric());
-    	assertTrue(ResolvedPrimitiveType.CHAR.isNumeric());
-    	assertTrue(ResolvedPrimitiveType.BYTE.isNumeric());
-    	assertTrue(ResolvedPrimitiveType.SHORT.isNumeric());
-    	assertTrue(ResolvedPrimitiveType.INT.isNumeric());
-    	assertTrue(ResolvedPrimitiveType.LONG.isNumeric());
-    	assertTrue(ResolvedPrimitiveType.FLOAT.isNumeric());
-    	assertTrue(ResolvedPrimitiveType.DOUBLE.isNumeric());
+        assertFalse(ResolvedPrimitiveType.BOOLEAN.isNumeric());
+        assertTrue(ResolvedPrimitiveType.CHAR.isNumeric());
+        assertTrue(ResolvedPrimitiveType.BYTE.isNumeric());
+        assertTrue(ResolvedPrimitiveType.SHORT.isNumeric());
+        assertTrue(ResolvedPrimitiveType.INT.isNumeric());
+        assertTrue(ResolvedPrimitiveType.LONG.isNumeric());
+        assertTrue(ResolvedPrimitiveType.FLOAT.isNumeric());
+        assertTrue(ResolvedPrimitiveType.DOUBLE.isNumeric());
     }
 
 }

@@ -30,18 +30,18 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class EmptyStmt extends Statement {
 
-	public EmptyStmt() {
-	}
+    public EmptyStmt() {
+    }
 
-	public EmptyStmt(Range range) {
-		super(range);
-	}
+    public EmptyStmt(Range range) {
+        super(range);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 }

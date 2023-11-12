@@ -37,8 +37,8 @@ public class CsmIndent implements CsmElement {
      */
     @Override
     public boolean isCorrespondingElement(TextElement textElement) {
-    	return (textElement instanceof TokenTextElement)
-    			&& ((TokenTextElement)textElement).isSpaceOrTab();
+        return (textElement instanceof TokenTextElement)
+                && ((TokenTextElement)textElement).isSpaceOrTab();
     }
 
     @Override

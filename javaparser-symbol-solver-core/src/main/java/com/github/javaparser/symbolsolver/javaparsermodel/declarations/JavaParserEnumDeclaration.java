@@ -376,7 +376,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         }
 
         @Override
-		public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
+        public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
             return new MethodUsage(this);
         }
 

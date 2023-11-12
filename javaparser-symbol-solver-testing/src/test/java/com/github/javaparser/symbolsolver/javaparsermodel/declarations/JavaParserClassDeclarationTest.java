@@ -960,24 +960,24 @@ class JavaParserClassDeclarationTest extends AbstractResolutionTest {
 
     // issue #4133
     @Test
-	void testContainerType() {
-		String code =
-	            "public class Foo {\n"
-	            + "    public static class Bar {\n"
-	            + "        public static class Baz {\n"
-	            + "        }\n"
-	            + "    }\n"
-	            + "}\n";
+    void testContainerType() {
+        String code =
+                "public class Foo {\n"
+                + "    public static class Bar {\n"
+                + "        public static class Baz {\n"
+                + "        }\n"
+                + "    }\n"
+                + "}\n";
 
-		JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
-		CompilationUnit cu = parser.parse(code);
+        JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
+        CompilationUnit cu = parser.parse(code);
 
-		List<ClassOrInterfaceDeclaration> declarations = cu.findAll(ClassOrInterfaceDeclaration.class);
-		// top level type
-		assertFalse(declarations.get(0).resolve().asReferenceType().containerType().isPresent());
-		assertEquals("Foo", declarations.get(1).resolve().asReferenceType().containerType().get().getQualifiedName());
-		assertEquals("Foo.Bar", declarations.get(2).resolve().asReferenceType().containerType().get().getQualifiedName());
-	}
+        List<ClassOrInterfaceDeclaration> declarations = cu.findAll(ClassOrInterfaceDeclaration.class);
+        // top level type
+        assertFalse(declarations.get(0).resolve().asReferenceType().containerType().isPresent());
+        assertEquals("Foo", declarations.get(1).resolve().asReferenceType().containerType().get().getQualifiedName());
+        assertEquals("Foo.Bar", declarations.get(2).resolve().asReferenceType().containerType().get().getQualifiedName());
+    }
 
 
     @Test

@@ -288,9 +288,9 @@ public abstract class ReferenceType implements Type, TypeParametrized, TypeParam
     public List<Tuple2<TypeParameterDeclaration, Type>> getTypeParametersMap() {
         List<Tuple2<TypeParameterDeclaration, Type>> typeParametersMap = new ArrayList<>();
         if (!isRawType()) {
-	        for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
-	            typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
-	        }
+            for (int i = 0; i < typeDeclaration.getTypeParameters().size(); i++) {
+                typeParametersMap.add(new Tuple2<>(typeDeclaration.getTypeParameters().get(0), typeParametersValues().get(i)));
+            }
         }
         return typeParametersMap;
     }

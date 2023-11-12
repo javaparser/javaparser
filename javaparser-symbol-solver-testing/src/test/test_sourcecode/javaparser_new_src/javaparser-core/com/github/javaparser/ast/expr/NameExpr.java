@@ -31,55 +31,55 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public class NameExpr extends Expression implements NodeWithName<NameExpr> {
 
-	private String name;
+    private String name;
 
-	public NameExpr() {
-	}
+    public NameExpr() {
+    }
 
-	public NameExpr(final String name) {
-		this.name = name;
-	}
+    public NameExpr(final String name) {
+        this.name = name;
+    }
 
-	public NameExpr(Range range, final String name) {
-		super(range);
-		this.name = name;
-	}
+    public NameExpr(Range range, final String name) {
+        super(range);
+        this.name = name;
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	@Override
-	public final String getName() {
-		return name;
-	}
+    @Override
+    public final String getName() {
+        return name;
+    }
 
     @Override
     public NameExpr setName(final String name) {
-		this.name = name;
+        this.name = name;
         return this;
-	}
+    }
 
 
-	/**
-	 * Creates a new {@link NameExpr} from a qualified name.<br>
-	 * The qualified name can contains "." (dot) characters.
-	 *
-	 * @param qualifiedName
-	 *            qualified name
-	 * @return instanceof {@link NameExpr}
-	 */
-	public static NameExpr name(String qualifiedName) {
-		String[] split = qualifiedName.split("\\.");
-		NameExpr ret = new NameExpr(split[0]);
-		for (int i = 1; i < split.length; i++) {
-			ret = new QualifiedNameExpr(ret, split[i]);
-		}
-		return ret;
-	}
+    /**
+     * Creates a new {@link NameExpr} from a qualified name.<br>
+     * The qualified name can contains "." (dot) characters.
+     *
+     * @param qualifiedName
+     *            qualified name
+     * @return instanceof {@link NameExpr}
+     */
+    public static NameExpr name(String qualifiedName) {
+        String[] split = qualifiedName.split("\\.");
+        NameExpr ret = new NameExpr(split[0]);
+        for (int i = 1; i < split.length; i++) {
+            ret = new QualifiedNameExpr(ret, split[i]);
+        }
+        return ret;
+    }
 
 }

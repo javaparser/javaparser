@@ -35,7 +35,7 @@ public final class BooleanLiteralExpr extends LiteralExpr {
     }
 
     public BooleanLiteralExpr(boolean value) {
-    	setValue(value);
+        setValue(value);
     }
 
     public BooleanLiteralExpr(int beginLine, int beginColumn, int endLine, int endColumn, boolean value) {

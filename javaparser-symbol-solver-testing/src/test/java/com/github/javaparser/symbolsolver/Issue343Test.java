@@ -80,7 +80,7 @@ class Issue343Test extends AbstractResolutionTest {
 
     @Test
     void resolveMethodCallOnStringLiteralOutsideAST() {
-    	assertTrue(symbolSolver.classToResolvedType(int.class).equals(getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length"))));
+        assertTrue(symbolSolver.classToResolvedType(int.class).equals(getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length"))));
     }
 
     @Test

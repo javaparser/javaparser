@@ -76,19 +76,19 @@ public final class ConditionalExpr extends Expression {
 
     public ConditionalExpr setCondition(Expression condition) {
         this.condition = condition;
-		setAsParentNodeOf(this.condition);
+        setAsParentNodeOf(this.condition);
         return this;
     }
 
     public ConditionalExpr setElseExpr(Expression elseExpr) {
         this.elseExpr = elseExpr;
-		setAsParentNodeOf(this.elseExpr);
+        setAsParentNodeOf(this.elseExpr);
         return this;
     }
 
     public ConditionalExpr setThenExpr(Expression thenExpr) {
         this.thenExpr = thenExpr;
-		setAsParentNodeOf(this.thenExpr);
+        setAsParentNodeOf(this.thenExpr);
         return this;
     }
 }

@@ -113,12 +113,12 @@ public class JavadocComment extends Comment {
     }
     
     @Override
-	public String getHeader() {
-		return "/**";
-	}
-	
-	@Override
-	public String getFooter() {
-		return "*/";
-	}
+    public String getHeader() {
+        return "/**";
+    }
+    
+    @Override
+    public String getFooter() {
+        return "*/";
+    }
 }
