@@ -18,6 +18,13 @@ This project contains a set of libraries implementing a Java 1.0 - Java 17 Parse
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
+## Sponsors
+
+Support this project by becoming a sponsor! Your donation will help the project live and grow successfully.
+
+Javaparser uses [OpenCollective](https://opencollective.com/javaparser) to gather money.
+
+
 ## Setup
 
 The project binaries are available in Maven Central.
@@ -127,6 +134,6 @@ Make sure that `javaparser-core` at least compiles before you run these.
 
 JavaParser is available either under the terms of the LGPL License or the Apache License. You as the user are entitled to choose the terms under which adopt JavaParser.
 
-For details about the LGPL License please refer to [LICENSE.LGPL](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.LGPL).
+For details about the LGPL License please refer to [LICENSE.LGPL](https://github.com/javaparser/javaparser/blob/master/LICENSE.LGPL).
 
-For details about the Apache License please refer to [LICENSE.APACHE](ttps://github.com/javaparser/javaparser/blob/master/LICENSE.APACHE).
+For details about the Apache License please refer to [LICENSE.APACHE](https://github.com/javaparser/javaparser/blob/master/LICENSE.APACHE).
