@@ -181,15 +181,6 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         if (optScope.isPresent()) {
             Expression scope = optScope.get();
 
-            // consider static methods
-            if (scope instanceof NameExpr) {
-                NameExpr scopeAsName = scope.asNameExpr();
-                SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId());
-                if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
-                    return singletonList(symbolReference.getCorrespondingDeclaration().asReferenceType());
-                }
-            }
-
             ResolvedType typeOfScope;
             try {
                 typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
@@ -216,11 +207,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 }
                 return singletonList(typeSolver.getSolvedJavaLangObject());
             }
-                    if (typeOfScope.isArray()) {
+            if (typeOfScope.isArray()) {
                 // method call on array are Object methods
                 return singletonList(typeSolver.getSolvedJavaLangObject());
             }
-                    if (typeOfScope.isTypeVariable()) {
+            if (typeOfScope.isTypeVariable()) {
                 Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {
                     // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
@@ -233,7 +224,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                 }
                 return result;
             }
-                    if (typeOfScope.isConstraint()) {
+            if (typeOfScope.isConstraint()) {
                 // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
             	ResolvedType type = typeOfScope.asConstraintType().getBound();
             	if (type.isReferenceType()) {
