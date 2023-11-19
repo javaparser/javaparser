@@ -92,7 +92,7 @@ class ClassOrInterfaceDeclarationTest {
         assertFalse(x.isInnerClass());
         assertFalse(x.isNestedType());
         assertFalse(x.isLocalClassDeclaration());
-        assertTrue(x.hasModifier(Modifier.Keyword.SEALED));
+        assertTrue(x.hasModifier(Modifier.DefaultKeyword.SEALED));
         assertEquals(x.getPermittedTypes().size(), 2);
         assertEquals(x.getPermittedTypes().get(0).getNameAsString(), "Y");
         assertEquals(x.getPermittedTypes().get(1).getNameAsString(), "Z");
@@ -106,7 +106,7 @@ class ClassOrInterfaceDeclarationTest {
         assertFalse(x.isInnerClass());
         assertFalse(x.isNestedType());
         assertFalse(x.isLocalClassDeclaration());
-        assertTrue(x.hasModifier(Modifier.Keyword.NON_SEALED));
+        assertTrue(x.hasModifier(Modifier.DefaultKeyword.NON_SEALED));
     }
 
 }

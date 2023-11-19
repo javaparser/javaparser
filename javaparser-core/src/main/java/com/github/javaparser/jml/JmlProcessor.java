@@ -48,11 +48,12 @@ public class JmlProcessor extends Processor {
         if (configuration.isProcessJml()) {
             final Optional<? extends Node> r = result.getResult();
             final Optional<CommentsCollection> comments = result.getCommentsCollection();
-            ArrayList<Node> processedJmlDoc = new ArrayList<>(4096);
+            ArrayList<Node> processedJmlDoc = new ArrayList<>(4096 * 10);
             if (r.isPresent() && comments.isPresent()) {
                 for (List<String> activeKeys : configuration.getJmlKeys()) {
                     final JmlReplaceVisitor v = new JmlReplaceVisitor(configuration, new TreeSet<>(activeKeys), result.getProblems());
                     r.get().accept(v, null);
+                    //System.out.format("cap: %d, size: %d, add: %d", 0, processedJmlDoc.size(), v.processedJmlDoc.size());
                     processedJmlDoc.addAll(v.processedJmlDoc);
                 }
             }

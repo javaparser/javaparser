@@ -13,10 +13,7 @@ import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.jml.JmlDocSanitizer;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -35,8 +32,11 @@ import java.util.stream.Stream;
  * @author Alexander Weigl
  * @version 1 (7/2/21)
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FullExamplesTest {
     private final JavaParser jpb;
+    private long lines;
+    private long time;
 
     {
         //private final StoreJMLComments storeProcessor = new StoreJMLComments()
@@ -155,7 +155,14 @@ class FullExamplesTest {
     private void testParse(Path p) throws IOException {
         Assumptions.assumeFalse(isBlocked(p));
         System.out.println(p);
-        ParseResult<CompilationUnit> result = jpb.parse(p);
+        var content = Files.readString(p);
+        long start = System.nanoTime();
+        ParseResult<CompilationUnit> result = jpb.parse(content);
+        long stop = System.nanoTime();
+
+        time += (stop - start);
+        lines += content.chars().filter(it -> it == '\n').count();
+
         result.getProblems().forEach(it -> {
             int line = it.getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.line).orElse(-1)).orElse(-1);
             System.out.format("%s\n\t%s:%d\n\n", it.getMessage(), p.toUri(), line);
@@ -169,6 +176,11 @@ class FullExamplesTest {
         return blockedPaths.contains(it);
     }
 
+    @AfterAll
+    public void stat() {
+        System.out.format("Performance: %d LoCs in %d ns%n", lines, time);
+        System.out.format("Performance: %.0f LoCs/ms", lines * 1000000.0 / time);
+    }
 
 }
 
