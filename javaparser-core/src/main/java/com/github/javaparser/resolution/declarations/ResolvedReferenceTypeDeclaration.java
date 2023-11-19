@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -36,7 +37,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable {
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-
+    String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
+    String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     @Override
@@ -175,9 +177,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst();
         if (field.isPresent()) {
             return field.get();
-        } else {
-            throw new UnsolvedSymbolException("Field not found: " + name);
         }
+        throw new UnsolvedSymbolException("Field not found: " + name);
     }
 
     /**
@@ -187,9 +188,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         Optional<ResolvedFieldDeclaration> field = getVisibleFields().stream().filter(f -> f.getName().equals(name)).findFirst();
         if (field.isPresent()) {
             return field.get();
-        } else {
-            throw new IllegalArgumentException();
         }
+        throw new IllegalArgumentException();
     }
 
     /**

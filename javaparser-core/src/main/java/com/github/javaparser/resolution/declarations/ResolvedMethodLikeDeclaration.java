@@ -128,9 +128,8 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
     default boolean hasVariadicParameter() {
         if (getNumberOfParams() == 0) {
             return false;
-        } else {
-            return getParam(getNumberOfParams() - 1).isVariadic();
         }
+        return getParam(getNumberOfParams() - 1).isVariadic();
     }
 
     @Override

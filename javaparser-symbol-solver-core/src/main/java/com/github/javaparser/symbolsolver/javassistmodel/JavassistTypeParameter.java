@@ -91,7 +91,8 @@ public class JavassistTypeParameter implements ResolvedTypeParameterDeclaration 
     public String getContainerQualifiedName() {
         if (this.container instanceof ResolvedReferenceTypeDeclaration) {
             return ((ResolvedReferenceTypeDeclaration) this.container).getQualifiedName();
-        } else if (this.container instanceof ResolvedMethodLikeDeclaration) {
+        }
+        if (this.container instanceof ResolvedMethodLikeDeclaration) {
             return ((ResolvedMethodLikeDeclaration) this.container).getQualifiedName();
         }
         throw new UnsupportedOperationException();

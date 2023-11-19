@@ -95,17 +95,14 @@ class JavadocParser {
             int asteriskIndex = startsWithAsterisk(l);
             if (asteriskIndex == -1) {
                 return l;
-            } else {
-                // if a line starts with space followed by an asterisk drop to the asterisk
-                // if there is a space immediately after the asterisk drop it also
-                if (l.length() > (asteriskIndex + 1)) {
+            }
+            if (l.length() > (asteriskIndex + 1)) {
                     char c = l.charAt(asteriskIndex + 1);
                     if (c == ' ' || c == '\t') {
                         return l.substring(asteriskIndex + 2);
                     }
                 }
-                return l.substring(asteriskIndex + 1);
-            }
+            return l.substring(asteriskIndex + 1);
         }).collect(Collectors.toList());
         // lines containing only whitespace are normalized to empty lines
         cleanedLines = cleanedLines.stream().map(l -> l.trim().isEmpty() ? "" : l).collect(Collectors.toList());
@@ -127,15 +124,14 @@ class JavadocParser {
     static int startsWithAsterisk(String line) {
         if (line.startsWith("*")) {
             return 0;
-        } else if ((line.startsWith(" ") || line.startsWith("\t")) && line.length() > 1) {
+        }
+        if ((line.startsWith(" ") || line.startsWith("\t")) && line.length() > 1) {
             int res = startsWithAsterisk(line.substring(1));
             if (res == -1) {
                 return -1;
-            } else {
-                return 1 + res;
             }
-        } else {
-            return -1;
+            return 1 + res;
         }
+        return -1;
     }
 }

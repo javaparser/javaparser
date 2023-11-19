@@ -277,7 +277,7 @@ public class ConcreteSyntaxModel {
             throw new IllegalStateException(s);
         });
         if (!concreteSyntaxModelByClass.containsKey(nodeClazz)) {
-            throw new UnsupportedOperationException(nodeClazz.getSimpleName());
+            throw new UnsupportedOperationException("Class " + nodeClazz.getSimpleName() + " not found!");
         }
         return concreteSyntaxModelByClass.get(nodeClazz);
     }

@@ -206,9 +206,8 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     public Optional<Expression> getExpressionBody() {
         if (body.isExpressionStmt()) {
             return Optional.of(body.asExpressionStmt().getExpression());
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override

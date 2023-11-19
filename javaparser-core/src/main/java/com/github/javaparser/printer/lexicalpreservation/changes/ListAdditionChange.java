@@ -61,9 +61,8 @@ public class ListAdditionChange implements Change {
             // Perform modification -- add to the list
             newNodeList.add(index, nodeAdded);
             return newNodeList;
-        } else {
-            return new NoChange().getValue(property, node);
         }
+        return new NoChange().getValue(property, node);
     }
 
     @Override

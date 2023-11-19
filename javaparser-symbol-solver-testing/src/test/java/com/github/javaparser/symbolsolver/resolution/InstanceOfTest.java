@@ -228,7 +228,7 @@ public class InstanceOfTest {
                 .parse(ParseStart.COMPILATION_UNIT, new StringProvider(x));
 
         assertEquals(1, parseResult.getProblems().size());
-        assertEquals("Use of patterns with instanceof is not supported.", parseResult.getProblem(0).getMessage());
+        assertEquals("Use of patterns with instanceof is not supported. Pay attention that this feature is supported starting from 'JAVA_14' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.", parseResult.getProblem(0).getMessage());
     }
 
     @Nested

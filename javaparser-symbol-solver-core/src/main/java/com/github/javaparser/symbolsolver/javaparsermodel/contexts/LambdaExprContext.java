@@ -112,10 +112,10 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             }
                             Value value = new Value(conType, name);
                             return Optional.of(value);
-                        } else {
-                            return Optional.empty();
                         }
-                    } else if (parentNode instanceof VariableDeclarator) {
+                        return Optional.empty();
+                    }
+                    if (parentNode instanceof VariableDeclarator) {
                         VariableDeclarator variableDeclarator = (VariableDeclarator) parentNode;
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
@@ -137,10 +137,10 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
                             Value value = new Value(lambdaType, name);
                             return Optional.of(value);
-                        } else {
-                            throw new UnsupportedOperationException();
                         }
-                    } else if (parentNode instanceof ReturnStmt) {
+                        throw new UnsupportedOperationException("functional method is not present in variable declarator");
+                    }
+                    if (parentNode instanceof ReturnStmt) {
                         ReturnStmt returnStmt = (ReturnStmt) parentNode;
                         Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
                         if (optDeclaration.isPresent()) {
@@ -165,11 +165,11 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
                                 Value value = new Value(lambdaType, name);
                                 return Optional.of(value);
-                            } else {
-                                throw new UnsupportedOperationException();
                             }
+                            throw new UnsupportedOperationException("functional method is not present in return statement");
                         }
-                    } else if (parentNode instanceof CastExpr) {
+                    }
+                    if (parentNode instanceof CastExpr) {
                         CastExpr castExpr = (CastExpr) parentNode;
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(castExpr.getType());
                         Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
@@ -192,12 +192,10 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
                             Value value = new Value(lambdaType, name);
                             return Optional.of(value);
-                        } else {
-                            throw new UnsupportedOperationException();
                         }
-                    } else {
-                        throw new UnsupportedOperationException();
+                        throw new UnsupportedOperationException("functional method is not present in cast expression");
                     }
+                    throw new UnsupportedOperationException("Unknown node type: " + parentNode.getClass().getSimpleName());
                 }
             }
         }
@@ -243,7 +241,7 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
         for (ResolvedValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
             if (decl.getName().equals(name)) {
 
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Symbol with name " + name + " already exists in symbol declarator");
             }
         }
         return Optional.empty();

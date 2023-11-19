@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
@@ -342,7 +344,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
         }
         if (node instanceof EnumConstantDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode((EnumConstantDeclaration) node), typeSolver);
+            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(node), typeSolver);
         }
         throw new IllegalArgumentException("Cannot get a reference type declaration from " + node.getClass().getCanonicalName());
     }

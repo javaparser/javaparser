@@ -15,7 +15,7 @@
   Line 207) toString() ==> com.github.javaparser.ast.Node.toString()
   Line 215) EqualsVisitor.equals(this, (Node) obj) ==> com.github.javaparser.ast.visitor.EqualsVisitor.equals(com.github.javaparser.ast.Node, com.github.javaparser.ast.Node)
   Line 220) this.accept(new CloneVisitor(), null) ==> com.github.javaparser.ast.Node.accept(com.github.javaparser.ast.visitor.GenericVisitor<R, A>, A)
-  Line 231) classType.isAssignableFrom(parent.getClass()) ==> java.lang.Class.isAssignableFrom(java.lang.Class<? extends java.lang.Object>)
+  Line 231) classType.isAssignableFrom(parent.getClass()) ==> java.lang.Class.isAssignableFrom(java.lang.Class<?>)
   Line 231) parent.getClass() ==> java.lang.Object.getClass()
   Line 243) range.contains(other.range) ==> com.github.javaparser.Range.contains(com.github.javaparser.Range)
   Line 247) orphanComments.add(comment) ==> java.util.List.add(E)

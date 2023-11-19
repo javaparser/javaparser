@@ -71,26 +71,26 @@ class AstResolutionUtils {
             String cn = ((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) container).getName().getId();
             if (b.isEmpty()) {
                 return cn;
-            } else {
-                return b + "." + cn;
             }
-        } else if (container instanceof com.github.javaparser.ast.body.EnumDeclaration) {
+            return b + "." + cn;
+        }
+        if (container instanceof com.github.javaparser.ast.body.EnumDeclaration) {
             String b = getClassName(base, container.getParentNode().orElse(null));
             String cn = ((com.github.javaparser.ast.body.EnumDeclaration) container).getName().getId();
             if (b.isEmpty()) {
                 return cn;
-            } else {
-                return b + "." + cn;
             }
-        } else if (container instanceof com.github.javaparser.ast.body.AnnotationDeclaration) {
+            return b + "." + cn;
+        }
+        if (container instanceof com.github.javaparser.ast.body.AnnotationDeclaration) {
             String b = getClassName(base, container.getParentNode().orElse(null));
             String cn = ((com.github.javaparser.ast.body.AnnotationDeclaration) container).getName().getId();
             if (b.isEmpty()) {
                 return cn;
-            } else {
-                return b + "." + cn;
             }
-        } else if (container != null) {
+            return b + "." + cn;
+        }
+        if (container != null) {
             return getClassName(base, container.getParentNode().orElse(null));
         }
         return base;
@@ -122,8 +122,7 @@ class AstResolutionUtils {
         if (declared.isEmpty()) {
             // If there are no constructors insert the default constructor
             return ImmutableList.of(new DefaultConstructorDeclaration<N>(container));
-        } else {
-            return declared;
         }
+        return declared;
     }
 }

@@ -110,9 +110,8 @@ public class ResolvedArrayType implements ResolvedType {
         ResolvedType baseTypeReplaced = baseType.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
         if (baseTypeReplaced == baseType) {
             return this;
-        } else {
-            return new ResolvedArrayType(baseTypeReplaced);
         }
+        return new ResolvedArrayType(baseTypeReplaced);
     }
 
     // /

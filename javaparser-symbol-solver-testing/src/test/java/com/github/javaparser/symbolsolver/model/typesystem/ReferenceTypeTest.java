@@ -21,6 +21,24 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.ProtocolException;
+import java.nio.Buffer;
+import java.nio.CharBuffer;
+import java.nio.file.FileSystemException;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -37,23 +55,6 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDec
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.ProtocolException;
-import java.nio.Buffer;
-import java.nio.CharBuffer;
-import java.nio.file.FileSystemException;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
@@ -267,6 +268,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
                 super(typeDeclaration);
             }
 
+            @Override
             public boolean isCorrespondingBoxingType(String name) {
                 return super.isCorrespondingBoxingType(name);
             }
@@ -869,7 +871,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         ResolvedType rt = types.get(0);
         String expected = "A";
         ResolvedType erasedType = rt.erasure();
-        assertTrue(rt.asReferenceType().isRawType());
+        assertFalse(rt.asReferenceType().isRawType());
         assertTrue(erasedType.asReferenceType().typeParametersValues().isEmpty());
         assertEquals(expected, erasedType.describe());
     }
@@ -927,6 +929,20 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         assertEquals(expectedErasedCType, typeC.erasure());
     }
 
+    @Test
+    void extend_type() {
+        ResolvedTypeVariable variable = parametrizedType("java.util.List", "java.lang.String");
+        assertTrue(variable.asTypeParameter().hasUpperBound());
+        assertFalse(variable.asTypeParameter().hasLowerBound());
+    }
+
+    @Test
+    void super_type() {
+        ResolvedTypeVariable variable = parametrizedTypeLowerBounded("java.util.List", "java.lang.String");
+        assertTrue(variable.asTypeParameter().hasLowerBound());
+        assertFalse(variable.asTypeParameter().hasUpperBound());
+    }
+
     // return a generic type with type arguments (arguments can be bounded)
     private ResolvedType genericType(String type, ResolvedType... parameterTypes) {
         return type(type, toList(parameterTypes));
@@ -953,13 +969,27 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
     // return a type parameter
     private ResolvedTypeVariable parametrizedType(String type, String parameterType) {
+        return parametrizedTypeUpperBounded(type, parameterType);
+    }
+
+    private ResolvedTypeVariable parametrizedTypeUpperBounded(String type, String parameterType) {
         return new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType(parameterType, type + "." + parameterType,
                 Arrays.asList((extendBound(parameterType)))));
     }
 
-    // rturn an extend bound
+    private ResolvedTypeVariable parametrizedTypeLowerBounded(String type, String parameterType) {
+        return new ResolvedTypeVariable(ResolvedTypeParameterDeclaration.onType(parameterType, type + "." + parameterType,
+                Arrays.asList((superBound(parameterType)))));
+    }
+
+    // return an extend bound
     private Bound extendBound(String type) {
         return Bound.extendsBound(type(type));
+    }
+
+    // return a super bound
+    private Bound superBound(String type) {
+        return Bound.superBound(type(type));
     }
 
     private Set<ResolvedType> toSet(ResolvedType... resolvedTypes) {
@@ -975,7 +1005,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         return new ResolvedArrayType(baseType);
     }
 
-    // return a list of types from the declared types (using a static parser) 
+    // return a list of types from the declared types (using a static parser)
     private List<ResolvedType> declaredTypes(String... lines) {
         CompilationUnit tree = treeOf(lines);
         List<ResolvedType> results = Lists.newLinkedList();

@@ -59,7 +59,8 @@ public final class JavaParserSymbolDeclaration {
         for (Node node : demandParentNode(parameter).getChildNodes()) {
             if (node == parameter) {
                 return pos;
-            } else if (node instanceof Parameter) {
+            }
+            if (node instanceof Parameter) {
                 pos++;
             }
         }

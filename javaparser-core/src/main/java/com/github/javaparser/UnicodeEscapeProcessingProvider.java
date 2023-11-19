@@ -99,13 +99,11 @@ public class UnicodeEscapeProcessingProvider implements Provider {
                 if (pos == offset) {
                     // Nothing read yet, this is the end of the stream.
                     return EOF;
-                } else {
-                    break;
                 }
-            } else {
-                _mappingBuilder.update();
-                buffer[pos++] = (char) ch;
+                break;
             }
+            _mappingBuilder.update();
+            buffer[pos++] = (char) ch;
         }
         return pos - offset;
     }
@@ -128,10 +126,9 @@ public class UnicodeEscapeProcessingProvider implements Provider {
             case BACKSLASH: {
                 if (_backslashSeen) {
                     return clearBackSlashSeen(next);
-                } else {
+                }
                     return backSlashSeen();
                 }
-            }
             default: {
                 // An arbitrary character.
                 return clearBackSlashSeen(next);
@@ -341,17 +338,13 @@ public class UnicodeEscapeProcessingProvider implements Provider {
             int result = Collections.binarySearch(_deltas, position);
             if (result >= 0) {
                 return _deltas.get(result);
-            } else {
-                int insertIndex = -result - 1;
-                if (insertIndex == 0) {
+            }
+            int insertIndex = -result - 1;
+            if (insertIndex == 0) {
                     // Before the first delta info, identity mapping.
                     return PositionUpdate.NONE;
-                } else {
-                    // The relevant update is the one with the position smaller
-                    // than the requested position.
-                    return _deltas.get(insertIndex - 1);
-                }
             }
+            return _deltas.get(insertIndex - 1);
         }
 
         /**
@@ -478,7 +471,7 @@ public class UnicodeEscapeProcessingProvider implements Provider {
         /**
          * Creates a {@link PositionMappingBuilder}.
          *
-         * @param left  The source {@link LineCounter}.
+         * @param left The source {@link LineCounter}.
          * @param right The target {@link LineCounter}.
          */
         public PositionMappingBuilder(LineCounter left, LineCounter right) {

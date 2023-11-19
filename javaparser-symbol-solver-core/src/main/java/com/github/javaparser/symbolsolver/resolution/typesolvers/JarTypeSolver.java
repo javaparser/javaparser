@@ -268,9 +268,8 @@ public class JarTypeSolver implements TypeSolver {
         SymbolReference<ResolvedReferenceTypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
-        } else {
-            throw new UnsolvedSymbolException(name);
         }
+        throw new UnsolvedSymbolException(name);
     }
 
 }

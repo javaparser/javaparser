@@ -39,9 +39,8 @@ public interface TypeSolver {
     default TypeSolver getRoot() {
         if (getParent() == null) {
             return this;
-        } else {
-            return getParent().getRoot();
         }
+        return getParent().getRoot();
     }
 
     /**
@@ -67,9 +66,8 @@ public interface TypeSolver {
         SymbolReference<ResolvedReferenceTypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
-        } else {
-            throw new UnsolvedSymbolException(name, this.toString());
         }
+        throw new UnsolvedSymbolException(name, this.toString());
     }
 
     /**

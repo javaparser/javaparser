@@ -61,9 +61,8 @@ public class ListReplacementChange implements Change {
             // Perform modification -- replace an item in the list
             newNodeList.set(index, newValue);
             return newNodeList;
-        } else {
-            return new NoChange().getValue(property, node);
         }
+        return new NoChange().getValue(property, node);
     }
 
     @Override

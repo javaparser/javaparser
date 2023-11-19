@@ -176,11 +176,11 @@ final class RemovedGroup implements Iterable<Removed> {
         if (tokenResult.isPresent()) {
             if (TokenTypes.isWhitespaceButNotEndOfLine(tokenResult.get().getKind())) {
                 return hasOnlyWhiteSpaceForTokenFunction(tokenResult.get(), tokenFunction);
-            } else if (TokenTypes.isEndOfLineToken(tokenResult.get().getKind())) {
-                return true;
-            } else {
-                return false;
             }
+            if (TokenTypes.isEndOfLineToken(tokenResult.get().getKind())) {
+                return true;
+            }
+            return false;
         }
         return true;
     }
@@ -224,12 +224,10 @@ final class RemovedGroup implements Iterable<Removed> {
                     if (previousToken.isPresent()) {
                         if (TokenTypes.isEndOfLineToken(previousToken.get().getKind())) {
                             return Optional.of(Integer.valueOf(indentation));
-                        } else {
-                            return Optional.empty();
                         }
-                    } else {
-                        return Optional.of(Integer.valueOf(indentation));
+                        return Optional.empty();
                     }
+                    return Optional.of(Integer.valueOf(indentation));
                 }
             }
         }

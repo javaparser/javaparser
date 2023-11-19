@@ -102,17 +102,15 @@ public class ResolvedTypeParametersMap {
         String qualifiedName = typeParameter.getQualifiedName();
         if (nameToValue.containsKey(qualifiedName)) {
             return nameToValue.get(qualifiedName);
-        } else {
-            return new ResolvedTypeVariable(typeParameter);
         }
+        return new ResolvedTypeVariable(typeParameter);
     }
 
     public Optional<ResolvedType> getValueBySignature(String signature) {
         if (nameToValue.containsKey(signature)) {
             return Optional.of(nameToValue.get(signature));
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     public List<String> getNames() {

@@ -184,9 +184,8 @@ public class CombinedTypeSolver implements TypeSolver {
         SymbolReference<ResolvedReferenceTypeDeclaration> res = tryToSolveType(name);
         if (res.isSolved()) {
             return res.getCorrespondingDeclaration();
-        } else {
-            throw new UnsolvedSymbolException(name);
         }
+        throw new UnsolvedSymbolException(name);
     }
 
     /**

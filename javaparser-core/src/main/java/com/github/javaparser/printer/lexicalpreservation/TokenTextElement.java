@@ -20,13 +20,14 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.Optional;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-import java.util.Optional;
 
-class TokenTextElement extends TextElement {
+public class TokenTextElement extends TextElement {
 
     private final JavaToken token;
 
@@ -43,16 +44,16 @@ class TokenTextElement extends TextElement {
     }
 
     @Override
-    String expand() {
+    public String expand() {
         return token.getText();
     }
 
     // Visible for testing
-    String getText() {
+    public String getText() {
         return token.getText();
     }
 
-    int getTokenKind() {
+    public int getTokenKind() {
         return token.getKind();
     }
 

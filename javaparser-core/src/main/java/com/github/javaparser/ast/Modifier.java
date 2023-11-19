@@ -127,6 +127,14 @@ public class Modifier extends Node {
         String name();
     }
 
+    public static Modifier sealedModifier() {
+        return new Modifier(DefaultKeyword.SEALED);
+    }
+
+    public static Modifier nonSealedModifier() {
+        return new Modifier(DefaultKeyword.NON_SEALED);
+    }
+
     /**
      * The Java modifier keywords.
      */

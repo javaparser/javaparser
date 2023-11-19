@@ -51,13 +51,11 @@ public class ForEachStatementContext extends AbstractJavaParserContext<ForEachSt
         VariableDeclarator variableDeclarator = wrappedNode.getVariable().getVariables().get(0);
         if (variableDeclarator.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
-        } else {
-            if (demandParentNode(wrappedNode) instanceof BlockStmt) {
-                return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
-            } else {
-                return solveSymbolInParentContext(name);
-            }
         }
+        if (demandParentNode(wrappedNode) instanceof BlockStmt) {
+                return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
+        }
+        return solveSymbolInParentContext(name);
     }
 
     @Override

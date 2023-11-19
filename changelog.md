@@ -1,23 +1,210 @@
-
-Next Release (Version 3.25.4-snapshot)
+Next Release (Version 3.25.7-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/200?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/203?closed=1)
 
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+Version 3.25.6
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/202?closed=1)
 
 ### Changed
 
-### Deprecated
-
-### Removed
+* reformat javaconcept take 2 (PR [#4167](https://github.com/javaparser/javaparser/pull/4167)
+  by [@JimmyGan437](https://github.com/JimmyGan437))
+* Using JAXP on XMLPrinter implementation (PR [#4166](https://github.com/javaparser/javaparser/pull/4166)
+  by [@lcbarcellos](https://github.com/lcbarcellos))
+* replace deprecated methond calls to their replacements (PR [#4157](https://github.com/javaparser/javaparser/pull/4157)
+  by [@JimmyGan437](https://github.com/JimmyGan437))
+* feat(#4075): Improve the validation error messages (PR [#4116](https://github.com/javaparser/javaparser/pull/4116)
+  by [@volodya-lombrozo](https://github.com/volodya-lombrozo))
 
 ### Fixed
 
-### Security
+* Fix: issue #2751 new HashSet()" != "new HashSet<>() (PR [#4183](https://github.com/javaparser/javaparser/pull/4183)
+  by [@lcbarcellos](https://github.com/lcbarcellos))
+* Fixes #2625 Add messages to thrown exceptions (PR [#4177](https://github.com/javaparser/javaparser/pull/4177)
+  by [@oannhpham](https://github.com/oannhpham))
+* Fix: issue 4163 Calling MethodDeclaration.getDeclarationAsString leads to MethodDelaration.getComment returning no
+  comment (PR [#4165](https://github.com/javaparser/javaparser/pull/4165) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3673 isAssignableBy method StackOverflowError (
+  PR [#4156](https://github.com/javaparser/javaparser/pull/4156) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: issue 3184 Unable to get the resolved type of class ResolvedReferenceType from T (
+  PR [#4147](https://github.com/javaparser/javaparser/pull/4147) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue #3269 Test resources containing included interfaces do not compile (
+  PR [#4139](https://github.com/javaparser/javaparser/pull/4139) by [@jlerbsc](https://github.com/jlerbsc))
+* CalculateResolvedType Type error (PR [#4138](https://github.com/javaparser/javaparser/pull/4138)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue #4036 LeastUpperBoundLogic.lub returns null when matches ConditionalExpr (
+  PR [#4137](https://github.com/javaparser/javaparser/pull/4137) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue #2484 SymbolResolver on MethodCallExpr fails if method parameter is of kind Class<? extends y> (
+  PR [#4136](https://github.com/javaparser/javaparser/pull/4136) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump com.google.guava:guava from 32.1.2-jre to 32.1.3-jre (
+  PR [#4154](https://github.com/javaparser/javaparser/pull/4154)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update actions/checkout action to v4 (PR [#4141](https://github.com/javaparser/javaparser/pull/4141)
+  by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@lcbarcellos](https://github.com/lcbarcellos)
+* [@volodya-lombrozo](https://github.com/volodya-lombrozo)
+* [@JimmyGan437](https://github.com/JimmyGan437)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@oannhpham](https://github.com/oannhpham)
+
+Version 3.25.5
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/201?closed=1)
+
+### Added
+
+* fix: issue 4115 ResolvedUnionType should give access to a list of resolved types (
+  PR [#4119](https://github.com/javaparser/javaparser/pull/4119) by [@jlerbsc](https://github.com/jlerbsc))
+* Support getting more annotation default values using reflection (
+  PR [#4103](https://github.com/javaparser/javaparser/pull/4103) by [@freya022](https://github.com/freya022))
+
+### Changed
+
+* Minor refactoring: Simplifies how to group deleted tokens by extracting a method into an independent class (
+  PR [#4134](https://github.com/javaparser/javaparser/pull/4134) by [@jlerbsc](https://github.com/jlerbsc))
+* Replace deprecated command with environment file (PR [#4122](https://github.com/javaparser/javaparser/pull/4122)
+  by [@70825](https://github.com/70825))
+* Fixes missing named constructor in Modifier.java  (PR [#4092](https://github.com/javaparser/javaparser/pull/4092)
+  by [@Auties00](https://github.com/Auties00))
+
+### Fixed
+
+* Fix: issue 4133 Top-level class containerType() throws an exception instead of Optional.empty() (
+  PR [#4135](https://github.com/javaparser/javaparser/pull/4135) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: apply multiline strings (PR [#4130](https://github.com/javaparser/javaparser/pull/4130)
+  by [@70825](https://github.com/70825))
+* Fix: issue 3976 Issue resolving implicit generic types (PR [#4128](https://github.com/javaparser/javaparser/pull/4128)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Add unit test for PR 4091 Fixed missing permits in pretty printer (
+  PR [#4126](https://github.com/javaparser/javaparser/pull/4126) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4124 UnsupportedOperationException: 'T' is thrown in MethodCallExpr resolve (
+  PR [#4125](https://github.com/javaparser/javaparser/pull/4125) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4051 Switched upperBounds and lowerBounds on ResolvedTypeP… (
+  PR [#4123](https://github.com/javaparser/javaparser/pull/4123) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix failing test on JDK 17 (PR [#4121](https://github.com/javaparser/javaparser/pull/4121)
+  by [@mahesh-hegde](https://github.com/mahesh-hegde))
+* Fix: issue 3673 isAssignableBy method StackOverflowError (
+  PR [#4118](https://github.com/javaparser/javaparser/pull/4118) by [@jlerbsc](https://github.com/jlerbsc))
+* Orphan comment added when using lexical preservation is not printed (
+  PR [#4114](https://github.com/javaparser/javaparser/pull/4114) by [@jlerbsc](https://github.com/jlerbsc))
+* Fixed missing permits in pretty printer (PR [#4091](https://github.com/javaparser/javaparser/pull/4091)
+  by [@Auties00](https://github.com/Auties00))
+
+### Developer Changes
+
+* chore(deps): update actions/checkout action to v3.6.0 (PR [#4127](https://github.com/javaparser/javaparser/pull/4127)
+  by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): bump com.google.guava:guava from 32.1.1-jre to 32.1.2-jre (
+  PR [#4109](https://github.com/javaparser/javaparser/pull/4109)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Uncategorised
+
+* Fix: issue 4104 LPP doesn't handle new switch entries well (
+  PR [#4106](https://github.com/javaparser/javaparser/pull/4106) by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@freya022](https://github.com/freya022)
+* [@Auties00](https://github.com/Auties00)
+* [@mahesh-hegde](https://github.com/mahesh-hegde)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@70825](https://github.com/70825)
+
+Version 3.25.4
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/200?closed=1)
+
+### Changed
+
+* Nested 'if' statements should be simplified (PR [#4085](https://github.com/javaparser/javaparser/pull/4085)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* BDD tests: migarte to JBehave 5 (PR [#4028](https://github.com/javaparser/javaparser/pull/4028)
+  by [@valfirst](https://github.com/valfirst))
+
+### Fixed
+
+* Fix: issue 4077 After building JavaParser (with tests) on MacOS multi… (
+  PR [#4086](https://github.com/javaparser/javaparser/pull/4086) by [@jlerbsc](https://github.com/jlerbsc))
+* fix line separators of selected test files (PR [#4083](https://github.com/javaparser/javaparser/pull/4083)
+  by [@abego](https://github.com/abego))
+* Fix: issue 3978 typesolver can't parse in parallel (PR [#4073](https://github.com/javaparser/javaparser/pull/4073)
+  by [@jlerbsc](https://github.com/jlerbsc))
+* Fix #4056 isDeclaredInInterface() returns true for fields declared inside enumerations contained in an interface (
+  PR [#4057](https://github.com/javaparser/javaparser/pull/4057) by [@Elewyth](https://github.com/Elewyth))
+* Fix: issue 4037 ArrayIndexOutOfBoundsException throws when method param is variadic (
+  PR [#4046](https://github.com/javaparser/javaparser/pull/4046) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4016 Failed to parse variable with name 'sealed' or 'permits' (
+  PR [#4039](https://github.com/javaparser/javaparser/pull/4039) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump guava from 32.1.0-jre to 32.1.1-jre (PR [#4089](https://github.com/javaparser/javaparser/pull/4089)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump guava from 32.0.0-jre to 32.1.0-jre (PR [#4087](https://github.com/javaparser/javaparser/pull/4087)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump checkstyle from 10.12.0 to 10.12.1 (PR [#4084](https://github.com/javaparser/javaparser/pull/4084)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump versions-maven-plugin from 2.15.0 to 2.16.0 (
+  PR [#4055](https://github.com/javaparser/javaparser/pull/4055)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-release-plugin from 3.0.0 to 3.0.1 (
+  PR [#4053](https://github.com/javaparser/javaparser/pull/4053)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump guava from 31.1-jre to 32.0.0-jre (PR [#4042](https://github.com/javaparser/javaparser/pull/4042)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-dependency-plugin from 3.5.0 to 3.6.0 (
+  PR [#4035](https://github.com/javaparser/javaparser/pull/4035)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-checkstyle-plugin from 3.2.2 to 3.3.0 (
+  PR [#4033](https://github.com/javaparser/javaparser/pull/4033)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump maven-scm-plugin from 2.0.0 to 2.0.1 (PR [#4031](https://github.com/javaparser/javaparser/pull/4031)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump codecov/codecov-action from 3.1.3 to 3.1.4 (
+  PR [#4030](https://github.com/javaparser/javaparser/pull/4030)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): bump build-helper-maven-plugin from 3.3.0 to 3.4.0 (
+  PR [#4026](https://github.com/javaparser/javaparser/pull/4026)
+  by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update dependency maven to v3.9.2 (PR [#4024](https://github.com/javaparser/javaparser/pull/4024)
+  by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@valfirst](https://github.com/valfirst)
+* [@abego](https://github.com/abego)
+* [@Elewyth](https://github.com/Elewyth)
+* [@jlerbsc](https://github.com/jlerbsc)
 
 Version 3.25.3
 --------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/199?closed=1)
+
+### Added
+
+* add Java 17 sealed/non-sealed classes (PR [#3997](https://github.com/javaparser/javaparser/pull/3997)
+  by [@kris-scheibe](https://github.com/kris-scheibe))
 
 ### Changed
 
@@ -89,6 +276,7 @@ Thank You to all contributors who worked on this release!
 * [@kris-scheibe](https://github.com/kris-scheibe)
 * [@jlerbsc](https://github.com/jlerbsc)
 * [@XenoAmess](https://github.com/XenoAmess)
+
 
 Version 3.25.2
 --------------
@@ -274,6 +462,7 @@ Thank You to all contributors who worked on this release!
 * [@marcluque](https://github.com/marcluque)
 * [@4everTheOne](https://github.com/4everTheOne)
 
+
 Version 3.24.10
 ---------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/194?closed=1)
@@ -345,6 +534,7 @@ Thank You to all contributors who worked on this release!
 * [@mernst](https://github.com/mernst)
 * [@4everTheOne](https://github.com/4everTheOne)
 
+
 Version 3.24.9
 ---------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/193?closed=1)
@@ -412,6 +602,7 @@ Thank You to all contributors who worked on this release!
 * [@jlerbsc](https://github.com/jlerbsc)
 * [@icmdaf](https://github.com/icmdaf)
 * [@4everTheOne](https://github.com/4everTheOne)
+
 
 Version 3.24.8
 --------------
@@ -521,6 +712,7 @@ Thank You to all contributors who worked on this release!
 * [@nelson-ng-96](https://github.com/nelson-ng-96)
 * [@Blackgen](https://github.com/Blackgen)
 * [@jlerbsc](https://github.com/jlerbsc)
+
 
 Version 3.24.6
 --------------
@@ -648,6 +840,7 @@ Thank You to all contributors who worked on this release!
 * [@matozoid](https://github.com/matozoid)
 * [@4everTheOne](https://github.com/4everTheOne)
 
+
 Version 3.24.4 - Repeat of 3.24.3
 ---------------------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
@@ -770,6 +963,7 @@ Thank You to all contributors who worked on this release!
 * [@matozoid](https://github.com/matozoid)
 * [@4everTheOne](https://github.com/4everTheOne)
 
+
 Version 3.24.3
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/190?closed=1)
@@ -881,6 +1075,7 @@ Thank You to all contributors who worked on this release!
 * [@MysterAitch](https://github.com/MysterAitch)
 * [@jlerbsc](https://github.com/jlerbsc)
 
+
 Version 3.24.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/189?closed=1)
@@ -961,6 +1156,7 @@ Thank You to all contributors who worked on this release!
 * [@jlerbsc](https://github.com/jlerbsc)
 * [@kanghj](https://github.com/kanghj)
 * [@sergekukharev](https://github.com/sergekukharev)
+
 
 Version 3.24.0
 ------------------
@@ -1153,6 +1349,7 @@ Thank You to all contributors who worked on this release!
 * [@4everTheOne](https://github.com/4everTheOne)
 * [@matozoid](https://github.com/matozoid)
 
+
 Version 3.23.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/185?closed=1)
@@ -1318,6 +1515,7 @@ Version 3.22.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/183?closed=1)
 
+
 ### API or Behaviour Change
 
 * Implemented isAssignableBy for VoidType - now return `false` instead of throwing `UnsupportedOperationException` (
@@ -1460,14 +1658,11 @@ Version 3.20.0
 [issues resolved](https://github.com/javaparser/javaparser/milestone/181?closed=1)
 
 ### Added
-
 * Issue #2991 - Added support for Iterables in CombinedTypeSolver
   (PR [#3033](https://github.com/javaparser/javaparser/pull/3033), by [@4everTheOne](https://github.com/4everTheOne))
 * Implemented logic for getAllFields in Annotations
   (PR [#3097](https://github.com/javaparser/javaparser/pull/3097), by [@4everTheOne](https://github.com/4everTheOne))
-
 ### Changed
-
 * Issue #2717 - Removed "empty" label from break statement and added additional test for BreakStmt
   (PR [#3109](https://github.com/javaparser/javaparser/pull/3109), by [@4everTheOne](https://github.com/4everTheOne))
 * Issue #2708 - Improvement to the generated code (removal of redundant casts, and additions of `@Override`)
@@ -1488,9 +1683,7 @@ Version 3.20.0
   (PR [#3110](https://github.com/javaparser/javaparser/pull/3110), by [@dependabot](https://github.com/dependabot))
 * Bump junit from 4.13.1 to 4.13.2
   (PR [#3129](https://github.com/javaparser/javaparser/pull/3129), by [@dependabot](https://github.com/dependabot))
-
 ### Fixed
-
 * Issue #3038 and Issue #3071 - Hanging when certain names are resolved
   (PR [#3072](https://github.com/javaparser/javaparser/pull/3072), by [@col-e](https://github.com/Col-E))
 * Javadoc fixes
@@ -1500,12 +1693,12 @@ Version 3.20.0
 * Issue #3106 - Wrong descriptor for primitive type long
   (PR [#3107](https://github.com/javaparser/javaparser/pull/3107), by [@jlerbsc](https://github.com/jlerbsc))
 
+
 Version 3.19.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/180?closed=1)
 
 ### Added
-
 * Adding test case on PrettyPrinter indentation
   (PR [#2950](https://github.com/javaparser/javaparser/pull/2950), by [@jlerbsc](https://github.com/jlerbsc))
 * Adding interface Printable for printer
@@ -1533,9 +1726,7 @@ Version 3.19.0
   (PR [#3068](https://github.com/javaparser/javaparser/pull/3068), by [@4everTheOne](https://github.com/4everTheOne))
 * Add unit tests to issue #3074 Unable to delete .jar files after parsing and using symbol solver (re: #3074)   
   (PR [#3076](https://github.com/javaparser/javaparser/pull/3076), by [@jlerbsc](https://github.com/jlerbsc))
-
 ### Changed
-
 * Minor refactoring regarding indentation management
   (PR [#2969](https://github.com/javaparser/javaparser/pull/2969), by [@jlerbsc](https://github.com/jlerbsc))
 * Minor refactoring regarding indentation management (part2)
@@ -1567,14 +1758,10 @@ Version 3.19.0
   (PR [#3026](https://github.com/javaparser/javaparser/pull/3026), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue #3050 - Minor improvement to thread safety
   (PR [#3052](https://github.com/javaparser/javaparser/pull/3052), by [@jlerbsc](https://github.com/jlerbsc))
-
 ### Deprecated
-
 * `PhantomNodeLogic` is now deprecated, with the logic now being handled by the node itself.
   (PR [#3002](https://github.com/javaparser/javaparser/pull/3002), by [@jlerbsc](https://github.com/jlerbsc))
-
 ### Fixed
-
 * Fix issue on pretty configuration change
   (PR [#2979](https://github.com/javaparser/javaparser/pull/2979), by [@jlerbsc](https://github.com/jlerbsc))
 * Fix trivial poly expression lambda, method reference, and parenthesized expressions
@@ -1610,12 +1797,12 @@ Version 3.19.0
 * Issue #3083 Fix choosing the most specific method in case of java.lang.Object argument type
   (PR [#3084](https://github.com/javaparser/javaparser/pull/3084), by [@jlerbsc](https://github.com/jlerbsc))
 
+
 Version 3.18.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/179?closed=1)
 
 ### Added
-
 * Add a convenient method (hasRange) to the interface NodeWithRange  
   (PR [#2929](https://github.com/javaparser/javaparser/pull/2929), by [@jlerbsc](https://github.com/jlerbsc))
 * Add test case to issue 1017 LambdaExpr left side too permissive
@@ -1625,9 +1812,7 @@ Version 3.18.0
 * Added java 15 (latest released) and java 16 (bleeding edge) language level options, incl. some validators / post
   processors / configuration options
   (PR [#2959](https://github.com/javaparser/javaparser/pull/2959), by [@MysterAitch](https://github.com/MysterAitch))
-
 ### Changed
-
 * Minor change in PrettyPrinterConfiguration : adding default char in enum IndentType
   (PR [#2948](https://github.com/javaparser/javaparser/pull/2948), by [@jlerbsc](https://github.com/jlerbsc))
 * Minor refactoring rename interface Printable to Stringable. Something that has a printable form. I.e., it can be
@@ -1641,14 +1826,11 @@ Version 3.18.0
   (PR [#2957](https://github.com/javaparser/javaparser/pull/2957), by [@MysterAitch](https://github.com/MysterAitch))
 * Bump mockito-core from 3.6.0 to 3.6.28
   (PR [#2942](https://github.com/javaparser/javaparser/pull/2942), by dependabot
-
 ### Removed
 
 * Removed .travis.yml -- per #2919
   (PR [#2958](https://github.com/javaparser/javaparser/pull/2958), by [@MysterAitch](https://github.com/MysterAitch))
-
 ### Fixed
-
 * Issue 2909 Improving search for the most relevant declaration of the specified class  
   (PR [#2927](https://github.com/javaparser/javaparser/pull/2927), by [@jlerbsc](https://github.com/jlerbsc))
 * Issue 2926 NoSuchElementException in PhantomNodeLogic after adding node  
@@ -1675,12 +1857,11 @@ Version 3.18.0
 * Issue 1945 JavaParser choking on multiple generic method calls on the same line
   (PR [#2966](https://github.com/javaparser/javaparser/pull/2966), by [@jlerbsc](https://github.com/jlerbsc))
 
+
 Version 3.17.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/178?closed=1)
-
 ### Fixed
-
 * BEHAVIOUR CHANGE: Fix ArrayType brackets precedence
   (PR [#2758](https://github.com/javaparser/javaparser/pull/2758), by [@iTakeshi](https://github.com/iTakeshi))
 * BEHAVIOUR CHANGE: Issue 2535 Comments within method missing indentation  
@@ -1708,7 +1889,6 @@ Version 3.17.0
   (PR [#2795](https://github.com/javaparser/javaparser/pull/2918), by [@jwaataja](https://github.com/jwaataja))
 
 ### Changed
-
 * Updated dependencies, and dependabot config
   (PR [#2893](https://github.com/javaparser/javaparser/pull/2893), by [@mysteraitch](https://github.com/mysteraitch))
   (PR [#2902](https://github.com/javaparser/javaparser/pull/2902), by Dependabot)
@@ -1724,10 +1904,10 @@ Version 3.17.0
   (PR [#2901](https://github.com/javaparser/javaparser/pull/2901), by [@mysteraitch](https://github.com/mysteraitch))
   (PR [#2913](https://github.com/javaparser/javaparser/pull/2913), by [@mernst](https://github.com/mernst))
 
+
 Version 3.16.3
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/177?closed=1)
-
 * ADDED: Created MANY test cases for older issues resolved but not directly linked/closed.
   (PRs
   [#2838](https://github.com/javaparser/javaparser/pull/2838),
@@ -1772,22 +1952,23 @@ Version 3.16.3
 * FIXED: Fix issue Solving symbol as value in the case where the scope is a constraint
   (PR [#2883](https://github.com/javaparser/javaparser/pull/2883), by [@jlerbsc](https://github.com/jlerbsc))
 
+
 Version 3.16.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/176?closed=1)
-
 * FIXED: Enhanced the handling of line separator, introducing an enum `LineSeparator` that can be used.
   (PR [#2685](https://github.com/javaparser/javaparser/pull/2685), by [@MysterAitch](https://github.com/MysterAitch))
 * FIXED: The generated metamodel classes now have the `@Generated` annotation
   (PR [#2706](https://github.com/javaparser/javaparser/pull/2706), by [@MysterAitch](https://github.com/MysterAitch))
 * various other bugfixes and enhancements
 
+
 Version 3.16.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/175?closed=1)
-
 * FIXED: Fixed typo
   (PR [#2697](https://github.com/javaparser/javaparser/pull/2697), by [@hfreeb](https://github.com/hfreeb))
+
 
 Version 3.16.0
 ------------------
@@ -1842,6 +2023,7 @@ Version 3.15.22
 * FIXED: Fixed resolving overloaded static method references (e.g. `String::valueOf` in a stream map/filter)
   ([#2662](https://github.com/javaparser/javaparser/pull/2662))
 
+
 Version 3.15.21
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/172?closed=1)
@@ -1863,6 +2045,7 @@ Version 3.15.21
   constructor.
   ([#2619](https://github.com/javaparser/javaparser/pull/2619))
 
+
 Version 3.15.20
 ------------------
 _skipped_
@@ -1877,8 +2060,8 @@ Version 3.15.18
 
 * CHANGED: Dependencies should now all be up-to-date.
   ([#2572](https://github.com/javaparser/javaparser/pull/2572) / [#2581](https://github.com/javaparser/javaparser/pull/2581))
-  - Note that the JavaCC update introduced a breaking change that now requires a StreamProvider to be passed a charset
-    if using an InputStream source.
+    - Note that the JavaCC update introduced a breaking change that now requires a StreamProvider to be passed a charset
+      if using an InputStream source.
 * FIXED (possible CHANGED/BREAKING):
   Improvements have been made to method `PositionUtils#nodeContains()` for clarity and precision in behaviour.
   ([#2502](https://github.com/javaparser/javaparser/pull/2502))
@@ -1944,7 +2127,6 @@ Version 3.15.8
 
 Version 3.15.7
 ------------------
-
 * BREAKING: Range.overlapsWith works slightly different now.
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/162?closed=1)
@@ -1955,7 +2137,6 @@ Version 3.15.6
 
 Version 3.15.5
 ------------------
-
 * BREAKING: bugs have been fixed in how SourceRoot configures parsing,
   so behaviour may change (which can be fixed by setting configuration on SourceRoot correctly.)
 
@@ -1979,7 +2160,6 @@ Version 3.15.1
 
 Version 3.15.0
 ------------------
-
 - The funny "PI" version number messed up the release order in the maven site,
   so here is a new minor release.
   [issues resolved](https://github.com/javaparser/javaparser/milestone/153?closed=1)
@@ -2002,7 +2182,6 @@ Version 3.14.13
 
 Version 3.14.12
 ------------------
-
 - BREAKING: `NodeWithConstructors` has been merged into `NodeWithMembers`,
   so if you don't have a very specific need to only find nodes that support constructors,
   you can use `NodeWithMembers` instead.
@@ -2011,7 +2190,6 @@ Version 3.14.12
 
 Version 3.14.11
 ------------------
-
 - BREAKING: the pseudo-language levels have been turned into constants with the same name in the same place.
   With a little luck everything will keep compiling.
 
@@ -2019,7 +2197,6 @@ Version 3.14.11
 
 Version 3.14.10 (buggy!)
 ------------------
-
 - BREAKING: Java 13: `break` no longer has an expression, this was part of a language preview in Java 12
   and has been removed in Java 13.
 - BREAKING: Java 13: `YieldStatement` and the keyword `yield` have been added.
@@ -2068,7 +2245,6 @@ Version 3.14.1
 
 Version 3.14.0
 ------------------
-
 * BREAKING: `SuperExpr` and `ThisExpr` used to have an `Expression classExpr`.
   this has been tightened to `Name typeName` which is more specific and easier to use.
   Checking if the expression is a `FieldAccessExpr` or `NameExpr` is no longer needed.
@@ -2116,7 +2292,6 @@ Version 3.13.3
 
 Version 3.13.2
 ------------------
-
 * Version 3.13.0 and 3.13.1 contain rather bad bugs that have been fixed here.
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/128?closed=1)
@@ -2130,14 +2305,12 @@ Version 3.13.1 (buggy!)
 
 Version 3.13.0 (buggy!)
 ------------------
-
 * "BREAKING": The static `JavaParser.parse...` methods have moved to `StaticJavaParser.parse...`!
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/126?closed=1)
 
 Version 3.12.0
 ------------------
-
 * "BREAKING": all deprecated code was removed.
   If you don't know what to do, try version 3.11.0 and read the Javadoc for the deprecated methods.
   It tells you what to use instead.
@@ -2146,7 +2319,6 @@ Version 3.12.0
 
 Version 3.11.0
 ------------------
-
 * BREAKING: `SwitchEntryStmt` is now `SwitchEntry`, because it was never a statement.
 * BREAKING: a case in a switch can now have multiple labels,
   so `SwitchEntry` no longer has an `Expression label`,
@@ -2166,7 +2338,6 @@ Version 3.10.1
 
 Version 3.10.0
 ------------------
-
 * slightly breaking: besides `break;` and `break [label];` there is now `break [expression];` like
   `break 1+2;` or `break "bye!";` . That means that `BreakStmt` no longer has a `label`,
   it has a `value` which is of type `Expression`.
@@ -2181,7 +2352,6 @@ Version 3.9.1
 
 Version 3.9.0
 ------------------
-
 * MAJOR BREAKAGE: modifiers (like public, static, transient) used to be a special case:
   they were enums stored in an EnumSet.
   This meant they were not true `Node`s, had to be treated in a special way, and missed some information.
@@ -2195,7 +2365,6 @@ Version 3.8.3
 
 Version 3.8.2
 ------------------
-
 * slightly breaking: `ObjectCreationExpr` no longer gets a diamond when constructed with the default constructor.
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/116?closed=1)
@@ -2206,14 +2375,12 @@ Version 3.8.1
 
 Version 3.8.0
 ------------------
-
 * A Unicode preprocessing filter is now available again.
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/113?closed=1)
 
 Version 3.7.1
 ------------------
-
 * slightly breaking: the enum constants in JsonToken are now capitalized.
 * slightly
   breaking: [some obscure methods in the symbol solver changed](https://github.com/javaparser/javaparser/pull/1922)
@@ -2222,7 +2389,6 @@ Version 3.7.1
 
 Version 3.7.0
 ------------------
-
 * BREAKING: `ForeachStmt` is now correctly capitalized: `ForEachStmt`
 * BREAKING: when using modules, everything that was called `...Statement` is now correctly called `...Directive`
 
@@ -2230,7 +2396,6 @@ Version 3.7.0
 
 Version 3.6.27
 ------------------
-
 * The Json serialization now serializes more fields,
   which *should* not impact existing code.
 
@@ -2238,7 +2403,6 @@ Version 3.6.27
 
 Version 3.6.26
 ------------------
-
 * BREAKING: Node.getData now throws an exception if the data was not set before.
   This can be rewritten by checking with Node.containsData before doing getData.
 
@@ -2250,7 +2414,6 @@ Version 3.6.25
 
 Version 3.6.24
 ------------------
-
 * `findAncestor(type, predicate)` is now available
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/108?closed=1)
@@ -2277,7 +2440,6 @@ Version 3.6.19
 
 Version 3.6.18
 ------------------
-
 * Parsing Java 11 is now supported.
 * Running on Java 11 is now supported.
 * Building on JDK 11 is NOT yet supported.
@@ -2286,7 +2448,6 @@ Version 3.6.18
 
 Version 3.6.17
 ------------------
-
 * A new artifact was added: javaparser-core-serialization.
   It contains a JSON serializer, and might get more serializers in the future.
 
@@ -2294,7 +2455,6 @@ Version 3.6.17
 
 Version 3.6.16
 ------------------
-
 * BREAKING: some parts of the module syntax used `Type` where they should have used `Name`.
   This is now fixed, but your code may need to be adapted if you are parsing modules.
 
@@ -2322,7 +2482,6 @@ Version 3.6.12
 
 Version 3.6.10 & Version 3.6.11
 ------------------
-
 * A mixup during the release put all the issues in the same milestone:
 
 [issues resolved](https://github.com/javaparser/javaparser/milestone/94?closed=1)
@@ -2334,7 +2493,6 @@ Version 3.6.9
 Version 3.6.8
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/92?closed=1)
-
 * Intellij Idea project files were deleted from the repository,
   so if you have a clone of the JP source, your local files will be deleted as well.
   Save anything you want to keep.
@@ -2346,13 +2504,11 @@ Version 3.6.7
 Version 3.6.6
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/90?closed=1)
-
 * You can now configure the parser inside JavaParserTypeSolver.
 
 Version 3.6.5
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/89?closed=1)
-
 * Be aware of annotations or indents looking slightly different when output!
 
 Version 3.6.4
@@ -2370,20 +2526,17 @@ Version 3.6.2
 Version 3.6.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/85?closed=1)
-
 * BREAKING: `SymbolSolverQuickSetup` has been removed in favor of `ProjectRoot` and `SymbolSolverCollectionStrategy`.
 
 Version 3.6.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/84?closed=1)
-
 * @daanschipper added `ProjectRoot` which is used for analysing and storing project structure.
 * Upgraded version from 3.5.20 to 3.6.0 because people got tired of seeing 3.5.
 
 Version 3.5.20
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/83?closed=1)
-
 * Thanks to @daanschipper for the PR :-)
 
 Version 3.5.19
@@ -2405,7 +2558,6 @@ Version 3.5.16
 Version 3.5.15
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/78?closed=1)
-
 * Java 10 support is complete.
 * BREAKING: Java language level support has changed to make Java 10 support possible.
   [Here's a little article about it](https://matozoid.github.io/2017/04/11/enable-java-9-support.html)
@@ -2413,7 +2565,6 @@ Version 3.5.15
 Version 3.5.14
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/77?closed=1)
-
 * Java 10's `var` can now be parsed and will be turned into a `VarType` node.
   It can not be resolved yet.
 * `NodeList` now has a pretty complete set of `...First` and `...Last` methods.
@@ -2422,19 +2573,16 @@ Version 3.5.14
 Version 3.5.13
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/76?closed=1)
-
 * The Javadoc parser has received a lot of attention.
 
 Version 3.5.12
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/75?closed=1)
-
 * Thanks to un0btanium for fixing the readme file!
 
 Version 3.5.11
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/74?closed=1)
-
 * BREAKING: `AssignExpr.Operator.AND` is now `AssignExpr.Operator.BINARY_AND`.
 * BREAKING: `AssignExpr.Operator.OR` is now `AssignExpr.Operator.BINARY_OR`.
 * `getPrimaryTypeName` and `getPrimaryType` give access to the type that has the same name as the file it came from.
@@ -2444,14 +2592,12 @@ Version 3.5.11
 Version 3.5.10
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/73?closed=1)
-
 * JavaSymbolSolver is now in the same project as JavaParser, meaning they get released together from now on.
 * LexicalPreservingPrinter has had a big speed optimization.
 
 Version 3.5.9
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/72?closed=1)
-
 * BREAKING: the very confusing constructor `NodeList(Node)` (which sets the parent) was removed.
 * To avoid using the int type for token kinds, use the new `JavaToken.Kind` enum.
   It can convert to and from the int kind.
@@ -2459,7 +2605,6 @@ Version 3.5.9
 Version 3.5.8
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/71?closed=1)
-
 * the module name is now set to com.github.javaparser.core
 
 Version 3.5.7
@@ -2469,7 +2614,6 @@ Version 3.5.7
 Version 3.5.6
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/69?closed=1)
-
 * `toSomeType()` methods have been added for many types that give more functional access to a subtype.
 * BETA: the below work on Java Symbol Solver is still ongoing.
 
@@ -2483,13 +2627,11 @@ Version 3.5.5
 Version 3.5.4
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/67?closed=1)
-
 * BETA: the below work on Java Symbol Solver is still ongoing.
 
 Version 3.5.3
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/66?closed=1)
-
 * Unicode escapes (`\u1234`) are now retained in the AST,
   but they are now only allowed in comments, string and character literals, and identifiers.
 * BETA: the below work on Java Symbol Solver is still ongoing.
@@ -2497,20 +2639,17 @@ Version 3.5.3
 Version 3.5.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/65?closed=1)
-
 * The pretty printer now cleans up Javadoc comments.
 * BETA: the below work on Java Symbol Solver is still ongoing.
 
 Version 3.5.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/64?closed=1)
-
 * BETA: the below work on Java Symbol Solver is still ongoing.
 
 Version 3.5.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/63?closed=1)
-
 * A functional visitor API has been added. See [PR 1195](https://github.com/javaparser/javaparser/pull/1195) for now.
 * Build is working again on Windows thanks to Leonardo Herrera.
 * The pretty printer now has an option to order imports, also thanks to Leonardo Herrera.
@@ -2521,7 +2660,6 @@ Version 3.5.0
 Version 3.4.4
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/62?closed=1)
-
 * BETA: the below work on Java Symbol Solver is still ongoing.
 
 Version 3.4.3
@@ -2558,6 +2696,7 @@ Version 3.4.1
 * `traverseScope` was added to all nodes with a scope, so you can travel through the scope without tripping over (non-)
   optionality.
 
+
 Version 3.4.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/58?closed=1)
@@ -2581,7 +2720,6 @@ Version 3.3.5
 Version 3.3.4
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/56?closed=1)
-
 * `SourceZip` has been added.
   Use it to read source code from jars or zip files.
   Thank you @ryan-beckett !
@@ -2593,27 +2731,23 @@ Version 3.3.4
 Version 3.3.3
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/55?closed=1)
-
 * Parsing a partial java file (like an expression or statement) no longer ignores trailing code.
 * New memory saving option: turn off token list.
 
 Version 3.3.2
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/54?closed=1)
-
 * `VisitorMap` lets you override hashcode/equals for nodes when used as a key for a map.
 
 Version 3.3.1
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/53?closed=1)
-
 * The token list is now mutable - see methods on `JavaToken`.
   This caused mild breakage - some fields have become `Optional`.
 
 Version 3.3.0
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/52?closed=1)
-
 * Breaking: `TryStmt::tryBlock` and `EnclosedExpr::inner` were optional for no good reason. Now they are required.
 * You can now ask a `JavaToken` for its category, which is useful for examining the token list or doing syntax
   highlighting or so.
@@ -2626,13 +2760,11 @@ Version 3.2.12
 Version 3.2.11
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/50?closed=1)
-
 * We're up to date with the latest Java 9 module system again.
 
 Version 3.2.10
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/49?closed=1)
-
 * `Node.replace(old, new)` was added, including property-specific `X.replaceY(newY)` methods
 
 Version 3.2.9
@@ -2667,7 +2799,6 @@ Version 3.2.6
 Version 3.2.5
 ------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/45?closed=1)
-
 * `NodeWithCondition` was added on all nodes containing a condition.
 * Lots of work on improving lexical preservation.
 * If a file was parsed from a file system, you can now get path information etc. from `CompilationUnit`
@@ -2681,7 +2812,6 @@ Version 3.2.4
 New style changelog, no more issue numbers, but a link:
 [issues resolved](https://github.com/javaparser/javaparser/milestone/44?closed=1)
 and any notable changes:
-
 * the new method `Node.removeForced()` by removing it, or removing the first parent that is optional.
   This is different from `Node.remove()`, `remove()` only tries to remove the node from the parent and fails if it
   can't.
@@ -2691,7 +2821,6 @@ and any notable changes:
 
 Version 3.2.3
 ------------------
-
 * 907 906 905 903 911 910 909 908 smaller improvements and fixes
 
 Version 3.2.2
@@ -2730,13 +2859,10 @@ Beta: `TreeStructureVisitor`, and `LexicalPreservingPrinter`.
 
 A start has been made on source level support. The default level is Java 8.
 It can be set to Java 9 like this for a parser *instance*:
-
 ```java
 private final JavaParser parser = new JavaParser(new ParserConfiguration().setValidator(new Java9Validator()));
 ```
-
 and like this for the static parse methods:
-
 ```java
 QuickJavaParser.getConfiguration().setValidator(new Java9Validator());
 ```
@@ -2795,7 +2921,6 @@ This version needs a minor version increase because of a backwards compatability
   that is what they do now.
 
 New:
-
 * 658 718 736 737 we have created a metamodel.
   It gives information about the structure of the various AST nodes, as if you are introspecting them.
   You can find it in `javaparser-metamodel`, the main class is `JavaParserMetaModel`
@@ -2808,13 +2933,11 @@ If you want to generate your own visitors, you can use the `VisitorGenerator` cl
 
 If you want to reuse the code generation utilities, look at module `javaparser-generator-utils` - there is a very
 useful `SourceRoot` class in there that takes away a lot of file management troubles.
-
 * 538 735 `TreeStructureVisitor` has been added, which should be considered beta.
 * 220 733 717 749 745 750 743 748 666 732 746 734 733 smaller improvements and fixes
 
 Version 3.0.1
 ------------------
-
 * 699 433 325 Javadoc can now be parsed
 * 703 696 added NodeWithOptionalScope
 * 702 FieldAccessExpr now implements NodeWithSimpleName, *which means that "field" has been renamed to "name"*
@@ -2823,12 +2946,10 @@ Version 3.0.1
 
 Version 3.0.0
 ------------------
-
 * 695 697 689 680 693 691 682 690 677 679 688 684 683 smaller improvements and fixes
 
 Version 3.0.0-RC.4
 ------------------
-
 * 668 669 TypeDeclarationStmt became LocalClassDeclarationStmt
 * 347 665 every node now has some documentation
 * 660 670 673 four types of import declaration have been merged back into the old ImportDeclaration
@@ -2843,7 +2964,6 @@ Version 3.0.0-RC.3
 
 Version 3.0.0-RC.2
 ------------------
-
 * 593 EmptyImportDeclaration and NonEmptyImportDeclaration have been removed
 * 612 VariableDeclaratorId has been removed. It has been substituted by "SimpleName name"
 * 614 617 the list of tokens has been linearized and simplified
@@ -2853,19 +2973,16 @@ Version 3.0.0-RC.2
 
 Version 3.0.0-RC.1
 ------------------
-
 * 499 601 renames many fields to be more consistent
 * 596 605 602 604 smaller improvements and fixes
 
 Version 3.0.0-alpha.11
 ------------------
-
 * 547 595 Node.range is now using Optional instead of Range.UNKNOWN
 * 584 588 548 585 bug fixes and improvements
 
 Version 3.0.0-alpha.10
 ------------------
-
 * 578 579 577 575 290 570 568 567 562 564 551 bug fixes and improvements
 
 Version 3.0.0-alpha.9
@@ -2879,13 +2996,11 @@ Version 3.0.0-alpha.9
 
 Version 3.0.0-alpha.8
 ------------------
-
 * 344 529 turn DumpVisitor into an official PrettyPrinter
 * 532 508 427 530 531 513 528 cleanups
 
 Version 3.0.0-alpha.7
 ------------------
-
 * 515 roll back attempt at using Optional
 * 522 504 make NodeList not a Node (restores parent/children behaviour to before alpha.4)
 * 527 526 rename getChildrenNodes to getChildNodes
@@ -2893,7 +3008,6 @@ Version 3.0.0-alpha.7
 
 Version 3.0.0-alpha.6
 ------------------
-
 * 503 modified ImportDeclaration hierarchy to have getters for static and "asterisk" again
 * 506 bug fix
 
@@ -2907,7 +3021,6 @@ Version 3.0.0-alpha.5
 
 Version 3.0.0-alpha.4
 ------------------
-
 * 463 471 nodes can now be removed easily
 * 491 import handling changed. Instead of "ImportDeclaration", we now have the four types of import as described in the
   JLS. [See issue](https://github.com/javaparser/javaparser/pull/491)
@@ -2927,14 +3040,12 @@ Version 3.0.0-alpha.3
 
 Version 3.0.0-alpha.2
 ------------------
-
 * 157 a new parser frontend, check https://github.com/javaparser/javaparser/pull/447 for explanations
 * 435 more builder methods like 400 and 405
 * 111 440 443 444 445 446 bugs & cleanups
 
 Version 3.0.0-alpha.1
 ------------------
-
 * 400 405 introduce many "builder" style methods for constructing code. Thanks DeepSnowNeeL!
 * 409 remove ASTHelper (methods are now on specific Node subclasses)
 * 414 JavaParser can now be instantiated and reused. InstanceJavaParser removed
@@ -2943,7 +3054,6 @@ Version 3.0.0-alpha.1
 
 Version 2.5.1
 -------------
-
 * 394 OSGi manifest added
 * 391 fix ModifierVisitor NullPointerException bug
 * 385 a few new parse methods
@@ -2972,7 +3082,6 @@ API breaking changes:
 
 Version 2.4.0
 -------------
-
 * several fixes in DumpVisitor for bugs due to lazy initialization
 * make TypeDeclaration implements DocumentableNode directly
 * TypedNode interface introduced
@@ -2989,7 +3098,6 @@ Version 2.4.0
 
 Version 2.3.0
 -------------
-
 * ClassOrInterfaceType implements NamedNode
 * DumpVisitor can now be extended
 * Improved documentation
@@ -2997,7 +3105,6 @@ Version 2.3.0
 
 Version 2.1.0
 -------------
-
 * Features
   * [#75 performance improvement for `PositionUtils.sortByBeginPosition`](https://github.com/javaparser/javaparser/issues/75)
   * [#64 In getDeclarationAsString parameter names should be optional](https://github.com/javaparser/javaparser/issues/64)
@@ -3018,18 +3125,16 @@ Version 2.1.0
 
 Version 2.0.0
 -------------
-
 * support Java 8
 
 Version 1.0.8 (2010-01-17)
 -------------
-
 * Fixed issues:
-  * Issue 17: A refactor suggestion for AnnotationExpr and its subclasses
-  * Issue 21: Java 5 JavaParser compiled JARs
-  * Issue 22: Please use java.lang.reflect.Modifier constants in japa.parser.ast.body.ModifierSet
-  * Issue 27: Implement the "equal" method
-  * Issue 30: equals and hashCode methods
+    * Issue 17: A refactor suggestion for AnnotationExpr and its subclasses
+    * Issue 21: Java 5 JavaParser compiled JARs
+    * Issue 22: Please use java.lang.reflect.Modifier constants in japa.parser.ast.body.ModifierSet
+    * Issue 27: Implement the "equal" method
+    * Issue 30: equals and hashCode methods
 
 Version 1.0.7 (2009-04-12)
 -------------
@@ -3039,7 +3144,6 @@ Version 1.0.7 (2009-04-12)
 
 Version 1.0.6 (2009-01-11)
 -------------
-
 * Issue 11 fixed: changed method get/setPakage to get/setPackage in the class CompilationUnit
 * Created new visitor adapter to help AST modification: ModifierVisitorAdapter
 * Changed visitor adapters to abstract
@@ -3052,13 +3156,11 @@ Version 1.0.5 (2008-10-26)
 
 Version 1.0.4 (2008-10-07)
 -------------
-
 * Moved to javacc 4.1.
 * The java_1_5.jj can be build alone without compilation errors
 
 Version 1.0.3 (2008-09-06)
 -------------
-
 * Removed SuperMemberAccessExpr class, it was no longer used
 * Removed the methods get/setTypeArgs() from ArrayCreationExpr, this node shouldn't have these methods.
 * Fixed the bug with start/end position of the nodes IntegerLiteralMinValueExpr and LongLiteralMinValueExpr
@@ -3066,23 +3168,20 @@ Version 1.0.3 (2008-09-06)
 
 Version 1.0.2 (2008-07-20)
 -------------
-
 * Issue fixed: Issue 1: Add support for editing AST nodes or create new ones
 
 Version 1.0.1 (2008-07-01)
 -------------
-
 * Issue fixed: Issue 5: end line and end column equal to begin line and begin column
 
 Version 1.0.0 (2008-06-25)
 -------------
-
 * Changed version numbering, starting version 1.0.0
 * Javadoc done for packages:
-  * japa.parser
-  * japa.parser.ast
+    * japa.parser
+    * japa.parser.ast
 * Corrected bug when parsing in multithread:
-  * JavaParser.setCacheParser(false) must be called before to use the parser concurrent
+    * JavaParser.setCacheParser(false) must be called before to use the parser concurrent
 
 2008-06-19
 -------------
@@ -3093,91 +3192,78 @@ Version 1.0.0 (2008-06-25)
 -------------
 
 * Bug corrected: NPE in VoidVisitorAdapter
-  * http://code.google.com/p/javaparser/issues/detail?id=2
+    * http://code.google.com/p/javaparser/issues/detail?id=2
 
 2008-06-09
 -------------
-
 * Added Adapters for de visitors
 
 2008-05-28
 -------------
-
 * This project now is published at Google Code:
-  * http://code.google.com/p/javaparser/
+    * http://code.google.com/p/javaparser/
 
 2008-05-25
 -------------
 
 * Added support for comments and javadoc to the tree.
-  * Javadocs are stored directly to members (BodyDeclaration and all deriveds (classes, methods, fields, etc.)),
-    accessible by the method getJavadoc().
-  * All comments are stored in the CompilationUnit, accessible by the method getComments().
+    * Javadocs are stored directly to members (BodyDeclaration and all deriveds (classes, methods, fields, etc.)),
+      accessible by the method getJavadoc().
+    * All comments are stored in the CompilationUnit, accessible by the method getComments().
 
 2008-04-01
 -------------
-
 * Changed all nodes public attributes to be private and created getters to access them
 * Changed the methods of the Node getLine e getColumn to getBeginLine and getBeginColumn
 * Added the methods getEndLine and getEndColumn to the Node class (works only in the BlockNode)
 
 2007-12-22
 -------------
-
 * Corrected ConditionalExpression bug
 
 2007-10-21
 -------------
-
 * Added LGPL License
 
 2007-10-21
 -------------
 
 * Bugs corrected:
-  * Created PackageDeclaration member of CompilationUnit to add suport for annotations in the package declaration
+    * Created PackageDeclaration member of CompilationUnit to add suport for annotations in the package declaration
   * Parameterized anonymous constructor invocation
   * Explicit constructor invotation Type Arguments
   * ctrl+z ("\u001A") ar end of compilation unit
 
 2007-10-09
 -------------
-
 * EnumConstantDeclaration annotation support corrected
 * Parssing Java Unicode escape characters suport added
 
 2007-10-03
 -------------
-
 * Bug corrected: "MotifComboPopup.this.super()" statement was generating parser error
 
 2007-10-01
 -------------
-
 * Bug corrected: Casting signed primitive values
-
 ```
 	double d = (double) -1;
 	                    ^
 ```
-
 2007-08-06
 -------------
-
 * Bug with the single line comments in the final of the unit corrected
 
 2007-07-31
 -------------
-
 * Fixed the bug with the following expression:  `Class c = (int.class);`
 
 2007-06-26
 -------------
-
 * Bug fixes from Leon Poyyayil work
-  * suport for hex floating point
-  * unicode digits in indentifier
-  * MemberValueArrayInitializer
+    * suport for hex floating point
+    * unicode digits in indentifier
+    * MemberValueArrayInitializer
 
 2007-03-09
 -------------
@@ -3191,6 +3277,5 @@ Version 1.0.0 (2008-06-25)
 
 2007-02-01
 -------------
-
 * Many bug fixes
 * Added line/column to nodes

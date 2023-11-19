@@ -176,8 +176,7 @@ public class VarType extends Type {
         node = node.get().getParentNode();
         if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
             return Optional.empty();
-        } else {
+        }
             return Optional.of((ForEachStmt) node.get());
         }
     }
-}

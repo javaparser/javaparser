@@ -43,21 +43,20 @@ public class JavassistFactory {
         try {
             if (ctClazz.isArray()) {
                 return new ResolvedArrayType(typeUsageFor(ctClazz.getComponentType(), typeSolver));
-            } else if (ctClazz.isPrimitive()) {
+            }
+            if (ctClazz.isPrimitive()) {
                 if (ctClazz.getName().equals("void")) {
                     return ResolvedVoidType.INSTANCE;
-                } else {
+                }
                     return ResolvedPrimitiveType.byName(ctClazz.getName());
                 }
-            } else {
                 if (ctClazz.isInterface()) {
                     return new ReferenceTypeImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver));
-                } else if (ctClazz.isEnum()) {
-                    return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctClazz, typeSolver));
-                } else {
-                    return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver));
                 }
+            if (ctClazz.isEnum()) {
+                    return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctClazz, typeSolver));
             }
+                    return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver));
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -66,27 +65,30 @@ public class JavassistFactory {
     public static ResolvedReferenceTypeDeclaration toTypeDeclaration(CtClass ctClazz, TypeSolver typeSolver) {
         if (ctClazz.isAnnotation()) {
             return new JavassistAnnotationDeclaration(ctClazz, typeSolver);
-        } else if (ctClazz.isInterface()) {
+        }
+        if (ctClazz.isInterface()) {
             return new JavassistInterfaceDeclaration(ctClazz, typeSolver);
-        } else if (ctClazz.isEnum()) {
+        }
+        if (ctClazz.isEnum()) {
             return new JavassistEnumDeclaration(ctClazz, typeSolver);
-        } else if (ctClazz.isArray()) {
+        }
+        if (ctClazz.isArray()) {
             throw new IllegalArgumentException("This method should not be called passing an array");
-        } else {
+        }
             return new JavassistClassDeclaration(ctClazz, typeSolver);
         }
-    }
 
     static AccessSpecifier modifiersToAccessLevel(final int modifiers) {
         if (Modifier.isPublic(modifiers)) {
             return AccessSpecifier.PUBLIC;
-        } else if (Modifier.isProtected(modifiers)) {
+        }
+        if (Modifier.isProtected(modifiers)) {
             return AccessSpecifier.PROTECTED;
-        } else if (Modifier.isPrivate(modifiers)) {
+        }
+        if (Modifier.isPrivate(modifiers)) {
             return AccessSpecifier.PRIVATE;
-        } else {
+        }
             return AccessSpecifier.NONE;
         }
-    }
 
 }

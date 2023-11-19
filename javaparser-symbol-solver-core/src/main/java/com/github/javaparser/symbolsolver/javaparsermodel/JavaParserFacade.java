@@ -292,9 +292,8 @@ public class JavaParserFacade {
         if (typeDeclarationSymbolReference.isSolved()) {
             ResolvedAnnotationDeclaration annotationDeclaration = (ResolvedAnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
             return solved(annotationDeclaration);
-        } else {
-            return unsolved();
         }
+        return unsolved();
     }
 
     public SymbolReference<ResolvedValueDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
@@ -370,21 +369,20 @@ public class JavaParserFacade {
                 Log.trace("getType on %s  -> %s", () -> node, () -> res);
             }
             return node.getData(TYPE_WITH_LAMBDAS_RESOLVED);
-        } else {
-            Optional<ResolvedType> res = find(TYPE_WITH_LAMBDAS_RESOLVED, node);
-            if (res.isPresent()) {
+        }
+        Optional<ResolvedType> res = find(TYPE_WITH_LAMBDAS_RESOLVED, node);
+        if (res.isPresent()) {
                 return res.get();
             }
-            res = find(TYPE_WITHOUT_LAMBDAS_RESOLVED, node);
-            if (!res.isPresent()) {
+        res = find(TYPE_WITHOUT_LAMBDAS_RESOLVED, node);
+        if (!res.isPresent()) {
                 ResolvedType resType = getTypeConcrete(node, solveLambdas);
                 node.setData(TYPE_WITHOUT_LAMBDAS_RESOLVED, resType);
                 Optional<ResolvedType> finalRes = res;
                 Log.trace("getType on %s (no solveLambdas) -> %s", () -> node, () -> finalRes);
                 return resType;
             }
-            return res.get();
-        }
+        return res.get();
     }
 
     private Optional<ResolvedType> find(DataKey<ResolvedType> dataKey, Node node) {
@@ -560,10 +558,10 @@ public class JavaParserFacade {
             if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration) {
                     return parent;
-                } else {
-                    detachFlag = true;
                 }
-            } else if (parent instanceof ObjectCreationExpr) {
+                detachFlag = true;
+            }
+            if (parent instanceof ObjectCreationExpr) {
                 if (detachFlag) {
                     return parent;
                 }
@@ -583,10 +581,10 @@ public class JavaParserFacade {
             if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration && ((TypeDeclaration<?>) parent).getFullyQualifiedName().get().endsWith(className)) {
                     return parent;
-                } else {
-                    detachFlag = true;
                 }
-            } else if (parent instanceof ObjectCreationExpr && ((ObjectCreationExpr) parent).getType().getName().asString().equals(className)) {
+                detachFlag = true;
+            }
+            if (parent instanceof ObjectCreationExpr && ((ObjectCreationExpr) parent).getType().getName().asString().equals(className)) {
                 if (detachFlag) {
                     return parent;
                 }
@@ -627,10 +625,9 @@ public class JavaParserFacade {
         node = node.get().getParentNode();
         if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
             return Optional.empty();
-        } else {
+        }
             return Optional.of((ForEachStmt) node.get());
         }
-    }
 
     public ResolvedType convert(Type type, Node node) {
         return convert(type, JavaParserFactory.getContext(node, typeSolver));

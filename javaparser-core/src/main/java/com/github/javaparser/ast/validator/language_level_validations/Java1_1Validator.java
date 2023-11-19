@@ -20,6 +20,7 @@
  */
 package com.github.javaparser.ast.validator.language_level_validations;
 
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
 import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
@@ -32,7 +33,7 @@ public class Java1_1Validator extends Java1_0Validator {
 
     final Validator innerClasses = new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, (n, reporter) -> n.getParentNode().ifPresent(p -> {
         if (p instanceof LocalClassDeclarationStmt && n.isInterface())
-            reporter.report(n, "There is no such thing as a local interface.");
+            reporter.report(n, new UpgradeJavaMessage("There is no such thing as a local interface.", ParserConfiguration.LanguageLevel.JAVA_16));
     }));
 
     public Java1_1Validator() {

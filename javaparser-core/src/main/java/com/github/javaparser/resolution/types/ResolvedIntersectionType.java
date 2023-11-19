@@ -24,6 +24,8 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+
 /**
  * An intersection type is defined in java as list of types separates by ampersands.
  *
@@ -70,8 +72,14 @@ public class ResolvedIntersectionType implements ResolvedType {
         List<ResolvedType> elementsReplaced = elements.stream().map(e -> e.replaceTypeVariables(tp, replaced, inferredTypes)).collect(Collectors.toList());
         if (elementsReplaced.equals(elements)) {
             return this;
-        } else {
-            return new ResolvedIntersectionType(elementsReplaced);
         }
+        return new ResolvedIntersectionType(elementsReplaced);
+    }
+
+    /*
+     * Returns the list of the resolved types
+     */
+    public List<ResolvedType> getElements() {
+        return elements;
     }
 }

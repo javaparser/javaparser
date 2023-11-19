@@ -20,35 +20,27 @@
  */
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import static com.github.javaparser.TokenTypes.isEndOfLineToken;
+import static com.github.javaparser.TokenTypes.isWhitespaceButNotEndOfLine;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.lexicalpreservation.TextElement;
+import com.github.javaparser.printer.lexicalpreservation.TokenTextElement;
 import com.github.javaparser.utils.LineSeparator;
-import static com.github.javaparser.TokenTypes.isEndOfLineToken;
-import static com.github.javaparser.TokenTypes.isWhitespaceButNotEndOfLine;
-
 public class CsmToken implements CsmElement {
 
     private final int tokenType;
 
     private String content;
 
-    private TokenContentCalculator tokenContentCalculator;
-
-    public interface TokenContentCalculator {
-
-        String calculate(Node node);
-    }
-
     public int getTokenType() {
         return tokenType;
     }
 
-    public String getContent(Node node) {
-        if (tokenContentCalculator != null) {
-            return tokenContentCalculator.calculate(node);
-        }
+    public String getContent() {
         return content;
     }
 
@@ -73,17 +65,12 @@ public class CsmToken implements CsmElement {
         this.content = content;
     }
 
-    public CsmToken(int tokenType, TokenContentCalculator tokenContentCalculator) {
-        this.tokenType = tokenType;
-        this.tokenContentCalculator = tokenContentCalculator;
-    }
-
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         if (isEndOfLineToken(tokenType)) {
             printer.println();
         } else {
-            printer.print(getContent(node));
+            printer.print(getContent());
         }
     }
 
@@ -103,14 +90,13 @@ public class CsmToken implements CsmElement {
             return false;
         if (content != null ? !content.equals(csmToken.content) : csmToken.content != null)
             return false;
-        return tokenContentCalculator != null ? tokenContentCalculator.equals(csmToken.tokenContentCalculator) : csmToken.tokenContentCalculator == null;
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = tokenType;
         result = 31 * result + (content != null ? content.hashCode() : 0);
-        result = 31 * result + (tokenContentCalculator != null ? tokenContentCalculator.hashCode() : 0);
         return result;
     }
 
@@ -124,5 +110,15 @@ public class CsmToken implements CsmElement {
 
     public boolean isNewLine() {
         return TokenTypes.isEndOfLineToken(tokenType);
+    }
+
+    /*
+     * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+     */
+    @Override
+    public boolean isCorrespondingElement(TextElement textElement) {
+        return (textElement instanceof TokenTextElement)
+                && ((TokenTextElement) textElement).getTokenKind() == getTokenType()
+                && ((TokenTextElement) textElement).getText().equals(getContent());
     }
 }

@@ -85,9 +85,8 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
         String qualifiedName = getQualifiedName();
         if (qualifiedName.contains(".")) {
             return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1);
-        } else {
-            return qualifiedName;
         }
+        return qualifiedName;
     }
 
     @Override

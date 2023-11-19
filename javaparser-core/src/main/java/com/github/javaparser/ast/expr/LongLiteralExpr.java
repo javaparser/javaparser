@@ -134,16 +134,11 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      * @return the literal value as a number while respecting different number representations
      */
     public Number asNumber() {
-        /* we need to handle the special case for the literal 9223372036854775808L, which is used to
-         * represent Integer.MIN_VALUE (-9223372036854775808L) as a combination of a UnaryExpr and a
-         * LongLiteralExpr. However 9223372036854775808L cannot be represented in a long, so we need
-         * to return a BigInteger
-         */
+
         if (Objects.equals(value, MAX_63_BIT_UNSIGNED_VALUE_AS_STRING) && hasUnaryMinusAsParent(this)) {
             return MAX_63_BIT_UNSIGNED_VALUE_AS_BIG_INTEGER;
-        } else {
-            return asLong();
         }
+        return asLong();
     }
 
     /**

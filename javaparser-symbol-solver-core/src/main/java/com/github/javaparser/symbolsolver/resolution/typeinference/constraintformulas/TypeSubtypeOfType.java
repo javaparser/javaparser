@@ -56,9 +56,8 @@ public class TypeSubtypeOfType extends ConstraintFormula {
         if (isProperType(S) && isProperType(T)) {
             if (T.isAssignableBy(S)) {
                 return ReductionResult.trueResult();
-            } else {
-                return ReductionResult.falseResult();
             }
+            return ReductionResult.falseResult();
         }
 
         // - Otherwise, if S is the null type, the constraint reduces to true.

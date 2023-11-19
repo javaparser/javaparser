@@ -260,7 +260,7 @@
   Line 404) removeCandidates.isEmpty() ==> java.util.Set.isEmpty()
   Line 404) removeCandidates.size() ==> java.util.Set.size()
   Line 404) applicableMethods.size() ==> java.util.List.size()
-  Line 405) applicableMethods.removeAll(removeCandidates) ==> java.util.List.removeAll(java.util.Collection<? extends java.lang.Object>)
+  Line 405) applicableMethods.removeAll(removeCandidates) ==> java.util.List.removeAll(java.util.Collection<?>)
   Line 409) applicableMethods.size() ==> java.util.List.size()
   Line 410) SymbolReference.solved(applicableMethods.get(0)) ==> com.github.javaparser.symbolsolver.model.resolution.SymbolReference.solved(S2)
   Line 410) applicableMethods.get(0) ==> java.util.List.get(int)

@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.cache;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.WeakHashMap;
@@ -46,7 +47,11 @@ public class InMemoryCache<K, V> implements Cache<K, V> {
         return new InMemoryCache<>();
     }
 
-    private final Map<K, V> mappedValues = new WeakHashMap<>();
+    private final Map<K, V> mappedValues;
+
+    private InMemoryCache() {
+        mappedValues = Collections.synchronizedMap(new WeakHashMap<>());
+    }
 
     @Override
     public void put(K key, V value) {

@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
+import java.util.*;
+
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.Expression;
@@ -40,10 +44,6 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-
-import java.util.*;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class MethodReferenceExprContext extends AbstractJavaParserContext<MethodReferenceExpr> {
 
@@ -81,14 +81,11 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             SymbolReference<ResolvedMethodDeclaration> firstResAttempt = MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
             if (firstResAttempt.isSolved()) {
                 return firstResAttempt;
-            } else {
-                // If has not already been solved above then will be solved here if single argument type same as
-                // (or subclass of) rrtd, as call is actually performed on the argument itself with zero params
-                SymbolReference<ResolvedMethodDeclaration> secondResAttempt = MethodResolutionLogic.solveMethodInType(rrtd, name, Collections.emptyList(), false);
-                if (secondResAttempt.isSolved()) {
+            }
+            SymbolReference<ResolvedMethodDeclaration> secondResAttempt = MethodResolutionLogic.solveMethodInType(rrtd, name, Collections.emptyList(), false);
+            if (secondResAttempt.isSolved()) {
                     return secondResAttempt;
                 }
-            }
         }
 
         return SymbolReference.unsolved();
@@ -103,7 +100,13 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             MethodCallExpr methodCallExpr = (MethodCallExpr) demandParentNode(wrappedNode);
             MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
             int pos = pos(methodCallExpr, wrappedNode);
-            ResolvedType lambdaType = methodUsage.getParamTypes().get(pos);
+            ResolvedMethodDeclaration rmd = methodUsage.getDeclaration();
+            // Since variable parameters are represented by an array, in case we deal with
+            // the variadic parameter we have to take into account the base type of the
+            // array.
+            ResolvedType lambdaType = (rmd.hasVariadicParameter() && pos >= rmd.getNumberOfParams() - 1) ?
+                    rmd.getLastParam().getType().asArrayType().getComponentType() :
+                    methodUsage.getParamType(pos);
 
             // Get the functional method in order for us to resolve it's type arguments properly
             Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
@@ -133,10 +136,10 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                 }
 
                 return resolvedTypes;
-            } else {
-                throw new UnsupportedOperationException();
             }
-        } else if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
+            throw new UnsupportedOperationException();
+        }
+        if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) demandParentNode(wrappedNode);
             ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
             Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
@@ -159,10 +162,10 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                 }
 
                 return resolvedTypes;
-            } else {
-                throw new UnsupportedOperationException();
             }
-        } else if (demandParentNode(wrappedNode) instanceof ReturnStmt) {
+            throw new UnsupportedOperationException();
+        }
+        if (demandParentNode(wrappedNode) instanceof ReturnStmt) {
             ReturnStmt returnStmt = (ReturnStmt) demandParentNode(wrappedNode);
             Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
             if (optDeclaration.isPresent()) {
@@ -187,14 +190,12 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                     }
 
                     return resolvedTypes;
-                } else {
-                    throw new UnsupportedOperationException();
                 }
+                throw new UnsupportedOperationException();
             }
             throw new UnsupportedOperationException();
-        } else {
-            throw new UnsupportedOperationException();
         }
+        throw new UnsupportedOperationException();
     }
 
     private int pos(MethodCallExpr callExpr, Expression param) {

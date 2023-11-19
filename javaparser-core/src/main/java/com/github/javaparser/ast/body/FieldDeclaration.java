@@ -263,8 +263,12 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      * Returns true if the field is declared in an interface
      */
     private boolean isDeclaredInInterface() {
-        Optional<ClassOrInterfaceDeclaration> parentClass = findAncestor(ClassOrInterfaceDeclaration.class);
-        return parentClass.map(parent -> parent.isInterface()).orElse(false);
+        Optional<TypeDeclaration> parentType = findAncestor(TypeDeclaration.class);
+        return parentType
+                .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
+                .map(BodyDeclaration::asClassOrInterfaceDeclaration)
+                .map(ClassOrInterfaceDeclaration::isInterface)
+                .orElse(false);
     }
 
     @Override

@@ -20,15 +20,15 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.Optional;
+
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
-import java.util.Optional;
-
 /**
  * Represent the position of a child node in the NodeText of its parent.
  */
-class ChildTextElement extends TextElement {
+public class ChildTextElement extends TextElement {
 
     private final Node child;
 
@@ -36,21 +36,22 @@ class ChildTextElement extends TextElement {
         this.child = child;
     }
 
-    String expand() {
+    @Override
+    public String expand() {
         return LexicalPreservingPrinter.print(child);
     }
 
-    Node getChild() {
+    public Node getChild() {
         return child;
     }
 
     @Override
-    boolean isToken(int tokenKind) {
+    public boolean isToken(int tokenKind) {
         return false;
     }
 
     @Override
-    boolean isNode(Node node) {
+    public boolean isNode(Node node) {
         return node == child;
     }
 

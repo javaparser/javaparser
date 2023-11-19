@@ -79,9 +79,8 @@ public class ResolvedTypeVariable implements ResolvedType {
         if (tpToBeReplaced.getName().equals(this.typeParameter.getName())) {
             inferredTypes.put(this.asTypeParameter(), replaced);
             return replaced;
-        } else {
-            return this;
         }
+        return this;
     }
 
     @Override
@@ -113,9 +112,8 @@ public class ResolvedTypeVariable implements ResolvedType {
     public boolean isAssignableBy(ResolvedType other) {
         if (other.isTypeVariable()) {
             return describe().equals(other.describe());
-        } else {
-            return true;
         }
+        return true;
     }
 
     @Override

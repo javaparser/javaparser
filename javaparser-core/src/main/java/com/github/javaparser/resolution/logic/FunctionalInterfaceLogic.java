@@ -51,9 +51,8 @@ public final class FunctionalInterfaceLogic {
         ResolvedReferenceTypeDeclaration typeDeclaration = optionalTypeDeclaration.get();
         if (type.isReferenceType() && typeDeclaration.isInterface()) {
             return getFunctionalMethod(typeDeclaration);
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     /**

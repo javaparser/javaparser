@@ -41,6 +41,10 @@ public class LeastUpperBoundLogic {
         // One way to handle this case is to remove the type null from the list of types.
         Set<ResolvedType> resolvedTypes = types.stream().filter(type -> !(type instanceof NullType)).collect(Collectors.toSet());
 
+        // reduces the set in the presence of enumeration type because members are
+        // not equal and they do not have an explicit super type.
+        // So we only keep one enumeration for all the members of an enumeration
+        filterEnumType(resolvedTypes);
 
         // The least upper bound, or "lub", of a set of reference types is a shared supertype that is more specific
         // than any other shared supertype (that is, no other shared supertype is a subtype of the least upper bound).
@@ -195,6 +199,33 @@ public class LeastUpperBoundLogic {
             }
         }
         return erasedBest;
+    }
+
+    /*
+     * Check the type declaration if it is an enum
+     */
+    private boolean isEnum(ResolvedType type) {
+        return type.isReferenceType() && type.asReferenceType().getTypeDeclaration().get().isEnum();
+    }
+
+    /*
+     * Keep only one enum reference type per enum declaration
+     */
+    private void filterEnumType(Set<ResolvedType> resolvedTypes) {
+        Map<String, ResolvedType> enumTypes = new HashMap<>();
+        List<ResolvedType> erasedEnumTypes = new ArrayList<>();
+        for (ResolvedType type : resolvedTypes) {
+            if (isEnum(type)) {
+                // enum qualified name i.e. java.math.RoundingMode
+                String qn = type.asReferenceType().getTypeDeclaration().get().asEnum().getQualifiedName();
+                // Save the first occurrence and mark the others so they can be deleted
+                ResolvedType returnedType = enumTypes.putIfAbsent(qn, type);
+                if (returnedType != null) {
+                    erasedEnumTypes.add(type);
+                }
+            }
+        }
+        resolvedTypes.removeAll(erasedEnumTypes);
     }
 
     private List<Set<ResolvedType>> supertypes(Set<ResolvedType> types) {

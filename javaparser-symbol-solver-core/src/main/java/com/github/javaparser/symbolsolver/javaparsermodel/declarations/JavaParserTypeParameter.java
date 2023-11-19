@@ -96,11 +96,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         ResolvedTypeParametrizable container = getContainer();
         if (container instanceof ResolvedReferenceTypeDeclaration) {
             return ((ResolvedReferenceTypeDeclaration) container).getQualifiedName();
-        } else if (container instanceof JavaParserConstructorDeclaration) {
-            return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
-        } else {
-            return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
         }
+        if (container instanceof JavaParserConstructorDeclaration) {
+            return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
+        }
+        return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
     }
 
     @Override
@@ -108,11 +108,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         ResolvedTypeParametrizable container = getContainer();
         if (container instanceof ResolvedReferenceTypeDeclaration) {
             return ((ResolvedReferenceTypeDeclaration) container).getId();
-        } else if (container instanceof JavaParserConstructorDeclaration) {
-            return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
-        } else {
-            return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
         }
+        if (container instanceof JavaParserConstructorDeclaration) {
+            return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
+        }
+        return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
     }
 
     @Override
@@ -121,7 +121,8 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         if (parentNode instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
             com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) parentNode;
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
-        } else if (parentNode instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
+        }
+        if (parentNode instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
             com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) parentNode;
             Optional<ClassOrInterfaceDeclaration> jpTypeDeclaration = jpConstructorDeclaration.findAncestor(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class);
             if (jpTypeDeclaration.isPresent()) {

@@ -123,6 +123,6 @@ class Java7ValidatorTest {
     @Test
     void noLambdas() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("a(() -> 1);"));
-        assertProblems(result, "(line 1,col 3) Lambdas are not supported.");
+        assertProblems(result, "(line 1,col 3) Lambdas are not supported. Pay attention that this feature is supported starting from 'JAVA_8' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 }

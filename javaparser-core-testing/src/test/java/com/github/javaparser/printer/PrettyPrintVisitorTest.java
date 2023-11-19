@@ -21,6 +21,15 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
@@ -38,14 +47,6 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.utils.TestParser;
-import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PrettyPrintVisitorTest extends TestParser {
 
@@ -520,5 +521,19 @@ class PrettyPrintVisitorTest extends TestParser {
                         "}\n";
         CompilationUnit cu = parseCompilationUnit(innerClassWithConstructorReceiverParam);
         assertEqualsStringIgnoringEol(innerClassWithConstructorReceiverParam, print(cu));
+    }
+
+    @Test
+    void printPermitsKeyworld() {
+        CompilationUnit cu = parseCompilationUnit(
+                ParserConfiguration.LanguageLevel.JAVA_17,
+                "public sealed interface I1 permits I2, C, D {}"
+        );
+        String expected =
+                "public sealed interface I1 permits I2, C, D {\n"
+                        + "}\n";
+
+
+        assertEqualsStringIgnoringEol(expected, cu.toString());
     }
 }

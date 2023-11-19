@@ -20,16 +20,18 @@
  */
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.TokenTypes.spaceTokenKind;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.lexicalpreservation.TextElement;
 import com.github.javaparser.utils.LineSeparator;
-import java.util.Arrays;
-import java.util.List;
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.TokenTypes.spaceTokenKind;
-
 public interface CsmElement {
 
     void prettyPrint(Node node, SourcePrinter printer);
@@ -68,10 +70,6 @@ public interface CsmElement {
 
     static CsmElement token(int tokenType) {
         return new CsmToken(tokenType);
-    }
-
-    static CsmElement token(int tokenType, CsmToken.TokenContentCalculator tokenContentCalculator) {
-        return new CsmToken(tokenType, tokenContentCalculator);
     }
 
     static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
@@ -149,5 +147,12 @@ public interface CsmElement {
 
     static CsmElement block(CsmElement content) {
         return sequence(token(GeneratedJavaParserConstants.LBRACE), indent(), content, unindent(), token(GeneratedJavaParserConstants.RBRACE));
+    }
+
+    /*
+     * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+     */
+    default boolean isCorrespondingElement(TextElement textElement) {
+        return false;
     }
 }

@@ -174,13 +174,13 @@ class TextElementIteratorsFactory {
                     nodeText.removeElement(index);
                 }
             };
-        } else if (textElement instanceof ChildTextElement) {
+        }
+        if (textElement instanceof ChildTextElement) {
             ChildTextElement childTextElement = (ChildTextElement) textElement;
             NodeText textForChild = childTextElement.getNodeTextForWrappedNode();
             return reverseIterator(textForChild);
-        } else {
-            throw new IllegalArgumentException();
         }
+        throw new IllegalArgumentException();
     }
 
     public static Iterator<TokenTextElement> reverseIterator(NodeText nodeText) {

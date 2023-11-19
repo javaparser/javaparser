@@ -88,14 +88,13 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
             }
             if (typeOfScope.isReferenceType()) {
                 return solveSymbolAsValue(name, typeOfScope.asReferenceType());
-            } else if (typeOfScope.isConstraint()) {
-                return solveSymbolAsValue(name, typeOfScope.asConstraintType().getBound().asReferenceType());
-            } else {
-                return Optional.empty();
             }
-        } else {
-            return solveSymbolAsValueInParentContext(name);
+            if (typeOfScope.isConstraint()) {
+                return solveSymbolAsValue(name, typeOfScope.asConstraintType().getBound().asReferenceType());
+            }
+            return Optional.empty();
         }
+        return solveSymbolAsValueInParentContext(name);
     }
 
     /*

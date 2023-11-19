@@ -96,7 +96,8 @@ public class NumericConditionalExprHandler implements ConditionalExprHandler {
         if (thenExpr.isPrimitive() && elseExpr.isPrimitive()) {
             if (((ResolvedPrimitiveType) thenExpr).in(resolvedPrimitiveTypeSubList) && elseExpr.equals(ResolvedPrimitiveType.INT)) {
                 return thenExpr;
-            } else if (((ResolvedPrimitiveType) elseExpr).in(resolvedPrimitiveTypeSubList) && thenExpr.equals(ResolvedPrimitiveType.INT)) {
+            }
+            if (((ResolvedPrimitiveType) elseExpr).in(resolvedPrimitiveTypeSubList) && thenExpr.equals(ResolvedPrimitiveType.INT)) {
                 return elseExpr;
             }
         }
@@ -107,7 +108,8 @@ public class NumericConditionalExprHandler implements ConditionalExprHandler {
         // How can we know it?
         if (thenExpr.isReference() && elseExpr.isPrimitive() && thenExpr.asReferenceType().isUnboxable() && thenExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList) && elseExpr.equals(ResolvedPrimitiveType.INT)) {
             return thenExpr.asReferenceType().toUnboxedType().get();
-        } else if (elseExpr.isReference() && thenExpr.isPrimitive() && elseExpr.asReferenceType().isUnboxable() && elseExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList) && thenExpr.equals(ResolvedPrimitiveType.INT)) {
+        }
+        if (elseExpr.isReference() && thenExpr.isPrimitive() && elseExpr.asReferenceType().isUnboxable() && elseExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList) && thenExpr.equals(ResolvedPrimitiveType.INT)) {
             return elseExpr.asReferenceType().toUnboxedType().get();
         }
         // Otherwise, binary numeric promotion (§5.6.2) is applied to the operand types,
