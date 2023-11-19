@@ -1,7 +1,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import java.util.*;
-
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmMix;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
@@ -133,22 +132,17 @@ public class ReshuffledDiffElementExtractor {
      * case the search for the next element of the list L1 must start from the
      * position of the last element kept {@code syncNextIndex}.
      */
-    private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder,
-                                                                                    CsmMix elementsFromNextOrder) {
+    private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder, CsmMix elementsFromNextOrder) {
         Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-        ArrayIterator<CsmElement> previousOrderElementsIterator = new ArrayIterator<>(
-                elementsFromPreviousOrder.getElements());
+        ArrayIterator<CsmElement> previousOrderElementsIterator = new ArrayIterator<>(elementsFromPreviousOrder.getElements());
         int syncNextIndex = 0;
         while (previousOrderElementsIterator.hasNext()) {
             CsmElement pe = previousOrderElementsIterator.next();
-            ArrayIterator<CsmElement> nextOrderElementsIterator = new ArrayIterator<>(
-                    elementsFromNextOrder.getElements(), syncNextIndex);
+            ArrayIterator<CsmElement> nextOrderElementsIterator = new ArrayIterator<>(elementsFromNextOrder.getElements(), syncNextIndex);
             while (nextOrderElementsIterator.hasNext()) {
                 CsmElement ne = nextOrderElementsIterator.next();
-                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index())
-                        && DifferenceElementCalculator.matching(ne, pe)) {
-                    correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(),
-                            previousOrderElementsIterator.index());
+                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index()) && DifferenceElementCalculator.matching(ne, pe)) {
+                    correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(), previousOrderElementsIterator.index());
                     // set the position to start on the next {@code nextOrderElementsIterator} iteration
                     syncNextIndex = nextOrderElementsIterator.index();
                     break;

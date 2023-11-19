@@ -508,10 +508,13 @@ public class MethodResolutionLogic {
     }
 
     public static SymbolReference<ResolvedMethodDeclaration> findMostApplicable(List<ResolvedMethodDeclaration> methods, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver, boolean wildcardTolerance) {
-        List<ResolvedMethodDeclaration> applicableMethods = // Only consider methods with a matching name
-                methods.stream().filter(// Filters out duplicate ResolvedMethodDeclaration by their signature.
-                        m -> m.getName().equals(name)).filter(// Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
-                        distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)).filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
+        // Only consider methods with a matching name
+        List<ResolvedMethodDeclaration> // Only consider methods with a matching name
+                applicableMethods = // Filters out duplicate ResolvedMethodDeclaration by their signature.
+                methods.stream().// Filters out duplicate ResolvedMethodDeclaration by their signature.
+                        filter(// Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
+                        m -> m.getName().equals(name)).// Checks if ResolvedMethodDeclaration is applicable to argumentsTypes.
+                        filter(distinctByKey(ResolvedMethodDeclaration::getQualifiedSignature)).filter((m) -> isApplicable(m, name, argumentsTypes, typeSolver, wildcardTolerance)).collect(Collectors.toList());
         // If no applicable methods found, return as unsolved.
         if (applicableMethods.isEmpty()) {
             return SymbolReference.unsolved();
@@ -729,22 +732,22 @@ public class MethodResolutionLogic {
         }
         MethodUsage winningCandidate = applicableMethods.get(0);
         for (int i = 1; i < applicableMethods.size(); i++) {
-                MethodUsage other = applicableMethods.get(i);
-                if (isMoreSpecific(winningCandidate, other)) {
-                    // nothing to do
-                } else if (isMoreSpecific(other, winningCandidate)) {
-                    winningCandidate = other;
-                } else {
-                    if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
-                        if (!areOverride(winningCandidate, other)) {
-                            throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other + ". First declared in " + winningCandidate.declaringType().getQualifiedName());
-                        }
-                    } else {
-                        // we expect the methods to be ordered such that inherited methods are later in the list
-                        //throw new UnsupportedOperationException();
+            MethodUsage other = applicableMethods.get(i);
+            if (isMoreSpecific(winningCandidate, other)) {
+                // nothing to do
+            } else if (isMoreSpecific(other, winningCandidate)) {
+                winningCandidate = other;
+            } else {
+                if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                    if (!areOverride(winningCandidate, other)) {
+                        throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method: " + winningCandidate + ", " + other + ". First declared in " + winningCandidate.declaringType().getQualifiedName());
                     }
+                } else {
+                    // we expect the methods to be ordered such that inherited methods are later in the list
+                    //throw new UnsupportedOperationException();
                 }
             }
+        }
         return Optional.of(winningCandidate);
     }
 

@@ -21,7 +21,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import java.util.Optional;
-
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.Range;

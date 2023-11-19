@@ -21,11 +21,9 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
-
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
@@ -41,6 +39,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalculator.CsmChild;
+
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
  * to remove or to add and follow by another sequence of elements.
@@ -315,7 +314,7 @@ public class Difference {
         }
         // compute space after the deleted element
         if (startIndex < nodeText.numberOfElements() && isSpaceOrTabElement(nodeText, startIndex)) {
-//			int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
+            //			int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
             for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
                 if (nodeText.getTextElement(i).isNewline()) {
                     break;

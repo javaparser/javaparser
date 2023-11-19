@@ -38,7 +38,6 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.Node;
 
 /**

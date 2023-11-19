@@ -97,11 +97,11 @@ class JavadocParser {
                 return l;
             }
             if (l.length() > (asteriskIndex + 1)) {
-                    char c = l.charAt(asteriskIndex + 1);
-                    if (c == ' ' || c == '\t') {
-                        return l.substring(asteriskIndex + 2);
-                    }
+                char c = l.charAt(asteriskIndex + 1);
+                if (c == ' ' || c == '\t') {
+                    return l.substring(asteriskIndex + 2);
                 }
+            }
             return l.substring(asteriskIndex + 1);
         }).collect(Collectors.toList());
         // lines containing only whitespace are normalized to empty lines

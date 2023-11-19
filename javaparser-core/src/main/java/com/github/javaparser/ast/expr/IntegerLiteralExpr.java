@@ -127,7 +127,6 @@ public class IntegerLiteralExpr extends LiteralStringValueExpr {
      * @return the literal value as a number while respecting different number representations
      */
     public Number asNumber() {
-
         if (Objects.equals(value, MAX_31_BIT_UNSIGNED_VALUE_AS_STRING) && hasUnaryMinusAsParent(this)) {
             return MAX_31_BIT_UNSIGNED_VALUE_AS_LONG;
         }

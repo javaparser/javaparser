@@ -156,30 +156,30 @@ public class ConstructorResolutionLogic {
         ResolvedConstructorDeclaration other = null;
         boolean possibleAmbiguity = false;
         for (int i = 1; i < applicableConstructors.size(); i++) {
-                other = applicableConstructors.get(i);
-                if (isMoreSpecific(winningCandidate, other, typeSolver)) {
-                    possibleAmbiguity = false;
-                } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
-                    possibleAmbiguity = false;
-                    winningCandidate = other;
+            other = applicableConstructors.get(i);
+            if (isMoreSpecific(winningCandidate, other, typeSolver)) {
+                possibleAmbiguity = false;
+            } else if (isMoreSpecific(other, winningCandidate, typeSolver)) {
+                possibleAmbiguity = false;
+                winningCandidate = other;
+            } else {
+                if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
+                    possibleAmbiguity = true;
                 } else {
-                    if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
-                        possibleAmbiguity = true;
-                    } else {
-                        // we expect the methods to be ordered such that inherited methods are later in the list
-                    }
+                    // we expect the methods to be ordered such that inherited methods are later in the list
                 }
-                if (possibleAmbiguity) {
-                    // pick the first exact match if it exists
-                    if (!MethodResolutionLogic.isExactMatch(winningCandidate, argumentsTypes)) {
-                        if (MethodResolutionLogic.isExactMatch(other, argumentsTypes)) {
-                            winningCandidate = other;
-                        } else {
-                            throw new MethodAmbiguityException("Ambiguous constructor call: cannot find a most applicable constructor: " + winningCandidate + ", " + other);
-                        }
+            }
+            if (possibleAmbiguity) {
+                // pick the first exact match if it exists
+                if (!MethodResolutionLogic.isExactMatch(winningCandidate, argumentsTypes)) {
+                    if (MethodResolutionLogic.isExactMatch(other, argumentsTypes)) {
+                        winningCandidate = other;
+                    } else {
+                        throw new MethodAmbiguityException("Ambiguous constructor call: cannot find a most applicable constructor: " + winningCandidate + ", " + other);
                     }
                 }
             }
+        }
         return SymbolReference.solved(winningCandidate);
     }
 

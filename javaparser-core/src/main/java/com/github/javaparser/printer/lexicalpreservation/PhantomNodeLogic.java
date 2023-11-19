@@ -53,8 +53,8 @@ public class PhantomNodeLogic {
             return isPhantomNodeCache.get(node);
         }
         if (node instanceof UnknownType) {
-                return true;
-            }
+            return true;
+        }
         boolean res = (node.getParentNode().isPresent() && node.getParentNode().get().hasRange() && node.hasRange() && !node.getParentNode().get().getRange().get().contains(node.getRange().get()) || inPhantomNode(node, LEVELS_TO_EXPLORE));
         isPhantomNodeCache.put(node, res);
         node.register(cacheCleaner);

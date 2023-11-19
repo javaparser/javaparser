@@ -107,7 +107,6 @@ public final class PositionUtils {
     }
 
     private static Node firstNonAnnotationNode(Node node) {
-
         if (node instanceof ClassOrInterfaceDeclaration) {
             // Modifiers appear before the class name --
             ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node;

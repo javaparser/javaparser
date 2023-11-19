@@ -35,7 +35,6 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.Node;
 
 /**

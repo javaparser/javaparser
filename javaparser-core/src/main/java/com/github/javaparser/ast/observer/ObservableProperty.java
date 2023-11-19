@@ -261,7 +261,7 @@ public enum ObservableProperty {
             }
             Optional<NodeList> opt = (Optional<NodeList>) rawValue;
             if (opt.isPresent()) {
-                    return opt.get();
+                return opt.get();
             }
             return null;
         } catch (ClassCastException e) {

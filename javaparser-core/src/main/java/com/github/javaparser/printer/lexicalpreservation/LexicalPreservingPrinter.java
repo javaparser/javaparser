@@ -26,12 +26,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
-
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DataKey;
@@ -150,8 +148,8 @@ public class LexicalPreservingPrinter {
                     // this case corresponds to the addition of a comment
                     // Find the position of the comment node and put in front of it the [...]
                     int // Find the position of the comment node and put in front of it the [...]
-                            index = //
-                            parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
+                            //
+                            index = parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
                     /* Add the same indentation to the comment as the previous node
                      * for example if we want to add a comment on the body of the method declaration :
                      * Actual code
@@ -506,7 +504,7 @@ public class LexicalPreservingPrinter {
             if (node.getParentNode().get() instanceof VariableDeclarator) {
                 return tokensPreceeding(node.getParentNode().get());
             }
-                return new TextElementIteratorsFactory.EmptyIterator<TokenTextElement>();
+            return new TextElementIteratorsFactory.EmptyIterator<TokenTextElement>();
         }
         return new TextElementIteratorsFactory.CascadingIterator<>(TextElementIteratorsFactory.partialReverseIterator(parentNodeText, index - 1), () -> tokensPreceeding(node.getParentNode().get()));
     }

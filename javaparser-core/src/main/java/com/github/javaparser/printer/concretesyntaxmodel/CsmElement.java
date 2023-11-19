@@ -22,16 +22,15 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 
 import static com.github.javaparser.TokenTypes.eolTokenKind;
 import static com.github.javaparser.TokenTypes.spaceTokenKind;
-
 import java.util.Arrays;
 import java.util.List;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.lexicalpreservation.TextElement;
 import com.github.javaparser.utils.LineSeparator;
+
 public interface CsmElement {
 
     void prettyPrint(Node node, SourcePrinter printer);

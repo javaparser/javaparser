@@ -75,7 +75,6 @@ public class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E>
         return new PeekingIterator<>(iterator);
     }
 
-
     /**
      * Constructor.
      *
@@ -176,18 +175,15 @@ public class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E>
         iterator.remove();
     }
 
-
     @Override
     public boolean hasPrevious() {
         return iterator.hasPrevious();
     }
 
-
     @Override
     public E previous() {
         return iterator.previous();
     }
-
 
     @Override
     public int nextIndex() {
@@ -200,16 +196,15 @@ public class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E>
      * Returns -1 if the listiterator is at the beginning of the list.
      */
     public int currentIndex() {
-        if (!hasPrevious()) return previousIndex();
+        if (!hasPrevious())
+            return previousIndex();
         return nextIndex() - 1;
     }
-
 
     @Override
     public int previousIndex() {
         return iterator.previousIndex();
     }
-
 
     @Override
     public void set(E e) {
@@ -219,7 +214,6 @@ public class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E>
         iterator.set(e);
     }
 
-
     @Override
     public void add(E e) {
         if (slotFilled) {
@@ -227,5 +221,4 @@ public class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E>
         }
         iterator.add(e);
     }
-
 }

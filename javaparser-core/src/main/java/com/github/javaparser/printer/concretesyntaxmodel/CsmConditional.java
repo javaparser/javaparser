@@ -63,23 +63,27 @@ public class CsmConditional implements CsmElement {
     public enum Condition {
 
         IS_EMPTY {
+
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value == null || value.isEmpty();
             }
         }, IS_NOT_EMPTY {
+
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 NodeList<? extends Node> value = property.getValueAsMultipleReference(node);
                 return value != null && !value.isEmpty();
             }
         }, IS_PRESENT {
+
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 return !property.isNullOrNotPresent(node);
             }
         }, FLAG {
+
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 return property.getValueAsBooleanAttribute(node);

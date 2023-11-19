@@ -180,7 +180,6 @@ public enum ResolvedPrimitiveType implements ResolvedType {
      * If any operand is of a reference type, it is subjected to unboxing conversion (§5.1.8).
      */
     public ResolvedPrimitiveType bnp(ResolvedPrimitiveType other) {
-
         if (this == ResolvedPrimitiveType.DOUBLE || other == ResolvedPrimitiveType.DOUBLE) {
             return ResolvedPrimitiveType.DOUBLE;
             // Otherwise, if either operand is of type float, the other is converted to float.

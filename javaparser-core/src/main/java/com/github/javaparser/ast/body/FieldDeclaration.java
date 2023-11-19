@@ -23,10 +23,8 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.Modifier.Keyword;
@@ -264,11 +262,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      */
     private boolean isDeclaredInInterface() {
         Optional<TypeDeclaration> parentType = findAncestor(TypeDeclaration.class);
-        return parentType
-                .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
-                .map(BodyDeclaration::asClassOrInterfaceDeclaration)
-                .map(ClassOrInterfaceDeclaration::isInterface)
-                .orElse(false);
+        return parentType.filter(BodyDeclaration::isClassOrInterfaceDeclaration).map(BodyDeclaration::asClassOrInterfaceDeclaration).map(ClassOrInterfaceDeclaration::isInterface).orElse(false);
     }
 
     @Override

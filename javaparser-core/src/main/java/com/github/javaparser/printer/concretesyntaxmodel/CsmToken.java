@@ -22,7 +22,6 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 
 import static com.github.javaparser.TokenTypes.isEndOfLineToken;
 import static com.github.javaparser.TokenTypes.isWhitespaceButNotEndOfLine;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.Node;
@@ -30,6 +29,7 @@ import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.lexicalpreservation.TextElement;
 import com.github.javaparser.printer.lexicalpreservation.TokenTextElement;
 import com.github.javaparser.utils.LineSeparator;
+
 public class CsmToken implements CsmElement {
 
     private final int tokenType;
@@ -117,8 +117,6 @@ public class CsmToken implements CsmElement {
      */
     @Override
     public boolean isCorrespondingElement(TextElement textElement) {
-        return (textElement instanceof TokenTextElement)
-                && ((TokenTextElement) textElement).getTokenKind() == getTokenType()
-                && ((TokenTextElement) textElement).getText().equals(getContent());
+        return (textElement instanceof TokenTextElement) && ((TokenTextElement) textElement).getTokenKind() == getTokenType() && ((TokenTextElement) textElement).getText().equals(getContent());
     }
 }

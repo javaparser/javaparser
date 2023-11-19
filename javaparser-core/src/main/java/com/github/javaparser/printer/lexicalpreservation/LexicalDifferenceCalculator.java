@@ -21,7 +21,6 @@
 package com.github.javaparser.printer.lexicalpreservation;
 
 import java.util.*;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -38,6 +37,7 @@ import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.*;
 import com.github.javaparser.utils.LineSeparator;
+
 class LexicalDifferenceCalculator {
 
     /**
@@ -92,8 +92,7 @@ class LexicalDifferenceCalculator {
          */
         @Override
         public boolean isCorrespondingElement(TextElement textElement) {
-            return (textElement instanceof ChildTextElement)
-                    && ((ChildTextElement) textElement).getChild() == getChild();
+            return (textElement instanceof ChildTextElement) && ((ChildTextElement) textElement).getChild() == getChild();
         }
 
         @Override

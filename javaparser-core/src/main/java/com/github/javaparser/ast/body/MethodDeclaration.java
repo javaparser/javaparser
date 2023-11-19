@@ -21,10 +21,8 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -46,6 +44,7 @@ import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: {@code class X { public int abc() {return 1;}
  * }}
@@ -110,7 +109,6 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         v.visit(this, arg);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getBody() {
         return Optional.ofNullable(body);
@@ -122,7 +120,6 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
      * @param body the body, can be null
      * @return this, the MethodDeclaration
      */
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setBody(final BlockStmt body) {
         if (body == this.body) {
@@ -136,13 +133,11 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return this;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setType(final Type type) {
         assertNotNull(type);
@@ -294,7 +289,6 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return super.remove(node);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodDeclaration removeBody() {
         return setBody((BlockStmt) null);

@@ -141,7 +141,6 @@ public abstract class Comment extends Node {
 
     @Override
     public boolean remove() {
-
         if (this.commentedNode != null) {
             this.commentedNode.setComment(null);
             return true;

@@ -26,5 +26,4 @@ public interface LookaheadIterator<E> {
      * @throws NoSuchElementException if the iterator is already exhausted according to {@link #hasNext()}
      */
     public E element();
-
 }

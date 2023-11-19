@@ -47,20 +47,13 @@ public final class UpgradeJavaMessage {
      * @param reason The reason why the language level must be upgraded.
      * @param level  The language level that must be configured.
      */
-    UpgradeJavaMessage(
-            final String reason,
-            final ParserConfiguration.LanguageLevel level
-    ) {
+    UpgradeJavaMessage(final String reason, final ParserConfiguration.LanguageLevel level) {
         this.reason = reason;
         this.level = level;
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "%s Pay attention that this feature is supported starting from '%s' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.",
-                this.reason,
-                this.level.toString()
-        );
+        return String.format("%s Pay attention that this feature is supported starting from '%s' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.", this.reason, this.level.toString());
     }
 }
