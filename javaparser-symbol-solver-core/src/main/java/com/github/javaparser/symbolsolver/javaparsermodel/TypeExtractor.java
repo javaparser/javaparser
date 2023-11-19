@@ -630,7 +630,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 		    // if a functional method returns void with a method reference, the return value
 		    // is discarded, so we should not care about type compatibility
 		    // lame example: Arrays.asList(args).forEach(String::getBytes);
-		    if (formalType.isVoid()) }
+		    if (formalType.isVoid()) {
 		        return formalType;
 	    	    }
 
