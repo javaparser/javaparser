@@ -627,6 +627,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                     ResolvedType actualType = facade.toMethodUsage(node, functionalMethod.getParamTypes()).returnType();
                     ResolvedType formalType = functionalMethod.returnType();
 
+		    // if a functional method returns void with a method reference, the return value
+		    // is discarded, so we should not care about type compatibility
+		    // lame example: Arrays.asList(args).forEach(String::getBytes);
+		    if (formalType.isVoid()) }
+		        return formalType;
+	    	    }
+
                     InferenceContext inferenceContext = new InferenceContext(typeSolver);
                     inferenceContext.addPair(formalType, actualType);
                     result = inferenceContext.resolve(inferenceContext.addSingle(result));
