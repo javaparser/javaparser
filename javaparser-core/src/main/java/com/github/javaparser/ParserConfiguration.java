@@ -166,8 +166,12 @@ public class ParserConfiguration {
          * Java 17 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
-        JAVA_17_PREVIEW(new Java17PreviewValidator(), new Java17PostProcessor());
-
+        JAVA_17_PREVIEW(new Java17PreviewValidator(), new Java17PostProcessor()),
+    	/**
+         * Java 18
+         */
+        JAVA_18(new Java18Validator(), new Java18PostProcessor());
+    	
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
          */
