@@ -256,16 +256,9 @@
                     <version>3.3.0</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.eluder.coveralls</groupId>
+                    <groupId>com.github.hazendaz.maven</groupId>
                     <artifactId>coveralls-maven-plugin</artifactId>
-                    <version>4.3.0</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>javax.xml.bind</groupId>
-                            <artifactId>jaxb-api</artifactId>
-                            <version>2.3.1</version>
-                        </dependency>
-                    </dependencies>
+                    <version>4.5.0-M2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
