@@ -145,6 +145,9 @@
     </contributors>
 
     <properties>
+        <!-- Reproducible Builds (auto updates to new timestamp upon release and all builds will be tied to this value) -->
+        <project.build.outputTimestamp>1</project.build.outputTimestamp>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
