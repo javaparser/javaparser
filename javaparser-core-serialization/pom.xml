@@ -56,14 +56,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.json</groupId>
-			<artifactId>javax.json-api</artifactId>
-			<version>1.1.4</version>
+			<groupId>jakarta.json</groupId>
+			<artifactId>jakarta.json-api</artifactId>
+			<version>1.1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish</groupId>
-			<artifactId>javax.json</artifactId>
-			<version>1.1.4</version>
+			<artifactId>jakarta.json</artifactId>
+			<version>1.1.6</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
