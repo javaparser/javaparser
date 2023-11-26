@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.*;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -36,8 +38,6 @@ import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.*;
 import com.github.javaparser.utils.LineSeparator;
-
-import java.util.*;
 
 class LexicalDifferenceCalculator {
 
@@ -71,7 +71,7 @@ class LexicalDifferenceCalculator {
         }
     }
 
-    static class CsmChild implements CsmElement {
+    public static class CsmChild implements CsmElement {
 
         private final Node child;
 
@@ -85,7 +85,16 @@ class LexicalDifferenceCalculator {
 
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("The prettyPrint method is not supported or implemented");
+        }
+
+        /*
+         * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+         */
+        @Override
+        public boolean isCorrespondingElement(TextElement textElement) {
+        	return (textElement instanceof ChildTextElement)
+        			&& ((ChildTextElement)textElement).getChild() == getChild();
         }
 
         @Override
@@ -141,7 +150,7 @@ class LexicalDifferenceCalculator {
     }
 
     /*
-     * Returns a new line token 
+     * Returns a new line token
      */
     private CsmElement getNewLineToken(LineSeparator lineSeparator) {
         return CsmElement.newline(lineSeparator);
@@ -190,7 +199,7 @@ class LexicalDifferenceCalculator {
             if (change instanceof PropertyChange && ((PropertyChange) change).getProperty() == csmSingleReference.getProperty()) {
                 child = (Node) ((PropertyChange) change).getNewValue();
             	if (node instanceof LambdaExpr && child instanceof ExpressionStmt) {
-                    // Same edge-case as in DefaultPrettyPrinterVisitor.visit(LambdaExpr, Void) 
+                    // Same edge-case as in DefaultPrettyPrinterVisitor.visit(LambdaExpr, Void)
             	    child = ((ExpressionStmt) child).getExpression();
             	}
             } else {
@@ -253,7 +262,7 @@ class LexicalDifferenceCalculator {
                             Modifier modifier = (Modifier) value;
                             elements.add(new CsmToken(toToken(modifier)));
                         } else {
-                            throw new UnsupportedOperationException(it.next().getClass().getSimpleName());
+                            throw new UnsupportedOperationException("Not supported value found: " + it.next().getClass().getSimpleName());
                         }
                         if (it.hasNext()) {
                             calculatedSyntaxModelForNode(csmList.getSeparatorPost(), node, elements, change);
@@ -316,7 +325,7 @@ class LexicalDifferenceCalculator {
         } else if (csm instanceof CsmChild) {
             elements.add(csm);
         } else {
-            throw new UnsupportedOperationException(csm.getClass().getSimpleName() + " " + csm);
+            throw new UnsupportedOperationException("Not supported element type: " + csm.getClass().getSimpleName() + " " + csm);
         }
     }
 
@@ -347,7 +356,7 @@ class LexicalDifferenceCalculator {
             case TRANSITIVE:
                 return GeneratedJavaParserConstants.TRANSITIVE;
             default:
-                throw new UnsupportedOperationException(modifier.getKeyword().name());
+                throw new UnsupportedOperationException("Not supported keyword" + modifier.getKeyword().name());
         }
     }
 

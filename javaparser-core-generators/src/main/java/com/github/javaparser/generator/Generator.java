@@ -107,7 +107,7 @@ public abstract class Generator {
             throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
         }
         final CallableDeclaration<?> existingCallable = existingCallables.get(0);
-        callable.setJavadocComment(callable.getJavadocComment().orElse(existingCallable.getJavadocComment().orElse(null)));
+        callable.setJavadocComment(callable.getJavadocComment().orElseGet(() -> existingCallable.getJavadocComment().orElse(null)));
         annotateGenerated(callable);
         containingClassOrInterface.getMembers().replace(existingCallable, callable);
     }

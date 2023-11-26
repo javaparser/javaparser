@@ -86,13 +86,22 @@ public class JavaParserTypeDeclarationAdapter {
                 TypeDeclaration<?> internalType = member.asTypeDeclaration();
                 if (internalType.getName().getId().equals(name) && compareTypeParameters(internalType, typeArguments)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
-                } else if (name.startsWith(wrappedNode.getName().getId() + "." + internalType.getName().getId())) {
+                }
+                if (name.startsWith(wrappedNode.getName().getId() + "." + internalType.getName().getId())) {
                     return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1), typeArguments);
-                } else if (name.startsWith(internalType.getName().getId() + ".")) {
+                }
+                if (name.startsWith(internalType.getName().getId() + ".")) {
                     return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1), typeArguments);
                 }
             }
         }
+
+        // Check class or interface declared in the compilation unit
+        SymbolReference<ResolvedTypeDeclaration> symbolRef = context.getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name, typeArguments);
+        if (symbolRef.isSolved())
+        	return symbolRef;
 
         // Check if is a type parameter
         if (wrappedNode instanceof NodeWithTypeParameters) {
@@ -145,10 +154,7 @@ public class JavaParserTypeDeclarationAdapter {
 			return SymbolReference.solved(type);
 		}
 
-        // Else check parents
-        return context.getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name, typeArguments);
+        return SymbolReference.unsolved();
     }
 
     private boolean isCompositeName(String name) {
@@ -185,9 +191,8 @@ public class JavaParserTypeDeclarationAdapter {
     private boolean compareTypeParameters(TypeDeclaration<?> typeDeclaration, List<ResolvedType> resolvedTypeArguments) {
         if (typeDeclaration instanceof NodeWithTypeParameters) {
             return compareTypeParameters((NodeWithTypeParameters<?>) typeDeclaration, resolvedTypeArguments);
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**
@@ -215,9 +220,8 @@ public class JavaParserTypeDeclarationAdapter {
                     if (internalTypeDeclaration.getName().equals(name)) {
                         if (visible) {
                             return internalTypeDeclaration;
-                        } else {
-                            return null; // FIXME -- Avoid returning null.
                         }
+                        return null;
                     }
                 }
 

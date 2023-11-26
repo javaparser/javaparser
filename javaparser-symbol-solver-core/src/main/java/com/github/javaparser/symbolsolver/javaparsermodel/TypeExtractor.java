@@ -83,7 +83,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     public ResolvedType visit(VariableDeclarator node, Boolean solveLambdas) {
         if (demandParentNode(node) instanceof FieldDeclaration) {
             return facade.convertToUsage(node.getType());
-        } else if (demandParentNode(node) instanceof VariableDeclarationExpr) {
+        }
+        if (demandParentNode(node) instanceof VariableDeclarationExpr) {
             return facade.convertToUsage(node.getType());
         }
         throw new UnsupportedOperationException(demandParentNode(node).getClass().getCanonicalName());
@@ -213,16 +214,17 @@ public class TypeExtractor extends DefaultVisitorAdapter {
      */
     private ResolvedType solveDotExpressionType(ResolvedReferenceTypeDeclaration parentType, FieldAccessExpr node) {
         // Fields and internal type declarations cannot have the same name.
-        // Thus, these checks will always be mutually exclusive.
+
         if (parentType.isEnum() && parentType.asEnum().hasEnumConstant(node.getName().getId())) {
             return parentType.asEnum().getEnumConstant(node.getName().getId()).getType();
-        } else if (parentType.hasField(node.getName().getId())) {
-            return parentType.getField(node.getName().getId()).getType();
-        } else if (parentType.hasInternalType(node.getName().getId())) {
-            return new ReferenceTypeImpl(parentType.getInternalType(node.getName().getId()));
-        } else {
-            throw new UnsolvedSymbolException(node.getName().getId());
         }
+            if (parentType.hasField(node.getName().getId())) {
+            return parentType.getField(node.getName().getId()).getType();
+        }
+            if (parentType.hasInternalType(node.getName().getId())) {
+            return new ReferenceTypeImpl(parentType.getInternalType(node.getName().getId()));
+        }
+        throw new UnsolvedSymbolException(node.getName().getId());
     }
 
     @Override
@@ -333,9 +335,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
         Optional<Value> value = createSolver().solveSymbolAsValue(node.getName().getId(), node);
         if (!value.isPresent()) {
             throw new UnsolvedSymbolException("Solving " + node, node.getName().getId());
-        } else {
-            return value.get().getType();
         }
+        return value.get().getType();
     }
 
     @Override
@@ -404,24 +405,22 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 ResolvedTypeDeclaration resolvedTypeName = resolvedTypeNameRef.getCorrespondingDeclaration();
                 if (resolvedTypeName.isInterface()) {
                     return new ReferenceTypeImpl(resolvedTypeName.asInterface());
-                } else if (resolvedTypeName.isClass()) {
+                }
+                            if (resolvedTypeName.isClass()) {
                     // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
                     return resolvedTypeName.asClass().getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
-                } else {
-                    throw new UnsupportedOperationException(node.getClass().getCanonicalName());
                 }
-            } else {
-                throw new UnsolvedSymbolException(className);
+                throw new UnsupportedOperationException(node.getClass().getCanonicalName());
             }
+            throw new UnsolvedSymbolException(className);
         }
 
         ResolvedTypeDeclaration typeOfNode = facade.getTypeDeclaration(facade.findContainingTypeDeclOrObjectCreationExpr(node));
         if (typeOfNode instanceof ResolvedClassDeclaration) {
             // TODO: Maybe include a presence check? e.g. in the case of `java.lang.Object` there will be no superclass.
             return ((ResolvedClassDeclaration) typeOfNode).getSuperClass().orElseThrow(() -> new RuntimeException("super class unexpectedly empty"));
-        } else {
-            throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException(node.getClass().getCanonicalName());
     }
 
     @Override
@@ -446,7 +445,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
     @Override
     public ResolvedType visit(VariableDeclarationExpr node, Boolean solveLambdas) {
         if (node.getVariables().size() != 1) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("TypeExtractor supports only one variable declaration in a variable declaration expression");
         }
         return facade.convertToUsage(node.getVariables().get(0).getType());
     }
@@ -496,8 +495,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 result = resolveLambda(node, result);
             }
             return result;
-        } else if (demandParentNode(node) instanceof VariableDeclarator)
-        {
+        }
+            if (demandParentNode(node) instanceof VariableDeclarator) {
             VariableDeclarator decExpr = (VariableDeclarator) demandParentNode(node);
             ResolvedType result = decExpr.getType().resolve();
 
@@ -505,7 +504,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 result = resolveLambda(node, result);
             }
             return result;
-        } else if (demandParentNode(node) instanceof AssignExpr) {
+        }
+            if (demandParentNode(node) instanceof AssignExpr) {
             AssignExpr assExpr = (AssignExpr) demandParentNode(node);
             ResolvedType result = assExpr.calculateResolvedType();
 
@@ -513,9 +513,8 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 result = resolveLambda(node, result);
             }
             return result;
-        } else {
-            throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
         }
+        throw new UnsupportedOperationException("The type of a lambda expr depends on the position and its return value");
     }
 
     private ResolvedType resolveLambda(LambdaExpr node, ResolvedType result) {
@@ -564,7 +563,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
 
             } else {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot resolve the type of lambda expression body " + lambdaExpr.getBody());
             }
 
             ResolvedType formalType = functionalMethod.get().returnType();
@@ -635,7 +634,14 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
                 return result;
             }
-            return refMethod.getCorrespondingDeclaration().getParam(pos).getType();
+			// Since variable parameters are represented by an array, in case we deal with
+			// the variadic parameter we have to take into account the base type of the
+			// array.
+			ResolvedMethodDeclaration rmd = refMethod.getCorrespondingDeclaration();
+			if (rmd.hasVariadicParameter() && pos >= rmd.getNumberOfParams() - 1) {
+				return rmd.getLastParam().getType().asArrayType().getComponentType();
+			}
+            return rmd.getParam(pos).getType();
         }
         throw new UnsupportedOperationException("The type of a method reference expr depends on the position and its return value");
     }

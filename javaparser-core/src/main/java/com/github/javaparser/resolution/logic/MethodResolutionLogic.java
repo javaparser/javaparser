@@ -330,6 +330,9 @@ public class MethodResolutionLogic {
                 if (!actualParam.isTypeVariable() || !actualParam.asTypeParameter().getName().equals(expectedParamName)) {
                     return matchTypeVariable(expectedParam.asTypeVariable(), actualParam, matchedParameters);
                 }
+                // actualParam is a TypeVariable and actualParam has the same name as expectedParamName
+                // We should definitely consider that types are assignable
+                return true;
             } else if (expectedParam.isReferenceType()) {
                 if (actualParam.isTypeVariable()) {
                     return matchTypeVariable(actualParam.asTypeVariable(), expectedParam, matchedParameters);
@@ -337,15 +340,22 @@ public class MethodResolutionLogic {
                 if (!expectedParam.equals(actualParam)) {
                     return false;
                 }
-            } else if (expectedParam.isWildcard()) {
+            }
+            if (expectedParam.isWildcard()) {
                 if (expectedParam.asWildcard().isExtends()) {
-                    return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actual, matchedParameters);
+                	// trying to compare with unbounded wildcard type parameter <?>
+                	if (actualParam.isWildcard() && !actualParam.asWildcard().isBounded()) {
+                		return true;
+                	}
+                	if (actualParam.isTypeVariable()) {
+                        return matchTypeVariable(actualParam.asTypeVariable(), expectedParam.asWildcard().getBoundedType(), matchedParameters);
+                    }
+                    return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actualParam, matchedParameters);
                 }
                 // TODO verify super bound
                 return true;
-            } else {
-                throw new UnsupportedOperationException(expectedParam.describe());
             }
+            throw new UnsupportedOperationException(expectedParam.describe());
         }
         return true;
     }
@@ -356,7 +366,8 @@ public class MethodResolutionLogic {
             ResolvedType matchedParameter = matchedParameters.get(typeParameterName);
             if (matchedParameter.isAssignableBy(type)) {
                 return true;
-            } else if (type.isAssignableBy(matchedParameter)) {
+            }
+            if (type.isAssignableBy(matchedParameter)) {
                 // update matchedParameters to contain the more general type
                 matchedParameters.put(typeParameterName, type);
                 return true;
@@ -823,9 +834,9 @@ public class MethodResolutionLogic {
         }
         if (applicableMethods.size() == 1) {
             return Optional.of(applicableMethods.get(0));
-        } else {
-            MethodUsage winningCandidate = applicableMethods.get(0);
-            for (int i = 1; i < applicableMethods.size(); i++) {
+        }
+        MethodUsage winningCandidate = applicableMethods.get(0);
+        for (int i = 1; i < applicableMethods.size(); i++) {
                 MethodUsage other = applicableMethods.get(i);
                 if (isMoreSpecific(winningCandidate, other)) {
                     // nothing to do
@@ -842,8 +853,7 @@ public class MethodResolutionLogic {
                     }
                 }
             }
-            return Optional.of(winningCandidate);
-        }
+        return Optional.of(winningCandidate);
     }
 
     private static boolean areOverride(MethodUsage winningCandidate, MethodUsage other) {

@@ -66,9 +66,8 @@ public class TypeInference {
         Optional<InstantiationSet> instantiationSetOpt = typeInference.instantiationInference(call, methodDeclaration);
         if (instantiationSetOpt.isPresent()) {
             return instantiationSetToMethodUsage(methodDeclaration, instantiationSetOpt.get());
-        } else {
-            throw new IllegalArgumentException();
         }
+        throw new IllegalArgumentException();
     }
 
     ///

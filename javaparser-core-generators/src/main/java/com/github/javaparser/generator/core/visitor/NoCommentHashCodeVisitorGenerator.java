@@ -62,8 +62,8 @@ public class NoCommentHashCodeVisitorGenerator extends VisitorGenerator {
                     if (propertyMetaModels.size() == 1) {
                         builder.append("0");
                         break;
-                    } else
-                        continue;
+                    }
+                    continue;
                 }
                 // Is this field another AST node? Visit it.
                 if (field.getNodeReference().isPresent()) {

@@ -127,7 +127,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveClassFieldThroughThis() {
         // configure symbol solver before parsing
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("AccessClassMemberThroughThis");
@@ -149,7 +149,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveClassFieldThroughSuper() {
         // configure symbol solver before parsing
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("AccessThroughSuper");
@@ -172,7 +172,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveClassFieldOfClassExtendingUnknownClass1() {
         // configure symbol solver before parsing
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
@@ -194,7 +194,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveClassFieldOfClassExtendingUnknownClass2() {
         // configure symbol solver before parsing
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
@@ -216,7 +216,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
     @Test
     void resolveInheritedFieldFromInterface() {
         // configure symbol solver before parsing
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         // parse compilation unit and get field access expression
         CompilationUnit cu = parseSample("ReflectionTypeSolverFieldFromInterfaceResolution");

@@ -61,7 +61,7 @@ class MethodsResolutionTest extends AbstractResolutionTest {
     @Test
     void testConsistentMethodResultion() {
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("PlatformTestUtil");
         ClassOrInterfaceDeclaration classDeclaration = Navigator.demandClass(cu, "PlatformTestUtil");

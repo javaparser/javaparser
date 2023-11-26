@@ -2,11 +2,11 @@ package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOError;
 import java.io.IOException;
 import java.io.Serializable;
-import java.rmi.AlreadyBoundException;
-import java.rmi.activation.UnknownGroupException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,8 +16,10 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -145,11 +147,11 @@ class LeastUpperBoundTest {
     @Test
     public void lub_approximation_with_complexe_inheritance() {
         ResolvedType expected = type(Exception.class.getCanonicalName());
-        // java.lang.Object/java.lang.Throwable/java.lang.Exception/java.rmi.AlreadyBoundException
-        ResolvedType alreadyBoundException = type(AlreadyBoundException.class.getCanonicalName());
-        // java.lang.Object//java.lang.Throwable/java.lang.Exception/java.rmi.activation.ActivationException/java.rmi.activation.UnknownGroupException
-        ResolvedType unknownGroupException = type(UnknownGroupException.class.getCanonicalName());
-        ResolvedType lub = leastUpperBound(alreadyBoundException, unknownGroupException);
+        // java.lang.Object/java.lang.Throwable/java.lang.Exception/java.net.URISyntaxException
+        ResolvedType uriSyntaxException = type(URISyntaxException.class.getCanonicalName());
+        // java.lang.Object//java.lang.Throwable/java.lang.Exception/java.io.IOException/java.io.FileNotFoundException
+        ResolvedType fileNotFoundException = type(FileNotFoundException.class.getCanonicalName());
+        ResolvedType lub = leastUpperBound(uriSyntaxException, fileNotFoundException);
         assertEquals(expected, lub);
     }
 
@@ -175,6 +177,21 @@ class LeastUpperBoundTest {
         ResolvedType expected = type(String.class.getCanonicalName());
         ResolvedType lub = leastUpperBound(nullType, stringType);
         assertEquals(expected, lub);
+    }
+
+    @Test
+    public void lub_of_enum() {
+    	ResolvedType type = type("java.math.RoundingMode");
+
+        ResolvedReferenceTypeDeclaration typeDeclaration = type.asReferenceType().getTypeDeclaration().get();
+
+		List<ResolvedType> constanteTypes = typeDeclaration.asEnum().getEnumConstants().stream()
+				.map(enumConst -> enumConst.getType()).collect(Collectors.toList());
+
+        ResolvedType expected = constanteTypes.get(0);
+
+        ResolvedType lub = leastUpperBound(constanteTypes.get(0), constanteTypes.get(1));
+        assertEquals(expected.asReferenceType().describe(), lub.asReferenceType().describe());
     }
 
     @Test
@@ -382,6 +399,15 @@ class LeastUpperBoundTest {
         CompilationUnit tree = treeOf(lines);
         List<ResolvedType> results = Lists.newLinkedList();
         for (ClassOrInterfaceDeclaration classTree : tree.findAll(ClassOrInterfaceDeclaration.class)) {
+            results.add(new ReferenceTypeImpl(classTree.resolve()));
+        }
+        return results;
+    }
+
+    private List<ResolvedType> declaredEnumTypes(String... lines) {
+        CompilationUnit tree = treeOf(lines);
+        List<ResolvedType> results = Lists.newLinkedList();
+        for (EnumDeclaration classTree : tree.findAll(EnumDeclaration.class)) {
             results.add(new ReferenceTypeImpl(classTree.resolve()));
         }
         return results;

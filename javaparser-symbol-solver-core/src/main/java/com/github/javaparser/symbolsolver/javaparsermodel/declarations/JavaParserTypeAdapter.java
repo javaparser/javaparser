@@ -21,14 +21,20 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.nodeTypes.NodeWithMembers;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithTypeParameters;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedAnnotationDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
@@ -39,12 +45,10 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
-import java.util.*;
-
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T>> {
+public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T> & NodeWithAnnotations<T>> {
 
     private T wrappedNode;
     private TypeSolver typeSolver;
@@ -66,9 +70,8 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
-        } else {
-            return containerName + "." + wrappedNode.getName().getId();
         }
+        return containerName + "." + wrappedNode.getName().getId();
     }
 
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
@@ -89,9 +92,8 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         if (type.isReferenceType()) {
             ResolvedReferenceTypeDeclaration other = typeSolver.solveType(type.describe());
             return isAssignableBy(other);
-        } else {
-            throw new UnsupportedOperationException();
         }
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -122,30 +124,31 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
                             return SymbolReference.solved(new JavaParserInterfaceDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
-                        } else {
-                            return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
                         }
-                    } else if (internalType instanceof EnumDeclaration) {
-                        return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver));
-                    } else if (internalType instanceof AnnotationDeclaration) {
-                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
-                    } else {
-                        throw new UnsupportedOperationException();
+                        return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
                     }
-                } else if (name.startsWith(prefix) && name.length() > prefix.length()) {
+                                    if (internalType instanceof EnumDeclaration) {
+                        return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver));
+                    }
+                                    if (internalType instanceof AnnotationDeclaration) {
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
+                    }
+                    throw new UnsupportedOperationException();
+                }
+                if (name.startsWith(prefix) && name.length() > prefix.length()) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
                             return new JavaParserInterfaceDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()));
-                        } else {
-                            return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()));
                         }
-                    } else if (internalType instanceof EnumDeclaration) {
-                        return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
-                    } else if (internalType instanceof AnnotationDeclaration) {
-                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
-                    } else {
-                        throw new UnsupportedOperationException();
+                        return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()));
                     }
+                                    if (internalType instanceof EnumDeclaration) {
+                        return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
+                    }
+                                    if (internalType instanceof AnnotationDeclaration) {
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
+                    }
+                    throw new UnsupportedOperationException();
                 }
             }
         }
@@ -155,15 +158,16 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return wrappedNode
                 .getParentNode()
+                .filter(parentNode -> !(parentNode instanceof CompilationUnit))
                 .map(node -> node.getSymbolResolver().toTypeDeclaration(node));
     }
-    
+
     public List<ResolvedFieldDeclaration> getFieldsForDeclaredVariables() {
         List<ResolvedFieldDeclaration> fields = new ArrayList<>();
         if (wrappedNode.getMembers() != null) {
             for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
-                if (member instanceof com.github.javaparser.ast.body.FieldDeclaration) {
-                    com.github.javaparser.ast.body.FieldDeclaration field = (com.github.javaparser.ast.body.FieldDeclaration) member;
+                if (member.isFieldDeclaration()) {
+                    FieldDeclaration field = member.asFieldDeclaration();
                     for (VariableDeclarator vd : field.getVariables()) {
                         fields.add(new JavaParserFieldDeclaration(vd, typeSolver));
                     }
@@ -171,6 +175,15 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
             }
         }
         return fields;
+    }
+
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+    	return wrappedNode.getAnnotations().stream()
+    		.map(annotation -> annotation.resolve())
+    		.collect(Collectors.toSet());
     }
 
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {

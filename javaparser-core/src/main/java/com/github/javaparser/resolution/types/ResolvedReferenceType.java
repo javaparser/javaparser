@@ -346,18 +346,19 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      */
     public abstract Set<ResolvedFieldDeclaration> getDeclaredFields();
 
+	/*
+	 * A class or interface whose declaration has one or more type parameters is a
+	 * generic class or interface [JLS, 8.1.2, 9.1.2]. For example, the List
+	 * interface has a single type parameter, E, representing its element type.
+	 * A raw type, is the name of the generic type used without any accompanying type
+	 * parameters [JLS, 4.8]. For example, the raw type corresponding to List<E> is
+	 * List.
+	 */
     public boolean isRawType() {
         if (!typeDeclaration.getTypeParameters().isEmpty()) {
             if (typeParametersMap().isEmpty()) {
                 return true;
             }
-            for (String name : typeParametersMap().getNames()) {
-                Optional<ResolvedType> value = typeParametersMap().getValueBySignature(name);
-                if (!value.isPresent() || !value.get().isTypeVariable() || !value.get().asTypeVariable().qualifiedName().equals(name)) {
-                    return false;
-                }
-            }
-            return true;
         }
         return false;
     }
@@ -470,9 +471,11 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
                             List<ResolvedType> thisBounds = thisParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
                             List<ResolvedType> otherBounds = otherParam.asTypeVariable().asTypeParameter().getBounds().stream().map(ResolvedTypeParameterDeclaration.Bound::getType).collect(Collectors.toList());
                             return thisBounds.size() == otherBounds.size() && otherBounds.containsAll(thisBounds);
-                        } else if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
+                        }
+                                            if (!(thisParam instanceof ResolvedTypeVariable) && otherParam instanceof ResolvedTypeVariable) {
                             return compareConsideringVariableTypeParameters(thisParam, (ResolvedTypeVariable) otherParam);
-                        } else if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
+                        }
+                        if (thisParam instanceof ResolvedTypeVariable && !(otherParam instanceof ResolvedTypeVariable)) {
                             return compareConsideringVariableTypeParameters(otherParam, (ResolvedTypeVariable) thisParam);
                         }
                         return false;

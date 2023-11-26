@@ -104,13 +104,14 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final ClassOrInterfaceDeclaration n, final Object arg) {
         NodeList<ClassOrInterfaceType> extendedTypes = cloneList(n.getExtendedTypes(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = cloneList(n.getImplementedTypes(), arg);
+        NodeList<ClassOrInterfaceType> permittedTypes = cloneList(n.getPermittedTypes(), arg);
         NodeList<TypeParameter> typeParameters = cloneList(n.getTypeParameters(), arg);
         NodeList<BodyDeclaration<?>> members = cloneList(n.getMembers(), arg);
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, n.isInterface(), name, typeParameters, extendedTypes, implementedTypes, members);
+        ClassOrInterfaceDeclaration r = new ClassOrInterfaceDeclaration(n.getTokenRange().orElse(null), modifiers, annotations, n.isInterface(), name, typeParameters, extendedTypes, implementedTypes, permittedTypes, members);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -43,9 +46,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -116,6 +116,14 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
+    }
+
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return javaParserTypeAdapter.getDeclaredAnnotations();
     }
 
     @Override
@@ -232,7 +240,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                                 public ResolvedTypeDeclaration declaringType() {
                                     return f.declaringType();
                                 }
-                                
+
                                 @Override
                                 public Optional<Node> toAst() {
                                     return f.toAst();
@@ -240,7 +248,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
                             });
                         })
                 );
-        
+
         return fields;
     }
 
@@ -333,11 +341,10 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         if (this.wrappedNode.getTypeParameters() == null) {
             return Collections.emptyList();
-        } else {
-            return this.wrappedNode.getTypeParameters().stream().map(
+        }
+        return this.wrappedNode.getTypeParameters().stream().map(
                     (tp) -> new JavaParserTypeParameter(tp, typeSolver)
             ).collect(Collectors.toList());
-        }
     }
 
     /**

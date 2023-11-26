@@ -143,15 +143,15 @@ public abstract class Comment extends Node {
 
     @Override
     public boolean remove() {
-        // the other are orphan comments and remove should work with them
+
         if (this.commentedNode != null) {
             this.commentedNode.setComment(null);
             return true;
-        } else if (this.getParentNode().isPresent()) {
-            return this.getParentNode().get().removeOrphanComment(this);
-        } else {
-            return false;
         }
+            if (this.getParentNode().isPresent()) {
+            return this.getParentNode().get().removeOrphanComment(this);
+        }
+        return false;
     }
 
     @Override

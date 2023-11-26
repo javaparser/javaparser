@@ -141,9 +141,8 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     public Optional<SimpleName> getName() {
         if (pattern == null) {
             return Optional.empty();
-        } else {
-            return Optional.of(pattern.getName());
         }
+        return Optional.of(pattern.getName());
     }
 
     @Override

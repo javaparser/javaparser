@@ -170,6 +170,9 @@ public class TokenTypes {
             case EXPORTS:
             case PROVIDES:
             case TRANSITIVE:
+            case PERMITS:
+            case SEALED:
+            case NON_SEALED:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:

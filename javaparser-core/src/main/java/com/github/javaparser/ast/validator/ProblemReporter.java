@@ -23,9 +23,8 @@ package com.github.javaparser.ast.validator;
 import com.github.javaparser.Problem;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
-
+import com.github.javaparser.ast.validator.language_level_validations.UpgradeJavaMessage;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -45,8 +44,18 @@ public class ProblemReporter {
      * @param message description of the problem
      * @param node the node in which the problem occurred, used to find the Range of the problem.
      */
+    public void report(final NodeWithTokenRange<?> node, final UpgradeJavaMessage message, final Object... args) {
+        this.report(node.getTokenRange().orElse(null), message.toString(), args);
+    }
+
+    /**
+     * Report a problem.
+     *
+     * @param message description of the problem
+     * @param node the node in which the problem occurred, used to find the Range of the problem.
+     */
     public void report(NodeWithTokenRange<?> node, String message, Object... args) {
-        report(node.getTokenRange().orElse(null), message, args);
+        this.report(node.getTokenRange().orElse(null), message, args);
     }
 
     public void report(TokenRange range, String message, Object... args) {
