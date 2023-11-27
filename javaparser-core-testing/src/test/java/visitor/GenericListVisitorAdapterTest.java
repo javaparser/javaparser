@@ -477,6 +477,7 @@ class GenericListVisitorAdapterTest {
         // When
         Mockito.when(node.getExtendedTypes()).thenReturn(mock(NodeList.class));
         Mockito.when(node.getImplementedTypes()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getPermittedTypes()).thenReturn(mock(NodeList.class));
         Mockito.when(node.getTypeParameters()).thenReturn(mock(NodeList.class));
         Mockito.when(node.getMembers()).thenReturn(mock(NodeList.class));
         Mockito.when(node.getModifiers()).thenReturn(mock(NodeList.class));
@@ -494,6 +495,7 @@ class GenericListVisitorAdapterTest {
         InOrder order = Mockito.inOrder(node);
         order.verify(node).getExtendedTypes();
         order.verify(node).getImplementedTypes();
+        order.verify(node).getPermittedTypes();
         order.verify(node).getTypeParameters();
         order.verify(node).getMembers();
         order.verify(node).getModifiers();
