@@ -2498,4 +2498,37 @@ class GenericListVisitorAdapterTest {
         order.verifyNoMoreInteractions();
     }
 
+    @Test
+    void visit_CompactConstructorDeclaration () {
+        // Given
+        Object argument = mock(Object.class);
+        CompactConstructorDeclaration  node = mock(CompactConstructorDeclaration .class);
+
+        // When
+        Mockito.when(node.getBody()).thenReturn(mock(BlockStmt.class));
+        Mockito.when(node.getModifiers()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getName()).thenReturn(mock(SimpleName.class));
+        Mockito.when(node.getThrownExceptions()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getTypeParameters()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getAnnotations()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getComment()).thenReturn(Optional.of(mock(Comment.class)));
+
+        // Then
+        List<Object> result = visitor.visit(node, argument);
+
+        // Assert
+        assertNotNull(result);
+
+        // Verify
+        InOrder order = Mockito.inOrder(node);
+        order.verify(node).getBody();
+        order.verify(node).getModifiers();
+        order.verify(node).getName();
+        order.verify(node).getThrownExceptions();
+        order.verify(node).getTypeParameters();
+        order.verify(node).getAnnotations();
+        order.verify(node, times(2)).getComment();
+        order.verifyNoMoreInteractions();
+    }
+
 }
