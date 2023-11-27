@@ -47,7 +47,14 @@ public interface ResolvedTypeParameterValueProvider {
             if (typeParameter.declaredOnType()) {
                 Optional<ResolvedType> typeParam = typeParamValue(typeParameter);
                 if (typeParam.isPresent()) {
-                    type = typeParam.get();
+                	ResolvedType resolvedTypeParam = typeParam.get();
+                	// Try to avoid an infinite loop when the type is a wildcard type bounded by a type variable like "? super T" 
+                	if (resolvedTypeParam.isWildcard() && 
+                			( !resolvedTypeParam.asWildcard().equals(ResolvedWildcard.UNBOUNDED)
+                					&& type.equals(resolvedTypeParam.asWildcard().getBoundedType()))) {
+                		return type;
+                	}
+                    type = resolvedTypeParam;
                 }
             }
         }
