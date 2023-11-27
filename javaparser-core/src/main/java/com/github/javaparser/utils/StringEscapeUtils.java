@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -79,6 +79,7 @@ public final class StringEscapeUtils {
         return UNESCAPE_JAVA_TEXT_BLOCK.translate(input);
     }
 
+    // TODO do we need to integrate /s escape sequence because there is a compilation error?
     private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(new String[][] { { "\\b", "\b" }, { "\\n", "\n" }, { "\\t", "\t" }, { "\\f", "\f" }, { "\\r", "\r" } });
 
     private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(new String[][] { { "\b", "\\b" }, { "\n", "\\n" }, { "\t", "\\t" }, { "\f", "\\f" }, { "\r", "\\r" } });

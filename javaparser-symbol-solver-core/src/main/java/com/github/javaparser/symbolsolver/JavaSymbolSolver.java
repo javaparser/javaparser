@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
@@ -38,8 +40,6 @@ import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * This implementation of the SymbolResolver wraps the functionality of the library to make them easily usable
@@ -293,7 +293,7 @@ public class JavaSymbolSolver implements SymbolResolver {
     public ResolvedType calculateType(Expression expression) {
         return JavaParserFacade.get(typeSolver).getType(expression);
     }
-    
+
     @Override
     public ResolvedReferenceTypeDeclaration toTypeDeclaration(Node node) {
         if (node instanceof ClassOrInterfaceDeclaration) {
@@ -312,7 +312,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             return new JavaParserAnnotationDeclaration((AnnotationDeclaration) node, typeSolver);
         }
         if (node instanceof EnumConstantDeclaration) {
-            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode((EnumConstantDeclaration) node), typeSolver);
+            return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(node), typeSolver);
         }
         throw new IllegalArgumentException("Cannot get a reference type declaration from " + node.getClass().getCanonicalName());
     }

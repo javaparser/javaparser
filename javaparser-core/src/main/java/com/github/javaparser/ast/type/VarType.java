@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -183,8 +183,7 @@ public class VarType extends Type {
         node = node.get().getParentNode();
         if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
             return Optional.empty();
-        } else {
-            return Optional.of((ForEachStmt)node.get());
         }
+        return Optional.of((ForEachStmt)node.get());
     }
 }

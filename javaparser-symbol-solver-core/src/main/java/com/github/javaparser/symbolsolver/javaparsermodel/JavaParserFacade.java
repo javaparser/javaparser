@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,13 @@
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
+
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+import static com.github.javaparser.resolution.model.SymbolReference.solved;
+import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
@@ -47,13 +54,6 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-import static com.github.javaparser.resolution.model.SymbolReference.solved;
-import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
-
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
  *
@@ -71,7 +71,7 @@ public class JavaParserFacade {
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
 
     private static final String JAVA_LANG_STRING = String.class.getCanonicalName();
-    
+
     /**
      * Note that the addition of the modifier {@code synchronized} is specific and directly in response to issue #2668.
      * <br>This <strong>MUST NOT</strong> be misinterpreted as a signal that JavaParser is safe to use within a multi-threaded environment.
@@ -242,6 +242,9 @@ public class JavaParserFacade {
                                 List<LambdaArgumentTypePlaceholder> placeholders) {
         int i = 0;
         for (Expression parameterValue : args) {
+            while (parameterValue instanceof EnclosedExpr) {
+                parameterValue = ((EnclosedExpr) parameterValue).getInner();
+            }
             if (parameterValue.isLambdaExpr() || parameterValue.isMethodReferenceExpr()) {
                 LambdaArgumentTypePlaceholder placeholder = new LambdaArgumentTypePlaceholder(i);
                 argumentTypes.add(placeholder);
@@ -289,9 +292,8 @@ public class JavaParserFacade {
         if (typeDeclarationSymbolReference.isSolved()) {
             ResolvedAnnotationDeclaration annotationDeclaration = (ResolvedAnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
             return solved(annotationDeclaration);
-        } else {
-            return unsolved();
         }
+        return unsolved();
     }
 
     public SymbolReference<ResolvedValueDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
@@ -367,21 +369,20 @@ public class JavaParserFacade {
                 Log.trace("getType on %s  -> %s", () -> node, () -> res);
             }
             return node.getData(TYPE_WITH_LAMBDAS_RESOLVED);
-        } else {
-            Optional<ResolvedType> res = find(TYPE_WITH_LAMBDAS_RESOLVED, node);
-            if (res.isPresent()) {
+        }
+        Optional<ResolvedType> res = find(TYPE_WITH_LAMBDAS_RESOLVED, node);
+        if (res.isPresent()) {
                 return res.get();
             }
-            res = find(TYPE_WITHOUT_LAMBDAS_RESOLVED, node);
-            if (!res.isPresent()) {
+        res = find(TYPE_WITHOUT_LAMBDAS_RESOLVED, node);
+        if (!res.isPresent()) {
                 ResolvedType resType = getTypeConcrete(node, solveLambdas);
                 node.setData(TYPE_WITHOUT_LAMBDAS_RESOLVED, resType);
                 Optional<ResolvedType> finalRes = res;
                 Log.trace("getType on %s (no solveLambdas) -> %s", () -> node, () -> finalRes);
                 return resType;
             }
-            return res.get();
-        }
+        return res.get();
     }
 
     private Optional<ResolvedType> find(DataKey<ResolvedType> dataKey, Node node) {
@@ -399,9 +400,9 @@ public class JavaParserFacade {
         }
 
         Optional<MethodUsage> result;
-        Set<MethodUsage> allMethods = typeOfScope.asReferenceType().getTypeDeclaration()
-                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
-                .getAllMethods();
+        ResolvedReferenceTypeDeclaration resolvedTypdeDecl = typeOfScope.asReferenceType().getTypeDeclaration()
+                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+        Set<MethodUsage> allMethods = resolvedTypdeDecl.getAllMethods();
 
         if (scope.isTypeExpr()) {
             // static methods should match all params
@@ -557,10 +558,10 @@ public class JavaParserFacade {
             if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration) {
                     return parent;
-                } else {
-                    detachFlag = true;
                 }
-            } else if (parent instanceof ObjectCreationExpr) {
+                detachFlag = true;
+            }
+            if (parent instanceof ObjectCreationExpr) {
                 if (detachFlag) {
                     return parent;
                 }
@@ -580,10 +581,10 @@ public class JavaParserFacade {
             if (parent instanceof BodyDeclaration) {
                 if (parent instanceof TypeDeclaration && ((TypeDeclaration<?>) parent).getFullyQualifiedName().get().endsWith(className)) {
                     return parent;
-                } else {
-                    detachFlag = true;
                 }
-            } else if (parent instanceof ObjectCreationExpr && ((ObjectCreationExpr) parent).getType().getName().asString().equals(className)) {
+                detachFlag = true;
+            }
+            if (parent instanceof ObjectCreationExpr && ((ObjectCreationExpr) parent).getType().getName().asString().equals(className)) {
                 if (detachFlag) {
                     return parent;
                 }
@@ -626,9 +627,8 @@ public class JavaParserFacade {
         node = node.get().getParentNode();
         if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
             return Optional.empty();
-        } else {
-            return Optional.of((ForEachStmt)node.get());
         }
+        return Optional.of((ForEachStmt)node.get());
     }
 
     public ResolvedType convert(Type type, Node node) {
@@ -704,7 +704,7 @@ public class JavaParserFacade {
      * @param clazz The class to be converted.
      *
      * @return The class resolved.
-     * 
+     *
      * @deprecated instead consider SymbolSolver.classToResolvedType(Class<?> clazz)
      */
     @Deprecated

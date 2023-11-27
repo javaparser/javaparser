@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,7 +40,7 @@ public interface NodeWithDeclaration {
 
     /**
      * As {@link NodeWithDeclaration#getDeclarationAsString(boolean, boolean, boolean)} including
-     * the parameters with both type and name.
+     * the parameters with both type and name. The method declaration is returned without comment.
      *
      * @param includingModifiers flag to include the modifiers (if present) in the string produced
      * @param includingThrows flag to include the throws clause (if present) in the string produced

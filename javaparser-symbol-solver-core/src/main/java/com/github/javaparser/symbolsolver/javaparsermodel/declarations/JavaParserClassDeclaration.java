@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
@@ -43,9 +46,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -104,7 +104,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     ///
     /// Public methods: fields
     ///
-    
+
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
@@ -143,7 +143,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
                                 public ResolvedTypeDeclaration declaringType() {
                                     return f.declaringType();
                                 }
-                                
+
                                 @Override
                                 public Optional<Node> toAst() {
                                     return f.toAst();
@@ -189,16 +189,15 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        if(isJavaLangObject()) {
+        if (isJavaLangObject()) {
             // If this is java.lang.Object, it has no super class.
             return Optional.empty();
-        } else if (wrappedNode.getExtendedTypes().isEmpty()) {
+        }
+        if (wrappedNode.getExtendedTypes().isEmpty()) {
             // All objects implicitly extend java.lang.Object -- inject it here (only when this isn't java.lang.Object)
             return Optional.of(object());
-        } else {
-            // Otherwise, return the first ancestor (n.b.: we know it's not empty due to check above).
-            return Optional.of(toReferenceType(wrappedNode.getExtendedTypes().getFirst().get()));
         }
+        return Optional.of(toReferenceType(wrappedNode.getExtendedTypes().getFirst().get()));
     }
 
     @Override
@@ -221,6 +220,14 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
+    }
+
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return javaParserTypeAdapter.getDeclaredAnnotations();
     }
 
     @Override

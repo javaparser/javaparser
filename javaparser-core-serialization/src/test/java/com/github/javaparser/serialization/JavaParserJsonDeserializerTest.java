@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -37,10 +37,12 @@ import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.utils.LineSeparator;
+
+import jakarta.json.Json;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
-import javax.json.Json;
 import java.io.StringReader;
 
 import static com.github.javaparser.StaticJavaParser.*;
@@ -51,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserJsonDeserializerTest {
     private final JavaParserJsonDeserializer deserializer = new JavaParserJsonDeserializer();
-
+    
     @Test
     void simpleTest() {
         CompilationUnit cu = parse("public class X{} class Z{}");

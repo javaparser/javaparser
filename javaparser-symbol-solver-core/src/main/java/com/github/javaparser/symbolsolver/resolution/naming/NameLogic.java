@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -78,12 +78,11 @@ public class NameLogic {
         if (node instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) node;
             return isAName(fieldAccessExpr.getScope());
-        } else {
-            return node instanceof SimpleName ||
+        }
+        return node instanceof SimpleName ||
                     node instanceof Name ||
                     node instanceof ClassOrInterfaceType ||
                     node instanceof NameExpr;
-        }
     }
 
     private static Node getQualifier(Node node) {
@@ -322,14 +321,13 @@ public class NameLogic {
         NameCategory first = syntacticClassificationAccordingToContext(name);
 
         // Second, a name that is initially classified by its context as an AmbiguousName or as a PackageOrTypeName is
-        // then reclassified to be a PackageName, TypeName, or ExpressionName.
+
         if (first.isNeedingDisambiguation()) {
             NameCategory second = reclassificationOfContextuallyAmbiguousNames(name, first, typeSolver);
             assert !second.isNeedingDisambiguation();
             return second;
-        } else {
-            return first;
         }
+        return first;
     }
 
     /**
@@ -364,9 +362,8 @@ public class NameLogic {
         if (isSimpleName(name)) {
             if (JavaParserFactory.getContext(name, typeSolver).solveType(nameAsString(name)).isSolved()) {
                 return NameCategory.TYPE_NAME;
-            } else {
-                return NameCategory.PACKAGE_NAME;
             }
+            return NameCategory.PACKAGE_NAME;
         }
 
         // 6.5.4.2. Qualified PackageOrTypeNames
@@ -381,9 +378,8 @@ public class NameLogic {
         if (isQualifiedName(name)) {
             if (JavaParserFactory.getContext(name, typeSolver).solveType(nameAsString(name)).isSolved()) {
                 return NameCategory.TYPE_NAME;
-            } else {
-                return NameCategory.PACKAGE_NAME;
             }
+            return NameCategory.PACKAGE_NAME;
         }
 
         throw new UnsupportedOperationException("This is unexpected: the name is neither simple or qualified");
@@ -410,9 +406,8 @@ public class NameLogic {
         if (leftNameCategory == NameCategory.PACKAGE_NAME) {
             if (typeSolver.hasType(nameAsString(nameNode))) {
                 return NameCategory.TYPE_NAME;
-            } else {
-                return NameCategory.PACKAGE_NAME;
             }
+            return NameCategory.PACKAGE_NAME;
         }
 
         // * If the name to the left of the "." is reclassified as a TypeName, then:
@@ -442,12 +437,10 @@ public class NameLogic {
                         return NameCategory.TYPE_NAME;
                     }
                     return NameCategory.COMPILATION_ERROR;
-                } else {
-                    throw new UnsupportedOperationException("The name is a type but it has been resolved to something that is not a reference type");
                 }
-            } else {
-                throw new UnsolvedSymbolException("Unable to solve context type: " + NameLogic.nameAsString(leftName));
+                throw new UnsupportedOperationException("The name is a type but it has been resolved to something that is not a reference type");
             }
+            throw new UnsolvedSymbolException("Unable to solve context type: " + NameLogic.nameAsString(leftName));
         }
 
         // * If the name to the left of the "." is reclassified as an ExpressionName, then this AmbiguousName is
@@ -983,23 +976,25 @@ public class NameLogic {
         }
         if (name instanceof Name) {
             return ((Name) name).asString();
-        } else if (name instanceof SimpleName) {
+        }
+            if (name instanceof SimpleName) {
             return ((SimpleName) name).getIdentifier();
-        } else if (name instanceof ClassOrInterfaceType) {
+        }
+            if (name instanceof ClassOrInterfaceType) {
             return ((ClassOrInterfaceType) name).asString();
-        } else if (name instanceof FieldAccessExpr) {
+        }
+            if (name instanceof FieldAccessExpr) {
             FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) name;
             if (isAName(fieldAccessExpr.getScope())) {
                 return nameAsString(fieldAccessExpr.getScope()) + "." + nameAsString(fieldAccessExpr.getName());
-            } else {
-                throw new IllegalArgumentException();
             }
-        } else if (name instanceof NameExpr) {
-            return ((NameExpr) name).getNameAsString();
-        } else {
-            throw new UnsupportedOperationException("Unknown type of name found: " + name + " ("
-                    + name.getClass().getCanonicalName() + ")");
+            throw new IllegalArgumentException();
         }
+            if (name instanceof NameExpr) {
+            return ((NameExpr) name).getNameAsString();
+        }
+        throw new UnsupportedOperationException("Unknown type of name found: " + name + " ("
+                    + name.getClass().getCanonicalName() + ")");
     }
 
     private interface PredicateOnParentAndChild<P extends Node, C extends Node> {
@@ -1017,9 +1012,8 @@ public class NameLogic {
         if (child.getParentNode().isPresent()) {
             Node parent = child.getParentNode().get();
             return parentClass.isInstance(parent) && predicate.isSatisfied(parentClass.cast(parent), child);
-        } else {
-            return false;
         }
+        return false;
     }
 
 }

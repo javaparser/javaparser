@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,11 +20,14 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.*;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.CharLiteralExpr;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -35,10 +38,6 @@ import com.github.javaparser.printer.Stringable;
 import com.github.javaparser.printer.concretesyntaxmodel.*;
 import com.github.javaparser.printer.lexicalpreservation.changes.*;
 import com.github.javaparser.utils.LineSeparator;
-
-import java.util.*;
-
-import static com.github.javaparser.TokenTypes.eolTokenKind;
 
 class LexicalDifferenceCalculator {
 
@@ -72,7 +71,7 @@ class LexicalDifferenceCalculator {
         }
     }
 
-    static class CsmChild implements CsmElement {
+    public static class CsmChild implements CsmElement {
 
         private final Node child;
 
@@ -86,7 +85,16 @@ class LexicalDifferenceCalculator {
 
         @Override
         public void prettyPrint(Node node, SourcePrinter printer) {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("The prettyPrint method is not supported or implemented");
+        }
+
+        /*
+         * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+         */
+        @Override
+        public boolean isCorrespondingElement(TextElement textElement) {
+        	return (textElement instanceof ChildTextElement)
+        			&& ((ChildTextElement)textElement).getChild() == getChild();
         }
 
         @Override
@@ -142,7 +150,7 @@ class LexicalDifferenceCalculator {
     }
 
     /*
-     * Returns a new line token 
+     * Returns a new line token
      */
     private CsmElement getNewLineToken(LineSeparator lineSeparator) {
         return CsmElement.newline(lineSeparator);
@@ -190,24 +198,14 @@ class LexicalDifferenceCalculator {
             Node child;
             if (change instanceof PropertyChange && ((PropertyChange) change).getProperty() == csmSingleReference.getProperty()) {
                 child = (Node) ((PropertyChange) change).getNewValue();
+            	if (node instanceof LambdaExpr && child instanceof ExpressionStmt) {
+                    // Same edge-case as in DefaultPrettyPrinterVisitor.visit(LambdaExpr, Void)
+            	    child = ((ExpressionStmt) child).getExpression();
+            	}
             } else {
                 child = csmSingleReference.getProperty().getValueAsSingleReference(node);
             }
             if (child != null) {
-                // fix issue #2374
-                // Add node comment if needed (it's not very elegant but it works)
-                // We need to be sure that the node is an ExpressionStmt because we can meet
-                // this class definition
-                // a line comment <This is my class, with my comment> followed by
-                // class A {}
-                // In this case keyworld [class] is considered as a token and [A] is a child element
-                // So if we don't care that the node is an ExpressionStmt we could try to generate a wrong definition
-                // like this [class // This is my class, with my comment A {}]
-                if (node.getComment().isPresent() && node instanceof ExpressionStmt) {
-                    LineSeparator lineSeparator = node.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
-                    elements.add(new CsmChild(node.getComment().get()));
-                    elements.add(new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
-                }
                 elements.add(new CsmChild(child));
             }
         } else if (csm instanceof CsmNone) {
@@ -264,7 +262,7 @@ class LexicalDifferenceCalculator {
                             Modifier modifier = (Modifier) value;
                             elements.add(new CsmToken(toToken(modifier)));
                         } else {
-                            throw new UnsupportedOperationException(it.next().getClass().getSimpleName());
+                            throw new UnsupportedOperationException("Not supported value found: " + it.next().getClass().getSimpleName());
                         }
                         if (it.hasNext()) {
                             calculatedSyntaxModelForNode(csmList.getSeparatorPost(), node, elements, change);
@@ -305,11 +303,13 @@ class LexicalDifferenceCalculator {
                 elements.add(new CsmToken(GeneratedJavaParserConstants.STRING_LITERAL, "\"" + ((StringLiteralExpr) node).getValue() + "\""));
             }
         } else if ((csm instanceof CsmString) && (node instanceof TextBlockLiteralExpr)) {
-            // FIXME: csm should be CsmTextBlock -- See also #2677
+            // Per https://openjdk.java.net/jeps/378#1--Line-terminators, any 'CRLF' and 'CR' are turned into 'LF' before interpreting the text
+        	String eol = node.getLineEndingStyle().toString();
+        	// FIXME: csm should be CsmTextBlock -- See also #2677
             if (change instanceof PropertyChange) {
-                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + ((PropertyChange) change).getNewValue() + "\"\"\""));
+                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + eol + ((PropertyChange) change).getNewValue() + "\"\"\""));
             } else {
-                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + ((TextBlockLiteralExpr) node).getValue() + "\"\"\""));
+                elements.add(new CsmToken(GeneratedJavaParserConstants.TEXT_BLOCK_LITERAL, "\"\"\"" + eol + ((TextBlockLiteralExpr) node).getValue() + "\"\"\""));
             }
         } else if ((csm instanceof CsmChar) && (node instanceof CharLiteralExpr)) {
             if (change instanceof PropertyChange) {
@@ -325,7 +325,7 @@ class LexicalDifferenceCalculator {
         } else if (csm instanceof CsmChild) {
             elements.add(csm);
         } else {
-            throw new UnsupportedOperationException(csm.getClass().getSimpleName() + " " + csm);
+            throw new UnsupportedOperationException("Not supported element type: " + csm.getClass().getSimpleName() + " " + csm);
         }
     }
 
@@ -356,7 +356,7 @@ class LexicalDifferenceCalculator {
             case TRANSITIVE:
                 return GeneratedJavaParserConstants.TRANSITIVE;
             default:
-                throw new UnsupportedOperationException(modifier.getKeyword().name());
+                throw new UnsupportedOperationException("Not supported keyword" + modifier.getKeyword().name());
         }
     }
 

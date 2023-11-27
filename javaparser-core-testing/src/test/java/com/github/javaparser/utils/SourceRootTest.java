@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,14 +21,7 @@
 
 package com.github.javaparser.utils;
 
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.ParseResult;
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,15 +29,30 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
+import com.github.javaparser.ParseProblemException;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.printer.DefaultPrettyPrinter;
+import com.github.javaparser.printer.Printer;
+import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
+import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 
 class SourceRootTest {
     private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/");
     private final SourceRoot sourceRoot = new SourceRoot(root);
+    private Printer printer;
 
     @BeforeEach
     void before() {
         sourceRoot.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+        printer = new DefaultPrettyPrinter();
+        sourceRoot.setPrinter(printer::print);
     }
 
     @Test
@@ -59,11 +67,13 @@ class SourceRootTest {
 
     @Test
     void saveInCallback() throws IOException {
+    	printer.getConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
         sourceRoot.parse("", sourceRoot.getParserConfiguration(), (localPath, absolutePath, result) -> SourceRoot.Callback.Result.SAVE);
     }
 
     @Test
     void saveInCallbackParallelized() {
+    	printer.getConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
         sourceRoot.parseParallelized("", sourceRoot.getParserConfiguration(), ((localPath, absolutePath, result) ->
                 SourceRoot.Callback.Result.SAVE));
     }

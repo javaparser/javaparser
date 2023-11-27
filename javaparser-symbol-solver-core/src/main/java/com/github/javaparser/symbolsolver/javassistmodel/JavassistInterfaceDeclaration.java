@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -28,6 +31,7 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
+import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -35,11 +39,9 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
 import javassist.CtClass;
 import javassist.CtField;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -93,7 +95,8 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
         return ctClass.getName().replace('$', '.');
     }
 
-    @Deprecated
+    @Override
+	@Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
@@ -106,18 +109,49 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType type) {
-        return javassistTypeDeclarationAdapter.isAssignableBy(type);
-    }
-
-    @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
       return javassistTypeDeclarationAdapter.getDeclaredFields();
     }
 
     @Override
+    public boolean isAssignableBy(ResolvedType type) {
+        return javassistTypeDeclarationAdapter.isAssignableBy(type);
+    }
+
+    @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return javassistTypeDeclarationAdapter.isAssignableBy(other);
+    }
+
+    @Override
+    public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
+    	if (other.isJavaLangObject()) {
+            // Everything can be assigned to {@code java.lang.Object}
+            return true;
+        }
+
+        if (other instanceof LambdaArgumentTypePlaceholder) {
+            return isFunctionalInterface();
+        }
+        if (other.getQualifiedName().equals(getQualifiedName())) {
+            return true;
+        }
+        Optional<ResolvedReferenceType> oSuperClass = javassistTypeDeclarationAdapter.getSuperClass();
+		if (oSuperClass.isPresent()) {
+			ResolvedReferenceType superClass = oSuperClass.get();
+			Optional<ResolvedReferenceTypeDeclaration> oDecl = superClass.getTypeDeclaration();
+			if (oDecl.isPresent() && oDecl.get().canBeAssignedTo(other)) {
+				return true;
+			}
+		}
+		for (ResolvedReferenceType interfaze : javassistTypeDeclarationAdapter.getInterfaces()) {
+			if (interfaze.getTypeDeclaration().isPresent()
+					&& interfaze.getTypeDeclaration().get().canBeAssignedTo(other)) {
+				return true;
+			}
+		}
+
+        return false;
     }
 
     @Override
@@ -135,6 +169,14 @@ public class JavassistInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return ctClass.hasAnnotation(canonicalName);
+    }
+
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return javassistTypeDeclarationAdapter.getDeclaredAnnotations();
     }
 
     @Override

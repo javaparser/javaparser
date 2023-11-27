@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -212,7 +212,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
     @Test
     void solveEnumConstructor() {
         // configure symbol solver before parsing
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("ConstructorCallsEnum");
         EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "ConstructorCallsEnum");
@@ -228,7 +228,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveNonPublicParentConstructorReflection() {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("ReflectionTypeSolverConstructorResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ReflectionTypeSolverConstructionResolution");
@@ -247,7 +247,7 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
     void testGenericParentContructorJavassist() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javassist_generics/generics.jar");
         TypeSolver typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver(true));
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
         CompilationUnit cu = parseSample("JarTypeSolverConstructorResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JarTypeSolverConstructionResolution");

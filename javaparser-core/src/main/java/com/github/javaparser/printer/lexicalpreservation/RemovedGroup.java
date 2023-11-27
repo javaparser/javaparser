@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -179,11 +179,11 @@ final class RemovedGroup implements Iterable<Removed> {
         if (tokenResult.isPresent()) {
             if (TokenTypes.isWhitespaceButNotEndOfLine(tokenResult.get().getKind())) {
                 return hasOnlyWhiteSpaceForTokenFunction(tokenResult.get(), tokenFunction);
-            } else if (TokenTypes.isEndOfLineToken(tokenResult.get().getKind())) {
-                return true;
-            } else {
-                return false;
             }
+                    if (TokenTypes.isEndOfLineToken(tokenResult.get().getKind())) {
+                return true;
+            }
+            return false;
         }
         return true;
     }
@@ -227,12 +227,10 @@ final class RemovedGroup implements Iterable<Removed> {
                     if (previousToken.isPresent()) {
                         if (TokenTypes.isEndOfLineToken(previousToken.get().getKind())) {
                             return Optional.of(Integer.valueOf(indentation));
-                        } else {
-                            return Optional.empty();
                         }
-                    } else {
-                        return Optional.of(Integer.valueOf(indentation));
+                        return Optional.empty();
                     }
+                    return Optional.of(Integer.valueOf(indentation));
                 }
             }
         }

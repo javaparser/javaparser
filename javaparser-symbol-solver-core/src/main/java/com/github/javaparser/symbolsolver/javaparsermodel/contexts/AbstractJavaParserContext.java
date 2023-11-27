@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+import static java.util.Collections.singletonList;
+
+import java.util.*;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
@@ -36,11 +41,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
-import java.util.*;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-import static java.util.Collections.singletonList;
-
 /**
  * @author Federico Tomassetti
  */
@@ -52,7 +52,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     ///
     /// Static methods
     ///
-    
+
     protected static boolean isQualifiedName(String name) {
         return name.contains(".");
     }
@@ -101,17 +101,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     public final Optional<Context> getParent() {
         Node parentNode = wrappedNode.getParentNode().orElse(null);
 
-        // TODO/FiXME: Document why the method call expression is treated differently.
+		// Resolution of the scope of the method call expression is delegated to parent
+		// context.
         if (parentNode instanceof MethodCallExpr) {
             MethodCallExpr parentCall = (MethodCallExpr) parentNode;
-            // TODO: Can this be replaced with: boolean found = parentCall.getArguments().contains(wrappedNode);
-            boolean found = false;
-            for (Expression expression : parentCall.getArguments()) {
-                if (expression == wrappedNode) {
-                    found = true;
-                    break;
-                }
-            }
+            boolean found = parentCall.getArguments().contains(wrappedNode);
             if (found) {
                 Node notMethod = parentNode;
                 while (notMethod instanceof MethodCallExpr) {
@@ -121,7 +115,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
         }
         Node notMethodNode = parentNode;
-        // to avoid an infinite loop if parent scope is the same as wrapped node 
+        // To avoid loops JP must ensure that the scope of the parent context
+		// is not the same as the current node.
         while (notMethodNode instanceof MethodCallExpr || notMethodNode instanceof FieldAccessExpr
                 || (notMethodNode != null && notMethodNode.hasScope() && getScope(notMethodNode).equals(wrappedNode)) ) {
             notMethodNode = notMethodNode.getParentNode().orElse(null);
@@ -132,8 +127,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         Context parentContext = JavaParserFactory.getContext(notMethodNode, typeSolver);
         return Optional.of(parentContext);
     }
-    
-    // before to call this method verify the node has a scope 
+
+    // before to call this method verify the node has a scope
     protected Node getScope(Node node) {
         return (Node) ((NodeWithOptionalScope)node).getScope().get();
     }
@@ -157,10 +152,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     .findFirst();
 
             if (localResolutionResults.isPresent()) {
-                if(patternExprs.size() == 1) {
+                if (patternExprs.size() == 1) {
                     JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(localResolutionResults.get(), typeSolver);
                     return SymbolReference.solved(decl);
-                } else if(patternExprs.size() > 1) {
+                }
+                if(patternExprs.size() > 1) {
                     throw new IllegalStateException("Unexpectedly more than one reference in scope");
                 }
             }
@@ -185,15 +181,6 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         if (optScope.isPresent()) {
             Expression scope = optScope.get();
 
-            // consider static methods
-            if (scope instanceof NameExpr) {
-                NameExpr scopeAsName = scope.asNameExpr();
-                SymbolReference<ResolvedTypeDeclaration> symbolReference = this.solveType(scopeAsName.getName().getId());
-                if (symbolReference.isSolved() && symbolReference.getCorrespondingDeclaration().isType()) {
-                    return singletonList(symbolReference.getCorrespondingDeclaration().asReferenceType());
-                }
-            }
-
             ResolvedType typeOfScope;
             try {
                 typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
@@ -217,13 +204,14 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                                     .getTypeDeclaration()
                                     .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
                     );
-                } else {
-                    return singletonList(typeSolver.getSolvedJavaLangObject());
                 }
-            } else if (typeOfScope.isArray()) {
+                return singletonList(typeSolver.getSolvedJavaLangObject());
+            }
+            if (typeOfScope.isArray()) {
                 // method call on array are Object methods
                 return singletonList(typeSolver.getSolvedJavaLangObject());
-            } else if (typeOfScope.isTypeVariable()) {
+            }
+            if (typeOfScope.isTypeVariable()) {
                 Collection<ResolvedReferenceTypeDeclaration> result = new ArrayList<>();
                 for (ResolvedTypeParameterDeclaration.Bound bound : typeOfScope.asTypeParameter().getBounds()) {
                     // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
@@ -235,16 +223,19 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     );
                 }
                 return result;
-            } else if (typeOfScope.isConstraint()) {
+            }
+            if (typeOfScope.isConstraint()) {
                 // TODO: Figure out if it is appropriate to remove the orElseThrow() -- if so, how...
-                return singletonList(
-                        typeOfScope.asConstraintType()
-                                .getBound()
-                                .asReferenceType()
-                                .getTypeDeclaration()
-                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
-                );
-            } else if (typeOfScope.isUnionType()) {
+            	ResolvedType type = typeOfScope.asConstraintType().getBound();
+            	if (type.isReferenceType()) {
+	                return singletonList(
+	                        type.asReferenceType().getTypeDeclaration()
+	                                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
+	                );
+            	}
+            	throw new UnsupportedOperationException("The type declaration cannot be found on constraint "+ type.describe());
+            }
+            if (typeOfScope.isUnionType()) {
                 return typeOfScope.asUnionType().getCommonAncestor()
                         .flatMap(ResolvedReferenceType::getTypeDeclaration)
                         .map(Collections::singletonList)
@@ -268,12 +259,13 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                         .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."))
         );
     }
-    
+
     /**
      * Similar to solveMethod but we return a MethodUsage.
      * A MethodUsage corresponds to a MethodDeclaration plus the resolved type variables.
      */
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
+    @Override
+	public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes) {
         SymbolReference<ResolvedMethodDeclaration> methodSolved = solveMethod(name, argumentsTypes, false);
         if (methodSolved.isSolved()) {
             ResolvedMethodDeclaration methodDeclaration = methodSolved.getCorrespondingDeclaration();
@@ -286,9 +278,8 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
             MethodUsage methodUsage = ((TypeVariableResolutionCapability) methodDeclaration).resolveTypeVariables(this, argumentsTypes);
             return Optional.of(methodUsage);
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     @Override

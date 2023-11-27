@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -55,16 +55,13 @@ public interface CollectionStrategy {
                             return Optional.empty();
                         }
                         return storage.map(CompilationUnit.Storage::getSourceRoot);
-                    } else {
-                        Log.info("Storage information not present -- an issue with providing a string rather than file reference?");
                     }
-                } else {
-                    Log.info("Parse result not present");
+                    Log.info("Storage information not present -- an issue with providing a string rather than file reference?");
                 }
-            } else {
-                Log.info("Parsing was not successful.");
-                Log.info("There were (%d) problems parsing file: %s", () -> parseResult.getProblems().size(), parseResult::getProblems);
+                Log.info("Parse result not present");
             }
+            Log.info("Parsing was not successful.");
+            Log.info("There were (%d) problems parsing file: %s", () -> parseResult.getProblems().size(), parseResult::getProblems);
         } catch (ParseProblemException e) {
             Log.info("Problem parsing file %s : %s", () -> file, () -> e.getLocalizedMessage());
         } catch (RuntimeException e) {

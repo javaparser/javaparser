@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,17 +20,18 @@
  */
 package com.github.javaparser.printer.concretesyntaxmodel;
 
-import com.github.javaparser.GeneratedJavaParserConstants;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.printer.SourcePrinter;
-import com.github.javaparser.utils.LineSeparator;
+import static com.github.javaparser.TokenTypes.eolTokenKind;
+import static com.github.javaparser.TokenTypes.spaceTokenKind;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.github.javaparser.TokenTypes.eolTokenKind;
-import static com.github.javaparser.TokenTypes.spaceTokenKind;
+import com.github.javaparser.GeneratedJavaParserConstants;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.lexicalpreservation.TextElement;
+import com.github.javaparser.utils.LineSeparator;
 
 public interface CsmElement {
 
@@ -70,10 +71,6 @@ public interface CsmElement {
 
     static CsmElement token(int tokenType) {
         return new CsmToken(tokenType);
-    }
-
-    static CsmElement token(int tokenType, CsmToken.TokenContentCalculator tokenContentCalculator) {
-        return new CsmToken(tokenType, tokenContentCalculator);
     }
 
     static CsmElement conditional(ObservableProperty property, CsmConditional.Condition condition, CsmElement thenElement) {
@@ -151,5 +148,12 @@ public interface CsmElement {
 
     static CsmElement block(CsmElement content) {
         return sequence(token(GeneratedJavaParserConstants.LBRACE), indent(), content, unindent(), token(GeneratedJavaParserConstants.RBRACE));
+    }
+
+    /*
+     * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+     */
+    default boolean isCorrespondingElement(TextElement textElement) {
+    	return false;
     }
 }

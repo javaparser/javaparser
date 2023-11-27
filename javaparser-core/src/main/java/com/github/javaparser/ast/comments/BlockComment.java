@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -36,7 +36,7 @@ import java.util.function.Consumer;
  * <p>
  * AST node that represent block comments.
  * </p>
- * Block comments can has multi lines and are delimited by "/&#42;" and
+ * Block comments can have multi lines and are delimited by "/&#42;" and
  * "&#42;/".
  *
  * @author Julio Vilmar Gesser
@@ -108,4 +108,14 @@ public class BlockComment extends Comment {
     public Optional<BlockComment> toBlockComment() {
         return Optional.of(this);
     }
+
+	@Override
+	public String getHeader() {
+		return "/*";
+	}
+	
+	@Override
+	public String getFooter() {
+		return "*/";
+	}
 }

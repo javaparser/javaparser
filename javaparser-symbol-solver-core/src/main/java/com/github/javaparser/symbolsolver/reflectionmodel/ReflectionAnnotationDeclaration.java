@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,7 +25,7 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.logic.ConfilictingGenericTypesException;
+import com.github.javaparser.resolution.logic.ConflictingGenericTypesException;
 import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
@@ -83,11 +83,10 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public String getClassName() {
         String qualifiedName = getQualifiedName();
-        if(qualifiedName.contains(".")) {
+        if (qualifiedName.contains(".")) {
             return qualifiedName.substring(qualifiedName.lastIndexOf(".") + 1);
-        } else {
-            return qualifiedName;
         }
+        return qualifiedName;
     }
 
     @Override
@@ -219,7 +218,7 @@ public class ReflectionAnnotationDeclaration extends AbstractTypeDeclaration imp
                 }
                 methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
                 return Optional.of(methodUsage);
-            } catch (ConfilictingGenericTypesException e) {
+            } catch (ConflictingGenericTypesException e) {
                 return Optional.empty();
             }
         } else {

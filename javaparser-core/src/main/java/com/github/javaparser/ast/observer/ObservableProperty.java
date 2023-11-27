@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,15 +20,15 @@
  */
 package com.github.javaparser.ast.observer;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.utils.Utils;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.utils.Utils;
 
 /**
  * Properties considered by the AstObserver
@@ -92,6 +92,7 @@ public enum ObservableProperty {
     PARAMETER(Type.SINGLE_REFERENCE),
     PARAMETERS(Type.MULTIPLE_REFERENCE),
     PATTERN(Type.SINGLE_REFERENCE),
+    PERMITTED_TYPES(Type.MULTIPLE_REFERENCE),
     QUALIFIER(Type.SINGLE_REFERENCE),
     RECEIVER_PARAMETER(Type.SINGLE_REFERENCE),
     RECORD_DECLARATION(Type.SINGLE_REFERENCE),
@@ -157,9 +158,8 @@ public enum ObservableProperty {
         Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();
         if (observableProperty.isPresent()) {
             return observableProperty.get();
-        } else {
-            throw new IllegalArgumentException("No property found with the given camel case name: " + camelCaseName);
         }
+        throw new IllegalArgumentException("No property found with the given camel case name: " + camelCaseName);
     }
 
     ObservableProperty(Type type) {
@@ -205,16 +205,15 @@ public enum ObservableProperty {
         try {
             if (rawValue instanceof Node) {
                 return (Node) rawValue;
-            } else if (rawValue instanceof Optional) {
+            }
+                    if (rawValue instanceof Optional) {
                 Optional<Node> opt = (Optional<Node>) rawValue;
                 if (opt.isPresent()) {
                     return opt.get();
-                } else {
-                    return null;
                 }
-            } else {
-                throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
+                return null;
             }
+            throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
         } catch (ClassCastException e) {
             throw new RuntimeException(e);
         }
@@ -237,14 +236,12 @@ public enum ObservableProperty {
             }
             if (rawValue instanceof NodeList) {
                 return (NodeList) rawValue;
-            } else {
-                Optional<NodeList> opt = (Optional<NodeList>) rawValue;
-                if (opt.isPresent()) {
-                    return opt.get();
-                } else {
-                    return null;
-                }
             }
+            Optional<NodeList> opt = (Optional<NodeList>) rawValue;
+            if (opt.isPresent()) {
+                    return opt.get();
+                }
+            return null;
         } catch (ClassCastException e) {
             throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
@@ -287,14 +284,7 @@ public enum ObservableProperty {
     }
 
     public boolean isNullOrNotPresent(Node node) {
-        Object result = getRawValue(node);
-        if (result == null) {
-            return true;
-        }
-        if (result instanceof Optional) {
-            return !((Optional) result).isPresent();
-        }
-        return false;
+    	return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
     }
 
     public boolean isNullOrEmpty(Node node) {

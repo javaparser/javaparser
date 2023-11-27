@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -319,9 +319,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     public boolean remove(Object o) {
         if (o instanceof Node) {
             return remove((Node) o);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

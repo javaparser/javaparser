@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -170,6 +170,9 @@ public class TokenTypes {
             case EXPORTS:
             case PROVIDES:
             case TRANSITIVE:
+            case PERMITS:
+            case SEALED:
+            case NON_SEALED:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:

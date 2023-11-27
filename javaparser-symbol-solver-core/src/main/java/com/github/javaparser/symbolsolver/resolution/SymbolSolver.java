@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -118,9 +118,8 @@ public class SymbolSolver implements Solver {
                 throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver).toString(), name);
             }
             return ref.getCorrespondingDeclaration();
-        } else {
-            throw new UnsupportedOperationException(type.getClass().getCanonicalName());
         }
+        throw new UnsupportedOperationException(type.getClass().getCanonicalName());
     }
 
     @Override

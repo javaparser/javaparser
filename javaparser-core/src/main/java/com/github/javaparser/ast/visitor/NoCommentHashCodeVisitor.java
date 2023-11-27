@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -111,7 +111,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final ClassOrInterfaceDeclaration n, final Void arg) {
-        return (n.getExtendedTypes().accept(this, arg)) * 31 + (n.getImplementedTypes().accept(this, arg)) * 31 + (n.isInterface() ? 1 : 0) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getMembers().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
+        return (n.getExtendedTypes().accept(this, arg)) * 31 + (n.getImplementedTypes().accept(this, arg)) * 31 + (n.isInterface() ? 1 : 0) * 31 + (n.getPermittedTypes().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getMembers().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg));
     }
 
     public Integer visit(final ClassOrInterfaceType n, final Void arg) {

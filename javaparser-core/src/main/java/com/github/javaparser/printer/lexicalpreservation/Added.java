@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -88,11 +88,11 @@ public class Added implements DifferenceElement {
     public TextElement toTextElement() {
         if (element instanceof LexicalDifferenceCalculator.CsmChild) {
             return new ChildTextElement(((LexicalDifferenceCalculator.CsmChild) element).getChild());
-        } else if (element instanceof CsmToken) {
-            return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent(null));
-        } else {
-            throw new UnsupportedOperationException(element.getClass().getSimpleName());
         }
+            if (element instanceof CsmToken) {
+            return new TokenTextElement(((CsmToken) element).getTokenType(), ((CsmToken) element).getContent());
+        }
+        throw new UnsupportedOperationException("Unsupported element type: " + element.getClass().getSimpleName());
     }
 
     /*

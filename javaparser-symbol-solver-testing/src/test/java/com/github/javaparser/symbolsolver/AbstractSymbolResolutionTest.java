@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,13 @@
 
 package com.github.javaparser.symbolsolver;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.resolution.SymbolResolver;
@@ -28,15 +35,9 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.CodeGenerationUtils;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public abstract class AbstractSymbolResolutionTest {
-    
+
     @AfterEach
     public void reset() {
         // reset configuration to not potentially disturb others tests.
@@ -45,7 +46,7 @@ public abstract class AbstractSymbolResolutionTest {
     }
 
     @AfterAll
-    public static void tearDown() {
+    static public void tearDown() {
         // clear internal caches
         JavaParserFacade.clearInstances();
     }
@@ -146,11 +147,11 @@ public abstract class AbstractSymbolResolutionTest {
     protected static Path adaptPath(String path) {
         return adaptPath(Paths.get(path));
     }
-    
+
     protected SymbolResolver symbolResolver(TypeSolver typeSolver) {
     	return new JavaSymbolSolver(typeSolver);
     }
-    
+
     protected TypeSolver defaultTypeSolver() {
     	return new ReflectionTypeSolver();
     }

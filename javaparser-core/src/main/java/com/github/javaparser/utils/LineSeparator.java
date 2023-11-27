@@ -1,6 +1,24 @@
-package com.github.javaparser.utils;
+/*
+ * Copyright (C) 2013-2023 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
 
-import com.github.javaparser.JavaToken;
+package com.github.javaparser.utils;
 
 import java.util.Optional;
 
@@ -104,25 +122,27 @@ public enum LineSeparator {
     public static Optional<LineSeparator> lookup(String ending) {
         if (CR.asRawString().equals(ending)) {
             return Optional.of(CR);
-        } else if (LF.asRawString().equals(ending)) {
-            return Optional.of(LF);
-        } else if (CRLF.asRawString().equals(ending)) {
-            return Optional.of(CRLF);
-        } else {
-            return Optional.empty();
         }
+            if (LF.asRawString().equals(ending)) {
+            return Optional.of(LF);
+        }
+            if (CRLF.asRawString().equals(ending)) {
+            return Optional.of(CRLF);
+        }
+        return Optional.empty();
     }
 
     public static Optional<LineSeparator> lookupEscaped(String ending) {
         if (CR.asEscapedString().equals(ending)) {
             return Optional.of(CR);
-        } else if (LF.asEscapedString().equals(ending)) {
-            return Optional.of(LF);
-        } else if (CRLF.asEscapedString().equals(ending)) {
-            return Optional.of(CRLF);
-        } else {
-            return Optional.empty();
         }
+            if (LF.asEscapedString().equals(ending)) {
+            return Optional.of(LF);
+        }
+            if (CRLF.asEscapedString().equals(ending)) {
+            return Optional.of(CRLF);
+        }
+        return Optional.empty();
     }
 
     public String describe() {
@@ -148,17 +168,17 @@ public enum LineSeparator {
         return text;
     }
 
-    // TODO: Determine if this should be used within TokenTypes.java -- thus leaving this as private for now.
-    private Optional<JavaToken.Kind> asJavaTokenKind() {
-        if (this == CR) {
-            return Optional.of(JavaToken.Kind.OLD_MAC_EOL);
-        } else if (this == LF) {
-            return Optional.of(JavaToken.Kind.UNIX_EOL);
-        } else if (this == CRLF) {
-            return Optional.of(JavaToken.Kind.WINDOWS_EOL);
-        }
-        return Optional.empty();
-    }
+//    // TODO: Determine if this should be used within TokenTypes.java -- thus leaving this as private for now.
+//    private Optional<JavaToken.Kind> asJavaTokenKind() {
+//        if (this == CR) {
+//            return Optional.of(JavaToken.Kind.OLD_MAC_EOL);
+//        } else if (this == LF) {
+//            return Optional.of(JavaToken.Kind.UNIX_EOL);
+//        } else if (this == CRLF) {
+//            return Optional.of(JavaToken.Kind.WINDOWS_EOL);
+//        }
+//        return Optional.empty();
+//    }
 
     @Override
     public String toString() {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -115,13 +115,12 @@ public class LineEndingProcessingProvider implements Provider {
                 if (pos == offset) {
                     // Nothing read yet, this is the end of the stream.
                     return EOF;
-                } else {
-                    break;
                 }
-            } else {
-                String str = String.valueOf((char) ch);
-                Optional<LineSeparator> lookup = LineSeparator.lookup(str);
-                if (lookup.isPresent()) {
+                break;
+            }
+            String str = String.valueOf((char) ch);
+            Optional<LineSeparator> lookup = LineSeparator.lookup(str);
+            if (lookup.isPresent()) {
                     LineSeparator lineSeparator = lookup.get();
                     // Track the number of times this character is found..
                     eolCounts.putIfAbsent(lineSeparator, 0);
@@ -140,9 +139,7 @@ public class LineEndingProcessingProvider implements Provider {
                     // If "this" (current) char <strong>is not</strong> a line separator, set the next loop's "previous" to null
                     previousLineSeparator = null;
                 }
-                // Move to next character
-                buffer[pos++] = (char) ch;
-            }
+            buffer[pos++] = (char) ch;
         }
         return pos - offset;
     }

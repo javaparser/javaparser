@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -293,8 +293,7 @@ class Java1_1ValidatorTest {
     @Test
     void localInterface() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{ void x() {" + allModifiers + "interface I{}}}"));
-        assertProblems(result, "(line 1,col 20) There is no such thing as a local interface."
-        );
+        assertProblems(result, "(line 1,col 20) There is no such thing as a local interface. Pay attention that this feature is supported starting from 'JAVA_16' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test

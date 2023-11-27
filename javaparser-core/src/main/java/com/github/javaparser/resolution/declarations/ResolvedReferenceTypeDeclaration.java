@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,15 +20,16 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import java.io.Serializable;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -36,7 +37,8 @@ import java.util.stream.Collectors;
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable {
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-
+    String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
+	String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     @Override
@@ -175,9 +177,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst();
         if (field.isPresent()) {
             return field.get();
-        } else {
-            throw new UnsolvedSymbolException("Field not found: " + name);
         }
+        throw new UnsolvedSymbolException("Field not found: " + name);
     }
 
     /**
@@ -187,9 +188,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         Optional<ResolvedFieldDeclaration> field = getVisibleFields().stream().filter(f -> f.getName().equals(name)).findFirst();
         if (field.isPresent()) {
             return field.get();
-        } else {
-            throw new IllegalArgumentException();
         }
+        throw new IllegalArgumentException();
     }
 
     /**
@@ -286,13 +286,45 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     /**
      * Has the type at least one annotation declared or inherited having the specified qualified name?
+     * By default, the subclasses do not inherit the annotation declared on the parent class.
+     * However, there is a way to propagate particular annotations throughout the class hierarchy using the @Inherited annotation.
      */
     default boolean hasAnnotation(String qualifiedName) {
         if (hasDirectlyAnnotation(qualifiedName)) {
             return true;
         }
-        return getAllAncestors().stream().filter(it -> it.asReferenceType().getTypeDeclaration().isPresent()).anyMatch(it -> it.asReferenceType().getTypeDeclaration().get().hasDirectlyAnnotation(qualifiedName));
+        return isClass() && getAllAncestors().stream()
+        		.filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+        		.filter(it -> it.asReferenceType().getTypeDeclaration().get().isClass())
+        		.map(it -> it.asReferenceType().getTypeDeclaration().get())
+        		.anyMatch(rrtd -> rrtd.hasDirectlyAnnotation(qualifiedName)
+        				&& rrtd.isInheritedAnnotation(qualifiedName));
     }
+
+    /**
+     * Returns true if the specified annotation is inheritable.
+     */
+    default boolean isInheritedAnnotation(String name) {
+    	Optional<ResolvedAnnotationDeclaration> declaration = getDeclaredAnnotation(name);
+    	return declaration.isPresent() && declaration.get().isInheritable();
+    }
+
+    /**
+     * Returns the resolved annotation corresponding to the specified name and declared in this type declaration.
+     */
+    default Optional<ResolvedAnnotationDeclaration> getDeclaredAnnotation(String name) {
+    	return getDeclaredAnnotations().stream()
+    			.filter(annotation -> annotation.getQualifiedName().endsWith(name))
+    			.findFirst();
+    }
+
+    /**
+     * Return a collection of all annotations declared in this type declaration.
+     */
+    default Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+    	throw new UnsupportedOperationException("Getting declared annotation is not supproted on this type " + this.getName());
+    }
+
 
     /**
      * This means that the type has a functional method. Conceptually, a functional interface has exactly one abstract method.

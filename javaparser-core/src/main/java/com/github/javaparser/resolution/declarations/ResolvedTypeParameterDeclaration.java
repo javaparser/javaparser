@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * Declaration of a type parameter.
@@ -106,7 +106,8 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
     /**
      * Name of the type parameter.
      */
-    String getName();
+    @Override
+	String getName();
 
     /**
      * Is the type parameter been defined on a type?
@@ -133,7 +134,8 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * The package name of the type bound(s).
      * This is unsupported because there is no package for a Type Parameter, only for its container.
      */
-    default String getPackageName() {
+    @Override
+	default String getPackageName() {
         throw new UnsupportedOperationException();
     }
 
@@ -141,7 +143,8 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * The class(es) wrapping the type bound(s).
      * This is unsupported because there is no class for a Type Parameter, only for its container.
      */
-    default String getClassName() {
+    @Override
+	default String getClassName() {
         throw new UnsupportedOperationException();
     }
 
@@ -150,7 +153,8 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      * It is composed by the qualified name of the container followed by a dot and the name of the Type Parameter.
      * The qualified name of a method is its qualified signature.
      */
-    default String getQualifiedName() {
+    @Override
+	default String getQualifiedName() {
         return String.format("%s.%s", getContainerId(), getName());
     }
 
@@ -177,11 +181,18 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
     List<Bound> getBounds();
 
     /**
+     * Has the type parameter a bound?
+     */
+    default boolean hasBound() {
+        return hasLowerBound() || hasUpperBound();
+    }
+
+    /**
      * Has the type parameter a lower bound?
      */
     default boolean hasLowerBound() {
         for (Bound b : getBounds()) {
-            if (b.isExtends()) {
+            if (b.isSuper()) {
                 return true;
             }
         }
@@ -193,7 +204,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     default boolean hasUpperBound() {
         for (Bound b : getBounds()) {
-            if (b.isSuper()) {
+            if (b.isExtends()) {
                 return true;
             }
         }
@@ -207,7 +218,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     default ResolvedType getLowerBound() {
         for (Bound b : getBounds()) {
-            if (b.isExtends()) {
+            if (b.isSuper()) {
                 return b.getType();
             }
         }
@@ -221,7 +232,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     default ResolvedType getUpperBound() {
         for (Bound b : getBounds()) {
-            if (b.isSuper()) {
+            if (b.isExtends()) {
                 return b.getType();
             }
         }

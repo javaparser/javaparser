@@ -30,8 +30,8 @@ class C3 {
 
 class InterfaceTest implements I1, I2.I2_1, I3.I3_1.I3_1_1 {
     I1 field_i1;
-    I2_1 field_i2;
-    I3_1_1 field_i3;
+    I2.I2_1 field_i2;
+    I3.I3_1.I3_1_1 field_i3;
 }
 
 class ClassTest1 extends C1 {
@@ -39,9 +39,9 @@ class ClassTest1 extends C1 {
 }
 
 class ClassTest2 extends C2.C2_1 {
-    C2_1 field_c2;
+    C2.C2_1 field_c2;
 }
 
 class ClassTest3 extends C3.C3_1.C3_1_1 {
-    C3_1_1 field_c3;
+    C3.C3_1.C3_1_1 field_c3;
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
@@ -34,10 +38,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.SubtypeOfBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.bounds.ThrowsBound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas.ExpressionCompatibleWithType;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * The API exposed by the TypeInference subsystem.
@@ -66,9 +66,8 @@ public class TypeInference {
         Optional<InstantiationSet> instantiationSetOpt = typeInference.instantiationInference(call, methodDeclaration);
         if (instantiationSetOpt.isPresent()) {
             return instantiationSetToMethodUsage(methodDeclaration, instantiationSetOpt.get());
-        } else {
-            throw new IllegalArgumentException();
         }
+        throw new IllegalArgumentException();
     }
 
     ///
@@ -567,8 +566,7 @@ public class TypeInference {
     }
 
     private boolean appearInThrowsClause(ResolvedTypeParameterDeclaration p, ResolvedMethodDeclaration methodDeclaration) {
-        for (int j=0;j<methodDeclaration.getNumberOfSpecifiedExceptions();j++) {
-            ResolvedType thrownType = methodDeclaration.getSpecifiedException(j);
+        for (ResolvedType thrownType : methodDeclaration.getSpecifiedExceptions()) {
             if (thrownType.isTypeVariable() && thrownType.asTypeVariable().asTypeParameter().equals(p)) {
                 return true;
             }

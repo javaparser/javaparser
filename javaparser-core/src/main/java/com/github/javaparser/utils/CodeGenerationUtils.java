@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -39,7 +39,8 @@ public final class CodeGenerationUtils {
     public static String getterName(Class<?> type, String name) {
         if (name.startsWith("is") && boolean.class.equals(type)) {
             return name;
-        } else if (Boolean.TYPE.equals(type)) {
+        }
+        if (Boolean.TYPE.equals(type)) {
             return "is" + capitalize(name);
         }
         return "get" + capitalize(name);
@@ -48,9 +49,11 @@ public final class CodeGenerationUtils {
     public static String getterToPropertyName(String getterName) {
         if (getterName.startsWith("is")) {
             return decapitalize(getterName.substring("is".length()));
-        } else if (getterName.startsWith("get")) {
+        }
+            if (getterName.startsWith("get")) {
             return decapitalize(getterName.substring("get".length()));
-        } else if (getterName.startsWith("has")) {
+        }
+        if (getterName.startsWith("has")) {
             return decapitalize(getterName.substring("has".length()));
         }
         throw new IllegalArgumentException("Unexpected getterName '" + getterName + "'");
@@ -66,9 +69,8 @@ public final class CodeGenerationUtils {
     public static String optionalOf(String text, boolean isOptional) {
         if (isOptional) {
             return f("Optional.of(%s)", text);
-        } else {
-            return "Optional.empty()";
         }
+        return "Optional.empty()";
     }
 
     /**

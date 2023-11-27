@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -46,12 +46,12 @@ class ImplementedOrExtendedTypeResolutionTest extends AbstractResolutionTest {
     @AfterEach
     void unConfigureSymbolSolver() {
         // unconfigure symbol solver so as not to potentially disturb tests in other classes
-        StaticJavaParser.getConfiguration().setSymbolResolver(null);
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(null);
     }
 
     @Test
     void solveImplementedTypes() {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution/ImplementedOrExtendedTypeResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "InterfaceTest");
@@ -62,7 +62,7 @@ class ImplementedOrExtendedTypeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveExtendedType1() {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution/ImplementedOrExtendedTypeResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassTest1");
@@ -71,7 +71,7 @@ class ImplementedOrExtendedTypeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveExtendedType2() {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution/ImplementedOrExtendedTypeResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassTest2");
@@ -80,7 +80,7 @@ class ImplementedOrExtendedTypeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveExtendedType3() {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
         CompilationUnit cu = parseSample("ImplementedOrExtendedTypeResolution/ImplementedOrExtendedTypeResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassTest3");
@@ -89,7 +89,7 @@ class ImplementedOrExtendedTypeResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveImplementedTypeWithSameName() throws IOException {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(
             new JavaParserTypeSolver(adaptPath("src/test/resources/ImplementedOrExtendedTypeResolution/pkg"))));
 
         CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/ImplementedOrExtendedTypeResolution/pkg/main/A.java"));

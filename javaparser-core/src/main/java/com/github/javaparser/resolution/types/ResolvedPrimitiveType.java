@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -71,7 +71,7 @@ public enum ResolvedPrimitiveType implements ResolvedType {
      * Returns true if the specified type is a boxed type of a primitive type.
      */
     public static boolean isBoxType(ResolvedType type) {
-    	if (!type.getClass().isInstance(ResolvedReferenceType.class)) {
+    	if (!type.isReferenceType()) {
     		return false;
     	}
         String qName = type.asReferenceType().getQualifiedName();
@@ -140,7 +140,8 @@ public enum ResolvedPrimitiveType implements ResolvedType {
     public boolean isAssignableBy(ResolvedType other) {
         if (other.isPrimitive()) {
             return this == other || promotionTypes.contains(other);
-        } else if (other.isReferenceType()) {
+        }
+            if (other.isReferenceType()) {
             if (other.asReferenceType().getQualifiedName().equals(getBoxTypeQName())) {
                 return true;
             }
@@ -150,9 +151,8 @@ public enum ResolvedPrimitiveType implements ResolvedType {
                 }
             }
             return false;
-        } else {
-            return other.isConstraint() && this.isAssignableBy(other.asConstraintType().getBound());
         }
+        return other.isConstraint() && this.isAssignableBy(other.asConstraintType().getBound());
     }
 
     public String getBoxTypeQName() {
@@ -182,14 +182,16 @@ public enum ResolvedPrimitiveType implements ResolvedType {
      * If any operand is of a reference type, it is subjected to unboxing conversion (§5.1.8).
      */
     public ResolvedPrimitiveType bnp(ResolvedPrimitiveType other) {
-        // If either operand is of type double, the other is converted to double.
+
         if (this == ResolvedPrimitiveType.DOUBLE || other == ResolvedPrimitiveType.DOUBLE) {
             return ResolvedPrimitiveType.DOUBLE;
             // Otherwise, if either operand is of type float, the other is converted to float.
-        } else if (this == ResolvedPrimitiveType.FLOAT || other == ResolvedPrimitiveType.FLOAT) {
+        }
+            if (this == ResolvedPrimitiveType.FLOAT || other == ResolvedPrimitiveType.FLOAT) {
             return ResolvedPrimitiveType.FLOAT;
             // Otherwise, if either operand is of type long, the other is converted to long.
-        } else if (this == ResolvedPrimitiveType.LONG || other == ResolvedPrimitiveType.LONG) {
+        }
+        if (this == ResolvedPrimitiveType.LONG || other == ResolvedPrimitiveType.LONG) {
             return ResolvedPrimitiveType.LONG;
         }
         // Otherwise, both operands are converted to type int.

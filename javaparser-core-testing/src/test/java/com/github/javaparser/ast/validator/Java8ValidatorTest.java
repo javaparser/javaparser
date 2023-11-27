@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2019 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -42,7 +42,7 @@ class Java8ValidatorTest {
     @Test
     void localInterface() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X {void a(){interface I{}};}"));
-        assertProblems(result, "(line 1,col 19) There is no such thing as a local interface.");
+        assertProblems(result, "(line 1,col 19) There is no such thing as a local interface. Pay attention that this feature is supported starting from 'JAVA_16' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
@@ -98,6 +98,6 @@ class Java8ValidatorTest {
     @Test
     void noModules() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("open module x {}"));
-        assertProblems(result, "(line 1,col 1) Modules are not supported.");
+        assertProblems(result, "(line 1,col 1) Modules are not supported. Pay attention that this feature is supported starting from 'JAVA_9' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 }

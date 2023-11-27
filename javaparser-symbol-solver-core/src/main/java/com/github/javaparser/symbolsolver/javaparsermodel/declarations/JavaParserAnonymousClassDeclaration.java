@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
@@ -43,9 +46,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ObjectCreatio
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * An anonymous class declaration representation.
@@ -86,9 +86,8 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
                     .filter(node -> memberClass.isAssignableFrom(node.getClass()))
                     .map(memberClass::cast)
                     .collect(Collectors.toList());
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     public Context getContext() {
@@ -233,9 +232,8 @@ public class JavaParserAnonymousClassDeclaration extends AbstractClassDeclaratio
         String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
         if (containerName.isEmpty()) {
             return getName();
-        } else {
-            return containerName + "." + getName();
         }
+        return containerName + "." + getName();
     }
 
     @Override

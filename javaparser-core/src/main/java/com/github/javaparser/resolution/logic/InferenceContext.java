@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,17 +21,15 @@
 
 package com.github.javaparser.resolution.logic;
 
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -79,17 +77,20 @@ public class InferenceContext {
             if (!formalTypeAsReference.getQualifiedName().equals(actualTypeAsReference.getQualifiedName())) {
                 List<ResolvedReferenceType> ancestors = actualTypeAsReference.getAllAncestors();
                 final String formalParamTypeQName = formalTypeAsReference.getQualifiedName();
-                // Interfaces do not extend the class Object, 
-                // which means that if the formal parameter is of type Object, all types can match.
+                // Interfaces do not extend the class Object,
+                // which means that if the formal parameter is of type Object,
+                // all types can match including the actual type.
                 List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName) ?
-                		ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()) :
+                		Stream.concat(new ArrayList<ResolvedType>(Arrays.asList(actualType)).stream(),
+                				ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()).stream())
+                				.collect(Collectors.toList()):
                 		ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
                     List<ResolvedType> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
                     if (correspondingActualType.isEmpty()) {
-                        throw new ConfilictingGenericTypesException(formalType, actualType);
+                        throw new ConflictingGenericTypesException(formalType, actualType);
                     }
                     correspondingFormalType = correspondingActualType;
 
@@ -191,48 +192,56 @@ public class InferenceContext {
         if (type.isWildcard()) {
             if (type.asWildcard().isExtends()) {
                 return ResolvedWildcard.extendsBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
-            } else if (type.asWildcard().isSuper()) {
-                return ResolvedWildcard.superBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
-            } else {
-                return type;
             }
-        } else if (type.isTypeVariable()) {
-            return inferenceVariableTypeForTp(type.asTypeParameter());
-        } else if (type.isReferenceType()) {
-            return type.asReferenceType().transformTypeParameters(tp -> placeInferenceVariables(tp));
-        } else if (type.isArray()) {
-            return new ResolvedArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
-        } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
+                    if (type.asWildcard().isSuper()) {
+                return ResolvedWildcard.superBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
+            }
             return type;
-        } else if (type.isConstraint()) {
-            return ResolvedLambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
-        } else if (type instanceof InferenceVariableType) {
-            return type;
-        } else {
-            throw new UnsupportedOperationException(type.describe());
         }
+            if (type.isTypeVariable()) {
+            return inferenceVariableTypeForTp(type.asTypeParameter());
+        }
+            if (type.isReferenceType()) {
+            return type.asReferenceType().transformTypeParameters(tp -> placeInferenceVariables(tp));
+        }
+            if (type.isArray()) {
+            return new ResolvedArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
+        }
+            if (type.isNull() || type.isPrimitive() || type.isVoid()) {
+            return type;
+        }
+            if (type.isConstraint()) {
+            return ResolvedLambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
+        }
+            if (type instanceof InferenceVariableType) {
+            return type;
+        }
+        throw new UnsupportedOperationException(type.describe());
     }
 
     public ResolvedType resolve(ResolvedType type) {
         if (type instanceof InferenceVariableType) {
             InferenceVariableType inferenceVariableType = (InferenceVariableType) type;
             return inferenceVariableType.equivalentType();
-        } else if (type.isReferenceType()) {
+        }
+            if (type.isReferenceType()) {
             return type.asReferenceType().transformTypeParameters(tp -> resolve(tp));
-        } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
+        }
+            if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
-        } else if (type.isArray()) {
+        }
+            if (type.isArray()) {
             return new ResolvedArrayType(resolve(type.asArrayType().getComponentType()));
-        } else if (type.isWildcard()) {
+        }
+            if (type.isWildcard()) {
             if (type.asWildcard().isExtends()) {
                 return ResolvedWildcard.extendsBound(resolve(type.asWildcard().getBoundedType()));
-            } else if (type.asWildcard().isSuper()) {
-                return ResolvedWildcard.superBound(resolve(type.asWildcard().getBoundedType()));
-            } else {
-                return type;
             }
-        } else {
-            throw new UnsupportedOperationException(type.describe());
+                    if (type.asWildcard().isSuper()) {
+                return ResolvedWildcard.superBound(resolve(type.asWildcard().getBoundedType()));
+            }
+            return type;
         }
+        throw new UnsupportedOperationException(type.describe());
     }
 }

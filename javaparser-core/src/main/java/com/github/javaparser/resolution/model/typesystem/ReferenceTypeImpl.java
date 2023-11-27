@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,11 @@
 
 package com.github.javaparser.resolution.model.typesystem;
 
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -34,15 +39,14 @@ import com.github.javaparser.resolution.types.ResolvedTypeTransformer;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 /**
  * @author Federico Tomassetti
  */
 public class ReferenceTypeImpl extends ResolvedReferenceType {
-	
+
+	private static final String[] ASSIGNABLE_REFERENCE_TYPE = { "java.lang.Object", "java.lang.Cloneable",
+	"java.io.Serializable" };
+
     public static ResolvedReferenceType undeterminedParameters(ResolvedReferenceTypeDeclaration typeDeclaration) {
         return new ReferenceTypeImpl(typeDeclaration, typeDeclaration.getTypeParameters().stream().map(
                 ResolvedTypeVariable::new
@@ -89,10 +93,10 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             if (this.isJavaLangObject()) {
                 return true;
             }
-            
+
             // Check if 'other' can be boxed to match this type
             if (isCorrespondingBoxingType(other.describe())) return true;
-            
+
             // All numeric types extend Number
             return other.isNumericType() && this.isReferenceType() && this.asReferenceType().getQualifiedName().equals(Number.class.getCanonicalName());
         }
@@ -137,7 +141,16 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         	Optional<ResolvedReferenceType> common = other.asUnionType().getCommonAncestor();
             return common.map(ancestor -> isAssignableBy(ancestor)).orElse(false);
         }
+        // An array can be assigned only to a variable of a compatible array type,
+        // or to a variable of type Object, Cloneable or java.io.Serializable.
+        if (other.isArray()) {
+			return isAssignableByReferenceType(getQualifiedName());
+		}
         return false;
+    }
+
+    private boolean isAssignableByReferenceType(String qname) {
+    	return Stream.of(ASSIGNABLE_REFERENCE_TYPE).anyMatch(ref -> ref.equals(qname));
     }
 
     @Override
@@ -195,8 +208,9 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
     public List<ResolvedReferenceType> getAllAncestors() {
         return getAllAncestors(ResolvedReferenceTypeDeclaration.depthFirstFunc);
     }
-    
-    public List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
+
+    @Override
+	public List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         // We need to go through the inheritance line and propagate the type parameters
 
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAllAncestors(traverser);
@@ -207,8 +221,9 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
 
         return ancestors;
     }
-    
-    public List<ResolvedReferenceType> getDirectAncestors() {
+
+    @Override
+	public List<ResolvedReferenceType> getDirectAncestors() {
         // We need to go through the inheritance line and propagate the type parameters
 
         List<ResolvedReferenceType> ancestors = typeDeclaration.getAncestors();
@@ -234,7 +249,8 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
         return ancestors;
     }
 
-    public ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap) {
+    @Override
+	public ResolvedReferenceType deriveTypeParameters(ResolvedTypeParametersMap typeParametersMap) {
         return create(typeDeclaration, typeParametersMap);
     }
 

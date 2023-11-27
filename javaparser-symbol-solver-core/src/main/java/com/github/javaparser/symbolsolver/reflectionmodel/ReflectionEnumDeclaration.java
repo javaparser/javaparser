@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,12 +21,16 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
-import com.github.javaparser.resolution.logic.ConfilictingGenericTypesException;
+import com.github.javaparser.resolution.logic.ConflictingGenericTypesException;
 import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
@@ -36,10 +40,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -89,7 +89,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   public AccessSpecifier accessSpecifier() {
     return ReflectionFactory.modifiersToAccessLevel(this.clazz.getModifiers());
   }
-  
+
   @Override
   public Optional<ResolvedReferenceTypeDeclaration> containerType() {
       return reflectionClassAdapter.containerType();
@@ -145,6 +145,29 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
   }
 
   @Override
+  public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
+      String otherName = other.getQualifiedName();
+      // Enums cannot be extended
+      if (otherName.equals(this.getQualifiedName())) {
+          return true;
+      }
+      if (otherName.equals(JAVA_LANG_ENUM)) {
+          return true;
+      }
+      // Enum implements Comparable and Serializable
+      if (otherName.equals(JAVA_LANG_COMPARABLE)) {
+          return true;
+      }
+      if (otherName.equals(JAVA_IO_SERIALIZABLE)) {
+          return true;
+      }
+      if (other.isJavaLangObject()) {
+          return true;
+      }
+      return false;
+  }
+
+  @Override
   public boolean isAssignableBy(ResolvedType type) {
     return reflectionClassAdapter.isAssignableBy(type);
   }
@@ -175,7 +198,8 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
             typeSolver,this, clazz);
   }
 
-  public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
+  @Override
+public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
                                                   Context invokationContext, List<ResolvedType> typeParameterValues) {
     Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
             typeParameterValues, this, clazz);
@@ -199,7 +223,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
             }
             methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
             return Optional.of(methodUsage);
-        } catch (ConfilictingGenericTypesException e) {
+        } catch (ConflictingGenericTypesException e) {
             return Optional.empty();
         }
     } else {

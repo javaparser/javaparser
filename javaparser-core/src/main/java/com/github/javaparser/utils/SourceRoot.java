@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -595,9 +595,8 @@ public class SourceRoot {
                             w.fork();
                             walks.add(w);
                             return SKIP_SUBTREE;
-                        } else {
-                            return CONTINUE;
                         }
+                        return CONTINUE;
                     }
 
                     @Override

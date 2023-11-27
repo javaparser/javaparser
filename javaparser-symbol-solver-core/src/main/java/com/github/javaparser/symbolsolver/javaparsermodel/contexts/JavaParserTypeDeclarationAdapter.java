@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,10 @@
  */
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.NodeList;
@@ -43,10 +47,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -86,13 +86,22 @@ public class JavaParserTypeDeclarationAdapter {
                 TypeDeclaration<?> internalType = member.asTypeDeclaration();
                 if (internalType.getName().getId().equals(name) && compareTypeParameters(internalType, typeArguments)) {
                     return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(internalType));
-                } else if (name.startsWith(wrappedNode.getName().getId() + "." + internalType.getName().getId())) {
+                }
+                if (name.startsWith(wrappedNode.getName().getId() + "." + internalType.getName().getId())) {
                     return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(wrappedNode.getName().getId().length() + 1), typeArguments);
-                } else if (name.startsWith(internalType.getName().getId() + ".")) {
+                }
+                if (name.startsWith(internalType.getName().getId() + ".")) {
                     return JavaParserFactory.getContext(internalType, typeSolver).solveType(name.substring(internalType.getName().getId().length() + 1), typeArguments);
                 }
             }
         }
+
+        // Check class or interface declared in the compilation unit
+        SymbolReference<ResolvedTypeDeclaration> symbolRef = context.getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(name, typeArguments);
+        if (symbolRef.isSolved())
+        	return symbolRef;
 
         // Check if is a type parameter
         if (wrappedNode instanceof NodeWithTypeParameters) {
@@ -128,16 +137,36 @@ public class JavaParserTypeDeclarationAdapter {
             }
         }
 
-        // Look into extended classes and implemented interfaces
-        ResolvedTypeDeclaration type = checkAncestorsForType(name, this.typeDeclaration);
-        if (type != null) {
-            return SymbolReference.solved(type);
-        }
+		// Looking at extended classes and implemented interfaces
+		String typeName = isCompositeName(name) ? innerMostPartOfName(name) : name;
+		ResolvedTypeDeclaration type = checkAncestorsForType(typeName, this.typeDeclaration);
+		// Before accepting this value we need to ensure that
+		// - the name is not a composite name (this is probably a local class which is discovered
+		//   by the check of ancestors
+		// - or the outer most part of the name is equals to the type declaration name.
+		//   it could be the case when the name is prefixed by the outer class name (eg outerclass.innerClass)
+		// - or the qualified name of the type is the same as the name (in case when the name is
+		//   a fully qualified class name like java.util.Iterator
+		if (type != null
+				&& (!isCompositeName(name)
+						|| outerMostPartOfName(name).equals(this.typeDeclaration.getName())
+						|| type.getQualifiedName().equals(name))) {
+			return SymbolReference.solved(type);
+		}
 
-        // Else check parents
-        return context.getParent()
-                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
-                .solveType(name, typeArguments);
+        return SymbolReference.unsolved();
+    }
+
+    private boolean isCompositeName(String name) {
+    	return name.indexOf('.') > -1;
+    }
+
+    private String innerMostPartOfName(String name) {
+    	return isCompositeName(name) ? name.substring(name.lastIndexOf(".")+1) : name;
+    }
+
+    private String outerMostPartOfName(String name) {
+    	return isCompositeName(name) ? name.substring(0, name.lastIndexOf(".")) : name;
     }
 
     private <T extends NodeWithTypeArguments<?>> boolean compareTypes(List<? extends Type> types,
@@ -162,9 +191,8 @@ public class JavaParserTypeDeclarationAdapter {
     private boolean compareTypeParameters(TypeDeclaration<?> typeDeclaration, List<ResolvedType> resolvedTypeArguments) {
         if (typeDeclaration instanceof NodeWithTypeParameters) {
             return compareTypeParameters((NodeWithTypeParameters<?>) typeDeclaration, resolvedTypeArguments);
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**
@@ -192,9 +220,8 @@ public class JavaParserTypeDeclarationAdapter {
                     if (internalTypeDeclaration.getName().equals(name)) {
                         if (visible) {
                             return internalTypeDeclaration;
-                        } else {
-                            return null; // FIXME -- Avoid returning null.
                         }
+                        return null;
                     }
                 }
 

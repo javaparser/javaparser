@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
@@ -31,9 +35,6 @@ import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LambdaResolutionTest extends AbstractResolutionTest {
 
@@ -134,7 +135,7 @@ class LambdaResolutionTest extends AbstractResolutionTest {
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         ResolvedType type = javaParserFacade.getType(expression);
-        assertEquals("java.util.stream.Collector<T, ? extends java.lang.Object, java.util.List<T>>", type.describe());
+        assertEquals("java.util.stream.Collector<T, ?, java.util.List<T>>", type.describe());
     }
 
     @Test

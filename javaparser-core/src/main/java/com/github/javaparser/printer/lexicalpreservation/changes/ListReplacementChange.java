@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.printer.lexicalpreservation.changes;
 
+import java.util.Optional;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
-
-import java.util.Optional;
 
 /**
  * The replacement of an element in a list.
@@ -62,8 +62,12 @@ public class ListReplacementChange implements Change {
             // Perform modification -- replace an item in the list
             newNodeList.set(index, newValue);
             return newNodeList;
-        } else {
-            return new NoChange().getValue(property, node);
         }
+        return new NoChange().getValue(property, node);
     }
+
+    @Override
+	public ObservableProperty getProperty() {
+		return observableProperty;
+	}
 }

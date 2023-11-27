@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,20 @@
  */
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.ast.Node.Parsedness.PARSED;
+import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Spliterator.DISTINCT;
+import static java.util.Spliterator.NONNULL;
+
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
@@ -29,6 +43,7 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithRange;
+import com.github.javaparser.ast.nodeTypes.NodeWithScope;
 import com.github.javaparser.ast.nodeTypes.NodeWithTokenRange;
 import com.github.javaparser.ast.observer.AstObserver;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -46,20 +61,6 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
-
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
-
-import static com.github.javaparser.ast.Node.Parsedness.PARSED;
-import static com.github.javaparser.ast.Node.TreeTraversal.PREORDER;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Spliterator.DISTINCT;
-import static java.util.Spliterator.NONNULL;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -152,7 +153,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration()
+			.removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     @InternalProperty
     private Range range;
@@ -198,14 +200,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * else create a new DefaultPrettyPrinter with default parameters
      */
     protected Printer getPrinter() {
-        return findCompilationUnit().map(c -> c.getPrinter()).orElse(createDefaultPrinter());
+        return findCompilationUnit().map(c -> c.getPrinter()).orElseGet(() -> createDefaultPrinter());
     }
 
     /*
      * Return the printer initialized with the specified configuration
      */
     protected Printer getPrinter(PrinterConfiguration configuration) {
-        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElse(createDefaultPrinter(configuration));
+        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElseGet(() -> createDefaultPrinter(configuration));
     }
 
     protected Printer createDefaultPrinter() {
@@ -236,18 +238,21 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     /**
      * @return the range of characters in the source code that this node covers.
      */
-    public Optional<Range> getRange() {
+    @Override
+	public Optional<Range> getRange() {
         return Optional.ofNullable(range);
     }
 
     /**
      * @return the range of tokens that this node covers.
      */
-    public Optional<TokenRange> getTokenRange() {
+    @Override
+	public Optional<TokenRange> getTokenRange() {
         return Optional.ofNullable(tokenRange);
     }
 
-    public Node setTokenRange(TokenRange tokenRange) {
+    @Override
+	public Node setTokenRange(TokenRange tokenRange) {
         this.tokenRange = tokenRange;
         if (tokenRange == null || !(tokenRange.getBegin().hasRange() && tokenRange.getEnd().hasRange())) {
             range = null;
@@ -261,7 +266,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * @param range the range of characters in the source code that this node covers. null can be used to indicate that
      *              no range information is known, or that it is not of interest.
      */
-    public Node setRange(Range range) {
+    @Override
+	public Node setRange(Range range) {
         if (this.range == range) {
             return this;
         }
@@ -329,7 +335,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Formatting can be configured with parameter PrinterConfiguration.
      */
     public final String toString(PrinterConfiguration configuration) {
-        return getPrinter(configuration).print(this);
+    	// save the current configuration
+    	PrinterConfiguration previousConfiguration = getPrinter().getConfiguration();
+    	// print with the new configuration
+    	String result = getPrinter(configuration).print(this);
+    	// restore the previous printer configuration (issue 4163)
+    	getPrinter().setConfiguration(previousConfiguration);
+    	return result;
     }
 
     @Override
@@ -361,6 +373,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     public void addOrphanComment(Comment comment) {
+    	notifyPropertyChange(ObservableProperty.COMMENT, null, comment);
         orphanComments.add(comment);
         comment.setParentNode(this);
     }
@@ -788,9 +801,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return findCompilationUnit().map(cu -> {
             if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
                 return cu.getData(SYMBOL_RESOLVER_KEY);
-            } else {
-                throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
             }
+            throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
         }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
     }
 
@@ -1111,15 +1123,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
                 Node node = nodes.get(cursor);
                 fillStackToLeaf(node);
                 return nextFromLevel();
-            } else {
-                nodesStack.pop();
-                cursorStack.pop();
-                hasNext = !nodesStack.empty();
-                if (hasNext) {
+            }
+            nodesStack.pop();
+            cursorStack.pop();
+            hasNext = !nodesStack.empty();
+            if (hasNext) {
                     return nextFromLevel();
                 }
-                return root;
-            }
+            return root;
         }
 
         private Node nextFromLevel() {
@@ -1131,10 +1142,11 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /*
-     * returns true if the node defines a scope
+     * Returns true if the node has an (optional) scope expression eg. method calls (object.method())
      */
     public boolean hasScope() {
-        return NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent();
+        return (NodeWithOptionalScope.class.isAssignableFrom(this.getClass()) && ((NodeWithOptionalScope) this).getScope().isPresent())
+        		|| (NodeWithScope.class.isAssignableFrom(this.getClass()) && ((NodeWithScope) this).getScope() != null);
     }
 
     /*

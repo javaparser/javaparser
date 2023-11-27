@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -93,18 +93,16 @@ public abstract class Bound {
         Optional<ProperLowerBound> partial = isProperLowerBound();
         if (partial.isPresent() && partial.get().getInferenceVariable().equals(inferenceVariable)) {
             return partial;
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     Optional<ProperUpperBound> isProperUpperBoundFor(InferenceVariable inferenceVariable) {
         Optional<ProperUpperBound> partial = isProperUpperBound();
         if (partial.isPresent() && partial.get().getInferenceVariable().equals(inferenceVariable)) {
             return partial;
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     /**

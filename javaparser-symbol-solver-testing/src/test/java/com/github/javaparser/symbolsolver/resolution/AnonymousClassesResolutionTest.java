@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -54,13 +54,13 @@ class AnonymousClassesResolutionTest extends AbstractResolutionTest {
                 cd);
 
         typeSolver.add(memoryTypeSolver);
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
     }
 
     @AfterAll
     static void unConfigureSymbolSolver() {
         // unconfigure symbol solver so as not to potentially disturb tests in other classes
-        StaticJavaParser.getConfiguration().setSymbolResolver(null);
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(null);
     }
 
     // See #1703

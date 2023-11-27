@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -92,20 +92,18 @@ public class ClassLoaderTypeSolver implements TypeSolver {
                 int lastDot = name.lastIndexOf('.');
                 if (lastDot == -1) {
                     return SymbolReference.unsolved();
-                } else {
-                    String parentName = name.substring(0, lastDot);
-                    String childName = name.substring(lastDot + 1);
-                    SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
-                    if (parent.isSolved()) {
+                }
+                String parentName = name.substring(0, lastDot);
+                String childName = name.substring(lastDot + 1);
+                SymbolReference<ResolvedReferenceTypeDeclaration> parent = tryToSolveType(parentName);
+                if (parent.isSolved()) {
                         Optional<ResolvedReferenceTypeDeclaration> innerClass = parent.getCorrespondingDeclaration()
                                 .internalTypes()
                                 .stream().filter(it -> it.getName().equals(childName)).findFirst();
                         return innerClass.map(SymbolReference::solved)
                                 .orElseGet(() -> SymbolReference.unsolved());
-                    } else {
-                        return SymbolReference.unsolved();
                     }
-                }
+                return SymbolReference.unsolved();
             }
         } else {
             return SymbolReference.unsolved();

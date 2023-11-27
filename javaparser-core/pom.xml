@@ -2,7 +2,7 @@
     <parent>
         <artifactId>javaparser-parent</artifactId>
         <groupId>com.github.javaparser</groupId>
-        <version>3.24.11-SNAPSHOT</version>
+        <version>3.25.7-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -104,7 +104,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>templating-maven-plugin</artifactId>
-                <version>1.0.0</version>
                 <executions>
                     <execution>
                         <id>filter-src</id>

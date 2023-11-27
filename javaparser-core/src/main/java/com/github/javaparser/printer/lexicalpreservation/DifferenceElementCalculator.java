@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -74,16 +74,19 @@ class DifferenceElementCalculator {
                 CsmChild childA = (CsmChild) a;
                 CsmChild childB = (CsmChild) b;
                 return childA.getChild().equals(childB.getChild());
-            } else if (b instanceof CsmToken) {
-                return false;
-            } else if (b instanceof CsmIndent) {
-                return false;
-            } else if (b instanceof CsmUnindent) {
-                return false;
-            } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
             }
-        } else if (a instanceof CsmToken) {
+                    if (b instanceof CsmToken) {
+                return false;
+            }
+                    if (b instanceof CsmIndent) {
+                return false;
+            }
+                    if (b instanceof CsmUnindent) {
+                return false;
+            }
+            throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
+        }
+            if (a instanceof CsmToken) {
             if (b instanceof CsmToken) {
                 // fix #2382:
                 // Tokens are described by their type AND their content
@@ -92,18 +95,22 @@ class DifferenceElementCalculator {
                 CsmToken childA = (CsmToken) a;
                 CsmToken childB = (CsmToken) b;
                 return childA.equals(childB);
-            } else if (b instanceof CsmChild) {
-                return false;
-            } else if (b instanceof CsmIndent) {
-                return false;
-            } else if (b instanceof CsmUnindent) {
-                return false;
-            } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
             }
-        } else if (a instanceof CsmIndent) {
+                    if (b instanceof CsmChild) {
+                return false;
+            }
+                    if (b instanceof CsmIndent) {
+                return false;
+            }
+                    if (b instanceof CsmUnindent) {
+                return false;
+            }
+            throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
+        }
+            if (a instanceof CsmIndent) {
             return b instanceof CsmIndent;
-        } else if (a instanceof CsmUnindent) {
+        }
+        if (a instanceof CsmUnindent) {
             return b instanceof CsmUnindent;
         }
         throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
@@ -118,17 +125,19 @@ class DifferenceElementCalculator {
                 CsmChild childA = (CsmChild) a;
                 CsmChild childB = (CsmChild) b;
                 return childA.getChild().getClass().equals(childB.getChild().getClass());
-            } else if (b instanceof CsmToken) {
-                return false;
-            } else {
-                throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
             }
-        } else if (a instanceof CsmToken) {
+                    if (b instanceof CsmToken) {
+                return false;
+            }
+            throw new UnsupportedOperationException(a.getClass().getSimpleName() + " " + b.getClass().getSimpleName());
+        }
+        if (a instanceof CsmToken) {
             if (b instanceof CsmToken) {
                 CsmToken childA = (CsmToken) a;
                 CsmToken childB = (CsmToken) b;
                 return childA.getTokenType() == childB.getTokenType();
-            } else if (b instanceof CsmChild) {
+            }
+            if (b instanceof CsmChild) {
                 return false;
             }
         }

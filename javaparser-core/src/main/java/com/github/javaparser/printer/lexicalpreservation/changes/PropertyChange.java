@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,7 +40,8 @@ public class PropertyChange implements Change {
         this.newValue = newValue;
     }
 
-    public ObservableProperty getProperty() {
+    @Override
+	public ObservableProperty getProperty() {
         return property;
     }
 
@@ -56,8 +57,7 @@ public class PropertyChange implements Change {
     public Object getValue(ObservableProperty property, Node node) {
         if (property == this.property) {
             return newValue;
-        } else {
-            return property.getRawValue(node);
         }
+        return property.getRawValue(node);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -142,12 +142,14 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
         Node parentOfWrappedNode = optionalParentNode.get();
 
-        // we should look in all the statements preceding, treating them as SymbolDeclarators
+
         if (parentOfWrappedNode instanceof MethodDeclaration) {
             return parentContext.solveSymbolAsValue(name);
-        }else if (parentOfWrappedNode instanceof LambdaExpr) {
+        }
+            if (parentOfWrappedNode instanceof LambdaExpr) {
             return parentContext.solveSymbolAsValue(name);
-        } else if (!(parentOfWrappedNode instanceof NodeWithStatements)) {
+        }
+        if (!(parentOfWrappedNode instanceof NodeWithStatements)) {
             return parentContext.solveSymbolAsValue(name);
         }
 
@@ -230,14 +232,17 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
         Node parentOfWrappedNode = optionalParentNode.get();
 
-        // we should look in all the statements preceding, treating them as SymbolDeclarators
+
         if (parentOfWrappedNode instanceof MethodDeclaration) {
             return solveSymbolInParentContext(name);
-        } else if (parentOfWrappedNode instanceof ConstructorDeclaration) {
+        }
+            if (parentOfWrappedNode instanceof ConstructorDeclaration) {
             return solveSymbolInParentContext(name);
-        } else if (parentOfWrappedNode instanceof LambdaExpr) {
+        }
+            if (parentOfWrappedNode instanceof LambdaExpr) {
             return solveSymbolInParentContext(name);
-        } else if (parentOfWrappedNode instanceof NodeWithStatements) {
+        }
+        if (parentOfWrappedNode instanceof NodeWithStatements) {
             // If we choose to not solve adjacent statements abort the solution process here.
             // In the calling context (the context that calls this) we will attempt to
             // resolve all prior adjacent statements, and then the common parent as the fallback.

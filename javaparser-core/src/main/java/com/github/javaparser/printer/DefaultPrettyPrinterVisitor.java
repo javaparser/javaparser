@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -18,6 +18,15 @@
  * GNU Lesser General Public License for more details.
  */
 package com.github.javaparser.printer;
+
+import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+import static com.github.javaparser.utils.Utils.*;
+import static java.util.stream.Collectors.joining;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
@@ -42,20 +51,11 @@ import com.github.javaparser.printer.configuration.ImportOrderingStrategy;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.imports.DefaultImportOrderingStrategy;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Pattern;
-
-import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-import static com.github.javaparser.utils.Utils.*;
-import static java.util.stream.Collectors.joining;
-
 /**
  * Outputs the AST as formatted Java source code.
  */
 public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
-	
+
 	private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     protected final PrinterConfiguration configuration;
@@ -297,6 +297,16 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 }
             }
         }
+        if(!n.getPermittedTypes().isEmpty()){
+            printer.print(" permits ");
+            for (final Iterator<ClassOrInterfaceType> i = n.getPermittedTypes().iterator(); i.hasNext(); ) {
+                final ClassOrInterfaceType c = i.next();
+                c.accept(this, arg);
+                if (i.hasNext()) {
+                    printer.print(", ");
+                }
+            }
+        }
         printer.println(" {");
         printer.indent();
         if (!isNullOrEmpty(n.getMembers())) {
@@ -351,7 +361,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(final JavadocComment n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         if (getOption(ConfigOption.PRINT_COMMENTS).isPresent() && getOption(ConfigOption.PRINT_JAVADOC).isPresent()) {
-            printer.println("/**");
+            printer.println(n.getHeader());
             final String commentContent = normalizeEolInTextBlock(n.getContent(), getOption(ConfigOption.END_OF_LINE_CHARACTER).get().asString());
             String[] lines = commentContent.split("\\R");
             List<String> strippedLines = new ArrayList<>();
@@ -384,7 +394,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                     printer.println(line);
                 }
             }
-            printer.println(" */");
+            printer.println(" "+n.getFooter());
         }
     }
 
@@ -1615,7 +1625,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         if (!getOption(ConfigOption.PRINT_COMMENTS).isPresent()) {
             return;
         }
-        printer.print("//").println(normalizeEolInTextBlock(RTRIM.matcher(n.getContent()).replaceAll(""), ""));
+        printer.print(n.getHeader()).println(normalizeEolInTextBlock(RTRIM.matcher(n.getContent()).replaceAll(""), ""));
     }
 
     @Override
@@ -1626,7 +1636,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         final String commentContent = normalizeEolInTextBlock(n.getContent(), getOption(ConfigOption.END_OF_LINE_CHARACTER).get().asString());
         // as BlockComment should not be formatted, -1 to preserve any trailing empty line if present
         String[] lines = commentContent.split("\\R", -1);
-        printer.print("/*");
+        printer.print(n.getHeader());
         for (int i = 0; i < (lines.length - 1); i++) {
             printer.print(lines[i]);
             // Avoids introducing indentation in blockcomments. ie: do not use println() as it would trigger indentation at the next print call.
@@ -1634,7 +1644,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
         // last line is not followed by a newline, and simply terminated with `*/`
         printer.print(lines[lines.length - 1]);
-        printer.println("*/");
+        printer.println(n.getFooter());
     }
 
     @Override

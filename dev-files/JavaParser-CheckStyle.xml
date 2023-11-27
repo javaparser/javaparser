@@ -36,7 +36,11 @@
 			<property name="standardPackageRegExp" value="^java\."/>
 			<property name="sortImportsInGroupAlphabetically" value="false"/>
 			<property name="separateLineBetweenGroups" value="false"/>
+			<property name="severity" value="warning" />
 		</module>
+
+		<!-- Imports that are not used, should be removed -->
+		<module name="UnusedImports"/>
 
 	</module>
 </module>

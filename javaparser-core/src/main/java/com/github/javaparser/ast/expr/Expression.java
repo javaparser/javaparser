@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -33,6 +33,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
@@ -42,7 +44,28 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * @author Julio Vilmar Gesser
  */
 public abstract class Expression extends Node {
+    
+    /**
+     * Returns {@code true} when the Node to be tested is not an
+     * {@link EnclosedExpr}, {@code false} otherwise.
+     */
+    public static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
 
+
+    /**
+     * A {@link Function} that returns its argument (an {@link Expression}) when 
+     * the argument is not an {@link EnclosedExpr}, otherwise the first 
+     * {@link Expression} down the argument's 'inner' path that is not an 
+     * {@link EnclosedExpr}.
+     * 
+     */
+    public static final Function<Expression, Expression> EXCLUDE_ENCLOSED_EXPR = expr -> {
+        while (expr.isEnclosedExpr()) {
+            expr = expr.asEnclosedExpr().getInner();
+        }
+        return expr;
+    };
+    
     @AllFieldsConstructor
     public Expression() {
         this(null);

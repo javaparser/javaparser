@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,9 +20,9 @@
  */
 package com.github.javaparser;
 
-import java.util.Objects;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Objects;
 
 /**
  * A position in a source file. Lines and columns start counting at 1.
@@ -156,7 +156,6 @@ public class Position implements Comparable<Position> {
     }
 
     public boolean isAfterOrEqual(Position otherPosition) {
-        assertNotNull(otherPosition);
         return isAfter(otherPosition) || equals(otherPosition);
     }
 
@@ -173,7 +172,6 @@ public class Position implements Comparable<Position> {
     }
 
     public boolean isBeforeOrEqual(Position otherPosition) {
-        assertNotNull(otherPosition);
         return isBefore(otherPosition) || equals(otherPosition);
     }
 

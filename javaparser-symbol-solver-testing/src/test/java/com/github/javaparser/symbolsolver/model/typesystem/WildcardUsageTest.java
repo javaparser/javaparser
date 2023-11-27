@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,19 +21,25 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
+import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class WildcardUsageTest {
 
@@ -423,5 +429,58 @@ class WildcardUsageTest {
 
         assertEquals(false, ref.getFieldType("bar").isPresent());
     }*/
+
+//    @Test
+//	void testIsAssignableByGenerics() {
+//		ResolvedType listOfSomethingExtendingNumbers = genericType(List.class.getCanonicalName(),
+//				extendsBound(Number.class.getCanonicalName()));
+//		ResolvedType listOfNumbers = genericType(List.class.getCanonicalName(), Number.class.getCanonicalName());
+//		ResolvedType listOfSomethingExtendingIntegers = genericType(List.class.getCanonicalName(),
+//				extendsBound(Integer.class.getCanonicalName()));
+//
+//		ResolvedType list1 = genericType(List.class.getCanonicalName(), Integer.class.getCanonicalName());
+//
+//		print(listOfSomethingExtendingIntegers.asReferenceType().getAllAncestors());
+//
+//		Collection<? extends Number> c1;
+//		Collection<Number> c2 = new ArrayList<>();;
+//		List<? extends Number> lnum = new ArrayList<>();
+//		List<? extends Integer> lint = new ArrayList<>();
+//		c1 = lint;
+//		c1 = lnum;
+//		lnum = lint;
+//		c1 = c2;
+//	}
+
+
+    // Utility methods
+
+	private void print(List<ResolvedReferenceType> ancestors) {
+		for (ResolvedReferenceType ancestor : ancestors) {
+			System.out.println(ancestor.describe());
+		}
+	}
+
+	private List<ResolvedType> types(String... types) {
+		return Arrays.stream(types).map(type -> type(type)).collect(Collectors.toList());
+	}
+
+	private ResolvedType type(String type) {
+		return new ReferenceTypeImpl(typeSolver.solveType(type));
+	}
+
+	private ResolvedType genericType(String type, String... parameterTypes) {
+		return new ReferenceTypeImpl(typeSolver.solveType(type), types(parameterTypes));
+	}
+
+	private ResolvedType genericType(String type, ResolvedType... parameterTypes) {
+		return new ReferenceTypeImpl(typeSolver.solveType(type), Arrays.asList(parameterTypes));
+	}
+
+	private ResolvedType extendsBound(String type) {
+		return ResolvedWildcard.extendsBound(type(type));
+	}
+
+
 
 }

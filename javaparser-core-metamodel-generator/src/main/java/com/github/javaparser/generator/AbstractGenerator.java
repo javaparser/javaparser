@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -56,7 +56,7 @@ public abstract class AbstractGenerator {
 
     protected static final String COPYRIGHT_NOTICE_JP_CORE = "\n" +
             " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
-            " * Copyright (C) 2011, 2013-2021 The JavaParser Team.\n" +
+            " * Copyright (C) 2011, 2013-2023 The JavaParser Team.\n" +
             " *\n" +
             " * This file is part of JavaParser.\n" +
             " *\n" +
@@ -77,7 +77,7 @@ public abstract class AbstractGenerator {
 
     protected static final String COPYRIGHT_NOTICE_JP_SS = "\n" +
             " * Copyright (C) 2015-2016 Federico Tomassetti\n" +
-            " * Copyright (C) 2017-2020 The JavaParser Team.\n" +
+            " * Copyright (C) 2017-2023 The JavaParser Team.\n" +
             " *\n" +
             " * This file is part of JavaParser.\n" +
             " *\n" +
@@ -128,7 +128,7 @@ public abstract class AbstractGenerator {
             Optional<Comment> callableComment = callable.getComment();
             Optional<Comment> existingCallableComment = existingCallable.getComment();
 
-            callable.setComment(callableComment.orElse(existingCallable.getComment().orElse(null)));
+            callable.setComment(callableComment.orElseGet(() -> existingCallable.getComment().orElse(null)));
 //            callable.setJavadocComment(callableJavadocComment.orElse(existingCallableJavadocComment.orElse(null)));
 
             // Mark the method as having been fully/partially generated.

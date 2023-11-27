@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,17 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -35,23 +46,15 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclarationTest;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
+
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
 
@@ -162,7 +165,8 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
     @Test
     void testHasAnnotation() {
         JavassistClassDeclaration compilationUnit = (JavassistClassDeclaration) anotherTypeSolver.solveType("com.github.javaparser.test.TestChildClass");
-        assertTrue(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
+        //TestChildClass has no TestAnnotation annotation declared even though parent class is annotated with this annotation because TestAnnotation annotation is not inheritable
+        assertFalse(compilationUnit.hasAnnotation("com.github.javaparser.test.TestAnnotation"));
     }
 
     @Test
@@ -536,7 +540,8 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
         void whenSuperClassIsProvided() {
             ResolvedReferenceTypeDeclaration node = newTypeSolver.solveType("com.github.javaparser.ast.Node");
             JavassistClassDeclaration cu = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-            assertTrue(cu.isAssignableBy(node));
+            assertFalse(cu.isAssignableBy(node));
+            assertTrue(node.isAssignableBy(cu));
         }
 
         @Test
@@ -545,7 +550,18 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
                     "com.github.javaparser.ast.nodeTypes.NodeWithImplements");
             JavassistClassDeclaration classDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType(
                     "com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
-            assertTrue(classDeclaration.isAssignableBy(nodeWithImplements));
+            assertFalse(classDeclaration.isAssignableBy(nodeWithImplements));
+            assertTrue(nodeWithImplements.isAssignableBy(classDeclaration));
+        }
+
+        @Test
+        void issue3673() {
+            ReflectionClassDeclaration optionalDeclaration = (ReflectionClassDeclaration) typeSolver.solveType(
+                    "java.util.Optional");
+            JavassistEnumDeclaration enumDeclaration = (JavassistEnumDeclaration) anotherTypeSolver.solveType(
+                    "com.github.javaparser.test.TestEnum");
+            assertFalse(optionalDeclaration.isAssignableBy(enumDeclaration));
+            assertFalse(enumDeclaration.isAssignableBy(optionalDeclaration));
         }
     }
 

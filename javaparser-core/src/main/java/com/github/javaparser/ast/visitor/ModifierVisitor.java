@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -241,6 +241,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<ClassOrInterfaceType> extendedTypes = modifyList(n.getExtendedTypes(), arg);
         NodeList<ClassOrInterfaceType> implementedTypes = modifyList(n.getImplementedTypes(), arg);
+        NodeList<ClassOrInterfaceType> permittedTypes = modifyList(n.getPermittedTypes(), arg);
         NodeList<TypeParameter> typeParameters = modifyList(n.getTypeParameters(), arg);
         NodeList<BodyDeclaration<?>> members = modifyList(n.getMembers(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
@@ -251,6 +252,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setModifiers(modifiers);
         n.setExtendedTypes(extendedTypes);
         n.setImplementedTypes(implementedTypes);
+        n.setPermittedTypes(permittedTypes);
         n.setTypeParameters(typeParameters);
         n.setMembers(members);
         n.setName(name);

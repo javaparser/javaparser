@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2019 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -78,7 +78,7 @@ class EnumResolutionTest extends AbstractResolutionTest {
     void resolveEnumConstantAccess() {
         try {
             // configure symbol solver before parsing
-            StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+            StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
 
             // parse compilation unit and get field access expression
             CompilationUnit cu = parseSample("EnumFieldAccess");
@@ -105,7 +105,7 @@ class EnumResolutionTest extends AbstractResolutionTest {
     @Test
     void enumAccessSpecifier() {
         try {
-            StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+            StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
             CompilationUnit cu = parseSample("EnumAccessSpecifier");
             ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MyClass");
 
@@ -147,7 +147,7 @@ class EnumResolutionTest extends AbstractResolutionTest {
                         "    }\n" +
                         "}";
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         CompilationUnit cu = StaticJavaParser.parse(s);
         MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).get();
         ResolvedMethodDeclaration rd = methodCallExpr.resolve();

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -56,9 +56,8 @@ public class TypeCompatibleWithType extends ConstraintFormula {
         if (isProperType(s) && isProperType(t)) {
             if (isCompatibleInALooseInvocationContext(s, t)) {
                 return ReductionResult.trueResult();
-            } else {
-                return ReductionResult.falseResult();
             }
+            return ReductionResult.falseResult();
         }
 
         // 2. Otherwise, if S is a primitive type, let S' be the result of applying boxing conversion (§5.1.7) to S. Then the constraint reduces to ‹S' → T›.

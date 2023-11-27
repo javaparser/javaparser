@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,12 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -35,15 +41,10 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.bytecode.AccessFlag;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -120,13 +121,36 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
+    public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
+        String otherName = other.getQualifiedName();
+        // Enums cannot be extended
+        if (otherName.equals(this.getQualifiedName())) {
+            return true;
+        }
+        if (otherName.equals(JAVA_LANG_ENUM)) {
+            return true;
+        }
+        // Enum implements Comparable and Serializable
+        if (otherName.equals(JAVA_LANG_COMPARABLE)) {
+            return true;
+        }
+        if (otherName.equals(JAVA_IO_SERIALIZABLE)) {
+            return true;
+        }
+        if (other.isJavaLangObject()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean isAssignableBy(ResolvedType type) {
-        throw new UnsupportedOperationException();
+    	return javassistTypeDeclarationAdapter.isAssignableBy(type);
     }
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        throw new UnsupportedOperationException();
+    	return javassistTypeDeclarationAdapter.isAssignableBy(other);
     }
 
     @Override
@@ -155,7 +179,8 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
         return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
+    @Override
+	public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
     }

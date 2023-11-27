@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import java.lang.annotation.Inherited;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -30,10 +34,6 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-
-import java.lang.annotation.Inherited;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -92,6 +92,14 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
         return AstResolutionUtils.hasDirectlyAnnotation(wrappedNode, typeSolver, canonicalName);
     }
 
+    /*
+     * Returns a set of the declared annotation on this type
+     */
+    @Override
+    public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+        return javaParserTypeAdapter.getDeclaredAnnotations();
+    }
+
     @Override
     public String getPackageName() {
         return AstResolutionUtils.getPackageName(wrappedNode);
@@ -107,9 +115,8 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
         String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
-        } else {
-            return containerName + "." + wrappedNode.getName();
         }
+        return containerName + "." + wrappedNode.getName();
     }
 
     @Override

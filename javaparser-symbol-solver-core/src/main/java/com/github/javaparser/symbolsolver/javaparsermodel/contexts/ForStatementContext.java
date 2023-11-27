@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -61,9 +61,8 @@ public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
 
         if (demandParentNode(wrappedNode) instanceof NodeWithStatements) {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
-        } else {
-            return solveSymbolInParentContext(name);
         }
+        return solveSymbolInParentContext(name);
     }
 
     @Override

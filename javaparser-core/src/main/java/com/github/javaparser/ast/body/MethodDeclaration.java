@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2021 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,6 +19,11 @@
  * GNU Lesser General Public License for more details.
  */
 package com.github.javaparser.ast.body;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
@@ -40,11 +45,6 @@ import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-
-import java.util.Optional;
-import java.util.function.Consumer;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: {@code class X { public int abc() {return 1;}
@@ -106,7 +106,8 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         v.visit(this, arg);
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getBody() {
         return Optional.ofNullable(body);
     }
@@ -117,7 +118,8 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
      * @param body the body, can be null
      * @return this, the MethodDeclaration
      */
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setBody(final BlockStmt body) {
         if (body == this.body) {
             return this;
@@ -130,12 +132,14 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -207,7 +211,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         }
         sb.append(getType().toString(prettyPrinterNoCommentsConfiguration));
         sb.append(" ");
-        sb.append(getName());
+        sb.append(getName().toString(prettyPrinterNoCommentsConfiguration));
         sb.append("(");
         boolean firstParam = true;
         for (Parameter param : getParameters()) {
@@ -217,9 +221,9 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
                 sb.append(", ");
             }
             if (includingParameterName) {
-                sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
+            	sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-                sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
+            	sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
                 if (param.isVarArgs()) {
                     sb.append("...");
                 }
@@ -286,7 +290,8 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return super.remove(node);
     }
 
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodDeclaration removeBody() {
         return setBody((BlockStmt) null);
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2020 The JavaParser Team.
+ * Copyright (C) 2017-2023 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -34,15 +38,12 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
+
 import javassist.CtBehavior;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.Modifier;
 import javassist.bytecode.*;
-
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -130,7 +131,8 @@ class JavassistUtils {
             ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
                     removeTypeArguments(internalNameToCanonicalName(getTypeName(classType))));
             return new ReferenceTypeImpl(typeDeclaration, typeArguments);
-        } else if (signatureType instanceof SignatureAttribute.TypeVariable) {
+        }
+            if (signatureType instanceof SignatureAttribute.TypeVariable) {
             SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable) signatureType;
             Optional<ResolvedTypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
             if (!typeParameterDeclarationOpt.isPresent()) {
@@ -138,20 +140,20 @@ class JavassistUtils {
             }
             ResolvedTypeParameterDeclaration typeParameterDeclaration = typeParameterDeclarationOpt.get();
             return new ResolvedTypeVariable(typeParameterDeclaration);
-        } else if (signatureType instanceof SignatureAttribute.ArrayType) {
+        }
+            if (signatureType instanceof SignatureAttribute.ArrayType) {
             SignatureAttribute.ArrayType arrayType = (SignatureAttribute.ArrayType) signatureType;
             ResolvedType baseType = signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable);
             return getArrayType(baseType, arrayType.getDimension());
-        } else if (signatureType instanceof SignatureAttribute.BaseType) {
+        }
+            if (signatureType instanceof SignatureAttribute.BaseType) {
             SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType) signatureType;
             if (baseType.toString().equals("void")) {
                 return ResolvedVoidType.INSTANCE;
-            } else {
-                return ResolvedPrimitiveType.byName(baseType.toString());
             }
-        } else {
-            throw new RuntimeException(signatureType.getClass().getCanonicalName());
+            return ResolvedPrimitiveType.byName(baseType.toString());
         }
+        throw new RuntimeException(signatureType.getClass().getCanonicalName());
     }
     /*
      * Manage dimension of an array
@@ -169,9 +171,8 @@ class JavassistUtils {
     private static String removeTypeArguments(String typeName) {
         if (typeName.contains("<")) {
             return typeName.substring(0, typeName.indexOf('<'));
-        } else {
-            return typeName;
         }
+        return typeName;
     }
 
     static String internalNameToCanonicalName(String typeName) {
@@ -181,12 +182,12 @@ class JavassistUtils {
     private static ResolvedType objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
         if (typeArgument instanceof SignatureAttribute.ClassType) {
             return signatureTypeToType(typeArgument, typeSolver, typeParametrizable);
-        } else if (typeArgument instanceof SignatureAttribute.ArrayType) {
-            return new ResolvedArrayType(signatureTypeToType(((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable));
-        } else {
-            String typeName = typeArgument.jvmTypeName();
-            return getGenericParameterByName(typeName, typeParametrizable, typeSolver);
         }
+            if (typeArgument instanceof SignatureAttribute.ArrayType) {
+            return new ResolvedArrayType(signatureTypeToType(((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable));
+        }
+        String typeName = typeArgument.jvmTypeName();
+        return getGenericParameterByName(typeName, typeParametrizable, typeSolver);
     }
 
     private static ResolvedType getGenericParameterByName(String typeName, ResolvedTypeParametrizable typeParametrizable, TypeSolver typeSolver) {
@@ -199,16 +200,16 @@ class JavassistUtils {
         if (typeArgument.isWildcard()) {
             if (typeArgument.getType() == null) {
                 return ResolvedWildcard.UNBOUNDED;
-            } else if (typeArgument.getKind() == '+') {
-                return ResolvedWildcard.extendsBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
-            } else if (typeArgument.getKind() == '-') {
-                return ResolvedWildcard.superBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
-            } else {
-                throw new UnsupportedOperationException();
             }
-        } else {
-            return objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable);
+                    if (typeArgument.getKind() == '+') {
+                return ResolvedWildcard.extendsBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
+            }
+                    if (typeArgument.getKind() == '-') {
+                return ResolvedWildcard.superBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
+            }
+            throw new UnsupportedOperationException();
         }
+        return objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable);
     }
 
     /**
@@ -234,10 +235,18 @@ class JavassistUtils {
                     .tag);
             if (attr != null) {
                 int pos = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
-                return Optional.ofNullable(attr.variableName(paramNumber + pos));
+                return getVariableName(attr, paramNumber + pos);
             }
         }
         return Optional.empty();
+    }
+
+    private static Optional<String> getVariableName(LocalVariableAttribute attr, int pos) {
+    	try {
+            return Optional.of(attr.variableNameByIndex(pos));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return Optional.empty();
+        }
     }
 
 }
