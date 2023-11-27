@@ -35,27 +35,27 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 
 public class Issue3866Test extends AbstractResolutionTest {
 
-	@Test
-	void test() {
+    @Test
+    void test() {
 
-		String code =
-				"public interface MyActivity {\n"
-				+ "  class MyTimestamps {}\n"
-				+ "    MyTimestamps getTimestamps();\n"
-				+ "  }\n"
-				+ "\n"
-				+ "  public interface MyRichPresence extends MyActivity { }\n"
-				+ "\n"
-				+ "  class MyActivityImpl implements MyActivity {\n"
-				+ "    MyActivity.MyTimestamps timestamps;\n"
-				+ "    @Override\n"
-				+ "    public MyActivity.MyTimestamps getTimestamps() {\n"
-				+ "      return timestamps;\n"
-				+ "  }\n"
-				+ "}";
+        String code =
+                "public interface MyActivity {\n"
+                + "  class MyTimestamps {}\n"
+                + "    MyTimestamps getTimestamps();\n"
+                + "  }\n"
+                + "\n"
+                + "  public interface MyRichPresence extends MyActivity { }\n"
+                + "\n"
+                + "  class MyActivityImpl implements MyActivity {\n"
+                + "    MyActivity.MyTimestamps timestamps;\n"
+                + "    @Override\n"
+                + "    public MyActivity.MyTimestamps getTimestamps() {\n"
+                + "      return timestamps;\n"
+                + "  }\n"
+                + "}";
 
-		final JavaSymbolSolver solver = new JavaSymbolSolver(new ReflectionTypeSolver(false));
-		StaticJavaParser.getParserConfiguration().setSymbolResolver(solver);
+        final JavaSymbolSolver solver = new JavaSymbolSolver(new ReflectionTypeSolver(false));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(solver);
         final CompilationUnit compilationUnit = StaticJavaParser.parse(code);
 
         final List<String> returnTypes = compilationUnit.findAll(MethodDeclaration.class)
@@ -65,5 +65,5 @@ public class Issue3866Test extends AbstractResolutionTest {
                 .collect(Collectors.toList());
 
         returnTypes.forEach(type -> assertEquals("MyActivity.MyTimestamps", type));
-	}
+    }
 }

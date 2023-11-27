@@ -530,8 +530,8 @@ class PrettyPrintVisitorTest extends TestParser {
                 "public sealed interface I1 permits I2, C, D {}"
         );
         String expected =
-        		"public sealed interface I1 permits I2, C, D {\n"
-        		+ "}\n";
+                "public sealed interface I1 permits I2, C, D {\n"
+                + "}\n";
 
 
         assertEqualsStringIgnoringEol(expected, cu.toString());

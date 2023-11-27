@@ -40,14 +40,14 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr>
     }
 
     public CastExpr(Type type, Expression expr) {
-    	setType(type);
-    	setExpr(expr);
+        setType(type);
+        setExpr(expr);
     }
 
     public CastExpr(Range range, Type type, Expression expr) {
         super(range);
         setType(type);
-    	setExpr(expr);
+        setExpr(expr);
     }
 
     @Override
@@ -71,14 +71,14 @@ public final class CastExpr extends Expression implements NodeWithType<CastExpr>
 
     public CastExpr setExpr(Expression expr) {
         this.expr = expr;
-		setAsParentNodeOf(this.expr);
+        setAsParentNodeOf(this.expr);
         return this;
     }
 
     @Override
     public CastExpr setType(Type type) {
         this.type = type;
-		setAsParentNodeOf(this.type);
+        setAsParentNodeOf(this.type);
         return this;
     }
 }

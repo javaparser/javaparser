@@ -28,17 +28,17 @@ import com.github.javaparser.ast.Node;
  */
 public abstract class TreeVisitor {
 
-	/**
-	 * https://en.wikipedia.org/wiki/Depth-first_search
-	 *
-	 * @param node the start node, and the first one that is passed to process(node).
-	 */
-	public void visitDepthFirst(Node node) {
-		process(node);
-		for (Node child : node.getChildrenNodes()) {
-			visitDepthFirst(child);
-		}
-	}
+    /**
+     * https://en.wikipedia.org/wiki/Depth-first_search
+     *
+     * @param node the start node, and the first one that is passed to process(node).
+     */
+    public void visitDepthFirst(Node node) {
+        process(node);
+        for (Node child : node.getChildrenNodes()) {
+            visitDepthFirst(child);
+        }
+    }
 
-	public abstract void process(Node node);
+    public abstract void process(Node node);
 }

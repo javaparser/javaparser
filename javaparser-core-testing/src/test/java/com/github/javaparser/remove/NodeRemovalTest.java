@@ -37,61 +37,61 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NodeRemovalTest extends  AbstractLexicalPreservingTest{
-	
-	private final CompilationUnit compilationUnit = new CompilationUnit();
+    
+    private final CompilationUnit compilationUnit = new CompilationUnit();
 
-	@Test
-	void testRemoveClassFromCompilationUnit() {
-		ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
-		assertEquals(1, compilationUnit.getTypes().size());
-		boolean remove = testClass.remove();
-		assertTrue(remove);
-		assertEquals(0, compilationUnit.getTypes().size());
-	}
+    @Test
+    void testRemoveClassFromCompilationUnit() {
+        ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
+        assertEquals(1, compilationUnit.getTypes().size());
+        boolean remove = testClass.remove();
+        assertTrue(remove);
+        assertEquals(0, compilationUnit.getTypes().size());
+    }
 
-	@Test
-	void testRemoveFieldFromClass() {
-		ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
+    @Test
+    void testRemoveFieldFromClass() {
+        ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("test");
 
-		FieldDeclaration addField = testClass.addField(String.class, "test");
-		assertEquals(1, testClass.getMembers().size());
-		boolean remove = addField.remove();
-		assertTrue(remove);
-		assertEquals(0, testClass.getMembers().size());
-	}
+        FieldDeclaration addField = testClass.addField(String.class, "test");
+        assertEquals(1, testClass.getMembers().size());
+        boolean remove = addField.remove();
+        assertTrue(remove);
+        assertEquals(0, testClass.getMembers().size());
+    }
 
-	@Test
-	void testRemoveStatementFromMethodBody() {
-		ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("testC");
+    @Test
+    void testRemoveStatementFromMethodBody() {
+        ClassOrInterfaceDeclaration testClass = compilationUnit.addClass("testC");
 
-		MethodDeclaration addMethod = testClass.addMethod("testM");
-		BlockStmt methodBody = addMethod.createBody();
-		Statement addStatement = methodBody.addAndGetStatement("test");
-		assertEquals(1, methodBody.getStatements().size());
-		boolean remove = addStatement.remove();
-		assertTrue(remove);
-		assertEquals(0, methodBody.getStatements().size());
-	}
+        MethodDeclaration addMethod = testClass.addMethod("testM");
+        BlockStmt methodBody = addMethod.createBody();
+        Statement addStatement = methodBody.addAndGetStatement("test");
+        assertEquals(1, methodBody.getStatements().size());
+        boolean remove = addStatement.remove();
+        assertTrue(remove);
+        assertEquals(0, methodBody.getStatements().size());
+    }
 
-	@Test
-	void testRemoveStatementFromMethodBodyWithLexicalPreservingPrinter() {
-		considerStatement("{\r\n" + "    log.error(\"context\", e);\r\n" +
-				"    log.error(\"context\", e);\r\n" +
-				"    throw new ApplicationException(e);\r\n" + "}\r\n");
-		BlockStmt bstmt = statement.asBlockStmt();
-		List<Node> children = bstmt.getChildNodes();
-		remove(children.get(0));
-		assertTrue(children.size() == 2);
-		remove(children.get(0));
-		assertTrue(children.size() == 1);
-		assertTrue(children.stream().allMatch(n -> n.getParentNode() != null));
-	}
+    @Test
+    void testRemoveStatementFromMethodBodyWithLexicalPreservingPrinter() {
+        considerStatement("{\r\n" + "    log.error(\"context\", e);\r\n" +
+                "    log.error(\"context\", e);\r\n" +
+                "    throw new ApplicationException(e);\r\n" + "}\r\n");
+        BlockStmt bstmt = statement.asBlockStmt();
+        List<Node> children = bstmt.getChildNodes();
+        remove(children.get(0));
+        assertTrue(children.size() == 2);
+        remove(children.get(0));
+        assertTrue(children.size() == 1);
+        assertTrue(children.stream().allMatch(n -> n.getParentNode() != null));
+    }
 
-	// remove the node and parent's node until response is true
-	boolean remove(Node node) {
-		boolean result = node.remove();
-		if (!result && node.getParentNode().isPresent())
-			result = remove(node.getParentNode().get());
-		return result;
-	}
+    // remove the node and parent's node until response is true
+    boolean remove(Node node) {
+        boolean result = node.remove();
+        if (!result && node.getParentNode().isPresent())
+            result = remove(node.getParentNode().get());
+        return result;
+    }
 }

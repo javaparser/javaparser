@@ -64,29 +64,29 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
         setBody(catchBlock);
     }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
     /**
      * Use {@link #getBody()} instead
      */
     @Deprecated
-	public BlockStmt getCatchBlock() {
-		return catchBlock;
-	}
+    public BlockStmt getCatchBlock() {
+        return catchBlock;
+    }
 
-	/**
-	 * Note that the type of the Parameter can be a UnionType. In this case, any annotations found at the start of the catch(@X A a |...)
-	 * are found directly in the Parameter. Annotations that are on the second or later type - catch(A a | @X B b ...) are found on those types.
-	 */
-	public Parameter getParam() {
-		return param;
-	}
+    /**
+     * Note that the type of the Parameter can be a UnionType. In this case, any annotations found at the start of the catch(@X A a |...)
+     * are found directly in the Parameter. Annotations that are on the second or later type - catch(A a | @X B b ...) are found on those types.
+     */
+    public Parameter getParam() {
+        return param;
+    }
 
     /**
      * Use {@link #setBody(BlockStmt)} instead
@@ -94,17 +94,17 @@ public final class CatchClause extends Node implements NodeWithBlockStmt<CatchCl
      * @param catchBlock
      */
     @Deprecated
-	public CatchClause setCatchBlock(final BlockStmt catchBlock) {
-		this.catchBlock = catchBlock;
-		setAsParentNodeOf(this.catchBlock);
+    public CatchClause setCatchBlock(final BlockStmt catchBlock) {
+        this.catchBlock = catchBlock;
+        setAsParentNodeOf(this.catchBlock);
         return this;
-	}
+    }
 
-	public CatchClause setParam(final Parameter param) {
-		this.param = param;
-		setAsParentNodeOf(this.param);
+    public CatchClause setParam(final Parameter param) {
+        this.param = param;
+        setAsParentNodeOf(this.param);
         return this;
-	}
+    }
 
     @Override
     public BlockStmt getBody() {

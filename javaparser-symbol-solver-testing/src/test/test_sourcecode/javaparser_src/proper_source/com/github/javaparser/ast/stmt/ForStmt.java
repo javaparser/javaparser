@@ -32,79 +32,79 @@ import java.util.List;
  */
 public final class ForStmt extends Statement {
 
-	private List<Expression> init;
+    private List<Expression> init;
 
-	private Expression compare;
+    private Expression compare;
 
-	private List<Expression> update;
+    private List<Expression> update;
 
-	private Statement body;
+    private Statement body;
 
-	public ForStmt() {
-	}
+    public ForStmt() {
+    }
 
-	public ForStmt(final List<Expression> init, final Expression compare,
-			final List<Expression> update, final Statement body) {
-		setCompare(compare);
-		setInit(init);
-		setUpdate(update);
-		setBody(body);
-	}
+    public ForStmt(final List<Expression> init, final Expression compare,
+            final List<Expression> update, final Statement body) {
+        setCompare(compare);
+        setInit(init);
+        setUpdate(update);
+        setBody(body);
+    }
 
-	public ForStmt(final int beginLine, final int beginColumn,
-			final int endLine, final int endColumn,
-			final List<Expression> init, final Expression compare,
-			final List<Expression> update, final Statement body) {
-		super(beginLine, beginColumn, endLine, endColumn);
-		setCompare(compare);
-		setInit(init);
-		setUpdate(update);
-		setBody(body);
-	}
+    public ForStmt(final int beginLine, final int beginColumn,
+            final int endLine, final int endColumn,
+            final List<Expression> init, final Expression compare,
+            final List<Expression> update, final Statement body) {
+        super(beginLine, beginColumn, endLine, endColumn);
+        setCompare(compare);
+        setInit(init);
+        setUpdate(update);
+        setBody(body);
+    }
 
-	@Override
-	public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override
-	public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Statement getBody() {
-		return body;
-	}
+    public Statement getBody() {
+        return body;
+    }
 
-	public Expression getCompare() {
-		return compare;
-	}
+    public Expression getCompare() {
+        return compare;
+    }
 
-	public List<Expression> getInit() {
-		return init;
-	}
+    public List<Expression> getInit() {
+        return init;
+    }
 
-	public List<Expression> getUpdate() {
-		return update;
-	}
+    public List<Expression> getUpdate() {
+        return update;
+    }
 
-	public void setBody(final Statement body) {
-		this.body = body;
-		setAsParentNodeOf(this.body);
-	}
+    public void setBody(final Statement body) {
+        this.body = body;
+        setAsParentNodeOf(this.body);
+    }
 
-	public void setCompare(final Expression compare) {
-		this.compare = compare;
-		setAsParentNodeOf(this.compare);
-	}
+    public void setCompare(final Expression compare) {
+        this.compare = compare;
+        setAsParentNodeOf(this.compare);
+    }
 
-	public void setInit(final List<Expression> init) {
-		this.init = init;
-		setAsParentNodeOf(this.init);
-	}
+    public void setInit(final List<Expression> init) {
+        this.init = init;
+        setAsParentNodeOf(this.init);
+    }
 
-	public void setUpdate(final List<Expression> update) {
-		this.update = update;
-		setAsParentNodeOf(this.update);
-	}
+    public void setUpdate(final List<Expression> update) {
+        this.update = update;
+        setAsParentNodeOf(this.update);
+    }
 }

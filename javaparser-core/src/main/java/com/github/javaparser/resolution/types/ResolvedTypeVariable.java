@@ -141,7 +141,7 @@ public class ResolvedTypeVariable implements ResolvedType {
      */
     @Override
     public ResolvedType solveGenericTypes(Context context) {
-    	return context.solveGenericType(describe()).orElse(this);
+        return context.solveGenericType(describe()).orElse(this);
     }
 
     @Override

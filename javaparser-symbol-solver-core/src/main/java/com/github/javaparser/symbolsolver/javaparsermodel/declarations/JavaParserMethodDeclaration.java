@@ -79,7 +79,7 @@ public class JavaParserMethodDeclaration implements ResolvedMethodDeclaration, T
     }
     
     private SymbolResolver symbolResolver(TypeSolver typeSolver) {
-    	return new JavaSymbolSolver(typeSolver);
+        return new JavaSymbolSolver(typeSolver);
     }
 
     @Override

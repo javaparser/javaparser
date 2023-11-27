@@ -100,7 +100,7 @@ public class JavaParserTypeSolver implements TypeSolver {
         // TODO support enums
         // TODO support interfaces
         if (foundTypes.containsKey(name))
-        	return SymbolReference.solved(foundTypes.get(name));
+            return SymbolReference.solved(foundTypes.get(name));
 
         SymbolReference<ReferenceTypeDeclaration> result = tryToSolveTypeUncached(name);
         if (result.isSolved()) {

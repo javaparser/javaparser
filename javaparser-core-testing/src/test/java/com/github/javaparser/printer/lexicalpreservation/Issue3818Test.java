@@ -36,22 +36,22 @@ public class Issue3818Test extends AbstractLexicalPreservingTest {
     @Test
     void test() {
         String src = "public class Foo {\n"
-        		+ "\n"
-				+ "    public Long[][] m(int[] a){}\n"
-				+ "}";
+                + "\n"
+                + "    public Long[][] m(int[] a){}\n"
+                + "}";
         
         String expected = "public class Foo {\n"
-        		+ "\n"
-				+ "    public Long[][] m(int[] b){}\n"
-				+ "}";
+                + "\n"
+                + "    public Long[][] m(int[] b){}\n"
+                + "}";
 
-		BodyDeclaration<?> cu = StaticJavaParser.parseBodyDeclaration(src);
-		MethodDeclaration md = cu.findAll(MethodDeclaration.class).get(0);
-		LexicalPreservingPrinter.setup(md);
-		Parameter p = md.getParameter(0);
-		Parameter paramExpr = new Parameter(p.getModifiers(), p.getAnnotations(), p.getType(),
-				p.isVarArgs(), p.getVarArgsAnnotations(), new SimpleName("b"));
-		md.replace(p, paramExpr);
-		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        BodyDeclaration<?> cu = StaticJavaParser.parseBodyDeclaration(src);
+        MethodDeclaration md = cu.findAll(MethodDeclaration.class).get(0);
+        LexicalPreservingPrinter.setup(md);
+        Parameter p = md.getParameter(0);
+        Parameter paramExpr = new Parameter(p.getModifiers(), p.getAnnotations(), p.getType(),
+                p.isVarArgs(), p.getVarArgsAnnotations(), new SimpleName("b"));
+        md.replace(p, paramExpr);
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 }

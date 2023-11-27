@@ -245,8 +245,8 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
         return Optional.of(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		throw new UnsupportedOperationException(getClass().getCanonicalName());
-	}
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        throw new UnsupportedOperationException(getClass().getCanonicalName());
+    }
 }

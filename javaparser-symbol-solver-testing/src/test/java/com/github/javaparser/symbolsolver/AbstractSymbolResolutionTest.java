@@ -149,10 +149,10 @@ public abstract class AbstractSymbolResolutionTest {
     }
 
     protected SymbolResolver symbolResolver(TypeSolver typeSolver) {
-    	return new JavaSymbolSolver(typeSolver);
+        return new JavaSymbolSolver(typeSolver);
     }
 
     protected TypeSolver defaultTypeSolver() {
-    	return new ReflectionTypeSolver();
+        return new ReflectionTypeSolver();
     }
 }

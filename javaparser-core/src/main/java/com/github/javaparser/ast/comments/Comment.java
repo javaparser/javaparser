@@ -237,6 +237,6 @@ public abstract class Comment extends Node {
      * Returns the content of the comment with header and footer
      */
     public String asString() {
-    	return getHeader()+getContent()+getFooter();
+        return getHeader()+getContent()+getFooter();
     }
 }

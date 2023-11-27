@@ -101,12 +101,12 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
             int pos = pos(methodCallExpr, wrappedNode);
             ResolvedMethodDeclaration rmd = methodUsage.getDeclaration();
-			// Since variable parameters are represented by an array, in case we deal with
-			// the variadic parameter we have to take into account the base type of the
-			// array.
+            // Since variable parameters are represented by an array, in case we deal with
+            // the variadic parameter we have to take into account the base type of the
+            // array.
             ResolvedType lambdaType = (rmd.hasVariadicParameter() && pos >= rmd.getNumberOfParams() - 1) ?
-            		rmd.getLastParam().getType().asArrayType().getComponentType():
-            			methodUsage.getParamType(pos);
+                    rmd.getLastParam().getType().asArrayType().getComponentType():
+                        methodUsage.getParamType(pos);
 
             // Get the functional method in order for us to resolve it's type arguments properly
             Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);

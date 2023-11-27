@@ -130,7 +130,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
     }
 
     @Override
-	@Deprecated
+    @Deprecated
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
@@ -202,15 +202,15 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
             return true;
         }
         Optional<ResolvedReferenceType> oSuperClass = javassistTypeDeclarationAdapter.getSuperClass();
-		if (oSuperClass.isPresent()) {
-			ResolvedReferenceType superClass = oSuperClass.get();
-			Optional<ResolvedReferenceTypeDeclaration> oDecl = superClass.getTypeDeclaration();
-			if (oDecl.isPresent() && oDecl.get().canBeAssignedTo(other)) {
-				return true;
-			}
-		}
+        if (oSuperClass.isPresent()) {
+            ResolvedReferenceType superClass = oSuperClass.get();
+            Optional<ResolvedReferenceTypeDeclaration> oDecl = superClass.getTypeDeclaration();
+            if (oDecl.isPresent() && oDecl.get().canBeAssignedTo(other)) {
+                return true;
+            }
+        }
 
-		for (ResolvedReferenceType interfaze : javassistTypeDeclarationAdapter.getInterfaces()) {
+        for (ResolvedReferenceType interfaze : javassistTypeDeclarationAdapter.getInterfaces()) {
             if (interfaze.getTypeDeclaration().isPresent() && interfaze.getTypeDeclaration().get().canBeAssignedTo(other)) {
                 return true;
             }
@@ -221,7 +221,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedType type) {
-    	return javassistTypeDeclarationAdapter.isAssignableBy(type);
+        return javassistTypeDeclarationAdapter.isAssignableBy(type);
     }
 
     @Override

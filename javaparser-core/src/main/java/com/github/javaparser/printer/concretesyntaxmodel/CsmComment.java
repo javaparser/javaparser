@@ -28,9 +28,9 @@ public class CsmComment implements CsmElement {
 
     static void process(Comment comment, SourcePrinter printer) {
         String content = printer.normalizeEolInTextBlock(comment.getContent());
-		printer.print(comment.getHeader());
-		printer.print(content);
-		printer.println(comment.getFooter());
+        printer.print(comment.getHeader());
+        printer.print(content);
+        printer.println(comment.getFooter());
     }
 
     @Override

@@ -34,31 +34,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class VariableResolutionTest extends AbstractResolutionTest {
 
-	@Test
-	void variableResolutionNoBlockStmt() {
-		// Test without nested block statement
+    @Test
+    void variableResolutionNoBlockStmt() {
+        // Test without nested block statement
 
-		CompilationUnit cu = parseSample("VariableResolutionInVariousScopes");
-		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VariableResolutionInVariousScopes");
+        CompilationUnit cu = parseSample("VariableResolutionInVariousScopes");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VariableResolutionInVariousScopes");
 
-		MethodDeclaration method = Navigator.demandMethod(clazz, "noBlock");
-		MethodCallExpr callExpr = method.findFirst(MethodCallExpr.class).get();
-		MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(callExpr);
+        MethodDeclaration method = Navigator.demandMethod(clazz, "noBlock");
+        MethodCallExpr callExpr = method.findFirst(MethodCallExpr.class).get();
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(callExpr);
 
-		assertTrue(methodUsage.declaringType().getQualifiedName().equals("java.lang.String"));
-	}
+        assertTrue(methodUsage.declaringType().getQualifiedName().equals("java.lang.String"));
+    }
 
-	@Test
-	void variableResolutionWithBlockStmt() {
-		// Test without nested block statement
+    @Test
+    void variableResolutionWithBlockStmt() {
+        // Test without nested block statement
 
-		CompilationUnit cu = parseSample("VariableResolutionInVariousScopes");
-		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VariableResolutionInVariousScopes");
+        CompilationUnit cu = parseSample("VariableResolutionInVariousScopes");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "VariableResolutionInVariousScopes");
 
-		MethodDeclaration method = Navigator.demandMethod(clazz, "withBlock");
-		MethodCallExpr callExpr = method.findFirst(MethodCallExpr.class).get();
-		MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(callExpr);
+        MethodDeclaration method = Navigator.demandMethod(clazz, "withBlock");
+        MethodCallExpr callExpr = method.findFirst(MethodCallExpr.class).get();
+        MethodUsage methodUsage = JavaParserFacade.get(new ReflectionTypeSolver()).solveMethodAsUsage(callExpr);
 
-		assertTrue(methodUsage.declaringType().getQualifiedName().equals("java.lang.String"));
-	}
+        assertTrue(methodUsage.declaringType().getQualifiedName().equals("java.lang.String"));
+    }
 }

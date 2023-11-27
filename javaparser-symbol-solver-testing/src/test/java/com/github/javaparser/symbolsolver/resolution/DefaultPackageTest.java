@@ -148,10 +148,10 @@ class DefaultPackageTest {
             throw new UnsupportedOperationException();
         }
 
-		@Override
-		public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-			return new HashSet<>();
-		}
+        @Override
+        public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
+            return new HashSet<>();
+        }
     }
 
     @Test

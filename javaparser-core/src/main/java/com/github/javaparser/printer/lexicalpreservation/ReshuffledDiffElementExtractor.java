@@ -9,7 +9,7 @@ import com.github.javaparser.printer.lexicalpreservation.Difference.ArrayIterato
 
 public class ReshuffledDiffElementExtractor {
 
-	private final NodeText nodeText;
+    private final NodeText nodeText;
 
     private enum MatchClassification {
 
@@ -27,15 +27,15 @@ public class ReshuffledDiffElementExtractor {
     }
 
     static ReshuffledDiffElementExtractor of(NodeText nodeText) {
-    	return new ReshuffledDiffElementExtractor(nodeText);
+        return new ReshuffledDiffElementExtractor(nodeText);
     }
 
-	private ReshuffledDiffElementExtractor(NodeText nodeText) {
-		this.nodeText = nodeText;
-	}
+    private ReshuffledDiffElementExtractor(NodeText nodeText) {
+        this.nodeText = nodeText;
+    }
 
-	public void extract(List<DifferenceElement> diffElements) {
-    	ArrayIterator<DifferenceElement> iterator = new ArrayIterator<>(diffElements);
+    public void extract(List<DifferenceElement> diffElements) {
+        ArrayIterator<DifferenceElement> iterator = new ArrayIterator<>(diffElements);
         while (iterator.hasNext()) {
             DifferenceElement diffElement = iterator.next();
             if (diffElement instanceof Reshuffled) {
@@ -50,9 +50,9 @@ public class ReshuffledDiffElementExtractor {
                 PeekingIterator<Integer> nodeTextIndexOfPreviousElementsIterator = new PeekingIterator<>(nodeTextIndexOfPreviousElements);
                 Map<Integer, Integer> nodeTextIndexToPreviousCSMIndex = new HashMap<>();
                 while (nodeTextIndexOfPreviousElementsIterator.hasNext()) {
-                	int value = nodeTextIndexOfPreviousElementsIterator.next();
+                    int value = nodeTextIndexOfPreviousElementsIterator.next();
                     if (value != -1) {
-                    	nodeTextIndexToPreviousCSMIndex.put(value, nodeTextIndexOfPreviousElementsIterator.currentIndex());
+                        nodeTextIndexToPreviousCSMIndex.put(value, nodeTextIndexOfPreviousElementsIterator.currentIndex());
                     }
                 }
                 int lastNodeTextIndex = nodeTextIndexOfPreviousElements.stream().max(Integer::compareTo).orElse(-1);
@@ -102,9 +102,9 @@ public class ReshuffledDiffElementExtractor {
                             CsmElement originalCSMElement = elementsFromPreviousOrder.getElements().get(indexOfOriginalCSMElement);
                             boolean toBeKept = correspondanceBetweenNextOrderAndPreviousOrder.containsValue(indexOfOriginalCSMElement);
                             if (toBeKept) {
-                            	iterator.add(new Kept(originalCSMElement));
+                                iterator.add(new Kept(originalCSMElement));
                             } else {
-                            	iterator.add(new Removed(originalCSMElement));
+                                iterator.add(new Removed(originalCSMElement));
                             }
                         }
                         // else we have a simple node text element, without associated csm element, just keep ignore it
@@ -113,64 +113,64 @@ public class ReshuffledDiffElementExtractor {
                 // Finally we look for the remaining new elements that were not yet added and
                 // add all of them
                 for (CsmElement elementToAdd : elementsToBeAddedAtTheEnd) {
-                	iterator.add(new Added(elementToAdd));
+                    iterator.add(new Added(elementToAdd));
                 }
             }
         }
     }
 
-	/*
-	 * Considering that the lists of elements are ordered, We can find the common
-	 * elements by starting with the list before the modifications and, for each
-	 * element, by going through the list of elements containing the modifications.
-	 *
-	 * We can find the common elements by starting with the list before the
-	 * modifications (L1) and, for each element, by going through the list of elements
-	 * containing the modifications (L2).
-	 *
-	 * If element A in list L1 is not found in list L2, it is a deleted element.
-	 * If element A of list L1 is found in list L2, it is a kept element. In this
-	 * case the search for the next element of the list L1 must start from the
-	 * position of the last element kept {@code syncNextIndex}.
-	 */
-	private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder,
-			CsmMix elementsFromNextOrder) {
-		Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
-		ArrayIterator<CsmElement> previousOrderElementsIterator = new ArrayIterator<>(
-				elementsFromPreviousOrder.getElements());
-		int syncNextIndex = 0;
-		while (previousOrderElementsIterator.hasNext()) {
-			CsmElement pe = previousOrderElementsIterator.next();
-			ArrayIterator<CsmElement> nextOrderElementsIterator = new ArrayIterator<>(
-					elementsFromNextOrder.getElements(), syncNextIndex);
-			while (nextOrderElementsIterator.hasNext()) {
-				CsmElement ne = nextOrderElementsIterator.next();
-				if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index())
-						&& DifferenceElementCalculator.matching(ne, pe)) {
-					correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(),
-							previousOrderElementsIterator.index());
-					// set the position to start on the next {@code nextOrderElementsIterator} iteration
-					syncNextIndex = nextOrderElementsIterator.index();
-					break;
-				}
-			}
-		}
-		return correspondanceBetweenNextOrderAndPreviousOrder;
-	}
+    /*
+     * Considering that the lists of elements are ordered, We can find the common
+     * elements by starting with the list before the modifications and, for each
+     * element, by going through the list of elements containing the modifications.
+     *
+     * We can find the common elements by starting with the list before the
+     * modifications (L1) and, for each element, by going through the list of elements
+     * containing the modifications (L2).
+     *
+     * If element A in list L1 is not found in list L2, it is a deleted element.
+     * If element A of list L1 is found in list L2, it is a kept element. In this
+     * case the search for the next element of the list L1 must start from the
+     * position of the last element kept {@code syncNextIndex}.
+     */
+    private Map<Integer, Integer> getCorrespondanceBetweenNextOrderAndPreviousOrder(CsmMix elementsFromPreviousOrder,
+            CsmMix elementsFromNextOrder) {
+        Map<Integer, Integer> correspondanceBetweenNextOrderAndPreviousOrder = new HashMap<>();
+        ArrayIterator<CsmElement> previousOrderElementsIterator = new ArrayIterator<>(
+                elementsFromPreviousOrder.getElements());
+        int syncNextIndex = 0;
+        while (previousOrderElementsIterator.hasNext()) {
+            CsmElement pe = previousOrderElementsIterator.next();
+            ArrayIterator<CsmElement> nextOrderElementsIterator = new ArrayIterator<>(
+                    elementsFromNextOrder.getElements(), syncNextIndex);
+            while (nextOrderElementsIterator.hasNext()) {
+                CsmElement ne = nextOrderElementsIterator.next();
+                if (!correspondanceBetweenNextOrderAndPreviousOrder.values().contains(previousOrderElementsIterator.index())
+                        && DifferenceElementCalculator.matching(ne, pe)) {
+                    correspondanceBetweenNextOrderAndPreviousOrder.put(nextOrderElementsIterator.index(),
+                            previousOrderElementsIterator.index());
+                    // set the position to start on the next {@code nextOrderElementsIterator} iteration
+                    syncNextIndex = nextOrderElementsIterator.index();
+                    break;
+                }
+            }
+        }
+        return correspondanceBetweenNextOrderAndPreviousOrder;
+    }
 
-	private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText) {
+    private List<Integer> findIndexOfCorrespondingNodeTextElement(List<CsmElement> elements, NodeText nodeText) {
         List<Integer> correspondingIndices = new ArrayList<>();
         PeekingIterator<CsmElement> csmElementListIterator = new PeekingIterator<>(elements);
         while ( csmElementListIterator.hasNext() ) {
-        	boolean isFirstIterationOnCsmElements = !csmElementListIterator.hasPrevious();
+            boolean isFirstIterationOnCsmElements = !csmElementListIterator.hasPrevious();
             int previousCsmElementIndex = csmElementListIterator.previousIndex();
             CsmElement csmElement = csmElementListIterator.next();
             Map<MatchClassification, Integer> potentialMatches = new EnumMap<>(MatchClassification.class);
             PeekingIterator<TextElement> nodeTextListIterator = new PeekingIterator<>(nodeText.getElements());
             while (nodeTextListIterator.hasNext()) {
-            	boolean isFirstIterationOnNodeTextElements = !nodeTextListIterator.hasPrevious();
-            	TextElement textElement = nodeTextListIterator.next();
-            	int currentTextElementIndex = nodeTextListIterator.currentIndex();
+                boolean isFirstIterationOnNodeTextElements = !nodeTextListIterator.hasPrevious();
+                TextElement textElement = nodeTextListIterator.next();
+                int currentTextElementIndex = nodeTextListIterator.currentIndex();
                 if (!correspondingIndices.contains(currentTextElementIndex)) {
                     boolean isCorresponding = csmElement.isCorrespondingElement(textElement);
                     if (isCorresponding) {

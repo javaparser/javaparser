@@ -29,5 +29,5 @@ import com.github.javaparser.resolution.types.ResolvedType;
  */
 public interface ConvertibleToUsage {
 
-	ResolvedType convertToUsage(Context context);
+    ResolvedType convertToUsage(Context context);
 }

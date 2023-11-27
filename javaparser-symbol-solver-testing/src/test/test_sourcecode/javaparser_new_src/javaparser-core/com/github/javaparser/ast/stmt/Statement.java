@@ -29,11 +29,11 @@ import com.github.javaparser.ast.Node;
  */
 public abstract class Statement extends Node {
 
-	public Statement() {
-	}
+    public Statement() {
+    }
 
-	public Statement(final Range range) {
-		super(range);
-	}
+    public Statement(final Range range) {
+        super(range);
+    }
 
 }

@@ -38,12 +38,12 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
     }
 
     public BodyDeclaration(List<AnnotationExpr> annotations) {
-    	setAnnotations(annotations);
+        setAnnotations(annotations);
     }
 
     public BodyDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, List<AnnotationExpr> annotations) {
         super(beginLine, beginColumn, endLine, endColumn);
-    	setAnnotations(annotations);
+        setAnnotations(annotations);
     }
 
     public final List<AnnotationExpr> getAnnotations() {
@@ -55,6 +55,6 @@ public abstract class BodyDeclaration extends Node implements AnnotableNode {
 
     public final void setAnnotations(List<AnnotationExpr> annotations) {
         this.annotations = annotations;
-		setAsParentNodeOf(this.annotations);
+        setAsParentNodeOf(this.annotations);
     }
 }

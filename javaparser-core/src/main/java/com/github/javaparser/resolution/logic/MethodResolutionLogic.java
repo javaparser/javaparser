@@ -156,10 +156,10 @@ public class MethodResolutionLogic {
             // must refer to the method String.format(String, Object...)
             // even if an array of primitive type cannot be assigned to an array of Object
             if (methodDeclaration.getParam(i).isVariadic()
-            		&& (i == countOfMethodParametersDeclared - 1)
-            		&& isArrayOfObject(expectedDeclaredType)
-            		&& actualArgumentType.isArray()) {
-            	continue;
+                    && (i == countOfMethodParametersDeclared - 1)
+                    && isArrayOfObject(expectedDeclaredType)
+                    && actualArgumentType.isArray()) {
+                continue;
             }
 
             boolean isAssignableWithoutSubstitution = expectedDeclaredType.isAssignableBy(actualArgumentType) ||
@@ -203,14 +203,14 @@ public class MethodResolutionLogic {
     }
 
     private static boolean isArrayOfObject(ResolvedType type) {
-    	return type.isArray()
-    			&& type.asArrayType().getComponentType().isReferenceType()
-    			&& type.asArrayType().getComponentType().asReferenceType().isJavaLangObject();
+        return type.isArray()
+                && type.asArrayType().getComponentType().isReferenceType()
+                && type.asArrayType().getComponentType().asReferenceType().isJavaLangObject();
     }
 
-	private static ResolvedArrayType convertToVariadicParameter(ResolvedType type) {
-		return type.isArray() ? type.asArrayType() : new ResolvedArrayType(type);
-	}
+    private static ResolvedArrayType convertToVariadicParameter(ResolvedType type) {
+        return type.isArray() ? type.asArrayType() : new ResolvedArrayType(type);
+    }
 
     /*
      * Returns the last parameter index
@@ -265,7 +265,7 @@ public class MethodResolutionLogic {
             return isAssignableMatchTypeParameters(expected.asReferenceType(), actual.asReferenceType(), matchedParameters);
         }
         if (expected.isReferenceType() && ResolvedPrimitiveType.isBoxType(expected) && actual.isPrimitive()) {
-        	ResolvedPrimitiveType expectedType = ResolvedPrimitiveType.byBoxTypeQName(expected.asReferenceType().getQualifiedName()).get().asPrimitive();
+            ResolvedPrimitiveType expectedType = ResolvedPrimitiveType.byBoxTypeQName(expected.asReferenceType().getQualifiedName()).get().asPrimitive();
             return expected.isAssignableBy(actual);
         }
         if (expected.isTypeVariable()) {
@@ -343,11 +343,11 @@ public class MethodResolutionLogic {
             }
             if (expectedParam.isWildcard()) {
                 if (expectedParam.asWildcard().isExtends()) {
-                	// trying to compare with unbounded wildcard type parameter <?>
-                	if (actualParam.isWildcard() && !actualParam.asWildcard().isBounded()) {
-                		return true;
-                	}
-                	if (actualParam.isTypeVariable()) {
+                    // trying to compare with unbounded wildcard type parameter <?>
+                    if (actualParam.isWildcard() && !actualParam.asWildcard().isBounded()) {
+                        return true;
+                    }
+                    if (actualParam.isTypeVariable()) {
                         return matchTypeVariable(actualParam.asTypeVariable(), expectedParam.asWildcard().getBoundedType(), matchedParameters);
                     }
                     return isAssignableMatchTypeParameters(expectedParam.asWildcard().getBoundedType(), actualParam, matchedParameters);
@@ -716,7 +716,7 @@ public class MethodResolutionLogic {
         // If both methods are variadic but the calling method omits any varArgs, bump the omitted args to
         // ensure the varargs type is considered when determining which method is more specific
         if (aVariadic && bVariadic && aNumberOfParams == bNumberOfParams && numberOfArgs == aNumberOfParams - 1) {
-        	omittedArgs++;
+            omittedArgs++;
         }
 
         // Either both methods are variadic or neither is. So we must compare the parameter types.
@@ -726,7 +726,7 @@ public class MethodResolutionLogic {
 
             ResolvedType argType = null;
             if (i < argumentTypes.size()) {
-            	argType = argumentTypes.get(i);
+                argType = argumentTypes.get(i);
             }
 
             // Safety: if a type is null it means a signature with too few parameters managed to get to this point.
@@ -743,14 +743,14 @@ public class MethodResolutionLogic {
             // instead of a boxing conversion from int to Integer. See JLS §15.12.2.
             // This is what we check here.
             if (argType != null &&
-            		paramTypeA.isPrimitive() == argType.isPrimitive() &&
+                    paramTypeA.isPrimitive() == argType.isPrimitive() &&
                     paramTypeB.isPrimitive() != argType.isPrimitive() &&
                     paramTypeA.isAssignableBy(argType)) {
 
                 return true;
             }
             if (argType != null &&
-            		paramTypeB.isPrimitive() == argType.isPrimitive() &&
+                    paramTypeB.isPrimitive() == argType.isPrimitive() &&
                     paramTypeA.isPrimitive() != argType.isPrimitive() &&
                     paramTypeB.isAssignableBy(argType)) {
 

@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 
 public interface LookaheadIterator<E> {
 
-	/**
+    /**
      * Returns the next element in iteration without advancing the underlying iterator.
      * If the iterator is already exhausted, null will be returned.
      * <p>

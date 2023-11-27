@@ -56,7 +56,7 @@ import com.github.javaparser.printer.configuration.imports.DefaultImportOrdering
  */
 public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
 
-	private static Pattern RTRIM = Pattern.compile("\\s+$");
+    private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     protected final PrinterConfiguration configuration;
 

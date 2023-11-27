@@ -237,7 +237,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 ParameterDeclaration parameter = methodUsage.getDeclaration().getParam(i);
                 Type parameterType = parameter.getType();
                 if (parameter.isVariadic()) {
-                	parameterType = parameterType.asArrayType().getComponentType();
+                    parameterType = parameterType.asArrayType().getComponentType();
                 }
                 inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }
@@ -265,14 +265,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
             return;
         }
         if (source.isReferenceType() && target.isReferenceType()) {
-        	ReferenceType sourceRefType = source.asReferenceType();
-        	ReferenceType targetRefType = target.asReferenceType();
+            ReferenceType sourceRefType = source.asReferenceType();
+            ReferenceType targetRefType = target.asReferenceType();
             if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
-            	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
-	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
-	                    inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
-	                }
-            	}
+                if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
+                    for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
+                        inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
+                    }
+                }
             }
             return;
         }

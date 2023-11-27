@@ -181,12 +181,12 @@ class LeastUpperBoundTest {
 
     @Test
     public void lub_of_enum() {
-    	ResolvedType type = type("java.math.RoundingMode");
+        ResolvedType type = type("java.math.RoundingMode");
 
         ResolvedReferenceTypeDeclaration typeDeclaration = type.asReferenceType().getTypeDeclaration().get();
 
-		List<ResolvedType> constanteTypes = typeDeclaration.asEnum().getEnumConstants().stream()
-				.map(enumConst -> enumConst.getType()).collect(Collectors.toList());
+        List<ResolvedType> constanteTypes = typeDeclaration.asEnum().getEnumConstants().stream()
+                .map(enumConst -> enumConst.getType()).collect(Collectors.toList());
 
         ResolvedType expected = constanteTypes.get(0);
 
@@ -325,39 +325,39 @@ class LeastUpperBoundTest {
     }
 
 
-	@Test
-	@Disabled("Waiting for generic type resolution")
-	public void lub_of_generics_without_loop2() {
-		List<ResolvedType> typesFromInput = declaredTypes(
-				"class Parent<X> {}",
-				"class Child<Y> extends Parent<Y> {}",
-				"class Other<Z> {}",
-				"class A {}",
-				"class ChildP extends Parent<Other<? extends A>> {}",
-				"class ChildC extends Child<Other<? extends A>> {}");
+    @Test
+    @Disabled("Waiting for generic type resolution")
+    public void lub_of_generics_without_loop2() {
+        List<ResolvedType> typesFromInput = declaredTypes(
+                "class Parent<X> {}",
+                "class Child<Y> extends Parent<Y> {}",
+                "class Other<Z> {}",
+                "class A {}",
+                "class ChildP extends Parent<Other<? extends A>> {}",
+                "class ChildC extends Child<Other<? extends A>> {}");
 
-		ResolvedType ChildP = typesFromInput.get(4);
-		ResolvedType childC = typesFromInput.get(5);
+        ResolvedType ChildP = typesFromInput.get(4);
+        ResolvedType childC = typesFromInput.get(5);
 
-		ResolvedType lub = leastUpperBound(ChildP, childC);
-		System.out.println(lub.describe());
+        ResolvedType lub = leastUpperBound(ChildP, childC);
+        System.out.println(lub.describe());
     }
 
-	@Test
-	@Disabled("Waiting for generic type resolution")
-	public void lub_of_generics_infinite_types() {
-		List<ResolvedType> types = declaredTypes(
-				"class Parent<X> {}",
-				"class Child<Y> extends Parent<Y> {}",
-				"class ChildInteger extends Child<Integer> {}",
-				"class ChildString extends Child<String> {}");
+    @Test
+    @Disabled("Waiting for generic type resolution")
+    public void lub_of_generics_infinite_types() {
+        List<ResolvedType> types = declaredTypes(
+                "class Parent<X> {}",
+                "class Child<Y> extends Parent<Y> {}",
+                "class ChildInteger extends Child<Integer> {}",
+                "class ChildString extends Child<String> {}");
 
-		ResolvedType childInteger = types.get(2);
-		ResolvedType childString = types.get(3);
+        ResolvedType childInteger = types.get(2);
+        ResolvedType childString = types.get(3);
 
-		ResolvedType lub = leastUpperBound(childInteger, childString);
-		System.out.println(lub.describe());
-	}
+        ResolvedType lub = leastUpperBound(childInteger, childString);
+        System.out.println(lub.describe());
+    }
 
     private List<ResolvedType> types(String... types) {
         return Arrays.stream(types).map(type -> type(type)).collect(Collectors.toList());

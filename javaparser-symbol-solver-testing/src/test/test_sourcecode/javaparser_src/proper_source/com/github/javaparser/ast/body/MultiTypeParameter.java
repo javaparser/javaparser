@@ -30,7 +30,7 @@ import java.util.List;
 
 public class MultiTypeParameter extends BaseParameter {
     private List<Type> types;
-	
+    
     public MultiTypeParameter() {}
 
     public MultiTypeParameter(int modifiers, List<AnnotationExpr> annotations, List<Type> types, VariableDeclaratorId id) {
@@ -41,7 +41,7 @@ public class MultiTypeParameter extends BaseParameter {
     public MultiTypeParameter(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, List<Type> types, VariableDeclaratorId id) {
         super(beginLine, beginColumn, endLine, endColumn, modifiers, annotations, id);
         this.types = types;
-	}
+    }
 
     @Override
     public <R, A> R accept(GenericVisitor<R, A> v, A arg) {

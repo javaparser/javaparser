@@ -56,10 +56,10 @@ class DifferenceElementCalculator {
             // in this case we consider that nodes are not equals
             // If the nodes have no declared position they are considered equal.
             return this.node.equals(cpi.node) 
-            		&& (this.node.hasRange() == false && cpi.node.hasRange() == false
-            			||	(this.node.hasRange() && cpi.node.hasRange() && this.node.getRange().get().contains(cpi.node.getRange().get())
-            			)
-            		);
+                    && (this.node.hasRange() == false && cpi.node.hasRange() == false
+                        ||    (this.node.hasRange() && cpi.node.hasRange() && this.node.getRange().get().contains(cpi.node.getRange().get())
+                        )
+                    );
         }
 
         @Override
@@ -194,47 +194,47 @@ class DifferenceElementCalculator {
             final int currentPosOfNextChildInOriginal = posOfNextChildInOriginal;
             final int currentPosOfNextChildInAfter = posOfNextChildInAfter;
             posOfNextChildInOriginal = childrenInOriginal.stream()
-            		.filter(i -> i.equals(child))
-            		.map(i -> i.position)
-            		.filter(position -> position > currentPosOfNextChildInOriginal)
-            		.findFirst().orElse(posOfNextChildInOriginal);
+                    .filter(i -> i.equals(child))
+                    .map(i -> i.position)
+                    .filter(position -> position > currentPosOfNextChildInOriginal)
+                    .findFirst().orElse(posOfNextChildInOriginal);
             // search the position of the node "child" in the modified list of cms element
             posOfNextChildInAfter = childrenInAfter.stream()
-            		.filter(i -> i.equals(child))
-            		.map(i -> i.position)
-            		.filter(position -> position > currentPosOfNextChildInAfter)
-            		.findFirst().orElse(posOfNextChildInAfter);
+                    .filter(i -> i.equals(child))
+                    .map(i -> i.position)
+                    .filter(position -> position > currentPosOfNextChildInAfter)
+                    .findFirst().orElse(posOfNextChildInAfter);
             // Imagine that the common elements has been moved, for example in the case where the parameters of a method are reversed
-			// In this case the afterIndex will be greater than the position of the child in
-			// the list
-			// For example : if {@code new Foo(a, b)} become {@code new Foo(b, a)}
-			// Nota: in this example there is 3 child elements Foo, 'a' and 'b', others are tokens
-			// In the orginal list the child element 'a' is at the position 5 and the
-			// element 'b' is at the position 8
-			// After reverting the list of parameters the child element 'a' is at the
-			// position 8 and the element 'b' is at the position 5
-			// When we deal with element 'b', it is in 5th position in the list after the
-			// modification but the previous position in the list was that of element 'a'.
+            // In this case the afterIndex will be greater than the position of the child in
+            // the list
+            // For example : if {@code new Foo(a, b)} become {@code new Foo(b, a)}
+            // Nota: in this example there is 3 child elements Foo, 'a' and 'b', others are tokens
+            // In the orginal list the child element 'a' is at the position 5 and the
+            // element 'b' is at the position 8
+            // After reverting the list of parameters the child element 'a' is at the
+            // position 8 and the element 'b' is at the position 5
+            // When we deal with element 'b', it is in 5th position in the list after the
+            // modification but the previous position in the list was that of element 'a'.
             if (originalIndex < posOfNextChildInOriginal || afterIndex < posOfNextChildInAfter) {
-            	// defines the sublist of elements located before the common element  
-            	CalculatedSyntaxModel originalSub = originalIndex < posOfNextChildInOriginal ? original.sub(originalIndex, posOfNextChildInOriginal) : new CalculatedSyntaxModel(Collections.EMPTY_LIST);
-            	CalculatedSyntaxModel afterSub = afterIndex < posOfNextChildInAfter ? after.sub(afterIndex, posOfNextChildInAfter) : new CalculatedSyntaxModel(Collections.EMPTY_LIST);
+                // defines the sublist of elements located before the common element  
+                CalculatedSyntaxModel originalSub = originalIndex < posOfNextChildInOriginal ? original.sub(originalIndex, posOfNextChildInOriginal) : new CalculatedSyntaxModel(Collections.EMPTY_LIST);
+                CalculatedSyntaxModel afterSub = afterIndex < posOfNextChildInAfter ? after.sub(afterIndex, posOfNextChildInAfter) : new CalculatedSyntaxModel(Collections.EMPTY_LIST);
                 elements.addAll(calculateImpl(originalSub, afterSub));
             }
             if (afterIndex <= posOfNextChildInAfter) {
-            	// we need to keep the current common node
-            	elements.add(new Kept(new CsmChild(child.node)));
+                // we need to keep the current common node
+                elements.add(new Kept(new CsmChild(child.node)));
             } else {
-            	// In this case the current node was not found in the list after change
-            	// so we need to remove it.
-            	elements.add(new Removed(new CsmChild(child.node)));
+                // In this case the current node was not found in the list after change
+                // so we need to remove it.
+                elements.add(new Removed(new CsmChild(child.node)));
             }
             originalIndex = originalIndex <= posOfNextChildInOriginal ? posOfNextChildInOriginal + 1 : originalIndex;
             afterIndex = afterIndex <= posOfNextChildInAfter ? posOfNextChildInAfter + 1 : afterIndex;
         }
         if (originalIndex < original.elements.size() || afterIndex < after.elements.size()) {
-        	CalculatedSyntaxModel originalSub = originalIndex < original.elements.size() ? original.sub(originalIndex, original.elements.size()) : new CalculatedSyntaxModel(Collections.EMPTY_LIST);
-        	CalculatedSyntaxModel afterSub = afterIndex < after.elements.size() ? after.sub(afterIndex, after.elements.size()) : new CalculatedSyntaxModel(Collections.EMPTY_LIST);
+            CalculatedSyntaxModel originalSub = originalIndex < original.elements.size() ? original.sub(originalIndex, original.elements.size()) : new CalculatedSyntaxModel(Collections.EMPTY_LIST);
+            CalculatedSyntaxModel afterSub = afterIndex < after.elements.size() ? after.sub(afterIndex, after.elements.size()) : new CalculatedSyntaxModel(Collections.EMPTY_LIST);
             elements.addAll(calculateImpl(originalSub, afterSub));
         }
         return elements;

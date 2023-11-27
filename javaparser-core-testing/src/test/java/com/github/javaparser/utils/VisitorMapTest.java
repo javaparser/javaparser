@@ -57,7 +57,7 @@ class VisitorMapTest {
     
     @Test
     void visitorMapGet(){
-    	CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x1 = parse("class X{}");
 
         Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         map.put(x1, 1);
@@ -66,7 +66,7 @@ class VisitorMapTest {
     
     @Test
     void visitorMapContainsKey(){
-    	CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x1 = parse("class X{}");
 
         Map<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         map.put(x1, 1);
@@ -75,12 +75,12 @@ class VisitorMapTest {
     
     @Test
     void visitorMapPutAll(){
-    	CompilationUnit x1 = parse("class X{}");
-    	CompilationUnit x2 = parse("class Y{}");
-    	Map<CompilationUnit, Integer> map = new HashMap<>();
-    	map.put(x1, 1);
-    	map.put(x2, 2);
-    	Map<CompilationUnit, Integer> visitorMap = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class Y{}");
+        Map<CompilationUnit, Integer> map = new HashMap<>();
+        map.put(x1, 1);
+        map.put(x2, 2);
+        Map<CompilationUnit, Integer> visitorMap = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         visitorMap.putAll(map);
         assertEquals(2, visitorMap.size());
     }

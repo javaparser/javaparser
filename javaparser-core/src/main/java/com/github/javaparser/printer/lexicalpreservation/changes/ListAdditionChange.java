@@ -66,8 +66,8 @@ public class ListAdditionChange implements Change {
         return new NoChange().getValue(property, node);
     }
 
-	@Override
-	public ObservableProperty getProperty() {
-		return observableProperty;
-	}
+    @Override
+    public ObservableProperty getProperty() {
+        return observableProperty;
+    }
 }

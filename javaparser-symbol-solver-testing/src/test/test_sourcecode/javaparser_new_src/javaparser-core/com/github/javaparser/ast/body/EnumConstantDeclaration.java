@@ -102,13 +102,13 @@ public final class EnumConstantDeclaration extends BodyDeclaration<EnumConstantD
 
     public EnumConstantDeclaration setArgs(List<Expression> args) {
         this.args = args;
-		setAsParentNodeOf(this.args);
+        setAsParentNodeOf(this.args);
         return this;
     }
 
     public EnumConstantDeclaration setClassBody(List<BodyDeclaration<?>> classBody) {
         this.classBody = classBody;
-		setAsParentNodeOf(this.classBody);
+        setAsParentNodeOf(this.classBody);
         return this;
     }
 

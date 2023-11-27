@@ -383,7 +383,7 @@ public final class MethodDeclaration extends BodyDeclaration<MethodDeclaration> 
         return this;
     }
 
-	/**
+    /**
      * @return the array brackets in this position: <code>int abc()[] {...}</code>
      */
     public List<ArrayBracketPair> getArrayBracketPairsAfterParameterList() {

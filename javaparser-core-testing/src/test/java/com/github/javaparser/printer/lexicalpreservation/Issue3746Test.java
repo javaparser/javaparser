@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Issue3746Test extends AbstractLexicalPreservingTest {
 
-	@Test
+    @Test
     void test() {
         considerCode(
                 "public class MyClass {\n"
@@ -40,24 +40,24 @@ public class Issue3746Test extends AbstractLexicalPreservingTest {
                         + "}");
 
         considerCode("class A {\n"
-				+ "  void foo() {\n"
-				+ "    int first = 1;\n"
-				+ "    int second = 2;\n"
-				+ "  }\n"
-				+ "}"
-				);
-    	
-    	String expected = 
-    			"class A {\n"
-    			+ "  void foo() {\n"
-    			+ "    foo();\n"
-    			+ "    int second = 2;\n"
-    			+ "  }\n"
-    			+ "}";
-    	BlockStmt block = cu.findAll(BlockStmt.class).get(0);
-    	ExpressionStmt newStmt = new ExpressionStmt(new MethodCallExpr("foo"));
-		block.addStatement(1,newStmt);
-		block.getStatement(0).remove();
-		assertEquals(expected, LexicalPreservingPrinter.print(cu));
+                + "  void foo() {\n"
+                + "    int first = 1;\n"
+                + "    int second = 2;\n"
+                + "  }\n"
+                + "}"
+                );
+        
+        String expected = 
+                "class A {\n"
+                + "  void foo() {\n"
+                + "    foo();\n"
+                + "    int second = 2;\n"
+                + "  }\n"
+                + "}";
+        BlockStmt block = cu.findAll(BlockStmt.class).get(0);
+        ExpressionStmt newStmt = new ExpressionStmt(new MethodCallExpr("foo"));
+        block.addStatement(1,newStmt);
+        block.getStatement(0).remove();
+        assertEquals(expected, LexicalPreservingPrinter.print(cu));
     }
 }

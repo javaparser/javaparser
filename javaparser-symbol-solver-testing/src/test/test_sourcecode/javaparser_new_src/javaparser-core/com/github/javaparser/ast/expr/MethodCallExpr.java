@@ -58,13 +58,13 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         setArgs(args);
     }
 
-	public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String name, final List<Expression> args) {
-		super(range);
-		setScope(scope);
-		setTypeArguments(typeArguments);
-		setName(name);
-		setArgs(args);
-	}
+    public MethodCallExpr(final Range range, final Expression scope, final List<Type<?>> typeArguments, final String name, final List<Expression> args) {
+        super(range);
+        setScope(scope);
+        setTypeArguments(typeArguments);
+        setName(name);
+        setArgs(args);
+    }
 
     /**
      * Adds the given argument to the method call.
@@ -109,10 +109,10 @@ public final class MethodCallExpr extends Expression implements NodeWithTypeArgu
         return scope;
     }
 
-	public void setArgs(final List<Expression> args) {
-		this.args = args;
-		setAsParentNodeOf(this.args);
-	}
+    public void setArgs(final List<Expression> args) {
+        this.args = args;
+        setAsParentNodeOf(this.args);
+    }
 
     public MethodCallExpr setName(final String name) {
         setNameExpr(new NameExpr(name));

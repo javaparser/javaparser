@@ -37,112 +37,112 @@ import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEo
 
 class Issue3773Test extends AbstractLexicalPreservingTest {
 
-	@Test
+    @Test
     void test3773() {
-		considerCode(
+        considerCode(
                 "class A {\r\n"
-                + "	public String output = \"Contents of \";\r\n"
-                + "	\r\n"
-                + "	public String debug(String output) {\r\n"
+                + "    public String output = \"Contents of \";\r\n"
+                + "    \r\n"
+                + "    public String debug(String output) {\r\n"
                 + "\r\n"
-                + "		Log.d(\"Debug\", output1);   \r\n"
-                + "		Log.d(\"Debug\", output2);   \r\n"
-                + "		Log.d(\"Debug\", output3);   			\r\n"
-                + "		Log.d(\"Debug\", output4); \r\n"
-                + "		\r\n"
-                + "		output = \"1\";\r\n"
-                + "		Log.d(\"Debug\", output1);\r\n"
-                + "		\r\n"
-                + "		output = \"2\";\r\n"
-                + "		Log.d(\"Debug\", output2);\r\n"
-                + "		\r\n"
-                + "		output = \"3\";\r\n"
-                + "		Log.d(\"Debug\", output3);\r\n"
-                + "		\r\n"
-                + "		Log.d(\"Debug\", \"\");   \r\n"
-                + "		Log.d(\"Debug\", \"\");  \r\n"
-                + "		Log.d(\"Debug\", \"3\");   \r\n"
-                + "		Log.d(\"Debug\", \"4\");   \r\n"
-                + "		\r\n"
-                + "		return \"\";\r\n"
-                + "	}\r\n"
+                + "        Log.d(\"Debug\", output1);   \r\n"
+                + "        Log.d(\"Debug\", output2);   \r\n"
+                + "        Log.d(\"Debug\", output3);               \r\n"
+                + "        Log.d(\"Debug\", output4); \r\n"
+                + "        \r\n"
+                + "        output = \"1\";\r\n"
+                + "        Log.d(\"Debug\", output1);\r\n"
+                + "        \r\n"
+                + "        output = \"2\";\r\n"
+                + "        Log.d(\"Debug\", output2);\r\n"
+                + "        \r\n"
+                + "        output = \"3\";\r\n"
+                + "        Log.d(\"Debug\", output3);\r\n"
+                + "        \r\n"
+                + "        Log.d(\"Debug\", \"\");   \r\n"
+                + "        Log.d(\"Debug\", \"\");  \r\n"
+                + "        Log.d(\"Debug\", \"3\");   \r\n"
+                + "        Log.d(\"Debug\", \"4\");   \r\n"
+                + "        \r\n"
+                + "        return \"\";\r\n"
+                + "    }\r\n"
                 + "}");
-		String expected = 
-        		"class A {\r\n"
-        		+ "	public String output = \"Contents of \";\r\n"
-        		+ "	\r\n"
-        		+ "	public String debug(String output) {\r\n"
-        		+ "\r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", output1);   \r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", output2);   \r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", output3);   			\r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", output4); \r\n"
-        		+ "		\r\n"
-        		+ "		output = \"1\";\r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", output1);\r\n"
-        		+ "		\r\n"
-        		+ "		output = \"2\";\r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", output2);\r\n"
-        		+ "		\r\n"
-        		+ "		output = \"3\";\r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", output3);\r\n"
-        		+ "		\r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", \"\");   \r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", \"\");  \r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", \"3\");   \r\n"
-        		+ "		if (Log.Level >= 3)\r\n"
-        		+ "		    Log.d(\"Debug\", \"4\");   \r\n"
-        		+ "		\r\n"
-        		+ "		return \"\";\r\n"
-        		+ "	}\r\n"
-        		+ "}";
-		
-		// here the logic
-		FunctionVisitor funVisitor = new FunctionVisitor();
+        String expected = 
+                "class A {\r\n"
+                + "    public String output = \"Contents of \";\r\n"
+                + "    \r\n"
+                + "    public String debug(String output) {\r\n"
+                + "\r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", output1);   \r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", output2);   \r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", output3);               \r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", output4); \r\n"
+                + "        \r\n"
+                + "        output = \"1\";\r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", output1);\r\n"
+                + "        \r\n"
+                + "        output = \"2\";\r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", output2);\r\n"
+                + "        \r\n"
+                + "        output = \"3\";\r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", output3);\r\n"
+                + "        \r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", \"\");   \r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", \"\");  \r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", \"3\");   \r\n"
+                + "        if (Log.Level >= 3)\r\n"
+                + "            Log.d(\"Debug\", \"4\");   \r\n"
+                + "        \r\n"
+                + "        return \"\";\r\n"
+                + "    }\r\n"
+                + "}";
+        
+        // here the logic
+        FunctionVisitor funVisitor = new FunctionVisitor();
         funVisitor.visit(cu, null);
-		
-		
-		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
-	}
-	
-	public class FunctionVisitor extends ModifierVisitor<Object> {
+        
+        
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+    
+    public class FunctionVisitor extends ModifierVisitor<Object> {
 
-		@Override
-		public Visitable visit(ExpressionStmt node, Object arg) {
-			List<MethodCallExpr> mces = node.getChildNodesByType(MethodCallExpr.class);
-			if (mces.isEmpty())
-				return node;
-			MethodCallExpr mce = mces.get(0);
-			if (mce.getScope().isPresent() && mce.getName() != null) {
-				String nodeScope = mce.getScope().get().toString();
-				String nodeName = mce.getName().toString();
-				if (nodeScope.equals("Log")) {
-					if (nodeName.equals("d")) {
-						IfStmt ifStmt = makeIfStmt(node);
-						return ifStmt;
-					}
-				}
-			}
-			return node;
-		}
-	}
-	
-	private IfStmt makeIfStmt(Statement thenStmt) {
-		Expression left = new FieldAccessExpr(new NameExpr("Log"), "Level");
-		Expression right = new IntegerLiteralExpr("3");
-		BinaryExpr condition = new BinaryExpr(left, right, Operator.GREATER_EQUALS);
-		IfStmt ifStmt = new IfStmt(condition, thenStmt, null);
-		return ifStmt;
-	}
+        @Override
+        public Visitable visit(ExpressionStmt node, Object arg) {
+            List<MethodCallExpr> mces = node.getChildNodesByType(MethodCallExpr.class);
+            if (mces.isEmpty())
+                return node;
+            MethodCallExpr mce = mces.get(0);
+            if (mce.getScope().isPresent() && mce.getName() != null) {
+                String nodeScope = mce.getScope().get().toString();
+                String nodeName = mce.getName().toString();
+                if (nodeScope.equals("Log")) {
+                    if (nodeName.equals("d")) {
+                        IfStmt ifStmt = makeIfStmt(node);
+                        return ifStmt;
+                    }
+                }
+            }
+            return node;
+        }
+    }
+    
+    private IfStmt makeIfStmt(Statement thenStmt) {
+        Expression left = new FieldAccessExpr(new NameExpr("Log"), "Level");
+        Expression right = new IntegerLiteralExpr("3");
+        BinaryExpr condition = new BinaryExpr(left, right, Operator.GREATER_EQUALS);
+        IfStmt ifStmt = new IfStmt(condition, thenStmt, null);
+        return ifStmt;
+    }
 
 }

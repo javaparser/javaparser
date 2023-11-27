@@ -87,17 +87,17 @@ class ReflectionClassAdapter {
 
     public List<ResolvedReferenceType> getAncestors() {
         List<ResolvedReferenceType> ancestors = new LinkedList<>();
-		if (typeDeclaration.isClass() && !Object.class.getCanonicalName().equals(clazz.getCanonicalName())) {
-			if (getSuperClass().isPresent()) {
-				ReferenceTypeImpl superClass = getSuperClass().get();
-				ancestors.add(superClass);
-			} else {
-				// Inject the implicitly added extends java.lang.Object
-				ReferenceTypeImpl object = new ReferenceTypeImpl(
-						new ReflectionClassDeclaration(Object.class, typeSolver));
-				ancestors.add(object);
-			}
-		}
+        if (typeDeclaration.isClass() && !Object.class.getCanonicalName().equals(clazz.getCanonicalName())) {
+            if (getSuperClass().isPresent()) {
+                ReferenceTypeImpl superClass = getSuperClass().get();
+                ancestors.add(superClass);
+            } else {
+                // Inject the implicitly added extends java.lang.Object
+                ReferenceTypeImpl object = new ReferenceTypeImpl(
+                        new ReflectionClassDeclaration(Object.class, typeSolver));
+                ancestors.add(object);
+            }
+        }
         ancestors.addAll(getInterfaces());
         return ancestors;
     }

@@ -317,7 +317,7 @@ class JavaCharStream
         }
         catch(java.io.IOException e)
         {
-	  // We are returning one backslash so we should only backup (count-1)
+      // We are returning one backslash so we should only backup (count-1)
           if (backSlashCnt > 1)
             backup(backSlashCnt-1);
 

@@ -96,13 +96,13 @@ public final class AssignExpr extends Expression {
 
     public AssignExpr setTarget(Expression target) {
         this.target = target;
-		setAsParentNodeOf(this.target);
+        setAsParentNodeOf(this.target);
         return this;
     }
 
     public AssignExpr setValue(Expression value) {
         this.value = value;
-		setAsParentNodeOf(this.value);
+        setAsParentNodeOf(this.value);
         return this;
     }
 }

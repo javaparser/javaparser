@@ -37,35 +37,35 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 
 public class Issue3918Test extends AbstractResolutionTest {
 
-	@Test
-	void test() {
+    @Test
+    void test() {
 
-		// class ancestor is defined like this
-		// public class Ancestor {
-	    //   public static class Iterator {}
-		// }
+        // class ancestor is defined like this
+        // public class Ancestor {
+        //   public static class Iterator {}
+        // }
 
-		String code =
-				"import java.util.ArrayList;\n"
-				+ "import java.util.List;\n" + "\n"
-				+ "public class Descendant extends Ancestor {\n"
-				+ "    public void doAThing() {\n"
-				+ "        List<Object> list = new ArrayList<>();\n"
-				+ "        java.util.Iterator<Object> iterator = list.iterator();\n"
-				+ "    }\n"
-				+ "}";
+        String code =
+                "import java.util.ArrayList;\n"
+                + "import java.util.List;\n" + "\n"
+                + "public class Descendant extends Ancestor {\n"
+                + "    public void doAThing() {\n"
+                + "        List<Object> list = new ArrayList<>();\n"
+                + "        java.util.Iterator<Object> iterator = list.iterator();\n"
+                + "    }\n"
+                + "}";
 
-		Path testFile = adaptPath("src/test/resources");
-		CombinedTypeSolver typeSolver = new CombinedTypeSolver();
-		typeSolver.add(new ReflectionTypeSolver());
-		typeSolver.add(new JavaParserTypeSolver(testFile));
-		CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(typeSolver)).parse(code);
+        Path testFile = adaptPath("src/test/resources");
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+        typeSolver.add(new ReflectionTypeSolver());
+        typeSolver.add(new JavaParserTypeSolver(testFile));
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(typeSolver)).parse(code);
 
-		Type type = cu
-				.findFirst(Type.class, n -> n.isReferenceType() && n.asReferenceType().asString().startsWith("java.util.Iterator"))
-				.get();
-		ResolvedType resolvedType = type.resolve();
-		assertEquals("java.util.Iterator<java.lang.Object>", resolvedType.describe());
+        Type type = cu
+                .findFirst(Type.class, n -> n.isReferenceType() && n.asReferenceType().asString().startsWith("java.util.Iterator"))
+                .get();
+        ResolvedType resolvedType = type.resolve();
+        assertEquals("java.util.Iterator<java.lang.Object>", resolvedType.describe());
 
-	}
+    }
 }

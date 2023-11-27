@@ -24,8 +24,8 @@ import com.github.javaparser.quality.Preconditions;
 
 class A {
 
-	public void method(@NotNull String notNull, @NotNull String secondNotNull) {
-		Preconditions.checkNotNull(notNull, "This was aan old message.");
-		Preconditions.checkNotNull(secondNotNull, "Parameter secondNotNull can't be null.");
-	}
+    public void method(@NotNull String notNull, @NotNull String secondNotNull) {
+        Preconditions.checkNotNull(notNull, "This was aan old message.");
+        Preconditions.checkNotNull(secondNotNull, "Parameter secondNotNull can't be null.");
+    }
 }

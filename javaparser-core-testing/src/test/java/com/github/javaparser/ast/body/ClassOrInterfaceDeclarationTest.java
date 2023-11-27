@@ -114,32 +114,32 @@ class ClassOrInterfaceDeclarationTest {
     @ParameterizedTest
     @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16"})
     void sealedFieldNamePermitted(ParserConfiguration.LanguageLevel languageLevel) {
-    	assertDoesNotThrow(() -> {
-    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean sealed");
+        assertDoesNotThrow(() -> {
+            TestParser.parseVariableDeclarationExpr(languageLevel, "boolean sealed");
         });
     }
 
     @ParameterizedTest
     @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_17"})
     void sealedFieldNameNotPermitted(ParserConfiguration.LanguageLevel languageLevel) {
-    	assertThrows(AssertionFailedError.class, () -> {
-    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean sealed");
+        assertThrows(AssertionFailedError.class, () -> {
+            TestParser.parseVariableDeclarationExpr(languageLevel, "boolean sealed");
         });
     }
 
     @ParameterizedTest
     @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16"})
     void permitsFieldNamePermitted(ParserConfiguration.LanguageLevel languageLevel) {
-    	assertDoesNotThrow(() -> {
-    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean permits");
+        assertDoesNotThrow(() -> {
+            TestParser.parseVariableDeclarationExpr(languageLevel, "boolean permits");
         });
     }
 
     @ParameterizedTest
     @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_17"})
     void permitsFieldNameNotPermitted(ParserConfiguration.LanguageLevel languageLevel) {
-    	assertThrows(AssertionFailedError.class, () -> {
-    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean permits");
+        assertThrows(AssertionFailedError.class, () -> {
+            TestParser.parseVariableDeclarationExpr(languageLevel, "boolean permits");
         });
     }
 

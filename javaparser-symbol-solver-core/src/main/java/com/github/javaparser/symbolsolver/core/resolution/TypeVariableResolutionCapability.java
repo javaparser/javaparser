@@ -28,5 +28,5 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.List;
 
 public interface TypeVariableResolutionCapability {
-	MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes);
+    MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes);
 }

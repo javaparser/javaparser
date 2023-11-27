@@ -99,7 +99,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }
@@ -111,7 +111,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * @return this, the ConstructorDeclaration
      */
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -173,9 +173,9 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
                 sb.append(", ");
             }
             if (includingParameterName) {
-            	sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-            	sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         sb.append(")");

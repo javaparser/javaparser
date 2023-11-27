@@ -339,9 +339,9 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
      *
      * @return The type resolved.
      */
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		String name = getNameWithScope();
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        String name = getNameWithScope();
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name);
         if (!ref.isSolved()) {
             throw new UnsolvedSymbolException(name);
@@ -355,5 +355,5 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
             return new ResolvedTypeVariable(typeDeclaration.asTypeParameter());
         }
         return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters);
-	}
+    }
 }

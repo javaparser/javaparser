@@ -41,7 +41,7 @@ public class PropertyChange implements Change {
     }
 
     @Override
-	public ObservableProperty getProperty() {
+    public ObservableProperty getProperty() {
         return property;
     }
 

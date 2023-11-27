@@ -107,7 +107,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<BlockStmt> getBody() {
         return Optional.ofNullable(body);
     }
@@ -119,7 +119,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
      * @return this, the MethodDeclaration
      */
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setBody(final BlockStmt body) {
         if (body == this.body) {
             return this;
@@ -133,13 +133,13 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Type getType() {
         return type;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public MethodDeclaration setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
@@ -221,9 +221,9 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
                 sb.append(", ");
             }
             if (includingParameterName) {
-            	sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-            	sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
+                sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
                 if (param.isVarArgs()) {
                     sb.append("...");
                 }
@@ -291,7 +291,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
+    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public MethodDeclaration removeBody() {
         return setBody((BlockStmt) null);
     }

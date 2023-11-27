@@ -11,46 +11,46 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 
 class JavaParserTypeDeclarationAdapterTest extends AbstractResolutionTest {
 
-	@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}
+    @BeforeAll
+    static void setUpBeforeClass() throws Exception {
+    }
 
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
+    @AfterAll
+    static void tearDownAfterClass() throws Exception {
+    }
 
-	@BeforeEach
-	void setUp() throws Exception {
-	}
+    @BeforeEach
+    void setUp() throws Exception {
+    }
 
-	@AfterEach
-	void tearDownAfterEach() throws Exception {
-	}
+    @AfterEach
+    void tearDownAfterEach() throws Exception {
+    }
 
-	@Test
-	void issue3214() {
-		String code =
-				"public interface Foo {\n"
-				+ "	    interface Bar {}\n"
-				+ "	}\n"
-				+ "\n"
-				+ "	public interface Bar {\n"
-				+ "	    void show();\n"
-				+ "	}\n"
-				+ "\n"
-				+ "	public class Test implements Foo.Bar {\n"
-				+ "	    private Bar bar;\n"
-				+ "	    private void m() {\n"
-				+ "	        bar.show();\n"
-				+ "	    }\n"
-				+ "	}";
+    @Test
+    void issue3214() {
+        String code =
+                "public interface Foo {\n"
+                + "        interface Bar {}\n"
+                + "    }\n"
+                + "\n"
+                + "    public interface Bar {\n"
+                + "        void show();\n"
+                + "    }\n"
+                + "\n"
+                + "    public class Test implements Foo.Bar {\n"
+                + "        private Bar bar;\n"
+                + "        private void m() {\n"
+                + "            bar.show();\n"
+                + "        }\n"
+                + "    }";
 
-		JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
-		CompilationUnit cu = parser.parse(code);
+        JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
+        CompilationUnit cu = parser.parse(code);
 
-		MethodCallExpr mce = cu.findAll(MethodCallExpr.class).get(0);
+        MethodCallExpr mce = cu.findAll(MethodCallExpr.class).get(0);
 
-		assertEquals("Bar.show()",mce.resolve().getQualifiedSignature());
-	}
+        assertEquals("Bar.show()",mce.resolve().getQualifiedSignature());
+    }
 
 }

@@ -152,7 +152,7 @@ public final class CompilationUnit extends Node {
      */
     public void setImports(List<ImportDeclaration> imports) {
         this.imports = imports;
-		setAsParentNodeOf(this.imports);
+        setAsParentNodeOf(this.imports);
     }
 
     /**
@@ -164,7 +164,7 @@ public final class CompilationUnit extends Node {
      */
     public void setPackage(PackageDeclaration pakage) {
         this.pakage = pakage;
-		setAsParentNodeOf(this.pakage);
+        setAsParentNodeOf(this.pakage);
     }
 
     /**
@@ -175,6 +175,6 @@ public final class CompilationUnit extends Node {
      */
     public void setTypes(List<TypeDeclaration> types) {
         this.types = types;
-		setAsParentNodeOf(this.types);
+        setAsParentNodeOf(this.types);
     }
 }

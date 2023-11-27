@@ -181,9 +181,9 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
      * Returns a set of the declared annotation on this type
      */
     public Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-    	return wrappedNode.getAnnotations().stream()
-    		.map(annotation -> annotation.resolve())
-    		.collect(Collectors.toSet());
+        return wrappedNode.getAnnotations().stream()
+            .map(annotation -> annotation.resolve())
+            .collect(Collectors.toSet());
     }
 
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {

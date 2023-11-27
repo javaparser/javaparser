@@ -129,8 +129,8 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
         return Optional.of(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		return ResolvedVoidType.INSTANCE;
-	}
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        return ResolvedVoidType.INSTANCE;
+    }
 }

@@ -145,12 +145,12 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedType type) {
-    	return javassistTypeDeclarationAdapter.isAssignableBy(type);
+        return javassistTypeDeclarationAdapter.isAssignableBy(type);
     }
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-    	return javassistTypeDeclarationAdapter.isAssignableBy(other);
+        return javassistTypeDeclarationAdapter.isAssignableBy(other);
     }
 
     @Override
@@ -180,7 +180,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-	public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
+    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         return JavassistUtils.solveMethodAsUsage(name, argumentsTypes, typeSolver, invokationContext, typeParameterValues, this, ctClass);
     }

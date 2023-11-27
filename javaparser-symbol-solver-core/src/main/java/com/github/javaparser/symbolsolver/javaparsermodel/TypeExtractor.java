@@ -550,12 +550,12 @@ public class TypeExtractor extends DefaultVisitorAdapter {
                 List<ReturnStmt> returnStmts = blockStmt.findAll(ReturnStmt.class);
 
                 if (returnStmts.size() > 0) {
-                	Set<ResolvedType> resolvedTypes = returnStmts.stream()
+                    Set<ResolvedType> resolvedTypes = returnStmts.stream()
                           .map(returnStmt -> returnStmt.getExpression()
-                        		  .map(e -> facade.getType(e))
-                        		  .orElse(ResolvedVoidType.INSTANCE))
+                                  .map(e -> facade.getType(e))
+                                  .orElse(ResolvedVoidType.INSTANCE))
                                   .collect(Collectors.toSet());
-                	actualType = LeastUpperBoundLogic.of().lub(resolvedTypes);
+                    actualType = LeastUpperBoundLogic.of().lub(resolvedTypes);
 
                 } else {
                     actualType = ResolvedVoidType.INSTANCE;
@@ -585,9 +585,9 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(MethodReferenceExpr node, Boolean solveLambdas) {
-    	if ("new".equals(node.getIdentifier())) {
-			return node.getScope().calculateResolvedType();
-		}
+        if ("new".equals(node.getIdentifier())) {
+            return node.getScope().calculateResolvedType();
+        }
         Node parentNode = demandParentNode(node);
         if (parentNode instanceof MethodCallExpr) {
             MethodCallExpr callExpr = (MethodCallExpr) parentNode;
@@ -634,13 +634,13 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
                 return result;
             }
-			// Since variable parameters are represented by an array, in case we deal with
-			// the variadic parameter we have to take into account the base type of the
-			// array.
-			ResolvedMethodDeclaration rmd = refMethod.getCorrespondingDeclaration();
-			if (rmd.hasVariadicParameter() && pos >= rmd.getNumberOfParams() - 1) {
-				return rmd.getLastParam().getType().asArrayType().getComponentType();
-			}
+            // Since variable parameters are represented by an array, in case we deal with
+            // the variadic parameter we have to take into account the base type of the
+            // array.
+            ResolvedMethodDeclaration rmd = refMethod.getCorrespondingDeclaration();
+            if (rmd.hasVariadicParameter() && pos >= rmd.getNumberOfParams() - 1) {
+                return rmd.getLastParam().getType().asArrayType().getComponentType();
+            }
             return rmd.getParam(pos).getType();
         }
         throw new UnsupportedOperationException("The type of a method reference expr depends on the position and its return value");

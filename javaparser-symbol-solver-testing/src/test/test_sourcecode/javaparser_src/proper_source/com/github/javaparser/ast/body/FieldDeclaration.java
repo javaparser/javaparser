@@ -46,31 +46,31 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
     }
 
     public FieldDeclaration(int modifiers, Type type, VariableDeclarator variable) {
-    	setModifiers(modifiers);
-    	setType(type);
-    	List<VariableDeclarator> aux = new ArrayList<VariableDeclarator>();
-    	aux.add(variable);
-    	setVariables(aux);
+        setModifiers(modifiers);
+        setType(type);
+        List<VariableDeclarator> aux = new ArrayList<VariableDeclarator>();
+        aux.add(variable);
+        setVariables(aux);
     }
 
     public FieldDeclaration(int modifiers, Type type, List<VariableDeclarator> variables) {
-    	setModifiers(modifiers);
-    	setType(type);
-    	setVariables(variables);
+        setModifiers(modifiers);
+        setType(type);
+        setVariables(variables);
     }
 
     public FieldDeclaration(int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
         super(annotations);
         setModifiers(modifiers);
-    	setType(type);
-    	setVariables(variables);
+        setType(type);
+        setVariables(variables);
     }
 
     public FieldDeclaration(int beginLine, int beginColumn, int endLine, int endColumn, int modifiers, List<AnnotationExpr> annotations, Type type, List<VariableDeclarator> variables) {
         super(beginLine, beginColumn, endLine, endColumn, annotations);
         setModifiers(modifiers);
-    	setType(type);
-    	setVariables(variables);
+        setType(type);
+        setVariables(variables);
     }
 
     @Override
@@ -107,12 +107,12 @@ public final class FieldDeclaration extends BodyDeclaration implements Documenta
 
     public void setType(Type type) {
         this.type = type;
-		setAsParentNodeOf(this.type);
+        setAsParentNodeOf(this.type);
     }
 
     public void setVariables(List<VariableDeclarator> variables) {
         this.variables = variables;
-		setAsParentNodeOf(this.variables);
+        setAsParentNodeOf(this.variables);
     }
 
     @Override

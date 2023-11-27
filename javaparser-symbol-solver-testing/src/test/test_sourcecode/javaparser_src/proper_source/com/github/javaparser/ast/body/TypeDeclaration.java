@@ -32,69 +32,69 @@ import java.util.List;
  */
 public abstract class TypeDeclaration extends BodyDeclaration implements NamedNode {
 
-	private NameExpr name;
+    private NameExpr name;
 
-	private int modifiers;
+    private int modifiers;
 
-	private List<BodyDeclaration> members;
+    private List<BodyDeclaration> members;
 
-	public TypeDeclaration() {
-	}
+    public TypeDeclaration() {
+    }
 
-	public TypeDeclaration(int modifiers, String name) {
-		setName(name);
-		setModifiers(modifiers);
-	}
+    public TypeDeclaration(int modifiers, String name) {
+        setName(name);
+        setModifiers(modifiers);
+    }
 
-	public TypeDeclaration(List<AnnotationExpr> annotations,
-			int modifiers, String name,
-			List<BodyDeclaration> members) {
-		super(annotations);
-		setName(name);
-		setModifiers(modifiers);
-		setMembers(members);
-	}
+    public TypeDeclaration(List<AnnotationExpr> annotations,
+            int modifiers, String name,
+            List<BodyDeclaration> members) {
+        super(annotations);
+        setName(name);
+        setModifiers(modifiers);
+        setMembers(members);
+    }
 
-	public TypeDeclaration(int beginLine, int beginColumn, int endLine,
-			int endColumn, List<AnnotationExpr> annotations,
-			int modifiers, String name,
-			List<BodyDeclaration> members) {
-		super(beginLine, beginColumn, endLine, endColumn, annotations);
-		setName(name);
-		setModifiers(modifiers);
-		setMembers(members);
-	}
+    public TypeDeclaration(int beginLine, int beginColumn, int endLine,
+            int endColumn, List<AnnotationExpr> annotations,
+            int modifiers, String name,
+            List<BodyDeclaration> members) {
+        super(beginLine, beginColumn, endLine, endColumn, annotations);
+        setName(name);
+        setModifiers(modifiers);
+        setMembers(members);
+    }
 
-	public final List<BodyDeclaration> getMembers() {
-		return members;
-	}
+    public final List<BodyDeclaration> getMembers() {
+        return members;
+    }
 
-	/**
-	 * Return the modifiers of this type declaration.
-	 * 
-	 * @see ModifierSet
-	 * @return modifiers
-	 */
-	public final int getModifiers() {
-		return modifiers;
-	}
+    /**
+     * Return the modifiers of this type declaration.
+     * 
+     * @see ModifierSet
+     * @return modifiers
+     */
+    public final int getModifiers() {
+        return modifiers;
+    }
 
-	public final String getName() {
-		return name.getName();
-	}
+    public final String getName() {
+        return name.getName();
+    }
 
-	public void setMembers(List<BodyDeclaration> members) {
-		this.members = members;
-		setAsParentNodeOf(this.members);
-	}
+    public void setMembers(List<BodyDeclaration> members) {
+        this.members = members;
+        setAsParentNodeOf(this.members);
+    }
 
-	public final void setModifiers(int modifiers) {
-		this.modifiers = modifiers;
-	}
+    public final void setModifiers(int modifiers) {
+        this.modifiers = modifiers;
+    }
 
-	public final void setName(String name) {
-		this.name = new NameExpr(name);
-	}
+    public final void setName(String name) {
+        this.name = new NameExpr(name);
+    }
 
     public final void setNameExpr(NameExpr nameExpr) {
       this.name = nameExpr;

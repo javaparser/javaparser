@@ -28,10 +28,10 @@ import com.github.javaparser.Range;
  */
 public abstract class LiteralExpr extends Expression {
 
-	public LiteralExpr() {
-	}
+    public LiteralExpr() {
+    }
 
-	public LiteralExpr(Range range) {
-		super(range);
-	}
+    public LiteralExpr(Range range) {
+        super(range);
+    }
 }

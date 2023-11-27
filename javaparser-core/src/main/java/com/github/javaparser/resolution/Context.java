@@ -42,12 +42,12 @@ import java.util.Optional;
  * @author Federico Tomassetti
  */
 public interface Context {
-	
-	/**
-	 * Returns the node wrapped in the context
-	 * 
-	 */
-	<N extends Node> N getWrappedNode();
+    
+    /**
+     * Returns the node wrapped in the context
+     * 
+     */
+    <N extends Node> N getWrappedNode();
 
     /**
      * @return The parent context, if there is one. For example, a method exists within a compilation unit.

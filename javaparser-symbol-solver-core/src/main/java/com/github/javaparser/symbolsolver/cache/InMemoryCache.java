@@ -51,7 +51,7 @@ public class InMemoryCache<K, V> implements Cache<K, V>  {
     private final Map<K, V> mappedValues;
 
     private InMemoryCache() {
-    	mappedValues = Collections.synchronizedMap(new WeakHashMap<>());
+        mappedValues = Collections.synchronizedMap(new WeakHashMap<>());
     }
 
     @Override

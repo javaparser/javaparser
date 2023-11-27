@@ -37,27 +37,27 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UnknownMethodsResolutionTest extends AbstractResolutionTest {
 
-	@Test
-	void testUnknownMethod1() {
-		assertThrows(UnsolvedSymbolException.class, () -> {
-		    CompilationUnit cu = parseSample("UnknownMethods");
-		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "UnknownMethods");
-		MethodDeclaration method = Navigator.demandMethod(clazz, "test1");
-		MethodCallExpr methodCallExpr = method.getBody().get().getStatement(0).asExpressionStmt().getExpression().asMethodCallExpr();
-		SymbolReference<ResolvedMethodDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr);
+    @Test
+    void testUnknownMethod1() {
+        assertThrows(UnsolvedSymbolException.class, () -> {
+            CompilationUnit cu = parseSample("UnknownMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "UnknownMethods");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "test1");
+        MethodCallExpr methodCallExpr = method.getBody().get().getStatement(0).asExpressionStmt().getExpression().asMethodCallExpr();
+        SymbolReference<ResolvedMethodDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr);
 });
-						
+                        
 }
 
-	@Test
-	void testUnknownMethod2() {
-		assertThrows(UnsolvedSymbolException.class, () -> {
-		    CompilationUnit cu = parseSample("UnknownMethods");
-		ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "UnknownMethods");
-		MethodDeclaration method = Navigator.demandMethod(clazz, "test2");
-		MethodCallExpr methodCallExpr = method.getBody().get().getStatement(1).asExpressionStmt().getExpression().asMethodCallExpr();
-		SymbolReference<ResolvedMethodDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr);
+    @Test
+    void testUnknownMethod2() {
+        assertThrows(UnsolvedSymbolException.class, () -> {
+            CompilationUnit cu = parseSample("UnknownMethods");
+        ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "UnknownMethods");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "test2");
+        MethodCallExpr methodCallExpr = method.getBody().get().getStatement(1).asExpressionStmt().getExpression().asMethodCallExpr();
+        SymbolReference<ResolvedMethodDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(methodCallExpr);
 });
-						
+                        
 }
 }

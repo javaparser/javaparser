@@ -54,8 +54,8 @@ import java.util.function.Consumer;
  * </ol>
  */
 public class VarType extends Type {
-	
-	private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
+    
+    private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     @AllFieldsConstructor
     public VarType() {
@@ -134,9 +134,9 @@ public class VarType extends Type {
         action.accept(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		Node parent = getParentNode().get();
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        Node parent = getParentNode().get();
         if (!(parent instanceof VariableDeclarator)) {
             throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
         }
@@ -157,14 +157,14 @@ public class VarType extends Type {
                 if (iterType.isReferenceType()) {
                     // The type of a variable in a for-each loop with an
                     // Iterable with parameter type
-                	List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
-					if (parametersType.isEmpty()) {
-						Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT)
-								.getDeclaration();
-						return oObjectDeclaration
-								.map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
-								.orElseThrow(() -> new UnsupportedOperationException());
-					}
+                    List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
+                    if (parametersType.isEmpty()) {
+                        Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT)
+                                .getDeclaration();
+                        return oObjectDeclaration
+                                .map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
+                                .orElseThrow(() -> new UnsupportedOperationException());
+                    }
                     return parametersType.get(0);
                 }
             }
@@ -172,9 +172,9 @@ public class VarType extends Type {
         return initializer
                 .map(Expression::calculateResolvedType)
                 .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
-	}
-	
-	private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(
+    }
+    
+    private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(
             VariableDeclarator variableDeclarator) {
         Optional<Node> node = variableDeclarator.getParentNode();
         if (!node.isPresent() || !(node.get() instanceof VariableDeclarationExpr)) {

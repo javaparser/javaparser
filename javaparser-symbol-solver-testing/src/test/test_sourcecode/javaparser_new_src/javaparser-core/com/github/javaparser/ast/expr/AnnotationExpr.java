@@ -28,21 +28,21 @@ import com.github.javaparser.Range;
  */
 public abstract class AnnotationExpr extends Expression {
 
-	protected NameExpr name;
+    protected NameExpr name;
 
-	public AnnotationExpr() {}
+    public AnnotationExpr() {}
 
-	public AnnotationExpr(Range range) {
-		super(range);
-	}
+    public AnnotationExpr(Range range) {
+        super(range);
+    }
 
-	public NameExpr getName() {
-		return name;
-	}
+    public NameExpr getName() {
+        return name;
+    }
 
-	public AnnotationExpr setName(NameExpr name) {
-		this.name = name;
-		setAsParentNodeOf(name);
-		return this;
-	}
+    public AnnotationExpr setName(NameExpr name) {
+        this.name = name;
+        setAsParentNodeOf(name);
+        return this;
+    }
 }

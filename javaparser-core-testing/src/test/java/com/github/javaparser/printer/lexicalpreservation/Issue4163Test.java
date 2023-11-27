@@ -38,25 +38,25 @@ import com.github.javaparser.printer.configuration.PrinterConfiguration;
 
 public class Issue4163Test extends AbstractLexicalPreservingTest {
 
-	@Test
-	void test() {
-		VoidVisitorAdapter<Object> visitor = new VoidVisitorAdapter<Object>() {
-	        @Override
-	        public void visit(MethodDeclaration n, Object arg) {
-	            System.out.println(n.getDeclarationAsString(true, true, true));
-	            System.out.println(n.getComment());
-	        }
-	    };
-	    String code =
-	    	"class Foo {\n"
-	    	+ "		/*\n"
-	    	+ "      * comment\n"
-	    	+ "      */\n"
-	    	+ "		void m() {}\n"
-	    	+ "	}";
+    @Test
+    void test() {
+        VoidVisitorAdapter<Object> visitor = new VoidVisitorAdapter<Object>() {
+            @Override
+            public void visit(MethodDeclaration n, Object arg) {
+                System.out.println(n.getDeclarationAsString(true, true, true));
+                System.out.println(n.getComment());
+            }
+        };
+        String code =
+            "class Foo {\n"
+            + "        /*\n"
+            + "      * comment\n"
+            + "      */\n"
+            + "        void m() {}\n"
+            + "    }";
 
-	    // setup pretty printer to print comments
-	    PrinterConfiguration config = new DefaultPrinterConfiguration()
+        // setup pretty printer to print comments
+        PrinterConfiguration config = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
         Printer printer = new DefaultPrettyPrinter(config);
         CompilationUnit cu = StaticJavaParser.parse(code);
@@ -68,8 +68,8 @@ public class Issue4163Test extends AbstractLexicalPreservingTest {
         // set the new pretty printer in the compilation unit
         cu.printer(printer);
         // visit the MethodDeclaration node
-	    visitor.visit(cu, null);
-	    // checks that the comment is printed after executing the getDeclarationAsString method
-	    assertEqualsStringIgnoringEol(expected, md.getComment().get().toString());
-	}
+        visitor.visit(cu, null);
+        // checks that the comment is printed after executing the getDeclarationAsString method
+        assertEqualsStringIgnoringEol(expected, md.getComment().get().toString());
+    }
 }

@@ -42,7 +42,7 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 class JavaParserMethodDeclarationTest extends AbstractResolutionTest
-		implements ResolvedMethodDeclarationTest, TypeVariableResolutionCapabilityTest {
+        implements ResolvedMethodDeclarationTest, TypeVariableResolutionCapabilityTest {
 
     @Override
     public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
@@ -60,29 +60,29 @@ class JavaParserMethodDeclarationTest extends AbstractResolutionTest
     }
 
     @Test
-	void issue2484() {
-		String code =
-				"public class MyClass {\n"
-						+ "    private Ibaz m_something;\n"
-						+ "\n"
-						+ "    public interface Ibaz {\n"
-						+ "    }\n"
-						+ "    \n"
-						+ "    public void foo(Class<? extends Ibaz> clazz) {\n"
-						+ "    }\n"
-						+ "    \n"
-						+ "    protected void bar() {\n"
-						+ "        foo(null); // this works\n"
-						+ "        foo(m_something.getClass()); // this doesn't work\n"
-						+ "    }\n"
-						+ "}";
+    void issue2484() {
+        String code =
+                "public class MyClass {\n"
+                        + "    private Ibaz m_something;\n"
+                        + "\n"
+                        + "    public interface Ibaz {\n"
+                        + "    }\n"
+                        + "    \n"
+                        + "    public void foo(Class<? extends Ibaz> clazz) {\n"
+                        + "    }\n"
+                        + "    \n"
+                        + "    protected void bar() {\n"
+                        + "        foo(null); // this works\n"
+                        + "        foo(m_something.getClass()); // this doesn't work\n"
+                        + "    }\n"
+                        + "}";
 
-		JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
-		CompilationUnit cu = parser.parse(code);
+        JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
+        CompilationUnit cu = parser.parse(code);
 
-		List<MethodCallExpr> mces = cu.findAll(MethodCallExpr.class);
-		assertEquals("MyClass.foo(java.lang.Class<? extends MyClass.Ibaz>)", mces.get(0).resolve().getQualifiedSignature());
-		assertEquals("MyClass.foo(java.lang.Class<? extends MyClass.Ibaz>)", mces.get(1).resolve().getQualifiedSignature());
-	}
+        List<MethodCallExpr> mces = cu.findAll(MethodCallExpr.class);
+        assertEquals("MyClass.foo(java.lang.Class<? extends MyClass.Ibaz>)", mces.get(0).resolve().getQualifiedSignature());
+        assertEquals("MyClass.foo(java.lang.Class<? extends MyClass.Ibaz>)", mces.get(1).resolve().getQualifiedSignature());
+    }
 
 }

@@ -43,8 +43,8 @@ public final class VariableDeclarator extends Node {
     }
 
     public VariableDeclarator(VariableDeclaratorId id, Expression init) {
-    	setId(id);
-    	setInit(init);
+        setId(id);
+        setInit(init);
     }
 
     public VariableDeclarator(int beginLine, int beginColumn, int endLine, int endColumn, VariableDeclaratorId id, Expression init) {
@@ -73,11 +73,11 @@ public final class VariableDeclarator extends Node {
 
     public void setId(VariableDeclaratorId id) {
         this.id = id;
-		setAsParentNodeOf(this.id);
+        setAsParentNodeOf(this.id);
     }
 
     public void setInit(Expression init) {
         this.init = init;
-		setAsParentNodeOf(this.init);
+        setAsParentNodeOf(this.init);
     }
 }

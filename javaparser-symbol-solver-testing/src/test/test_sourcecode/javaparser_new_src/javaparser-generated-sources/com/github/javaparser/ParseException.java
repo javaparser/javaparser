@@ -44,9 +44,9 @@ public class ParseException extends Exception {
           int[][] expectedTokenSequencesVal,
           String[] tokenImageVal
          )
-	{
-	  this (currentTokenVal, expectedTokenSequencesVal, tokenImageVal, null);
-	}
+    {
+      this (currentTokenVal, expectedTokenSequencesVal, tokenImageVal, null);
+    }
   
   
   /**
@@ -119,7 +119,7 @@ public class ParseException extends Exception {
                            int[][] expectedTokenSequences,
                            String[] tokenImage,
                            String lexicalStateName) {
-	StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder();
     StringBuffer expected = new StringBuffer();
     
     int maxSize = 0;
@@ -129,7 +129,7 @@ public class ParseException extends Exception {
         maxSize = expectedTokenSequences[i].length;
       }
       for (int j = 0; j < expectedTokenSequences[i].length; j++) {
-    	  sortedOptions.add(tokenImage[expectedTokenSequences[i][j]]);
+          sortedOptions.add(tokenImage[expectedTokenSequences[i][j]]);
       }
     }
     
@@ -142,33 +142,33 @@ public class ParseException extends Exception {
     Token tok = currentToken.next;
     for (int i = 0; i < maxSize; i++) {
       String tokenText = tok.image;
-  	  String escapedTokenText = add_escapes(tokenText);
+        String escapedTokenText = add_escapes(tokenText);
       if (i != 0) {
-      	sb.append(" ");
+          sb.append(" ");
       }
       if (tok.kind == 0) {
-      	sb.append(tokenImage[0]);
+          sb.append(tokenImage[0]);
         break;
       }
       sb.append(" \"");
-	  sb.append(escapedTokenText);
+      sb.append(escapedTokenText);
       sb.append("\"");
       sb.append(" " + tokenImage[tok.kind]);
       tok = tok.next;
     }
-	sb.append(EOL).append(INDENT).append("at line " + currentToken.next.beginLine + ", column " + currentToken.next.beginColumn);
-	sb.append(".").append(EOL);
+    sb.append(EOL).append(INDENT).append("at line " + currentToken.next.beginLine + ", column " + currentToken.next.beginColumn);
+    sb.append(".").append(EOL);
     
     if (expectedTokenSequences.length == 0) {
         // Nothing to add here
     } else {
-    	int numExpectedTokens = expectedTokenSequences.length;
-    	sb.append(EOL).append("Was expecting"+ (numExpectedTokens == 1 ? ":" : " one of:") + EOL + EOL);
-    	sb.append(expected.toString());
+        int numExpectedTokens = expectedTokenSequences.length;
+        sb.append(EOL).append("Was expecting"+ (numExpectedTokens == 1 ? ":" : " one of:") + EOL + EOL);
+        sb.append(expected.toString());
     }
     // 2013/07/30 --> Seems to be inaccurate as represents the readahead state, not the lexical state BEFORE the unknown token
 //    if (lexicalStateName != null) {
-//    	sb.append(EOL).append("** Lexical State : ").append(lexicalStateName).append(EOL).append(EOL);
+//        sb.append(EOL).append("** Lexical State : ").append(lexicalStateName).append(EOL).append(EOL);
 //    }
     
     return sb.toString();

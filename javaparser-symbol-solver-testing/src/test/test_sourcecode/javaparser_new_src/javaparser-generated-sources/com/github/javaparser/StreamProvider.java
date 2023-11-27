@@ -26,44 +26,44 @@ import java.io.Reader;
  */
 public class StreamProvider implements Provider {
 
-	Reader _reader;
+    Reader _reader;
 
-	public StreamProvider(Reader reader) {
-		_reader = reader;
-	}
-	
-	public StreamProvider(InputStream stream) throws IOException {
-		_reader = new BufferedReader(new InputStreamReader(stream));
-	}
-	
-	public StreamProvider(InputStream stream, String charsetName) throws IOException {
-		_reader = new BufferedReader(new InputStreamReader(stream, charsetName));
-	}
+    public StreamProvider(Reader reader) {
+        _reader = reader;
+    }
+    
+    public StreamProvider(InputStream stream) throws IOException {
+        _reader = new BufferedReader(new InputStreamReader(stream));
+    }
+    
+    public StreamProvider(InputStream stream, String charsetName) throws IOException {
+        _reader = new BufferedReader(new InputStreamReader(stream, charsetName));
+    }
 
-	@Override
-	public int read(char[] buffer, int off, int len) throws IOException {
-	   int result = _reader.read(buffer, off, len);
+    @Override
+    public int read(char[] buffer, int off, int len) throws IOException {
+       int result = _reader.read(buffer, off, len);
 
-	   /* CBA -- Added 2014/03/29 -- 
-	             This logic allows the generated Java code to be easily translated to C# (via sharpen) -
-	             as in C# 0 represents end of file, and in Java, -1 represents end of file
-	             See : http://msdn.microsoft.com/en-us/library/9kstw824(v=vs.110).aspx
-	             ** Technically, this is not required for java but the overhead is extremely low compared to the code generation benefits.
-	   */
-	   
-	   if (result == 0) {
-	      if (off < buffer.length && len > 0) {
-	        result = -1;
-	      }
-	   }
-	   
-		return result;
-	}
+       /* CBA -- Added 2014/03/29 -- 
+                 This logic allows the generated Java code to be easily translated to C# (via sharpen) -
+                 as in C# 0 represents end of file, and in Java, -1 represents end of file
+                 See : http://msdn.microsoft.com/en-us/library/9kstw824(v=vs.110).aspx
+                 ** Technically, this is not required for java but the overhead is extremely low compared to the code generation benefits.
+       */
+       
+       if (result == 0) {
+          if (off < buffer.length && len > 0) {
+            result = -1;
+          }
+       }
+       
+        return result;
+    }
 
-	@Override
-	public void close() throws IOException {
-		_reader.close();
-	}
+    @Override
+    public void close() throws IOException {
+        _reader.close();
+    }
 
 }
 

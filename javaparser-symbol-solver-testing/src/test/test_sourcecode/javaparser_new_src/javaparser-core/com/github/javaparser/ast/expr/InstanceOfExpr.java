@@ -32,51 +32,51 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public final class InstanceOfExpr extends Expression implements NodeWithType<InstanceOfExpr> {
 
-	private Expression expr;
+    private Expression expr;
 
-	private Type type;
+    private Type type;
 
-	public InstanceOfExpr() {
-	}
+    public InstanceOfExpr() {
+    }
 
-	public InstanceOfExpr(final Expression expr, final Type type) {
-		setExpr(expr);
-		setType(type);
-	}
+    public InstanceOfExpr(final Expression expr, final Type type) {
+        setExpr(expr);
+        setType(type);
+    }
 
-	public InstanceOfExpr(final Range range, final Expression expr, final Type type) {
-		super(range);
-		setExpr(expr);
-		setType(type);
-	}
+    public InstanceOfExpr(final Range range, final Expression expr, final Type type) {
+        super(range);
+        setExpr(expr);
+        setType(type);
+    }
 
-	@Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
-		return v.visit(this, arg);
-	}
+    @Override public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
+    }
 
-	@Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
-	}
+    @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
+    }
 
-	public Expression getExpr() {
-		return expr;
-	}
+    public Expression getExpr() {
+        return expr;
+    }
 
-	@Override
-	public Type getType() {
-		return type;
-	}
+    @Override
+    public Type getType() {
+        return type;
+    }
 
-	public InstanceOfExpr setExpr(final Expression expr) {
-		this.expr = expr;
-		setAsParentNodeOf(this.expr);
-		return this;
-	}
-
-	@Override
-    public InstanceOfExpr setType(final Type type) {
-		this.type = type;
-		setAsParentNodeOf(this.type);
+    public InstanceOfExpr setExpr(final Expression expr) {
+        this.expr = expr;
+        setAsParentNodeOf(this.expr);
         return this;
-	}
+    }
+
+    @Override
+    public InstanceOfExpr setType(final Type type) {
+        this.type = type;
+        setAsParentNodeOf(this.type);
+        return this;
+    }
 }

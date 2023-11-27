@@ -107,17 +107,17 @@ public final class ArrayCreationExpr extends Expression {
 
     public void setDimensions(List<Expression> dimensions) {
         this.dimensions = dimensions;
-		setAsParentNodeOf(this.dimensions);
+        setAsParentNodeOf(this.dimensions);
     }
 
     public void setInitializer(ArrayInitializerExpr initializer) {
         this.initializer = initializer;
-		setAsParentNodeOf(this.initializer);
+        setAsParentNodeOf(this.initializer);
     }
 
     public void setType(Type type) {
         this.type = type;
-		setAsParentNodeOf(this.type);
+        setAsParentNodeOf(this.type);
     }
 
     public List<List<AnnotationExpr>> getArraysAnnotations() {

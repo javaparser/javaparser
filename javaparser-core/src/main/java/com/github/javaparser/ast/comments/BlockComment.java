@@ -109,13 +109,13 @@ public class BlockComment extends Comment {
         return Optional.of(this);
     }
 
-	@Override
-	public String getHeader() {
-		return "/*";
-	}
-	
-	@Override
-	public String getFooter() {
-		return "*/";
-	}
+    @Override
+    public String getHeader() {
+        return "/*";
+    }
+    
+    @Override
+    public String getFooter() {
+        return "*/";
+    }
 }

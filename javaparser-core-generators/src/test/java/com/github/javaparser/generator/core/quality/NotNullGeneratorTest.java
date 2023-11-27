@@ -36,46 +36,46 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 class NotNullGeneratorTest {
 
-	@Test
-	void testExecutionOfGenerator() throws Exception {
+    @Test
+    void testExecutionOfGenerator() throws Exception {
 
-		// Setup the
-		String resourcesFolderPath = getClass().getCanonicalName().replace(".", File.separator);
+        // Setup the
+        String resourcesFolderPath = getClass().getCanonicalName().replace(".", File.separator);
 
-		String basePath = Paths.get("src", "test", "resources").toString();
-		Path originalFile = Paths.get(basePath, resourcesFolderPath, "original");
-		Path expectedFile = Paths.get(basePath, resourcesFolderPath, "expected");
+        String basePath = Paths.get("src", "test", "resources").toString();
+        Path originalFile = Paths.get(basePath, resourcesFolderPath, "original");
+        Path expectedFile = Paths.get(basePath, resourcesFolderPath, "expected");
 
-		SourceRoot originalSources = new SourceRoot(originalFile);
-		SourceRoot expectedSources = new SourceRoot(expectedFile);
-		expectedSources.tryToParse();
+        SourceRoot originalSources = new SourceRoot(originalFile);
+        SourceRoot expectedSources = new SourceRoot(expectedFile);
+        expectedSources.tryToParse();
 
-		// Generate the information
-		new NotNullGenerator(originalSources).generate();
+        // Generate the information
+        new NotNullGenerator(originalSources).generate();
 
-		List<CompilationUnit> editedSourceCus = originalSources.getCompilationUnits();
-		List<CompilationUnit> expectedSourcesCus = expectedSources.getCompilationUnits();
-		assertEquals(expectedSourcesCus.size(), editedSourceCus.size());
+        List<CompilationUnit> editedSourceCus = originalSources.getCompilationUnits();
+        List<CompilationUnit> expectedSourcesCus = expectedSources.getCompilationUnits();
+        assertEquals(expectedSourcesCus.size(), editedSourceCus.size());
 
-		// Check if all the files match the expected result
-		for (int i = 0 ; i < editedSourceCus.size() ; i++) {
+        // Check if all the files match the expected result
+        for (int i = 0 ; i < editedSourceCus.size() ; i++) {
 
-			DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
-			String expectedCode = printer.print(expectedSourcesCus.get(i));
-			String editedCode = printer.print(editedSourceCus.get(i));
+            DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
+            String expectedCode = printer.print(expectedSourcesCus.get(i));
+            String editedCode = printer.print(editedSourceCus.get(i));
 
-			if (!expectedCode.equals(editedCode)) {
-				System.out.println("Expected:");
-				System.out.println("####");
-				System.out.println(expectedSourcesCus.get(i));
-				System.out.println("####");
-				System.out.println("Actual:");
-				System.out.println("####");
-				System.out.println(editedSourceCus.get(i));
-				System.out.println("####");
-				fail("Actual code doesn't match with the expected code.");
-			}
-		}
-	}
+            if (!expectedCode.equals(editedCode)) {
+                System.out.println("Expected:");
+                System.out.println("####");
+                System.out.println(expectedSourcesCus.get(i));
+                System.out.println("####");
+                System.out.println("Actual:");
+                System.out.println("####");
+                System.out.println(editedSourceCus.get(i));
+                System.out.println("####");
+                fail("Actual code doesn't match with the expected code.");
+            }
+        }
+    }
 
 }

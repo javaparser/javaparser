@@ -242,7 +242,7 @@ class JavassistUtils {
     }
 
     private static Optional<String> getVariableName(LocalVariableAttribute attr, int pos) {
-    	try {
+        try {
             return Optional.of(attr.variableNameByIndex(pos));
         } catch (ArrayIndexOutOfBoundsException e) {
             return Optional.empty();

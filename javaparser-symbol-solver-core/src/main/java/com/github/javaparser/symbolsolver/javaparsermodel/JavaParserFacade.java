@@ -615,7 +615,7 @@ public class JavaParserFacade {
      * @return The type resolved.
      */
     public ResolvedType convertToUsage(Type type) {
-    	return convertToUsage(type, JavaParserFactory.getContext(type, typeSolver));
+        return convertToUsage(type, JavaParserFactory.getContext(type, typeSolver));
     }
 
     private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(
@@ -709,8 +709,8 @@ public class JavaParserFacade {
      */
     @Deprecated
     public ResolvedType classToResolvedType(Class<?> clazz) {
-    	Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
-    	return symbolSolver.classToResolvedType(clazz);
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        return symbolSolver.classToResolvedType(clazz);
     }
 
 }

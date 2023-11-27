@@ -199,11 +199,11 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
         return Optional.of(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		List<ResolvedType> resolvedElements = getElements().stream()
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        List<ResolvedType> resolvedElements = getElements().stream()
                 .map(el -> el.convertToUsage(context))
                 .collect(Collectors.toList());
         return new ResolvedUnionType(resolvedElements);
-	}
+    }
 }

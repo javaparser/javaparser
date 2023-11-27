@@ -284,7 +284,7 @@ public enum ObservableProperty {
     }
 
     public boolean isNullOrNotPresent(Node node) {
-    	return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
+        return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
     }
 
     public boolean isNullOrEmpty(Node node) {

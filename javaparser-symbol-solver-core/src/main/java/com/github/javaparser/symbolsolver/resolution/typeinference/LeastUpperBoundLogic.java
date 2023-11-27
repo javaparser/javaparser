@@ -23,7 +23,7 @@ public class LeastUpperBoundLogic {
     private Set<Set<ResolvedType>> lubCache = new HashSet<>();
 
     public static LeastUpperBoundLogic of() {
-    	return new LeastUpperBoundLogic();
+        return new LeastUpperBoundLogic();
     }
 
     private LeastUpperBoundLogic() {}
@@ -40,8 +40,8 @@ public class LeastUpperBoundLogic {
         // One way to handle this case is to remove the type null from the list of types.
         Set<ResolvedType> resolvedTypes = types.stream().filter(type -> !(type instanceof NullType)).collect(Collectors.toSet());
 
-		// reduces the set in the presence of enumeration type because members are
-		// not equal and they do not have an explicit super type.
+        // reduces the set in the presence of enumeration type because members are
+        // not equal and they do not have an explicit super type.
         // So we only keep one enumeration for all the members of an enumeration
         filterEnumType(resolvedTypes);
 
@@ -204,25 +204,25 @@ public class LeastUpperBoundLogic {
      * Check the type declaration if it is an enum
      */
     private boolean isEnum(ResolvedType type) {
-    	return type.isReferenceType() && type.asReferenceType().getTypeDeclaration().get().isEnum();
+        return type.isReferenceType() && type.asReferenceType().getTypeDeclaration().get().isEnum();
     }
 
     /*
      * Keep only one enum reference type per enum declaration
      */
     private void filterEnumType(Set<ResolvedType> resolvedTypes) {
-    	Map<String, ResolvedType> enumTypes = new HashMap<>();
+        Map<String, ResolvedType> enumTypes = new HashMap<>();
         List<ResolvedType> erasedEnumTypes = new ArrayList<>();
         for (ResolvedType type : resolvedTypes) {
-        	if (isEnum(type)) {
-        		// enum qualified name i.e. java.math.RoundingMode
-        		String qn = type.asReferenceType().getTypeDeclaration().get().asEnum().getQualifiedName();
-        		// Save the first occurrence and mark the others so they can be deleted
-        		ResolvedType returnedType = enumTypes.putIfAbsent(qn, type);
-        		if (returnedType != null) {
-        			erasedEnumTypes.add(type);
-        		}
-        	}
+            if (isEnum(type)) {
+                // enum qualified name i.e. java.math.RoundingMode
+                String qn = type.asReferenceType().getTypeDeclaration().get().asEnum().getQualifiedName();
+                // Save the first occurrence and mark the others so they can be deleted
+                ResolvedType returnedType = enumTypes.putIfAbsent(qn, type);
+                if (returnedType != null) {
+                    erasedEnumTypes.add(type);
+                }
+            }
         }
         resolvedTypes.removeAll(erasedEnumTypes);
     }
@@ -234,7 +234,7 @@ public class LeastUpperBoundLogic {
     }
 
     private Set<ResolvedType> supertypes(ResolvedType type) {
-    	// How to deal with other types like for example type variable?
+        // How to deal with other types like for example type variable?
         return type.isReferenceType() ? supertypes(type.asReferenceType())
                 : new LinkedHashSet<>();
     }
@@ -370,12 +370,12 @@ public class LeastUpperBoundLogic {
      * the result of lcta(List<String>, List<T>) should be in List<String>.
      */
     private boolean isSubstituable(ResolvedTypeParameterDeclaration typeDecl, ResolvedType type) {
-    	return type.isTypeVariable() && (!typeDecl.hasBound() || boundedAsObject(typeDecl));
+        return type.isTypeVariable() && (!typeDecl.hasBound() || boundedAsObject(typeDecl));
     }
 
     private boolean boundedAsObject(ResolvedTypeParameterDeclaration typeDecl) {
-    	List<Bound> bounds = typeDecl.getBounds();
-    	return bounds.size() == 1 && bounds.get(0).getType().equals(typeDecl.object());
+        List<Bound> bounds = typeDecl.getBounds();
+        return bounds.size() == 1 && bounds.get(0).getType().equals(typeDecl.object());
     }
 
     private ResolvedType substituteType(ResolvedType type1, TypeSubstitution typeSubstitution) {

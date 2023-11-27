@@ -28,7 +28,7 @@ public class ArrayBracketPair extends Node implements NodeWithAnnotations<ArrayB
     }
 
     @Override public <A> void accept(final VoidVisitor<A> v, final A arg) {
-		v.visit(this, arg);
+        v.visit(this, arg);
     }
 
     public List<AnnotationExpr> getAnnotations() {

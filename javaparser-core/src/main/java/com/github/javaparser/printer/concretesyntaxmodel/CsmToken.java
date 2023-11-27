@@ -118,8 +118,8 @@ public class CsmToken implements CsmElement {
      */
     @Override
     public boolean isCorrespondingElement(TextElement textElement) {
-    	return (textElement instanceof TokenTextElement)
-    			&& ((TokenTextElement)textElement).getTokenKind() == getTokenType()
-    			&& ((TokenTextElement)textElement).getText().equals(getContent());
+        return (textElement instanceof TokenTextElement)
+                && ((TokenTextElement)textElement).getTokenKind() == getTokenType()
+                && ((TokenTextElement)textElement).getText().equals(getContent());
     }
 }

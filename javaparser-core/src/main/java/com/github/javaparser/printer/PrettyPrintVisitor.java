@@ -57,7 +57,7 @@ import com.github.javaparser.printer.configuration.PrettyPrinterConfiguration;
 @Deprecated
 public class PrettyPrintVisitor implements VoidVisitor<Void> {
 
-	private static Pattern RTRIM = Pattern.compile("\\s+$");
+    private static Pattern RTRIM = Pattern.compile("\\s+$");
 
     protected PrettyPrinterConfiguration configuration;
 

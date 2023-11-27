@@ -29,24 +29,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PreconditionsTest {
 
-	@Test
-	void checkArgument_withTrueExpression() {
-		checkArgument(true);
-	}
+    @Test
+    void checkArgument_withTrueExpression() {
+        checkArgument(true);
+    }
 
-	@Test
-	void checkArgument_withFalseExpression() {
-		assertThrows(IllegalArgumentException.class, () -> checkArgument(false));
-	}
+    @Test
+    void checkArgument_withFalseExpression() {
+        assertThrows(IllegalArgumentException.class, () -> checkArgument(false));
+    }
 
-	@Test
-	void checkNotNull_withNonNull() {
-		checkNotNull(new Object());
-	}
+    @Test
+    void checkNotNull_withNonNull() {
+        checkNotNull(new Object());
+    }
 
-	@Test
-	void checkNotNull_withNull() {
-		assertThrows(IllegalArgumentException.class, () -> checkNotNull(null));
-	}
+    @Test
+    void checkNotNull_withNull() {
+        assertThrows(IllegalArgumentException.class, () -> checkNotNull(null));
+    }
 
 }

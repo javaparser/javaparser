@@ -41,12 +41,12 @@ import com.github.javaparser.utils.Pair;
  */
 public abstract class AbstractTypeDeclaration implements ResolvedReferenceTypeDeclaration {
 
-	/*
-	 * Returns all methods which have distinct "enhanced" signature declared in this type and all members.
-	 * An "enhanced" signature include the return type which is used sometimes to identify functional interfaces.
-	 * This is a different implementation from the previous one which returned all methods which have a distinct
-	 * signature (based on method name and qualified parameter types)
-	 */
+    /*
+     * Returns all methods which have distinct "enhanced" signature declared in this type and all members.
+     * An "enhanced" signature include the return type which is used sometimes to identify functional interfaces.
+     * This is a different implementation from the previous one which returned all methods which have a distinct
+     * signature (based on method name and qualified parameter types)
+     */
     @Override
     public final Set<MethodUsage> getAllMethods() {
         Set<MethodUsage> methods = new HashSet<>();

@@ -122,7 +122,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }
@@ -134,7 +134,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
      * @return this, the ConstructorDeclaration
      */
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -149,13 +149,13 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -170,13 +170,13 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -191,13 +191,13 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType> getThrownExceptions() {
         return thrownExceptions;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
@@ -212,13 +212,13 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {

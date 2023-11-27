@@ -81,10 +81,10 @@ public class InferenceContext {
                 // which means that if the formal parameter is of type Object,
                 // all types can match including the actual type.
                 List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName) ?
-                		Stream.concat(new ArrayList<ResolvedType>(Arrays.asList(actualType)).stream(),
-                				ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()).stream())
-                				.collect(Collectors.toList()):
-                		ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
+                        Stream.concat(new ArrayList<ResolvedType>(Arrays.asList(actualType)).stream(),
+                                ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()).stream())
+                                .collect(Collectors.toList()):
+                        ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
@@ -162,14 +162,14 @@ public class InferenceContext {
             if (formalType.isPrimitive()) {
                 // nothing to do
             } else {
-            	ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(actualType.asPrimitive().getBoxTypeQName());
+                ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(actualType.asPrimitive().getBoxTypeQName());
                 registerCorrespondance(formalType, new ReferenceTypeImpl(resolvedTypedeclaration));
             }
         } else if (actualType.isReferenceType()) {
             if (formalType.isPrimitive()) {
                 if (formalType.asPrimitive().getBoxTypeQName().equals(actualType.describe())) {
-                	ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(formalType.asPrimitive().getBoxTypeQName());
-                	registerCorrespondance(new ReferenceTypeImpl(resolvedTypedeclaration), actualType);
+                    ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(formalType.asPrimitive().getBoxTypeQName());
+                    registerCorrespondance(new ReferenceTypeImpl(resolvedTypedeclaration), actualType);
                 } else {
                     // nothing to do
                 }

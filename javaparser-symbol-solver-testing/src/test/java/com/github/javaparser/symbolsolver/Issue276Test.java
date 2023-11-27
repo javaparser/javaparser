@@ -47,15 +47,15 @@ class Issue276Test extends AbstractResolutionTest{
         CompilationUnit cu = parse(adaptPath("src/test/resources/issue276/foo/C.java"));
         ClassOrInterfaceDeclaration cls = Navigator.demandClassOrInterface(cu, "C");
         TypeSolver typeSolver = new CombinedTypeSolver(
-        		new ReflectionTypeSolver(), 
-        		new JavaParserTypeSolver(adaptPath("src/test/resources/issue276"), new LeanParserConfiguration()));
+                new ReflectionTypeSolver(), 
+                new JavaParserTypeSolver(adaptPath("src/test/resources/issue276"), new LeanParserConfiguration()));
         List<MethodDeclaration> methods = cls.findAll(MethodDeclaration.class);
         boolean isSolved = false;
         for (MethodDeclaration method: methods) {
-        	if (method.getNameAsString().equals("overrideMe")) {
-        		MethodContext context = new MethodContext(method, typeSolver);
-        		isSolved = context.solveType("FindMeIfYouCan").isSolved();
-        	}
+            if (method.getNameAsString().equals("overrideMe")) {
+                MethodContext context = new MethodContext(method, typeSolver);
+                isSolved = context.solveType("FindMeIfYouCan").isSolved();
+            }
         }
         Assertions.assertTrue(isSolved);
     }

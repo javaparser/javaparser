@@ -63,7 +63,7 @@ class FunctionInterfaceLogicTest {
         // By default, all methods in interface are public and abstract until we do not declare it
         // as default and properties are static and final.
         // This interface is not fonctional because it inherits two abstract methods
-   	 	// which are not members of Object and the default apply method does not override the abstract apply method
+        // which are not members of Object and the default apply method does not override the abstract apply method
         // defined in the Function interface.
         assertEquals(false, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
     }
@@ -73,7 +73,7 @@ class FunctionInterfaceLogicTest {
         T foo(S str);
 
         @Override
-		default T apply(S str) {
+        default T apply(S str) {
             return foo(str);
         }
     }

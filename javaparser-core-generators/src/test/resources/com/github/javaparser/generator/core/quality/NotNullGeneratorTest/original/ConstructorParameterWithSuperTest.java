@@ -22,13 +22,13 @@
 import com.github.javaparser.quality.NotNull;
 
 class A {
-	public A(String a) {}
+    public A(String a) {}
 }
 
 class B {
 
-	public B(@NotNull String c) {
-		super("ok");
-	}
+    public B(@NotNull String c) {
+        super("ok");
+    }
 
 }

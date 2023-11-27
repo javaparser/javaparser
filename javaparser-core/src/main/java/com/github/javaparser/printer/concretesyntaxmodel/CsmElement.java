@@ -154,6 +154,6 @@ public interface CsmElement {
      * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
      */
     default boolean isCorrespondingElement(TextElement textElement) {
-    	return false;
+        return false;
     }
 }

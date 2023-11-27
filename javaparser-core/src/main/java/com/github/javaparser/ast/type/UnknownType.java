@@ -144,8 +144,8 @@ public class UnknownType extends Type {
      *
      * @return The type resolved.
      */
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		throw new IllegalArgumentException("Inferred lambda parameter type");
-	}
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        throw new IllegalArgumentException("Inferred lambda parameter type");
+    }
 }

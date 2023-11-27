@@ -269,7 +269,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
             }
 
             @Override
-			public boolean isCorrespondingBoxingType(String name) {
+            public boolean isCorrespondingBoxingType(String name) {
                 return super.isCorrespondingBoxingType(name);
             }
 
@@ -931,16 +931,16 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
     @Test
     void extend_type() {
-    	ResolvedTypeVariable variable = parametrizedType("java.util.List", "java.lang.String");
-    	assertTrue(variable.asTypeParameter().hasUpperBound());
-    	assertFalse(variable.asTypeParameter().hasLowerBound());
+        ResolvedTypeVariable variable = parametrizedType("java.util.List", "java.lang.String");
+        assertTrue(variable.asTypeParameter().hasUpperBound());
+        assertFalse(variable.asTypeParameter().hasLowerBound());
     }
 
     @Test
     void super_type() {
-    	ResolvedTypeVariable variable = parametrizedTypeLowerBounded("java.util.List", "java.lang.String");
-    	assertTrue(variable.asTypeParameter().hasLowerBound());
-    	assertFalse(variable.asTypeParameter().hasUpperBound());
+        ResolvedTypeVariable variable = parametrizedTypeLowerBounded("java.util.List", "java.lang.String");
+        assertTrue(variable.asTypeParameter().hasLowerBound());
+        assertFalse(variable.asTypeParameter().hasUpperBound());
     }
 
     // return a generic type with type arguments (arguments can be bounded)

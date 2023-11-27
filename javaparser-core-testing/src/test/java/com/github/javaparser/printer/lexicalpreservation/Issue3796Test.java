@@ -32,23 +32,23 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 
 public class Issue3796Test extends AbstractLexicalPreservingTest {
 
-	@Test
+    @Test
     void test() {
-		considerCode(
-				"public class MyClass {\n"
-				+ "	/** Comment */ \n"
-				+ "	@Rule String s0; \n"
-				+ "}");
-		String expected = 
-				"public class MyClass {\n" +
-				"\n" +
-				"}";
+        considerCode(
+                "public class MyClass {\n"
+                + "    /** Comment */ \n"
+                + "    @Rule String s0; \n"
+                + "}");
+        String expected = 
+                "public class MyClass {\n" +
+                "\n" +
+                "}";
 
-		List<FieldDeclaration> fields = cu.findAll(FieldDeclaration.class);
-		FieldDeclaration field = fields.get(0);
+        List<FieldDeclaration> fields = cu.findAll(FieldDeclaration.class);
+        FieldDeclaration field = fields.get(0);
 
-		field.remove();
+        field.remove();
 
-		assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+        assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 }

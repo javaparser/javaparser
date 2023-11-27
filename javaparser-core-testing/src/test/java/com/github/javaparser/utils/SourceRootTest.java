@@ -67,13 +67,13 @@ class SourceRootTest {
 
     @Test
     void saveInCallback() throws IOException {
-    	printer.getConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
+        printer.getConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
         sourceRoot.parse("", sourceRoot.getParserConfiguration(), (localPath, absolutePath, result) -> SourceRoot.Callback.Result.SAVE);
     }
 
     @Test
     void saveInCallbackParallelized() {
-    	printer.getConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
+        printer.getConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
         sourceRoot.parseParallelized("", sourceRoot.getParserConfiguration(), ((localPath, absolutePath, result) ->
                 SourceRoot.Callback.Result.SAVE));
     }

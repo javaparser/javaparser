@@ -62,38 +62,38 @@ public class SymbolSolver implements Solver {
     }
 
     @Override
-	public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, Context context) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, Context context) {
         return context.solveSymbol(name);
     }
 
     @Override
-	public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, Node node) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, Node node) {
         return solveSymbol(name, JavaParserFactory.getContext(node, typeSolver));
     }
 
     @Override
-	public Optional<Value> solveSymbolAsValue(String name, Context context) {
+    public Optional<Value> solveSymbolAsValue(String name, Context context) {
         return context.solveSymbolAsValue(name);
     }
 
     @Override
-	public Optional<Value> solveSymbolAsValue(String name, Node node) {
+    public Optional<Value> solveSymbolAsValue(String name, Node node) {
         Context context = JavaParserFactory.getContext(node, typeSolver);
         return solveSymbolAsValue(name, context);
     }
 
     @Override
-	public SymbolReference<? extends ResolvedTypeDeclaration> solveType(String name, Context context) {
+    public SymbolReference<? extends ResolvedTypeDeclaration> solveType(String name, Context context) {
         return context.solveType(name);
     }
 
     @Override
-	public SymbolReference<? extends ResolvedTypeDeclaration> solveType(String name, Node node) {
+    public SymbolReference<? extends ResolvedTypeDeclaration> solveType(String name, Node node) {
         return solveType(name, JavaParserFactory.getContext(node, typeSolver));
     }
 
     @Override
-	public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context) {
+    public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Context context) {
         SymbolReference<ResolvedMethodDeclaration> decl = context.solveMethod(methodName, argumentsTypes, false);
         if (!decl.isSolved()) {
             throw new UnsolvedSymbolException(context.toString(), methodName);
@@ -102,12 +102,12 @@ public class SymbolSolver implements Solver {
     }
 
     @Override
-	public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Node node) {
+    public MethodUsage solveMethod(String methodName, List<ResolvedType> argumentsTypes, Node node) {
         return solveMethod(methodName, argumentsTypes, JavaParserFactory.getContext(node, typeSolver));
     }
 
     @Override
-	public ResolvedTypeDeclaration solveType(Type type) {
+    public ResolvedTypeDeclaration solveType(Type type) {
         if (type instanceof ClassOrInterfaceType) {
 
             // FIXME should call typesolver here!
@@ -123,7 +123,7 @@ public class SymbolSolver implements Solver {
     }
 
     @Override
-	public ResolvedType solveTypeUsage(String name, Context context) {
+    public ResolvedType solveTypeUsage(String name, Context context) {
         Optional<ResolvedType> genericType = context.solveGenericType(name);
         if (genericType.isPresent()) {
             return genericType.get();
@@ -139,7 +139,7 @@ public class SymbolSolver implements Solver {
      * It should contain its own private fields but not inherited private fields.
      */
     @Override
-	public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration, String name) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof SymbolResolutionCapability) {
             return ((SymbolResolutionCapability) typeDeclaration).solveSymbol(name, typeSolver);
         }
@@ -153,7 +153,7 @@ public class SymbolSolver implements Solver {
      * and do not be specific to JavaParser classes like in this case.
      */
     @Override
-	@Deprecated
+    @Deprecated
     public SymbolReference<ResolvedTypeDeclaration> solveTypeInType(ResolvedTypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             return ((JavaParserClassDeclaration) typeDeclaration).solveType(name);

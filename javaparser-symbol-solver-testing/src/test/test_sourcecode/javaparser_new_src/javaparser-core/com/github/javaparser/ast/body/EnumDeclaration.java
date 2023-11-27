@@ -91,14 +91,14 @@ public final class EnumDeclaration extends TypeDeclaration<EnumDeclaration>
 
     public EnumDeclaration setEntries(List<EnumConstantDeclaration> entries) {
         this.entries = entries;
-		setAsParentNodeOf(this.entries);
+        setAsParentNodeOf(this.entries);
         return this;
     }
 
     @Override
     public EnumDeclaration setImplements(List<ClassOrInterfaceType> implementsList) {
         this.implementsList = implementsList;
-		setAsParentNodeOf(this.implementsList);
+        setAsParentNodeOf(this.implementsList);
         return this;
     }
 

@@ -40,12 +40,12 @@ public final class Parameter extends BaseParameter {
     }
 
     public Parameter(Type type, VariableDeclaratorId id) {
-    	super(id);
+        super(id);
         setType(type);
     }
 
     public Parameter(int modifiers, Type type, VariableDeclaratorId id) {
-    	super(modifiers, id);
+        super(modifiers, id);
         setType(type);
     }
 
@@ -75,7 +75,7 @@ public final class Parameter extends BaseParameter {
 
     public void setType(Type type) {
         this.type = type;
-		setAsParentNodeOf(this.type);
+        setAsParentNodeOf(this.type);
     }
 
     public void setVarArgs(boolean isVarArgs) {
