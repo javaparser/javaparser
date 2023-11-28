@@ -22,11 +22,13 @@ package com.github.javaparser.serialization;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+
+import jakarta.json.Json;
+import jakarta.json.stream.JsonGenerator;
+import jakarta.json.stream.JsonGeneratorFactory;
+
 import org.junit.jupiter.api.Test;
 
-import javax.json.Json;
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonGeneratorFactory;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;

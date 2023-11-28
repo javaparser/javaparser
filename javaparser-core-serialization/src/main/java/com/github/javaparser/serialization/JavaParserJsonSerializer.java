@@ -30,7 +30,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.Log;
 
-import javax.json.stream.JsonGenerator;
+import jakarta.json.stream.JsonGenerator;
 
 import static com.github.javaparser.utils.Utils.decapitalize;
 import static java.util.Objects.requireNonNull;

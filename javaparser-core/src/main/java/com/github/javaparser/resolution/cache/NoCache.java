@@ -19,74 +19,63 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.cache;
+package com.github.javaparser.resolution.cache;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
- * This class is used to wrap a Guava {@link com.google.common.cache.Cache}.
+ * A cache implementation that does not store any information.
  *
- * @param <K> The type of the key.
- * @param <V> The type of the value.
+ * @param <K> The key type.
+ * @param <V> The value type.
  */
-public class GuavaCache<K, V> implements Cache<K, V>  {
+public class NoCache<K, V> implements Cache<K, V> {
 
     /**
-     * Wrap a Guava cache with a custom cache.
-     *
-     * @param guavaCache The guava cache to be wrapped-
+     * Create a new instance.
      *
      * @param <expectedK> The expected type for the key.
      * @param <expectedV> The expected type for the value.
      *
      * @return A newly created instance of {@link NoCache}.
      */
-    public static <expectedK, expectedV> GuavaCache<expectedK, expectedV> create(com.google.common.cache.Cache<expectedK, expectedV> guavaCache) {
-        return new GuavaCache<>(guavaCache);
-    }
-
-    private final com.google.common.cache.Cache<K, V> guavaCache;
-
-    public GuavaCache(com.google.common.cache.Cache<K, V> guavaCache) {
-        this.guavaCache = Objects.requireNonNull(guavaCache, "The argument GuavaCache can't be null.");
+    public static <expectedK, expectedV> NoCache<expectedK, expectedV> create() {
+        return new NoCache<>();
     }
 
     @Override
     public void put(K key, V value) {
-        guavaCache.put(key, value);
+        // Nothing to do here.
     }
 
     @Override
     public Optional<V> get(K key) {
-        return Optional.ofNullable(
-                guavaCache.getIfPresent(key)
-        );
+        return Optional.empty();
     }
 
     @Override
     public void remove(K key) {
-        guavaCache.invalidate(key);
+        // Nothing to do here.
     }
 
     @Override
     public void removeAll() {
-        guavaCache.invalidateAll();
+        // Nothing to do here.
     }
 
     @Override
     public boolean contains(K key) {
-        return get(key).isPresent();
+        return false;
     }
 
     @Override
     public long size() {
-        return guavaCache.size();
+        return 0;
     }
 
     @Override
     public boolean isEmpty() {
-        return size() == 0;
+        return true;
     }
 
 }
