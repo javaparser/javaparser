@@ -21,6 +21,7 @@
 
 package com.github.javaparser.symbolsolver.cache;
 
+import com.github.javaparser.resolution.cache.GuavaCache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.junit.jupiter.api.BeforeEach;
