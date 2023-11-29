@@ -14,15 +14,17 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2667378.svg)](https://doi.org/10.5281/zenodo.2667378)
 
 
-This project contains a set of libraries implementing a Java 1.0 - Java 17 Parser with advanced analysis functionalities.
+This project contains a set of libraries implementing a Java 1.0 - Java 18 Parser with advanced analysis functionalities.
 
 Our main site is at [JavaParser.org](http://javaparser.org)
 
 ## Sponsors
 
-Support this project by becoming a sponsor! Your donation will help the project live and grow successfully.
+Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/javaparser). Your donation will help the project live and grow successfully.
 
 Javaparser uses [OpenCollective](https://opencollective.com/javaparser) to gather money.
+
+**Thank you to our sponsors!**
 
 
 ## Setup
