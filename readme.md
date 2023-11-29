@@ -24,6 +24,10 @@ Support this project by becoming a sponsor! Your donation will help the project 
 
 Javaparser uses [OpenCollective](https://opencollective.com/javaparser) to gather money.
 
+Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/javaparser).
+
+**Thank you to our sponsors!**
+
 
 ## Setup
 
