@@ -20,9 +20,11 @@ Our main site is at [JavaParser.org](http://javaparser.org)
 
 ## Sponsors
 
-Support this project by becoming a sponsor! Your donation will help the project live and grow successfully.
+Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/javaparser). Your donation will help the project live and grow successfully.
 
 Javaparser uses [OpenCollective](https://opencollective.com/javaparser) to gather money.
+
+**Thank you to our sponsors!**
 
 
 ## Setup
