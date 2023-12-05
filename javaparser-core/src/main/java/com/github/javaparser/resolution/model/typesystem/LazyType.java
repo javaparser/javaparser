@@ -35,7 +35,7 @@ public class LazyType implements ResolvedType {
         this.provider = provider;
     }
 
-    private ResolvedType getType() {
+    public ResolvedType getType() {
         if (concrete == null) {
             concrete = provider.apply(null);
         }
