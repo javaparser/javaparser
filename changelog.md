@@ -10,7 +10,7 @@ Next Release (Version 3.25.8-snapshot)
 ### Fixed
 ### Security
 
-Version 3.25.6
+Version 3.25.7
 --------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/203?closed=1)
 
