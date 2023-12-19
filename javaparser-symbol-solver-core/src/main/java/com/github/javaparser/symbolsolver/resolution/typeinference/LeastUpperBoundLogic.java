@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -38,7 +39,11 @@ public class LeastUpperBoundLogic {
 
         // The direct supertypes of the null type are all reference types other than the null type itself.
         // One way to handle this case is to remove the type null from the list of types.
-        Set<ResolvedType> resolvedTypes = types.stream().filter(type -> !(type instanceof NullType)).collect(Collectors.toSet());
+        // Provides the concret type of Lazy type if needed
+        Set<ResolvedType> resolvedTypes = types.stream()
+        		.filter(type -> !(type instanceof NullType))
+        		.map(type -> concreteType(type))
+        		.collect(Collectors.toSet());
 
 		// reduces the set in the presence of enumeration type because members are
 		// not equal and they do not have an explicit super type.
@@ -198,6 +203,13 @@ public class LeastUpperBoundLogic {
             }
         }
         return erasedBest;
+    }
+    
+    /*
+     * Provides concrete type of Lazy type
+     */
+    private ResolvedType concreteType(ResolvedType type) {
+    	return type instanceof LazyType ? LazyType.class.cast(type).getType() : type;
     }
 
     /*

@@ -1,7 +1,7 @@
 
-Next Release (Version 3.25.7-snapshot)
+Next Release (Version 3.25.8-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/203?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/204?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,58 @@ Next Release (Version 3.25.7-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+Version 3.25.7
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/203?closed=1)
+
+### Added
+
+* [GHA] Remove old comment that is no longer valid around jdks and add jdk 17 (PR [#4226](https://github.com/javaparser/javaparser/pull/4226) by [@hazendaz](https://github.com/hazendaz))
+* Fix: issue 3833 No enum constant com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_18 (PR [#4221](https://github.com/javaparser/javaparser/pull/4221) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Changed
+
+* Refactoring: Move cache features to javaparser-core (PR [#4238](https://github.com/javaparser/javaparser/pull/4238) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: removes reference to coveralls plugin which is not useful because codecov is used to track code coverage (PR [#4235](https://github.com/javaparser/javaparser/pull/4235) by [@jlerbsc](https://github.com/jlerbsc))
+* Uses jakarta.json api, upgrades jakarta.json-api to the latest version & uses new default  Eclipse Parsson (PR [#4234](https://github.com/javaparser/javaparser/pull/4234) by [@jlerbsc](https://github.com/jlerbsc))
+* Move mockito to 4.11.0 and handle byte buddy consistently as well as properly define its agent in argLine for surefire (PR [#4228](https://github.com/javaparser/javaparser/pull/4228) by [@hazendaz](https://github.com/hazendaz))
+* Cleanup poms, use jakarta provided (javax namespace), hamcrest follow up, and switch coveralls plugin - Fixes #4111 (PR [#4225](https://github.com/javaparser/javaparser/pull/4225) by [@hazendaz](https://github.com/hazendaz))
+* [pom] Switch from hamcrest-library (deprecated) to hamcrest (PR [#4200](https://github.com/javaparser/javaparser/pull/4200) by [@hazendaz](https://github.com/hazendaz))
+* Putting code in the .orElse that has a side effect that can affect performance (PR [#4199](https://github.com/javaparser/javaparser/pull/4199) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix: issue 3650 unreproducible MAVEN_BUILD_TIMESTAMP (PR [#4243](https://github.com/javaparser/javaparser/pull/4243) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3972 StackOverflowError when resolving type of scope of a MethodCall (PR [#4236](https://github.com/javaparser/javaparser/pull/4236) by [@jlerbsc](https://github.com/jlerbsc))
+* [fix] Jdk 18 enum stub was extended off java 16 post processor not java17 (PR [#4227](https://github.com/javaparser/javaparser/pull/4227) by [@hazendaz](https://github.com/hazendaz))
+* Fix: issue #4047 Symbol Solver mixes name with type (PR [#4206](https://github.com/javaparser/javaparser/pull/4206) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix grammar (PR [#4203](https://github.com/javaparser/javaparser/pull/4203) by [@mernst](https://github.com/mernst))
+* Minor changes : corrupted format, useless cast, javadoc (PR [#4198](https://github.com/javaparser/javaparser/pull/4198) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): update actions/setup-java action to v4 (PR [#4241](https://github.com/javaparser/javaparser/pull/4241) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): bump org.codehaus.mojo:build-helper-maven-plugin from 3.4.0 to 3.5.0 (PR [#4223](https://github.com/javaparser/javaparser/pull/4223) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Adds sponsor link to help the project live and grow (PR [#4204](https://github.com/javaparser/javaparser/pull/4204) by [@jlerbsc](https://github.com/jlerbsc))
+* chore(deps): bump org.codehaus.mojo:templating-maven-plugin from 1.0.0 to 3.0.0 (PR [#4195](https://github.com/javaparser/javaparser/pull/4195) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update junit5 monorepo to v5.10.1 (PR [#4193](https://github.com/javaparser/javaparser/pull/4193) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### Uncategorised
+
+* Added unit tests for visitors (PR [#4239](https://github.com/javaparser/javaparser/pull/4239) by [@4everTheOne](https://github.com/4everTheOne))
+* Unit tests for class GenericListVisitorAdapter (PR [#4237](https://github.com/javaparser/javaparser/pull/4237) by [@4everTheOne](https://github.com/4everTheOne))
+* Update readme.md (PR [#4222](https://github.com/javaparser/javaparser/pull/4222) by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@hazendaz](https://github.com/hazendaz)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@mernst](https://github.com/mernst)
+* [@4everTheOne](https://github.com/4everTheOne)
+
 
 Version 3.25.6
 --------------
