@@ -24,6 +24,8 @@ package com.github.javaparser.symbolsolver.cache;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.github.javaparser.resolution.cache.CacheStats;
+
 /**
  * This class is used to wrap a Guava {@link com.google.common.cache.Cache}.
  *
@@ -88,5 +90,12 @@ public class GuavaCache<K, V> implements Cache<K, V>  {
     public boolean isEmpty() {
         return size() == 0;
     }
+
+	@Override
+	public CacheStats stats() {
+		com.google.common.cache.CacheStats stats = guavaCache.stats();
+		return new DefaultCacheStats(stats.hitCount(), stats.missCount(), stats.loadSuccessCount(),
+				stats.loadExceptionCount(), stats.totalLoadTime(), stats.evictionCount());
+	}
 
 }

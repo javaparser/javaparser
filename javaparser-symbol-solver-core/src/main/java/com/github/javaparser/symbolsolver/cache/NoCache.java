@@ -78,4 +78,9 @@ public class NoCache<K, V> implements Cache<K, V> {
         return true;
     }
 
+	@Override
+	public CacheStats stats() {
+		return new DefaultCacheStats();
+	}
+
 }

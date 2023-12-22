@@ -91,4 +91,9 @@ public class InMemoryCache<K, V> implements Cache<K, V>  {
         return mappedValues.isEmpty();
     }
 
+    @Override
+	public CacheStats stats() {
+		return new DefaultCacheStats();
+	}
+
 }
