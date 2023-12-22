@@ -23,8 +23,6 @@ package com.github.javaparser.symbolsolver.cache;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.resolution.cache.NoCache;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class NoCacheTest {

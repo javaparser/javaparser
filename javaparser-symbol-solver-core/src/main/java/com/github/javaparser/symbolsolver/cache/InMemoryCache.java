@@ -19,7 +19,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.resolution.cache;
+package com.github.javaparser.symbolsolver.cache;
 
 import java.util.Collections;
 import java.util.Map;
