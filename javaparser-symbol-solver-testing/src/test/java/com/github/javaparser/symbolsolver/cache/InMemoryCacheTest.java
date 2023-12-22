@@ -24,8 +24,6 @@ package com.github.javaparser.symbolsolver.cache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.resolution.cache.InMemoryCache;
-
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
