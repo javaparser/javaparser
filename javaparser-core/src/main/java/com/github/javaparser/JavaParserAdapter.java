@@ -195,4 +195,7 @@ public class JavaParserAdapter {
         return handleResult(getParser().parseMethodDeclaration(methodDeclaration));
     }
 
+    public ArrayInitializerExpr parseArrayInitializerExpr(String arrayInitializerExpr) {
+        return handleResult(getParser().parseArrayInitializerExpr(arrayInitializerExpr));
+    }
 }

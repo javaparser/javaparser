@@ -91,5 +91,7 @@ public interface ParseStart<R> {
 
     ParseStart<MethodDeclaration> METHOD_DECLARATION = GeneratedJavaParser::MethodDeclarationParseStart;
 
+    ParseStart<ArrayInitializerExpr> ARRAY_INITIALIZER_EXPR = GeneratedJavaParser::ArrayInitializer;
+
     R parse(GeneratedJavaParser parser) throws ParseException;
 }
