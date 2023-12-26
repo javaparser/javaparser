@@ -163,6 +163,14 @@ class JavaParserTest {
     }
 
     @Test
+    void parseArrayInitialization() {
+        String code = "{1,2,3}";
+        ArrayInitializerExpr expression = parseArrayInitializerExpr(code);
+
+        assertEquals(3, expression.getValues().size());
+    }
+
+    @Test
     void rangeOfIntersectionType() {
         String code = "class A {" + SYSTEM_EOL
                 + "  Object f() {" + SYSTEM_EOL

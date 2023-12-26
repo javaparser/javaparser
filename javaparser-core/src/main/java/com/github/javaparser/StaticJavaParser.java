@@ -517,6 +517,19 @@ public final class StaticJavaParser {
         return newParserAdapted().parseMethodDeclaration(methodDeclaration);
     }
 
+    /**
+     * Parses an array initializer expression and returns it as ArrayInitializerExpr.
+     *
+     * @param arrayInitializerExpr an array initializer like "{1,2,3}"
+     * @return the AST for the array initializer expression
+     * @throws ParseProblemException if the source code has parser errors
+     * @see ArrayInitializerExpr
+     */
+    public static ArrayInitializerExpr parseArrayInitializerExpr(@NotNull String arrayInitializerExpr) {
+        Preconditions.checkNotNull(arrayInitializerExpr, "Parameter arrayInitializerExpr can't be null.");
+        return newParserAdapted().parseArrayInitializerExpr(arrayInitializerExpr);
+    }
+
     // Private methods
 
     private static JavaParser newParser() {
