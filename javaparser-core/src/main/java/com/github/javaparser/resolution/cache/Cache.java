@@ -18,11 +18,9 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.cache;
+package com.github.javaparser.resolution.cache;
 
 import java.util.Optional;
-
-import com.github.javaparser.resolution.cache.CacheStats;
 
 /**
  * A contract that defines a semi-persistent mapping of keys and values.

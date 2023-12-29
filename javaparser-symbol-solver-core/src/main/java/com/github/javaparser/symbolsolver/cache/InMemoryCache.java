@@ -26,6 +26,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.WeakHashMap;
 
+import com.github.javaparser.resolution.cache.Cache;
+import com.github.javaparser.resolution.cache.CacheStats;
+
 /**
  * A cache implementation that stores the information in memory.
  * <br>
