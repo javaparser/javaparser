@@ -54,6 +54,9 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
  */
 public class JavaSymbolSolver implements SymbolResolver {
 
+	/*
+	 * add possibility to resolve array.length #1695
+	 */
     private static class ArrayLengthValueDeclaration implements ResolvedValueDeclaration {
 
         private static final ArrayLengthValueDeclaration INSTANCE = new ArrayLengthValueDeclaration();
