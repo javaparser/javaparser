@@ -44,7 +44,6 @@ import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 
 /**
