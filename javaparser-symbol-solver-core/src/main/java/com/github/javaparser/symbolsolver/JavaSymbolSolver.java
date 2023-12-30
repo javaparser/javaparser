@@ -23,10 +23,13 @@ package com.github.javaparser.symbolsolver;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
+import java.util.Optional;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -36,9 +39,12 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.*;
 
 /**
@@ -241,23 +247,51 @@ public class JavaSymbolSolver implements SymbolResolver {
                 throw new UnsolvedSymbolException("We are unable to find the constructor declaration corresponding to " + node);
             }
         }
-        if (node instanceof Parameter) {
-            if (ResolvedParameterDeclaration.class.equals(resultClass)) {
-                Parameter parameter = (Parameter) node;
-                CallableDeclaration callableDeclaration = node.findAncestor(CallableDeclaration.class).get();
-                ResolvedMethodLikeDeclaration resolvedMethodLikeDeclaration;
-                if (callableDeclaration.isConstructorDeclaration()) {
-                    resolvedMethodLikeDeclaration = callableDeclaration.asConstructorDeclaration().resolve();
-                } else {
-                    resolvedMethodLikeDeclaration = callableDeclaration.asMethodDeclaration().resolve();
-                }
-                for (int i = 0; i < resolvedMethodLikeDeclaration.getNumberOfParams(); i++) {
-                    if (resolvedMethodLikeDeclaration.getParam(i).getName().equals(parameter.getNameAsString())) {
-                        return resultClass.cast(resolvedMethodLikeDeclaration.getParam(i));
-                    }
-                }
-            }
-        }
+		if (node instanceof Parameter) {
+			if (ResolvedParameterDeclaration.class.equals(resultClass)) {
+				Parameter parameter = (Parameter) node;
+				Optional<Node> parentNode = node.getParentNode();
+				if (!parentNode.isPresent()) {
+					throw new UnsolvedSymbolException(
+							"We are unable to resolve the parameter declaration corresponding to " + node);
+				}
+				Node parent = (Node) parentNode.get();
+				if (parent instanceof ConstructorDeclaration) {
+					Optional<ResolvedParameterDeclaration> resolvedParameterDeclaration = resolveParameterDeclaration(
+							((ConstructorDeclaration) parent).resolve(), parameter);
+					return resolvedParameterDeclaration.map(rpd -> resultClass.cast(rpd))
+							.orElseThrow(() -> new UnsolvedSymbolException(
+									"We are unable to resolve the parameter declaration corresponding to " + node));
+				} else if (parent instanceof MethodDeclaration) {
+					Optional<ResolvedParameterDeclaration> resolvedParameterDeclaration = resolveParameterDeclaration(
+							((MethodDeclaration) parent).resolve(), parameter);
+					return resolvedParameterDeclaration.map(rpd -> resultClass.cast(rpd))
+							.orElseThrow(() -> new UnsolvedSymbolException(
+									"We are unable to resolve the parameter declaration corresponding to " + node));
+				} else if (parent instanceof RecordDeclaration) {
+					Optional<ResolvedParameterDeclaration> resolvedParameterDeclaration = resolveParameterDeclaration(
+							((RecordDeclaration) parent).resolve(), parameter);
+					return resolvedParameterDeclaration.map(rpd -> resultClass.cast(rpd))
+							.orElseThrow(() -> new UnsolvedSymbolException(
+									"We are unable to resolve the parameter declaration corresponding to " + node));
+				} else if (parent instanceof LambdaExpr) {
+					Optional<ResolvedParameterDeclaration> resolvedParameterDeclaration = resolveParameterDeclaration(
+							parameter);
+					return resolvedParameterDeclaration.map(rpd -> resultClass.cast(rpd))
+							.orElseThrow(() -> new UnsolvedSymbolException(
+									"We are unable to resolve the parameter declaration corresponding to " + node));
+				} else if (parent instanceof CatchClause) {
+					Optional<ResolvedParameterDeclaration> resolvedParameterDeclaration = resolveParameterDeclaration(
+							parameter);
+					return resolvedParameterDeclaration.map(rpd -> resultClass.cast(rpd))
+							.orElseThrow(() -> new UnsolvedSymbolException(
+									"We are unable to resolve the parameter declaration corresponding to " + node));
+				} else {
+					throw new UnsolvedSymbolException(
+							"We are unable to resolve the parameter declaration corresponding to " + node);
+				}
+			}
+		}
         if (node instanceof AnnotationExpr) {
             SymbolReference<ResolvedAnnotationDeclaration> result = JavaParserFacade.get(typeSolver).solve((AnnotationExpr) node);
             if (result.isSolved()) {
@@ -281,7 +315,80 @@ public class JavaSymbolSolver implements SymbolResolver {
         throw new UnsupportedOperationException("Unable to find the declaration of type " + resultClass.getSimpleName()
                 + " from " + node.getClass().getSimpleName());
     }
+    
+    /*
+     * Resolves constructor or method parameter
+     */
+	private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(
+			ResolvedMethodLikeDeclaration resolvedMethodLikeDeclaration, Parameter parameter) {
+		for (int i = 0; i < resolvedMethodLikeDeclaration.getNumberOfParams(); i++) {
+			if (resolvedMethodLikeDeclaration.getParam(i).getName().equals(parameter.getNameAsString())) {
+				return Optional.of(resolvedMethodLikeDeclaration.getParam(i));
+			}
+		}
+		return Optional.empty();
+	}
+	
+	/*
+	 * Resolves record parameter
+	 */
+	private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(
+			ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration, Parameter parameter) {
+		ResolvedFieldDeclaration rfd = resolvedReferenceTypeDeclaration.getField(parameter.getNameAsString());
+		if (rfd == null) return Optional.empty();
+		ResolvedParameterDeclaration  resolvedParameterDeclaration = new ResolvedParameterDeclaration() {
 
+			@Override
+			public ResolvedType getType() {
+				return rfd.getType();
+			}
+
+			@Override
+			public String getName() {
+				return parameter.getNameAsString();
+			}
+
+			@Override
+			public boolean isVariadic() {
+				return parameter.isVarArgs();
+			}
+			
+		};
+		return Optional.of(resolvedParameterDeclaration);
+	}
+	
+	/*
+	 * Resolves lambda expression parameters and catch clause parameters
+	 */
+	private Optional<ResolvedParameterDeclaration> resolveParameterDeclaration(Parameter parameter) {
+		ResolvedParameterDeclaration resolvedParameterDeclaration = new ResolvedParameterDeclaration() {
+
+			@Override
+			public ResolvedType getType() {
+				Node parentNode = parameter.getParentNode().get();
+				if (parameter.getType().isUnknownType() && parentNode instanceof LambdaExpr) {
+					Optional<Value> value = JavaParserFactory.getContext(parentNode, typeSolver)
+							.solveSymbolAsValue(parameter.getNameAsString());
+					return value.map(v -> v.getType()).orElseThrow(() -> new UnsolvedSymbolException(
+							"We are unable to resolve the parameter declaration corresponding to " + parameter));
+				}
+				return JavaParserFacade.get(typeSolver).convertToUsage(parameter.getType());
+			}
+
+			@Override
+			public String getName() {
+				return parameter.getNameAsString();
+			}
+
+			@Override
+			public boolean isVariadic() {
+				return parameter.isVarArgs();
+			}
+
+		};
+		return Optional.of(resolvedParameterDeclaration);
+	}
+	
     @Override
     public <T> T toResolvedType(Type javaparserType, Class<T> resultClass) {
         ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(javaparserType);

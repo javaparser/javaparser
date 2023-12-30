@@ -22,8 +22,10 @@
 package com.github.javaparser.symbolsolver;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.resolution.TypeSolver;
@@ -44,6 +46,8 @@ import java.util.List;
 
 import static com.github.javaparser.Providers.provider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
 
@@ -175,5 +179,105 @@ class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
         Parameter declaration = methodDeclaration.getParameter(0);
         ResolvedParameterDeclaration resolvedDeclaration = declaration.resolve();
     }
-
+    
+    @Test
+    void resolveParameterDeclarationOnConstructor() throws IOException {
+    	String code = 
+    			"class Foo {\n"
+    			+ "    	String baz;\n"
+    			+ "    	Foo(String baz){\n"
+    			+ "    		this.baz = baz;\n"
+    			+ "    	}"
+    			+ "}";
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
+        CompilationUnit cu = parser.parse(code);
+        Parameter parameter = cu.findFirst(Parameter.class).get();
+        ResolvedParameterDeclaration resolvedParameterDeclaration = parameter.resolve();
+        assertEquals("java.lang.String",resolvedParameterDeclaration.describeType());
+        assertTrue(resolvedParameterDeclaration.isParameter());
+    }
+    
+    @Test
+    void resolveParameterDeclarationOnMethodDeclaration() throws IOException {
+    	String code = 
+    			"class Foo {\n"
+    			+ "    	void m(String bar) {}\n"
+    			+ "}";
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
+        CompilationUnit cu = parser.parse(code);
+        Parameter parameter = cu.findFirst(Parameter.class).get();
+        ResolvedParameterDeclaration resolvedParameterDeclaration = parameter.resolve();
+        assertEquals("java.lang.String",resolvedParameterDeclaration.describeType());
+        assertTrue(resolvedParameterDeclaration.isParameter());
+    }
+    
+    @Test()
+    void resolveParameterDeclarationOnRecordDeclaration() throws IOException {
+    	String code = "record Point(Integer x) { }";
+        ParserConfiguration parserConfiguration = new ParserConfiguration().setLanguageLevel(LanguageLevel.JAVA_16);
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
+        CompilationUnit cu = parser.parse(code);
+        Parameter parameter = cu.findFirst(Parameter.class).get();
+        // TODO Fixme when the record declarations are resolved.
+        assertThrows(UnsupportedOperationException.class, () -> parameter.resolve());
+//        assertEquals("java.lang.Integer",parameter.resolve().describeType());
+    }
+    
+    @Test()
+    void resolveParameterDeclarationOnCatchClauseExpr() throws IOException {
+    	String code = 
+    			"class Foo {\n"
+    			+ "        void m() {\n"
+    			+ "        	try {\n"
+    			+ "                throw new java.io.FileNotFoundException();\n"
+    			+ "            } catch (java.io.IOException ioe) {}\n"
+    			+ "        }\n"
+    			+ "}";
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
+        CompilationUnit cu = parser.parse(code);
+        Parameter parameter = cu.findFirst(Parameter.class).get();
+        ResolvedParameterDeclaration resolvedParameterDeclaration = parameter.resolve();
+        assertEquals("java.io.IOException",resolvedParameterDeclaration.describeType());
+        assertTrue(resolvedParameterDeclaration.isParameter());
+    }
+    
+    @Test()
+    void resolveParameterDeclarationOnLambdaExprWithTypeInference() throws IOException {
+    	String code = 
+    			"class Foo {\n"
+    			+ "    	  java.util.function.Consumer<Integer> consumer = item -> {};\n"
+    			+ "}";
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
+        CompilationUnit cu = parser.parse(code);
+        Parameter parameter = cu.findFirst(Parameter.class).get();
+        ResolvedParameterDeclaration resolvedParameterDeclaration = parameter.resolve();
+        assertEquals("java.lang.Integer",resolvedParameterDeclaration.describeType());
+        assertTrue(resolvedParameterDeclaration.isParameter());
+    }
+    
+    @Test()
+    void resolveParameterDeclarationOnLambdaExprWithoutTypeInference() throws IOException {
+    	String code = 
+    			"class Foo {\n"
+    			+ "    	  java.util.function.Consumer<Long> consumer = (Long a) -> { System.out.println(a); };\n"
+    			+ "}";
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
+        CompilationUnit cu = parser.parse(code);
+        Parameter parameter = cu.findFirst(Parameter.class).get();
+        ResolvedParameterDeclaration resolvedParameterDeclaration = parameter.resolve();
+        assertEquals("java.lang.Long",resolvedParameterDeclaration.describeType());
+        assertTrue(resolvedParameterDeclaration.isParameter());
+    }
+    
 }
