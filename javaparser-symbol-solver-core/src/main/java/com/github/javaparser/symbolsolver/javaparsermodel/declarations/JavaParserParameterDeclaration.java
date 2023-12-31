@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.model.Value;

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;

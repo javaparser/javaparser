@@ -40,7 +40,6 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
