@@ -24,7 +24,6 @@ package com.github.javaparser.symbolsolver.resolution.typeinference;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
-import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -37,7 +36,7 @@ import java.util.List;
 public class ExpressionHelper {
 
     public static boolean isExplicitlyTyped(LambdaExpr lambdaExpr) {
-        return lambdaExpr.getParameters().stream().allMatch(p -> !(p.getType() instanceof UnknownType));
+        return lambdaExpr.getParameters().stream().allMatch(p -> !(p.getType().isUnknownType()));
     }
 
     public static List<Expression> getResultExpressions(BlockStmt blockStmt) {

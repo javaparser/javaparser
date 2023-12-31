@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedInterfaceDeclaration;
@@ -583,7 +582,7 @@ public class TypeInference {
     }
 
     private boolean isImplicitlyTyped(LambdaExpr lambdaExpr) {
-        return lambdaExpr.getParameters().stream().anyMatch(p -> p.getType() instanceof UnknownType);
+        return lambdaExpr.getParameters().stream().anyMatch(p -> p.getType().isUnknownType());
     }
 
     private boolean isInexact(MethodReferenceExpr methodReferenceExpr) {
@@ -596,7 +595,7 @@ public class TypeInference {
         //
         // - An implicitly typed lambda expression (§15.27.1).
 
-        if (argument instanceof LambdaExpr) {
+        if (argument.isLambdaExpr()) {
             LambdaExpr lambdaExpr = (LambdaExpr)argument;
             if (isImplicitlyTyped(lambdaExpr)) {
                 return false;
@@ -605,7 +604,7 @@ public class TypeInference {
 
         // - An inexact method reference expression (§15.13.1).
 
-        if (argument instanceof MethodReferenceExpr) {
+        if (argument.isMethodReferenceExpr()) {
             MethodReferenceExpr methodReferenceExpr = (MethodReferenceExpr)argument;
             if (isInexact(methodReferenceExpr)) {
                 return false;
@@ -616,37 +615,37 @@ public class TypeInference {
         //   explicitly typed lambda expression or an exact method reference expression for which the
         //   corresponding target type (as derived from the signature of m) is a type parameter of m.
 
-        if (argument instanceof LambdaExpr) {
+        if (argument.isLambdaExpr()) {
             throw new UnsupportedOperationException();
         }
 
-        if (argument instanceof MethodReferenceExpr) {
+        if (argument.isMethodReferenceExpr()) {
             throw new UnsupportedOperationException();
         }
 
         // - An explicitly typed lambda expression whose body is an expression that is not pertinent to applicability.
 
-        if (argument instanceof LambdaExpr) {
+        if (argument.isLambdaExpr()) {
             throw new UnsupportedOperationException();
         }
 
         // - An explicitly typed lambda expression whose body is a block, where at least one result expression is not
         //   pertinent to applicability.
 
-        if (argument instanceof LambdaExpr) {
+        if (argument.isLambdaExpr()) {
             throw new UnsupportedOperationException();
         }
 
         // - A parenthesized expression (§15.8.5) whose contained expression is not pertinent to applicability.
 
-        if (argument instanceof EnclosedExpr) {
+        if (argument.isEnclosedExpr()) {
             EnclosedExpr enclosedExpr = (EnclosedExpr)argument;
             return isPertinentToApplicability(enclosedExpr.getInner());
         }
 
         // - A conditional expression (§15.25) whose second or third operand is not pertinent to applicability.
 
-        if (argument instanceof ConditionalExpr) {
+        if (argument.isConditionalExpr()) {
             ConditionalExpr conditionalExpr = (ConditionalExpr)argument;
             return isPertinentToApplicability(conditionalExpr.getThenExpr()) &&
                     isPertinentToApplicability(conditionalExpr.getElseExpr());

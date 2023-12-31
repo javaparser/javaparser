@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.model.Value;
@@ -60,7 +59,7 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
 
     @Override
     public ResolvedType getType() {
-        if (wrappedNode.getType() instanceof UnknownType && JavaParserFactory.getContext(wrappedNode, typeSolver) instanceof LambdaExprContext) {
+        if (wrappedNode.getType().isUnknownType() && JavaParserFactory.getContext(wrappedNode, typeSolver) instanceof LambdaExprContext) {
             Optional<Value> value = JavaParserFactory.getContext(wrappedNode, typeSolver).solveSymbolAsValue(wrappedNode.getNameAsString());
             if (value.isPresent()) {
                 return value.get().getType();

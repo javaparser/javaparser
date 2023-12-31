@@ -1075,7 +1075,7 @@ public class PrettyPrintVisitor implements VoidVisitor<Void> {
             printAnnotations(n.getVarArgsAnnotations(), false, arg);
             printer.print("...");
         }
-        if (!(n.getType() instanceof UnknownType)) {
+        if (!(n.getType().isUnknownType())) {
             printer.print(" ");
         }
         n.getName().accept(this, arg);
