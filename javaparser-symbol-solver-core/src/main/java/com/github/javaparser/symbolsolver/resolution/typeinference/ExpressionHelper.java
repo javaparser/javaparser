@@ -37,7 +37,7 @@ import java.util.List;
 public class ExpressionHelper {
 
     public static boolean isExplicitlyTyped(LambdaExpr lambdaExpr) {
-        return lambdaExpr.getParameters().stream().allMatch(p -> !(p.getType() instanceof UnknownType));
+        return lambdaExpr.getParameters().stream().allMatch(p -> !(p.getType().isUnknownType()));
     }
 
     public static List<Expression> getResultExpressions(BlockStmt blockStmt) {

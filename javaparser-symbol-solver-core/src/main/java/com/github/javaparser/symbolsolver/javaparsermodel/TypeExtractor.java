@@ -92,7 +92,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(Parameter node, Boolean solveLambdas) {
-        if (node.getType() instanceof UnknownType) {
+        if (node.getType().isUnknownType()) {
             throw new IllegalStateException("Parameter has unknown type: " + node);
         }
         return facade.convertToUsage(node.getType());

@@ -188,7 +188,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 //       - If the lambda parameters have explicitly declared types F1, ..., Fn and the function type
                 //         has parameter types G1, ..., Gn, then i) for all i (1 ≤ i ≤ n), ‹Fi = Gi›, and ii) ‹T' <: T›.
 
-                boolean hasExplicitlyDeclaredTypes = lambdaExpr.getParameters().stream().anyMatch(p -> !(p.getType() instanceof UnknownType));
+                boolean hasExplicitlyDeclaredTypes = lambdaExpr.getParameters().stream().anyMatch(p -> !(p.getType().isUnknownType()));
                 if (hasExplicitlyDeclaredTypes) {
                     throw new UnsupportedOperationException();
                 }
