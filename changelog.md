@@ -1,7 +1,7 @@
 
-Next Release (Version 3.25.8-snapshot)
+Next Release (Version 3.25.9-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/204?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/205?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,47 @@ Next Release (Version 3.25.8-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+Version 3.25.8
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/204?closed=1)
+
+### Added
+
+* feat: creates cache statistics and moves Cache interface to javaparser-core (PR [#4278](https://github.com/javaparser/javaparser/pull/4278) by [@jlerbsc](https://github.com/jlerbsc))
+* feat: Add parseArrayInitializerExpr to JavaParser API (PR [#4276](https://github.com/javaparser/javaparser/pull/4276) by [@iMashtak](https://github.com/iMashtak))
+* feat: A visitor looking for a node by its position in an AST (PR [#4258](https://github.com/javaparser/javaparser/pull/4258) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Changed
+
+* fix: Partial removal of the use of instanceof in favour of the use of the API (PR [#4280](https://github.com/javaparser/javaparser/pull/4280) by [@jlerbsc](https://github.com/jlerbsc))
+* [GHA] Run on java 18 (PR [#4252](https://github.com/javaparser/javaparser/pull/4252) by [@hazendaz](https://github.com/hazendaz))
+
+### Fixed
+
+* fix: issue 4240 Calling resolve on catch block parameter throws exception (PR [#4279](https://github.com/javaparser/javaparser/pull/4279) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4270 Exception when resolving ObjectCreationExpr with nested varargs (PR [#4273](https://github.com/javaparser/javaparser/pull/4273) by [@jlerbsc](https://github.com/jlerbsc))
+* add Java_18 to yieldSupport (PR [#4262](https://github.com/javaparser/javaparser/pull/4262) by [@Kimmmey](https://github.com/Kimmmey))
+* fix: issue #4245 UnsupportedOperationException with LexicalPreservingPrinter when removing a sealed modified (PR [#4253](https://github.com/javaparser/javaparser/pull/4253) by [@jlerbsc](https://github.com/jlerbsc))
+* [ci] Fix change log released version as 3.25.7 (PR [#4251](https://github.com/javaparser/javaparser/pull/4251) by [@hazendaz](https://github.com/hazendaz))
+* Fix: issue 3278 Lazy types cause stack overflow when trying to find the least upper bound type (PR [#4246](https://github.com/javaparser/javaparser/pull/4246) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump com.google.guava:guava from 32.1.3-jre to 33.0.0-jre (PR [#4264](https://github.com/javaparser/javaparser/pull/4264) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Uncategorised
+
+* Revert "Refactoring: Move cache features to javaparser-core" (PR [#4274](https://github.com/javaparser/javaparser/pull/4274) by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@hazendaz](https://github.com/hazendaz)
+* [@iMashtak](https://github.com/iMashtak)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@Kimmmey](https://github.com/Kimmmey)
 
 Version 3.25.7
 --------------
