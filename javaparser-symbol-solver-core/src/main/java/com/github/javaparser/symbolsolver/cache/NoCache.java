@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,76 +19,71 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.resolution.cache;
+package com.github.javaparser.symbolsolver.cache;
 
-import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
-import java.util.WeakHashMap;
+
+import com.github.javaparser.resolution.cache.Cache;
+import com.github.javaparser.resolution.cache.CacheStats;
 
 /**
- * A cache implementation that stores the information in memory.
- * <br>
- * The current implementation stores the values in memory in a {@link WeakHashMap}.
+ * A cache implementation that does not store any information.
  *
- * @param <K> The type of the key.
- * @param <V> The type of the value.
+ * @param <K> The key type.
+ * @param <V> The value type.
  */
-public class InMemoryCache<K, V> implements Cache<K, V>  {
+public class NoCache<K, V> implements Cache<K, V> {
 
     /**
-     * Create a new instance for a cache in memory.
+     * Create a new instance.
      *
      * @param <expectedK> The expected type for the key.
      * @param <expectedV> The expected type for the value.
      *
-     * @return A newly created instance of {@link InMemoryCache}.
+     * @return A newly created instance of {@link NoCache}.
      */
-    public static <expectedK, expectedV> InMemoryCache<expectedK, expectedV> create() {
-        return new InMemoryCache<>();
-    }
-
-    private final Map<K, V> mappedValues;
-
-    private InMemoryCache() {
-    	mappedValues = Collections.synchronizedMap(new WeakHashMap<>());
+    public static <expectedK, expectedV> NoCache<expectedK, expectedV> create() {
+        return new NoCache<>();
     }
 
     @Override
     public void put(K key, V value) {
-        mappedValues.put(key, value);
+        // Nothing to do here.
     }
 
     @Override
     public Optional<V> get(K key) {
-        return Optional.ofNullable(
-                mappedValues.get(key)
-        );
+        return Optional.empty();
     }
 
     @Override
     public void remove(K key) {
-        mappedValues.remove(key);
+        // Nothing to do here.
     }
 
     @Override
     public void removeAll() {
-        mappedValues.clear();
+        // Nothing to do here.
     }
 
     @Override
     public boolean contains(K key) {
-        return mappedValues.containsKey(key);
+        return false;
     }
 
     @Override
     public long size() {
-        return mappedValues.size();
+        return 0;
     }
 
     @Override
     public boolean isEmpty() {
-        return mappedValues.isEmpty();
+        return true;
     }
+
+	@Override
+	public CacheStats stats() {
+		return new DefaultCacheStats();
+	}
 
 }

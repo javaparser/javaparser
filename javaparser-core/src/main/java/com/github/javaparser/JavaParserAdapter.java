@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2023 The JavaParser Team.
+ * Copyright (C) 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -195,4 +195,7 @@ public class JavaParserAdapter {
         return handleResult(getParser().parseMethodDeclaration(methodDeclaration));
     }
 
+    public ArrayInitializerExpr parseArrayInitializerExpr(String arrayInitializerExpr) {
+        return handleResult(getParser().parseArrayInitializerExpr(arrayInitializerExpr));
+    }
 }

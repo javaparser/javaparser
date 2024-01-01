@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,7 +21,6 @@
 
 package com.github.javaparser.symbolsolver.cache;
 
-import com.github.javaparser.resolution.cache.GuavaCache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.junit.jupiter.api.BeforeEach;

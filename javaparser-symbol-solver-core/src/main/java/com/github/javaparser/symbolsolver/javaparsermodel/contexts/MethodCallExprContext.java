@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -348,13 +348,14 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 ResolvedType actualType = lastActualParamType;
                 if (lastActualParamType.isArray()) {
                 	ResolvedType componentType = lastActualParamType.asArrayType().getComponentType();
-                	// in cases where, the expected type is a generic type (Arrays.asList(T... a)) and the component type of the array type is a reference type
+                	// in cases where, the expected type is assignable by the actual reference type of the array 
+                	// (Files.newInputStream(path, options) and options is a variadic argument of type OpenOption)
+                	// or the expected type is a generic type (Arrays.asList(T... a)) and the component type of the array type is a reference type
                 	// or the expected type is not a generic (IntStream.of(int... values)) and the component type is not a reference type
                 	// then the actual type is the component type (in the example above 'int')
-                	if ((componentType.isReferenceType()
-                			&& ResolvedTypeVariable.class.isInstance(expectedType))
-                			|| (!componentType.isReferenceType()
-                        			&& !ResolvedTypeVariable.class.isInstance(expectedType))) {
+                	if ((componentType.isReferenceType()&& ResolvedTypeVariable.class.isInstance(expectedType))
+                			|| (!componentType.isReferenceType() && !ResolvedTypeVariable.class.isInstance(expectedType))
+                			|| (componentType.isReferenceType() && expectedType.isAssignableBy(componentType))) {
                 		actualType = lastActualParamType.asArrayType().getComponentType();
                 	}
                 }
