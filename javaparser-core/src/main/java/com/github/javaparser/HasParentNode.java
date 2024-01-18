@@ -99,7 +99,7 @@ public interface HasParentNode<T> extends Observable {
         }
         return parent.findAncestor(predicate, types);
     }
-    
+
     /**
      * Determines whether this {@code HasParentNode} node is a descendant of the given node. A node is <i>not</i> a
      * descendant of itself.
