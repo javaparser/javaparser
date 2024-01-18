@@ -92,13 +92,14 @@ public interface HasParentNode<T> extends Observable {
         if (!hasParentNode())
             return Optional.empty();
         Node parent = getParentNode().get();
-        Optional<Class<N>> oType = Arrays.stream(types).filter(type -> type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent))).findFirst();
-        if (oType.isPresent()) {
-            return Optional.of(oType.get().cast(parent));
+        for (Class<N> type : types) {
+            if (type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent))) {
+                return Optional.of(type.cast(parent));
+            }
         }
         return parent.findAncestor(predicate, types);
     }
-
+    
     /**
      * Determines whether this {@code HasParentNode} node is a descendant of the given node. A node is <i>not</i> a
      * descendant of itself.
