@@ -35,6 +35,7 @@ import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -58,9 +59,10 @@ class EnumResolutionTest extends AbstractResolutionTest {
         SwitchStmt switchStmt = Navigator.demandSwitch(method);
         Expression expression = switchStmt.getEntries().get(0).getLabels().get(0);
 
-        SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
+        SymbolReference<? extends ResolvedDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(expression);
         assertTrue(ref.isSolved());
-        assertEquals("SwitchOnEnum.MyEnum", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        ResolvedValueDeclaration valueDecl = (ResolvedValueDeclaration) ref.getCorrespondingDeclaration();
+        assertEquals("SwitchOnEnum.MyEnum", valueDecl.getType().asReferenceType().getQualifiedName());
     }
 
     @Test

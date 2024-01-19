@@ -26,6 +26,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
@@ -96,7 +97,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
         CompilationUnit cu = StaticJavaParser.parse(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/03_symbol/main/Main.java"));
         NameExpr ne = Navigator.findNameExpression(cu, "A").get();
-        String actual = ne.resolve().getType().describe();
+        String actual = ((ResolvedValueDeclaration) ne.resolve()).getType().describe();
         assertEquals("main.Clazz.MyEnum", actual);
     }
 

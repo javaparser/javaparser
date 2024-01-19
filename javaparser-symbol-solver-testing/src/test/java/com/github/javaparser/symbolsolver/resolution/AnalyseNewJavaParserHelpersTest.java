@@ -25,7 +25,10 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -87,7 +90,8 @@ class AnalyseNewJavaParserHelpersTest extends AbstractResolutionTest {
     void nodesTypeIsCorrect() throws IOException {
         CompilationUnit cu = parse("com/github/javaparser/utils/PositionUtils");
         NameExpr nodes = cu.findAll(NameExpr.class).stream().filter(it -> it.getName() != null && it.getName().getId().equals("nodes")).findFirst().get();
-        ResolvedType type = JavaParserFacade.get(TYPESOLVER).solve(nodes).getCorrespondingDeclaration().getType();
+        SymbolReference<? extends ResolvedDeclaration> resolved = JavaParserFacade.get(TYPESOLVER).solve(nodes);
+        ResolvedType type = ((ResolvedValueDeclaration) resolved.getCorrespondingDeclaration()).getType();
         assertEquals("java.util.List<T>", type.describe());
         assertEquals(1, type.asReferenceType().typeParametersValues().size());
         assertEquals(true, type.asReferenceType().typeParametersValues().get(0).isTypeVariable());

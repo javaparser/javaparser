@@ -20,40 +20,38 @@
 
 package com.github.javaparser.symbolsolver;
 
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
-import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
+import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+public class Issue3251Test {
 
-public class Issue3159Test extends AbstractResolutionTest {
-
-    @Test
-    public void test() throws IOException {
-        String code = "class Test {\n" +
-                "  void f() {\n" +
-                "    int a = 0;\n" +
-                "    while (a < 10) {}\n" +
-                "  }\n" +
-                "}";
-        
-        ParserConfiguration config = new ParserConfiguration();
-        config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
-        StaticJavaParser.setConfiguration(config);
-
-        CompilationUnit cu = StaticJavaParser.parse(code);
-        NameExpr mce = cu.findFirst(NameExpr.class).get();
-
-        ResolvedDeclaration v = mce.resolve();
-        // verify that the symbol declaration represents a variable
-        assertTrue(v.isVariable());
+    @BeforeEach
+    void setup() {
+        TypeSolver typeResolver = new ReflectionTypeSolver();
+        JavaSymbolSolver symbolResolver = new JavaSymbolSolver(typeResolver);
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(symbolResolver);
     }
 
+    @Test
+    void resolveNameAsType() {
+        String code = "class A { int a = Integer.MAX_VALUE; }";
+        CompilationUnit cu = parse(code);
+        NameExpr integerTypeNameExpr = cu.findFirst(NameExpr.class).get();
+
+        ResolvedDeclaration resolved = integerTypeNameExpr.resolve();
+
+        assertTrue(resolved.isType());
+        assertInstanceOf(ResolvedTypeDeclaration.class, resolved);
+        assertEquals("java.lang.Integer", ((ResolvedTypeDeclaration) resolved).getQualifiedName());
+    }
 }

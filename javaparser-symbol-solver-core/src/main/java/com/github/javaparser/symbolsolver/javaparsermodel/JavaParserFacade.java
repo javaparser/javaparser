@@ -118,15 +118,15 @@ public class JavaParserFacade {
         return symbolSolver;
     }
 
-    public SymbolReference<? extends ResolvedValueDeclaration> solve(NameExpr nameExpr) {
+    public SymbolReference<? extends ResolvedDeclaration> solve(NameExpr nameExpr) {
         return symbolSolver.solveSymbol(nameExpr.getName().getId(), nameExpr);
     }
 
-    public SymbolReference<? extends ResolvedValueDeclaration> solve(SimpleName nameExpr) {
+    public SymbolReference<? extends ResolvedDeclaration> solve(SimpleName nameExpr) {
         return symbolSolver.solveSymbol(nameExpr.getId(), nameExpr);
     }
 
-    public SymbolReference<? extends ResolvedValueDeclaration> solve(Expression expr) {
+    public SymbolReference<? extends ResolvedDeclaration> solve(Expression expr) {
         return expr.toNameExpr().map(this::solve).orElseThrow(() -> new IllegalArgumentException(expr.getClass().getCanonicalName()));
     }
 

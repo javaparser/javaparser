@@ -189,7 +189,10 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof NameExpr) {
-            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((NameExpr) node);
+            SymbolReference<? extends ResolvedDeclaration> result = JavaParserFacade.get(typeSolver).solve((NameExpr) node);
+            if (!result.isSolved()) {
+                result = JavaParserFactory.getContext(node, typeSolver).solveType(((NameExpr) node).getNameAsString());
+            }
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());
@@ -302,7 +305,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             }
         }
         if (node instanceof PatternExpr) {
-            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((PatternExpr) node);
+            SymbolReference<? extends ResolvedDeclaration> result = JavaParserFacade.get(typeSolver).solve((PatternExpr) node);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());

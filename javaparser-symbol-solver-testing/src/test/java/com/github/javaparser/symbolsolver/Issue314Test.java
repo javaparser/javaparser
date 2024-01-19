@@ -26,7 +26,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -67,7 +67,7 @@ class Issue314Test extends AbstractResolutionTest{
                 "    }";
         CompilationUnit cu = parse(code);
         NameExpr refToA = Navigator.findNameExpression(Navigator.demandClass(cu, "B"), "a").get();
-        SymbolReference<? extends ResolvedValueDeclaration> symbolReference = javaParserFacade.solve(refToA);
+        SymbolReference<? extends ResolvedDeclaration> symbolReference = javaParserFacade.solve(refToA);
         assertEquals(true, symbolReference.isSolved());
         assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
         assertEquals("a", symbolReference.getCorrespondingDeclaration().getName());

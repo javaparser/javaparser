@@ -182,7 +182,7 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         NameExpr expression = returnStmt.getExpression().get().asNameExpr();
 
         // resolve field access expression
-        ResolvedValueDeclaration resolvedValueDeclaration = expression.resolve();
+        ResolvedValueDeclaration resolvedValueDeclaration = (ResolvedValueDeclaration) expression.resolve();
 
         // get expected field declaration
         VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "foo");

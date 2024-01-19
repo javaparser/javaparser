@@ -29,8 +29,8 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -374,7 +374,7 @@ public class InstanceOfTest {
                 assertEquals(1, nameExprs.size());
 
                 NameExpr nameExpr = nameExprs.get(0);
-                ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
+                ResolvedDeclaration resolvedNameExpr = nameExpr.resolve();
             }
 
 
@@ -564,7 +564,7 @@ public class InstanceOfTest {
             assertEquals(2, nameExprs.size());
 
             NameExpr nameExpr = nameExprs.get(0);
-            ResolvedValueDeclaration resolvedNameExpr = nameExpr.resolve();
+            ResolvedDeclaration resolvedNameExpr = nameExpr.resolve();
             ResolvedType resolvedNameExprType = nameExpr.calculateResolvedType();
 
         }

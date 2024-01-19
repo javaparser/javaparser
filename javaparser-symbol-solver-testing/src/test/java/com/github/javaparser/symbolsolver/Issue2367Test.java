@@ -55,7 +55,7 @@ class Issue2367Test extends AbstractSymbolResolutionTest {
                 new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
 
         NameExpr nameExpr = unit.findFirst(NameExpr.class, m -> m.getName().getIdentifier().equals("privateField")).get();
-        ResolvedValueDeclaration resolvedValueDeclaration = nameExpr.resolve();
+        ResolvedValueDeclaration resolvedValueDeclaration = (ResolvedValueDeclaration) nameExpr.resolve();
         assertEquals("double", resolvedValueDeclaration.getType().describe());
     }
 }

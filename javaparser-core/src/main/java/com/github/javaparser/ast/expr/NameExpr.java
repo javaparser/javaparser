@@ -34,7 +34,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NameExprMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -47,7 +47,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>, Resolvable<ResolvedValueDeclaration> {
+public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>, Resolvable<ResolvedDeclaration> {
 
     private SimpleName name;
 
@@ -151,10 +151,10 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
 
     /**
      * Attempts to resolve the declaration corresponding to the accessed name. If successful, a
-     * {@link ResolvedValueDeclaration} representing the declaration of the value accessed by this {@code NameExpr} is
+     * {@link ResolvedDeclaration} representing the declaration of the value accessed by this {@code NameExpr} is
      * returned. Otherwise, an {@link UnsolvedSymbolException} is thrown.
      *
-     * @return a {@link ResolvedValueDeclaration} representing the declaration of the accessed value.
+     * @return a {@link ResolvedDeclaration} representing the declaration of the accessed value.
      * @throws UnsolvedSymbolException if the declaration corresponding to the name expression could not be resolved.
      * @see FieldAccessExpr#resolve()
      * @see MethodCallExpr#resolve()
@@ -162,8 +162,8 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
      * @see ExplicitConstructorInvocationStmt#resolve()
      */
     @Override
-    public ResolvedValueDeclaration resolve() {
-        return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
+    public ResolvedDeclaration resolve() {
+        return getSymbolResolver().resolveDeclaration(this, ResolvedDeclaration.class);
     }
 
     @Override

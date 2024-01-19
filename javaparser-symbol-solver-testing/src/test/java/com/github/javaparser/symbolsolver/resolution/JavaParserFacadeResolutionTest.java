@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.resolution;
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
@@ -45,7 +46,6 @@ import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -107,7 +107,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
                 "}";
         MethodCallExpr methodCallExpr = Navigator.demandNodeOfGivenClass(parse(code), MethodCallExpr.class);
         NameExpr nameE = (NameExpr) methodCallExpr.getScope().get();
-        SymbolReference<? extends ResolvedValueDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
+        SymbolReference<? extends ResolvedDeclaration> symbolReference = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameE);
         assertTrue(symbolReference.isSolved());
         assertTrue(symbolReference.getCorrespondingDeclaration().isParameter());
         assertEquals("e", symbolReference.getCorrespondingDeclaration().asParameter().getName());

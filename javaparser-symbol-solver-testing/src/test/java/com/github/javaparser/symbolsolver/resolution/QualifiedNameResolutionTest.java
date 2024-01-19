@@ -25,6 +25,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.resolution.Navigator;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -43,9 +44,10 @@ class QualifiedNameResolutionTest extends AbstractResolutionTest {
         MethodDeclaration method = Navigator.demandMethod(referencesToField, "foo1");
         NameExpr nameExpr = Navigator.findNameExpression(method, "s").get();
 
-        SymbolReference<? extends ResolvedValueDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
+        SymbolReference<? extends ResolvedDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(nameExpr);
         assertTrue(ref.isSolved());
-        assertEquals("java.util.Scanner", ref.getCorrespondingDeclaration().getType().asReferenceType().getQualifiedName());
+        ResolvedValueDeclaration valueDecl = (ResolvedValueDeclaration) ref.getCorrespondingDeclaration();
+        assertEquals("java.util.Scanner", valueDecl.getType().asReferenceType().getQualifiedName());
     }
 
 }
