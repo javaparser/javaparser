@@ -25,6 +25,11 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -761,5 +766,242 @@ public class RecordDeclarationTest {
     private void assertTwoRecordDeclarations(CompilationUnit cu) {
         List<RecordDeclaration> recordDeclarations = cu.findAll(RecordDeclaration.class);
         assertEquals(2, recordDeclarations.size());
+    }
+
+    @Test
+    public void testReceiverParameter() {
+        RecordDeclaration record = new RecordDeclaration();
+        ReceiverParameter receiverParameter = new ReceiverParameter();
+        record.setReceiverParameter(receiverParameter);
+        assertEquals(receiverParameter, record.getReceiverParameter().orElse(null));
+    }
+
+    @Test
+    public void testIsRecordDeclaration() {
+        RecordDeclaration record = new RecordDeclaration(new NodeList<Modifier>(), "testName");
+        assertTrue(record.isRecordDeclaration());
+    }
+
+    @Test
+    public void testAsRecordDeclaration() {
+        RecordDeclaration record = new RecordDeclaration(new NodeList<Modifier>(), "testName");
+        assertTrue(record.asRecordDeclaration() instanceof RecordDeclaration);
+    }
+
+    @Test
+    public void testToRecordDeclaration() {
+        RecordDeclaration record = new RecordDeclaration(new NodeList<Modifier>(), "testName");
+        assertTrue(record.toRecordDeclaration().isPresent());
+    }
+
+    @Test
+    public void testIfRecordDeclaration() {
+        RecordDeclaration record = new RecordDeclaration(new NodeList<Modifier>(), "testName");
+        record.ifRecordDeclaration(r -> assertEquals("testName", r.getName().asString()));
+    }
+
+    @Test
+    public void testRemoveImplementedTypes() {
+        RecordDeclaration record = new RecordDeclaration();
+        ClassOrInterfaceType type = new ClassOrInterfaceType("Type");
+        record.getImplementedTypes().add(type);
+        assertTrue(record.remove(type));
+        assertFalse(record.getImplementedTypes().contains(type));
+    }
+
+    @Test
+    public void testRemoveParameters() {
+        RecordDeclaration record = new RecordDeclaration();
+        Parameter param = new Parameter(new PrimitiveType(PrimitiveType.Primitive.INT), "intParam");
+        record.getParameters().add(param);
+        assertTrue(record.remove(param));
+        assertFalse(record.getParameters().contains(param));
+    }
+
+    @Test
+    public void testRemoveReceiverParameter() {
+        RecordDeclaration record = new RecordDeclaration();
+        ReceiverParameter receiverParameter = new ReceiverParameter();
+        record.setReceiverParameter(receiverParameter);
+        assertTrue(record.remove(receiverParameter));
+        record.removeReceiverParameter();
+        assertNull(record.getReceiverParameter().orElse(null));
+    }
+
+    @Test
+    public void testRemoveTypeParameters() {
+        RecordDeclaration record = new RecordDeclaration();
+        TypeParameter typeParam = new TypeParameter("T");
+        record.getTypeParameters().add(typeParam);
+
+        assertTrue(record.remove(typeParam));
+        assertFalse(record.getTypeParameters().contains(typeParam));
+    }
+
+    @Test
+    public void testReplaceImplementedTypes() {
+        RecordDeclaration record = new RecordDeclaration();
+        ClassOrInterfaceType oldType = new ClassOrInterfaceType("OldType");
+        ClassOrInterfaceType newType = new ClassOrInterfaceType("NewType");
+        record.getImplementedTypes().add(oldType);
+
+        assertTrue(record.replace(oldType, newType));
+        assertFalse(record.getImplementedTypes().contains(oldType));
+        assertTrue(record.getImplementedTypes().contains(newType));
+    }
+
+    @Test
+    public void testReplaceParameters() {
+        RecordDeclaration record = new RecordDeclaration();
+        Parameter oldParam = new Parameter(new PrimitiveType(PrimitiveType.Primitive.INT), "intParam");
+        Parameter newParam = new Parameter(new PrimitiveType(PrimitiveType.Primitive.DOUBLE), "doubleParam");
+        record.getParameters().add(oldParam);
+
+        assertTrue(record.replace(oldParam, newParam));
+        assertFalse(record.getParameters().contains(oldParam));
+        assertTrue(record.getParameters().contains(newParam));
+    }
+
+    @Test
+    public void testReplaceTypeParameters() {
+        RecordDeclaration record = new RecordDeclaration();
+        TypeParameter oldTypeParam = new TypeParameter("OldT");
+        TypeParameter newTypeParam = new TypeParameter("NewT");
+        record.getTypeParameters().add(oldTypeParam);
+
+        assertTrue(record.replace(oldTypeParam, newTypeParam));
+        assertFalse(record.getTypeParameters().contains(oldTypeParam));
+        assertTrue(record.getTypeParameters().contains(newTypeParam));
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        ReceiverParameter rp = new ReceiverParameter();
+        assertNotNull(rp.getType());
+        assertNotNull(rp.getName());
+        assertTrue(rp.getAnnotations().isEmpty());
+    }
+
+    @Test
+    public void testConstructorWithTypeAndName() {
+        Type type = new ClassOrInterfaceType();
+        Name name = new Name("TestName");
+        ReceiverParameter rp = new ReceiverParameter(type, name);
+
+        assertEquals(type, rp.getType());
+        assertEquals(name, rp.getName());
+    }
+
+    @Test
+    public void testConstructorWithTypeAndStringName() {
+        Type type = new ClassOrInterfaceType();
+        String name = "TestName";
+        ReceiverParameter rp = new ReceiverParameter(type, name);
+
+        assertEquals(type, rp.getType());
+        assertEquals(name, rp.getName().asString());
+    }
+
+    @Test
+    public void testSetGetType() {
+        ReceiverParameter rp = new ReceiverParameter();
+        Type newType = new ClassOrInterfaceType("NewType");
+        rp.setType(newType);
+
+        assertEquals(newType, rp.getType());
+    }
+
+    @Test
+    public void testSetGetName() {
+        ReceiverParameter rp = new ReceiverParameter();
+        Name newName = new Name("NewName");
+        rp.setName(newName);
+
+        assertEquals(newName, rp.getName());
+    }
+
+    @Test
+    public void testAddAnnotation() {
+        ReceiverParameter rp = new ReceiverParameter();
+        AnnotationExpr annotation = new SingleMemberAnnotationExpr(new Name("TestAnnotation"), new StringLiteralExpr("Value"));
+        rp.getAnnotations().add(annotation);
+
+        assertEquals(1, rp.getAnnotations().size());
+        assertTrue(rp.getAnnotations().contains(annotation));
+    }
+
+    @Test
+    public void testClone() {
+        ReceiverParameter rp = new ReceiverParameter();
+        ReceiverParameter clonedRp = rp.clone();
+        assertNotSame(rp, clonedRp);
+        assertEquals(rp.getType(), clonedRp.getType());
+        assertEquals(rp.getName(), clonedRp.getName());
+        assertEquals(rp.getAnnotations().size(), clonedRp.getAnnotations().size());
+    }
+
+    @Test
+    public void testRemoveAnnotation() {
+        ReceiverParameter rp = new ReceiverParameter();
+        AnnotationExpr annotation = new SingleMemberAnnotationExpr(new Name("TestAnnotation"), new StringLiteralExpr("Value"));
+        rp.getAnnotations().add(annotation);
+        rp.remove(annotation);
+        assertTrue(rp.getAnnotations().isEmpty());
+    }
+
+    @Test
+    public void testReplaceAnnotation() {
+        ReceiverParameter rp = new ReceiverParameter();
+        AnnotationExpr annotation1 = new SingleMemberAnnotationExpr(new Name("Annotation1"), new StringLiteralExpr("Value1"));
+        AnnotationExpr annotation2 = new SingleMemberAnnotationExpr(new Name("Annotation2"), new StringLiteralExpr("Value2"));
+        rp.getAnnotations().add(annotation1);
+        rp.replace(annotation1, annotation2);
+        assertEquals(1, rp.getAnnotations().size());
+        assertTrue(rp.getAnnotations().contains(annotation2));
+        assertFalse(rp.getAnnotations().contains(annotation1));
+    }
+
+    @Test
+    public void testReplaceWithNullNode() {
+        ReceiverParameter rp = new ReceiverParameter();
+        assertFalse(rp.replace(null, new Name("NewName")));
+    }
+
+    @Test
+    public void testReplaceAnnotationInList() {
+        ReceiverParameter rp = new ReceiverParameter();
+        AnnotationExpr annotation1 = new SingleMemberAnnotationExpr(new Name("Annotation1"), new StringLiteralExpr("Value1"));
+        AnnotationExpr annotation2 = new SingleMemberAnnotationExpr(new Name("Annotation2"), new StringLiteralExpr("Value2"));
+        rp.getAnnotations().add(annotation1);
+        assertTrue(rp.replace(annotation1, annotation2));
+        assertFalse(rp.getAnnotations().contains(annotation1));
+        assertTrue(rp.getAnnotations().contains(annotation2));
+    }
+
+    @Test
+    public void testReplaceName() {
+        ReceiverParameter rp = new ReceiverParameter();
+        Name newName = new Name("NewName");
+
+        assertTrue(rp.replace(rp.getName(), newName));
+        assertEquals(newName, rp.getName());
+    }
+
+    @Test
+    public void testReplaceType() {
+        ReceiverParameter rp = new ReceiverParameter();
+        Type newType = new ClassOrInterfaceType("NewType");
+
+        assertTrue(rp.replace(rp.getType(), newType));
+        assertEquals(newType, rp.getType());
+    }
+
+    @Test
+    public void testReplaceWithNonExistentNode() {
+        ReceiverParameter rp = new ReceiverParameter();
+        Name newName = new Name("NewName");
+        Name nonExistentName = new Name("NonExistentName");
+
+        assertFalse(rp.replace(nonExistentName, newName));
     }
 }

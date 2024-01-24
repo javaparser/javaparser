@@ -26,6 +26,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.ast.type.Type;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -127,5 +130,169 @@ class FieldDeclarationTest {
                 () -> assertFalse(i.isStatic()),
                 () -> assertFalse(i.isFinal())
         );
+    }
+
+    @Test
+    public void testFieldWithModifiers() {
+        NodeList<Modifier> modifiers = new NodeList<>();
+        modifiers.add(Modifier.publicModifier());
+        modifiers.add(Modifier.staticModifier());
+
+        Type type = new ClassOrInterfaceType("String");
+        String name = "fieldName";
+
+        FieldDeclaration field = new FieldDeclaration(modifiers, type, name);
+        assertTrue(field.getModifiers().contains(Modifier.publicModifier()));
+        assertTrue(field.getModifiers().contains(Modifier.staticModifier()));
+    }
+
+    @Test
+    public void testGetModifiers() {
+        FieldDeclaration field = new FieldDeclaration();
+        NodeList<Modifier> modifiers = new NodeList<>();
+        modifiers.add(Modifier.publicModifier());
+        field.setModifiers(modifiers);
+        assertTrue(field.getModifiers().contains(Modifier.publicModifier()));
+    }
+
+    @Test
+    public void testSetVariables() {
+        FieldDeclaration field = new FieldDeclaration();
+        NodeList<VariableDeclarator> variables = new NodeList<>();
+        VariableDeclarator var = new VariableDeclarator(new ClassOrInterfaceType("String"), "testVar");
+        variables.add(var);
+        field.setVariables(variables);
+        assertEquals("testVar", field.getVariables().get(0).getNameAsString());
+    }
+
+    @Test
+    public void testCreateGetter() {
+        ClassOrInterfaceDeclaration mockClass = new ClassOrInterfaceDeclaration();
+        FieldDeclaration field = mockClass.addField(int.class, "sampleField", Modifier.Keyword.PRIVATE);
+
+        MethodDeclaration generatedGetter = field.createGetter();
+
+        assertEquals("getSampleField", generatedGetter.getNameAsString());
+        assertEquals(PrimitiveType.intType(), generatedGetter.getType());
+        assertNotNull(generatedGetter.getBody().get());
+    }
+
+    @Test
+    public void testCreateSetter() {
+        ClassOrInterfaceDeclaration mockClass = new ClassOrInterfaceDeclaration();
+        FieldDeclaration field = mockClass.addField(int.class, "sampleField", Modifier.Keyword.PRIVATE);
+
+        MethodDeclaration generatedSetter = field.createSetter();
+
+        assertEquals("setSampleField", generatedSetter.getNameAsString());
+        assertEquals(1, generatedSetter.getParameters().size());
+        assertEquals("sampleField", generatedSetter.getParameter(0).getNameAsString());
+    }
+
+    @Test
+    public void testIsTransient() {
+        FieldDeclaration field = new FieldDeclaration();
+        assertFalse(field.isTransient());
+
+        NodeList<Modifier> modifiers = new NodeList<>();
+        modifiers.add(Modifier.transientModifier());
+        field.setModifiers(modifiers);
+        assertTrue(field.isTransient());
+    }
+
+    @Test
+    public void testSetTransient() {
+        FieldDeclaration field = new FieldDeclaration();
+        assertFalse(field.isTransient());
+        field.setTransient(true);
+        assertTrue(field.isTransient());
+    }
+
+    @Test
+    public void testIsVolatile() {
+        FieldDeclaration field = new FieldDeclaration();
+        assertFalse(field.isVolatile());
+
+        NodeList<Modifier> modifiers = new NodeList<>();
+        modifiers.add(Modifier.volatileModifier());
+        field.setModifiers(modifiers);
+        assertTrue(field.isVolatile());
+    }
+
+    @Test
+    public void testSetVolatile() {
+        FieldDeclaration field = new FieldDeclaration();
+        assertFalse(field.isVolatile());
+        field.setVolatile(true);
+        assertTrue(field.isVolatile());
+    }
+
+    @Test
+    public void testIsStatic() {
+        FieldDeclaration field = new FieldDeclaration();
+        assertFalse(field.isStatic());
+
+        NodeList<Modifier> modifiers = new NodeList<>();
+        modifiers.add(Modifier.staticModifier());
+        field.setModifiers(modifiers);
+        assertTrue(field.isStatic());
+    }
+
+    @Test
+    public void testIsFinal() {
+        FieldDeclaration field = new FieldDeclaration();
+        assertFalse(field.isFinal());
+
+        NodeList<Modifier> modifiers = new NodeList<>();
+        modifiers.add(Modifier.finalModifier());
+        field.setModifiers(modifiers);
+        assertTrue(field.isFinal());
+    }
+
+    @Test
+    public void testIsPublic() {
+        FieldDeclaration field = new FieldDeclaration();
+        assertFalse(field.isPublic());
+
+        NodeList<Modifier> modifiers = new NodeList<>();
+        modifiers.add(Modifier.publicModifier());
+        field.setModifiers(modifiers);
+        assertTrue(field.isPublic());
+    }
+
+    @Test
+    public void testRemoveVariableNode() {
+        FieldDeclaration field = new FieldDeclaration();
+        VariableDeclarator variable = new VariableDeclarator(PrimitiveType.intType(), "testVar");
+        field.addVariable(variable);
+
+        assertTrue(field.getVariables().contains(variable));
+        assertTrue(field.remove(variable));
+        assertFalse(field.getVariables().contains(variable));
+    }
+
+    @Test
+    public void testReplaceVariableNode() {
+        FieldDeclaration field = new FieldDeclaration();
+        VariableDeclarator originalVariable = new VariableDeclarator(PrimitiveType.intType(), "originalVar");
+        field.addVariable(originalVariable);
+        VariableDeclarator replacementVariable = new VariableDeclarator(PrimitiveType.intType(), "replacementVar");
+
+        assertTrue(field.replace(originalVariable, replacementVariable));
+        assertFalse(field.getVariables().contains(originalVariable));
+        assertTrue(field.getVariables().contains(replacementVariable));
+    }
+
+    @Test
+    public void testTypeCastingMethods() {
+        FieldDeclaration field = new FieldDeclaration();
+
+        assertTrue(field.isFieldDeclaration());
+        assertEquals(field, field.asFieldDeclaration());
+        field.ifFieldDeclaration(e -> {
+            assertTrue(e instanceof FieldDeclaration);
+        });
+
+        assertTrue(field.toFieldDeclaration().isPresent());
     }
 }

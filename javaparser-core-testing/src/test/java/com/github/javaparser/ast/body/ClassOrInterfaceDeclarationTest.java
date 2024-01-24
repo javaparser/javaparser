@@ -34,6 +34,9 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.utils.TestParser;
+import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.TypeParameter;
 
 class ClassOrInterfaceDeclarationTest {
     @Test
@@ -143,4 +146,102 @@ class ClassOrInterfaceDeclarationTest {
         });
     }
 
+    @Test
+    public void testClassOrInterfaceDeclarationDefaultConstructor() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        assertNotNull(decl);
+    }
+
+    @Test
+    public void testClassOrInterfaceDeclarationWithModifiersAndName() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "TestName");
+        assertEquals("TestName", decl.getNameAsString());
+    }
+
+    @Test
+    public void testCloneMethod() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        ClassOrInterfaceDeclaration cloned = decl.clone();
+        assertNotNull(cloned);
+    }
+
+    @Test
+    public void testRemoveMethodExtendedTypes() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        ClassOrInterfaceType extendedType = new ClassOrInterfaceType("ExtendedType");
+        decl.addExtendedType(extendedType);
+        assertTrue(decl.remove(extendedType));
+        assertFalse(decl.getExtendedTypes().contains(extendedType));
+    }
+
+    @Test
+    public void testRemoveMethodImplementedTypes() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        ClassOrInterfaceType implementedType = new ClassOrInterfaceType("ImplementedType");
+        decl.addImplementedType(implementedType);
+        assertTrue(decl.remove(implementedType));
+        assertFalse(decl.getImplementedTypes().contains(implementedType));
+    }
+
+    @Test
+    public void testRemoveMethodTypeParameters() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        TypeParameter typeParameter = new TypeParameter("TypeParam");
+        decl.addTypeParameter(typeParameter);
+        assertTrue(decl.remove(typeParameter));
+        assertFalse(decl.getTypeParameters().contains(typeParameter));
+    }
+
+    @Test
+    public void testGetFullyQualifiedNameNonLocalClass() {
+        CompilationUnit cu = parse("package com.example; class X{}");
+        ClassOrInterfaceDeclaration y = cu.getClassByName("X").get();
+        assertEquals("com.example.X", y.getFullyQualifiedName().get());
+    }
+
+    @Test
+    public void testReplaceExtendedTypes() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        ClassOrInterfaceType oldType = new ClassOrInterfaceType("OldType");
+        ClassOrInterfaceType newType = new ClassOrInterfaceType("NewType");
+        decl.addExtendedType(oldType);
+        boolean result = decl.replace(oldType, newType);
+        assertTrue(result);
+        assertTrue(decl.getExtendedTypes().contains(newType));
+    }
+
+    @Test
+    public void testReplaceImplementedTypes() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        ClassOrInterfaceType oldType = new ClassOrInterfaceType("OldType");
+        ClassOrInterfaceType newType = new ClassOrInterfaceType("NewType");
+        decl.addImplementedType(oldType);
+        boolean result = decl.replace(oldType, newType);
+        assertTrue(result);
+        assertTrue(decl.getImplementedTypes().contains(newType));
+    }
+
+    @Test
+    public void testReplaceTypeParameters() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        TypeParameter oldType = new TypeParameter("OldType");
+        TypeParameter newType = new TypeParameter("NewType");
+        decl.addTypeParameter(oldType);
+        boolean result = decl.replace(oldType, newType);
+        assertTrue(result);
+        assertTrue(decl.getTypeParameters().contains(newType));
+    }
+
+    @Test
+    void testTypeCastingMethods() {
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration();
+        assertTrue(decl.isClassOrInterfaceDeclaration());
+        assertEquals(decl, decl.asClassOrInterfaceDeclaration());
+
+        decl.ifClassOrInterfaceDeclaration(e -> {
+            assertTrue(e instanceof ClassOrInterfaceDeclaration);
+        });
+
+        assertTrue(decl.toClassOrInterfaceDeclaration().isPresent());
+    }
 }
