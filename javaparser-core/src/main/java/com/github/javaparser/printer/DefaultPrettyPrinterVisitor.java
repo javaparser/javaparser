@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -1499,7 +1499,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             printAnnotations(n.getVarArgsAnnotations(), false, arg);
             printer.print("...");
         }
-        if (!(n.getType() instanceof UnknownType)) {
+        if (!(n.getType().isUnknownType())) {
             printer.print(" ");
         }
         n.getName().accept(this, arg);

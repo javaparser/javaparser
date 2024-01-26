@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -300,7 +300,7 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         AnnotationExpr annotationExpr = method.getAnnotation(0);
 
         // resolve annotation expression @Test
-        JavassistAnnotationDeclaration resolved = (JavassistAnnotationDeclaration) annotationExpr.resolve();
+        ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // check that the annotation @Test has the annotations @Target and @Retention, but not @Documented
         assertEquals("org.junit.Test", resolved.getQualifiedName());

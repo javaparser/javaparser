@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -19,7 +18,7 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.cache;
+package com.github.javaparser.resolution.cache;
 
 import java.util.Optional;
 
@@ -90,5 +89,13 @@ public interface Cache<K, V> {
      * @return {@code True} if is empty.
      */
     boolean isEmpty();
+    
+    /**
+     * Returns a current snapshot of this cache's cumulative statistics, or a set of default values if
+     * the cache is not recording statistics. All statistics begin at zero and never decrease over the
+     * lifetime of the cache.
+     *
+     */
+    CacheStats stats();
 
 }

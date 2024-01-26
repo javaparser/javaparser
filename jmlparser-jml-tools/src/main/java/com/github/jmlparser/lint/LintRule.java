@@ -11,5 +11,5 @@ public interface LintRule {
     String WARN = "WARN";
     String ERROR = "ERROR";
 
-    void accept(Node node, LintProblemReporter problemReporter);
+    void accept(Node node, LintProblemReporter problemReporter, JmlLintingConfig config);
 }

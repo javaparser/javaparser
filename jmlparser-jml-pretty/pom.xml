@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>io.github.jmltoolkit</groupId>
 		<artifactId>jmlparser-parent</artifactId>
-		<version>3.25.6</version>
+		<version>3.25.8</version>
 	</parent>
 	<artifactId>jmlparser-jml-pretty</artifactId>
 

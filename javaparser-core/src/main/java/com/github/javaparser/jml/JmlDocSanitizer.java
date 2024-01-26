@@ -3,8 +3,10 @@ package com.github.javaparser.jml;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
+import com.github.javaparser.Token;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
+
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
@@ -14,24 +16,17 @@ import java.util.regex.Pattern;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public class JmlDocSanitizer {
-
-    private final Set<String> enabledKeys;
-
-    public JmlDocSanitizer(Set<String> enabledKeys) {
-        this.enabledKeys = enabledKeys;
-    }
-
+public record JmlDocSanitizer(Set<String> enabledKeys) {
     public String asString(NodeList<JmlDoc> jmlDocs) {
         return asString(jmlDocs, true);
     }
 
-    public String asString(NodeList<JmlDoc> jmlDocs, boolean emulateGlobalPosition) {
+    public String asStringJT(Collection<JavaToken> jmlDocs, boolean emulateGlobalPosition) {
         if (jmlDocs.isEmpty())
             return "";
+
         StringConstructor s = new StringConstructor();
-        for (JmlDoc jmlDoc : jmlDocs) {
-            JavaToken tok = jmlDoc.getContent();
+        for (JavaToken tok : jmlDocs) {
             if (emulateGlobalPosition) {
                 final Optional<Range> range = tok.getRange();
                 if (range.isPresent()) {
@@ -41,9 +36,30 @@ public class JmlDocSanitizer {
             } else {
                 s.append("\n");
             }
-            s.append(jmlDoc.getContent().getText());
+            s.append(tok.getText());
         }
         return toSanitizedString(s.getBuffer());
+    }
+
+    public String asString(Collection<Token> jmlDocs, boolean emulateGlobalPosition) {
+        if (jmlDocs.isEmpty())
+            return "";
+
+        StringConstructor s = new StringConstructor();
+        for (Token tok : jmlDocs) {
+            if (emulateGlobalPosition) {
+                s.expandTo(tok.beginLine, tok.beginColumn);
+            } else {
+                s.append("\n");
+            }
+            s.append(tok.image);
+        }
+        return toSanitizedString(s.getBuffer());
+    }
+
+
+    public String asString(NodeList<JmlDoc> jmlDocs, boolean emulateGlobalPosition) {
+        return asStringJT(jmlDocs.stream().map(JmlDoc::getContent).toList(), emulateGlobalPosition);
     }
 
     public String toSanitizedString(StringBuilder s) {
@@ -130,8 +146,8 @@ public class JmlDocSanitizer {
                 return false;
             }
         }
-        if (//unconditonal JML comment
-                pos + 2 == posAt)
+        //unconditional JML comment
+        if (pos + 2 == posAt)
             return true;
         String[] keys = splitTags(s.substring(pos + 2, posAt));
         return isActiveJmlSpec(keys);
@@ -187,55 +203,5 @@ public class JmlDocSanitizer {
     private static boolean isPositive(String marker) {
         return marker.charAt(0) == '+';
     }
-
-    public Set<String> getEnabledKeys() {
-        return enabledKeys;
-    }
 }
 
-class StringConstructor {
-
-    private final StringBuilder sb = new StringBuilder(1024);
-
-    //JavaCC starts with 1/1
-    private int curLine = 1;
-
-    private int curColumn = 1;
-
-    public StringConstructor append(String value) {
-        sb.ensureCapacity(sb.length() + value.length() + 1);
-        for (char c : value.toCharArray()) {
-            sb.append(c);
-            if (c == '\n') {
-                curColumn = 1;
-                curLine++;
-            } else {
-                curColumn++;
-            }
-        }
-        return this;
-    }
-
-    public StringConstructor expandTo(int line, int column) {
-        if (curLine > line || (curLine == line && curColumn > column)) {
-            throw new IllegalArgumentException();
-        }
-        for (; curLine < line; curLine++) {
-            sb.append("\n");
-            curColumn = 1;
-        }
-        for (; curColumn < column; curColumn++) {
-            sb.append(" ");
-        }
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return sb.toString();
-    }
-
-    public StringBuilder getBuffer() {
-        return sb;
-    }
-}

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -90,6 +90,8 @@ public interface ParseStart<R> {
     ParseStart<ModuleDirective> MODULE_DIRECTIVE = GeneratedJavaParser::ModuleDirectiveParseStart;
 
     ParseStart<MethodDeclaration> METHOD_DECLARATION = GeneratedJavaParser::MethodDeclarationParseStart;
+
+    ParseStart<ArrayInitializerExpr> ARRAY_INITIALIZER_EXPR = GeneratedJavaParser::ArrayInitializer;
 
     R parse(GeneratedJavaParser parser) throws ParseException;
 }

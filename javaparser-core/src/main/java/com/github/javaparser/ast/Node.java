@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -197,14 +197,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * else create a new DefaultPrettyPrinter with default parameters
      */
     protected Printer getPrinter() {
-        return findCompilationUnit().map(c -> c.getPrinter()).orElse(createDefaultPrinter());
+        return findCompilationUnit().map(c -> c.getPrinter()).orElseGet(() -> createDefaultPrinter());
     }
 
     /*
      * Return the printer initialized with the specified configuration
      */
     protected Printer getPrinter(PrinterConfiguration configuration) {
-        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElse(createDefaultPrinter(configuration));
+        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElseGet(() -> createDefaultPrinter(configuration));
     }
 
     protected Printer createDefaultPrinter() {

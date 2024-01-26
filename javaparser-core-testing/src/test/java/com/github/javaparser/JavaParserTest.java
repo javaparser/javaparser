@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -160,6 +160,14 @@ class JavaParserTest {
         assertEquals("Runnable", intersectionType.getElements().get(0).asClassOrInterfaceType().getNameAsString());
         assertTrue(intersectionType.getElements().get(1) instanceof ClassOrInterfaceType);
         assertEquals("Serializable", intersectionType.getElements().get(1).asClassOrInterfaceType().getNameAsString());
+    }
+
+    @Test
+    void parseArrayInitialization() {
+        String code = "{1,2,3}";
+        ArrayInitializerExpr expression = parseArrayInitializerExpr(code);
+
+        assertEquals(3, expression.getValues().size());
     }
 
     @Test

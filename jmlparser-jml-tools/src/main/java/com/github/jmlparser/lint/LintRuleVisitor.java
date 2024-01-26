@@ -14,7 +14,7 @@ public abstract class LintRuleVisitor extends VoidVisitorAdapter<LintProblemRepo
      * Implement the "visit" methods you want to use for validation.
      */
     @Override
-    public void accept(Node node, LintProblemReporter problemReporter) {
+    public void accept(Node node, LintProblemReporter problemReporter, JmlLintingConfig config) {
         reset();
         node.accept(this, problemReporter);
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -203,7 +203,11 @@ public class ParserConfiguration {
          * Java 17 -- including incubator/preview/second preview features.
          * Note that preview features, unless otherwise specified, follow the grammar and behaviour of the latest released JEP for that feature.
          */
-        JAVA_17_PREVIEW(new Java17PreviewValidator(), new Java17PostProcessor());
+        JAVA_17_PREVIEW(new Java17PreviewValidator(), new Java17PostProcessor()),
+        /**
+         * Java 18
+         */
+        JAVA_18(new Java18Validator(), new Java18PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -229,7 +233,7 @@ public class ParserConfiguration {
 
         final PostProcessors postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[]{JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW};
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW, JAVA_18 };
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {
             this.validator = validator;

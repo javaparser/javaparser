@@ -1,30 +1,19 @@
 package com.github.jmlparser.lint;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author Alexander Weigl
  * @version 1 (12/29/21)
  */
+@Data
 public class JmlLintingConfig {
     private boolean checkNameClashes = true;
     private boolean checkMissingNames = true;
 
     public JmlLintingConfig() {
-    }
-
-    public boolean isCheckNameClashes() {
-        return checkNameClashes;
-    }
-
-    public void setCheckNameClashes(boolean checkNameClashes) {
-        this.checkNameClashes = checkNameClashes;
-    }
-
-    public boolean isCheckMissingNames() {
-        return checkMissingNames;
-    }
-
-    public void setCheckMissingNames(boolean checkMissingNames) {
-        this.checkMissingNames = checkMissingNames;
     }
 
     public boolean isDisabled(LintRule lintRule) {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -26,7 +26,6 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -188,7 +187,7 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 //       - If the lambda parameters have explicitly declared types F1, ..., Fn and the function type
                 //         has parameter types G1, ..., Gn, then i) for all i (1 ≤ i ≤ n), ‹Fi = Gi›, and ii) ‹T' <: T›.
 
-                boolean hasExplicitlyDeclaredTypes = lambdaExpr.getParameters().stream().anyMatch(p -> !(p.getType() instanceof UnknownType));
+                boolean hasExplicitlyDeclaredTypes = lambdaExpr.getParameters().stream().anyMatch(p -> !(p.getType().isUnknownType()));
                 if (hasExplicitlyDeclaredTypes) {
                     throw new UnsupportedOperationException();
                 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -40,7 +40,6 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.UnknownType;
 import com.github.javaparser.resolution.*;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
@@ -92,7 +91,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
 
     @Override
     public ResolvedType visit(Parameter node, Boolean solveLambdas) {
-        if (node.getType() instanceof UnknownType) {
+        if (node.getType().isUnknownType()) {
             throw new IllegalStateException("Parameter has unknown type: " + node);
         }
         return facade.convertToUsage(node.getType());

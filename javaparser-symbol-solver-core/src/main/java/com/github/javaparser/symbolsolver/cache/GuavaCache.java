@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,6 +23,9 @@ package com.github.javaparser.symbolsolver.cache;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import com.github.javaparser.resolution.cache.Cache;
+import com.github.javaparser.resolution.cache.CacheStats;
 
 /**
  * This class is used to wrap a Guava {@link com.google.common.cache.Cache}.
@@ -86,5 +89,12 @@ public class GuavaCache<K, V> implements Cache<K, V> {
     public boolean isEmpty() {
         return size() == 0;
     }
+
+	@Override
+	public CacheStats stats() {
+		com.google.common.cache.CacheStats stats = guavaCache.stats();
+		return new DefaultCacheStats(stats.hitCount(), stats.missCount(), stats.loadSuccessCount(),
+				stats.loadExceptionCount(), stats.totalLoadTime(), stats.evictionCount());
+	}
 
 }

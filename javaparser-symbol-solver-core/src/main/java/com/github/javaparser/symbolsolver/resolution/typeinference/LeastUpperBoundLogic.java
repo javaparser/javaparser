@@ -1,3 +1,23 @@
+/*
+ * Copyright (C) 2013-2024 The JavaParser Team.
+ *
+ * This file is part of JavaParser.
+ *
+ * JavaParser can be used either under the terms of
+ * a) the GNU Lesser General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * b) the terms of the Apache License
+ *
+ * You should have received a copy of both licenses in LICENCE.LGPL and
+ * LICENCE.APACHE. Please refer to those files for details.
+ *
+ * JavaParser is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
+
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import java.util.*;
@@ -6,6 +26,7 @@ import java.util.stream.Collectors;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
+import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -39,7 +60,11 @@ public class LeastUpperBoundLogic {
 
         // The direct supertypes of the null type are all reference types other than the null type itself.
         // One way to handle this case is to remove the type null from the list of types.
-        Set<ResolvedType> resolvedTypes = types.stream().filter(type -> !(type instanceof NullType)).collect(Collectors.toSet());
+        // Provides the concret type of Lazy type if needed
+        Set<ResolvedType> resolvedTypes = types.stream()
+        		.filter(type -> !(type instanceof NullType))
+        		.map(type -> concreteType(type))
+        		.collect(Collectors.toSet());
 
         // reduces the set in the presence of enumeration type because members are
         // not equal and they do not have an explicit super type.
@@ -199,6 +224,13 @@ public class LeastUpperBoundLogic {
             }
         }
         return erasedBest;
+    }
+    
+    /*
+     * Provides concrete type of Lazy type
+     */
+    private ResolvedType concreteType(ResolvedType type) {
+    	return type instanceof LazyType ? LazyType.class.cast(type).getType() : type;
     }
 
     /*

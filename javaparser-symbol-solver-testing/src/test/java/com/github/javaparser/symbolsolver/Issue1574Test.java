@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2023 The JavaParser Team.
+ * Copyright (C) 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -35,83 +35,74 @@ public class Issue1574Test {
     private static final String LINE_FILE = "src/test/resources/issue1574/Comment.java";
     private static final String BLOCK_FILE = "src/test/resources/issue1574/BlockComment.java";
     private static final String ORPHAN_FILE = "src/test/resources/issue1574/ClassWithOrphanComments.java";
-
     @Test
-    void removeAllCommentsBeforePackageLine() throws Exception {
+    void removeAllCommentsBeforePackageLine() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(LINE_FILE));
-        for (Comment child : cu.getComments()) {
+        for(Comment child: cu.getComments()){
             child.remove();
         }
-        assertEquals(0, cu.getComments().size());
+        assertEquals(0,cu.getComments().size());
         assertFalse(cu.getComment().isPresent());
     }
-
     @Test
-    void removeAllCommentsBeforePackageBlock() throws Exception {
+    void removeAllCommentsBeforePackageBlock() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(BLOCK_FILE));
-        for (Comment child : cu.getComments()) {
+        for(Comment child: cu.getComments()){
             child.remove();
         }
-        assertEquals(0, cu.getComments().size());
+        assertEquals(0,cu.getComments().size());
         assertFalse(cu.getComment().isPresent());
     }
-
     @Test
-    void getAllContainedCommentBeforePackageDeclarationLine() throws Exception {
+    void getAllContainedCommentBeforePackageDeclarationLine() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(LINE_FILE));
         List<Comment> comments = cu.getAllContainedComments();
-        assertEquals(2, comments.size());
+        assertEquals(2,comments.size());
 
     }
-
     @Test
-    void getAllContainedCommentBeforePackageDeclarationBlock() throws Exception {
+    void getAllContainedCommentBeforePackageDeclarationBlock() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(BLOCK_FILE));
         List<Comment> comments = cu.getAllContainedComments();
-        assertEquals(2, comments.size());
+        assertEquals(2,comments.size());
 
     }
-
     @Test
-    void getAllCommentBeforePackageDeclarationOrphan() throws Exception {
+    void getAllCommentBeforePackageDeclarationOrphan() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(ORPHAN_FILE));
         List<Comment> comments = cu.getAllContainedComments();
-        assertEquals(6, comments.size());
+        assertEquals(6,comments.size());
 
     }
-
     @Test
-    void getOrphanComments() throws Exception {
+    void getOrphanComments() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(LINE_FILE));
         List<Comment> comments = cu.getOrphanComments();
         //The 2 first should be orphan comment while the third will be associated to the package
-        assertEquals(1, comments.size());
+        assertEquals(1,comments.size());
 
 
     }
-
     @Test
-    void getOrphanCommentsBlock() throws Exception {
+    void getOrphanCommentsBlock() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(BLOCK_FILE));
         List<Comment> comments = cu.getOrphanComments();
         //The 2 first should be orphan comment while the third will be associated to the package
-        assertEquals(1, comments.size());
+        assertEquals(1,comments.size());
 
     }
-
     @Test
-    void getAllCommentBeforePackageDeclarationLine() throws Exception {
+    void getAllCommentBeforePackageDeclarationLine() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(LINE_FILE));
         List<Comment> comments = cu.getComments();
-        assertEquals(3, comments.size());
+        assertEquals(3,comments.size());
 
     }
-
     @Test
-    void getAllCommentBeforePackageDeclarationBlock() throws Exception {
+    void getAllCommentBeforePackageDeclarationBlock() throws Exception{
         CompilationUnit cu = StaticJavaParser.parse(new File(BLOCK_FILE));
         List<Comment> comments = cu.getComments();
-        assertEquals(3, comments.size());
+        assertEquals(3,comments.size());
     }
 
 }

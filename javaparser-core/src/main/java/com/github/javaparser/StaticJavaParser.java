@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -514,6 +514,19 @@ public final class StaticJavaParser {
     public static MethodDeclaration parseMethodDeclaration(@NotNull String methodDeclaration) {
         Preconditions.checkNotNull(methodDeclaration, "Parameter methodDeclaration can't be null.");
         return newParserAdapted().parseMethodDeclaration(methodDeclaration);
+    }
+
+    /**
+     * Parses an array initializer expression and returns it as ArrayInitializerExpr.
+     *
+     * @param arrayInitializerExpr an array initializer like "{1,2,3}"
+     * @return the AST for the array initializer expression
+     * @throws ParseProblemException if the source code has parser errors
+     * @see ArrayInitializerExpr
+     */
+    public static ArrayInitializerExpr parseArrayInitializerExpr(@NotNull String arrayInitializerExpr) {
+        Preconditions.checkNotNull(arrayInitializerExpr, "Parameter arrayInitializerExpr can't be null.");
+        return newParserAdapted().parseArrayInitializerExpr(arrayInitializerExpr);
     }
 
     // Private methods

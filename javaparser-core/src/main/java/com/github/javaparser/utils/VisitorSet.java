@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -24,6 +24,7 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -58,9 +59,8 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public boolean addAll(Collection<? extends N> col) {
         boolean modified = false;
-        for (N elem : col)
-            if (add(elem))
-                modified = true;
+        for (N elem : col) if (add(elem))
+            modified = true;
         return modified;
     }
 
@@ -76,9 +76,8 @@ public class VisitorSet<N extends Node> implements Set<N> {
 
     @Override
     public boolean containsAll(Collection<?> col) {
-        for (Object elem : col)
-            if (!contains(elem))
-                return false;
+        for (Object elem : col) if (!contains(elem))
+            return false;
         return true;
     }
 
@@ -118,9 +117,8 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public boolean removeAll(Collection<?> col) {
         boolean modified = false;
-        for (Object elem : col)
-            if (remove(elem))
-                modified = true;
+        for (Object elem : col) if (remove(elem))
+            modified = true;
         return modified;
     }
 

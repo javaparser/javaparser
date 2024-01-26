@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2023 The JavaParser Team.
+ * Copyright (C) 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -42,17 +42,17 @@ public class Issue2764Test {
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         javaParser = new JavaParser(config);
     }
-
+    
     @Test
     void resolveUnaryExpr() {
-        String code =
+        String code = 
                 "class A {" +
-                        "  void a() {" +
-                        "    int e;" +
-                        "    for(e++;;){}" +
-                        "  }" +
-                        "}";
-
+                "  void a() {" +
+                "    int e;" + 
+                "    for(e++;;){}" +
+                "  }" +
+                "}";
+      
         ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
         assertTrue(parseResult.isSuccessful());
         assertTrue(parseResult.getResult().isPresent());

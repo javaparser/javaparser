@@ -2,6 +2,7 @@ package com.github.jmlparser.lint;
 
 import com.github.javaparser.ast.Node;
 import com.github.jmlparser.lint.sarif.*;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +23,13 @@ public class JmlLintingFacade {
     private static final String VERSION = JmlLintingFacade.class.getPackage().getImplementationVersion();
     private static final String NAME = "JML-lint";
 
-    private List<LintRule> linters;
+    @Getter
+    private final List<LintRule> linters;
+    private final JmlLintingConfig config;
 
     public JmlLintingFacade(JmlLintingConfig config) {
         linters = getLinter(config);
-    }
-
-    public List<LintRule> getLinters() {
-        return linters;
+        this.config = config;
     }
 
     private Tool getSarifTool() {
@@ -57,7 +57,7 @@ public class JmlLintingFacade {
         for (Node it : nodes) {
             for (LintRule linter : linters) {
                 try {
-                    linter.accept(it, reporter);
+                    linter.accept(it, reporter, config);
                 } catch (Exception e) {
                     LOGGER.error("Error in linter: {}", linter.getClass().getName(), e);
                 }
