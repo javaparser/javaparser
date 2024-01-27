@@ -41,6 +41,7 @@ Bundle-SymbolicName: com.github.javaparser.javaparser-core
     com.github.javaparser.printer.lexicalpreservation.changes, \
     com.github.javaparser.quality, \
     com.github.javaparser.resolution, \
+    com.github.javaparser.resolution.cache, \
     com.github.javaparser.resolution.declarations, \
     com.github.javaparser.resolution.logic, \
     com.github.javaparser.resolution.model, \

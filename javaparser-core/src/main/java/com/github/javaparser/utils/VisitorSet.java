@@ -24,7 +24,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;

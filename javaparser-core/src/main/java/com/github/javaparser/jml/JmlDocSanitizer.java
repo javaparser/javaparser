@@ -6,7 +6,6 @@ import com.github.javaparser.Range;
 import com.github.javaparser.Token;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
-
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
@@ -17,6 +16,7 @@ import java.util.regex.Pattern;
  * @version 1 (11/23/21)
  */
 public record JmlDocSanitizer(Set<String> enabledKeys) {
+
     public String asString(NodeList<JmlDoc> jmlDocs) {
         return asString(jmlDocs, true);
     }
@@ -24,7 +24,6 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
     public String asStringJT(Collection<JavaToken> jmlDocs, boolean emulateGlobalPosition) {
         if (jmlDocs.isEmpty())
             return "";
-
         StringConstructor s = new StringConstructor();
         for (JavaToken tok : jmlDocs) {
             if (emulateGlobalPosition) {
@@ -44,7 +43,6 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
     public String asString(Collection<Token> jmlDocs, boolean emulateGlobalPosition) {
         if (jmlDocs.isEmpty())
             return "";
-
         StringConstructor s = new StringConstructor();
         for (Token tok : jmlDocs) {
             if (emulateGlobalPosition) {
@@ -56,7 +54,6 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
         }
         return toSanitizedString(s.getBuffer());
     }
-
 
     public String asString(NodeList<JmlDoc> jmlDocs, boolean emulateGlobalPosition) {
         return asStringJT(jmlDocs.stream().map(JmlDoc::getContent).toList(), emulateGlobalPosition);
@@ -204,4 +201,3 @@ public record JmlDocSanitizer(Set<String> enabledKeys) {
         return marker.charAt(0) == '+';
     }
 }
-

@@ -348,9 +348,9 @@ public class UnicodeEscapeProcessingProvider implements Provider {
             }
             int insertIndex = -result - 1;
             if (insertIndex == 0) {
-                    // Before the first delta info, identity mapping.
-                    return PositionUpdate.NONE;
-                }
+                // Before the first delta info, identity mapping.
+                return PositionUpdate.NONE;
+            }
             return _deltas.get(insertIndex - 1);
         }
 
