@@ -27,11 +27,9 @@ import java.util.*;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithArguments;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -220,17 +218,6 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             return resolvedTypes;
         }
         throw new UnsupportedOperationException();
-    }
-
-    private int pos(NodeWithArguments<?> callExpr, Expression param) {
-        int i = 0;
-        for (Expression p : callExpr.getArguments()) {
-            if (p == param) {
-                return i;
-            }
-            i++;
-        }
-        throw new IllegalArgumentException();
     }
 
 }
