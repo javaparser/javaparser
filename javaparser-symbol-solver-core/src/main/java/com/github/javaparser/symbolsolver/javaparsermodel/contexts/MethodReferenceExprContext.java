@@ -102,7 +102,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
         if (demandParentNode(wrappedNode) instanceof MethodCallExpr) {
             MethodCallExpr methodCallExpr = (MethodCallExpr) demandParentNode(wrappedNode);
             MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
-            int pos = pos(methodCallExpr, wrappedNode);
+            int pos = methodCallExpr.getArgumentPosition(wrappedNode);
             ResolvedMethodDeclaration rmd = methodUsage.getDeclaration();
 			// Since variable parameters are represented by an array, in case we deal with
 			// the variadic parameter we have to take into account the base type of the
@@ -118,7 +118,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) demandParentNode(wrappedNode);
             ResolvedConstructorDeclaration rcd = JavaParserFacade.get(typeSolver).solve(objectCreationExpr)
                     .getCorrespondingDeclaration();
-            int pos = pos(objectCreationExpr, wrappedNode);
+            int pos = objectCreationExpr.getArgumentPosition(wrappedNode);
             // Since variable parameters are represented by an array, in case we deal with
             // the variadic parameter we have to take into account the base type of the
             // array.
