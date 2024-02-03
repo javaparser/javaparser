@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -25,24 +25,13 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.key.KeyAbstractExecutionContext;
-import com.github.javaparser.ast.key.KeyExecutionContext;
-import com.github.javaparser.ast.key.KeyMethodCallStatement;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.logic.MethodResolutionLogic;
-import com.github.javaparser.resolution.model.SymbolReference;
-import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
@@ -56,89 +45,90 @@ public class JavaParserFactory {
             throw new NullPointerException("Node should not be null");
         }
 
-        //region KEY
-        if(node instanceof KeyMethodCallStatement) {
-            KeyAbstractExecutionContext n = ((KeyMethodCallStatement) node).getContext();
-            return getContext(n, typeSolver);
-        }
 
-        if(node instanceof KeyExecutionContext) {
-            KeyExecutionContext c = ((KeyExecutionContext) node);
-            // TODO weigl: cast not required in new versions
-            ResolvedClassDeclaration rt = (ResolvedClassDeclaration) typeSolver.solveType(c.getContext().asString());
-            String name = c.getSignature().getName().asString();
-            JavaParserFacade facade = JavaParserFacade.get(typeSolver);
-            Context clazzContext = getContext(rt.toAst().get(), typeSolver);
-            List<ResolvedType> argumentTypes = c.getSignature().getParamTypes().stream().map(
-                    it -> facade.convertToUsage(it, clazzContext)
-            ).collect(Collectors.toList());
-            SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(rt, name, argumentTypes);
-            if(method.isSolved()) {
-                return getContext(method.getCorrespondingDeclaration().toAst().get(), typeSolver);
-            }
-            return null;
-        }
-        //endregion
-
-
-        // TODO: Is order important here?
         if (node instanceof ArrayAccessExpr) {
             return new ArrayAccessExprContext((ArrayAccessExpr) node, typeSolver);
-        } else if (node instanceof AnnotationDeclaration) {
+        }
+            if (node instanceof AnnotationDeclaration) {
             return new AnnotationDeclarationContext((AnnotationDeclaration) node, typeSolver);
-        } else if (node instanceof BinaryExpr) {
+        }
+            if (node instanceof BinaryExpr) {
             return new BinaryExprContext((BinaryExpr) node, typeSolver);
-        } else if (node instanceof BlockStmt) {
+        }
+            if (node instanceof BlockStmt) {
             return new BlockStmtContext((BlockStmt) node, typeSolver);
-        } else if (node instanceof CompilationUnit) {
+        }
+            if (node instanceof CompilationUnit) {
             return new CompilationUnitContext((CompilationUnit) node, typeSolver);
-        } else if (node instanceof EnclosedExpr) {
+        }
+            if (node instanceof EnclosedExpr) {
             return new EnclosedExprContext((EnclosedExpr) node, typeSolver);
-        } else if (node instanceof ForEachStmt) {
+        }
+            if (node instanceof ForEachStmt) {
             return new ForEachStatementContext((ForEachStmt) node, typeSolver);
-        } else if (node instanceof ForStmt) {
+        }
+            if (node instanceof ForStmt) {
             return new ForStatementContext((ForStmt) node, typeSolver);
-        } else if (node instanceof IfStmt) {
+        }
+            if (node instanceof IfStmt) {
             return new IfStatementContext((IfStmt) node, typeSolver);
-        } else if (node instanceof InstanceOfExpr) {
+        }
+            if (node instanceof InstanceOfExpr) {
             return new InstanceOfExprContext((InstanceOfExpr) node, typeSolver);
-        } else if (node instanceof LambdaExpr) {
+        }
+            if (node instanceof LambdaExpr) {
             return new LambdaExprContext((LambdaExpr) node, typeSolver);
-        } else if (node instanceof MethodDeclaration) {
+        }
+            if (node instanceof MethodDeclaration) {
             return new MethodContext((MethodDeclaration) node, typeSolver);
-        } else if (node instanceof ConstructorDeclaration) {
+        }
+            if (node instanceof ConstructorDeclaration) {
             return new ConstructorContext((ConstructorDeclaration) node, typeSolver);
-        } else if (node instanceof ClassOrInterfaceDeclaration) {
+        }
+            if (node instanceof ClassOrInterfaceDeclaration) {
             return new ClassOrInterfaceDeclarationContext((ClassOrInterfaceDeclaration) node, typeSolver);
-        } else if (node instanceof MethodCallExpr) {
+        }
+            if (node instanceof MethodCallExpr) {
             return new MethodCallExprContext((MethodCallExpr) node, typeSolver);
-        } else if (node instanceof MethodReferenceExpr) {
+        }
+            if (node instanceof MethodReferenceExpr) {
             return new MethodReferenceExprContext((MethodReferenceExpr) node, typeSolver);
-        } else if (node instanceof EnumDeclaration) {
+        }
+            if (node instanceof EnumDeclaration) {
             return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
-        } else if (node instanceof FieldAccessExpr) {
+        }
+            if (node instanceof FieldAccessExpr) {
             return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
-        } else if (node instanceof SwitchEntry) {
+        }
+            if (node instanceof SwitchEntry) {
             return new SwitchEntryContext((SwitchEntry) node, typeSolver);
-        } else if (node instanceof TryStmt) {
+        }
+            if (node instanceof TryStmt) {
             return new TryWithResourceContext((TryStmt) node, typeSolver);
-        } else if (node instanceof Statement) {
+        }
+            if (node instanceof Statement) {
             return new StatementContext<>((Statement) node, typeSolver);
-        } else if (node instanceof CatchClause) {
+        }
+            if (node instanceof CatchClause) {
             return new CatchClauseContext((CatchClause) node, typeSolver);
-        } else if (node instanceof UnaryExpr) {
+        }
+            if (node instanceof UnaryExpr) {
             return new UnaryExprContext((UnaryExpr) node, typeSolver);
-        } else if (node instanceof VariableDeclarator) {
+        }
+            if (node instanceof VariableDeclarator) {
             return new VariableDeclaratorContext((VariableDeclarator) node, typeSolver);
-        } else if (node instanceof VariableDeclarationExpr) {
+        }
+            if (node instanceof VariableDeclarationExpr) {
             return new VariableDeclarationExprContext((VariableDeclarationExpr) node, typeSolver);
-        } else if (node instanceof ObjectCreationExpr &&
+        }
+            if (node instanceof ObjectCreationExpr &&
             ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
             return new AnonymousClassDeclarationContext((ObjectCreationExpr) node, typeSolver);
-        } else if (node instanceof ObjectCreationExpr) {
+        }
+            if (node instanceof ObjectCreationExpr) {
             return new ObjectCreationContext((ObjectCreationExpr)node, typeSolver);
-        } else {
-            if (node instanceof NameExpr) {
+        }
+        if (node instanceof NameExpr) {
                 // to resolve a name when in a fieldAccess context, we can go up until we get a node other than FieldAccessExpr,
                 // in order to prevent a infinite loop if the name is the same as the field (ie x.x, x.y.x, or x.y.z.x)
                 if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr) {
@@ -155,8 +145,8 @@ public class JavaParserFactory {
                     return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
                 }
             }
-            final Node parentNode = demandParentNode(node);
-            if (node instanceof ClassOrInterfaceType && parentNode instanceof ClassOrInterfaceDeclaration) {
+        final Node parentNode = demandParentNode(node);
+        if (node instanceof ClassOrInterfaceType && parentNode instanceof ClassOrInterfaceDeclaration) {
                 ClassOrInterfaceDeclaration parentDeclaration = (ClassOrInterfaceDeclaration) parentNode;
                 if (parentDeclaration.getImplementedTypes().contains(node) ||
                     parentDeclaration.getExtendedTypes().contains(node)) {
@@ -165,8 +155,7 @@ public class JavaParserFactory {
                     return new ClassOrInterfaceDeclarationExtendsContext(parentDeclaration, typeSolver);
                 }
             }
-            return getContext(parentNode, typeSolver);
-        }
+        return getContext(parentNode, typeSolver);
     }
 
     public static SymbolDeclarator getSymbolDeclarator(Node node, TypeSolver typeSolver) {

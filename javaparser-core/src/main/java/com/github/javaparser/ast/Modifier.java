@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -82,6 +82,14 @@ public class Modifier extends Node {
 
     public static Modifier transitiveModifier() {
         return new Modifier(Keyword.TRANSITIVE);
+    }
+
+    public static Modifier sealedModifier() {
+        return new Modifier(Keyword.SEALED);
+    }
+
+    public static Modifier nonSealedModifier() {
+        return new Modifier(Keyword.NON_SEALED);
     }
 
     /**

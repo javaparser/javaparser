@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -47,14 +47,14 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
     @AfterEach
     void unConfigureSymbolSolver() {
         // unconfigure symbol solver so as not to potentially disturb tests in other classes
-        StaticJavaParser.getConfiguration().setSymbolResolver(null);
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(null);
     }
 
     // in each case, the name itself doesn't matter -- we just want to assert that StackOverflowError wouldn't occur.
 
     @Test
     void solveMethodInReceiver() throws IOException {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
             new ReflectionTypeSolver(),
             new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/00_receiver")))));
 
@@ -66,7 +66,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveMethodInParent() throws IOException {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
             new ReflectionTypeSolver(),
             new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/01_parent")))));
 
@@ -78,7 +78,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveMethodInNested() throws IOException {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
             new ReflectionTypeSolver(),
             new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/02_nested")))));
 
@@ -90,7 +90,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveSymbol() throws IOException {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
             new ReflectionTypeSolver(),
             new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/03_symbol")))));
 
@@ -102,7 +102,7 @@ class CompilationUnitContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveMyself() throws IOException {
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(
             new ReflectionTypeSolver(),
             new JavaParserTypeSolver(adaptPath("src/test/resources/CompilationUnitContextResolutionTest/04_reviewComment")))));
 

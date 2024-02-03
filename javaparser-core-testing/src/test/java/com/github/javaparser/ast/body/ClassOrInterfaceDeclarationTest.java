@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,17 +21,19 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.opentest4j.AssertionFailedError;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.utils.TestParser;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClassOrInterfaceDeclarationTest {
     @Test
@@ -107,6 +109,38 @@ class ClassOrInterfaceDeclarationTest {
         assertFalse(x.isNestedType());
         assertFalse(x.isLocalClassDeclaration());
         assertTrue(x.hasModifier(Modifier.Keyword.NON_SEALED));
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16"})
+    void sealedFieldNamePermitted(ParserConfiguration.LanguageLevel languageLevel) {
+    	assertDoesNotThrow(() -> {
+    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean sealed");
+        });
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_17"})
+    void sealedFieldNameNotPermitted(ParserConfiguration.LanguageLevel languageLevel) {
+    	assertThrows(AssertionFailedError.class, () -> {
+    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean sealed");
+        });
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16"})
+    void permitsFieldNamePermitted(ParserConfiguration.LanguageLevel languageLevel) {
+    	assertDoesNotThrow(() -> {
+    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean permits");
+        });
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_17"})
+    void permitsFieldNameNotPermitted(ParserConfiguration.LanguageLevel languageLevel) {
+    	assertThrows(AssertionFailedError.class, () -> {
+    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean permits");
+        });
     }
 
 }

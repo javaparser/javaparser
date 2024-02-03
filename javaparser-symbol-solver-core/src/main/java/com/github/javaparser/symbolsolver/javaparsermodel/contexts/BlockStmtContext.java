@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -91,7 +91,7 @@ public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
             // given that we don't know the statement we are trying to resolve, we look for all variable declarations 
             // defined in the context of the wrapped node whether it is located before or after the statement that interests us 
             // because a variable cannot be (re)defined after having been used
-            wrappedNode.getStatements().getLast().ifPresent(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
+            wrappedNode.getStatements().getOLast().ifPresent(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
             if (!variableDeclarators.isEmpty()) {
                 // FIXME: Work backwards from the current statement, to only consider declarations prior to this statement.
                 for (VariableDeclarator vd : variableDeclarators) {

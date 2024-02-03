@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -113,7 +113,8 @@ public abstract class AbstractMethodLikeDeclarationContext
             if (localType.getName().getId().equals(name)) {
                 return SymbolReference.solved(JavaParserFacade.get(typeSolver)
                         .getTypeDeclaration(localType));
-            } else if (name.startsWith(String.format("%s.", localType.getName()))) {
+            }
+            if (name.startsWith(String.format("%s.", localType.getName()))) {
                 return JavaParserFactory.getContext(localType, typeSolver)
                         .solveType(name.substring(localType.getName().getId().length() + 1));
             }

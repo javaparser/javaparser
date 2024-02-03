@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -46,8 +46,7 @@ public class ContextHelper {
         if (typeDeclaration instanceof MethodUsageResolutionCapability) {
             return ((MethodUsageResolutionCapability) typeDeclaration)
                            .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
-        } else {
-            throw new UnsupportedOperationException(typeDeclaration.toString());
         }
+        throw new UnsupportedOperationException(typeDeclaration.toString());
     }
 }

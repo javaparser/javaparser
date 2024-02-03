@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -46,6 +46,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclarationTest;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -539,7 +540,8 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
         void whenSuperClassIsProvided() {
             ResolvedReferenceTypeDeclaration node = newTypeSolver.solveType("com.github.javaparser.ast.Node");
             JavassistClassDeclaration cu = (JavassistClassDeclaration) newTypeSolver.solveType("com.github.javaparser.ast.CompilationUnit");
-            assertTrue(cu.isAssignableBy(node));
+            assertFalse(cu.isAssignableBy(node));
+            assertTrue(node.isAssignableBy(cu));
         }
 
         @Test
@@ -548,7 +550,18 @@ class JavassistClassDeclarationTest extends AbstractClassDeclarationTest {
                     "com.github.javaparser.ast.nodeTypes.NodeWithImplements");
             JavassistClassDeclaration classDeclaration = (JavassistClassDeclaration) newTypeSolver.solveType(
                     "com.github.javaparser.ast.body.ClassOrInterfaceDeclaration");
-            assertTrue(classDeclaration.isAssignableBy(nodeWithImplements));
+            assertFalse(classDeclaration.isAssignableBy(nodeWithImplements));
+            assertTrue(nodeWithImplements.isAssignableBy(classDeclaration));
+        }
+
+        @Test
+        void issue3673() {
+            ReflectionClassDeclaration optionalDeclaration = (ReflectionClassDeclaration) typeSolver.solveType(
+                    "java.util.Optional");
+            JavassistEnumDeclaration enumDeclaration = (JavassistEnumDeclaration) anotherTypeSolver.solveType(
+                    "com.github.javaparser.test.TestEnum");
+            assertFalse(optionalDeclaration.isAssignableBy(enumDeclaration));
+            assertFalse(enumDeclaration.isAssignableBy(optionalDeclaration));
         }
     }
 

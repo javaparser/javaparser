@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2023 The JavaParser Team.
+ * Copyright (C) 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -108,7 +108,8 @@ public class NumericConditionalExprHandler implements ConditionalExprHandler {
             if (((ResolvedPrimitiveType)thenExpr).in(resolvedPrimitiveTypeSubList)
                 && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
                 return thenExpr;
-            } else if (((ResolvedPrimitiveType)elseExpr).in(resolvedPrimitiveTypeSubList)
+            }
+            if (((ResolvedPrimitiveType)elseExpr).in(resolvedPrimitiveTypeSubList)
                 && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {
                 return elseExpr;
             }
@@ -125,7 +126,8 @@ public class NumericConditionalExprHandler implements ConditionalExprHandler {
                 && thenExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
                 && ((ResolvedPrimitiveType)elseExpr).equals(ResolvedPrimitiveType.INT)) {
             return thenExpr.asReferenceType().toUnboxedType().get();
-        } else if (elseExpr.isReference() && thenExpr.isPrimitive()
+        }
+        if (elseExpr.isReference() && thenExpr.isPrimitive()
                 && elseExpr.asReferenceType().isUnboxable()
                 && elseExpr.asReferenceType().toUnboxedType().get().in(resolvedPrimitiveTypeSubList)
                 && ((ResolvedPrimitiveType)thenExpr).equals(ResolvedPrimitiveType.INT)) {

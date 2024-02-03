@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -23,8 +23,10 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.Modifier.Keyword;
@@ -124,17 +126,20 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      * @return modifiers
      * @see Modifier
      */
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<VariableDeclarator> getVariables() {
         return variables;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
@@ -148,7 +153,8 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
         return this;
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
@@ -238,7 +244,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      */
     @Override
     public boolean isStatic() {
-        return hasModifier(STATIC) || isDeclaredInInterface();
+    	return hasModifier(STATIC) || isDeclaredInInterface();
     }
 
     /*
@@ -246,7 +252,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      */
     @Override
     public boolean isFinal() {
-        return hasModifier(Keyword.FINAL) || isDeclaredInInterface();
+    	return hasModifier(Keyword.FINAL) || isDeclaredInInterface();
     }
 
     /*
@@ -254,15 +260,19 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
      */
     @Override
     public boolean isPublic() {
-        return hasModifier(Keyword.PUBLIC) || isDeclaredInInterface();
+    	return hasModifier(Keyword.PUBLIC) || isDeclaredInInterface();
     }
 
     /*
      * Returns true if the field is declared in an interface
      */
     private boolean isDeclaredInInterface() {
-        Optional<ClassOrInterfaceDeclaration> parentClass = findAncestor(ClassOrInterfaceDeclaration.class);
-        return parentClass.map(parent -> parent.isInterface()).orElse(false);
+    	Optional<TypeDeclaration> parentType = findAncestor(TypeDeclaration.class);
+        return parentType
+                .filter(BodyDeclaration::isClassOrInterfaceDeclaration)
+                .map(BodyDeclaration::asClassOrInterfaceDeclaration)
+                .map(ClassOrInterfaceDeclaration::isInterface)
+                .orElse(false);
     }
 
     @Override

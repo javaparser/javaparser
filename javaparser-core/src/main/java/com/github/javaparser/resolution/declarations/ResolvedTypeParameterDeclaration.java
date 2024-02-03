@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -190,7 +190,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     default boolean hasLowerBound() {
         for (Bound b : getBounds()) {
-            if (b.isExtends()) {
+            if (b.isSuper()) {
                 return true;
             }
         }
@@ -202,7 +202,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     default boolean hasUpperBound() {
         for (Bound b : getBounds()) {
-            if (b.isSuper()) {
+            if (b.isExtends()) {
                 return true;
             }
         }
@@ -216,7 +216,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     default ResolvedType getLowerBound() {
         for (Bound b : getBounds()) {
-            if (b.isExtends()) {
+            if (b.isSuper()) {
                 return b.getType();
             }
         }
@@ -230,7 +230,7 @@ public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaratio
      */
     default ResolvedType getUpperBound() {
         for (Bound b : getBounds()) {
-            if (b.isSuper()) {
+            if (b.isExtends()) {
                 return b.getType();
             }
         }

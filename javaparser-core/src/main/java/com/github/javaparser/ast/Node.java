@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -151,7 +151,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     // usefull to find if the node is a phantom node
     private static final int LEVELS_TO_EXPLORE = 3;
 
-    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
+    protected static final PrinterConfiguration prettyPrinterNoCommentsConfiguration = new DefaultPrinterConfiguration()
+			.removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
 
     @InternalProperty
     private Range range;
@@ -203,14 +204,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * else create a new DefaultPrettyPrinter with default parameters
      */
     protected Printer getPrinter() {
-        return findCompilationUnit().map(c -> c.getPrinter()).orElse(createDefaultPrinter());
+        return findCompilationUnit().map(c -> c.getPrinter()).orElseGet(() -> createDefaultPrinter());
     }
 
     /*
      * Return the printer initialized with the specified configuration
      */
     protected Printer getPrinter(PrinterConfiguration configuration) {
-        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElse(createDefaultPrinter(configuration));
+        return findCompilationUnit().map(c -> c.getPrinter(configuration)).orElseGet(() -> createDefaultPrinter(configuration));
     }
 
     protected Printer createDefaultPrinter() {
@@ -338,7 +339,13 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      * Formatting can be configured with parameter PrinterConfiguration.
      */
     public final String toString(PrinterConfiguration configuration) {
-        return getPrinter(configuration).print(this);
+    	// save the current configuration
+    	PrinterConfiguration previousConfiguration = getPrinter().getConfiguration();
+    	// print with the new configuration
+    	String result = getPrinter(configuration).print(this);
+    	// restore the previous printer configuration (issue 4163)
+    	getPrinter().setConfiguration(previousConfiguration);
+    	return result;
     }
 
     @Override
@@ -370,6 +377,7 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     public void addOrphanComment(Comment comment) {
+    	notifyPropertyChange(ObservableProperty.COMMENT, null, comment);
         orphanComments.add(comment);
         comment.setParentNode(this);
     }
@@ -813,9 +821,8 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         return findCompilationUnit().map(cu -> {
             if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
                 return cu.getData(SYMBOL_RESOLVER_KEY);
-            } else {
-                throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
             }
+            throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
         }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
     }
 
@@ -1136,15 +1143,14 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
                 Node node = nodes.get(cursor);
                 fillStackToLeaf(node);
                 return nextFromLevel();
-            } else {
-                nodesStack.pop();
-                cursorStack.pop();
-                hasNext = !nodesStack.empty();
-                if (hasNext) {
+            }
+            nodesStack.pop();
+            cursorStack.pop();
+            hasNext = !nodesStack.empty();
+            if (hasNext) {
                     return nextFromLevel();
                 }
-                return root;
-            }
+            return root;
         }
 
         private Node nextFromLevel() {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,11 @@
  */
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -37,9 +42,6 @@ import com.github.javaparser.metamodel.ConstructorDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import java.util.Optional;
-import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A constructor declaration: {@code class X { X() { } }} where X(){} is the constructor declaration.
@@ -96,7 +98,8 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
         v.visit(this, arg);
     }
 
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }
@@ -107,7 +110,8 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * @param body the body, can not be null
      * @return this, the ConstructorDeclaration
      */
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Override
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
@@ -169,9 +173,9 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
                 sb.append(", ");
             }
             if (includingParameterName) {
-                sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
+            	sb.append(param.toString(prettyPrinterNoCommentsConfiguration));
             } else {
-                sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
+            	sb.append(param.getType().toString(prettyPrinterNoCommentsConfiguration));
             }
         }
         sb.append(")");

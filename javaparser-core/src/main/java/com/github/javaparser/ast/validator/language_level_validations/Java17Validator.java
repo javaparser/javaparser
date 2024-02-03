@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.ast.validator.language_level_validations;
 
+import com.github.javaparser.ast.validator.ReservedKeywordValidator;
+import com.github.javaparser.ast.validator.Validator;
+
 /**
  * This validator validates according to Java 17 syntax rules.
  *
@@ -27,10 +30,15 @@ package com.github.javaparser.ast.validator.language_level_validations;
  */
 public class Java17Validator extends Java16Validator {
 
+	final Validator sealedNotAllowedAsIdentifier = new ReservedKeywordValidator("sealed");
+	final Validator permitsNotAllowedAsIdentifier = new ReservedKeywordValidator("permits");
+
     public Java17Validator() {
         super();
         // Released Language Features
         // Sealed Classes - https://openjdk.java.net/jeps/409
+        add(sealedNotAllowedAsIdentifier);
+        add(permitsNotAllowedAsIdentifier);
         remove(noSealedClasses);
         remove(noPermitsListInClasses);
     }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -54,7 +54,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
         StaticJavaParser
-                .getConfiguration()
+                .getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(extendsTypePath);
@@ -84,7 +84,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
         StaticJavaParser
-                .getConfiguration()
+                .getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(implementingTypePath);
@@ -109,7 +109,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
         StaticJavaParser
-                .getConfiguration()
+                .getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(mainPath);
@@ -127,7 +127,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
         StaticJavaParser
-                .getConfiguration()
+                .getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(mainPath);
@@ -145,7 +145,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
         StaticJavaParser
-                .getConfiguration()
+                .getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(mainPath);
@@ -163,7 +163,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
 
         JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(srcRootPath);
         StaticJavaParser
-                .getConfiguration()
+                .getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(javaParserTypeSolver));
 
         CompilationUnit cu = StaticJavaParser.parse(mainPath);
@@ -191,7 +191,7 @@ public class TypeResolutionWithSameNameTest extends AbstractResolutionTest {
             "}\n";
 
         StaticJavaParser
-                .getConfiguration()
+                .getParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
 
         CompilationUnit cu = StaticJavaParser.parse(code);

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -66,7 +66,8 @@ public abstract class AbstractSymbolResolutionTest {
         JDK14(14),
         JDK15(15),
         JDK16(16),
-        JDK17(17);
+        JDK17(17),
+        JDK18(18);
 
         private final Integer major;
 
@@ -114,6 +115,8 @@ public abstract class AbstractSymbolResolutionTest {
                 return JDK16;
             } else if("17".equals(javaVersion) || javaVersion.startsWith("17.")) {
                 return JDK17;
+            } else if("18".equals(javaVersion) || javaVersion.startsWith("18.")) {
+                return JDK18;
             }
 
             throw new IllegalStateException("Unable to determine the current version of java running");

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -66,9 +66,8 @@ public class TypeHelper {
             ResolvedWildcard wildcard = (ResolvedWildcard)type;
             if (wildcard.isBounded()) {
                 return isProperType(wildcard.getBoundedType());
-            } else {
-                return true;
             }
+            return true;
         }
         if (type.isPrimitive()) {
             return true;
@@ -181,9 +180,8 @@ public class TypeHelper {
     public static boolean areCompatibleThroughWideningPrimitiveConversion(ResolvedType s, ResolvedType t) {
         if (s.isPrimitive() && t.isPrimitive()) {
             return s.isAssignableBy(t);
-        } else {
-            return false;
         }
+        return false;
     }
 
     public static Set<InferenceVariable> usedInferenceVariables(ResolvedType type) {
@@ -229,13 +227,7 @@ public class TypeHelper {
                 used18_5_3 = true;
                 throw new UnsupportedOperationException();
             }
-
-            // - If T is a wildcard-parameterized functional interface type and the lambda expression is implicitly typed,
-            //   then the ground target type is the non-wildcard parameterization (§9.9) of T.
-
-            else {
-                return new Pair<>(nonWildcardParameterizationOf(T.asReferenceType(), typeSolver), used18_5_3);
-            }
+            return new Pair<>(nonWildcardParameterizationOf(T.asReferenceType(), typeSolver), used18_5_3);
         }
 
         // - Otherwise, the ground target type is T.
@@ -314,9 +306,8 @@ public class TypeHelper {
         Optional<MethodUsage> mu = FunctionalInterfaceLogic.getFunctionalMethod(type);
         if (mu.isPresent()) {
             return MethodType.fromMethodUsage(mu.get());
-        } else {
-            throw new IllegalArgumentException();
         }
+        throw new IllegalArgumentException();
     }
 
     /**

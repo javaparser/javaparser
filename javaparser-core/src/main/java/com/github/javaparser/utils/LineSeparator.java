@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2023 The JavaParser Team.
+ * Copyright (C) 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -121,25 +121,27 @@ public enum LineSeparator {
     public static Optional<LineSeparator> lookup(String ending) {
         if (CR.asRawString().equals(ending)) {
             return Optional.of(CR);
-        } else if (LF.asRawString().equals(ending)) {
-            return Optional.of(LF);
-        } else if (CRLF.asRawString().equals(ending)) {
-            return Optional.of(CRLF);
-        } else {
-            return Optional.empty();
         }
+            if (LF.asRawString().equals(ending)) {
+            return Optional.of(LF);
+        }
+            if (CRLF.asRawString().equals(ending)) {
+            return Optional.of(CRLF);
+        }
+        return Optional.empty();
     }
 
     public static Optional<LineSeparator> lookupEscaped(String ending) {
         if (CR.asEscapedString().equals(ending)) {
             return Optional.of(CR);
-        } else if (LF.asEscapedString().equals(ending)) {
-            return Optional.of(LF);
-        } else if (CRLF.asEscapedString().equals(ending)) {
-            return Optional.of(CRLF);
-        } else {
-            return Optional.empty();
         }
+            if (LF.asEscapedString().equals(ending)) {
+            return Optional.of(LF);
+        }
+            if (CRLF.asEscapedString().equals(ending)) {
+            return Optional.of(CRLF);
+        }
+        return Optional.empty();
     }
 
     public String describe() {

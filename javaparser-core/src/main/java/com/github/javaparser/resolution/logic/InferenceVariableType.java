@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -109,9 +109,8 @@ public class InferenceVariableType implements ResolvedType {
         if (concreteEquivalent.isEmpty()) {
             if (correspondingTp == null) {
                 return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
-            } else {
-                return new ResolvedTypeVariable(correspondingTp);
             }
+            return new ResolvedTypeVariable(correspondingTp);
         }
         if (concreteEquivalent.size() == 1) {
             return concreteEquivalent.iterator().next();
@@ -119,15 +118,14 @@ public class InferenceVariableType implements ResolvedType {
         Set<ResolvedType> notTypeVariables = equivalentTypes.stream().filter(t -> !t.isTypeVariable() && !hasInferenceVariables(t)).collect(Collectors.toSet());
         if (notTypeVariables.size() == 1) {
             return notTypeVariables.iterator().next();
-        } else if (notTypeVariables.size() == 0 && !superTypes.isEmpty()) {
+        }
+            if (notTypeVariables.size() == 0 && !superTypes.isEmpty()) {
             if (superTypes.size() == 1) {
                 return superTypes.iterator().next();
-            } else {
-                throw new IllegalStateException("Super types are: " + superTypes);
             }
-        } else {
-            throw new IllegalStateException("Equivalent types are: " + equivalentTypes);
+            throw new IllegalStateException("Super types are: " + superTypes);
         }
+        throw new IllegalStateException("Equivalent types are: " + equivalentTypes);
     }
 
     private boolean hasInferenceVariables(ResolvedType type) {

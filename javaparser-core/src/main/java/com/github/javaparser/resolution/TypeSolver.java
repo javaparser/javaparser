@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -39,9 +39,8 @@ public interface TypeSolver {
     default TypeSolver getRoot() {
         if (getParent() == null) {
             return this;
-        } else {
-            return getParent().getRoot();
         }
+        return getParent().getRoot();
     }
 
     /**
@@ -67,9 +66,8 @@ public interface TypeSolver {
         SymbolReference<ResolvedReferenceTypeDeclaration> ref = tryToSolveType(name);
         if (ref.isSolved()) {
             return ref.getCorrespondingDeclaration();
-        } else {
-            throw new UnsolvedSymbolException(name, this.toString());
         }
+        throw new UnsolvedSymbolException(name, this.toString());
     }
 
     /**

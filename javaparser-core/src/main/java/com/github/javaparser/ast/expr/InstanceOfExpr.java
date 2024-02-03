@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -139,9 +139,8 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     public Optional<SimpleName> getName() {
         if (pattern == null) {
             return Optional.empty();
-        } else {
-            return Optional.of(pattern.getName());
         }
+        return Optional.of(pattern.getName());
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -300,10 +300,8 @@ public class CompilationUnit extends Node {
                 return currentPackageName.equals(importPackageName.get());
             }
             return false;
-        } else {
-            // imports of unnamed package are not allowed
-            return true;
         }
+        return true;
     }
 
     private static Optional<Name> getImportPackageName(ImportDeclaration importDeclaration) {
@@ -397,7 +395,7 @@ public class CompilationUnit extends Node {
         }
         if (ClassUtils.isPrimitiveOrWrapper(clazz) || JAVA_LANG.equals(clazz.getPackage().getName()))
             return this;
-        else if (clazz.isAnonymousClass() || clazz.isLocalClass())
+        if (clazz.isAnonymousClass() || clazz.isLocalClass())
             throw new IllegalArgumentException(clazz.getName() + " is an anonymous or local class therefore it can't be added with addImport");
         return addImport(clazz.getCanonicalName());
     }
@@ -753,7 +751,7 @@ public class CompilationUnit extends Node {
          */
         public Path getSourceRoot() {
             final Optional<String> pkgAsString = compilationUnit.getPackageDeclaration().map(NodeWithName::getNameAsString);
-            return pkgAsString.map(p -> Paths.get(CodeGenerationUtils.packageToPath(p))).map(pkg -> subtractPaths(getDirectory(), pkg)).orElse(getDirectory());
+            return pkgAsString.map(p -> Paths.get(CodeGenerationUtils.packageToPath(p))).map(pkg -> subtractPaths(getDirectory(), pkg)).orElseGet(() -> getDirectory());
         }
 
         public String getFileName() {

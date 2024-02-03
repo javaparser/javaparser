@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,12 +22,12 @@
 package com.github.javaparser;
 
 
-import com.github.valfirst.jbehave.junit.monitoring.JUnitReportingRunner;
 import org.jbehave.core.configuration.Configuration;
 import org.jbehave.core.configuration.MostUsefulConfiguration;
 import org.jbehave.core.failures.FailingUponPendingStep;
 import org.jbehave.core.io.LoadFromClasspath;
 import org.jbehave.core.io.StoryFinder;
+import org.jbehave.core.junit.JUnit4StoryRunner;
 import org.jbehave.core.junit.JUnitStories;
 import org.jbehave.core.reporters.Format;
 import org.jbehave.core.reporters.StoryReporterBuilder;
@@ -42,7 +42,7 @@ abstract class BasicJBehaveTest extends JUnitStories {
 
     BasicJBehaveTest(String storiesPath) {
         this.storiesPath = storiesPath;
-        JUnitReportingRunner.recommendedControls(configuredEmbedder());
+        JUnit4StoryRunner.recommendedControls(configuredEmbedder());
     }
 
     @Override

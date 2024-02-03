@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -101,13 +101,14 @@ public class ResolvedWildcard implements ResolvedType {
     public String describe() {
         if (type == null) {
             return "?";
-        } else if (type == BoundType.SUPER) {
-            return "? super " + boundedType.describe();
-        } else if (type == BoundType.EXTENDS) {
-            return "? extends " + boundedType.describe();
-        } else {
-            throw new UnsupportedOperationException();
         }
+            if (type == BoundType.SUPER) {
+            return "? super " + boundedType.describe();
+        }
+            if (type == BoundType.EXTENDS) {
+            return "? extends " + boundedType.describe();
+        }
+        throw new UnsupportedOperationException();
     }
 
     public boolean isSuper() {
@@ -134,13 +135,14 @@ public class ResolvedWildcard implements ResolvedType {
         if (boundedType == null) {
             // return other.isReferenceType() && other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
             return false;
-        } else if (type == BoundType.SUPER) {
-            return boundedType.isAssignableBy(other);
-        } else if (type == BoundType.EXTENDS) {
-            return false;
-        } else {
-            throw new RuntimeException();
         }
+            if (type == BoundType.SUPER) {
+            return boundedType.isAssignableBy(other);
+        }
+            if (type == BoundType.EXTENDS) {
+            return false;
+        }
+        throw new RuntimeException();
     }
 
     @Override
@@ -157,9 +159,8 @@ public class ResolvedWildcard implements ResolvedType {
         }
         if (boundedTypeReplaced != boundedType) {
             return new ResolvedWildcard(type, boundedTypeReplaced);
-        } else {
-            return this;
         }
+        return this;
     }
 
     @Override
@@ -168,11 +169,11 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     public boolean isUpperBounded() {
-        return isSuper();
+        return isExtends();
     }
 
     public boolean isLowerBounded() {
-        return isExtends();
+        return isSuper();
     }
 
     public enum BoundType {
@@ -189,9 +190,8 @@ public class ResolvedWildcard implements ResolvedType {
             ResolvedType boundResolved = getBoundedType().solveGenericTypes(context);
             if (isExtends()) {
                 return ResolvedWildcard.extendsBound(boundResolved);
-            } else {
-                return ResolvedWildcard.superBound(boundResolved);
             }
+            return ResolvedWildcard.superBound(boundResolved);
         }
         return this;
     }

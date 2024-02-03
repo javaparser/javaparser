@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -22,12 +22,23 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
+import com.github.javaparser.printer.lexicalpreservation.TextElement;
+import com.github.javaparser.printer.lexicalpreservation.TokenTextElement;
 
 public class CsmIndent implements CsmElement {
 
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         printer.indent();
+    }
+
+    /*
+     * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
+     */
+    @Override
+    public boolean isCorrespondingElement(TextElement textElement) {
+    	return (textElement instanceof TokenTextElement)
+    			&& ((TokenTextElement)textElement).isSpaceOrTab();
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,13 +20,14 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
+import java.util.Optional;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-import java.util.Optional;
 
-class TokenTextElement extends TextElement {
+public class TokenTextElement extends TextElement {
 
     private final JavaToken token;
 
@@ -43,16 +44,16 @@ class TokenTextElement extends TextElement {
     }
 
     @Override
-    String expand() {
+    public String expand() {
         return token.getText();
     }
 
     // Visible for testing
-    String getText() {
+    public String getText() {
         return token.getText();
     }
 
-    int getTokenKind() {
+    public int getTokenKind() {
         return token.getKind();
     }
 
@@ -145,8 +146,8 @@ class TokenTextElement extends TextElement {
         return token.getRange();
     }
 
-    @Override
-    public void accept(LexicalPreservingVisitor visitor) {
-        visitor.visit(this);
-    }
+	@Override
+	public void accept(LexicalPreservingVisitor visitor) {
+		visitor.visit(this);
+	}
 }

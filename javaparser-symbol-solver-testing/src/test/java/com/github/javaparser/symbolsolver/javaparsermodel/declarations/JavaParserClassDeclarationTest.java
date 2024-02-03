@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
@@ -49,10 +50,10 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
+import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -61,7 +62,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 
-class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
+class JavaParserClassDeclarationTest extends AbstractResolutionTest {
 
     private TypeSolver typeSolver;
     private TypeSolver typeSolverNewCode;
@@ -957,7 +958,26 @@ class JavaParserClassDeclarationTest extends AbstractSymbolResolutionTest {
 
     // Set<TypeDeclaration> internalTypes()
 
-    // Optional<TypeDeclaration> containerType()
+    // issue #4133
+    @Test
+	void testContainerType() {
+		String code =
+	            "public class Foo {\n"
+	            + "    public static class Bar {\n"
+	            + "        public static class Baz {\n"
+	            + "        }\n"
+	            + "    }\n"
+	            + "}\n";
+
+		JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
+		CompilationUnit cu = parser.parse(code);
+
+		List<ClassOrInterfaceDeclaration> declarations = cu.findAll(ClassOrInterfaceDeclaration.class);
+		// top level type
+		assertFalse(declarations.get(0).resolve().asReferenceType().containerType().isPresent());
+		assertEquals("Foo", declarations.get(1).resolve().asReferenceType().containerType().get().getQualifiedName());
+		assertEquals("Foo.Bar", declarations.get(2).resolve().asReferenceType().containerType().get().getQualifiedName());
+	}
 
 
     @Test

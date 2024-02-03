@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -110,9 +110,8 @@ public class ControlFlowLogic {
     private <P extends Node> boolean parentIs(Node node, Class<P> parentClass) {
         if (node.getParentNode().isPresent()) {
             return parentClass.isInstance(node.getParentNode().get());
-        } else {
-            return false;
         }
+        return false;
     }
 
     // See JLS 14.21
@@ -167,10 +166,8 @@ public class ControlFlowLogic {
                     // An if-then-else statement can complete normally iff the then-statement can
                     // complete normally or the else-statement can complete normally.
                     return canCompleteNormally(n.getThenStmt()) || canCompleteNormally(n.getElseStmt().get());
-                } else {
-                    // An if-then statement can complete normally iff it is reachable.
-                    return isReachable(n);
                 }
+                return isReachable(n);
             }
 
             @Override

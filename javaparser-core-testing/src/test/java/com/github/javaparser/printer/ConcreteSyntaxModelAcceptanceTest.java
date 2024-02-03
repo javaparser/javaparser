@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -51,8 +51,16 @@ class ConcreteSyntaxModelAcceptanceTest {
 
     @Test
     void printingExampleJavaConcepts() throws IOException {
-        CompilationUnit cu = parse(rootDir.resolve("com/github/javaparser/printer/JavaConcepts.java"));
-        TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConcepts"), prettyPrint(cu));
-    }
+        CompilationUnit base = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsBase.java"));
+        CompilationUnit enums = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsEnums.java"));
+        CompilationUnit innerClass = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsInnerClasses.java"));
+        CompilationUnit methods = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsMethods.java"));
+        CompilationUnit ugly = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsUgly.java"));
+        TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsBase"), prettyPrint(base));
+        TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsEnums"), prettyPrint(enums));
+        TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsInnerClasses"), prettyPrint(innerClass));
+        TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsMethods"), prettyPrint(methods));
+        TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsUgly"), prettyPrint(ugly));
+        }
 
 }

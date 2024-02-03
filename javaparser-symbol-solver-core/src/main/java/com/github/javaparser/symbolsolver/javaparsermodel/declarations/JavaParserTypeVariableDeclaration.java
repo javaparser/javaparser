@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -93,9 +93,8 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
     public boolean isAssignableBy(ResolvedType type) {
         if (type.isTypeVariable()) {
             throw new UnsupportedOperationException("Is this type variable declaration assignable by " + type.describe());
-        } else {
-            throw new UnsupportedOperationException("Is this type variable declaration assignable by " + type);
         }
+        throw new UnsupportedOperationException("Is this type variable declaration assignable by " + type);
     }
 
     @Override
@@ -125,9 +124,9 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
             // If no bound is declared for a type variable, Object is assumed.
             // https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4
             return Collections.singletonList(new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject()));
-        } else {
-            List<ResolvedReferenceType> ancestors = new ArrayList<>();
-            for (ClassOrInterfaceType type : wrappedNode.getTypeBound()) {
+        }
+        List<ResolvedReferenceType> ancestors = new ArrayList<>();
+        for (ClassOrInterfaceType type : wrappedNode.getTypeBound()) {
                 try {
                     ResolvedType resolvedType = JavaParserFacade.get(typeSolver).convertToUsage(type);
                     ancestors.add(resolvedType.asReferenceType());
@@ -138,8 +137,7 @@ public class JavaParserTypeVariableDeclaration extends AbstractTypeDeclaration {
                     }
                 }
             }
-            return ancestors;
-        }
+        return ancestors;
     }
 
     @Override

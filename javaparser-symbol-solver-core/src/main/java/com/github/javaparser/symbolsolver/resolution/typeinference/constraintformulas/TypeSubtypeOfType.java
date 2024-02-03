@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -56,9 +56,8 @@ public class TypeSubtypeOfType extends ConstraintFormula {
         if (isProperType(S) && isProperType(T)) {
             if (T.isAssignableBy(S)) {
                 return ReductionResult.trueResult();
-            } else {
-                return ReductionResult.falseResult();
             }
+            return ReductionResult.falseResult();
         }
 
         // - Otherwise, if S is the null type, the constraint reduces to true.

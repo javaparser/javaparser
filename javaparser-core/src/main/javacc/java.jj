@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -58,7 +58,7 @@ options {
 PARSER_BEGIN(GeneratedJavaParser)
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -273,7 +273,7 @@ TOKEN_MGR_DECLS :
 
 SPECIAL_TOKEN :
 {
-    <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
+  <SINGLE_LINE_COMMENT: "//" (~["\n","\r"])*>
 }
 
 MORE :
@@ -3080,7 +3080,7 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> |
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> |
         // overwritten by Key/SV but still valid in Java
         "model" | "ghost" | "two_state" | "no_state" | "source" | "merge_point" | "exec" | "ccatch" | "ccat" |
         <IDENTIFIER> | <SVIDENTIFIER> | <KEYIDENTIFIER> | <JMLIDENTIFIER>

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -59,7 +59,8 @@ public final class JavaParserSymbolDeclaration {
         for (Node node : demandParentNode(parameter).getChildNodes()) {
             if (node == parameter) {
                 return pos;
-            } else if (node instanceof Parameter) {
+            }
+            if (node instanceof Parameter) {
                 pos++;
             }
         }

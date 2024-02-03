@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -46,7 +46,7 @@ class FieldAccessExprResolutionTest extends AbstractResolutionTest {
     @BeforeEach
     void configureSymbolSolver() throws IOException {
         // configure symbol solver so as not to potentially disturb tests in other classes
-        StaticJavaParser.getConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
     }
 
     @Test

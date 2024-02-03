@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -185,48 +185,56 @@ public class InferenceContext {
         if (type.isWildcard()) {
             if (type.asWildcard().isExtends()) {
                 return ResolvedWildcard.extendsBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
-            } else if (type.asWildcard().isSuper()) {
-                return ResolvedWildcard.superBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
-            } else {
-                return type;
             }
-        } else if (type.isTypeVariable()) {
-            return inferenceVariableTypeForTp(type.asTypeParameter());
-        } else if (type.isReferenceType()) {
-            return type.asReferenceType().transformTypeParameters(tp -> placeInferenceVariables(tp));
-        } else if (type.isArray()) {
-            return new ResolvedArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
-        } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
+                    if (type.asWildcard().isSuper()) {
+                return ResolvedWildcard.superBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
+            }
             return type;
-        } else if (type.isConstraint()) {
-            return ResolvedLambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
-        } else if (type instanceof InferenceVariableType) {
-            return type;
-        } else {
-            throw new UnsupportedOperationException(type.describe());
         }
+            if (type.isTypeVariable()) {
+            return inferenceVariableTypeForTp(type.asTypeParameter());
+        }
+            if (type.isReferenceType()) {
+            return type.asReferenceType().transformTypeParameters(tp -> placeInferenceVariables(tp));
+        }
+            if (type.isArray()) {
+            return new ResolvedArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
+        }
+            if (type.isNull() || type.isPrimitive() || type.isVoid()) {
+            return type;
+        }
+            if (type.isConstraint()) {
+            return ResolvedLambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
+        }
+            if (type instanceof InferenceVariableType) {
+            return type;
+        }
+        throw new UnsupportedOperationException(type.describe());
     }
 
     public ResolvedType resolve(ResolvedType type) {
         if (type instanceof InferenceVariableType) {
             InferenceVariableType inferenceVariableType = (InferenceVariableType) type;
             return inferenceVariableType.equivalentType();
-        } else if (type.isReferenceType()) {
+        }
+            if (type.isReferenceType()) {
             return type.asReferenceType().transformTypeParameters(tp -> resolve(tp));
-        } else if (type.isNull() || type.isPrimitive() || type.isVoid()) {
+        }
+            if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
-        } else if (type.isArray()) {
+        }
+            if (type.isArray()) {
             return new ResolvedArrayType(resolve(type.asArrayType().getComponentType()));
-        } else if (type.isWildcard()) {
+        }
+            if (type.isWildcard()) {
             if (type.asWildcard().isExtends()) {
                 return ResolvedWildcard.extendsBound(resolve(type.asWildcard().getBoundedType()));
-            } else if (type.asWildcard().isSuper()) {
-                return ResolvedWildcard.superBound(resolve(type.asWildcard().getBoundedType()));
-            } else {
-                return type;
             }
-        } else {
-            throw new UnsupportedOperationException(type.describe());
+                    if (type.asWildcard().isSuper()) {
+                return ResolvedWildcard.superBound(resolve(type.asWildcard().getBoundedType()));
+            }
+            return type;
         }
+        throw new UnsupportedOperationException(type.describe());
     }
 }

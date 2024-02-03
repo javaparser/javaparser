@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StringProvider;
@@ -36,6 +37,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.CatchClause;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.MethodUsage;
@@ -169,6 +171,7 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         Type jpType = catchClause.getParameter().getType();
         ResolvedType jssType = jpType.resolve();
         assertTrue(jssType instanceof ResolvedUnionType);
+        assertTrue(jssType.asUnionType().getElements().size()==2);
     }
 
     @Test
@@ -291,6 +294,29 @@ class JavaParserFacadeResolutionTest extends AbstractResolutionTest {
         ResolvedType resolvedType = mce.calculateResolvedType();
 
         assertEquals("java.util.OptionalDouble", resolvedType.describe());
+    }
+    
+    @Test
+    void resolveMethodTypeParametersUsingVariadicArgument() {
+        String sourceCode = 
+        		"import java.io.BufferedInputStream;\n" +
+                "import java.io.IOException;\n" +
+                "import java.nio.file.Files;\n" +
+                "import java.nio.file.OpenOption;\n" +
+                "import java.nio.file.Path;\n" +
+                "\n" +
+                "public class Test {\n" +
+                "    public void write(final Path path, final OpenOption... options) throws IOException {\n" +
+                "        BufferedInputStream in = new BufferedInputStream(Files.newInputStream(path, options));\n" +
+                "    }\n" +
+                "}";
+
+        JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
+        CompilationUnit cu = parser.parse(sourceCode);
+
+        ObjectCreationExpr oce = cu.findFirst(ObjectCreationExpr.class).get();
+
+        assertEquals("java.io.BufferedInputStream", oce.calculateResolvedType().describe());
     }
 
     // See issue 3725

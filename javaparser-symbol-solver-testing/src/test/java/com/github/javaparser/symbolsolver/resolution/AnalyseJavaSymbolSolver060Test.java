@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -92,7 +92,7 @@ class AnalyseJavaSymbolSolver060Test extends AbstractResolutionTest {
         PrintStream outErr = new PrintStream(outErrStream);
         
         // set configuration to ignore comment
-        StaticJavaParser.getConfiguration().setAttributeComments(false);
+        StaticJavaParser.getParserConfiguration().setAttributeComments(false);
 
         sourceFileInfoExtractor.setOut(outErr);
         sourceFileInfoExtractor.setErr(outErr);

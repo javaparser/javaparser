@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -92,7 +92,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other));
+        return javassistTypeDeclarationAdapter.isAssignableBy(other);
     }
 
     @Override
@@ -194,35 +194,34 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType type) {
-        if (type.isNull()) {
-            return true;
-        }
-
-        if (type instanceof LambdaArgumentTypePlaceholder) {
+    public boolean canBeAssignedTo(ResolvedReferenceTypeDeclaration other) {
+        if (other instanceof LambdaArgumentTypePlaceholder) {
             return isFunctionalInterface();
         }
-
-        // TODO look into generics
-        if (type.describe().equals(this.getQualifiedName())) {
+        if (other.getQualifiedName().equals(getQualifiedName())) {
             return true;
         }
+        Optional<ResolvedReferenceType> oSuperClass = javassistTypeDeclarationAdapter.getSuperClass();
+		if (oSuperClass.isPresent()) {
+			ResolvedReferenceType superClass = oSuperClass.get();
+			Optional<ResolvedReferenceTypeDeclaration> oDecl = superClass.getTypeDeclaration();
+			if (oDecl.isPresent() && oDecl.get().canBeAssignedTo(other)) {
+				return true;
+			}
+		}
 
-        Optional<ResolvedReferenceType> superClassOpt = getSuperClass();
-        if (superClassOpt.isPresent()) {
-            ResolvedReferenceType superClass = superClassOpt.get();
-            if (superClass.isAssignableBy(type)) {
-                return true;
-            }
-        }
-
-        for (ResolvedReferenceType interfaceType : getInterfaces()) {
-            if (interfaceType.isAssignableBy(type)) {
+		for (ResolvedReferenceType interfaze : javassistTypeDeclarationAdapter.getInterfaces()) {
+            if (interfaze.getTypeDeclaration().isPresent() && interfaze.getTypeDeclaration().get().canBeAssignedTo(other)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isAssignableBy(ResolvedType type) {
+    	return javassistTypeDeclarationAdapter.isAssignableBy(type);
     }
 
     @Override

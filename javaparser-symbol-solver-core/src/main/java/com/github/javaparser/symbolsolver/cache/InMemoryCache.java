@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -21,9 +21,13 @@
 
 package com.github.javaparser.symbolsolver.cache;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.WeakHashMap;
+
+import com.github.javaparser.resolution.cache.Cache;
+import com.github.javaparser.resolution.cache.CacheStats;
 
 /**
  * A cache implementation that stores the information in memory.
@@ -47,7 +51,11 @@ public class InMemoryCache<K, V> implements Cache<K, V>  {
         return new InMemoryCache<>();
     }
 
-    private final Map<K, V> mappedValues = new WeakHashMap<>();
+    private final Map<K, V> mappedValues;
+
+    private InMemoryCache() {
+    	mappedValues = Collections.synchronizedMap(new WeakHashMap<>());
+    }
 
     @Override
     public void put(K key, V value) {
@@ -85,5 +93,10 @@ public class InMemoryCache<K, V> implements Cache<K, V>  {
     public boolean isEmpty() {
         return mappedValues.isEmpty();
     }
+
+    @Override
+	public CacheStats stats() {
+		return new DefaultCacheStats();
+	}
 
 }

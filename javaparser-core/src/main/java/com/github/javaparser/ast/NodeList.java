@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2023 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -185,7 +185,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     /**
      * Inserts the node before all other nodes.
      */
-    public NodeList<N> addFirst(N node) {
+    public NodeList<N> addFirstO(N node) {
         add(0, node);
         return this;
     }
@@ -193,7 +193,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     /**
      * Inserts the node after all other nodes. (This is simply an alias for add.)
      */
-    public NodeList<N> addLast(N node) {
+    public NodeList<N> addLastO(N node) {
         add(node);
         return this;
     }
@@ -229,7 +229,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     /**
      * @return the first node, or empty if the list is empty.
      */
-    public Optional<N> getFirst() {
+    public Optional<N> getOFirst() {
         if (isEmpty()) {
             return Optional.empty();
         }
@@ -239,7 +239,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     /**
      * @return the last node, or empty if the list is empty.
      */
-    public Optional<N> getLast() {
+    public Optional<N> getOLast() {
         if (isEmpty()) {
             return Optional.empty();
         }
@@ -318,9 +318,8 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     public boolean remove(Object o) {
         if (o instanceof Node) {
             return remove((Node) o);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**

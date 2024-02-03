@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2023 The JavaParser Team.
+ * Copyright (C) 2017-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -30,7 +30,9 @@ import java.util.stream.Stream;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
+import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -84,17 +86,15 @@ public class JavassistTypeDeclarationAdapter {
                 return Optional.of(new ReferenceTypeImpl(
                         typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass()))
                 ));
-            } else {
-                // If there is a generic signature present, solve the types and return it.
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Optional.ofNullable(
+            }
+            SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+            return Optional.ofNullable(
                         JavassistUtils.signatureTypeToType(
                                 classSignature.getSuperClass(),
                                 typeSolver,
                                 typeDeclaration
                         ).asReferenceType()
                 );
-            }
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
@@ -215,8 +215,8 @@ public class JavassistTypeDeclarationAdapter {
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
         if (null == ctClass.getGenericSignature()) {
             return Collections.emptyList();
-        } else {
-            try {
+        }
+        try {
                 SignatureAttribute.ClassSignature classSignature =
                         SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
                 return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters())
@@ -225,7 +225,6 @@ public class JavassistTypeDeclarationAdapter {
             } catch (BadBytecode badBytecode) {
                 throw new RuntimeException(badBytecode);
             }
-        }
     }
 
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
@@ -238,21 +237,39 @@ public class JavassistTypeDeclarationAdapter {
         }
     }
 
-    public boolean isAssignableBy(ResolvedType other) {
+    public boolean isAssignableBy(ResolvedType type) {
 
-        if (other.isNull()) {
+        if (type instanceof NullType) {
             return true;
         }
-
-        if (other instanceof LambdaArgumentTypePlaceholder) {
-            return typeDeclaration.isFunctionalInterface();
+        if (type instanceof LambdaArgumentTypePlaceholder) {
+            return isFunctionalInterface();
+        }
+        if (type.isArray()) {
+            return false;
+        }
+        if (type.isPrimitive()) {
+            return false;
+        }
+        if (type.describe().equals(typeDeclaration.getQualifiedName())) {
+            return true;
+        }
+        if (type instanceof ReferenceTypeImpl) {
+            ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
+            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+                return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(typeDeclaration);
+            }
         }
 
-        return other.isAssignableBy(new ReferenceTypeImpl(typeDeclaration));
+        return false;
     }
 
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
         return isAssignableBy(new ReferenceTypeImpl(other));
+    }
+
+    private final boolean isFunctionalInterface() {
+        return FunctionalInterfaceLogic.getFunctionalMethod(typeDeclaration).isPresent();
     }
 
     /**
