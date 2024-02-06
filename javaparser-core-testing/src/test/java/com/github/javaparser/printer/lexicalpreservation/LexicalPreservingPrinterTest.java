@@ -26,7 +26,10 @@ import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter.NODE_TEXT_DATA;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -1699,6 +1702,24 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
 		    	"  }\n" +
 		    	"}";
     	cu.getAllContainedComments().get(0).remove();
+    	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
+    }
+
+    // issue 4311  IllegalStateException when removing all comments with LexicalPreservingPrinter
+    @Test
+    void removedLineCommentsWithSameContent() {
+		considerCode("public class Foo {\n" +
+    			"  //line 1 \n" +
+    			"  //line 1 \n" +
+    			"  void mymethod() {\n" +
+    			"  }\n" +
+    			"}");
+		String expected =
+				"public class Foo {\n" +
+		    	"  void mymethod() {\n" +
+		    	"  }\n" +
+		    	"}";
+    	cu.getAllContainedComments().stream().forEach(c -> c.remove());
     	assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
 

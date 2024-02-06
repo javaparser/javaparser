@@ -175,9 +175,6 @@ public class LexicalPreservingPrinter {
                         } else {
                         	removeAllExtraCharactersStartingFrom(nodeText.getElements().listIterator(index));
                         }
-//                        if (nodeText.getElements().get(index).isNewline()) {
-//                            nodeText.removeElement(index);
-//                        }
                     } else {
                         throw new UnsupportedOperationException("Trying to remove something that is not a comment!");
                     }
@@ -285,12 +282,21 @@ public class LexicalPreservingPrinter {
             return nodeText.findElement(matchingChild.and(matchingChild.matchByRange()));
         }
 
+        /*
+         * Comment
+         */
         private List<ChildTextElement> findChildTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<ChildTextElement> matchingChildElements;
 			matchingChildElements = selectMatchingChildElements(oldValue, nodeText);
             if (matchingChildElements.size() > 1) {
                 // Duplicate child nodes found, refine the result
-                matchingChildElements = matchingChildElements.stream().filter(t -> isEqualRange(t.getChild().getRange(), oldValue.getRange())).collect(toList());
+				matchingChildElements = matchingChildElements.stream()
+						.filter(t -> t.getChild().hasRange() && oldValue.hasRange())
+						.filter(t -> t.getChild().getRange().get().equals(oldValue.getRange().get())
+								|| (t.getChild().getComment().isPresent()
+										&& t.getChild().getComment().get().hasRange()
+										&& t.getChild().getComment().get().getRange().get().equals(oldValue.getRange().get())))
+						.collect(toList());
             }
             if (matchingChildElements.size() != 1) {
                 throw new IllegalStateException("The matching child text element for the comment to be removed could not be found.");
@@ -324,25 +330,32 @@ public class LexicalPreservingPrinter {
 
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
-            if (oldValue instanceof JavadocComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.getHeader() + oldValue.getContent() + oldValue.getFooter())).collect(toList());
-            } else if (oldValue instanceof BlockComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(MULTI_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.getHeader() + oldValue.getContent() + oldValue.getFooter())).collect(toList());
-            } else {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(SINGLE_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().trim().equals((oldValue.getHeader() + oldValue.getContent()).trim())).collect(toList());
-            }
-            if (matchingTokens.size() > 1) {
-                // Duplicate comments found, refine the result
-                matchingTokens = matchingTokens.stream().filter(t -> isEqualRange(t.getToken().getRange(), oldValue.getRange())).collect(toList());
-            }
-            return matchingTokens;
-        }
-
-        private boolean isEqualRange(Optional<Range> range1, Optional<Range> range2) {
-            if (range1.isPresent() && range2.isPresent()) {
-                return range1.get().equals(range2.get());
-            }
-            return false;
+			if (oldValue instanceof JavadocComment) {
+				matchingTokens = nodeText.getElements().stream()
+						.filter(e -> e.isToken(JAVADOC_COMMENT))
+						.map(e -> (TokenTextElement) e)
+						.filter(t -> t.getText().equals(oldValue.asString()))
+						.collect(toList());
+			} else if (oldValue instanceof BlockComment) {
+				matchingTokens = nodeText.getElements().stream()
+						.filter(e -> e.isToken(MULTI_LINE_COMMENT))
+						.map(e -> (TokenTextElement) e)
+						.filter(t -> t.getText().equals(oldValue.asString()))
+						.collect(toList());
+			} else {
+				matchingTokens = nodeText.getElements().stream()
+						.filter(e -> e.isToken(SINGLE_LINE_COMMENT))
+						.map(e -> (TokenTextElement) e)
+						.filter(t -> t.getText().trim().equals((oldValue.asString()).trim()))
+						.collect(toList());
+			}
+			// To check that a comment matches in the list of tokens, if exists the range must be always checked,
+			// as comments with the same content may exist on different lines.
+            return matchingTokens.stream()
+                		.filter(t -> (!t.getToken().hasRange() && !oldValue.hasRange())
+                				|| (t.getToken().hasRange() && oldValue.hasRange()
+                						&& t.getToken().getRange().get().equals(oldValue.getRange().get())))
+                		.collect(toList());
         }
 
 		/**
