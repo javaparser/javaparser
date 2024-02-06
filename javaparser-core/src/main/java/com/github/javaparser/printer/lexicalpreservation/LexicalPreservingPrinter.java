@@ -349,11 +349,12 @@ public class LexicalPreservingPrinter {
 						.filter(t -> t.getText().trim().equals((oldValue.asString()).trim()))
 						.collect(toList());
 			}
-			// To check that a comment matches in the list of tokens, the range must be always checked,
+			// To check that a comment matches in the list of tokens, if exists the range must be always checked,
 			// as comments with the same content may exist on different lines.
             return matchingTokens.stream()
-                		.filter(t -> t.getToken().hasRange() && oldValue.hasRange())
-                		.filter(t -> t.getToken().getRange().get().equals(oldValue.getRange().get()))
+                		.filter(t -> (!t.getToken().hasRange() && !oldValue.hasRange())
+                				|| (t.getToken().hasRange() && oldValue.hasRange()
+                						&& t.getToken().getRange().get().equals(oldValue.getRange().get())))
                 		.collect(toList());
         }
 
