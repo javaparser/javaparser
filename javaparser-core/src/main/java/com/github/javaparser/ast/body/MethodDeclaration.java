@@ -23,6 +23,7 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -269,13 +270,16 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     /*
-     * Every interface is implicitly abstract.
+     * Every interface is implicitly abstract but
+     * only one of abstract, default, or static modifier is permitted
      * https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.1.1
      */
     @Override
 	public boolean isAbstract() {
-        return hasModifier(Keyword.ABSTRACT) || isImplicitlyAbstract();
-    }
+		return hasModifier(Keyword.ABSTRACT) || (isImplicitlyAbstract() && Arrays
+				.asList(Keyword.STATIC, Keyword.DEFAULT).stream()
+					.noneMatch(modifier -> hasModifier(modifier)));
+	}
 
     private boolean isImplicitlyAbstract() {
     	return hasParentNode()

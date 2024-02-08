@@ -143,5 +143,7 @@ class MethodDeclarationTest {
         assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
         cu = parse("interface Foo { protected void m(); }");
         assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
+        cu = parse("interface Foo { static void m(); }");
+        assertFalse(cu.findFirst(MethodDeclaration.class).get().isAbstract());
     }
 }
