@@ -22,6 +22,7 @@ package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import java.util.Optional;
 
+import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -56,12 +57,31 @@ public class ListRemovalChange implements Change {
             NodeList<Node> newNodeList = new NodeList<>();
             // fix #2187 set the parent node in the new list
             newNodeList.setParentNode(currentNodeList.getParentNodeForChildren());
-            newNodeList.addAll(currentNodeList);
-            // Perform modification -- remove an item from the list
-            newNodeList.remove(index);
+			// Here we want to obtain a sub-list that does not contain an element.
+			// It is important not to implement this by first adding all the elements in the
+			// list and then deleting the element to be removed, as this involves event
+			// propagation mechanisms, particularly for lexical preservation,
+			// which deletes the relationship between a node and its parent node.
+			// This relationship is necessary to reinforce indentation, for example when
+			// deleting a node, as indentation can be carried by the parent node.
+            currentNodeList.stream().filter(n -> !isSameNode(currentNodeList.get(index),n))
+            	.forEach(selectedNode -> newNodeList.add(selectedNode));
             return newNodeList;
         }
         return new NoChange().getValue(property, node);
+    }
+
+    private boolean isSameNode(Node n1, Node n2) {
+    	return n1.equals(n2) && isSameRange(n1, n2);
+    }
+
+    private boolean isSameRange(Node n1, Node n2) {
+    	return (!n1.hasRange() && !n2.hasRange())
+    			|| (n1.hasRange() && n2.hasRange() && isSameRange(n1.getRange().get(), n2.getRange().get()));
+    }
+
+	private boolean isSameRange(Range r1, Range r2) {
+    	return r1.equals(r2);
     }
 
     @Override

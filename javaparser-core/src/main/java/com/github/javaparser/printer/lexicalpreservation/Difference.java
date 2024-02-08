@@ -20,7 +20,9 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -335,6 +337,26 @@ public class Difference {
     }
 
     /*
+     * An element is considered inlined if, before the line break, there are nodes in the list of elements
+     */
+    private boolean isInlined(NodeText nodeText, int startIndex) {
+    	boolean inlined = false;
+		if (startIndex < nodeText.numberOfElements() && startIndex >= 0) {
+			// at this stage startIndex points to the first element before the deleted one
+			for (int i = startIndex; i < nodeText.numberOfElements(); i++) {
+				if (nodeText.getTextElement(i).isNewline()) {
+					break;
+				}
+				if (nodeText.getTextElement(i).isChild()) {
+					inlined = true;
+					break;
+				}
+			}
+		}
+        return inlined;
+    }
+
+    /*
      * Returns true if the indexed element is a space or a tab
      */
 	private boolean isSpaceOrTabElement(NodeText nodeText, int i) {
@@ -464,6 +486,26 @@ public class Difference {
                     originalIndex++;
                 }
             } else {
+            	// If we delete the first element, it is possible that there is an indentation to be deleted which is stored in the parent node.
+            	NodeText parentNodeText = new NodeText();
+            	List<TextElement> indentationTokens = new ArrayList<>();
+            	if (originalIndex == 0 && removed.getChild().getParentNode().isPresent()) {
+            		Node startingNodeForFindingIndentation = removed.getChild();
+            		Node parentNode = removed.getChild().getParentNode().get();
+            		parentNodeText = LexicalPreservingPrinter.getOrCreateNodeText(parentNode);
+            		// If we are trying to delete the first element of a node and that node is also the first element of the parent node, we need to look for the grandfather node which logically contains the indentation characters.
+            		// This is the case, for example, when trying to delete an annotation positioned on a method declaration.
+            		// The token corresponding to the annotation is the first element of the annotation node
+            		// and it is also the first element of the parent node (MethodDeclaration),
+            		// so the previous indentation is defined in the parent node of the method declaration.
+            		if (!parentNodeText.getElements().isEmpty()
+            				&& parentNode.getParentNode().isPresent()
+            				&& parentNodeText.getTextElement(0).equals(nodeText.getTextElement(originalIndex))) {
+            			startingNodeForFindingIndentation = parentNode;
+            			parentNodeText = LexicalPreservingPrinter.getOrCreateNodeText(parentNode.getParentNode().get());
+            		}
+            		indentationTokens = LexicalPreservingPrinter.findIndentation(startingNodeForFindingIndentation);
+            	}
                 nodeText.removeElement(originalIndex);
                 // When we don't try to remove a complete line
                 // and removing the element is not the first action of a replacement (removal followed by addition)
@@ -494,6 +536,19 @@ public class Difference {
                 if (isRemovingIndentationActivable(removedGroup)) {
                 	// Since the element has been deleted we try to start the analysis from the previous element
                     originalIndex = considerRemovingIndentation(nodeText, originalIndex);
+					// If we delete the first element, it is possible that there is an indentation
+					// to be deleted which is stored in the parent node.
+					// We don't want to remove indentation when the node to remove is not the only
+					// node in the line (if there are other nodes before the next character
+					// indicating the end of line).
+					// This is for example the case when we want to delete an annotation declared on
+					// the same line as a method declaration.
+					if (originalIndex == 0 && !indentationTokens.isEmpty() && !isInlined(nodeText, originalIndex)) {
+						for (TextElement indentationToken : indentationTokens) {
+							parentNodeText.removeElement(
+									parentNodeText.findElement(indentationToken.and(indentationToken.matchByRange())));
+						}
+					}
                 }
                 diffIndex++;
             }
