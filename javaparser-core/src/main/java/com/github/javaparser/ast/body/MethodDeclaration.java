@@ -20,13 +20,16 @@
  */
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.nodeTypes.*;
@@ -250,6 +253,41 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         sb.append(getType().toDescriptor());
         return sb.toString();
     }
+
+    /*
+     * Interface methods are implicitly public
+     */
+    @Override
+    public boolean isPublic() {
+        return hasModifier(PUBLIC) || isImplicitlyPublic();
+    }
+
+    private boolean isImplicitlyPublic() {
+    	return getAccessSpecifier() == AccessSpecifier.NONE
+    			&& hasParentNode()
+    			&& getParentNode().get() instanceof ClassOrInterfaceDeclaration
+    			&& ((ClassOrInterfaceDeclaration)getParentNode().get()).isInterface();
+    }
+
+    /*
+     * Every interface is implicitly abstract but
+     * only one of abstract, default, or static modifier is permitted
+     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.1.1
+     */
+    @Override
+	public boolean isAbstract() {
+		return hasModifier(Keyword.ABSTRACT) || (isImplicitlyAbstract() && Arrays
+				.asList(Keyword.STATIC, Keyword.DEFAULT).stream()
+					.noneMatch(modifier -> hasModifier(modifier)));
+	}
+
+    private boolean isImplicitlyAbstract() {
+    	return hasParentNode()
+    			&& getParentNode().get() instanceof ClassOrInterfaceDeclaration
+    			&& ((ClassOrInterfaceDeclaration)getParentNode().get()).isInterface();
+    }
+
+
 
     public boolean isNative() {
         return hasModifier(Modifier.Keyword.NATIVE);
