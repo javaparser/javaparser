@@ -21,6 +21,7 @@
 
 package com.github.javaparser.remove;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -36,6 +37,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 
 class NodeRemovalTest extends  AbstractLexicalPreservingTest{
 
@@ -90,6 +92,27 @@ class NodeRemovalTest extends  AbstractLexicalPreservingTest{
 		assertTrue(children.size() == 1);
 		assertTrue(children.stream().allMatch(n -> n.getParentNode() != null));
 	}
+
+	@Test
+	// issue 1638
+    public void removingAnnotationsFormattedWithAdditionalSpaces() {
+        considerCode(
+                "class X {\n" +
+                "   @Override\n" +
+                "  public void testCase() {\n" +
+                "  }\n" +
+                "}"
+        );
+
+        cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
+
+        String result = LexicalPreservingPrinter.print(cu.findCompilationUnit().get());
+        assertEqualsStringIgnoringEol(
+                "class X {\n" +
+                        "  public void testCase() {\n" +
+                        "  }\n" +
+                        "}", result);
+    }
 
 	// remove the node and parent's node until response is true
 	boolean remove(Node node) {
