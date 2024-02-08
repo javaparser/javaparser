@@ -21,10 +21,16 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
-import static org.junit.jupiter.api.Assertions.*;
+import com.github.javaparser.ast.CompilationUnit;
 
 class MethodDeclarationTest {
     @Test
@@ -102,7 +108,7 @@ class MethodDeclarationTest {
         MethodDeclaration method1 = parseBodyDeclaration("int x(int z, String q);").asMethodDeclaration();
         assertEquals("x(int, String)", method1.getSignature().toString());
     }
-    
+
     @Test
     void isVariableArityMethod() {
         MethodDeclaration method1 = parseBodyDeclaration("int x(int... z);").asMethodDeclaration();
@@ -110,12 +116,32 @@ class MethodDeclarationTest {
         MethodDeclaration method2 = parseBodyDeclaration("int x(int i, int... z);").asMethodDeclaration();
         assertTrue(method2.isVariableArityMethod());
     }
-    
+
     @Test
     void isFixedArityMethod() {
         MethodDeclaration method1 = parseBodyDeclaration("int x(int z);").asMethodDeclaration();
         assertTrue(method1.isFixedArityMethod());
         MethodDeclaration method2 = parseBodyDeclaration("int x();").asMethodDeclaration();
         assertTrue(method2.isFixedArityMethod());
+    }
+
+    @Test
+    void isInterfaceImplictlyPublic() {
+        CompilationUnit cu = parse("interface Foo { void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isPublic());
+        cu = parse("interface Foo { abstract void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isPublic());
+        cu = parse("interface Foo { protected void m(); }");
+        assertFalse(cu.findFirst(MethodDeclaration.class).get().isPublic());
+    }
+
+    @Test
+    void isInterfaceImplictlyAbstract() {
+        CompilationUnit cu = parse("interface Foo { void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
+        cu = parse("interface Foo { abstract void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
+        cu = parse("interface Foo { protected void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
     }
 }
