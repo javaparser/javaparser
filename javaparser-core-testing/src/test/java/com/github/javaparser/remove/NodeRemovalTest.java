@@ -21,6 +21,13 @@
 
 package com.github.javaparser.remove;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -29,15 +36,9 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NodeRemovalTest extends  AbstractLexicalPreservingTest{
-	
+
 	private final CompilationUnit compilationUnit = new CompilationUnit();
 
 	@Test
@@ -75,9 +76,12 @@ class NodeRemovalTest extends  AbstractLexicalPreservingTest{
 
 	@Test
 	void testRemoveStatementFromMethodBodyWithLexicalPreservingPrinter() {
-		considerStatement("{\r\n" + "    log.error(\"context\", e);\r\n" +
+		considerStatement(
+				"{\r\n" +
 				"    log.error(\"context\", e);\r\n" +
-				"    throw new ApplicationException(e);\r\n" + "}\r\n");
+				"    log.error(\"context\", e);\r\n" +
+				"    throw new ApplicationException(e);\r\n" +
+				"}\r\n");
 		BlockStmt bstmt = statement.asBlockStmt();
 		List<Node> children = bstmt.getChildNodes();
 		remove(children.get(0));
