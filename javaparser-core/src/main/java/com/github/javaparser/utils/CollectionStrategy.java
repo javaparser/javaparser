@@ -50,7 +50,7 @@ public interface CollectionStrategy {
                 if (parseResult.getResult().isPresent()) {
                     final Optional<CompilationUnit.Storage> storage = parseResult.getResult().flatMap(CompilationUnit::getStorage);
                     if (storage.isPresent()) {
-                        if (storage.get().getFileName().equals("module-info.java")) {
+                        if ("module-info.java".equals(storage.get().getFileName())) {
                             // module-info.java is useless for finding the source root, since it can be placed in any directory.
                             return Optional.empty();
                         }
