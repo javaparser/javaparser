@@ -151,7 +151,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
       if (otherName.equals(this.getQualifiedName())) {
           return true;
       }
-      if (otherName.equals(JAVA_LANG_ENUM)) {
+      if (JAVA_LANG_ENUM.equals(otherName)) {
           return true;
       }
       // Enum implements Comparable and Serializable

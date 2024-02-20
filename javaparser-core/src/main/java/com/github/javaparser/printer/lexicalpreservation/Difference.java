@@ -786,7 +786,7 @@ public class Difference {
             if (part.equals(token.asString())) {
                 // get 'dot' token
                 token = token.getNextToken().get();
-                if (!token.asString().equals("."))
+                if (!".".equals(token.asString()))
                     break;
                 // get the next part
                 token = token.getNextToken().get();

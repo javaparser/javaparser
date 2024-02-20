@@ -51,7 +51,7 @@ public class Java10PostProcessor extends PostProcessors {
             result.getResult().ifPresent(node -> {
                 node.findAll(ClassOrInterfaceType.class)
                     .forEach(n -> {
-                        if (n.getNameAsString().equals("var")
+                        if ("var".equals(n.getNameAsString())
                                 && !matchForbiddenContext(n)) {
                             n.replace(new VarType(n.getTokenRange().orElse(null)));
                         }
