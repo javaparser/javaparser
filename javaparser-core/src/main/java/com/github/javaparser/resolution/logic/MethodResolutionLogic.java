@@ -890,7 +890,7 @@ public class MethodResolutionLogic {
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
-    private static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
+    protected static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
         if (source.equals(target)) {
             return;
         }
