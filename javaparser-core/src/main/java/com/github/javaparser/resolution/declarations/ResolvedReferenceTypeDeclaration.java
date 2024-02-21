@@ -360,7 +360,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default boolean isJavaLangObject() {
         return this.isClass() && !isAnonymousClass() && // Consider anonymous classes
-        hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        hasName() && JAVA_LANG_OBJECT.equals(getQualifiedName());
     }
 
     /**
@@ -368,6 +368,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see ResolvedReferenceType#isJavaLangEnum()
      */
     default boolean isJavaLangEnum() {
-        return this.isEnum() && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isEnum() && JAVA_LANG_ENUM.equals(getQualifiedName());
     }
 }

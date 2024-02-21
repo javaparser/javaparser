@@ -39,7 +39,7 @@ public class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
 
     @Override
     public void visit(Name n, ProblemReporter arg) {
-        if (n.getIdentifier().equals("record") && !validUsage(n)) {
+        if ("record".equals(n.getIdentifier()) && !validUsage(n)) {
             arg.report(n, error);
         }
         super.visit(n, arg);
@@ -47,7 +47,7 @@ public class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
 
     @Override
     public void visit(SimpleName n, ProblemReporter arg) {
-        if (n.getIdentifier().equals("record") && !validUsage(n)) {
+        if ("record".equals(n.getIdentifier()) && !validUsage(n)) {
             arg.report(n, error);
         }
         super.visit(n, arg);
