@@ -11,8 +11,6 @@
 		<module>javaparser-symbol-solver-core</module>
 		<module>javaparser-symbol-solver-testing</module>
 		<module>jmlparser-jml-tests</module>
-		<module>jmlparser-jml-tools</module>
-		<module>jmlparser-jml-pretty</module>
 	</modules>
 
 	<groupId>io.github.jmltoolkit</groupId>
