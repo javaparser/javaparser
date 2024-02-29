@@ -161,10 +161,7 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
       if (otherName.equals(JAVA_IO_SERIALIZABLE)) {
           return true;
       }
-      if (other.isJavaLangObject()) {
-          return true;
-      }
-      return false;
+      return other.isJavaLangObject();
   }
 
   @Override

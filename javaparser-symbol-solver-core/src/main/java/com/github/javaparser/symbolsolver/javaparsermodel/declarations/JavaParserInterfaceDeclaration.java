@@ -93,9 +93,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
         JavaParserInterfaceDeclaration that = (JavaParserInterfaceDeclaration) o;
 
-        if (!wrappedNode.equals(that.wrappedNode)) return false;
-
-        return true;
+        return wrappedNode.equals(that.wrappedNode);
     }
 
     @Override

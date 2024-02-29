@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.Context;
@@ -39,10 +43,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -131,11 +131,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
 
         if (!clazz.getCanonicalName().equals(that.clazz.getCanonicalName())) return false;
 
-        if (!getTypeParameters().equals(that.getTypeParameters())) {
-            return false;
-        }
-
-        return true;
+        return getTypeParameters().equals(that.getTypeParameters());
     }
 
     @Override
@@ -143,7 +139,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         return clazz.hashCode();
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
+    @Override
+	public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameterValues) {
         Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
                 typeParameterValues, this, clazz);
@@ -193,12 +190,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
             }
         }
 
-        if (other.isJavaLangObject()) {
-            // Everything can be assigned to {@code java.lang.Object}
-            return true;
-        }
-
-        return false;
+        // Everything can be assigned to {@code java.lang.Object}
+        return other.isJavaLangObject();
     }
 
     @Override
@@ -288,7 +281,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         return res;
     }
-    
+
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return reflectionClassAdapter.containerType();

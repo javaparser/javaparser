@@ -21,6 +21,11 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -33,11 +38,6 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 
 /**
@@ -69,9 +69,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
         JavaParserTypeParameter that = (JavaParserTypeParameter) o;
 
-        if (wrappedNode != null ? !wrappedNode.equals(that.wrappedNode) : that.wrappedNode != null) return false;
-
-        return true;
+        return wrappedNode != null && wrappedNode.equals(that.wrappedNode);
     }
 
     @Override

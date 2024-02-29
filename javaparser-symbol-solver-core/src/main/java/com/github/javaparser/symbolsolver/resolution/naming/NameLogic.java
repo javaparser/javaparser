@@ -592,12 +592,8 @@ public class NameLogic {
 
         // 2. In a type-import-on-demand declaration (§7.5.2)
 
-        if (whenParentIs(ImportDeclaration.class, name, (p, c) ->
-                !p.isStatic() && p.isAsterisk() && p.getName() == name)) {
-            return true;
-        }
-
-        return false;
+        return whenParentIs(ImportDeclaration.class, name, (p, c) ->
+                !p.isStatic() && p.isAsterisk() && p.getName() == name);
     }
 
     private static boolean isSyntacticallyAMethodName(Node name) {
@@ -605,11 +601,7 @@ public class NameLogic {
         //
         // 1. Before the "(" in a method invocation expression (§15.12)
 
-        if (whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getName() == c)) {
-            return true;
-        }
-
-        return false;
+        return whenParentIs(MethodCallExpr.class, name, (p, c) -> p.getName() == c);
     }
 
     private static boolean isSyntacticallyAModuleName(Node name) {
@@ -626,11 +618,8 @@ public class NameLogic {
         if (whenParentIs(ModuleExportsDirective.class, name, (p, c) -> p.getModuleNames().contains(name))) {
             return true;
         }
-        if (whenParentIs(ModuleOpensDirective.class, name, (p, c) -> p.getModuleNames().contains(name))) {
-            return true;
-        }
 
-        return false;
+        return whenParentIs(ModuleOpensDirective.class, name, (p, c) -> p.getModuleNames().contains(name));
     }
 
     private static boolean isSyntacticallyAPackageName(Node name) {
@@ -644,12 +633,9 @@ public class NameLogic {
             return true;
         }
         // 2. To the left of the "." in a qualified PackageName
-        if (whenParentIs(Name.class, name, (p, c) -> p.getQualifier().isPresent()
+        return whenParentIs(Name.class, name, (p, c) -> p.getQualifier().isPresent()
                 && p.getQualifier().get() == name
-                && isSyntacticallyAPackageName(p))) {
-            return true;
-        }
-        return false;
+                && isSyntacticallyAPackageName(p));
     }
 
     private static boolean isSyntacticallyATypeName(Node name) {
