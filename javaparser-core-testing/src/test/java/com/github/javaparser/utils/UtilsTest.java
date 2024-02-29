@@ -21,7 +21,11 @@
 
 package com.github.javaparser.utils;
 
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.utils.Utils.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -30,9 +34,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import static com.github.javaparser.utils.Utils.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class UtilsTest {
 
@@ -182,8 +184,11 @@ class UtilsTest {
                 Optional.empty()));
 
         assertFalse(valueIsNullOrEmptyStringOrOptional("foo"));
+        assertFalse(valueIsNullOrEmptyStringOrOptional(""));
         assertFalse(valueIsNullOrEmptyStringOrOptional(
                 Optional.ofNullable("foo")));
+        assertFalse(valueIsNullOrEmptyStringOrOptional(
+                Optional.ofNullable("")));
     }
 
     @Test

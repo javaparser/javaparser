@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.visitor;
 
+import java.util.Optional;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -30,8 +32,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
-import java.util.Optional;
 
 /**
  * A visitor that clones (copies) a node and all its children.
@@ -258,7 +258,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final InitializerDeclaration n, final Object arg) {
         BlockStmt body = cloneNode(n.getBody(), arg);
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         InitializerDeclaration r = new InitializerDeclaration(n.getTokenRange().orElse(null), n.isStatic(), body);
         r.setComment(comment);
@@ -329,7 +328,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final IntersectionType n, final Object arg) {
         NodeList<ReferenceType> elements = cloneList(n.getElements(), arg);
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         IntersectionType r = new IntersectionType(n.getTokenRange().orElse(null), elements);
         r.setComment(comment);
@@ -341,7 +339,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final UnionType n, final Object arg) {
         NodeList<ReferenceType> elements = cloneList(n.getElements(), arg);
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         UnionType r = new UnionType(n.getTokenRange().orElse(null), elements);
         r.setComment(comment);
@@ -352,7 +349,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final VoidType n, final Object arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         VoidType r = new VoidType(n.getTokenRange().orElse(null));
         r.setComment(comment);
@@ -376,7 +372,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final UnknownType n, final Object arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         UnknownType r = new UnknownType(n.getTokenRange().orElse(null));
         r.setComment(comment);
@@ -1189,7 +1184,6 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final VarType n, final Object arg) {
-        NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         VarType r = new VarType(n.getTokenRange().orElse(null));
         r.setComment(comment);
