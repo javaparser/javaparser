@@ -1,7 +1,8 @@
 
-Next Release (Version 3.25.9-snapshot)
+
+Next Release (Version 3.25.10-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/205?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/206?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +10,51 @@ Next Release (Version 3.25.9-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+Version 3.25.9
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/205?closed=1)
+
+### Added
+
+* Fix: issue #3878 resolve MethodReference in ObjectCreationExpr (PR [#4296](https://github.com/javaparser/javaparser/pull/4296) by [@fishautumn](https://github.com/fishautumn))
+
+### Changed
+
+* Switch order of literals to prevent NullPointerException (PR [#4322](https://github.com/javaparser/javaparser/pull/4322) by [@citizenjosh](https://github.com/citizenjosh))
+* Minor refactoring to use the existing getArgumentPosition method (PR [#4306](https://github.com/javaparser/javaparser/pull/4306) by [@jlerbsc](https://github.com/jlerbsc))
+* Optimize find ancestor (PR [#4294](https://github.com/javaparser/javaparser/pull/4294) by [@magicwerk](https://github.com/magicwerk))
+* refac: Removes useless ExpressionHelper utility class and replaces some explicit casts by using the javaparser API (PR [#4291](https://github.com/javaparser/javaparser/pull/4291) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* fix: Dead stores should be removed (sonar rule) (PR [#4329](https://github.com/javaparser/javaparser/pull/4329) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: Replace this if-then-else statement by a single return statement (sonar rule) (PR [#4328](https://github.com/javaparser/javaparser/pull/4328) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: issue 2043 getAccessSpecifier should return public for interface methods (PR [#4317](https://github.com/javaparser/javaparser/pull/4317) by [@jlerbsc](https://github.com/jlerbsc))
+* Further improve correction of whitespace during difference application (PR [#4316](https://github.com/javaparser/javaparser/pull/4316) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue #3946 Symbol solver is unable to resolve inherited inner classes (PR [#4314](https://github.com/javaparser/javaparser/pull/4314) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: issue 4311 IllegalStateException when removing all comments with LexicalPreservingPrinter (PR [#4313](https://github.com/javaparser/javaparser/pull/4313) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3939 SymbolResolver.calculateType(Expression) may fails on first try, then succeed on later tries (PR [#4290](https://github.com/javaparser/javaparser/pull/4290) by [@jlerbsc](https://github.com/jlerbsc))
+* Adds unit test for issue 4284 "ClassCastException when resolving MethodCallExpr inside an enhanced switch statement" (PR [#4285](https://github.com/javaparser/javaparser/pull/4285) by [@jlerbsc](https://github.com/jlerbsc))
+* Change `SwitchStmt` to `SwitchNode` in `SwitchEntryContext` to avoid `ClassCastException` (PR [#4283](https://github.com/javaparser/javaparser/pull/4283) by [@PalashSharma20](https://github.com/PalashSharma20))
+
+### Developer Changes
+
+* chore(deps): bump org.codehaus.mojo:exec-maven-plugin from 3.1.1 to 3.2.0 (PR [#4323](https://github.com/javaparser/javaparser/pull/4323) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* chore(deps): update junit5 monorepo to v5.10.2 (PR [#4307](https://github.com/javaparser/javaparser/pull/4307) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v4 (PR [#4304](https://github.com/javaparser/javaparser/pull/4304) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/cache action to v4 (PR [#4293](https://github.com/javaparser/javaparser/pull/4293) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@citizenjosh](https://github.com/citizenjosh)
+* [@magicwerk](https://github.com/magicwerk)
+* [@PalashSharma20](https://github.com/PalashSharma20)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@fishautumn](https://github.com/fishautumn)
+
 
 Version 3.25.8
 --------------
