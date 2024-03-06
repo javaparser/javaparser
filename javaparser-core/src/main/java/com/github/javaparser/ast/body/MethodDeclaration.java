@@ -254,9 +254,11 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return sb.toString();
     }
 
-    /*
-     * Interface methods are implicitly public
-     */
+	/*
+	 * A method in the body of an interface may be declared public or private
+	 * (§6.6). If no access modifier is given, the method is implicitly public.
+	 * https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.4
+	 */
     @Override
     public boolean isPublic() {
         return hasModifier(PUBLIC) || isImplicitlyPublic();
@@ -270,22 +272,20 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     /*
-     * Every interface is implicitly abstract but
-     * only one of abstract, default, or static modifier is permitted
-     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.1.1
+     * An interface method lacking a private, default, or static modifier is implicitly abstract.
+     * https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.4
      */
     @Override
 	public boolean isAbstract() {
-		return hasModifier(Keyword.ABSTRACT) || (isImplicitlyAbstract() && Arrays
-				.asList(Keyword.STATIC, Keyword.DEFAULT).stream()
-					.noneMatch(modifier -> hasModifier(modifier)));
+		return super.isAbstract() || isImplicitlyAbstract();
 	}
 
-    private boolean isImplicitlyAbstract() {
-    	return hasParentNode()
-    			&& getParentNode().get() instanceof ClassOrInterfaceDeclaration
-    			&& ((ClassOrInterfaceDeclaration)getParentNode().get()).isInterface();
-    }
+	private boolean isImplicitlyAbstract() {
+		return hasParentNode() && getParentNode().get() instanceof ClassOrInterfaceDeclaration
+				&& ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface()
+				&& Arrays.asList(Keyword.STATIC, Keyword.DEFAULT, Keyword.PRIVATE).stream()
+						.noneMatch(modifier -> hasModifier(modifier));
+	}
 
 
 
