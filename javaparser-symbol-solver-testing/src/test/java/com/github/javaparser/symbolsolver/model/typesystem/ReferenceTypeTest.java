@@ -21,10 +21,15 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -106,7 +111,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
 
         // minimal initialization of JavaParser
         ParserConfiguration configuration = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+                .setSymbolResolver(new JavaSymbolSolver(typeSolver));
         // Setup parser
         StaticJavaParser.setConfiguration(configuration);
     }
@@ -342,6 +347,20 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
     void testIsAssignableByUnionType() {
         assertEquals(true, ioException.isAssignableBy(unionWithIOExceptionAsCommonAncestor));
         assertEquals(false, ioException.isAssignableBy(unionWithThrowableAsCommonAncestor));
+    }
+
+    @Test
+    void testIsAssignableByBoundedTypeVariable() throws IllegalAccessException {
+        // get the parameter Consumer<? super T> from Iterable.forEach method
+    	ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
+    	ResolvedReferenceTypeDeclaration decl = typeSolver.solveType(Iterable.class.getCanonicalName());
+    	ResolvedType typeParameter = decl.getDeclaredMethods().stream()
+    			.filter(m -> m.getName().equals("forEach"))
+    			.findFirst()
+    			.map(m -> m.getParam(0).getType()).orElseThrow(() -> new IllegalAccessException());
+    	// get the bounded type of the type parameter
+    	ResolvedType a = typeParameter.asReferenceType().getTypeParametersMap().get(0).b.asWildcard().getBoundedType();
+        assertTrue(string.isAssignableBy(a));
     }
 
     @Test

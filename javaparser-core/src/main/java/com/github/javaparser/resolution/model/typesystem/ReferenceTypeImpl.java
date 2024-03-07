@@ -116,9 +116,13 @@ public class ReferenceTypeImpl extends ResolvedReferenceType {
             return false;
         }
         if (other.isTypeVariable()) {
+			// Here we are trying to compare a reference type let's say java.lang.String
+			// with a type variable (for example 'T')
+			// so we need to reverse the check since getBounds method always returns a bound that
+			// match extend java.lang.Object
             for (ResolvedTypeParameterDeclaration.Bound bound : other.asTypeVariable().asTypeParameter().getBounds()) {
                 if (bound.isExtends()) {
-                    if (this.isAssignableBy(bound.getType())) {
+                	if (bound.getType().isAssignableBy(this)) {
                         return true;
                     }
                 }
