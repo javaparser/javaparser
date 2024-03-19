@@ -96,10 +96,10 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
             if (!lazyType.isReferenceType())
                 return false;
             return this.equals(lazyType.asReferenceType());
-        } else {
-            if (getClass() != o.getClass())
-                return false;
         }
+
+        if (getClass() != o.getClass())
+            return false;
 
         ResolvedReferenceType that = asResolvedReferenceType(o);
         if (!typeDeclaration.equals(that.typeDeclaration))
