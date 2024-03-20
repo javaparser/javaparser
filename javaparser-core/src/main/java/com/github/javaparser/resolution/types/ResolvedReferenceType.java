@@ -20,10 +20,6 @@
  */
 package com.github.javaparser.resolution.types;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -36,6 +32,10 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -88,26 +88,25 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || (!isLazyType(o) && getClass() != o.getClass())
-        		|| (isLazyType(o) && !this.equals(asResolvedReferenceType(o))))
+        if (o == null)
             return false;
-        ResolvedReferenceType that = asResolvedReferenceType(o);
+
+        if (o instanceof LazyType) {
+            final LazyType lazyType = (LazyType) o;
+            if (!lazyType.isReferenceType())
+                return false;
+            return this.equals(lazyType.asReferenceType());
+        }
+
+        if (getClass() != o.getClass())
+            return false;
+
+        ResolvedReferenceType that = (ResolvedReferenceType) o;
         if (!typeDeclaration.equals(that.typeDeclaration))
             return false;
         if (!typeParametersMap.equals(that.typeParametersMap))
             return false;
         return true;
-    }
-
-    private boolean isLazyType(Object type) {
-    	return type !=null && type instanceof LazyType;
-    }
-
-    private ResolvedReferenceType asResolvedReferenceType(Object o) {
-    	if (isLazyType(o)) {
-    		return ((LazyType) o).asReferenceType();
-    	}
-    	return ResolvedReferenceType.class.cast(o);
     }
 
     @Override
