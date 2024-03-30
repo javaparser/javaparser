@@ -770,6 +770,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(final StringLiteralExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
+        n.getTemplateProcessor().ifPresent(tp -> {
+            tp.accept(this, arg);
+            printer.print(".");
+        });
         printer.print("\"");
         printer.print(n.getValue());
         printer.print("\"");
@@ -779,6 +783,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(final TextBlockLiteralExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
+        n.getTemplateProcessor().ifPresent(tp -> {
+            tp.accept(this, arg);
+            printer.print(".");
+        });
         printer.print("\"\"\"");
         printer.indent();
         n.stripIndentOfLines().forEach(line -> {
@@ -1243,6 +1251,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                     printer.print(", ");
                 }
             }
+            n.getGuard().ifPresent(g -> {
+                printer.print(" when ");
+                g.accept(this, arg);
+            });
             printer.print(separator);
         }
         printer.println();

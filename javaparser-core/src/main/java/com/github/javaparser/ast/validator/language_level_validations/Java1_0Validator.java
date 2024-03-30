@@ -112,6 +112,13 @@ public class Java1_0Validator extends Validators {
 
     final Validator noPermitsListInClasses = new SimpleValidator<>(ClassOrInterfaceDeclaration.class, n -> n.getPermittedTypes().isNonEmpty(), (n, reporter) -> reporter.report(n, new UpgradeJavaMessage("Permitted sub-classes are not supported.", ParserConfiguration.LanguageLevel.JAVA_17)));
 
+    final SingleNodeTypeValidator<SwitchStmt> noSwitchPatternMatching = new SingleNodeTypeValidator<>(SwitchStmt.class, (n, reporter) -> {
+        if (n.getEntries().stream().map(SwitchEntry::getLabels).anyMatch(l -> l.stream().anyMatch(m -> m instanceof VariableDeclarationExpr))) {
+            reporter.report(n, new UpgradeJavaMessage("Pattern matching not supported.", ParserConfiguration.LanguageLevel.JAVA_21_INCOMPLETE));
+        }
+    });
+
+
     public Java1_0Validator() {
         super(new CommonValidators());
         add(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
@@ -138,5 +145,6 @@ public class Java1_0Validator extends Validators {
         add(noRecordDeclaration);
         add(noSealedClasses);
         add(noPermitsListInClasses);
+        add(noSwitchPatternMatching);
     }
 }

@@ -875,7 +875,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final StringLiteralExpr n, final A arg) {
+        Expression templateProcessor = n.getTemplateProcessor().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setTemplateProcessor(templateProcessor);
         n.setComment(comment);
         return n;
     }
@@ -893,9 +895,11 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final SwitchEntry n, final A arg) {
         NodeList<Expression> labels = modifyList(n.getLabels(), arg);
         NodeList<Statement> statements = modifyList(n.getStatements(), arg);
+        Expression guard = n.getGuard().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setLabels(labels);
         n.setStatements(statements);
+        n.setGuard(guard);
         n.setComment(comment);
         return n;
     }
@@ -1316,7 +1320,9 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final TextBlockLiteralExpr n, final A arg) {
+        Expression templateProcessor = n.getTemplateProcessor().map(s -> (Expression) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setTemplateProcessor(templateProcessor);
         n.setComment(comment);
         return n;
     }

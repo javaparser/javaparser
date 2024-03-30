@@ -1681,6 +1681,11 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
 	@Override
 	public void visit(final StringLiteralExpr n, final Range arg) {
 
+		if (n.getTemplateProcessor().isPresent()) {
+			n.getTemplateProcessor().get().accept(this, arg);
+			if (selectedNode != null)
+				return;
+		}
 		if (n.getComment().isPresent()) {
 			n.getComment().get().accept(this, arg);
 			if (selectedNode != null)
@@ -1721,6 +1726,11 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
 		}
 		{
 			n.getStatements().accept(this, arg);
+			if (selectedNode != null)
+				return;
+		}
+		if (n.getGuard().isPresent()) {
+			n.getGuard().get().accept(this, arg);
 			if (selectedNode != null)
 				return;
 		}
@@ -2478,6 +2488,11 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
 	@Override
 	public void visit(final TextBlockLiteralExpr n, final Range arg) {
 
+		if (n.getTemplateProcessor().isPresent()) {
+			n.getTemplateProcessor().get().accept(this, arg);
+			if (selectedNode != null)
+				return;
+		}
 		if (n.getComment().isPresent()) {
 			n.getComment().get().accept(this, arg);
 			if (selectedNode != null)

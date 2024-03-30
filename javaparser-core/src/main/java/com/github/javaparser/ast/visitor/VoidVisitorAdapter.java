@@ -485,6 +485,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final StringLiteralExpr n, final A arg) {
+        n.getTemplateProcessor().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -498,6 +499,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     public void visit(final SwitchEntry n, final A arg) {
         n.getLabels().forEach(p -> p.accept(this, arg));
         n.getStatements().forEach(p -> p.accept(this, arg));
+        n.getGuard().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 
@@ -711,6 +713,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final TextBlockLiteralExpr n, final A arg) {
+        n.getTemplateProcessor().ifPresent(l -> l.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

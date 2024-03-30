@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -36,6 +37,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.github.javaparser.utils.StringEscapeUtils.unescapeJavaTextBlock;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
 
@@ -46,6 +48,8 @@ import static java.util.stream.IntStream.range;
  * The content of "value" is byte-for-byte exactly what is in the source code.
  */
 public class TextBlockLiteralExpr extends LiteralStringValueExpr {
+
+    private Expression templateProcessor;
 
     public TextBlockLiteralExpr() {
         this(null, "empty");
@@ -70,6 +74,12 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
         customInitialization();
     }
 
+    @AllFieldsConstructor
+    public TextBlockLiteralExpr(TokenRange tokenRange, String value, Expression templateProcessor) {
+        this(tokenRange, value);
+        setTemplateProcessor(templateProcessor);
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
@@ -80,6 +90,24 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<Expression> getTemplateProcessor() {
+        return Optional.ofNullable(templateProcessor);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public TextBlockLiteralExpr setTemplateProcessor(Expression templateProcessor) {
+        if (templateProcessor == this.templateProcessor) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.SELECTOR, this.templateProcessor, templateProcessor);
+        if (this.templateProcessor != null)
+            this.templateProcessor.setParentNode(null);
+        this.templateProcessor = templateProcessor;
+        setAsParentNodeOf(templateProcessor);
+        return this;
     }
 
     @Override

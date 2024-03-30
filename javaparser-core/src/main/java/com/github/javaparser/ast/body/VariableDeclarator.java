@@ -282,4 +282,8 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     public ResolvedValueDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
+
+    boolean isUnnamed() {
+        return name != null && "_".equals(name.asString());
+    }
 }

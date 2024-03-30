@@ -541,6 +541,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final StringLiteralExpr n2 = (StringLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
             return false;
+        if (!objEquals(n.getTemplateProcessor(), n2.getTemplateProcessor()))
+            return false;
         return true;
     }
 
@@ -810,6 +812,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getStatements(), n2.getStatements()))
             return false;
         if (!objEquals(n.getType(), n2.getType()))
+            return false;
+        if (!objEquals(n.getGuard(), n2.getGuard()))
             return false;
         return true;
     }
@@ -1104,6 +1108,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     public Boolean visit(final TextBlockLiteralExpr n, final Visitable arg) {
         final TextBlockLiteralExpr n2 = (TextBlockLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
+            return false;
+        if (!objEquals(n.getTemplateProcessor(), n2.getTemplateProcessor()))
             return false;
         return true;
     }

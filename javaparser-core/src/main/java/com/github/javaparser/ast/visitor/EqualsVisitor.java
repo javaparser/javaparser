@@ -666,6 +666,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         final StringLiteralExpr n2 = (StringLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
             return false;
+        if (!objEquals(n.getTemplateProcessor(), n2.getTemplateProcessor()))
+            return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;
         return true;
@@ -997,6 +999,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
         if (!objEquals(n.getType(), n2.getType()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
+            return false;
+        if (!nodeEquals(n.getGuard(), n2.getGuard()))
             return false;
         return true;
     }
@@ -1348,6 +1352,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     public Boolean visit(final TextBlockLiteralExpr n, final Visitable arg) {
         final TextBlockLiteralExpr n2 = (TextBlockLiteralExpr) arg;
         if (!objEquals(n.getValue(), n2.getValue()))
+            return false;
+        if (!objEquals(n.getTemplateProcessor(), n2.getTemplateProcessor()))
             return false;
         if (!nodeEquals(n.getComment(), n2.getComment()))
             return false;

@@ -34,6 +34,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
 
+import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -85,7 +87,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
 
     public enum Type {
-
         STATEMENT_GROUP, EXPRESSION, BLOCK, THROWS_STATEMENT
     }
 
@@ -95,21 +96,30 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
 
     private Type type;
 
+    private Expression guard;
+
     public SwitchEntry() {
-        this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>());
+        this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>(), null);
     }
 
     @AllFieldsConstructor
     public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
-        this(null, labels, type, statements);
+        this(null, labels, type, statements, null);
     }
+
+    @AllFieldsConstructor
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements, Expression guard) {
+        this(null, labels, type, statements, guard);
+    }
+
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements) {
+    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, Expression guard) {
         super(tokenRange);
+        setGuard(guard);
         setLabels(labels);
         setType(type);
         setStatements(statements);
@@ -129,6 +139,11 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<Expression> getGuard() {
+        return Optional.ofNullable(guard);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Expression> getLabels() {
         return labels;
     }
@@ -136,6 +151,19 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
         return statements;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SwitchEntry setGuard(final Expression guard) {
+        if (guard == this.guard) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.SELECTOR, this.guard, guard);
+        if (this.guard != null)
+            this.guard.setParentNode(null);
+        this.guard = guard;
+        setAsParentNodeOf(guard);
+        return this;
     }
 
     /**

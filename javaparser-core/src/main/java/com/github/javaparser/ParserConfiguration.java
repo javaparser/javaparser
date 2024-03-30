@@ -170,7 +170,13 @@ public class ParserConfiguration {
         /**
          * Java 18
          */
-        JAVA_18(new Java18Validator(), new Java18PostProcessor());
+        JAVA_18(new Java18Validator(), new Java18PostProcessor()),
+        JAVA_19_INCOMPLETE(new Java19Validator(), new Java19PostProcessor()),
+        JAVA_20_INCOMPLETE(new Java20Validator(), new Java20PostProcessor()),
+        JAVA_21_INCOMPLETE(new Java21Validator(), new Java21PostProcessor()),
+        JAVA_21_PREVIEW_INCOMPLETE(new Java21PreviewValidator(), new Java21PostProcessor()),
+        JAVA_22_INCOMPLETE(new Java22Validator(), new Java22PostProcessor()),
+        JAVA_22_PREVIEW_INCOMPLETE(new Java22PreviewValidator(), new Java22PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -196,7 +202,7 @@ public class ParserConfiguration {
 
         final PostProcessors postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW, JAVA_18 };
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW, JAVA_18, JAVA_19_INCOMPLETE, JAVA_20_INCOMPLETE, JAVA_21_INCOMPLETE, JAVA_21_PREVIEW_INCOMPLETE, JAVA_22_INCOMPLETE, JAVA_22_PREVIEW_INCOMPLETE};
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {
             this.validator = validator;

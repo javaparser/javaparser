@@ -1553,6 +1553,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final StringLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
+        if (n.getTemplateProcessor().isPresent()) {
+            tmp = n.getTemplateProcessor().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null)
@@ -1589,6 +1594,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getStatements().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getGuard().isPresent()) {
+            tmp = n.getGuard().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -2178,6 +2188,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final TextBlockLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
+        if (n.getTemplateProcessor().isPresent()) {
+            tmp = n.getTemplateProcessor().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null)

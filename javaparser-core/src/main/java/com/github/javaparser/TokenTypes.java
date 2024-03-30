@@ -173,6 +173,7 @@ public class TokenTypes {
             case PERMITS:
             case SEALED:
             case NON_SEALED:
+            case WHEN:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:

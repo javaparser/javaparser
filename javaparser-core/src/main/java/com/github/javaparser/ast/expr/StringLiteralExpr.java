@@ -23,6 +23,7 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -35,6 +36,7 @@ import java.util.function.Consumer;
 
 import static com.github.javaparser.utils.StringEscapeUtils.escapeJava;
 import static com.github.javaparser.utils.StringEscapeUtils.unescapeJava;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A literal string.
@@ -47,6 +49,8 @@ import static com.github.javaparser.utils.StringEscapeUtils.unescapeJava;
  * @author Julio Vilmar Gesser
  */
 public class StringLiteralExpr extends LiteralStringValueExpr {
+
+    private Expression templateProcessor;
 
     public StringLiteralExpr() {
         this(null, "empty");
@@ -69,6 +73,30 @@ public class StringLiteralExpr extends LiteralStringValueExpr {
     public StringLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
         customInitialization();
+    }
+
+    @AllFieldsConstructor
+    public StringLiteralExpr(TokenRange tokenRange, String value, Expression templateProcessor) {
+        this(tokenRange, value);
+        setTemplateProcessor(templateProcessor);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Optional<Expression> getTemplateProcessor() {
+        return Optional.ofNullable(templateProcessor);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public StringLiteralExpr setTemplateProcessor(Expression templateProcessor) {
+        if (templateProcessor == this.templateProcessor) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.SELECTOR, this.templateProcessor, templateProcessor);
+        if (this.templateProcessor != null)
+            this.templateProcessor.setParentNode(null);
+        this.templateProcessor = templateProcessor;
+        setAsParentNodeOf(templateProcessor);
+        return this;
     }
 
     @Override

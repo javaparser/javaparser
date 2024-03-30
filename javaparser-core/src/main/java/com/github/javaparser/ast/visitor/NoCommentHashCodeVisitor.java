@@ -307,7 +307,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final StringLiteralExpr n, final Void arg) {
-        return (n.getValue().hashCode());
+        return (n.getValue().hashCode()) * 31 + + (n.getTemplateProcessor().isPresent() ? n.getTemplateProcessor().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final SuperExpr n, final Void arg) {
@@ -315,7 +315,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     public Integer visit(final SwitchEntry n, final Void arg) {
-        return (n.getLabels().accept(this, arg)) * 31 + (n.getStatements().accept(this, arg)) * 31 + (n.getType().hashCode());
+        return (n.getLabels().accept(this, arg)) * 31 + (n.getStatements().accept(this, arg)) * 31 + (n.getType().hashCode()) * 31 + (n.getGuard().isPresent() ? n.getGuard().get().accept(this, arg) : 0);
     }
 
     public Integer visit(final SwitchStmt n, final Void arg) {
@@ -438,7 +438,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
 
     @Override
     public Integer visit(final TextBlockLiteralExpr n, final Void arg) {
-        return (n.getValue().hashCode());
+        return (n.getValue().hashCode()) * 31 + + (n.getTemplateProcessor().isPresent() ? n.getTemplateProcessor().get().accept(this, arg) : 0);
     }
 
     @Override
