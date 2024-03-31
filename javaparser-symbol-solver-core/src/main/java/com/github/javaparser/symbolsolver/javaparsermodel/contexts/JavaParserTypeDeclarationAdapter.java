@@ -265,7 +265,8 @@ public class JavaParserTypeDeclarationAdapter {
         // If we haven't located any candidates that are declared on this type or its ancestors, consider the parent context.
         // This is relevant e.g. with nested classes.
         // Note that we want to avoid infinite recursion when a class is using its own method - see issue #75
-        if (candidateMethods.isEmpty()) {
+        // We also want to avoid infinite recursion when handling static imports - see issue #4358
+        if (candidateMethods.isEmpty() && !staticOnly) {
             SymbolReference<ResolvedMethodDeclaration> parentSolution = context.getParent()
                     .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
                     .solveMethod(name, argumentsTypes, staticOnly);
