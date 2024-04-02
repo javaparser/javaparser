@@ -56,4 +56,13 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
         assertTransformedToString("switch (a) { case 1: a; a; }", stmt);
     }
 
+    @Test
+    void nullDefaultSwitchEntryPreserved() {
+        String code = "switch (a) { case null, default -> System.out.println(-1); }";
+        Statement stmt = consider(code);
+        NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
+        statements.set(0, statements.get(0).clone());
+        assertTransformedToString(code, stmt);
+    }
+
 }

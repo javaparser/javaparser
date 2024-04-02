@@ -574,4 +574,36 @@ class PrettyPrinterTest {
         assertTrue(indentation.getType() == IndentType.TABS);
         assertEquals("\t\t", indentation.getIndent());
     }
+
+    @Test
+    public void testSwitchDefault() {
+        String code = "class Foo {\n" +
+                "\n" +
+                "    void foo(Integer arg) {\n" +
+                "        switch(foo) {\n" +
+                "            default ->\n" +
+                "                System.out.println(-1);\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testSwitchNullDefault() {
+        String code = "class Foo {\n" +
+                "\n" +
+                "    void foo(Integer arg) {\n" +
+                "        switch(foo) {\n" +
+                "            case null, default ->\n" +
+                "                System.out.println(-1);\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
 }
