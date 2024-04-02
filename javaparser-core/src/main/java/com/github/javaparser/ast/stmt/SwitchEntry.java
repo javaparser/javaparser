@@ -33,7 +33,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -98,23 +97,24 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     private boolean isDefault;
 
     public SwitchEntry() {
-        this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>());
+        this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>(), false);
     }
 
     @AllFieldsConstructor
-    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
-        this(null, labels, type, statements);
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements, final boolean isDefault) {
+        this(null, labels, type, statements, isDefault);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements) {
+    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, final boolean isDefault) {
         super(tokenRange);
         setLabels(labels);
         setType(type);
         setStatements(statements);
+        setDefault(isDefault);
         customInitialization();
     }
 
@@ -242,5 +242,18 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public SwitchEntry setDefault(final boolean isDefault) {
+        if (isDefault == this.isDefault) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.DEFAULT, this.isDefault, isDefault);
+        this.isDefault = isDefault;
+        return this;
     }
 }
