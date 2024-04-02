@@ -95,6 +95,8 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
 
     private Type type;
 
+    private boolean isDefault;
+
     public SwitchEntry() {
         this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>());
     }
