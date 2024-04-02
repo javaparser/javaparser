@@ -45,7 +45,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -819,7 +818,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
         CompilationUnit cu = new JavaParser(parserConfiguration)
-                .parse(ParseStart.COMPILATION_UNIT, new StringProvider(code)).getResult().get();
+                .parse(code).getResult().get();
 
         ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         ClassOrInterfaceDeclaration classB = cu.getClassByName("B").get();
@@ -845,7 +844,7 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
 
         CompilationUnit cu = new JavaParser(parserConfiguration)
-                .parse(ParseStart.COMPILATION_UNIT, new StringProvider(code)).getResult().get();
+                .parse(code).getResult().get();
 
         ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
         ClassOrInterfaceDeclaration classB = cu.getClassByName("B").get();
