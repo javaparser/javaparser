@@ -21,10 +21,15 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -39,7 +44,10 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.javaparser.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseStart;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
@@ -877,9 +885,27 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    // The erasure of a parameterized type with bound.
+    void erasure_type_variable() {
+        List<ResolvedType> types = declaredTypes(
+                "class A<T extends Number> {}");
+        ResolvedType rt = types.get(0);
+        String expected =  "A";
+        assertEquals(expected, rt.erasure().describe());
+    }
+
+    @Test
+    // The erasure of a parameterized type
+    void erasure_parametrizedType() {
+    	ResolvedType parametrizedType = genericType(Map.class.getCanonicalName(), Integer.class.getCanonicalName(), Integer.class.getCanonicalName());
+    	String expected = "java.util.Map";
+        assertEquals(expected, parametrizedType.erasure().describe());
+    }
+
+    @Test
     // The erasure of an array type T[] is |T|[].
     void erasure_arraytype() {
-        // create a type : List <String>
+        // create a type : List <String>[]
         ResolvedType genericList = array(genericType(List.class.getCanonicalName(), String.class.getCanonicalName()));
         String expected = "java.util.List[]";
         assertEquals(expected, genericList.erasure().describe());
@@ -888,21 +914,20 @@ class ReferenceTypeTest extends AbstractSymbolResolutionTest {
     @Test
     // The erasure of an array type T[] is |T|[].
     void erasure_arraytype_with_bound() {
-        // create a type : List <T extends Serializable>
+        // create a type : List <T extends Serializable>[]
         ResolvedTypeVariable typeArguments = parametrizedType("T", Serializable.class.getCanonicalName());
         ResolvedType genericList = array(genericType(List.class.getCanonicalName(), typeArguments));
-        String expected = "java.util.List<java.io.Serializable>[]";
+        String expected = "java.util.List[]";
         assertEquals(expected, genericList.erasure().describe());
     }
 
     @Test
-    // The erasure of a type variable (§4.4) is the erasure of its leftmost bound.
-    void erasure_type_variable() {
-        List<ResolvedType> types = declaredTypes(
-                "class A<T extends Number> {}");
-        ResolvedType rt = types.get(0);
-        String expected =  "A<java.lang.Number>";
-        assertEquals(expected, rt.erasure().describe());
+    // The erasure of T extends Serializable is the erasure of its leftmost bound.
+    void erasure_bounded_type_parameter() {
+        // create a type : T extends Serializable
+        ResolvedTypeVariable typeArguments = parametrizedType("T", Serializable.class.getCanonicalName());
+        String expected = "java.io.Serializable";
+        assertEquals(expected, typeArguments.erasure().describe());
     }
 
     @Test
