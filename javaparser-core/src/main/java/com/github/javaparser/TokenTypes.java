@@ -189,6 +189,7 @@ public class TokenTypes {
             case CHARACTER_LITERAL:
             case STRING_LITERAL:
             case TEXT_BLOCK_LITERAL:
+            case STRING_TEMPLATE_LITERAL:
             case TRUE:
             case FALSE:
             case NULL:

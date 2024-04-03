@@ -709,7 +709,38 @@ TOKEN :
           ( // TODO: Could these escape sequences be extracted out?
               "\\"
               (
-                  ["s","n","t","b","r","f","\\","'","\"","{"]
+                  ["s","n","t","b","r","f","\\","'","\""]
+               |
+                  ["0"-"7"] ( ["0"-"7"] )?
+               |
+                  ["0"-"3"] ["0"-"7"] ["0"-"7"]
+              )
+          )
+       |
+          (
+              "\\u"
+              ["0"-"9","A"-"F","a"-"f"]
+              ["0"-"9","A"-"F","a"-"f"]
+              ["0"-"9","A"-"F","a"-"f"]
+              ["0"-"9","A"-"F","a"-"f"]
+          )
+      )*
+      "\""
+  >
+|
+    /**
+    * https://openjdk.org/jeps/459
+    */
+  < STRING_TEMPLATE_LITERAL:
+      "\""
+      // TODO: Could (and the duplicate code in CHARACTER_LITERAL) this be extracted out?
+      (
+          (~["\"","\\","\n","\r"])
+       |
+          ( // TODO: Could these escape sequences be extracted out?
+              "\\"
+              (
+                  ["s","n","t","b","r","f","\\","'","\"", "{"]
                |
                   ["0"-"7"] ( ["0"-"7"] )?
                |
@@ -3034,7 +3065,7 @@ Expression Expression():
          |
             "."
             (
-                <STRING_LITERAL> { ret = new StringLiteralExpr(tokenRange(), unquote(token.image), ret); }
+                <STRING_TEMPLATE_LITERAL> { ret = new StringLiteralExpr(tokenRange(), unquote(token.image), ret); }
              |
                 <TEXT_BLOCK_LITERAL> { ret = new TextBlockLiteralExpr(tokenRange(), unTripleQuote(token.image), ret); }
             )

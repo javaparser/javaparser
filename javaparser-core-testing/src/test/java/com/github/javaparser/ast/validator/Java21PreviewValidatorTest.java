@@ -24,6 +24,7 @@ package com.github.javaparser.ast.validator;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.EXPRESSION;
+import static com.github.javaparser.ParseStart.METHOD_DECLARATION;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_21_PREVIEW_INCOMPLETE;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
@@ -53,6 +55,14 @@ class Java21PreviewValidatorTest {
                     "STR.\"test\\{5+5}\""));
             TestUtils.assertNoProblems(result);
         }
+
+        @Test
+        void nonTemplate() {
+            ParseResult<MethodDeclaration> result = javaParser.parse(METHOD_DECLARATION, provider(
+                    "void test() { t.equals(\"test\\{5+5}\"); }"));
+            TestUtils.assertEqualsString("Parse error. Found  \"\\\"test\\\\{5+5}\\\"\" <STRING_TEMPLATE_LITERAL>, expected one of  \"!\" \"(\" \")\" \"+\" \"++\" \"-\" \"--\" \"@\" \"\\\"\\\"\\\"\" \"boolean\" \"byte\" \"char\" \"double\" \"enum\" \"exports\" \"false\" \"float\" \"int\" \"long\" \"module\" \"new\" \"null\" \"open\" \"opens\" \"permits\" \"provides\" \"record\" \"requires\" \"sealed\" \"short\" \"strictfp\" \"super\" \"switch\" \"this\" \"to\" \"transitive\" \"true\" \"uses\" \"void\" \"with\" \"yield\" \"~\" <CHARACTER_LITERAL> <FLOATING_POINT_LITERAL> <IDENTIFIER> <INTEGER_LITERAL> <LONG_LITERAL> <STRING_LITERAL>", result.getProblems().get(0).getMessage());
+        }
+
 
         @Test
         void textBlock() {
