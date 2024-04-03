@@ -22,6 +22,7 @@ package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.utils.Utils;
 
@@ -41,6 +42,10 @@ public interface Change {
             case IS_PRESENT:
                 return !Utils.valueIsNullOrEmptyStringOrOptional(getValue(csmConditional.getProperty(), node))
                 		&& !isEvaluatedOnDerivedProperty(csmConditional.getProperty());
+	        case IS_STMT_GROUP_ENTRY:
+				return (node instanceof SwitchEntry)
+						&& (csmConditional.getProperty() == ObservableProperty.TYPE)
+						&& (getValue(csmConditional.getProperty(), node) == SwitchEntry.Type.STATEMENT_GROUP);
             default:
                 throw new UnsupportedOperationException("" + csmConditional.getProperty() + " " + csmConditional.getCondition());
         }

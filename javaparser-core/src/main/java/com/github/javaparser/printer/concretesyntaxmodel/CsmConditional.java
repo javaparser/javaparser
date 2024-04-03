@@ -23,6 +23,7 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.printer.SourcePrinter;
 
 import java.util.Arrays;
@@ -91,6 +92,17 @@ public class CsmConditional implements CsmElement {
             @Override
             boolean evaluate(Node node, ObservableProperty property) {
                 return property.getValueAsBooleanAttribute(node);
+            }
+        }
+        , IS_STMT_GROUP_ENTRY {
+            @Override
+            boolean evaluate(Node node, ObservableProperty property) {
+                if (node instanceof SwitchEntry && property == ObservableProperty.TYPE) {
+                    SwitchEntry.Type entryType = (SwitchEntry.Type)(property.getRawValue(node));
+                    return entryType == SwitchEntry.Type.STATEMENT_GROUP;
+                } else {
+                    return false;
+                }
             }
         }
         ;

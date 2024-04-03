@@ -4596,7 +4596,6 @@ SwitchEntry SwitchEntry():
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin;
     SwitchEntry ret;
-    Expression expression = null;
     Statement stmt = null;
     boolean isDefault = false;
 }
@@ -4625,11 +4624,10 @@ SwitchEntry SwitchEntry():
      |
         "->"
         (
-            expression = Expression()
-            ";"
+            stmt = StatementExpression()
             {
                 TokenRange r=range(begin, token());
-                stmts.add(new ExpressionStmt(expression.getTokenRange().get(), expression));
+                stmts.add(stmt);
                 ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault);
             }
          |
