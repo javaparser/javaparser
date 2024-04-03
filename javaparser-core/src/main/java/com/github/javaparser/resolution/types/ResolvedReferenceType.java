@@ -20,6 +20,10 @@
  */
 package com.github.javaparser.resolution.types;
 
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -32,10 +36,6 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
 import com.github.javaparser.utils.Pair;
-
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * A ReferenceType like a class, an interface or an enum. Note that this type can contain also the values
@@ -575,18 +575,7 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     }
 
     private List<ResolvedType> erasureOfParamaters(ResolvedTypeParametersMap typeParametersMap) {
-        List<ResolvedType> erasedParameters = new ArrayList<ResolvedType>();
-        if (!typeParametersMap.isEmpty()) {
-            // add erased type except java.lang.object
-        	List<ResolvedType> parameters = typeParametersMap.getTypes().stream()
-        			.filter(type -> !type.isReferenceType())
-        			.map(type -> type.erasure())
-        			.filter(erasedType -> !(isJavaObject(erasedType)))
-        			.filter(erasedType -> erasedType != null)
-        			.collect(Collectors.toList());
-            erasedParameters.addAll(parameters);
-        }
-        return erasedParameters;
+        return new ArrayList<ResolvedType>();
     }
 
     private boolean isJavaObject(ResolvedType rt) {
