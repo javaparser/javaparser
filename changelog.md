@@ -1,8 +1,7 @@
 
-
-Next Release (Version 3.25.10-snapshot)
+Next Release (Version 3.25.11-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/206?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/207?closed=1)
 
 ### Added
 ### Changed
@@ -10,6 +9,32 @@ Next Release (Version 3.25.10-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+
+Version 3.25.10
+---------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/206?closed=1)
+
+### Fixed
+
+* Fix issue 4345 Strange error when trying to find erasure of generic t… (PR [#4362](https://github.com/javaparser/javaparser/pull/4362) by [@jlerbsc](https://github.com/jlerbsc))
+* fix: issue 4358 prevent infinite cycles with static imports (PR [#4359](https://github.com/javaparser/javaparser/pull/4359) by [@kdunee](https://github.com/kdunee))
+* Refactor `ResolvedReferenceType#equals` (PR [#4351](https://github.com/javaparser/javaparser/pull/4351) by [@freya022](https://github.com/freya022))
+* fix: issue 4331 Cannot be 'abstract' and also 'private'. for a private method in an interface (PR [#4332](https://github.com/javaparser/javaparser/pull/4332) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* chore(deps): bump actions/checkout from 4.1.1 to 4.1.2 (PR [#4341](https://github.com/javaparser/javaparser/pull/4341) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@kdunee](https://github.com/kdunee)
+* [@freya022](https://github.com/freya022)
+* [@jlerbsc](https://github.com/jlerbsc)
+
+
 
 Version 3.25.9
 --------------
