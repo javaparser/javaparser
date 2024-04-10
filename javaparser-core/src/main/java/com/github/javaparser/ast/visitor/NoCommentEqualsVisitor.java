@@ -29,7 +29,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.Optional;
 
 public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable> {
@@ -805,6 +804,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Override
     public Boolean visit(final SwitchEntry n, final Visitable arg) {
         final SwitchEntry n2 = (SwitchEntry) arg;
+        if (!objEquals(n.isDefault(), n2.isDefault()))
+            return false;
         if (!nodesEquals(n.getLabels(), n2.getLabels()))
             return false;
         if (!nodesEquals(n.getStatements(), n2.getStatements()))

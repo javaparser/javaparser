@@ -106,7 +106,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
      * the `isDefault` field was added.
      */
     public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
-    this(labels, type, statements, false);
+        this(labels, type, statements, false);
     }
 
     @AllFieldsConstructor
@@ -118,7 +118,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, final boolean isDefault) {
+    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, boolean isDefault) {
         super(tokenRange);
         setLabels(labels);
         setType(type);
@@ -266,10 +266,12 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         return super.replace(node, replacementNode);
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isDefault() {
         return isDefault;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchEntry setDefault(final boolean isDefault) {
         if (isDefault == this.isDefault) {
             return this;
