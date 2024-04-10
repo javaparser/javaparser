@@ -94,17 +94,6 @@ public class CsmConditional implements CsmElement {
                 return property.getValueAsBooleanAttribute(node);
             }
         }
-        , IS_STMT_GROUP_ENTRY {
-            @Override
-            boolean evaluate(Node node, ObservableProperty property) {
-                if (node instanceof SwitchEntry && property == ObservableProperty.TYPE) {
-                    SwitchEntry.Type entryType = (SwitchEntry.Type)(property.getRawValue(node));
-                    return entryType == SwitchEntry.Type.STATEMENT_GROUP;
-                } else {
-                    return false;
-                }
-            }
-        }
         ;
 
         abstract boolean evaluate(Node node, ObservableProperty property);

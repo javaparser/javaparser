@@ -42,10 +42,6 @@ public interface Change {
             case IS_PRESENT:
                 return !Utils.valueIsNullOrEmptyStringOrOptional(getValue(csmConditional.getProperty(), node))
                 		&& !isEvaluatedOnDerivedProperty(csmConditional.getProperty());
-	        case IS_STMT_GROUP_ENTRY:
-				return (node instanceof SwitchEntry)
-						&& (csmConditional.getProperty() == ObservableProperty.TYPE)
-						&& (getValue(csmConditional.getProperty(), node) == SwitchEntry.Type.STATEMENT_GROUP);
             default:
                 throw new UnsupportedOperationException("" + csmConditional.getProperty() + " " + csmConditional.getCondition());
         }
