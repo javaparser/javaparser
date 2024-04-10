@@ -31,6 +31,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -124,6 +125,19 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         setStatements(statements);
         setDefault(isDefault);
         customInitialization();
+    }
+
+    /**
+     * This is required for the ConcreteSyntaxModel, specifically to determine whether this
+     * entry uses the classic switch statement syntax (e.g. `case X: ...`) or the newer
+     * switch expression syntax (`case X -> ...`).
+     *
+     * The entry type is STATEMENT_GROUP in the switch statement case and all other values
+     * are for the various switch expressions.
+     */
+    @DerivedProperty
+    public boolean isSwitchStatementEntry() {
+        return type == Type.STATEMENT_GROUP;
     }
 
     @Override
