@@ -21,12 +21,14 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 
@@ -34,6 +36,18 @@ import static com.github.javaparser.StaticJavaParser.parseStatement;
  * Transforming Statement and verifying the LexicalPreservation works as expected.
  */
 class StatementTransformationsTest extends AbstractLexicalPreservingTest {
+
+    private static final ParserConfiguration.LanguageLevel storedLanguageLevel = StaticJavaParser.getParserConfiguration().getLanguageLevel();
+
+    @BeforeEach
+    public void setLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+    }
+
+    @AfterEach
+    public void resetLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
+    }
 
     Statement consider(String code) {
         Statement statement = parseStatement(code);

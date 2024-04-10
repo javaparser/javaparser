@@ -21,8 +21,12 @@
 
 package com.github.javaparser.ast.stmt;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
@@ -31,6 +35,18 @@ import static com.github.javaparser.ast.stmt.SwitchEntry.Type.STATEMENT_GROUP;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SwitchStmtTest {
+
+    private static final ParserConfiguration.LanguageLevel storedLanguageLevel = StaticJavaParser.getParserConfiguration().getLanguageLevel();
+    @BeforeAll
+    public static void setLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+    }
+
+    @AfterAll
+    public static void resetLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
+    }
+
     @Test
     void classicSwitch() {
         SwitchStmt switchStmt = parseStatement("switch (day) {\n" +
