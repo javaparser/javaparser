@@ -22,7 +22,6 @@ package com.github.javaparser.printer.lexicalpreservation.changes;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmConditional;
 import com.github.javaparser.utils.Utils;
 
