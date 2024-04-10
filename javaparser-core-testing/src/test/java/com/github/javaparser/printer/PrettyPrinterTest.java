@@ -33,8 +33,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.*;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -66,13 +66,13 @@ class PrettyPrinterTest {
     }
 
     private static final ParserConfiguration.LanguageLevel storedLanguageLevel = StaticJavaParser.getParserConfiguration().getLanguageLevel();
-    @BeforeAll
-    public static void setLanguageLevel() {
+    @BeforeEach
+    public void setLanguageLevel() {
         StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
     }
 
-    @AfterAll
-    public static void resetLanguageLevel() {
+    @AfterEach
+    public void resetLanguageLevel() {
         StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
     }
 
