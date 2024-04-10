@@ -600,7 +600,6 @@ class PrettyPrinterTest {
                 "    }\n" +
                 "}\n";
 
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
     }
