@@ -112,6 +112,12 @@ public class Java1_0Validator extends Validators {
 
     final Validator noPermitsListInClasses = new SimpleValidator<>(ClassOrInterfaceDeclaration.class, n -> n.getPermittedTypes().isNonEmpty(), (n, reporter) -> reporter.report(n, new UpgradeJavaMessage("Permitted sub-classes are not supported.", ParserConfiguration.LanguageLevel.JAVA_17)));
 
+    final Validator noSwitchNullDefault = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
+        if (n.getLabels().isNonEmpty() && n.isDefault()) {
+            reporter.report(n, new UpgradeJavaMessage("Switch case null, default not supported.", ParserConfiguration.LanguageLevel.JAVA_21_INCOMPLETE));
+        }
+    });
+
     public Java1_0Validator() {
         super(new CommonValidators());
         add(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
@@ -138,5 +144,6 @@ public class Java1_0Validator extends Validators {
         add(noRecordDeclaration);
         add(noSealedClasses);
         add(noPermitsListInClasses);
+        add(noSwitchNullDefault);
     }
 }

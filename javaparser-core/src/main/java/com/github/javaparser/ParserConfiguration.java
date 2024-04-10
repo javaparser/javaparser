@@ -170,7 +170,22 @@ public class ParserConfiguration {
         /**
          * Java 18
          */
-        JAVA_18(new Java18Validator(), new Java18PostProcessor());
+        JAVA_18(new Java18Validator(), new Java18PostProcessor()),
+
+        /**
+         * Java 19
+         */
+        JAVA_19(new Java19Validator(), new Java19PostProcessor()),
+
+        /**
+         * Java 20
+         */
+        JAVA_20(new Java20Validator(), new Java20PostProcessor()),
+
+        /**
+         * Java 21
+         */
+        JAVA_21_INCOMPLETE(new Java21Validator(), new Java21PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.

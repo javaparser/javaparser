@@ -25,13 +25,17 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_14;
 import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 class Java14ValidatorTest {
 
@@ -42,6 +46,19 @@ class Java14ValidatorTest {
 
     // TODO: Confirm PERMITTED - text blocks permitted
 
+    @Nested
+    class SwitchExpr {
+        @Test
+        void switchExprAllowed() {
+            ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case 3 -> System.out.println(0);}"));
+            assertNoProblems(result);
+        }
+        @Test
+        void noSwitchDefaultCaseAllowed() {
+            ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case null, default -> System.out.println(0);}"));
+            assertProblems(result, "(line 1,col 11) Switch case null, default not supported. Pay attention that this feature is supported starting from 'JAVA_21_INCOMPLETE' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        }
+    }
     /**
      * Records are available within Java 14 (preview), Java 15 (2nd preview), and Java 16 (release).
      * The introduction of records means that they are no longer able to be used as identifiers.
@@ -72,7 +89,7 @@ class Java14ValidatorTest {
             void recordDeclaration() {
                 String s = "record X() { }";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 1) Record Declarations are not supported. Pay attention that this feature is supported starting from 'JAVA_14' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+                assertProblems(result, "(line 1,col 1) Record Declarations are not supported. Pay attention that this feature is supported starting from 'JAVA_14' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
             }
         }
     }
