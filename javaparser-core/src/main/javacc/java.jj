@@ -4603,16 +4603,16 @@ SwitchEntry SwitchEntry():
     (
         "case" { begin=token(); }
         (
-            LOOKAHEAD(3)
-			label = NullLiteral() { labels = add(labels, label); }
-			","
-			"default" { isDefault = true; }
-         |
+			LOOKAHEAD({!(getToken(2).image == "," && getToken(3).image == "default")})
 			label = ConditionalExpression() { labels = add(labels, label); }
 			(
 				","
 				label = ConditionalExpression()  { labels = add(labels, label); }
 			)*
+		  |
+			label = NullLiteral() { labels = add(labels, label); }
+			","
+			"default" { isDefault = true; }
         )
      |
         "default" { begin=token(); isDefault = true; }
