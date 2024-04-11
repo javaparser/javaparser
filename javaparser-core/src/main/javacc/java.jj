@@ -4604,16 +4604,16 @@ SwitchEntry SwitchEntry():
         "case" { begin=token(); }
         (
             /**
-            * Since null is also a conditional expression, a lookahead is necessary to determine
-            * whether this is the "null, default" case, or whether the null is a regular
-            * conditional expression. The check is negated to maintain the ordering in the JLS.
-            *
-            * In the "null, default" case, the next 3 tokens will be "null" "," "default". Since
-            * "default" can only be preceded by "," in this specific case (as "default" cannot
-            * appear in a list elsewhere), it is sufficient to check that "," "default" appear
-            * in the correct order. Since the only label that can appear before the "default"
-            * is the single-token "null", the "," token must also be the second token.
-            */
+             * Since null is also a conditional expression, a lookahead is necessary to determine
+             * whether this is the "null, default" case, or whether the null is a regular
+             * conditional expression. The check is negated to maintain the ordering in the JLS.
+             *
+             * In the "null, default" case, the next 3 tokens will be "null" "," "default". Since
+             * "default" can only be preceded by "," in this specific case (as "default" cannot
+             * appear in a list elsewhere), it is sufficient to check that "," "default" appear
+             * in the correct order. Since the only label that can appear before the "default"
+             * is the single-token "null", the "," token must also be the second token.
+             */
             LOOKAHEAD({!(getToken(2).image.equals(",") && getToken(3).image.equals("default"))})
             label = ConditionalExpression() { labels = add(labels, label); }
             (
