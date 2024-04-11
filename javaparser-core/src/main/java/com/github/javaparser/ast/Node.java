@@ -433,6 +433,35 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         if (newParentNode == parentNode) {
             return this;
         }
+        setParentNodeButDontAddToChildren(newParentNode);
+        // add to new parent, if any
+        if (parentNode != null) {
+            parentNode.childNodes.add(this);
+        }
+        return this;
+    }
+
+    /**
+     * Assign a new parent to this node, removing it
+     * from the list of children of the previous parent, if any.
+     *
+     * @param newParentNode node to be set as parent
+     * @param index         the index this node will be added at the parent's child list
+     */
+    @Override
+    public Node setParentNode(Node newParentNode, int index) {
+        if (newParentNode == parentNode) {
+            return this;
+        }
+        setParentNodeButDontAddToChildren(newParentNode);
+        // add to new parent, if any
+        if (parentNode != null) {
+            parentNode.childNodes.add(index, this);
+        }
+        return this;
+    }
+
+    protected void setParentNodeButDontAddToChildren(Node newParentNode) {
         observers.forEach(o -> o.parentChange(this, parentNode, newParentNode));
         // remove from old parent, if any
         if (parentNode != null) {
@@ -445,11 +474,6 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
             parentChildNodes.trimToSize();
         }
         parentNode = newParentNode;
-        // add to new parent, if any
-        if (parentNode != null) {
-            parentNode.childNodes.add(this);
-        }
-        return this;
     }
 
     protected void setAsParentNodeOf(Node childNode) {
@@ -638,6 +662,12 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     protected void setAsParentNodeOf(NodeList<? extends Node> list) {
         if (list != null) {
             list.setParentNode(getParentNodeForChildren());
+        }
+    }
+
+    protected void addListToChildrenAtIndexButDontSetParent(NodeList<? extends Node> list, int index) {
+        if (list != null) {
+            this.childNodes.addAll(index, list);
         }
     }
 

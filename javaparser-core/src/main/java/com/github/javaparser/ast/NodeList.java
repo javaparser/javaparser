@@ -81,6 +81,13 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
         setAsParentNodeOf(node);
     }
 
+    private void own(N node, int index) {
+        if (node == null) {
+            return;
+        }
+        setAsParentNodeOf(node, index);
+    }
+
     public boolean remove(Node node) {
         int index = innerList.indexOf(node);
         if (index != -1) {
@@ -179,7 +186,7 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     @Override
     public void add(int index, N node) {
         notifyElementAdded(index, node);
-        own(node);
+        own(node, index);
         innerList.add(index, node);
     }
 
@@ -262,6 +269,20 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     public NodeList<N> setParentNode(Node parentNode) {
         this.parentNode = parentNode;
         setAsParentNodeOf(innerList);
+        return this;
+    }
+
+    /**
+     * Sets the parentNode
+     *
+     * @param parentNode the parentNode
+     * @return this, the NodeList
+     */
+    @Override
+    public NodeList<N> setParentNode(Node parentNode, int index) {
+        this.parentNode = parentNode;
+        setAsParentNodeOfButDontAddToChildren(innerList);
+        parentNode.addListToChildrenAtIndexButDontSetParent(this, index);
         return this;
     }
 
@@ -547,8 +568,16 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
 
     private void setAsParentNodeOf(List<? extends Node> childNodes) {
         if (childNodes != null) {
-            for (HasParentNode current : childNodes) {
+            for (HasParentNode<Node> current : childNodes) {
                 current.setParentNode(getParentNodeForChildren());
+            }
+        }
+    }
+
+    private void setAsParentNodeOfButDontAddToChildren(List<? extends Node> childNodes) {
+        if (childNodes != null) {
+            for (Node current : childNodes) {
+                current.setParentNodeButDontAddToChildren(getParentNodeForChildren());
             }
         }
     }
@@ -556,6 +585,12 @@ public class NodeList<N extends Node> implements List<N>, Iterable<N>, HasParent
     private void setAsParentNodeOf(Node childNode) {
         if (childNode != null) {
             childNode.setParentNode(getParentNodeForChildren());
+        }
+    }
+
+    private void setAsParentNodeOf(Node childNode, int index) {
+        if (childNode != null) {
+            childNode.setParentNode(getParentNodeForChildren(), index);
         }
     }
 

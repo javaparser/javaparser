@@ -52,6 +52,15 @@ public interface HasParentNode<T> extends Observable {
     T setParentNode(Node parentNode);
 
     /**
+     * Sets the parent node.
+     *
+     * @param parentNode the parent node, or {@code null} to set no parent.
+     * @param index the index this node will be inserted at the child list of parentNode.
+     * @return {@code this}
+     */
+    T setParentNode(Node parentNode, int index);
+
+    /**
      * Returns the parent node from the perspective of the children of this node.
      * <p>
      * That is, this method returns {@code this} for everything except {@code NodeList}. A {@code NodeList} returns its
