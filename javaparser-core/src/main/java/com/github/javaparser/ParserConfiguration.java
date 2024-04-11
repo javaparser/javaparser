@@ -170,7 +170,22 @@ public class ParserConfiguration {
         /**
          * Java 18
          */
-        JAVA_18(new Java18Validator(), new Java18PostProcessor());
+        JAVA_18(new Java18Validator(), new Java18PostProcessor()),
+
+        /**
+         * Java 19
+         */
+        JAVA_19(new Java19Validator(), new Java19PostProcessor()),
+
+        /**
+         * Java 20
+         */
+        JAVA_20(new Java20Validator(), new Java20PostProcessor()),
+
+        /**
+         * Java 21
+         */
+        JAVA_21(new Java21Validator(), new Java21PostProcessor());
 
         /**
          * Does no post processing or validation. Only for people wanting the fastest parsing.
@@ -190,13 +205,13 @@ public class ParserConfiguration {
         /**
          * The newest Java features supported.
          */
-        public static LanguageLevel BLEEDING_EDGE = JAVA_17_PREVIEW;
+        public static LanguageLevel BLEEDING_EDGE = JAVA_21;
 
         final Validator validator;
 
         final PostProcessors postProcessor;
 
-        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW, JAVA_18 };
+        private static final LanguageLevel[] yieldSupport = new LanguageLevel[] { JAVA_13, JAVA_13_PREVIEW, JAVA_14, JAVA_14_PREVIEW, JAVA_15, JAVA_15_PREVIEW, JAVA_16, JAVA_16_PREVIEW, JAVA_17, JAVA_17_PREVIEW, JAVA_18, JAVA_19, JAVA_20, JAVA_21};
 
         LanguageLevel(Validator validator, PostProcessors postProcessor) {
             this.validator = validator;

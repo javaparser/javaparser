@@ -119,4 +119,5 @@ class Java1_0ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: break;}"));
         assertNoProblems(result);
     }
+
 }

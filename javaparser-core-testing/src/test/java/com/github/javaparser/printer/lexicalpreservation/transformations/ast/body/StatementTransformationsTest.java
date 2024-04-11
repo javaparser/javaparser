@@ -21,12 +21,14 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 
@@ -34,6 +36,18 @@ import static com.github.javaparser.StaticJavaParser.parseStatement;
  * Transforming Statement and verifying the LexicalPreservation works as expected.
  */
 class StatementTransformationsTest extends AbstractLexicalPreservingTest {
+
+    private static final ParserConfiguration.LanguageLevel storedLanguageLevel = StaticJavaParser.getParserConfiguration().getLanguageLevel();
+
+    @BeforeEach
+    public void setLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+    }
+
+    @AfterEach
+    public void resetLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
+    }
 
     Statement consider(String code) {
         Statement statement = parseStatement(code);
@@ -54,6 +68,33 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
         NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
         statements.set(1, statements.get(1).clone()); // clone() to force replacement
         assertTransformedToString("switch (a) { case 1: a; a; }", stmt);
+    }
+
+    @Test
+    void newSwitchEntryPreserved() {
+        String code = "switch (a) { case 2 -> System.out.println(-1); }";
+        Statement stmt = consider(code);
+        NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
+        statements.set(0, statements.get(0).clone());
+        assertTransformedToString(code, stmt);
+    }
+
+    @Test
+    void newDefaultSwitchEntryPreserved() {
+        String code = "switch (a) { default -> System.out.println(-1); }";
+        Statement stmt = consider(code);
+        NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
+        statements.set(0, statements.get(0).clone());
+        assertTransformedToString(code, stmt);
+    }
+
+    @Test
+    void nullDefaultSwitchEntryPreserved() {
+        String code = "switch (a) { case null, default -> System.out.println(-1); }";
+        Statement stmt = consider(code);
+        NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
+        statements.set(0, statements.get(0).clone());
+        assertTransformedToString(code, stmt);
     }
 
 }

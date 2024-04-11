@@ -1243,6 +1243,10 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                     printer.print(", ");
                 }
             }
+            // `case null, default -> ...` added in JEP 441
+            if (n.getLabels().isNonEmpty() && n.isDefault()) {
+                printer.print(", default");
+            }
             printer.print(separator);
         }
         printer.println();

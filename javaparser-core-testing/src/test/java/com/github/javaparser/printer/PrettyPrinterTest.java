@@ -33,6 +33,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.printer.configuration.*;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -61,6 +63,17 @@ class PrettyPrinterTest {
     
     private Optional<ConfigurationOption> getOption(PrinterConfiguration config, ConfigOption cOption) {
         return config.get(new DefaultConfigurationOption(cOption));
+    }
+
+    private static final ParserConfiguration.LanguageLevel storedLanguageLevel = StaticJavaParser.getParserConfiguration().getLanguageLevel();
+    @BeforeEach
+    public void setLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+    }
+
+    @AfterEach
+    public void resetLanguageLevel() {
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(storedLanguageLevel);
     }
 
     @Test
@@ -573,5 +586,37 @@ class PrettyPrinterTest {
         indentation.setType(IndentType.TABS);
         assertTrue(indentation.getType() == IndentType.TABS);
         assertEquals("\t\t", indentation.getIndent());
+    }
+
+    @Test
+    public void testSwitchDefault() {
+        String code = "class Foo {\n" +
+                "\n" +
+                "    void foo(Integer arg) {\n" +
+                "        switch(foo) {\n" +
+                "            default ->\n" +
+                "                System.out.println(-1);\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testSwitchNullDefault() {
+        String code = "class Foo {\n" +
+                "\n" +
+                "    void foo(Integer arg) {\n" +
+                "        switch(foo) {\n" +
+                "            case null, default ->\n" +
+                "                System.out.println(-1);\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
     }
 }

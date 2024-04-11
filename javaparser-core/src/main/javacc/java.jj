@@ -4583,6 +4583,7 @@ SwitchExpr SwitchExpression():
  *         SwitchLabel : {SwitchLabel :} BlockStatements
  *     SwitchLabel:
  *         case CaseConstant {, CaseConstant}
+ *         case null [, default]
  *         default
  *     CaseConstant:
  *         ConditionalExpression
@@ -4595,47 +4596,64 @@ SwitchEntry SwitchEntry():
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin;
     SwitchEntry ret;
-    Expression expression = null;
     Statement stmt = null;
+    boolean isDefault = false;
 }
 {
     (
         "case" { begin=token(); }
-        label = ConditionalExpression() { labels = add(labels, label); }
         (
+            /**
+             * Since null is also a conditional expression, a lookahead is necessary to determine
+             * whether this is the "null, default" case, or whether the null is a regular
+             * conditional expression. The check is negated to maintain the ordering in the JLS.
+             *
+             * In the "null, default" case, the next 3 tokens will be "null" "," "default". Since
+             * "default" can only be preceded by "," in this specific case (as "default" cannot
+             * appear in a list elsewhere), it is sufficient to check that "," "default" appear
+             * in the correct order. Since the only label that can appear before the "default"
+             * is the single-token "null", the "," token must also be the second token.
+             */
+            LOOKAHEAD({!(getToken(2).image.equals(",") && getToken(3).image.equals("default"))})
+            label = ConditionalExpression() { labels = add(labels, label); }
+            (
+                ","
+                label = ConditionalExpression()  { labels = add(labels, label); }
+            )*
+          |
+            label = NullLiteral() { labels = add(labels, label); }
             ","
-            label = ConditionalExpression()  { labels = add(labels, label); }
-        )*
+            "default" { isDefault = true; }
+        )
      |
-        "default" { begin=token(); }
+        "default" { begin=token(); isDefault = true; }
     )
     (
         ":"
         stmts = Statements()
-        { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts); }
+        { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts, isDefault); }
      |
         "->"
         (
-            expression = Expression()
-            ";"
+            stmt = StatementExpression()
             {
                 TokenRange r=range(begin, token());
-                stmts.add(new ExpressionStmt(expression.getTokenRange().get(), expression));
-                ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
+                stmts.add(stmt);
+                ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault);
             }
          |
             stmt = Block()
             {
                 TokenRange r=range(begin, token());
                 stmts.add(stmt);
-                ret = new SwitchEntry(r, labels, BLOCK, stmts);
+                ret = new SwitchEntry(r, labels, BLOCK, stmts, isDefault);
             }
          |
             stmt = ThrowStatement()
             {
                 TokenRange r=range(begin, token());
                 stmts.add(stmt);
-                ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts);
+                ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts, isDefault);
             }
         )
     )

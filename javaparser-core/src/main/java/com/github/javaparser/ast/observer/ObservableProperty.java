@@ -24,7 +24,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
-
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -50,6 +49,7 @@ public enum ObservableProperty {
     COMPONENT_TYPE(Type.SINGLE_REFERENCE),
     CONDITION(Type.SINGLE_REFERENCE),
     CONTENT(Type.SINGLE_ATTRIBUTE),
+    DEFAULT(Type.SINGLE_ATTRIBUTE),
     DEFAULT_VALUE(Type.SINGLE_REFERENCE),
     DIMENSION(Type.SINGLE_REFERENCE),
     DIRECTIVES(Type.MULTIPLE_REFERENCE),
@@ -131,6 +131,7 @@ public enum ObservableProperty {
     MAXIMUM_COMMON_TYPE(Type.SINGLE_REFERENCE, true),
     POSTFIX(Type.SINGLE_ATTRIBUTE, true),
     PREFIX(Type.SINGLE_ATTRIBUTE, true),
+    SWITCH_STATEMENT_ENTRY(Type.SINGLE_ATTRIBUTE, true),
     THEN_BLOCK(Type.SINGLE_ATTRIBUTE, true),
     USING_DIAMOND_OPERATOR(Type.SINGLE_ATTRIBUTE, true),
     RANGE,
@@ -206,7 +207,7 @@ public enum ObservableProperty {
             if (rawValue instanceof Node) {
                 return (Node) rawValue;
             }
-                    if (rawValue instanceof Optional) {
+            if (rawValue instanceof Optional) {
                 Optional<Node> opt = (Optional<Node>) rawValue;
                 if (opt.isPresent()) {
                     return opt.get();
@@ -239,8 +240,8 @@ public enum ObservableProperty {
             }
             Optional<NodeList> opt = (Optional<NodeList>) rawValue;
             if (opt.isPresent()) {
-                    return opt.get();
-                }
+                return opt.get();
+            }
             return null;
         } catch (ClassCastException e) {
             throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
@@ -284,7 +285,7 @@ public enum ObservableProperty {
     }
 
     public boolean isNullOrNotPresent(Node node) {
-    	return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
+        return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
     }
 
     public boolean isNullOrEmpty(Node node) {

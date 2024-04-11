@@ -31,9 +31,9 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchEntryMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -95,25 +95,49 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
 
     private Type type;
 
+    private boolean isDefault;
+
     public SwitchEntry() {
-        this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>());
+        this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>(), false);
+    }
+
+    /**
+     * This constructor exists for backwards compatibility for code that instantiated `SwitchEntries` before
+     * the `isDefault` field was added.
+     */
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
+        this(labels, type, statements, false);
     }
 
     @AllFieldsConstructor
-    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
-        this(null, labels, type, statements);
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements, final boolean isDefault) {
+        this(null, labels, type, statements, isDefault);
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements) {
+    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, boolean isDefault) {
         super(tokenRange);
         setLabels(labels);
         setType(type);
         setStatements(statements);
+        setDefault(isDefault);
         customInitialization();
+    }
+
+    /**
+     * This is required for the ConcreteSyntaxModel, specifically to determine whether this
+     * entry uses the classic switch statement syntax (e.g. `case X: ...`) or the newer
+     * switch expression syntax (`case X -> ...`).
+     *
+     * The entry type is STATEMENT_GROUP in the switch statement case and all other values
+     * are for the various switch expressions.
+     */
+    @DerivedProperty
+    public boolean isSwitchStatementEntry() {
+        return type == Type.STATEMENT_GROUP;
     }
 
     @Override
@@ -240,5 +264,20 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SwitchEntry setDefault(final boolean isDefault) {
+        if (isDefault == this.isDefault) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.DEFAULT, this.isDefault, isDefault);
+        this.isDefault = isDefault;
+        return this;
     }
 }
