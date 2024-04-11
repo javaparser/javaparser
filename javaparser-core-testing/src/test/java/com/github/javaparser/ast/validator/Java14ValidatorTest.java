@@ -56,7 +56,7 @@ class Java14ValidatorTest {
         @Test
         void noSwitchDefaultCaseAllowed() {
             ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case null, default -> System.out.println(0);}"));
-            assertProblems(result, "(line 1,col 11) Switch case null, default not supported. Pay attention that this feature is supported starting from 'JAVA_21_INCOMPLETE' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+            assertProblems(result, "(line 1,col 11) Switch case null, default not supported. Pay attention that this feature is supported starting from 'JAVA_21' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
         }
     }
     /**

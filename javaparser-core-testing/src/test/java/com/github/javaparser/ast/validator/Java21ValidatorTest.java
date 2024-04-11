@@ -28,13 +28,13 @@ import com.github.javaparser.ast.expr.Expression;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ParseStart.EXPRESSION;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_21_INCOMPLETE;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_21;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
 
 class Java21ValidatorTest {
 
-    private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_21_INCOMPLETE));
+    private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_21));
 
     @Test
     void switchDefaultCaseAllowed() {

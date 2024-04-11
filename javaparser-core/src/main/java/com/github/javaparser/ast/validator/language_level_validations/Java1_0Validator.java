@@ -114,7 +114,7 @@ public class Java1_0Validator extends Validators {
 
     final Validator noSwitchNullDefault = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
         if (n.getLabels().isNonEmpty() && n.isDefault()) {
-            reporter.report(n, new UpgradeJavaMessage("Switch case null, default not supported.", ParserConfiguration.LanguageLevel.JAVA_21_INCOMPLETE));
+            reporter.report(n, new UpgradeJavaMessage("Switch case null, default not supported.", ParserConfiguration.LanguageLevel.JAVA_21));
         }
     });
 
