@@ -23,12 +23,14 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
+import com.github.javaparser.ast.stmt.SwitchStmt;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
 import static com.github.javaparser.utils.TestParser.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SwitchExprTest {
     @Test
@@ -209,5 +211,45 @@ class SwitchExprTest {
                 "        yield yield == yield ? yield : yield;\n" +
                 "    }\n" +
                 "};");
+    }
+
+    @Test
+    void switchPattern() {
+        SwitchStmt stmt = parseStatement("switch (value) {\n" +
+                "    case Box b -> System.out.println(b);\n" +
+                "}").asSwitchStmt();
+
+        assertEquals(1, stmt.getEntries().size());
+
+        SwitchEntry entry = stmt.getEntry(0);
+        assertFalse(entry.getGuard().isPresent());
+
+        assertEquals(1, entry.getLabels().size());
+
+        PatternExpr label = (PatternExpr) entry.getLabels().get(0);
+
+        assertEquals("b", label.getNameAsString());
+        assertEquals("Box", label.getTypeAsString());
+    }
+
+    @Test
+    void switchPatternWithGuard() {
+        SwitchStmt stmt = parseStatement("switch (value) {\n" +
+                "    case Box b when b.nonEmpty() -> System.out.println(b);\n" +
+                "}").asSwitchStmt();
+
+        assertEquals(1, stmt.getEntries().size());
+
+        SwitchEntry entry = stmt.getEntry(0);
+        assertTrue(entry.getGuard().isPresent());
+
+        Expression guard = entry.getGuard().get();
+        assertInstanceOf(MethodCallExpr.class, guard);
+
+        assertEquals(1, entry.getLabels().size());
+        PatternExpr label = (PatternExpr) entry.getLabels().get(0);
+
+        assertEquals("b", label.getNameAsString());
+        assertEquals("Box", label.getTypeAsString());
     }
 }

@@ -1729,6 +1729,11 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
 			if (selectedNode != null)
 				return;
 		}
+		if (n.getGuard().isPresent()) {
+			n.getGuard().get().accept(this, arg);
+			if (selectedNode != null)
+				return;
+		}
 		if (fn.apply(n, arg)) {
 			selectedNode = n;
 		}

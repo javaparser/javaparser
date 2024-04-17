@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
@@ -34,6 +36,8 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
 import java.util.List;
 
@@ -71,6 +75,19 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
                 } else {
                     throw new UnsupportedOperationException();
                 }
+            }
+        }
+
+        // look for declaration in a pattern label for this entry
+        for (Expression e : wrappedNode.getLabels()) {
+            if (!(e instanceof PatternExpr)) {
+                continue;
+            }
+
+            PatternExpr pattern = (PatternExpr) e;
+            if (pattern.getNameAsString().equals(name)) {
+                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(pattern, typeSolver);
+                return SymbolReference.solved(decl);
             }
         }
 

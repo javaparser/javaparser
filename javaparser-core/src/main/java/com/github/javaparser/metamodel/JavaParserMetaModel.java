@@ -771,6 +771,8 @@ public final class JavaParserMetaModel {
         localRecordDeclarationStmtMetaModel.getDeclaredPropertyMetaModels().add(localRecordDeclarationStmtMetaModel.recordDeclarationPropertyMetaModel);
         returnStmtMetaModel.expressionPropertyMetaModel = new PropertyMetaModel(returnStmtMetaModel, "expression", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false);
         returnStmtMetaModel.getDeclaredPropertyMetaModels().add(returnStmtMetaModel.expressionPropertyMetaModel);
+        switchEntryMetaModel.guardPropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "guard", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), true, false, false, false);
+        switchEntryMetaModel.getDeclaredPropertyMetaModels().add(switchEntryMetaModel.guardPropertyMetaModel);
         switchEntryMetaModel.isDefaultPropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "isDefault", boolean.class, Optional.empty(), false, false, false, false);
         switchEntryMetaModel.getDeclaredPropertyMetaModels().add(switchEntryMetaModel.isDefaultPropertyMetaModel);
         switchEntryMetaModel.labelsPropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "labels", com.github.javaparser.ast.expr.Expression.class, Optional.of(expressionMetaModel), false, false, true, false);
@@ -779,6 +781,8 @@ public final class JavaParserMetaModel {
         switchEntryMetaModel.getDeclaredPropertyMetaModels().add(switchEntryMetaModel.statementsPropertyMetaModel);
         switchEntryMetaModel.typePropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "type", com.github.javaparser.ast.stmt.SwitchEntry.Type.class, Optional.empty(), false, false, false, false);
         switchEntryMetaModel.getDeclaredPropertyMetaModels().add(switchEntryMetaModel.typePropertyMetaModel);
+        switchEntryMetaModel.guardedEntryPropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "guardedEntry", boolean.class, Optional.empty(), false, false, false, false);
+        switchEntryMetaModel.getDerivedPropertyMetaModels().add(switchEntryMetaModel.guardedEntryPropertyMetaModel);
         switchEntryMetaModel.switchStatementEntryPropertyMetaModel = new PropertyMetaModel(switchEntryMetaModel, "switchStatementEntry", boolean.class, Optional.empty(), false, false, false, false);
         switchEntryMetaModel.getDerivedPropertyMetaModels().add(switchEntryMetaModel.switchStatementEntryPropertyMetaModel);
         switchStmtMetaModel.entriesPropertyMetaModel = new PropertyMetaModel(switchStmtMetaModel, "entries", com.github.javaparser.ast.stmt.SwitchEntry.class, Optional.of(switchEntryMetaModel), false, false, true, false);
