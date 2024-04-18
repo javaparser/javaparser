@@ -108,10 +108,18 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
 
     /**
      * This constructor exists for backwards compatibility for code that instantiated `SwitchEntries` before
-     * the `isDefault` field was added.
+     * the `isDefault` and guard fields were added.
      */
     public SwitchEntry(final TokenRange tokenRange, final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
         this(tokenRange, labels, type, statements, false, null);
+    }
+
+    /**
+     * This constructor exists for backwards compatibility for code that instantiated `SwitchEntries` before
+     * the `isDefault` and guard fields were added.
+     */
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
+        this(null, labels, type, statements, false, null);
     }
 
     @AllFieldsConstructor
