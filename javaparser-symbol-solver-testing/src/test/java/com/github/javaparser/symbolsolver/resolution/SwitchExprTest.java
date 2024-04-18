@@ -25,22 +25,6 @@ public class SwitchExprTest {
     }
 
     @Test
-    public void todoremove() {
-        CompilationUnit cu = parse("record Box(int i) {}\n" +
-                "class Test {\n" +
-                "    public void foo(Object o) {\n" +
-                "        if (o instanceof String s) {\n" +
-                "            System.out.println(s);\n" +
-                "        }\n" +
-                "    }\n" +
-                "}"
-        );
-
-        NameExpr name = Navigator.findNameExpression(cu, "s").get();
-        assertEquals("java.lang.String", name.resolve().getType().describe());
-    }
-
-    @Test
     public void switchPatternShouldResolve() {
         CompilationUnit cu = parse("class Test {\n" +
                 "    public void foo(Object o) {\n" +
