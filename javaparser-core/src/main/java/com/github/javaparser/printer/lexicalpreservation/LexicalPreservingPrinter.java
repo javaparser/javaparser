@@ -427,7 +427,7 @@ public class LexicalPreservingPrinter {
         root.getTokenRange().ifPresent(rootTokenRange -> {
             for (JavaToken token : rootTokenRange) {
                 Range tokenRange = token.getRange().orElseThrow(() -> new RuntimeException("Token without range: " + token));
-                Node owner = findNodeForToken(root, tokenRange).orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
+                Node owner = root.findByRange(tokenRange).orElseThrow(() -> new RuntimeException("Token without node owning it: " + token));
                 if (!tokensByNode.containsKey(owner)) {
                     tokensByNode.put(owner, new LinkedList<>());
                 }
@@ -444,25 +444,6 @@ public class LexicalPreservingPrinter {
                 }
             }.visitBreadthFirst(root);
         });
-    }
-
-    private static Optional<Node> findNodeForToken(Node node, Range tokenRange) {
-        if (node.isPhantom()) {
-            return Optional.empty();
-        }
-        if (!node.hasRange()) {
-            return Optional.empty();
-        }
-        if (!node.getRange().get().contains(tokenRange)) {
-            return Optional.empty();
-        }
-        for (Node child : node.getChildNodes()) {
-            Optional<Node> found = findNodeForToken(child, tokenRange);
-            if (found.isPresent()) {
-                return found;
-            }
-        }
-        return Optional.of(node);
     }
 
     private static void storeInitialTextForOneNode(Node node, List<JavaToken> nodeTokens) {

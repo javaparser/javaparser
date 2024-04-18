@@ -981,6 +981,28 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         });
     }
 
+    /*
+     * Find a node by a range. The search is performed on the current node and its children.
+     */
+    public Optional<Node> findByRange(Range range) {
+        if (isPhantom()) {
+            return Optional.empty();
+        }
+        if (!hasRange()) {
+            return Optional.empty();
+        }
+        if (!getRange().get().contains(range)) {
+            return Optional.empty();
+        }
+        for (Node child : getChildNodes()) {
+            Optional<Node> found = child.findByRange(range);
+            if (found.isPresent()) {
+                return found;
+            }
+        }
+        return Optional.of(this);
+    }
+
     /**
      * Determines whether this node is an ancestor of the given node. A node is <i>not</i> an ancestor of itself.
      *
