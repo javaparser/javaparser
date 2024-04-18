@@ -52,8 +52,9 @@ public class SwitchExprTest {
                 "}"
         );
 
-        NameExpr name = Navigator.findNameExpression(cu, "s").get();
-        assertEquals("java.lang.String", name.resolve().getType().describe());
+        cu.findAll(NameExpr.class).stream().filter(nameExpr -> nameExpr.getNameAsString().equals("s")).forEach(nameExpr -> {
+            assertEquals("java.lang.String", nameExpr.resolve().getType().describe());
+        });
     }
 
     @Test
