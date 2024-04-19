@@ -154,15 +154,6 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         return type == Type.STATEMENT_GROUP;
     }
 
-    /**
-     * This is required for the ConcreteSyntaxModel for deciding if a "when" token should
-     * be expected or not.
-     */
-    @DerivedProperty
-    public boolean isGuardedEntry() {
-        return getGuard().isPresent();
-    }
-
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
