@@ -1418,6 +1418,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final SwitchEntry n, final A arg) {
         R result;
+        if (n.getGuard().isPresent()) {
+            result = n.getGuard().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getLabels().accept(this, arg);
             if (result != null)

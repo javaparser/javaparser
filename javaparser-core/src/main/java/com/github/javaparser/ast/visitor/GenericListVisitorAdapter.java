@@ -29,7 +29,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -1582,6 +1581,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final SwitchEntry n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
+        if (n.getGuard().isPresent()) {
+            tmp = n.getGuard().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         {
             tmp = n.getLabels().accept(this, arg);
             if (tmp != null)

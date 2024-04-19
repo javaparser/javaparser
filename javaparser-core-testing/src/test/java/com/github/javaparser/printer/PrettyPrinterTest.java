@@ -619,4 +619,36 @@ class PrettyPrinterTest {
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
     }
+
+    @Test
+    public void testSwitchPattern() {
+        String code = "class Foo {\n" +
+                "\n" +
+                "    void foo(Integer arg) {\n" +
+                "        switch(foo) {\n" +
+                "            case String s ->\n" +
+                "                System.out.println(s);\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
+
+    @Test
+    public void testSwitchPatternWithGuard() {
+        String code = "class Foo {\n" +
+                "\n" +
+                "    void foo(Integer arg) {\n" +
+                "        switch(foo) {\n" +
+                "            case String s when s.length() > 5 ->\n" +
+                "                System.out.println(s);\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
 }

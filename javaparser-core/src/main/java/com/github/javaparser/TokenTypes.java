@@ -21,7 +21,6 @@
 package com.github.javaparser;
 
 import com.github.javaparser.utils.LineSeparator;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
 /**
@@ -173,6 +172,7 @@ public class TokenTypes {
             case PERMITS:
             case SEALED:
             case NON_SEALED:
+            case WHEN:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:

@@ -97,4 +97,21 @@ class StatementTransformationsTest extends AbstractLexicalPreservingTest {
         assertTransformedToString(code, stmt);
     }
 
+    @Test
+    void switchPatternPreserved() {
+        String code = "switch (a) { case String s -> System.out.println(s); }";
+        Statement stmt = consider(code);
+        NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
+        statements.set(0, statements.get(0).clone());
+        assertTransformedToString(code, stmt);
+    }
+
+    @Test
+    void switchPatternWithGuardPreserved() {
+        String code = "switch (a) { case String s when s.length() > 5 -> System.out.println(s); }";
+        Statement stmt = consider(code);
+        NodeList<Statement> statements = stmt.asSwitchStmt().getEntry(0).getStatements();
+        statements.set(0, statements.get(0).clone());
+        assertTransformedToString(code, stmt);
+    }
 }

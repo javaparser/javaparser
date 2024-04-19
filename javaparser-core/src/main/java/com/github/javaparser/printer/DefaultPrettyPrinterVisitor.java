@@ -1247,6 +1247,12 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             if (n.getLabels().isNonEmpty() && n.isDefault()) {
                 printer.print(", default");
             }
+
+            if (n.getGuard().isPresent()) {
+                printer.print(" when ");
+                n.getGuard().get().accept(this, arg);
+            }
+
             printer.print(separator);
         }
         printer.println();

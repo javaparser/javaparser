@@ -366,6 +366,7 @@ TOKEN :
 | < EXPORTS: "exports" >
 | < PROVIDES: "provides" >
 | < TRANSITIVE: "transitive" >
+| < WHEN: "when" >
 }
 
 /* LITERALS */
@@ -2984,7 +2985,7 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
-        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> |
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> |
         // An actual plain old identifier
         <IDENTIFIER>
     ) { ret = token.image; setTokenKind(IDENTIFIER);}
@@ -4584,9 +4585,14 @@ SwitchExpr SwitchExpression():
  *     SwitchLabel:
  *         case CaseConstant {, CaseConstant}
  *         case null [, default]
+ *         case CasePattern [Guard]
  *         default
  *     CaseConstant:
  *         ConditionalExpression
+ *     CasePattern:
+ *         Pattern
+ *     Guard:
+ *         when Expression
  * }</pre>
  */
 SwitchEntry SwitchEntry():
@@ -4598,32 +4604,44 @@ SwitchEntry SwitchEntry():
     SwitchEntry ret;
     Statement stmt = null;
     boolean isDefault = false;
+    Expression guard = null;
 }
 {
     (
         "case" { begin=token(); }
         (
             /**
-             * Since null is also a conditional expression, a lookahead is necessary to determine
-             * whether this is the "null, default" case, or whether the null is a regular
-             * conditional expression. The check is negated to maintain the ordering in the JLS.
+             * For the sake of keeping the lookaheads simple and fast, the cases here aren't checked
+             * in the order in which they appear in the JLS. The order checked here corresponds to
              *
-             * In the "null, default" case, the next 3 tokens will be "null" "," "default". Since
-             * "default" can only be preceded by "," in this specific case (as "default" cannot
-             * appear in a list elsewhere), it is sufficient to check that "," "default" appear
-             * in the correct order. Since the only label that can appear before the "default"
-             * is the single-token "null", the "," token must also be the second token.
+             * SwitchLabel:
+             *   case null [, default]
+             *   case CasePattern [Guard]
+             *   case CaseConstant {, CaseConstant}
+             *
+             * This LOOKAHEAD(3) checks specifically for the "null , default" token sequence.
              */
-            LOOKAHEAD({!(getToken(2).image.equals(",") && getToken(3).image.equals("default"))})
+            LOOKAHEAD(3)
+            label = NullLiteral() { labels = add(labels, label); }
+            ","
+            "default" { isDefault = true; }
+          |
+            /**
+            * This lookahead is necessary to avoid ambiguity with the ConditionalExpression branch
+            * below.
+            */
+            LOOKAHEAD(3)
+            label = PatternExpression() { labels = add(labels, label); }
+            [
+              "when"
+              guard = ConditionalExpression()
+            ]
+          |
             label = ConditionalExpression() { labels = add(labels, label); }
             (
                 ","
                 label = ConditionalExpression()  { labels = add(labels, label); }
             )*
-          |
-            label = NullLiteral() { labels = add(labels, label); }
-            ","
-            "default" { isDefault = true; }
         )
      |
         "default" { begin=token(); isDefault = true; }
@@ -4631,7 +4649,7 @@ SwitchEntry SwitchEntry():
     (
         ":"
         stmts = Statements()
-        { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts, isDefault); }
+        { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts, isDefault, guard); }
      |
         "->"
         (
@@ -4639,21 +4657,21 @@ SwitchEntry SwitchEntry():
             {
                 TokenRange r=range(begin, token());
                 stmts.add(stmt);
-                ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault);
+                ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault, guard);
             }
          |
             stmt = Block()
             {
                 TokenRange r=range(begin, token());
                 stmts.add(stmt);
-                ret = new SwitchEntry(r, labels, BLOCK, stmts, isDefault);
+                ret = new SwitchEntry(r, labels, BLOCK, stmts, isDefault, guard);
             }
          |
             stmt = ThrowStatement()
             {
                 TokenRange r=range(begin, token());
                 stmts.add(stmt);
-                ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts, isDefault);
+                ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts, isDefault, guard);
             }
         )
     )

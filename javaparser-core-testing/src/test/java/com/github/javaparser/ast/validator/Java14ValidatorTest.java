@@ -58,6 +58,13 @@ class Java14ValidatorTest {
             ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case null, default -> System.out.println(0);}"));
             assertProblems(result, "(line 1,col 11) Switch case null, default not supported. Pay attention that this feature is supported starting from 'JAVA_21' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
         }
+
+        @Test
+        void noSwitchPatternAllowed() {
+            ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case String s -> System.out.println(0);}"));
+            assertProblems(result, "(line 1,col 11) Switch patterns not supported. Pay attention that this feature is supported starting from 'JAVA_21' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        }
+
     }
     /**
      * Records are available within Java 14 (preview), Java 15 (2nd preview), and Java 16 (release).
