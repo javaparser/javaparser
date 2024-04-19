@@ -31,6 +31,7 @@ import static com.github.javaparser.ParseStart.EXPRESSION;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_21;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 class Java21ValidatorTest {
 
@@ -39,6 +40,12 @@ class Java21ValidatorTest {
     @Test
     void switchDefaultCaseAllowed() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case null, default -> System.out.println(0);}"));
+        assertNoProblems(result);
+    }
+
+    @Test
+    void switchPatternWithGuardAllowed() {
+        ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case String s when s.length() > 5 -> System.out.println(0);}"));
         assertNoProblems(result);
     }
 

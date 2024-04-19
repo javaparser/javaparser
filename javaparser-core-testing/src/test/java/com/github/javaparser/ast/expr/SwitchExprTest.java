@@ -26,6 +26,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
+import com.github.javaparser.resolution.Navigator;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.*;
@@ -234,13 +235,13 @@ class SwitchExprTest {
 
     @Test
     void switchPatternWithGuard() {
-        SwitchStmt stmt = parseStatement("switch (value) {\n" +
+        SwitchExpr expr = parseExpression("switch (value) {\n" +
                 "    case Box b when b.nonEmpty() -> System.out.println(b);\n" +
-                "}").asSwitchStmt();
+                "}").asSwitchExpr();
 
-        assertEquals(1, stmt.getEntries().size());
+        assertEquals(1, expr.getEntries().size());
 
-        SwitchEntry entry = stmt.getEntry(0);
+        SwitchEntry entry = expr.getEntry(0);
         assertTrue(entry.getGuard().isPresent());
 
         Expression guard = entry.getGuard().get();
@@ -251,5 +252,39 @@ class SwitchExprTest {
 
         assertEquals("b", label.getNameAsString());
         assertEquals("Box", label.getTypeAsString());
+    }
+
+    @Test
+    void testRemoveGuard() {
+        SwitchExpr expr = parseExpression("switch (value) {\n" +
+                "    case Box b when b.nonEmpty() -> {}\n" +
+                "}").asSwitchExpr();
+
+        SwitchEntry entry = expr.getEntry(0);
+
+        assertTrue(entry.getGuard().isPresent());
+
+        entry.removeGuard();
+
+        assertFalse(entry.getGuard().isPresent());
+
+        assertFalse(Navigator.findNameExpression(entry, "b").isPresent());
+    }
+
+    @Test
+    void testRemoveWithGuard() {
+        SwitchExpr expr = parseExpression("switch (value) {\n" +
+                "    case Box b when b.nonEmpty() -> {}\n" +
+                "}").asSwitchExpr();
+
+        SwitchEntry entry = expr.getEntry(0);
+
+        assertTrue(entry.getGuard().isPresent());
+
+        entry.remove(entry.getGuard().get());
+
+        assertFalse(entry.getGuard().isPresent());
+
+        assertFalse(Navigator.findNameExpression(entry, "b").isPresent());
     }
 }
