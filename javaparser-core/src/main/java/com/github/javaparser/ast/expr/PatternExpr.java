@@ -21,8 +21,53 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.AllFieldsConstructor;
+import java.util.Optional;
+import java.util.function.Consumer;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.PatternExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.TokenRange;
 
 public abstract class PatternExpr extends Expression {
+
     @AllFieldsConstructor
-    public PatternExpr() { }
+    public PatternExpr() {
+    }
+
+    @Override
+    public boolean isPatternExpr() {
+        return true;
+    }
+
+    @Override
+    public PatternExpr asPatternExpr() {
+        return this;
+    }
+
+    @Override
+    public Optional<PatternExpr> toPatternExpr() {
+        return Optional.of(this);
+    }
+
+    public void ifPatternExpr(Consumer<PatternExpr> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public PatternExpr clone() {
+        return (PatternExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public PatternExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.patternExprMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public PatternExpr(TokenRange tokenRange) {
+        super(tokenRange);
+        customInitialization();
+    }
 }

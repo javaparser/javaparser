@@ -859,18 +859,37 @@ public abstract class Expression extends Node {
         return scope.elidesTypeArguments() && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isTypePatternExpr() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public TypePatternExpr asTypePatternExpr() {
         throw new IllegalStateException(f("%s is not TypePatternExpr, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TypePatternExpr> toTypePatternExpr() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypePatternExpr(Consumer<TypePatternExpr> action) {
+    }
+
+    public boolean isPatternExpr() {
+        return false;
+    }
+
+    public PatternExpr asPatternExpr() {
+        throw new IllegalStateException(f("%s is not PatternExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<PatternExpr> toPatternExpr() {
+        return Optional.empty();
+    }
+
+    public void ifPatternExpr(Consumer<PatternExpr> action) {
     }
 }

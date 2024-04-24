@@ -220,20 +220,25 @@ public class TypePatternExpr extends Expression implements NodeWithSimpleName<Ty
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isTypePatternExpr() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public TypePatternExpr asTypePatternExpr() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TypePatternExpr> toTypePatternExpr() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypePatternExpr(Consumer<TypePatternExpr> action) {
         action.accept(this);
     }
