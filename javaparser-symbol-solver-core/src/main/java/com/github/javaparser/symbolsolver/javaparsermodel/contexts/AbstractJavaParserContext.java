@@ -144,19 +144,19 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         // First check if there are any pattern expressions available to this node.
         Context parentContext = optionalParentContext.get();
         if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
-            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
+            List<TypePatternExpr> typePatternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
 
-            Optional<PatternExpr> localResolutionResults = patternExprs
+            Optional<TypePatternExpr> localResolutionResults = typePatternExprs
                     .stream()
                     .filter(vd -> vd.getNameAsString().equals(name))
                     .findFirst();
 
             if (localResolutionResults.isPresent()) {
-                if (patternExprs.size() == 1) {
+                if (typePatternExprs.size() == 1) {
                     JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(localResolutionResults.get(), typeSolver);
                     return SymbolReference.solved(decl);
                 }
-                if(patternExprs.size() > 1) {
+                if(typePatternExprs.size() > 1) {
                     throw new IllegalStateException("Unexpectedly more than one reference in scope");
                 }
             }

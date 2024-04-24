@@ -22,7 +22,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -79,14 +79,14 @@ class JavaParserSymbolDeclarationTest {
     }
 
     /**
-     * Try to create a pattern variable using {@link JavaParserSymbolDeclaration#patternVar(PatternExpr, TypeSolver)} and check
+     * Try to create a pattern variable using {@link JavaParserSymbolDeclaration#patternVar(TypePatternExpr, TypeSolver)} and check
      * if the returned declaration is marked as a pattern and can be converted to a
      * {@link com.github.javaparser.resolution.declarations.ResolvedPatternDeclaration} using {@link ResolvedValueDeclaration#asPattern()}.
      */
     @Test
     void createdPatternVariableShouldBeMarkedAsPatternVar() {
-        PatternExpr patternExpr = new PatternExpr();
-        ResolvedValueDeclaration patternVar = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
+        TypePatternExpr typePatternExpr = new TypePatternExpr();
+        ResolvedValueDeclaration patternVar = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
 
         assertTrue(patternVar.isPattern());
         assertDoesNotThrow(patternVar::asPattern);

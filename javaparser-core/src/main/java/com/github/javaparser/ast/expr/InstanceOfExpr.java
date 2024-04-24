@@ -92,7 +92,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  *
- * @see com.github.javaparser.ast.expr.PatternExpr
+ * @see TypePatternExpr
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
@@ -101,7 +101,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     private Expression expression;
 
     @OptionalProperty
-    private PatternExpr pattern;
+    private TypePatternExpr pattern;
 
     private ReferenceType type;
 
@@ -114,7 +114,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     }
 
     @AllFieldsConstructor
-    public InstanceOfExpr(final Expression expression, final ReferenceType type, final PatternExpr pattern) {
+    public InstanceOfExpr(final Expression expression, final ReferenceType type, final TypePatternExpr pattern) {
         this(null, expression, type, pattern);
     }
 
@@ -122,7 +122,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public InstanceOfExpr(TokenRange tokenRange, Expression expression, ReferenceType type, PatternExpr pattern) {
+    public InstanceOfExpr(TokenRange tokenRange, Expression expression, ReferenceType type, TypePatternExpr pattern) {
         super(tokenRange);
         setExpression(expression);
         setType(type);
@@ -181,7 +181,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<PatternExpr> getPattern() {
+    public Optional<TypePatternExpr> getPattern() {
         return Optional.ofNullable(pattern);
     }
 
@@ -219,7 +219,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public InstanceOfExpr removePattern() {
-        return setPattern((PatternExpr) null);
+        return setPattern((TypePatternExpr) null);
     }
 
     @Override
@@ -234,7 +234,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
         }
         if (pattern != null) {
             if (node == pattern) {
-                setPattern((PatternExpr) replacementNode);
+                setPattern((TypePatternExpr) replacementNode);
                 return true;
             }
         }
@@ -260,7 +260,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setPattern(final PatternExpr pattern) {
+    public InstanceOfExpr setPattern(final TypePatternExpr pattern) {
         if (pattern == this.pattern) {
             return this;
         }

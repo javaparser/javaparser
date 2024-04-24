@@ -73,7 +73,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public class PatternExpr extends Expression implements NodeWithSimpleName<PatternExpr>, NodeWithType<PatternExpr, ReferenceType>, NodeWithFinalModifier<PatternExpr> {
+public class TypePatternExpr extends Expression implements NodeWithSimpleName<TypePatternExpr>, NodeWithType<TypePatternExpr, ReferenceType>, NodeWithFinalModifier<TypePatternExpr> {
 
     private NodeList<Modifier> modifiers;
 
@@ -81,12 +81,12 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
 
     private ReferenceType type;
 
-    public PatternExpr() {
+    public TypePatternExpr() {
         this(null, new NodeList<>(), new ClassOrInterfaceType(), new SimpleName());
     }
 
     @AllFieldsConstructor
-    public PatternExpr(final NodeList<Modifier> modifiers, final ReferenceType type, SimpleName name) {
+    public TypePatternExpr(final NodeList<Modifier> modifiers, final ReferenceType type, SimpleName name) {
         this(null, modifiers, type, name);
     }
 
@@ -94,7 +94,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, ReferenceType type, SimpleName name) {
+    public TypePatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, ReferenceType type, SimpleName name) {
         super(tokenRange);
         setModifiers(modifiers);
         setType(type);
@@ -125,7 +125,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PatternExpr setName(final SimpleName name) {
+    public TypePatternExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -139,7 +139,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PatternExpr setType(final ReferenceType type) {
+    public TypePatternExpr setType(final ReferenceType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -160,19 +160,19 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public PatternExpr asPatternExpr() {
+    public TypePatternExpr asPatternExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<PatternExpr> toPatternExpr() {
+    public Optional<TypePatternExpr> toPatternExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifPatternExpr(Consumer<PatternExpr> action) {
+    public void ifPatternExpr(Consumer<TypePatternExpr> action) {
         action.accept(this);
     }
 
@@ -201,8 +201,8 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public PatternExpr clone() {
-        return (PatternExpr) accept(new CloneVisitor(), null);
+    public TypePatternExpr clone() {
+        return (TypePatternExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -217,7 +217,7 @@ public class PatternExpr extends Expression implements NodeWithSimpleName<Patter
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PatternExpr setModifiers(final NodeList<Modifier> modifiers) {
+    public TypePatternExpr setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;

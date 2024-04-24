@@ -900,8 +900,8 @@ class ObjectIdentityEqualsVisitorTest {
 
     @Test
     void equals_GivenPatternExpr() {
-        Node nodeA = new PatternExpr();
-        Node nodeB = new PatternExpr();
+        Node nodeA = new TypePatternExpr();
+        Node nodeB = new TypePatternExpr();
 
         Assertions.assertTrue(ObjectIdentityEqualsVisitor.equals(nodeA, nodeA));
         Assertions.assertFalse(ObjectIdentityEqualsVisitor.equals(nodeA, nodeB));

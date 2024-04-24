@@ -21,7 +21,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.InstanceOfExpr;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -44,7 +44,7 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        Optional<PatternExpr> optionalPatternExpr = wrappedNode.getPattern();
+        Optional<TypePatternExpr> optionalPatternExpr = wrappedNode.getPattern();
         if(optionalPatternExpr.isPresent()) {
             if(optionalPatternExpr.get().getNameAsString().equals(name)) {
                 JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr.get(), typeSolver);
@@ -60,7 +60,7 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
 
         Context parentContext = optionalParentContext.get();
         if(parentContext instanceof BinaryExprContext) {
-            Optional<PatternExpr> optionalPatternExpr1 = parentContext.patternExprInScope(name);
+            Optional<TypePatternExpr> optionalPatternExpr1 = parentContext.patternExprInScope(name);
             if(optionalPatternExpr1.isPresent()) {
                 JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr1.get(), typeSolver);
                 return SymbolReference.solved(decl);
@@ -73,8 +73,8 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
     }
 
     @Override
-    public List<PatternExpr> patternExprsExposedFromChildren() {
-        List<PatternExpr> results = new ArrayList<>();
+    public List<TypePatternExpr> patternExprsExposedFromChildren() {
+        List<TypePatternExpr> results = new ArrayList<>();
 
         // If this instanceof expression has a pattern, add it to the list.
         wrappedNode.getPattern().ifPresent(results::add);

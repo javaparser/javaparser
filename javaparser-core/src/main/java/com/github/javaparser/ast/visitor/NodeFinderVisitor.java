@@ -73,7 +73,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
@@ -2495,7 +2495,7 @@ public class NodeFinderVisitor extends VoidVisitorAdapter<Range> {
 	}
 
 	@Override
-	public void visit(final PatternExpr n, final Range arg) {
+	public void visit(final TypePatternExpr n, final Range arg) {
 
 		{
 			n.getModifiers().accept(this, arg);

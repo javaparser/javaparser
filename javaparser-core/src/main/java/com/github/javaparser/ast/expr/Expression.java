@@ -789,17 +789,17 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public PatternExpr asPatternExpr() {
+    public TypePatternExpr asPatternExpr() {
         throw new IllegalStateException(f("%s is not PatternExpr, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<PatternExpr> toPatternExpr() {
+    public Optional<TypePatternExpr> toPatternExpr() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifPatternExpr(Consumer<PatternExpr> action) {
+    public void ifPatternExpr(Consumer<TypePatternExpr> action) {
     }
 
     /**

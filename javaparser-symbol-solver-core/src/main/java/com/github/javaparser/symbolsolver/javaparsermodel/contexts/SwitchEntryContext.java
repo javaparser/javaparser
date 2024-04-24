@@ -22,7 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
@@ -80,11 +80,11 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
 
         // look for declaration in a pattern label for this entry
         for (Expression e : wrappedNode.getLabels()) {
-            if (!(e instanceof PatternExpr)) {
+            if (!(e instanceof TypePatternExpr)) {
                 continue;
             }
 
-            PatternExpr pattern = (PatternExpr) e;
+            TypePatternExpr pattern = (TypePatternExpr) e;
             if (pattern.getNameAsString().equals(name)) {
                 JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(pattern, typeSolver);
                 return SymbolReference.solved(decl);

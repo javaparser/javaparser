@@ -1056,7 +1056,7 @@ class NoCommentHashCodeVisitorTest {
 
 	@Test
 	void testVisitPatternExpr() {
-		PatternExpr node = spy(new PatternExpr());
+		TypePatternExpr node = spy(new TypePatternExpr());
 		NoCommentHashCodeVisitor.hashCode(node);
 
 		verify(node, times(1)).getName();

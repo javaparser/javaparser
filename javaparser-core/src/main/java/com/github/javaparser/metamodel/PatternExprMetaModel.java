@@ -21,7 +21,7 @@
 package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 
 import java.util.Optional;
 
@@ -39,7 +39,7 @@ public class PatternExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     PatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, PatternExpr.class, "PatternExpr", "com.github.javaparser.ast.expr", false, false);
+        super(superBaseNodeMetaModel, TypePatternExpr.class, "PatternExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
     public PropertyMetaModel modifiersPropertyMetaModel;

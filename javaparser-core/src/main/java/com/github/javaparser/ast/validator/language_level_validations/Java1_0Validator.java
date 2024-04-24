@@ -119,7 +119,7 @@ public class Java1_0Validator extends Validators {
     });
 
     final Validator noSwitchPatterns = new SingleNodeTypeValidator<>(SwitchEntry.class, (n, reporter) -> {
-        if (n.getGuard().isPresent() || n.getLabels().stream().anyMatch(expr -> expr instanceof PatternExpr)) {
+        if (n.getGuard().isPresent() || n.getLabels().stream().anyMatch(expr -> expr instanceof TypePatternExpr)) {
             reporter.report(n, new UpgradeJavaMessage("Switch patterns not supported.", ParserConfiguration.LanguageLevel.JAVA_21));
         }
     });

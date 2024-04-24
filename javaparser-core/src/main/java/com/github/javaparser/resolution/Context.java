@@ -24,7 +24,7 @@ package com.github.javaparser.resolution;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
@@ -228,19 +228,19 @@ public interface Context {
      * The pattern expressions that are declared in this immediate context and made visible to a given child.
      * This list could include values which are shadowed.
      */
-    default List<PatternExpr> patternExprsExposedToChild(Node child) {
+    default List<TypePatternExpr> patternExprsExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
     /**
      */
-    default List<PatternExpr> patternExprsExposedFromChildren() {
+    default List<TypePatternExpr> patternExprsExposedFromChildren() {
         return Collections.emptyList();
     }
 
     /**
      */
-    default List<PatternExpr> negatedPatternExprsExposedFromChildren() {
+    default List<TypePatternExpr> negatedPatternExprsExposedFromChildren() {
         return Collections.emptyList();
     }
 
@@ -336,7 +336,7 @@ public interface Context {
      *  }
      * }</pre>
      */
-    default Optional<PatternExpr> patternExprInScope(String name) {
+    default Optional<TypePatternExpr> patternExprInScope(String name) {
         if (!getParent().isPresent()) {
             return Optional.empty();
         }
@@ -347,7 +347,7 @@ public interface Context {
 
         // First check if the pattern is directly declared within this context.
         Node wrappedNode = getWrappedNode();
-        Optional<PatternExpr> localResolutionResults = parentContext
+        Optional<TypePatternExpr> localResolutionResults = parentContext
                 .patternExprsExposedToChild(wrappedNode)
                 .stream()
                 .filter(vd -> vd.getNameAsString().equals(name))

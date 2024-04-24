@@ -1063,7 +1063,7 @@ public class GenericVisitorAdapterTest {
 
         // When
         Mockito.when(node.getExpression()).thenReturn(mock(Expression.class));
-        Mockito.when(node.getPattern()).thenReturn(Optional.of(mock(PatternExpr.class)));
+        Mockito.when(node.getPattern()).thenReturn(Optional.of(mock(TypePatternExpr.class)));
         Mockito.when(node.getType()).thenReturn(mock(ReferenceType.class));
         Mockito.when(node.getComment()).thenReturn(Optional.of(mock(Comment.class)));
 
@@ -2456,7 +2456,7 @@ public class GenericVisitorAdapterTest {
     void visit_GivenPatternExpr() {
         // Given
         Object argument = mock(Object.class);
-        PatternExpr node = mock(PatternExpr.class);
+        TypePatternExpr node = mock(TypePatternExpr.class);
 
         // When
         Mockito.when(node.getModifiers()).thenReturn(mock(NodeList.class));

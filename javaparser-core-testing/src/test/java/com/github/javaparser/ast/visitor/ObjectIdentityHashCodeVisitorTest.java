@@ -450,7 +450,7 @@ class ObjectIdentityHashCodeVisitorTest {
 
 	@Test
 	void testVisitPatternExpr() {
-		PatternExpr node = spy(new PatternExpr());
+		TypePatternExpr node = spy(new TypePatternExpr());
 		assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));
 	}
 
