@@ -138,7 +138,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.NormalAnnotationExpr.class);
         add(com.github.javaparser.ast.expr.NullLiteralExpr.class);
         add(com.github.javaparser.ast.expr.ObjectCreationExpr.class);
-        add(TypePatternExpr.class);
+        add(com.github.javaparser.ast.expr.PatternExpr.class);
         add(com.github.javaparser.ast.expr.SingleMemberAnnotationExpr.class);
         add(com.github.javaparser.ast.expr.SimpleName.class);
         add(com.github.javaparser.ast.expr.SuperExpr.class);
@@ -146,6 +146,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(com.github.javaparser.ast.expr.TextBlockLiteralExpr.class);
         add(com.github.javaparser.ast.expr.ThisExpr.class);
         add(com.github.javaparser.ast.expr.TypeExpr.class);
+        add(com.github.javaparser.ast.expr.TypePatternExpr.class);
         add(com.github.javaparser.ast.expr.UnaryExpr.class);
         add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
