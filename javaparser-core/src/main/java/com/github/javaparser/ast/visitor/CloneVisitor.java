@@ -507,7 +507,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     @Override
     public Visitable visit(final InstanceOfExpr n, final Object arg) {
         Expression expression = cloneNode(n.getExpression(), arg);
-        TypePatternExpr pattern = cloneNode(n.getPattern(), arg);
+        PatternExpr pattern = cloneNode(n.getPattern(), arg);
         ReferenceType type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         InstanceOfExpr r = new InstanceOfExpr(n.getTokenRange().orElse(null), expression, type, pattern);
