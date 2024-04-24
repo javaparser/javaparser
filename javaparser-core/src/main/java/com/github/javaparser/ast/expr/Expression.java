@@ -779,25 +779,6 @@ public abstract class Expression extends Node {
     public void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
     }
 
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isPatternExpr() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public TypePatternExpr asPatternExpr() {
-        throw new IllegalStateException(f("%s is not PatternExpr, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<TypePatternExpr> toPatternExpr() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifPatternExpr(Consumer<TypePatternExpr> action) {
-    }
-
     /**
      * See https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.2
      * @return true if the expression is a standalone expression
