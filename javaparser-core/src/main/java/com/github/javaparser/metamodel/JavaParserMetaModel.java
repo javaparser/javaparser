@@ -1078,7 +1078,7 @@ public final class JavaParserMetaModel {
     public static final TypeExprMetaModel typeExprMetaModel = new TypeExprMetaModel(Optional.of(expressionMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    public static final TypePatternExprMetaModel typePatternExprMetaModel = new TypePatternExprMetaModel(Optional.of(expressionMetaModel));
+    public static final TypePatternExprMetaModel typePatternExprMetaModel = new TypePatternExprMetaModel(Optional.of(patternExprMetaModel));
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     public static final UnaryExprMetaModel unaryExprMetaModel = new UnaryExprMetaModel(Optional.of(expressionMetaModel));

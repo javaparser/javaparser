@@ -23,10 +23,12 @@ package com.github.javaparser.ast.expr;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import java.util.Optional;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.PatternExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.Node;
 
 public abstract class PatternExpr extends Expression {
 
@@ -35,30 +37,37 @@ public abstract class PatternExpr extends Expression {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isPatternExpr() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public PatternExpr asPatternExpr() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<PatternExpr> toPatternExpr() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPatternExpr(Consumer<PatternExpr> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public PatternExpr clone() {
         return (PatternExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public PatternExprMetaModel getMetaModel() {
         return JavaParserMetaModel.patternExprMetaModel;
     }
@@ -66,6 +75,7 @@ public abstract class PatternExpr extends Expression {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public PatternExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
