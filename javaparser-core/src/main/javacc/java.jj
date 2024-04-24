@@ -3325,7 +3325,7 @@ Expression EqualityExpression():
  *         ReferenceType Identifier
  * }<pre>
  */
-PatternExpr PatternExpression():
+TypePatternExpr TypePatternExpression():
 {
     ModifierHolder modifier;
     ReferenceType type;
@@ -3335,7 +3335,7 @@ PatternExpr PatternExpression():
     modifier = Modifiers()
     type = ReferenceType(modifier.annotations)
     name = SimpleName()
-    { return new PatternExpr(range(type, token()), modifier.modifiers, type, name); }
+    { return new TypePatternExpr(range(type, token()), modifier.modifiers, type, name); }
 }
 
 
@@ -3357,15 +3357,15 @@ Expression InstanceOfExpression():
     Expression ret;
     ReferenceType type;
     NodeList<AnnotationExpr> annotations;
-    PatternExpr pattern;
+    TypePatternExpr pattern;
 }
 {
     ret = RelationalExpression()
     [
         "instanceof"
         (
-            LOOKAHEAD(PatternExpression())
-            pattern = PatternExpression()
+            LOOKAHEAD(TypePatternExpression())
+            pattern = TypePatternExpression()
             { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType(), pattern); }
          |
             type = AnnotatedReferenceType()
@@ -4631,7 +4631,7 @@ SwitchEntry SwitchEntry():
             * below.
             */
             LOOKAHEAD(3)
-            label = PatternExpression() { labels = add(labels, label); }
+            label = TypePatternExpression() { labels = add(labels, label); }
             [
               "when"
               guard = ConditionalExpression()
