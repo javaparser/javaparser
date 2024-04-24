@@ -3316,6 +3316,14 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+PatternExpr PatternExpression():
+{
+    PatternExpr ret;
+}
+{
+    ret = TypePatternExpression()
+    { return ret; }
+}
 
 /**
  * https://openjdk.java.net/jeps/375
@@ -3357,15 +3365,15 @@ Expression InstanceOfExpression():
     Expression ret;
     ReferenceType type;
     NodeList<AnnotationExpr> annotations;
-    TypePatternExpr pattern;
+    PatternExpr pattern;
 }
 {
     ret = RelationalExpression()
     [
         "instanceof"
         (
-            LOOKAHEAD(TypePatternExpression())
-            pattern = TypePatternExpression()
+            LOOKAHEAD(PatternExpression())
+            pattern = PatternExpression()
             { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType(), pattern); }
          |
             type = AnnotatedReferenceType()
@@ -4631,7 +4639,7 @@ SwitchEntry SwitchEntry():
             * below.
             */
             LOOKAHEAD(3)
-            label = TypePatternExpression() { labels = add(labels, label); }
+            label = PatternExpression() { labels = add(labels, label); }
             [
               "when"
               guard = ConditionalExpression()
