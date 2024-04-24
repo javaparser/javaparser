@@ -20,7 +20,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.expr.TypePatternExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
@@ -36,8 +36,8 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
     }
 
     @Override
-    public List<TypePatternExpr> patternExprsExposedFromChildren() {
-        List<TypePatternExpr> results = new ArrayList<>();
+    public List<PatternExpr> patternExprsExposedFromChildren() {
+        List<PatternExpr> results = new ArrayList<>();
 
         // Propagate any pattern expressions "up"
         if(wrappedNode.getOperator() == UnaryExpr.Operator.LOGICAL_COMPLEMENT) {
@@ -55,8 +55,8 @@ public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
     }
 
     @Override
-    public List<TypePatternExpr> negatedPatternExprsExposedFromChildren() {
-        List<TypePatternExpr> results = new ArrayList<>();
+    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
+        List<PatternExpr> results = new ArrayList<>();
 
         // Propagate any pattern expressions "up"
         if(wrappedNode.getOperator() == UnaryExpr.Operator.LOGICAL_COMPLEMENT) {

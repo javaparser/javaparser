@@ -23,7 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.TypePatternExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.resolution.TypeSolver;
 
 import java.util.Collections;
@@ -48,13 +48,13 @@ public class VariableDeclaratorContext extends AbstractJavaParserContext<Variabl
     }
 
     @Override
-    public List<TypePatternExpr> patternExprsExposedFromChildren() {
+    public List<PatternExpr> patternExprsExposedFromChildren() {
         // Variable declarators never make pattern expressions available.
         return Collections.emptyList();
     }
 
     @Override
-    public List<TypePatternExpr> negatedPatternExprsExposedFromChildren() {
+    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
         // Variable declarators never make pattern expressions available.
         return Collections.emptyList();
     }

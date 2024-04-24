@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
@@ -39,13 +40,13 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     }
 
     @Override
-    public List<TypePatternExpr> patternExprsExposedFromChildren() {
+    public List<PatternExpr> patternExprsExposedFromChildren() {
 
         BinaryExpr binaryExpr = wrappedNode;
         Expression leftBranch = binaryExpr.getLeft();
         Expression rightBranch = binaryExpr.getRight();
 
-        List<TypePatternExpr> results = new ArrayList<>();
+        List<PatternExpr> results = new ArrayList<>();
 
         if (binaryExpr.getOperator().equals(BinaryExpr.Operator.EQUALS)) {
             if (rightBranch.isBooleanLiteralExpr()) {
@@ -95,13 +96,13 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     }
 
     @Override
-    public List<TypePatternExpr> negatedPatternExprsExposedFromChildren() {
+    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
 
         BinaryExpr binaryExpr = wrappedNode;
         Expression leftBranch = binaryExpr.getLeft();
         Expression rightBranch = binaryExpr.getRight();
 
-        List<TypePatternExpr> results = new ArrayList<>();
+        List<PatternExpr> results = new ArrayList<>();
 
         // FIXME: Redo the `.getValue() == true` to take more complex code into account when determining if definitively true (e.g. `
         if (binaryExpr.getOperator().equals(BinaryExpr.Operator.EQUALS)) {
@@ -161,7 +162,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         return results;
     }
 
-    private List<TypePatternExpr> patternExprsExposedToDirectParentFromBranch(Expression branch) {
+    private List<PatternExpr> patternExprsExposedToDirectParentFromBranch(Expression branch) {
         if (branch.isEnclosedExpr() || branch.isBinaryExpr() || branch.isUnaryExpr() || branch.isInstanceOfExpr()) {
             Context branchContext = JavaParserFactory.getContext(branch, typeSolver);
             return branchContext.patternExprsExposedFromChildren();
@@ -170,7 +171,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         return new ArrayList<>();
     }
 
-    private List<TypePatternExpr> negatedPatternExprsExposedToDirectParentFromBranch(Expression branch) {
+    private List<PatternExpr> negatedPatternExprsExposedToDirectParentFromBranch(Expression branch) {
         if (branch.isEnclosedExpr() || branch.isBinaryExpr() || branch.isUnaryExpr() || branch.isInstanceOfExpr()) {
             Context branchContext = JavaParserFactory.getContext(branch, typeSolver);
             return branchContext.negatedPatternExprsExposedFromChildren();
@@ -179,12 +180,12 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         return new ArrayList<>();
     }
 
-    public List<TypePatternExpr> patternExprsExposedToChild(Node child) {
+    public List<PatternExpr> patternExprsExposedToChild(Node child) {
         BinaryExpr binaryExpr = wrappedNode;
         Expression leftBranch = binaryExpr.getLeft();
         Expression rightBranch = binaryExpr.getRight();
 
-        List<TypePatternExpr> results = new ArrayList<>();
+        List<PatternExpr> results = new ArrayList<>();
         if (child == leftBranch) {
             results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
         } else if (child == rightBranch) {
@@ -202,15 +203,15 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
     }
 
 
-    public Optional<TypePatternExpr> patternExprInScope(String name) {
+    public Optional<PatternExpr> patternExprInScope(String name) {
         BinaryExpr binaryExpr = wrappedNode;
         Expression leftBranch = binaryExpr.getLeft();
         Expression rightBranch = binaryExpr.getRight();
 
-        List<TypePatternExpr> typePatternExprs = patternExprsExposedToDirectParentFromBranch(leftBranch);
-        Optional<TypePatternExpr> localResolutionResults = typePatternExprs
+        List<PatternExpr> patternExprs = patternExprsExposedToDirectParentFromBranch(leftBranch);
+        Optional<PatternExpr> localResolutionResults = patternExprs
                 .stream()
-                .filter(vd -> vd.getNameAsString().equals(name))
+                .filter(vd -> vd instanceof TypePatternExpr && ((TypePatternExpr) vd).getNameAsString().equals(name))
                 .findFirst();
 
         if (localResolutionResults.isPresent()) {

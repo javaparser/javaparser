@@ -1,23 +1,23 @@
-/*
- * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
- *
- * This file is part of JavaParser.
- *
- * JavaParser can be used either under the terms of
- * a) the GNU Lesser General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
- * b) the terms of the Apache License
- *
- * You should have received a copy of both licenses in LICENCE.LGPL and
- * LICENCE.APACHE. Please refer to those files for details.
- *
- * JavaParser is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- */
+///*
+// * Copyright (C) 2015-2016 Federico Tomassetti
+// * Copyright (C) 2017-2024 The JavaParser Team.
+// *
+// * This file is part of JavaParser.
+// *
+// * JavaParser can be used either under the terms of
+// * a) the GNU Lesser General Public License as published by
+// *     the Free Software Foundation, either version 3 of the License, or
+// *     (at your option) any later version.
+// * b) the terms of the Apache License
+// *
+// * You should have received a copy of both licenses in LICENCE.LGPL and
+// * LICENCE.APACHE. Please refer to those files for details.
+// *
+// * JavaParser is distributed in the hope that it will be useful,
+// * but WITHOUT ANY WARRANTY; without even the implied warranty of
+// * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// * GNU Lesser General Public License for more details.
+// */
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
@@ -144,16 +144,17 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         // First check if there are any pattern expressions available to this node.
         Context parentContext = optionalParentContext.get();
         if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
-            List<TypePatternExpr> typePatternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
+            List<PatternExpr> typePatternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
 
-            Optional<TypePatternExpr> localResolutionResults = typePatternExprs
+            Optional<PatternExpr> localResolutionResults = typePatternExprs
                     .stream()
-                    .filter(vd -> vd.getNameAsString().equals(name))
+                    .filter(vd -> vd instanceof TypePatternExpr && ((TypePatternExpr) vd).getNameAsString().equals(name))
                     .findFirst();
 
-            if (localResolutionResults.isPresent()) {
+            if (localResolutionResults.isPresent() && (localResolutionResults.get() instanceof TypePatternExpr)) {
                 if (typePatternExprs.size() == 1) {
-                    JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(localResolutionResults.get(), typeSolver);
+                    TypePatternExpr typePatternExpr = (TypePatternExpr) localResolutionResults.get();
+                    JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                     return SymbolReference.solved(decl);
                 }
                 if(typePatternExprs.size() > 1) {

@@ -84,9 +84,9 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
                 continue;
             }
 
-            TypePatternExpr pattern = (TypePatternExpr) e;
-            if (pattern.getNameAsString().equals(name)) {
-                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(pattern, typeSolver);
+            TypePatternExpr typePatternExpr = (TypePatternExpr) e;
+            if (typePatternExpr.getNameAsString().equals(name)) {
+                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                 return SymbolReference.solved(decl);
             }
         }

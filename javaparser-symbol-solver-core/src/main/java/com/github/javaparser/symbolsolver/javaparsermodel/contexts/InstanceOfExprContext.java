@@ -21,6 +21,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.InstanceOfExpr;
+import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
@@ -44,10 +45,12 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        Optional<TypePatternExpr> optionalPatternExpr = wrappedNode.getPattern();
-        if(optionalPatternExpr.isPresent()) {
-            if(optionalPatternExpr.get().getNameAsString().equals(name)) {
-                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr.get(), typeSolver);
+        // TODO: Add PatternExprContext and solve in that
+        Optional<PatternExpr> optionalPatternExpr = wrappedNode.getPattern();
+        if(optionalPatternExpr.isPresent() && (optionalPatternExpr.get() instanceof TypePatternExpr)) {
+            TypePatternExpr typePatternExpr = (TypePatternExpr) optionalPatternExpr.get();
+            if(typePatternExpr.getNameAsString().equals(name)) {
+                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                 return SymbolReference.solved(decl);
             }
         }
@@ -60,9 +63,10 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
 
         Context parentContext = optionalParentContext.get();
         if(parentContext instanceof BinaryExprContext) {
-            Optional<TypePatternExpr> optionalPatternExpr1 = parentContext.patternExprInScope(name);
-            if(optionalPatternExpr1.isPresent()) {
-                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr1.get(), typeSolver);
+            Optional<PatternExpr> optionalPatternExpr1 = parentContext.patternExprInScope(name);
+            if(optionalPatternExpr1.isPresent() && (optionalPatternExpr1.get() instanceof TypePatternExpr)) {
+                TypePatternExpr typePatternExpr = (TypePatternExpr) optionalPatternExpr1.get();
+                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                 return SymbolReference.solved(decl);
             }
         } // TODO: Also consider unary expr context
@@ -73,8 +77,8 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
     }
 
     @Override
-    public List<TypePatternExpr> patternExprsExposedFromChildren() {
-        List<TypePatternExpr> results = new ArrayList<>();
+    public List<PatternExpr> patternExprsExposedFromChildren() {
+        List<PatternExpr> results = new ArrayList<>();
 
         // If this instanceof expression has a pattern, add it to the list.
         wrappedNode.getPattern().ifPresent(results::add);

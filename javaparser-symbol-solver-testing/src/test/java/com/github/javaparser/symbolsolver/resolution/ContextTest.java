@@ -695,9 +695,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
     private void assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
                                                                   int expectedNumber, String message) {
-        List<TypePatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .patternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p instanceof TypePatternExpr &&  ((TypePatternExpr) p).getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
@@ -708,9 +708,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
     private void assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
                                                                   int expectedNumber, String message) {
-        List<TypePatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .negatedPatternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p instanceof TypePatternExpr && ((TypePatternExpr) p).getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     @Test
@@ -1242,7 +1242,8 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 Context leftBranchContext = JavaParserFactory.getContext(leftBranch, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> left_s = leftBranchContext.solveSymbol("s");
                 assertTrue(left_s.isSolved());
-                Optional<TypePatternExpr> optionalPatternExpr = leftBranchContext.patternExprInScope("s");
+                Optional<PatternExpr> optionalPatternExpr = leftBranchContext.patternExprInScope("s");
+                assertTrue(optionalPatternExpr.isPresent());
                 SymbolReference<? extends ResolvedValueDeclaration> left_s2 = leftBranchContext.solveSymbol("s2");
                 assertFalse(left_s2.isSolved());
 
