@@ -30,12 +30,10 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -44,20 +42,18 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * @author Julio Vilmar Gesser
  */
 public abstract class Expression extends Node {
-    
+
     /**
      * Returns {@code true} when the Node to be tested is not an
      * {@link EnclosedExpr}, {@code false} otherwise.
      */
     public static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
 
-
     /**
-     * A {@link Function} that returns its argument (an {@link Expression}) when 
-     * the argument is not an {@link EnclosedExpr}, otherwise the first 
-     * {@link Expression} down the argument's 'inner' path that is not an 
+     * A {@link Function} that returns its argument (an {@link Expression}) when
+     * the argument is not an {@link EnclosedExpr}, otherwise the first
+     * {@link Expression} down the argument's 'inner' path that is not an
      * {@link EnclosedExpr}.
-     * 
      */
     public static final Function<Expression, Expression> EXCLUDE_ENCLOSED_EXPR = expr -> {
         while (expr.isEnclosedExpr()) {
@@ -65,7 +61,7 @@ public abstract class Expression extends Node {
         }
         return expr;
     };
-    
+
     @AllFieldsConstructor
     public Expression() {
         this(null);
@@ -880,5 +876,20 @@ public abstract class Expression extends Node {
         Expression scope = (Expression) ((NodeWithOptionalScope) this).getScope().get();
         NodeWithTypeArguments nwta = (NodeWithTypeArguments) this;
         return scope.elidesTypeArguments() && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
+    }
+
+    public boolean isTypePatternExpr() {
+        return false;
+    }
+
+    public TypePatternExpr asTypePatternExpr() {
+        throw new IllegalStateException(f("%s is not TypePatternExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<TypePatternExpr> toTypePatternExpr() {
+        return Optional.empty();
+    }
+
+    public void ifTypePatternExpr(Consumer<TypePatternExpr> action) {
     }
 }

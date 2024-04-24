@@ -32,12 +32,10 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.PatternExprMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.metamodel.TypePatternExprMetaModel;
 
 /**
  * <h1>The instanceof statement</h1>
@@ -153,30 +151,6 @@ public class TypePatternExpr extends Expression implements NodeWithSimpleName<Ty
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isPatternExpr() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public TypePatternExpr asPatternExpr() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<TypePatternExpr> toPatternExpr() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifPatternExpr(Consumer<TypePatternExpr> action) {
-        action.accept(this);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
@@ -207,8 +181,8 @@ public class TypePatternExpr extends Expression implements NodeWithSimpleName<Ty
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public PatternExprMetaModel getMetaModel() {
-        return JavaParserMetaModel.patternExprMetaModel;
+    public TypePatternExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.typePatternExprMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -243,5 +217,24 @@ public class TypePatternExpr extends Expression implements NodeWithSimpleName<Ty
             }
         }
         return super.remove(node);
+    }
+
+    @Override
+    public boolean isTypePatternExpr() {
+        return true;
+    }
+
+    @Override
+    public TypePatternExpr asTypePatternExpr() {
+        return this;
+    }
+
+    @Override
+    public Optional<TypePatternExpr> toTypePatternExpr() {
+        return Optional.of(this);
+    }
+
+    public void ifTypePatternExpr(Consumer<TypePatternExpr> action) {
+        action.accept(this);
     }
 }
