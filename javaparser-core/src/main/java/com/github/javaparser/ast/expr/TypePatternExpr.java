@@ -71,13 +71,11 @@ import com.github.javaparser.metamodel.TypePatternExprMetaModel;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<TypePatternExpr>, NodeWithType<TypePatternExpr, ReferenceType>, NodeWithFinalModifier<TypePatternExpr> {
+public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<TypePatternExpr>,  NodeWithFinalModifier<TypePatternExpr> {
 
     private NodeList<Modifier> modifiers;
 
     private SimpleName name;
-
-    private ReferenceType type;
 
     public TypePatternExpr() {
         this(null, new NodeList<>(), new ClassOrInterfaceType(), new SimpleName());
@@ -118,11 +116,6 @@ public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<T
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReferenceType getType() {
-        return type;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public TypePatternExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
@@ -133,20 +126,6 @@ public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<T
             this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
-        return this;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypePatternExpr setType(final ReferenceType type) {
-        assertNotNull(type);
-        if (type == this.type) {
-            return this;
-        }
-        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
-            this.type.setParentNode(null);
-        this.type = type;
-        setAsParentNodeOf(type);
         return this;
     }
 
@@ -164,10 +143,6 @@ public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<T
         }
         if (node == name) {
             setName((SimpleName) replacementNode);
-            return true;
-        }
-        if (node == type) {
-            setType((ReferenceType) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);

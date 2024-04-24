@@ -24,16 +24,23 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.PatternExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
 
-public abstract class PatternExpr extends Expression {
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+public abstract class PatternExpr extends Expression implements NodeWithType<PatternExpr, ReferenceType> {
+
+    private ReferenceType type;
 
     @AllFieldsConstructor
-    public PatternExpr() {
+    public PatternExpr(final ReferenceType type) {
     }
 
     @Override
@@ -79,5 +86,24 @@ public abstract class PatternExpr extends Expression {
     public PatternExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public PatternExpr setType(final ReferenceType type) {
+        assertNotNull(type);
+        if (type == this.type) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
+        if (this.type != null)
+            this.type.setParentNode(null);
+        this.type = type;
+        setAsParentNodeOf(type);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReferenceType getType() {
+        return type;
     }
 }
