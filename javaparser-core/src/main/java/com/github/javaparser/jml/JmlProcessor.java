@@ -23,6 +23,7 @@ import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * Here happens the JML magic. This post-processor consumes {@link JmlDoc}
@@ -143,7 +144,9 @@ public class JmlProcessor extends Processor {
                 setJmlTags(t);
                 TypeDeclaration<?> parent = (TypeDeclaration<?>) n.getParentNode().get();
                 NodeList<BodyDeclaration<?>> members = parent.getMembers();
-                int pos = members.indexOf(n);
+                int pos = IntStream.range(0, members.size())
+                        .filter(i -> members.get(i) == n)
+                        .findFirst().orElse(-1);
                 assert pos >= 0;
                 if (pos + 1 >= members.size()) {
                     //JML Documentation is last element, therefore it can only refer to upper element.
