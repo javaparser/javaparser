@@ -247,7 +247,7 @@ public class JavaSymbolSolver implements SymbolResolver {
                     return resultClass.cast(result.getCorrespondingDeclaration());
                 }
             } else {
-                if (((FieldAccessExpr) node).getName().getId().equals("length")) {
+                if ("length".equals(((FieldAccessExpr) node).getName().getId())) {
                     ResolvedType scopeType = ((FieldAccessExpr) node).getScope().calculateResolvedType();
                     if (scopeType.isArray()) {
                         if (resultClass.isInstance(ArrayLengthValueDeclaration.INSTANCE)) {

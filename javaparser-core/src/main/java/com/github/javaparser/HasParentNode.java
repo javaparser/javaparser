@@ -20,11 +20,11 @@
  */
 package com.github.javaparser;
 
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.observer.Observable;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.observer.Observable;
 
 /**
  * An object that can have a parent node.
@@ -72,8 +72,8 @@ public interface HasParentNode<T> extends Observable {
      * Walks the parents of this node and returns the first node of type {@code type} that matches {@code predicate}, or
      * {@code empty()} if none is found. The given type may also be an interface type, such as one of the
      * {@code NodeWith...} interface types.
-     *
-     * @deprecated This method is no longer acceptable to find ancestor.
+     * @deprecated
+     * This method is no longer acceptable to find ancestor.
      * <p> Use {@link findAncestor(Predicate, Class)} instead.
      */
     @Deprecated
@@ -85,16 +85,16 @@ public interface HasParentNode<T> extends Observable {
      * Walks the parents of this node and returns the first node that matches one of types {@code types}, or
      * {@code empty()} if none is found. The given type may also be an interface type, such as one of the
      * {@code NodeWith...} interface types.
-     *
      * @param <N>
      */
     default <N> Optional<N> findAncestor(Predicate<N> predicate, Class<N>... types) {
         if (!hasParentNode())
             return Optional.empty();
         Node parent = getParentNode().get();
-        Optional<Class<N>> oType = Arrays.stream(types).filter(type -> type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent))).findFirst();
-        if (oType.isPresent()) {
-            return Optional.of(oType.get().cast(parent));
+        for (Class<N> type : types) {
+            if (type.isAssignableFrom(parent.getClass()) && predicate.test(type.cast(parent))) {
+                return Optional.of(type.cast(parent));
+            }
         }
         return parent.findAncestor(predicate, types);
     }

@@ -227,7 +227,7 @@ public class TypeHelper {
             // - If T is a wildcard-parameterized functional interface type and the lambda expression is explicitly typed,
             //   then the ground target type is inferred as described in §18.5.3.
 
-            if (ExpressionHelper.isExplicitlyTyped(lambdaExpr)) {
+            if (lambdaExpr.isExplicitlyTyped()) {
                 used18_5_3 = true;
                 throw new UnsupportedOperationException();
             }

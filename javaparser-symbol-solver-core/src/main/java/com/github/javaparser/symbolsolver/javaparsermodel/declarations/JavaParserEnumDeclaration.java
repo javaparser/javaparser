@@ -122,7 +122,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (otherName.equals(this.getQualifiedName())) {
             return true;
         }
-        if (otherName.equals(JAVA_LANG_ENUM)) {
+        if (JAVA_LANG_ENUM.equals(otherName)) {
             return true;
         }
         // Enum implements Comparable and Serializable
@@ -132,10 +132,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (otherName.equals(JAVA_IO_SERIALIZABLE)) {
             return true;
         }
-        if (other.isJavaLangObject()) {
-            return true;
-        }
-        return false;
+        return other.isJavaLangObject();
     }
 
     @Override
@@ -185,9 +182,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         JavaParserEnumDeclaration that = (JavaParserEnumDeclaration) o;
 
-        if (!wrappedNode.equals(that.wrappedNode)) return false;
-
-        return true;
+        return wrappedNode.equals(that.wrappedNode);
     }
 
     @Override
@@ -204,10 +199,10 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
                                                                   boolean staticOnly) {
-        if (name.equals("values") && argumentsTypes.isEmpty()) {
+        if ("values".equals(name) && argumentsTypes.isEmpty()) {
             return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
-        if (name.equals("valueOf") && argumentsTypes.size() == 1) {
+        if ("valueOf".equals(name) && argumentsTypes.size() == 1) {
             ResolvedType argument = argumentsTypes.get(0);
             if (argument.isReferenceType() && "java.lang.String".equals(argument.asReferenceType().getQualifiedName())) {
                 return SymbolReference.solved(new JavaParserEnumDeclaration.ValueOfMethod(this, typeSolver));

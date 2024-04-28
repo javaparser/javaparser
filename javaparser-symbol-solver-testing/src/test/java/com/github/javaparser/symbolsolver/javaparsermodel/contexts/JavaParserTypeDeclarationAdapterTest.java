@@ -22,12 +22,19 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.*;
 
 import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 class JavaParserTypeDeclarationAdapterTest extends AbstractResolutionTest {
 
@@ -71,6 +78,35 @@ class JavaParserTypeDeclarationAdapterTest extends AbstractResolutionTest {
         MethodCallExpr mce = cu.findAll(MethodCallExpr.class).get(0);
 
         assertEquals("Bar.show()", mce.resolve().getQualifiedSignature());
+    }
+
+    @Test
+    void issue3946() {
+
+        String code =
+                "interface Activity {\n"
+                        + "class Timestamps {}\n"
+                        + "  Timestamps getTimestamps();\n"
+                        + "}\n"
+                        + "interface RichPresence extends Activity {}\n"
+                        + "  class ActivityImpl implements Activity {\n"
+                        + "    RichPresence.Timestamps timestamps;\n"
+                        + "    @Override\n"
+                        + "	   public RichPresence.Timestamps getTimestamps() { return timestamps; }\n"
+                        + "    }\n"
+                        + "class RichPresenceImpl extends ActivityImpl implements RichPresence { }";
+
+        final JavaSymbolSolver solver = new JavaSymbolSolver(new ReflectionTypeSolver(false));
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(solver);
+        final CompilationUnit compilationUnit = StaticJavaParser.parse(code);
+
+        final List<String> returnTypes = compilationUnit.findAll(MethodDeclaration.class)
+                .stream()
+                .map(md -> md.resolve())
+                .map(rmd -> rmd.getReturnType().describe())
+                .collect(Collectors.toList());
+
+        returnTypes.forEach(type -> assertEquals("Activity.Timestamps", type));
     }
 
 }

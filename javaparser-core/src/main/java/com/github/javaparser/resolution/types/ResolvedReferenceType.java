@@ -23,6 +23,7 @@ package com.github.javaparser.resolution.types;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -87,25 +88,25 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || (!isLazyType(o) && getClass() != o.getClass()) || (isLazyType(o) && !this.equals(asResolvedReferenceType(o))))
+        if (o == null)
             return false;
-        ResolvedReferenceType that = asResolvedReferenceType(o);
+
+        if (o instanceof LazyType) {
+            final LazyType lazyType = (LazyType) o;
+            if (!lazyType.isReferenceType())
+                return false;
+            return this.equals(lazyType.asReferenceType());
+        }
+
+        if (getClass() != o.getClass())
+            return false;
+
+        ResolvedReferenceType that = (ResolvedReferenceType) o;
         if (!typeDeclaration.equals(that.typeDeclaration))
             return false;
         if (!typeParametersMap.equals(that.typeParametersMap))
             return false;
         return true;
-    }
-
-    private boolean isLazyType(Object type) {
-        return type != null && type instanceof LazyType;
-    }
-
-    private ResolvedReferenceType asResolvedReferenceType(Object o) {
-        if (isLazyType(o)) {
-            return ((LazyType) o).asReferenceType();
-        }
-        return ResolvedReferenceType.class.cast(o);
     }
 
     @Override
@@ -523,8 +524,8 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     public boolean isJavaLangObject() {
-        return // Consider anonymous classes
-                this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return this.isReferenceType() && // Consider anonymous classes
+                hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -532,8 +533,8 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
      */
     public boolean isJavaLangEnum() {
-        return // Consider anonymous classes
-                this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isReferenceType() && // Consider anonymous classes
+                hasName() && getQualifiedName().equals(JAVA_LANG_ENUM);
     }
 
     // /
@@ -574,13 +575,7 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
     }
 
     private List<ResolvedType> erasureOfParamaters(ResolvedTypeParametersMap typeParametersMap) {
-        List<ResolvedType> erasedParameters = new ArrayList<ResolvedType>();
-        if (!typeParametersMap.isEmpty()) {
-            // add erased type except java.lang.object
-            List<ResolvedType> parameters = typeParametersMap.getTypes().stream().filter(type -> !type.isReferenceType()).map(type -> type.erasure()).filter(erasedType -> !(isJavaObject(erasedType))).filter(erasedType -> erasedType != null).collect(Collectors.toList());
-            erasedParameters.addAll(parameters);
-        }
-        return erasedParameters;
+        return new ArrayList<ResolvedType>();
     }
 
     private boolean isJavaObject(ResolvedType rt) {

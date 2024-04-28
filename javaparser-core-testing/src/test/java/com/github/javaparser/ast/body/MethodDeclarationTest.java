@@ -21,10 +21,16 @@
 
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
-import static org.junit.jupiter.api.Assertions.*;
+import com.github.javaparser.ast.CompilationUnit;
 
 class MethodDeclarationTest {
     @Test
@@ -117,5 +123,40 @@ class MethodDeclarationTest {
         assertTrue(method1.isFixedArityMethod());
         MethodDeclaration method2 = parseBodyDeclaration("int x();").asMethodDeclaration();
         assertTrue(method2.isFixedArityMethod());
+    }
+
+    /*
+     * A method in the body of an interface may be declared public or private
+     * (§6.6). If no access modifier is given, the method is implicitly public.
+     * https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.4
+     */
+    @Test
+    void isMethodInterfaceImplictlyPublic() {
+        CompilationUnit cu = parse("interface Foo { void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isPublic());
+        cu = parse("interface Foo { public void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isPublic());
+        cu = parse("interface Foo { abstract void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isPublic());
+        cu = parse("interface Foo { private void m(); }");
+        assertFalse(cu.findFirst(MethodDeclaration.class).get().isPublic());
+    }
+
+    /*
+     * An interface method lacking a private, default, or static modifier is implicitly abstract.
+     * https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.4
+     */
+    @Test
+    void isMethodInterfaceImplictlyAbstract() {
+        CompilationUnit cu = parse("interface Foo { void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
+        cu = parse("interface Foo { abstract void m(); }");
+        assertTrue(cu.findFirst(MethodDeclaration.class).get().isAbstract());
+        cu = parse("interface Foo { private void m(); }");
+        assertFalse(cu.findFirst(MethodDeclaration.class).get().isAbstract());
+        cu = parse("interface Foo { static void m(); }");
+        assertFalse(cu.findFirst(MethodDeclaration.class).get().isAbstract());
+        cu = parse("interface Foo { default void m(){} }");
+        assertFalse(cu.findFirst(MethodDeclaration.class).get().isAbstract());
     }
 }

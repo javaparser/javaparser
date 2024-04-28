@@ -21,9 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
-import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -50,8 +50,8 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        SwitchStmt switchStmt = (SwitchStmt) demandParentNode(wrappedNode);
-        ResolvedType type = JavaParserFacade.get(typeSolver).getType(switchStmt.getSelector());
+        SwitchNode switchNode = (SwitchNode) demandParentNode(wrappedNode);
+        ResolvedType type = JavaParserFacade.get(typeSolver).getType(switchNode.getSelector());
         if (type.isReferenceType() && type.asReferenceType().getTypeDeclaration().isPresent()) {
             ResolvedReferenceTypeDeclaration typeDeclaration = type.asReferenceType().getTypeDeclaration().get();
             if (typeDeclaration.isEnum()) {
@@ -75,7 +75,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
         }
 
         // look for declaration in this and previous switch entry statements
-        for (SwitchEntry seStmt : switchStmt.getEntries()) {
+        for (SwitchEntry seStmt : switchNode.getEntries()) {
             for (Statement stmt : seStmt.getStatements()) {
                 SymbolDeclarator symbolDeclarator = JavaParserFactory.getSymbolDeclarator(stmt, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> symbolReference = solveWith(symbolDeclarator, name);

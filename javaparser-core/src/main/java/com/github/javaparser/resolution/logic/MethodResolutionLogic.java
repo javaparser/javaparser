@@ -116,7 +116,6 @@ public class MethodResolutionLogic {
         }
         // The index of the final argument passed (on the method usage).
         int countOfNeedleArgumentsPassedAfterGrouping = needleArgumentTypes.size();
-        int lastNeedleArgumentIndexAfterGrouping = getLastParameterIndex(countOfNeedleArgumentsPassed);
         // If variadic parameters are possible then they will have been "grouped" into a single argument.
         // At this point, therefore, the number of arguments must be equal -- if they're not, then there is no match.
         if (countOfNeedleArgumentsPassedAfterGrouping != countOfMethodParametersDeclared) {
@@ -383,7 +382,6 @@ public class MethodResolutionLogic {
         int lastMethodUsageArgumentIndex = getLastParameterIndex(countOfMethodUsageArgumentsPassed);
         // The index of the final argument passed (on the method usage).
         int needleParameterCount = needleParameterTypes.size();
-        int lastNeedleParameterIndex = getLastParameterIndex(needleParameterCount);
         // TODO: Does the method usage have a declaration at this point..?
         boolean methodIsDeclaredWithVariadicParameter = methodUsage.getDeclaration().hasVariadicParameter();
         // If the counts do not match and the method is not variadic, this is not a match.

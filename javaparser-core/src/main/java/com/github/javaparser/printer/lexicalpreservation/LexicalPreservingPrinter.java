@@ -26,10 +26,12 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.decapitalize;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.DataKey;
@@ -132,11 +134,10 @@ public class LexicalPreservingPrinter {
             if (property == ObservableProperty.COMMENT) {
                 Optional<Node> parentNode = observedNode.getParentNode();
                 NodeText nodeText = parentNode.map(parent -> getOrCreateNodeText(parentNode.get())).orElseGet(() -> getOrCreateNodeText(observedNode));
-                if (oldValue == null) {
-                    // this case corresponds to the addition of a comment
-                    int index = // Find the position of the comment node and put in front of it the [...]
-                            parentNode.isPresent() ? //
-                                    nodeText.findChild(observedNode) : 0;
+                if (oldValue == null) { // this case corresponds to the addition of a comment
+                    int index = parentNode.isPresent() ? // Find the position of the comment node and put in front of it the [...]
+                            nodeText.findChild(observedNode) : //
+                            0;
                     /* Add the same indentation to the comment as the previous node
                      * for example if we want to add a comment on the body of the method declaration :
                      * Actual code
@@ -162,8 +163,7 @@ public class LexicalPreservingPrinter {
                     nodeText.addElement(index++, makeCommentToken((Comment) newValue));
                     nodeText.addToken(index, eolTokenKind(lineSeparator), lineSeparator.asRawString());
                     // code indentation after inserting an eol token may be wrong
-                } else if (newValue == null) {
-                    // this case corresponds to a deletion of a comment
+                } else if (newValue == null) { // this case corresponds to a deletion of a comment
                     if (oldValue instanceof Comment) {
                         if (((Comment) oldValue).isOrphan()) {
                             nodeText = getOrCreateNodeText(observedNode);
@@ -175,9 +175,6 @@ public class LexicalPreservingPrinter {
                         } else {
                             removeAllExtraCharactersStartingFrom(nodeText.getElements().listIterator(index));
                         }
-                        //                        if (nodeText.getElements().get(index).isNewline()) {
-                        //                            nodeText.removeElement(index);
-                        //                        }
                     } else {
                         throw new UnsupportedOperationException("Trying to remove something that is not a comment!");
                     }
@@ -200,17 +197,14 @@ public class LexicalPreservingPrinter {
         }
 
         private boolean isCompleteLine(List<TextElement> elements, int index) {
-            if (index <= 0 || index >= elements.size())
-                return false;
+            if (index <= 0 || index >= elements.size()) return false;
             boolean isCompleteLine = true;
             ListIterator<TextElement> iterator = elements.listIterator(index);
             // verify if elements after the index are only spaces or tabs
             while (iterator.hasNext()) {
                 TextElement textElement = iterator.next();
-                if (textElement.isNewline())
-                    break;
-                if (textElement.isSpaceOrTab())
-                    continue;
+                if (textElement.isNewline()) break;
+                if (textElement.isSpaceOrTab()) continue;
                 isCompleteLine = false;
                 break;
             }
@@ -218,18 +212,16 @@ public class LexicalPreservingPrinter {
             iterator = elements.listIterator(index);
             while (iterator.hasPrevious() && isCompleteLine) {
                 TextElement textElement = iterator.previous();
-                if (textElement.isNewline())
-                    break;
-                if (textElement.isSpaceOrTab())
-                    continue;
+                if (textElement.isNewline()) break;
+                if (textElement.isSpaceOrTab()) continue;
                 isCompleteLine = false;
             }
+
             return isCompleteLine;
         }
 
         private void removeAllExtraCharacters(List<TextElement> elements, int index) {
-            if (index < 0 || index >= elements.size())
-                return;
+            if (index < 0 || index >= elements.size()) return;
             removeAllExtraCharactersStartingFrom(elements.listIterator(index));
             removeAllExtraCharactersBeforePosition(elements.listIterator(index));
         }
@@ -290,12 +282,21 @@ public class LexicalPreservingPrinter {
             return nodeText.findElement(matchingChild.and(matchingChild.matchByRange()));
         }
 
+        /*
+         * Comment
+         */
         private List<ChildTextElement> findChildTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<ChildTextElement> matchingChildElements;
             matchingChildElements = selectMatchingChildElements(oldValue, nodeText);
             if (matchingChildElements.size() > 1) {
                 // Duplicate child nodes found, refine the result
-                matchingChildElements = matchingChildElements.stream().filter(t -> isEqualRange(t.getChild().getRange(), oldValue.getRange())).collect(toList());
+                matchingChildElements = matchingChildElements.stream()
+                        .filter(t -> t.getChild().hasRange() && oldValue.hasRange())
+                        .filter(t -> t.getChild().getRange().get().equals(oldValue.getRange().get())
+                                || (t.getChild().getComment().isPresent()
+                                && t.getChild().getComment().get().hasRange()
+                                && t.getChild().getComment().get().getRange().get().equals(oldValue.getRange().get())))
+                        .collect(toList());
             }
             if (matchingChildElements.size() != 1) {
                 throw new IllegalStateException("The matching child text element for the comment to be removed could not be found.");
@@ -305,7 +306,8 @@ public class LexicalPreservingPrinter {
 
         private List<ChildTextElement> selectMatchingChildElements(Comment oldValue, NodeText nodeText) {
             List<ChildTextElement> result = new ArrayList<>();
-            List<ChildTextElement> childTextElements = nodeText.getElements().stream().filter(e -> e.isChild()).map(c -> (ChildTextElement) c).collect(toList());
+            List<ChildTextElement> childTextElements = nodeText.getElements().stream().filter(e -> e.isChild())
+                    .map(c -> (ChildTextElement) c).collect(toList());
             ListIterator<ChildTextElement> iterator = childTextElements.listIterator();
             while (iterator.hasNext()) {
                 ChildTextElement textElement = iterator.next();
@@ -329,24 +331,31 @@ public class LexicalPreservingPrinter {
         private List<TokenTextElement> findTokenTextElementForComment(Comment oldValue, NodeText nodeText) {
             List<TokenTextElement> matchingTokens;
             if (oldValue instanceof JavadocComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(JAVADOC_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.getHeader() + oldValue.getContent() + oldValue.getFooter())).collect(toList());
+                matchingTokens = nodeText.getElements().stream()
+                        .filter(e -> e.isToken(JAVADOC_COMMENT))
+                        .map(e -> (TokenTextElement) e)
+                        .filter(t -> t.getText().equals(oldValue.asString()))
+                        .collect(toList());
             } else if (oldValue instanceof BlockComment) {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(MULTI_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().equals(oldValue.getHeader() + oldValue.getContent() + oldValue.getFooter())).collect(toList());
+                matchingTokens = nodeText.getElements().stream()
+                        .filter(e -> e.isToken(MULTI_LINE_COMMENT))
+                        .map(e -> (TokenTextElement) e)
+                        .filter(t -> t.getText().equals(oldValue.asString()))
+                        .collect(toList());
             } else {
-                matchingTokens = nodeText.getElements().stream().filter(e -> e.isToken(SINGLE_LINE_COMMENT)).map(e -> (TokenTextElement) e).filter(t -> t.getText().trim().equals((oldValue.getHeader() + oldValue.getContent()).trim())).collect(toList());
+                matchingTokens = nodeText.getElements().stream()
+                        .filter(e -> e.isToken(SINGLE_LINE_COMMENT))
+                        .map(e -> (TokenTextElement) e)
+                        .filter(t -> t.getText().trim().equals((oldValue.asString()).trim()))
+                        .collect(toList());
             }
-            if (matchingTokens.size() > 1) {
-                // Duplicate comments found, refine the result
-                matchingTokens = matchingTokens.stream().filter(t -> isEqualRange(t.getToken().getRange(), oldValue.getRange())).collect(toList());
-            }
-            return matchingTokens;
-        }
-
-        private boolean isEqualRange(Optional<Range> range1, Optional<Range> range2) {
-            if (range1.isPresent() && range2.isPresent()) {
-                return range1.get().equals(range2.get());
-            }
-            return false;
+            // To check that a comment matches in the list of tokens, if exists the range must be always checked,
+            // as comments with the same content may exist on different lines.
+            return matchingTokens.stream()
+                    .filter(t -> (!t.getToken().hasRange() && !oldValue.hasRange())
+                            || (t.getToken().hasRange() && oldValue.hasRange()
+                            && t.getToken().getRange().get().equals(oldValue.getRange().get())))
+                    .collect(toList());
         }
 
         /**
@@ -507,6 +516,7 @@ public class LexicalPreservingPrinter {
         final NodeText nodeText = getOrCreateNodeText(node);
         nodeText.getElements().forEach(element -> element.accept(visitor));
         return visitor.toString();
+
     }
 
     //
@@ -581,8 +591,8 @@ public class LexicalPreservingPrinter {
             if (!comment.hasRange()) {
                 LineSeparator lineSeparator = node.getLineEndingStyleOrDefault(LineSeparator.SYSTEM);
                 calculatedSyntaxModel.elements.add(0, new CsmToken(eolTokenKind(lineSeparator), lineSeparator.asRawString()));
-                calculatedSyntaxModel.elements.add(0, new CsmChild(comment));
-            }
+                calculatedSyntaxModel.elements.add(0,new CsmChild(comment));
+        	}
         });
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {

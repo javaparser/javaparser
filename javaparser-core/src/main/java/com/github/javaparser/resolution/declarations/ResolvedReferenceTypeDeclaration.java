@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -36,11 +37,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaration, ResolvedTypeParametrizable {
 
     String JAVA_LANG_ENUM = java.lang.Enum.class.getCanonicalName();
-
     String JAVA_LANG_COMPARABLE = java.lang.Comparable.class.getCanonicalName();
-
     String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
-
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
     @Override
@@ -295,7 +293,12 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         if (hasDirectlyAnnotation(qualifiedName)) {
             return true;
         }
-        return isClass() && getAllAncestors().stream().filter(it -> it.asReferenceType().getTypeDeclaration().isPresent()).filter(it -> it.asReferenceType().getTypeDeclaration().get().isClass()).map(it -> it.asReferenceType().getTypeDeclaration().get()).anyMatch(rrtd -> rrtd.hasDirectlyAnnotation(qualifiedName) && rrtd.isInheritedAnnotation(qualifiedName));
+        return isClass() && getAllAncestors().stream()
+                .filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+                .filter(it -> it.asReferenceType().getTypeDeclaration().get().isClass())
+                .map(it -> it.asReferenceType().getTypeDeclaration().get())
+                .anyMatch(rrtd -> rrtd.hasDirectlyAnnotation(qualifiedName)
+                        && rrtd.isInheritedAnnotation(qualifiedName));
     }
 
     /**
@@ -310,7 +313,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Returns the resolved annotation corresponding to the specified name and declared in this type declaration.
      */
     default Optional<ResolvedAnnotationDeclaration> getDeclaredAnnotation(String name) {
-        return getDeclaredAnnotations().stream().filter(annotation -> annotation.getQualifiedName().endsWith(name)).findFirst();
+        return getDeclaredAnnotations().stream()
+                .filter(annotation -> annotation.getQualifiedName().endsWith(name))
+                .findFirst();
     }
 
     /**
@@ -319,6 +324,7 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     default Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
         throw new UnsupportedOperationException("Getting declared annotation is not supproted on this type " + this.getName());
     }
+
 
     /**
      * This means that the type has a functional method. Conceptually, a functional interface has exactly one abstract method.
@@ -353,8 +359,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     default boolean isJavaLangObject() {
-        return // Consider anonymous classes
-                this.isClass() && !isAnonymousClass() && hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return this.isClass() && !isAnonymousClass() && // Consider anonymous classes
+                hasName() && JAVA_LANG_OBJECT.equals(getQualifiedName());
     }
 
     /**
@@ -362,6 +368,6 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see ResolvedReferenceType#isJavaLangEnum()
      */
     default boolean isJavaLangEnum() {
-        return this.isEnum() && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return this.isEnum() && JAVA_LANG_ENUM.equals(getQualifiedName());
     }
 }

@@ -83,7 +83,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
         Expression scope = wrappedNode.getScope();
         if (wrappedNode.getName().toString().equals(name)) {
             ResolvedType typeOfScope = JavaParserFacade.get(typeSolver).getType(scope);
-            if (typeOfScope.isArray() && name.equals(ARRAY_LENGTH_FIELD_NAME)) {
+            if (typeOfScope.isArray() && ARRAY_LENGTH_FIELD_NAME.equals(name)) {
                 return Optional.of(new Value(ResolvedPrimitiveType.INT, ARRAY_LENGTH_FIELD_NAME));
             }
             if (typeOfScope.isReferenceType()) {

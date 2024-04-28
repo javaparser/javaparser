@@ -21,6 +21,13 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.Context;
@@ -38,13 +45,6 @@ import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapabi
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.comparators.MethodComparator;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -108,9 +108,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
 
         ReflectionClassDeclaration that = (ReflectionClassDeclaration) o;
 
-        if (!clazz.getCanonicalName().equals(that.clazz.getCanonicalName())) return false;
-
-        return true;
+        return clazz.getCanonicalName().equals(that.clazz.getCanonicalName());
     }
 
     @Override
@@ -190,8 +188,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         }
 
         // When empty there is no sense in trying to find the most applicable.
-        // This is useful for debugging. Performance is not affected as 
-        // MethodResolutionLogic.findMostApplicable method returns very early 
+        // This is useful for debugging. Performance is not affected as
+        // MethodResolutionLogic.findMostApplicable method returns very early
         // when candidateSolvedMethods is empty.
         if (candidateSolvedMethods.isEmpty()) {
             return SymbolReference.unsolved();
@@ -211,6 +209,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         return new ReferenceTypeImpl(this);
     }
 
+    @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, Context invokationContext, List<ResolvedType> typeParameterValues) {
         List<MethodUsage> methodUsages = new ArrayList<>();
 

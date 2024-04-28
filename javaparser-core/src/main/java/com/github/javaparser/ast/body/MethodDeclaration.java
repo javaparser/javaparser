@@ -20,11 +20,9 @@
  */
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.jml.clauses.JmlContract;
@@ -44,6 +42,13 @@ import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
+import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: {@code class X { public int abc() {return 1;}
@@ -250,6 +255,40 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
         return sb.toString();
     }
 
+    /*
+     * A method in the body of an interface may be declared public or private
+     * (§6.6). If no access modifier is given, the method is implicitly public.
+     * https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.4
+     */
+    @Override
+    public boolean isPublic() {
+        return hasModifier(PUBLIC) || isImplicitlyPublic();
+    }
+
+    private boolean isImplicitlyPublic() {
+        return getAccessSpecifier() == AccessSpecifier.NONE
+                && hasParentNode()
+                && getParentNode().get() instanceof ClassOrInterfaceDeclaration
+                && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface();
+    }
+
+    /*
+     * An interface method lacking a private, default, or static modifier is implicitly abstract.
+     * https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.4
+     */
+    @Override
+    public boolean isAbstract() {
+        return super.isAbstract() || isImplicitlyAbstract();
+    }
+
+    private boolean isImplicitlyAbstract() {
+        return hasParentNode() && getParentNode().get() instanceof ClassOrInterfaceDeclaration
+                && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface()
+                && Arrays.asList(STATIC, DEFAULT, PRIVATE).stream()
+                .noneMatch(modifier -> hasModifier(modifier));
+    }
+
+
     public boolean isNative() {
         return hasModifier(Modifier.DefaultKeyword.NATIVE);
     }
@@ -259,7 +298,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     public boolean isDefault() {
-        return hasModifier(Modifier.DefaultKeyword.DEFAULT);
+        return hasModifier(DEFAULT);
     }
 
     public MethodDeclaration setNative(boolean set) {
@@ -271,7 +310,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     public MethodDeclaration setDefault(boolean set) {
-        return setModifier(Modifier.DefaultKeyword.DEFAULT, set);
+        return setModifier(DEFAULT, set);
     }
 
     @Override

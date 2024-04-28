@@ -20,10 +20,14 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.GeneratedJavaParserConstants.*;
+import static com.github.javaparser.GeneratedJavaParserConstants.LBRACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.RBRACE;
+import static com.github.javaparser.GeneratedJavaParserConstants.SPACE;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
@@ -43,7 +47,7 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalDifferenceCalcul
 /**
  * A Difference should give me a sequence of elements I should find (to indicate the context) followed by a list of elements
  * to remove or to add and follow by another sequence of elements.
- * <p>
+ *
  * I should later be able to apply such difference to a nodeText.
  */
 public class Difference {
@@ -107,8 +111,13 @@ public class Difference {
         return spaces;
     }
 
+
     int lastIndexOfEol(List<TextElement> source) {
-        return IntStream.range(0, source.size()).map(i -> source.size() - i - 1).filter(i -> source.get(i).isNewline()).findFirst().orElse(-1);
+        return IntStream.range(0, source.size())
+                .map(i -> source.size() - i - 1)
+                .filter(i -> source.get(i).isNewline())
+                .findFirst()
+                .orElse(-1);
     }
 
     /*
@@ -235,11 +244,15 @@ public class Difference {
     }
 
     private boolean isEnforcingIndentationActivable(RemovedGroup removedGroup) {
-        return (isLastElement(diffElements, diffIndex) || !(nextDiffElement(diffElements, diffIndex).isAdded())) && originalIndex < originalElements.size() && !removedGroup.isACompleteLine();
+        return (isLastElement(diffElements, diffIndex) || !(nextDiffElement(diffElements, diffIndex).isAdded()))
+                && originalIndex < originalElements.size()
+                && !removedGroup.isACompleteLine();
     }
 
     private boolean isRemovingIndentationActivable(RemovedGroup removedGroup) {
-        return (isLastElement(diffElements, diffIndex) || !(nextDiffElement(diffElements, diffIndex).isAdded())) && originalIndex < originalElements.size() && removedGroup.isACompleteLine();
+        return (isLastElement(diffElements, diffIndex) || !(nextDiffElement(diffElements, diffIndex).isAdded()))
+                && originalIndex < originalElements.size()
+                && removedGroup.isACompleteLine();
     }
 
     private boolean isLastElement(List<?> list, int index) {
@@ -255,9 +268,7 @@ public class Difference {
      * and the number of consecutive whitespace (or tab) characters
      */
     private class EnforcingIndentationContext {
-
         int start;
-
         int extraCharacters;
 
         public EnforcingIndentationContext(int start) {
@@ -272,8 +283,7 @@ public class Difference {
 
     /**
      * Remove excess white space after deleting element.
-     *
-     * @param nodeText      Contains a list of elements to analyze
+     * @param nodeText Contains a list of elements to analyze
      * @param nodeTextIndex Starting position in the input list
      * @return The current position in the list of the elements
      */
@@ -289,8 +299,7 @@ public class Difference {
     /**
      * Starting at {@code nodeTextIndex} this method tries to determine how many contiguous spaces there are between
      * the previous end of line and the next non whitespace (or tab) character
-     *
-     * @param nodeText      List of elements to analyze
+     * @param nodeText List of elements to analyze
      * @param nodeTextIndex Starting position in the input list
      * @return EnforcingIndentationContext Data structure that hold the starting position of the first whitespace char and
      * The number of consecutive whitespace (or tab) characters
@@ -314,7 +323,7 @@ public class Difference {
         }
         // compute space after the deleted element
         if (startIndex < nodeText.numberOfElements() && isSpaceOrTabElement(nodeText, startIndex)) {
-            //			int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
+//			int startingFromIndex = startIndex == 0 ? startIndex : startIndex + 1;
             for (int i = startIndex; i >= 0 && i < nodeText.numberOfElements(); i++) {
                 if (nodeText.getTextElement(i).isNewline()) {
                     break;
@@ -325,7 +334,28 @@ public class Difference {
                 ctx.extraCharacters++;
             }
         }
+
         return ctx;
+    }
+
+    /*
+     * An element is considered inlined if, before the line break, there are nodes in the list of elements
+     */
+    private boolean isInlined(NodeText nodeText, int startIndex) {
+        boolean inlined = false;
+        if (startIndex < nodeText.numberOfElements() && startIndex >= 0) {
+            // at this stage startIndex points to the first element before the deleted one
+            for (int i = startIndex; i < nodeText.numberOfElements(); i++) {
+                if (nodeText.getTextElement(i).isNewline()) {
+                    break;
+                }
+                if (nodeText.getTextElement(i).isChild()) {
+                    inlined = true;
+                    break;
+                }
+            }
+        }
+        return inlined;
     }
 
     /*
@@ -458,6 +488,26 @@ public class Difference {
                     originalIndex++;
                 }
             } else {
+                // If we delete the first element, it is possible that there is an indentation to be deleted which is stored in the parent node.
+                NodeText parentNodeText = new NodeText();
+                List<TextElement> indentationTokens = new ArrayList<>();
+                if (originalIndex == 0 && removed.getChild().getParentNode().isPresent()) {
+                    Node startingNodeForFindingIndentation = removed.getChild();
+                    Node parentNode = removed.getChild().getParentNode().get();
+                    parentNodeText = LexicalPreservingPrinter.getOrCreateNodeText(parentNode);
+                    // If we are trying to delete the first element of a node and that node is also the first element of the parent node, we need to look for the grandfather node which logically contains the indentation characters.
+                    // This is the case, for example, when trying to delete an annotation positioned on a method declaration.
+                    // The token corresponding to the annotation is the first element of the annotation node
+                    // and it is also the first element of the parent node (MethodDeclaration),
+                    // so the previous indentation is defined in the parent node of the method declaration.
+                    if (!parentNodeText.getElements().isEmpty()
+                            && parentNode.getParentNode().isPresent()
+                            && parentNodeText.getTextElement(0).equals(nodeText.getTextElement(originalIndex))) {
+                        startingNodeForFindingIndentation = parentNode;
+                        parentNodeText = LexicalPreservingPrinter.getOrCreateNodeText(parentNode.getParentNode().get());
+                    }
+                    indentationTokens = LexicalPreservingPrinter.findIndentation(startingNodeForFindingIndentation);
+                }
                 nodeText.removeElement(originalIndex);
                 // When we don't try to remove a complete line
                 // and removing the element is not the first action of a replacement (removal followed by addition)
@@ -488,6 +538,19 @@ public class Difference {
                 if (isRemovingIndentationActivable(removedGroup)) {
                     // Since the element has been deleted we try to start the analysis from the previous element
                     originalIndex = considerRemovingIndentation(nodeText, originalIndex);
+                    // If we delete the first element, it is possible that there is an indentation
+                    // to be deleted which is stored in the parent node.
+                    // We don't want to remove indentation when the node to remove is not the only
+                    // node in the line (if there are other nodes before the next character
+                    // indicating the end of line).
+                    // This is for example the case when we want to delete an annotation declared on
+                    // the same line as a method declaration.
+                    if (originalIndex == 0 && !indentationTokens.isEmpty() && !isInlined(nodeText, originalIndex)) {
+                        for (TextElement indentationToken : indentationTokens) {
+                            parentNodeText.removeElement(
+                                    parentNodeText.findElement(indentationToken.and(indentationToken.matchByRange())));
+                        }
+                    }
                 }
                 diffIndex++;
             }
@@ -497,12 +560,13 @@ public class Difference {
             if (isRemovingIndentationActivable(removedGroup)) {
                 originalIndex = considerRemovingIndentation(nodeText, originalIndex);
             }
-        } else if (removed.isToken() && originalElementIsToken && (// handle EOLs separately as their token kind might not be equal. This is because the 'removed'
+        } else if (removed.isToken() && originalElementIsToken && (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind() || // handle EOLs separately as their token kind might not be equal. This is because the 'removed'
                 // element always has the current operating system's EOL as type
-                removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind() || (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine() && removed.isNewLine()))) {
+                (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine() && removed.isNewLine()))) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
-        } else if ((removed.isWhiteSpaceNotEol() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent) && originalElement.isSpaceOrTab()) {
+        } else if ((removed.isWhiteSpaceNotEol() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent)
+                && originalElement.isSpaceOrTab()) {
             // remove the current space
             nodeText.removeElement(originalIndex);
         } else if (originalElementIsToken && originalElement.isWhiteSpaceOrComment()) {
@@ -545,7 +609,10 @@ public class Difference {
         }
         // we dont want to remove the indentation if the last removed element is a newline
         // because in this case we are trying to remove the indentation of the next child element
-        if (!removedGroup.isProcessed() && removedGroup.isLastElement(removed) && removedGroup.isACompleteLine() && !removed.isNewLine()) {
+        if (!removedGroup.isProcessed()
+                && removedGroup.isLastElement(removed)
+                && removedGroup.isACompleteLine()
+                && !removed.isNewLine()) {
             Integer lastElementIndex = removedGroup.getLastElementIndex();
             Optional<Integer> indentation = removedGroup.getIndentation();
             if (indentation.isPresent() && !isReplaced(lastElementIndex)) {
@@ -721,7 +788,7 @@ public class Difference {
             if (part.equals(token.asString())) {
                 // get 'dot' token
                 token = token.getNextToken().get();
-                if (!token.asString().equals("."))
+                if (!".".equals(token.asString()))
                     break;
                 // get the next part
                 token = token.getNextToken().get();
@@ -889,7 +956,9 @@ public class Difference {
             boolean currentIsNewline = nodeText.getTextElement(originalIndex).isNewline();
             boolean isFirstElement = originalIndex == 0;
             boolean previousIsWhiteSpace = originalIndex > 0 && nodeText.getTextElement(originalIndex - 1).isWhiteSpace();
-            boolean commentIsBeforeAddedElement = currentIsAComment && addedTextElement.getRange().isPresent() && nodeText.getTextElement(originalIndex).getRange().map(range -> range.isBefore(addedTextElement.getRange().get())).orElse(false);
+            boolean commentIsBeforeAddedElement = currentIsAComment && addedTextElement.getRange().isPresent()
+                    && nodeText.getTextElement(originalIndex).getRange()
+                    .map(range -> range.isBefore(addedTextElement.getRange().get())).orElse(false);
             if (sufficientTokensRemainToSkip && currentIsAComment && commentIsBeforeAddedElement) {
                 // Need to get behind the comment:
                 // FIXME: Why 2? This comment and the next newline?
@@ -951,7 +1020,6 @@ public class Difference {
      * A list iterator which provides a method to know the current positioning
      */
     public static class ArrayIterator<T> implements ListIterator<T> {
-
         ListIterator<T> iterator;
 
         public ArrayIterator(List<T> elements) {
@@ -1015,6 +1083,7 @@ public class Difference {
             iterator.add(e);
             ;
         }
+
     }
 
     /*

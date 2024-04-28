@@ -16,7 +16,7 @@
 	<groupId>io.github.jmltoolkit</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>3.25.8-SNAPSHOT</version>
+	<version>3.25.10-SNAPSHOT</version>
 
 	<name>jmlparser-parent</name>
 	<url>https://github.com/wadoon/jmlparser</url>
@@ -153,9 +153,9 @@
 			${project.basedir}/jmlparser-jml-tests/target/site/jacoco/jacoco.xml,
 			${project.basedir}/javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml,
 		</sonar.coverage.jacoco.xmlReportPaths>
-        <byte-buddy.version>1.14.11</byte-buddy.version>
+		<byte-buddy.version>1.14.13</byte-buddy.version>
         <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar</argLine>
-        <build.timestamp>2024-01-01T00:00:00Z</build.timestamp>
+		<build.timestamp>2024-04-04T00:00:00Z</build.timestamp>
         <!-- Maven Plugins -->
 	</properties>
 
@@ -208,12 +208,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.12.1</version>
+					<version>3.13.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-gpg-plugin</artifactId>
-					<version>3.1.1</version>
+					<version>3.2.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -272,7 +272,7 @@
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.8.11</version>
+					<version>0.8.12</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -300,12 +300,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.2.3</version>
+					<version>3.2.5</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
-                    <version>3.1.1</version>
+					<version>3.2.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -348,7 +348,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>10.12.7</version>
+	                        <version>10.15.0</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -367,7 +367,7 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>33.0.0-jre</version>
+				<version>33.1.0-jre</version>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
@@ -390,19 +390,19 @@
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-engine</artifactId>
-                <version>5.10.1</version>
+				<version>5.10.2</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.junit.jupiter</groupId>
 				<artifactId>junit-jupiter-params</artifactId>
-                <version>5.10.1</version>
+				<version>5.10.2</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.junit.vintage</groupId>
 				<artifactId>junit-vintage-engine</artifactId>
-                <version>5.10.1</version>
+				<version>5.10.2</version>
 				<scope>test</scope>
                 <exclusions>
                     <exclusion>
@@ -518,7 +518,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>3.1.0</version>
+						<version>3.2.2</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>

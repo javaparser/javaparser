@@ -540,6 +540,22 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
     }
 
     /**
+     * Gets data for this node using the given key or returns an {@code Optional.empty()}.
+     *
+     * @param <M> The type of the data.
+     * @param key The key for the data
+     * @return The data.
+     * @see DataKey
+     */
+    @SuppressWarnings("unchecked")
+    public <M> Optional<M> findData(final DataKey<M> key) {
+        if (containsData(key)) {
+            return Optional.of(getData(key));
+        }
+        return Optional.empty();
+    }
+
+    /**
      * This method was added to support the clone method.
      *
      * @return all known data keys.

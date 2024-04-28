@@ -20,6 +20,11 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -38,9 +43,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LambdaExprMetaModel;
-import java.util.Optional;
-import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * <h1>A lambda expression</h1>
@@ -115,11 +117,13 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         customInitialization();
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Parameter> getParameters() {
         return parameters;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public LambdaExpr setParameters(final NodeList<Parameter> parameters) {
         assertNotNull(parameters);
@@ -271,5 +275,12 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
     @Override
     public boolean isPolyExpression() {
         return true;
+    }
+
+    /*
+     * Returns true if no type parameter has been defined
+     */
+    public boolean isExplicitlyTyped() {
+        return getParameters().stream().allMatch(p -> !(p.getType().isUnknownType()));
     }
 }

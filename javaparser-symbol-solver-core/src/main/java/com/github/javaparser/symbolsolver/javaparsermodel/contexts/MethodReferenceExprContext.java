@@ -27,12 +27,13 @@ import java.util.*;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
@@ -99,7 +100,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
         if (demandParentNode(wrappedNode) instanceof MethodCallExpr) {
             MethodCallExpr methodCallExpr = (MethodCallExpr) demandParentNode(wrappedNode);
             MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
-            int pos = pos(methodCallExpr, wrappedNode);
+            int pos = methodCallExpr.getArgumentPosition(wrappedNode);
             ResolvedMethodDeclaration rmd = methodUsage.getDeclaration();
             // Since variable parameters are represented by an array, in case we deal with
             // the variadic parameter we have to take into account the base type of the
@@ -108,37 +109,24 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                     rmd.getLastParam().getType().asArrayType().getComponentType() :
                     methodUsage.getParamType(pos);
 
-            // Get the functional method in order for us to resolve it's type arguments properly
-            Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
-            if (functionalMethodOpt.isPresent()) {
-                MethodUsage functionalMethod = functionalMethodOpt.get();
-
-                List<ResolvedType> resolvedTypes = new ArrayList<>();
-
-                for (ResolvedType type : functionalMethod.getParamTypes()) {
-                    InferenceContext inferenceContext = new InferenceContext(typeSolver);
-
-                    // Resolve each type variable of the lambda, and use this later to infer the type of each
-                    // implicit parameter
-                    inferenceContext.addPair(new ReferenceTypeImpl(functionalMethod.declaringType()), lambdaType);
-
-                    // Now resolve the argument type using the inference context
-                    ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(type));
-
-                    ResolvedLambdaConstraintType conType;
-                    if (argType.isWildcard()) {
-                        conType = ResolvedLambdaConstraintType.bound(argType.asWildcard().getBoundedType());
-                    } else {
-                        conType = ResolvedLambdaConstraintType.bound(argType);
-                    }
-
-                    resolvedTypes.add(conType);
-                }
-
-                return resolvedTypes;
-            }
-            throw new UnsupportedOperationException();
+            return resolveLambdaTypes(lambdaType);
         }
+
+        if (demandParentNode(wrappedNode) instanceof ObjectCreationExpr) {
+            ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) demandParentNode(wrappedNode);
+            ResolvedConstructorDeclaration rcd = JavaParserFacade.get(typeSolver).solve(objectCreationExpr)
+                    .getCorrespondingDeclaration();
+            int pos = objectCreationExpr.getArgumentPosition(wrappedNode);
+            // Since variable parameters are represented by an array, in case we deal with
+            // the variadic parameter we have to take into account the base type of the
+            // array.
+            ResolvedType lambdaType = (rcd.hasVariadicParameter() && pos >= rcd.getNumberOfParams() - 1) ?
+                    rcd.getLastParam().getType().asArrayType().getComponentType() :
+                    rcd.getParam(pos).getType();
+
+            return resolveLambdaTypes(lambdaType);
+        }
+
         if (demandParentNode(wrappedNode) instanceof VariableDeclarator) {
             VariableDeclarator variableDeclarator = (VariableDeclarator) demandParentNode(wrappedNode);
             ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
@@ -165,6 +153,7 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             }
             throw new UnsupportedOperationException();
         }
+
         if (demandParentNode(wrappedNode) instanceof ReturnStmt) {
             ReturnStmt returnStmt = (ReturnStmt) demandParentNode(wrappedNode);
             Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
@@ -198,15 +187,37 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
         throw new UnsupportedOperationException();
     }
 
-    private int pos(MethodCallExpr callExpr, Expression param) {
-        int i = 0;
-        for (Expression p : callExpr.getArguments()) {
-            if (p == param) {
-                return i;
+    private List<ResolvedType> resolveLambdaTypes(ResolvedType lambdaType) {
+        // Get the functional method in order for us to resolve it's type arguments properly
+        Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
+        if (functionalMethodOpt.isPresent()) {
+            MethodUsage functionalMethod = functionalMethodOpt.get();
+
+            List<ResolvedType> resolvedTypes = new ArrayList<>();
+
+            for (ResolvedType type : functionalMethod.getParamTypes()) {
+                InferenceContext inferenceContext = new InferenceContext(typeSolver);
+
+                // Resolve each type variable of the lambda, and use this later to infer the type of each
+                // implicit parameter
+                inferenceContext.addPair(new ReferenceTypeImpl(functionalMethod.declaringType()), lambdaType);
+
+                // Now resolve the argument type using the inference context
+                ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(type));
+
+                ResolvedLambdaConstraintType conType;
+                if (argType.isWildcard()) {
+                    conType = ResolvedLambdaConstraintType.bound(argType.asWildcard().getBoundedType());
+                } else {
+                    conType = ResolvedLambdaConstraintType.bound(argType);
+                }
+
+                resolvedTypes.add(conType);
             }
-            i++;
+
+            return resolvedTypes;
         }
-        throw new IllegalArgumentException();
+        throw new UnsupportedOperationException();
     }
 
 }
