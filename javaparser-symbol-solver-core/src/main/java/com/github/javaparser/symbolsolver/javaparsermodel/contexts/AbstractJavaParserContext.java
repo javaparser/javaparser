@@ -148,12 +148,12 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
             Optional<PatternExpr> localResolutionResults = typePatternExprs
                     .stream()
-                    .filter(vd -> vd instanceof TypePatternExpr && ((TypePatternExpr) vd).getNameAsString().equals(name))
+                    .filter(vd -> vd.isTypePatternExpr() && vd.asTypePatternExpr().getNameAsString().equals(name))
                     .findFirst();
 
-            if (localResolutionResults.isPresent() && (localResolutionResults.get() instanceof TypePatternExpr)) {
+            if (localResolutionResults.isPresent() && localResolutionResults.get().isTypePatternExpr()) {
                 if (typePatternExprs.size() == 1) {
-                    TypePatternExpr typePatternExpr = (TypePatternExpr) localResolutionResults.get();
+                    TypePatternExpr typePatternExpr = localResolutionResults.get().asTypePatternExpr();
                     JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                     return SymbolReference.solved(decl);
                 }

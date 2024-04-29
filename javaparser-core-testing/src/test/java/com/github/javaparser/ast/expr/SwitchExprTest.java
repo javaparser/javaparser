@@ -227,7 +227,7 @@ class SwitchExprTest {
 
         assertEquals(1, entry.getLabels().size());
 
-        TypePatternExpr label = (TypePatternExpr) entry.getLabels().get(0);
+        TypePatternExpr label = entry.getLabels().get(0).asTypePatternExpr();
 
         assertEquals("b", label.getNameAsString());
         assertEquals("Box", label.getTypeAsString());
@@ -248,7 +248,7 @@ class SwitchExprTest {
         assertInstanceOf(MethodCallExpr.class, guard);
 
         assertEquals(1, entry.getLabels().size());
-        TypePatternExpr label = (TypePatternExpr) entry.getLabels().get(0);
+        TypePatternExpr label = entry.getLabels().get(0).asTypePatternExpr();
 
         assertEquals("b", label.getNameAsString());
         assertEquals("Box", label.getTypeAsString());

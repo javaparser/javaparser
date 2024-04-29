@@ -46,8 +46,8 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
         for (int i = 0; i < patternExprs.size(); i++) {
-            if (patternExprs.get(i) instanceof TypePatternExpr) {
-                TypePatternExpr typePatternExpr = (TypePatternExpr) patternExprs.get(i);
+            if (patternExprs.get(i).isTypePatternExpr()) {
+                TypePatternExpr typePatternExpr = patternExprs.get(i).asTypePatternExpr();
                 if (typePatternExpr.getNameAsString().equals(name)) {
                     return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver));
                 }

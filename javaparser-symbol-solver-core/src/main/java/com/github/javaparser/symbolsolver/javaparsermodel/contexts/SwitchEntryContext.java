@@ -80,11 +80,11 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
 
         // look for declaration in a pattern label for this entry
         for (Expression e : wrappedNode.getLabels()) {
-            if (!(e instanceof TypePatternExpr)) {
+            if (!e.isTypePatternExpr()) {
                 continue;
             }
 
-            TypePatternExpr typePatternExpr = (TypePatternExpr) e;
+            TypePatternExpr typePatternExpr = e.asTypePatternExpr();
             if (typePatternExpr.getNameAsString().equals(name)) {
                 JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                 return SymbolReference.solved(decl);

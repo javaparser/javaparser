@@ -142,10 +142,10 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
         if (pattern == null) {
             return Optional.empty();
         }
-        if (!(pattern instanceof TypePatternExpr)) {
+        if (!pattern.isTypePatternExpr()) {
             return Optional.empty();
         }
-        return Optional.of(((TypePatternExpr) pattern).getName());
+        return Optional.of(pattern.asTypePatternExpr().getName());
     }
 
     @Override

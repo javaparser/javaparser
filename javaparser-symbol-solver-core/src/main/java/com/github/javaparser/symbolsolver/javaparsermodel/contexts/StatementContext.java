@@ -221,8 +221,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
         for (int i = 0; i < patternExprs.size(); i++) {
             PatternExpr patternExpr = patternExprs.get(i);
-            if (patternExpr instanceof TypePatternExpr) {
-                TypePatternExpr typePatternExpr = (TypePatternExpr) patternExpr;
+            if (patternExpr.isTypePatternExpr()) {
+                TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
                 if(typePatternExpr.getNameAsString().equals(name)) {
                     return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver));
                 }

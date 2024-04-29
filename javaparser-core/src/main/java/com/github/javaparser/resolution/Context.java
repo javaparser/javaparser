@@ -329,7 +329,7 @@ public interface Context {
         Optional<PatternExpr> localResolutionResults = parentContext
                 .patternExprsExposedToChild(wrappedNode)
                 .stream()
-                .filter(vd -> vd instanceof TypePatternExpr && ((TypePatternExpr) vd).getNameAsString().equals(name))
+                .filter(vd -> vd.isTypePatternExpr() && vd.asTypePatternExpr().getNameAsString().equals(name))
                 .findFirst();
         if (localResolutionResults.isPresent()) {
             return localResolutionResults;

@@ -211,7 +211,7 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         List<PatternExpr> patternExprs = patternExprsExposedToDirectParentFromBranch(leftBranch);
         Optional<PatternExpr> localResolutionResults = patternExprs
                 .stream()
-                .filter(vd -> vd instanceof TypePatternExpr && ((TypePatternExpr) vd).getNameAsString().equals(name))
+                .filter(vd -> vd.isTypePatternExpr() && vd.asTypePatternExpr().getNameAsString().equals(name))
                 .findFirst();
 
         if (localResolutionResults.isPresent()) {

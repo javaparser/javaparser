@@ -103,7 +103,7 @@ class InstanceOfExprTest {
 
         PatternExpr patternExpr = expr.getPattern().get();
         assertInstanceOf(TypePatternExpr.class, patternExpr);
-        TypePatternExpr typePatternExpr = (TypePatternExpr) patternExpr;
+        TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
         assertEquals("String", typePatternExpr.getType().asString());
         assertEquals("s", typePatternExpr.getName().asString());
         assertFalse(typePatternExpr.isFinal());
@@ -145,7 +145,7 @@ class InstanceOfExprTest {
 
         PatternExpr patternExpr = expr.getPattern().get();
         assertInstanceOf(TypePatternExpr.class, patternExpr);
-        TypePatternExpr typePatternExpr = (TypePatternExpr) patternExpr;
+        TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
         assertEquals("String", typePatternExpr.getType().asString());
         assertEquals("s", typePatternExpr.getName().asString());
         assertTrue(typePatternExpr.isFinal());

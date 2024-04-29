@@ -697,7 +697,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .patternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p instanceof TypePatternExpr &&  ((TypePatternExpr) p).getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.isTypePatternExpr() &&  p.asTypePatternExpr().getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
@@ -710,7 +710,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .negatedPatternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p instanceof TypePatternExpr && ((TypePatternExpr) p).getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.isTypePatternExpr() && p.asTypePatternExpr().getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     @Test
