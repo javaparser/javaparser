@@ -23,7 +23,6 @@ package com.github.javaparser.resolution.types;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
@@ -90,17 +89,14 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
             return true;
         if (o == null)
             return false;
-
         if (o instanceof LazyType) {
             final LazyType lazyType = (LazyType) o;
             if (!lazyType.isReferenceType())
                 return false;
             return this.equals(lazyType.asReferenceType());
         }
-
         if (getClass() != o.getClass())
             return false;
-
         ResolvedReferenceType that = (ResolvedReferenceType) o;
         if (!typeDeclaration.equals(that.typeDeclaration))
             return false;
@@ -524,8 +520,8 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     public boolean isJavaLangObject() {
-        return this.isReferenceType() && // Consider anonymous classes
-                hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
+        return // Consider anonymous classes
+                this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_OBJECT);
     }
 
     /**
@@ -533,8 +529,8 @@ public abstract class ResolvedReferenceType implements ResolvedType, ResolvedTyp
      * @see ResolvedReferenceTypeDeclaration#isJavaLangEnum()
      */
     public boolean isJavaLangEnum() {
-        return this.isReferenceType() && // Consider anonymous classes
-                hasName() && getQualifiedName().equals(JAVA_LANG_ENUM);
+        return // Consider anonymous classes
+                this.isReferenceType() && hasName() && getQualifiedName().equals(JAVA_LANG_ENUM);
     }
 
     // /

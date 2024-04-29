@@ -42,11 +42,9 @@ import com.github.javaparser.metamodel.MethodDeclarationMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -266,10 +264,7 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     private boolean isImplicitlyPublic() {
-        return getAccessSpecifier() == AccessSpecifier.NONE
-                && hasParentNode()
-                && getParentNode().get() instanceof ClassOrInterfaceDeclaration
-                && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface();
+        return getAccessSpecifier() == AccessSpecifier.NONE && hasParentNode() && getParentNode().get() instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface();
     }
 
     /*
@@ -282,12 +277,8 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     }
 
     private boolean isImplicitlyAbstract() {
-        return hasParentNode() && getParentNode().get() instanceof ClassOrInterfaceDeclaration
-                && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface()
-                && Arrays.asList(STATIC, DEFAULT, PRIVATE).stream()
-                .noneMatch(modifier -> hasModifier(modifier));
+        return hasParentNode() && getParentNode().get() instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration) getParentNode().get()).isInterface() && Arrays.asList(STATIC, DEFAULT, PRIVATE).stream().noneMatch(modifier -> hasModifier(modifier));
     }
-
 
     public boolean isNative() {
         return hasModifier(Modifier.DefaultKeyword.NATIVE);

@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.function.Function;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.UnaryExpr;
 
@@ -224,15 +223,15 @@ public class Utils {
         if (value == null) {
             return true;
         }
-//        // is not Optional?
-//        if (!(value instanceof Optional)) {
-//        	return false;
-//        }
-//        // is an empty Optional?
-//		if (!((Optional) value).isPresent()) {
-//			return true;
-//		}
-//        return false;
+        //        // is not Optional?
+        //        if (!(value instanceof Optional)) {
+        //        	return false;
+        //        }
+        //        // is an empty Optional?
+        //		if (!((Optional) value).isPresent()) {
+        //			return true;
+        //		}
+        //        return false;
         return value instanceof Optional ? !((Optional) value).isPresent() : false;
     }
 
