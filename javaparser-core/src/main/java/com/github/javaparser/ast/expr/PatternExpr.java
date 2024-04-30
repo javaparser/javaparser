@@ -31,7 +31,6 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.PatternExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.Node;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 

@@ -24,7 +24,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.PatternExpr;
-import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
