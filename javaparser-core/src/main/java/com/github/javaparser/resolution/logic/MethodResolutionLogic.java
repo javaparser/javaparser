@@ -798,30 +798,8 @@ public class MethodResolutionLogic {
         return paramType.isReferenceType() && paramType.asReferenceType().getQualifiedName().equals("java.lang.Object");
     }
 
-    private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB) {
-        boolean oneMoreSpecificFound = false;
-        for (int i = 0; i < methodA.getNoParams(); i++) {
-            ResolvedType tdA = methodA.getParamType(i);
-            ResolvedType tdB = methodB.getParamType(i);
-
-            boolean aIsAssignableByB = tdA.isAssignableBy(tdB);
-            boolean bIsAssignableByA = tdB.isAssignableBy(tdA);
-
-            // A is more specific
-            if (bIsAssignableByA && !aIsAssignableByB) {
-                oneMoreSpecificFound = true;
-            }
-            // B is more specific
-            if (aIsAssignableByB && !bIsAssignableByA) {
-                return false;
-            }
-
-            // If B is vararg and A is not, A is more specific
-            if (tdB.isArray() && tdB.asArrayType().getComponentType().isAssignableBy(tdA)) {
-                oneMoreSpecificFound = true;
-            }
-        }
-        return oneMoreSpecificFound;
+    private static boolean isMoreSpecific(MethodUsage methodA, MethodUsage methodB, List<ResolvedType> argumentTypes) {
+    	return isMoreSpecific(methodA.getDeclaration(), methodB.getDeclaration(), argumentTypes);
     }
 
     public static Optional<MethodUsage> findMostApplicableUsage(List<MethodUsage> methods, String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver) {
@@ -836,9 +814,9 @@ public class MethodResolutionLogic {
         MethodUsage winningCandidate = applicableMethods.get(0);
         for (int i = 1; i < applicableMethods.size(); i++) {
                 MethodUsage other = applicableMethods.get(i);
-                if (isMoreSpecific(winningCandidate, other)) {
+                if (isMoreSpecific(winningCandidate, other, argumentsTypes)) {
                     // nothing to do
-                } else if (isMoreSpecific(other, winningCandidate)) {
+                } else if (isMoreSpecific(other, winningCandidate, argumentsTypes)) {
                     winningCandidate = other;
                 } else {
                     if (winningCandidate.declaringType().getQualifiedName().equals(other.declaringType().getQualifiedName())) {
