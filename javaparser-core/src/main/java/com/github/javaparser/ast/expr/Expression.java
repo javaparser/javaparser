@@ -30,12 +30,10 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.ExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -44,20 +42,18 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
  * @author Julio Vilmar Gesser
  */
 public abstract class Expression extends Node {
-    
+
     /**
      * Returns {@code true} when the Node to be tested is not an
      * {@link EnclosedExpr}, {@code false} otherwise.
      */
     public static final Predicate<Node> IS_NOT_ENCLOSED_EXPR = n -> !(n instanceof EnclosedExpr);
 
-
     /**
-     * A {@link Function} that returns its argument (an {@link Expression}) when 
-     * the argument is not an {@link EnclosedExpr}, otherwise the first 
-     * {@link Expression} down the argument's 'inner' path that is not an 
+     * A {@link Function} that returns its argument (an {@link Expression}) when
+     * the argument is not an {@link EnclosedExpr}, otherwise the first
+     * {@link Expression} down the argument's 'inner' path that is not an
      * {@link EnclosedExpr}.
-     * 
      */
     public static final Function<Expression, Expression> EXCLUDE_ENCLOSED_EXPR = expr -> {
         while (expr.isEnclosedExpr()) {
@@ -65,7 +61,7 @@ public abstract class Expression extends Node {
         }
         return expr;
     };
-    
+
     @AllFieldsConstructor
     public Expression() {
         this(null);
@@ -783,25 +779,6 @@ public abstract class Expression extends Node {
     public void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
     }
 
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isPatternExpr() {
-        return false;
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public PatternExpr asPatternExpr() {
-        throw new IllegalStateException(f("%s is not PatternExpr, it is %s", this, this.getClass().getSimpleName()));
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<PatternExpr> toPatternExpr() {
-        return Optional.empty();
-    }
-
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifPatternExpr(Consumer<PatternExpr> action) {
-    }
-
     /**
      * See https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.2
      * @return true if the expression is a standalone expression
@@ -880,5 +857,43 @@ public abstract class Expression extends Node {
         Expression scope = (Expression) ((NodeWithOptionalScope) this).getScope().get();
         NodeWithTypeArguments nwta = (NodeWithTypeArguments) this;
         return scope.elidesTypeArguments() && (!nwta.getTypeArguments().isPresent() || nwta.isUsingDiamondOperator());
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isTypePatternExpr() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public TypePatternExpr asTypePatternExpr() {
+        throw new IllegalStateException(f("%s is not TypePatternExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<TypePatternExpr> toTypePatternExpr() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifTypePatternExpr(Consumer<TypePatternExpr> action) {
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isPatternExpr() {
+        return false;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public PatternExpr asPatternExpr() {
+        throw new IllegalStateException(f("%s is not PatternExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<PatternExpr> toPatternExpr() {
+        return Optional.empty();
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifPatternExpr(Consumer<PatternExpr> action) {
     }
 }

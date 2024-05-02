@@ -24,7 +24,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.TypeSolver;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
@@ -50,8 +50,8 @@ public final class JavaParserSymbolDeclaration {
         return new JavaParserVariableDeclaration(variableDeclarator, typeSolver);
     }
 
-    public static JavaParserPatternDeclaration patternVar(PatternExpr patternExpr, TypeSolver typeSolver) {
-        return new JavaParserPatternDeclaration(patternExpr, typeSolver);
+    public static JavaParserPatternDeclaration patternVar(TypePatternExpr typePatternExpr, TypeSolver typeSolver) {
+        return new JavaParserPatternDeclaration(typePatternExpr, typeSolver);
     }
 
     public static int getParamPos(Parameter parameter) {

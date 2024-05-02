@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
 
@@ -101,9 +102,11 @@ class InstanceOfExprTest {
         assertTrue(expr.getPattern().isPresent());
 
         PatternExpr patternExpr = expr.getPattern().get();
-        assertEquals("String", patternExpr.getType().asString());
-        assertEquals("s", patternExpr.getName().asString());
-        assertFalse(patternExpr.isFinal());
+        assertInstanceOf(TypePatternExpr.class, patternExpr);
+        TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
+        assertEquals("String", typePatternExpr.getType().asString());
+        assertEquals("s", typePatternExpr.getName().asString());
+        assertFalse(typePatternExpr.isFinal());
 
         //
         assertTrue(expr.getName().isPresent());
@@ -141,9 +144,11 @@ class InstanceOfExprTest {
         assertTrue(expr.getPattern().isPresent());
 
         PatternExpr patternExpr = expr.getPattern().get();
-        assertEquals("String", patternExpr.getType().asString());
-        assertEquals("s", patternExpr.getName().asString());
-        assertTrue(patternExpr.isFinal());
+        assertInstanceOf(TypePatternExpr.class, patternExpr);
+        TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
+        assertEquals("String", typePatternExpr.getType().asString());
+        assertEquals("s", typePatternExpr.getName().asString());
+        assertTrue(typePatternExpr.isFinal());
 
         //
         assertTrue(expr.getName().isPresent());

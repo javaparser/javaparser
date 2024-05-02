@@ -3316,6 +3316,14 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+PatternExpr PatternExpression():
+{
+    PatternExpr ret;
+}
+{
+    ret = TypePatternExpression()
+    { return ret; }
+}
 
 /**
  * https://openjdk.java.net/jeps/375
@@ -3325,7 +3333,7 @@ Expression EqualityExpression():
  *         ReferenceType Identifier
  * }<pre>
  */
-PatternExpr PatternExpression():
+TypePatternExpr TypePatternExpression():
 {
     ModifierHolder modifier;
     ReferenceType type;
@@ -3335,7 +3343,7 @@ PatternExpr PatternExpression():
     modifier = Modifiers()
     type = ReferenceType(modifier.annotations)
     name = SimpleName()
-    { return new PatternExpr(range(type, token()), modifier.modifiers, type, name); }
+    { return new TypePatternExpr(range(type, token()), modifier.modifiers, type, name); }
 }
 
 

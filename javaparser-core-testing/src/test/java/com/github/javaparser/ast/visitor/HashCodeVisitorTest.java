@@ -711,7 +711,7 @@ class HashCodeVisitorTest {
 
 	@Test
 	void testVisitPatternExpr() {
-		PatternExpr node = spy(new PatternExpr());
+		TypePatternExpr node = spy(new TypePatternExpr());
 		HashCodeVisitor.hashCode(node);
 		verify(node, times(1)).getModifiers();
 		verify(node, times(1)).getName();

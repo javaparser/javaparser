@@ -2191,7 +2191,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final PatternExpr n, final A arg) {
+    public List<R> visit(final TypePatternExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {

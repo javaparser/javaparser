@@ -165,8 +165,8 @@ public class JavaParserFactory {
         if (node instanceof Parameter) {
             return new ParameterSymbolDeclarator((Parameter) node, typeSolver);
         }
-        if (node instanceof PatternExpr) {
-            return new PatternSymbolDeclarator((PatternExpr) node, typeSolver);
+        if (node instanceof TypePatternExpr) {
+            return new PatternSymbolDeclarator((TypePatternExpr) node, typeSolver);
         }
         if (node instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) node;

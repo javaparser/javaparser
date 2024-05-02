@@ -2097,7 +2097,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final PatternExpr n, final A arg) {
+    public R visit(final TypePatternExpr n, final A arg) {
         R result;
         {
             result = n.getModifiers().accept(this, arg);

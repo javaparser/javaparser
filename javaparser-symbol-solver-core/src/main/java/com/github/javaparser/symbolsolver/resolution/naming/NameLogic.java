@@ -178,10 +178,10 @@ public class NameLogic {
         if (whenParentIs(Parameter.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
-        if (whenParentIs(PatternExpr.class, name, (p, c) -> p.getName() == c)) {
+        if (whenParentIs(TypePatternExpr.class, name, (p, c) -> p.getName() == c)) {
             return NameRole.DECLARATION;
         }
-        if (whenParentIs(PatternExpr.class, name, (p, c) -> p.getType() == c)) {
+        if (whenParentIs(TypePatternExpr.class, name, (p, c) -> p.getType() == c)) {
             return NameRole.REFERENCE;
         }
         if (whenParentIs(ReceiverParameter.class, name, (p, c) -> p.getType() == c)) {

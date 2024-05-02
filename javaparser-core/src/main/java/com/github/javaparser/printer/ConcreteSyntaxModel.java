@@ -123,7 +123,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(EnclosedExpr.class, sequence(comment(), token(GeneratedJavaParserConstants.LPAREN), child(ObservableProperty.INNER), token(GeneratedJavaParserConstants.RPAREN)));
         concreteSyntaxModelByClass.put(FieldAccessExpr.class, sequence(comment(), child(SCOPE), token(GeneratedJavaParserConstants.DOT), child(ObservableProperty.NAME)));
         concreteSyntaxModelByClass.put(InstanceOfExpr.class, sequence(comment(), child(ObservableProperty.EXPRESSION), space(), token(GeneratedJavaParserConstants.INSTANCEOF), space(), child(ObservableProperty.TYPE)));
-        concreteSyntaxModelByClass.put(PatternExpr.class, sequence(child(ObservableProperty.TYPE), space(), child(ObservableProperty.NAME)));
+        concreteSyntaxModelByClass.put(TypePatternExpr.class, sequence(child(ObservableProperty.TYPE), space(), child(ObservableProperty.NAME)));
         concreteSyntaxModelByClass.put(IntegerLiteralExpr.class, sequence(comment(), attribute(ObservableProperty.VALUE)));
         concreteSyntaxModelByClass.put(LambdaExpr.class, sequence(comment(), conditional(ObservableProperty.ENCLOSING_PARAMETERS, FLAG, token(GeneratedJavaParserConstants.LPAREN)), list(ObservableProperty.PARAMETERS, sequence(comma(), space())), conditional(ObservableProperty.ENCLOSING_PARAMETERS, FLAG, token(GeneratedJavaParserConstants.RPAREN)), space(), token(GeneratedJavaParserConstants.ARROW), space(), conditional(ObservableProperty.EXPRESSION_BODY, IS_PRESENT, child(ObservableProperty.EXPRESSION_BODY), child(ObservableProperty.BODY))));
         concreteSyntaxModelByClass.put(LongLiteralExpr.class, sequence(comment(), attribute(ObservableProperty.VALUE)));

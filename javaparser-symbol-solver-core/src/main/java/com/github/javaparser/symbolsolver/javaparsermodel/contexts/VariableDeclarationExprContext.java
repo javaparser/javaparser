@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -45,9 +46,11 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
         for (int i = 0; i < patternExprs.size(); i++) {
-            PatternExpr patternExpr = patternExprs.get(i);
-            if(patternExpr.getNameAsString().equals(name)) {
-                return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
+            if (patternExprs.get(i).isTypePatternExpr()) {
+                TypePatternExpr typePatternExpr = patternExprs.get(i).asTypePatternExpr();
+                if (typePatternExpr.getNameAsString().equals(name)) {
+                    return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver));
+                }
             }
         }
 

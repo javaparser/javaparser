@@ -520,7 +520,7 @@ class VoidVisitorWithDefaultsTest {
 
     @Test
     void testThatVisitWithPatternExprAsParameterCallDefaultAction() {
-        visitor.visit(mock(PatternExpr.class), argument);
+        visitor.visit(mock(TypePatternExpr.class), argument);
         assertNodeVisitDefaultAction();
     }
 

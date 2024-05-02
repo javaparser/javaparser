@@ -26,6 +26,7 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.resolution.Context;
@@ -220,8 +221,11 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
         for (int i = 0; i < patternExprs.size(); i++) {
             PatternExpr patternExpr = patternExprs.get(i);
-            if(patternExpr.getNameAsString().equals(name)) {
-                return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver));
+            if (patternExpr.isTypePatternExpr()) {
+                TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
+                if(typePatternExpr.getNameAsString().equals(name)) {
+                    return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver));
+                }
             }
         }
 

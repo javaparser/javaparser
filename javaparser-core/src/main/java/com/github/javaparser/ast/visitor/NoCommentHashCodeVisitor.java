@@ -442,7 +442,7 @@ public class NoCommentHashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final PatternExpr n, final Void arg) {
+    public Integer visit(final TypePatternExpr n, final Void arg) {
         return (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getType().accept(this, arg));
     }
 

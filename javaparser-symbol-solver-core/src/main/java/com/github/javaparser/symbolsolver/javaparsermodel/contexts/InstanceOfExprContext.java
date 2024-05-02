@@ -22,6 +22,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.InstanceOfExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -44,10 +45,12 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        // TODO: Add PatternExprContext and solve in that
         Optional<PatternExpr> optionalPatternExpr = wrappedNode.getPattern();
-        if(optionalPatternExpr.isPresent()) {
-            if(optionalPatternExpr.get().getNameAsString().equals(name)) {
-                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr.get(), typeSolver);
+        if(optionalPatternExpr.isPresent() && (optionalPatternExpr.get().isTypePatternExpr())) {
+            TypePatternExpr typePatternExpr = optionalPatternExpr.get().asTypePatternExpr();
+            if(typePatternExpr.getNameAsString().equals(name)) {
+                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                 return SymbolReference.solved(decl);
             }
         }
@@ -61,8 +64,9 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
         Context parentContext = optionalParentContext.get();
         if(parentContext instanceof BinaryExprContext) {
             Optional<PatternExpr> optionalPatternExpr1 = parentContext.patternExprInScope(name);
-            if(optionalPatternExpr1.isPresent()) {
-                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(optionalPatternExpr1.get(), typeSolver);
+            if(optionalPatternExpr1.isPresent() && (optionalPatternExpr1.get().isTypePatternExpr())) {
+                TypePatternExpr typePatternExpr = optionalPatternExpr1.get().asTypePatternExpr();
+                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                 return SymbolReference.solved(decl);
             }
         } // TODO: Also consider unary expr context

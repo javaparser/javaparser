@@ -697,7 +697,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .patternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.isTypePatternExpr() &&  p.asTypePatternExpr().getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
@@ -710,7 +710,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                                                                   int expectedNumber, String message) {
         List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
                 .negatedPatternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.isTypePatternExpr() && p.asTypePatternExpr().getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     @Test
@@ -826,7 +826,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
 
     @Nested
-    class PatternExprTests {
+    class TypePatternExprTests {
         @Test
         void instanceOfPatternExpr0() {
             InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW, "a instanceof String", ParseStart.EXPRESSION).asInstanceOfExpr();
@@ -868,7 +868,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
 
         @Nested
-        class PatternExprNegationTests {
+        class TypePatternExprNegationTests {
             @Test
             void instanceOfPatternExpr4() {
                 String message = "Only s (NEGATED) must be available from this expression.";
@@ -903,7 +903,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
 
         @Nested
-        class PatternExprBinaryExprTests {
+        class TypePatternExprBinaryExprTests {
 
             @Test
             void instanceOfPatternExprBinaryExpr1() {
@@ -1019,7 +1019,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
 
         @Nested
-        class PatternExprVariableDeclarationTests {
+        class TypePatternExprVariableDeclarationTests {
 
             @Test
             void instanceOfPatternExprVariableDeclaration_variableDeclaration() {
@@ -1147,7 +1147,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
 
         @Nested
-        class PatternExprScopeTests {
+        class TypePatternExprScopeTests {
 
             @Test
             void instanceOfPatternExprResolution_expr1() {
@@ -1243,6 +1243,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 SymbolReference<? extends ResolvedValueDeclaration> left_s = leftBranchContext.solveSymbol("s");
                 assertTrue(left_s.isSolved());
                 Optional<PatternExpr> optionalPatternExpr = leftBranchContext.patternExprInScope("s");
+                assertTrue(optionalPatternExpr.isPresent());
                 SymbolReference<? extends ResolvedValueDeclaration> left_s2 = leftBranchContext.solveSymbol("s2");
                 assertFalse(left_s2.isSolved());
 

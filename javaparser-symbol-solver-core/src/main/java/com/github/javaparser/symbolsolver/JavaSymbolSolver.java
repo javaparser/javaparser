@@ -301,8 +301,8 @@ public class JavaSymbolSolver implements SymbolResolver {
                 throw new UnsolvedSymbolException("We are unable to find the annotation declaration corresponding to " + node);
             }
         }
-        if (node instanceof PatternExpr) {
-            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((PatternExpr) node);
+        if (node instanceof TypePatternExpr) {
+            SymbolReference<? extends ResolvedValueDeclaration> result = JavaParserFacade.get(typeSolver).solve((TypePatternExpr) node);
             if (result.isSolved()) {
                 if (resultClass.isInstance(result.getCorrespondingDeclaration())) {
                     return resultClass.cast(result.getCorrespondingDeclaration());

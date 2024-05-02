@@ -92,7 +92,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  *
- * @see com.github.javaparser.ast.expr.PatternExpr
+ * @see PatternExpr
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
@@ -131,7 +131,7 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     }
 
     /**
-     * Helper method which, if this is an expression with a pattern, returns the identifier/name.
+     * Helper method which, if this is an expression with a type pattern, returns the identifier/name.
      * <br>
      * <br>For example:
      * <br>{@code obj instanceof String stringName}
@@ -142,7 +142,10 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
         if (pattern == null) {
             return Optional.empty();
         }
-        return Optional.of(pattern.getName());
+        if (!pattern.isTypePatternExpr()) {
+            return Optional.empty();
+        }
+        return Optional.of(pattern.asTypePatternExpr().getName());
     }
 
     @Override

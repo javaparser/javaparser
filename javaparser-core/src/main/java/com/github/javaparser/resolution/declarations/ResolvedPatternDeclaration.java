@@ -20,13 +20,15 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.expr.TypePatternExpr;
+
 /**
  * Declaration of a pattern expression.
  * <p>
  * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
  *
  * @author Roger Howell
- * @see com.github.javaparser.ast.expr.PatternExpr
+ * @see TypePatternExpr
  */
 public interface ResolvedPatternDeclaration extends ResolvedValueDeclaration {
 

@@ -144,19 +144,20 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         // First check if there are any pattern expressions available to this node.
         Context parentContext = optionalParentContext.get();
         if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
-            List<PatternExpr> patternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
+            List<PatternExpr> typePatternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
 
-            Optional<PatternExpr> localResolutionResults = patternExprs
+            Optional<PatternExpr> localResolutionResults = typePatternExprs
                     .stream()
-                    .filter(vd -> vd.getNameAsString().equals(name))
+                    .filter(vd -> vd.isTypePatternExpr() && vd.asTypePatternExpr().getNameAsString().equals(name))
                     .findFirst();
 
-            if (localResolutionResults.isPresent()) {
-                if (patternExprs.size() == 1) {
-                    JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(localResolutionResults.get(), typeSolver);
+            if (localResolutionResults.isPresent() && localResolutionResults.get().isTypePatternExpr()) {
+                if (typePatternExprs.size() == 1) {
+                    TypePatternExpr typePatternExpr = localResolutionResults.get().asTypePatternExpr();
+                    JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                     return SymbolReference.solved(decl);
                 }
-                if(patternExprs.size() > 1) {
+                if(typePatternExprs.size() > 1) {
                     throw new IllegalStateException("Unexpectedly more than one reference in scope");
                 }
             }

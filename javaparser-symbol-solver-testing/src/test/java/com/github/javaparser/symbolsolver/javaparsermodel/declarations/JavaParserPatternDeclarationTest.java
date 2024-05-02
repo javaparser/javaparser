@@ -24,7 +24,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedPatternDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
@@ -50,8 +50,8 @@ class JavaParserPatternDeclarationTest implements ResolvedPatternDeclarationTest
 
     @Override
     public JavaParserPatternDeclaration createValue() {
-        PatternExpr wrappedNode = StaticJavaParser.parse("class A {a() {if (object instanceof String d) return;}}")
-                .findFirst(PatternExpr.class).get();
+        TypePatternExpr wrappedNode = StaticJavaParser.parse("class A {a() {if (object instanceof String d) return;}}")
+                .findFirst(TypePatternExpr.class).get();
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         return new JavaParserPatternDeclaration(wrappedNode, typeSolver);
     }
