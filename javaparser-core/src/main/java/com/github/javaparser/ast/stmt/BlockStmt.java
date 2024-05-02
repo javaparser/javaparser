@@ -193,8 +193,8 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<NodeList<JmlContract>> getContracts() {
-        return Optional.ofNullable(contracts);
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")

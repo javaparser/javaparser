@@ -244,8 +244,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final BlockStmt n, final A arg) {
         R result;
-        if (n.getContracts().isPresent()) {
-            result = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -505,8 +505,8 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getContracts().isPresent()) {
-            result = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -582,11 +582,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getContracts().isPresent()) {
-            result = n.getContracts().get().accept(this, arg);
-            if (result != null)
-                return result;
-        }
+        result = n.getContracts().accept(this, arg);
+        if (result != null)
+            return result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)
@@ -807,11 +805,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getContracts().isPresent()) {
-            result = n.getContracts().get().accept(this, arg);
-            if (result != null)
-                return result;
-        }
+        result = n.getContracts().accept(this, arg);
+        if (result != null)
+            return result;
         {
             result = n.getIterable().accept(this, arg);
             if (result != null)
@@ -843,11 +839,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getContracts().isPresent()) {
-            result = n.getContracts().get().accept(this, arg);
-            if (result != null)
-                return result;
-        }
+        result = n.getContracts().accept(this, arg);
+        if (result != null)
+            return result;
         {
             result = n.getInitialization().accept(this, arg);
             if (result != null)
@@ -1074,11 +1068,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getContracts().isPresent()) {
-            result = n.getContracts().get().accept(this, arg);
-            if (result != null)
-                return result;
-        }
+        result = n.getContracts().accept(this, arg);
+        if (result != null)
+            return result;
         {
             result = n.getModifiers().accept(this, arg);
             if (result != null)
@@ -1751,11 +1743,9 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getContracts().isPresent()) {
-            result = n.getContracts().get().accept(this, arg);
-            if (result != null)
-                return result;
-        }
+        result = n.getContracts().accept(this, arg);
+        if (result != null)
+            return result;
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)

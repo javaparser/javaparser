@@ -13,7 +13,6 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.OptionalProperty;
-import java.util.Optional;
 
 /**
  * @author Alexander Weigl
@@ -53,8 +52,8 @@ public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelP
     }
 
     @Override
-    public Optional<NodeList<JmlContract>> getContracts() {
-        return Optional.of(contracts);
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
     }
 
     @Override

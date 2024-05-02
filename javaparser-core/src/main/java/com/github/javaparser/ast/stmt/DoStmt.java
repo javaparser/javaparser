@@ -38,8 +38,10 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -215,8 +217,8 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<NodeList<JmlContract>> getContracts() {
-        return Optional.ofNullable(contracts);
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")

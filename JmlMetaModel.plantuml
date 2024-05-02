@@ -1,0 +1,248 @@
+@startuml
+
+package "Java" #DDDDDD {
+	abstract class Statement
+	abstract class Expression
+	abstract class BodyDeclaration
+
+	abstract class Callable
+	class Method extends Callable
+	class Constructor extends Callable
+	/'(Callable,"JML".JmlContract) . JmlContainer'/
+	abstract class Type
+
+	class BlockStmt extends Statement
+	BlockStmt -> "*" Statement
+}
+
+package "JML" #DFEFEF {
+interface JmlContainer {
+	tags : List<String>
+}
+
+/'class Jmlish
+class DefaultJmlContainer '/
+abstract class JmlBodyDeclaration
+enum Behavior {
+    NONE
+    BEHAVIOR
+    NORMAL
+    ABRUPT
+    EXCEPTIONAL
+    MODEL
+    BREAK
+    CONTINUE
+    RETURN
+}
+abstract class JmlStatement extends Java.Statement, JmlContainer
+class JmlBeginStmt extends JmlStatement {
+
+}
+class JmlUnreachableStmt extends JmlStatement
+class JmlExpressionStmt extends JmlStatement {
+	/'expression: Java.Expression'/
+}
+JmlExpressionStmt -> Java.Expression
+
+class JmlGhostStmt extends JmlStatement {
+	stmt : Java.Statement
+}
+class JmlRefiningStmt extends JmlStatement
+JmlRefiningStmt -> JmlContract
+
+class JmlLabelStmt extends JmlStatement {
+	label: Java.SimpleName
+}
+
+class JmlEndStmt extends JmlStatement {}
+class JmlLetExpr extends Java.Expression {
+	variables: Java.VariableDeclarationExpr
+	expression: Java.Expression
+}
+abstract class JmlClassLevel extends JmlContainer
+class JmlRepresentsDeclaration extends JmlClassLevel
+class JmlFieldDeclaration extends JmlClassLevel
+class JmlMethodDeclaration extends JmlClassLevel
+class JmlClassAccessibleDeclaration extends JmlClassLevel
+class JmlClassExprDeclaration extends JmlClassLevel {
+	kind : SimpleName
+    name : SimpleName
+    modifiers : NodeList<Modifier>
+    expression : Java.Expression
+    jmlTags: List<SimpleName>
+}
+
+class JmlQuantifiedExpr extends Java.Expression {
+    /'private JmlBinder binder;'/
+    variables : List<Java.Parameter>
+    expressions : List<Java.Expression>
+}
+JmlQuantifiedExpr -> Quantifier
+enum Quantifier {
+        FORALL
+        EXISTS
+        NUM_OF
+        MIN
+        MAX
+        SUM
+        BSUM
+        UNION
+        SEQDEF
+        PRODUCT
+        CHOOSE
+}
+
+abstract class JmlClause {
+	name : SimpleName
+}
+JmlClause ---> JmlClauseKind
+enum JmlClauseKind {
+    ENSURES
+    ENSURES_FREE
+    ENSURES_REDUNDANTLY
+    REQUIRES
+    REQUIRES_FREE
+    REQUIRES_REDUNDANTLY
+    DECREASES
+    MODIFIES
+    MODIFIABLE
+    ASSIGNABLE
+    ACCESSIBLE
+    PRE
+    POST
+    PRE_REDUNDANTLY
+    POST_REDUNDANTLY
+    MAINTAINING
+    MAINTAINING_REDUNDANTLY
+    DECREASING
+    DECREASES_REDUNDANTLY
+    LOOP_INVARIANT
+    LOOP_INVARIANT_FREE
+    LOOP_INVARIANT_REDUNDANTLY
+    MEASURED_BY
+    RETURNS
+    RETURNS_REDUNDANTLY
+    BREAKS
+    BREAKS_REDUNDANTLY
+    CONTINUES
+    CONTINUES_REDUNDANTLY
+    OLD
+    FORALL
+    SIGNALS
+    SIGNALS_REDUNDANTLY
+    SIGNALS_ONLY
+    WHEN
+    WORKING_SPACE
+    WORKING_SPACE_REDUNDANTLY
+    CAPTURES
+    CAPTURES_REDUNDANTLY
+    INITIALLY
+    INVARIANT_REDUNDANTLY
+    INVARIANT
+    ASSIGNABLE_REDUNDANTLY
+    MODIFIABLE_REDUNDANTLY
+    MODIFIES_REDUNDANTLY
+    CALLABLE
+    CALLABLE_REDUNDANTLY
+    DIVERGES
+    DIVERGES_REDUNDANTLY
+    DURATION
+    DURATION_REDUNDANTLY
+    NONE
+}
+
+class JmlClauseIf extends JmlClause
+class JmlMultiExprClause extends JmlClause {
+        heaps : NodeList<SimpleName>
+}
+JmlMultiCompareExpr "*" -> "1" JmlClauseKind
+JmlMultiCompareExpr "*" -> "*" Java.Expression
+
+class JmlSimpleExprClause extends JmlClause {
+	/'expression : Java.Expression'/
+}
+JmlSimpleExprClause "*" -> "1" Java.Expression
+
+class JmlAccessibleClause extends JmlClause
+class JmlClauseLabel extends JmlClause {
+	label:Java.SimpleName
+	expression:Java.Expression
+
+}
+
+class JmlOldClause extends JmlClause {
+    declarations : Java.VariableDeclarationExpr
+}
+class JmlCallableClause extends JmlClause {
+
+}
+class JmlForallClause extends JmlClause {
+    boundedVariables : NodeList<Parameter>
+}
+class JmlCapturesClause extends JmlClause
+class JmlSignalsClause extends JmlClause {
+	parameter: Java.Parameter
+	expression: Java.Expression
+}
+class JmlSignalsOnlyClause extends JmlClause {
+	type: Java.Type
+}
+class JmlMultiCompareExpr extends Java.Expression
+class JmlImportDeclaration
+class JmlSetComprehension extends Java.Expression {
+	binding : Java.VariableDeclarator
+	predicate : Java.Expression
+}
+
+class JmlLogicType extends Java.Type
+JmlLogicType -> LogicPrimitiveType
+enum LogicPrimitiveType {
+	\seq
+	\map
+	\set
+	\bigint
+	\bigfloat
+}
+
+class JmlLabelExpr extends Java.Expression
+abstract class JmlBodyDeclaration extends Java.BodyDeclaration
+
+class JmlContract extends JmlContainer {
+	/'type : ContractType'/
+	name : Java.SimpleName
+	modifiers : List<Modifier>
+}
+JmlContract "1" --> "*" JmlContract
+JmlContract "1" --> "*" JmlClause
+JmlContract -> ContractType
+
+enum ContractType{
+	METHOD
+	LAMBDA
+	LOOP
+	LOOP_INV
+	STATEMENT
+	BLOCK
+}
+JmlContract -> Behavior
+
+enum JmlStmtKind {
+	ASSERT
+	ASSERT_REDUNDANTLY
+	ASSUME
+	ASSUME_REDUNDANTLY
+	HENCE_BY
+	HENCE_BY_REDUNDANTLY
+	SET
+}
+
+JmlExpressionStmt -> JmlStmtKind
+
+}
+
+Java.Callable "+ contracts 1" -> "0..*" JML.JmlContract
+
+Java.BlockStmt "+ contracts 1" -> "*" JML.JmlContract
+
+
+@enduml

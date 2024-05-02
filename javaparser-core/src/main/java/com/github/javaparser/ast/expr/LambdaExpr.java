@@ -29,6 +29,8 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.jml.NodeWithContracts;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.nodeTypes.NodeWithParameters;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -58,13 +60,15 @@ import com.github.javaparser.metamodel.LambdaExprMetaModel;
  *
  * @author Raquel Pau
  */
-public class LambdaExpr extends Expression implements NodeWithParameters<LambdaExpr> {
+public class LambdaExpr extends Expression implements NodeWithParameters<LambdaExpr>, NodeWithContracts<LambdaExpr> {
 
     private NodeList<Parameter> parameters;
 
     private boolean isEnclosingParameters;
 
     private Statement body;
+
+    private NodeList<JmlContract> contracts = new NodeList<>();
 
     public LambdaExpr() {
         this(null, new NodeList<>(), new ReturnStmt(), false);
@@ -278,5 +282,16 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
      */
     public boolean isExplicitlyTyped() {
         return getParameters().stream().allMatch(p -> !(p.getType().isUnknownType()));
+    }
+
+    @Override
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
+    }
+
+    @Override
+    public LambdaExpr setContracts(NodeList<JmlContract> contracts) {
+        this.contracts = contracts;
+        return this;
     }
 }

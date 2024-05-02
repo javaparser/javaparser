@@ -313,8 +313,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final BlockStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getContracts().isPresent()) {
-            tmp = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -585,8 +585,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts().isPresent()) {
-            tmp = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -664,8 +664,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts().isPresent()) {
-            tmp = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -904,8 +904,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts().isPresent()) {
-            tmp = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -936,8 +936,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts().isPresent()) {
-            tmp = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -1285,8 +1285,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts().isPresent()) {
-            tmp = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -1933,8 +1933,8 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts().isPresent()) {
-            tmp = n.getContracts().get().accept(this, arg);
+        if (n.getContracts() != null) {
+            tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

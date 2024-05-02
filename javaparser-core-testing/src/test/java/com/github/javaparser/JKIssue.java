@@ -38,7 +38,7 @@ public class JKIssue {
 
         var methods = cu.getPrimaryType().get().getMethods();
         for (var method : methods) {
-            Assertions.assertEquals(1, method.getContracts().get().size());
+            Assertions.assertEquals(1, method.getContracts().size());
         }
     }
 
@@ -50,7 +50,7 @@ public class JKIssue {
         CompilationUnit cu = parser.parse(Paths.get("src/test/test_sourcecode/MissingParentSimpleExprClause.java"))
                 .getResult().get();
 
-        var clause = cu.getType(0).getMethods().get(0).getContracts().get().get(0).getClauses().get(0).asJmlSimpleExprClause();
+        var clause = cu.getType(0).getMethods().get(0).getContracts().get(0).getClauses().get(0).asJmlSimpleExprClause();
         Assertions.assertEquals(1, clause.getChildNodes().size());
     }
 }

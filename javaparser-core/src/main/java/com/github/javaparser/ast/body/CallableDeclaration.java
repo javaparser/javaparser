@@ -47,7 +47,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
  */
-public abstract class CallableDeclaration<T extends CallableDeclaration<?>> extends BodyDeclaration<T> implements NodeWithAccessModifiers<T>, NodeWithDeclaration, NodeWithSimpleName<T>, NodeWithParameters<T>, NodeWithThrownExceptions<T>, NodeWithTypeParameters<T>, NodeWithJavadoc<T>, NodeWithAbstractModifier<T>, NodeWithStaticModifier<T>, NodeWithFinalModifier<T>, NodeWithStrictfpModifier<T>, NodeWithContracts<CallableDeclaration> {
+public abstract class CallableDeclaration<T extends CallableDeclaration<?>> extends BodyDeclaration<T> implements NodeWithAccessModifiers<T>, NodeWithDeclaration, NodeWithSimpleName<T>, NodeWithParameters<T>, NodeWithThrownExceptions<T>, NodeWithTypeParameters<T>, NodeWithJavadoc<T>, NodeWithAbstractModifier<T>, NodeWithStaticModifier<T>, NodeWithFinalModifier<T>, NodeWithStrictfpModifier<T>, NodeWithContracts<T> {
 
     private NodeList<Modifier> modifiers;
 
@@ -62,7 +62,6 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @OptionalProperty
     private ReceiverParameter receiverParameter;
 
-    @OptionalProperty
     private NodeList<JmlContract> contracts = new NodeList<>();
 
     @AllFieldsConstructor
@@ -450,8 +449,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<NodeList<JmlContract>> getContracts() {
-        return Optional.ofNullable(contracts);
+    public NodeList<JmlContract> getContracts() {
+        return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")

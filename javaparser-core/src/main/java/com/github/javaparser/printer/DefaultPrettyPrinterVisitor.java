@@ -1443,7 +1443,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(final MethodDeclaration n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-        printList(n.getContracts().get(), "\n");
+        printList(n.getContracts(), "\n");
         printMemberAnnotations(n.getAnnotations(), arg);
         printModifiers(n.getModifiers());
         printTypeParameters(n.getTypeParameters(), arg);
@@ -1587,7 +1587,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final BlockStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().ifPresent(it -> it.accept(this, arg));
+        n.getContracts().accept(this, arg);
         printComment(n.getComment(), arg);
         printer.println("{");
         if (n.getStatements() != null) {
@@ -1832,7 +1832,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final WhileStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().ifPresent(it -> it.accept(this, arg));
+        n.getContracts().accept(this, arg);
         printComment(n.getComment(), arg);
         printer.print("while (");
         n.getCondition().accept(this, arg);
@@ -1852,7 +1852,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final DoStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().ifPresent(it -> it.accept(this, arg));
+        n.getContracts().accept(this, arg);
         printComment(n.getComment(), arg);
         printer.print("do ");
         n.getBody().accept(this, arg);
@@ -1864,7 +1864,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final ForEachStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().ifPresent(it -> it.accept(this, arg));
+        n.getContracts().accept(this, arg);
         printComment(n.getComment(), arg);
         printer.print("for (");
         n.getVariable().accept(this, arg);
@@ -1877,7 +1877,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(final ForStmt n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
-        n.getContracts().ifPresent(it -> it.accept(this, arg));
+        n.getContracts().accept(this, arg);
         printComment(n.getComment(), arg);
         printer.print("for (");
         if (n.getInitialization() != null) {
