@@ -139,6 +139,45 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
     }
 
     @Test
+    void checkNodeTextCreatedForMethodParameterWithAnnotation() {
+        String code = "class A {void foo(@Nullable String p1, float p2) { }}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+        MethodDeclaration md = classA.getMethodsByName("foo").get(0);
+        Parameter p1 = md.getParameterByName("p1").get();
+        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(p1);
+        assertEquals(Arrays.asList("@Nullable", " ", "String", " ", "p1"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    void checkNodeTextCreatedForMethodWithTypeArgument() {
+        String code = "class A {Set<String> foo(String p1, float p2) { return null;}}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+        MethodDeclaration md = classA.getMethodsByName("foo").get(0);
+        Type p1 = md.getType().asClassOrInterfaceType().getTypeArguments().get().get(0);
+        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(p1);
+        assertEquals(Arrays.asList("String"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
+    void checkNodeTextCreatedForMethodWithAnnotatedTypeArgument() {
+        String code = "class A {Set<@Nullable String> foo() { return null;}}";
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration classA = cu.getClassByName("A").get();
+        MethodDeclaration md = classA.getMethodsByName("foo").get(0);
+        Type p1 = md.getType();
+        NodeText nodeText = LexicalPreservingPrinter.getOrCreateNodeText(p1);
+        assertEquals(Arrays.asList("Set", "<", "@", "Nullable", " " , "String", ">"),
+                nodeText.getElements().stream().map(TextElement::expand).collect(Collectors.toList()));
+    }
+
+    @Test
     void checkNodeTextCreatedForPrimitiveType() {
         String code = "class A {void foo(int p1, float p2) { }}";
         considerCode(code);
