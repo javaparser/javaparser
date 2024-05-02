@@ -34,6 +34,37 @@ import com.github.javaparser.TokenRange;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+/**
+ * <h1>Pattern Matching in Java</h1>
+ *
+ * <h2>Java 1.0 to 13</h2>
+ * Not available.
+ * <br>
+ * <h2>Java 14</h2>
+ * Java 14 introduced TypePatterns with simple pattern matching in {@code instanceof} expressions.
+ * @see com.github.javaparser.ast.expr.TypePatternExpr
+ * <h2>Java 21</h2>
+ * In Java 21, support for pattern matching was extended to switch expressions and {@code Record Patterns}
+ * were introduced. Since {@code Record Patterns} and {@code TypePatterns} can be used interchangeably, the
+ * {@code PatternExpr} class is used as a common parent for both in the JavaParser AST.
+ *
+ * <h3>JDK21 Grammar</h3>
+ * <br>
+ * <pre><code>Pattern:
+ *     TypePattern
+ *     RecordPattern
+ * TypePattern:
+ *     LocalVariableDeclaration
+ * RecordPattern:
+ *     ReferenceType ( [PatternList] )
+ * PatternList:
+ *     Pattern {, Pattern }</code></pre>
+ *
+ * @author Johannes Coetzee
+ *
+ * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
+ * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
+ */
 public abstract class PatternExpr extends Expression implements NodeWithType<PatternExpr, ReferenceType> {
 
     private ReferenceType type;
