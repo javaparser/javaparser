@@ -21,11 +21,13 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -430,28 +432,158 @@ class WildcardUsageTest {
         assertEquals(false, ref.getFieldType("bar").isPresent());
     }*/
 
-//    @Test
-//	void testIsAssignableByGenerics() {
-//		ResolvedType listOfSomethingExtendingNumbers = genericType(List.class.getCanonicalName(),
-//				extendsBound(Number.class.getCanonicalName()));
-//		ResolvedType listOfNumbers = genericType(List.class.getCanonicalName(), Number.class.getCanonicalName());
-//		ResolvedType listOfSomethingExtendingIntegers = genericType(List.class.getCanonicalName(),
-//				extendsBound(Integer.class.getCanonicalName()));
-//
-//		ResolvedType list1 = genericType(List.class.getCanonicalName(), Integer.class.getCanonicalName());
-//
-//		print(listOfSomethingExtendingIntegers.asReferenceType().getAllAncestors());
-//
-//		Collection<? extends Number> c1;
-//		Collection<Number> c2 = new ArrayList<>();;
-//		List<? extends Number> lnum = new ArrayList<>();
-//		List<? extends Integer> lint = new ArrayList<>();
-//		c1 = lint;
-//		c1 = lnum;
-//		lnum = lint;
-//		c1 = c2;
-//	}
+	/*
+	 * The raw type is the supertype of all possible generic types, whether they
+	 * contain a wildcard or not. For example, Collection is the supertype of
+	 * Collection<Number>, Collection<Integer>, but also of Collection<?> and
+	 * Collection<? extends Number>
+	 */
+    @Test
+	void testIsRawTypeAssignableByGenerics() {
+		ResolvedType rawCollectionType = type(Collection.class.getCanonicalName());
 
+		ResolvedType collectionOfNumbers = genericType(Collection.class.getCanonicalName(),
+				Number.class.getCanonicalName());
+		ResolvedType collectionOfSomethingExtendingNumbers = genericType(Collection.class.getCanonicalName(),
+				extendsBound(Number.class.getCanonicalName()));
+		ResolvedType collectionOfSomethingExtendingInteger = genericType(Collection.class.getCanonicalName(),
+				extendsBound(Integer.class.getCanonicalName()));
+
+		ResolvedType collectionOfAnything = genericType(Collection.class.getCanonicalName(),
+				ResolvedWildcard.UNBOUNDED);
+
+		assertTrue(rawCollectionType.isAssignableBy(collectionOfNumbers));
+		assertTrue(rawCollectionType.isAssignableBy(collectionOfSomethingExtendingNumbers));
+		assertTrue(rawCollectionType.isAssignableBy(collectionOfSomethingExtendingInteger));
+		assertTrue(rawCollectionType.isAssignableBy(collectionOfAnything));
+
+	}
+
+	/*
+	 * Inheritance relationships are the same for generic types as for raw types, as
+	 * long as the generic type does not vary in the hierarchy. So
+	 * Collection<Number> is the supertype of List<Integer>, Set<Integer>, and
+	 * ArrayList<Integer>. Similarly, Collection<? extends Number> is the supertype
+	 * of List<? extends Number>, Set<? extends Number>, and ArrayList<? extends
+	 * Number>. On the other hand, no relationship exists between List<Number>, and
+	 * List<? extends Number>, since the generic type is no longer the same.
+	 */
+    @Test
+	void testIsGenericTypeAssignableByGenerics() {
+		// Collection<Integer>
+		ResolvedType collectionOfInteger = genericType(Collection.class.getCanonicalName(),
+				Integer.class.getCanonicalName());
+
+		// List<Integer>
+		ResolvedType listOfInteger = genericType(List.class.getCanonicalName(), Integer.class.getCanonicalName());
+		// Set<Integer>
+		ResolvedType SetOfInteger = genericType(Set.class.getCanonicalName(), Integer.class.getCanonicalName());
+
+		assertTrue(collectionOfInteger.isAssignableBy(listOfInteger));
+		assertTrue(collectionOfInteger.isAssignableBy(SetOfInteger));
+
+		// Collection<? extends Number>
+		ResolvedType collectionOfSomethingExtendingNumbers = genericType(Collection.class.getCanonicalName(),
+				extendsBound(Number.class.getCanonicalName()));
+
+		// list<? extends Number>
+		ResolvedType listOfSomethingExtendingNumbers = genericType(List.class.getCanonicalName(),
+				extendsBound(Number.class.getCanonicalName()));
+		// Set<? extends Number>
+		ResolvedType setOfSomethingExtendingNumbers = genericType(Set.class.getCanonicalName(),
+				extendsBound(Number.class.getCanonicalName()));
+
+		assertTrue(collectionOfSomethingExtendingNumbers.isAssignableBy(listOfSomethingExtendingNumbers));
+		assertTrue(collectionOfSomethingExtendingNumbers.isAssignableBy(setOfSomethingExtendingNumbers));
+
+		// List<Number>
+		ResolvedType listOfNumber = genericType(List.class.getCanonicalName(),
+				Number.class.getCanonicalName());
+
+		assertFalse(listOfNumber.isAssignableBy(listOfSomethingExtendingNumbers));
+
+
+		// Class<String> is not assignable by class<? extends String>
+
+		ResolvedType classOfString = genericType(Class.class.getCanonicalName(), String.class.getCanonicalName());
+		ResolvedType classOfSomethingExtendingString = genericType(Class.class.getCanonicalName(),
+				extendsBound(String.class.getCanonicalName()));
+
+		assertFalse(classOfString.isAssignableBy(classOfSomethingExtendingString));
+
+	}
+
+	/*
+	 * The generic type built on the ? type is the supertype of all the generic
+	 * types that can be built on this type, whether they contain a wildcard or not.
+	 * For example, the type Collection<?> is the supertype of Collection<Number>
+	 * and Collection<? extends Number>.
+	 */
+    @Test
+	void testIsUnboundGenericTypeAssignableByGenerics() {
+
+		// Collection<?>
+		ResolvedType collectionOfAnything = genericType(Collection.class.getCanonicalName(),
+				ResolvedWildcard.UNBOUNDED);
+
+		// Collection<? extends Number>
+		ResolvedType collectionOfSomethingExtendingNumbers = genericType(Collection.class.getCanonicalName(),
+				extendsBound(Number.class.getCanonicalName()));
+		// Collection<Number>
+		ResolvedType collectionOfNumbers = genericType(Collection.class.getCanonicalName(),
+				Number.class.getCanonicalName());
+
+		assertTrue(collectionOfAnything.isAssignableBy(collectionOfSomethingExtendingNumbers));
+		assertTrue(collectionOfAnything.isAssignableBy(collectionOfNumbers));
+	}
+
+	/*
+	 * A generic type built on a type ? extends X (where X is a given concrete type)
+	 * is the supertype of the generic type built on X, of all the generic types
+	 * built on the subtypes of X, and of all the generic types bounded by
+	 * extensions of the subtypes of X. In other words, Collection<? extends Number>
+	 * is the supertype of Collection<Float> and Collection<? extends Float> (which
+	 * is a bit of a stretch, since Float is a final class).
+	 */
+    @Test
+	void testIsExtendBoundedGenericTypeAssignableByGenerics() {
+		// Collection<? extends Number>
+		ResolvedType collectionOfSomethingExtendingNumbers = genericType(Collection.class.getCanonicalName(),
+				extendsBound(Number.class.getCanonicalName()));
+
+		// Collection<Float>
+		ResolvedType collectionOfFloat = genericType(Collection.class.getCanonicalName(),
+				Float.class.getCanonicalName());
+		// Collection<? extends Float>
+		ResolvedType collectionOfSomethingExtendingFloat = genericType(Collection.class.getCanonicalName(),
+				extendsBound(Float.class.getCanonicalName()));
+
+		assertTrue(collectionOfSomethingExtendingNumbers.isAssignableBy(collectionOfFloat));
+		assertTrue(collectionOfSomethingExtendingNumbers.isAssignableBy(collectionOfSomethingExtendingFloat));
+
+	}
+
+	@Test
+	void testIsSuperBoundedGenericTypeAssignableByGenerics() {
+		// Collection<? super Number>
+		ResolvedType collectionOfSomethingSuperNumbers = genericType(Collection.class.getCanonicalName(),
+				superBound(Number.class.getCanonicalName()));
+
+		// List<? super Serializable>
+		ResolvedType collectionOfSomethingSuperSerializable = genericType(Collection.class.getCanonicalName(),
+				superBound(Serializable.class.getCanonicalName()));
+		// Collection<Number>
+		ResolvedType collectionOfNumber = genericType(Collection.class.getCanonicalName(),
+				Number.class.getCanonicalName());
+		// Collection<Serializable>
+		ResolvedType collectionOfSerializable = genericType(Collection.class.getCanonicalName(),
+				Serializable.class.getCanonicalName());
+
+		assertTrue(collectionOfSomethingSuperNumbers.isAssignableBy(collectionOfSomethingSuperSerializable));
+		assertTrue(collectionOfSomethingSuperNumbers.isAssignableBy(collectionOfNumber));
+		assertTrue(collectionOfSomethingSuperNumbers.isAssignableBy(collectionOfSerializable));
+
+	}
 
     // Utility methods
 
@@ -479,6 +611,10 @@ class WildcardUsageTest {
 
 	private ResolvedType extendsBound(String type) {
 		return ResolvedWildcard.extendsBound(type(type));
+	}
+
+	private ResolvedType superBound(String type) {
+		return ResolvedWildcard.superBound(type(type));
 	}
 
 
