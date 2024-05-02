@@ -48,7 +48,6 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     private NodeList<Statement> statements;
 
-    @OptionalProperty
     private NodeList<JmlContract> contracts = new NodeList<>();
 
     public BlockStmt() {
@@ -116,12 +115,10 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         if (node == null) {
             return false;
         }
-        if (contracts != null) {
-            for (int i = 0; i < contracts.size(); i++) {
-                if (contracts.get(i) == node) {
-                    contracts.remove(i);
-                    return true;
-                }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
             }
         }
         for (int i = 0; i < statements.size(); i++) {
@@ -151,12 +148,10 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         if (node == null) {
             return false;
         }
-        if (contracts != null) {
-            for (int i = 0; i < contracts.size(); i++) {
-                if (contracts.get(i) == node) {
-                    contracts.set(i, (JmlContract) replacementNode);
-                    return true;
-                }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
             }
         }
         for (int i = 0; i < statements.size(); i++) {
@@ -199,6 +194,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
         }

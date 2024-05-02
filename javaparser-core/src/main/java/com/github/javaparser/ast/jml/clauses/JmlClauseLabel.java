@@ -17,7 +17,6 @@ import com.github.javaparser.metamodel.JmlClauseLabelMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.function.Consumer;
 
 /**
@@ -189,20 +188,25 @@ public class JmlClauseLabel extends JmlClause {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlClauseLabel() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlClauseLabel asJmlClauseLabel() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlClauseLabel> toJmlClauseLabel() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClauseLabel(Consumer<JmlClauseLabel> action) {
         action.accept(this);
     }

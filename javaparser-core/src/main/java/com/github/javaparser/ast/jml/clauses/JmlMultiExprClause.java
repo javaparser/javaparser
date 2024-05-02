@@ -17,7 +17,6 @@ import com.github.javaparser.metamodel.JmlMultiExprClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.function.Consumer;
 
 /**
@@ -196,20 +195,25 @@ public class JmlMultiExprClause extends JmlClause {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlMultiExprClause() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlMultiExprClause asJmlMultiExprClause() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlMultiExprClause> toJmlMultiExprClause() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlMultiExprClause(Consumer<JmlMultiExprClause> action) {
         action.accept(this);
     }

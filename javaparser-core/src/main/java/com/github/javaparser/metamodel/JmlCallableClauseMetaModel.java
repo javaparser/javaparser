@@ -40,4 +40,6 @@ public class JmlCallableClauseMetaModel extends JmlClauseMetaModel {
     JmlCallableClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlCallableClause.class, "JmlCallableClause", "com.github.javaparser.ast.jml.clauses", false, false);
     }
+
+    public PropertyMetaModel methodSignaturesPropertyMetaModel;
 }

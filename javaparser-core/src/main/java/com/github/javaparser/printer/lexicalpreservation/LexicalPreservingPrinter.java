@@ -136,8 +136,8 @@ public class LexicalPreservingPrinter {
                     // this case corresponds to the addition of a comment
                     // Find the position of the comment node and put in front of it the [...]
                     int // Find the position of the comment node and put in front of it the [...]
-                            index = //
-                            parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
+                            //
+                            index = parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
                     /* Add the same indentation to the comment as the previous node
                      * for example if we want to add a comment on the body of the method declaration :
                      * Actual code

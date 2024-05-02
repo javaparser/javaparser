@@ -1109,11 +1109,13 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final LambdaExpr n, final A arg) {
         Statement body = (Statement) n.getBody().accept(this, arg);
+        NodeList<JmlContract> contracts = modifyList(n.getContracts(), arg);
         NodeList<Parameter> parameters = modifyList(n.getParameters(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (body == null)
             return null;
         n.setBody(body);
+        n.setContracts(contracts);
         n.setParameters(parameters);
         n.setComment(comment);
         return n;
@@ -1500,8 +1502,10 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
 
     @Override
     public Visitable visit(final JmlCallableClause n, final A arg) {
+        NodeList<JmlMethodSignature> methodSignatures = modifyList(n.getMethodSignatures(), arg);
         SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        n.setMethodSignatures(methodSignatures);
         n.setName(name);
         n.setComment(comment);
         return n;
@@ -1535,8 +1539,18 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(JmlClauseIf n, A arg) {
-        return null;
+    public Visitable visit(final JmlClauseIf n, final A arg) {
+        Expression condition = (Expression) n.getCondition().accept(this, arg);
+        Expression then = (Expression) n.getThen().accept(this, arg);
+        SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (condition == null || then == null)
+            return null;
+        n.setCondition(condition);
+        n.setThen(then);
+        n.setName(name);
+        n.setComment(comment);
+        return n;
     }
 
     @Override
@@ -1826,6 +1840,21 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
             return null;
         n.setJmlTags(jmlTags);
         n.setLabel(label);
+        n.setComment(comment);
+        return n;
+    }
+
+    @Override
+    public Visitable visit(final JmlMethodSignature n, final A arg) {
+        NodeList<Type> argumentTypes = modifyList(n.getArgumentTypes(), arg);
+        SimpleName name = (SimpleName) n.getName().accept(this, arg);
+        Type receiver = n.getReceiver().map(s -> (Type) s.accept(this, arg)).orElse(null);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (name == null)
+            return null;
+        n.setArgumentTypes(argumentTypes);
+        n.setName(name);
+        n.setReceiver(receiver);
         n.setComment(comment);
         return n;
     }

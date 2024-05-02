@@ -313,7 +313,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final BlockStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
-        if (n.getContracts() != null) {
+        {
             tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -585,7 +585,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts() != null) {
+        {
             tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -664,7 +664,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts() != null) {
+        {
             tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -904,7 +904,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts() != null) {
+        {
             tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -936,7 +936,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts() != null) {
+        {
             tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -1130,6 +1130,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
                 result.addAll(tmp);
         }
         {
+            tmp = n.getContracts().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
             tmp = n.getParameters().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -1285,7 +1290,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts() != null) {
+        {
             tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -1933,7 +1938,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
             if (tmp != null)
                 result.addAll(tmp);
         }
-        if (n.getContracts() != null) {
+        {
             tmp = n.getContracts().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
@@ -2512,6 +2517,11 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final JmlCallableClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
+        {
+            tmp = n.getMethodSignatures().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         if (n.getName().isPresent()) {
             tmp = n.getName().get().accept(this, arg);
             if (tmp != null)
@@ -2580,6 +2590,21 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     public List<R> visit(final JmlClauseIf n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
+        {
+            tmp = n.getCondition().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getThen().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getName().isPresent()) {
+            tmp = n.getName().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
         if (n.getComment().isPresent()) {
             tmp = n.getComment().get().accept(this, arg);
             if (tmp != null)
@@ -3218,6 +3243,33 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getLabel().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getComment().isPresent()) {
+            tmp = n.getComment().get().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        return result;
+    }
+
+    @Override
+    public List<R> visit(final JmlMethodSignature n, final A arg) {
+        List<R> result = new ArrayList<>();
+        List<R> tmp;
+        {
+            tmp = n.getArgumentTypes().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        {
+            tmp = n.getName().accept(this, arg);
+            if (tmp != null)
+                result.addAll(tmp);
+        }
+        if (n.getReceiver().isPresent()) {
+            tmp = n.getReceiver().get().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

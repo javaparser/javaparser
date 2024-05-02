@@ -14,7 +14,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlSignalsClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -138,20 +137,25 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlSignalsClause() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlSignalsClause asJmlSignalsClause() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlSignalsClause> toJmlSignalsClause() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlSignalsClause(Consumer<JmlSignalsClause> action) {
         action.accept(this);
     }

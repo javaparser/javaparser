@@ -1162,6 +1162,20 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
+    public void visit(JmlMethodSignature n, Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        n.getReceiver().ifPresent(it -> {
+            it.accept(this, arg);
+            printer.print(".");
+        });
+        n.getName().accept(this, arg);
+        printer.print("(");
+        printList(n.getArgumentTypes(), ", ");
+        printer.print(")");
+    }
+
+    @Override
     public void visit(final CharLiteralExpr n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);

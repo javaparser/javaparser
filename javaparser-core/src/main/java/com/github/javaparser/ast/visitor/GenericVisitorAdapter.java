@@ -244,7 +244,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final BlockStmt n, final A arg) {
         R result;
-        if (n.getContracts() != null) {
+        {
             result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
@@ -505,7 +505,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        if (n.getContracts() != null) {
+        {
             result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
@@ -582,9 +582,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        result = n.getContracts().accept(this, arg);
-        if (result != null)
-            return result;
+        {
+            result = n.getContracts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)
@@ -805,9 +807,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        result = n.getContracts().accept(this, arg);
-        if (result != null)
-            return result;
+        {
+            result = n.getContracts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getIterable().accept(this, arg);
             if (result != null)
@@ -839,9 +843,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        result = n.getContracts().accept(this, arg);
-        if (result != null)
-            return result;
+        {
+            result = n.getContracts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getInitialization().accept(this, arg);
             if (result != null)
@@ -1068,9 +1074,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        result = n.getContracts().accept(this, arg);
-        if (result != null)
-            return result;
+        {
+            result = n.getContracts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         {
             result = n.getModifiers().accept(this, arg);
             if (result != null)
@@ -1743,9 +1751,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
             if (result != null)
                 return result;
         }
-        result = n.getContracts().accept(this, arg);
-        if (result != null)
-            return result;
+        {
+            result = n.getContracts().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
             if (result != null)
@@ -1785,6 +1795,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         R result;
         {
             result = n.getBody().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getContracts().accept(this, arg);
             if (result != null)
                 return result;
         }
@@ -2394,6 +2409,11 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final JmlCallableClause n, final A arg) {
         R result;
+        {
+            result = n.getMethodSignatures().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getName().isPresent()) {
             result = n.getName().get().accept(this, arg);
             if (result != null)
@@ -2457,9 +2477,25 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     @Override
     public R visit(final JmlClauseIf n, final A arg) {
         R result;
+        {
+            result = n.getCondition().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getThen().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getName().isPresent()) {
+            result = n.getName().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
         if (n.getComment().isPresent()) {
             result = n.getComment().get().accept(this, arg);
-            return result;
+            if (result != null)
+                return result;
         }
         return null;
     }
@@ -3070,6 +3106,32 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
         }
         {
             result = n.getLabel().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getComment().isPresent()) {
+            result = n.getComment().get().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        return null;
+    }
+
+    @Override
+    public R visit(final JmlMethodSignature n, final A arg) {
+        R result;
+        {
+            result = n.getArgumentTypes().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        {
+            result = n.getName().accept(this, arg);
+            if (result != null)
+                return result;
+        }
+        if (n.getReceiver().isPresent()) {
+            result = n.getReceiver().get().accept(this, arg);
             if (result != null)
                 return result;
         }

@@ -324,4 +324,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlEndStmt n, A arg);
 
     R visit(JmlLabelStmt n, A arg);
+
+    R visit(JmlMethodSignature n, A arg);
 }

@@ -12,6 +12,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
+// in favour of JmlMultiExprClause
+@Deprecated()
 public class JmlCapturesClause extends JmlClause {
 
     @AllFieldsConstructor

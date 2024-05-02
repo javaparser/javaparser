@@ -36,7 +36,6 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.WhileStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -50,7 +49,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, NodeWithCondition<WhileStmt>, NodeWithContracts<WhileStmt> {
 
-    @OptionalProperty
     private NodeList<JmlContract> contracts;
 
     private Expression condition;
@@ -142,12 +140,10 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         if (node == null) {
             return false;
         }
-        if (contracts != null) {
-            for (int i = 0; i < contracts.size(); i++) {
-                if (contracts.get(i) == node) {
-                    contracts.remove(i);
-                    return true;
-                }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
             }
         }
         return super.remove(node);
@@ -179,12 +175,10 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
             setCondition((Expression) replacementNode);
             return true;
         }
-        if (contracts != null) {
-            for (int i = 0; i < contracts.size(); i++) {
-                if (contracts.get(i) == node) {
-                    contracts.set(i, (JmlContract) replacementNode);
-                    return true;
-                }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
             }
         }
         return super.replace(node, replacementNode);
@@ -221,6 +215,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public WhileStmt setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
         }

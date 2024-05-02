@@ -105,8 +105,8 @@ public class ConcreteSyntaxModel {
         // FIXME: we should introduce a derived property
         // FIXME: we should introduce a derived property
         // FIXME: we should introduce a derived property
-        concreteSyntaxModelByClass.// list(ObservableProperty.EXTRA_ARRAY_LEVELS),
-                put(VariableDeclarator.class, sequence(comment(), child(ObservableProperty.NAME), conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), token(GeneratedJavaParserConstants.ASSIGN), space(), child(ObservableProperty.INITIALIZER)))));
+        // list(ObservableProperty.EXTRA_ARRAY_LEVELS),
+        concreteSyntaxModelByClass.put(VariableDeclarator.class, sequence(comment(), child(ObservableProperty.NAME), conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), token(GeneratedJavaParserConstants.ASSIGN), space(), child(ObservableProperty.INITIALIZER)))));
         // /
         // / Expressions
         // /
@@ -213,10 +213,10 @@ public class ConcreteSyntaxModel {
         //space(),
         //space(),
         //space(),
-        concreteSyntaxModelByClass.//space(),
-                put(//space(),
-                JmlCallableClause.class, //child(EXPRESSION),
-                sequence(child(MODIFIERS), token(CALLABLE), semicolon()));
+        //space(),
+        //space(),
+        //child(EXPRESSION),
+        concreteSyntaxModelByClass.put(JmlCallableClause.class, sequence(child(MODIFIERS), token(CALLABLE), semicolon()));
         concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class, sequence(child(MODIFIERS), attribute(KIND), space(), attribute(NAME), token(COLON), child(EXPRESSION), semicolon()));
         concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());

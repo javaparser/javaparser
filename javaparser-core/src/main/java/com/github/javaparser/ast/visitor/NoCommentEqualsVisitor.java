@@ -965,6 +965,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         final LambdaExpr n2 = (LambdaExpr) arg;
         if (!nodeEquals(n.getBody(), n2.getBody()))
             return false;
+        if (!nodesEquals(n.getContracts(), n2.getContracts()))
+            return false;
         if (!objEquals(n.isEnclosingParameters(), n2.isEnclosingParameters()))
             return false;
         if (!nodesEquals(n.getParameters(), n2.getParameters()))
@@ -1273,6 +1275,8 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Override
     public Boolean visit(final JmlCallableClause n, final Visitable arg) {
         final JmlCallableClause n2 = (JmlCallableClause) arg;
+        if (!nodesEquals(n.getMethodSignatures(), n2.getMethodSignatures()))
+            return false;
         if (!nodeEquals(n.getName(), n2.getName()))
             return false;
         return true;
@@ -1305,7 +1309,15 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     @Override
     public Boolean visit(final JmlClauseIf n, final Visitable arg) {
         final JmlClauseIf n2 = (JmlClauseIf) arg;
-        return objEquals(n.getKind(), n2.getKind());
+        if (!nodeEquals(n.getCondition(), n2.getCondition()))
+            return false;
+        if (!objEquals(n.getKind(), n2.getKind()))
+            return false;
+        if (!nodeEquals(n.getThen(), n2.getThen()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        return true;
     }
 
     @Override
@@ -1600,6 +1612,18 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
             return false;
         if (!nodeEquals(n.getLabel(), n2.getLabel()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public Boolean visit(final JmlMethodSignature n, final Visitable arg) {
+        final JmlMethodSignature n2 = (JmlMethodSignature) arg;
+        if (!nodesEquals(n.getArgumentTypes(), n2.getArgumentTypes()))
+            return false;
+        if (!nodeEquals(n.getName(), n2.getName()))
+            return false;
+        if (!nodeEquals(n.getReceiver(), n2.getReceiver()))
             return false;
         return true;
     }

@@ -4,9 +4,21 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import com.github.javaparser.ast.observer.ObservableProperty;
+
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.metamodel.JmlClauseIfMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
 
 /**
  * @author Alexander Weigl
@@ -14,9 +26,15 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
  */
 public class JmlClauseIf extends JmlClause implements MethodContractable {
 
+    private JmlClauseKind kind;
+
+    private Expression then;
+
+    private Expression condition;
+
     @AllFieldsConstructor
-    public JmlClauseIf() {
-        this(null);
+    public JmlClauseIf(SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
+        this(null, name, condition, kind, then);
     }
 
     /**
@@ -29,18 +47,19 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @Override
-    @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
-        if (node == null)
-            return false;
-        return super.remove(node);
-    }
-
-    @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
     public boolean replace(Node node, Node replacementNode) {
-        if (node == null)
+        if (node == null) {
             return false;
+        }
+        if (node == condition) {
+            setCondition((Expression) replacementNode);
+            return true;
+        }
+        if (node == then) {
+            setThen((Expression) replacementNode);
+            return true;
+        }
         return super.replace(node, replacementNode);
     }
 
@@ -51,8 +70,9 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public JmlClauseKind getKind() {
-        return JmlClauseKind.WORKING_SPACE;
+        return kind;
     }
 
     @Override
@@ -65,5 +85,89 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression getCondition() {
+        return condition;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseIf setCondition(final Expression condition) {
+        assertNotNull(condition);
+        if (condition == this.condition) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
+        if (this.condition != null)
+            this.condition.setParentNode(null);
+        this.condition = condition;
+        setAsParentNodeOf(condition);
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseIf setKind(final JmlClauseKind kind) {
+        assertNotNull(kind);
+        if (kind == this.kind) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);
+        this.kind = kind;
+        return this;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression getThen() {
+        return then;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public JmlClauseIf setThen(final Expression then) {
+        assertNotNull(then);
+        if (then == this.then) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.THEN, this.then, then);
+        if (this.then != null)
+            this.then.setParentNode(null);
+        this.then = then;
+        setAsParentNodeOf(then);
+        return this;
+    }
+
+    @Override
+    public boolean isJmlClauseIf() {
+        return true;
+    }
+
+    @Override
+    public JmlClauseIf asJmlClauseIf() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlClauseIf> toJmlClauseIf() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlClauseIf(Consumer<JmlClauseIf> action) {
+        action.accept(this);
+    }
+
+    @Override
+    public JmlClauseIfMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClauseIfMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public JmlClauseIf(TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
+        super(tokenRange, name);
+        setCondition(condition);
+        setKind(kind);
+        setThen(then);
+        customInitialization();
     }
 }

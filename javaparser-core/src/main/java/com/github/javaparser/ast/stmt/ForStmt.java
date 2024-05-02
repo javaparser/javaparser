@@ -37,10 +37,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ForStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -72,7 +70,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  */
 public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWithContracts<ForStmt> {
 
-    @OptionalProperty
     private NodeList<JmlContract> contracts;
 
     private NodeList<Expression> initialization;
@@ -220,12 +217,10 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWit
                 return true;
             }
         }
-        if (contracts != null) {
-            for (int i = 0; i < contracts.size(); i++) {
-                if (contracts.get(i) == node) {
-                    contracts.remove(i);
-                    return true;
-                }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
             }
         }
         for (int i = 0; i < initialization.size(); i++) {
@@ -276,12 +271,10 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWit
                 return true;
             }
         }
-        if (contracts != null) {
-            for (int i = 0; i < contracts.size(); i++) {
-                if (contracts.get(i) == node) {
-                    contracts.set(i, (JmlContract) replacementNode);
-                    return true;
-                }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
             }
         }
         for (int i = 0; i < initialization.size(); i++) {
@@ -330,6 +323,7 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWit
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ForStmt setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;
         }

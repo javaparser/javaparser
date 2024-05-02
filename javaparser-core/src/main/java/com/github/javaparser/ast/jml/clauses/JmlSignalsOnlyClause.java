@@ -13,7 +13,6 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlSignalsOnlyClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -136,20 +135,25 @@ public class JmlSignalsOnlyClause extends JmlClause implements MethodContractabl
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlSignalsOnlyClause() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlSignalsOnlyClause asJmlSignalsOnlyClause() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlSignalsOnlyClause> toJmlSignalsOnlyClause() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlSignalsOnlyClause(Consumer<JmlSignalsOnlyClause> action) {
         action.accept(this);
     }

@@ -319,4 +319,6 @@ public interface VoidVisitor<A> {
     void visit(JmlEndStmt n, A arg);
 
     void visit(JmlLabelStmt n, A arg);
+
+    void visit(JmlMethodSignature n, A arg);
 }

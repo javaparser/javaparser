@@ -148,10 +148,16 @@ enum JmlClauseKind {
     DIVERGES_REDUNDANTLY
     DURATION
     DURATION_REDUNDANTLY
+    WHEN
+    WHEN_REDUNDANTLY
     NONE
+
 }
 
-class JmlClauseIf extends JmlClause
+class JmlClauseIf extends JmlClause {
+	then : Java.Expression
+	cond : Java.Expression
+}
 class JmlMultiExprClause extends JmlClause {
         heaps : NodeList<SimpleName>
 }
@@ -174,12 +180,12 @@ class JmlOldClause extends JmlClause {
     declarations : Java.VariableDeclarationExpr
 }
 class JmlCallableClause extends JmlClause {
-
+	pre : Java.Expression
+	methodCalls : List<Java.MethodCallExpr>
 }
 class JmlForallClause extends JmlClause {
     boundedVariables : NodeList<Parameter>
 }
-class JmlCapturesClause extends JmlClause
 class JmlSignalsClause extends JmlClause {
 	parameter: Java.Parameter
 	expression: Java.Expression

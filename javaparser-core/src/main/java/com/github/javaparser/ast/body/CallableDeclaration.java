@@ -214,12 +214,10 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         if (node == null) {
             return false;
         }
-        if (contracts != null) {
-            for (int i = 0; i < contracts.size(); i++) {
-                if (contracts.get(i) == node) {
-                    contracts.remove(i);
-                    return true;
-                }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
             }
         }
         for (int i = 0; i < modifiers.size(); i++) {
@@ -355,12 +353,10 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
         if (node == null) {
             return false;
         }
-        if (contracts != null) {
-            for (int i = 0; i < contracts.size(); i++) {
-                if (contracts.get(i) == node) {
-                    contracts.set(i, (JmlContract) replacementNode);
-                    return true;
-                }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
             }
         }
         for (int i = 0; i < modifiers.size(); i++) {
@@ -456,6 +452,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
     public T setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
         if (contracts == this.contracts) {
             return (T) this;
         }

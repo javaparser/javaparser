@@ -193,6 +193,12 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         if (node == null) {
             return false;
         }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.remove(i);
+                return true;
+            }
+        }
         for (int i = 0; i < parameters.size(); i++) {
             if (parameters.get(i) == node) {
                 parameters.remove(i);
@@ -235,6 +241,12 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         if (node == body) {
             setBody((Statement) replacementNode);
             return true;
+        }
+        for (int i = 0; i < contracts.size(); i++) {
+            if (contracts.get(i) == node) {
+                contracts.set(i, (JmlContract) replacementNode);
+                return true;
+            }
         }
         for (int i = 0; i < parameters.size(); i++) {
             if (parameters.get(i) == node) {
@@ -284,14 +296,22 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         return getParameters().stream().allMatch(p -> !(p.getType().isUnknownType()));
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
-    @Override
-    public LambdaExpr setContracts(NodeList<JmlContract> contracts) {
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public LambdaExpr setContracts(final NodeList<JmlContract> contracts) {
+        assertNotNull(contracts);
+        if (contracts == this.contracts) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.CONTRACTS, this.contracts, contracts);
+        if (this.contracts != null)
+            this.contracts.setParentNode(null);
         this.contracts = contracts;
+        setAsParentNodeOf(contracts);
         return this;
     }
 }

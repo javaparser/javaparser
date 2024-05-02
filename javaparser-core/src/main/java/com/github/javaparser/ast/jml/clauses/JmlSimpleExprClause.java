@@ -17,7 +17,6 @@ import com.github.javaparser.metamodel.JmlSimpleExprClauseMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.function.Consumer;
 
 /**
@@ -205,20 +204,25 @@ public class JmlSimpleExprClause extends JmlClause implements MethodContractable
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlSimpleExprClause() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlSimpleExprClause asJmlSimpleExprClause() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlSimpleExprClause> toJmlSimpleExprClause() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlSimpleExprClause(Consumer<JmlSimpleExprClause> action) {
         action.accept(this);
     }
