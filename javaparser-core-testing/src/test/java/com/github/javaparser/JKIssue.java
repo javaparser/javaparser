@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 public class JKIssue {
-    @Test()
+    @Test
     void test() throws IOException {
         ParserConfiguration cfg = new ParserConfiguration();
         cfg.setProcessJml(true);
@@ -40,5 +40,17 @@ public class JKIssue {
         for (var method : methods) {
             Assertions.assertEquals(1, method.getContracts().get().size());
         }
+    }
+
+    @Test
+    void test2() throws IOException {
+        ParserConfiguration cfg = new ParserConfiguration();
+        cfg.setProcessJml(true);
+        JavaParser parser = new JavaParser(cfg);
+        CompilationUnit cu = parser.parse(Paths.get("src/test/test_sourcecode/MissingParentSimpleExprClause.java"))
+                .getResult().get();
+
+        var clause = cu.getType(0).getMethods().get(0).getContracts().get().get(0).getClauses().get(0).asJmlSimpleExprClause();
+        Assertions.assertEquals(1, clause.getChildNodes().size());
     }
 }

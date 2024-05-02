@@ -18,6 +18,8 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (25.02.22)
@@ -191,5 +193,24 @@ public class JmlMultiExprClause extends JmlClause {
         this.expressions = expressions;
         setAsParentNodeOf(expressions);
         return this;
+    }
+
+    @Override
+    public boolean isJmlMultiExprClause() {
+        return true;
+    }
+
+    @Override
+    public JmlMultiExprClause asJmlMultiExprClause() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlMultiExprClause> toJmlMultiExprClause() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlMultiExprClause(Consumer<JmlMultiExprClause> action) {
+        action.accept(this);
     }
 }

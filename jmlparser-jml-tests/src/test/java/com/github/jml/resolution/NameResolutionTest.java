@@ -12,6 +12,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.JavaRefersToJmlException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.TypeSolverBuilder;
 import com.google.common.truth.Truth;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -132,7 +133,6 @@ class NameResolutionTest {
             }
             Assertions.fail("Errors during parsing");
         }
-
 
         final ResolveAllVisitor v = new ResolveAllVisitor();
         cu.getResult().get().accept(v, null);

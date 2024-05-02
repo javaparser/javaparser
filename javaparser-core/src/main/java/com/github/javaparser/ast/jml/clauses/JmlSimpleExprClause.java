@@ -18,6 +18,8 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -53,9 +55,6 @@ public class JmlSimpleExprClause extends JmlClause implements MethodContractable
 
     public JmlSimpleExprClause(TokenRange range, JavaToken kind, SimpleName name, NodeList<SimpleName> heaps, Expression expr) {
         this(range, JmlClauseKind.getKindByToken(kind), name, heaps, expr);
-    }
-
-    public JmlSimpleExprClause(TokenRange orElse, JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expression) {
     }
 
     @Override
@@ -203,5 +202,24 @@ public class JmlSimpleExprClause extends JmlClause implements MethodContractable
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlSimpleExprClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlSimpleExprClauseMetaModel;
+    }
+
+    @Override
+    public boolean isJmlSimpleExprClause() {
+        return true;
+    }
+
+    @Override
+    public JmlSimpleExprClause asJmlSimpleExprClause() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlSimpleExprClause> toJmlSimpleExprClause() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlSimpleExprClause(Consumer<JmlSimpleExprClause> action) {
+        action.accept(this);
     }
 }

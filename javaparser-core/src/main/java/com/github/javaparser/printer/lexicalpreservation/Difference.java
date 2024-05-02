@@ -548,8 +548,8 @@ public class Difference {
                 originalIndex = considerRemovingIndentation(nodeText, originalIndex);
             }
         } else if (removed.isToken() && originalElementIsToken && (// handle EOLs separately as their token kind might not be equal. This is because the 'removed'
-                removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind() || // element always has the current operating system's EOL as type
-                        (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine() && removed.isNewLine()))) {
+                // element always has the current operating system's EOL as type
+                removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind() || (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine() && removed.isNewLine()))) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
         } else if ((removed.isWhiteSpaceNotEol() || removed.getElement() instanceof CsmIndent || removed.getElement() instanceof CsmUnindent) && originalElement.isSpaceOrTab()) {

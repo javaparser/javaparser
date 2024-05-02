@@ -104,9 +104,9 @@ public class ConcreteSyntaxModel {
         // FIXME: we should introduce a derived property
         // FIXME: we should introduce a derived property
         // FIXME: we should introduce a derived property
-        concreteSyntaxModelByClass.// FIXME: we should introduce a derived property
-                put(// list(ObservableProperty.EXTRA_ARRAY_LEVELS),
-                VariableDeclarator.class, sequence(comment(), child(ObservableProperty.NAME), conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), token(GeneratedJavaParserConstants.ASSIGN), space(), child(ObservableProperty.INITIALIZER)))));
+        // FIXME: we should introduce a derived property
+        concreteSyntaxModelByClass.// list(ObservableProperty.EXTRA_ARRAY_LEVELS),
+                put(VariableDeclarator.class, sequence(comment(), child(ObservableProperty.NAME), conditional(ObservableProperty.INITIALIZER, IS_PRESENT, sequence(space(), token(GeneratedJavaParserConstants.ASSIGN), space(), child(ObservableProperty.INITIALIZER)))));
         // /
         // / Expressions
         // /
@@ -212,11 +212,11 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlClauseLabel.class, sequence(child(ObservableProperty.KIND), token(LPAREN), child(LABEL), token(RPAREN), space(), child(EXPRESSION), semicolon(), newline()));
         //space(),
         //space(),
+        //space(),
         concreteSyntaxModelByClass.//space(),
                 put(//space(),
-                JmlCallableClause.class, //space(),
-                sequence(//child(EXPRESSION),
-                        child(MODIFIERS), token(CALLABLE), semicolon()));
+                JmlCallableClause.class, //child(EXPRESSION),
+                sequence(child(MODIFIERS), token(CALLABLE), semicolon()));
         concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class, sequence(child(MODIFIERS), attribute(KIND), space(), attribute(NAME), token(COLON), child(EXPRESSION), semicolon()));
         concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());

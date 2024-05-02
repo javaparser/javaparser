@@ -18,6 +18,8 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -184,5 +186,24 @@ public class JmlClauseLabel extends JmlClause {
         notifyPropertyChange(ObservableProperty.KIND, this.kind, kind);
         this.kind = kind;
         return this;
+    }
+
+    @Override
+    public boolean isJmlClauseLabel() {
+        return true;
+    }
+
+    @Override
+    public JmlClauseLabel asJmlClauseLabel() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlClauseLabel> toJmlClauseLabel() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlClauseLabel(Consumer<JmlClauseLabel> action) {
+        action.accept(this);
     }
 }

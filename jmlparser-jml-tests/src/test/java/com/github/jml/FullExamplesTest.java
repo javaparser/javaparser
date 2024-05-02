@@ -12,7 +12,9 @@ import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
 import com.github.javaparser.ast.jml.doc.JmlDocStmt;
 import com.github.javaparser.ast.jml.doc.JmlDocType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 import com.github.javaparser.jml.JmlDocSanitizer;
+import com.google.common.truth.Truth;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -170,6 +172,22 @@ class FullExamplesTest {
         });
         //storeProcessor.process(result, config);
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
+
+        testParentAndChild(result.getResult().get());
+    }
+
+    private void testParentAndChild(Node node) {
+        node.accept(new VoidVisitorWithDefaults<>() {
+            @Override
+            public void defaultAction(Node n, Object arg) {
+                final var parent = node.getParentNode();
+                if (parent.isPresent()) {
+                    final var childNodes = parent.get().getChildNodes();
+                    Assertions.assertFalse(childNodes.isEmpty());
+                    Truth.assertThat(childNodes).contains(node);
+                }
+            }
+        }, null);
     }
 
     private boolean isBlocked(Path it) {

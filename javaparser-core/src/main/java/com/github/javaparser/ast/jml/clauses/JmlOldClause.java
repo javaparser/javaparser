@@ -13,6 +13,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlOldClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (12/12/21)
@@ -100,5 +103,24 @@ public class JmlOldClause extends JmlClause {
     @Override
     public JmlClauseKind getKind() {
         return JmlClauseKind.OLD;
+    }
+
+    @Override
+    public boolean isJmlOldClause() {
+        return true;
+    }
+
+    @Override
+    public JmlOldClause asJmlOldClause() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlOldClause> toJmlOldClause() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlOldClause(Consumer<JmlOldClause> action) {
+        action.accept(this);
     }
 }

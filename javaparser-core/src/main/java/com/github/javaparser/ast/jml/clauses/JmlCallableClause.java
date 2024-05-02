@@ -10,6 +10,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlCallableClauseMetaModel;
 import com.github.javaparser.ast.Node;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
@@ -57,5 +60,24 @@ public class JmlCallableClause extends JmlClause {
     @Override
     public JmlClauseKind getKind() {
         return JmlClauseKind.CALLABLE;
+    }
+
+    @Override
+    public boolean isJmlCallableClause() {
+        return true;
+    }
+
+    @Override
+    public JmlCallableClause asJmlCallableClause() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlCallableClause> toJmlCallableClause() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlCallableClause(Consumer<JmlCallableClause> action) {
+        action.accept(this);
     }
 }

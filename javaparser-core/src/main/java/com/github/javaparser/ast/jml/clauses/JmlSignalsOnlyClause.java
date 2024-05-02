@@ -14,6 +14,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlSignalsOnlyClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -130,5 +133,24 @@ public class JmlSignalsOnlyClause extends JmlClause implements MethodContractabl
     @Override
     public JmlClauseKind getKind() {
         return JmlClauseKind.SIGNALS_ONLY;
+    }
+
+    @Override
+    public boolean isJmlSignalsOnlyClause() {
+        return true;
+    }
+
+    @Override
+    public JmlSignalsOnlyClause asJmlSignalsOnlyClause() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlSignalsOnlyClause> toJmlSignalsOnlyClause() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlSignalsOnlyClause(Consumer<JmlSignalsOnlyClause> action) {
+        action.accept(this);
     }
 }

@@ -15,6 +15,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlSignalsClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -132,5 +135,24 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
     public JmlSignalsClause clone() {
         return (JmlSignalsClause) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public boolean isJmlSignalsClause() {
+        return true;
+    }
+
+    @Override
+    public JmlSignalsClause asJmlSignalsClause() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlSignalsClause> toJmlSignalsClause() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlSignalsClause(Consumer<JmlSignalsClause> action) {
+        action.accept(this);
     }
 }

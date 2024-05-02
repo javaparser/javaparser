@@ -14,6 +14,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlForallClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
@@ -113,5 +116,24 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     @Override
     public JmlClauseKind getKind() {
         return JmlClauseKind.FORALL;
+    }
+
+    @Override
+    public boolean isJmlForallClause() {
+        return true;
+    }
+
+    @Override
+    public JmlForallClause asJmlForallClause() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlForallClause> toJmlForallClause() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlForallClause(Consumer<JmlForallClause> action) {
+        action.accept(this);
     }
 }
