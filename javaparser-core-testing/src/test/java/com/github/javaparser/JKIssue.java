@@ -53,4 +53,14 @@ public class JKIssue {
         var clause = cu.getType(0).getMethods().get(0).getContracts().get(0).getClauses().get(0).asJmlSimpleExprClause();
         Assertions.assertEquals(1, clause.getChildNodes().size());
     }
+
+    @Test
+    void test3() throws IOException {
+        ParserConfiguration cfg = new ParserConfiguration();
+        cfg.setProcessJml(true);
+        JavaParser parser = new JavaParser(cfg);
+        final var result = parser.parse(Paths.get("src/test/test_sourcecode/JKTmpTest.java"));
+        result.getProblems().forEach(System.err::println);
+        Assertions.assertTrue(result.isSuccessful());
+    }
 }
