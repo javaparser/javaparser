@@ -1634,7 +1634,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     @Override
     public Visitable visit(final JmlBodyDeclaration n, final A arg) {
         NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
-        NodeList<JmlClassLevel> elements = modifyList(n.getElements(), arg);
+        NodeList<JmlClassLevelDeclaration> elements = modifyList(n.getElements(), arg);
         NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setAnnotations(annotations);
@@ -1645,7 +1645,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlSetComprehension n, final A arg) {
+    public Visitable visit(final JmlSetComprehensionExpr n, final A arg) {
         VariableDeclarator binding = (VariableDeclarator) n.getBinding().accept(this, arg);
         Expression predicate = (Expression) n.getPredicate().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);

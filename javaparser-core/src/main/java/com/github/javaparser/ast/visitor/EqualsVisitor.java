@@ -1697,8 +1697,8 @@ public class EqualsVisitor implements GenericVisitor<Boolean, Visitable> {
     }
 
     @Override
-    public Boolean visit(final JmlSetComprehension n, final Visitable arg) {
-        final JmlSetComprehension n2 = (JmlSetComprehension) arg;
+    public Boolean visit(final JmlSetComprehensionExpr n, final Visitable arg) {
+        final JmlSetComprehensionExpr n2 = (JmlSetComprehensionExpr) arg;
         if (!nodeEquals(n.getBinding(), n2.getBinding()))
             return false;
         if (!nodeEquals(n.getPredicate(), n2.getPredicate()))

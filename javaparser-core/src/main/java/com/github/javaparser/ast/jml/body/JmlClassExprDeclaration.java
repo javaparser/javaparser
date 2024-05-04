@@ -21,7 +21,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlClassExprDeclaration extends JmlClassLevel<JmlClassExprDeclaration> implements NodeWithModifiers<JmlClassExprDeclaration> {
+public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassExprDeclaration> implements NodeWithModifiers<JmlClassExprDeclaration> {
 
     private SimpleName kind;
 

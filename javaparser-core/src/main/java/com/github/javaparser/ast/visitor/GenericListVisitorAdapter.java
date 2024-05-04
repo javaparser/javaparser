@@ -2799,7 +2799,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final JmlSetComprehension n, final A arg) {
+    public List<R> visit(final JmlSetComprehensionExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {

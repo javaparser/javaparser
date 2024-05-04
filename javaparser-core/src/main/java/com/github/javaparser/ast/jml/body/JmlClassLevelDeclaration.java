@@ -11,31 +11,30 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlClassLevelMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl
  * @version 1 (3/17/21)
  */
-public abstract class JmlClassLevel<T extends BodyDeclaration<?>> extends BodyDeclaration<T> implements Jmlish, NodeWithJmlTags<T> {
+public abstract class JmlClassLevelDeclaration<T extends BodyDeclaration<?>> extends BodyDeclaration<T> implements Jmlish, NodeWithJmlTags<T> {
 
     @AllFieldsConstructor
-    public JmlClassLevel() {
+    public JmlClassLevelDeclaration() {
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClassLevel(TokenRange tokenRange) {
+    public JmlClassLevelDeclaration(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlClassLevel<?> clone() {
-        return (JmlClassLevel<?>) accept(new CloneVisitor(), null);
+    public JmlClassLevelDeclaration<?> clone() {
+        return (JmlClassLevelDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
     @Override
@@ -46,19 +45,19 @@ public abstract class JmlClassLevel<T extends BodyDeclaration<?>> extends BodyDe
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassLevel asJmlClassLevel() {
+    public JmlClassLevelDeclaration asJmlClassLevel() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassLevel> toJmlClassLevel() {
+    public Optional<JmlClassLevelDeclaration> toJmlClassLevel() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassLevel(Consumer<JmlClassLevel> action) {
+    public void ifJmlClassLevel(Consumer<JmlClassLevelDeclaration> action) {
         action.accept(this);
     }
 

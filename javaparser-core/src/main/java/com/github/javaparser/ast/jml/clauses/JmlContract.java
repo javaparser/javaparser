@@ -24,7 +24,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     private NodeList<SimpleName> jmlTags = new NodeList<>();
 
-    private Type type = Type.METHOD;
+    private ContractType type = ContractType.METHOD;
 
     @OptionalProperty
     private SimpleName name;
@@ -38,20 +38,20 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     private NodeList<JmlContract> subContracts = new NodeList<>();
 
     public JmlContract() {
-        this((TokenRange) null, new NodeList<>(), Type.METHOD, Behavior.NONE, null, new NodeList<>(), new NodeList<>(), new NodeList<>());
+        this((TokenRange) null, new NodeList<>(), ContractType.METHOD, Behavior.NONE, null, new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public JmlContract(NodeList<SimpleName> jmlTags, Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public JmlContract(NodeList<SimpleName> jmlTags, ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         this(null, jmlTags, type, behavior, name, modifiers, clauses, subContracts);
     }
 
-    public JmlContract(Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public JmlContract(ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         this((TokenRange) null, new NodeList<>(), type, behavior, name, modifiers, clauses, subContracts);
     }
 
     public JmlContract(TokenRange range, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
-        this(range, new NodeList<>(), Type.METHOD, behavior, null, modifiers, clauses, subContracts);
+        this(range, new NodeList<>(), ContractType.METHOD, behavior, null, modifiers, clauses, subContracts);
     }
 
     @Override
@@ -272,16 +272,6 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
         return this;
     }
 
-    public enum Type {
-
-        METHOD,
-        LOOP,
-        LOOP_INV,
-        BLOCK,
-        STATEMENT,
-        LAMBDA
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<SimpleName> getName() {
         return Optional.ofNullable(name);
@@ -301,12 +291,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Type getType() {
+    public ContractType getType() {
         return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setType(final Type type) {
+    public JmlContract setType(final ContractType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -325,7 +315,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlContract(TokenRange tokenRange, Type type, boolean isLoopContract, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public JmlContract(TokenRange tokenRange, ContractType type, boolean isLoopContract, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
         setType(type);
         setLoopContract(isLoopContract);
@@ -341,7 +331,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlContract(TokenRange tokenRange, NodeList<SimpleName> jmlTags, Type type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public JmlContract(TokenRange tokenRange, NodeList<SimpleName> jmlTags, ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setType(type);

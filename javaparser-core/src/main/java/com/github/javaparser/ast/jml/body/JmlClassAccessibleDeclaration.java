@@ -20,7 +20,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlClassAccessibleDeclaration extends JmlClassLevel<JmlClassAccessibleDeclaration> implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
+public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlClassAccessibleDeclaration> implements NodeWithModifiers<JmlClassAccessibleDeclaration> {
 
     private NodeList<Modifier> modifiers;
 

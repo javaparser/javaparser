@@ -21,7 +21,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlFieldDeclaration extends JmlClassLevel<JmlFieldDeclaration> {
+public class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclaration> {
 
     private FieldDeclaration decl;
 

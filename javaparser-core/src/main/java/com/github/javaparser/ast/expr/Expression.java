@@ -987,17 +987,17 @@ public abstract class Expression extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlSetComprehension asJmlSetComprehension() {
-        throw new IllegalStateException(f("%s is not JmlSetComprehension, it is %s", this, this.getClass().getSimpleName()));
+    public JmlSetComprehensionExpr asJmlSetComprehension() {
+        throw new IllegalStateException(f("%s is not JmlSetComprehensionExpr, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlSetComprehension> toJmlSetComprehension() {
+    public Optional<JmlSetComprehensionExpr> toJmlSetComprehension() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlSetComprehension(Consumer<JmlSetComprehension> action) {
+    public void ifJmlSetComprehension(Consumer<JmlSetComprehensionExpr> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

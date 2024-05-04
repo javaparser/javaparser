@@ -81,8 +81,6 @@ public enum JmlClauseKind implements JmlKeyword {
         return jmlSymbol;
     }
 
-    public static EnumSet<JmlClauseKind> VALID_CLAUSES_BLOCK_CONTRACT = EnumSet.of(ENSURES, ENSURES_FREE, ENSURES_REDUNDANTLY, REQUIRES, REQUIRES_FREE, REQUIRES_REDUNDANTLY, DECREASES, MODIFIES, MODIFIABLE, ASSIGNABLE, ACCESSIBLE, PRE, POST, RETURNS, BREAKS, CONTINUES, OLD, FORALL, SIGNALS, SIGNALS_ONLY, WHEN, WORKING_SPACE, CAPTURES, INITIALLY, INVARIANT, ASSIGNABLE_REDUNDANTLY, MODIFIABLE_REDUNDANTLY, MODIFIES_REDUNDANTLY, CAPTURES_REDUNDANTLY, CALLABLE, DIVERGES, DURATION);
-
     public static JmlClauseKind getKindByToken(JavaToken token) {
         Optional<JmlClauseKind> k = Arrays.stream(JmlClauseKind.values()).filter(it -> it.jmlSymbol.equals(token.getText())).findFirst();
         if (k.isPresent()) {

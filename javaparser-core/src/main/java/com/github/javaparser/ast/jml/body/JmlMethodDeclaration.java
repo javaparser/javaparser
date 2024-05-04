@@ -23,7 +23,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (4/5/21)
  */
-public class JmlMethodDeclaration extends JmlClassLevel<JmlMethodDeclaration> {
+public class JmlMethodDeclaration extends JmlClassLevelDeclaration<JmlMethodDeclaration> {
 
     private MethodDeclaration methodDeclaration;
 

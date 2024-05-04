@@ -1532,7 +1532,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
 
     @Override
     public Visitable visit(final JmlBodyDeclaration n, final Object arg) {
-        NodeList<JmlClassLevel> elements = cloneList(n.getElements(), arg);
+        NodeList<JmlClassLevelDeclaration> elements = cloneList(n.getElements(), arg);
         NodeList<SimpleName> jmlTags = cloneList(n.getJmlTags(), arg);
         NodeList<AnnotationExpr> annotations = cloneList(n.getAnnotations(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
@@ -1544,11 +1544,11 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     }
 
     @Override
-    public Visitable visit(final JmlSetComprehension n, final Object arg) {
+    public Visitable visit(final JmlSetComprehensionExpr n, final Object arg) {
         VariableDeclarator binding = cloneNode(n.getBinding(), arg);
         Expression predicate = cloneNode(n.getPredicate(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        JmlSetComprehension r = new JmlSetComprehension(n.getTokenRange().orElse(null), binding, predicate);
+        JmlSetComprehensionExpr r = new JmlSetComprehensionExpr(n.getTokenRange().orElse(null), binding, predicate);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

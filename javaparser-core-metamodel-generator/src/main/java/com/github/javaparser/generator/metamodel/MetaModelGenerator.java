@@ -167,7 +167,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlLetExpr.class);
         add(JmlMultiCompareExpr.class);
         add(JmlLabelExpr.class);
-        add(JmlSetComprehension.class);
+        add(JmlSetComprehensionExpr.class);
 
         add(com.github.javaparser.ast.stmt.AssertStmt.class);
         add(com.github.javaparser.ast.stmt.BlockStmt.class);
@@ -203,7 +203,7 @@ public class MetaModelGenerator extends AbstractGenerator {
         add(JmlBeginStmt.class);
         add(JmlEndStmt.class);
 
-        add(JmlClassLevel.class);
+        add(JmlClassLevelDeclaration.class);
         add(JmlMethodDeclaration.class);
         add(JmlFieldDeclaration.class);
         add(JmlClause.class);

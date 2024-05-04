@@ -19,16 +19,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/24/21)
  */
-public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> implements JmlContainer<JmlBodyDeclaration, JmlClassLevel>, Jmlish {
+public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> implements JmlContainer<JmlBodyDeclaration, JmlClassLevelDeclaration>, Jmlish {
 
     private boolean singleLine;
 
     private NodeList<SimpleName> jmlTags;
 
-    private NodeList<JmlClassLevel> elements;
+    private NodeList<JmlClassLevelDeclaration> elements;
 
     @AllFieldsConstructor
-    public JmlBodyDeclaration(boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements) {
+    public JmlBodyDeclaration(boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevelDeclaration> elements) {
         this(null, singleLine, jmlTags, elements);
     }
 
@@ -112,18 +112,18 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> impl
     /**
      * This constructor is used by the parser and is considered private.
      */
-    public JmlBodyDeclaration(TokenRange tokenRange, JmlClassLevel wrapped) {
+    public JmlBodyDeclaration(TokenRange tokenRange, JmlClassLevelDeclaration wrapped) {
         super(tokenRange);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlClassLevel> getElements() {
+    public NodeList<JmlClassLevelDeclaration> getElements() {
         return elements;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlBodyDeclaration setElements(final NodeList<JmlClassLevel> elements) {
+    public JmlBodyDeclaration setElements(final NodeList<JmlClassLevelDeclaration> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return this;
@@ -178,7 +178,7 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> impl
         }
         for (int i = 0; i < elements.size(); i++) {
             if (elements.get(i) == node) {
-                elements.set(i, (JmlClassLevel) replacementNode);
+                elements.set(i, (JmlClassLevelDeclaration) replacementNode);
                 return true;
             }
         }
@@ -195,7 +195,7 @@ public class JmlBodyDeclaration extends BodyDeclaration<JmlBodyDeclaration> impl
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlBodyDeclaration(TokenRange tokenRange, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevel> elements) {
+    public JmlBodyDeclaration(TokenRange tokenRange, boolean singleLine, NodeList<SimpleName> jmlTags, NodeList<JmlClassLevelDeclaration> elements) {
         super(tokenRange);
         setSingleLine(singleLine);
         setJmlTags(jmlTags);

@@ -2681,7 +2681,7 @@ public abstract class GenericVisitorAdapter<R, A> implements GenericVisitor<R, A
     }
 
     @Override
-    public R visit(final JmlSetComprehension n, final A arg) {
+    public R visit(final JmlSetComprehensionExpr n, final A arg) {
         R result;
         {
             result = n.getBinding().accept(this, arg);

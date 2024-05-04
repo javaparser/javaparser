@@ -237,7 +237,7 @@ public class ConcreteSyntaxModel {
         concreteSyntaxModelByClass.put(JmlQuantifiedExpr.class, sequence(token(LPAREN), attribute(BINDER), space(), list(VARIABLES, sequence(comma(), space())), token(SEMICOLON), space(), list(EXPRESSIONS, sequence(semicolon(), space())), token(RPAREN)));
         concreteSyntaxModelByClass.put(JmlRefiningStmt.class, sequence());
         concreteSyntaxModelByClass.put(JmlRepresentsDeclaration.class, sequence());
-        concreteSyntaxModelByClass.put(JmlSetComprehension.class, sequence());
+        concreteSyntaxModelByClass.put(JmlSetComprehensionExpr.class, sequence());
         concreteSyntaxModelByClass.put(JmlExpressionStmt.class, sequence(child(KIND), space(), child(EXPRESSION), semicolon()));
         concreteSyntaxModelByClass.put(JmlTypeExpr.class, sequence(child(TYPE)));
         concreteSyntaxModelByClass.put(JmlUnreachableStmt.class, sequence(token(UNREACHABLE), semicolon()));

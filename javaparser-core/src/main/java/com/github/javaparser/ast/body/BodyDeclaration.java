@@ -485,17 +485,17 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClassLevel asJmlClassLevel() {
-        throw new IllegalStateException(f("%s is not JmlClassLevel, it is %s", this, this.getClass().getSimpleName()));
+    public JmlClassLevelDeclaration asJmlClassLevel() {
+        throw new IllegalStateException(f("%s is not JmlClassLevelDeclaration, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClassLevel> toJmlClassLevel() {
+    public Optional<JmlClassLevelDeclaration> toJmlClassLevel() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClassLevel(Consumer<JmlClassLevel> action) {
+    public void ifJmlClassLevel(Consumer<JmlClassLevelDeclaration> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")

@@ -26,7 +26,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public class JmlRepresentsDeclaration extends JmlClassLevel<JmlRepresentsDeclaration> implements NodeWithModifiers<JmlRepresentsDeclaration>, NodeWithName<JmlRepresentsDeclaration> {
+public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepresentsDeclaration> implements NodeWithModifiers<JmlRepresentsDeclaration>, NodeWithName<JmlRepresentsDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
