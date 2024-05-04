@@ -33,12 +33,12 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
+import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CommentTest {
@@ -81,20 +81,20 @@ class CommentTest {
     @Test
     void testReplaceDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                "}" + SYSTEM_EOL);
+        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void oneMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
+                "}" + LineSeparator.SYSTEM);
 
         MethodDeclaration methodDeclaration = cu.findFirst(MethodDeclaration.class).get();
 
@@ -122,21 +122,21 @@ class CommentTest {
     @Test
     void testRemoveDuplicateComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
+        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void oneMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
                 "}" +
-                SYSTEM_EOL);
+                LineSeparator.SYSTEM);
 
         MethodDeclaration methodDeclaration = cu.findFirst(MethodDeclaration.class).get();
 
@@ -160,21 +160,21 @@ class CommentTest {
     @Test
     void testRemoveDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
+        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void oneMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
                 "}" +
-                SYSTEM_EOL);
+                LineSeparator.SYSTEM);
 
         MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
 

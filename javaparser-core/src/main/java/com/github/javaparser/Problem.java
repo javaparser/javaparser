@@ -23,7 +23,8 @@ package com.github.javaparser;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
+import com.github.javaparser.utils.LineSeparator;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -48,12 +49,12 @@ public class Problem {
     public String toString() {
         final StringBuilder str = new StringBuilder(getVerboseMessage());
         if (cause != null) {
-            str.append(SYSTEM_EOL).append("Problem stacktrace : ").append(SYSTEM_EOL);
+            str.append(LineSeparator.SYSTEM).append("Problem stacktrace : ").append(LineSeparator.SYSTEM);
             for (int i = 0; i < cause.getStackTrace().length; i++) {
                 StackTraceElement ste = cause.getStackTrace()[i];
                 str.append("  ").append(ste.toString());
                 if (i + 1 != cause.getStackTrace().length)
-                    str.append(SYSTEM_EOL);
+                    str.append(LineSeparator.SYSTEM);
             }
         }
         return str.toString();

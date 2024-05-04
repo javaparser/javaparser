@@ -27,12 +27,13 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.utils.LineSeparator;
+
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -115,7 +116,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
     void addingAnnotation() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
-        assertTransformedToString("@myAnno" + SYSTEM_EOL + "int foo();", it);
+        assertTransformedToString("@myAnno" + LineSeparator.SYSTEM + "int foo();", it);
     }
 
     @Test
@@ -123,7 +124,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
         AnnotationMemberDeclaration it = consider("int foo();");
         it.addAnnotation("myAnno");
         it.addAnnotation("myAnno2");
-        assertTransformedToString("@myAnno" + SYSTEM_EOL + "@myAnno2" + SYSTEM_EOL + "int foo();", it);
+        assertTransformedToString("@myAnno" + LineSeparator.SYSTEM + "@myAnno2" + LineSeparator.SYSTEM + "int foo();", it);
     }
 
     @Test
@@ -135,7 +136,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
 
     @Test
     void removingAnnotationOnPrevLine() {
-        AnnotationMemberDeclaration it = consider("@myAnno" + SYSTEM_EOL + "int foo();");
+        AnnotationMemberDeclaration it = consider("@myAnno" + LineSeparator.SYSTEM + "int foo();");
         it.getAnnotations().remove(0);
         assertTransformedToString("int foo();", it);
     }
@@ -153,7 +154,7 @@ class AnnotationMemberDeclarationTransformationsTest extends AbstractLexicalPres
     void addingJavadoc() {
         AnnotationMemberDeclaration it = consider("int foo();");
         it.setJavadocComment("Cool this annotation!");
-        assertTransformedToString("@interface AD { /**Cool this annotation!*/" + SYSTEM_EOL +
+        assertTransformedToString("@interface AD { /**Cool this annotation!*/" + LineSeparator.SYSTEM +
                 "int foo(); }", it.getParentNode().get());
     }
 

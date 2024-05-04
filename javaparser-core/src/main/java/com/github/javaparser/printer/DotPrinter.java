@@ -24,10 +24,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.util.List;
 
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 
@@ -49,7 +49,7 @@ public class DotPrinter {
         StringBuilder output = new StringBuilder();
         output.append("digraph {");
         output(node, null, "root", output);
-        output.append(SYSTEM_EOL + "}");
+        output.append(LineSeparator.SYSTEM + "}");
         return output.toString();
     }
 
@@ -62,15 +62,15 @@ public class DotPrinter {
         List<PropertyMetaModel> subLists = allPropertyMetaModels.stream().filter(PropertyMetaModel::isNodeList).collect(toList());
         String ndName = nextNodeName();
         if (outputNodeType)
-            builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + " (" + metaModel.getTypeName() + ")\"];");
+            builder.append(LineSeparator.SYSTEM + ndName + " [label=\"" + escape(name) + " (" + metaModel.getTypeName() + ")\"];");
         else
-            builder.append(SYSTEM_EOL + ndName + " [label=\"" + escape(name) + "\"];");
+            builder.append(LineSeparator.SYSTEM + ndName + " [label=\"" + escape(name) + "\"];");
         if (parentNodeName != null)
-            builder.append(SYSTEM_EOL + parentNodeName + " -> " + ndName + ";");
+            builder.append(LineSeparator.SYSTEM + parentNodeName + " -> " + ndName + ";");
         for (PropertyMetaModel a : attributes) {
             String attrName = nextNodeName();
-            builder.append(SYSTEM_EOL + attrName + " [label=\"" + escape(a.getName()) + "='" + escape(a.getValue(node).toString()) + "'\"];");
-            builder.append(SYSTEM_EOL + ndName + " -> " + attrName + ";");
+            builder.append(LineSeparator.SYSTEM + attrName + " [label=\"" + escape(a.getName()) + "='" + escape(a.getValue(node).toString()) + "'\"];");
+            builder.append(LineSeparator.SYSTEM + ndName + " -> " + attrName + ";");
         }
         for (PropertyMetaModel sn : subNodes) {
             Node nd = (Node) sn.getValue(node);
@@ -81,8 +81,8 @@ public class DotPrinter {
             NodeList<? extends Node> nl = (NodeList<? extends Node>) sl.getValue(node);
             if (nl != null && nl.isNonEmpty()) {
                 String ndLstName = nextNodeName();
-                builder.append(SYSTEM_EOL + ndLstName + " [label=\"" + escape(sl.getName()) + "\"];");
-                builder.append(SYSTEM_EOL + ndName + " -> " + ndLstName + ";");
+                builder.append(LineSeparator.SYSTEM + ndLstName + " [label=\"" + escape(sl.getName()) + "\"];");
+                builder.append(LineSeparator.SYSTEM + ndName + " -> " + ndLstName + ";");
                 String slName = sl.getName().substring(0, sl.getName().length() - 1);
                 for (Node nd : nl) output(nd, ndLstName, slName, builder);
             }

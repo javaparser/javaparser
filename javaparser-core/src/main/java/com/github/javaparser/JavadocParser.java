@@ -24,6 +24,7 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.JavadocBlockTag;
 import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,18 +49,18 @@ class JavadocParser {
     }
 
     public static Javadoc parse(String commentContent) {
-        List<String> cleanLines = cleanLines(normalizeEolInTextBlock(commentContent, SYSTEM_EOL));
+        List<String> cleanLines = cleanLines(normalizeEolInTextBlock(commentContent, LineSeparator.SYSTEM));
         int indexOfFirstBlockTag = cleanLines.stream().filter(JavadocParser::isABlockLine).map(cleanLines::indexOf).findFirst().orElse(-1);
         List<String> blockLines;
         String descriptionText;
         if (indexOfFirstBlockTag == -1) {
-            descriptionText = trimRight(String.join(SYSTEM_EOL, cleanLines));
+            descriptionText = trimRight(String.join(LineSeparator.SYSTEM.asRawString(), cleanLines));
             blockLines = Collections.emptyList();
         } else {
-            descriptionText = trimRight(String.join(SYSTEM_EOL, cleanLines.subList(0, indexOfFirstBlockTag)));
+            descriptionText = trimRight(String.join(LineSeparator.SYSTEM.asRawString(), cleanLines.subList(0, indexOfFirstBlockTag)));
             // Combine cleaned lines, but only starting with the first block tag till the end
             // In this combined string it is easier to handle multiple lines which actually belong together
-            String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size()).stream().collect(Collectors.joining(SYSTEM_EOL));
+            String tagBlock = cleanLines.subList(indexOfFirstBlockTag, cleanLines.size()).stream().collect(Collectors.joining(LineSeparator.SYSTEM.asRawString()));
             // Split up the entire tag back again, considering now that some lines belong to the same block tag.
             // The pattern splits the block at each new line starting with the '@' symbol, thus the symbol
             // then needs to be added again so that the block parsers handles everything correctly.
@@ -89,7 +90,7 @@ class JavadocParser {
     }
 
     private static List<String> cleanLines(String content) {
-        String[] lines = content.split(SYSTEM_EOL);
+        String[] lines = content.split(LineSeparator.SYSTEM.asRawString());
         if (lines.length == 0) {
             return Collections.emptyList();
         }

@@ -25,6 +25,7 @@ import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.Utils;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +55,7 @@ class PrinterConfigurationTest {
                 Integer.valueOf(5));
         assertTrue(getOption(config, ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY).get().asValue() ==
                 Integer.valueOf(5));
-        assertEquals(getOption(config, ConfigOption.END_OF_LINE_CHARACTER).get().asString(), Utils.SYSTEM_EOL);
+        assertEquals(getOption(config, ConfigOption.END_OF_LINE_CHARACTER).get().asString(), LineSeparator.SYSTEM.asRawString());
     }
 
     @Test

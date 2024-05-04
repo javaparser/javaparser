@@ -29,6 +29,8 @@ import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
+import com.github.javaparser.utils.LineSeparator;
+
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.GeneratedJavaParserConstants.IDENTIFIER;
@@ -36,7 +38,6 @@ import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -147,21 +148,21 @@ class ModuleDeclarationTest {
                         "}");
 
         assertEquals(
-                "@Foo(1)" + SYSTEM_EOL +
-                        "@Foo(2)" + SYSTEM_EOL +
-                        "@Bar" + SYSTEM_EOL +
-                        "module M.N {" + SYSTEM_EOL +
-                        "    requires A.B;" + SYSTEM_EOL +
-                        "    requires transitive C.D;" + SYSTEM_EOL +
-                        "    requires static E.F;" + SYSTEM_EOL +
-                        "    requires static transitive G.H;" + SYSTEM_EOL +
-                        "    exports P.Q;" + SYSTEM_EOL +
-                        "    exports R.S to T1.U1, T2.U2;" + SYSTEM_EOL +
-                        "    opens P.Q;" + SYSTEM_EOL +
-                        "    opens R.S to T1.U1, T2.U2;" + SYSTEM_EOL +
-                        "    uses V.W;" + SYSTEM_EOL +
-                        "    provides X.Y with Z1.Z2, Z3.Z4;" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL, cu.toString());
+                "@Foo(1)" + LineSeparator.SYSTEM +
+                        "@Foo(2)" + LineSeparator.SYSTEM +
+                        "@Bar" + LineSeparator.SYSTEM +
+                        "module M.N {" + LineSeparator.SYSTEM +
+                        "    requires A.B;" + LineSeparator.SYSTEM +
+                        "    requires transitive C.D;" + LineSeparator.SYSTEM +
+                        "    requires static E.F;" + LineSeparator.SYSTEM +
+                        "    requires static transitive G.H;" + LineSeparator.SYSTEM +
+                        "    exports P.Q;" + LineSeparator.SYSTEM +
+                        "    exports R.S to T1.U1, T2.U2;" + LineSeparator.SYSTEM +
+                        "    opens P.Q;" + LineSeparator.SYSTEM +
+                        "    opens R.S to T1.U1, T2.U2;" + LineSeparator.SYSTEM +
+                        "    uses V.W;" + LineSeparator.SYSTEM +
+                        "    provides X.Y with Z1.Z2, Z3.Z4;" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM, cu.toString());
 
     }
 
@@ -186,21 +187,21 @@ class ModuleDeclarationTest {
                         "}");
 
         assertEquals(
-                "@Foo(1)" + SYSTEM_EOL +
-                        "@Foo(2)" + SYSTEM_EOL +
-                        "@Bar" + SYSTEM_EOL +
-                        "open module M.N {" + SYSTEM_EOL +
-                        "    requires A.B;" + SYSTEM_EOL +
-                        "    requires transitive C.D;" + SYSTEM_EOL +
-                        "    requires static E.F;" + SYSTEM_EOL +
-                        "    requires transitive static G.H;" + SYSTEM_EOL +
-                        "    exports P.Q;" + SYSTEM_EOL +
-                        "    exports R.S to T1.U1, T2.U2;" + SYSTEM_EOL +
-                        "    opens P.Q;" + SYSTEM_EOL +
-                        "    opens R.S to T1.U1, T2.U2;" + SYSTEM_EOL +
-                        "    uses V.W;" + SYSTEM_EOL +
-                        "    provides X.Y with Z1.Z2, Z3.Z4;" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
+                "@Foo(1)" + LineSeparator.SYSTEM +
+                        "@Foo(2)" + LineSeparator.SYSTEM +
+                        "@Bar" + LineSeparator.SYSTEM +
+                        "open module M.N {" + LineSeparator.SYSTEM +
+                        "    requires A.B;" + LineSeparator.SYSTEM +
+                        "    requires transitive C.D;" + LineSeparator.SYSTEM +
+                        "    requires static E.F;" + LineSeparator.SYSTEM +
+                        "    requires transitive static G.H;" + LineSeparator.SYSTEM +
+                        "    exports P.Q;" + LineSeparator.SYSTEM +
+                        "    exports R.S to T1.U1, T2.U2;" + LineSeparator.SYSTEM +
+                        "    opens P.Q;" + LineSeparator.SYSTEM +
+                        "    opens R.S to T1.U1, T2.U2;" + LineSeparator.SYSTEM +
+                        "    uses V.W;" + LineSeparator.SYSTEM +
+                        "    provides X.Y with Z1.Z2, Z3.Z4;" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM, ConcreteSyntaxModel.genericPrettyPrint(cu));
 
     }
 
