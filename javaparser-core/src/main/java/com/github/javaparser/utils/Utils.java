@@ -37,14 +37,6 @@ import com.github.javaparser.ast.expr.UnaryExpr;
  */
 public class Utils {
 
-    /**
-     * // TODO: Replace this within the internal codebase.
-     * @deprecated New code should use {@link LineSeparator#SYSTEM} if referring to the current host system's line separator,
-     *  else {@link LineSeparator#CR} or {@link LineSeparator#LF} or {@link LineSeparator#CRLF} if referring to a specific style of line separator.
-     */
-    @Deprecated
-    public static final String EOL = LineSeparator.SYSTEM.asRawString();
-
     public static <E> boolean isNullOrEmpty(Collection<E> collection) {
         return collection == null || collection.isEmpty();
     }
