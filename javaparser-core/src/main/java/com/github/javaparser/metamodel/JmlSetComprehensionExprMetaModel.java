@@ -21,7 +21,8 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-import com.github.javaparser.ast.jml.body.JmlBodyDeclaration;
+
+import com.github.javaparser.ast.jml.expr.JmlSetComprehensionExpr;
 import com.github.javaparser.ast.Generated;
 
 /**
@@ -34,16 +35,14 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JmlBodyDeclarationMetaModel extends BodyDeclarationMetaModel {
+public class JmlSetComprehensionExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    JmlBodyDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlBodyDeclaration.class, "JmlBodyDeclaration", "com.github.javaparser.ast.jml.body", false, false);
+    JmlSetComprehensionExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, JmlSetComprehensionExpr.class, "JmlSetComprehensionExpr", "com.github.javaparser.ast.jml.expr", false, false);
     }
 
-    public PropertyMetaModel elementsPropertyMetaModel;
+    public PropertyMetaModel bindingPropertyMetaModel;
 
-    public PropertyMetaModel jmlTagsPropertyMetaModel;
-
-    public PropertyMetaModel singleLinePropertyMetaModel;
+    public PropertyMetaModel predicatePropertyMetaModel;
 }

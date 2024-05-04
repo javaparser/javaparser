@@ -26,7 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -555,11 +554,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlAccessibleClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
     public R visit(final JmlClauseLabel n, final A arg) {
         return defaultAction(n, arg);
     }
@@ -610,11 +604,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final JmlCapturesClause n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
     public R visit(final JmlForallClause n, final A arg) {
         return defaultAction(n, arg);
     }
@@ -646,11 +635,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final JmlContract n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlBodyDeclaration n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -691,11 +675,6 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final JmlDocStmt n, final A arg) {
-        return defaultAction(n, arg);
-    }
-
-    @Override
-    public R visit(final JmlImportDeclaration n, final A arg) {
         return defaultAction(n, arg);
     }
 

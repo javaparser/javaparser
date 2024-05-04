@@ -6644,7 +6644,7 @@ JmlContract JmlLoopContract():
 	    clause=JmlLoopInvClauses() {clauses.add(clause);}
 	)*
 	{ return new JmlContract(range(begin, token()), new NodeList<>(),
-                              JmlContract.Type.LOOP, b, name, new NodeList<>(),
+                              ContractType.LOOP, b, name, new NodeList<>(),
                               clauses, new NodeList<>());
     }
 }
@@ -6687,7 +6687,7 @@ JmlContract JmlInvContract():
   (
       clause=JmlLoopInvClauses() { clauses.add(clause); }
   )*
-  { return new JmlContract(range(clause, token()), JmlContract.Type.LOOP_INV, false, Behavior.NONE,
+  { return new JmlContract(range(clause, token()), ContractType.LOOP_INV, false, Behavior.NONE,
                                     name, new NodeList<>(), clauses, new NodeList<>()); }
 }
 
@@ -6745,7 +6745,7 @@ JmlContract JmlContract():
   (clause=JmlContractClause() {clauses.add(clause);})+
   (<NESTED_CONTRACT_START> subContracts=JmlContracts() <NESTED_CONTRACT_END>)?
   { JavaToken begin = orIfInvalid(beginVisibility,beginBehavior, name, clauses.get(0));
-	return new JmlContract(range(begin, token()), JmlContract.Type.METHOD, false, b,
+	return new JmlContract(range(begin, token()), ContractType.METHOD, false, b,
 				name, new NodeList<>(), clauses, subContracts);}
 }
 
@@ -7012,7 +7012,6 @@ JmlClause JmlSignalsOnlyClause():
 
 void jmlModifiers(NodeList<Modifier> modifiers):
 {
-    JmlContainer c = new DefaultJmlContainer();
 }
 {
   try {
@@ -7063,7 +7062,7 @@ void jmlModifiersInner(NodeList<Modifier> modifiers):
 
 void JmlClassLevelInner(ModifierHolder modifiers,  NodeList<Node> ret):
 {
-		JmlClassLevel element;
+		JmlClassLevelDeclaration element;
 		NodeList<JmlContract> contracts;
 		MethodDeclaration method = null;
 		boolean hit = false;
@@ -7098,7 +7097,7 @@ void JmlClassLevelInner(ModifierHolder modifiers,  NodeList<Node> ret):
 ArbitraryNodeContainer JmlClassLevelStart():
 {
     NodeList<Node> ret = new NodeList<>();
-    JmlClassLevel element;
+    JmlClassLevelDeclaration element;
     NodeList<JmlContract> contracts;
     ModifierHolder modifiers;
     JavaToken begin;
@@ -7201,7 +7200,7 @@ Parameter QParameter(Type previousType):
 }
 
 
-JmlClassLevel JmlFieldDeclaration(ModifierHolder modifier):
+JmlClassLevelDeclaration JmlFieldDeclaration(ModifierHolder modifier):
 {
     FieldDeclaration decl;
 }
@@ -7212,7 +7211,7 @@ JmlClassLevel JmlFieldDeclaration(ModifierHolder modifier):
     }
 }
 
-JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
+JmlClassLevelDeclaration JmlMethodDeclaration(ModifierHolder modifier):
 {
     RangedList<TypeParameter> typeParameters = new RangedList<TypeParameter>(emptyNodeList());
     Type type;
@@ -7266,7 +7265,7 @@ JmlClassLevel JmlMethodDeclaration(ModifierHolder modifier):
     }
 }
 
-JmlClassLevel JmlClassExpr(ModifierHolder modifiers):
+JmlClassLevelDeclaration JmlClassExpr(ModifierHolder modifiers):
 { Expression expr; JavaToken begin; SimpleName id;}
 {
   (<AXIOM> | <INVARIANT> | <INITIALLY> | <CONSTRAINT> | <CONSTRAINT_REDUNDANTLY>)
@@ -7280,7 +7279,7 @@ JmlClassLevel JmlClassExpr(ModifierHolder modifiers):
 }
 
 
-JmlClassLevel JmlClassAccessible(ModifierHolder modifiers):
+JmlClassLevelDeclaration JmlClassAccessible(ModifierHolder modifiers):
 {
     JavaToken begin;
     Expression var;
@@ -7301,7 +7300,7 @@ JmlClassLevel JmlClassAccessible(ModifierHolder modifiers):
                              modifiers.modifiers, var, expressions, measuredBy);}
 }
 
-JmlClassLevel JmlClassRepresents(ModifierHolder modifiers):
+JmlClassLevelDeclaration JmlClassRepresents(ModifierHolder modifiers):
 {
      JavaToken begin;
      Name id=null;

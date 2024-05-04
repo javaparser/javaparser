@@ -12,7 +12,7 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.JmlSetComprehensionMetaModel;
+import com.github.javaparser.metamodel.JmlSetComprehensionExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
@@ -152,7 +152,26 @@ public class JmlSetComprehensionExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlSetComprehensionMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlSetComprehensionMetaModel;
+    public JmlSetComprehensionExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlSetComprehensionExprMetaModel;
+    }
+
+    @Override
+    public boolean isJmlSetComprehensionExpr() {
+        return true;
+    }
+
+    @Override
+    public JmlSetComprehensionExpr asJmlSetComprehensionExpr() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlSetComprehensionExpr> toJmlSetComprehensionExpr() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlSetComprehensionExpr(Consumer<JmlSetComprehensionExpr> action) {
+        action.accept(this);
     }
 }

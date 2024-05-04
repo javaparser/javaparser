@@ -26,7 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -253,8 +252,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlQuantifiedExpr n, A arg);
 
-    R visit(JmlAccessibleClause n, A arg);
-
     R visit(JmlClauseLabel n, A arg);
 
     R visit(JmlExpressionStmt n, A arg);
@@ -275,8 +272,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlCallableClause n, A arg);
 
-    R visit(JmlCapturesClause n, A arg);
-
     R visit(JmlForallClause n, A arg);
 
     R visit(JmlRefiningStmt n, A arg);
@@ -291,8 +286,6 @@ public interface GenericVisitor<R, A> {
 
     R visit(JmlContract n, A arg);
 
-    R visit(JmlBodyDeclaration n, A arg);
-
     R visit(JmlSetComprehensionExpr n, A arg);
 
     R visit(JmlGhostStmt n, A arg);
@@ -304,8 +297,6 @@ public interface GenericVisitor<R, A> {
     R visit(JmlDocDeclaration n, A arg);
 
     R visit(JmlDocStmt n, A arg);
-
-    R visit(JmlImportDeclaration n, A arg);
 
     R visit(JmlDoc n, A arg);
 

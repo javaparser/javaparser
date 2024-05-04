@@ -8,9 +8,11 @@ import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.jml.NodeWithJmlTags;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.metamodel.JmlClassLevelMetaModel;
+import com.github.javaparser.metamodel.JmlClassLevelDeclarationMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import com.github.javaparser.ast.Node;
 
 /**
  * @author Alexander Weigl
@@ -63,7 +65,26 @@ public abstract class JmlClassLevelDeclaration<T extends BodyDeclaration<?>> ext
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlClassLevelMetaModel getMetaModel() {
-        return JavaParserMetaModel.jmlClassLevelMetaModel;
+    public JmlClassLevelDeclarationMetaModel getMetaModel() {
+        return JavaParserMetaModel.jmlClassLevelDeclarationMetaModel;
+    }
+
+    @Override
+    public boolean isJmlClassLevelDeclaration() {
+        return true;
+    }
+
+    @Override
+    public JmlClassLevelDeclaration asJmlClassLevelDeclaration() {
+        return this;
+    }
+
+    @Override
+    public Optional<JmlClassLevelDeclaration> toJmlClassLevelDeclaration() {
+        return Optional.of(this);
+    }
+
+    public void ifJmlClassLevelDeclaration(Consumer<JmlClassLevelDeclaration> action) {
+        action.accept(this);
     }
 }

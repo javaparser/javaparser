@@ -26,7 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -469,11 +468,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlAccessibleClause n, final Void arg) {
-        return (n.getExpressions().accept(this, arg)) * 31 + (n.getHeaps().accept(this, arg)) * 31 + (n.getMeasuredBy().isPresent() ? n.getMeasuredBy().get().accept(this, arg) : 0) * 31 + (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
     public Integer visit(final JmlClauseLabel n, final Void arg) {
         return (n.getExpr().accept(this, arg)) * 31 + (n.getKind().hashCode()) * 31 + (n.getLabel().isPresent() ? n.getLabel().get().accept(this, arg) : 0) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
@@ -524,11 +518,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     }
 
     @Override
-    public Integer visit(final JmlCapturesClause n, final Void arg) {
-        return (n.getKind().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
     public Integer visit(final JmlForallClause n, final Void arg) {
         return (n.getBoundedVariables().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
@@ -561,11 +550,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlContract n, final Void arg) {
         return (n.getBehavior().hashCode()) * 31 + (n.getClauses().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().isPresent() ? n.getName().get().accept(this, arg) : 0) * 31 + (n.getSubContracts().accept(this, arg)) * 31 + (n.getType().hashCode()) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final JmlBodyDeclaration n, final Void arg) {
-        return (n.getElements().accept(this, arg)) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.isSingleLine() ? 1 : 0) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override
@@ -605,11 +589,6 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     @Override
     public Integer visit(final JmlDocStmt n, final Void arg) {
         return (n.getJmlComments().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
-    }
-
-    @Override
-    public Integer visit(final JmlImportDeclaration n, final Void arg) {
-        return (n.isAsterisk() ? 1 : 0) * 31 + (n.isStatic() ? 1 : 0) * 31 + (n.getJmlTags().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
 
     @Override

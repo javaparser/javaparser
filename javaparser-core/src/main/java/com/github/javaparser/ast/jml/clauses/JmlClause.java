@@ -271,18 +271,22 @@ public abstract class JmlClause extends Node implements Jmlish {
     public void ifJmlSimpleExprClause(Consumer<JmlSimpleExprClause> action) {
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlClauseIf() {
         return false;
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlClauseIf asJmlClauseIf() {
         throw new IllegalStateException(f("%s is not JmlClauseIf, it is %s", this, this.getClass().getSimpleName()));
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlClauseIf> toJmlClauseIf() {
         return Optional.empty();
     }
 
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClauseIf(Consumer<JmlClauseIf> action) {
     }
 }

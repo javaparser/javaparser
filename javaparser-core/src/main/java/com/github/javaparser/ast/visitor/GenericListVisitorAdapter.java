@@ -26,7 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -2284,33 +2283,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final JmlAccessibleClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getExpressions().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getHeaps().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getMeasuredBy().isPresent()) {
-            tmp = n.getMeasuredBy().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
     public List<R> visit(final JmlClauseLabel n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
@@ -2536,18 +2508,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public List<R> visit(final JmlCapturesClause n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
     public List<R> visit(final JmlForallClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
@@ -2760,33 +2720,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         }
         {
             tmp = n.getSubContracts().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final JmlBodyDeclaration n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getElements().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getJmlTags().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getAnnotations().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }
@@ -3023,28 +2956,6 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
         List<R> tmp;
         {
             tmp = n.getJmlComments().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        if (n.getComment().isPresent()) {
-            tmp = n.getComment().get().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        return result;
-    }
-
-    @Override
-    public List<R> visit(final JmlImportDeclaration n, final A arg) {
-        List<R> result = new ArrayList<>();
-        List<R> tmp;
-        {
-            tmp = n.getJmlTags().accept(this, arg);
-            if (tmp != null)
-                result.addAll(tmp);
-        }
-        {
-            tmp = n.getName().accept(this, arg);
             if (tmp != null)
                 result.addAll(tmp);
         }

@@ -27,7 +27,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -1360,19 +1359,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlAccessibleClause n, final A arg) {
-        NodeList<Expression> exprs = modifyList(n.getExpressions(), arg);
-        NodeList<SimpleName> heaps = modifyList(n.getHeaps(), arg);
-        Expression measuredBy = n.getMeasuredBy().map(s -> (Expression) s.accept(this, arg)).orElse(null);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setExpressions(exprs);
-        n.setHeaps(heaps);
-        n.setMeasuredBy(measuredBy);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
     public Visitable visit(final JmlClauseLabel n, final A arg) {
         Expression expr = (Expression) n.getExpr().accept(this, arg);
         SimpleName label = n.getLabel().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
@@ -1512,13 +1498,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlCapturesClause n, final A arg) {
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
     public Visitable visit(final JmlForallClause n, final A arg) {
         NodeList<Parameter> boundedVariables = modifyList(n.getBoundedVariables(), arg);
         SimpleName name = n.getName().map(s -> (SimpleName) s.accept(this, arg)).orElse(null);
@@ -1632,19 +1611,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     }
 
     @Override
-    public Visitable visit(final JmlBodyDeclaration n, final A arg) {
-        NodeList<AnnotationExpr> annotations = modifyList(n.getAnnotations(), arg);
-        NodeList<JmlClassLevelDeclaration> elements = modifyList(n.getElements(), arg);
-        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        n.setAnnotations(annotations);
-        n.setElements(elements);
-        n.setJmlTags(jmlTags);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
     public Visitable visit(final JmlSetComprehensionExpr n, final A arg) {
         VariableDeclarator binding = (VariableDeclarator) n.getBinding().accept(this, arg);
         Expression predicate = (Expression) n.getPredicate().accept(this, arg);
@@ -1718,19 +1684,6 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         NodeList<JmlDoc> jmlComments = modifyList(n.getJmlComments(), arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         n.setJmlComments(jmlComments);
-        n.setComment(comment);
-        return n;
-    }
-
-    @Override
-    public Visitable visit(final JmlImportDeclaration n, final A arg) {
-        NodeList<SimpleName> jmlTags = modifyList(n.getJmlTags(), arg);
-        Name name = (Name) n.getName().accept(this, arg);
-        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
-        if (name == null)
-            return null;
-        n.setJmlTags(jmlTags);
-        n.setName(name);
         n.setComment(comment);
         return n;
     }

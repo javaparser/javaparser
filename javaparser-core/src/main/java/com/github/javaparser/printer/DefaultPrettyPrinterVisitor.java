@@ -27,7 +27,6 @@ import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -785,12 +784,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlAccessibleClause n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printClause(n.getKind(), n.getHeaps(), n.getExpressions());
-    }
-
-    @Override
     public void visit(JmlClauseLabel n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printer.print(n.getKind().jmlSymbol);
@@ -917,14 +910,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     @Override
-    public void visit(JmlCapturesClause n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        printer.print(n.getKind().jmlSymbol);
-        printer.print(" TODO");
-        printer.println(";");
-    }
-
-    @Override
     public void visit(JmlForallClause n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printer.print(n.getKind().jmlSymbol);
@@ -997,14 +982,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.indent();
         printList(n.getSubContracts(), "", "", "", "{|\n", "|}");
         printer.unindent().unindent();
-    }
-
-    @Override
-    public void visit(JmlBodyDeclaration n, Void arg) {
-        printOrphanCommentsBeforeThisChildNode(n);
-        startJmlComment(n.isSingleLine(), n.getJmlTags());
-        printList(n.getElements(), "\n");
-        endJmlComment();
     }
 
     private void endJmlComment() {
@@ -1084,10 +1061,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlDocStmt n, Void arg) {
         n.getJmlComments().forEach(it -> it.accept(this, arg));
-    }
-
-    @Override
-    public void visit(JmlImportDeclaration n, Void arg) {
     }
 
     @Override

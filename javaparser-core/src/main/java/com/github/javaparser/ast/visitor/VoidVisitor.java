@@ -26,7 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -248,8 +247,6 @@ public interface VoidVisitor<A> {
 
     void visit(JmlQuantifiedExpr jmlQuantifiedExpr, A arg);
 
-    void visit(JmlAccessibleClause n, A arg);
-
     void visit(JmlClauseLabel n, A arg);
 
     void visit(JmlExpressionStmt n, A arg);
@@ -270,8 +267,6 @@ public interface VoidVisitor<A> {
 
     void visit(JmlCallableClause n, A arg);
 
-    void visit(JmlCapturesClause n, A arg);
-
     void visit(JmlForallClause n, A arg);
 
     void visit(JmlRefiningStmt n, A arg);
@@ -286,8 +281,6 @@ public interface VoidVisitor<A> {
 
     void visit(JmlContract n, A arg);
 
-    void visit(JmlBodyDeclaration n, A arg);
-
     void visit(JmlSetComprehensionExpr n, A arg);
 
     void visit(JmlGhostStmt n, A arg);
@@ -299,8 +292,6 @@ public interface VoidVisitor<A> {
     void visit(JmlDocDeclaration n, A arg);
 
     void visit(JmlDocStmt n, A arg);
-
-    void visit(JmlImportDeclaration n, A arg);
 
     void visit(JmlDoc n, A arg);
 

@@ -13,9 +13,7 @@ import com.github.javaparser.metamodel.JmlCallableClauseMetaModel;
 import com.github.javaparser.ast.Node;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**

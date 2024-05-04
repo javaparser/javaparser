@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
- * Copyright (C) 2011, 2013-2020 The JavaParser Team.
+ * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -20,9 +20,11 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.jml.clauses.JmlAccessibleClause;
 import java.util.Optional;
+
+import com.github.javaparser.ast.jml.body.JmlClassLevelDeclaration;
+import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -30,20 +32,19 @@ import java.util.Optional;
  *     <li>The contents and annotations within the package `com.github.javaparser.ast`, and</li>
  *     <li>`ALL_NODE_CLASSES` within the class `com.github.javaparser.generator.metamodel.MetaModelGenerator`.</li>
  * </ul>
- * <p>
+ *
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class AccessibleClauseMetaModel extends JmlClauseMetaModel {
+public class JmlClassLevelDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    AccessibleClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, JmlAccessibleClause.class, "AccessibleClause", "com.github.javaparser.ast.jml.clauses", false, false);
+    JmlClassLevelDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
+        super(superBaseNodeMetaModel, JmlClassLevelDeclaration.class, "JmlClassLevelDeclaration", "com.github.javaparser.ast.jml.body", true, true);
     }
 
-    public PropertyMetaModel exprsPropertyMetaModel;
-
-    public PropertyMetaModel heapsPropertyMetaModel;
-
-    public PropertyMetaModel measuredByPropertyMetaModel;
+    @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
+    protected JmlClassLevelDeclarationMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+        super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
+    }
 }

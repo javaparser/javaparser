@@ -26,7 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -462,11 +461,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final JmlAccessibleClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
     public Integer visit(final JmlClauseLabel n, final Void arg) {
         return n.hashCode();
     }
@@ -517,11 +511,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
     }
 
     @Override
-    public Integer visit(final JmlCapturesClause n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
     public Integer visit(final JmlForallClause n, final Void arg) {
         return n.hashCode();
     }
@@ -553,11 +542,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlContract n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final JmlBodyDeclaration n, final Void arg) {
         return n.hashCode();
     }
 
@@ -597,11 +581,6 @@ public class ObjectIdentityHashCodeVisitor implements GenericVisitor<Integer, Vo
 
     @Override
     public Integer visit(final JmlDocStmt n, final Void arg) {
-        return n.hashCode();
-    }
-
-    @Override
-    public Integer visit(final JmlImportDeclaration n, final Void arg) {
         return n.hashCode();
     }
 

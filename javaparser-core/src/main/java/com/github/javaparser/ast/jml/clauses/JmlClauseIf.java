@@ -9,14 +9,10 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.ast.observer.ObservableProperty;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.metamodel.JmlClauseIfMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
@@ -137,25 +133,31 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isJmlClauseIf() {
         return true;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JmlClauseIf asJmlClauseIf() {
         return this;
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<JmlClauseIf> toJmlClauseIf() {
         return Optional.of(this);
     }
 
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClauseIf(Consumer<JmlClauseIf> action) {
         action.accept(this);
     }
 
     @Override
+    @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlClauseIfMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClauseIfMetaModel;
     }
@@ -163,6 +165,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     /**
      * This constructor is used by the parser and is considered private.
      */
+    @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public JmlClauseIf(TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
         super(tokenRange, name);
         setCondition(condition);

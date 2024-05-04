@@ -26,7 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -548,11 +547,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final JmlAccessibleClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
     public Boolean visit(final JmlClauseLabel n, final Visitable arg) {
         return n == arg;
     }
@@ -603,11 +597,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
     }
 
     @Override
-    public Boolean visit(final JmlCapturesClause n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
     public Boolean visit(final JmlForallClause n, final Visitable arg) {
         return n == arg;
     }
@@ -639,11 +628,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final JmlContract n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final JmlBodyDeclaration n, final Visitable arg) {
         return n == arg;
     }
 
@@ -684,11 +668,6 @@ public class ObjectIdentityEqualsVisitor implements GenericVisitor<Boolean, Visi
 
     @Override
     public Boolean visit(final JmlDocStmt n, final Visitable arg) {
-        return n == arg;
-    }
-
-    @Override
-    public Boolean visit(final JmlImportDeclaration n, final Visitable arg) {
         return n == arg;
     }
 

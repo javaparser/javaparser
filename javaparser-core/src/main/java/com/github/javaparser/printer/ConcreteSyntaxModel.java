@@ -218,7 +218,6 @@ public class ConcreteSyntaxModel {
         //child(EXPRESSION),
         concreteSyntaxModelByClass.put(JmlCallableClause.class, sequence(child(MODIFIERS), token(CALLABLE), semicolon()));
         concreteSyntaxModelByClass.put(JmlClassExprDeclaration.class, sequence(child(MODIFIERS), attribute(KIND), space(), attribute(NAME), token(COLON), child(EXPRESSION), semicolon()));
-        concreteSyntaxModelByClass.put(JmlBodyDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlClassAccessibleDeclaration.class, sequence());
         concreteSyntaxModelByClass.put(JmlContract.class, sequence());
         concreteSyntaxModelByClass.put(JmlGhostStmt.class, sequence());

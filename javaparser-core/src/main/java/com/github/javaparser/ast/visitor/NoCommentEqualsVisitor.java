@@ -26,7 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.JmlImportDeclaration;
 import com.github.javaparser.ast.jml.body.*;
 import com.github.javaparser.ast.jml.clauses.*;
 import com.github.javaparser.ast.jml.doc.JmlDoc;
@@ -1147,18 +1146,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final JmlAccessibleClause n, final Visitable arg) {
-        final JmlAccessibleClause n2 = (JmlAccessibleClause) arg;
-        if (!nodesEquals(n.getExpressions(), n2.getExpressions()))
-            return false;
-        if (!nodesEquals(n.getHeaps(), n2.getHeaps()))
-            return false;
-        if (!nodeEquals(n.getMeasuredBy(), n2.getMeasuredBy()))
-            return false;
-        return objEquals(n.getKind(), n2.getKind());
-    }
-
-    @Override
     public Boolean visit(final JmlClauseLabel n, final Visitable arg) {
         final JmlClauseLabel n2 = (JmlClauseLabel) arg;
         if (!nodeEquals(n.getExpr(), n2.getExpr()))
@@ -1283,12 +1270,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
     }
 
     @Override
-    public Boolean visit(final JmlCapturesClause n, final Visitable arg) {
-        final JmlCapturesClause n2 = (JmlCapturesClause) arg;
-        return objEquals(n.getKind(), n2.getKind());
-    }
-
-    @Override
     public Boolean visit(final JmlForallClause n, final Visitable arg) {
         final JmlForallClause n2 = (JmlForallClause) arg;
         if (!nodesEquals(n.getBoundedVariables(), n2.getBoundedVariables()))
@@ -1388,20 +1369,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getSubContracts(), n2.getSubContracts()))
             return false;
         if (!objEquals(n.getType(), n2.getType()))
-            return false;
-        return true;
-    }
-
-    @Override
-    public Boolean visit(final JmlBodyDeclaration n, final Visitable arg) {
-        final JmlBodyDeclaration n2 = (JmlBodyDeclaration) arg;
-        if (!nodesEquals(n.getElements(), n2.getElements()))
-            return false;
-        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
-            return false;
-        if (!objEquals(n.isSingleLine(), n2.isSingleLine()))
-            return false;
-        if (!nodesEquals(n.getAnnotations(), n2.getAnnotations()))
             return false;
         return true;
     }
@@ -1508,18 +1475,6 @@ public class NoCommentEqualsVisitor implements GenericVisitor<Boolean, Visitable
         if (!nodesEquals(n.getJmlComments(), n2.getJmlComments()))
             return false;
         return true;
-    }
-
-    @Override
-    public Boolean visit(final JmlImportDeclaration n, final Visitable arg) {
-        final JmlImportDeclaration n2 = (JmlImportDeclaration) arg;
-        if (!objEquals(n.isAsterisk(), n2.isAsterisk()))
-            return false;
-        if (!objEquals(n.isStatic(), n2.isStatic()))
-            return false;
-        if (!nodesEquals(n.getJmlTags(), n2.getJmlTags()))
-            return false;
-        return nodeEquals(n.getName(), n2.getName());
     }
 
     @Override
