@@ -106,11 +106,8 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         }
 
         // DefaultConfigurationOption with initial currentValue
-        ConfigOption(Class clazz, Object value) {
+        <T> ConfigOption(Class<T> clazz, T value) {
             this.type = clazz;
-            if (!(this.type.isAssignableFrom(value.getClass()))) {
-                throw new IllegalArgumentException(String.format("%s is not an instance of %s", value, type.getName()));
-            }
             this.defaultValue = value;
         }
     }
