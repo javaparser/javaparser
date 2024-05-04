@@ -1,11 +1,11 @@
 version: 2
 updates:
-  - package-ecosystem: "gradle"
+  - package-ecosystem: "maven"
     directory: "/"
     schedule:
       interval: "weekly"
     groups:
-      all:
+      maven-deps:
         patterns:
           - "*"      
   - package-ecosystem: "github-actions"
@@ -13,6 +13,6 @@ updates:
     schedule:
       interval: "weekly"
     groups:
-      all:
+      gh-actions:
         patterns:
           - "*"
