@@ -21,7 +21,7 @@ package com.github.javaparser.printer.configuration;
 
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
-import com.github.javaparser.utils.Utils;
+import com.github.javaparser.utils.LineSeparator;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -90,7 +90,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * Set it to 1 or less to always align vertically.
          */
         MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY(Integer.class, Integer.valueOf(5)),
-        END_OF_LINE_CHARACTER(String.class, Utils.SYSTEM_EOL),
+        END_OF_LINE_CHARACTER(String.class, LineSeparator.SYSTEM.asRawString()),
         /**
          * Indentation proprerty
          */
@@ -106,11 +106,8 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         }
 
         // DefaultConfigurationOption with initial currentValue
-        ConfigOption(Class clazz, Object value) {
+        <T> ConfigOption(Class<T> clazz, T value) {
             this.type = clazz;
-            if (!(this.type.isAssignableFrom(value.getClass()))) {
-                throw new IllegalArgumentException(String.format("%s is not an instance of %s", value, type.getName()));
-            }
             this.defaultValue = value;
         }
     }

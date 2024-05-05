@@ -29,11 +29,12 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.utils.LineSeparator;
+
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -125,7 +126,7 @@ class ModifierVisitorTest extends AbstractLexicalPreservingTest {
             }
         }, null);
 
-        assertEquals("void x() {" + SYSTEM_EOL + "}", result.toString());
+        assertEquals("void x() {" + LineSeparator.SYSTEM + "}", result.toString());
     }
 
     @Test

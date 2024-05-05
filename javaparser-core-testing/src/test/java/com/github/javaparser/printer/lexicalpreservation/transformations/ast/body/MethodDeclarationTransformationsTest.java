@@ -36,6 +36,8 @@ import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
+import com.github.javaparser.utils.LineSeparator;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +47,6 @@ import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
 import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * Transforming MethodDeclaration and verifying the LexicalPreservation works as expected.
@@ -72,21 +73,21 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void removingDuplicateJavaDocComment() {
         // Arrange
-        considerCode("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void oneMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
                 "}" +
-                SYSTEM_EOL);
+                LineSeparator.SYSTEM);
 
         MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
 
@@ -112,21 +113,21 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void replacingDuplicateJavaDocComment() {
         // Arrange
-        considerCode("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void oneMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /**" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
                 "}" +
-                SYSTEM_EOL);
+                LineSeparator.SYSTEM);
 
         MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
 
@@ -158,21 +159,21 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void removingDuplicateComment() {
         // Arrange
-        considerCode("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /*" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /*" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
+        considerCode("public class MyClass {" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /*" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void oneMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
+                LineSeparator.SYSTEM +
+                "  /*" + LineSeparator.SYSTEM +
+                "   * Comment A" + LineSeparator.SYSTEM +
+                "   */" + LineSeparator.SYSTEM +
+                "  public void anotherMethod() {" + LineSeparator.SYSTEM +
+                "  }" + LineSeparator.SYSTEM +
                 "}" +
-                SYSTEM_EOL);
+                LineSeparator.SYSTEM);
 
         MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
 
@@ -227,11 +228,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void removingModifiersWithExistingAnnotations() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  @Test" + SYSTEM_EOL +
-                        "  public void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  @Test" + LineSeparator.SYSTEM +
+                        "  public void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
@@ -247,11 +248,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void removingModifiersWithExistingAnnotations_withVariableNumberOfSeparator() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  @Test" + SYSTEM_EOL +
-                        "  public      void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  @Test" + LineSeparator.SYSTEM +
+                        "  public      void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).setModifiers(new NodeList<>());
@@ -282,11 +283,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void replacingModifiersWithExistingAnnotations() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  @Test" + SYSTEM_EOL +
-                        "  public void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  @Test" + LineSeparator.SYSTEM +
+                        "  public void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).setModifiers(createModifierList(PROTECTED));
@@ -344,11 +345,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void addingToExistingAnnotations() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  @Test" + SYSTEM_EOL +
-                        "  public void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  @Test" + LineSeparator.SYSTEM +
+                        "  public void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).addSingleMemberAnnotation(
@@ -367,10 +368,10 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void addingAnnotationsNoModifiers() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).addMarkerAnnotation("Test");
@@ -388,11 +389,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void replacingAnnotations() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  @Override" + SYSTEM_EOL +
-                        "  public void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  @Override" + LineSeparator.SYSTEM +
+                        "  public void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).setAnnotations(new NodeList<>(new MarkerAnnotationExpr("Test")));
@@ -411,7 +412,7 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
         MethodDeclaration it = consider("void testMethod(){}");
         it.addMarkerAnnotation("Override");
         assertTransformedToString(
-                "@Override" + SYSTEM_EOL +
+                "@Override" + LineSeparator.SYSTEM +
                         "void testMethod(){}", it);
     }
 
@@ -422,11 +423,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void removingAnnotations() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  @Override" + SYSTEM_EOL +
-                        "  public void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  @Override" + LineSeparator.SYSTEM +
+                        "  public void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
@@ -443,11 +444,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     void removingAnnotationsWithSpaces() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  @Override " + SYSTEM_EOL +
-                        "  public void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  @Override " + LineSeparator.SYSTEM +
+                        "  public void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).getAnnotationByName("Override").get().remove();
@@ -470,11 +471,11 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     @Test
     public void addingModifiersWithExistingAnnotations() {
         considerCode(
-                "class X {" + SYSTEM_EOL +
-                        "  @Test" + SYSTEM_EOL +
-                        "  void testCase() {" + SYSTEM_EOL +
-                        "  }" + SYSTEM_EOL +
-                        "}" + SYSTEM_EOL
+                "class X {" + LineSeparator.SYSTEM +
+                        "  @Test" + LineSeparator.SYSTEM +
+                        "  void testCase() {" + LineSeparator.SYSTEM +
+                        "  }" + LineSeparator.SYSTEM +
+                        "}" + LineSeparator.SYSTEM
         );
 
         cu.getType(0).getMethods().get(0).addModifier(Modifier.finalModifier().getKeyword(), Modifier.publicModifier().getKeyword());
@@ -489,18 +490,18 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
 
     @Test
     public void parseAndPrintAnonymousClassExpression() {
-        Expression expression = parseExpression("new Object() {" + SYSTEM_EOL +
+        Expression expression = parseExpression("new Object() {" + LineSeparator.SYSTEM +
                 "}");
-         String expected = "new Object() {" + SYSTEM_EOL +
+         String expected = "new Object() {" + LineSeparator.SYSTEM +
                 "}";
         assertTransformedToString(expected, expression);
     }
 
     @Test
     public void parseAndPrintAnonymousClassStatement() {
-        Statement statement = parseStatement("Object anonymous = new Object() {" + SYSTEM_EOL +
+        Statement statement = parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM +
                 "};");
-        String expected = "Object anonymous = new Object() {" + SYSTEM_EOL +
+        String expected = "Object anonymous = new Object() {" + LineSeparator.SYSTEM +
                 "};";
         assertTransformedToString(expected, statement);
     }
@@ -509,16 +510,16 @@ class MethodDeclarationTransformationsTest extends AbstractLexicalPreservingTest
     public void replaceBodyShouldNotBreakAnonymousClasses() {
         MethodDeclaration it = consider("public void method() { }");
         it.getBody().ifPresent(body -> {
-            Statement statement = parseStatement("Object anonymous = new Object() {" + SYSTEM_EOL +
+            Statement statement = parseStatement("Object anonymous = new Object() {" + LineSeparator.SYSTEM +
                     "};");
             NodeList<Statement> statements = new NodeList<>();
             statements.add(statement);
             body.setStatements(statements);
         });
 
-        String expected = "public void method() {" + SYSTEM_EOL +
-                "    Object anonymous = new Object() {" + SYSTEM_EOL +
-                "    };" + SYSTEM_EOL +
+        String expected = "public void method() {" + LineSeparator.SYSTEM +
+                "    Object anonymous = new Object() {" + LineSeparator.SYSTEM +
+                "    };" + LineSeparator.SYSTEM +
                 "}";
         assertTransformedToString(expected, it);
     }

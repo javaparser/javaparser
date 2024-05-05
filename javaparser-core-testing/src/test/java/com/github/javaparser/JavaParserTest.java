@@ -28,7 +28,6 @@ import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static com.github.javaparser.StaticJavaParser.*;
 import static com.github.javaparser.utils.TestUtils.assertInstanceOf;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
@@ -50,6 +49,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.IntersectionType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.printer.YamlPrinter;
+import com.github.javaparser.utils.LineSeparator;
 
 class JavaParserTest {
 
@@ -172,9 +172,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfIntersectionType() {
-        String code = "class A {" + SYSTEM_EOL
-                + "  Object f() {" + SYSTEM_EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
+        String code = "class A {" + LineSeparator.SYSTEM
+                + "  Object f() {" + LineSeparator.SYSTEM
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + LineSeparator.SYSTEM
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -186,9 +186,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfCast() {
-        String code = "class A {" + SYSTEM_EOL
-                + "  Object f() {" + SYSTEM_EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
+        String code = "class A {" + LineSeparator.SYSTEM
+                + "  Object f() {" + LineSeparator.SYSTEM
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + LineSeparator.SYSTEM
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -199,9 +199,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfCastNonIntersection() {
-        String code = "class A {" + SYSTEM_EOL
-                + "  Object f() {" + SYSTEM_EOL
-                + "    return (Comparator<Map.Entry<K, V>>               )(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
+        String code = "class A {" + LineSeparator.SYSTEM
+                + "  Object f() {" + LineSeparator.SYSTEM
+                + "    return (Comparator<Map.Entry<K, V>>               )(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + LineSeparator.SYSTEM
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -212,9 +212,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfLambda() {
-        String code = "class A {" + SYSTEM_EOL
-                + "  Object f() {" + SYSTEM_EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
+        String code = "class A {" + LineSeparator.SYSTEM
+                + "  Object f() {" + LineSeparator.SYSTEM
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + LineSeparator.SYSTEM
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();
@@ -228,9 +228,9 @@ class JavaParserTest {
 
     @Test
     void rangeOfLambdaBody() {
-        String code = "class A {" + SYSTEM_EOL
-                + "  Object f() {" + SYSTEM_EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
+        String code = "class A {" + LineSeparator.SYSTEM
+                + "  Object f() {" + LineSeparator.SYSTEM
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + LineSeparator.SYSTEM
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = cu.getClassByName("A").get().getMember(0).asMethodDeclaration();

@@ -23,11 +23,12 @@ package com.github.javaparser.builders;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.utils.LineSeparator;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EnumDeclarationBuildersTest {
@@ -38,7 +39,7 @@ class EnumDeclarationBuildersTest {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addImplementedType(Function.class);
         assertEquals(1, cu.getImports().size());
-        assertEquals("import " + Function.class.getName() + ";" + SYSTEM_EOL,
+        assertEquals("import " + Function.class.getName() + ";" + LineSeparator.SYSTEM,
                 cu.getImport(0).toString());
         assertEquals(1, testEnum.getImplementedTypes().size());
         assertEquals(Function.class.getSimpleName(), testEnum.getImplementedTypes(0).getNameAsString());

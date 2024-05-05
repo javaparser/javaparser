@@ -30,10 +30,11 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
+import com.github.javaparser.utils.LineSeparator;
+
 import org.junit.jupiter.api.Test;
 
 import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -122,7 +123,7 @@ class ArrayTypeTest {
         VariableDeclarationExpr variableDeclarationExpr = variableDeclarationStatement.getExpression().asVariableDeclarationExpr();
 
         variableDeclarationExpr.getVariable(0).setType(new ArrayType(new ArrayType(PrimitiveType.intType())));
-        assertEquals("@C" + SYSTEM_EOL + "int[][] a;", variableDeclarationStatement.toString());
+        assertEquals("@C" + LineSeparator.SYSTEM + "int[][] a;", variableDeclarationStatement.toString());
     }
 
     @Test
@@ -138,7 +139,7 @@ class ArrayTypeTest {
         MethodDeclaration method = parseBodyDeclaration("int[][] a()[][] {}").asMethodDeclaration();
         method.setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
-        assertEquals("Blob[][] a() {" + SYSTEM_EOL + "}", method.toString());
+        assertEquals("Blob[][] a() {" + LineSeparator.SYSTEM + "}", method.toString());
     }
 
     @Test
@@ -164,7 +165,7 @@ class ArrayTypeTest {
         MethodDeclaration method = parseBodyDeclaration("void a(int[][] a[][]) {}").asMethodDeclaration();
         method.getParameter(0).setType(new ArrayType(new ArrayType(parseClassOrInterfaceType("Blob"))));
 
-        assertEquals("void a(Blob[][] a) {" + SYSTEM_EOL + "}", method.toString());
+        assertEquals("void a(Blob[][] a) {" + LineSeparator.SYSTEM + "}", method.toString());
     }
 
     @Test

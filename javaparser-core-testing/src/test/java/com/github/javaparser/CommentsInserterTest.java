@@ -23,6 +23,7 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,6 @@ import java.io.IOException;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualToTextResourceNoEol;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CommentsInserterTest {
@@ -66,11 +66,11 @@ class CommentsInserterTest {
 
     @Test
     void issue200EnumConstantsWithCommentsForceVerticalAlignment() {
-        CompilationUnit cu = TestParser.parseCompilationUnit("public enum X {" + SYSTEM_EOL +
-                "    /** const1 javadoc */" + SYSTEM_EOL +
-                "    BORDER_CONSTANT," + SYSTEM_EOL +
-                "    /** const2 javadoc */" + SYSTEM_EOL +
-                "    ANOTHER_CONSTANT" + SYSTEM_EOL +
+        CompilationUnit cu = TestParser.parseCompilationUnit("public enum X {" + LineSeparator.SYSTEM +
+                "    /** const1 javadoc */" + LineSeparator.SYSTEM +
+                "    BORDER_CONSTANT," + LineSeparator.SYSTEM +
+                "    /** const2 javadoc */" + LineSeparator.SYSTEM +
+                "    ANOTHER_CONSTANT" + LineSeparator.SYSTEM +
                 "}");
         assertEqualsStringIgnoringEol("public enum X {\n" +
                 "\n" +
@@ -87,13 +87,13 @@ class CommentsInserterTest {
 
     @Test
     void issue234LosingCommentsInArrayInitializerExpr() {
-        CompilationUnit cu = TestParser.parseCompilationUnit("@Anno(stuff={" + SYSTEM_EOL +
-                "    // Just," + SYSTEM_EOL +
-                "    // an," + SYSTEM_EOL +
-                "    // example" + SYSTEM_EOL +
-                "})" + SYSTEM_EOL +
-                "class ABC {" + SYSTEM_EOL +
-                "" + SYSTEM_EOL +
+        CompilationUnit cu = TestParser.parseCompilationUnit("@Anno(stuff={" + LineSeparator.SYSTEM +
+                "    // Just," + LineSeparator.SYSTEM +
+                "    // an," + LineSeparator.SYSTEM +
+                "    // example" + LineSeparator.SYSTEM +
+                "})" + LineSeparator.SYSTEM +
+                "class ABC {" + LineSeparator.SYSTEM +
+                "" + LineSeparator.SYSTEM +
                 "}");
 
         assertEqualsStringIgnoringEol("@Anno(stuff = {// Just,\n" +

@@ -21,10 +21,11 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.utils.LineSeparator;
+
 import java.util.List;
 import java.util.Optional;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -113,7 +114,7 @@ public class JavaToken {
             content = content.substring(1, content.length() - 1);
         }
         if (TokenTypes.isEndOfLineToken(kind)) {
-            content = SYSTEM_EOL;
+            content = LineSeparator.SYSTEM.asRawString();
         } else if (TokenTypes.isWhitespace(kind)) {
             content = " ";
         }
