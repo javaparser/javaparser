@@ -37,7 +37,6 @@ import org.mockito.Mockito;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
 public class GenericVisitorAdapterTest {
@@ -2549,4 +2548,10 @@ public class GenericVisitorAdapterTest {
         order.verifyNoMoreInteractions();
     }
 
+	@SuppressWarnings("unchecked")
+	// Non type-safe mock method to avoid unchecked warnings
+	// Its use is trivial and systematic enough to not be a problem
+	private <T> T mock(Class<?> classToMock) {
+		return (T) Mockito.mock(classToMock);
+	}
 }
