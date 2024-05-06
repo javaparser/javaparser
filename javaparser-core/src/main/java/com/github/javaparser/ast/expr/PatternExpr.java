@@ -31,8 +31,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.PatternExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 /**
  * <h1>Pattern Matching in Java</h1>
@@ -135,5 +135,26 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ReferenceType getType() {
         return type;
+    }
+
+    @Override
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null) {
+            return false;
+        }
+        if (node == type) {
+            setType((ReferenceType) replacementNode);
+            return true;
+        }
+        return super.replace(node, replacementNode);
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public PatternExpr(TokenRange tokenRange, ReferenceType type) {
+        super(tokenRange);
+        setType(type);
+        customInitialization();
     }
 }
