@@ -44,16 +44,16 @@ class JavaParserPatternDeclarationTest implements ResolvedPatternDeclarationTest
     @Override
     public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
-                safeCast(associableToAST, JavaParserPatternDeclaration.class).getWrappedNode()
+                safeCast(associableToAST, JavaParserTypePatternDeclaration.class).getWrappedNode()
         );
     }
 
     @Override
-    public JavaParserPatternDeclaration createValue() {
+    public JavaParserTypePatternDeclaration createValue() {
         TypePatternExpr wrappedNode = StaticJavaParser.parse("class A {a() {if (object instanceof String d) return;}}")
                 .findFirst(TypePatternExpr.class).get();
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-        return new JavaParserPatternDeclaration(wrappedNode, typeSolver);
+        return new JavaParserTypePatternDeclaration(wrappedNode, typeSolver);
     }
 
     @Override

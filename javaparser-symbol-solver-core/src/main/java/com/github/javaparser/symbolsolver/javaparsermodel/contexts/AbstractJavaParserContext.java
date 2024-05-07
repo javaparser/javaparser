@@ -38,7 +38,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypePatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
 /**
@@ -154,7 +154,7 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             if (localResolutionResults.isPresent() && localResolutionResults.get().isTypePatternExpr()) {
                 if (typePatternExprs.size() == 1) {
                     TypePatternExpr typePatternExpr = localResolutionResults.get().asTypePatternExpr();
-                    JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
+                    JavaParserTypePatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                     return SymbolReference.solved(decl);
                 }
                 if(typePatternExprs.size() > 1) {

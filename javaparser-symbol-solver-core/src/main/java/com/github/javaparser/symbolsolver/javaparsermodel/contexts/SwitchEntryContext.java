@@ -36,7 +36,7 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypePatternDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
 import java.util.List;
@@ -86,7 +86,7 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
 
             TypePatternExpr typePatternExpr = e.asTypePatternExpr();
             if (typePatternExpr.getNameAsString().equals(name)) {
-                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
+                JavaParserTypePatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                 return SymbolReference.solved(decl);
             }
         }
