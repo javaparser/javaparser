@@ -35,12 +35,12 @@ import java.util.Optional;
  *
  * @author Roger Howell
  */
-public class JavaParserPatternDeclaration implements ResolvedPatternDeclaration {
+public class JavaParserTypePatternDeclaration implements ResolvedPatternDeclaration {
 
     private final TypePatternExpr wrappedNode;
     private final TypeSolver typeSolver;
 
-    public JavaParserPatternDeclaration(TypePatternExpr wrappedNode, TypeSolver typeSolver) {
+    public JavaParserTypePatternDeclaration(TypePatternExpr wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }

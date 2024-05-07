@@ -50,8 +50,8 @@ public final class JavaParserSymbolDeclaration {
         return new JavaParserVariableDeclaration(variableDeclarator, typeSolver);
     }
 
-    public static JavaParserPatternDeclaration patternVar(TypePatternExpr typePatternExpr, TypeSolver typeSolver) {
-        return new JavaParserPatternDeclaration(typePatternExpr, typeSolver);
+    public static JavaParserTypePatternDeclaration patternVar(TypePatternExpr typePatternExpr, TypeSolver typeSolver) {
+        return new JavaParserTypePatternDeclaration(typePatternExpr, typeSolver);
     }
 
     public static int getParamPos(Parameter parameter) {
