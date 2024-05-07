@@ -33,7 +33,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Optional;
 
-class JavaParserPatternDeclarationTest implements ResolvedPatternDeclarationTest {
+class JavaParserTypePatternDeclarationTest implements ResolvedPatternDeclarationTest {
 
     @BeforeAll
     public static void setup() {
