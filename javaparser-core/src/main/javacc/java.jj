@@ -3321,7 +3321,12 @@ PatternExpr PatternExpression():
     PatternExpr ret;
 }
 {
-    ret = TypePatternExpression()
+	(
+		LOOKAHEAD(TypePatternExpression())
+		ret = TypePatternExpression()
+	  |
+	    ret = RecordPatternExpression()
+	)
     { return ret; }
 }
 
@@ -3344,6 +3349,51 @@ TypePatternExpr TypePatternExpression():
     type = ReferenceType(modifier.annotations)
     name = SimpleName()
     { return new TypePatternExpr(range(type, token()), modifier.modifiers, type, name); }
+}
+
+/**
+ * https://openjdk.org/jeps/440
+ * <pre><code>
+ * RecordPattern:
+ *     ReferenceType ( [PatternList] )
+ * PatternList:
+ *     Pattern {, Pattern }
+ * </code></pre>
+ */
+RecordPatternExpr RecordPatternExpression():
+{
+	ModifierHolder modifier;
+	ReferenceType type;
+	NodeList<PatternExpr> patternList;
+}
+{
+	modifier = Modifiers()
+	type = ReferenceType(modifier.annotations)
+	patternList = PatternList()
+	{ return new RecordPatternExpr(range(type, token()), modifier.modifiers, type, patternList); }
+}
+
+/**
+ * https://openjdk.org/jeps/440
+ * <pre><code>
+ * PatternList:
+ *     Pattern {, Pattern }
+ * </code></pre>
+ */
+NodeList<PatternExpr> PatternList():
+{
+    PatternExpr pattern;
+	NodeList<PatternExpr> ret = new NodeList<>();
+}
+{
+	"("
+    pattern = PatternExpression() { ret.add(pattern); }
+    (
+        ","
+        pattern = PatternExpression() { ret.add(pattern); }
+    )*
+	")"
+    { return ret; }
 }
 
 
