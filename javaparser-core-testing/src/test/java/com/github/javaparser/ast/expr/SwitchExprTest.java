@@ -287,4 +287,37 @@ class SwitchExprTest {
 
         assertFalse(Navigator.findNameExpression(entry, "b").isPresent());
     }
+
+    @Test
+    void testRecordPattern() {
+        SwitchExpr expr = parseExpression("switch (value) {\n" +
+                "    case TwoBox (String s, Box(Integer i)) -> {}\n" +
+                "}").asSwitchExpr();
+
+        SwitchEntry entry = expr.getEntry(0);
+
+        assertTrue(entry.getLabels().get(0).isRecordPatternExpr());
+
+        RecordPatternExpr recordPattern = entry.getLabels().get(0).asRecordPatternExpr();
+
+        assertEquals("TwoBox", recordPattern.getTypeAsString());
+
+        assertEquals(2, recordPattern.getPatternList().size());
+
+        assertTrue(recordPattern.getPatternList().get(0).isTypePatternExpr());
+        TypePatternExpr stringPattern = recordPattern.getPatternList().get(0).asTypePatternExpr();
+        assertEquals("String", stringPattern.getTypeAsString());
+        assertEquals("s", stringPattern.getNameAsString());
+
+        assertTrue(recordPattern.getPatternList().get(1).isRecordPatternExpr());
+        RecordPatternExpr boxPattern = recordPattern.getPatternList().get(1).asRecordPatternExpr();
+        assertEquals("Box", boxPattern.getTypeAsString());
+
+        assertEquals(1, boxPattern.getPatternList().size());
+
+        assertTrue(boxPattern.getPatternList().get(0).isTypePatternExpr());
+        TypePatternExpr integerPattern = boxPattern.getPatternList().get(0).asTypePatternExpr();
+        assertEquals("Integer", integerPattern.getTypeAsString());
+        assertEquals("i", integerPattern.getNameAsString());
+    }
 }
