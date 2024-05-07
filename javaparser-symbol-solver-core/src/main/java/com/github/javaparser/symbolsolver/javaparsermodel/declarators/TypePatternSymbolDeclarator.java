@@ -32,9 +32,9 @@ import java.util.List;
 /**
  * @author Roger Howell
  */
-public class PatternSymbolDeclarator extends AbstractSymbolDeclarator<TypePatternExpr> {
+public class TypePatternSymbolDeclarator extends AbstractSymbolDeclarator<TypePatternExpr> {
 
-    public PatternSymbolDeclarator(TypePatternExpr wrappedNode, TypeSolver typeSolver) {
+    public TypePatternSymbolDeclarator(TypePatternExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
