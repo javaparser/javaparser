@@ -387,7 +387,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public boolean isStatic() {
-            return false;
+            return true;
         }
 
         @Override
