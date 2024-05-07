@@ -896,4 +896,19 @@ public abstract class Expression extends Node {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifPatternExpr(Consumer<PatternExpr> action) {
     }
+
+    public boolean isRecordPatternExpr() {
+        return false;
+    }
+
+    public RecordPatternExpr asRecordPatternExpr() {
+        throw new IllegalStateException(f("%s is not RecordPatternExpr, it is %s", this, this.getClass().getSimpleName()));
+    }
+
+    public Optional<RecordPatternExpr> toRecordPatternExpr() {
+        return Optional.empty();
+    }
+
+    public void ifRecordPatternExpr(Consumer<RecordPatternExpr> action) {
+    }
 }

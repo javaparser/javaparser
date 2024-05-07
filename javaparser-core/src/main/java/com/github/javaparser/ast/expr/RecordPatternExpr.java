@@ -7,8 +7,17 @@ import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import java.util.regex.Pattern;
+import java.util.Optional;
+import java.util.function.Consumer;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.CloneVisitor;
+import com.github.javaparser.metamodel.RecordPatternExprMetaModel;
+import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.TokenRange;
+import com.github.javaparser.ast.Generated;
 
 /**
  * <h1>Record Patterns</h1>
@@ -58,22 +67,129 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
     }
 
     @Override
-    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
-        return null;
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+        return v.visit(this, arg);
     }
 
     @Override
-    public <A> void accept(VoidVisitor<A> v, A arg) {
-
+    @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+        v.visit(this, arg);
     }
 
-    @Override
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
-        return null;
+        return modifiers;
+    }
+
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public RecordPatternExpr setModifiers(final NodeList<Modifier> modifiers) {
+        assertNotNull(modifiers);
+        if (modifiers == this.modifiers) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
+        this.modifiers = modifiers;
+        setAsParentNodeOf(modifiers);
+        return this;
     }
 
     @Override
-    public RecordPatternExpr setModifiers(NodeList<Modifier> modifiers) {
-        return null;
+    public boolean isRecordPatternExpr() {
+        return true;
+    }
+
+    @Override
+    public RecordPatternExpr asRecordPatternExpr() {
+        return this;
+    }
+
+    @Override
+    public Optional<RecordPatternExpr> toRecordPatternExpr() {
+        return Optional.of(this);
+    }
+
+    public void ifRecordPatternExpr(Consumer<RecordPatternExpr> action) {
+        action.accept(this);
+    }
+
+    public NodeList<PatternExpr> getPatternList() {
+        return patternList;
+    }
+
+    public RecordPatternExpr setPatternList(final NodeList<PatternExpr> patternList) {
+        assertNotNull(patternList);
+        if (patternList == this.patternList) {
+            return this;
+        }
+        notifyPropertyChange(ObservableProperty.PATTERN_LIST, this.patternList, patternList);
+        if (this.patternList != null)
+            this.patternList.setParentNode(null);
+        this.patternList = patternList;
+        setAsParentNodeOf(patternList);
+        return this;
+    }
+
+    @Override
+    public boolean remove(Node node) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.remove(i);
+                return true;
+            }
+        }
+        for (int i = 0; i < patternList.size(); i++) {
+            if (patternList.get(i) == node) {
+                patternList.remove(i);
+                return true;
+            }
+        }
+        return super.remove(node);
+    }
+
+    @Override
+    public boolean replace(Node node, Node replacementNode) {
+        if (node == null) {
+            return false;
+        }
+        for (int i = 0; i < modifiers.size(); i++) {
+            if (modifiers.get(i) == node) {
+                modifiers.set(i, (Modifier) replacementNode);
+                return true;
+            }
+        }
+        for (int i = 0; i < patternList.size(); i++) {
+            if (patternList.get(i) == node) {
+                patternList.set(i, (PatternExpr) replacementNode);
+                return true;
+            }
+        }
+        return super.replace(node, replacementNode);
+    }
+
+    @Override
+    public RecordPatternExpr clone() {
+        return (RecordPatternExpr) accept(new CloneVisitor(), null);
+    }
+
+    @Override
+    public RecordPatternExprMetaModel getMetaModel() {
+        return JavaParserMetaModel.recordPatternExprMetaModel;
+    }
+
+    /**
+     * This constructor is used by the parser and is considered private.
+     */
+    public RecordPatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, ReferenceType type, NodeList<PatternExpr> patternList) {
+        super(tokenRange, type);
+        setModifiers(modifiers);
+        setPatternList(patternList);
+        customInitialization();
     }
 }
