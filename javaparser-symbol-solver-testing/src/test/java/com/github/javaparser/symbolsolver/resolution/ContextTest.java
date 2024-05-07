@@ -1300,9 +1300,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertTrue(symbolReference.isSolved(), "symbol not solved");
                 ResolvedDeclaration correspondingDeclaration = symbolReference.getCorrespondingDeclaration();
                 assertEquals("s", correspondingDeclaration.getName(), "unexpected name for the solved symbol");
-                assertTrue(correspondingDeclaration.isPattern());
-                assertEquals("s", correspondingDeclaration.asPattern().getName(), "unexpected name for the solved pattern");
-                assertEquals("java.lang.String", correspondingDeclaration.asPattern().getType().asReferenceType().getQualifiedName(), "unexpected type for the solved pattern");
+                assertTrue(correspondingDeclaration.isTypePattern());
+                assertEquals("s", correspondingDeclaration.asTypePattern().getName(), "unexpected name for the solved pattern");
+                assertEquals("java.lang.String", correspondingDeclaration.asTypePattern().getType().asReferenceType().getQualifiedName(), "unexpected type for the solved pattern");
 
             }
 
@@ -1369,7 +1369,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                     SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
                     assertTrue(s.isSolved());
-                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s.getCorrespondingDeclaration().isTypePattern());
                 }
 
                 @Test
@@ -1389,7 +1389,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                     SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
                     assertTrue(s.isSolved());
-                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s.getCorrespondingDeclaration().isTypePattern());
                 }
 
                 @Test
@@ -1452,7 +1452,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_list.getCorrespondingDeclaration().isTypePattern());
 //                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
 
                     // The second one should resolve to the pattern variable (the string).
@@ -1460,7 +1460,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string.getCorrespondingDeclaration().isTypePattern());
                 }
 
                 @Test
@@ -1489,7 +1489,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_list.getCorrespondingDeclaration().isTypePattern());
 //                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
 
                     // The second one should resolve to the pattern variable (the string).
@@ -1497,21 +1497,21 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string.getCorrespondingDeclaration().isTypePattern());
 
                     // The third one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
                     Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
                     assertTrue(s_string2.isSolved());
-                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string2.getCorrespondingDeclaration().isTypePattern());
 
                     // The fourth one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
                     Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
                     assertTrue(s_string3.isSolved());
-                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string3.getCorrespondingDeclaration().isTypePattern());
                 }
 
                 @Test
@@ -1540,28 +1540,28 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_list.getCorrespondingDeclaration().isTypePattern());
 
                     // The second one should resolve to the standard variable (the list).
                     MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertFalse(s_string.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_string.getCorrespondingDeclaration().isTypePattern());
 
                     // The third one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
                     Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
                     assertTrue(s_string2.isSolved());
-                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string2.getCorrespondingDeclaration().isTypePattern());
 
                     // The fourth one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
                     Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
                     assertTrue(s_string3.isSolved());
-                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string3.getCorrespondingDeclaration().isTypePattern());
                 }
             }
         }
