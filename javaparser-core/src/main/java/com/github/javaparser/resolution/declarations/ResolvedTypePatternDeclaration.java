@@ -23,22 +23,22 @@ package com.github.javaparser.resolution.declarations;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 
 /**
- * Declaration of a pattern expression.
+ * Declaration of a type pattern expression.
  * <p>
  * WARNING: Implemented fairly blindly. Unsure if required or even appropriate. Use with extreme caution.
  *
  * @author Roger Howell
  * @see TypePatternExpr
  */
-public interface ResolvedPatternDeclaration extends ResolvedValueDeclaration {
+public interface ResolvedTypePatternDeclaration extends ResolvedValueDeclaration {
 
     @Override
-    default boolean isPattern() {
+    default boolean isTypePattern() {
         return true;
     }
 
     @Override
-    default ResolvedPatternDeclaration asPattern() {
+    default ResolvedTypePatternDeclaration asTypePattern() {
         return this;
     }
 
