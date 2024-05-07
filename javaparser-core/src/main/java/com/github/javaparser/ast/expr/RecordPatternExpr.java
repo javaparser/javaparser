@@ -4,6 +4,7 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -61,9 +62,12 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
 
     private NodeList<PatternExpr> patternList;
 
+    public RecordPatternExpr() {
+        this(new NodeList<>(), new ClassOrInterfaceType(), new NodeList<>());
+    }
     @AllFieldsConstructor
     public RecordPatternExpr(final NodeList<Modifier> modifiers, final ReferenceType type, final NodeList<PatternExpr> patternList) {
-        super(type);
+        this(null, modifiers, type, patternList);
     }
 
     @Override
