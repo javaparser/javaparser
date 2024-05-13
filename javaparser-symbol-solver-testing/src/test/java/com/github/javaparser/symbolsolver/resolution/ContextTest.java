@@ -695,9 +695,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
     private void assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
                                                                   int expectedNumber, String message) {
-        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
-                .patternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.isTypePatternExpr() &&  p.asTypePatternExpr().getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        List<TypePatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .typePatternExprsExposedFromChildren();
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
@@ -708,9 +708,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
     private void assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
                                                                   int expectedNumber, String message) {
-        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
-                .negatedPatternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.isTypePatternExpr() && p.asTypePatternExpr().getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        List<TypePatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .negatedTypePatternExprsExposedFromChildren();
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     @Test
@@ -823,6 +823,57 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
         assertNoVarsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
+    }
+
+    @Nested
+    class RecordPatternExprTests {
+        @Test
+        void recordPatternExprInInstanceOf() {
+            InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_21, "a instanceof Box(String s, Box(Integer i, Boolean b))", ParseStart.EXPRESSION).asInstanceOfExpr();
+            String message = "No Pattern Expr must be available from this expression.";
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", message);
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "i", message);
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "b", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "i", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "b", message);
+        }
+
+        @Test
+        void recordPatternExprInNegatedInstanceOf() {
+            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_21, "!(a instanceof Box(String s, Box(Integer i, Boolean b)))", ParseStart.EXPRESSION).asUnaryExpr();
+            String message = "No Pattern Expr must be available from this expression.";
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "i", message);
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "b", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "i", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "b", message);
+        }
+
+        @Test
+        void recordPatternExprInBinaryExpr() {
+            String message = "Only s must be available from this expression.";
+            BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_21, "true == a instanceof Box(String s, Box(Integer i, Boolean b))", ParseStart.EXPRESSION).asBinaryExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
+        }
+
+        @Test
+        void recordPatternExprInNegatedBinaryExpr() {
+            String message = "Only s must be available from this expression.";
+            BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_21, "true != a instanceof Box(String s, Box(Integer i, Boolean b))", ParseStart.EXPRESSION).asBinaryExpr();
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
+        }
     }
 
     @Nested
@@ -1242,7 +1293,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 Context leftBranchContext = JavaParserFactory.getContext(leftBranch, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> left_s = leftBranchContext.solveSymbol("s");
                 assertTrue(left_s.isSolved());
-                Optional<PatternExpr> optionalPatternExpr = leftBranchContext.patternExprInScope("s");
+                Optional<TypePatternExpr> optionalPatternExpr = leftBranchContext.typePatternExprInScope("s");
                 assertTrue(optionalPatternExpr.isPresent());
                 SymbolReference<? extends ResolvedValueDeclaration> left_s2 = leftBranchContext.solveSymbol("s2");
                 assertFalse(left_s2.isSolved());

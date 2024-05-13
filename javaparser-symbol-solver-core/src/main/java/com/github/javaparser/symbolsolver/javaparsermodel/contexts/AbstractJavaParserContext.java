@@ -144,11 +144,11 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         // First check if there are any pattern expressions available to this node.
         Context parentContext = optionalParentContext.get();
         if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
-            List<PatternExpr> typePatternExprs = parentContext.patternExprsExposedToChild(this.getWrappedNode());
+            List<TypePatternExpr> typePatternExprs = parentContext.typePatternExprsExposedToChild(this.getWrappedNode());
 
-            Optional<PatternExpr> localResolutionResults = typePatternExprs
+            Optional<TypePatternExpr> localResolutionResults = typePatternExprs
                     .stream()
-                    .filter(vd -> vd.isTypePatternExpr() && vd.asTypePatternExpr().getNameAsString().equals(name))
+                    .filter(vd -> vd.getNameAsString().equals(name))
                     .findFirst();
 
             if (localResolutionResults.isPresent() && localResolutionResults.get().isTypePatternExpr()) {
@@ -286,5 +286,28 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     @Override
     public N getWrappedNode() {
         return wrappedNode;
+    }
+
+    public List<TypePatternExpr> typePatternExprsDiscoveredInPattern(PatternExpr patternExpr) {
+        List<TypePatternExpr> discoveredTypePatterns = new ArrayList<>();
+        Queue<PatternExpr> patternsToCheck = new ArrayDeque<>();
+        patternsToCheck.add(patternExpr);
+
+        while (!patternsToCheck.isEmpty()) {
+            PatternExpr patternToCheck = patternsToCheck.remove();
+
+            if (patternToCheck.isTypePatternExpr()) {
+                discoveredTypePatterns.add(patternToCheck.asTypePatternExpr());
+            } else if (patternToCheck.isRecordPatternExpr()) {
+                patternsToCheck.addAll(patternToCheck.asRecordPatternExpr().getPatternList());
+            } else {
+                throw new UnsupportedOperationException(String.format(
+                        "Discovering type pattern expressions in %s not supported",
+                        patternExpr.getClass().getName()
+                ));
+            }
+        }
+
+        return discoveredTypePatterns;
     }
 }

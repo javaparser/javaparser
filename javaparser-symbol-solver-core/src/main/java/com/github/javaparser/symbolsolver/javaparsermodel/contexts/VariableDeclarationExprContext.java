@@ -44,7 +44,7 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
     }
 
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
+        List<TypePatternExpr> patternExprs = typePatternExprsExposedFromChildren();
         for (int i = 0; i < patternExprs.size(); i++) {
             if (patternExprs.get(i).isTypePatternExpr()) {
                 TypePatternExpr typePatternExpr = patternExprs.get(i).asTypePatternExpr();
@@ -72,13 +72,13 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
 
 
     @Override
-    public List<PatternExpr> patternExprsExposedFromChildren() {
+    public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
         // Variable declarations never make pattern expressions available.
         return Collections.emptyList();
     }
 
     @Override
-    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
+    public List<TypePatternExpr> negatedTypePatternExprsExposedFromChildren() {
         // Variable declarations never make pattern expressions available.
         return Collections.emptyList();
     }

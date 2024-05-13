@@ -22,6 +22,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
@@ -37,8 +38,8 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
     }
 
     @Override
-    public List<PatternExpr> patternExprsExposedFromChildren() {
-        List<PatternExpr> results = new ArrayList<>();
+    public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
+        List<TypePatternExpr> results = new ArrayList<>();
 
         /*
          * Test for an assignment expression
@@ -51,15 +52,15 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
             // Propagate any pattern expressions "up" without modification
             Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
             if (!this.equals(innerContext)) {
-                results = new ArrayList<>(innerContext.patternExprsExposedFromChildren());
+                results = new ArrayList<>(innerContext.typePatternExprsExposedFromChildren());
             }
         }
         return results;
     }
 
     @Override
-    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
-        List<PatternExpr> results = new ArrayList<>();
+    public List<TypePatternExpr> negatedTypePatternExprsExposedFromChildren() {
+        List<TypePatternExpr> results = new ArrayList<>();
 
         /*
          * Test for an assignment expression
@@ -72,7 +73,7 @@ public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr>
             // Propagate any pattern expressions "up" without modification
             Context innerContext = JavaParserFactory.getContext(wrappedNode.getInner(), typeSolver);
             if (!this.equals(innerContext)) {
-                results = new ArrayList<>(innerContext.negatedPatternExprsExposedFromChildren());
+                results = new ArrayList<>(innerContext.negatedTypePatternExprsExposedFromChildren());
             }
         }
         return results;
