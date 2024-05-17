@@ -188,4 +188,37 @@ class EnumResolutionTest extends AbstractResolutionTest {
         assertTrue(rd.isStatic());
     }
 
+    @Test
+    public void testResolveValuesMethodAndReturnType() {
+        String s =
+                "public class ClassTest {\n" +
+                "    public enum SecurityPolicyScopedTemplatesKeys {\n" +
+                "        SUSPICIOUS(\"suspicious\");\n" +
+                "        private String displayName;\n" +
+                "\n" +
+                "        private SecurityPolicyScopedTemplatesKeys(String displayName) {\n" +
+                "            this.displayName = displayName;\n" +
+                "        }\n" +
+                "\n" +
+                "        public String getDisplayName() {\n" +
+                "            return this.displayName;\n" +
+                "        }\n" +
+                "\n" +
+                "        public SecurityPolicyScopedTemplatesKeys m(int id) {\n" +
+                "            return values()[id];\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        CompilationUnit cu = StaticJavaParser.parse(s);
+        MethodCallExpr methodCallExpr = cu.findFirst(MethodCallExpr.class).get();
+        ResolvedMethodDeclaration rd = methodCallExpr.resolve();
+        assertEquals("values", rd.getName());
+        assertEquals("ClassTest.SecurityPolicyScopedTemplatesKeys[]", rd.getReturnType().describe());
+        final ResolvedType resolvedType = methodCallExpr.calculateResolvedType();
+        assertEquals("ClassTest.SecurityPolicyScopedTemplatesKeys[]", resolvedType.describe());
+        assertTrue(rd.isStatic());
+    }
+
 }
