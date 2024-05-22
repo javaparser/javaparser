@@ -466,6 +466,9 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
 
+        // Since this is used to resolve reference to "extended" and "implemented" types, and since these type references
+        // should not be resolved against member types of the current type, we resolve based on the context containing
+        // the class declaration.
         SymbolReference<ResolvedTypeDeclaration> ref = getContext().getParent()
                 .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
                 .solveType(className);
