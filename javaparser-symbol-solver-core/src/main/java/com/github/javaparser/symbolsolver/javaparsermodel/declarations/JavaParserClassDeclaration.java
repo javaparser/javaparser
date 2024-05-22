@@ -465,16 +465,25 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
             // look for the qualified name (for example class of type Rectangle2D.Double)
             className = classOrInterfaceType.getScope().get().toString() + "." + className;
         }
-        SymbolReference<ResolvedTypeDeclaration> ref = solveType(className);
+
+        // Since this is used to resolve reference to "extended" and "implemented" types, and since these type references
+        // should not be resolved against member types of the current type, we resolve based on the context containing
+        // the class declaration.
+        SymbolReference<ResolvedTypeDeclaration> ref = getContext().getParent()
+                .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                .solveType(className);
 
         // If unable to solve by the class name alone, attempt to qualify it.
         if (!ref.isSolved()) {
             Optional<ClassOrInterfaceType> localScope = classOrInterfaceType.getScope();
             if (localScope.isPresent()) {
                 String localName = localScope.get().getName().getId() + "." + classOrInterfaceType.getName().getId();
-                ref = solveType(localName);
+                ref = getContext().getParent()
+                        .orElseThrow(() -> new RuntimeException("Parent context unexpectedly empty."))
+                        .solveType(localName);
             }
         }
+
 
         // If still unable to resolve, throw an exception.
         if (!ref.isSolved()) {
