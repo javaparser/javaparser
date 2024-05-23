@@ -108,13 +108,7 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
      */
     public S getCorrespondingDeclaration() {
-
-        Optional<S> declaration = getDeclaration();
-        if (declaration.isPresent()) {
-            return declaration.get();
-        }
-
-        throw new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol.");
+    	return getDeclaration().orElseThrow(() -> new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol."));
     }
 
     /**
