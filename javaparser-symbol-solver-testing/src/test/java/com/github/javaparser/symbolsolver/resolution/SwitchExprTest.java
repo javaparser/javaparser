@@ -91,4 +91,20 @@ public class SwitchExprTest {
 
         assertThrows(UnsolvedSymbolException.class, resolveS);
     }
+
+    @Test
+    public void nestedSwitchRecordPatternShouldResolve() {
+        CompilationUnit cu = parse("class Test {\n" +
+                "    public void foo(Object o) {\n" +
+                "        switch (o) {\n" +
+                "            case Box(InnerBox(Integer i), InnerBox(String s)) -> System.out.println(s);\n" +
+                "            case null, default -> {}\n" +
+                "        };\n" +
+                "    }\n" +
+                "}"
+        );
+
+        NameExpr name = Navigator.findNameExpression(cu, "s").get();
+        assertEquals("java.lang.String", name.resolve().getType().describe());
+    }
 }

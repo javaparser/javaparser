@@ -25,6 +25,7 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static java.util.Collections.singletonList;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
@@ -143,27 +144,29 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
         // First check if there are any pattern expressions available to this node.
         Context parentContext = optionalParentContext.get();
-        if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext) {
+        if(parentContext instanceof BinaryExprContext || parentContext instanceof IfStatementContext || parentContext instanceof SwitchEntryContext) {
             List<TypePatternExpr> typePatternExprs = parentContext.typePatternExprsExposedToChild(this.getWrappedNode());
 
-            Optional<TypePatternExpr> localResolutionResults = typePatternExprs
+            List<TypePatternExpr> localResolutionResults = typePatternExprs
                     .stream()
                     .filter(vd -> vd.getNameAsString().equals(name))
-                    .findFirst();
+                    .collect(Collectors.toList());
 
-            if (localResolutionResults.isPresent() && localResolutionResults.get().isTypePatternExpr()) {
-                if (typePatternExprs.size() == 1) {
-                    TypePatternExpr typePatternExpr = localResolutionResults.get().asTypePatternExpr();
+            switch (localResolutionResults.size()) {
+                case 0:
+                    // Delegate solving to the parent context.
+                    return parentContext.solveSymbol(name);
+
+                case 1:
+                    TypePatternExpr typePatternExpr = localResolutionResults.get(0).asTypePatternExpr();
                     JavaParserTypePatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
                     return SymbolReference.solved(decl);
-                }
-                if(typePatternExprs.size() > 1) {
+
+                default:
                     throw new IllegalStateException("Unexpectedly more than one reference in scope");
-                }
             }
         }
 
-        // Delegate solving to the parent context.
         return parentContext.solveSymbol(name);
     }
 
