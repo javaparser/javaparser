@@ -16,6 +16,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorWithDefaults;
 import com.github.javaparser.jml.JmlDocSanitizer;
 import com.google.common.truth.Truth;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -174,6 +175,8 @@ class FullExamplesTest {
         Assertions.assertTrue(result.isSuccessful(), "parsing failed");
 
         testParentAndChild(result.getResult().get());
+
+        System.out.println(result.getResult().get().toString());
     }
 
     private void testParentAndChild(Node node) {

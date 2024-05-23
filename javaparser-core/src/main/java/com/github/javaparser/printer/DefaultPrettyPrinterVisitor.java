@@ -973,6 +973,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     @Override
     public void visit(JmlContract n, Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
+        boolean openedJml = inJmlComment();
+        if (!openedJml) startJmlComment(false, n.getJmlTags());
         printModifiers(n.getModifiers());
         printer.print(" ");
         printer.print(n.getBehavior().jmlSymbol());
@@ -982,12 +984,13 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printer.indent();
         printList(n.getSubContracts(), "", "", "", "{|\n", "|}");
         printer.unindent().unindent();
+        if (!openedJml) endJmlComment();
     }
 
     private void endJmlComment() {
         assert inJmlComment() && inJmlSingleComment != inJmlMultiComment;
         if (inJmlSingleComment) {
-            printer.print("");
+            printer.println("");
         } else {
             printer.println("*/");
         }

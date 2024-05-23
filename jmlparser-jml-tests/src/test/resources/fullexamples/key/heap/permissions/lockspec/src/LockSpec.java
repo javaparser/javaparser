@@ -66,7 +66,7 @@ public interface Lock {
         ensures spec.lockTransfer();
         assignable<heap> \strictly_nothing;
         assignable<permissions> spec.fpPerm(); @*/
-    public /*@ helper @*/ native void lock();
+    public /*@ helper @*/ void lock();
 
     /*@ normal_behavior
         requires spec.lockStatus(\dl_TRUE());
@@ -74,7 +74,7 @@ public interface Lock {
         ensures spec.unlockTransfer();
         assignable<heap> spec.fp(); // should be done by the prover
         assignable<permissions> spec.fpPerm(); @*/
-    public /*@ helper @*/ native void unlock();
+    public /*@ helper @*/ void unlock();
 }
 
 public class Counter implements LockSpec {
