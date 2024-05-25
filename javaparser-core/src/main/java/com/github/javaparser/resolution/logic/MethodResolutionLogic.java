@@ -866,7 +866,7 @@ public class MethodResolutionLogic {
         throw new UnsupportedOperationException(typeDeclaration.getClass().getCanonicalName());
     }
 
-    private static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
+    public static void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
         if (source.equals(target)) {
             return;
         }
@@ -874,11 +874,11 @@ public class MethodResolutionLogic {
             ResolvedReferenceType sourceRefType = source.asReferenceType();
             ResolvedReferenceType targetRefType = target.asReferenceType();
             if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
-                if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
-                    for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
-                        inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
-                    }
-                }
+            	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
+	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
+	                    inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
+	                }
+            	}
             }
             return;
         }
@@ -890,26 +890,58 @@ public class MethodResolutionLogic {
             return;
         }
         if (source.isWildcard() && target.isWildcard()) {
+            if (source.asWildcard().isBounded() && target.asWildcard().isBounded()){
+                inferTypes(source.asWildcard().getBoundedType(), target.asWildcard().getBoundedType(), mappings);
+            }
             return;
         }
         if (source.isReferenceType() && target.isTypeVariable()) {
             mappings.put(target.asTypeParameter(), source);
             return;
         }
-
-        if (source.isWildcard() && target.isReferenceType()) {
-            if (source.asWildcard().isBounded()) {
-                inferTypes(source.asWildcard().getBoundedType(), target, mappings);
-            }
-            return;
-        }
-
         if (source.isWildcard() && target.isTypeVariable()) {
             mappings.put(target.asTypeParameter(), source);
             return;
         }
+        if (source.isArray() && target.isArray()) {
+            ResolvedType sourceComponentType = source.asArrayType().getComponentType();
+            ResolvedType targetComponentType = target.asArrayType().getComponentType();
+            inferTypes(sourceComponentType, targetComponentType, mappings);
+            return;
+        }
+        if (source.isArray() && target.isWildcard()){
+            if(target.asWildcard().isBounded()){
+                inferTypes(source, target.asWildcard().getBoundedType(), mappings);
+                return;
+            }
+            return;
+        }
+        if (source.isArray() && target.isTypeVariable()) {
+            mappings.put(target.asTypeParameter(), source);
+            return;
+        }
+
+        if (source.isWildcard() && target.isReferenceType()){
+            if (source.asWildcard().isBounded()){
+                inferTypes(source.asWildcard().getBoundedType(), target, mappings);
+            }
+            return;
+        }
+        if (source.isConstraint() && target.isReferenceType()){
+            inferTypes(source.asConstraintType().getBound(), target, mappings);
+            return;
+        }
+
+        if (source.isConstraint() && target.isTypeVariable()){
+            inferTypes(source.asConstraintType().getBound(), target, mappings);
+            return;
+        }
         if (source.isTypeVariable() && target.isTypeVariable()) {
             mappings.put(target.asTypeParameter(), source);
+            return;
+        }
+        if (source.isTypeVariable()) {
+            inferTypes(target, source, mappings);
             return;
         }
         if (source.isPrimitive() || target.isPrimitive()) {
@@ -917,6 +949,13 @@ public class MethodResolutionLogic {
         }
         if (source.isNull()) {
             return;
+        }
+
+        if (target.isReferenceType()) {
+            ResolvedReferenceType formalTypeAsReference = target.asReferenceType();
+            if (formalTypeAsReference.isJavaLangObject()) {
+                return;
+            }
         }
     }
 
