@@ -21,12 +21,10 @@
 
 package com.github.javaparser.steps;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.ModifierVisitor;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
+import static com.github.javaparser.utils.Utils.readerToString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.FileReader;
@@ -34,9 +32,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.utils.Utils.readerToString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
+import com.github.javaparser.utils.LineSeparator;
 
 public class PrettyPrintingSteps {
 
@@ -107,6 +110,9 @@ public class PrettyPrintingSteps {
 
     @Then("it is printed as:$src")
     public void isPrintedAs(String src) {
-        assertEquals(src.trim(), resultNode.toString().trim());
+        assertEquals(
+                normalizeEolInTextBlock(src.trim(), LineSeparator.ARBITRARY),
+                normalizeEolInTextBlock(resultNode.toString().trim(), LineSeparator.ARBITRARY)
+        );
     }
 }
