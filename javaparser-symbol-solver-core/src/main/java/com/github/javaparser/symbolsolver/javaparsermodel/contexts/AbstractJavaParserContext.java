@@ -30,7 +30,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithOptionalScope;
 import com.github.javaparser.resolution.*;
-import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -52,10 +55,6 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
     ///
     /// Static methods
     ///
-
-    protected static boolean isQualifiedName(String name) {
-        return name.contains(".");
-    }
 
     public static SymbolReference<ResolvedValueDeclaration> solveWith(SymbolDeclarator symbolDeclarator, String name) {
         for (ResolvedValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
