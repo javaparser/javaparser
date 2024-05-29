@@ -679,13 +679,12 @@ public class Difference {
             } else if (originalElement.isIdentifier()) {
                 originalIndex++;
                 diffIndex++;
+            } else if (kept.isPrimitiveType()) {
+                originalIndex++;
+                diffIndex++;
             } else {
-                if (kept.isPrimitiveType()) {
-                    originalIndex++;
-                    diffIndex++;
-                } else {
-                    throw new UnsupportedOperationException("kept " + kept.getElement() + " vs " + originalElement);
-                }
+            	// original is a token so we keep it (for example an unexpected semicolon)
+            	originalIndex++;
             }
         } else if (kept.isToken() && originalElementIsToken) {
             TokenTextElement originalTextToken = (TokenTextElement) originalElement;
