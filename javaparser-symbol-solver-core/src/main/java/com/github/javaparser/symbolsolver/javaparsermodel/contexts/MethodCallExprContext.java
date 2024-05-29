@@ -213,7 +213,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 if (!argumentsTypes.get(i).isArray() && parameter.isVariadic()) {
                     parameterType = parameterType.asArrayType().getComponentType();
                 }
-                inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
+                MethodResolutionLogic.inferTypes(argumentsTypes.get(i), parameterType, derivedValues);
             }
 
             for (Map.Entry<ResolvedTypeParameterDeclaration, ResolvedType> entry : derivedValues.entrySet()){
@@ -234,99 +234,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
 		return ref;
     }
 
-    private void inferTypes(ResolvedType source, ResolvedType target, Map<ResolvedTypeParameterDeclaration, ResolvedType> mappings) {
-        if (source.equals(target)) {
-            return;
-        }
-        if (source.isReferenceType() && target.isReferenceType()) {
-            ResolvedReferenceType sourceRefType = source.asReferenceType();
-            ResolvedReferenceType targetRefType = target.asReferenceType();
-            if (sourceRefType.getQualifiedName().equals(targetRefType.getQualifiedName())) {
-            	if (!sourceRefType.isRawType() && !targetRefType.isRawType()) {
-	                for (int i = 0; i < sourceRefType.typeParametersValues().size(); i++) {
-	                    inferTypes(sourceRefType.typeParametersValues().get(i), targetRefType.typeParametersValues().get(i), mappings);
-	                }
-            	}
-            }
-            return;
-        }
-        if (source.isReferenceType() && target.isWildcard()) {
-            if (target.asWildcard().isBounded()) {
-                inferTypes(source, target.asWildcard().getBoundedType(), mappings);
-                return;
-            }
-            return;
-        }
-        if (source.isWildcard() && target.isWildcard()) {
-            if (source.asWildcard().isBounded() && target.asWildcard().isBounded()){
-                inferTypes(source.asWildcard().getBoundedType(), target.asWildcard().getBoundedType(), mappings);
-            }
-            return;
-        }
-        if (source.isReferenceType() && target.isTypeVariable()) {
-            mappings.put(target.asTypeParameter(), source);
-            return;
-        }
-        if (source.isWildcard() && target.isTypeVariable()) {
-            mappings.put(target.asTypeParameter(), source);
-            return;
-        }
-        if (source.isArray() && target.isArray()) {
-            ResolvedType sourceComponentType = source.asArrayType().getComponentType();
-            ResolvedType targetComponentType = target.asArrayType().getComponentType();
-            inferTypes(sourceComponentType, targetComponentType, mappings);
-            return;
-        }
-        if (source.isArray() && target.isWildcard()){
-            if(target.asWildcard().isBounded()){
-                inferTypes(source, target.asWildcard().getBoundedType(), mappings);
-                return;
-            }
-            return;
-        }
-        if (source.isArray() && target.isTypeVariable()) {
-            mappings.put(target.asTypeParameter(), source);
-            return;
-        }
-
-        if (source.isWildcard() && target.isReferenceType()){
-            if (source.asWildcard().isBounded()){
-                inferTypes(source.asWildcard().getBoundedType(), target, mappings);
-            }
-            return;
-        }
-        if (source.isConstraint() && target.isReferenceType()){
-            inferTypes(source.asConstraintType().getBound(), target, mappings);
-            return;
-        }
-
-        if (source.isConstraint() && target.isTypeVariable()){
-            inferTypes(source.asConstraintType().getBound(), target, mappings);
-            return;
-        }
-        if (source.isTypeVariable() && target.isTypeVariable()) {
-            mappings.put(target.asTypeParameter(), source);
-            return;
-        }
-        if (source.isTypeVariable()) {
-            inferTypes(target, source, mappings);
-            return;
-        }
-        if (source.isPrimitive() || target.isPrimitive()) {
-            return;
-        }
-        if (source.isNull()) {
-            return;
-        }
-
-        if (target.isReferenceType()) {
-            ResolvedReferenceType formalTypeAsReference = target.asReferenceType();
-            if (formalTypeAsReference.isJavaLangObject()) {
-                return;
-            }
-        }
-        throw new RuntimeException(source.describe() + " " + target.describe());
-    }
 
     private MethodUsage resolveMethodTypeParameters(MethodUsage methodUsage, List<ResolvedType> actualParamTypes) {
         Map<ResolvedTypeParameterDeclaration, ResolvedType> matchedTypeParameters = new HashMap<>();
@@ -348,7 +255,7 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
                 ResolvedType actualType = lastActualParamType;
                 if (lastActualParamType.isArray()) {
                 	ResolvedType componentType = lastActualParamType.asArrayType().getComponentType();
-                	// in cases where, the expected type is assignable by the actual reference type of the array 
+                	// in cases where, the expected type is assignable by the actual reference type of the array
                 	// (Files.newInputStream(path, options) and options is a variadic argument of type OpenOption)
                 	// or the expected type is a generic type (Arrays.asList(T... a)) and the component type of the array type is a reference type
                 	// or the expected type is not a generic (IntStream.of(int... values)) and the component type is not a reference type

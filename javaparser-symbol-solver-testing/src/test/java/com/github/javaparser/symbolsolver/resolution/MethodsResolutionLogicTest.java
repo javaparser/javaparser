@@ -24,6 +24,10 @@ package com.github.javaparser.symbolsolver.resolution;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,9 +35,13 @@ import org.junit.jupiter.api.Test;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
+import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.resolution.types.ResolvedWildcard;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
+import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -88,4 +96,33 @@ class MethodsResolutionLogicTest extends AbstractResolutionTest {
 
         assertEquals(true, MethodResolutionLogic.isApplicable(mu, "isThrows", ImmutableList.of(classOfRuntimeType), typeSolver));
     }
+
+    // related to issue https://github.com/javaparser/javaparser/issues/4330
+    @Test
+    void compatibilityShouldConsiderAlsoTypeVariables() {
+    	ReflectionInterfaceDeclaration declaration = (ReflectionInterfaceDeclaration) typeSolver.solveType("java.util.List");
+    	MethodUsage mu = declaration.getAllMethods().stream().filter(m -> m.getDeclaration().getSignature().equals("forEach(java.util.function.Consumer<? super T>)")).findFirst().get();
+
+    	ResolvedType typeParam = genericType(Consumer.class.getCanonicalName(), superBound(String.class.getCanonicalName()));
+
+        assertEquals(true, MethodResolutionLogic.isApplicable(mu, "forEach", ImmutableList.of(typeParam), typeSolver));
+    }
+
+    private List<ResolvedType> types(String... types) {
+        return Arrays.stream(types).map(type -> type(type)).collect(Collectors.toList());
+    }
+
+    private ResolvedType type(String type) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type));
+    }
+
+
+    private ResolvedType genericType(String type, ResolvedType... parameterTypes) {
+        return new ReferenceTypeImpl(typeSolver.solveType(type), Arrays.asList(parameterTypes));
+    }
+
+    private ResolvedType superBound(String type) {
+        return ResolvedWildcard.superBound(type(type));
+    }
+
 }

@@ -112,7 +112,7 @@ class ClassOrInterfaceDeclarationTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16"})
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16", "JAVA_17"})
     void sealedFieldNamePermitted(ParserConfiguration.LanguageLevel languageLevel) {
     	assertDoesNotThrow(() -> {
     		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean sealed");
@@ -120,15 +120,23 @@ class ClassOrInterfaceDeclarationTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_17"})
-    void sealedFieldNameNotPermitted(ParserConfiguration.LanguageLevel languageLevel) {
-    	assertThrows(AssertionFailedError.class, () -> {
-    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean sealed");
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16"})
+    void sealedClassOrInterfaceNamePermitted(ParserConfiguration.LanguageLevel languageLevel) {
+    	assertDoesNotThrow(() -> {
+    		TestParser.parseCompilationUnit(languageLevel, "class sealed {}");
         });
     }
 
     @ParameterizedTest
-    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16"})
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_17"})
+    void sealedClassOrInterfaceNameNotPermitted(ParserConfiguration.LanguageLevel languageLevel) {
+    	assertThrows(AssertionFailedError.class, () -> {
+    		TestParser.parseCompilationUnit(languageLevel, "class sealed {}");
+        });
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16", "JAVA_17"})
     void permitsFieldNamePermitted(ParserConfiguration.LanguageLevel languageLevel) {
     	assertDoesNotThrow(() -> {
     		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean permits");
@@ -136,10 +144,18 @@ class ClassOrInterfaceDeclarationTest {
     }
 
     @ParameterizedTest
+    @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_8","JAVA_9","JAVA_10","JAVA_11","JAVA_12","JAVA_13","JAVA_14", "JAVA_15", "JAVA_16"})
+    void permitsClassOrInterfaceNamePermitted(ParserConfiguration.LanguageLevel languageLevel) {
+    	assertDoesNotThrow(() -> {
+    		TestParser.parseCompilationUnit(languageLevel, "class permits {}");
+        });
+    }
+
+    @ParameterizedTest
     @EnumSource(value = ParserConfiguration.LanguageLevel.class, names = {"JAVA_17"})
-    void permitsFieldNameNotPermitted(ParserConfiguration.LanguageLevel languageLevel) {
+    void permitsClassOrInterfaceNameNotPermitted(ParserConfiguration.LanguageLevel languageLevel) {
     	assertThrows(AssertionFailedError.class, () -> {
-    		TestParser.parseVariableDeclarationExpr(languageLevel, "boolean permits");
+    		TestParser.parseCompilationUnit(languageLevel, "class permits {}");
         });
     }
 
