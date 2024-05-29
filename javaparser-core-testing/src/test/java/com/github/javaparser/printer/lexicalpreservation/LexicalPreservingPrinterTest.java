@@ -1894,4 +1894,32 @@ class LexicalPreservingPrinterTest extends AbstractLexicalPreservingTest {
         assertFalse(LexicalPreservingPrinter.isAvailableOn(cu));
     }
 
+    // issue 4442
+    @Test
+    void handleUnexpectedToken() {
+    	String code = "public class Foo {\n" +
+                ";\n" + // <-- this is the unexpected token
+                "    public void func(){};\n" +
+                "\n" +
+                "}";
+
+    	String expected =
+    			"import com.github.javaparser.ast.Generated;\n"
+    			+ "\n"
+    			+ "@Generated\n"
+    			+ "public class Foo {\n"
+    			+ ";\n"
+    			+ "    public void func(){};\n"
+    			+ "\n"
+    			+ "}";
+
+        considerCode(code);
+
+        ClassOrInterfaceDeclaration md = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        md.addAnnotation(Generated.class);
+        String modifiedContent = LexicalPreservingPrinter.print(cu);
+        System.out.println(modifiedContent);
+        assertEquals(expected, LexicalPreservingPrinter.print(cu));
+    }
+
 }
