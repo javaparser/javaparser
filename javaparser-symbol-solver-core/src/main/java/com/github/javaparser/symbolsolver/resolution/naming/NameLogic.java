@@ -464,7 +464,7 @@ public class NameLogic {
 
         String name = nameAsString(nameNode);
         Context context = JavaParserFactory.getContext(nameNode, typeSolver);
-        if (context.patternExprInScope(name).isPresent()) {
+        if (context.typePatternExprInScope(name).isPresent()) {
             return NameCategory.EXPRESSION_NAME;
         }
         if (context.localVariableDeclarationInScope(name).isPresent()) {

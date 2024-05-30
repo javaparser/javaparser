@@ -2,6 +2,8 @@ package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.NodeList;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,10 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.function.Consumer;
 
 import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class exists to test the generated methods for the various Pattern expression
@@ -77,5 +76,46 @@ public class PatternExprTest {
         TestConsumer<TypePatternExpr> invalidTypePattern = new TestConsumer<>();
         instanceOfExpr.ifTypePatternExpr(invalidTypePattern);
         assertFalse(invalidTypePattern.isConsumed);
+    }
+
+    @Test
+    public void recordPatternGeneratedMethodsShouldWork() {
+        Expression expr = parseExpression("x instanceof Foo(Bar b)");
+
+        assertTrue(expr.isInstanceOfExpr());
+
+        InstanceOfExpr instanceOfExpr = expr.asInstanceOfExpr();
+
+        assertTrue(instanceOfExpr.getPattern().isPresent());
+        PatternExpr pattern = instanceOfExpr.getPattern().get();
+
+        assertTrue(pattern.isRecordPatternExpr());
+        assertTrue(pattern.toRecordPatternExpr().isPresent());
+        RecordPatternExpr recordPattern = pattern.asRecordPatternExpr();
+
+        NodeList<Modifier> newModifiers = new NodeList<>();
+        Modifier newModifier = new Modifier();
+        newModifiers.add(newModifier);
+        recordPattern.setModifiers(newModifiers);
+        assertEquals(newModifiers, recordPattern.getModifiers());
+
+        recordPattern.replace(newModifier, newModifier);
+        assertEquals(newModifiers, recordPattern.getModifiers());
+
+        recordPattern.remove(newModifier);
+        assertTrue(recordPattern.getModifiers().isEmpty());
+
+        TestConsumer<RecordPatternExpr> validPattern = new TestConsumer<>();
+        pattern.ifRecordPatternExpr(validPattern);
+        assertTrue(validPattern.isConsumed);
+
+        NodeList<PatternExpr> patternList = recordPattern.getPatternList();
+        assertTrue(patternList.isNonEmpty());
+
+        recordPattern.replace(patternList.get(0), patternList.get(0));
+        assertTrue(patternList.isNonEmpty());
+
+        RecordPatternExpr newRecordPattern = recordPattern.clone();
+        assertEquals(recordPattern.getTypeAsString(), newRecordPattern.getTypeAsString());
     }
 }

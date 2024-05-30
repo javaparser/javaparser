@@ -899,9 +899,18 @@ class ObjectIdentityEqualsVisitorTest {
     }
 
     @Test
-    void equals_GivenPatternExpr() {
+    void equals_GivenTypePatternExpr() {
         Node nodeA = new TypePatternExpr();
         Node nodeB = new TypePatternExpr();
+
+        Assertions.assertTrue(ObjectIdentityEqualsVisitor.equals(nodeA, nodeA));
+        Assertions.assertFalse(ObjectIdentityEqualsVisitor.equals(nodeA, nodeB));
+    }
+
+    @Test
+    void equals_GivenRecordPatternExpr() {
+        Node nodeA = new RecordPatternExpr();
+        Node nodeB = new RecordPatternExpr();
 
         Assertions.assertTrue(ObjectIdentityEqualsVisitor.equals(nodeA, nodeA));
         Assertions.assertFalse(ObjectIdentityEqualsVisitor.equals(nodeA, nodeB));

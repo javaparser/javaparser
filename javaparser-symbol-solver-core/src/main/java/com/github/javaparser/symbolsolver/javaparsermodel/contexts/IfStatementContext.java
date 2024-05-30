@@ -22,7 +22,7 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
@@ -40,21 +40,21 @@ public class IfStatementContext extends StatementContext<IfStmt> {
 
 
     @Override
-    public List<PatternExpr> patternExprsExposedToChild(Node child) {
+    public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
         Expression condition = wrappedNode.getCondition();
         Context conditionContext = JavaParserFactory.getContext(condition, typeSolver);
 
-        List<PatternExpr> results = new ArrayList<>();
+        List<TypePatternExpr> results = new ArrayList<>();
 
         boolean givenNodeIsWithinThenStatement = wrappedNode.getThenStmt().containsWithinRange(child);
         if(givenNodeIsWithinThenStatement) {
-            results.addAll(conditionContext.patternExprsExposedFromChildren());
+            results.addAll(conditionContext.typePatternExprsExposedFromChildren());
         }
 
         wrappedNode.getElseStmt().ifPresent(elseStatement -> {
             boolean givenNodeIsWithinElseStatement = elseStatement.containsWithinRange(child);
             if(givenNodeIsWithinElseStatement) {
-                results.addAll(conditionContext.negatedPatternExprsExposedFromChildren());
+                results.addAll(conditionContext.negatedTypePatternExprsExposedFromChildren());
             }
         });
 

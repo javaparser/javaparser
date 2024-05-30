@@ -25,14 +25,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public interface ResolvedPatternDeclarationTest extends ResolvedValueDeclarationTest {
+public interface ResolvedTypePatternDeclarationTest extends ResolvedValueDeclarationTest {
 
     @Override
-    ResolvedPatternDeclaration createValue();
+    ResolvedTypePatternDeclaration createValue();
 
     @Test
     default void resolvedPatternShouldBeMarkedAsPattern() {
-        assertTrue(createValue().isPattern());
+        assertTrue(createValue().isTypePattern());
     }
 
     @Test

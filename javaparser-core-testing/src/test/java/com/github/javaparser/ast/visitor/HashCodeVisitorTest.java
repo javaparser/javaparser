@@ -710,11 +710,21 @@ class HashCodeVisitorTest {
 	}
 
 	@Test
-	void testVisitPatternExpr() {
+	void testVisitTypePatternExpr() {
 		TypePatternExpr node = spy(new TypePatternExpr());
 		HashCodeVisitor.hashCode(node);
 		verify(node, times(1)).getModifiers();
 		verify(node, times(1)).getName();
+		verify(node, times(1)).getType();
+		verify(node, times(1)).getComment();
+	}
+
+	@Test
+	void testVisitRecordPatternExpr() {
+		RecordPatternExpr node = spy(new RecordPatternExpr());
+		HashCodeVisitor.hashCode(node);
+		verify(node, times(1)).getModifiers();
+		verify(node, times(1)).getPatternList();
 		verify(node, times(1)).getType();
 		verify(node, times(1)).getComment();
 	}

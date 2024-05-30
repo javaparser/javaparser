@@ -1293,4 +1293,17 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         copyData(n, r);
         return r;
     }
+
+    @Override
+    public Visitable visit(final RecordPatternExpr n, final Object arg) {
+        NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
+        NodeList<PatternExpr> patternList = cloneList(n.getPatternList(), arg);
+        ReferenceType type = cloneNode(n.getType(), arg);
+        Comment comment = cloneNode(n.getComment(), arg);
+        RecordPatternExpr r = new RecordPatternExpr(n.getTokenRange().orElse(null), modifiers, type, patternList);
+        r.setComment(comment);
+        n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
+        copyData(n, r);
+        return r;
+    }
 }

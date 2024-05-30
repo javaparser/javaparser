@@ -462,4 +462,9 @@ public class HashCodeVisitor implements GenericVisitor<Integer, Void> {
     public Integer visit(final CompactConstructorDeclaration n, final Void arg) {
         return (n.getBody().accept(this, arg)) * 31 + (n.getModifiers().accept(this, arg)) * 31 + (n.getName().accept(this, arg)) * 31 + (n.getThrownExceptions().accept(this, arg)) * 31 + (n.getTypeParameters().accept(this, arg)) * 31 + (n.getAnnotations().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
     }
+
+    @Override
+    public Integer visit(final RecordPatternExpr n, final Void arg) {
+        return (n.getModifiers().accept(this, arg)) * 31 + (n.getPatternList().accept(this, arg)) * 31 + (n.getType().accept(this, arg)) * 31 + (n.getComment().isPresent() ? n.getComment().get().accept(this, arg) : 0);
+    }
 }

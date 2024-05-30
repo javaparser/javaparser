@@ -1335,4 +1335,19 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
         n.setComment(comment);
         return n;
     }
+
+    @Override
+    public Visitable visit(final RecordPatternExpr n, final A arg) {
+        NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
+        NodeList<PatternExpr> patternList = modifyList(n.getPatternList(), arg);
+        ReferenceType type = (ReferenceType) n.getType().accept(this, arg);
+        Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
+        if (type == null)
+            return null;
+        n.setModifiers(modifiers);
+        n.setPatternList(patternList);
+        n.setType(type);
+        n.setComment(comment);
+        return n;
+    }
 }
