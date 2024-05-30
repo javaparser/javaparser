@@ -22,6 +22,7 @@
 package com.github.javaparser.ast.expr;
 
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.SwitchEntry;
@@ -236,7 +237,7 @@ class SwitchExprTest {
     @Test
     void switchPatternWithGuard() {
         SwitchExpr expr = parseExpression("switch (value) {\n" +
-                "    case Box b when b.nonEmpty() -> System.out.println(b);\n" +
+                "    case Box b when b.nonEmpty() -> b.get() + 12;\n" +
                 "}").asSwitchExpr();
 
         assertEquals(1, expr.getEntries().size());
@@ -252,6 +253,8 @@ class SwitchExprTest {
 
         assertEquals("b", label.getNameAsString());
         assertEquals("Box", label.getTypeAsString());
+
+        assertEquals("b.get() + 12;", entry.getStatements().get(0).toString());
     }
 
     @Test
@@ -319,5 +322,98 @@ class SwitchExprTest {
         TypePatternExpr integerPattern = boxPattern.getPatternList().get(0).asTypePatternExpr();
         assertEquals("Integer", integerPattern.getTypeAsString());
         assertEquals("i", integerPattern.getNameAsString());
+    }
+
+    /**
+     * Credit to @Kimmmey in https://github.com/javaparser/javaparser/issues/4440 for the
+     * example code.
+     */
+    @Test
+    void testSwitchExprUnaryMinus() {
+        Statement stmt = parseStatement("int i = switch (x) {\n" +
+                "    case 0 -> 0;\n" +
+                "    default -> -1;\n" +
+                "};");
+
+        VariableDeclarator declarator = (VariableDeclarator) stmt.getChildNodes().get(0).getChildNodes().get(0);
+        SwitchExpr switchExpr = declarator.getInitializer().get().asSwitchExpr();
+
+        assertEquals("0", switchExpr.getEntry(0).getLabels().get(0).toString());
+        assertEquals("0;", switchExpr.getEntry(0).getStatements().get(0).toString());
+
+        assertTrue(switchExpr.getEntry(1).getLabels().isEmpty());
+        assertTrue(switchExpr.getEntry(1).isDefault());
+        assertEquals("-1;", switchExpr.getEntry(1).getStatements().get(0).toString());
+    }
+
+    /**
+     * Credit to @Kimmmey in https://github.com/javaparser/javaparser/issues/4440 for the
+     * example code.
+     */
+    @Test
+    void testSwitchExprUnaryNot() {
+        Statement stmt = parseStatement("boolean b = switch (x) {\n" +
+                "    case 0 -> true;\n" +
+                "    default -> !false;\n" +
+                "};");
+
+        VariableDeclarator declarator = (VariableDeclarator) stmt.getChildNodes().get(0).getChildNodes().get(0);
+        SwitchExpr switchExpr = declarator.getInitializer().get().asSwitchExpr();
+
+        assertEquals("0", switchExpr.getEntry(0).getLabels().get(0).toString());
+        assertEquals("true;", switchExpr.getEntry(0).getStatements().get(0).toString());
+
+        assertTrue(switchExpr.getEntry(1).getLabels().isEmpty());
+        assertTrue(switchExpr.getEntry(1).isDefault());
+        assertEquals("!false;", switchExpr.getEntry(1).getStatements().get(0).toString());
+    }
+
+    /**
+     * Credit to @Kimmmey in https://github.com/javaparser/javaparser/issues/4440 for the
+     * example code.
+     */
+    @Test
+    void testSwitchExprWithBinaryExpr() {
+        Statement stmt = parseStatement("int i = switch (x) {\n" +
+                "    case 1 -> 1;\n" +
+                "    case 2, 3 -> 1 + 2;\n" +
+                "    default -> 1;\n" +
+                "};");
+
+        VariableDeclarator declarator = (VariableDeclarator) stmt.getChildNodes().get(0).getChildNodes().get(0);
+        SwitchExpr switchExpr = declarator.getInitializer().get().asSwitchExpr();
+
+        assertEquals("1", switchExpr.getEntry(0).getLabels().get(0).toString());
+        assertEquals("1;", switchExpr.getEntry(0).getStatements().get(0).toString());
+
+        assertEquals("2", switchExpr.getEntry(1).getLabels().get(0).toString());
+        assertEquals("3", switchExpr.getEntry(1).getLabels().get(1).toString());
+        assertEquals("1 + 2;", switchExpr.getEntry(1).getStatements().get(0).toString());
+
+        assertTrue(switchExpr.getEntry(2).getLabels().isEmpty());
+        assertTrue(switchExpr.getEntry(2).isDefault());
+        assertEquals("1;", switchExpr.getEntry(2).getStatements().get(0).toString());
+
+    }
+
+    @Test
+    void testSwitchExprWithAssignment() {
+        Statement stmt = parseStatement("{\n" +
+                "    int z;\n" +
+                "    int i = switch (x) {\n" +
+                "        case 1 -> z = 1;\n" +
+                "        default -> 1;\n" +
+                "    };\n" +
+                "}");
+
+        VariableDeclarator declarator = (VariableDeclarator) stmt.getChildNodes().get(1).getChildNodes().get(0).getChildNodes().get(0);
+        SwitchExpr switchExpr = declarator.getInitializer().get().asSwitchExpr();
+
+        assertEquals("1", switchExpr.getEntry(0).getLabels().get(0).toString());
+        assertEquals("z = 1;", switchExpr.getEntry(0).getStatements().get(0).toString());
+
+        assertTrue(switchExpr.getEntry(1).getLabels().isEmpty());
+        assertTrue(switchExpr.getEntry(1).isDefault());
+        assertEquals("1;", switchExpr.getEntry(1).getStatements().get(0).toString());
     }
 }
