@@ -8,7 +8,6 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-import java.util.regex.Pattern;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.observer.ObservableProperty;

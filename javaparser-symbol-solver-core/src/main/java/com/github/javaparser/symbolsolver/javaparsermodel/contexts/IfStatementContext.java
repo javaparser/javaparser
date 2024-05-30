@@ -22,7 +22,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.resolution.Context;

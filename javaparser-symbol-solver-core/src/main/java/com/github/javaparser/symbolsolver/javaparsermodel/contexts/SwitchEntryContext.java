@@ -22,8 +22,6 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.NodeList;
-import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.stmt.Statement;
@@ -38,8 +36,6 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypePatternDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
 import java.util.List;
 import java.util.stream.Collectors;

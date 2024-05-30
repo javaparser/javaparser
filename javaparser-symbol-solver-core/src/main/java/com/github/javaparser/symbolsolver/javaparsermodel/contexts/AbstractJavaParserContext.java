@@ -290,6 +290,20 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
         return wrappedNode;
     }
 
+    /**
+     * When looking for a variable declaration in a pattern expression, there are 2 cases:
+     *   1. The pattern expression is a type pattern expression (e.g. {@code Foo f}), in which case we can just compare
+     *      the name of the variable we're trying to resolve with the name declared in the pattern.
+     *   2. The pattern expression is a record pattern expression (e.g. {@code Foo (Bar b, Baz (...) )}), in which case
+     *      we need to traverse the "pattern tree" to find all type pattern expressions, so that we can compare names
+     *      for all of these.
+     *
+     * In both cases, we only really care about the type pattern expressions, so this method simply does a traversal
+     * of the pattern tree to find all type pattern expressions contained in it.
+     *
+     * @param patternExpr the root of the pattern tree to traverse
+     * @return all type pattern expressions discovered in the tree
+     */
     public List<TypePatternExpr> typePatternExprsDiscoveredInPattern(PatternExpr patternExpr) {
         List<TypePatternExpr> discoveredTypePatterns = new ArrayList<>();
         Queue<PatternExpr> patternsToCheck = new ArrayDeque<>();

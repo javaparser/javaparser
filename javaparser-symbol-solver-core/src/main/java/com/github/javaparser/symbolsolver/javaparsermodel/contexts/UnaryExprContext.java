@@ -20,7 +20,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.expr.UnaryExpr;
 import com.github.javaparser.resolution.Context;
