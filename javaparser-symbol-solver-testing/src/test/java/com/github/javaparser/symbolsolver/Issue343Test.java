@@ -21,6 +21,14 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
@@ -30,11 +38,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Note this issue number refers to the archived `javasymbolsolver` repository,
@@ -85,6 +88,6 @@ class Issue343Test extends AbstractResolutionTest {
 
     @Test
     void resolveLocaleOutsideAST() {
-        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, new FieldAccessExpr(new NameExpr("Locale"), "US")));
+        assertThrows(UnsolvedSymbolException.class, () -> getExpressionType(typeResolver, new FieldAccessExpr(new NameExpr("Locale"), "US")));
     }
 }
