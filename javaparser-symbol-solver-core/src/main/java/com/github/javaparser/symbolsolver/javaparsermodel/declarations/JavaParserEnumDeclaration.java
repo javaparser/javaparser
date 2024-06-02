@@ -21,9 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -48,8 +45,12 @@ import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapabi
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnumDeclarationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -219,6 +220,19 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return getContext().solveSymbol(name);
+    }
+
+    public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
+        Context context = getContext();
+        if (context instanceof EnumDeclarationContext) {
+            SymbolReference<? extends ResolvedValueDeclaration> reference = ((EnumDeclarationContext) context).solveSymbolInEnum(name);
+            if (reference.getDeclaration().isPresent() &&
+                    ResolvedValueDeclaration.IsPublicStaticMember(reference.getDeclaration().get())) {
+                return reference;
+            }
+        }
+
+        return SymbolReference.unsolved();
     }
 
     @Override

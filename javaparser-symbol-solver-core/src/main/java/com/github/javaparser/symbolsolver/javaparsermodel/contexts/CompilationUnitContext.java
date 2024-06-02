@@ -94,7 +94,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
                     // avoid infinite recursion
                     if (!isAncestorOf(importedType)) {
-                        SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
+                        SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver).solvePublicStaticSymbolInType(importedType, name);
                         if (ref.isSolved()) {
                             return ref;
                         }
@@ -108,7 +108,7 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
                     if (memberName.equals(name)) {
                         ResolvedTypeDeclaration importedType = typeSolver.solveType(typeName);
-                        return new SymbolSolver(typeSolver).solveSymbolInType(importedType, memberName);
+                        return new SymbolSolver(typeSolver).solvePublicStaticSymbolInType(importedType, memberName);
                     }
                 }
             }

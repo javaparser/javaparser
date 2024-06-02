@@ -60,14 +60,23 @@ public class ClassOrInterfaceDeclarationContext extends AbstractJavaParserContex
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        SymbolReference<? extends ResolvedValueDeclaration> classResolveResult = this.solveSymbolInClass(name);
+        if(classResolveResult.isSolved()) {
+            return classResolveResult;
+        }
+
+        // then to parent
+        return solveSymbolInParentContext(name);
+    }
+
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInClass(String name) {
         if (typeSolver == null) throw new IllegalArgumentException();
 
         if (this.getDeclaration().hasVisibleField(name)) {
             return SymbolReference.solved(this.getDeclaration().getVisibleField(name));
         }
 
-        // then to parent
-        return solveSymbolInParentContext(name);
+        return SymbolReference.unsolved();
     }
 
     @Override

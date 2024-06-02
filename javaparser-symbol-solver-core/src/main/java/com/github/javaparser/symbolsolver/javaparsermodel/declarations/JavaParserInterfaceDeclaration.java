@@ -21,9 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -44,8 +41,13 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnumDeclarationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -301,6 +303,20 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return getContext().solveSymbol(name);
+    }
+
+    public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
+        Context context = getContext();
+        if (context instanceof ClassOrInterfaceDeclarationContext) {
+            SymbolReference<? extends ResolvedValueDeclaration> reference = ((ClassOrInterfaceDeclarationContext) context).solveSymbolInClass(name);
+
+            if (reference.getDeclaration().isPresent() &&
+                    ResolvedValueDeclaration.IsPublicStaticMember(reference.getDeclaration().get())) {
+                return reference;
+            }
+        }
+
+        return SymbolReference.unsolved();
     }
 
     @Override

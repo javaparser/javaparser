@@ -34,4 +34,13 @@ public interface SymbolResolutionCapability {
 	 * @return Symbol reference of the resolved value.
 	 */
 	SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver);
+
+
+	/**
+	 * Resolve a public static field declared directly within the type
+	 * @param name Field / symbol name.
+	 * @param typeSolver Symbol solver to resolve type usage.
+	 * @return Symbol reference of the resolved value.
+	 */
+	SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver);
 }

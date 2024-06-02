@@ -237,6 +237,16 @@ public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> 
     return SymbolReference.unsolved();
   }
 
+  public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
+      SymbolReference<? extends ResolvedValueDeclaration> resolvedSymbol = solveSymbol(name, typeSolver);
+      if(resolvedSymbol.getDeclaration().isPresent() &&
+              ResolvedValueDeclaration.IsPublicStaticMember(resolvedSymbol.getDeclaration().get())) {
+          return resolvedSymbol;
+      }
+
+      return SymbolReference.unsolved();
+  }
+
   @Override
   public List<ResolvedEnumConstantDeclaration> getEnumConstants() {
       return Arrays.stream(clazz.getFields())

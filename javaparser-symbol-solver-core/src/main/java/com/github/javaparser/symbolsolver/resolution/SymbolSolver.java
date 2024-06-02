@@ -188,4 +188,12 @@ public class SymbolSolver implements Solver {
         }
         return new ReferenceTypeImpl(declaration);
     }
+
+    public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticSymbolInType(ResolvedTypeDeclaration typeDeclaration, String memberName) {
+        if (typeDeclaration instanceof SymbolResolutionCapability) {
+            return ((SymbolResolutionCapability) typeDeclaration).solvePublicStaticField(memberName, typeSolver);
+        }
+        return SymbolReference.unsolved();
+
+    }
 }

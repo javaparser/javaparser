@@ -50,6 +50,16 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
+        SymbolReference<? extends ResolvedValueDeclaration> enumResolutionResult = solveSymbolInEnum(name);
+        if(enumResolutionResult.isSolved()) {
+            return enumResolutionResult;
+        }
+
+        // then to parent
+        return solveSymbolInParentContext(name);
+    }
+
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInEnum(String name) {
         if (typeSolver == null) throw new IllegalArgumentException();
 
         // among constants
@@ -63,8 +73,7 @@ public class EnumDeclarationContext extends AbstractJavaParserContext<EnumDeclar
             return SymbolReference.solved(this.getDeclaration().getField(name));
         }
 
-        // then to parent
-        return solveSymbolInParentContext(name);
+        return SymbolReference.unsolved();
     }
 
     @Override

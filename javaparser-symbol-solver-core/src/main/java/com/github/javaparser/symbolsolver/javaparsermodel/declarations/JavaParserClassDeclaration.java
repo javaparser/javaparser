@@ -44,6 +44,7 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
@@ -332,6 +333,20 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         return getContext().solveSymbol(name);
+    }
+
+    @Override
+    public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
+        Context context = getContext();
+        if (context instanceof ClassOrInterfaceDeclarationContext) {
+            SymbolReference<? extends ResolvedValueDeclaration> reference = ((ClassOrInterfaceDeclarationContext) context).solveSymbolInClass(name);
+            if (reference.getDeclaration().isPresent() &&
+                    ResolvedValueDeclaration.IsPublicStaticMember(reference.getDeclaration().get())) {
+                return reference;
+            }
+        }
+
+        return SymbolReference.unsolved();
     }
 
     @Override

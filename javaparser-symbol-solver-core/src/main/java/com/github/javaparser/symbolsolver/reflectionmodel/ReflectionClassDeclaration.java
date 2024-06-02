@@ -305,6 +305,16 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         return SymbolReference.unsolved();
     }
 
+    public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
+        SymbolReference<? extends ResolvedValueDeclaration> resolvedSymbol = solveSymbol(name, typeSolver);
+        if(resolvedSymbol.getDeclaration().isPresent() &&
+                ResolvedValueDeclaration.IsPublicStaticMember(resolvedSymbol.getDeclaration().get())) {
+            return resolvedSymbol;
+        }
+
+        return SymbolReference.unsolved();
+    }
+
     @Override
     public boolean hasDirectlyAnnotation(String canonicalName) {
         return reflectionClassAdapter.hasDirectlyAnnotation(canonicalName);

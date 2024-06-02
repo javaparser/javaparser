@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.ast.AccessSpecifier;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
@@ -33,4 +35,20 @@ public interface ResolvedValueDeclaration extends ResolvedDeclaration {
      * Type of the declaration.
      */
     ResolvedType getType();
+
+
+
+    public static boolean IsPublicStaticMember(ResolvedValueDeclaration declaration) {
+        if(declaration instanceof ResolvedFieldDeclaration) {
+            ResolvedFieldDeclaration resolvedFieldDeclaration = (ResolvedFieldDeclaration)declaration;
+            return resolvedFieldDeclaration.isStatic() && resolvedFieldDeclaration.accessSpecifier() == AccessSpecifier.PUBLIC;
+        }
+
+        if(declaration instanceof ResolvedMethodDeclaration) {
+            ResolvedMethodDeclaration resolvedMethodDeclaration = (ResolvedMethodDeclaration)declaration;
+            return resolvedMethodDeclaration.isStatic() && resolvedMethodDeclaration.accessSpecifier() == AccessSpecifier.PUBLIC;
+        }
+
+        return declaration instanceof ResolvedEnumConstantDeclaration;
+    }
 }
