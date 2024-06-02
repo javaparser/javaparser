@@ -311,7 +311,8 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
             SymbolReference<? extends ResolvedValueDeclaration> reference = ((ClassOrInterfaceDeclarationContext) context).solveSymbolInClass(name);
 
             if (reference.getDeclaration().isPresent() &&
-                    ResolvedValueDeclaration.IsPublicStaticMember(reference.getDeclaration().get())) {
+                    (reference.getDeclaration().get() instanceof ResolvedFieldDeclaration ||
+                    ResolvedValueDeclaration.IsPublicStaticMember(reference.getDeclaration().get()))) {
                 return reference;
             }
         }

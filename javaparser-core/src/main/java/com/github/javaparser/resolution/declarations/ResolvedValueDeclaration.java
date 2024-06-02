@@ -21,7 +21,6 @@
 package com.github.javaparser.resolution.declarations;
 
 import com.github.javaparser.ast.AccessSpecifier;
-import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
