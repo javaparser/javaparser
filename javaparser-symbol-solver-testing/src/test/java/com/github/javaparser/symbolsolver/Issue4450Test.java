@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Issue4450Test extends AbstractSymbolResolutionTest {
   @Test
@@ -26,10 +27,16 @@ public class Issue4450Test extends AbstractSymbolResolutionTest {
     ParserConfiguration pc = new ParserConfiguration()
         .setSymbolResolver(new JavaSymbolSolver(cts));
     StaticJavaParser.setConfiguration(pc);
-    CompilationUnit cu = StaticJavaParser.parse(issueResourcesPath.resolve("a/RefCycleClass.java"));
 
-    // We shouldn't throw a mismatched symbol
-    assertDoesNotThrow(() -> cu.findAll(NameExpr.class).stream()
+    // We shouldn't stack overflow
+    CompilationUnit cu1 = StaticJavaParser.parse(issueResourcesPath.resolve("a/RefCycleClass.java"));
+    assertDoesNotThrow(() -> cu1.findAll(NameExpr.class).stream()
+            .map(NameExpr::resolve)
+            .findAny().get());
+
+
+    CompilationUnit cu2 = StaticJavaParser.parse(issueResourcesPath.resolve("a/RefCycleClassFailure.java"));
+    assertThrows(Exception.class, () -> cu2.findAll(NameExpr.class).stream()
             .map(NameExpr::resolve)
             .findAny().get());
   }
