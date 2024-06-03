@@ -1,7 +1,7 @@
 
-Next Release (Version 3.25.11-snapshot)
+Next Release (Version 3.26.1-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/207?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/208?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,62 @@ Next Release (Version 3.25.11-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+
+Next Release (Version 3.26.0)
+-----------------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/207?closed=1)
+
+### Added
+
+* [JEP 440] Add support for record patterns (PR [#4432](https://github.com/javaparser/javaparser/pull/4432) by [@johannescoetzee](https://github.com/johannescoetzee))
+* PatternExpr -> TypePatternExpr refactor in preparation for record pattern implementation (PR [#4387](https://github.com/javaparser/javaparser/pull/4387) by [@johannescoetzee](https://github.com/johannescoetzee))
+* [JEP441] Add support for switch pattern matching (PR [#4375](https://github.com/javaparser/javaparser/pull/4375) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Add support for `case null, default` in switch and fix concrete syntax model for new switch syntax (PR [#4364](https://github.com/javaparser/javaparser/pull/4364) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### Changed
+
+* Fixes SYSTEM_EOL warnings (PR [#4412](https://github.com/javaparser/javaparser/pull/4412) by [@matthieu-vergne](https://github.com/matthieu-vergne))
+* Refact: Adds a find node by range method in Node class (PR [#4377](https://github.com/javaparser/javaparser/pull/4377) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Fixed
+
+* Fix: issue 3277 StackOverflow issue while parse MethodCallExpr/FieldAccessExpr, their ancestor/child node is ObjectCreation expression which contain .new (PR [#4447](https://github.com/javaparser/javaparser/pull/4447) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix expressions in the body of switch expression entries (Issue 4440) (PR [#4446](https://github.com/javaparser/javaparser/pull/4446) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix: issue 4442 LexicalPreservingPrinter does not support unexpected token (PR [#4444](https://github.com/javaparser/javaparser/pull/4444) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 3100 JavaSymbolSolver unable to resolve an inner class defined in a base class (PR [#4441](https://github.com/javaparser/javaparser/pull/4441) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: 4330 Method 'forEach' cannot be resolved in certain context (PR [#4436](https://github.com/javaparser/javaparser/pull/4436) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: 'permits' and 'sealed' Contextual keyworlds usage (PR [#4434](https://github.com/javaparser/javaparser/pull/4434) by [@jlerbsc](https://github.com/jlerbsc))
+* Fixes an error in jbehave tests when they are run in a Windows os (PR [#4433](https://github.com/javaparser/javaparser/pull/4433) by [@jlerbsc](https://github.com/jlerbsc))
+* Make resolution of implements and extends types start with the parent… (PR [#4430](https://github.com/javaparser/javaparser/pull/4430) by [@eldapiiro](https://github.com/eldapiiro))
+* Fix: solveMethodAsUsage() for implicit method <enum>::values() (PR [#4424](https://github.com/javaparser/javaparser/pull/4424) by [@Kimmmey](https://github.com/Kimmmey))
+* Fix: <enum>::values() is a static method, was not static (PR [#4417](https://github.com/javaparser/javaparser/pull/4417) by [@Kimmmey](https://github.com/Kimmmey))
+* Fix missed generated code from PatternExpr refactor (PR [#4414](https://github.com/javaparser/javaparser/pull/4414) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fixes #4410 (PR [#4411](https://github.com/javaparser/javaparser/pull/4411) by [@matthieu-vergne](https://github.com/matthieu-vergne))
+* Fix issue 2368 Unable to calculate the type of a varargs parameter (PR [#4402](https://github.com/javaparser/javaparser/pull/4402) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: Fixes the version currently supported by Javaparser. (PR [#4393](https://github.com/javaparser/javaparser/pull/4393) by [@jlerbsc](https://github.com/jlerbsc))
+* ?? make mvnw command runnable by copy-pasting (PR [#4382](https://github.com/javaparser/javaparser/pull/4382) by [@cravingPixels](https://github.com/cravingPixels))
+
+### Developer Changes
+
+* chore(deps): bump actions/checkout from 4.1.4 to 4.1.5 (PR [#4415](https://github.com/javaparser/javaparser/pull/4415) by [@dependabot[bot]](https://github.com/apps/dependabot))
+* Minor refactoring on Concrete syntax model (PR [#4405](https://github.com/javaparser/javaparser/pull/4405) by [@jlerbsc](https://github.com/jlerbsc))
+* chore(deps): bump actions/checkout from 4.1.2 to 4.1.3 (PR [#4381](https://github.com/javaparser/javaparser/pull/4381) by [@dependabot[bot]](https://github.com/apps/dependabot))
+
+### Uncategorised
+
+* Improve unit test on generic (PR [#4407](https://github.com/javaparser/javaparser/pull/4407) by [@jlerbsc](https://github.com/jlerbsc))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@eldapiiro](https://github.com/eldapiiro)
+* [@cravingPixels](https://github.com/cravingPixels)
+* [@johannescoetzee](https://github.com/johannescoetzee)
+* [@matthieu-vergne](https://github.com/matthieu-vergne)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@Kimmmey](https://github.com/Kimmmey)
 
 
 Version 3.25.10
