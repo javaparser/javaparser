@@ -311,7 +311,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
             if (reference.getDeclaration().isPresent() &&
                     (reference.getDeclaration().get() instanceof ResolvedFieldDeclaration ||
-                    ResolvedValueDeclaration.IsPublicStaticMember(reference.getDeclaration().get()))) {
+                    ResolvedValueDeclaration.IsPublicStaticField(reference.getDeclaration().get()))) {
                 return reference;
             }
         }

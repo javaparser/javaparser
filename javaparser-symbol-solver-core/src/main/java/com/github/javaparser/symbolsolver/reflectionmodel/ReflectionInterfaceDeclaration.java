@@ -249,7 +249,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
         SymbolReference<? extends ResolvedValueDeclaration> resolvedSymbol = solveSymbol(name, typeSolver);
         if(resolvedSymbol.getDeclaration().isPresent() &&
-                ResolvedValueDeclaration.IsPublicStaticMember(resolvedSymbol.getDeclaration().get())) {
+                ResolvedValueDeclaration.IsPublicStaticField(resolvedSymbol.getDeclaration().get())) {
             return resolvedSymbol;
         }
 

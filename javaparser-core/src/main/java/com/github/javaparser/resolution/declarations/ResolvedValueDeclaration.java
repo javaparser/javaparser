@@ -37,15 +37,10 @@ public interface ResolvedValueDeclaration extends ResolvedDeclaration {
 
 
 
-    public static boolean IsPublicStaticMember(ResolvedValueDeclaration declaration) {
+    static boolean IsPublicStaticField(ResolvedValueDeclaration declaration) {
         if(declaration instanceof ResolvedFieldDeclaration) {
             ResolvedFieldDeclaration resolvedFieldDeclaration = (ResolvedFieldDeclaration)declaration;
             return resolvedFieldDeclaration.isStatic() && resolvedFieldDeclaration.accessSpecifier() == AccessSpecifier.PUBLIC;
-        }
-
-        if(declaration instanceof ResolvedMethodDeclaration) {
-            ResolvedMethodDeclaration resolvedMethodDeclaration = (ResolvedMethodDeclaration)declaration;
-            return resolvedMethodDeclaration.isStatic() && resolvedMethodDeclaration.accessSpecifier() == AccessSpecifier.PUBLIC;
         }
 
         return declaration instanceof ResolvedEnumConstantDeclaration;

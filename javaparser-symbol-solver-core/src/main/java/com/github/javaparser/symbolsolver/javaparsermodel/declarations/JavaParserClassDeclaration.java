@@ -341,7 +341,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         if (context instanceof ClassOrInterfaceDeclarationContext) {
             SymbolReference<? extends ResolvedValueDeclaration> reference = ((ClassOrInterfaceDeclarationContext) context).solveSymbolInClass(name);
             if (reference.getDeclaration().isPresent() &&
-                    ResolvedValueDeclaration.IsPublicStaticMember(reference.getDeclaration().get())) {
+                    ResolvedValueDeclaration.IsPublicStaticField(reference.getDeclaration().get())) {
                 return reference;
             }
         }

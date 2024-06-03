@@ -11,5 +11,6 @@ public class RefCycleClass {
 
     public void runMe() {
         unknownName.run();
+        RefCycleEnum myEnum = Value1;
     }
 }

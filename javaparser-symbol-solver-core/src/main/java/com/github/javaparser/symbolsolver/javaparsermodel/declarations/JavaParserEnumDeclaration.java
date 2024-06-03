@@ -227,7 +227,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (context instanceof EnumDeclarationContext) {
             SymbolReference<? extends ResolvedValueDeclaration> reference = ((EnumDeclarationContext) context).solveSymbolInEnum(name);
             if (reference.getDeclaration().isPresent() &&
-                    ResolvedValueDeclaration.IsPublicStaticMember(reference.getDeclaration().get())) {
+                    ResolvedValueDeclaration.IsPublicStaticField(reference.getDeclaration().get())) {
                 return reference;
             }
         }
