@@ -10,6 +10,7 @@ We noticed we get the best feedback from those.
 Here are [some fun project ideas](https://github.com/javaparser/javaparser/labels/fun%20project%20idea).
 - If you start working on an issue, please say so with a comment in the issue.
 - If you know how to fix a problem, please fix it and open a pull request instead of opening an issue.
+- If you would like to add new nodes, or new fields to existing nodes, check out the [Guide to Adding New Nodes and Fields](https://github.com/javaparser/javaparser/wiki/A-Detailed-Guide-to-Adding-New-Nodes-and-Fields).
 
 Thanks for helping!
 
