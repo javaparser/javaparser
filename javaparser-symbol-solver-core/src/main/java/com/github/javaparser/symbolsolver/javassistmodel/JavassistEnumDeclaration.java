@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -41,10 +35,16 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-
+import com.github.javaparser.symbolsolver.utils.DeclarationUtils;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.bytecode.AccessFlag;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -230,7 +230,7 @@ public class JavassistEnumDeclaration extends AbstractTypeDeclaration
     public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
         SymbolReference<? extends ResolvedValueDeclaration> resolvedSymbol = solveSymbol(name, typeSolver);
         if(resolvedSymbol.getDeclaration().isPresent() &&
-                ResolvedValueDeclaration.IsPublicStaticField(resolvedSymbol.getDeclaration().get())) {
+                DeclarationUtils.IsPublicStaticField(resolvedSymbol.getDeclaration().get())) {
             return resolvedSymbol;
         }
 

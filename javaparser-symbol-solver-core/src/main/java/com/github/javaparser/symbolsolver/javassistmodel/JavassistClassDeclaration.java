@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.Context;
@@ -41,9 +37,13 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-
+import com.github.javaparser.symbolsolver.utils.DeclarationUtils;
 import javassist.CtClass;
 import javassist.CtField;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author Federico Tomassetti
@@ -165,7 +165,7 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
     public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
         SymbolReference<? extends ResolvedValueDeclaration> resolvedSymbol = solveSymbol(name, typeSolver);
         if(resolvedSymbol.getDeclaration().isPresent() &&
-                ResolvedValueDeclaration.IsPublicStaticField(resolvedSymbol.getDeclaration().get())) {
+                DeclarationUtils.IsPublicStaticField(resolvedSymbol.getDeclaration().get())) {
             return resolvedSymbol;
         }
 

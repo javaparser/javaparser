@@ -48,6 +48,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.EnumDeclarationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory;
+import com.github.javaparser.symbolsolver.utils.DeclarationUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -227,7 +228,7 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         if (context instanceof EnumDeclarationContext) {
             SymbolReference<? extends ResolvedValueDeclaration> reference = ((EnumDeclarationContext) context).solveSymbolInEnum(name);
             if (reference.getDeclaration().isPresent() &&
-                    ResolvedValueDeclaration.IsPublicStaticField(reference.getDeclaration().get())) {
+                    DeclarationUtils.IsPublicStaticField(reference.getDeclaration().get())) {
                 return reference;
             }
         }

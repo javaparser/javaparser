@@ -21,9 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
@@ -47,6 +44,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.utils.DeclarationUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -341,7 +342,7 @@ public class JavaParserClassDeclaration extends AbstractClassDeclaration
         if (context instanceof ClassOrInterfaceDeclarationContext) {
             SymbolReference<? extends ResolvedValueDeclaration> reference = ((ClassOrInterfaceDeclarationContext) context).solveSymbolInClass(name);
             if (reference.getDeclaration().isPresent() &&
-                    ResolvedValueDeclaration.IsPublicStaticField(reference.getDeclaration().get())) {
+                    DeclarationUtils.IsPublicStaticField(reference.getDeclaration().get())) {
                 return reference;
             }
         }

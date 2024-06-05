@@ -40,6 +40,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import com.github.javaparser.symbolsolver.utils.DeclarationUtils;
 
 /**
  * @author Federico Tomassetti
@@ -240,7 +241,7 @@ public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> 
   public SymbolReference<? extends ResolvedValueDeclaration> solvePublicStaticField(String name, TypeSolver typeSolver) {
       SymbolReference<? extends ResolvedValueDeclaration> resolvedSymbol = solveSymbol(name, typeSolver);
       if(resolvedSymbol.getDeclaration().isPresent() &&
-              ResolvedValueDeclaration.IsPublicStaticField(resolvedSymbol.getDeclaration().get())) {
+              DeclarationUtils.IsPublicStaticField(resolvedSymbol.getDeclaration().get())) {
           return resolvedSymbol;
       }
 

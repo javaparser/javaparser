@@ -44,6 +44,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ClassOrInterfaceDeclarationContext;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import com.github.javaparser.symbolsolver.utils.DeclarationUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -311,7 +312,7 @@ public class JavaParserInterfaceDeclaration extends AbstractTypeDeclaration
 
             if (reference.getDeclaration().isPresent() &&
                     (reference.getDeclaration().get() instanceof ResolvedFieldDeclaration ||
-                    ResolvedValueDeclaration.IsPublicStaticField(reference.getDeclaration().get()))) {
+                            DeclarationUtils.IsPublicStaticField(reference.getDeclaration().get()))) {
                 return reference;
             }
         }
