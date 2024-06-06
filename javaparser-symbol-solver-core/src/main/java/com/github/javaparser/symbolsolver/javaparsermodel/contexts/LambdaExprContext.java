@@ -119,110 +119,34 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                     if (parentNode instanceof VariableDeclarator) {
                         VariableDeclarator variableDeclarator = (VariableDeclarator) parentNode;
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
-                        Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
-                        if (functionalMethod.isPresent()) {
-                            ResolvedType lambdaType = functionalMethod.get().getParamType(index);
-
-                            // Replace parameter from declarator
-                            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
-                            if (lambdaType.isReferenceType()) {
-                                for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
-                                    if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
-                                        ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
-                                        lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
-                                    }
-                                }
-                            } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
-                                lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
-                            }
-
-                            Value value = new Value(lambdaType, name);
-                            return Optional.of(value);
-                        }
-                        throw new UnsupportedOperationException("functional method is not present in variable declarator");
+                        return solveLambdaParameter(t, index)
+								.map(resolvedLamdbaTypeParametre -> Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
+								.orElseThrow(() -> new UnsupportedOperationException("functional method is not present in variable declarator"));
                     }
                     if (parentNode instanceof ReturnStmt) {
                         ReturnStmt returnStmt = (ReturnStmt) parentNode;
                         Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
                         if (optDeclaration.isPresent()) {
                             ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(optDeclaration.get().asMethodDeclaration().getType());
-                            Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
-
-                            if (functionalMethod.isPresent()) {
-                                ResolvedType lambdaType = functionalMethod.get().getParamType(index);
-
-                                // Replace parameter from declarator
-                                Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
-                                if (lambdaType.isReferenceType()) {
-                                    for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
-                                        if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
-                                            ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
-                                            lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
-                                        }
-                                    }
-                                } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
-                                    lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
-                                }
-
-                                Value value = new Value(lambdaType, name);
-                                return Optional.of(value);
-                            }
-                            throw new UnsupportedOperationException("functional method is not present in return statement");
+                            return solveLambdaParameter(t, index)
+    								.map(resolvedLamdbaTypeParametre -> Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
+    								.orElseThrow(() -> new UnsupportedOperationException("functional method is not present in return expression"));
                         }
                     }
                     if (parentNode instanceof CastExpr) {
                         CastExpr castExpr = (CastExpr) parentNode;
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(castExpr.getType());
-                        Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
-
-                        if (functionalMethod.isPresent()) {
-                            ResolvedType lambdaType = functionalMethod.get().getParamType(index);
-
-                            // Replace parameter from declarator
-                            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
-                            if (lambdaType.isReferenceType()) {
-                                for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
-                                    if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
-                                        ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
-                                        lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
-                                    }
-                                }
-                            } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
-                                lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
-                            }
-
-                            Value value = new Value(lambdaType, name);
-                            return Optional.of(value);
-                        }
-                        throw new UnsupportedOperationException("functional method is not present in cast expression");
+                        return solveLambdaParameter(t, index)
+								.map(resolvedLamdbaTypeParametre -> Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
+								.orElseThrow(() -> new UnsupportedOperationException("functional method is not present in cast expression"));
                     }
 					if (parentNode instanceof AssignExpr) {
 						AssignExpr expr = (AssignExpr) parentNode;
 						ResolvedType t = expr.calculateResolvedType();
-						Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
-						if (functionalMethod.isPresent()) {
-							ResolvedType lambdaType = functionalMethod.get().getParamType(index);
-
-							// Replace parameter from declarator
-							Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
-							if (lambdaType.isReferenceType()) {
-								for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType
-										.asReferenceType().getTypeParametersMap()) {
-									if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
-										ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
-										lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
-									}
-								}
-							} else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
-								lambdaType = t.asReferenceType().typeParametersMap()
-										.getValue(lambdaType.asTypeParameter());
-							}
-
-							Value value = new Value(lambdaType, name);
-							return Optional.of(value);
-						}
-						throw new UnsupportedOperationException(
-								"Unknown node type: " + parentNode.getClass().getSimpleName());
+						return solveLambdaParameter(t, index)
+								.map(resolvedLamdbaTypeParametre -> Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
+								.orElseThrow(() -> new UnsupportedOperationException(
+								"Unknown node type: " + parentNode.getClass().getSimpleName()));
 					}
                     throw new UnsupportedOperationException("Unknown node type: " + parentNode.getClass().getSimpleName());
                 }
@@ -231,6 +155,33 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
 
         // if nothing is found we should ask the parent context
         return solveSymbolAsValueInParentContext(name);
+    }
+
+    /*
+     * Infers the type of a parameter of a lambda expression
+     */
+    private Optional<ResolvedType> solveLambdaParameter(ResolvedType t, int parameterIndex) {
+    	ResolvedType lambdaType = null;
+    	Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
+		if (functionalMethod.isPresent()) {
+			lambdaType = functionalMethod.get().getParamType(parameterIndex);
+
+			// Replace parameter from declarator
+			Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
+			if (lambdaType.isReferenceType()) {
+				for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType
+						.asReferenceType().getTypeParametersMap()) {
+					if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
+						ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
+						lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
+					}
+				}
+			} else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
+				lambdaType = t.asReferenceType().typeParametersMap()
+						.getValue(lambdaType.asTypeParameter());
+			}
+		}
+		return Optional.ofNullable(lambdaType);
     }
 
     @Override
