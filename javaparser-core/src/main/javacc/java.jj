@@ -5599,6 +5599,10 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
  *         (one of)
  *         Annotation public
  *         abstract
+ *     ClassDeclaration:
+ *         NormalClassDeclaration
+ *         EnumDeclaration
+ *         RecordDeclaration
  * }<pre>
  * For Convenience:
  * <pre>{@code
@@ -5614,6 +5618,10 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 {
     modifier = Modifiers()
     (
+        // This case must be checked before AnnotationTypeMemberDeclaration since the prefixes are the same
+        LOOKAHEAD(RecordDeclaration())
+        ret = RecordDeclaration(modifier)
+     |
         LOOKAHEAD(Type() Identifier() "(")
         ret = AnnotationTypeMemberDeclaration(modifier)
      |
