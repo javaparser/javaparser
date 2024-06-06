@@ -96,4 +96,19 @@ class VisitorMapTest {
         
         assertFalse(map.containsKey(x1));
     }
+
+    @Test
+    void completeKeySetTest(){
+        CompilationUnit x1 = parse("class X{}");
+        CompilationUnit x2 = parse("class X{}");
+
+        VisitorMap<CompilationUnit, Integer> map = new VisitorMap<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        map.put(x1, 1);
+        map.put(x2, 1);
+        assertEquals(1, map.keySet().size());
+        assertEquals(2, map.allKeys().size());
+
+        assertEquals(1, map.entrySet().size());
+        assertEquals(2, map.allEntries().size());
+    }
 }
