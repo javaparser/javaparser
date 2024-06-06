@@ -21,6 +21,8 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.Range;
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -421,7 +423,7 @@ class SwitchExprTest {
     @Test
     void issue4455Test() {
         SwitchExpr switchExpr = parseExpression("switch (column) {\n" +
-                "  case CustomDeployTableModel.ARTIFACT_NAME -> {}\n" +
+                "    case CustomDeployTableModel.ARTIFACT_NAME -> {}\n" +
                 "}").asSwitchExpr();
 
         assertEquals(Node.Parsedness.PARSED, switchExpr.getParsed());
@@ -431,5 +433,12 @@ class SwitchExprTest {
 
         assertEquals("CustomDeployTableModel.ARTIFACT_NAME", switchLabel.toString());
         assertTrue(switchLabel.isFieldAccessExpr());
+        assertTrue(switchLabel.getRange().isPresent());
+
+        Range switchLabelRange = switchLabel.getRange().get();
+        assertEquals(2, switchLabelRange.begin.line);
+        assertEquals(10, switchLabelRange.begin.column);
+        assertEquals(2, switchLabelRange.end.line);
+        assertEquals(45, switchLabelRange.end.column);
     }
 }
