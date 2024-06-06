@@ -21,6 +21,7 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -415,5 +416,20 @@ class SwitchExprTest {
         assertTrue(switchExpr.getEntry(1).getLabels().isEmpty());
         assertTrue(switchExpr.getEntry(1).isDefault());
         assertEquals("1;", switchExpr.getEntry(1).getStatements().get(0).toString());
+    }
+
+    @Test
+    void issue4455Test() {
+        SwitchExpr switchExpr = parseExpression("switch (column) {\n" +
+                "  case CustomDeployTableModel.ARTIFACT_NAME -> {}\n" +
+                "}").asSwitchExpr();
+
+        assertEquals(Node.Parsedness.PARSED, switchExpr.getParsed());
+
+        SwitchEntry entry = switchExpr.getEntry(0);
+        Expression switchLabel = entry.getLabels().get(0);
+
+        assertEquals("CustomDeployTableModel.ARTIFACT_NAME", switchLabel.toString());
+        assertTrue(switchLabel.isFieldAccessExpr());
     }
 }

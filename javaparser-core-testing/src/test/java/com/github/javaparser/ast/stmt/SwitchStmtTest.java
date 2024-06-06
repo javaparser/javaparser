@@ -23,8 +23,12 @@ package com.github.javaparser.ast.stmt;
 
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.NullLiteralExpr;
+import com.github.javaparser.ast.expr.SwitchExpr;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -32,6 +36,7 @@ import org.junit.jupiter.api.Test;
 import static com.github.javaparser.StaticJavaParser.parseStatement;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.EXPRESSION;
 import static com.github.javaparser.ast.stmt.SwitchEntry.Type.STATEMENT_GROUP;
+import static com.github.javaparser.utils.TestParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SwitchStmtTest {
@@ -83,6 +88,21 @@ class SwitchStmtTest {
 
         assertTrue(switchStmt.getEntry(0).isDefault());
         assertInstanceOf(NullLiteralExpr.class, switchStmt.getEntry(0).getLabels().get(0));
+    }
+
+    @Test
+    void issue4455Test() {
+        SwitchStmt switchStmt = parseStatement("switch (column) {\n" +
+                "  case CustomDeployTableModel.ARTIFACT_NAME:\n" +
+                "}").asSwitchStmt();
+
+        assertEquals(Node.Parsedness.PARSED, switchStmt.getParsed());
+
+        SwitchEntry entry = switchStmt.getEntry(0);
+        Expression switchLabel = entry.getLabels().get(0);
+
+        assertEquals("CustomDeployTableModel.ARTIFACT_NAME", switchLabel.toString());
+        assertTrue(switchLabel.isFieldAccessExpr());
     }
 
 
