@@ -24,6 +24,7 @@ package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.CastExpr;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -131,6 +132,29 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
+
+        Context context = new LambdaExprContext(lambdaExpr, combinedTypeSolver);
+
+        Optional<Value> ref = context.solveSymbolAsValue("p");
+        assertTrue(ref.isPresent());
+        assertEquals("java.lang.String", ref.get().getType().describe());
+    }
+
+    @Test
+    // see https://github.com/javaparser/javaparser/issues/4399
+    void solveParameterOfLambdaInAssignExpr() {
+
+    	Path src = adaptPath("src/test/resources");
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
+        combinedTypeSolver.add(new ReflectionTypeSolver());
+        combinedTypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));
+
+        CompilationUnit cu = parseSample("Lambda", combinedTypeSolver);
+
+        com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
+        MethodDeclaration method = Navigator.demandMethod(clazz, "testInAssignExpr");
+        AssignExpr expr = Navigator.demandNodeOfGivenClass(method, AssignExpr.class);
+        LambdaExpr lambdaExpr = expr.getValue().asLambdaExpr();
 
         Context context = new LambdaExprContext(lambdaExpr, combinedTypeSolver);
 
