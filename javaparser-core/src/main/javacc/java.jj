@@ -4689,7 +4689,7 @@ SwitchEntry SwitchEntry():
             * This lookahead is necessary to avoid ambiguity with the ConditionalExpression branch
             * below.
             */
-            LOOKAHEAD(3)
+            LOOKAHEAD(PatternExpression())
             label = PatternExpression() { labels = add(labels, label); }
             [
               "when"
