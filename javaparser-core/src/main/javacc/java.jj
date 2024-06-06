@@ -4716,7 +4716,8 @@ SwitchEntry SwitchEntry():
                 expr = Expression()
                 {
                     TokenRange r=range(begin, token());
-                    stmts.add(new ExpressionStmt(expr.getTokenRange().get(), expr));
+                    // expr.getTokenRange() will not be present if storeTokens is false
+                    stmts.add(new ExpressionStmt(expr.getTokenRange().orElse(null), expr));
                     ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault, guard);
                 }
                 ";"
