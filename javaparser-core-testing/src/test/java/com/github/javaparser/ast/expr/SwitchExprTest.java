@@ -21,6 +21,9 @@
 
 package com.github.javaparser.ast.expr;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -439,5 +442,24 @@ class SwitchExprTest {
         assertEquals(10, switchLabelRange.begin.column);
         assertEquals(2, switchLabelRange.end.line);
         assertEquals(45, switchLabelRange.end.column);
+    }
+
+    @Test
+    void switchExprWithoutTokensStored() {
+        ParserConfiguration config = new ParserConfiguration();
+        config.setStoreTokens(false);
+        config.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+        JavaParser parser = new JavaParser(config);
+
+        ParseResult<SwitchExpr> result = parser.parseExpression("switch (o) {\n" +
+                "    case Foo f -> f.get();\n" +
+                "}");
+
+        assertTrue(result.isSuccessful());
+        assertTrue(result.getProblems().isEmpty());
+
+        SwitchEntry entry = result.getResult().get().getEntry(0);
+        assertEquals("Foo f", entry.getLabels().get(0).toString());
+        assertEquals("f.get();", entry.getStatements().get(0).toString());
     }
 }
