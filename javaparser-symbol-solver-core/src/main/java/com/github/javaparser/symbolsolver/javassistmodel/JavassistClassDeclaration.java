@@ -44,6 +44,7 @@ import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import javassist.CtClass;
 import javassist.CtField;
+import javassist.Modifier;
 
 /**
  * @author Federico Tomassetti
@@ -324,6 +325,10 @@ public class JavassistClassDeclaration extends AbstractClassDeclaration
         In case the name is composed of the internal type only, i.e. f.getName() returns B, it will also works.
          */
         return this.internalTypes().stream().anyMatch(f -> f.getName().endsWith(name));
+    }
+
+    public boolean isAbstract() {
+        return Modifier.isAbstract(ctClass.getModifiers());
     }
 
 }
