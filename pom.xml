@@ -340,6 +340,20 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+                <plugin>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <!-- This is the last version with Java 8 support -->
+                    <version>2.30.0</version>
+                    <configuration>
+                        <!-- limit format enforcement to just the files changed by this feature branch -->
+                        <ratchetFrom>origin/master</ratchetFrom>
+                        <java>
+                            <!-- google-java-format, but better: see https://github.com/palantir/palantir-java-format -->
+                            <palantirJavaFormat/>
+                        </java>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
