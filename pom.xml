@@ -348,20 +348,6 @@
                     <configuration>
                         <!-- limit format enforcement to just the files changed by this feature branch -->
                         <ratchetFrom>origin/master</ratchetFrom>
-                        <formats>
-                            <format>
-                                <includes>
-                                    <include>.gitattributes</include>
-                                    <include>.gitignore</include>
-                                </includes>
-                                <trimTrailingWhitespace/>
-                                <endWithNewline/>
-                                <indent>
-                                    <tabs>true</tabs>
-                                    <spacesPerTab>4</spacesPerTab>
-                                </indent>
-                            </format>
-                        </formats>
                         <java>
                             <!-- google-java-format, but better: see https://github.com/palantir/palantir-java-format -->
                             <palantirJavaFormat/>
