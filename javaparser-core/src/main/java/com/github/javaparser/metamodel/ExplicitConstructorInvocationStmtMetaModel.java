@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt;
-
 import java.util.Optional;
 
 /**
@@ -39,7 +38,13 @@ public class ExplicitConstructorInvocationStmtMetaModel extends StatementMetaMod
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ExplicitConstructorInvocationStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ExplicitConstructorInvocationStmt.class, "ExplicitConstructorInvocationStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(
+                superBaseNodeMetaModel,
+                ExplicitConstructorInvocationStmt.class,
+                "ExplicitConstructorInvocationStmt",
+                "com.github.javaparser.ast.stmt",
+                false,
+                false);
     }
 
     public PropertyMetaModel argumentsPropertyMetaModel;

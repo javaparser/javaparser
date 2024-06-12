@@ -26,32 +26,32 @@ import static com.github.javaparser.utils.Utils.normalizeEolInTextBlock;
 import static com.github.javaparser.utils.Utils.readerToString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.ModifierVisitor;
+import com.github.javaparser.utils.LineSeparator;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.visitor.ModifierVisitor;
-import com.github.javaparser.utils.LineSeparator;
 
 public class PrettyPrintingSteps {
 
     private Node resultNode;
     private String sourceUnderTest;
 
-    @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body}:$classSrc")
+    @Given(
+            "the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body}:$classSrc")
     public void givenTheClass(String classSrc) {
         this.sourceUnderTest = classSrc.trim();
     }
 
-    @Given("the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body} in the file \"$classFile\"")
+    @Given(
+            "the {class|compilation unit|expression|block|statement|import|annotation|body|class body|interface body} in the file \"$classFile\"")
     public void givenTheClassInTheFile(String classFile) throws URISyntaxException, IOException {
         URL url = getClass().getResource("../samples/" + classFile);
         sourceUnderTest = readerToString(new FileReader(new File(url.toURI()))).trim();
@@ -104,15 +104,13 @@ public class PrettyPrintingSteps {
 
     @When("the class is visited by an empty ModifierVisitorAdapter")
     public void whenTheClassIsVisitedByAnEmptyModifierVisitorAdapter() {
-        (new ModifierVisitor<Void>() {
-        }).visit((CompilationUnit) resultNode, null);
+        (new ModifierVisitor<Void>() {}).visit((CompilationUnit) resultNode, null);
     }
 
     @Then("it is printed as:$src")
     public void isPrintedAs(String src) {
         assertEquals(
                 normalizeEolInTextBlock(src.trim(), LineSeparator.ARBITRARY),
-                normalizeEolInTextBlock(resultNode.toString().trim(), LineSeparator.ARBITRARY)
-        );
+                normalizeEolInTextBlock(resultNode.toString().trim(), LineSeparator.ARBITRARY));
     }
 }

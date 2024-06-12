@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.stmt.LocalClassDeclarationStmt;
-
 import java.util.Optional;
 
 /**
@@ -39,7 +38,13 @@ public class LocalClassDeclarationStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     LocalClassDeclarationStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, LocalClassDeclarationStmt.class, "LocalClassDeclarationStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(
+                superBaseNodeMetaModel,
+                LocalClassDeclarationStmt.class,
+                "LocalClassDeclarationStmt",
+                "com.github.javaparser.ast.stmt",
+                false,
+                false);
     }
 
     public PropertyMetaModel classDeclarationPropertyMetaModel;

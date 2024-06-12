@@ -20,44 +20,37 @@
 
 package com.github.javaparser.symbolsolver;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.JavaParserAdapter;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import com.github.javaparser.ast.expr.MethodReferenceExpr;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class Issue4047Test extends AbstractResolutionTest {
 
-	@Test
-	void test() {
+    @Test
+    void test() {
 
-		String code =
-				"import static java.lang.String.valueOf;\n"
-				+ "public class MyClass { \n"
-				+ "  void f() { \n"
-				+ "    Long Integer = null; \n"
-				+ "    Integer.intValue(); \n"
-				+ "    valueOf(Integer); \n"
-				+ "  } \n"
-				+ "} \n";
+        String code = "import static java.lang.String.valueOf;\n"
+                + "public class MyClass { \n"
+                + "  void f() { \n"
+                + "    Long Integer = null; \n"
+                + "    Integer.intValue(); \n"
+                + "    valueOf(Integer); \n"
+                + "  } \n"
+                + "} \n";
 
-		JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
-		CompilationUnit cu = parser.parse(code);
+        JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
+        CompilationUnit cu = parser.parse(code);
 
-		List<MethodCallExpr> exprs = cu.findAll(MethodCallExpr .class);
+        List<MethodCallExpr> exprs = cu.findAll(MethodCallExpr.class);
 
-		assertEquals("java.lang.Long.intValue()", exprs.get(0).resolve().getQualifiedSignature());
-		assertEquals("java.lang.String.valueOf(java.lang.Object)", exprs.get(1).resolve().getQualifiedSignature());
-	}
+        assertEquals("java.lang.Long.intValue()", exprs.get(0).resolve().getQualifiedSignature());
+        assertEquals(
+                "java.lang.String.valueOf(java.lang.Object)",
+                exprs.get(1).resolve().getQualifiedSignature());
+    }
 }

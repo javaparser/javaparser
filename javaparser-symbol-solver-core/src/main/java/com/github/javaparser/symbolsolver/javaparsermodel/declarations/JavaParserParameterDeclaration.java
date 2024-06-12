@@ -31,7 +31,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.LambdaExprContext;
-
 import java.util.Optional;
 
 /**
@@ -59,8 +58,10 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
 
     @Override
     public ResolvedType getType() {
-        if (wrappedNode.getType().isUnknownType() && JavaParserFactory.getContext(wrappedNode, typeSolver) instanceof LambdaExprContext) {
-            Optional<Value> value = JavaParserFactory.getContext(wrappedNode, typeSolver).solveSymbolAsValue(wrappedNode.getNameAsString());
+        if (wrappedNode.getType().isUnknownType()
+                && JavaParserFactory.getContext(wrappedNode, typeSolver) instanceof LambdaExprContext) {
+            Optional<Value> value = JavaParserFactory.getContext(wrappedNode, typeSolver)
+                    .solveSymbolAsValue(wrappedNode.getNameAsString());
             if (value.isPresent()) {
                 return value.get().getType();
             }
@@ -77,7 +78,6 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
      *
      * @return A visitable JavaParser node wrapped by this object.
      */
-
     public Parameter getWrappedNode() {
         return wrappedNode;
     }
@@ -86,5 +86,4 @@ public class JavaParserParameterDeclaration implements ResolvedParameterDeclarat
     public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
-
 }

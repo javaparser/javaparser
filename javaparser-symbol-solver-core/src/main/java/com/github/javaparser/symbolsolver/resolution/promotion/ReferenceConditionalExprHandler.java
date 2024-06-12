@@ -20,12 +20,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.promotion;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import com.github.javaparser.resolution.promotion.ConditionalExprHandler;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class ReferenceConditionalExprHandler implements ConditionalExprHandler {
     ResolvedType thenExpr;
@@ -38,7 +37,8 @@ public class ReferenceConditionalExprHandler implements ConditionalExprHandler {
 
     @Override
     public ResolvedType resolveType() {
-        // If one of the second and third operands is of the null type and the type of the other is a reference type, then the type of the conditional expression is that reference type.
+        // If one of the second and third operands is of the null type and the type of the other is a reference type,
+        // then the type of the conditional expression is that reference type.
         if (thenExpr.isNull()) {
             return elseExpr;
         }

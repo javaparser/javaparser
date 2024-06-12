@@ -18,11 +18,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-
 import java.util.List;
 
 /**
@@ -31,5 +29,4 @@ import java.util.List;
 public interface SymbolDeclarator {
 
     List<ResolvedValueDeclaration> getSymbolDeclarations();
-
 }

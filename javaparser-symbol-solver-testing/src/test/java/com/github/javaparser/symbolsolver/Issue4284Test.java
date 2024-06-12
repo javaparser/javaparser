@@ -20,38 +20,35 @@
 
 package com.github.javaparser.symbolsolver;
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
+import org.junit.jupiter.api.Test;
 
 public class Issue4284Test extends AbstractResolutionTest {
 
-	@Test
-	void test() {
+    @Test
+    void test() {
 
-		String code =
-				"public class SampleCode {\n"
-				+ "    public static void main(String... args) {\n"
-				+ "        char ch = args[0].charAt(0);\n"
-				+ "        int result = switch (ch) {\n"
-				+ "            default -> System.out.println(ch);\n"
-				+ "        };\n"
-				+ "    }\n"
-				+ "}";
+        String code = "public class SampleCode {\n"
+                + "    public static void main(String... args) {\n"
+                + "        char ch = args[0].charAt(0);\n"
+                + "        int result = switch (ch) {\n"
+                + "            default -> System.out.println(ch);\n"
+                + "        };\n"
+                + "    }\n"
+                + "}";
 
-		ParserConfiguration parserConfiguration = new ParserConfiguration()
-				.setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
-				.setSymbolResolver(symbolResolver(defaultTypeSolver()));
+        ParserConfiguration parserConfiguration = new ParserConfiguration()
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+                .setSymbolResolver(symbolResolver(defaultTypeSolver()));
 
-		CompilationUnit cu = JavaParserAdapter.of(new JavaParser(parserConfiguration)).parse(code);
+        CompilationUnit cu =
+                JavaParserAdapter.of(new JavaParser(parserConfiguration)).parse(code);
 
-		cu.findAll(MethodCallExpr.class).forEach(MethodCallExpr::resolve);
-
-	}
-
+        cu.findAll(MethodCallExpr.class).forEach(MethodCallExpr::resolve);
+    }
 }

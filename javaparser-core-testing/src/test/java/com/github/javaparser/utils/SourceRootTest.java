@@ -23,17 +23,6 @@ package com.github.javaparser.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -42,9 +31,19 @@ import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.printer.Printer;
 import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 class SourceRootTest {
-    private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/");
+    private final Path root = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class)
+            .resolve("src/test/resources/com/github/javaparser/utils/");
     private final SourceRoot sourceRoot = new SourceRoot(root);
     private Printer printer;
 
@@ -61,44 +60,63 @@ class SourceRootTest {
         List<CompilationUnit> units = sourceRoot.getCompilationUnits();
 
         assertEquals(7, units.size());
-        assertTrue(units.stream().allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
-        assertTrue(parseResults.stream().noneMatch(cu -> cu.getResult().get().getStorage().get().getPath().toString().contains("source.root")));
+        assertTrue(units.stream()
+                .allMatch(unit -> !unit.getTypes().isEmpty() || unit.getModule().isPresent()));
+        assertTrue(parseResults.stream().noneMatch(cu -> cu.getResult()
+                .get()
+                .getStorage()
+                .get()
+                .getPath()
+                .toString()
+                .contains("source.root")));
     }
 
     @Test
     void saveInCallback() throws IOException {
-    	printer.getConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
-        sourceRoot.parse("", sourceRoot.getParserConfiguration(), (localPath, absolutePath, result) -> SourceRoot.Callback.Result.SAVE);
+        printer.getConfiguration()
+                .addOption(new DefaultConfigurationOption(
+                        ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
+        sourceRoot.parse(
+                "",
+                sourceRoot.getParserConfiguration(),
+                (localPath, absolutePath, result) -> SourceRoot.Callback.Result.SAVE);
     }
 
     @Test
     void saveInCallbackParallelized() {
-    	printer.getConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
-        sourceRoot.parseParallelized("", sourceRoot.getParserConfiguration(), ((localPath, absolutePath, result) ->
-                SourceRoot.Callback.Result.SAVE));
+        printer.getConfiguration()
+                .addOption(new DefaultConfigurationOption(
+                        ConfigOption.END_OF_LINE_CHARACTER, LineSeparator.LF.asRawString()));
+        sourceRoot.parseParallelized(
+                "",
+                sourceRoot.getParserConfiguration(),
+                ((localPath, absolutePath, result) -> SourceRoot.Callback.Result.SAVE));
     }
 
     @Test
     void fileAsRootIsNotAllowed() {
         assertThrows(IllegalArgumentException.class, () -> {
-            Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class).resolve("com/github/javaparser/utils/Bla.java");
-        new SourceRoot(path);
-    });
-}
+            Path path = CodeGenerationUtils.classLoaderRoot(SourceRootTest.class)
+                    .resolve("com/github/javaparser/utils/Bla.java");
+            new SourceRoot(path);
+        });
+    }
 
     @Test
     void dotsInRootDirectoryAreAllowed() throws IOException {
-        Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils/source.root");
+        Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class)
+                .resolve("src/test/resources/com/github/javaparser/utils/source.root");
         new SourceRoot(path).tryToParse();
     }
 
     @Test
     void dotsInPackageAreNotAllowed() {
         assertThrows(ParseProblemException.class, () -> {
-            Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class).resolve("src/test/resources/com/github/javaparser/utils");
-        new SourceRoot(path).parse("source.root", "Y.java");
-    });
-}
+            Path path = CodeGenerationUtils.mavenModuleRoot(SourceRootTest.class)
+                    .resolve("src/test/resources/com/github/javaparser/utils");
+            new SourceRoot(path).parse("source.root", "Y.java");
+        });
+    }
 
     @Test
     void isSensibleDirectoryToEnter() throws IOException {

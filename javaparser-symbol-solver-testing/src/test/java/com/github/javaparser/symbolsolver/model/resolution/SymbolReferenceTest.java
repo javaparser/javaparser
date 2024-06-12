@@ -22,8 +22,6 @@ package com.github.javaparser.symbolsolver.model.resolution;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
@@ -32,6 +30,7 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
 
 class SymbolReferenceTest {
 
@@ -60,7 +59,8 @@ class SymbolReferenceTest {
     void testAdaptSymbolForSubClass() {
         ResolvedDeclaration resolvedDeclaration = new ReflectionClassDeclaration(String.class, typeSolver);
         SymbolReference<ResolvedDeclaration> symbol = SymbolReference.solved(resolvedDeclaration);
-        SymbolReference<ResolvedClassDeclaration> adaptedSymbol = SymbolReference.adapt(symbol, ResolvedClassDeclaration.class);
+        SymbolReference<ResolvedClassDeclaration> adaptedSymbol =
+                SymbolReference.adapt(symbol, ResolvedClassDeclaration.class);
 
         assertNotNull(adaptedSymbol);
         assertNotNull(adaptedSymbol.getDeclaration());
@@ -71,7 +71,8 @@ class SymbolReferenceTest {
     void testAdaptSymbolForInvalidSubClass() {
         ResolvedClassDeclaration resolvedDeclaration = new ReflectionClassDeclaration(String.class, typeSolver);
         SymbolReference<ResolvedClassDeclaration> symbol = SymbolReference.solved(resolvedDeclaration);
-        SymbolReference<ResolvedParameterDeclaration> adaptedSymbol = SymbolReference.adapt(symbol, ResolvedParameterDeclaration.class);
+        SymbolReference<ResolvedParameterDeclaration> adaptedSymbol =
+                SymbolReference.adapt(symbol, ResolvedParameterDeclaration.class);
 
         assertNotNull(adaptedSymbol);
         assertNotNull(adaptedSymbol.getDeclaration());
@@ -107,5 +108,4 @@ class SymbolReferenceTest {
         assertFalse(symbol.isSolved());
         assertThrows(UnsolvedSymbolException.class, symbol::getCorrespondingDeclaration);
     }
-
 }

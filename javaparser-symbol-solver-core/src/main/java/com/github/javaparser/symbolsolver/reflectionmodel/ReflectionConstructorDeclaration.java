@@ -28,7 +28,6 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.List;
@@ -60,14 +59,18 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     @Override
     public ResolvedParameterDeclaration getParam(int i) {
         if (i < 0 || i >= getNumberOfParams()) {
-            throw new IllegalArgumentException(String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
+            throw new IllegalArgumentException(
+                    String.format("No param with index %d. Number of params: %d", i, getNumberOfParams()));
         }
         boolean variadic = false;
         if (constructor.isVarArgs()) {
             variadic = i == (constructor.getParameterCount() - 1);
         }
-        return new ReflectionParameterDeclaration(constructor.getParameterTypes()[i],
-                constructor.getGenericParameterTypes()[i], typeSolver, variadic,
+        return new ReflectionParameterDeclaration(
+                constructor.getParameterTypes()[i],
+                constructor.getGenericParameterTypes()[i],
+                typeSolver,
+                variadic,
                 constructor.getParameters()[i].getName());
     }
 
@@ -83,7 +86,9 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
 
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        return Arrays.stream(constructor.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
+        return Arrays.stream(constructor.getTypeParameters())
+                .map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -98,5 +103,4 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
         }
         return ReflectionFactory.typeUsageFor(this.constructor.getExceptionTypes()[index], typeSolver);
     }
-
 }

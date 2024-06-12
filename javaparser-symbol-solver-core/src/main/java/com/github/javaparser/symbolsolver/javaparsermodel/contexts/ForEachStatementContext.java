@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.stmt.BlockStmt;
@@ -31,11 +33,8 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-
 import java.util.Collections;
 import java.util.List;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 public class ForEachStatementContext extends AbstractJavaParserContext<ForEachStmt> {
 
@@ -48,18 +47,20 @@ public class ForEachStatementContext extends AbstractJavaParserContext<ForEachSt
         if (wrappedNode.getVariable().getVariables().size() != 1) {
             throw new IllegalStateException();
         }
-        VariableDeclarator variableDeclarator = wrappedNode.getVariable().getVariables().get(0);
+        VariableDeclarator variableDeclarator =
+                wrappedNode.getVariable().getVariables().get(0);
         if (variableDeclarator.getName().getId().equals(name)) {
             return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver));
         }
         if (demandParentNode(wrappedNode) instanceof BlockStmt) {
-                return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
-            }
+            return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
+        }
         return solveSymbolInParentContext(name);
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
     }

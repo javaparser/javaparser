@@ -22,7 +22,6 @@ package com.github.javaparser;
 
 import com.github.javaparser.ast.comments.CommentsCollection;
 import com.github.javaparser.utils.LineSeparator;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;

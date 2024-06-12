@@ -33,7 +33,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
 import com.github.javaparser.utils.TypeUtils;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -73,9 +72,7 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
 
     @Override
     public String toString() {
-        return "ReflectionMethodDeclaration{" +
-                "method=" + method +
-                '}';
+        return "ReflectionMethodDeclaration{" + "method=" + method + '}';
     }
 
     @Override
@@ -110,13 +107,19 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         if (method.isVarArgs()) {
             variadic = i == (method.getParameterCount() - 1);
         }
-        return new ReflectionParameterDeclaration(method.getParameterTypes()[i], method.getGenericParameterTypes()[i],
-                typeSolver, variadic, method.getParameters()[i].getName());
+        return new ReflectionParameterDeclaration(
+                method.getParameterTypes()[i],
+                method.getGenericParameterTypes()[i],
+                typeSolver,
+                variadic,
+                method.getParameters()[i].getName());
     }
 
     @Override
     public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
-        return Arrays.stream(method.getTypeParameters()).map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver)).collect(Collectors.toList());
+        return Arrays.stream(method.getTypeParameters())
+                .map((refTp) -> new ReflectionTypeParameter(refTp, false, typeSolver))
+                .collect(Collectors.toList());
     }
 
     public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {

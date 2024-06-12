@@ -22,7 +22,6 @@
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ import java.util.List;
  */
 public class InferenceVariableSubstitution {
 
-    private final static InferenceVariableSubstitution EMPTY = new InferenceVariableSubstitution();
+    private static final InferenceVariableSubstitution EMPTY = new InferenceVariableSubstitution();
 
     private List<InferenceVariable> inferenceVariables;
     private List<ResolvedType> types;
@@ -53,5 +52,4 @@ public class InferenceVariableSubstitution {
         newInstance.types.add(type);
         return newInstance;
     }
-
 }

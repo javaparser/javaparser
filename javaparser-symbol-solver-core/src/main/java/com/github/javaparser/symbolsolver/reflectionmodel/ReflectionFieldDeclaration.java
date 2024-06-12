@@ -26,7 +26,6 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -70,7 +69,7 @@ public class ReflectionFieldDeclaration implements ResolvedFieldDeclaration {
     public boolean isStatic() {
         return Modifier.isStatic(field.getModifiers());
     }
-    
+
     @Override
     public boolean isVolatile() {
         return Modifier.isVolatile(field.getModifiers());

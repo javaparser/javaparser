@@ -20,19 +20,19 @@
  */
 package com.github.javaparser.resolution.declarations;
 
+import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
  * This is a common interface for MethodDeclaration and ConstructorDeclaration.
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
+public interface ResolvedMethodLikeDeclaration
+        extends ResolvedDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
 
     /**
      * The package name of the declaring type.
@@ -103,7 +103,8 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
      */
     default ResolvedParameterDeclaration getLastParam() {
         if (getNumberOfParams() == 0) {
-            throw new UnsupportedOperationException("This method has no typeParametersValues, therefore it has no a last parameter");
+            throw new UnsupportedOperationException(
+                    "This method has no typeParametersValues, therefore it has no a last parameter");
         }
         return getParam(getNumberOfParams() - 1);
     }
@@ -112,11 +113,11 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
      * Returns the list of formal parameter types
      */
     default List<ResolvedType> formalParameterTypes() {
-    	if (getNumberOfParams() == 0) {
+        if (getNumberOfParams() == 0) {
             return Collections.emptyList();
         }
         List<ResolvedType> types = new ArrayList<>();
-        for (int i=0;i<getNumberOfParams();i++) {
+        for (int i = 0; i < getNumberOfParams(); i++) {
             types.add(getParam(i).getType());
         }
         return types;
@@ -161,10 +162,10 @@ public interface ResolvedMethodLikeDeclaration extends ResolvedDeclaration, Reso
         if (getNumberOfSpecifiedExceptions() == 0) {
             return Collections.emptyList();
         }
-		List<ResolvedType> exceptions = new ArrayList<>();
-		for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
-			exceptions.add(getSpecifiedException(i));
-		}
-		return exceptions;
+        List<ResolvedType> exceptions = new ArrayList<>();
+        for (int i = 0; i < getNumberOfSpecifiedExceptions(); i++) {
+            exceptions.add(getSpecifiedException(i));
+        }
+        return exceptions;
     }
 }

@@ -20,19 +20,20 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
-import java.util.Optional;
-import java.util.function.Consumer;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.visitor.CloneVisitor;
-import com.github.javaparser.metamodel.PatternExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-import com.github.javaparser.TokenRange;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.ast.Node;
+import com.github.javaparser.metamodel.PatternExprMetaModel;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * <h1>Pattern Matching in Java</h1>
@@ -70,8 +71,7 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
     private ReferenceType type;
 
     @AllFieldsConstructor
-    public PatternExpr(final ReferenceType type) {
-    }
+    public PatternExpr(final ReferenceType type) {}
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -125,8 +125,7 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
-            this.type.setParentNode(null);
+        if (this.type != null) this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;

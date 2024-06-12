@@ -21,7 +21,6 @@
 package com.github.javaparser.utils;
 
 import com.github.javaparser.ParserConfiguration;
-
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;

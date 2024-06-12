@@ -21,24 +21,23 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
 import com.github.javaparser.utils.CodeGenerationUtils;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolver> {
 
@@ -56,14 +55,16 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
     void containsLocationInStorage() {
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(
                 CodeGenerationUtils.mavenModuleRoot(JavaParserTypeSolver.class).resolve("src/main/java"),
-                new LeanParserConfiguration()
-        );
+                new LeanParserConfiguration());
 
-        SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver");
+        SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType(
+                "com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver");
 
         JavaParserClassDeclaration declaration = (JavaParserClassDeclaration) x.getCorrespondingDeclaration();
         Node wrappedNode = declaration.getWrappedNode();
-        assertEquals("JavaParserTypeSolver.java", wrappedNode.findCompilationUnit().get().getStorage().get().getFileName());
+        assertEquals(
+                "JavaParserTypeSolver.java",
+                wrappedNode.findCompilationUnit().get().getStorage().get().getFileName());
     }
 
     @Test
@@ -78,13 +79,13 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
         typeSolver.tryToSolveType("folder.Test");
     }
 
-
     @Test
     public void givenJavaParserTypeSolver_tryToSolveClass_expectSuccess() {
         Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(src);
 
-        SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit");
+        SymbolReference<ResolvedReferenceTypeDeclaration> x =
+                typeSolver.tryToSolveType("com.github.javaparser.ast.CompilationUnit");
 
         assertTrue(x.isSolved());
         assertNotNull(x.getCorrespondingDeclaration());
@@ -96,7 +97,8 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
         Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(src);
 
-        SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ParseResult");
+        SymbolReference<ResolvedReferenceTypeDeclaration> x =
+                typeSolver.tryToSolveType("com.github.javaparser.ParseResult");
 
         assertTrue(x.isSolved());
         assertNotNull(x.getCorrespondingDeclaration());
@@ -108,7 +110,8 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
         Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(src);
 
-        SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ast.Modifier");
+        SymbolReference<ResolvedReferenceTypeDeclaration> x =
+                typeSolver.tryToSolveType("com.github.javaparser.ast.Modifier");
 
         assertTrue(x.isSolved());
         assertNotNull(x.getCorrespondingDeclaration());
@@ -120,7 +123,8 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
         Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(src);
 
-        SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ast.nodeTypes.NodeWithDeclaration");
+        SymbolReference<ResolvedReferenceTypeDeclaration> x =
+                typeSolver.tryToSolveType("com.github.javaparser.ast.nodeTypes.NodeWithDeclaration");
 
         assertTrue(x.isSolved());
         assertNotNull(x.getCorrespondingDeclaration());
@@ -132,13 +136,14 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
         Path src = adaptPath("src/test/test_sourcecode/javaparser_new_src/javaparser-core");
         JavaParserTypeSolver typeSolver = new JavaParserTypeSolver(src);
 
-        SymbolReference<ResolvedReferenceTypeDeclaration> x = typeSolver.tryToSolveType("com.github.javaparser.ast.nodeTypes.NodeWithName");
+        SymbolReference<ResolvedReferenceTypeDeclaration> x =
+                typeSolver.tryToSolveType("com.github.javaparser.ast.nodeTypes.NodeWithName");
 
         assertTrue(x.isSolved());
         assertNotNull(x.getCorrespondingDeclaration());
         assertTrue(x.getCorrespondingDeclaration().isInterface());
     }
-    
+
     @Test
     public void givenJavaParserTypeSolver_tryToSolveAnUnexpectedSourceFileName_expectSuccess() {
         Path src = adaptPath("src/test/test_sourcecode");
@@ -175,17 +180,14 @@ class JavaParserTypeSolverTest extends AbstractTypeSolverTest<JavaParserTypeSolv
         JavaParserTypeSolver javaParserTypeSolver = JAVA_PARSER_PROVIDER.get();
 
         CompletableFuture<Void> tasks = CompletableFuture.allOf(
-                CompletableFuture.runAsync(new StressRunnable("com.github.javaparser.ast.body.Object",
-                        javaParserTypeSolver)),
-                CompletableFuture.runAsync(new StressRunnable("com.github.javaparser.ast.comments.Object",
-                        javaParserTypeSolver)),
-                CompletableFuture.runAsync(new StressRunnable("com.github.javaparser.ast.expr.Object",
-                        javaParserTypeSolver)),
-                CompletableFuture.runAsync(new StressRunnable("com.github.javaparser.ast.stmt.Object",
-                        javaParserTypeSolver))
-        );
-        assertDoesNotThrow(tasks::join,
-                "JavaParserTypeSolve should work properly when called from multiple threads.");
+                CompletableFuture.runAsync(
+                        new StressRunnable("com.github.javaparser.ast.body.Object", javaParserTypeSolver)),
+                CompletableFuture.runAsync(
+                        new StressRunnable("com.github.javaparser.ast.comments.Object", javaParserTypeSolver)),
+                CompletableFuture.runAsync(
+                        new StressRunnable("com.github.javaparser.ast.expr.Object", javaParserTypeSolver)),
+                CompletableFuture.runAsync(
+                        new StressRunnable("com.github.javaparser.ast.stmt.Object", javaParserTypeSolver)));
+        assertDoesNotThrow(tasks::join, "JavaParserTypeSolve should work properly when called from multiple threads.");
     }
-
 }

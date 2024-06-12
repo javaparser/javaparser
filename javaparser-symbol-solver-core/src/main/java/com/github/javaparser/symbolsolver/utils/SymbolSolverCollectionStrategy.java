@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.utils;
 
+import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -30,13 +33,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import com.github.javaparser.utils.CollectionStrategy;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.ProjectRoot;
-
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-
-import static java.nio.file.FileVisitResult.CONTINUE;
-import static java.nio.file.FileVisitResult.SKIP_SUBTREE;
 
 /**
  * {@link CollectionStrategy} which collects all SourceRoots and initialises the TypeSolver and
@@ -79,21 +78,27 @@ public class SymbolSolverCollectionStrategy implements CollectionStrategy {
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     if (javaMatcher.matches(file)) {
                         String parent = file.getParent().toString();
-                        // This is not a very elegant or powerful solution but it works and it allows to unblock users :-(
+                        // This is not a very elegant or powerful solution but it works and it allows to unblock users
+                        // :-(
                         // We are trying to verify the current_root directory for each package.
-                        // Sometime (for exemple https://github.com/apache/logging-log4j1) we can have java packages directly under a base directory
+                        // Sometime (for exemple https://github.com/apache/logging-log4j1) we can have java packages
+                        // directly under a base directory
                         // and source directory under the same base package.
                         // for exemple:
-                        // logging-log4j1\examples\customLevel\XLevel.java <- examples is a package (the root source directory is logging-log4j1)
-                        // logging-log4j1\src\main\java\org\apache\log4j\Appender.java <- org is a package (the root source directory is logging-log4j1\src\main\java)
+                        // logging-log4j1\examples\customLevel\XLevel.java <- examples is a package (the root source
+                        // directory is logging-log4j1)
+                        // logging-log4j1\src\main\java\org\apache\log4j\Appender.java <- org is a package (the root
+                        // source directory is logging-log4j1\src\main\java)
                         if (!parent.equals(previousSourceDirectory)) {
                             Log.info("Trying to compute the source root from %s", () -> file.toString());
                             previousSourceDirectory = parent;
                             currentProjectDir = getRoot(file).orElse(null);
                         }
-                        if (current_root == null || (currentProjectDir != null && !currentProjectDir.equals(current_root))) {
+                        if (current_root == null
+                                || (currentProjectDir != null && !currentProjectDir.equals(current_root))) {
                             current_root = currentProjectDir;
-                            if (current_root != null) Log.info("New current source root is %s", () -> current_root.toString());
+                            if (current_root != null)
+                                Log.info("New current source root is %s", () -> current_root.toString());
                         }
                     } else if (jarMatcher.matches(file)) {
                         Log.info("Jar file is found %s", () -> file.toString());

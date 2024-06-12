@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static com.github.javaparser.ast.expr.Expression.EXCLUDE_ENCLOSED_EXPR;
+import static com.github.javaparser.ast.expr.Expression.IS_NOT_ENCLOSED_EXPR;
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -45,12 +49,7 @@ import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-
 import java.util.*;
-
-import static com.github.javaparser.ast.expr.Expression.EXCLUDE_ENCLOSED_EXPR;
-import static com.github.javaparser.ast.expr.Expression.IS_NOT_ENCLOSED_EXPR;
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -72,12 +71,14 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                     Node parentNode = demandParentNode(wrappedNode, IS_NOT_ENCLOSED_EXPR);
                     if (parentNode instanceof MethodCallExpr) {
                         MethodCallExpr methodCallExpr = (MethodCallExpr) parentNode;
-                        MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
+                        MethodUsage methodUsage =
+                                JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
                         int i = methodCallExpr.getArgumentPosition(wrappedNode, EXCLUDE_ENCLOSED_EXPR);
                         ResolvedType lambdaType = methodUsage.getParamTypes().get(i);
 
                         // Get the functional method in order for us to resolve it's type arguments properly
-                        Optional<MethodUsage> functionalMethodOpt = FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
+                        Optional<MethodUsage> functionalMethodOpt =
+                                FunctionalInterfaceLogic.getFunctionalMethod(lambdaType);
                         if (functionalMethodOpt.isPresent()) {
                             MethodUsage functionalMethod = functionalMethodOpt.get();
                             InferenceContext inferenceContext = new InferenceContext(typeSolver);
@@ -85,29 +86,37 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                             // Resolve each type variable of the lambda, and use this later to infer the type of each
                             // implicit parameter
                             lambdaType.asReferenceType().getTypeDeclaration().ifPresent(typeDeclaration -> {
-                                inferenceContext.addPair(
-                                        lambdaType,
-                                        new ReferenceTypeImpl(typeDeclaration)
-                                );
+                                inferenceContext.addPair(lambdaType, new ReferenceTypeImpl(typeDeclaration));
                             });
 
                             // Find the position of this lambda argument
                             boolean found = false;
                             int lambdaParamIndex;
-                            for (lambdaParamIndex = 0; lambdaParamIndex < wrappedNode.getParameters().size(); lambdaParamIndex++){
-                                if (wrappedNode.getParameter(lambdaParamIndex).getName().getIdentifier().equals(name)){
+                            for (lambdaParamIndex = 0;
+                                    lambdaParamIndex
+                                            < wrappedNode.getParameters().size();
+                                    lambdaParamIndex++) {
+                                if (wrappedNode
+                                        .getParameter(lambdaParamIndex)
+                                        .getName()
+                                        .getIdentifier()
+                                        .equals(name)) {
                                     found = true;
                                     break;
                                 }
                             }
-                            if (!found) { return Optional.empty(); }
+                            if (!found) {
+                                return Optional.empty();
+                            }
 
                             // Now resolve the argument type using the inference context
-                            ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(functionalMethod.getParamType(lambdaParamIndex)));
+                            ResolvedType argType = inferenceContext.resolve(
+                                    inferenceContext.addSingle(functionalMethod.getParamType(lambdaParamIndex)));
 
                             ResolvedLambdaConstraintType conType;
-                            if (argType.isWildcard()){
-                                conType = ResolvedLambdaConstraintType.bound(argType.asWildcard().getBoundedType());
+                            if (argType.isWildcard()) {
+                                conType = ResolvedLambdaConstraintType.bound(
+                                        argType.asWildcard().getBoundedType());
                             } else {
                                 conType = ResolvedLambdaConstraintType.bound(argType);
                             }
@@ -120,35 +129,47 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
                         VariableDeclarator variableDeclarator = (VariableDeclarator) parentNode;
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(variableDeclarator.getType());
                         return solveLambdaParameter(t, index)
-								.map(resolvedLamdbaTypeParametre -> Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
-								.orElseThrow(() -> new UnsupportedOperationException("functional method is not present in variable declarator"));
+                                .map(resolvedLamdbaTypeParametre ->
+                                        Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
+                                .orElseThrow(() -> new UnsupportedOperationException(
+                                        "functional method is not present in variable declarator"));
                     }
                     if (parentNode instanceof ReturnStmt) {
                         ReturnStmt returnStmt = (ReturnStmt) parentNode;
                         Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
                         if (optDeclaration.isPresent()) {
-                            ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(optDeclaration.get().asMethodDeclaration().getType());
+                            ResolvedType t = JavaParserFacade.get(typeSolver)
+                                    .convertToUsage(optDeclaration
+                                            .get()
+                                            .asMethodDeclaration()
+                                            .getType());
                             return solveLambdaParameter(t, index)
-    								.map(resolvedLamdbaTypeParametre -> Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
-    								.orElseThrow(() -> new UnsupportedOperationException("functional method is not present in return expression"));
+                                    .map(resolvedLamdbaTypeParametre ->
+                                            Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
+                                    .orElseThrow(() -> new UnsupportedOperationException(
+                                            "functional method is not present in return expression"));
                         }
                     }
                     if (parentNode instanceof CastExpr) {
                         CastExpr castExpr = (CastExpr) parentNode;
                         ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(castExpr.getType());
                         return solveLambdaParameter(t, index)
-								.map(resolvedLamdbaTypeParametre -> Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
-								.orElseThrow(() -> new UnsupportedOperationException("functional method is not present in cast expression"));
+                                .map(resolvedLamdbaTypeParametre ->
+                                        Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
+                                .orElseThrow(() -> new UnsupportedOperationException(
+                                        "functional method is not present in cast expression"));
                     }
-					if (parentNode instanceof AssignExpr) {
-						AssignExpr expr = (AssignExpr) parentNode;
-						ResolvedType t = expr.calculateResolvedType();
-						return solveLambdaParameter(t, index)
-								.map(resolvedLamdbaTypeParametre -> Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
-								.orElseThrow(() -> new UnsupportedOperationException(
-								"Unknown node type: " + parentNode.getClass().getSimpleName()));
-					}
-                    throw new UnsupportedOperationException("Unknown node type: " + parentNode.getClass().getSimpleName());
+                    if (parentNode instanceof AssignExpr) {
+                        AssignExpr expr = (AssignExpr) parentNode;
+                        ResolvedType t = expr.calculateResolvedType();
+                        return solveLambdaParameter(t, index)
+                                .map(resolvedLamdbaTypeParametre ->
+                                        Optional.of(new Value(resolvedLamdbaTypeParametre, name)))
+                                .orElseThrow(() -> new UnsupportedOperationException("Unknown node type: "
+                                        + parentNode.getClass().getSimpleName()));
+                    }
+                    throw new UnsupportedOperationException(
+                            "Unknown node type: " + parentNode.getClass().getSimpleName());
                 }
             }
         }
@@ -161,27 +182,28 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
      * Infers the type of a parameter of a lambda expression
      */
     private Optional<ResolvedType> solveLambdaParameter(ResolvedType t, int parameterIndex) {
-    	ResolvedType lambdaType = null;
-    	Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
-		if (functionalMethod.isPresent()) {
-			lambdaType = functionalMethod.get().getParamType(parameterIndex);
+        ResolvedType lambdaType = null;
+        Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
+        if (functionalMethod.isPresent()) {
+            lambdaType = functionalMethod.get().getParamType(parameterIndex);
 
-			// Replace parameter from declarator
-			Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
-			if (lambdaType.isReferenceType()) {
-				for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType
-						.asReferenceType().getTypeParametersMap()) {
-					if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
-						ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
-						lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
-					}
-				}
-			} else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
-				lambdaType = t.asReferenceType().typeParametersMap()
-						.getValue(lambdaType.asTypeParameter());
-			}
-		}
-		return Optional.ofNullable(lambdaType);
+            // Replace parameter from declarator
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
+            if (lambdaType.isReferenceType()) {
+                for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry :
+                        lambdaType.asReferenceType().getTypeParametersMap()) {
+                    if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
+                        ResolvedType ot =
+                                t.asReferenceType().typeParametersMap().getValue(entry.a);
+                        lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
+                    }
+                }
+            } else if (lambdaType.isTypeVariable()
+                    && lambdaType.asTypeParameter().declaredOnType()) {
+                lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
+            }
+        }
+        return Optional.ofNullable(lambdaType);
     }
 
     @Override
@@ -199,14 +221,16 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
     }
 
     @Override
     public List<Parameter> parametersExposedToChild(Node child) {
-        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the direct child?
+        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the
+        // direct child?
         if (child == wrappedNode.getBody()) {
             return wrappedNode.getParameters();
         }
@@ -218,11 +242,12 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
     ///
 
     @Override
-	protected final Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name) {
+    protected final Optional<Value> solveWithAsValue(SymbolDeclarator symbolDeclarator, String name) {
         for (ResolvedValueDeclaration decl : symbolDeclarator.getSymbolDeclarations()) {
             if (decl.getName().equals(name)) {
 
-                throw new UnsupportedOperationException("Symbol with name " + name + " already exists in symbol declarator");
+                throw new UnsupportedOperationException(
+                        "Symbol with name " + name + " already exists in symbol declarator");
             }
         }
         return Optional.empty();

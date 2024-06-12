@@ -25,7 +25,6 @@ import com.github.javaparser.printer.configuration.*;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.utils.Utils;
-
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -60,7 +59,15 @@ public class SourcePrinter {
     }
 
     SourcePrinter(final PrinterConfiguration configuration) {
-        this(configuration.get(new DefaultConfigurationOption(ConfigOption.INDENTATION)).get().asValue(), configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString());
+        this(
+                configuration
+                        .get(new DefaultConfigurationOption(ConfigOption.INDENTATION))
+                        .get()
+                        .asValue(),
+                configuration
+                        .get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER))
+                        .get()
+                        .asString());
     }
 
     SourcePrinter(Indentation indentation, String eol) {
@@ -75,7 +82,7 @@ public class SourcePrinter {
      */
     public SourcePrinter indent() {
         String currentIndent = indents.peek();
-        switch(indentation.getType()) {
+        switch (indentation.getType()) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 indents.push(currentIndent + indentation.getIndent());
@@ -103,7 +110,7 @@ public class SourcePrinter {
             throw new IllegalStateException("Attempt to indent less than the previous indent.");
         }
         StringBuilder newIndent = new StringBuilder(lastPrintedIndent);
-        switch(indentation.getType()) {
+        switch (indentation.getType()) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 while (newIndent.length() < column) {
@@ -126,9 +133,15 @@ public class SourcePrinter {
                     fullTab.append(IndentType.SPACES.getCar());
                 }
                 String fullTabString = fullTab.toString();
-                if ((newIndent.length() >= currentIndentType.getWidth()) && newIndent.substring(newIndent.length() - currentIndentType.getWidth()).equals(fullTabString)) {
+                if ((newIndent.length() >= currentIndentType.getWidth())
+                        && newIndent
+                                .substring(newIndent.length() - currentIndentType.getWidth())
+                                .equals(fullTabString)) {
                     int i = newIndent.indexOf(fullTabString);
-                    newIndent.replace(i, i + currentIndentType.getWidth(), currentIndentType.getCar().toString());
+                    newIndent.replace(
+                            i,
+                            i + currentIndentType.getWidth(),
+                            currentIndentType.getCar().toString());
                 }
                 break;
             default:

@@ -20,6 +20,10 @@
 
 package com.github.javaparser.ast.visitor;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -30,20 +34,16 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-
 class GenericListVisitorAdapterTest {
 
-    private final GenericListVisitorAdapter<Object, Object> visitor = new GenericListVisitorAdapter<Object, Object>() {};
+    private final GenericListVisitorAdapter<Object, Object> visitor =
+            new GenericListVisitorAdapter<Object, Object>() {};
 
     @Test
     void visit_GivenAnnotationDeclaration() {
@@ -2545,10 +2545,10 @@ class GenericListVisitorAdapterTest {
     }
 
     @Test
-    void visit_CompactConstructorDeclaration () {
+    void visit_CompactConstructorDeclaration() {
         // Given
         Object argument = mock(Object.class);
-        CompactConstructorDeclaration  node = mock(CompactConstructorDeclaration .class);
+        CompactConstructorDeclaration node = mock(CompactConstructorDeclaration.class);
 
         // When
         Mockito.when(node.getBody()).thenReturn(mock(BlockStmt.class));
@@ -2576,5 +2576,4 @@ class GenericListVisitorAdapterTest {
         order.verify(node, times(2)).getComment();
         order.verifyNoMoreInteractions();
     }
-
 }

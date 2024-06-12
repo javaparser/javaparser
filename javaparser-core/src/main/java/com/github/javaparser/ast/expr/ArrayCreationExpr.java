@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.StaticJavaParser.parseType;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -33,12 +36,8 @@ import com.github.javaparser.metamodel.ArrayCreationExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.StaticJavaParser.parseType;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * {@code new int[5][4][][]} or {@code new int[][]{{1},{2,3}}}.
@@ -75,7 +74,11 @@ public class ArrayCreationExpr extends Expression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ArrayCreationExpr(TokenRange tokenRange, Type elementType, NodeList<ArrayCreationLevel> levels, ArrayInitializerExpr initializer) {
+    public ArrayCreationExpr(
+            TokenRange tokenRange,
+            Type elementType,
+            NodeList<ArrayCreationLevel> levels,
+            ArrayInitializerExpr initializer) {
         super(tokenRange);
         setElementType(elementType);
         setLevels(levels);
@@ -117,8 +120,7 @@ public class ArrayCreationExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.INITIALIZER, this.initializer, initializer);
-        if (this.initializer != null)
-            this.initializer.setParentNode(null);
+        if (this.initializer != null) this.initializer.setParentNode(null);
         this.initializer = initializer;
         setAsParentNodeOf(initializer);
         return this;
@@ -131,8 +133,7 @@ public class ArrayCreationExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ELEMENT_TYPE, this.elementType, elementType);
-        if (this.elementType != null)
-            this.elementType.setParentNode(null);
+        if (this.elementType != null) this.elementType.setParentNode(null);
         this.elementType = elementType;
         setAsParentNodeOf(elementType);
         return this;
@@ -150,8 +151,7 @@ public class ArrayCreationExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LEVELS, this.levels, levels);
-        if (this.levels != null)
-            this.levels.setParentNode(null);
+        if (this.levels != null) this.levels.setParentNode(null);
         this.levels = levels;
         setAsParentNodeOf(levels);
         return this;

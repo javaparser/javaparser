@@ -20,18 +20,17 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 public class Issue3173Test extends AbstractResolutionTest {
 
@@ -41,12 +40,7 @@ public class Issue3173Test extends AbstractResolutionTest {
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
 
-        String s =
-                "public class Program {\n" +
-                        "\n" +
-                        "    public @interface AnnotationClass {\n" +
-                        "    }\n" +
-                        "}";
+        String s = "public class Program {\n" + "\n" + "    public @interface AnnotationClass {\n" + "    }\n" + "}";
 
         CompilationUnit cu = StaticJavaParser.parse(s);
         List<AnnotationDeclaration> annDecls = cu.findAll(AnnotationDeclaration.class);

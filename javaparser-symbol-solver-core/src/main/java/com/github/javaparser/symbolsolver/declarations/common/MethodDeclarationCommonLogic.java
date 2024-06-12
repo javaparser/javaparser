@@ -30,7 +30,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.logic.InferenceContext;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +51,8 @@ public class MethodDeclarationCommonLogic {
         ResolvedType returnType = replaceTypeParams(methodDeclaration.getReturnType(), context);
         List<ResolvedType> params = new ArrayList<>();
         for (int i = 0; i < methodDeclaration.getNumberOfParams(); i++) {
-            ResolvedType replaced = replaceTypeParams(methodDeclaration.getParam(i).getType(), context);
+            ResolvedType replaced =
+                    replaceTypeParams(methodDeclaration.getParam(i).getType(), context);
             params.add(replaced);
         }
 
@@ -102,7 +102,10 @@ public class MethodDeclarationCommonLogic {
     }
 
     protected Optional<ResolvedType> typeParamByName(String name, Context context) {
-        return methodDeclaration.getTypeParameters().stream().filter(tp -> tp.getName().equals(name)).map(tp -> toType(tp)).findFirst();
+        return methodDeclaration.getTypeParameters().stream()
+                .filter(tp -> tp.getName().equals(name))
+                .map(tp -> toType(tp))
+                .findFirst();
     }
 
     protected ResolvedType toType(ResolvedTypeParameterDeclaration typeParameterDeclaration) {

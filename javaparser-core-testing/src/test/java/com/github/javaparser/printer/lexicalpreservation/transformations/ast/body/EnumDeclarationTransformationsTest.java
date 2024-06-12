@@ -21,17 +21,16 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
 import com.github.javaparser.utils.LineSeparator;
-
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
 
 /**
  * Transforming EnumDeclaration and verifying the LexicalPreservation works as expected.
@@ -79,14 +78,11 @@ class EnumDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
 
     @Test
     void addingConstants() {
-        EnumDeclaration ed = consider("enum A {" + LineSeparator.SYSTEM +
-                " E1" + LineSeparator.SYSTEM +
-                "}");
+        EnumDeclaration ed = consider("enum A {" + LineSeparator.SYSTEM + " E1" + LineSeparator.SYSTEM + "}");
         ed.getEntries().addLast(new EnumConstantDeclaration("E2"));
-        assertTransformedToString("enum A {" + LineSeparator.SYSTEM +
-                " E1," + LineSeparator.SYSTEM +
-                " E2" + LineSeparator.SYSTEM +
-                "}", ed);
+        assertTransformedToString(
+                "enum A {" + LineSeparator.SYSTEM + " E1," + LineSeparator.SYSTEM + " E2" + LineSeparator.SYSTEM + "}",
+                ed);
     }
 
     // members

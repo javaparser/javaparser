@@ -25,7 +25,6 @@ import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
-
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -48,20 +47,25 @@ public interface CollectionStrategy {
             final ParseResult<CompilationUnit> parseResult = javaParser.parse(file);
             if (parseResult.isSuccessful()) {
                 if (parseResult.getResult().isPresent()) {
-                    final Optional<CompilationUnit.Storage> storage = parseResult.getResult().flatMap(CompilationUnit::getStorage);
+                    final Optional<CompilationUnit.Storage> storage =
+                            parseResult.getResult().flatMap(CompilationUnit::getStorage);
                     if (storage.isPresent()) {
                         if ("module-info.java".equals(storage.get().getFileName())) {
-                            // module-info.java is useless for finding the source root, since it can be placed in any directory.
+                            // module-info.java is useless for finding the source root, since it can be placed in any
+                            // directory.
                             return Optional.empty();
                         }
                         return storage.map(CompilationUnit.Storage::getSourceRoot);
                     }
-                    Log.info("Storage information not present -- an issue with providing a string rather than file reference?");
+                    Log.info(
+                            "Storage information not present -- an issue with providing a string rather than file reference?");
                 }
                 Log.info("Parse result not present");
             }
             Log.info("Parsing was not successful.");
-            Log.info("There were (%d) problems parsing file: %s", () -> parseResult.getProblems().size(), parseResult::getProblems);
+            Log.info(
+                    "There were (%d) problems parsing file: %s",
+                    () -> parseResult.getProblems().size(), parseResult::getProblems);
         } catch (ParseProblemException e) {
             Log.info("Problem parsing file %s : %s", () -> file, () -> e.getLocalizedMessage());
         } catch (RuntimeException e) {

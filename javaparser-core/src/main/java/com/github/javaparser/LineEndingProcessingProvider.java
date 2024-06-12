@@ -21,7 +21,6 @@
 package com.github.javaparser;
 
 import com.github.javaparser.utils.LineSeparator;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,7 +81,10 @@ public class LineEndingProcessingProvider implements Provider {
     }
 
     public LineSeparator getDetectedLineEnding() {
-        return LineSeparator.getLineEnding(eolCounts.getOrDefault(LineSeparator.CR, 0), eolCounts.getOrDefault(LineSeparator.LF, 0), eolCounts.getOrDefault(LineSeparator.CRLF, 0));
+        return LineSeparator.getLineEnding(
+                eolCounts.getOrDefault(LineSeparator.CR, 0),
+                eolCounts.getOrDefault(LineSeparator.LF, 0),
+                eolCounts.getOrDefault(LineSeparator.CRLF, 0));
     }
 
     private boolean isBufferEmpty() {
@@ -121,24 +123,26 @@ public class LineEndingProcessingProvider implements Provider {
             String str = String.valueOf((char) ch);
             Optional<LineSeparator> lookup = LineSeparator.lookup(str);
             if (lookup.isPresent()) {
-                    LineSeparator lineSeparator = lookup.get();
-                    // Track the number of times this character is found..
-                    eolCounts.putIfAbsent(lineSeparator, 0);
-                    eolCounts.put(lineSeparator, eolCounts.get(lineSeparator) + 1);
-                    // Handle line separators of length two (specifically CRLF)
-                    // TODO: Make this more generic than just CRLF (e.g. track the previous char rather than the previous line separator
-                    if (lineSeparator == LineSeparator.LF) {
-                        if (previousLineSeparator == LineSeparator.CR) {
-                            eolCounts.putIfAbsent(LineSeparator.CRLF, 0);
-                            eolCounts.put(LineSeparator.CRLF, eolCounts.get(LineSeparator.CRLF) + 1);
-                        }
+                LineSeparator lineSeparator = lookup.get();
+                // Track the number of times this character is found..
+                eolCounts.putIfAbsent(lineSeparator, 0);
+                eolCounts.put(lineSeparator, eolCounts.get(lineSeparator) + 1);
+                // Handle line separators of length two (specifically CRLF)
+                // TODO: Make this more generic than just CRLF (e.g. track the previous char rather than the previous
+                // line separator
+                if (lineSeparator == LineSeparator.LF) {
+                    if (previousLineSeparator == LineSeparator.CR) {
+                        eolCounts.putIfAbsent(LineSeparator.CRLF, 0);
+                        eolCounts.put(LineSeparator.CRLF, eolCounts.get(LineSeparator.CRLF) + 1);
                     }
-                    // If "this" (current) char <strong>is</strong> a line separator, set the next loop's "previous" to this
-                    previousLineSeparator = lineSeparator;
-                } else {
-                    // If "this" (current) char <strong>is not</strong> a line separator, set the next loop's "previous" to null
-                    previousLineSeparator = null;
                 }
+                // If "this" (current) char <strong>is</strong> a line separator, set the next loop's "previous" to this
+                previousLineSeparator = lineSeparator;
+            } else {
+                // If "this" (current) char <strong>is not</strong> a line separator, set the next loop's "previous" to
+                // null
+                previousLineSeparator = null;
+            }
             buffer[pos++] = (char) ch;
         }
         return pos - offset;

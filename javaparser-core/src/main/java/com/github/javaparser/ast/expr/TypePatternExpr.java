@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
@@ -31,10 +33,9 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import com.github.javaparser.metamodel.TypePatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
-import com.github.javaparser.metamodel.TypePatternExprMetaModel;
 
 /**
  * <h1>The instanceof statement</h1>
@@ -70,7 +71,8 @@ import com.github.javaparser.metamodel.TypePatternExprMetaModel;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<TypePatternExpr>, NodeWithFinalModifier<TypePatternExpr> {
+public class TypePatternExpr extends PatternExpr
+        implements NodeWithSimpleName<TypePatternExpr>, NodeWithFinalModifier<TypePatternExpr> {
 
     private NodeList<Modifier> modifiers;
 
@@ -120,8 +122,7 @@ public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<T
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -170,8 +171,7 @@ public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<T
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
+        if (this.modifiers != null) this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;

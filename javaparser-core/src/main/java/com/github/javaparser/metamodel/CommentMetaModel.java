@@ -23,7 +23,6 @@ package com.github.javaparser.metamodel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
-
 import java.util.Optional;
 
 /**
@@ -44,7 +43,13 @@ public class CommentMetaModel extends NodeMetaModel {
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    protected CommentMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+    protected CommentMetaModel(
+            Optional<BaseNodeMetaModel> superNodeMetaModel,
+            Class<? extends Node> type,
+            String name,
+            String packageName,
+            boolean isAbstract,
+            boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 

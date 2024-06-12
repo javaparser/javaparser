@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
 import java.util.Optional;
 
 /**
@@ -39,7 +38,13 @@ public class ClassOrInterfaceTypeMetaModel extends ReferenceTypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ClassOrInterfaceTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ClassOrInterfaceType.class, "ClassOrInterfaceType", "com.github.javaparser.ast.type", false, false);
+        super(
+                superBaseNodeMetaModel,
+                ClassOrInterfaceType.class,
+                "ClassOrInterfaceType",
+                "com.github.javaparser.ast.type",
+                false,
+                false);
     }
 
     public PropertyMetaModel namePropertyMetaModel;

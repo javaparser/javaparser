@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -41,15 +44,11 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 class ConstructorsResolutionTest extends AbstractResolutionTest {
 
@@ -63,8 +62,13 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ConstructorCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testNormalConstructor");
-        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
-                .asExpressionStmt().getExpression().asObjectCreationExpr();
+        ObjectCreationExpr objectCreationExpr = method.getBody()
+                .get()
+                .getStatements()
+                .get(0)
+                .asExpressionStmt()
+                .getExpression()
+                .asObjectCreationExpr();
 
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
@@ -82,8 +86,13 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ConstructorCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerClassConstructor");
-        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(1)
-                .asExpressionStmt().getExpression().asObjectCreationExpr();
+        ObjectCreationExpr objectCreationExpr = method.getBody()
+                .get()
+                .getStatements()
+                .get(1)
+                .asExpressionStmt()
+                .getExpression()
+                .asObjectCreationExpr();
 
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
@@ -101,8 +110,13 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ConstructorCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerClassConstructorWithNewScope");
-        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
-                .asExpressionStmt().getExpression().asObjectCreationExpr();
+        ObjectCreationExpr objectCreationExpr = method.getBody()
+                .get()
+                .getStatements()
+                .get(0)
+                .asExpressionStmt()
+                .getExpression()
+                .asObjectCreationExpr();
 
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
@@ -120,8 +134,13 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ConstructorCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testInnerInnerClassConstructor");
-        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
-                .asExpressionStmt().getExpression().asObjectCreationExpr();
+        ObjectCreationExpr objectCreationExpr = method.getBody()
+                .get()
+                .getStatements()
+                .get(0)
+                .asExpressionStmt()
+                .getExpression()
+                .asObjectCreationExpr();
 
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
@@ -139,8 +158,13 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ConstructorCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassEmptyConstructor");
-        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
-                .asExpressionStmt().getExpression().asObjectCreationExpr();
+        ObjectCreationExpr objectCreationExpr = method.getBody()
+                .get()
+                .getStatements()
+                .get(0)
+                .asExpressionStmt()
+                .getExpression()
+                .asObjectCreationExpr();
 
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
@@ -154,8 +178,13 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ConstructorCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassEmptyConstructorInterface");
-        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
-                .asExpressionStmt().getExpression().asObjectCreationExpr();
+        ObjectCreationExpr objectCreationExpr = method.getBody()
+                .get()
+                .getStatements()
+                .get(0)
+                .asExpressionStmt()
+                .getExpression()
+                .asObjectCreationExpr();
 
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
@@ -169,44 +198,53 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ConstructorCalls");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ConstructorCalls");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testAnonymousInnerClassStringConstructor");
-        ObjectCreationExpr objectCreationExpr = method.getBody().get().getStatements().get(0)
-                .asExpressionStmt().getExpression().asObjectCreationExpr();
+        ObjectCreationExpr objectCreationExpr = method.getBody()
+                .get()
+                .getStatements()
+                .get(0)
+                .asExpressionStmt()
+                .getExpression()
+                .asObjectCreationExpr();
 
         SymbolReference<ResolvedConstructorDeclaration> ref =
                 JavaParserFacade.get(new ReflectionTypeSolver()).solve(objectCreationExpr);
 
         assertTrue(ref.isSolved());
         assertEquals(1, ref.getCorrespondingDeclaration().getNumberOfParams());
-        assertEquals("java.lang.String", ref.getCorrespondingDeclaration().getParam(0).getType().describe());
+        assertEquals(
+                "java.lang.String",
+                ref.getCorrespondingDeclaration().getParam(0).getType().describe());
     }
 
     @Test
     public void testIssue1436() {
-        CompilationUnit cu = StaticJavaParser.parse("interface TypeIfc {}" +
-                "class TypeA {" +
-                "  void doSomething(TypeIfc typeIfc) {" +
-                "  }" +
-                "}" +
-
-                "class B {" +
-                "  void x() {" +
-                "    TypeA obj = new TypeA();" +
-                "    obj.doSomething(new TypeIfc() {" +
-                "    });" +
-                "  }" +
-                "}");
+        CompilationUnit cu = StaticJavaParser.parse("interface TypeIfc {}" + "class TypeA {"
+                + "  void doSomething(TypeIfc typeIfc) {"
+                + "  }"
+                + "}"
+                + "class B {"
+                + "  void x() {"
+                + "    TypeA obj = new TypeA();"
+                + "    obj.doSomething(new TypeIfc() {"
+                + "    });"
+                + "  }"
+                + "}");
 
         List<ObjectCreationExpr> oceList = cu.findAll(ObjectCreationExpr.class);
         assertEquals(2, oceList.size());
 
-        SymbolReference<ResolvedConstructorDeclaration> ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(oceList.get(0)); // new TypeA();
+        SymbolReference<ResolvedConstructorDeclaration> ref =
+                JavaParserFacade.get(new ReflectionTypeSolver()).solve(oceList.get(0)); // new TypeA();
         assertTrue(ref.isSolved());
         assertEquals("TypeA", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
 
         ref = JavaParserFacade.get(new ReflectionTypeSolver()).solve(oceList.get(1)); // new TypeIfc() {}
         assertTrue(ref.isSolved());
-        //assertEquals("B$1", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
-        assertTrue(ref.getCorrespondingDeclaration().declaringType().getQualifiedName().startsWith("B.Anonymous-"));
+        // assertEquals("B$1", ref.getCorrespondingDeclaration().declaringType().getQualifiedName());
+        assertTrue(ref.getCorrespondingDeclaration()
+                .declaringType()
+                .getQualifiedName()
+                .startsWith("B.Anonymous-"));
     }
 
     @Test
@@ -216,7 +254,8 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
 
         CompilationUnit cu = parseSample("ConstructorCallsEnum");
         EnumDeclaration enumDeclaration = Navigator.demandEnum(cu, "ConstructorCallsEnum");
-        ConstructorDeclaration constructor = (ConstructorDeclaration) enumDeclaration.getChildNodes().get(3);
+        ConstructorDeclaration constructor =
+                (ConstructorDeclaration) enumDeclaration.getChildNodes().get(3);
 
         ResolvedConstructorDeclaration resolvedConstructor = constructor.resolve();
 
@@ -233,8 +272,8 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ReflectionTypeSolverConstructorResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ReflectionTypeSolverConstructionResolution");
         ConstructorDeclaration constructorDeclaration = Navigator.demandConstructor(clazz, 0);
-        ExplicitConstructorInvocationStmt stmt =
-                (ExplicitConstructorInvocationStmt) constructorDeclaration.getBody().getStatement(0);
+        ExplicitConstructorInvocationStmt stmt = (ExplicitConstructorInvocationStmt)
+                constructorDeclaration.getBody().getStatement(0);
 
         ResolvedConstructorDeclaration cd = stmt.resolve();
 
@@ -252,8 +291,8 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("JarTypeSolverConstructorResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "JarTypeSolverConstructionResolution");
         ConstructorDeclaration constructorDeclaration = Navigator.demandConstructor(clazz, 0);
-        ExplicitConstructorInvocationStmt stmt =
-                (ExplicitConstructorInvocationStmt) constructorDeclaration.getBody().getStatement(0);
+        ExplicitConstructorInvocationStmt stmt = (ExplicitConstructorInvocationStmt)
+                constructorDeclaration.getBody().getStatement(0);
 
         ResolvedConstructorDeclaration cd = stmt.resolve();
 
@@ -261,5 +300,4 @@ class ConstructorsResolutionTest extends AbstractResolutionTest {
         assertEquals("S", cd.getParam(0).describeType());
         assertEquals("javaparser.GenericClass", cd.declaringType().getQualifiedName());
     }
-
 }

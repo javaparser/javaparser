@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.bounds;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
@@ -28,16 +30,14 @@ import com.github.javaparser.symbolsolver.resolution.typeinference.Bound;
 import com.github.javaparser.symbolsolver.resolution.typeinference.InferenceVariable;
 import com.github.javaparser.symbolsolver.resolution.typeinference.Instantiation;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class SameAsBoundTest {
 
     private TypeSolver typeSolver = new ReflectionTypeSolver();
-    private ResolvedType stringType = new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()));
+    private ResolvedType stringType =
+            new ReferenceTypeImpl(new ReflectionTypeSolver().solveType(String.class.getCanonicalName()));
 
     @Test
     void recognizeInstantiation() {
@@ -49,5 +49,4 @@ class SameAsBoundTest {
         assertEquals(Optional.of(new Instantiation(inferenceVariable, stringType)), bound1.isAnInstantiation());
         assertEquals(Optional.of(new Instantiation(inferenceVariable, stringType)), bound2.isAnInstantiation());
     }
-
 }

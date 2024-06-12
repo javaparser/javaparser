@@ -26,8 +26,6 @@ import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import javassist.CtClass;
-
 import java.lang.annotation.Inherited;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +33,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javassist.CtClass;
 
 /**
  * @author Malte Skoruppa
@@ -47,10 +46,7 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{" +
-                "ctClass=" + ctClass.getName() +
-                ", typeSolver=" + typeSolver +
-                '}';
+        return getClass().getSimpleName() + "{" + "ctClass=" + ctClass.getName() + ", typeSolver=" + typeSolver + '}';
     }
 
     public JavassistAnnotationDeclaration(CtClass ctClass, TypeSolver typeSolver) {
@@ -137,7 +133,8 @@ public class JavassistAnnotationDeclaration extends AbstractTypeDeclaration impl
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         // TODO #1841
-        throw new UnsupportedOperationException("containerType() is not supported for " + this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(
+                "containerType() is not supported for " + this.getClass().getCanonicalName());
     }
 
     @Override

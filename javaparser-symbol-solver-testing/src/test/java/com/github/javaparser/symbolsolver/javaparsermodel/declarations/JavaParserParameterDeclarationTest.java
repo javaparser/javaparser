@@ -28,7 +28,6 @@ import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
 import java.util.Optional;
 
 class JavaParserParameterDeclarationTest implements ResolvedParameterDeclarationTest {
@@ -36,14 +35,14 @@ class JavaParserParameterDeclarationTest implements ResolvedParameterDeclaration
     @Override
     public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
         return Optional.of(
-                safeCast(associableToAST, JavaParserParameterDeclaration.class).getWrappedNode()
-        );
+                safeCast(associableToAST, JavaParserParameterDeclaration.class).getWrappedNode());
     }
 
     @Override
     public JavaParserParameterDeclaration createValue() {
         Parameter parameter = StaticJavaParser.parseMethodDeclaration("<T> void a(T a) {}")
-                .findFirst(Parameter.class).get();
+                .findFirst(Parameter.class)
+                .get();
         ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
         return new JavaParserParameterDeclaration(parameter, typeSolver);
     }

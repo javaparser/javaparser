@@ -21,19 +21,19 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.utils.CodeGenerationUtils;
 import com.github.javaparser.utils.TestUtils;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
-
-import static com.github.javaparser.StaticJavaParser.parse;
+import org.junit.jupiter.api.Test;
 
 class ConcreteSyntaxModelAcceptanceTest {
-    private final Path rootDir = CodeGenerationUtils.mavenModuleRoot(ConcreteSyntaxModelAcceptanceTest.class).resolve("src/test/test_sourcecode");
+    private final Path rootDir = CodeGenerationUtils.mavenModuleRoot(ConcreteSyntaxModelAcceptanceTest.class)
+            .resolve("src/test/test_sourcecode");
 
     private String prettyPrint(Node node) {
         return ConcreteSyntaxModel.genericPrettyPrint(node);
@@ -53,14 +53,15 @@ class ConcreteSyntaxModelAcceptanceTest {
     void printingExampleJavaConcepts() throws IOException {
         CompilationUnit base = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsBase.java"));
         CompilationUnit enums = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsEnums.java"));
-        CompilationUnit innerClass = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsInnerClasses.java"));
+        CompilationUnit innerClass =
+                parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsInnerClasses.java"));
         CompilationUnit methods = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsMethods.java"));
         CompilationUnit ugly = parse(rootDir.resolve("com/github/javaparser/printer/JavaConceptsUgly.java"));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsBase"), prettyPrint(base));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsEnums"), prettyPrint(enums));
-        TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsInnerClasses"), prettyPrint(innerClass));
+        TestUtils.assertEqualsStringIgnoringEol(
+                prettyPrintedExpectation("JavaConceptsInnerClasses"), prettyPrint(innerClass));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsMethods"), prettyPrint(methods));
         TestUtils.assertEqualsStringIgnoringEol(prettyPrintedExpectation("JavaConceptsUgly"), prettyPrint(ugly));
-        }
-
+    }
 }

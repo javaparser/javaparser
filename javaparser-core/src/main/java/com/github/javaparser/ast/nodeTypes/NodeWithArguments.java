@@ -20,13 +20,12 @@
  */
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
-
 import java.util.function.Function;
-
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 
 /**
  * A node with arguments.
@@ -66,8 +65,8 @@ public interface NodeWithArguments<N extends Node> {
     }
 
     /*
-     * Returns the position of the {@code argument} in the object's argument 
-     * list, after converting the argument using the given {@code converter} 
+     * Returns the position of the {@code argument} in the object's argument
+     * list, after converting the argument using the given {@code converter}
      * function.
      */
     default int getArgumentPosition(Expression argument, Function<Expression, Expression> converter) {

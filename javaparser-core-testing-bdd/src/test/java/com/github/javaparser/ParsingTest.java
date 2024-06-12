@@ -23,13 +23,12 @@ package com.github.javaparser;
 
 import com.github.javaparser.steps.ParsingSteps;
 import com.github.javaparser.steps.SharedSteps;
+import java.util.HashMap;
+import java.util.Map;
 import org.jbehave.core.junit.JUnit4StoryRunner;
 import org.jbehave.core.steps.InjectableStepsFactory;
 import org.jbehave.core.steps.InstanceStepsFactory;
 import org.junit.runner.RunWith;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RunWith(JUnit4StoryRunner.class)
 public class ParsingTest extends BasicJBehaveTest {
@@ -38,14 +37,10 @@ public class ParsingTest extends BasicJBehaveTest {
     public InjectableStepsFactory stepsFactory() {
         Map<String, Object> state = new HashMap<>();
 
-        return new InstanceStepsFactory(configuration(),
-                new SharedSteps(state),
-                new ParsingSteps(state));
+        return new InstanceStepsFactory(configuration(), new SharedSteps(state), new ParsingSteps(state));
     }
 
     public ParsingTest() {
         super("**/parsing*.story");
     }
 }
-
-

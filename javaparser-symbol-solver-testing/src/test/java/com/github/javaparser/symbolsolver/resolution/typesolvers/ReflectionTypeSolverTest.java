@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
@@ -31,15 +33,12 @@ import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class ReflectionTypeSolverTest extends ClassLoaderTypeSolverTest<ReflectionTypeSolver> {
 
@@ -54,29 +53,36 @@ class ReflectionTypeSolverTest extends ClassLoaderTypeSolverTest<ReflectionTypeS
         assertEquals(true, ts.hasType(Object.class.getCanonicalName()));
         assertEquals(false, ts.hasType("foo.zum.unexisting"));
     }
-    
+
     @Test()
     void testInvalidArgumentNumber() throws IOException {
         Path file = adaptPath("src/test/resources/issue2366/Test.java");
 
-        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());	    
+        CombinedTypeSolver combinedSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
 
         ParserConfiguration pc = new ParserConfiguration()
-            	                        .setSymbolResolver(new JavaSymbolSolver(combinedSolver))
-            	                        .setLanguageLevel(LanguageLevel.JAVA_8);
+                .setSymbolResolver(new JavaSymbolSolver(combinedSolver))
+                .setLanguageLevel(LanguageLevel.JAVA_8);
 
         JavaParser javaParser = new JavaParser(pc);
 
-        CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
-        
-        Assertions.assertThrows(UnsolvedSymbolException.class, () -> unit.accept(new VoidVisitorAdapter<Object>() {
-            @Override
-            public void visit(ObjectCreationExpr exp, Object arg) {
-            	super.visit(exp, arg);
-                exp.resolve().getSignature();
-            }            
-        }, null));
-    }
+        CompilationUnit unit = javaParser
+                .parse(
+                        ParseStart.COMPILATION_UNIT,
+                        new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name()))
+                .getResult()
+                .get();
 
+        Assertions.assertThrows(
+                UnsolvedSymbolException.class,
+                () -> unit.accept(
+                        new VoidVisitorAdapter<Object>() {
+                            @Override
+                            public void visit(ObjectCreationExpr exp, Object arg) {
+                                super.visit(exp, arg);
+                                exp.resolve().getSignature();
+                            }
+                        },
+                        null));
+    }
 }

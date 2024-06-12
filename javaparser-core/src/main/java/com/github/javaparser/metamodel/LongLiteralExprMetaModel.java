@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.expr.LongLiteralExpr;
-
 import java.util.Optional;
 
 /**
@@ -39,6 +38,12 @@ public class LongLiteralExprMetaModel extends LiteralStringValueExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     LongLiteralExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, LongLiteralExpr.class, "LongLiteralExpr", "com.github.javaparser.ast.expr", false, false);
+        super(
+                superBaseNodeMetaModel,
+                LongLiteralExpr.class,
+                "LongLiteralExpr",
+                "com.github.javaparser.ast.expr",
+                false,
+                false);
     }
 }

@@ -20,14 +20,13 @@
  */
 package com.github.javaparser.resolution;
 
-import java.util.*;
-
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametersMap;
 import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParametrized;
+import java.util.*;
 
 /**
  * This is basically a MethodDeclaration with some TypeParameters defined.
@@ -56,14 +55,28 @@ public class MethodUsage implements ResolvedTypeParametrized {
     }
 
     public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType) {
-        this(declaration, paramTypes, returnType, declaration.getSpecifiedExceptions(), ResolvedTypeParametersMap.empty());
+        this(
+                declaration,
+                paramTypes,
+                returnType,
+                declaration.getSpecifiedExceptions(),
+                ResolvedTypeParametersMap.empty());
     }
 
-    public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType, List<ResolvedType> exceptionTypes) {
+    public MethodUsage(
+            ResolvedMethodDeclaration declaration,
+            List<ResolvedType> paramTypes,
+            ResolvedType returnType,
+            List<ResolvedType> exceptionTypes) {
         this(declaration, paramTypes, returnType, exceptionTypes, ResolvedTypeParametersMap.empty());
     }
 
-    private MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType, List<ResolvedType> exceptionTypes, ResolvedTypeParametersMap typeParametersMap) {
+    private MethodUsage(
+            ResolvedMethodDeclaration declaration,
+            List<ResolvedType> paramTypes,
+            ResolvedType returnType,
+            List<ResolvedType> exceptionTypes,
+            ResolvedTypeParametersMap typeParametersMap) {
         this.declaration = declaration;
         this.paramTypes = paramTypes;
         this.returnType = returnType;
@@ -146,7 +159,12 @@ public class MethodUsage implements ResolvedTypeParametrized {
             throw new IllegalArgumentException();
         }
         // TODO if the method declaration has a type param with that name ignore this call
-        MethodUsage res = new MethodUsage(declaration, paramTypes, returnType, exceptionTypes, typeParametersMap.toBuilder().setValue(typeParameter, type).build());
+        MethodUsage res = new MethodUsage(
+                declaration,
+                paramTypes,
+                returnType,
+                exceptionTypes,
+                typeParametersMap.toBuilder().setValue(typeParameter, type).build());
         Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
         for (int i = 0; i < paramTypes.size(); i++) {
             ResolvedType originalParamType = paramTypes.get(i);
@@ -225,16 +243,16 @@ public class MethodUsage implements ResolvedTypeParametrized {
         return exceptionTypes;
     }
 
-	/*
-	 * Two methods or constructors, M and N, have the same signature if they have
-	 * the same name, the same type parameters (if any) (§8.4.4), and, after
-	 * adapting the formal parameter types of N to the the type parameters of M, the
-	 * same formal parameter types.
-	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html
-	 * This method returns an approximation of this rule.
-	 */
+    /*
+     * Two methods or constructors, M and N, have the same signature if they have
+     * the same name, the same type parameters (if any) (§8.4.4), and, after
+     * adapting the formal parameter types of N to the the type parameters of M, the
+     * same formal parameter types.
+     * https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html
+     * This method returns an approximation of this rule.
+     */
     public boolean isSameSignature(MethodUsage otherMethodUsage) {
-    	return getSignature().equals(otherMethodUsage.getSignature());
+        return getSignature().equals(otherMethodUsage.getSignature());
     }
 
     /*
@@ -243,7 +261,7 @@ public class MethodUsage implements ResolvedTypeParametrized {
      * the signature of m1 is the same as the erasure (§4.6) of the signature of m2.
      */
     public boolean isSubSignature(MethodUsage otherMethodUsage) {
-    	return getErasedSignature().equals(otherMethodUsage.getErasedSignature());
+        return getErasedSignature().equals(otherMethodUsage.getErasedSignature());
     }
 
     /*
@@ -255,7 +273,8 @@ public class MethodUsage implements ResolvedTypeParametrized {
      * R1 can be converted to a subtype of R2 by unchecked conversion (§5.1.9).
      * d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
      */
-	public boolean isReturnTypeSubstituable(MethodUsage otherMethodUsage) {
-		return getDeclaration().isReturnTypeSubstituable(otherMethodUsage.getDeclaration().getReturnType());
-	}
+    public boolean isReturnTypeSubstituable(MethodUsage otherMethodUsage) {
+        return getDeclaration()
+                .isReturnTypeSubstituable(otherMethodUsage.getDeclaration().getReturnType());
+    }
 }

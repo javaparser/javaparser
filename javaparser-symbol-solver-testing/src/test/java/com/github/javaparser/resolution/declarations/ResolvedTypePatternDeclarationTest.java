@@ -21,9 +21,9 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 public interface ResolvedTypePatternDeclarationTest extends ResolvedValueDeclarationTest {
 
@@ -39,5 +39,4 @@ public interface ResolvedTypePatternDeclarationTest extends ResolvedValueDeclara
     default void resolvedPatternShouldHaveAName() {
         assertTrue(createValue().hasName());
     }
-
 }

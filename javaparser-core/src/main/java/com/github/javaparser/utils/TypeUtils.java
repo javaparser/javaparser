@@ -22,7 +22,6 @@ package com.github.javaparser.utils;
 
 import com.github.javaparser.ast.type.PrimitiveType.Primitive;
 import com.github.javaparser.ast.type.VoidType;
-
 import java.lang.reflect.Method;
 import java.util.Optional;
 
@@ -55,7 +54,10 @@ public class TypeUtils {
             String descriptor = getPrimitiveTypeDescriptor(currentClass);
             stringBuilder.append(descriptor);
         } else {
-            stringBuilder.append("L").append(currentClass.getName().replace(".", "/")).append(";");
+            stringBuilder
+                    .append("L")
+                    .append(currentClass.getName().replace(".", "/"))
+                    .append(";");
         }
     }
 

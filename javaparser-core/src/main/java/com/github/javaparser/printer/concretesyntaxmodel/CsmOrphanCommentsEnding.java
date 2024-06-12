@@ -20,14 +20,13 @@
  */
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.SourcePrinter;
-
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
 
 public class CsmOrphanCommentsEnding implements CsmElement {
 

@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,13 +33,9 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClassOrInterfaceDeclarationContextTest {
 
@@ -58,7 +57,9 @@ class ClassOrInterfaceDeclarationContextTest {
 
         assertTrue(alphaContext.solveType("Foo").isSolved());
         assertTrue(alphaContext.solveType("Foo", Collections.emptyList()).isSolved());
-        assertFalse(alphaContext.solveType("Foo", Collections.singletonList(ResolvedPrimitiveType.INT)).isSolved());
+        assertFalse(alphaContext
+                .solveType("Foo", Collections.singletonList(ResolvedPrimitiveType.INT))
+                .isSolved());
     }
 
     @Test
@@ -69,11 +70,12 @@ class ClassOrInterfaceDeclarationContextTest {
 
         assertTrue(betaContext.solveType("Foo").isSolved());
         assertFalse(betaContext.solveType("Foo", Collections.emptyList()).isSolved());
-        assertTrue(betaContext.solveType("Foo", Collections.singletonList(ResolvedPrimitiveType.INT)).isSolved());
+        assertTrue(betaContext
+                .solveType("Foo", Collections.singletonList(ResolvedPrimitiveType.INT))
+                .isSolved());
     }
 
     private CompilationUnit parse(String sourceCode) {
         return javaParser.parse(sourceCode).getResult().orElseThrow(AssertionError::new);
     }
-
 }

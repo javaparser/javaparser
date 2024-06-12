@@ -37,7 +37,7 @@ public class BooleanConditionalExprHandler implements ConditionalExprHandler {
         this.thenExpr = thenExpr;
         this.elseExpr = elseExpr;
     }
-    
+
     @Override
     public ResolvedType resolveType() {
         if (thenExpr.isReferenceType() && elseExpr.isReferenceType()) {

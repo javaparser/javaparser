@@ -21,10 +21,10 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseExpression;
 
 class DoubleLiteralExprTest {
     @Test

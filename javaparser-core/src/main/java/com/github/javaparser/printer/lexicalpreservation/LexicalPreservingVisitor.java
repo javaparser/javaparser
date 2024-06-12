@@ -17,33 +17,32 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.lexicalpreservation;
 
 import java.io.StringWriter;
 
 public class LexicalPreservingVisitor {
 
-	private StringWriter writer;
-	
-	public LexicalPreservingVisitor() {
-		this(new StringWriter());
-	}
-	
-	public LexicalPreservingVisitor(StringWriter writer) {
-		this.writer = writer;
-	}
+    private StringWriter writer;
 
-	public void visit(ChildTextElement child) {
-		child.accept(this);
-	}
-	
-	public void visit(TokenTextElement token) {
-		writer.append(token.getText());
-	}
-	
-	@Override
-	public String toString() {
-		return writer.toString();
-	}
+    public LexicalPreservingVisitor() {
+        this(new StringWriter());
+    }
+
+    public LexicalPreservingVisitor(StringWriter writer) {
+        this.writer = writer;
+    }
+
+    public void visit(ChildTextElement child) {
+        child.accept(this);
+    }
+
+    public void visit(TokenTextElement token) {
+        writer.append(token.getText());
+    }
+
+    @Override
+    public String toString() {
+        return writer.toString();
+    }
 }

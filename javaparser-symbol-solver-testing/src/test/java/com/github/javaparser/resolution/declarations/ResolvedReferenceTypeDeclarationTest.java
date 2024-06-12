@@ -21,12 +21,13 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public interface ResolvedReferenceTypeDeclarationTest extends ResolvedTypeDeclarationTest, ResolvedTypeParametrizableTest {
+import org.junit.jupiter.api.Test;
+
+public interface ResolvedReferenceTypeDeclarationTest
+        extends ResolvedTypeDeclarationTest, ResolvedTypeParametrizableTest {
 
     @Override
     ResolvedReferenceTypeDeclaration createValue();
@@ -50,5 +51,4 @@ public interface ResolvedReferenceTypeDeclarationTest extends ResolvedTypeDeclar
     default void getConstructorsCantBeNull() {
         assertNotNull(createValue().getConstructors());
     }
-
 }

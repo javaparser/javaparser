@@ -27,34 +27,30 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class Issue2740Test extends AbstractResolutionTest {
 
     @Test()
     void test() {
-        String code =
-                "import java.util.function.Consumer;\n" + 
-                "import java.util.ArrayList;\n" + 
-                "\n" + 
-                "public class A {\n" + 
-                "    \n" + 
-                "    void m() {\n" + 
-                "        new Consumer<String>() {\n" + 
-                "            private ArrayList<Integer> t = new ArrayList<>();\n" + 
-                "            @Override\n" + 
-                "            public void accept(String s) {\n" + 
-                "                t.add(s);\n" + 
-                "            }\n" + 
-                "            \n" + 
-                "        };" + 
-                "    }\n" + 
-                "\n" + 
-                "}";
+        String code = "import java.util.function.Consumer;\n" + "import java.util.ArrayList;\n"
+                + "\n"
+                + "public class A {\n"
+                + "    \n"
+                + "    void m() {\n"
+                + "        new Consumer<String>() {\n"
+                + "            private ArrayList<Integer> t = new ArrayList<>();\n"
+                + "            @Override\n"
+                + "            public void accept(String s) {\n"
+                + "                t.add(s);\n"
+                + "            }\n"
+                + "            \n"
+                + "        };"
+                + "    }\n"
+                + "\n"
+                + "}";
 
-        
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
         StaticJavaParser.setConfiguration(config);
@@ -65,5 +61,4 @@ public class Issue2740Test extends AbstractResolutionTest {
             ResolvedMethodDeclaration rd = expr.resolve();
         }
     }
-    
 }

@@ -39,15 +39,15 @@ import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
-
 import java.util.List;
 import java.util.Optional;
 
 /**
  * @author Federico Tomassetti
  */
-public abstract class AbstractMethodLikeDeclarationContext
-        <T extends Node & NodeWithParameters<T> & NodeWithTypeParameters<T>> extends AbstractJavaParserContext<T> {
+public abstract class AbstractMethodLikeDeclarationContext<
+                T extends Node & NodeWithParameters<T> & NodeWithTypeParameters<T>>
+        extends AbstractJavaParserContext<T> {
 
     public AbstractMethodLikeDeclarationContext(T wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -57,7 +57,8 @@ public abstract class AbstractMethodLikeDeclarationContext
     public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         for (Parameter parameter : wrappedNode.getParameters()) {
             SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(parameter, typeSolver);
-            SymbolReference<? extends ResolvedValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
+            SymbolReference<? extends ResolvedValueDeclaration> symbolReference =
+                    AbstractJavaParserContext.solveWith(sb, name);
             if (symbolReference.isSolved()) {
                 return symbolReference;
             }
@@ -111,8 +112,7 @@ public abstract class AbstractMethodLikeDeclarationContext
         List<TypeDeclaration> localTypes = wrappedNode.findAll(TypeDeclaration.class);
         for (TypeDeclaration<?> localType : localTypes) {
             if (localType.getName().getId().equals(name)) {
-                return SymbolReference.solved(JavaParserFacade.get(typeSolver)
-                        .getTypeDeclaration(localType));
+                return SymbolReference.solved(JavaParserFacade.get(typeSolver).getTypeDeclaration(localType));
             }
             if (name.startsWith(String.format("%s.", localType.getName()))) {
                 return JavaParserFactory.getContext(localType, typeSolver)
@@ -124,7 +124,8 @@ public abstract class AbstractMethodLikeDeclarationContext
     }
 
     @Override
-    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
     }

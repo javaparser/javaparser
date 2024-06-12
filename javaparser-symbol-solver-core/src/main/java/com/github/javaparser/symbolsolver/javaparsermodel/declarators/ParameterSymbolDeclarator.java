@@ -25,7 +25,6 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-
 import java.util.LinkedList;
 import java.util.List;
 

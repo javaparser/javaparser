@@ -54,5 +54,4 @@ public class ReflectionTypeSolver extends ClassLoaderTypeSolver {
     protected boolean filterName(String name) {
         return !jreOnly || (name.startsWith("java.") || name.startsWith("javax."));
     }
-
 }

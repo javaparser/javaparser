@@ -22,9 +22,6 @@ package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
-import java.util.Optional;
-import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
@@ -42,6 +39,8 @@ import com.github.javaparser.metamodel.CompactConstructorDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * <h1>The record declaration's constructor</h1>
@@ -66,7 +65,14 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se16/html/jls-8.html#jls-8.10.4">JLS 8.10.3 - Record Constructor Declarations</a>
  * @since 3.22.0
  */
-public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstructorDeclaration> implements NodeWithBlockStmt<CompactConstructorDeclaration>, NodeWithAccessModifiers<CompactConstructorDeclaration>, NodeWithJavadoc<CompactConstructorDeclaration>, NodeWithSimpleName<CompactConstructorDeclaration>, NodeWithThrownExceptions<CompactConstructorDeclaration>, NodeWithTypeParameters<CompactConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
+public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstructorDeclaration>
+        implements NodeWithBlockStmt<CompactConstructorDeclaration>,
+                NodeWithAccessModifiers<CompactConstructorDeclaration>,
+                NodeWithJavadoc<CompactConstructorDeclaration>,
+                NodeWithSimpleName<CompactConstructorDeclaration>,
+                NodeWithThrownExceptions<CompactConstructorDeclaration>,
+                NodeWithTypeParameters<CompactConstructorDeclaration>,
+                Resolvable<ResolvedConstructorDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -79,19 +85,46 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
     private NodeList<ReferenceType> thrownExceptions;
 
     public CompactConstructorDeclaration() {
-        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new BlockStmt());
+        this(
+                null,
+                new NodeList<>(),
+                new NodeList<>(),
+                new NodeList<>(),
+                new SimpleName(),
+                new NodeList<>(),
+                new BlockStmt());
     }
 
     public CompactConstructorDeclaration(String name) {
-        this(null, new NodeList<>(new Modifier()), new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new BlockStmt());
+        this(
+                null,
+                new NodeList<>(new Modifier()),
+                new NodeList<>(),
+                new NodeList<>(),
+                new SimpleName(name),
+                new NodeList<>(),
+                new BlockStmt());
     }
 
     public CompactConstructorDeclaration(NodeList<Modifier> modifiers, String name) {
-        this(null, modifiers, new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new BlockStmt());
+        this(
+                null,
+                modifiers,
+                new NodeList<>(),
+                new NodeList<>(),
+                new SimpleName(name),
+                new NodeList<>(),
+                new BlockStmt());
     }
 
     @AllFieldsConstructor
-    public CompactConstructorDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public CompactConstructorDeclaration(
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            NodeList<TypeParameter> typeParameters,
+            SimpleName name,
+            NodeList<ReferenceType> thrownExceptions,
+            BlockStmt body) {
         this(null, modifiers, annotations, typeParameters, name, thrownExceptions, body);
     }
 
@@ -99,7 +132,14 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CompactConstructorDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<ReferenceType> thrownExceptions, BlockStmt body) {
+    public CompactConstructorDeclaration(
+            TokenRange tokenRange,
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            NodeList<TypeParameter> typeParameters,
+            SimpleName name,
+            NodeList<ReferenceType> thrownExceptions,
+            BlockStmt body) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -121,8 +161,7 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
         v.visit(this, arg);
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBody() {
         return body;
     }
@@ -133,100 +172,86 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
      * @param body the body, can not be null
      * @return this, the ConstructorDeclaration
      */
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
+        if (this.body != null) this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
+        if (this.modifiers != null) this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SimpleName getName() {
         return name;
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<ReferenceType> getThrownExceptions() {
         return thrownExceptions;
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         assertNotNull(thrownExceptions);
         if (thrownExceptions == this.thrownExceptions) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
-        if (this.thrownExceptions != null)
-            this.thrownExceptions.setParentNode(null);
+        if (this.thrownExceptions != null) this.thrownExceptions.setParentNode(null);
         this.thrownExceptions = thrownExceptions;
         setAsParentNodeOf(thrownExceptions);
         return this;
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<TypeParameter> getTypeParameters() {
         return typeParameters;
     }
 
-    @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public CompactConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         assertNotNull(typeParameters);
         if (typeParameters == this.typeParameters) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        if (this.typeParameters != null)
-            this.typeParameters.setParentNode(null);
+        if (this.typeParameters != null) this.typeParameters.setParentNode(null);
         this.typeParameters = typeParameters;
         setAsParentNodeOf(typeParameters);
         return this;
@@ -237,7 +262,8 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
      * <p>
      * [accessSpecifier] className [throws exceptionsList]
      */
-    public String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
+    public String getDeclarationAsString(
+            boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = getAccessSpecifier();

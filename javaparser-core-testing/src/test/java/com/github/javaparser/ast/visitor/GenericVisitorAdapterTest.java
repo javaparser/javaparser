@@ -20,6 +20,10 @@
 
 package com.github.javaparser.ast.visitor;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -30,15 +34,10 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 
 public class GenericVisitorAdapterTest {
 
@@ -2544,10 +2543,10 @@ public class GenericVisitorAdapterTest {
     }
 
     @Test
-    void visit_CompactConstructorDeclaration () {
+    void visit_CompactConstructorDeclaration() {
         // Given
         Object argument = mock(Object.class);
-        CompactConstructorDeclaration  node = mock(CompactConstructorDeclaration .class);
+        CompactConstructorDeclaration node = mock(CompactConstructorDeclaration.class);
 
         // When
         Mockito.when(node.getBody()).thenReturn(mock(BlockStmt.class));
@@ -2575,5 +2574,4 @@ public class GenericVisitorAdapterTest {
         order.verify(node, times(2)).getComment();
         order.verifyNoMoreInteractions();
     }
-
 }

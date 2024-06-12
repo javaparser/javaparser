@@ -20,6 +20,9 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -33,38 +36,32 @@ import com.github.javaparser.symbolsolver.javassistmodel.JavassistMethodDeclarat
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 class MethodDescriptorTest extends AbstractResolutionTest {
 
-    private static String code =
-            "public class A {\n" +
-            "  A(int i, double d, Thread t) {}\n" +
-            "  public enum TestEnum {\n" +
-            "    TEST_ENUM(\"test\");" +
-            "    private String a;\n" +
-            "    private TestEnum(String a) {\n" +
-            "      this.a = a;\n" +
-            "    }\n" +
-            "  }\n" +
-            "  Object m(int i, double d, Thread t) {return new Object();}\n" +
-            "  void m(int i, double d, Thread t) {}\n" +
-            "  int[] m(int i, double d, Thread t) {return new int[] {};}\n" +
-            "  long[][] m(int i, double d, Thread t) {return new long[][] {};}\n" +
-            "  void m() {\n" +
-            "    System.out.println(\"a\");\n" +
-            "    TestEnum.valueOf(\"TEST_ENUM\");\n" +
-            "    TestEnum.values();\n" +
-            "  }\n" +
-            "}";
+    private static String code = "public class A {\n" + "  A(int i, double d, Thread t) {}\n"
+            + "  public enum TestEnum {\n"
+            + "    TEST_ENUM(\"test\");"
+            + "    private String a;\n"
+            + "    private TestEnum(String a) {\n"
+            + "      this.a = a;\n"
+            + "    }\n"
+            + "  }\n"
+            + "  Object m(int i, double d, Thread t) {return new Object();}\n"
+            + "  void m(int i, double d, Thread t) {}\n"
+            + "  int[] m(int i, double d, Thread t) {return new int[] {};}\n"
+            + "  long[][] m(int i, double d, Thread t) {return new long[][] {};}\n"
+            + "  void m() {\n"
+            + "    System.out.println(\"a\");\n"
+            + "    TestEnum.valueOf(\"TEST_ENUM\");\n"
+            + "    TestEnum.values();\n"
+            + "  }\n"
+            + "}";
 
     private static TypeSolver typeSolver;
     private static CompilationUnit cu;
@@ -73,8 +70,7 @@ class MethodDescriptorTest extends AbstractResolutionTest {
     static void setup() throws IOException {
         Path javassistJar = adaptPath("src/test/resources/javassistmethoddecl/javassistmethoddecl.jar");
         ParserConfiguration config = new ParserConfiguration();
-        typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(),
-                new JarTypeSolver(javassistJar));
+        typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JarTypeSolver(javassistJar));
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(config);
         cu = parse(code);
@@ -102,7 +98,9 @@ class MethodDescriptorTest extends AbstractResolutionTest {
     void resolvedMethodDeclarationDescriptorTest() {
         // example provided in https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3
         List<MethodDeclaration> methods = cu.findAll(MethodDeclaration.class);
-        assertEquals("(IDLjava/lang/Thread;)Ljava/lang/Object;", methods.get(0).resolve().toDescriptor());
+        assertEquals(
+                "(IDLjava/lang/Thread;)Ljava/lang/Object;",
+                methods.get(0).resolve().toDescriptor());
         // with void return type
         assertEquals("(IDLjava/lang/Thread;)V", methods.get(1).resolve().toDescriptor());
         // with single array type
@@ -116,7 +114,8 @@ class MethodDescriptorTest extends AbstractResolutionTest {
         // check descriptor of ReflectionMethodDeclaration
         assertEquals("(Ljava/lang/String;)V", methodCalls.get(0).resolve().toDescriptor());
         // of ValueOfMethod
-        assertEquals("(Ljava/lang/String;)LA/TestEnum;", methodCalls.get(1).resolve().toDescriptor());
+        assertEquals(
+                "(Ljava/lang/String;)LA/TestEnum;", methodCalls.get(1).resolve().toDescriptor());
         // of ValuesMethod
         assertEquals("()[LA/TestEnum;", methodCalls.get(2).resolve().toDescriptor());
         // of JavassistMethodDeclaration
@@ -134,7 +133,10 @@ class MethodDescriptorTest extends AbstractResolutionTest {
     }
 
     private JavassistMethodDeclaration findMethodWithName(JavassistClassDeclaration classDecl, String name) {
-        return classDecl.getDeclaredMethods().stream().filter(methodDecl -> methodDecl.getName().equals(name))
-                .map(m -> (JavassistMethodDeclaration) m).findAny().get();
+        return classDecl.getDeclaredMethods().stream()
+                .filter(methodDecl -> methodDecl.getName().equals(name))
+                .map(m -> (JavassistMethodDeclaration) m)
+                .findAny()
+                .get();
     }
 }

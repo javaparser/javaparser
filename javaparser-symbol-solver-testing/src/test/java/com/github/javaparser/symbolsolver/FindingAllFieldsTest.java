@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.resolution.Navigator;
@@ -30,11 +32,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
-import org.junit.jupiter.api.Test;
-
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class FindingAllFieldsTest extends AbstractResolutionTest {
 
@@ -42,20 +41,30 @@ class FindingAllFieldsTest extends AbstractResolutionTest {
     void findAllInheritedFields() {
         CompilationUnit cu = parseSample("AClassWithFields");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
-        ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
+        ResolvedReferenceTypeDeclaration typeDeclaration =
+                JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
         assertEquals(3, typeDeclaration.getAllFields().size());
-        assertEquals(ImmutableSet.of("a", "b", "c"),
-                typeDeclaration.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
+        assertEquals(
+                ImmutableSet.of("a", "b", "c"),
+                typeDeclaration.getAllFields().stream()
+                        .map(ResolvedDeclaration::getName)
+                        .collect(Collectors.toSet()));
     }
 
     @Test
     void findAllInheritedFieldsAndGenerics() {
         CompilationUnit cu = parseSample("AClassWithFieldsAndGenerics");
         ClassOrInterfaceDeclaration classC = Navigator.demandClass(cu, "C");
-        ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
+        ResolvedReferenceTypeDeclaration typeDeclaration =
+                JavaParserFacade.get(new ReflectionTypeSolver()).getTypeDeclaration(classC);
         assertEquals(3, typeDeclaration.getAllFields().size());
-        assertEquals(ImmutableSet.of("a", "b", "c"),
-                typeDeclaration.getAllFields().stream().map(ResolvedDeclaration::getName).collect(Collectors.toSet()));
-        assertEquals("java.util.List<java.lang.String>", typeDeclaration.getField("b").getType().describe());
+        assertEquals(
+                ImmutableSet.of("a", "b", "c"),
+                typeDeclaration.getAllFields().stream()
+                        .map(ResolvedDeclaration::getName)
+                        .collect(Collectors.toSet()));
+        assertEquals(
+                "java.util.List<java.lang.String>",
+                typeDeclaration.getField("b").getType().describe());
     }
 }

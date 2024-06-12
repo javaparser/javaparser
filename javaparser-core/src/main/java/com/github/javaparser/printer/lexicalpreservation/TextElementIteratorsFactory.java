@@ -123,8 +123,7 @@ class TextElementIteratorsFactory {
         }
 
         @Override
-        public void remove() {
-        }
+        public void remove() {}
     }
 
     static class ComposedIterator<E> implements Iterator<E> {
@@ -175,7 +174,7 @@ class TextElementIteratorsFactory {
                 }
             };
         }
-            if (textElement instanceof ChildTextElement) {
+        if (textElement instanceof ChildTextElement) {
             ChildTextElement childTextElement = (ChildTextElement) textElement;
             NodeText textForChild = childTextElement.getNodeTextForWrappedNode();
             return reverseIterator(textForChild);

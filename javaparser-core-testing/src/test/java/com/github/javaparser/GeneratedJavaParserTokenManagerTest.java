@@ -21,11 +21,10 @@
 
 package com.github.javaparser;
 
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.StaticJavaParser.parseResource;
 
 import java.io.IOException;
-
-import static com.github.javaparser.StaticJavaParser.parseResource;
+import org.junit.jupiter.api.Test;
 
 class GeneratedJavaParserTokenManagerTest {
     private String makeFilename(String sampleName) {
