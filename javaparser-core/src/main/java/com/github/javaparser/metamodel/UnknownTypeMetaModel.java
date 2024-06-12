@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.type.UnknownType;
-
 import java.util.Optional;
 
 /**

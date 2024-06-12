@@ -23,7 +23,6 @@ package com.github.javaparser.javadoc;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.utils.LineSeparator;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,7 +106,8 @@ public class Javadoc {
     public JavadocComment toComment(String indentation) {
         for (char c : indentation.toCharArray()) {
             if (!Character.isWhitespace(c)) {
-                throw new IllegalArgumentException("The indentation string should be composed only by whitespace characters");
+                throw new IllegalArgumentException(
+                        "The indentation string should be composed only by whitespace characters");
             }
         }
         StringBuilder sb = new StringBuilder();
@@ -139,10 +139,8 @@ public class Javadoc {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Javadoc document = (Javadoc) o;
         return description.equals(document.description) && blockTags.equals(document.blockTags);
     }

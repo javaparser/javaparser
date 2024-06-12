@@ -21,36 +21,29 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.FieldDeclaration;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import org.junit.jupiter.api.Test;
 
 public class Issue3761Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test() {
-    	considerCode(
-        		"class C { \n"
-        		+ "    static String S = \"s\";\n"
-        		+ "}");
+        considerCode("class C { \n" + "    static String S = \"s\";\n" + "}");
 
         FieldDeclaration field = cu.findAll(FieldDeclaration.class).get(0);
 
-		List<Modifier.Keyword> kws = field.getModifiers().stream().map(Modifier::getKeyword).collect(Collectors.toList());
-		kws.add(0, Modifier.Keyword.PROTECTED);
-		field.setModifiers(kws.toArray(new Modifier.Keyword[] {}));
-        
-        String expected = 
-        		"class C { \r\n"
-        		+ "    protected static String S = \"s\";\r\n"
-        		+ "}";
+        List<Modifier.Keyword> kws =
+                field.getModifiers().stream().map(Modifier::getKeyword).collect(Collectors.toList());
+        kws.add(0, Modifier.Keyword.PROTECTED);
+        field.setModifiers(kws.toArray(new Modifier.Keyword[] {}));
+
+        String expected = "class C { \r\n" + "    protected static String S = \"s\";\r\n" + "}";
 
         assertEqualsStringIgnoringEol(expected, LexicalPreservingPrinter.print(cu));
     }
-
 }

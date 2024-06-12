@@ -33,7 +33,6 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -50,7 +49,8 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
     @Override
     public final SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
         SymbolDeclarator sb = JavaParserFactory.getSymbolDeclarator(wrappedNode.getParameter(), typeSolver);
-        SymbolReference<? extends ResolvedValueDeclaration> symbolReference = AbstractJavaParserContext.solveWith(sb, name);
+        SymbolReference<? extends ResolvedValueDeclaration> symbolReference =
+                AbstractJavaParserContext.solveWith(sb, name);
         if (symbolReference.isSolved()) {
             return symbolReference;
         }
@@ -73,7 +73,8 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
     }
 
     @Override
-    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public final SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
     }
@@ -85,7 +86,8 @@ public class CatchClauseContext extends AbstractJavaParserContext<CatchClause> {
 
     @Override
     public List<Parameter> parametersExposedToChild(Node child) {
-        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the direct child?
+        // TODO/FIXME: Presumably the parameters must be exposed to all children and their descendants, not just the
+        // direct child?
         if (child == getWrappedNode().getBody()) {
             return Collections.singletonList(getWrappedNode().getParameter());
         }

@@ -29,7 +29,6 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -68,8 +67,6 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
         return Collections.emptyList();
     }
 
-
-
     @Override
     public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
         // Variable declarations never make pattern expressions available.
@@ -81,5 +78,4 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
         // Variable declarations never make pattern expressions available.
         return Collections.emptyList();
     }
-
 }

@@ -38,5 +38,4 @@ public class ReflectionTestObject {
     public String getC() {
         return c;
     }
-
 }

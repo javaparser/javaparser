@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -39,15 +42,11 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Malte Langkabel
@@ -68,7 +67,8 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpression().get();
+        MethodCallExpr methodCallExpr =
+                (MethodCallExpr) returnStmt.getExpression().get();
         LambdaExpr lambdaExpr = (LambdaExpr) methodCallExpr.getArguments().get(0);
 
         Context context = new LambdaExprContext(lambdaExpr, typeSolver);
@@ -104,7 +104,8 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testFunctionalVar");
-        VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a").get();
+        VariableDeclarator varDecl =
+                Navigator.demandVariableDeclaration(method, "a").get();
         LambdaExpr lambdaExpr = (LambdaExpr) varDecl.getInitializer().get();
 
         Path src = adaptPath("src/test/resources");
@@ -125,8 +126,10 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
 
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "testCast");
-        VariableDeclarator varDecl = Navigator.demandVariableDeclaration(method, "a").get();
-        LambdaExpr lambdaExpr = ((CastExpr) varDecl.getInitializer().get()).getExpression().asLambdaExpr();
+        VariableDeclarator varDecl =
+                Navigator.demandVariableDeclaration(method, "a").get();
+        LambdaExpr lambdaExpr =
+                ((CastExpr) varDecl.getInitializer().get()).getExpression().asLambdaExpr();
 
         Path src = adaptPath("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
@@ -144,7 +147,7 @@ class LambdaExprContextResolutionTest extends AbstractResolutionTest {
     // see https://github.com/javaparser/javaparser/issues/4399
     void solveParameterOfLambdaInAssignExpr() {
 
-    	Path src = adaptPath("src/test/resources");
+        Path src = adaptPath("src/test/resources");
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
         combinedTypeSolver.add(new JavaParserTypeSolver(src, new LeanParserConfiguration()));

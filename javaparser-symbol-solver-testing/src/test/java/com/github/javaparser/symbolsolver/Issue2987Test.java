@@ -20,6 +20,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -28,18 +30,15 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class Issue2987Test extends AbstractResolutionTest {
 
     @Test
     void test() {
-        String code = "class ClassA {\n" +
-                "    void f() {\n" +
-                "        String s = \"\";\n" +
-                "        String t = (s.length() == 0 ? \"*\" : s) + \"\" ;\n" +
-                "    }\n" +
-                "}";
+        String code = "class ClassA {\n" + "    void f() {\n"
+                + "        String s = \"\";\n"
+                + "        String t = (s.length() == 0 ? \"*\" : s) + \"\" ;\n"
+                + "    }\n"
+                + "}";
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false)));
@@ -49,7 +48,5 @@ public class Issue2987Test extends AbstractResolutionTest {
 
         MethodCallExpr expr = cu.findFirst(MethodCallExpr.class).get();
         assertEquals("java.lang.String.length()", expr.resolve().getQualifiedSignature());
-
     }
-
 }

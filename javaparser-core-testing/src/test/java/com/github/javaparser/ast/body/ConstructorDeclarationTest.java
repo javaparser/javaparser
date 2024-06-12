@@ -21,11 +21,10 @@
 
 package com.github.javaparser.ast.body;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.javaparser.utils.LineSeparator;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class ConstructorDeclarationTest {
     @Test
@@ -33,8 +32,7 @@ class ConstructorDeclarationTest {
         ConstructorDeclaration cons = new ConstructorDeclaration("Cons");
         cons.createBody().addStatement("super();");
 
-        assertEquals(String.format("public Cons() {%1$s" +
-                "    super();%1$s" +
-                "}", LineSeparator.SYSTEM), cons.toString());
+        assertEquals(
+                String.format("public Cons() {%1$s" + "    super();%1$s" + "}", LineSeparator.SYSTEM), cons.toString());
     }
 }

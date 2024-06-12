@@ -26,7 +26,6 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -39,13 +38,16 @@ public class ContextHelper {
         // prevent instantiation
     }
 
-    public static Optional<MethodUsage> solveMethodAsUsage(ResolvedTypeDeclaration typeDeclaration, String name,
-                                                           List<ResolvedType> argumentsTypes, Context invokationContext,
-                                                           List<ResolvedType> typeParameters) {
+    public static Optional<MethodUsage> solveMethodAsUsage(
+            ResolvedTypeDeclaration typeDeclaration,
+            String name,
+            List<ResolvedType> argumentsTypes,
+            Context invokationContext,
+            List<ResolvedType> typeParameters) {
 
         if (typeDeclaration instanceof MethodUsageResolutionCapability) {
             return ((MethodUsageResolutionCapability) typeDeclaration)
-                           .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
+                    .solveMethodAsUsage(name, argumentsTypes, invokationContext, typeParameters);
         }
         throw new UnsupportedOperationException(typeDeclaration.toString());
     }

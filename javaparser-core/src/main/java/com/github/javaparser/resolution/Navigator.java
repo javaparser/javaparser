@@ -18,7 +18,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution;
 
 import com.github.javaparser.ast.CompilationUnit;
@@ -29,7 +28,6 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.stmt.SwitchStmt;
-
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -54,10 +52,13 @@ public final class Navigator {
         return cd;
     }
 
-    public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String qualifiedName) {
+    public static ClassOrInterfaceDeclaration demandClassOrInterface(
+            CompilationUnit compilationUnit, String qualifiedName) {
         return findType(compilationUnit, qualifiedName)
-            .map(res -> res.toClassOrInterfaceDeclaration().orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is " + res.getClass().getCanonicalName())))
-            .orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
+                .map(res -> res.toClassOrInterfaceDeclaration()
+                        .orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is "
+                                + res.getClass().getCanonicalName())))
+                .orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
     }
 
     /**
@@ -69,7 +70,8 @@ public final class Navigator {
      * @return The desired ConstructorDeclaration if it was found, else an exception is thrown.
      */
     public static ConstructorDeclaration demandConstructor(TypeDeclaration<?> td, int index) {
-        // TODO: Refactor to use `td.findAll(ConstructorDeclaration.class);` - potential difference re: searching only immediate children?
+        // TODO: Refactor to use `td.findAll(ConstructorDeclaration.class);` - potential difference re: searching only
+        // immediate children?
         ConstructorDeclaration found = null;
         int i = 0;
         for (BodyDeclaration<?> bd : td.getMembers()) {
@@ -145,7 +147,9 @@ public final class Navigator {
     }
 
     public static Node demandParentNode(Node node) {
-        return node.getParentNode().orElseThrow(() -> new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST"));
+        return node.getParentNode()
+                .orElseThrow(() -> new IllegalStateException(
+                        "Parent not found, the node does not appear to be inserted in a correct AST"));
     }
 
     /**
@@ -213,7 +217,6 @@ public final class Navigator {
         if (node instanceof SwitchStmt) {
             return Optional.of((SwitchStmt) node);
         }
-
         return node.findFirst(SwitchStmt.class);
     }
 
@@ -227,10 +230,10 @@ public final class Navigator {
         if (cu.getTypes().isEmpty()) {
             return Optional.empty();
         }
-
         final String typeName = getOuterTypeName(qualifiedName);
-        Optional<TypeDeclaration<?>> type = cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)).findFirst();
-
+        Optional<TypeDeclaration<?>> type = cu.getTypes().stream()
+                .filter((t) -> t.getName().getId().equals(typeName))
+                .findFirst();
         final String innerTypeName = getInnerTypeName(qualifiedName);
         if (type.isPresent() && !innerTypeName.isEmpty()) {
             return findType(type.get(), innerTypeName);
@@ -246,10 +249,10 @@ public final class Navigator {
      */
     public static Optional<TypeDeclaration<?>> findType(TypeDeclaration<?> td, String qualifiedName) {
         final String typeName = getOuterTypeName(qualifiedName);
-
         Optional<TypeDeclaration<?>> type = Optional.empty();
         for (Node n : td.getMembers()) {
-            if (n instanceof TypeDeclaration && ((TypeDeclaration<?>) n).getName().getId().equals(typeName)) {
+            if (n instanceof TypeDeclaration
+                    && ((TypeDeclaration<?>) n).getName().getId().equals(typeName)) {
                 type = Optional.of((TypeDeclaration<?>) n);
                 break;
             }
@@ -279,5 +282,4 @@ public final class Navigator {
     public static Node requireParentNode(Node node) {
         return demandParentNode(node);
     }
-
 }

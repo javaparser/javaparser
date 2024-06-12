@@ -20,10 +20,10 @@
 
 package com.github.javaparser.utils;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Roger Howell
@@ -55,7 +55,7 @@ class LineSeparatorTest {
         assertFalse(LineSeparator.lookup("\r \n").isPresent());
         assertFalse(LineSeparator.lookup("\\r \\n").isPresent());
     }
-    
+
     @Test
     void lookupEscaped() {
         assertEquals(LineSeparator.CR, LineSeparator.lookupEscaped("\\r").get());
@@ -113,5 +113,4 @@ class LineSeparatorTest {
         assertEquals(LineSeparator.UNKNOWN, LineSeparator.valueOf("UNKNOWN"));
         assertEquals(LineSeparator.ARBITRARY, LineSeparator.valueOf("ARBITRARY"));
     }
-
 }

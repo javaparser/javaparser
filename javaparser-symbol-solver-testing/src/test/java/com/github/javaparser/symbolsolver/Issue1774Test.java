@@ -20,26 +20,25 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class Issue1774Test extends AbstractResolutionTest {
 
     @Test
     public void test() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false))));
+        StaticJavaParser.setConfiguration(
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false))));
 
-        String str = 
-                  "public class A { "
+        String str = "public class A { "
                 + "  String s1 = false + \"str\";"
                 + "  String s2 = 'a' + \"str\";"
                 + "  String s3 = 1 + \"foo\";"
@@ -70,12 +69,10 @@ public class Issue1774Test extends AbstractResolutionTest {
         assertEquals("int", exprs.get(8).calculateResolvedType().describe());
         assertEquals("long", exprs.get(9).calculateResolvedType().describe());
         assertEquals("long", exprs.get(10).calculateResolvedType().describe());
-        
+
         // unary primitve promotion
         assertEquals("int", exprs.get(11).calculateResolvedType().describe());
         assertEquals("int", exprs.get(12).calculateResolvedType().describe());
         assertEquals("int", exprs.get(13).calculateResolvedType().describe());
-        
     }
-
 }

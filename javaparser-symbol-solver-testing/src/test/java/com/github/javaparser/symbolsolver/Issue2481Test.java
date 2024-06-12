@@ -39,15 +39,16 @@ public class Issue2481Test {
         parserConfiguration.setSymbolResolver(new JavaSymbolSolver(solver));
         JavaParser parser = new JavaParser(parserConfiguration);
         ParseResult<CompilationUnit> cu = parser.parse("class A<T> { T t; }");
-        cu.ifSuccessful( c -> {
-            c.accept(new VoidVisitorAdapter<Void>() {
-                @Override
-                public void visit(ClassOrInterfaceType n, Void arg) {
-                    super.visit(n, arg);
-                    n.resolve();
-                }
-            }, null);
+        cu.ifSuccessful(c -> {
+            c.accept(
+                    new VoidVisitorAdapter<Void>() {
+                        @Override
+                        public void visit(ClassOrInterfaceType n, Void arg) {
+                            super.visit(n, arg);
+                            n.resolve();
+                        }
+                    },
+                    null);
         });
     }
-
 }

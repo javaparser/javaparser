@@ -21,6 +21,13 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_5;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -29,26 +36,24 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_5;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.ast.validator.Java1_1ValidatorTest.allModifiers;
-import static com.github.javaparser.utils.TestUtils.assertNoProblems;
-import static com.github.javaparser.utils.TestUtils.assertProblems;
-
 class Java5ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_5));
 
     @Test
     void genericsWithoutDiamond() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b = new ArrayList<>();}"));
-        assertProblems(result, "(line 1,col 33) The diamond operator is not supported. Pay attention that this feature is supported starting from 'JAVA_7' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b = new ArrayList<>();}"));
+        assertProblems(
+                result,
+                "(line 1,col 33) The diamond operator is not supported. Pay attention that this feature is supported starting from 'JAVA_7' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
     void topAnnotationDeclaration() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "@interface X{}"));
-        assertProblems(result,
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "@interface X{}"));
+        assertProblems(
+                result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
                 "(line 1,col 1) Can have only one of 'native', 'strictfp'.",
@@ -61,14 +66,15 @@ class Java5ValidatorTest {
                 "(line 1,col 1) 'static' is not allowed here.",
                 "(line 1,col 1) 'final' is not allowed here.",
                 "(line 1,col 1) 'private' is not allowed here.",
-                "(line 1,col 1) 'protected' is not allowed here."
-        );
+                "(line 1,col 1) 'protected' is not allowed here.");
     }
 
     @Test
     void nestedAnnotationDeclaration() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "@interface I{}}"));
-        assertProblems(result,
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "@interface I{}}"));
+        assertProblems(
+                result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
                 "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
@@ -78,14 +84,15 @@ class Java5ValidatorTest {
                 "(line 1,col 9) 'final' is not allowed here.",
                 "(line 1,col 9) 'synchronized' is not allowed here.",
                 "(line 1,col 9) 'native' is not allowed here.",
-                "(line 1,col 9) 'transitive' is not allowed here."
-        );
+                "(line 1,col 9) 'transitive' is not allowed here.");
     }
 
     @Test
     void annotationMember() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("@interface X{" + allModifiers + "int x();}"));
-        assertProblems(result,
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("@interface X{" + allModifiers + "int x();}"));
+        assertProblems(
+                result,
                 "(line 1,col 14) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 14) Can have only one of 'final', 'abstract'.",
                 "(line 1,col 14) Can have only one of 'native', 'strictfp'.",
@@ -99,14 +106,14 @@ class Java5ValidatorTest {
                 "(line 1,col 14) 'private' is not allowed here.",
                 "(line 1,col 14) 'strictfp' is not allowed here.",
                 "(line 1,col 14) 'static' is not allowed here.",
-                "(line 1,col 14) 'transitive' is not allowed here."
-        );
+                "(line 1,col 14) 'transitive' is not allowed here.");
     }
 
     @Test
     void topEnum() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(allModifiers + "enum X{}"));
-        assertProblems(result,
+        assertProblems(
+                result,
                 "(line 1,col 1) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 1) Can have only one of 'final', 'abstract'.",
                 "(line 1,col 1) Can have only one of 'native', 'strictfp'.",
@@ -120,14 +127,15 @@ class Java5ValidatorTest {
                 "(line 1,col 1) 'abstract' is not allowed here.",
                 "(line 1,col 1) 'final' is not allowed here.",
                 "(line 1,col 1) 'private' is not allowed here.",
-                "(line 1,col 1) 'protected' is not allowed here."
-        );
+                "(line 1,col 1) 'protected' is not allowed here.");
     }
 
     @Test
     void nestedEnum() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "enum I{}}"));
-        assertProblems(result,
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X{" + allModifiers + "enum I{}}"));
+        assertProblems(
+                result,
                 "(line 1,col 9) Can have only one of 'public', 'protected', 'private'.",
                 "(line 1,col 9) Can have only one of 'final', 'abstract'.",
                 "(line 1,col 9) Can have only one of 'native', 'strictfp'.",
@@ -138,8 +146,7 @@ class Java5ValidatorTest {
                 "(line 1,col 9) 'final' is not allowed here.",
                 "(line 1,col 9) 'synchronized' is not allowed here.",
                 "(line 1,col 9) 'native' is not allowed here.",
-                "(line 1,col 9) 'transitive' is not allowed here."
-        );
+                "(line 1,col 9) 'transitive' is not allowed here.");
     }
 
     @Test
@@ -157,20 +164,24 @@ class Java5ValidatorTest {
     @Test
     void noMultipleVariablesInForEach() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(int i, j : nums){}"));
-        assertProblems(result,
+        assertProblems(
+                result,
                 "(line 1,col 1) A foreach statement's variable declaration must have exactly one variable declarator. Given: 2.");
     }
 
     @Test
     void noModifiersInForEachBesideFinal() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(static transient int i : nums){}"));
-        assertProblems(result,
-                "(line 1,col 5) 'static' is not allowed here.", "(line 1,col 5) 'transient' is not allowed here.");
+        assertProblems(
+                result,
+                "(line 1,col 5) 'static' is not allowed here.",
+                "(line 1,col 5) 'transient' is not allowed here.");
     }
 
     @Test
     void staticImport() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("import static x;import static x.*;import x.X;import x.*;"));
+        ParseResult<CompilationUnit> result = javaParser.parse(
+                COMPILATION_UNIT, provider("import static x;import static x.*;import x.X;import x.*;"));
         assertNoProblems(result);
     }
 

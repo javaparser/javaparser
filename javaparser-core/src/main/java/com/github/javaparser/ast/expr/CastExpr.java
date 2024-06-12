@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -34,11 +36,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.CastExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A typecast. The (long) in {@code (long)15}
@@ -100,8 +99,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null)
-            this.expression.setParentNode(null);
+        if (this.expression != null) this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -114,8 +112,7 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null)
-            this.type.setParentNode(null);
+        if (this.type != null) this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;

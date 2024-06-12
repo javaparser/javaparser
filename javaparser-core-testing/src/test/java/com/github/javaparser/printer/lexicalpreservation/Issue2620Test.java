@@ -21,6 +21,10 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -28,13 +32,8 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.utils.LineSeparator;
-import org.junit.jupiter.api.Test;
-
 import java.util.Optional;
-
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.Test;
 
 public class Issue2620Test extends AbstractLexicalPreservingTest {
 
@@ -53,32 +52,28 @@ public class Issue2620Test extends AbstractLexicalPreservingTest {
         doTest(LineSeparator.CRLF);
     }
 
-
     /*
      * This test case must prevent an UnsupportedOperation Removed throwed by LexicalPreservation when we try to replace an expression
      */
     public void doTest(LineSeparator eol) {
 
-        considerCode("" +
-                "    public class Foo { //comment" + eol +
-                "        private String a;" + eol +
-                "        private String b;" + eol +
-                "        private String c;" + eol +
-                "        private String d;" + eol +
-                "    }");
+        considerCode("" + "    public class Foo { //comment"
+                + eol + "        private String a;"
+                + eol + "        private String b;"
+                + eol + "        private String c;"
+                + eol + "        private String d;"
+                + eol + "    }");
 
         // Note: Expect the platform's EOL character when printing
         // FIXME: Indentation is bad here.
-        String expected = "" +
-                "    public class Foo { //comment" + eol +
-                "        private String newField;" + eol +
-                "        " + eol +
-                "        private String a;" + eol +
-                "        private String b;" + eol +
-                "        private String c;" + eol +
-                "        private String d;" + eol +
-                "    }";
-
+        String expected = "" + "    public class Foo { //comment"
+                + eol + "        private String newField;"
+                + eol + "        "
+                + eol + "        private String a;"
+                + eol + "        private String b;"
+                + eol + "        private String c;"
+                + eol + "        private String d;"
+                + eol + "    }";
 
         // create a new field declaration
         VariableDeclarator variable = new VariableDeclarator(new ClassOrInterfaceType("String"), "newField");
@@ -89,12 +84,12 @@ public class Issue2620Test extends AbstractLexicalPreservingTest {
         cd.get().getMembers().addFirst(fd);
 
         // should be printed like this
-//        System.out.println("\n\nOriginal:\n" + original);
-//        System.out.println("\n\nExpected:\n" + expected);
+        //        System.out.println("\n\nOriginal:\n" + original);
+        //        System.out.println("\n\nExpected:\n" + expected);
 
         // but the result is
         final String actual = LexicalPreservingPrinter.print(cu);
-//        System.out.println("\n\nActual:\n" + actual);
+        //        System.out.println("\n\nActual:\n" + actual);
 
         LineSeparator detectedLineSeparator = LineSeparator.detect(actual);
 
@@ -109,9 +104,7 @@ public class Issue2620Test extends AbstractLexicalPreservingTest {
     }
 
     private String escapeNewlines(String input) {
-        return input
-                .replaceAll("\\r", "\\\\r")
-                .replaceAll("\\n", "\\\\n");
+        return input.replaceAll("\\r", "\\\\r").replaceAll("\\n", "\\\\n");
     }
 
     private String normaliseNewlines(String input) {

@@ -17,12 +17,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.printer.configuration;
 
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
-
 import java.util.List;
 
 public interface ImportOrderingStrategy {
@@ -67,5 +65,4 @@ public interface ImportOrderingStrategy {
     void setSortImportsAlphabetically(boolean sortAlphabetically);
 
     boolean isSortImportsAlphabetically();
-
 }

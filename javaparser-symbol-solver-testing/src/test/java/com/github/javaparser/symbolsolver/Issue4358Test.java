@@ -15,24 +15,24 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 public class Issue4358Test extends AbstractSymbolResolutionTest {
-  @Test
-  public void testIssue4358() throws IOException {
-    Path issueResourcesPath = adaptPath("src/test/resources/issue4358");
-    ReflectionTypeSolver rts = new ReflectionTypeSolver();
-    JavaParserTypeSolver jpts = new JavaParserTypeSolver(issueResourcesPath);
-    CombinedTypeSolver cts = new CombinedTypeSolver();
-    cts.add(rts);
-    cts.add(jpts);
-    ParserConfiguration pc = new ParserConfiguration()
-        .setSymbolResolver(new JavaSymbolSolver(cts));
-    StaticJavaParser.setConfiguration(pc);
-    CompilationUnit cu = StaticJavaParser.parse(issueResourcesPath.resolve("foo/A.java"));
+    @Test
+    public void testIssue4358() throws IOException {
+        Path issueResourcesPath = adaptPath("src/test/resources/issue4358");
+        ReflectionTypeSolver rts = new ReflectionTypeSolver();
+        JavaParserTypeSolver jpts = new JavaParserTypeSolver(issueResourcesPath);
+        CombinedTypeSolver cts = new CombinedTypeSolver();
+        cts.add(rts);
+        cts.add(jpts);
+        ParserConfiguration pc = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(cts));
+        StaticJavaParser.setConfiguration(pc);
+        CompilationUnit cu = StaticJavaParser.parse(issueResourcesPath.resolve("foo/A.java"));
 
-    // There's only one method call in this compilation unit
-    ResolvedMethodDeclaration actual = cu.findAll(MethodCallExpr.class).stream()
-        .map(MethodCallExpr::resolve)
-        .findAny().get();
+        // There's only one method call in this compilation unit
+        ResolvedMethodDeclaration actual = cu.findAll(MethodCallExpr.class).stream()
+                .map(MethodCallExpr::resolve)
+                .findAny()
+                .get();
 
-    assertEquals("foo.B.d()", actual.getQualifiedSignature());
-  }
+        assertEquals("foo.B.d()", actual.getQualifiedSignature());
+    }
 }

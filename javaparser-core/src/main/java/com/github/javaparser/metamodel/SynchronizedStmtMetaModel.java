@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.stmt.SynchronizedStmt;
-
 import java.util.Optional;
 
 /**
@@ -39,7 +38,13 @@ public class SynchronizedStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     SynchronizedStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, SynchronizedStmt.class, "SynchronizedStmt", "com.github.javaparser.ast.stmt", false, false);
+        super(
+                superBaseNodeMetaModel,
+                SynchronizedStmt.class,
+                "SynchronizedStmt",
+                "com.github.javaparser.ast.stmt",
+                false,
+                false);
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;

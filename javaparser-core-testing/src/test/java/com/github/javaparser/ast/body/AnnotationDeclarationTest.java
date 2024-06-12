@@ -21,12 +21,12 @@
 
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.stmt.Statement;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.utils.TestParser.parseStatement;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import com.github.javaparser.ast.stmt.Statement;
+import org.junit.jupiter.api.Test;
 
 class AnnotationDeclarationTest {
     @Test

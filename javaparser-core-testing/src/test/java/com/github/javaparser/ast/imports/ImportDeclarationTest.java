@@ -21,11 +21,11 @@
 
 package com.github.javaparser.ast.imports;
 
-import com.github.javaparser.ast.ImportDeclaration;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.StaticJavaParser.parseImport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.ast.ImportDeclaration;
+import org.junit.jupiter.api.Test;
 
 class ImportDeclarationTest {
     @Test
@@ -53,5 +53,4 @@ class ImportDeclarationTest {
         ImportDeclaration i = parseImport("import static a.b.c.X.*;");
         assertEquals("a.b.c.X", i.getNameAsString());
     }
-
 }

@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 
 /**
  * A node that explicitly extends other types, using the {@code extends} keyword.

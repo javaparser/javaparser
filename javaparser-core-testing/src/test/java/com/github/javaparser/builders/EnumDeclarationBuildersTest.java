@@ -21,15 +21,13 @@
 
 package com.github.javaparser.builders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.utils.LineSeparator;
-
-import org.junit.jupiter.api.Test;
-
 import java.util.function.Function;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class EnumDeclarationBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
@@ -39,10 +37,12 @@ class EnumDeclarationBuildersTest {
         EnumDeclaration testEnum = cu.addEnum("test");
         testEnum.addImplementedType(Function.class);
         assertEquals(1, cu.getImports().size());
-        assertEquals("import " + Function.class.getName() + ";" + LineSeparator.SYSTEM,
+        assertEquals(
+                "import " + Function.class.getName() + ";" + LineSeparator.SYSTEM,
                 cu.getImport(0).toString());
         assertEquals(1, testEnum.getImplementedTypes().size());
-        assertEquals(Function.class.getSimpleName(), testEnum.getImplementedTypes(0).getNameAsString());
+        assertEquals(
+                Function.class.getSimpleName(), testEnum.getImplementedTypes(0).getNameAsString());
     }
 
     @Test

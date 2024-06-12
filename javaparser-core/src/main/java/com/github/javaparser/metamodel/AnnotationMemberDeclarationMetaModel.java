@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
-
 import java.util.Optional;
 
 /**
@@ -39,7 +38,13 @@ public class AnnotationMemberDeclarationMetaModel extends BodyDeclarationMetaMod
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     AnnotationMemberDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, AnnotationMemberDeclaration.class, "AnnotationMemberDeclaration", "com.github.javaparser.ast.body", false, false);
+        super(
+                superBaseNodeMetaModel,
+                AnnotationMemberDeclaration.class,
+                "AnnotationMemberDeclaration",
+                "com.github.javaparser.ast.body",
+                false,
+                false);
     }
 
     public PropertyMetaModel defaultValuePropertyMetaModel;

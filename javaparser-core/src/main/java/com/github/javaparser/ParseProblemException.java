@@ -20,12 +20,11 @@
  */
 package com.github.javaparser;
 
-import java.util.List;
-
-import com.github.javaparser.utils.LineSeparator;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.singletonList;
+
+import com.github.javaparser.utils.LineSeparator;
+import java.util.List;
 
 /**
  * Thrown when parsing problems occur during parsing with the static methods on JavaParser.

@@ -21,12 +21,12 @@
 
 package com.github.javaparser.ast.expr;
 
-import com.github.javaparser.ParseProblemException;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.StaticJavaParser.parseExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import com.github.javaparser.ParseProblemException;
+import org.junit.jupiter.api.Test;
 
 class SuperExprTest {
     @Test

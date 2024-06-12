@@ -20,6 +20,9 @@
 
 package com.github.javaparser.ast.type;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -31,9 +34,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ClassOrInterfaceTypeTest {
 
@@ -75,5 +75,4 @@ class ClassOrInterfaceTypeTest {
 
         assertEquals("Ljava/lang/String;", classOrInterfaceType.toDescriptor());
     }
-
 }

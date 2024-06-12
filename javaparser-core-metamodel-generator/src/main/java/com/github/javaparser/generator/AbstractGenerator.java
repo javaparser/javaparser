@@ -21,6 +21,9 @@
 
 package com.github.javaparser.generator;
 
+import static com.github.javaparser.ast.NodeList.toNodeList;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.Problem;
 import com.github.javaparser.StaticJavaParser;
@@ -40,61 +43,55 @@ import com.github.javaparser.ast.stmt.SwitchStmt;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.ast.NodeList.toNodeList;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * A general pattern that the generators in this module will follow.
  */
 public abstract class AbstractGenerator {
 
-    protected static final String COPYRIGHT_NOTICE_JP_CORE = "\n" +
-            " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n" +
-            " * Copyright (C) 2011, 2013-2024 The JavaParser Team.\n" +
-            " *\n" +
-            " * This file is part of JavaParser.\n" +
-            " *\n" +
-            " * JavaParser can be used either under the terms of\n" +
-            " * a) the GNU Lesser General Public License as published by\n" +
-            " *     the Free Software Foundation, either version 3 of the License, or\n" +
-            " *     (at your option) any later version.\n" +
-            " * b) the terms of the Apache License\n" +
-            " *\n" +
-            " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
-            " * LICENCE.APACHE. Please refer to those files for details.\n" +
-            " *\n" +
-            " * JavaParser is distributed in the hope that it will be useful,\n" +
-            " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-            " * GNU Lesser General Public License for more details.\n" +
-            " ";
+    protected static final String COPYRIGHT_NOTICE_JP_CORE = "\n" + " * Copyright (C) 2007-2010 Júlio Vilmar Gesser.\n"
+            + " * Copyright (C) 2011, 2013-2024 The JavaParser Team.\n"
+            + " *\n"
+            + " * This file is part of JavaParser.\n"
+            + " *\n"
+            + " * JavaParser can be used either under the terms of\n"
+            + " * a) the GNU Lesser General Public License as published by\n"
+            + " *     the Free Software Foundation, either version 3 of the License, or\n"
+            + " *     (at your option) any later version.\n"
+            + " * b) the terms of the Apache License\n"
+            + " *\n"
+            + " * You should have received a copy of both licenses in LICENCE.LGPL and\n"
+            + " * LICENCE.APACHE. Please refer to those files for details.\n"
+            + " *\n"
+            + " * JavaParser is distributed in the hope that it will be useful,\n"
+            + " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+            + " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+            + " * GNU Lesser General Public License for more details.\n"
+            + " ";
 
-    protected static final String COPYRIGHT_NOTICE_JP_SS = "\n" +
-            " * Copyright (C) 2015-2016 Federico Tomassetti\n" +
-            " * Copyright (C) 2017-2024 The JavaParser Team.\n" +
-            " *\n" +
-            " * This file is part of JavaParser.\n" +
-            " *\n" +
-            " * JavaParser can be used either under the terms of\n" +
-            " * a) the GNU Lesser General Public License as published by\n" +
-            " *     the Free Software Foundation, either version 3 of the License, or\n" +
-            " *     (at your option) any later version.\n" +
-            " * b) the terms of the Apache License\n" +
-            " *\n" +
-            " * You should have received a copy of both licenses in LICENCE.LGPL and\n" +
-            " * LICENCE.APACHE. Please refer to those files for details.\n" +
-            " *\n" +
-            " * JavaParser is distributed in the hope that it will be useful,\n" +
-            " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-            " * GNU Lesser General Public License for more details.\n" +
-            " ";
+    protected static final String COPYRIGHT_NOTICE_JP_SS = "\n" + " * Copyright (C) 2015-2016 Federico Tomassetti\n"
+            + " * Copyright (C) 2017-2024 The JavaParser Team.\n"
+            + " *\n"
+            + " * This file is part of JavaParser.\n"
+            + " *\n"
+            + " * JavaParser can be used either under the terms of\n"
+            + " * a) the GNU Lesser General Public License as published by\n"
+            + " *     the Free Software Foundation, either version 3 of the License, or\n"
+            + " *     (at your option) any later version.\n"
+            + " * b) the terms of the Apache License\n"
+            + " *\n"
+            + " * You should have received a copy of both licenses in LICENCE.LGPL and\n"
+            + " * LICENCE.APACHE. Please refer to those files for details.\n"
+            + " *\n"
+            + " * JavaParser is distributed in the hope that it will be useful,\n"
+            + " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+            + " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+            + " * GNU Lesser General Public License for more details.\n"
+            + " ";
 
     protected final SourceRoot sourceRoot;
 
@@ -105,16 +102,18 @@ public abstract class AbstractGenerator {
     private void addOrReplaceMethod(
             ClassOrInterfaceDeclaration containingClassOrInterface,
             CallableDeclaration<?> callable,
-            Runnable onNoExistingMethod
-    ) {
-        List<CallableDeclaration<?>> existingMatchingCallables = containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
+            Runnable onNoExistingMethod) {
+        List<CallableDeclaration<?>> existingMatchingCallables =
+                containingClassOrInterface.getCallablesWithSignature(callable.getSignature());
         if (existingMatchingCallables.isEmpty()) {
             // A matching callable exists -- will now normally add/insert.
             onNoExistingMethod.run();
         } else {
             // A matching callable doe NOT exist -- will now normally replace.
             if (existingMatchingCallables.size() > 1) {
-                throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but found more than one, and unable to disambiguate.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
+                throw new AssertionError(f(
+                        "Wanted to regenerate a method with signature %s in %s, but found more than one, and unable to disambiguate.",
+                        callable.getSignature(), containingClassOrInterface.getNameAsString()));
             }
 
             final CallableDeclaration<?> existingCallable = existingMatchingCallables.get(0);
@@ -128,8 +127,10 @@ public abstract class AbstractGenerator {
             Optional<Comment> callableComment = callable.getComment();
             Optional<Comment> existingCallableComment = existingCallable.getComment();
 
-            callable.setComment(callableComment.orElseGet(() -> existingCallable.getComment().orElse(null)));
-//            callable.setJavadocComment(callableJavadocComment.orElse(existingCallableJavadocComment.orElse(null)));
+            callable.setComment(callableComment.orElseGet(
+                    () -> existingCallable.getComment().orElse(null)));
+            //
+            // callable.setJavadocComment(callableJavadocComment.orElse(existingCallableJavadocComment.orElse(null)));
 
             // Mark the method as having been fully/partially generated.
             annotateGenerated(callable);
@@ -153,19 +154,15 @@ public abstract class AbstractGenerator {
      * Utility method that looks for a method or constructor with an identical signature as "callable" and replaces it
      * with callable. If not found, adds callable. When the new callable has no javadoc, any old javadoc will be kept.
      */
-    protected void addOrReplaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        addOrReplaceMethod(
-                containingClassOrInterface,
-                callable,
-                () -> {
-                    annotateGenerated(callable);
-                    containingClassOrInterface.addMember(callable);
-                }
-        );
+    protected void addOrReplaceWhenSameSignature(
+            ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        addOrReplaceMethod(containingClassOrInterface, callable, () -> {
+            annotateGenerated(callable);
+            containingClassOrInterface.addMember(callable);
+        });
     }
 
-    protected void after() throws Exception {
-    }
+    protected void after() throws Exception {}
 
     /**
      * @param node       The node to which the annotation will be added.
@@ -174,8 +171,7 @@ public abstract class AbstractGenerator {
      * @param <T>        Only accept nodes which accept annotations.
      */
     private <T extends NodeWithAnnotations<?>> void annotate(T node, Class<?> annotation, Expression content) {
-        NodeList<AnnotationExpr> annotations = node.getAnnotations()
-                .stream()
+        NodeList<AnnotationExpr> annotations = node.getAnnotations().stream()
                 .filter(a -> !a.getNameAsString().equals(annotation.getSimpleName()))
                 .collect(toNodeList());
 
@@ -200,16 +196,12 @@ public abstract class AbstractGenerator {
     }
 
     protected <T extends Node & NodeWithAnnotations<?>> void removeAnnotation(T node, Class<?> annotation) {
-        node.getAnnotations().removeIf(annotationExpr ->
-                annotationExpr.getName().asString().equals(
-                        annotation.getSimpleName()
-                )
-        );
+        node.getAnnotations()
+                .removeIf(annotationExpr -> annotationExpr.getName().asString().equals(annotation.getSimpleName()));
 
         node.findAncestor(CompilationUnit.class).ifPresent(compilationUnit -> {
             removeAnnotationImportIfUnused(compilationUnit, annotation);
         });
-
     }
 
     protected <T extends Node & NodeWithAnnotations<?>> void removeGenerated(T node) {
@@ -218,14 +210,8 @@ public abstract class AbstractGenerator {
 
     protected void removeAnnotationImportIfUnused(CompilationUnit compilationUnit, Class<?> annotation) {
 
-        List<AnnotationExpr> staleAnnotations = compilationUnit
-                .findAll(AnnotationExpr.class)
-                .stream()
-                .filter(annotationExpr ->
-                        annotationExpr.getName().asString().equals(
-                                annotation.getSimpleName()
-                        )
-                )
+        List<AnnotationExpr> staleAnnotations = compilationUnit.findAll(AnnotationExpr.class).stream()
+                .filter(annotationExpr -> annotationExpr.getName().asString().equals(annotation.getSimpleName()))
                 .collect(Collectors.toList());
 
         if (staleAnnotations.isEmpty()) {
@@ -256,8 +242,10 @@ public abstract class AbstractGenerator {
      * This is not currently used directly by any current generators, but may be useful when changing a generator
      * and you need to get rid of a set of outdated methods.
      */
-    protected void removeMethodWithSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        for (CallableDeclaration<?> existingCallable : containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {
+    protected void removeMethodWithSameSignature(
+            ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        for (CallableDeclaration<?> existingCallable :
+                containingClassOrInterface.getCallablesWithSignature(callable.getSignature())) {
             containingClassOrInterface.remove(existingCallable);
         }
     }
@@ -267,16 +255,14 @@ public abstract class AbstractGenerator {
      * with callable. If not found, fails. When the new callable has no javadoc, any old javadoc will be kept. The
      * method or constructor is annotated with the generator class.
      */
-    protected void replaceWhenSameSignature(ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
-        addOrReplaceMethod(
-                containingClassOrInterface,
-                callable,
-                () -> {
-                    throw new AssertionError(f("Wanted to regenerate a method with signature %s in %s, but it wasn't there.", callable.getSignature(), containingClassOrInterface.getNameAsString()));
-                }
-        );
+    protected void replaceWhenSameSignature(
+            ClassOrInterfaceDeclaration containingClassOrInterface, CallableDeclaration<?> callable) {
+        addOrReplaceMethod(containingClassOrInterface, callable, () -> {
+            throw new AssertionError(f(
+                    "Wanted to regenerate a method with signature %s in %s, but it wasn't there.",
+                    callable.getSignature(), containingClassOrInterface.getNameAsString()));
+        });
     }
-
 
     protected List<CompilationUnit> getParsedCompilationUnitsFromSourceRoot(SourceRoot sourceRoot) throws IOException {
         List<CompilationUnit> cus = sourceRoot.getCompilationUnits();
@@ -284,7 +270,9 @@ public abstract class AbstractGenerator {
 
         boolean allParsed = parseResults.stream().allMatch(ParseResult::isSuccessful);
         if (!allParsed) {
-            List<ParseResult<CompilationUnit>> problemResults = parseResults.stream().filter(compilationUnitParseResult -> !compilationUnitParseResult.isSuccessful()).collect(Collectors.toList());
+            List<ParseResult<CompilationUnit>> problemResults = parseResults.stream()
+                    .filter(compilationUnitParseResult -> !compilationUnitParseResult.isSuccessful())
+                    .collect(Collectors.toList());
             for (int i = 0; i < problemResults.size(); i++) {
                 ParseResult<CompilationUnit> parseResult = problemResults.get(i);
                 List<Problem> problems = parseResult.getProblems();
@@ -304,10 +292,10 @@ public abstract class AbstractGenerator {
                 .collect(Collectors.toList());
     }
 
-
     protected MethodDeclaration prettyPrint(MethodDeclaration methodDeclaration) {
         return prettyPrint(methodDeclaration, "");
     }
+
     protected MethodDeclaration prettyPrint(MethodDeclaration methodDeclaration, String indent) {
         String methodDeclarationString = indent + methodDeclaration.toString().replaceAll("(\\R)", "$1" + indent);
         MethodDeclaration prettyMethodDeclaration = StaticJavaParser.parseMethodDeclaration(methodDeclarationString);
@@ -318,6 +306,7 @@ public abstract class AbstractGenerator {
     protected EnumDeclaration prettyPrint(EnumDeclaration enumDeclaration) {
         return prettyPrint(enumDeclaration, "");
     }
+
     protected EnumDeclaration prettyPrint(EnumDeclaration enumDeclaration, String indent) {
         String enumDeclarationString = indent + enumDeclaration.toString().replaceAll("(\\R)", "$1" + indent);
         TypeDeclaration<?> prettyEnumDeclaration = StaticJavaParser.parseTypeDeclaration(enumDeclarationString);
@@ -331,6 +320,7 @@ public abstract class AbstractGenerator {
     protected SwitchStmt prettyPrint(SwitchStmt switchStmt) {
         return prettyPrint(switchStmt, "");
     }
+
     protected SwitchStmt prettyPrint(SwitchStmt switchStmt, String indent) {
         String switchStmtString = indent + switchStmt.toString().replaceAll("(\\R)", "$1" + indent);
         Statement prettySwitchStmt = StaticJavaParser.parseStatement(switchStmtString);

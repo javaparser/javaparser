@@ -21,17 +21,15 @@
 
 package com.github.javaparser.builders;
 
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.utils.LineSeparator;
-
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class NodeWithParametersBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
@@ -42,7 +40,9 @@ class NodeWithParametersBuildersTest {
         addMethod.addParameter(int.class, "yay");
         Parameter myNewParam = addMethod.addAndGetParameter(List.class, "myList");
         assertEquals(1, cu.getImports().size());
-        assertEquals("import " + List.class.getName() + ";" + LineSeparator.SYSTEM, cu.getImport(0).toString());
+        assertEquals(
+                "import " + List.class.getName() + ";" + LineSeparator.SYSTEM,
+                cu.getImport(0).toString());
         assertEquals(2, addMethod.getParameters().size());
         assertEquals("yay", addMethod.getParameter(0).getNameAsString());
         assertEquals("List", addMethod.getParameter(1).getType().toString());
@@ -63,5 +63,4 @@ class NodeWithParametersBuildersTest {
         assertEquals(addAndGetParameter, addMethod.getParameterByType("int").get());
         assertEquals(addAndGetParameter, addMethod.getParameterByType(int.class).get());
     }
-
 }

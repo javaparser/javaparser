@@ -21,6 +21,12 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParseStart.EXPRESSION;
+import static com.github.javaparser.ParseStart.STATEMENT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_21;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -29,25 +35,21 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.ParseStart.EXPRESSION;
-import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_21;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.TestUtils.assertNoProblems;
-
 class Java21ValidatorTest {
 
     private final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_21));
 
     @Test
     void switchDefaultCaseAllowed() {
-        ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case null, default -> System.out.println(0);}"));
+        ParseResult<Expression> result =
+                javaParser.parse(EXPRESSION, provider("switch(x){case null, default -> System.out.println(0);}"));
         assertNoProblems(result);
     }
 
     @Test
     void switchPatternWithGuardAllowed() {
-        ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("switch(x){case String s when s.length() > 5 -> System.out.println(0);}"));
+        ParseResult<Expression> result = javaParser.parse(
+                EXPRESSION, provider("switch(x){case String s when s.length() > 5 -> System.out.println(0);}"));
         assertNoProblems(result);
     }
 
@@ -56,5 +58,4 @@ class Java21ValidatorTest {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("if (a instanceof Box(String s)) {}"));
         TestUtils.assertNoProblems(result);
     }
-
 }

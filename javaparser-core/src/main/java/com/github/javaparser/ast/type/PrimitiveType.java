@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.ast.type;
 
+import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -35,13 +38,9 @@ import com.github.javaparser.metamodel.PrimitiveTypeMetaModel;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A primitive type.
@@ -86,7 +85,6 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     public enum Primitive {
-
         BOOLEAN("Boolean", "Z"),
         CHAR("Character", "C"),
         BYTE("Byte", "B"),
@@ -103,9 +101,9 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         private String codeRepresentation;
 
         /*
-        * Returns the Primitive constant corresponding to the specified type name (e.g. "boolean", "int",
-        * "long").
-        */
+         * Returns the Primitive constant corresponding to the specified type name (e.g. "boolean", "int",
+         * "long").
+         */
         public static Optional<Primitive> byTypeName(String name) {
             for (Primitive primitive : values()) {
                 if (primitive.name().toLowerCase().equals(name)) {
@@ -116,9 +114,9 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         }
 
         /*
-        * Returns the Primitive constant corresponding to the specified boxed type name (e.g. "Boolean", "Integer",
-        * "Long").
-        */
+         * Returns the Primitive constant corresponding to the specified boxed type name (e.g. "Boolean", "Integer",
+         * "Long").
+         */
         public static Optional<Primitive> byBoxedTypeName(String simpleName) {
             return Optional.ofNullable(unboxMap.getOrDefault(simpleName, null));
         }
@@ -263,8 +261,8 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
         return Optional.of(this);
     }
 
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		return ResolvedPrimitiveType.byName(getType().name());
-	}
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        return ResolvedPrimitiveType.byName(getType().name());
+    }
 }

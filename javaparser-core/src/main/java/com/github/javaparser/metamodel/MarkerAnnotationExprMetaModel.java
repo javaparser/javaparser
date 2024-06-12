@@ -22,7 +22,6 @@ package com.github.javaparser.metamodel;
 
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-
 import java.util.Optional;
 
 /**
@@ -39,6 +38,12 @@ public class MarkerAnnotationExprMetaModel extends AnnotationExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     MarkerAnnotationExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, MarkerAnnotationExpr.class, "MarkerAnnotationExpr", "com.github.javaparser.ast.expr", false, false);
+        super(
+                superBaseNodeMetaModel,
+                MarkerAnnotationExpr.class,
+                "MarkerAnnotationExpr",
+                "com.github.javaparser.ast.expr",
+                false,
+                false);
     }
 }

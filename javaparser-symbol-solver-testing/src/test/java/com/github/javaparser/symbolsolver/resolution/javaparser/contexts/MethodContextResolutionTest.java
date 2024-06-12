@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -35,8 +37,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.MemoryTypeSolve
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Malte Langkabel

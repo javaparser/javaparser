@@ -21,10 +21,10 @@
 
 package com.github.javaparser.printer;
 
-import com.github.javaparser.ast.expr.Expression;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import com.github.javaparser.ast.expr.Expression;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -48,9 +48,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -140,13 +140,15 @@ class XmlPrinterTest {
 
         if (!expectedDocument.isEqualNode(actualDocument)) {
             try {
-                fail(String.format("-- expected:\n%s-- actual:\n%s",
-                        getXML(expectedDocument), getXML(actualDocument)));
-            } catch(TransformerException ex) {
-                fail(String.format(""
-                        + "expected: <%s>, but it was <%s>\n"
-                        + "Additionally, a TransformerException was raised when trying to report XML document contents",
-                        expected, actual), ex);
+                fail(String.format("-- expected:\n%s-- actual:\n%s", getXML(expectedDocument), getXML(actualDocument)));
+            } catch (TransformerException ex) {
+                fail(
+                        String.format(
+                                ""
+                                        + "expected: <%s>, but it was <%s>\n"
+                                        + "Additionally, a TransformerException was raised when trying to report XML document contents",
+                                expected, actual),
+                        ex);
             }
         }
     }
@@ -158,7 +160,9 @@ class XmlPrinterTest {
 
         String output = xmlOutput.output(expression);
 
-        assertXMLEquals("<root type='BinaryExpr' operator='PLUS'><left type='IntegerLiteralExpr' value='1'></left><right type='IntegerLiteralExpr' value='1'></right></root>", output);
+        assertXMLEquals(
+                "<root type='BinaryExpr' operator='PLUS'><left type='IntegerLiteralExpr' value='1'></left><right type='IntegerLiteralExpr' value='1'></right></root>",
+                output);
     }
 
     @Test
@@ -180,7 +184,9 @@ class XmlPrinterTest {
 
         String output = xmlOutput.output(expression);
 
-        assertXMLEquals("<root type='MethodCallExpr'><name type='SimpleName' identifier='a'></name><arguments><argument type='IntegerLiteralExpr' value='1'></argument><argument type='IntegerLiteralExpr' value='2'></argument></arguments></root>", output);
+        assertXMLEquals(
+                "<root type='MethodCallExpr'><name type='SimpleName' identifier='a'></name><arguments><argument type='IntegerLiteralExpr' value='1'></argument><argument type='IntegerLiteralExpr' value='2'></argument></arguments></root>",
+                output);
     }
 
     // Demonstrate the use of streaming, without use of temporary strings.
@@ -189,22 +195,20 @@ class XmlPrinterTest {
 
         File tempFile = createTempFile();
 
-        try (
-            FileWriter fileWriter = new FileWriter(tempFile)
-        ) {
+        try (FileWriter fileWriter = new FileWriter(tempFile)) {
             XmlPrinter xmlOutput = new XmlPrinter(false);
             xmlOutput.outputDocument(parseExpression("1+1"), "root", fileWriter);
         }
 
-        assertXMLEquals(""
-                // Expected
-                + "<root operator='PLUS'>"
-                    + "<left value='1'/>"
-                    + "<right value='1'/>"
-                + "</root>",
+        assertXMLEquals(
+                ""
+                        // Expected
+                        + "<root operator='PLUS'>"
+                        + "<left value='1'/>"
+                        + "<right value='1'/>"
+                        + "</root>",
                 // Actual (Using temporary string for checking results. No one has been used when generating XML)
-                new String(Files.readAllBytes(tempFile.toPath()))
-        );
+                new String(Files.readAllBytes(tempFile.toPath())));
     }
 
     @Test
@@ -221,31 +225,31 @@ class XmlPrinterTest {
         xmlWriter.writeStartDocument();
         xmlWriter.writeStartElement("custom");
 
-            xmlOutput.outputNode(parseExpression("1+1"), "plusExpr", xmlWriter);
-            xmlOutput.outputNode(parseExpression("a(1,2)"), "callExpr", xmlWriter);
+        xmlOutput.outputNode(parseExpression("1+1"), "plusExpr", xmlWriter);
+        xmlOutput.outputNode(parseExpression("a(1,2)"), "callExpr", xmlWriter);
 
         xmlWriter.writeEndElement();
         xmlWriter.writeEndDocument();
         xmlWriter.close();
 
-        assertXMLEquals(""
-                // Expected
-                + "<custom>"
-                    + "<plusExpr operator='PLUS'>"
+        assertXMLEquals(
+                ""
+                        // Expected
+                        + "<custom>"
+                        + "<plusExpr operator='PLUS'>"
                         + "<left value='1'/>"
                         + "<right value='1'/>"
-                    + "</plusExpr>"
-                    + "<callExpr>"
+                        + "</plusExpr>"
+                        + "<callExpr>"
                         + "<name identifier='a'/>"
                         + "<arguments>"
-                            + "<argument value='1'/>"
-                            + "<argument value='2'/>"
+                        + "<argument value='1'/>"
+                        + "<argument value='2'/>"
                         + "</arguments>"
-                    + "</callExpr>"
-                + "</custom>",
+                        + "</callExpr>"
+                        + "</custom>",
                 // Actual
-                stringWriter.toString()
-        );
+                stringWriter.toString());
     }
 
     @Test
@@ -253,16 +257,16 @@ class XmlPrinterTest {
         Expression expression = parseExpression("new HashSet()");
         XmlPrinter xmlOutput = new XmlPrinter(false);
         String output = xmlOutput.output(expression);
-        assertXMLEquals(""
-                // Expected
-                + "<root>"
-                    + "<type>"
+        assertXMLEquals(
+                ""
+                        // Expected
+                        + "<root>"
+                        + "<type>"
                         + "<name identifier='HashSet'/>"
-                    + "</type>"
-                + "</root>",
+                        + "</type>"
+                        + "</root>",
                 // Actual
-                output
-        );
+                output);
     }
 
     @Test
@@ -270,17 +274,17 @@ class XmlPrinterTest {
         Expression expression = parseExpression("new HashSet<>()");
         XmlPrinter xmlOutput = new XmlPrinter(false);
         String output = xmlOutput.output(expression);
-        assertXMLEquals(""
-                // Expected
-                + "<root>"
-                    + "<type>"
+        assertXMLEquals(
+                ""
+                        // Expected
+                        + "<root>"
+                        + "<type>"
                         + "<name identifier='HashSet'/>"
                         + "<typeArguments/>"
-                    + "</type>"
-                + "</root>",
+                        + "</type>"
+                        + "</root>",
                 // Actual
-                output
-        );
+                output);
     }
 
     @Test
@@ -288,24 +292,24 @@ class XmlPrinterTest {
         Expression expression = parseExpression("new HashSet<Integer,File>()");
         XmlPrinter xmlOutput = new XmlPrinter(false);
         String output = xmlOutput.output(expression);
-        assertXMLEquals(""
-                // Expected
-                + "<root>"
-                    + "<type>"
+        assertXMLEquals(
+                ""
+                        // Expected
+                        + "<root>"
+                        + "<type>"
                         + "<name identifier='HashSet'/>"
                         + "<typeArguments>"
-                            + "<typeArgument>"
-                                + "<name identifier='Integer'/>"
-                            + "</typeArgument>"
-                            + "<typeArgument>"
-                                + "<name identifier='File'/>"
-                            + "</typeArgument>"
+                        + "<typeArgument>"
+                        + "<name identifier='Integer'/>"
+                        + "</typeArgument>"
+                        + "<typeArgument>"
+                        + "<name identifier='File'/>"
+                        + "</typeArgument>"
                         + "</typeArguments>"
-                    + "</type>"
-                + "</root>",
+                        + "</type>"
+                        + "</root>",
                 // Actual
-                output
-        );
+                output);
     }
 }
 

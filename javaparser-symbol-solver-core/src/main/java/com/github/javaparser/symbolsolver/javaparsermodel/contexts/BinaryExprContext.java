@@ -27,7 +27,6 @@ import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -80,7 +79,8 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
                 }
             }
 
-            // TODO/FIXME: There are other cases where it may be ambiguously true until runtime e.g. `"x" instanceof String s == (new Random().nextBoolean())`
+            // TODO/FIXME: There are other cases where it may be ambiguously true until runtime e.g. `"x" instanceof
+            // String s == (new Random().nextBoolean())`
 
         } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND)) {
             // "x" instanceof String s && s.length() > 0
@@ -103,7 +103,8 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
 
         List<TypePatternExpr> results = new ArrayList<>();
 
-        // FIXME: Redo the `.getValue() == true` to take more complex code into account when determining if definitively true (e.g. `
+        // FIXME: Redo the `.getValue() == true` to take more complex code into account when determining if definitively
+        // true (e.g. `
         if (binaryExpr.getOperator().equals(BinaryExpr.Operator.EQUALS)) {
             if (rightBranch.isBooleanLiteralExpr()) {
                 if (isDefinitivelyTrue(rightBranch)) {
@@ -147,7 +148,8 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
                 }
             }
 
-            // TODO/FIXME: There are other cases where it may be ambiguously true until runtime e.g. `"x" instanceof String s == (new Random().nextBoolean())`
+            // TODO/FIXME: There are other cases where it may be ambiguously true until runtime e.g. `"x" instanceof
+            // String s == (new Random().nextBoolean())`
 
         } else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND)) {
             // "x" instanceof String s && s.length() > 0
@@ -193,14 +195,14 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
                 results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
             }
         }
-//        else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND) && rightBranch.isAncestorOf(child)) {
-//            // "" instanceof String s && "" instanceof String s2
-//            results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
-//        }
+        //        else if (binaryExpr.getOperator().equals(BinaryExpr.Operator.AND) && rightBranch.isAncestorOf(child))
+        // {
+        //            // "" instanceof String s && "" instanceof String s2
+        //            results.addAll(patternExprsExposedToDirectParentFromBranch(leftBranch));
+        //        }
 
         return results;
     }
-
 
     public Optional<TypePatternExpr> typePatternExprInScope(String name) {
         BinaryExpr binaryExpr = wrappedNode;
@@ -208,15 +210,13 @@ public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
         Expression rightBranch = binaryExpr.getRight();
 
         List<TypePatternExpr> patternExprs = patternExprsExposedToDirectParentFromBranch(leftBranch);
-        Optional<TypePatternExpr> localResolutionResults = patternExprs
-                .stream()
+        Optional<TypePatternExpr> localResolutionResults = patternExprs.stream()
                 .filter(vd -> vd.getNameAsString().equals(name))
                 .findFirst();
 
         if (localResolutionResults.isPresent()) {
             return localResolutionResults;
         }
-
 
         // If we don't find the parameter locally, escalate up the scope hierarchy to see if it is declared there.
         if (!getParent().isPresent()) {

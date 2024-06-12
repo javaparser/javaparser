@@ -25,9 +25,6 @@ import static com.github.javaparser.resolution.Navigator.demandParentNode;
 import static com.github.javaparser.resolution.model.SymbolReference.solved;
 import static com.github.javaparser.resolution.model.SymbolReference.unsolved;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Node;
@@ -53,6 +50,8 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class to be used by final users to solve symbols for JavaParser ASTs.
@@ -63,10 +62,8 @@ public class JavaParserFacade {
 
     // Start of static class
 
-    private static final DataKey<ResolvedType> TYPE_WITH_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
-    };
-    private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {
-    };
+    private static final DataKey<ResolvedType> TYPE_WITH_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {};
+    private static final DataKey<ResolvedType> TYPE_WITHOUT_LAMBDAS_RESOLVED = new DataKey<ResolvedType>() {};
 
     private static final Map<TypeSolver, JavaParserFacade> instances = new WeakHashMap<>();
 
@@ -127,7 +124,9 @@ public class JavaParserFacade {
     }
 
     public SymbolReference<? extends ResolvedValueDeclaration> solve(Expression expr) {
-        return expr.toNameExpr().map(this::solve).orElseThrow(() -> new IllegalArgumentException(expr.getClass().getCanonicalName()));
+        return expr.toNameExpr()
+                .map(this::solve)
+                .orElseThrow(() -> new IllegalArgumentException(expr.getClass().getCanonicalName()));
     }
 
     public SymbolReference<ResolvedMethodDeclaration> solve(MethodCallExpr methodCallExpr) {
@@ -142,13 +141,16 @@ public class JavaParserFacade {
         return solve(objectCreationExpr, true);
     }
 
-    public SymbolReference<ResolvedConstructorDeclaration> solve(ExplicitConstructorInvocationStmt explicitConstructorInvocationStmt) {
+    public SymbolReference<ResolvedConstructorDeclaration> solve(
+            ExplicitConstructorInvocationStmt explicitConstructorInvocationStmt) {
         return solve(explicitConstructorInvocationStmt, true);
     }
 
-    public SymbolReference<ResolvedConstructorDeclaration> solve(ExplicitConstructorInvocationStmt explicitConstructorInvocationStmt, boolean solveLambdas) {
+    public SymbolReference<ResolvedConstructorDeclaration> solve(
+            ExplicitConstructorInvocationStmt explicitConstructorInvocationStmt, boolean solveLambdas) {
         // Constructor invocation must exist within a class (not interface).
-        Optional<ClassOrInterfaceDeclaration> optAncestorClassOrInterfaceNode = explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
+        Optional<ClassOrInterfaceDeclaration> optAncestorClassOrInterfaceNode =
+                explicitConstructorInvocationStmt.findAncestor(ClassOrInterfaceDeclaration.class);
         if (!optAncestorClassOrInterfaceNode.isPresent()) {
             return unsolved();
         }
@@ -156,7 +158,8 @@ public class JavaParserFacade {
         ClassOrInterfaceDeclaration classOrInterfaceNode = optAncestorClassOrInterfaceNode.get();
         ResolvedReferenceTypeDeclaration resolvedClassNode = classOrInterfaceNode.resolve();
         if (!resolvedClassNode.isClass()) {
-            throw new IllegalStateException("Expected to be a class -- cannot call this() or super() within an interface.");
+            throw new IllegalStateException(
+                    "Expected to be a class -- cannot call this() or super() within an interface.");
         }
 
         ResolvedTypeDeclaration typeDecl = null;
@@ -165,7 +168,8 @@ public class JavaParserFacade {
             typeDecl = resolvedClassNode.asReferenceType();
         } else {
             // super()
-            Optional<ResolvedReferenceType> superClass = resolvedClassNode.asClass().getSuperClass();
+            Optional<ResolvedReferenceType> superClass =
+                    resolvedClassNode.asClass().getSuperClass();
             if (superClass.isPresent() && superClass.get().getTypeDeclaration().isPresent()) {
                 typeDecl = superClass.get().getTypeDeclaration().get();
             }
@@ -177,10 +181,16 @@ public class JavaParserFacade {
         // Solve each of the arguments being passed into this constructor invocation.
         List<ResolvedType> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
-        solveArguments(explicitConstructorInvocationStmt, explicitConstructorInvocationStmt.getArguments(), solveLambdas, argumentTypes, placeholders);
+        solveArguments(
+                explicitConstructorInvocationStmt,
+                explicitConstructorInvocationStmt.getArguments(),
+                solveLambdas,
+                argumentTypes,
+                placeholders);
 
         // Determine which constructor is referred to, and return it.
-        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(((ResolvedClassDeclaration) typeDecl).getConstructors(), argumentTypes, typeSolver);
+        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(
+                ((ResolvedClassDeclaration) typeDecl).getConstructors(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -213,33 +223,42 @@ public class JavaParserFacade {
     /**
      * Given a constructor call find out to which constructor declaration it corresponds.
      */
-    public SymbolReference<ResolvedConstructorDeclaration> solve(ObjectCreationExpr objectCreationExpr, boolean solveLambdas) {
+    public SymbolReference<ResolvedConstructorDeclaration> solve(
+            ObjectCreationExpr objectCreationExpr, boolean solveLambdas) {
         List<ResolvedType> argumentTypes = new LinkedList<>();
         List<LambdaArgumentTypePlaceholder> placeholders = new LinkedList<>();
 
-        solveArguments(objectCreationExpr, objectCreationExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
+        solveArguments(
+                objectCreationExpr, objectCreationExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
         ResolvedReferenceTypeDeclaration typeDecl = null;
         if (objectCreationExpr.getAnonymousClassBody().isPresent()) {
             typeDecl = new JavaParserAnonymousClassDeclaration(objectCreationExpr, typeSolver);
         } else {
-            ResolvedType classDecl = JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr);
-            if (classDecl.isReferenceType() && classDecl.asReferenceType().getTypeDeclaration().isPresent()) {
+            ResolvedType classDecl =
+                    JavaParserFacade.get(typeSolver).convert(objectCreationExpr.getType(), objectCreationExpr);
+            if (classDecl.isReferenceType()
+                    && classDecl.asReferenceType().getTypeDeclaration().isPresent()) {
                 typeDecl = classDecl.asReferenceType().getTypeDeclaration().get();
             }
         }
         if (typeDecl == null) {
             return unsolved();
         }
-        SymbolReference<ResolvedConstructorDeclaration> res = ConstructorResolutionLogic.findMostApplicable(typeDecl.getConstructors(), argumentTypes, typeSolver);
+        SymbolReference<ResolvedConstructorDeclaration> res =
+                ConstructorResolutionLogic.findMostApplicable(typeDecl.getConstructors(), argumentTypes, typeSolver);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
         return res;
     }
 
-    private void solveArguments(Node node, NodeList<Expression> args, boolean solveLambdas, List<ResolvedType> argumentTypes,
-                                List<LambdaArgumentTypePlaceholder> placeholders) {
+    private void solveArguments(
+            Node node,
+            NodeList<Expression> args,
+            boolean solveLambdas,
+            List<ResolvedType> argumentTypes,
+            List<LambdaArgumentTypePlaceholder> placeholders) {
         int i = 0;
         for (Expression parameterValue : args) {
             while (parameterValue instanceof EnclosedExpr) {
@@ -253,8 +272,11 @@ public class JavaParserFacade {
                 try {
                     argumentTypes.add(JavaParserFacade.get(typeSolver).getType(parameterValue, solveLambdas));
                 } catch (Exception e) {
-                    throw failureHandler.handle(e, String.format("Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
-                            node, parameterValue));
+                    throw failureHandler.handle(
+                            e,
+                            String.format(
+                                    "Unable to calculate the type of a parameter of a method call. Method call: %s, Parameter: %s",
+                                    node, parameterValue));
                 }
             }
             i++;
@@ -270,7 +292,8 @@ public class JavaParserFacade {
 
         solveArguments(methodCallExpr, methodCallExpr.getArguments(), solveLambdas, argumentTypes, placeholders);
 
-        SymbolReference<ResolvedMethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver).solveMethod(methodCallExpr.getName().getId(), argumentTypes, false);
+        SymbolReference<ResolvedMethodDeclaration> res = JavaParserFactory.getContext(methodCallExpr, typeSolver)
+                .solveMethod(methodCallExpr.getName().getId(), argumentTypes, false);
         for (LambdaArgumentTypePlaceholder placeholder : placeholders) {
             placeholder.setMethod(res);
         }
@@ -280,24 +303,29 @@ public class JavaParserFacade {
     /**
      * Given a method reference find out to which method declaration it corresponds.
      */
-    public SymbolReference<ResolvedMethodDeclaration> solve(MethodReferenceExpr methodReferenceExpr, boolean solveLambdas) {
+    public SymbolReference<ResolvedMethodDeclaration> solve(
+            MethodReferenceExpr methodReferenceExpr, boolean solveLambdas) {
         // pass empty argument list to be populated
         List<ResolvedType> argumentTypes = new LinkedList<>();
-        return JavaParserFactory.getContext(methodReferenceExpr, typeSolver).solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false);
+        return JavaParserFactory.getContext(methodReferenceExpr, typeSolver)
+                .solveMethod(methodReferenceExpr.getIdentifier(), argumentTypes, false);
     }
 
     public SymbolReference<ResolvedAnnotationDeclaration> solve(AnnotationExpr annotationExpr) {
         Context context = JavaParserFactory.getContext(annotationExpr, typeSolver);
-        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference = context.solveType(annotationExpr.getNameAsString());
+        SymbolReference<ResolvedTypeDeclaration> typeDeclarationSymbolReference =
+                context.solveType(annotationExpr.getNameAsString());
         if (typeDeclarationSymbolReference.isSolved()) {
-            ResolvedAnnotationDeclaration annotationDeclaration = (ResolvedAnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
+            ResolvedAnnotationDeclaration annotationDeclaration =
+                    (ResolvedAnnotationDeclaration) typeDeclarationSymbolReference.getCorrespondingDeclaration();
             return solved(annotationDeclaration);
         }
         return unsolved();
     }
 
     public SymbolReference<ResolvedValueDeclaration> solve(FieldAccessExpr fieldAccessExpr) {
-        return ((FieldAccessContext) JavaParserFactory.getContext(fieldAccessExpr, typeSolver)).solveField(fieldAccessExpr.getName().getId());
+        return ((FieldAccessContext) JavaParserFactory.getContext(fieldAccessExpr, typeSolver))
+                .solveField(fieldAccessExpr.getName().getId());
     }
 
     /**
@@ -332,10 +360,12 @@ public class JavaParserFacade {
         } catch (UnsolvedSymbolException e) {
             if (node instanceof NameExpr) {
                 NameExpr nameExpr = (NameExpr) node;
-                SymbolReference<ResolvedTypeDeclaration> typeDeclaration = JavaParserFactory.getContext(node, typeSolver)
-                        .solveType(nameExpr.getNameAsString());
-                if (typeDeclaration.isSolved() && typeDeclaration.getCorrespondingDeclaration() instanceof ResolvedReferenceTypeDeclaration) {
-                    ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration = (ResolvedReferenceTypeDeclaration) typeDeclaration.getCorrespondingDeclaration();
+                SymbolReference<ResolvedTypeDeclaration> typeDeclaration =
+                        JavaParserFactory.getContext(node, typeSolver).solveType(nameExpr.getNameAsString());
+                if (typeDeclaration.isSolved()
+                        && typeDeclaration.getCorrespondingDeclaration() instanceof ResolvedReferenceTypeDeclaration) {
+                    ResolvedReferenceTypeDeclaration resolvedReferenceTypeDeclaration =
+                            (ResolvedReferenceTypeDeclaration) typeDeclaration.getCorrespondingDeclaration();
                     return ReferenceTypeImpl.undeterminedParameters(resolvedReferenceTypeDeclaration);
                 }
             }
@@ -343,17 +373,17 @@ public class JavaParserFacade {
         }
     }
 
-	/*
-	 * Returns the resolved Type of the {@code Node}. If the node is a method call
-	 * expression and and the flag activates lambda expression resolution, the type
-	 * of the arguments to the expression are looked up beforehand so that the type
-	 * resolution is as relevant as possible.
-	 */
+    /*
+     * Returns the resolved Type of the {@code Node}. If the node is a method call
+     * expression and and the flag activates lambda expression resolution, the type
+     * of the arguments to the expression are looked up beforehand so that the type
+     * resolution is as relevant as possible.
+     */
     public ResolvedType getType(Node node, boolean solveLambdas) {
         if (solveLambdas) {
             if (!node.containsData(TYPE_WITH_LAMBDAS_RESOLVED)) {
 
-            	if (node instanceof MethodCallExpr) {
+                if (node instanceof MethodCallExpr) {
                     MethodCallExpr methodCallExpr = (MethodCallExpr) node;
                     for (Node arg : methodCallExpr.getArguments()) {
                         if (!arg.containsData(TYPE_WITH_LAMBDAS_RESOLVED)) {
@@ -371,17 +401,17 @@ public class JavaParserFacade {
         // Try to return a value from the cache of resolved types using lambda expressions
         Optional<ResolvedType> res = node.findData(TYPE_WITH_LAMBDAS_RESOLVED);
         if (res.isPresent()) {
-                return res.get();
+            return res.get();
         }
 
         // else try to return a value from the cache of resolved types without lambda expressions
         // Or resolves the node type without resolving the lambda expressions
-		return node.findData(TYPE_WITHOUT_LAMBDAS_RESOLVED).orElseGet(() -> {
-			ResolvedType resType = getTypeConcrete(node, solveLambdas);
-			node.setData(TYPE_WITHOUT_LAMBDAS_RESOLVED, resType);
-			Log.trace("getType on %s (no solveLambdas) -> %s", () -> node, () -> res);
-			return resType;
-		});
+        return node.findData(TYPE_WITHOUT_LAMBDAS_RESOLVED).orElseGet(() -> {
+            ResolvedType resType = getTypeConcrete(node, solveLambdas);
+            node.setData(TYPE_WITHOUT_LAMBDAS_RESOLVED, resType);
+            Log.trace("getType on %s (no solveLambdas) -> %s", () -> node, () -> res);
+            return resType;
+        });
     }
 
     protected MethodUsage toMethodUsage(MethodReferenceExpr methodReferenceExpr, List<ResolvedType> paramTypes) {
@@ -392,7 +422,9 @@ public class JavaParserFacade {
         }
 
         Optional<MethodUsage> result;
-        ResolvedReferenceTypeDeclaration resolvedTypdeDecl = typeOfScope.asReferenceType().getTypeDeclaration()
+        ResolvedReferenceTypeDeclaration resolvedTypdeDecl = typeOfScope
+                .asReferenceType()
+                .getTypeDeclaration()
                 .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
         Set<MethodUsage> allMethods = resolvedTypdeDecl.getAllMethods();
 
@@ -402,7 +434,8 @@ public class JavaParserFacade {
                     .filter(it -> it.getDeclaration().isStatic())
                     .collect(Collectors.toList());
 
-            result = MethodResolutionLogic.findMostApplicableUsage(staticMethodUsages, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+            result = MethodResolutionLogic.findMostApplicableUsage(
+                    staticMethodUsages, methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
 
             if (!paramTypes.isEmpty()) {
                 // instance methods are called on the first param and should match all other params
@@ -414,9 +447,14 @@ public class JavaParserFacade {
                 instanceMethodParamTypes.remove(0); // remove the first one
 
                 Optional<MethodUsage> instanceResult = MethodResolutionLogic.findMostApplicableUsage(
-                        instanceMethodUsages, methodReferenceExpr.getIdentifier(), instanceMethodParamTypes, typeSolver);
+                        instanceMethodUsages,
+                        methodReferenceExpr.getIdentifier(),
+                        instanceMethodParamTypes,
+                        typeSolver);
                 if (result.isPresent() && instanceResult.isPresent()) {
-                    throw new MethodAmbiguityException("Ambiguous method call: cannot find a most applicable method for " + methodReferenceExpr.getIdentifier());
+                    throw new MethodAmbiguityException(
+                            "Ambiguous method call: cannot find a most applicable method for "
+                                    + methodReferenceExpr.getIdentifier());
                 }
 
                 if (instanceResult.isPresent()) {
@@ -424,7 +462,8 @@ public class JavaParserFacade {
                 }
             }
         } else {
-            result = MethodResolutionLogic.findMostApplicableUsage(new ArrayList<>(allMethods), methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
+            result = MethodResolutionLogic.findMostApplicableUsage(
+                    new ArrayList<>(allMethods), methodReferenceExpr.getIdentifier(), paramTypes, typeSolver);
 
             if (result.isPresent() && result.get().getDeclaration().isStatic()) {
                 throw new RuntimeException("Invalid static method reference " + methodReferenceExpr.getIdentifier());
@@ -438,7 +477,8 @@ public class JavaParserFacade {
         return result.get();
     }
 
-    protected ResolvedType getBinaryTypeConcrete(Node left, Node right, boolean solveLambdas, BinaryExpr.Operator operator) {
+    protected ResolvedType getBinaryTypeConcrete(
+            Node left, Node right, boolean solveLambdas, BinaryExpr.Operator operator) {
         ResolvedType leftType = getTypeConcrete(left, solveLambdas);
         ResolvedType rightType = getTypeConcrete(right, solveLambdas);
 
@@ -451,10 +491,10 @@ public class JavaParserFacade {
         // the newly created string.
 
         if (operator == BinaryExpr.Operator.PLUS) {
-            boolean isLeftString = leftType.isReferenceType() && leftType.asReferenceType()
-                    .getQualifiedName().equals(JAVA_LANG_STRING);
-            boolean isRightString = rightType.isReferenceType() && rightType.asReferenceType()
-                    .getQualifiedName().equals(JAVA_LANG_STRING);
+            boolean isLeftString = leftType.isReferenceType()
+                    && leftType.asReferenceType().getQualifiedName().equals(JAVA_LANG_STRING);
+            boolean isRightString = rightType.isReferenceType()
+                    && rightType.asReferenceType().getQualifiedName().equals(JAVA_LANG_STRING);
             if (isLeftString || isRightString) {
                 return isLeftString ? leftType : rightType;
             }
@@ -471,7 +511,8 @@ public class JavaParserFacade {
         // * Otherwise, both operands are converted to type int.
 
         boolean isLeftNumeric = leftType.isPrimitive() && leftType.asPrimitive().isNumeric();
-        boolean isRightNumeric = rightType.isPrimitive() && rightType.asPrimitive().isNumeric();
+        boolean isRightNumeric =
+                rightType.isPrimitive() && rightType.asPrimitive().isNumeric();
 
         if (isLeftNumeric && isRightNumeric) {
             return leftType.asPrimitive().bnp(rightType.asPrimitive());
@@ -482,7 +523,6 @@ public class JavaParserFacade {
         }
         return leftType;
     }
-
 
     /**
      * Should return more like a TypeApplication: a TypeDeclaration and possible typeParametersValues or array
@@ -571,12 +611,21 @@ public class JavaParserFacade {
         while (true) {
             parent = demandParentNode(parent);
             if (parent instanceof BodyDeclaration) {
-                if (parent instanceof TypeDeclaration && ((TypeDeclaration<?>) parent).getFullyQualifiedName().get().endsWith(className)) {
+                if (parent instanceof TypeDeclaration
+                        && ((TypeDeclaration<?>) parent)
+                                .getFullyQualifiedName()
+                                .get()
+                                .endsWith(className)) {
                     return parent;
                 }
                 detachFlag = true;
             }
-            if (parent instanceof ObjectCreationExpr && ((ObjectCreationExpr) parent).getType().getName().asString().equals(className)) {
+            if (parent instanceof ObjectCreationExpr
+                    && ((ObjectCreationExpr) parent)
+                            .getType()
+                            .getName()
+                            .asString()
+                            .equals(className)) {
                 if (detachFlag) {
                     return parent;
                 }
@@ -607,11 +656,10 @@ public class JavaParserFacade {
      * @return The type resolved.
      */
     public ResolvedType convertToUsage(Type type) {
-    	return convertToUsage(type, JavaParserFactory.getContext(type, typeSolver));
+        return convertToUsage(type, JavaParserFactory.getContext(type, typeSolver));
     }
 
-    private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(
-            VariableDeclarator variableDeclarator) {
+    private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(VariableDeclarator variableDeclarator) {
         Optional<Node> node = variableDeclarator.getParentNode();
         if (!node.isPresent() || !(node.get() instanceof VariableDeclarationExpr)) {
             return Optional.empty();
@@ -620,7 +668,7 @@ public class JavaParserFacade {
         if (!node.isPresent() || !(node.get() instanceof ForEachStmt)) {
             return Optional.empty();
         }
-        return Optional.of((ForEachStmt)node.get());
+        return Optional.of((ForEachStmt) node.get());
     }
 
     public ResolvedType convert(Type type, Node node) {
@@ -635,20 +683,24 @@ public class JavaParserFacade {
         List<ResolvedType> params = new ArrayList<>();
         if (call.getArguments() != null) {
             for (Expression param : call.getArguments()) {
-                //getTypeConcrete(Node node, boolean solveLambdas)
+                // getTypeConcrete(Node node, boolean solveLambdas)
                 try {
                     params.add(getType(param, false));
                 } catch (Exception e) {
-                    throw failureHandler.handle(e, String.format("Error calculating the type of parameter %s of method call %s", param, call));
+                    throw failureHandler.handle(
+                            e,
+                            String.format("Error calculating the type of parameter %s of method call %s", param, call));
                 }
-                //params.add(getTypeConcrete(param, false));
+                // params.add(getTypeConcrete(param, false));
             }
         }
         Context context = JavaParserFactory.getContext(call, typeSolver);
-        Optional<MethodUsage> methodUsage = context.solveMethodAsUsage(call.getName().getId(), params);
+        Optional<MethodUsage> methodUsage =
+                context.solveMethodAsUsage(call.getName().getId(), params);
         if (!methodUsage.isPresent()) {
-            throw new UnsolvedSymbolException("Method '" + call.getName() + "' cannot be resolved in context "
-                    + call + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context + ". Parameter types: " + params);
+            throw new UnsolvedSymbolException("Method '" + call.getName() + "' cannot be resolved in context " + call
+                    + " (line: " + call.getRange().map(r -> "" + r.begin.line).orElse("??") + ") " + context
+                    + ". Parameter types: " + params);
         }
         return methodUsage.get();
     }
@@ -663,7 +715,8 @@ public class JavaParserFacade {
         throw new IllegalArgumentException();
     }
 
-    public ResolvedReferenceTypeDeclaration getTypeDeclaration(ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
+    public ResolvedReferenceTypeDeclaration getTypeDeclaration(
+            ClassOrInterfaceDeclaration classOrInterfaceDeclaration) {
         return symbolResolver.toTypeDeclaration(classOrInterfaceDeclaration);
     }
 
@@ -676,11 +729,14 @@ public class JavaParserFacade {
             return new ReferenceTypeImpl(getTypeDeclaration((ClassOrInterfaceDeclaration) node));
         }
         if (node instanceof EnumDeclaration) {
-            JavaParserEnumDeclaration enumDeclaration = new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
+            JavaParserEnumDeclaration enumDeclaration =
+                    new JavaParserEnumDeclaration((EnumDeclaration) node, typeSolver);
             return new ReferenceTypeImpl(enumDeclaration);
         }
-        if (node instanceof ObjectCreationExpr && ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
-            JavaParserAnonymousClassDeclaration anonymousDeclaration = new JavaParserAnonymousClassDeclaration((ObjectCreationExpr) node, typeSolver);
+        if (node instanceof ObjectCreationExpr
+                && ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
+            JavaParserAnonymousClassDeclaration anonymousDeclaration =
+                    new JavaParserAnonymousClassDeclaration((ObjectCreationExpr) node, typeSolver);
             return new ReferenceTypeImpl(anonymousDeclaration);
         }
         return getTypeOfThisIn(demandParentNode(node));
@@ -701,8 +757,7 @@ public class JavaParserFacade {
      */
     @Deprecated
     public ResolvedType classToResolvedType(Class<?> clazz) {
-    	Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
-    	return symbolSolver.classToResolvedType(clazz);
+        Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
+        return symbolSolver.classToResolvedType(clazz);
     }
-
 }

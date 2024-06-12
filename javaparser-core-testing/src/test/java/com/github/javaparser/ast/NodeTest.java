@@ -27,10 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -44,6 +40,8 @@ import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.utils.LineSeparator;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
 
 class NodeTest {
     @Test
@@ -61,7 +59,8 @@ class NodeTest {
     @Test
     void removeOrphanCommentNegativeCase() {
         ClassOrInterfaceDeclaration aClass = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "A");
-        FieldDeclaration aField = new FieldDeclaration(new NodeList<>(), new VariableDeclarator(PrimitiveType.intType(), "f"));
+        FieldDeclaration aField =
+                new FieldDeclaration(new NodeList<>(), new VariableDeclarator(PrimitiveType.intType(), "f"));
         aClass.getMembers().add(aField);
         Comment c = new LineComment("A comment");
         aField.addOrphanComment(c);
@@ -107,31 +106,32 @@ class NodeTest {
 
     @Test
     void findCompilationUnitOfCommentNode() {
-        CompilationUnit cu = parse("class X {\n" +
-                "  void x() {\n" +
-                "    // this is a comment\n" +
-                "    foo();\n" +
-                "  }\n" +
-                "}\n");
+        CompilationUnit cu = parse(
+                "class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "    foo();\n" + "  }\n" + "}\n");
 
-        Comment comment = cu.getType(0).getMember(0)
-                .asMethodDeclaration().getBody().get()
-                .getStatement(0).getComment().get();
+        Comment comment = cu.getType(0)
+                .getMember(0)
+                .asMethodDeclaration()
+                .getBody()
+                .get()
+                .getStatement(0)
+                .getComment()
+                .get();
 
         assertTrue(comment.findCompilationUnit().isPresent());
     }
 
     @Test
     void findCompilationUnitOfOrphanCommentNode() {
-        CompilationUnit cu = parse("class X {\n" +
-                "  void x() {\n" +
-                "    // this is a comment\n" +
-                "  }\n" +
-                "}\n");
+        CompilationUnit cu = parse("class X {\n" + "  void x() {\n" + "    // this is a comment\n" + "  }\n" + "}\n");
 
-        Comment comment = cu.getType(0).getMember(0)
-                .asMethodDeclaration().getBody().get()
-                .getOrphanComments().get(0);
+        Comment comment = cu.getType(0)
+                .getMember(0)
+                .asMethodDeclaration()
+                .getBody()
+                .get()
+                .getOrphanComments()
+                .get(0);
 
         assertTrue(comment.findCompilationUnit().isPresent());
     }
@@ -147,13 +147,14 @@ class NodeTest {
 
     @Test
     void removingTheSecondOfAListOfIdenticalStatementsDoesNotMessUpTheParents() {
-        CompilationUnit unit = parse(String.format("public class Example {%1$s" +
-                "  public static void example() {%1$s" +
-                "    boolean swapped;%1$s" +
-                "    swapped=false;%1$s" +
-                "    swapped=false;%1$s" +
-                "  }%1$s" +
-                "}%1$s", LineSeparator.SYSTEM));
+        CompilationUnit unit = parse(String.format(
+                "public class Example {%1$s" + "  public static void example() {%1$s"
+                        + "    boolean swapped;%1$s"
+                        + "    swapped=false;%1$s"
+                        + "    swapped=false;%1$s"
+                        + "  }%1$s"
+                        + "}%1$s",
+                LineSeparator.SYSTEM));
         // remove the second swapped=false
         ExpressionStmt target = unit.findAll(ExpressionStmt.class).get(2);
         target.remove();
@@ -163,39 +164,37 @@ class NodeTest {
 
     @Test
     void findNodeByRange() {
-        CompilationUnit cu = parse("class X {\n" +
-                "  void x() {\n" +
-                "  }\n" +
-                "}\n");
-        ClassOrInterfaceDeclaration coid = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        CompilationUnit cu = parse("class X {\n" + "  void x() {\n" + "  }\n" + "}\n");
+        ClassOrInterfaceDeclaration coid =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
         MethodDeclaration md = cu.findFirst(MethodDeclaration.class).get();
 
         // The range corresponds to the compilation unit
-        Optional<Node> node = cu.findByRange(new Range(new Position(1,1), new Position(4,2)));
+        Optional<Node> node = cu.findByRange(new Range(new Position(1, 1), new Position(4, 2)));
         assertTrue(node.isPresent());
         assertEquals(cu, node.get());
 
         // The range corresponds to the class declaration
-        node = cu.findByRange(new Range(new Position(1,1), new Position(4,1)));
+        node = cu.findByRange(new Range(new Position(1, 1), new Position(4, 1)));
         assertTrue(node.isPresent());
         assertEquals(coid, node.get());
 
         // The range corresponds to the method declaration
-        node = cu.findByRange(new Range(new Position(2,3), new Position(3,3)));
+        node = cu.findByRange(new Range(new Position(2, 3), new Position(3, 3)));
         assertTrue(node.isPresent());
         assertEquals(md, node.get());
 
         // The range is included in the class declaration
-        node = cu.findByRange(new Range(new Position(1,1), new Position(1,1)));
+        node = cu.findByRange(new Range(new Position(1, 1), new Position(1, 1)));
         assertTrue(node.isPresent());
         assertEquals(coid, node.get());
 
         // The range is not included in the compilation unit
-        node = cu.findByRange(new Range(new Position(5,1), new Position(5,1)));
+        node = cu.findByRange(new Range(new Position(5, 1), new Position(5, 1)));
         assertFalse(node.isPresent());
 
         // Search based on the method declaration, but the range corresponds to a parent node.
-        node = md.findByRange(new Range(new Position(1,1), new Position(1,1)));
+        node = md.findByRange(new Range(new Position(1, 1), new Position(1, 1)));
         assertFalse(node.isPresent());
     }
 }

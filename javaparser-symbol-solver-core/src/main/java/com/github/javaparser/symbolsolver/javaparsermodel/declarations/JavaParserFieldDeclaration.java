@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -31,11 +33,7 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-
 import java.util.Optional;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-
 
 /**
  * @author Federico Tomassetti
@@ -53,7 +51,8 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
         if (!(demandParentNode(variableDeclarator) instanceof com.github.javaparser.ast.body.FieldDeclaration)) {
-            throw new IllegalStateException(demandParentNode(variableDeclarator).getClass().getCanonicalName());
+            throw new IllegalStateException(
+                    demandParentNode(variableDeclarator).getClass().getCanonicalName());
         }
         this.wrappedNode = (com.github.javaparser.ast.body.FieldDeclaration) demandParentNode(variableDeclarator);
     }
@@ -114,7 +113,7 @@ public class JavaParserFieldDeclaration implements ResolvedFieldDeclaration {
         }
         throw new IllegalStateException();
     }
-    
+
     @Override
     public Optional<Node> toAst() {
         return Optional.ofNullable(wrappedNode);

@@ -23,5 +23,4 @@ package com.github.javaparser.ast.validator.postprocessors;
 /**
  * Processes the generic AST into a Java 17 AST and validates it.
  */
-public class Java17PostProcessor extends Java16PostProcessor {
-}
+public class Java17PostProcessor extends Java16PostProcessor {}

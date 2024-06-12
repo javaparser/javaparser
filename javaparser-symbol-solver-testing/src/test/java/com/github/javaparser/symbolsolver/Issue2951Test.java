@@ -20,6 +20,9 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -36,13 +39,9 @@ import com.github.javaparser.resolution.types.parametrization.ResolvedTypeParame
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 public class Issue2951Test {
     @Test
@@ -54,7 +53,9 @@ public class Issue2951Test {
         StaticJavaParser.setConfiguration(config);
 
         ResolvedReferenceTypeDeclaration clazzA = typeResolver.solveType("foo.A");
-        Optional<ResolvedMethodDeclaration> optionalMethod = clazzA.getDeclaredMethods().stream().filter(m -> m.getName().equals("get")).findFirst();
+        Optional<ResolvedMethodDeclaration> optionalMethod = clazzA.getDeclaredMethods().stream()
+                .filter(m -> m.getName().equals("get"))
+                .findFirst();
         assertTrue(optionalMethod.isPresent());
 
         ResolvedMethodDeclaration method = optionalMethod.get();

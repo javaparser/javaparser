@@ -20,6 +20,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -29,8 +31,6 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Issue2764Test {
     private JavaParser javaParser;
@@ -42,18 +42,13 @@ public class Issue2764Test {
         config.setSymbolResolver(new JavaSymbolSolver(typeSolver));
         javaParser = new JavaParser(config);
     }
-    
+
     @Test
     void resolveUnaryExpr() {
-        String code = 
-                "class A {" +
-                "  void a() {" +
-                "    int e;" + 
-                "    for(e++;;){}" +
-                "  }" +
-                "}";
-      
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+        String code = "class A {" + "  void a() {" + "    int e;" + "    for(e++;;){}" + "  }" + "}";
+
+        ParseResult<CompilationUnit> parseResult =
+                javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
         assertTrue(parseResult.isSuccessful());
         assertTrue(parseResult.getResult().isPresent());
 

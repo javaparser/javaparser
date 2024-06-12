@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
@@ -38,7 +34,9 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
-
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javassist.CtBehavior;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -50,9 +48,14 @@ import javassist.bytecode.*;
  */
 class JavassistUtils {
 
-    static Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, TypeSolver typeSolver,
-                                                    Context invokationContext, List<ResolvedType> typeParameterValues,
-                                                    ResolvedReferenceTypeDeclaration scopeType, CtClass ctClass) {
+    static Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> argumentsTypes,
+            TypeSolver typeSolver,
+            Context invokationContext,
+            List<ResolvedType> typeParameterValues,
+            ResolvedReferenceTypeDeclaration scopeType,
+            CtClass ctClass) {
         List<ResolvedTypeParameterDeclaration> typeParameters = scopeType.getTypeParameters();
 
         List<MethodUsage> methods = new ArrayList<>();
@@ -77,16 +80,22 @@ class JavassistUtils {
 
         for (ResolvedReferenceType ancestor : scopeType.getAncestors()) {
             ancestor.getTypeDeclaration()
-                .flatMap(superClassTypeDeclaration -> ancestor.getTypeDeclaration())
-                .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
-                .ifPresent(methods::add);
+                    .flatMap(superClassTypeDeclaration -> ancestor.getTypeDeclaration())
+                    .flatMap(interfaceTypeDeclaration -> ContextHelper.solveMethodAsUsage(
+                            interfaceTypeDeclaration, name, argumentsTypes, invokationContext, typeParameterValues))
+                    .ifPresent(methods::add);
         }
 
         return MethodResolutionLogic.findMostApplicableUsage(methods, name, argumentsTypes, typeSolver);
     }
 
-    static SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly,
-                                                                  TypeSolver typeSolver, ResolvedReferenceTypeDeclaration scopeType, CtClass ctClass) {
+    static SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name,
+            List<ResolvedType> argumentsTypes,
+            boolean staticOnly,
+            TypeSolver typeSolver,
+            ResolvedReferenceTypeDeclaration scopeType,
+            CtClass ctClass) {
         List<ResolvedMethodDeclaration> candidates = new ArrayList<>();
         Predicate<CtMethod> staticOnlyCheck = m -> !staticOnly || java.lang.reflect.Modifier.isStatic(m.getModifiers());
         for (CtMethod method : ctClass.getDeclaredMethods()) {
@@ -108,11 +117,7 @@ class JavassistUtils {
             Optional<ResolvedReferenceTypeDeclaration> ancestorTypeDeclOpt = ancestorRefType.getTypeDeclaration();
             if (ancestorTypeDeclOpt.isPresent()) {
                 SymbolReference<ResolvedMethodDeclaration> ancestorMethodRef = MethodResolutionLogic.solveMethodInType(
-                        ancestorTypeDeclOpt.get(),
-                        name,
-                        argumentsTypes,
-                        staticOnly
-                );
+                        ancestorTypeDeclOpt.get(), name, argumentsTypes, staticOnly);
                 if (ancestorMethodRef.isSolved()) {
                     candidates.add(ancestorMethodRef.getCorrespondingDeclaration());
                 }
@@ -124,29 +129,37 @@ class JavassistUtils {
         return MethodResolutionLogic.findMostApplicable(candidates, name, argumentsTypes, typeSolver);
     }
 
-    static ResolvedType signatureTypeToType(SignatureAttribute.Type signatureType, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
+    static ResolvedType signatureTypeToType(
+            SignatureAttribute.Type signatureType,
+            TypeSolver typeSolver,
+            ResolvedTypeParametrizable typeParametrizable) {
         if (signatureType instanceof SignatureAttribute.ClassType) {
             SignatureAttribute.ClassType classType = (SignatureAttribute.ClassType) signatureType;
-            List<ResolvedType> typeArguments = classType.getTypeArguments() == null ? Collections.emptyList() : Arrays.stream(classType.getTypeArguments()).map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable)).collect(Collectors.toList());
-            ResolvedReferenceTypeDeclaration typeDeclaration = typeSolver.solveType(
-                    removeTypeArguments(internalNameToCanonicalName(getTypeName(classType))));
+            List<ResolvedType> typeArguments = classType.getTypeArguments() == null
+                    ? Collections.emptyList()
+                    : Arrays.stream(classType.getTypeArguments())
+                            .map(ta -> typeArgumentToType(ta, typeSolver, typeParametrizable))
+                            .collect(Collectors.toList());
+            ResolvedReferenceTypeDeclaration typeDeclaration =
+                    typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(getTypeName(classType))));
             return new ReferenceTypeImpl(typeDeclaration, typeArguments);
         }
-            if (signatureType instanceof SignatureAttribute.TypeVariable) {
+        if (signatureType instanceof SignatureAttribute.TypeVariable) {
             SignatureAttribute.TypeVariable typeVariableSignature = (SignatureAttribute.TypeVariable) signatureType;
-            Optional<ResolvedTypeParameterDeclaration> typeParameterDeclarationOpt = typeParametrizable.findTypeParameter(typeVariableSignature.getName());
+            Optional<ResolvedTypeParameterDeclaration> typeParameterDeclarationOpt =
+                    typeParametrizable.findTypeParameter(typeVariableSignature.getName());
             if (!typeParameterDeclarationOpt.isPresent()) {
                 throw new UnsolvedSymbolException("Unable to solve TypeVariable " + typeVariableSignature);
             }
             ResolvedTypeParameterDeclaration typeParameterDeclaration = typeParameterDeclarationOpt.get();
             return new ResolvedTypeVariable(typeParameterDeclaration);
         }
-            if (signatureType instanceof SignatureAttribute.ArrayType) {
+        if (signatureType instanceof SignatureAttribute.ArrayType) {
             SignatureAttribute.ArrayType arrayType = (SignatureAttribute.ArrayType) signatureType;
             ResolvedType baseType = signatureTypeToType(arrayType.getComponentType(), typeSolver, typeParametrizable);
             return getArrayType(baseType, arrayType.getDimension());
         }
-            if (signatureType instanceof SignatureAttribute.BaseType) {
+        if (signatureType instanceof SignatureAttribute.BaseType) {
             SignatureAttribute.BaseType baseType = (SignatureAttribute.BaseType) signatureType;
             if (baseType.toString().equals("void")) {
                 return ResolvedVoidType.INSTANCE;
@@ -179,33 +192,44 @@ class JavassistUtils {
         return typeName.replaceAll("\\$", ".");
     }
 
-    private static ResolvedType objectTypeArgumentToType(SignatureAttribute.ObjectType typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
+    private static ResolvedType objectTypeArgumentToType(
+            SignatureAttribute.ObjectType typeArgument,
+            TypeSolver typeSolver,
+            ResolvedTypeParametrizable typeParametrizable) {
         if (typeArgument instanceof SignatureAttribute.ClassType) {
             return signatureTypeToType(typeArgument, typeSolver, typeParametrizable);
         }
-            if (typeArgument instanceof SignatureAttribute.ArrayType) {
-            return new ResolvedArrayType(signatureTypeToType(((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable));
+        if (typeArgument instanceof SignatureAttribute.ArrayType) {
+            return new ResolvedArrayType(signatureTypeToType(
+                    ((SignatureAttribute.ArrayType) typeArgument).getComponentType(), typeSolver, typeParametrizable));
         }
         String typeName = typeArgument.jvmTypeName();
         return getGenericParameterByName(typeName, typeParametrizable, typeSolver);
     }
 
-    private static ResolvedType getGenericParameterByName(String typeName, ResolvedTypeParametrizable typeParametrizable, TypeSolver typeSolver) {
-        Optional<ResolvedType> type = typeParametrizable.findTypeParameter(typeName).map(ResolvedTypeVariable::new);
+    private static ResolvedType getGenericParameterByName(
+            String typeName, ResolvedTypeParametrizable typeParametrizable, TypeSolver typeSolver) {
+        Optional<ResolvedType> type =
+                typeParametrizable.findTypeParameter(typeName).map(ResolvedTypeVariable::new);
         return type.orElseGet(() -> new ReferenceTypeImpl(
                 typeSolver.solveType(removeTypeArguments(internalNameToCanonicalName(typeName)))));
     }
 
-    private static ResolvedType typeArgumentToType(SignatureAttribute.TypeArgument typeArgument, TypeSolver typeSolver, ResolvedTypeParametrizable typeParametrizable) {
+    private static ResolvedType typeArgumentToType(
+            SignatureAttribute.TypeArgument typeArgument,
+            TypeSolver typeSolver,
+            ResolvedTypeParametrizable typeParametrizable) {
         if (typeArgument.isWildcard()) {
             if (typeArgument.getType() == null) {
                 return ResolvedWildcard.UNBOUNDED;
             }
-                    if (typeArgument.getKind() == '+') {
-                return ResolvedWildcard.extendsBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
+            if (typeArgument.getKind() == '+') {
+                return ResolvedWildcard.extendsBound(
+                        objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
             }
-                    if (typeArgument.getKind() == '-') {
-                return ResolvedWildcard.superBound(objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
+            if (typeArgument.getKind() == '-') {
+                return ResolvedWildcard.superBound(
+                        objectTypeArgumentToType(typeArgument.getType(), typeSolver, typeParametrizable));
             }
             throw new UnsupportedOperationException();
         }
@@ -231,8 +255,8 @@ class JavassistUtils {
         MethodInfo methodInfo = method.getMethodInfo();
         CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
         if (codeAttribute != null) {
-            LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute
-                    .tag);
+            LocalVariableAttribute attr =
+                    (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
             if (attr != null) {
                 int pos = Modifier.isStatic(method.getModifiers()) ? 0 : 1;
                 return getVariableName(attr, paramNumber + pos);
@@ -242,11 +266,10 @@ class JavassistUtils {
     }
 
     private static Optional<String> getVariableName(LocalVariableAttribute attr, int pos) {
-    	try {
+        try {
             return Optional.of(attr.variableNameByIndex(pos));
         } catch (ArrayIndexOutOfBoundsException e) {
             return Optional.empty();
         }
     }
-
 }

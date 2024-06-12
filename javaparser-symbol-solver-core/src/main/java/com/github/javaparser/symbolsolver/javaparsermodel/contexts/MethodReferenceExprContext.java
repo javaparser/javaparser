@@ -23,8 +23,6 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
-import java.util.*;
-
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -45,6 +43,7 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedLambdaConstraintType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import java.util.*;
 
 public class MethodReferenceExprContext extends AbstractJavaParserContext<MethodReferenceExpr> {
 
@@ -61,7 +60,8 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
     ///
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         if ("new".equals(name)) {
             throw new UnsupportedOperationException("Constructor calls not yet resolvable");
         }
@@ -79,14 +79,16 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
         }
 
         for (ResolvedReferenceTypeDeclaration rrtd : rrtds) {
-            SymbolReference<ResolvedMethodDeclaration> firstResAttempt = MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
+            SymbolReference<ResolvedMethodDeclaration> firstResAttempt =
+                    MethodResolutionLogic.solveMethodInType(rrtd, name, argumentsTypes, false);
             if (firstResAttempt.isSolved()) {
                 return firstResAttempt;
             }
-            SymbolReference<ResolvedMethodDeclaration> secondResAttempt = MethodResolutionLogic.solveMethodInType(rrtd, name, Collections.emptyList(), false);
+            SymbolReference<ResolvedMethodDeclaration> secondResAttempt =
+                    MethodResolutionLogic.solveMethodInType(rrtd, name, Collections.emptyList(), false);
             if (secondResAttempt.isSolved()) {
-                    return secondResAttempt;
-                }
+                return secondResAttempt;
+            }
         }
 
         return SymbolReference.unsolved();
@@ -102,27 +104,27 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             MethodUsage methodUsage = JavaParserFacade.get(typeSolver).solveMethodAsUsage(methodCallExpr);
             int pos = methodCallExpr.getArgumentPosition(wrappedNode);
             ResolvedMethodDeclaration rmd = methodUsage.getDeclaration();
-			// Since variable parameters are represented by an array, in case we deal with
-			// the variadic parameter we have to take into account the base type of the
-			// array.
-            ResolvedType lambdaType = (rmd.hasVariadicParameter() && pos >= rmd.getNumberOfParams() - 1) ?
-            		rmd.getLastParam().getType().asArrayType().getComponentType():
-            			methodUsage.getParamType(pos);
+            // Since variable parameters are represented by an array, in case we deal with
+            // the variadic parameter we have to take into account the base type of the
+            // array.
+            ResolvedType lambdaType = (rmd.hasVariadicParameter() && pos >= rmd.getNumberOfParams() - 1)
+                    ? rmd.getLastParam().getType().asArrayType().getComponentType()
+                    : methodUsage.getParamType(pos);
 
             return resolveLambdaTypes(lambdaType);
         }
 
         if (demandParentNode(wrappedNode) instanceof ObjectCreationExpr) {
             ObjectCreationExpr objectCreationExpr = (ObjectCreationExpr) demandParentNode(wrappedNode);
-            ResolvedConstructorDeclaration rcd = JavaParserFacade.get(typeSolver).solve(objectCreationExpr)
-                    .getCorrespondingDeclaration();
+            ResolvedConstructorDeclaration rcd =
+                    JavaParserFacade.get(typeSolver).solve(objectCreationExpr).getCorrespondingDeclaration();
             int pos = objectCreationExpr.getArgumentPosition(wrappedNode);
             // Since variable parameters are represented by an array, in case we deal with
             // the variadic parameter we have to take into account the base type of the
             // array.
-            ResolvedType lambdaType = (rcd.hasVariadicParameter() && pos >= rcd.getNumberOfParams() - 1) ?
-                    rcd.getLastParam().getType().asArrayType().getComponentType():
-                    rcd.getParam(pos).getType();
+            ResolvedType lambdaType = (rcd.hasVariadicParameter() && pos >= rcd.getNumberOfParams() - 1)
+                    ? rcd.getLastParam().getType().asArrayType().getComponentType()
+                    : rcd.getParam(pos).getType();
 
             return resolveLambdaTypes(lambdaType);
         }
@@ -137,13 +139,17 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                     // Replace parameter from declarator
                     Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
                     if (lambdaType.isReferenceType()) {
-                        for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
-                            if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
-                                ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
+                        for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry :
+                                lambdaType.asReferenceType().getTypeParametersMap()) {
+                            if (entry.b.isTypeVariable()
+                                    && entry.b.asTypeParameter().declaredOnType()) {
+                                ResolvedType ot =
+                                        t.asReferenceType().typeParametersMap().getValue(entry.a);
                                 lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
                             }
                         }
-                    } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
+                    } else if (lambdaType.isTypeVariable()
+                            && lambdaType.asTypeParameter().declaredOnType()) {
                         lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
                     }
                     resolvedTypes.add(lambdaType);
@@ -158,7 +164,9 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
             ReturnStmt returnStmt = (ReturnStmt) demandParentNode(wrappedNode);
             Optional<MethodDeclaration> optDeclaration = returnStmt.findAncestor(MethodDeclaration.class);
             if (optDeclaration.isPresent()) {
-                ResolvedType t = JavaParserFacade.get(typeSolver).convertToUsage(optDeclaration.get().asMethodDeclaration().getType());
+                ResolvedType t = JavaParserFacade.get(typeSolver)
+                        .convertToUsage(
+                                optDeclaration.get().asMethodDeclaration().getType());
                 Optional<MethodUsage> functionalMethod = FunctionalInterfaceLogic.getFunctionalMethod(t);
                 if (functionalMethod.isPresent()) {
                     List<ResolvedType> resolvedTypes = new ArrayList<>();
@@ -166,13 +174,18 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                         // Replace parameter from declarator
                         Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
                         if (lambdaType.isReferenceType()) {
-                            for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType> entry : lambdaType.asReferenceType().getTypeParametersMap()) {
-                                if (entry.b.isTypeVariable() && entry.b.asTypeParameter().declaredOnType()) {
-                                    ResolvedType ot = t.asReferenceType().typeParametersMap().getValue(entry.a);
+                            for (com.github.javaparser.utils.Pair<ResolvedTypeParameterDeclaration, ResolvedType>
+                                    entry : lambdaType.asReferenceType().getTypeParametersMap()) {
+                                if (entry.b.isTypeVariable()
+                                        && entry.b.asTypeParameter().declaredOnType()) {
+                                    ResolvedType ot = t.asReferenceType()
+                                            .typeParametersMap()
+                                            .getValue(entry.a);
                                     lambdaType = lambdaType.replaceTypeVariables(entry.a, ot, inferredTypes);
                                 }
                             }
-                        } else if (lambdaType.isTypeVariable() && lambdaType.asTypeParameter().declaredOnType()) {
+                        } else if (lambdaType.isTypeVariable()
+                                && lambdaType.asTypeParameter().declaredOnType()) {
                             lambdaType = t.asReferenceType().typeParametersMap().getValue(lambdaType.asTypeParameter());
                         }
                         resolvedTypes.add(lambdaType);
@@ -206,8 +219,9 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
                 ResolvedType argType = inferenceContext.resolve(inferenceContext.addSingle(type));
 
                 ResolvedLambdaConstraintType conType;
-                if (argType.isWildcard()){
-                    conType = ResolvedLambdaConstraintType.bound(argType.asWildcard().getBoundedType());
+                if (argType.isWildcard()) {
+                    conType = ResolvedLambdaConstraintType.bound(
+                            argType.asWildcard().getBoundedType());
                 } else {
                     conType = ResolvedLambdaConstraintType.bound(argType);
                 }
@@ -219,5 +233,4 @@ public class MethodReferenceExprContext extends AbstractJavaParserContext<Method
         }
         throw new UnsupportedOperationException();
     }
-
 }

@@ -21,6 +21,9 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -28,22 +31,17 @@ import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 class NodeWithJavadocTest {
 
     @Test
     void removeJavaDocNegativeCaseNoComment() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
-                false, "Foo");
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
         assertFalse(decl.removeJavaDocComment());
     }
 
     @Test
     void removeJavaDocNegativeCaseCommentNotJavaDoc() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
-                false, "Foo");
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
         decl.setComment(new LineComment("A comment"));
         assertFalse(decl.removeJavaDocComment());
         assertTrue(decl.getComment().isPresent());
@@ -51,8 +49,7 @@ class NodeWithJavadocTest {
 
     @Test
     void removeJavaDocPositiveCase() {
-        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(),
-                false, "Foo");
+        ClassOrInterfaceDeclaration decl = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
         decl.setComment(new JavadocComment("A comment"));
         assertTrue(decl.removeJavaDocComment());
         assertFalse(decl.getComment().isPresent());
@@ -66,5 +63,4 @@ class NodeWithJavadocTest {
         assertFalse(method.getJavadocComment().isPresent());
         assertFalse(method.getJavadoc().isPresent());
     }
-
 }

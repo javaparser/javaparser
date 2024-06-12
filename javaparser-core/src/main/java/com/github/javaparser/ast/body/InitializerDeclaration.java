@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.body;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -33,18 +35,16 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.InitializerDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: {@code class X { static { a=3; }  } }
  *
  * @author Julio Vilmar Gesser
  */
-public class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration> implements NodeWithJavadoc<InitializerDeclaration>, NodeWithBlockStmt<InitializerDeclaration> {
+public class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration>
+        implements NodeWithJavadoc<InitializerDeclaration>, NodeWithBlockStmt<InitializerDeclaration> {
 
     private boolean isStatic;
 
@@ -99,8 +99,7 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null)
-            this.body.setParentNode(null);
+        if (this.body != null) this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;

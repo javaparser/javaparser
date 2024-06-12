@@ -21,15 +21,15 @@
 
 package com.github.javaparser.ast.stmt;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.expr.*;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_12;
 import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
 import static com.github.javaparser.utils.TestParser.parseStatement;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.*;
+import org.junit.jupiter.api.Test;
 
 class YieldStmtTest {
     @Test
@@ -87,22 +87,21 @@ class YieldStmtTest {
 
     @Test
     void keywordShouldNotInterfereWithIdentifiers() {
-        CompilationUnit compilationUnit = parseCompilationUnit(JAVA_12, "class yield { yield yield(yield yield){yield();} }");
-        assertEqualsStringIgnoringEol("class yield {\n" +
-                "\n" +
-                "    yield yield(yield yield) {\n" +
-                "        yield();\n" +
-                "    }\n" +
-                "}\n", compilationUnit.toString());
+        CompilationUnit compilationUnit =
+                parseCompilationUnit(JAVA_12, "class yield { yield yield(yield yield){yield();} }");
+        assertEqualsStringIgnoringEol(
+                "class yield {\n" + "\n"
+                        + "    yield yield(yield yield) {\n"
+                        + "        yield();\n"
+                        + "    }\n"
+                        + "}\n",
+                compilationUnit.toString());
     }
 
     @Test
     void keywordShouldNotInterfereWithIdentifiers2() {
         CompilationUnit compilationUnit = parseCompilationUnit("enum X { yield, }");
-        assertEqualsStringIgnoringEol("enum X {\n" +
-                "\n" +
-                "    yield\n" +
-                "}\n", compilationUnit.toString());
+        assertEqualsStringIgnoringEol("enum X {\n" + "\n" + "    yield\n" + "}\n", compilationUnit.toString());
     }
 
     @Test

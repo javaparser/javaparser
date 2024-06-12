@@ -20,6 +20,9 @@
  */
 package com.github.javaparser.ast.comments;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -29,12 +32,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.CommentMetaModel;
 import com.github.javaparser.metamodel.InternalProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Abstract class for all AST nodes that represent comments.
@@ -99,7 +98,8 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LineComment asLineComment() {
-        throw new IllegalStateException(f("%s is not LineComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(
+                f("%s is not LineComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     public Optional<Node> getCommentedNode() {
@@ -143,12 +143,11 @@ public abstract class Comment extends Node {
 
     @Override
     public boolean remove() {
-
         if (this.commentedNode != null) {
             this.commentedNode.setComment(null);
             return true;
         }
-            if (this.getParentNode().isPresent()) {
+        if (this.getParentNode().isPresent()) {
             return this.getParentNode().get().removeOrphanComment(this);
         }
         return false;
@@ -183,7 +182,8 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BlockComment asBlockComment() {
-        throw new IllegalStateException(f("%s is not BlockComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(
+                f("%s is not BlockComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -193,20 +193,18 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JavadocComment asJavadocComment() {
-        throw new IllegalStateException(f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(
+                f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifBlockComment(Consumer<BlockComment> action) {
-    }
+    public void ifBlockComment(Consumer<BlockComment> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJavadocComment(Consumer<JavadocComment> action) {
-    }
+    public void ifJavadocComment(Consumer<JavadocComment> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLineComment(Consumer<LineComment> action) {
-    }
+    public void ifLineComment(Consumer<LineComment> action) {}
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BlockComment> toBlockComment() {
@@ -222,21 +220,21 @@ public abstract class Comment extends Node {
     public Optional<LineComment> toLineComment() {
         return Optional.empty();
     }
-    
+
     /*
-     * Header is "//" for line comment 
+     * Header is "//" for line comment
      */
-    abstract public String getHeader(); 
-    
+    public abstract String getHeader();
+
     /*
-     * 
+     *
      */
-    abstract public String getFooter();
-    
+    public abstract String getFooter();
+
     /*
      * Returns the content of the comment with header and footer
      */
     public String asString() {
-    	return getHeader()+getContent()+getFooter();
+        return getHeader() + getContent() + getFooter();
     }
 }

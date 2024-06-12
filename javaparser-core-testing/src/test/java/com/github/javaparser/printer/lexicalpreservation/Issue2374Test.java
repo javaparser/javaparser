@@ -21,36 +21,30 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.stmt.Statement;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-
 public class Issue2374Test extends AbstractLexicalPreservingTest {
-    
+
     @Test
     public void test() {
         String lineComment = "Example comment";
-        considerCode(
-                "public class Bar {\n" + 
-                "    public void foo() {\n" + 
-                "        System.out.print(\"Hello\");\n" + 
-                "    }\n" + 
-                "}"
-                );
-        String expected =
-        		"public class Bar {\n"
-        		+ "    public void foo() {\n"
-        		+ "        System.out.print(\"Hello\");\n"
-        		+ "        //Example comment\n"
-        		+ "        System.out.println(\"World!\");\n"
-        		+ "    }\n"
-        		+ "}";
+        considerCode("public class Bar {\n" + "    public void foo() {\n"
+                + "        System.out.print(\"Hello\");\n"
+                + "    }\n"
+                + "}");
+        String expected = "public class Bar {\n"
+                + "    public void foo() {\n"
+                + "        System.out.print(\"Hello\");\n"
+                + "        //Example comment\n"
+                + "        System.out.println(\"World!\");\n"
+                + "    }\n"
+                + "}";
         // contruct a statement with a comment
         Statement stmt = StaticJavaParser.parseStatement("System.out.println(\"World!\");");
         stmt.setLineComment(lineComment);

@@ -37,7 +37,6 @@ import com.github.javaparser.metamodel.WildcardTypeMetaModel;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -66,7 +65,10 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     }
 
     @AllFieldsConstructor
-    public WildcardType(final ReferenceType extendedType, final ReferenceType superType, final NodeList<AnnotationExpr> annotations) {
+    public WildcardType(
+            final ReferenceType extendedType,
+            final ReferenceType superType,
+            final NodeList<AnnotationExpr> annotations) {
         this(null, extendedType, superType, annotations);
     }
 
@@ -74,7 +76,11 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType, NodeList<AnnotationExpr> annotations) {
+    public WildcardType(
+            TokenRange tokenRange,
+            ReferenceType extendedType,
+            ReferenceType superType,
+            NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
         setExtendedType(extendedType);
         setSuperType(superType);
@@ -115,8 +121,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
-        if (this.extendedType != null)
-            this.extendedType.setParentNode(null);
+        if (this.extendedType != null) this.extendedType.setParentNode(null);
         this.extendedType = extendedType;
         setAsParentNodeOf(extendedType);
         return this;
@@ -134,8 +139,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
             return this;
         }
         notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
-        if (this.superType != null)
-            this.superType.setParentNode(null);
+        if (this.superType != null) this.superType.setParentNode(null);
         this.superType = superType;
         setAsParentNodeOf(superType);
         return this;
@@ -266,17 +270,19 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      *
      * @return The type resolved.
      */
-	@Override
-	public ResolvedType convertToUsage(Context context) {
-		if (getExtendedType().isPresent() && !getSuperType().isPresent()) {
-			return ResolvedWildcard.extendsBound(getExtendedType().get().convertToUsage(context)); // removed (ReferenceTypeImpl)
-		}
-		if (!getExtendedType().isPresent() && getSuperType().isPresent()) {
-			return ResolvedWildcard.superBound(getSuperType().get().convertToUsage(context)); // removed (ReferenceTypeImpl)
-		}
-		if (!getExtendedType().isPresent() && !getSuperType().isPresent()) {
-			return ResolvedWildcard.UNBOUNDED;
-		}
-		throw new UnsupportedOperationException(toString());
-	}
+    @Override
+    public ResolvedType convertToUsage(Context context) {
+        if (getExtendedType().isPresent() && !getSuperType().isPresent()) {
+            // removed (ReferenceTypeImpl)
+            return ResolvedWildcard.extendsBound(getExtendedType().get().convertToUsage(context));
+        }
+        if (!getExtendedType().isPresent() && getSuperType().isPresent()) {
+            // removed (ReferenceTypeImpl)
+            return ResolvedWildcard.superBound(getSuperType().get().convertToUsage(context));
+        }
+        if (!getExtendedType().isPresent() && !getSuperType().isPresent()) {
+            return ResolvedWildcard.UNBOUNDED;
+        }
+        throw new UnsupportedOperationException(toString());
+    }
 }

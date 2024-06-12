@@ -39,14 +39,12 @@ public abstract class VoidVisitorWithDefaults<A> implements VoidVisitor<A> {
     /**
      * This will be called by every node visit method that is not overridden.
      */
-    public void defaultAction(Node n, A arg) {
-    }
+    public void defaultAction(Node n, A arg) {}
 
     /**
      * This will be called by the NodeList visit method when it is not overridden.
      */
-    public void defaultAction(NodeList n, A arg) {
-    }
+    public void defaultAction(NodeList n, A arg) {}
 
     @Override
     public void visit(final AnnotationDeclaration n, final A arg) {

@@ -21,15 +21,15 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference.constraintformulas;
 
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
+import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typeinference.BoundSet;
 import com.github.javaparser.symbolsolver.resolution.typeinference.ConstraintFormula;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isCompatibleInALooseInvocationContext;
-import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 
 /**
  * A type S is compatible in a loose invocation context with type T
@@ -51,7 +51,8 @@ public class TypeCompatibleWithType extends ConstraintFormula {
     public ReductionResult reduce(BoundSet currentBoundSet) {
         // A constraint formula of the form ‹S → T› is reduced as follows:
         //
-        // 1. If S and T are proper types, the constraint reduces to true if S is compatible in a loose invocation context with T (§5.3), and false otherwise.
+        // 1. If S and T are proper types, the constraint reduces to true if S is compatible in a loose invocation
+        // context with T (§5.3), and false otherwise.
 
         if (isProperType(s) && isProperType(t)) {
             if (isCompatibleInALooseInvocationContext(s, t)) {
@@ -60,19 +61,23 @@ public class TypeCompatibleWithType extends ConstraintFormula {
             return ReductionResult.falseResult();
         }
 
-        // 2. Otherwise, if S is a primitive type, let S' be the result of applying boxing conversion (§5.1.7) to S. Then the constraint reduces to ‹S' → T›.
+        // 2. Otherwise, if S is a primitive type, let S' be the result of applying boxing conversion (§5.1.7) to S.
+        // Then the constraint reduces to ‹S' → T›.
 
         if (s.isPrimitive()) {
             ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-            ResolvedType sFirst = new ReferenceTypeImpl(typeSolver.solveType(s.asPrimitive().getBoxTypeQName()));
+            ResolvedType sFirst =
+                    new ReferenceTypeImpl(typeSolver.solveType(s.asPrimitive().getBoxTypeQName()));
             return ReductionResult.oneConstraint(new TypeCompatibleWithType(typeSolver, sFirst, t));
         }
 
-        // 3. Otherwise, if T is a primitive type, let T' be the result of applying boxing conversion (§5.1.7) to T. Then the constraint reduces to ‹S = T'›.
+        // 3. Otherwise, if T is a primitive type, let T' be the result of applying boxing conversion (§5.1.7) to T.
+        // Then the constraint reduces to ‹S = T'›.
 
         if (t.isPrimitive()) {
             ReflectionTypeSolver typeSolver = new ReflectionTypeSolver();
-            ResolvedType tFirst = new ReferenceTypeImpl(typeSolver.solveType(t.asPrimitive().getBoxTypeQName()));
+            ResolvedType tFirst =
+                    new ReferenceTypeImpl(typeSolver.solveType(t.asPrimitive().getBoxTypeQName()));
             return ReductionResult.oneConstraint(new TypeSameAsType(s, tFirst));
         }
 
@@ -84,7 +89,13 @@ public class TypeCompatibleWithType extends ConstraintFormula {
         //    form G<...> that is a supertype of S, but the raw type G is a supertype of S, then the constraint reduces
         //    to true.
 
-        if (t.isReferenceType() && t.asReferenceType().getTypeDeclaration().isPresent() && !t.asReferenceType().getTypeDeclaration().get().getTypeParameters().isEmpty()) {
+        if (t.isReferenceType()
+                && t.asReferenceType().getTypeDeclaration().isPresent()
+                && !t.asReferenceType()
+                        .getTypeDeclaration()
+                        .get()
+                        .getTypeParameters()
+                        .isEmpty()) {
             // FIXME I really cannot understand what the specification means...
 
             // there exists a type of the form G<...> that is a supertype of S?
@@ -98,7 +109,7 @@ public class TypeCompatibleWithType extends ConstraintFormula {
                 return ReductionResult.trueResult();
             }
 
-            //throw new UnsupportedOperationException();
+            // throw new UnsupportedOperationException();
         }
 
         // 5. Otherwise, if T is an array type of the form G<T1, ..., Tn>[]k, and there exists no type of the form
@@ -134,9 +145,6 @@ public class TypeCompatibleWithType extends ConstraintFormula {
 
     @Override
     public String toString() {
-        return "TypeCompatibleWithType{" +
-                "s=" + s +
-                ", t=" + t +
-                '}';
+        return "TypeCompatibleWithType{" + "s=" + s + ", t=" + t + '}';
     }
 }

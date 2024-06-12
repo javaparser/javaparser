@@ -28,7 +28,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.BlockCommentMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -109,13 +108,13 @@ public class BlockComment extends Comment {
         return Optional.of(this);
     }
 
-	@Override
-	public String getHeader() {
-		return "/*";
-	}
-	
-	@Override
-	public String getFooter() {
-		return "*/";
-	}
+    @Override
+    public String getHeader() {
+        return "/*";
+    }
+
+    @Override
+    public String getFooter() {
+        return "*/";
+    }
 }
