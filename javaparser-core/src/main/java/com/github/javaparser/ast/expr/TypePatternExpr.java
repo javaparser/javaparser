@@ -70,7 +70,7 @@ import com.github.javaparser.metamodel.TypePatternExprMetaModel;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<TypePatternExpr>,  NodeWithFinalModifier<TypePatternExpr> {
+public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<TypePatternExpr>, NodeWithFinalModifier<TypePatternExpr> {
 
     private NodeList<Modifier> modifiers;
 
@@ -90,9 +90,8 @@ public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<T
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public TypePatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, ReferenceType type, SimpleName name) {
-        super(tokenRange);
+        super(tokenRange, type);
         setModifiers(modifiers);
-        setType(type);
         setName(name);
         customInitialization();
     }

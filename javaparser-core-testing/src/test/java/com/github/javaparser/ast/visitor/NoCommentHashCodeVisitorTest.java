@@ -1055,12 +1055,22 @@ class NoCommentHashCodeVisitorTest {
 	}
 
 	@Test
-	void testVisitPatternExpr() {
+	void testVisitTypePatternExpr() {
 		TypePatternExpr node = spy(new TypePatternExpr());
 		NoCommentHashCodeVisitor.hashCode(node);
 
 		verify(node, times(1)).getName();
 		verify(node, times(1)).getType();
+		verify(node, never()).getComment();
+	}
+
+	@Test
+	void testVisitRecordPatternExpr() {
+		RecordPatternExpr node = spy(new RecordPatternExpr());
+		NoCommentHashCodeVisitor.hashCode(node);
+
+		verify(node, times(1)).getType();
+		verify(node, times(1)).getPatternList();
 		verify(node, never()).getComment();
 	}
 

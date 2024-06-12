@@ -23,7 +23,6 @@ package com.github.javaparser.printer;
 
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
@@ -46,6 +45,7 @@ import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.utils.LineSeparator;
 import com.github.javaparser.utils.TestParser;
 
 class PrettyPrintVisitorTest extends TestParser {
@@ -123,7 +123,7 @@ class PrettyPrintVisitorTest extends TestParser {
         assertEquals("a = 1 / 1;", print(statement5));
 
         Statement statement6 = parseStatement("if (1 > 2 && 1 < 3 || 1 < 3){}");
-        assertEquals("if (1 > 2 && 1 < 3 || 1 < 3) {" + SYSTEM_EOL
+        assertEquals("if (1 > 2 && 1 < 3 || 1 < 3) {" + LineSeparator.SYSTEM
                 + "}", print(statement6));
 
     }
@@ -155,7 +155,7 @@ class PrettyPrintVisitorTest extends TestParser {
     void printOperatorA(){
         PrinterConfiguration conf = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         Statement statement6 = parseStatement("if(1>2&&1<3||1<3){}");
-        assertEquals("if (1>2&&1<3||1<3) {" + SYSTEM_EOL
+        assertEquals("if (1>2&&1<3||1<3) {" + LineSeparator.SYSTEM
                 + "}", print(statement6, conf));
     }
 
@@ -181,37 +181,37 @@ class PrettyPrintVisitorTest extends TestParser {
     @Test
     void printSimplestClass() {
         Node node = parse("class A {}");
-        assertEquals("class A {" + SYSTEM_EOL +
-                "}" + SYSTEM_EOL, print(node));
+        assertEquals("class A {" + LineSeparator.SYSTEM +
+                "}" + LineSeparator.SYSTEM, print(node));
     }
 
     @Test
     void printAClassWithField() {
         Node node = parse("class A { int a; }");
-        assertEquals("class A {" + SYSTEM_EOL
-                + SYSTEM_EOL +
-                "    int a;" + SYSTEM_EOL +
-                "}" + SYSTEM_EOL, print(node));
+        assertEquals("class A {" + LineSeparator.SYSTEM
+                + LineSeparator.SYSTEM +
+                "    int a;" + LineSeparator.SYSTEM +
+                "}" + LineSeparator.SYSTEM, print(node));
     }
 
     @Test
     void printAReceiverParameter() {
         Node node = parseBodyDeclaration("int x(@O X A.B.this, int y) { }");
-        assertEquals("int x(@O X A.B.this, int y) {" + SYSTEM_EOL + "}", print(node));
+        assertEquals("int x(@O X A.B.this, int y) {" + LineSeparator.SYSTEM + "}", print(node));
     }
 
     @Test
     void printLambdaIntersectionTypeAssignment() {
-        String code = "class A {" + SYSTEM_EOL +
-                "  void f() {" + SYSTEM_EOL +
-                "    Runnable r = (Runnable & Serializable) (() -> {});" + SYSTEM_EOL +
-                "    r = (Runnable & Serializable)() -> {};" + SYSTEM_EOL +
-                "    r = (Runnable & I)() -> {};" + SYSTEM_EOL +
+        String code = "class A {" + LineSeparator.SYSTEM +
+                "  void f() {" + LineSeparator.SYSTEM +
+                "    Runnable r = (Runnable & Serializable) (() -> {});" + LineSeparator.SYSTEM +
+                "    r = (Runnable & Serializable)() -> {};" + LineSeparator.SYSTEM +
+                "    r = (Runnable & I)() -> {};" + LineSeparator.SYSTEM +
                 "  }}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
 
-        assertEquals("Runnable r = (Runnable & Serializable) (() -> {" + SYSTEM_EOL + "});", print(methodDeclaration.getBody().get().getStatements().get(0)));
+        assertEquals("Runnable r = (Runnable & Serializable) (() -> {" + LineSeparator.SYSTEM + "});", print(methodDeclaration.getBody().get().getStatements().get(0)));
     }
 
     @Test
@@ -225,9 +225,9 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     void printLambdaIntersectionTypeReturn() {
-        String code = "class A {" + SYSTEM_EOL
-                + "  Object f() {" + SYSTEM_EOL
-                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + SYSTEM_EOL
+        String code = "class A {" + LineSeparator.SYSTEM
+                + "  Object f() {" + LineSeparator.SYSTEM
+                + "    return (Comparator<Map.Entry<K, V>> & Serializable)(c1, c2) -> c1.getKey().compareTo(c2.getKey()); " + LineSeparator.SYSTEM
                 + "}}";
         CompilationUnit cu = parse(code);
         MethodDeclaration methodDeclaration = (MethodDeclaration) cu.getType(0).getMember(0);
@@ -237,11 +237,11 @@ class PrettyPrintVisitorTest extends TestParser {
 
     @Test
     void printClassWithoutJavaDocButWithComment() {
-        String code = String.format("/** javadoc */ public class A { %s// stuff%s}", SYSTEM_EOL, SYSTEM_EOL);
+        String code = String.format("/** javadoc */ public class A { %s// stuff%s}", LineSeparator.SYSTEM, LineSeparator.SYSTEM);
         CompilationUnit cu = parse(code);
         PrinterConfiguration ignoreJavaDoc = new DefaultPrinterConfiguration().removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC));
         String content = cu.toString(ignoreJavaDoc);
-        assertEquals(String.format("public class A {%s    // stuff%s}%s", SYSTEM_EOL, SYSTEM_EOL, SYSTEM_EOL), content);
+        assertEquals(String.format("public class A {%s    // stuff%s}%s", LineSeparator.SYSTEM, LineSeparator.SYSTEM, LineSeparator.SYSTEM), content);
     }
 
     @Test

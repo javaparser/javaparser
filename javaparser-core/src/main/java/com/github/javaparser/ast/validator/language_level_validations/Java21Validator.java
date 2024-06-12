@@ -30,5 +30,6 @@ public class Java21Validator extends Java20Validator {
         super();
         remove(noSwitchNullDefault);
         remove(noSwitchPatterns);
+        remove(noRecordPatterns);
     }
 }

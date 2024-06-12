@@ -2453,7 +2453,7 @@ public class GenericVisitorAdapterTest {
     }
 
     @Test
-    void visit_GivenPatternExpr() {
+    void visit_GivenTypePatternExpr() {
         // Given
         Object argument = mock(Object.class);
         TypePatternExpr node = mock(TypePatternExpr.class);
@@ -2474,6 +2474,33 @@ public class GenericVisitorAdapterTest {
         InOrder order = Mockito.inOrder(node);
         order.verify(node).getModifiers();
         order.verify(node).getName();
+        order.verify(node).getType();
+        order.verify(node, times(2)).getComment();
+        order.verifyNoMoreInteractions();
+    }
+
+    @Test
+    void visit_GivenRecordPatternExpr() {
+        // Given
+        Object argument = mock(Object.class);
+        RecordPatternExpr node = mock(RecordPatternExpr.class);
+
+        // When
+        Mockito.when(node.getModifiers()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getType()).thenReturn(mock(ReferenceType.class));
+        Mockito.when(node.getPatternList()).thenReturn(mock(NodeList.class));
+        Mockito.when(node.getComment()).thenReturn(Optional.of(mock(Comment.class)));
+
+        // Then
+        Object result = visitor.visit(node, argument);
+
+        // Assert
+        assertNull(result);
+
+        // Verify
+        InOrder order = Mockito.inOrder(node);
+        order.verify(node).getModifiers();
+        order.verify(node).getPatternList();
         order.verify(node).getType();
         order.verify(node, times(2)).getComment();
         order.verifyNoMoreInteractions();

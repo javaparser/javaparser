@@ -651,4 +651,20 @@ class PrettyPrinterTest {
         CompilationUnit cu = parse(code);
         assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
     }
+
+    @Test
+    public void testNestedRecordPattern() {
+        String code = "class Foo {\n" +
+                "\n" +
+                "    void foo(Integer arg) {\n" +
+                "        switch(foo) {\n" +
+                "            case TwoBox(String s, Box(Integer i)) ->\n" +
+                "                System.out.println(s);\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n";
+
+        CompilationUnit cu = parse(code);
+        assertEqualsStringIgnoringEol(code, new DefaultPrettyPrinter().print(cu));
+    }
 }

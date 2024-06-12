@@ -21,7 +21,7 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.nodeTypes.SwitchNode;
 import com.github.javaparser.ast.stmt.Statement;
@@ -36,10 +36,9 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserPatternDeclaration;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
@@ -78,19 +77,6 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
             }
         }
 
-        // look for declaration in a pattern label for this entry
-        for (Expression e : wrappedNode.getLabels()) {
-            if (!e.isTypePatternExpr()) {
-                continue;
-            }
-
-            TypePatternExpr typePatternExpr = e.asTypePatternExpr();
-            if (typePatternExpr.getNameAsString().equals(name)) {
-                JavaParserPatternDeclaration decl = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
-                return SymbolReference.solved(decl);
-            }
-        }
-
         // look for declaration in this and previous switch entry statements
         for (SwitchEntry seStmt : switchNode.getEntries()) {
             for (Statement stmt : seStmt.getStatements()) {
@@ -113,5 +99,15 @@ public class SwitchEntryContext extends AbstractJavaParserContext<SwitchEntry> {
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
         // TODO: Document why staticOnly is forced to be false.
         return solveMethodInParentContext(name, argumentsTypes, false);
+    }
+
+    @Override
+    public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
+        return wrappedNode
+                .getLabels()
+                .stream()
+                .filter(label -> label.isPatternExpr())
+                .flatMap(label -> typePatternExprsDiscoveredInPattern(label.asPatternExpr()).stream())
+                .collect(Collectors.toList());
     }
 }

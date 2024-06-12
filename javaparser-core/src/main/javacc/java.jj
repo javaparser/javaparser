@@ -3321,7 +3321,12 @@ PatternExpr PatternExpression():
     PatternExpr ret;
 }
 {
-    ret = TypePatternExpression()
+	(
+		LOOKAHEAD(TypePatternExpression())
+		ret = TypePatternExpression()
+	  |
+	    ret = RecordPatternExpression()
+	)
     { return ret; }
 }
 
@@ -3344,6 +3349,51 @@ TypePatternExpr TypePatternExpression():
     type = ReferenceType(modifier.annotations)
     name = SimpleName()
     { return new TypePatternExpr(range(type, token()), modifier.modifiers, type, name); }
+}
+
+/**
+ * https://openjdk.org/jeps/440
+ * <pre><code>
+ * RecordPattern:
+ *     ReferenceType ( [PatternList] )
+ * PatternList:
+ *     Pattern {, Pattern }
+ * </code></pre>
+ */
+RecordPatternExpr RecordPatternExpression():
+{
+	ModifierHolder modifier;
+	ReferenceType type;
+	NodeList<PatternExpr> patternList;
+}
+{
+	modifier = Modifiers()
+	type = ReferenceType(modifier.annotations)
+	patternList = PatternList()
+	{ return new RecordPatternExpr(range(type, token()), modifier.modifiers, type, patternList); }
+}
+
+/**
+ * https://openjdk.org/jeps/440
+ * <pre><code>
+ * PatternList:
+ *     Pattern {, Pattern }
+ * </code></pre>
+ */
+NodeList<PatternExpr> PatternList():
+{
+    PatternExpr pattern;
+	NodeList<PatternExpr> ret = new NodeList<>();
+}
+{
+	"("
+    pattern = PatternExpression() { ret.add(pattern); }
+    (
+        ","
+        pattern = PatternExpression() { ret.add(pattern); }
+    )*
+	")"
+    { return ret; }
 }
 
 
@@ -4611,6 +4661,7 @@ SwitchEntry SwitchEntry():
     JavaToken begin;
     SwitchEntry ret;
     Statement stmt = null;
+    Expression expr = null;
     boolean isDefault = false;
     Expression guard = null;
 }
@@ -4638,7 +4689,7 @@ SwitchEntry SwitchEntry():
             * This lookahead is necessary to avoid ambiguity with the ConditionalExpression branch
             * below.
             */
-            LOOKAHEAD(3)
+            LOOKAHEAD(PatternExpression())
             label = PatternExpression() { labels = add(labels, label); }
             [
               "when"
@@ -4661,12 +4712,16 @@ SwitchEntry SwitchEntry():
      |
         "->"
         (
-            stmt = StatementExpression()
-            {
-                TokenRange r=range(begin, token());
-                stmts.add(stmt);
-                ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault, guard);
-            }
+            (
+                expr = Expression()
+                {
+                    TokenRange r=range(begin, token());
+                    // expr.getTokenRange() will not be present if storeTokens is false
+                    stmts.add(new ExpressionStmt(expr.getTokenRange().orElse(null), expr));
+                    ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault, guard);
+                }
+                ";"
+            )
          |
             stmt = Block()
             {
@@ -5545,6 +5600,10 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
  *         (one of)
  *         Annotation public
  *         abstract
+ *     ClassDeclaration:
+ *         NormalClassDeclaration
+ *         EnumDeclaration
+ *         RecordDeclaration
  * }<pre>
  * For Convenience:
  * <pre>{@code
@@ -5560,6 +5619,10 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 {
     modifier = Modifiers()
     (
+        // This case must be checked before AnnotationTypeMemberDeclaration since the prefixes are the same
+        LOOKAHEAD(RecordDeclaration())
+        ret = RecordDeclaration(modifier)
+     |
         LOOKAHEAD(Type() Identifier() "(")
         ret = AnnotationTypeMemberDeclaration(modifier)
      |

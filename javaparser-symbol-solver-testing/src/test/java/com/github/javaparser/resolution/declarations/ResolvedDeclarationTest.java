@@ -68,10 +68,10 @@ public interface ResolvedDeclarationTest extends AssociableToASTTest {
     @Test
     default void whenDeclarationIsAPatternTheCallToTheMethodAsPatternShouldNotThrow() {
         ResolvedDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isPattern())
-            assertDoesNotThrow(resolvedDeclaration::asPattern);
+        if (resolvedDeclaration.isTypePattern())
+            assertDoesNotThrow(resolvedDeclaration::asTypePattern);
         else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asPattern);
+            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asTypePattern);
     }
 
     @Test

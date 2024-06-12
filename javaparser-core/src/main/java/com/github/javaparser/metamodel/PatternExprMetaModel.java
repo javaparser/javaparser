@@ -46,4 +46,6 @@ public class PatternExprMetaModel extends ExpressionMetaModel {
     protected PatternExprMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
+
+    public PropertyMetaModel typePropertyMetaModel;
 }

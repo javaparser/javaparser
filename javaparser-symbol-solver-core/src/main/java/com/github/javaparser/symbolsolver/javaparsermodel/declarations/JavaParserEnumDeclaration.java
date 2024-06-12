@@ -58,6 +58,8 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
         implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
         SymbolResolutionCapability {
 
+    private static final String VALUES = "values";
+
     private TypeSolver typeSolver;
     private EnumDeclaration wrappedNode;
     private JavaParserTypeAdapter<com.github.javaparser.ast.body.EnumDeclaration> javaParserTypeAdapter;
@@ -193,13 +195,16 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
     @Override
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentTypes,
                                                     Context invokationContext, List<ResolvedType> typeParameters) {
+        if (VALUES.equals(name) && argumentTypes.isEmpty()) {
+            return Optional.of(new MethodUsage(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver)));
+        }
         return getContext().solveMethodAsUsage(name, argumentTypes);
     }
 
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes,
                                                                   boolean staticOnly) {
-        if ("values".equals(name) && argumentsTypes.isEmpty()) {
+        if (VALUES.equals(name) && argumentsTypes.isEmpty()) {
             return SymbolReference.solved(new JavaParserEnumDeclaration.ValuesMethod(this, typeSolver));
         }
         if ("valueOf".equals(name) && argumentsTypes.size() == 1) {
@@ -387,12 +392,12 @@ public class JavaParserEnumDeclaration extends AbstractTypeDeclaration
 
         @Override
         public boolean isStatic() {
-            return false;
+            return true;
         }
 
         @Override
         public String getName() {
-            return "values";
+            return VALUES;
         }
 
         @Override

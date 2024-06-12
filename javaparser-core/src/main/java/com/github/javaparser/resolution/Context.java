@@ -23,7 +23,7 @@ package com.github.javaparser.resolution;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.SymbolReference;
@@ -216,19 +216,19 @@ public interface Context {
      * The pattern expressions that are declared in this immediate context and made visible to a given child.
      * This list could include values which are shadowed.
      */
-    default List<PatternExpr> patternExprsExposedToChild(Node child) {
+    default List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
         return Collections.emptyList();
     }
 
     /**
      */
-    default List<PatternExpr> patternExprsExposedFromChildren() {
+    default List<TypePatternExpr> typePatternExprsExposedFromChildren() {
         return Collections.emptyList();
     }
 
     /**
      */
-    default List<PatternExpr> negatedPatternExprsExposedFromChildren() {
+    default List<TypePatternExpr> negatedTypePatternExprsExposedFromChildren() {
         return Collections.emptyList();
     }
 
@@ -316,7 +316,7 @@ public interface Context {
      *  }
      * }</pre>
      */
-    default Optional<PatternExpr> patternExprInScope(String name) {
+    default Optional<TypePatternExpr> typePatternExprInScope(String name) {
         if (!getParent().isPresent()) {
             return Optional.empty();
         }
@@ -325,16 +325,16 @@ public interface Context {
         // FIXME: If there are multiple patterns, throw an error?
         // First check if the pattern is directly declared within this context.
         Node wrappedNode = getWrappedNode();
-        Optional<PatternExpr> localResolutionResults = parentContext
-                .patternExprsExposedToChild(wrappedNode)
+        Optional<TypePatternExpr> localResolutionResults = parentContext
+                .typePatternExprsExposedToChild(wrappedNode)
                 .stream()
-                .filter(vd -> vd.isTypePatternExpr() && vd.asTypePatternExpr().getNameAsString().equals(name))
+                .filter(vd -> vd.getNameAsString().equals(name))
                 .findFirst();
         if (localResolutionResults.isPresent()) {
             return localResolutionResults;
         }
         // If we don't find the parameter locally, escalate up the scope hierarchy to see if it is declared there.
-        return parentContext.patternExprInScope(name);
+        return parentContext.typePatternExprInScope(name);
     }
 
     default Optional<ResolvedFieldDeclaration> fieldDeclarationInScope(String name) {

@@ -521,8 +521,14 @@ class GenericVisitorWithDefaultsTest {
     }
 
     @Test
-    void testThatVisitWithPatternExprAsParameterCallDefaultAction() {
+    void testThatVisitWithTypePatternExprAsParameterCallDefaultAction() {
         Node node = visitor.visit(mock(TypePatternExpr.class), argument);
+        assertNodeVisitDefaultAction(node);
+    }
+
+    @Test
+    void testThatVisitWithRecordPatternExprAsParameterCallDefaultAction() {
+        Node node = visitor.visit(mock(RecordPatternExpr.class), argument);
         assertNodeVisitDefaultAction(node);
     }
 

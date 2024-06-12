@@ -63,7 +63,7 @@ public interface ResolvedDeclaration extends AssociableToAST {
     /**
      * Does this declaration represents a pattern declaration?
      */
-    default boolean isPattern() {
+    default boolean isTypePattern() {
         return false;
     }
 
@@ -128,7 +128,7 @@ public interface ResolvedDeclaration extends AssociableToAST {
     /**
      * Return this as a PatternDeclaration or throw an UnsupportedOperationException
      */
-    default ResolvedPatternDeclaration asPattern() {
+    default ResolvedTypePatternDeclaration asTypePattern() {
         throw new UnsupportedOperationException(String.format("%s is not a Pattern", this));
     }
 }

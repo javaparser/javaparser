@@ -695,9 +695,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
     private void assertNumberOfPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
                                                                   int expectedNumber, String message) {
-        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
-                .patternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.isTypePatternExpr() &&  p.asTypePatternExpr().getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        List<TypePatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .typePatternExprsExposedFromChildren();
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     private void assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName, String message) {
@@ -708,9 +708,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
     }
     private void assertNumberOfNegatedPatternExprsExposedToImmediateParentInContextNamed(Node parent, String patternExprName,
                                                                   int expectedNumber, String message) {
-        List<PatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
-                .negatedPatternExprsExposedFromChildren();
-        assertEquals(expectedNumber, vars.stream().filter(p -> p.isTypePatternExpr() && p.asTypePatternExpr().getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
+        List<TypePatternExpr> vars = JavaParserFactory.getContext(parent, typeSolver)
+                .negatedTypePatternExprsExposedFromChildren();
+        assertEquals(expectedNumber, vars.stream().filter(p -> p.getNameAsString().equals(patternExprName)).count(), "[" + patternExprName + "]: " + message);
     }
 
     @Test
@@ -823,6 +823,57 @@ class ContextTest extends AbstractSymbolResolutionTest {
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getResources().get(1), "res1");
         assertNoVarsExposedToChildInContextNamed(stmt, stmt.getResources().get(0), "res1");
         assertOneVarExposedToChildInContextNamed(stmt, stmt.getTryBlock(), "res1");
+    }
+
+    @Nested
+    class RecordPatternExprTests {
+        @Test
+        void recordPatternExprInInstanceOf() {
+            InstanceOfExpr instanceOfExpr = parse(ParserConfiguration.LanguageLevel.JAVA_21, "a instanceof Box(String s, Box(Integer i, Boolean b))", ParseStart.EXPRESSION).asInstanceOfExpr();
+            String message = "No Pattern Expr must be available from this expression.";
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", message);
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "i", message);
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "b", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "s", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "i", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(instanceOfExpr, "b", message);
+        }
+
+        @Test
+        void recordPatternExprInNegatedInstanceOf() {
+            UnaryExpr unaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_21, "!(a instanceof Box(String s, Box(Integer i, Boolean b)))", ParseStart.EXPRESSION).asUnaryExpr();
+            String message = "No Pattern Expr must be available from this expression.";
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "i", message);
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "b", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "i", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "b", message);
+        }
+
+        @Test
+        void recordPatternExprInBinaryExpr() {
+            String message = "Only s must be available from this expression.";
+            BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_21, "true == a instanceof Box(String s, Box(Integer i, Boolean b))", ParseStart.EXPRESSION).asBinaryExpr();
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
+            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
+            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
+        }
+
+        @Test
+        void recordPatternExprInNegatedBinaryExpr() {
+            String message = "Only s must be available from this expression.";
+            BinaryExpr binaryExpr = parse(ParserConfiguration.LanguageLevel.JAVA_21, "true != a instanceof Box(String s, Box(Integer i, Boolean b))", ParseStart.EXPRESSION).asBinaryExpr();
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
+            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
+            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
+        }
     }
 
     @Nested
@@ -1242,7 +1293,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 Context leftBranchContext = JavaParserFactory.getContext(leftBranch, typeSolver);
                 SymbolReference<? extends ResolvedValueDeclaration> left_s = leftBranchContext.solveSymbol("s");
                 assertTrue(left_s.isSolved());
-                Optional<PatternExpr> optionalPatternExpr = leftBranchContext.patternExprInScope("s");
+                Optional<TypePatternExpr> optionalPatternExpr = leftBranchContext.typePatternExprInScope("s");
                 assertTrue(optionalPatternExpr.isPresent());
                 SymbolReference<? extends ResolvedValueDeclaration> left_s2 = leftBranchContext.solveSymbol("s2");
                 assertFalse(left_s2.isSolved());
@@ -1300,9 +1351,9 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertTrue(symbolReference.isSolved(), "symbol not solved");
                 ResolvedDeclaration correspondingDeclaration = symbolReference.getCorrespondingDeclaration();
                 assertEquals("s", correspondingDeclaration.getName(), "unexpected name for the solved symbol");
-                assertTrue(correspondingDeclaration.isPattern());
-                assertEquals("s", correspondingDeclaration.asPattern().getName(), "unexpected name for the solved pattern");
-                assertEquals("java.lang.String", correspondingDeclaration.asPattern().getType().asReferenceType().getQualifiedName(), "unexpected type for the solved pattern");
+                assertTrue(correspondingDeclaration.isTypePattern());
+                assertEquals("s", correspondingDeclaration.asTypePattern().getName(), "unexpected name for the solved pattern");
+                assertEquals("java.lang.String", correspondingDeclaration.asTypePattern().getType().asReferenceType().getQualifiedName(), "unexpected type for the solved pattern");
 
             }
 
@@ -1369,7 +1420,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                     SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
                     assertTrue(s.isSolved());
-                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s.getCorrespondingDeclaration().isTypePattern());
                 }
 
                 @Test
@@ -1389,7 +1440,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
 
                     SymbolReference<? extends ResolvedValueDeclaration> s = context.solveSymbol("s");
                     assertTrue(s.isSolved());
-                    assertTrue(s.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s.getCorrespondingDeclaration().isTypePattern());
                 }
 
                 @Test
@@ -1452,7 +1503,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_list.getCorrespondingDeclaration().isTypePattern());
 //                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
 
                     // The second one should resolve to the pattern variable (the string).
@@ -1460,7 +1511,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string.getCorrespondingDeclaration().isTypePattern());
                 }
 
                 @Test
@@ -1489,7 +1540,7 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_list.getCorrespondingDeclaration().isTypePattern());
 //                    assertTrue(s_list.getCorrespondingDeclaration().isVariable()); // Should pass but seemingly not implemented/overridden, perhaps?
 
                     // The second one should resolve to the pattern variable (the string).
@@ -1497,21 +1548,21 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertTrue(s_string.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string.getCorrespondingDeclaration().isTypePattern());
 
                     // The third one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
                     Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
                     assertTrue(s_string2.isSolved());
-                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string2.getCorrespondingDeclaration().isTypePattern());
 
                     // The fourth one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
                     Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
                     assertTrue(s_string3.isSolved());
-                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string3.getCorrespondingDeclaration().isTypePattern());
                 }
 
                 @Test
@@ -1540,28 +1591,28 @@ class ContextTest extends AbstractSymbolResolutionTest {
                     Context context_list = JavaParserFactory.getContext(methodCallExpr_list, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_list = context_list.solveSymbol("s");
                     assertTrue(s_list.isSolved());
-                    assertFalse(s_list.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_list.getCorrespondingDeclaration().isTypePattern());
 
                     // The second one should resolve to the standard variable (the list).
                     MethodCallExpr methodCallExpr_string = methodCallExprs.get(1);
                     Context context_string = JavaParserFactory.getContext(methodCallExpr_string, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string = context_string.solveSymbol("s");
                     assertTrue(s_string.isSolved());
-                    assertFalse(s_string.getCorrespondingDeclaration().isPattern());
+                    assertFalse(s_string.getCorrespondingDeclaration().isTypePattern());
 
                     // The third one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string2 = methodCallExprs.get(2);
                     Context context_string2 = JavaParserFactory.getContext(methodCallExpr_string2, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string2 = context_string2.solveSymbol("s");
                     assertTrue(s_string2.isSolved());
-                    assertTrue(s_string2.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string2.getCorrespondingDeclaration().isTypePattern());
 
                     // The fourth one should resolve to the pattern variable (the string).
                     MethodCallExpr methodCallExpr_string3 = methodCallExprs.get(2);
                     Context context_string3 = JavaParserFactory.getContext(methodCallExpr_string3, typeSolver);
                     SymbolReference<? extends ResolvedValueDeclaration> s_string3 = context_string3.solveSymbol("s");
                     assertTrue(s_string3.isSolved());
-                    assertTrue(s_string3.getCorrespondingDeclaration().isPattern());
+                    assertTrue(s_string3.getCorrespondingDeclaration().isTypePattern());
                 }
             }
         }

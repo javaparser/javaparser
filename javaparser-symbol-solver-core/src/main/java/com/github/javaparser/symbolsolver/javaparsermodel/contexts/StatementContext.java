@@ -218,7 +218,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
          * If we're in a statement that contains a pattern expression.
          * Example: {@code double x = a instanceof String s;}
          */
-        List<PatternExpr> patternExprs = patternExprsExposedFromChildren();
+        List<TypePatternExpr> patternExprs = typePatternExprsExposedFromChildren();
         for (int i = 0; i < patternExprs.size(); i++) {
             PatternExpr patternExpr = patternExprs.get(i);
             if (patternExpr.isTypePatternExpr()) {
@@ -324,14 +324,14 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
 
     @Override
-    public List<PatternExpr> patternExprsExposedFromChildren() {
+    public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
         // Statements never make pattern expressions available.
         return Collections.emptyList();
 
     }
 
     @Override
-    public List<PatternExpr> negatedPatternExprsExposedFromChildren() {
+    public List<TypePatternExpr> negatedTypePatternExprsExposedFromChildren() {
         // Statements never make pattern expressions available.
         return Collections.emptyList();
     }

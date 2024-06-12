@@ -142,15 +142,15 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         }
     }
 
-    protected void printArguments(final NodeList<Expression> args, final Void arg) {
+    protected <T extends Expression> void printArguments(final NodeList<T> args, final Void arg) {
         printer.print("(");
         if (!isNullOrEmpty(args)) {
             boolean columnAlignParameters = (args.size() > 1) && getOption(ConfigOption.COLUMN_ALIGN_PARAMETERS).isPresent();
             if (columnAlignParameters) {
                 printer.indentWithAlignTo(printer.getCursor().column);
             }
-            for (final Iterator<Expression> i = args.iterator(); i.hasNext(); ) {
-                final Expression e = i.next();
+            for (final Iterator<T> i = args.iterator(); i.hasNext(); ) {
+                final T e = i.next();
                 e.accept(this, arg);
                 if (i.hasNext()) {
                     printer.print(",");
@@ -734,6 +734,15 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         n.getType().accept(this, arg);
         printer.print(" ");
         n.getName().accept(this, arg);
+    }
+
+
+    @Override
+    public void visit(final RecordPatternExpr n, final Void arg) {
+        printOrphanCommentsBeforeThisChildNode(n);
+        printComment(n.getComment(), arg);
+        n.getType().accept(this, arg);
+        printArguments(n.getPatternList(), arg);
     }
 
     @Override

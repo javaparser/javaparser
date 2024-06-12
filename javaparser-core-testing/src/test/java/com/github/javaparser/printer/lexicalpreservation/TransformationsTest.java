@@ -34,13 +34,14 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ReturnStmt;
 import com.github.javaparser.ast.type.ArrayType;
 import com.github.javaparser.ast.type.PrimitiveType;
+import com.github.javaparser.utils.LineSeparator;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * These tests are more "high level" than the ones in LexicalPreservingPrinterTest.
@@ -173,13 +174,13 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     @Test
     void issue2099AddingStatementAfterTraillingComment1() {
         considerStatement(
-                "    if(value != null) {" + SYSTEM_EOL +
-                "        value.value();" + SYSTEM_EOL +
+                "    if(value != null) {" + LineSeparator.SYSTEM +
+                "        value.value();" + LineSeparator.SYSTEM +
                 "    }");
 
-        BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + SYSTEM_EOL +
-                "       value1();" + SYSTEM_EOL +
-                "    value2(); // Test" + SYSTEM_EOL +
+        BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + LineSeparator.SYSTEM +
+                "       value1();" + LineSeparator.SYSTEM +
+                "    value2(); // Test" + LineSeparator.SYSTEM +
                 "}"));
 
         blockStmt.addStatement(statement);
@@ -197,13 +198,13 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     @Test
     void issue2099AddingStatementAfterTraillingComment2() {
         considerStatement(
-                "    if(value != null) {" + SYSTEM_EOL +
-                "        value.value();" + SYSTEM_EOL +
+                "    if(value != null) {" + LineSeparator.SYSTEM +
+                "        value.value();" + LineSeparator.SYSTEM +
                 "    }");
 
-        BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + SYSTEM_EOL +
-                "       value1();" + SYSTEM_EOL +
-                "    value2(); /* test */" + SYSTEM_EOL +
+        BlockStmt blockStmt = LexicalPreservingPrinter.setup(StaticJavaParser.parseBlock("{" + LineSeparator.SYSTEM +
+                "       value1();" + LineSeparator.SYSTEM +
+                "    value2(); /* test */" + LineSeparator.SYSTEM +
                 "}"));
 
         blockStmt.addStatement(statement);
@@ -222,15 +223,15 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     @Test
     void addingStatement1() {
         considerStatement(
-                "        if(value != null) {" + SYSTEM_EOL +
-                        "            value.value();" + SYSTEM_EOL +
+                "        if(value != null) {" + LineSeparator.SYSTEM +
+                        "            value.value();" + LineSeparator.SYSTEM +
                         "        }");
 
-        CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + SYSTEM_EOL +
-                "    public void method() {" + SYSTEM_EOL +
-                "           value1();" + SYSTEM_EOL +
-                "        value2(); // Test" + SYSTEM_EOL +
-                "    }" + SYSTEM_EOL +
+        CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + LineSeparator.SYSTEM +
+                "    public void method() {" + LineSeparator.SYSTEM +
+                "           value1();" + LineSeparator.SYSTEM +
+                "        value2(); // Test" + LineSeparator.SYSTEM +
+                "    }" + LineSeparator.SYSTEM +
                 "}"));
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)compilationUnit.getChildNodes().get(0);
         MethodDeclaration methodDeclaration = (MethodDeclaration)classOrInterfaceDeclaration.getChildNodes().get(2);
@@ -252,15 +253,15 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     @Test
     void addingStatement2() {
         considerStatement(
-                "        if(value != null) {" + SYSTEM_EOL +
-                        "            value.value();" + SYSTEM_EOL +
+                "        if(value != null) {" + LineSeparator.SYSTEM +
+                        "            value.value();" + LineSeparator.SYSTEM +
                         "        }");
 
-        CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + SYSTEM_EOL +
-                "    public void method() {" + SYSTEM_EOL +
-                "           value1();" + SYSTEM_EOL +
-                "        value2();" + SYSTEM_EOL +
-                "    }" + SYSTEM_EOL +
+        CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + LineSeparator.SYSTEM +
+                "    public void method() {" + LineSeparator.SYSTEM +
+                "           value1();" + LineSeparator.SYSTEM +
+                "        value2();" + LineSeparator.SYSTEM +
+                "    }" + LineSeparator.SYSTEM +
                 "}"));
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)compilationUnit.getChildNodes().get(0);
         MethodDeclaration methodDeclaration = (MethodDeclaration)classOrInterfaceDeclaration.getChildNodes().get(2);
@@ -282,15 +283,15 @@ class TransformationsTest extends  AbstractLexicalPreservingTest {
     @Test
     void addingStatement3() {
         considerStatement(
-                "        if(value != null) {" + SYSTEM_EOL +
-                        "            value.value();" + SYSTEM_EOL +
+                "        if(value != null) {" + LineSeparator.SYSTEM +
+                        "            value.value();" + LineSeparator.SYSTEM +
                         "        }");
 
-        CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + SYSTEM_EOL +
-                "    public void method() {" + SYSTEM_EOL +
-                "           value1();" + SYSTEM_EOL +
-                "        value2();" + SYSTEM_EOL + SYSTEM_EOL +
-                "    }" + SYSTEM_EOL +
+        CompilationUnit compilationUnit = LexicalPreservingPrinter.setup(StaticJavaParser.parse("public class Test {" + LineSeparator.SYSTEM +
+                "    public void method() {" + LineSeparator.SYSTEM +
+                "           value1();" + LineSeparator.SYSTEM +
+                "        value2();" + LineSeparator.SYSTEM + LineSeparator.SYSTEM +
+                "    }" + LineSeparator.SYSTEM +
                 "}"));
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = (ClassOrInterfaceDeclaration)compilationUnit.getChildNodes().get(0);
         MethodDeclaration methodDeclaration = (MethodDeclaration)classOrInterfaceDeclaration.getChildNodes().get(2);

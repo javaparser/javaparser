@@ -49,6 +49,21 @@ class Java16ValidatorTest {
 
     }
 
+    @Nested
+    class PatternMatching {
+        @Test
+        void patternMatchingAllowed() {
+            ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("if (a instanceof String s) {}"));
+            TestUtils.assertNoProblems(result);
+        }
+
+        @Test
+        void recordPatternsForbidden() {
+            ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("if (a instanceof Box(String s)) {}"));
+            TestUtils.assertProblems(result, "(line 1,col 18) Record patterns are not supported. Pay attention that this feature is supported starting from 'JAVA_21' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        }
+    }
+
     /**
      * Records are available within Java 14 (preview), Java 15 (2nd preview), and Java 16 (release).
      * The introduction of records means that they are no longer able to be used as identifiers.

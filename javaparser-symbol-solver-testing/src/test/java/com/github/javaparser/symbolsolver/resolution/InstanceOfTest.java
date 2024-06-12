@@ -27,6 +27,7 @@ import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
@@ -43,6 +44,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InstanceOfTest {
+
+    private CompilationUnit parse(String code) {
+        TypeSolver typeSolver = new ReflectionTypeSolver();
+        ParserConfiguration parserConfiguration = new ParserConfiguration();
+        parserConfiguration.setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        parserConfiguration.setLanguageLevel(ParserConfiguration.LanguageLevel.BLEEDING_EDGE);
+        return new JavaParser(parserConfiguration).parse(code).getResult().get();
+    }
 
     protected final TypeSolver typeSolver = new ReflectionTypeSolver();
 
@@ -549,6 +558,24 @@ public class InstanceOfTest {
             });
         }
 
+    }
+
+    @Nested
+    class PatternTest {
+        @Test
+        public void instanceOfWithRecordPatternShouldResolve() {
+            CompilationUnit cu = parse("class Test {\n" +
+                    "    public void foo(Object o) {\n" +
+                    "        if (o instanceof Box(InnerBox(Integer i), InnerBox(String s))) {\n" +
+                    "            System.out.println(s);\n" +
+                    "        };\n" +
+                    "    }\n" +
+                    "}"
+            );
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
     }
 
 

@@ -1,0 +1,1 @@
+public class Convolution2D extends ConvolutionLayer { }
