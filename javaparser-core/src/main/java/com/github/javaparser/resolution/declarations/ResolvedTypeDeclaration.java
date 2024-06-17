@@ -94,6 +94,13 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
     }
 
     /**
+     * Is this the declaration of a record class?
+     */
+    default boolean isRecord() {
+        return false;
+    }
+
+    /**
      * Is this the declaration of an annotation?
      */
     default boolean isAnnotation() {
@@ -166,6 +173,13 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      */
     default ResolvedEnumDeclaration asEnum() {
         throw new UnsupportedOperationException(String.format("%s is not an enum", this));
+    }
+
+    /**
+     * Return this as a RecordDeclaration or throw UnsupportedOperationException.
+     */
+    default ResolvedRecordDeclaration asRecord() {
+        throw new UnsupportedOperationException(String.format("%s is not a record", this));
     }
 
     /**
