@@ -34,6 +34,7 @@ import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
@@ -240,9 +241,9 @@ class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
         JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
         CompilationUnit cu = parser.parse(code);
         Parameter parameter = cu.findFirst(Parameter.class).get();
-        // TODO Fixme when the record declarations are resolved.
-        assertThrows(UnsupportedOperationException.class, () -> parameter.resolve());
-        //        assertEquals("java.lang.Integer",parameter.resolve().describeType());
+        // TODO: Update when records can be resolved
+        // assertEquals("java.lang.Integer",parameter.resolve().describeType());
+        assertThrows(UnsolvedSymbolException.class, () -> parameter.resolve().describeType());
     }
 
     @Test()

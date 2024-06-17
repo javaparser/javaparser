@@ -23,6 +23,7 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
@@ -215,7 +216,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
 
     public ResolvedType getUsage(Node node) {
 
-        return new ReferenceTypeImpl(this, typeSolver);
+        return new ReferenceTypeImpl(this);
     }
 
     public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> argumentsTypes, Context invokationContext, List<ResolvedType> typeParameterValues) {
@@ -325,7 +326,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
 
     @Override
     public boolean isAssignableBy(ResolvedReferenceTypeDeclaration other) {
-        return isAssignableBy(new ReferenceTypeImpl(other, typeSolver));
+        return isAssignableBy(new ReferenceTypeImpl(other));
     }
 
     @Override
@@ -436,6 +437,6 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
     ///
 
     protected ResolvedReferenceType record() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangRecord(), typeSolver);
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangRecord());
     }
 }

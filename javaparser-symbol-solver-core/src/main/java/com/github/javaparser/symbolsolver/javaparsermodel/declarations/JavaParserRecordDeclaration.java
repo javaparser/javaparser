@@ -32,6 +32,7 @@ import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -41,7 +42,7 @@ import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionC
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 
 import java.util.*;
@@ -52,8 +53,8 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 // TODO: Check all of this
-public class JavaParserRecordDeclaration extends AbstractClassDeclaration
-        implements MethodUsageResolutionCapability, SymbolResolutionCapability {
+public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
+        implements ResolvedRecordDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability, SymbolResolutionCapability {
 
     ///
     /// Fields
@@ -189,13 +190,11 @@ public class JavaParserRecordDeclaration extends AbstractClassDeclaration
         return wrappedNode.getName().getId();
     }
 
-    @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
-        ResolvedReferenceTypeDeclaration solvedJavaLangObject = typeSolver.getSolvedJavaLangRecord();
-        return Optional.of(new ReferenceTypeImpl(solvedJavaLangObject));
+        ResolvedReferenceTypeDeclaration solvedJavaLangRecord = typeSolver.getSolvedJavaLangRecord();
+        return Optional.of(new ReferenceTypeImpl(solvedJavaLangRecord));
     }
 
-    @Override
     public List<ResolvedReferenceType> getInterfaces() {
         List<ResolvedReferenceType> interfaces = new ArrayList<>();
         // TODO FIXME: Remove null check -- should be an empty list...
@@ -205,6 +204,18 @@ public class JavaParserRecordDeclaration extends AbstractClassDeclaration
             }
         }
         return interfaces;
+    }
+
+    @Override
+    public List<ResolvedReferenceType> getAllSuperClasses() {
+        List<ResolvedReferenceType> superClasses = new ArrayList<>();
+        getSuperClass().ifPresent(superClass -> superClasses.add(superClass));
+        return superClasses;
+    }
+
+    @Override
+    public List<ResolvedReferenceType> getAllInterfaces() {
+        return null;
     }
 
     @Override
@@ -425,12 +436,6 @@ public class JavaParserRecordDeclaration extends AbstractClassDeclaration
     ///
     /// Protected methods
     ///
-
-    @Override
-    protected ResolvedReferenceType object() {
-        ResolvedReferenceTypeDeclaration solvedJavaLangObject = typeSolver.getSolvedJavaLangObject();
-        return new ReferenceTypeImpl(solvedJavaLangObject);
-    }
 
     @Override
     public Set<ResolvedReferenceTypeDeclaration> internalTypes() {
