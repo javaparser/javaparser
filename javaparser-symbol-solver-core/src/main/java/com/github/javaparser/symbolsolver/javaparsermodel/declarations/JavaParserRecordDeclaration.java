@@ -44,7 +44,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -54,7 +53,10 @@ import java.util.stream.Collectors;
  */
 // TODO: Check all of this
 public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
-        implements ResolvedRecordDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability, SymbolResolutionCapability {
+        implements ResolvedRecordDeclaration,
+                MethodResolutionCapability,
+                MethodUsageResolutionCapability,
+                SymbolResolutionCapability {
 
     ///
     /// Fields
@@ -150,6 +152,40 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
                                 }
                             });
                         }));
+
+        wrappedNode
+                .getParameters()
+                .forEach(parameter -> fields.add(new ResolvedFieldDeclaration() {
+                    @Override
+                    public boolean isStatic() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isVolatile() {
+                        return false;
+                    }
+
+                    @Override
+                    public ResolvedTypeDeclaration declaringType() {
+                        return wrappedNode.resolve();
+                    }
+
+                    @Override
+                    public AccessSpecifier accessSpecifier() {
+                        return AccessSpecifier.PRIVATE;
+                    }
+
+                    @Override
+                    public ResolvedType getType() {
+                        return parameter.getType().resolve();
+                    }
+
+                    @Override
+                    public String getName() {
+                        return parameter.getNameAsString();
+                    }
+                }));
 
         return fields;
     }

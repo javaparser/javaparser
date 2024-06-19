@@ -464,7 +464,7 @@ public class JavaSymbolSolver implements SymbolResolver {
             return new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(node), typeSolver);
         }
         if (node instanceof RecordDeclaration) {
-            return new JavaParserRecordDeclaration((RecordDeclaration) node,typeSolver);
+            return new JavaParserRecordDeclaration((RecordDeclaration) node, typeSolver);
         }
         throw new IllegalArgumentException("Cannot get a reference type declaration from "
                 + node.getClass().getCanonicalName());
