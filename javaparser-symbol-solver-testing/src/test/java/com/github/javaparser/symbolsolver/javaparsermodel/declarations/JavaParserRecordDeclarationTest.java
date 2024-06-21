@@ -293,7 +293,7 @@ public class JavaParserRecordDeclarationTest {
                 .sorted((fst, snd) -> fst.getName().compareTo(snd.getName()))
                 .collect(Collectors.toList());
 
-        //assertEquals(3, sortedMethods.size());
+        assertEquals(3, sortedMethods.size());
 
         ResolvedMethodDeclaration fooMethod = sortedMethods.get(0);
         assertEquals("Test.foo", fooMethod.getQualifiedName());
