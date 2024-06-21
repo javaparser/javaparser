@@ -43,7 +43,7 @@ jobs:
         run: ./mvnw -B checkstyle:check
 
   spotless_check:
-    name: Validate code generation and formatting
+    name: Spotless check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout latest code
