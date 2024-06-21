@@ -21,6 +21,7 @@
 package com.github.javaparser.symbolsolver;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -28,7 +29,6 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
@@ -39,23 +39,23 @@ public class Issue4450Test extends AbstractSymbolResolutionTest {
     public void test() throws IOException {
         ParserConfiguration config = new ParserConfiguration();
         Path issueResourcesPath = adaptPath("src/test/resources/issue4450");
-	    JavaParserTypeSolver jpts = new JavaParserTypeSolver(issueResourcesPath);
+        JavaParserTypeSolver jpts = new JavaParserTypeSolver(issueResourcesPath);
         CombinedTypeSolver cts = new CombinedTypeSolver();
         cts.add(new ReflectionTypeSolver(false));
         cts.add(jpts);
         config.setSymbolResolver(new JavaSymbolSolver(cts));
         StaticJavaParser.setConfiguration(config);
-	    StaticJavaParser.setConfiguration(config);
-	    CompilationUnit cu = StaticJavaParser.parse(issueResourcesPath.resolve("a/RefCycleClass.java"));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = StaticJavaParser.parse(issueResourcesPath.resolve("a/RefCycleClass.java"));
 
-	    // We shouldn't throw a mismatched symbol
-	    assertDoesNotThrow(() -> cu.findAll(NameExpr.class).stream()
-	            .map(NameExpr::resolve)
-	            .findAny().get());
+        // We shouldn't throw a mismatched symbol
+        assertDoesNotThrow(() -> cu.findAll(NameExpr.class).stream()
+                .map(NameExpr::resolve)
+                .findAny()
+                .get());
 
-	    cu.findAll(NameExpr.class).forEach(expr -> {
-	    	expr.resolve().getName();
-	    });
+        cu.findAll(NameExpr.class).forEach(expr -> {
+            expr.resolve().getName();
+        });
     }
-
 }
