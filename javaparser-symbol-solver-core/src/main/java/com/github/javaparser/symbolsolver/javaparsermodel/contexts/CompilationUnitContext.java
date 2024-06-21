@@ -21,11 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
@@ -41,6 +36,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -49,11 +48,12 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
 
     private static final String DEFAULT_PACKAGE = "java.lang";
 
-	// Contains the names of static import declarations with asterisks that have
-	// already been resolved. The aim is to keep a history of name searches for the
-	// same resolution attempt in order to avoid a recursive issue leading to a
-	// stackoverflow exception. See issues 4450 & 2720
-    private static ThreadLocal<List<String>> resolvedStaticImport = ThreadLocal.withInitial(() -> new ArrayList<String>());
+    // Contains the names of static import declarations with asterisks that have
+    // already been resolved. The aim is to keep a history of name searches for the
+    // same resolution attempt in order to avoid a recursive issue leading to a
+    // stackoverflow exception. See issues 4450 & 2720
+    private static ThreadLocal<List<String>> resolvedStaticImport =
+            ThreadLocal.withInitial(() -> new ArrayList<String>());
 
     ///
     /// Static methods
@@ -91,20 +91,20 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             if (importDecl.isStatic()) {
                 if (importDecl.isAsterisk()) {
                     String qName = importDecl.getNameAsString();
-					// Try to resolve the name in from declarations imported with asterisks only if
-					// they have not already been analysed, otherwise this can lead to an infinite
-					// loop via circular dependencies.
-					if (!isAlreadyResolved(qName)) {
-						resolvedStaticImport.get().add(qName);
-						ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
+                    // Try to resolve the name in from declarations imported with asterisks only if
+                    // they have not already been analysed, otherwise this can lead to an infinite
+                    // loop via circular dependencies.
+                    if (!isAlreadyResolved(qName)) {
+                        resolvedStaticImport.get().add(qName);
+                        ResolvedTypeDeclaration importedType = typeSolver.solveType(qName);
 
-						SymbolReference<? extends ResolvedValueDeclaration> ref = new SymbolSolver(typeSolver)
-								.solveSymbolInType(importedType, name);
-						if (ref.isSolved()) {
-							resolvedStaticImport.remove(); // clear the search history
-							return ref;
-						}
-					}
+                        SymbolReference<? extends ResolvedValueDeclaration> ref =
+                                new SymbolSolver(typeSolver).solveSymbolInType(importedType, name);
+                        if (ref.isSolved()) {
+                            resolvedStaticImport.remove(); // clear the search history
+                            return ref;
+                        }
+                    }
                 } else {
                     String whole = importDecl.getNameAsString();
 
@@ -120,14 +120,14 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
             }
         }
 
-		// Clear of the search history because we don't want this context to be reused
-		// in another search.
-		resolvedStaticImport.remove();
+        // Clear of the search history because we don't want this context to be reused
+        // in another search.
+        resolvedStaticImport.remove();
         return SymbolReference.unsolved();
     }
 
     private boolean isAlreadyResolved(String qName) {
-    	return resolvedStaticImport.get().contains(qName);
+        return resolvedStaticImport.get().contains(qName);
     }
 
     @Override
@@ -329,12 +329,12 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
                         return SymbolReference.unsolved();
                     }
 
-					ResolvedTypeDeclaration ref = typeSolver.solveType(importString);
-					SymbolReference<ResolvedMethodDeclaration> method = MethodResolutionLogic.solveMethodInType(ref,
-							name, argumentsTypes, true);
-					if (method.isSolved()) {
-						return method;
-					}
+                    ResolvedTypeDeclaration ref = typeSolver.solveType(importString);
+                    SymbolReference<ResolvedMethodDeclaration> method =
+                            MethodResolutionLogic.solveMethodInType(ref, name, argumentsTypes, true);
+                    if (method.isSolved()) {
+                        return method;
+                    }
                 } else {
                     String qName = importDecl.getNameAsString();
 
@@ -396,5 +396,4 @@ public class CompilationUnitContext extends AbstractJavaParserContext<Compilatio
         String memberName = qName.substring(index + 1);
         return memberName;
     }
-
 }
