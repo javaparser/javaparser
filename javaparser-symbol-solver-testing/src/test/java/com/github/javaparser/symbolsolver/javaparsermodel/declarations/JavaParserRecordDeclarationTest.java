@@ -9,12 +9,16 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
@@ -257,14 +261,47 @@ public class JavaParserRecordDeclarationTest {
 
         RecordDeclaration recordDeclaration =
                 compilationUnit.findFirst(RecordDeclaration.class).get();
-        JavaParserRecordDeclaration resolvedRecordDeclaration =
-                (JavaParserRecordDeclaration) recordDeclaration.resolve();
+        ResolvedReferenceTypeDeclaration resolvedDeclaration = recordDeclaration.resolve();
 
-        List<ResolvedFieldDeclaration> fields = resolvedRecordDeclaration.getAllFields();
+        List<ResolvedFieldDeclaration> fields = resolvedDeclaration.getAllFields();
         assertEquals(2, fields.size());
         assertEquals("java.lang.String", fields.get(0).getType().describe());
         assertEquals("s", fields.get(0).getName());
         assertEquals("java.lang.Integer", fields.get(1).getType().describe());
         assertEquals("i", fields.get(1).getName());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void testGetDeclaredMethods() {
+        ParseResult<CompilationUnit> x = javaParser.parse("" +
+                "record Test(String s, Integer i) {\n" +
+                "    public int foo(int x) {\n" +
+                "        return x + i;\n" +
+                "    }\n" +
+                "}");
+        CompilationUnit compilationUnit = x.getResult().get();
+
+        RecordDeclaration recordDeclaration =
+                compilationUnit.findFirst(RecordDeclaration.class).get();
+        JavaParserRecordDeclaration resolvedRecordDeclaration =
+                (JavaParserRecordDeclaration) recordDeclaration.resolve();
+
+        Set<ResolvedMethodDeclaration> methods = resolvedRecordDeclaration.getDeclaredMethods();
+
+        List<ResolvedMethodDeclaration> sortedMethods = methods.stream()
+                .sorted((fst, snd) -> fst.getName().compareTo(snd.getName()))
+                .collect(Collectors.toList());
+
+        //assertEquals(3, sortedMethods.size());
+
+        ResolvedMethodDeclaration fooMethod = sortedMethods.get(0);
+        assertEquals("Test.foo", fooMethod.getQualifiedName());
+        assertEquals("Test.foo(int)", fooMethod.getQualifiedSignature());
+        assertEquals("int", fooMethod.getReturnType().describe());
+
+        ResolvedMethodDeclaration implicitSMethod = sortedMethods.get(1);
+
+        ResolvedMethodDeclaration implicitIMethod = sortedMethods.get(2);
     }
 }
