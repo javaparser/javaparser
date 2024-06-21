@@ -29,3 +29,4 @@ Our development workflow is based on Pull Request. If you are not familiar with 
 - Pull requests often stay open for at least a few days to give people a chance to review it.
 - A pull request is merged when all comments on it have been resolved.
 - If you create a pull request for an issue, mention the issue in the format #123 to make github link it automatically.
+- Before submitting a pull request, please run `./mvnw spotless:apply` to format your code to avoid any formatting related issues during review.
