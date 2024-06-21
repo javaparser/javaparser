@@ -1,7 +1,7 @@
 
-Next Release (Version 3.26.1-snapshot)
+Next Release (Version 3.26.2-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/208?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/209?closed=1)
 
 ### Added
 ### Changed
@@ -10,9 +10,48 @@ Next Release (Version 3.26.1-snapshot)
 ### Fixed
 ### Security
 
+Version 3.26.1
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/208?closed=1)
 
-Next Release (Version 3.26.0)
------------------------------
+### Added
+
+* Fix record declarations nested in annotation declarations (PR [#4460](https://github.com/javaparser/javaparser/pull/4460) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### Changed
+
+* Format code with spotless (PR [#4465](https://github.com/javaparser/javaparser/pull/4465) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Simplifying the search for types in compilation unit (PR [#4459](https://github.com/javaparser/javaparser/pull/4459) by [@jlerbsc](https://github.com/jlerbsc))
+* Add spotless plugin configuration (PR [#4409](https://github.com/javaparser/javaparser/pull/4409) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### Fixed
+
+* Disable spotless ratcheting and fix formatting (PR [#4478](https://github.com/javaparser/javaparser/pull/4478) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix: issue 4450 Endless recursion (-> StackOverflow) with cyclic static references (PR [#4477](https://github.com/javaparser/javaparser/pull/4477) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4399 MethodCallExpr inside lambda in assignment expression cannot be resolved (PR [#4462](https://github.com/javaparser/javaparser/pull/4462) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix crash on SwitchExpr entries if tokens are not stored (PR [#4461](https://github.com/javaparser/javaparser/pull/4461) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix lookahead for pattern expression in switch entries [Issue 4455] (PR [#4458](https://github.com/javaparser/javaparser/pull/4458) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### Developer Changes
+
+* Automatically format code after codegen and validate with a github action (PR [#4468](https://github.com/javaparser/javaparser/pull/4468) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Add git-blame-ignore-revs file to ignore the reformatting commit in git blame (PR [#4466](https://github.com/javaparser/javaparser/pull/4466) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### Uncategorised
+
+* Add link to the guide to adding nodes in CONTRIBUTING.md (PR [#4453](https://github.com/javaparser/javaparser/pull/4453) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@johannescoetzee](https://github.com/johannescoetzee)
+* [@jlerbsc](https://github.com/jlerbsc)
+
+
+
+Version 3.26.0
+--------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/207?closed=1)
 
 ### Added
