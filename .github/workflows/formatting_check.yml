@@ -1,0 +1,63 @@
+name: Check codegen and formatting
+
+#on: [push, pull_request]
+#on: [pull_request]
+on:
+  # Trigger the workflow on push to master (ignoring .md only changes)
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+
+  # Trigger the workflow on any pull_request (ignoring .md only changes)
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+  # Enable manual triggering (important for contributors to enable a check on their fork)
+  workflow_dispatch:
+
+# If a build is running in the current branch, and the branch is updated, we cancel the previous build and start
+# a new one with the updated changes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Run checkstyle validations for pipeline
+  checkstyle_check:
+    name: Validate checkstyle
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: "0"
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'zulu'
+      - name: Validate Project Checkstyle
+        run: ./mvnw -B checkstyle:check
+
+  spotless_check:
+    name: Validate code generation and formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: "0"
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'zulu'
+      - name: Generate code and format
+        run: |
+          ./run_core_metamodel_generator.sh
+          # ./run_core_generators.sh automatically runs ./mvnw spotless:apply
+          ./run_core_generators.sh
+          git diff --exit-code
