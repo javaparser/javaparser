@@ -77,10 +77,9 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
         if (clazz.isLocalClass()) {
             throw new IllegalArgumentException("Class should not be a local class");
         }
-        /* JDK <16 does not contain `isRecord()` therefore does not compile when building with JDK8 */
-        //      if (clazz.isRecord()) {
-        //          throw new IllegalArgumentException("Class should not be a record");
-        //      }
+        if (isRecordType(clazz)) {
+            throw new IllegalArgumentException("Class should not be a record");
+        }
         if (!clazz.isEnum()) {
             throw new IllegalArgumentException("Class should be an enum");
         }

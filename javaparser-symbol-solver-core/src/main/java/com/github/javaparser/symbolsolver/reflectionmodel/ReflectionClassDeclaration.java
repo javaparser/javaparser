@@ -79,6 +79,9 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         if (clazz.isEnum()) {
             throw new IllegalArgumentException("Class should not be an enum");
         }
+        if (isRecordType(clazz)) {
+            throw new IllegalArgumentException("Class should not be a record");
+        }
         this.clazz = clazz;
         this.typeSolver = typeSolver;
         this.reflectionClassAdapter = new ReflectionClassAdapter(clazz, typeSolver, this);

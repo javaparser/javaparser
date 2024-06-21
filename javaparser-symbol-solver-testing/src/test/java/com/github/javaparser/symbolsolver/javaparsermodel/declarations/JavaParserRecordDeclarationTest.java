@@ -251,7 +251,7 @@ public class JavaParserRecordDeclarationTest {
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
-    void testReflectionGetDeclaredFields() {
+    void testGetDeclaredFields() {
         ParseResult<CompilationUnit> x = javaParser.parse("record Test(String s, Integer i) {}");
         CompilationUnit compilationUnit = x.getResult().get();
 

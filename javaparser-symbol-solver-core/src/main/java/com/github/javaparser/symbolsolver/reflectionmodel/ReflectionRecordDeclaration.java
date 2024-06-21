@@ -82,11 +82,9 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
         if (clazz.isEnum()) {
             throw new IllegalArgumentException("Class should not be an enum");
         }
-        /* JDK <16 does not contain `isRecord()` therefore does not compile when building with JDK8 */
-        /* TODO: Check if record by "ruling out" everything else? */
-        //        if (!clazz.isRecord()) {
-        //            throw new IllegalArgumentException("Class should be a record");
-        //        }
+        if (!isRecordType(clazz)) {
+            throw new IllegalArgumentException("Class should be a record");
+        }
         this.clazz = clazz;
         this.typeSolver = typeSolver;
         this.reflectionClassAdapter = new ReflectionClassAdapter(clazz, typeSolver, this);
