@@ -74,6 +74,9 @@ public class JavassistFactory {
         if (ctClazz.isArray()) {
             throw new IllegalArgumentException("This method should not be called passing an array");
         }
+        if (ctClazz.getAttribute("Record") != null) {
+            return new JavassistRecordDeclaration(ctClazz, typeSolver);
+        }
         return new JavassistClassDeclaration(ctClazz, typeSolver);
     }
 

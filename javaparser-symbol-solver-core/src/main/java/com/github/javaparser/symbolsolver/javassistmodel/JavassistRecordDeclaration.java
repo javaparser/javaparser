@@ -35,11 +35,12 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
-import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import javassist.CtClass;
 import javassist.CtField;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -47,8 +48,8 @@ import java.util.Set;
 /**
  * @author Federico Tomassetti
  */
-public class JavassistRecordDeclaration extends AbstractClassDeclaration
-        implements MethodUsageResolutionCapability, SymbolResolutionCapability {
+public class JavassistRecordDeclaration extends AbstractTypeDeclaration
+        implements ResolvedRecordDeclaration, MethodUsageResolutionCapability, SymbolResolutionCapability {
 
     private CtClass ctClass;
     private TypeSolver typeSolver;
@@ -58,19 +59,14 @@ public class JavassistRecordDeclaration extends AbstractClassDeclaration
         if (ctClass == null) {
             throw new IllegalArgumentException();
         }
-        if (ctClass.isInterface() || ctClass.isAnnotation() || ctClass.isPrimitive() || ctClass.isEnum()) {
+        if (ctClass.getAttribute("Record") == null) {
             throw new IllegalArgumentException(
-                    "Trying to instantiate a JavassistClassDeclaration with something which is not a class: "
+                    "Trying to instantiate a JavassistRecordDeclaration with something which is not a record: "
                             + ctClass.toString());
         }
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
         this.javassistTypeDeclarationAdapter = new JavassistTypeDeclarationAdapter(ctClass, typeSolver, this);
-    }
-
-    @Override
-    protected ResolvedReferenceType object() {
-        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }
 
     @Override
@@ -188,13 +184,6 @@ public class JavassistRecordDeclaration extends AbstractClassDeclaration
         return javassistTypeDeclarationAdapter.getAncestors(acceptIncompleteList);
     }
 
-    @Override
-    @Deprecated
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return JavassistUtils.solveMethod(name, argumentsTypes, staticOnly, typeSolver, this, ctClass);
-    }
-
     public ResolvedType getUsage(Node node) {
         return new ReferenceTypeImpl(this);
     }
@@ -263,11 +252,6 @@ public class JavassistRecordDeclaration extends AbstractClassDeclaration
     }
 
     @Override
-    public boolean isClass() {
-        return !ctClass.isInterface();
-    }
-
-    @Override
     public Optional<ResolvedReferenceType> getSuperClass() {
         return javassistTypeDeclarationAdapter.getSuperClass();
     }
@@ -275,6 +259,31 @@ public class JavassistRecordDeclaration extends AbstractClassDeclaration
     @Override
     public List<ResolvedReferenceType> getInterfaces() {
         return javassistTypeDeclarationAdapter.getInterfaces();
+    }
+
+    @Override
+    public final List<ResolvedReferenceType> getAllSuperClasses() {
+        List<ResolvedReferenceType> superclasses = new ArrayList<>();
+
+        getSuperClass().ifPresent(superClass -> {
+            superclasses.add(superClass);
+            superclasses.addAll(superClass.getAllClassesAncestors());
+        });
+
+        return superclasses;
+    }
+
+    @Override
+    public final List<ResolvedReferenceType> getAllInterfaces() {
+        List<ResolvedReferenceType> interfaces = new ArrayList<>();
+        for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
+            interfaces.add(interfaceDeclaration);
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
+        }
+        getSuperClass().ifPresent(superClass -> {
+            interfaces.addAll(superClass.getAllInterfacesAncestors());
+        });
+        return interfaces;
     }
 
     @Override
