@@ -35,6 +35,19 @@ jobs:
         ## Different JDK versions have different implementations etc. -- test on all combinations (ideally 8 to latest).
         ### exclude pre-8 (min development version jdk8)
         jdk: [ 8,9,10,11,12,13,14,15,16,17,18 ]
+        # The below configurations are no longer available on github runners and is not supported by the 
+        # setup-java action, nor are they available from the supported distributions.
+        # See https://github.com/actions/setup-java for details
+        exclude:
+          - os: macos-latest
+            jdk: 9
+          - os: macos-latest
+            jdk: 10
+          - os: macos-latest
+            jdk: 12
+          - os: macos-latest
+            jdk: 14
+
     env:
       OS: ${{ matrix.os }}
       JDK: ${{ matrix.jdk }}
