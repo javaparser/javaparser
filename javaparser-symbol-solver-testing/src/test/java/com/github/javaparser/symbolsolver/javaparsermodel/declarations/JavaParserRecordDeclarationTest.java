@@ -18,7 +18,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledForJreRange;
@@ -274,12 +273,11 @@ public class JavaParserRecordDeclarationTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetDeclaredMethods() {
-        ParseResult<CompilationUnit> x = javaParser.parse("" +
-                "record Test(String s, Integer i) {\n" +
-                "    public int foo(int x) {\n" +
-                "        return x + i;\n" +
-                "    }\n" +
-                "}");
+        ParseResult<CompilationUnit> x = javaParser.parse("" + "record Test(String s, Integer i) {\n"
+                + "    public int foo(int x) {\n"
+                + "        return x + i;\n"
+                + "    }\n"
+                + "}");
         CompilationUnit compilationUnit = x.getResult().get();
 
         RecordDeclaration recordDeclaration =

@@ -92,7 +92,8 @@ class ReflectionClassAdapter {
 
     public List<ResolvedReferenceType> getAncestors() {
         List<ResolvedReferenceType> ancestors = new LinkedList<>();
-        if (typeDeclaration.isClass() && !Object.class.getCanonicalName().equals(clazz.getCanonicalName())) {
+        if ((typeDeclaration.isClass() || typeDeclaration.isRecord())
+                && !Object.class.getCanonicalName().equals(clazz.getCanonicalName())) {
             if (getSuperClass().isPresent()) {
                 ReferenceTypeImpl superClass = getSuperClass().get();
                 ancestors.add(superClass);

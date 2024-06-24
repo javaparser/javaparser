@@ -353,8 +353,8 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public boolean isClass() {
-        return !clazz.isInterface();
+    public boolean isRecord() {
+        return true;
     }
 
     @Override
@@ -375,7 +375,7 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
         });
 
         if (superclasses.removeIf(ResolvedReferenceType::isJavaLangObject)) {
-            superclasses.add(record());
+            superclasses.add(object());
         }
         return superclasses;
     }
@@ -441,5 +441,9 @@ public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
 
     protected ResolvedReferenceType record() {
         return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangRecord());
+    }
+
+    protected ResolvedReferenceType object() {
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }
 }

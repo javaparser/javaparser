@@ -19,138 +19,160 @@
  * GNU Lesser General Public License for more details.
  */
 
-package com.github.javaparser.symbolsolver.javassistmodel;
+package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.AssociableToAST;
-import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
+import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableSet;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
 
-class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
+@EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
+    private ClassLoader classLoader = new ClassLoader() {
+        public Class<?> findClass(String name) {
+            String strippedName = name.substring(4);
+            byte[] b = loadClassData(strippedName);
+            return defineClass(name, b, 0, b.length);
+        }
 
-    private TypeSolver typeSolver;
+        private byte[] loadClassData(String name) {
+            Path filePath = adaptPath(String.format("src/test/resources/record_declarations/%s.class", name));
+            try {
+                return Files.readAllBytes(filePath);
+            } catch (IOException e) {
+                return null;
+            }
+        }
+    };
+    private TypeSolver typeSolver =
+            new CombinedTypeSolver(new ClassLoaderTypeSolver(classLoader), new ReflectionTypeSolver());
 
-    @BeforeEach
-    void setup() throws IOException {
-        Path pathToJar = adaptPath("src/test/resources/record_declarations/Box.jar");
-        typeSolver = new CombinedTypeSolver(new JarTypeSolver(pathToJar), new ReflectionTypeSolver());
-    }
-
-    ///
-    /// Test misc
-    ///
-
+    /**
+     * The test classes were compiled with Java 17, so attempting to load them with any lower version will crash
+     */
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsClass() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isClass());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsInterface() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isInterface());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsEnum() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isEnum());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsRecord() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertTrue(compilationUnit.isRecord());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsTypeVariable() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertFalse(compilationUnit.isTypeParameter());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testIsType() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertTrue(compilationUnit.isType());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsType() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(compilationUnit, compilationUnit.asType());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsClass() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+            ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asInterface();
         });
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsInterface() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+            ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asInterface();
         });
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsEnum() {
         assertThrows(UnsupportedOperationException.class, () -> {
-            JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+            ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
             compilationUnit.asEnum();
         });
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testAsRecord() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(compilationUnit, compilationUnit.asRecord());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetPackageName() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("box", compilationUnit.getPackageName());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetClassName() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("Box", compilationUnit.getClassName());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetQualifiedName() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals("box.Box", compilationUnit.getQualifiedName());
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetGenericTypeField() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         List<ResolvedFieldDeclaration> declarationList = compilationUnit.getAllFields();
         assertEquals(1, declarationList.size());
 
@@ -165,8 +187,9 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetDeclaredMethods() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         Set<ResolvedMethodDeclaration> methodsSet = compilationUnit.getDeclaredMethods();
         assertEquals(5, methodsSet.size());
 
@@ -192,8 +215,9 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     ///
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetSuperclass() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 "java.lang.Record",
                 compilationUnit
@@ -203,8 +227,9 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetAllSuperclasses() {
-        JavassistRecordDeclaration cu = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration cu = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("java.lang.Record", "java.lang.Object"),
                 cu.getAllSuperClasses().stream()
@@ -213,8 +238,9 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetAllAncestorsWithDepthFirstTraversalOrder() {
-        JavassistRecordDeclaration cu = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration cu = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("java.lang.Record", "java.lang.Object", "box.Foo"),
                 cu.getAllAncestors().stream()
@@ -223,8 +249,9 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetInterfaces() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("box.Foo"),
                 compilationUnit.getInterfaces().stream()
@@ -233,27 +260,13 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetAllInterfaces() {
-        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
                 ImmutableSet.of("box.Foo"),
                 compilationUnit.getAllInterfaces().stream()
                         .map(ResolvedReferenceType::getQualifiedName)
                         .collect(Collectors.toSet()));
-    }
-
-    @Override
-    public Optional<Node> getWrappedDeclaration(AssociableToAST associableToAST) {
-        return Optional.empty();
-    }
-
-    @Override
-    public AbstractTypeDeclaration createValue() {
-        return (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
-    }
-
-    @Override
-    public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
-        return false;
     }
 }
