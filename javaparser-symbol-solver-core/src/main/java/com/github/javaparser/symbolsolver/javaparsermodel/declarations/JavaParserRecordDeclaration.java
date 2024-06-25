@@ -25,6 +25,7 @@ import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.BodyDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
@@ -40,6 +41,7 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
+import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
@@ -359,6 +361,7 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
+
         return getContext().solveMethod(name, argumentsTypes, staticOnly);
     }
 
@@ -439,6 +442,9 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
             if (member instanceof MethodDeclaration) {
                 methods.add(new JavaParserMethodDeclaration((MethodDeclaration) member, typeSolver));
             }
+        }
+        for (Parameter parameter : wrappedNode.getParameters()) {
+            methods.add(new ImplicitGetterMethod(parameter, wrappedNode, typeSolver));
         }
         return methods;
     }
@@ -532,5 +538,94 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
                 .collect(Collectors.toList());
 
         return new ReferenceTypeImpl(ref.getCorrespondingDeclaration().asReferenceType(), superClassTypeParameters);
+    }
+
+    public static class ImplicitGetterMethod implements ResolvedMethodDeclaration, TypeVariableResolutionCapability {
+
+        private Parameter correspondingParameter;
+        private RecordDeclaration recordDeclaration;
+        private TypeSolver typeSolver;
+
+        public ImplicitGetterMethod(
+                Parameter correspondingParameter, RecordDeclaration recordDeclaration, TypeSolver typeSolver) {
+            this.correspondingParameter = correspondingParameter;
+            this.recordDeclaration = recordDeclaration;
+            this.typeSolver = typeSolver;
+        }
+
+        @Override
+        public AccessSpecifier accessSpecifier() {
+            return AccessSpecifier.PUBLIC;
+        }
+
+        @Override
+        public String getName() {
+            return correspondingParameter.getNameAsString();
+        }
+
+        @Override
+        public ResolvedType getReturnType() {
+            return correspondingParameter.getType().resolve();
+        }
+
+        @Override
+        public boolean isAbstract() {
+            return false;
+        }
+
+        @Override
+        public boolean isDefaultMethod() {
+            return false;
+        }
+
+        @Override
+        public boolean isStatic() {
+            return false;
+        }
+
+        @Override
+        public String toDescriptor() {
+            return String.format("()%s", getReturnType().toDescriptor());
+        }
+
+        @Override
+        public ResolvedReferenceTypeDeclaration declaringType() {
+            return recordDeclaration.resolve();
+        }
+
+        @Override
+        public int getNumberOfParams() {
+            return 0;
+        }
+
+        @Override
+        public ResolvedParameterDeclaration getParam(int i) {
+            throw new UnsupportedOperationException("Implicit record getter methods do not have parameters");
+        }
+
+        @Override
+        public int getNumberOfSpecifiedExceptions() {
+            return 0;
+        }
+
+        @Override
+        public ResolvedType getSpecifiedException(int index) {
+            throw new UnsupportedOperationException("Implicit record getter methods do not throw exceptions");
+        }
+
+        @Override
+        public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public MethodUsage resolveTypeVariables(Context context, List<ResolvedType> parameterTypes) {
+            return new MethodUsage(this);
+        }
+
+        @Override
+        public Optional<Node> toAst() {
+            return Optional.of(recordDeclaration);
+        }
     }
 }

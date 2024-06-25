@@ -5,16 +5,23 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.RecordDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -273,7 +280,7 @@ public class JavaParserRecordDeclarationTest {
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetDeclaredMethods() {
-        ParseResult<CompilationUnit> x = javaParser.parse("" + "record Test(String s, Integer i) {\n"
+        ParseResult<CompilationUnit> x = javaParser.parse("record Test(String s, Integer i) {\n"
                 + "    public int foo(int x) {\n"
                 + "        return x + i;\n"
                 + "    }\n"
@@ -288,7 +295,7 @@ public class JavaParserRecordDeclarationTest {
         Set<ResolvedMethodDeclaration> methods = resolvedRecordDeclaration.getDeclaredMethods();
 
         List<ResolvedMethodDeclaration> sortedMethods = methods.stream()
-                .sorted((fst, snd) -> fst.getName().compareTo(snd.getName()))
+                .sorted(Comparator.comparing(ResolvedDeclaration::getName))
                 .collect(Collectors.toList());
 
         assertEquals(3, sortedMethods.size());
@@ -298,8 +305,78 @@ public class JavaParserRecordDeclarationTest {
         assertEquals("Test.foo(int)", fooMethod.getQualifiedSignature());
         assertEquals("int", fooMethod.getReturnType().describe());
 
-        ResolvedMethodDeclaration implicitSMethod = sortedMethods.get(1);
+        ResolvedMethodDeclaration implicitIMethod = sortedMethods.get(1);
+        assertEquals("i", implicitIMethod.getName());
+        assertEquals("Test.i", implicitIMethod.getQualifiedName());
 
-        ResolvedMethodDeclaration implicitIMethod = sortedMethods.get(2);
+        ResolvedMethodDeclaration implicitSMethod = sortedMethods.get(2);
+        assertEquals("s", implicitSMethod.getName());
+        assertEquals("Test.s", implicitSMethod.getQualifiedName());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void testImplicitGetterResolution() {
+        ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
+                + "record Test(String s) {\n"
+                + "    public String foo() {\n"
+                + "        return s();\n"
+                + "    }\n"
+                + "}");
+
+        MethodCallExpr sCall =
+                Navigator.findMethodCall(cu.getResult().get(), "s").get();
+
+        ResolvedMethodDeclaration resolvedCall = sCall.resolve();
+        assertEquals("s", resolvedCall.getName());
+        assertEquals("test.Test.s", resolvedCall.getQualifiedName());
+        assertEquals("java.lang.String", resolvedCall.getReturnType().describe());
+        assertEquals("test", resolvedCall.getPackageName());
+        assertEquals("Test", resolvedCall.getClassName());
+        assertEquals(0, resolvedCall.getNumberOfParams());
+        assertEquals(0, resolvedCall.getNumberOfSpecifiedExceptions());
+        assertEquals(AccessSpecifier.PUBLIC, resolvedCall.accessSpecifier());
+        assertEquals("()Ljava/lang/String;", resolvedCall.toDescriptor());
+        assertEquals("test.Test", resolvedCall.declaringType().getQualifiedName());
+
+        assertFalse(resolvedCall.isAbstract());
+        assertFalse(resolvedCall.isDefaultMethod());
+        assertFalse(resolvedCall.isStatic());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void testImplicitGetterSolvingFromDecl() {
+        ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
+                + "record Test(String s) {\n"
+                + "    public String foo() {\n"
+                + "        return s();\n"
+                + "    }\n"
+                + "}");
+
+        RecordDeclaration recordDeclaration =
+                cu.getResult().get().findFirst(RecordDeclaration.class).get();
+        JavaParserRecordDeclaration resolvedRecordDeclaration =
+                (JavaParserRecordDeclaration) recordDeclaration.resolve();
+
+        SymbolReference<ResolvedMethodDeclaration> symbol =
+                resolvedRecordDeclaration.solveMethod("s", Collections.emptyList());
+        assertTrue(symbol.isSolved());
+        ResolvedMethodDeclaration resolvedCall = symbol.getCorrespondingDeclaration();
+
+        assertEquals("s", resolvedCall.getName());
+        assertEquals("test.Test.s", resolvedCall.getQualifiedName());
+        assertEquals("java.lang.String", resolvedCall.getReturnType().describe());
+        assertEquals("test", resolvedCall.getPackageName());
+        assertEquals("Test", resolvedCall.getClassName());
+        assertEquals(0, resolvedCall.getNumberOfParams());
+        assertEquals(0, resolvedCall.getNumberOfSpecifiedExceptions());
+        assertEquals(AccessSpecifier.PUBLIC, resolvedCall.accessSpecifier());
+        assertEquals("()Ljava/lang/String;", resolvedCall.toDescriptor());
+        assertEquals("test.Test", resolvedCall.declaringType().getQualifiedName());
+
+        assertFalse(resolvedCall.isAbstract());
+        assertFalse(resolvedCall.isDefaultMethod());
+        assertFalse(resolvedCall.isStatic());
     }
 }

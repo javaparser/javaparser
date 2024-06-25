@@ -22,6 +22,7 @@
 package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.resolution.TypeSolver;
@@ -31,6 +32,7 @@ import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserRecordDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypeParameter;
 import java.util.LinkedList;
 import java.util.List;
@@ -103,7 +105,24 @@ public class RecordDeclarationContext extends AbstractJavaParserContext<RecordDe
     @Override
     public SymbolReference<ResolvedMethodDeclaration> solveMethod(
             String name, List<ResolvedType> argumentsTypes, boolean staticOnly) {
-        return javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly);
+        SymbolReference<ResolvedMethodDeclaration> resolvedExplicitMethod =
+                javaParserTypeDeclarationAdapter.solveMethod(name, argumentsTypes, staticOnly);
+
+        if (!resolvedExplicitMethod.isSolved() && argumentsTypes.isEmpty()) {
+            // If the method could not be resolved and has no arguments, then it could be an implicit getter for
+            // a record parameter.
+            Optional<Parameter> matchingParameter = wrappedNode.getParameters().stream()
+                    .filter(parameter -> parameter.getNameAsString().equals(name))
+                    .findFirst();
+
+            if (matchingParameter.isPresent()) {
+                ResolvedMethodDeclaration resolvedMethod = new JavaParserRecordDeclaration.ImplicitGetterMethod(
+                        matchingParameter.get(), wrappedNode, typeSolver);
+                return SymbolReference.solved(resolvedMethod);
+            }
+        }
+
+        return resolvedExplicitMethod;
     }
 
     public SymbolReference<ResolvedConstructorDeclaration> solveConstructor(List<ResolvedType> argumentsTypes) {
