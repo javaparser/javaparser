@@ -109,6 +109,12 @@ public class ResolvedTypeVariable implements ResolvedType {
     @Override
     public boolean isAssignableBy(ResolvedType other) {
         if (other.isTypeVariable()) {
+        	// if we want to compare something like @{code C extends Comparable<C>} with @{code K extends Comparable<K>}
+        	// we have to compare the type of the bound. For the moment we are focusing solely on the first type.
+        	if (typeParameter.hasBound() && other.asTypeVariable().asTypeParameter().hasBound()) {
+				return typeParameter.getBounds().get(0).getType()
+						.isAssignableBy(other.asTypeVariable().asTypeParameter().getBounds().get(0).getType());
+        	}
             return describe().equals(other.describe());
         }
         return true;
