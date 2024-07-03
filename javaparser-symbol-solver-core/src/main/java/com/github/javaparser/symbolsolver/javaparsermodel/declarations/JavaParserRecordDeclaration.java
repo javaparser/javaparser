@@ -258,7 +258,33 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
 
     @Override
     public List<ResolvedConstructorDeclaration> getConstructors() {
-        return AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this);
+        List<ResolvedConstructorDeclaration> constructors =
+                AstResolutionUtils.getConstructors(this.wrappedNode, typeSolver, this).stream()
+                        .filter(constructor -> !(constructor instanceof DefaultConstructorDeclaration))
+                        .collect(Collectors.toList());
+
+        if (constructors.isEmpty() || !containsCanonicalConstructor(constructors)) {
+            constructors.add(new CanonicalRecordConstructor(wrappedNode, typeSolver));
+        }
+
+        return constructors;
+    }
+
+    private boolean containsCanonicalConstructor(List<ResolvedConstructorDeclaration> constructors) {
+        return constructors.stream().anyMatch(constructor -> {
+            if (constructor.getNumberOfParams() != wrappedNode.getParameters().size()) {
+                return false;
+            }
+            for (int i = 0; i < constructor.getNumberOfParams(); i++) {
+                if (!constructor
+                        .getParam(i)
+                        .getType()
+                        .equals(wrappedNode.getParameter(i).getType().resolve())) {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
     @Override
@@ -626,6 +652,58 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
         @Override
         public Optional<Node> toAst() {
             return Optional.of(recordDeclaration);
+        }
+    }
+
+    public static class CanonicalRecordConstructor implements ResolvedConstructorDeclaration {
+
+        private RecordDeclaration recordDeclaration;
+        private TypeSolver typeSolver;
+
+        public CanonicalRecordConstructor(RecordDeclaration recordDeclaration, TypeSolver typeSolver) {
+            this.recordDeclaration = recordDeclaration;
+            this.typeSolver = typeSolver;
+        }
+
+        @Override
+        public AccessSpecifier accessSpecifier() {
+            return AccessSpecifier.PUBLIC;
+        }
+
+        @Override
+        public ResolvedReferenceTypeDeclaration declaringType() {
+            return recordDeclaration.resolve();
+        }
+
+        @Override
+        public int getNumberOfParams() {
+            return recordDeclaration.getParameters().size();
+        }
+
+        @Override
+        public ResolvedParameterDeclaration getParam(int i) {
+            // TODO: Should this be a copy?
+            return recordDeclaration.getParameters().get(i).resolve();
+        }
+
+        @Override
+        public int getNumberOfSpecifiedExceptions() {
+            return 0;
+        }
+
+        @Override
+        public ResolvedType getSpecifiedException(int index) {
+            throw new UnsupportedOperationException("The canonical record constructor does not throw any exceptions");
+        }
+
+        @Override
+        public String getName() {
+            return recordDeclaration.getNameAsString();
+        }
+
+        @Override
+        public List<ResolvedTypeParameterDeclaration> getTypeParameters() {
+            return Collections.emptyList();
         }
     }
 }
