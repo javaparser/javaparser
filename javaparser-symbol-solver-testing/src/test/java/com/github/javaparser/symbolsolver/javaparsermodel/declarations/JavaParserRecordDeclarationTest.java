@@ -457,4 +457,44 @@ public class JavaParserRecordDeclarationTest {
         assertEquals("test.Test.foo", fooMethod.getQualifiedName());
         assertEquals("()V", fooMethod.getQualifiedSignature());
     }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void testGetAllStaticFields() {
+        ParseResult<CompilationUnit> cu = javaParser.parse(
+                "package test;\n" + "record Test(String s) {\n" + "    static Integer value = 2;" + "}");
+
+        RecordDeclaration recordDeclaration =
+                cu.getResult().get().findFirst(RecordDeclaration.class).get();
+        JavaParserRecordDeclaration resolvedRecordDeclaration =
+                (JavaParserRecordDeclaration) recordDeclaration.resolve();
+
+        assertEquals(1, resolvedRecordDeclaration.getAllStaticFields().size());
+
+        ResolvedFieldDeclaration staticField =
+                resolvedRecordDeclaration.getAllStaticFields().get(0);
+
+        assertEquals("value", staticField.getName());
+        assertEquals("java.lang.Integer", staticField.getType().describe());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void testGetAllNonStaticFields() {
+        ParseResult<CompilationUnit> cu = javaParser.parse(
+                "package test;\n" + "record Test(String s) {\n" + "    static Integer value = 2;" + "}");
+
+        RecordDeclaration recordDeclaration =
+                cu.getResult().get().findFirst(RecordDeclaration.class).get();
+        JavaParserRecordDeclaration resolvedRecordDeclaration =
+                (JavaParserRecordDeclaration) recordDeclaration.resolve();
+
+        assertEquals(1, resolvedRecordDeclaration.getAllNonStaticFields().size());
+
+        ResolvedFieldDeclaration field =
+                resolvedRecordDeclaration.getAllNonStaticFields().get(0);
+
+        assertEquals("s", field.getName());
+        assertEquals("java.lang.String", field.getType().describe());
+    }
 }

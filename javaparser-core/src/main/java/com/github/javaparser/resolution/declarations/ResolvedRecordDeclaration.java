@@ -25,16 +25,13 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <<<<<<< HEAD
  * Declaration of a Record (not an interface or an enum).
- * =======
- * Declaration of a Class (not an interface or an enum).
- * >>>>>>> 2951cae62 (Add javassist support for records)
  *
  * Note that it can be associated to a Node AST because anonymous class declarations return an incompatible
  * node type, compared to classic class declarations.
  *
  * @author Federico Tomassetti
+ * @author Johannes Coetzee
  */
 public interface ResolvedRecordDeclaration
         extends ResolvedReferenceTypeDeclaration, ResolvedTypeParametrizable, HasAccessSpecifier {
