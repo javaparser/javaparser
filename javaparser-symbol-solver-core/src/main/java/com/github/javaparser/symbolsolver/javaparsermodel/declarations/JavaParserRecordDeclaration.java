@@ -54,6 +54,7 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 // TODO: Check all of this
+// TODO: This is mostly a copy of JavaParserClassDeclaration. Refactor to reduce code duplication.
 public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
         implements ResolvedRecordDeclaration,
                 MethodResolutionCapability,
@@ -106,6 +107,12 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
     /// Public methods: fields
     ///
 
+    /**
+     * This method returns both the ResolvedFieldDeclarations for the explicit static fields declared in the
+     * record and non-static private fields corresponding to the record parameters. This is done to make
+     * the fields of a record consistent across the various models (since the record parameters are considered
+     * fields by the Java compiler and runtime).
+     */
     @Override
     public List<ResolvedFieldDeclaration> getAllFields() {
         List<ResolvedFieldDeclaration> fields = javaParserTypeAdapter.getFieldsForDeclaredVariables();
@@ -461,6 +468,10 @@ public class JavaParserRecordDeclaration extends AbstractTypeDeclaration
         return false;
     }
 
+    /**
+     * This method returns both the explicit methods declared in the record and the implicit getter
+     * methods for the record parameters. This is done for consistency across the various models.
+     */
     @Override
     public Set<ResolvedMethodDeclaration> getDeclaredMethods() {
         Set<ResolvedMethodDeclaration> methods = new HashSet<>();
