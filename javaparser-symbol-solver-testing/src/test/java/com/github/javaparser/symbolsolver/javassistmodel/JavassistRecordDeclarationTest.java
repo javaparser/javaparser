@@ -27,10 +27,10 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -156,14 +156,8 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
         List<ResolvedFieldDeclaration> declarationList = compilationUnit.getAllFields();
         assertEquals(1, declarationList.size());
 
-        Map<String, ResolvedType> fields = new HashMap<>();
-        for (ResolvedFieldDeclaration fieldDeclaration : declarationList) {
-            String name = fieldDeclaration.getName();
-            ResolvedType type = fieldDeclaration.getType();
-            fields.put(name, type);
-        }
-
-        assertTrue(fields.containsKey("value"));
+        ResolvedFieldDeclaration valueField = compilationUnit.getField("value");
+        assertEquals("T", valueField.getType().describe());
     }
 
     @Test
@@ -246,6 +240,86 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
                 compilationUnit.getAllInterfaces().stream()
                         .map(ResolvedReferenceType::getQualifiedName)
                         .collect(Collectors.toSet()));
+    }
+
+    @Test
+    void testGetImplicitConstructor() {
+        JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
+
+        assertEquals(1, compilationUnit.getConstructors().size());
+
+        ResolvedConstructorDeclaration constructor =
+                compilationUnit.getConstructors().get(0);
+
+        assertEquals("Box", constructor.getName());
+        assertEquals("box.Box.Box", constructor.getQualifiedName());
+        assertEquals(1, constructor.getNumberOfParams());
+        assertEquals("box", constructor.getPackageName());
+        assertEquals("Box", constructor.getClassName());
+    }
+
+    @Test
+    void testGetExplicitConstructors() {
+        JavassistRecordDeclaration compilationUnit =
+                (JavassistRecordDeclaration) typeSolver.solveType("box.BoxWithAllConstructors");
+
+        assertEquals(2, compilationUnit.getConstructors().size());
+
+        ResolvedConstructorDeclaration stringConstructor =
+                compilationUnit.getConstructors().get(0);
+
+        assertEquals("BoxWithAllConstructors", stringConstructor.getName());
+        assertEquals("box.BoxWithAllConstructors.BoxWithAllConstructors", stringConstructor.getQualifiedName());
+        assertEquals(1, stringConstructor.getNumberOfParams());
+        assertEquals("box", stringConstructor.getPackageName());
+        assertEquals("BoxWithAllConstructors", stringConstructor.getClassName());
+        assertEquals(1, stringConstructor.getNumberOfParams());
+        assertEquals("java.lang.String", stringConstructor.getParam(0).getType().describe());
+
+        ResolvedConstructorDeclaration integerConstructor =
+                compilationUnit.getConstructors().get(1);
+        assertEquals("BoxWithAllConstructors", integerConstructor.getName());
+        assertEquals("box.BoxWithAllConstructors.BoxWithAllConstructors", integerConstructor.getQualifiedName());
+        assertEquals(1, integerConstructor.getNumberOfParams());
+        assertEquals("box", integerConstructor.getPackageName());
+        assertEquals("BoxWithAllConstructors", integerConstructor.getClassName());
+        assertEquals(1, integerConstructor.getNumberOfParams());
+        assertEquals(
+                "java.lang.Integer", integerConstructor.getParam(0).getType().describe());
+    }
+
+    @Test
+    void testNonCanonicalConstructor() {
+        JavassistRecordDeclaration compilationUnit =
+                (JavassistRecordDeclaration) typeSolver.solveType("box.BoxWithNonCanonicalConstructor");
+
+        assertEquals(2, compilationUnit.getConstructors().size());
+
+        ResolvedConstructorDeclaration integerConstructor =
+                compilationUnit.getConstructors().get(0);
+        assertEquals("BoxWithNonCanonicalConstructor", integerConstructor.getName());
+        assertEquals(
+                "box.BoxWithNonCanonicalConstructor.BoxWithNonCanonicalConstructor",
+                integerConstructor.getQualifiedName());
+        assertEquals(1, integerConstructor.getNumberOfParams());
+        assertEquals("box", integerConstructor.getPackageName());
+        assertEquals("BoxWithNonCanonicalConstructor", integerConstructor.getClassName());
+        assertEquals(1, integerConstructor.getNumberOfParams());
+        assertEquals(
+                "java.lang.Integer", integerConstructor.getParam(0).getType().describe());
+
+        ResolvedConstructorDeclaration stringConstructor =
+                compilationUnit.getConstructors().get(1);
+
+        assertEquals("BoxWithNonCanonicalConstructor", stringConstructor.getName());
+        assertEquals(
+                "box.BoxWithNonCanonicalConstructor.BoxWithNonCanonicalConstructor",
+                stringConstructor.getQualifiedName());
+        assertEquals(1, stringConstructor.getNumberOfParams());
+        assertEquals("box", stringConstructor.getPackageName());
+        assertEquals("BoxWithNonCanonicalConstructor", stringConstructor.getClassName());
+        assertEquals(1, stringConstructor.getNumberOfParams());
+        assertEquals("java.lang.String", stringConstructor.getParam(0).getType().describe());
     }
 
     @Override

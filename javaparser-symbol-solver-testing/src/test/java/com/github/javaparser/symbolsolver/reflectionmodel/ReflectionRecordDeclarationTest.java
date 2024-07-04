@@ -51,7 +51,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
         }
 
         private byte[] loadClassData(String name) {
-            Path filePath = adaptPath(String.format("src/test/resources/record_declarations/%s.class", name));
+            Path filePath = adaptPath(String.format("src/test/resources/record_declarations/box/%s.class", name));
             try {
                 return Files.readAllBytes(filePath);
             } catch (IOException e) {
