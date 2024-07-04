@@ -43,6 +43,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
 
 class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
 
@@ -149,6 +150,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetGenericTypeField() {
         JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         List<ResolvedFieldDeclaration> declarationList = compilationUnit.getAllFields();
@@ -192,6 +194,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     ///
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetSuperclass() {
         JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
@@ -203,6 +206,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllSuperclasses() {
         JavassistRecordDeclaration cu = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
@@ -213,6 +217,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllAncestorsWithDepthFirstTraversalOrder() {
         JavassistRecordDeclaration cu = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
@@ -233,6 +238,7 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testGetAllInterfaces() {
         JavassistRecordDeclaration compilationUnit = (JavassistRecordDeclaration) typeSolver.solveType("box.Box");
         assertEquals(
@@ -255,5 +261,12 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
     @Override
     public boolean isFunctionalInterface(AbstractTypeDeclaration typeDeclaration) {
         return false;
+    }
+
+    @Override
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    public void getAllFieldsCantBeNull() {
+        assertNotNull(createValue().getAllFields());
     }
 }
