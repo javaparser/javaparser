@@ -440,22 +440,21 @@ public class JavaParserRecordDeclarationTest {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n" + "interface Foo {\n"
                 + "    default void foo() {}\n"
                 + "}\n"
-                + "record Test(String s) {}");
+                + "record Test(String s)  implements Foo {}");
 
         RecordDeclaration recordDeclaration =
                 cu.getResult().get().findFirst(RecordDeclaration.class).get();
         JavaParserRecordDeclaration resolvedRecordDeclaration =
                 (JavaParserRecordDeclaration) recordDeclaration.resolve();
 
-        assertEquals(1, resolvedRecordDeclaration.getConstructors().size());
-
         ResolvedMethodDeclaration fooMethod = resolvedRecordDeclaration.getAllMethods().stream()
                 .filter(methodUsage -> methodUsage.getName().equals("foo"))
                 .findFirst()
                 .get()
                 .getDeclaration();
-        assertEquals("test.Test.foo", fooMethod.getQualifiedName());
-        assertEquals("()V", fooMethod.getQualifiedSignature());
+        assertEquals("test.Foo.foo", fooMethod.getQualifiedName());
+        assertEquals("test.Foo.foo()", fooMethod.getQualifiedSignature());
+        assertEquals("void", fooMethod.getReturnType().describe());
     }
 
     @Test
