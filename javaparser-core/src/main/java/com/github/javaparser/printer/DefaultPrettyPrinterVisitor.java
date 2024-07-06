@@ -588,18 +588,39 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         printer.print("{");
         if (!isNullOrEmpty(n.getValues())) {
-            printer.print(" ");
+            final boolean multiLine = doPrintAsArrayOfAnnotations(n);
+            if (multiLine) {
+                printer.println();
+                printer.indent();
+                printer.indent();
+            } else {
+                printer.print(" ");
+            }
+
             for (final Iterator<Expression> i = n.getValues().iterator(); i.hasNext(); ) {
                 final Expression expr = i.next();
                 expr.accept(this, arg);
                 if (i.hasNext()) {
-                    printer.print(", ");
+                    printer.print(multiLine ? "," : ", ");
+                    if (multiLine)
+                        printer.println();
                 }
             }
-            printer.print(" ");
+
+            if (multiLine) {
+                printer.println();
+                printer.unindent();
+                printer.unindent();
+            } else {
+                printer.print(" ");
+            }
         }
         printOrphanCommentsEnding(n);
         printer.print("}");
+    }
+
+    private boolean doPrintAsArrayOfAnnotations(final ArrayInitializerExpr n) {
+        return getOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS).isPresent() && n.getValues().stream().allMatch(s -> s instanceof AnnotationExpr);
     }
 
     @Override
