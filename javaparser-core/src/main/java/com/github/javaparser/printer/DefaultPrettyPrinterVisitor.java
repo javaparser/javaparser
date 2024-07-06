@@ -588,18 +588,46 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
         printComment(n.getComment(), arg);
         printer.print("{");
         if (!isNullOrEmpty(n.getValues())) {
-            printer.print(" ");
-            for (final Iterator<Expression> i = n.getValues().iterator(); i.hasNext(); ) {
-                final Expression expr = i.next();
-                expr.accept(this, arg);
-                if (i.hasNext()) {
-                    printer.print(", ");
-                }
-            }
-            printer.print(" ");
+            printFormattedArray(n, arg, doPrintAsArrayOfAnnotations(n));
         }
         printOrphanCommentsEnding(n);
         printer.print("}");
+    }
+
+    private boolean doPrintAsArrayOfAnnotations(final ArrayInitializerExpr n) {
+        return getOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS).isPresent() && n.getValues().stream().allMatch(s -> s instanceof AnnotationExpr);
+    }
+
+    private void printFormattedArray(final ArrayInitializerExpr n, final Void arg, final boolean multiline) {
+        if (multiline) {
+            printer.println();
+            printer.indent();
+            printer.indent();
+        } else {
+            printer.print(" ");
+        }
+
+        basicPrintArray(n, arg, multiline);
+        if (multiline) {
+            printer.println();
+            printer.unindent();
+            printer.unindent();
+        } else {
+            printer.print(" ");
+        }
+
+    }
+
+    private void basicPrintArray(final ArrayInitializerExpr n, final Void arg, boolean multiLIne) {
+        for (final Iterator<Expression> i = n.getValues().iterator(); i.hasNext(); ) {
+            final Expression expr = i.next();
+            expr.accept(this, arg);
+            if (i.hasNext()) {
+                printer.print(multiLIne ? "," : ", ");
+                if (multiLIne)
+                    printer.println();
+            }
+        }
     }
 
     @Override

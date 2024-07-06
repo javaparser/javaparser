@@ -93,8 +93,22 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
         /**
          * Indentation proprerty
          */
-        INDENTATION(Indentation.class, new Indentation(IndentType.SPACES, 4));
+        INDENTATION(Indentation.class, new Indentation(IndentType.SPACES, 4)),
 
+        /**
+         * This parameter allows to print pretty formatted arrays
+         * <pre>{@code
+         *     @ApiResponses(value = {
+         *        @ApiResponse(responseCode = "200", description = "OK"),
+         *        @ApiResponse(responseCode = "404", description = "Error")
+         *     })
+         * }<pre>
+         * instead of inline like this
+         * <pre>{@code
+         *         @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Error")})
+         * }<pre>
+         */
+        INDENT_PRINT_ARRAYS_OF_ANNOTATIONS(Boolean.class);
         Object defaultValue;
 
         Class type;
