@@ -615,8 +615,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 printer.print(" ");
             }
         }
-        printOrphanCommentsEnding(n);
-        printer.print("}");
     }
 
     private boolean doPrintAsArrayOfAnnotations(final ArrayInitializerExpr n) {
