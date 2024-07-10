@@ -208,6 +208,9 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals(0, methods.get("toString").getNoParams());
         assertTrue(methods.containsKey("equals"));
         assertEquals(1, methods.get("equals").getNoParams());
+        assertInstanceOf(
+                ResolvedRecordDeclaration.class,
+                methods.get("map").getDeclaration().declaringType());
     }
 
     ///
@@ -268,5 +271,85 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
                 compilationUnit.getAllInterfaces().stream()
                         .map(ResolvedReferenceType::getQualifiedName)
                         .collect(Collectors.toSet()));
+    }
+
+    @Test
+    void testGetImplicitConstructor() {
+        ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
+
+        assertEquals(1, compilationUnit.getConstructors().size());
+
+        ResolvedConstructorDeclaration constructor =
+                compilationUnit.getConstructors().get(0);
+
+        assertEquals("Box", constructor.getName());
+        assertEquals("box.Box.Box", constructor.getQualifiedName());
+        assertEquals(1, constructor.getNumberOfParams());
+        assertEquals("box", constructor.getPackageName());
+        assertEquals("Box", constructor.getClassName());
+    }
+
+    @Test
+    void testGetExplicitConstructors() {
+        ReflectionRecordDeclaration compilationUnit =
+                (ReflectionRecordDeclaration) typeSolver.solveType("box.BoxWithAllConstructors");
+
+        assertEquals(2, compilationUnit.getConstructors().size());
+
+        ResolvedConstructorDeclaration stringConstructor =
+                compilationUnit.getConstructors().get(0);
+
+        assertEquals("BoxWithAllConstructors", stringConstructor.getName());
+        assertEquals("box.BoxWithAllConstructors.BoxWithAllConstructors", stringConstructor.getQualifiedName());
+        assertEquals(1, stringConstructor.getNumberOfParams());
+        assertEquals("box", stringConstructor.getPackageName());
+        assertEquals("BoxWithAllConstructors", stringConstructor.getClassName());
+        assertEquals(1, stringConstructor.getNumberOfParams());
+        assertEquals("java.lang.String", stringConstructor.getParam(0).getType().describe());
+
+        ResolvedConstructorDeclaration integerConstructor =
+                compilationUnit.getConstructors().get(1);
+        assertEquals("BoxWithAllConstructors", integerConstructor.getName());
+        assertEquals("box.BoxWithAllConstructors.BoxWithAllConstructors", integerConstructor.getQualifiedName());
+        assertEquals(1, integerConstructor.getNumberOfParams());
+        assertEquals("box", integerConstructor.getPackageName());
+        assertEquals("BoxWithAllConstructors", integerConstructor.getClassName());
+        assertEquals(1, integerConstructor.getNumberOfParams());
+        assertEquals(
+                "java.lang.Integer", integerConstructor.getParam(0).getType().describe());
+    }
+
+    @Test
+    void testNonCanonicalConstructor() {
+        ReflectionRecordDeclaration compilationUnit =
+                (ReflectionRecordDeclaration) typeSolver.solveType("box.BoxWithNonCanonicalConstructor");
+
+        assertEquals(2, compilationUnit.getConstructors().size());
+
+        ResolvedConstructorDeclaration integerConstructor =
+                compilationUnit.getConstructors().get(0);
+        assertEquals("BoxWithNonCanonicalConstructor", integerConstructor.getName());
+        assertEquals(
+                "box.BoxWithNonCanonicalConstructor.BoxWithNonCanonicalConstructor",
+                integerConstructor.getQualifiedName());
+        assertEquals(1, integerConstructor.getNumberOfParams());
+        assertEquals("box", integerConstructor.getPackageName());
+        assertEquals("BoxWithNonCanonicalConstructor", integerConstructor.getClassName());
+        assertEquals(1, integerConstructor.getNumberOfParams());
+        assertEquals(
+                "java.lang.Integer", integerConstructor.getParam(0).getType().describe());
+
+        ResolvedConstructorDeclaration stringConstructor =
+                compilationUnit.getConstructors().get(1);
+
+        assertEquals("BoxWithNonCanonicalConstructor", stringConstructor.getName());
+        assertEquals(
+                "box.BoxWithNonCanonicalConstructor.BoxWithNonCanonicalConstructor",
+                stringConstructor.getQualifiedName());
+        assertEquals(1, stringConstructor.getNumberOfParams());
+        assertEquals("box", stringConstructor.getPackageName());
+        assertEquals("BoxWithNonCanonicalConstructor", stringConstructor.getClassName());
+        assertEquals(1, stringConstructor.getNumberOfParams());
+        assertEquals("java.lang.String", stringConstructor.getParam(0).getType().describe());
     }
 }

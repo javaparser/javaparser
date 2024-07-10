@@ -21,12 +21,11 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import static com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration.isRecordType;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedClassDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -47,8 +46,12 @@ public class ReflectionConstructorDeclaration implements ResolvedConstructorDecl
     }
 
     @Override
-    public ResolvedClassDeclaration declaringType() {
-        return new ReflectionClassDeclaration(constructor.getDeclaringClass(), typeSolver);
+    public ResolvedReferenceTypeDeclaration declaringType() {
+        if (isRecordType(constructor.getDeclaringClass())) {
+            return new ReflectionRecordDeclaration(constructor.getDeclaringClass(), typeSolver);
+        } else {
+            return new ReflectionClassDeclaration(constructor.getDeclaringClass(), typeSolver);
+        }
     }
 
     @Override
