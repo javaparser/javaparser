@@ -15,18 +15,17 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 public class Issue2738Test extends AbstractSymbolResolutionTest {
-	@Test
-	void test() throws IOException {
-		ParserConfiguration config = new ParserConfiguration();
-		Path pathToSourceFile = adaptPath("src/test/resources/issue2738");
-		TypeSolver cts = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(pathToSourceFile));
-		config.setSymbolResolver(new JavaSymbolSolver(cts));
+    @Test
+    void test() throws IOException {
+        ParserConfiguration config = new ParserConfiguration();
+        Path pathToSourceFile = adaptPath("src/test/resources/issue2738");
+        TypeSolver cts = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(pathToSourceFile));
+        config.setSymbolResolver(new JavaSymbolSolver(cts));
 
-		StaticJavaParser.setConfiguration(config);
-		CompilationUnit cu = StaticJavaParser.parse(pathToSourceFile.resolve("B.java"));
+        StaticJavaParser.setConfiguration(config);
+        CompilationUnit cu = StaticJavaParser.parse(pathToSourceFile.resolve("B.java"));
 
-		// We shouldn't throw an exception
-		assertDoesNotThrow(() -> cu.findAll(MethodCallExpr.class).stream().map(MethodCallExpr::resolve));
-
-	}
+        // We shouldn't throw an exception
+        assertDoesNotThrow(() -> cu.findAll(MethodCallExpr.class).stream().map(MethodCallExpr::resolve));
+    }
 }

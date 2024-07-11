@@ -94,7 +94,6 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * Indentation proprerty
          */
         INDENTATION(Indentation.class, new Indentation(IndentType.SPACES, 4)),
-
         /**
          * This parameter allows to print pretty formatted arrays
          * <pre>{@code
@@ -109,6 +108,7 @@ public class DefaultPrinterConfiguration implements PrinterConfiguration {
          * }<pre>
          */
         INDENT_PRINT_ARRAYS_OF_ANNOTATIONS(Boolean.class);
+
         Object defaultValue;
 
         Class type;
