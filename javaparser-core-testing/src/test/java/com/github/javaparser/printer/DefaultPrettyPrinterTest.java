@@ -669,29 +669,30 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void testArrayOfAnnotationsFormat() {
-        String expectedCode = "import io.swagger.v3.oas.annotations.Operation;\n" +
-                "import io.swagger.v3.oas.annotations.Parameter;\n" +
-                "import io.swagger.v3.oas.annotations.responses.ApiResponse;\n" +
-                "import io.swagger.v3.oas.annotations.responses.ApiResponses;\n" +
-                "import org.springframework.http.HttpStatus;\n" +
-                "import org.springframework.http.ResponseEntity;\n" +
-                "import org.springframework.web.bind.annotation.DeleteMapping;\n" +
-                "\n" +
-                "@Deprecated\n" +
-                "public class UserController2 {\n" +
-                "\n" +
-                "    @Operation(summary = \"Delete a user\")\n" +
-                "    @ApiResponses(value = {\n" +
-                "            @ApiResponse(responseCode = \"204\", description = \"OK\"),\n" +
-                "            @ApiResponse(responseCode = \"404\", description = \"Failed\")\n" +
-                "    })\n" +
-                "    @DeleteMapping(\"/{id}\")\n" +
-                "    public ResponseEntity<Void> deleteUser(@Parameter(description = \"ID of the user\", required = true) int id) {\n" +
-                "        return new ResponseEntity<>(HttpStatus.NOT_FOUND);\n" +
-                "    }\n" +
-                "}\n";
+        String expectedCode = "import io.swagger.v3.oas.annotations.Operation;\n"
+                + "import io.swagger.v3.oas.annotations.Parameter;\n"
+                + "import io.swagger.v3.oas.annotations.responses.ApiResponse;\n"
+                + "import io.swagger.v3.oas.annotations.responses.ApiResponses;\n"
+                + "import org.springframework.http.HttpStatus;\n"
+                + "import org.springframework.http.ResponseEntity;\n"
+                + "import org.springframework.web.bind.annotation.DeleteMapping;\n"
+                + "\n"
+                + "@Deprecated\n"
+                + "public class UserController2 {\n"
+                + "\n"
+                + "    @Operation(summary = \"Delete a user\")\n"
+                + "    @ApiResponses(value = {\n"
+                + "            @ApiResponse(responseCode = \"204\", description = \"OK\"),\n"
+                + "            @ApiResponse(responseCode = \"404\", description = \"Failed\")\n"
+                + "    })\n"
+                + "    @DeleteMapping(\"/{id}\")\n"
+                + "    public ResponseEntity<Void> deleteUser(@Parameter(description = \"ID of the user\", required = true) int id) {\n"
+                + "        return new ResponseEntity<>(HttpStatus.NOT_FOUND);\n"
+                + "    }\n"
+                + "}\n";
 
-        printerConfiguration.addOption(new DefaultConfigurationOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS, true));
+        printerConfiguration.addOption(
+                new DefaultConfigurationOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS, true));
         CompilationUnit cu = parserAdapter.parse(expectedCode);
         Printer printer = getDefaultPrinter(printerConfiguration);
         String actualCode = printer.print(cu);
@@ -699,27 +700,26 @@ class DefaultPrettyPrinterTest {
         assertEqualsStringIgnoringEol(expectedCode, actualCode);
     }
 
-
     @Test
     void testArrayOfAnnotationsDisableFormat() {
-        String expectedCode = "import io.swagger.v3.oas.annotations.Operation;\n" +
-                "import io.swagger.v3.oas.annotations.Parameter;\n" +
-                "import io.swagger.v3.oas.annotations.responses.ApiResponse;\n" +
-                "import io.swagger.v3.oas.annotations.responses.ApiResponses;\n" +
-                "import org.springframework.http.HttpStatus;\n" +
-                "import org.springframework.http.ResponseEntity;\n" +
-                "import org.springframework.web.bind.annotation.DeleteMapping;\n" +
-                "\n" +
-                "@Deprecated\n" +
-                "public class UserController2 {\n" +
-                "\n" +
-                "    @Operation(summary = \"Delete a user\")\n" +
-                "    @ApiResponses(value = { @ApiResponse(responseCode = \"204\", description = \"OK\"), @ApiResponse(responseCode = \"404\", description = \"Failed\") })\n" +
-                "    @DeleteMapping(\"/{id}\")\n" +
-                "    public ResponseEntity<Void> deleteUser(@Parameter(description = \"ID of the user\", required = true) int id) {\n" +
-                "        return new ResponseEntity<>(HttpStatus.NOT_FOUND);\n" +
-                "    }\n" +
-                "}\n";
+        String expectedCode = "import io.swagger.v3.oas.annotations.Operation;\n"
+                + "import io.swagger.v3.oas.annotations.Parameter;\n"
+                + "import io.swagger.v3.oas.annotations.responses.ApiResponse;\n"
+                + "import io.swagger.v3.oas.annotations.responses.ApiResponses;\n"
+                + "import org.springframework.http.HttpStatus;\n"
+                + "import org.springframework.http.ResponseEntity;\n"
+                + "import org.springframework.web.bind.annotation.DeleteMapping;\n"
+                + "\n"
+                + "@Deprecated\n"
+                + "public class UserController2 {\n"
+                + "\n"
+                + "    @Operation(summary = \"Delete a user\")\n"
+                + "    @ApiResponses(value = { @ApiResponse(responseCode = \"204\", description = \"OK\"), @ApiResponse(responseCode = \"404\", description = \"Failed\") })\n"
+                + "    @DeleteMapping(\"/{id}\")\n"
+                + "    public ResponseEntity<Void> deleteUser(@Parameter(description = \"ID of the user\", required = true) int id) {\n"
+                + "        return new ResponseEntity<>(HttpStatus.NOT_FOUND);\n"
+                + "    }\n"
+                + "}\n";
 
         CompilationUnit cu = parserAdapter.parse(expectedCode);
         Printer printer = getDefaultPrinter(printerConfiguration);

@@ -602,8 +602,7 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                 expr.accept(this, arg);
                 if (i.hasNext()) {
                     printer.print(multiLine ? "," : ", ");
-                    if (multiLine)
-                        printer.println();
+                    if (multiLine) printer.println();
                 }
             }
 
@@ -620,7 +619,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     }
 
     private boolean doPrintAsArrayOfAnnotations(final ArrayInitializerExpr n) {
-        return getOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS).isPresent() && n.getValues().stream().allMatch(s -> s instanceof AnnotationExpr);
+        return getOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS).isPresent()
+                && n.getValues().stream().allMatch(s -> s instanceof AnnotationExpr);
     }
 
     @Override

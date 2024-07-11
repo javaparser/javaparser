@@ -496,8 +496,10 @@ public abstract class ResolvedReferenceType
                         }
                     } else {
                         if (thisParam instanceof ResolvedTypeVariable && otherParam instanceof ResolvedTypeVariable) {
-                        	// Here we want to compare something like @{code C extends Comparable<C>} with @{code K extends Comparable<K>}
-                        	// we have to compare the type of the erased bound (in this example the type @{code Comparable}).
+                            // Here we want to compare something like @{code C extends Comparable<C>} with @{code K
+                            // extends Comparable<K>}
+                            // we have to compare the type of the erased bound (in this example the type @{code
+                            // Comparable}).
                             List<ResolvedType> thisBounds =
                                     thisParam.asTypeVariable().asTypeParameter().getBounds().stream()
                                             .map(ResolvedTypeParameterDeclaration.Bound::getType)
