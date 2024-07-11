@@ -11,6 +11,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -531,5 +532,43 @@ public class JavaParserRecordDeclarationTest {
                 assertEquals("Util.create(java.lang.String)", call.resolve().getQualifiedSignature());
             }
         }
+    }
+
+    void testGenericInvocation() {
+        ParseResult<CompilationUnit> cu = javaParser.parse("record GenericBox<T> (T value) {}\n" + "class Test {\n"
+                + "  public static void main(String[] args) {\n"
+                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
+                + "    System.out.println(box.value());\n"
+                + "  }\n"
+                + "}");
+
+        MethodCallExpr valueCall = cu.getResult().get().findAll(MethodCallExpr.class).stream()
+                .filter(call -> call.getNameAsString().equals("value"))
+                .findFirst()
+                .get();
+
+        assertEquals("java.lang.Integer", valueCall.calculateResolvedType().describe());
+
+        ResolvedMethodDeclaration resolvedValue = valueCall.resolve();
+        assertEquals("T", resolvedValue.getReturnType().describe());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void genericConstructorTest() {
+        ParseResult<CompilationUnit> cu = javaParser.parse("record GenericBox<T>(T value) {}\n"
+                + "class Test {\n"
+                + "  public static void main(String[] args) {\n"
+                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
+                + "    System.out.println(box.value());\n"
+                + "  }\n"
+                + "}");
+
+        ObjectCreationExpr constructorInvocation =
+                cu.getResult().get().findFirst(ObjectCreationExpr.class).get();
+
+        assertEquals("GenericBox", constructorInvocation.getType().getNameAsString());
+        assertEquals("GenericBox", constructorInvocation.getType().resolve().describe());
+        assertEquals("GenericBox", constructorInvocation.calculateResolvedType().describe());
     }
 }
