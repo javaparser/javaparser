@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.Navigator;
@@ -495,5 +497,39 @@ public class JavaParserRecordDeclarationTest {
 
         assertEquals("s", field.getName());
         assertEquals("java.lang.String", field.getType().describe());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    public void testStaticMethod() {
+        ParserConfiguration.LanguageLevel oldLevel =
+                StaticJavaParser.getParserConfiguration().getLanguageLevel();
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
+        StaticJavaParser.getParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
+        CompilationUnit compilationUnit =
+                StaticJavaParser.parse("public interface IUtil {\n" + "    record WrapperRecord(String name){}\n"
+                        + "}\n"
+                        + "\n"
+                        + "public class Util implements IUtil {\n"
+                        + "    public static Util create(String key) {\n"
+                        + "        return new Util();\n"
+                        + "    }\n"
+                        + "}\n"
+                        + "                \n"
+                        + "public class Test {\n"
+                        + "                \n"
+                        + "    public void test() {\n"
+                        + "        Util.create(\"foo\");\n"
+                        + "    }\n"
+                        + "                \n"
+                        + "}\n");
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(oldLevel);
+
+        for (MethodDeclaration method : compilationUnit.findAll(MethodDeclaration.class)) {
+            for (MethodCallExpr call : method.findAll(MethodCallExpr.class)) {
+                assertEquals("create", call.getNameAsString());
+                assertEquals("Util.create(java.lang.String)", call.resolve().getQualifiedSignature());
+            }
+        }
     }
 }
