@@ -23,12 +23,20 @@ package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -44,18 +52,19 @@ import org.junit.jupiter.api.condition.EnabledForJreRange;
 @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
 class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     private ClassLoader classLoader = new ClassLoader() {
-        public Class<?> findClass(String name) {
-            String strippedName = name.substring(4);
+        public Class<?> findClass(String name) throws ClassNotFoundException {
+            int beginIndex = Math.max(0, name.lastIndexOf('.') + 1);
+            String strippedName = name.substring(beginIndex);
             byte[] b = loadClassData(strippedName);
             return defineClass(name, b, 0, b.length);
         }
 
-        private byte[] loadClassData(String name) {
-            Path filePath = adaptPath(String.format("src/test/resources/record_declarations/box/%s.class", name));
+        private byte[] loadClassData(String name) throws ClassNotFoundException {
             try {
+                Path filePath = adaptPath(String.format("src/test/resources/record_declarations/box/%s.class", name));
                 return Files.readAllBytes(filePath);
-            } catch (IOException e) {
-                return null;
+            } catch (Exception e) {
+                throw new ClassNotFoundException(e.getMessage());
             }
         }
     };
@@ -351,5 +360,34 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
         assertEquals("BoxWithNonCanonicalConstructor", stringConstructor.getClassName());
         assertEquals(1, stringConstructor.getNumberOfParams());
         assertEquals("java.lang.String", stringConstructor.getParam(0).getType().describe());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
+    void genericConstructorTest() {
+        ParserConfiguration configuration = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver)))
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
+
+        JavaParser javaParser = new JavaParser(configuration);
+        ParseResult<CompilationUnit> cu = javaParser.parse("import box.GenericBox;\n"
+                + "class Test {\n"
+                + "  public static void main(String[] args) {\n"
+                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
+                + "    System.out.println(box.value());\n"
+                + "  }\n"
+                + "}");
+
+        ObjectCreationExpr constructorInvocation =
+                cu.getResult().get().findFirst(ObjectCreationExpr.class).get();
+
+        assertEquals("GenericBox", constructorInvocation.getType().getNameAsString());
+        assertEquals("box.GenericBox", constructorInvocation.getType().resolve().describe());
+        assertEquals(
+                "box.GenericBox", constructorInvocation.calculateResolvedType().describe());
+
+        MethodCallExpr valueCall =
+                Navigator.findMethodCall(cu.getResult().get(), "value").get();
+        assertEquals("java.lang.Integer", valueCall.calculateResolvedType().describe());
     }
 }

@@ -23,14 +23,22 @@ package com.github.javaparser.symbolsolver.javassistmodel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.resolution.MethodUsage;
+import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -320,6 +328,35 @@ class JavassistRecordDeclarationTest extends AbstractTypeDeclarationTest {
         assertEquals("BoxWithNonCanonicalConstructor", stringConstructor.getClassName());
         assertEquals(1, stringConstructor.getNumberOfParams());
         assertEquals("java.lang.String", stringConstructor.getParam(0).getType().describe());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
+    void genericConstructorTest() {
+        ParserConfiguration configuration = new ParserConfiguration()
+                .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver(), typeSolver)))
+                .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_16);
+
+        JavaParser javaParser = new JavaParser(configuration);
+        ParseResult<CompilationUnit> cu = javaParser.parse("import box.GenericBox;\n"
+                + "class Test {\n"
+                + "  public static void main(String[] args) {\n"
+                + "    GenericBox<Integer> box = new GenericBox<>(2);\n"
+                + "    System.out.println(box.value());\n"
+                + "  }\n"
+                + "}");
+
+        ObjectCreationExpr constructorInvocation =
+                cu.getResult().get().findFirst(ObjectCreationExpr.class).get();
+
+        assertEquals("GenericBox", constructorInvocation.getType().getNameAsString());
+        assertEquals("box.GenericBox", constructorInvocation.getType().resolve().describe());
+        assertEquals(
+                "box.GenericBox", constructorInvocation.calculateResolvedType().describe());
+
+        MethodCallExpr valueCall =
+                Navigator.findMethodCall(cu.getResult().get(), "value").get();
+        assertEquals("java.lang.Integer", valueCall.calculateResolvedType().describe());
     }
 
     @Override
