@@ -53,6 +53,9 @@ import org.junit.jupiter.api.condition.EnabledForJreRange;
 class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     private ClassLoader classLoader = new ClassLoader() {
         public Class<?> findClass(String name) throws ClassNotFoundException {
+            if (name.startsWith("java.lang")) {
+                throw new ClassNotFoundException("Cannot define classes in java.lang");
+            }
             int beginIndex = Math.max(0, name.lastIndexOf('.') + 1);
             String strippedName = name.substring(beginIndex);
             byte[] b = loadClassData(strippedName);
@@ -283,6 +286,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetImplicitConstructor() {
         ReflectionRecordDeclaration compilationUnit = (ReflectionRecordDeclaration) typeSolver.solveType("box.Box");
 
@@ -299,6 +303,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testGetExplicitConstructors() {
         ReflectionRecordDeclaration compilationUnit =
                 (ReflectionRecordDeclaration) typeSolver.solveType("box.BoxWithAllConstructors");
@@ -329,6 +334,7 @@ class ReflectionRecordDeclarationTest extends AbstractSymbolResolutionTest {
     }
 
     @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_17)
     void testNonCanonicalConstructor() {
         ReflectionRecordDeclaration compilationUnit =
                 (ReflectionRecordDeclaration) typeSolver.solveType("box.BoxWithNonCanonicalConstructor");
