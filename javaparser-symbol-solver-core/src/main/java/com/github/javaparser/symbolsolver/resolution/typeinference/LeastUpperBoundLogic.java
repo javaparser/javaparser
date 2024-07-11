@@ -56,6 +56,11 @@ public class LeastUpperBoundLogic {
             throw new IllegalArgumentException();
         }
 
+		// If there is only one type then the lub is the type itself
+		if (types.size() == 1) {
+			return types.iterator().next();
+		}
+
         // The direct supertypes of the null type are all reference types other than the null type itself.
         // One way to handle this case is to remove the type null from the list of types.
         // Provides the concret type of Lazy type if needed

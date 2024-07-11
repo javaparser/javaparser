@@ -77,6 +77,12 @@ class LeastUpperBoundTest {
     }
 
     @Test
+    public void lub_of_one_null_element_is_itself() {
+        ResolvedType lub = leastUpperBound(NullType.INSTANCE);
+        assertEquals(lub, lub);
+    }
+
+    @Test
     public void lub_should_fail_if_no_type_provided() {
         try {
             ResolvedType lub = leastUpperBound(new ResolvedType[] {});
