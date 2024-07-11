@@ -596,7 +596,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
             } else {
                 printer.print(" ");
             }
-
             for (final Iterator<Expression> i = n.getValues().iterator(); i.hasNext(); ) {
                 final Expression expr = i.next();
                 expr.accept(this, arg);
@@ -605,7 +604,6 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
                     if (multiLine) printer.println();
                 }
             }
-
             if (multiLine) {
                 printer.println();
                 printer.unindent();
