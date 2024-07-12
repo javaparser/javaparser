@@ -317,6 +317,21 @@ public class JavaParserRecordDeclarationTest {
 
     @Test
     @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
+    void testGetSuperclass() {
+        ParseResult<CompilationUnit> cu = javaParser.parse("record Foo(String s) {}");
+
+        RecordDeclaration recordDeclaration =
+                cu.getResult().get().findFirst(RecordDeclaration.class).get();
+        JavaParserRecordDeclaration resolvedRecordDeclaration =
+                (JavaParserRecordDeclaration) recordDeclaration.resolve();
+
+        ResolvedReferenceType superClass =
+                resolvedRecordDeclaration.getSuperClass().get();
+        assertEquals("java.lang.Record", superClass.getQualifiedName());
+    }
+
+    @Test
+    @EnabledForJreRange(min = org.junit.jupiter.api.condition.JRE.JAVA_14)
     void testImplicitGetterResolution() {
         ParseResult<CompilationUnit> cu = javaParser.parse("package test;\n"
                 + "record Test(String s) {\n"
