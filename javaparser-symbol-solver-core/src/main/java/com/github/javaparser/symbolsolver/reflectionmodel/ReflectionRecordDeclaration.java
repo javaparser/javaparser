@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2015-2016 Federico Tomassetti
- * Copyright (C) 2017-2024 The JavaParser Team.
+ * Copyright (C) 2017-2020 The JavaParser Team.
  *
  * This file is part of JavaParser.
  *
@@ -27,6 +27,7 @@ import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.*;
+import com.github.javaparser.resolution.logic.MethodResolutionCapability;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.LambdaArgumentTypePlaceholder;
 import com.github.javaparser.resolution.model.SymbolReference;
@@ -34,9 +35,8 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
-import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.ContextHelper;
-import com.github.javaparser.symbolsolver.logic.AbstractClassDeclaration;
+import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.comparators.MethodComparator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -48,8 +48,8 @@ import java.util.stream.Collectors;
 /**
  * @author Federico Tomassetti
  */
-public class ReflectionClassDeclaration extends AbstractClassDeclaration
-        implements MethodUsageResolutionCapability, SymbolResolutionCapability {
+public class ReflectionRecordDeclaration extends AbstractTypeDeclaration
+        implements ResolvedRecordDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability {
 
     ///
     /// Fields
@@ -63,7 +63,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
     /// Constructors
     ///
 
-    public ReflectionClassDeclaration(Class<?> clazz, TypeSolver typeSolver) {
+    public ReflectionRecordDeclaration(Class<?> clazz, TypeSolver typeSolver) {
         if (clazz == null) {
             throw new IllegalArgumentException("Class should not be null");
         }
@@ -76,11 +76,14 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         if (clazz.isArray()) {
             throw new IllegalArgumentException("Class should not be an array");
         }
+        if (clazz.isLocalClass()) {
+            throw new IllegalArgumentException("Class should not be a local class");
+        }
         if (clazz.isEnum()) {
             throw new IllegalArgumentException("Class should not be an enum");
         }
-        if (isRecordType(clazz)) {
-            throw new IllegalArgumentException("Class should not be a record");
+        if (!isRecordType(clazz)) {
+            throw new IllegalArgumentException("Class should be a record");
         }
         this.clazz = clazz;
         this.typeSolver = typeSolver;
@@ -108,9 +111,11 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ReflectionClassDeclaration that = (ReflectionClassDeclaration) o;
+        ReflectionRecordDeclaration that = (ReflectionRecordDeclaration) o;
 
-        return clazz.getCanonicalName().equals(that.clazz.getCanonicalName());
+        if (!clazz.getCanonicalName().equals(that.clazz.getCanonicalName())) return false;
+
+        return true;
     }
 
     @Override
@@ -193,7 +198,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         // MethodResolutionLogic.findMostApplicable method returns very early
         // when candidateSolvedMethods is empty.
         if (candidateSolvedMethods.isEmpty()) {
-            return SymbolReference.unsolved();
+            return SymbolReference.unsolved(ResolvedMethodDeclaration.class);
         }
         return MethodResolutionLogic.findMostApplicable(candidateSolvedMethods, name, argumentsTypes, typeSolver);
     }
@@ -208,7 +213,6 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         return new ReferenceTypeImpl(this);
     }
 
-    @Override
     public Optional<MethodUsage> solveMethodAsUsage(
             String name,
             List<ResolvedType> argumentsTypes,
@@ -271,7 +275,7 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
             return true;
         }
         if (this.clazz.getSuperclass() != null
-                && new ReflectionClassDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)) {
+                && new ReflectionRecordDeclaration(clazz.getSuperclass(), typeSolver).canBeAssignedTo(other)) {
             return true;
         }
         for (Class<?> interfaze : clazz.getInterfaces()) {
@@ -303,14 +307,14 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
         return reflectionClassAdapter.getAllFields();
     }
 
-    @Override
+    @Deprecated
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {
         for (Field field : clazz.getFields()) {
             if (field.getName().equals(name)) {
                 return SymbolReference.solved(new ReflectionFieldDeclaration(field, typeSolver));
             }
         }
-        return SymbolReference.unsolved();
+        return SymbolReference.unsolved(ResolvedValueDeclaration.class);
     }
 
     @Override
@@ -349,8 +353,8 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
     }
 
     @Override
-    public boolean isClass() {
-        return !clazz.isInterface();
+    public boolean isRecord() {
+        return true;
     }
 
     @Override
@@ -362,8 +366,36 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
     }
 
     @Override
+    public List<ResolvedReferenceType> getAllSuperClasses() {
+        List<ResolvedReferenceType> superclasses = new ArrayList<>();
+
+        getSuperClass().ifPresent(superClass -> {
+            superclasses.add(superClass);
+            superclasses.addAll(superClass.getAllClassesAncestors());
+        });
+
+        if (superclasses.removeIf(ResolvedReferenceType::isJavaLangObject)) {
+            superclasses.add(object());
+        }
+        return superclasses;
+    }
+
+    @Override
     public List<ResolvedReferenceType> getInterfaces() {
         return reflectionClassAdapter.getInterfaces();
+    }
+
+    @Override
+    public List<ResolvedReferenceType> getAllInterfaces() {
+        List<ResolvedReferenceType> interfaces = new ArrayList<>();
+        for (ResolvedReferenceType interfaceDeclaration : getInterfaces()) {
+            interfaces.add(interfaceDeclaration);
+            interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors());
+        }
+        getSuperClass().ifPresent(superClass -> {
+            interfaces.addAll(superClass.getAllInterfacesAncestors());
+        });
+        return interfaces;
     }
 
     @Override
@@ -398,11 +430,19 @@ public class ReflectionClassDeclaration extends AbstractClassDeclaration
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public Optional<Node> toAst() {
+        return Optional.empty();
+    }
+
     ///
     /// Protected methods
     ///
 
-    @Override
+    protected ResolvedReferenceType record() {
+        return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangRecord());
+    }
+
     protected ResolvedReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
     }

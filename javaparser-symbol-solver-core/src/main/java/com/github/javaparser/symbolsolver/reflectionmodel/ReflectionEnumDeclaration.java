@@ -74,6 +74,12 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
         if (clazz.isArray()) {
             throw new IllegalArgumentException("Class should not be an array");
         }
+        if (clazz.isLocalClass()) {
+            throw new IllegalArgumentException("Class should not be a local class");
+        }
+        if (isRecordType(clazz)) {
+            throw new IllegalArgumentException("Class should not be a record");
+        }
         if (!clazz.isEnum()) {
             throw new IllegalArgumentException("Class should be an enum");
         }

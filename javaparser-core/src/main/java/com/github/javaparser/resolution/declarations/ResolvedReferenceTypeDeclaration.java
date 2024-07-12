@@ -43,6 +43,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
 
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
+    // Can't use java.lang.Record.class.getCanonicalName() since records were only added in Java 14.
+    String JAVA_LANG_RECORD = "java.lang.Record";
+
     @Override
     default ResolvedReferenceTypeDeclaration asReferenceType() {
         return this;
@@ -387,5 +390,13 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default boolean isJavaLangEnum() {
         return this.isEnum() && JAVA_LANG_ENUM.equals(getQualifiedName());
+    }
+
+    /**
+     * @return true if this represents {@code java.lang.Record}
+     * @see ResolvedReferenceType#isJavaLangRecord()
+     */
+    default boolean isJavaLangRecord() {
+        return this.isRecord() && JAVA_LANG_RECORD.equals(getQualifiedName());
     }
 }

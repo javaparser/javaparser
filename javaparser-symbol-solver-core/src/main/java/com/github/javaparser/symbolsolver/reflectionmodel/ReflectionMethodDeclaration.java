@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import static com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration.isRecordType;
+
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -87,6 +89,9 @@ public class ReflectionMethodDeclaration implements ResolvedMethodDeclaration, T
         }
         if (method.getDeclaringClass().isEnum()) {
             return new ReflectionEnumDeclaration(method.getDeclaringClass(), typeSolver);
+        }
+        if (isRecordType(method.getDeclaringClass())) {
+            return new ReflectionRecordDeclaration(method.getDeclaringClass(), typeSolver);
         }
         return new ReflectionClassDeclaration(method.getDeclaringClass(), typeSolver);
     }

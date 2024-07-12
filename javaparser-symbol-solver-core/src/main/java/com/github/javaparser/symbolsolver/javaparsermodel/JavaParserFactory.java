@@ -96,6 +96,9 @@ public class JavaParserFactory {
         if (node instanceof EnumDeclaration) {
             return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
         }
+        if (node instanceof RecordDeclaration) {
+            return new RecordDeclarationContext((RecordDeclaration) node, typeSolver);
+        }
         if (node instanceof FieldAccessExpr) {
             return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
         }

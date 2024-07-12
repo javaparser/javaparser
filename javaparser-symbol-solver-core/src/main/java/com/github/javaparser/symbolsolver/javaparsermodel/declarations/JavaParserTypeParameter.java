@@ -119,6 +119,11 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
                     (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) parentNode;
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
         }
+        if (parentNode instanceof com.github.javaparser.ast.body.RecordDeclaration) {
+            com.github.javaparser.ast.body.RecordDeclaration jpRecordDeclaration =
+                    (com.github.javaparser.ast.body.RecordDeclaration) parentNode;
+            return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpRecordDeclaration);
+        }
         if (parentNode instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
             com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration =
                     (com.github.javaparser.ast.body.ConstructorDeclaration) parentNode;

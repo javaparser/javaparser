@@ -23,7 +23,6 @@ package com.github.javaparser.symbolsolver;
 
 import static com.github.javaparser.Providers.provider;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.JavaParser;
@@ -240,9 +239,7 @@ class JavaParserAPIIntegrationTest extends AbstractSymbolResolutionTest {
         JavaParserAdapter parser = JavaParserAdapter.of(new JavaParser(parserConfiguration));
         CompilationUnit cu = parser.parse(code);
         Parameter parameter = cu.findFirst(Parameter.class).get();
-        // TODO Fixme when the record declarations are resolved.
-        assertThrows(UnsupportedOperationException.class, () -> parameter.resolve());
-        //        assertEquals("java.lang.Integer",parameter.resolve().describeType());
+        assertEquals("java.lang.Integer", parameter.resolve().describeType());
     }
 
     @Test()

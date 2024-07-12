@@ -49,6 +49,9 @@ public abstract class ResolvedReferenceType
 
     protected static String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
 
+    // Can't use java.lang.Record.class.getCanonicalName() since records were only added in Java 14.
+    protected static String JAVA_LANG_RECORD = "java.lang.Record";
+
     //
     // Fields
     //
@@ -588,6 +591,17 @@ public abstract class ResolvedReferenceType
                 && // Consider anonymous classes
                 hasName()
                 && getQualifiedName().equals(JAVA_LANG_ENUM);
+    }
+
+    /**
+     * @return true, if this represents {@code java.lang.Record}
+     * @see ResolvedReferenceTypeDeclaration#isJavaLangRecord()
+     */
+    public boolean isJavaLangRecord() {
+        return this.isReferenceType()
+                && // Consider anonymous classes
+                hasName()
+                && getQualifiedName().equals(JAVA_LANG_RECORD);
     }
 
     // /
