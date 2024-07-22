@@ -28,7 +28,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -63,7 +63,7 @@ import java.util.function.Consumer;
  * Per JEP305 (not currently listed within the JLS):
  * <br>
  * <pre>{@code Pattern:
- *      ReferenceType Identifier}</pre>
+ *      Type Identifier}</pre>
  *
  * @author Roger Howell
  *
@@ -83,7 +83,7 @@ public class TypePatternExpr extends PatternExpr
     }
 
     @AllFieldsConstructor
-    public TypePatternExpr(final NodeList<Modifier> modifiers, final ReferenceType type, SimpleName name) {
+    public TypePatternExpr(final NodeList<Modifier> modifiers, final Type type, SimpleName name) {
         this(null, modifiers, type, name);
     }
 
@@ -91,7 +91,7 @@ public class TypePatternExpr extends PatternExpr
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TypePatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, ReferenceType type, SimpleName name) {
+    public TypePatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, SimpleName name) {
         super(tokenRange, type);
         setModifiers(modifiers);
         setName(name);

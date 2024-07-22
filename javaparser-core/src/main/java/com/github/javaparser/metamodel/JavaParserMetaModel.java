@@ -2006,8 +2006,8 @@ public final class JavaParserMetaModel {
         patternExprMetaModel.typePropertyMetaModel = new PropertyMetaModel(
                 patternExprMetaModel,
                 "type",
-                com.github.javaparser.ast.type.ReferenceType.class,
-                Optional.of(referenceTypeMetaModel),
+                com.github.javaparser.ast.type.Type.class,
+                Optional.of(typeMetaModel),
                 false,
                 false,
                 false,
