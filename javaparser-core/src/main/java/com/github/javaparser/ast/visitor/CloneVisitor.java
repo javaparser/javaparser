@@ -1298,7 +1298,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final TypePatternExpr n, final Object arg) {
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         SimpleName name = cloneNode(n.getName(), arg);
-        ReferenceType type = cloneNode(n.getType(), arg);
+        Type type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         TypePatternExpr r = new TypePatternExpr(n.getTokenRange().orElse(null), modifiers, type, name);
         r.setComment(comment);
@@ -1355,7 +1355,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
     public Visitable visit(final RecordPatternExpr n, final Object arg) {
         NodeList<Modifier> modifiers = cloneList(n.getModifiers(), arg);
         NodeList<PatternExpr> patternList = cloneList(n.getPatternList(), arg);
-        ReferenceType type = cloneNode(n.getType(), arg);
+        Type type = cloneNode(n.getType(), arg);
         Comment comment = cloneNode(n.getComment(), arg);
         RecordPatternExpr r = new RecordPatternExpr(n.getTokenRange().orElse(null), modifiers, type, patternList);
         r.setComment(comment);

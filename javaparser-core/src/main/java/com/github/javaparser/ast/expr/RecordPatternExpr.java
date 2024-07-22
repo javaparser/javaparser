@@ -12,6 +12,7 @@ import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithFinalModifier;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -68,8 +69,17 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
 
     @AllFieldsConstructor
     public RecordPatternExpr(
-            final NodeList<Modifier> modifiers, final ReferenceType type, final NodeList<PatternExpr> patternList) {
+            final NodeList<Modifier> modifiers, final Type type, final NodeList<PatternExpr> patternList) {
         this(null, modifiers, type, patternList);
+    }
+
+    /**
+     * The type of RecordPatternExpr must always be a reference type. Only nested TypePatternExprs may have primitive
+     * types.
+     */
+    @Override
+    public ReferenceType getType() {
+        return super.getType().asReferenceType();
     }
 
     @Override
@@ -203,10 +213,7 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
     public RecordPatternExpr(
-            TokenRange tokenRange,
-            NodeList<Modifier> modifiers,
-            ReferenceType type,
-            NodeList<PatternExpr> patternList) {
+            TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, NodeList<PatternExpr> patternList) {
         super(tokenRange, type);
         setModifiers(modifiers);
         setPatternList(patternList);

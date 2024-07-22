@@ -456,4 +456,28 @@ class SwitchExprTest {
         assertEquals("Foo f", entry.getLabels().get(0).toString());
         assertEquals("f.get();", entry.getStatements().get(0).toString());
     }
+
+    @Test
+    void testRecordPatternWithPrimitiveType() {
+        SwitchExpr switchExpr =
+                parseExpression("switch (foo) { case Foo(int x) -> sink(x); }").asSwitchExpr();
+
+        assertEquals(Node.Parsedness.PARSED, switchExpr.getParsed());
+
+        SwitchEntry entry = switchExpr.getEntry(0);
+        Expression switchLabel = entry.getLabels().get(0);
+
+        assertEquals("Foo(int x)", switchLabel.toString());
+        assertTrue(switchLabel.isRecordPatternExpr());
+
+        RecordPatternExpr recordPattern = switchLabel.asRecordPatternExpr();
+
+        assertEquals("Foo", recordPattern.getType().toString());
+        assertEquals(1, recordPattern.getPatternList().size());
+        assertTrue(recordPattern.getPatternList().get(0).isTypePatternExpr());
+
+        TypePatternExpr innerType = recordPattern.getPatternList().get(0).asTypePatternExpr();
+
+        assertTrue(innerType.getType().isPrimitiveType());
+    }
 }

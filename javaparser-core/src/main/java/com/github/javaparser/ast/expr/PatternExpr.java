@@ -28,7 +28,7 @@ import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.type.ReferenceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PatternExprMetaModel;
@@ -66,12 +66,12 @@ import java.util.function.Consumer;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public abstract class PatternExpr extends Expression implements NodeWithType<PatternExpr, ReferenceType> {
+public abstract class PatternExpr extends Expression implements NodeWithType<PatternExpr, Type> {
 
-    private ReferenceType type;
+    private Type type;
 
     @AllFieldsConstructor
-    public PatternExpr(final ReferenceType type) {}
+    public PatternExpr(final Type type) {}
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -119,7 +119,7 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PatternExpr setType(final ReferenceType type) {
+    public PatternExpr setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -131,8 +131,12 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
         return this;
     }
 
+    /**
+     * The types of record patters and top-level type patterns must be reference types, but nested type patterns
+     * can also have primitive types.
+     */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReferenceType getType() {
+    public Type getType() {
         return type;
     }
 
@@ -143,7 +147,7 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
             return false;
         }
         if (node == type) {
-            setType((ReferenceType) replacementNode);
+            setType((Type) replacementNode);
             return true;
         }
         return super.replace(node, replacementNode);
@@ -153,7 +157,7 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PatternExpr(TokenRange tokenRange, ReferenceType type) {
+    public PatternExpr(TokenRange tokenRange, Type type) {
         super(tokenRange);
         setType(type);
         customInitialization();

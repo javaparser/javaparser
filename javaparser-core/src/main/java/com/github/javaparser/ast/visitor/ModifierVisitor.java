@@ -1293,7 +1293,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final TypePatternExpr n, final A arg) {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         SimpleName name = (SimpleName) n.getName().accept(this, arg);
-        ReferenceType type = (ReferenceType) n.getType().accept(this, arg);
+        Type type = (Type) n.getType().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (name == null || type == null) return null;
         n.setModifiers(modifiers);
@@ -1307,7 +1307,7 @@ public class ModifierVisitor<A> implements GenericVisitor<Visitable, A> {
     public Visitable visit(final RecordPatternExpr n, final A arg) {
         NodeList<Modifier> modifiers = modifyList(n.getModifiers(), arg);
         NodeList<PatternExpr> patternList = modifyList(n.getPatternList(), arg);
-        ReferenceType type = (ReferenceType) n.getType().accept(this, arg);
+        Type type = (Type) n.getType().accept(this, arg);
         Comment comment = n.getComment().map(s -> (Comment) s.accept(this, arg)).orElse(null);
         if (type == null) return null;
         n.setModifiers(modifiers);
