@@ -345,4 +345,8 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         // Statements never make pattern expressions available.
         return Collections.emptyList();
     }
+
+    public List<TypePatternExpr> getIntroducedTypePatterns() {
+        return Collections.emptyList();
+    }
 }
