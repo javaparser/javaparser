@@ -26,33 +26,44 @@ import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import java.util.ArrayList;
+import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableResult;
+import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableVisitor;
+import java.util.LinkedList;
 import java.util.List;
 
 public class IfStatementContext extends StatementContext<IfStmt> {
-    // public class IfStatementContext extends AbstractJavaParserContext<IfStmt> {
 
     public IfStatementContext(IfStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
+    /**
+     * The following rules apply to a statement if (e) S:
+     * - A pattern variable introduced by e when true is definitely matched at S.
+     *
+     *  The following rules apply to a statement if (e) S else T:
+     *  - A pattern variable introduced by e when true is definitely matched at S.
+     *  - A pattern variable introduced by e when false is definitely matched at T.
+     *
+     *  https://docs.oracle.com/javase/specs/jls/se22/html/jls-6.html#jls-6.3.2.2
+     */
     @Override
     public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
-        Expression condition = wrappedNode.getCondition();
-        Context conditionContext = JavaParserFactory.getContext(condition, typeSolver);
+        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        List<TypePatternExpr> results = new LinkedList<>();
 
-        List<TypePatternExpr> results = new ArrayList<>();
+        Expression condition = wrappedNode.getCondition();
+        PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
 
         boolean givenNodeIsWithinThenStatement = wrappedNode.getThenStmt().containsWithinRange(child);
         if (givenNodeIsWithinThenStatement) {
-            results.addAll(conditionContext.typePatternExprsExposedFromChildren());
+            results.addAll(patternsInScope.getVariablesIntroducedIfTrue());
         }
 
         wrappedNode.getElseStmt().ifPresent(elseStatement -> {
             boolean givenNodeIsWithinElseStatement = elseStatement.containsWithinRange(child);
             if (givenNodeIsWithinElseStatement) {
-                results.addAll(conditionContext.negatedTypePatternExprsExposedFromChildren());
+                results.addAll(patternsInScope.getVariablesIntroducedIfFalse());
             }
         });
 
