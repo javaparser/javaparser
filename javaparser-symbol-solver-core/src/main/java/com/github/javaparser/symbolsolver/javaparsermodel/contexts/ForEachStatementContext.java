@@ -36,7 +36,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import java.util.Collections;
 import java.util.List;
 
-public class ForEachStatementContext extends AbstractJavaParserContext<ForEachStmt> {
+public class ForEachStatementContext extends StatementContext<ForEachStmt> {
 
     public ForEachStatementContext(ForEachStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);

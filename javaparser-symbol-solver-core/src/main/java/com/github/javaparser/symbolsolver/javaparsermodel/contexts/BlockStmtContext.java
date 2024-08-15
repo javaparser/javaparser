@@ -37,7 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class BlockStmtContext extends AbstractJavaParserContext<BlockStmt> {
+public class BlockStmtContext extends StatementContext<BlockStmt> {
 
     public BlockStmtContext(BlockStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);

@@ -37,7 +37,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import java.util.LinkedList;
 import java.util.List;
 
-public class ForStatementContext extends AbstractJavaParserContext<ForStmt> {
+public class ForStatementContext extends StatementContext<ForStmt> {
 
     public ForStatementContext(ForStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
