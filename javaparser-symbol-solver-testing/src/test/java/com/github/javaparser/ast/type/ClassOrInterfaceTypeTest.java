@@ -75,4 +75,20 @@ class ClassOrInterfaceTypeTest {
 
         assertEquals("Ljava/lang/String;", classOrInterfaceType.toDescriptor());
     }
+
+    @Test
+    void testToDescriptorWithTypeVariables() {
+        ParseResult<CompilationUnit> compilationUnit =
+                javaParser.parse("public class A  { public static <T extends String> void method(T arg); }");
+
+        assertEquals(
+                "(Ljava/lang/String;)V",
+                compilationUnit
+                        .getResult()
+                        .get()
+                        .getType(0)
+                        .getMethodsByName("method")
+                        .get(0)
+                        .toDescriptor());
+    }
 }
