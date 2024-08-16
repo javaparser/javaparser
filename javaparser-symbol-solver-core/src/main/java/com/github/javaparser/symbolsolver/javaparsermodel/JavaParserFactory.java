@@ -72,6 +72,9 @@ public class JavaParserFactory {
         if (node instanceof IfStmt) {
             return new IfStatementContext((IfStmt) node, typeSolver);
         }
+        if (node instanceof WhileStmt) {
+            return new WhileStatementContext((WhileStmt) node, typeSolver);
+        }
         if (node instanceof InstanceOfExpr) {
             return new InstanceOfExprContext((InstanceOfExpr) node, typeSolver);
         }

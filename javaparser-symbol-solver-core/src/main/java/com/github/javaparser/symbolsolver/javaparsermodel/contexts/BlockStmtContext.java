@@ -132,6 +132,13 @@ public class BlockStmtContext extends StatementContext<BlockStmt> {
                     }
                 }
             }
+
+            SymbolReference<? extends ResolvedValueDeclaration> resolvedFromPattern =
+                    findExposedPatternInParentContext(optionalParent.get().getWrappedNode(), name);
+
+            if (resolvedFromPattern.isSolved()) {
+                return resolvedFromPattern;
+            }
         }
 
         // Otherwise continue as normal...
