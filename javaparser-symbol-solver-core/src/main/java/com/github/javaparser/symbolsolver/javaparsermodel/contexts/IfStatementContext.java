@@ -26,8 +26,10 @@ import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.javaparsermodel.NormalCompletionVisitor;
 import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableResult;
 import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableVisitor;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,6 +70,40 @@ public class IfStatementContext extends StatementContext<IfStmt> {
         });
 
         return results;
+    }
+
+    /**
+     * The following rules apply to a statement if (e) S:
+     * - A pattern variable is introduced by if (e) S iff
+     *   (i) it is introduced by e when false and
+     *   (ii) S cannot complete normally.
+     *
+     * The following rules apply to a statement if (e) S else T:
+     * - A pattern variable is introduced by if (e) S else T iff either:
+     *   - It is introduced by e when true, and S can complete normally, and T cannot complete normally; or
+     *   - It is introduced by e when false, and S cannot complete normally, and T can complete normally.
+     */
+    @Override
+    public List<TypePatternExpr> getIntroducedTypePatterns() {
+        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        Expression condition = wrappedNode.getCondition();
+        PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
+
+        NormalCompletionVisitor completionVisitor = new NormalCompletionVisitor();
+        boolean thenCanCompleteNormally = wrappedNode.getThenStmt().accept(completionVisitor, null);
+        // If there is no else block, then we can treat it as an empty block which can complete normally by definition
+        boolean elseCanCompleteNormally = !wrappedNode.getElseStmt().isPresent()
+                || wrappedNode.getElseStmt().get().accept(completionVisitor, null);
+
+        if (thenCanCompleteNormally && !elseCanCompleteNormally) {
+            return patternsInScope.getVariablesIntroducedIfTrue();
+        }
+
+        if (!thenCanCompleteNormally && elseCanCompleteNormally) {
+            return patternsInScope.getVariablesIntroducedIfFalse();
+        }
+
+        return Collections.emptyList();
     }
 
     /**

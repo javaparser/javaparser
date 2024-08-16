@@ -28,7 +28,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnaryExprContext extends AbstractJavaParserContext<UnaryExpr> {
+public class UnaryExprContext extends ExpressionContext<UnaryExpr> {
 
     public UnaryExprContext(UnaryExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);

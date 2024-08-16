@@ -37,7 +37,6 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
@@ -337,18 +336,5 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
 
     public List<TypePatternExpr> getIntroducedTypePatterns() {
         return Collections.emptyList();
-    }
-
-    public SymbolReference<? extends ResolvedValueDeclaration> findExposedPatternInParentContext(
-            Node parent, String name) {
-        Context context = JavaParserFactory.getContext(parent, typeSolver);
-        List<TypePatternExpr> patternVariablesExposedToWrappedNode =
-                context.typePatternExprsExposedToChild(wrappedNode);
-        for (TypePatternExpr typePatternExpr : patternVariablesExposedToWrappedNode) {
-            if (typePatternExpr.getNameAsString().equals(name)) {
-                return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver));
-            }
-        }
-        return SymbolReference.unsolved();
     }
 }

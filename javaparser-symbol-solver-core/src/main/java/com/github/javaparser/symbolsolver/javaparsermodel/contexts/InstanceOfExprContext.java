@@ -36,7 +36,7 @@ import java.util.Optional;
 /**
  * @author Roger Howell
  */
-public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfExpr> {
+public class InstanceOfExprContext extends ExpressionContext<InstanceOfExpr> {
 
     public InstanceOfExprContext(InstanceOfExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -71,8 +71,8 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
             }
         } // TODO: Also consider unary expr context
 
-        // if nothing is found we should ask the parent context
-        return solveSymbolInParentContext(name);
+        // if nothing is found we should check for existing patterns and ask the parent context
+        return super.solveSymbol(name);
     }
 
     @Override

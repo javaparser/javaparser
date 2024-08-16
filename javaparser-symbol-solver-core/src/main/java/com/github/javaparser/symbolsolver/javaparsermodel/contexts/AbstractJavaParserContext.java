@@ -330,4 +330,17 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
         return discoveredTypePatterns;
     }
+
+    public SymbolReference<? extends ResolvedValueDeclaration> findExposedPatternInParentContext(
+            Node parent, String name) {
+        Context context = JavaParserFactory.getContext(parent, typeSolver);
+        List<TypePatternExpr> patternVariablesExposedToWrappedNode =
+                context.typePatternExprsExposedToChild(wrappedNode);
+        for (TypePatternExpr typePatternExpr : patternVariablesExposedToWrappedNode) {
+            if (typePatternExpr.getNameAsString().equals(name)) {
+                return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver));
+            }
+        }
+        return SymbolReference.unsolved();
+    }
 }

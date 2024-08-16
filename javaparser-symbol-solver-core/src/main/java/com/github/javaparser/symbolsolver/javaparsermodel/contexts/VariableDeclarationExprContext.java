@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * @author Federico Tomassetti
  */
-public class VariableDeclarationExprContext extends AbstractJavaParserContext<VariableDeclarationExpr> {
+public class VariableDeclarationExprContext extends ExpressionContext<VariableDeclarationExpr> {
 
     public VariableDeclarationExprContext(VariableDeclarationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -52,8 +52,9 @@ public class VariableDeclarationExprContext extends AbstractJavaParserContext<Va
             }
         }
 
-        // Default to solving in parent context if unable to solve directly here.
-        return solveSymbolInParentContext(name);
+        // Look for a pattern introducing this variable, then default to solving in parent context if unable to solve
+        // directly here.
+        return super.solveSymbol(name);
     }
 
     @Override

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class BinaryExprContext extends AbstractJavaParserContext<BinaryExpr> {
+public class BinaryExprContext extends ExpressionContext<BinaryExpr> {
 
     public BinaryExprContext(BinaryExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);

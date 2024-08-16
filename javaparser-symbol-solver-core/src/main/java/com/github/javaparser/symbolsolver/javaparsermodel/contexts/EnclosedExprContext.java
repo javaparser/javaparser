@@ -28,7 +28,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnclosedExprContext extends AbstractJavaParserContext<EnclosedExpr> {
+public class EnclosedExprContext extends ExpressionContext<EnclosedExpr> {
 
     public EnclosedExprContext(EnclosedExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
