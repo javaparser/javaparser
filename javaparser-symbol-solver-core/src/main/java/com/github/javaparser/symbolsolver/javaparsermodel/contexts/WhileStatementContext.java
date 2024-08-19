@@ -26,6 +26,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.symbolsolver.javaparsermodel.NormalCompletionVisitor;
 import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableResult;
 import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableVisitor;
 import java.util.LinkedList;
@@ -54,6 +55,29 @@ public class WhileStatementContext extends StatementContext<WhileStmt> {
             PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
 
             results.addAll(patternsInScope.getVariablesIntroducedIfTrue());
+        }
+
+        return results;
+    }
+
+    /**
+     * The following rules apply to a statement while (e) S:
+     * - A pattern variable is introduced by while (e) S iff
+     *   (i) it is introduced by e when false and
+     *   (ii) S does not contain a reachable break statement for which the while statement is the break target
+     *
+     * https://docs.oracle.com/javase/specs/jls/se21/html/jls-6.html#jls-6.3.2.3
+     */
+    @Override
+    public List<TypePatternExpr> getIntroducedTypePatterns() {
+        List<TypePatternExpr> results = new LinkedList<>();
+
+        if (!NormalCompletionVisitor.containsCorrespondingBreak(wrappedNode)) {
+            Expression condition = wrappedNode.getCondition();
+            PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+            PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
+
+            results.addAll(patternsInScope.getVariablesIntroducedIfFalse());
         }
 
         return results;
