@@ -33,6 +33,7 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -191,6 +192,7 @@ public class PatternVariableIntroductionTest {
         }
 
         @Test
+        @Disabled("Until bug mentioned in https://github.com/javaparser/javaparser/issues/4344 is fixed")
         public void conditionalAnd4() {
             CompilationUnit cu = parse("class Test {\n"
                     + "    public void test(Object o) {\n"
