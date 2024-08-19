@@ -136,6 +136,9 @@ public class JavaParserFactory {
         if (node instanceof ObjectCreationExpr) {
             return new ObjectCreationContext((ObjectCreationExpr) node, typeSolver);
         }
+        if (node instanceof ConditionalExpr) {
+            return new ConditionalExprContext((ConditionalExpr) node, typeSolver);
+        }
         if (node instanceof NameExpr) {
             // to resolve a name when in a fieldAccess context, we can go up until we get a node other than
             // FieldAccessExpr,
