@@ -29,8 +29,6 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypePatternDeclaration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -73,17 +71,5 @@ public class InstanceOfExprContext extends ExpressionContext<InstanceOfExpr> {
 
         // if nothing is found we should check for existing patterns and ask the parent context
         return super.solveSymbol(name);
-    }
-
-    @Override
-    public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
-        List<TypePatternExpr> results = new ArrayList<>();
-
-        // If this instanceof expression has a pattern, add it to the list.
-        wrappedNode
-                .getPattern()
-                .ifPresent(patternExpr -> results.addAll(typePatternExprsDiscoveredInPattern(patternExpr)));
-
-        return results;
     }
 }

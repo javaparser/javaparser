@@ -39,6 +39,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
+import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableVisitor;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypePatternDeclaration;
 import java.util.*;
@@ -342,5 +343,17 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
             }
         }
         return SymbolReference.unsolved();
+    }
+
+    @Override
+    public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
+        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        return wrappedNode.accept(variableVisitor, null).getVariablesIntroducedIfTrue();
+    }
+
+    @Override
+    public List<TypePatternExpr> negatedTypePatternExprsExposedFromChildren() {
+        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        return wrappedNode.accept(variableVisitor, null).getVariablesIntroducedIfFalse();
     }
 }

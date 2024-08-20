@@ -322,18 +322,6 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         return solveMethodInParentContext(name, argumentsTypes, false);
     }
 
-    @Override
-    public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
-        // Statements never make pattern expressions available.
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<TypePatternExpr> negatedTypePatternExprsExposedFromChildren() {
-        // Statements never make pattern expressions available.
-        return Collections.emptyList();
-    }
-
     public List<TypePatternExpr> getIntroducedTypePatterns() {
         return Collections.emptyList();
     }
