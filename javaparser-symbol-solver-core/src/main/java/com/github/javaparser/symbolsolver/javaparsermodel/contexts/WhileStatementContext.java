@@ -50,7 +50,7 @@ public class WhileStatementContext extends StatementContext<WhileStmt> {
 
         boolean givenNodeIsWithinBody = wrappedNode.getBody().containsWithinRange(child);
         if (givenNodeIsWithinBody) {
-            PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+            PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
             Expression condition = wrappedNode.getCondition();
             PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
 
@@ -74,7 +74,7 @@ public class WhileStatementContext extends StatementContext<WhileStmt> {
 
         if (!NormalCompletionVisitor.containsCorrespondingBreak(wrappedNode)) {
             Expression condition = wrappedNode.getCondition();
-            PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+            PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
             PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
 
             results.addAll(patternsInScope.getVariablesIntroducedIfFalse());

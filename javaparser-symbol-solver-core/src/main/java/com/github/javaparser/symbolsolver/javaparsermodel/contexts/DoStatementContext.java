@@ -52,7 +52,7 @@ public class DoStatementContext extends StatementContext<DoStmt> {
         if (!NormalCompletionVisitor.containsCorrespondingBreak(wrappedNode)) {
             Expression condition = wrappedNode.getCondition();
 
-            PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+            PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
             PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
 
             results.addAll(patternsInScope.getVariablesIntroducedIfFalse());

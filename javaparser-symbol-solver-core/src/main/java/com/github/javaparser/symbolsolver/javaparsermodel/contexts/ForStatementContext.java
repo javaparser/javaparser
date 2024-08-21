@@ -64,7 +64,7 @@ public class ForStatementContext extends StatementContext<ForStmt> {
         if ((givenNodeIsWithinUpdate || givenNodeIsWithinBody)
                 && wrappedNode.getCompare().isPresent()) {
             Expression condition = wrappedNode.getCompare().get();
-            PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+            PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
             PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
 
             results.addAll(patternsInScope.getVariablesIntroducedIfTrue());
@@ -89,7 +89,7 @@ public class ForStatementContext extends StatementContext<ForStmt> {
         Optional<Expression> maybeCompare = wrappedNode.getCompare();
 
         if (maybeCompare.isPresent() && !NormalCompletionVisitor.containsCorrespondingBreak(wrappedNode)) {
-            PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+            PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
             PatternVariableResult patternsInScope = maybeCompare.get().accept(variableVisitor, null);
 
             results.addAll(patternsInScope.getVariablesIntroducedIfFalse());

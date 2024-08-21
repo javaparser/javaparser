@@ -27,17 +27,6 @@ import java.util.*;
 
 public class PatternVariableVisitor extends GenericVisitorWithDefaults<PatternVariableResult, Void> {
 
-    private static PatternVariableVisitor patternVariableVisitor = null;
-
-    private PatternVariableVisitor() {}
-
-    public static PatternVariableVisitor getInstance() {
-        if (patternVariableVisitor == null) {
-            patternVariableVisitor = new PatternVariableVisitor();
-        }
-        return patternVariableVisitor;
-    }
-
     @Override
     public PatternVariableResult defaultAction(Node node, Void unused) {
         return new PatternVariableResult();
@@ -67,7 +56,7 @@ public class PatternVariableVisitor extends GenericVisitorWithDefaults<PatternVa
      * https://docs.oracle.com/javase/specs/jls/se22/html/jls-6.html#jls-6.3.1.1
      */
     private static PatternVariableResult getVariablesIntroducedByAnd(BinaryExpr expression) {
-        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
         PatternVariableResult introducedByLeft = expression.getLeft().accept(variableVisitor, null);
         PatternVariableResult introducedByRight = expression.getRight().accept(variableVisitor, null);
 
@@ -89,7 +78,7 @@ public class PatternVariableVisitor extends GenericVisitorWithDefaults<PatternVa
      * https://docs.oracle.com/javase/specs/jls/se22/html/jls-6.html#jls-6.3.1.2
      */
     private static PatternVariableResult getVariablesIntroducedByOr(BinaryExpr expression) {
-        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
         PatternVariableResult introducedByLeft = expression.getLeft().accept(variableVisitor, null);
         PatternVariableResult introducedByRight = expression.getRight().accept(variableVisitor, null);
 
@@ -116,7 +105,7 @@ public class PatternVariableVisitor extends GenericVisitorWithDefaults<PatternVa
      *  https://docs.oracle.com/javase/specs/jls/se22/html/jls-6.html#jls-6.3.1.3
      */
     private static PatternVariableResult getVariablesIntroducedByLogicalComplement(UnaryExpr unaryExpr) {
-        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
         PatternVariableResult introducedByChild = unaryExpr.getExpression().accept(variableVisitor, null);
 
         introducedByChild.swapTrueAndFalse();

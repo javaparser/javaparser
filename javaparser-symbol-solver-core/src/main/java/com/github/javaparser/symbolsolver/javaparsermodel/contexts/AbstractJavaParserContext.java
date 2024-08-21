@@ -347,13 +347,13 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
 
     @Override
     public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
-        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
         return wrappedNode.accept(variableVisitor, null).getVariablesIntroducedIfTrue();
     }
 
     @Override
     public List<TypePatternExpr> negatedTypePatternExprsExposedFromChildren() {
-        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
         return wrappedNode.accept(variableVisitor, null).getVariablesIntroducedIfFalse();
     }
 }

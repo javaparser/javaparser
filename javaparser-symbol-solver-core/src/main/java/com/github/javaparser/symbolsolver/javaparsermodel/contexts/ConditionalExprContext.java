@@ -47,7 +47,7 @@ public class ConditionalExprContext extends ExpressionContext<ConditionalExpr> {
     public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
         List<TypePatternExpr> results = new LinkedList<>();
 
-        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
         PatternVariableResult patternsInScope = wrappedNode.getCondition().accept(variableVisitor, null);
 
         if (wrappedNode.getThenExpr().containsWithinRange(child)) {

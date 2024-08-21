@@ -51,7 +51,7 @@ public class IfStatementContext extends StatementContext<IfStmt> {
      */
     @Override
     public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
-        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
         List<TypePatternExpr> results = new LinkedList<>();
 
         Expression condition = wrappedNode.getCondition();
@@ -85,7 +85,7 @@ public class IfStatementContext extends StatementContext<IfStmt> {
      */
     @Override
     public List<TypePatternExpr> getIntroducedTypePatterns() {
-        PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
         Expression condition = wrappedNode.getCondition();
         PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
 

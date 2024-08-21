@@ -60,7 +60,7 @@ public class BinaryExprContext extends ExpressionContext<BinaryExpr> {
         List<TypePatternExpr> results = new LinkedList<>();
 
         if (wrappedNode.getRight().containsWithinRange(child)) {
-            PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+            PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
             PatternVariableResult patternsInScope = wrappedNode.getLeft().accept(variableVisitor, null);
 
             results.addAll(patternsInScope.getVariablesIntroducedIfTrue());
@@ -85,7 +85,7 @@ public class BinaryExprContext extends ExpressionContext<BinaryExpr> {
         List<TypePatternExpr> results = new LinkedList<>();
 
         if (wrappedNode.getRight().containsWithinRange(child)) {
-            PatternVariableVisitor variableVisitor = PatternVariableVisitor.getInstance();
+            PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
             PatternVariableResult patternsInScope = wrappedNode.getLeft().accept(variableVisitor, null);
 
             results.addAll(patternsInScope.getVariablesIntroducedIfFalse());
