@@ -21,6 +21,12 @@
 
 package com.github.javaparser.ast;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.Position;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -36,19 +42,12 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.utils.LineSeparator;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 class NodeTest {
     @Test
@@ -211,26 +210,19 @@ class NodeTest {
         void rootHasNoChild() {
             Node root = new CompilationUnit();
             List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.PREORDER);
-            assertEquals(
-                    Arrays.asList(CompilationUnit.class),
-                    classesOf(nodes));
+            assertEquals(Arrays.asList(CompilationUnit.class), classesOf(nodes));
         }
 
         @Test
         void rootHasChild() {
             Node root = new CompilationUnit("com");
             List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.PREORDER);
-            assertEquals(
-                    Arrays.asList(CompilationUnit.class, PackageDeclaration.class, Name.class),
-                    classesOf(nodes));
+            assertEquals(Arrays.asList(CompilationUnit.class, PackageDeclaration.class, Name.class), classesOf(nodes));
         }
 
         @Test
         void astHasMultipleLeafs() {
-            Node root = parse("package com;"
-                    + "import com.*;"
-                    + "import org.*;"
-                    + "abstract class Foo {}");
+            Node root = parse("package com;" + "import com.*;" + "import org.*;" + "abstract class Foo {}");
             List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.PREORDER);
             assertEquals(
                     Arrays.asList(
@@ -258,26 +250,19 @@ class NodeTest {
         void rootHasNoChild() {
             Node root = new CompilationUnit();
             List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.POSTORDER);
-            assertEquals(
-                    Arrays.asList(CompilationUnit.class),
-                    classesOf(nodes));
+            assertEquals(Arrays.asList(CompilationUnit.class), classesOf(nodes));
         }
 
         @Test
         void rootHasChild() {
             Node root = new CompilationUnit("com");
             List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.POSTORDER);
-            assertEquals(
-                    Arrays.asList(Name.class, PackageDeclaration.class, CompilationUnit.class),
-                    classesOf(nodes));
+            assertEquals(Arrays.asList(Name.class, PackageDeclaration.class, CompilationUnit.class), classesOf(nodes));
         }
 
         @Test
         void astHasMultipleLeafs() {
-            Node root = parse("package com;"
-                    + "import com.*;"
-                    + "import org.*;"
-                    + "abstract class Foo {}");
+            Node root = parse("package com;" + "import com.*;" + "import org.*;" + "abstract class Foo {}");
             List<Node> nodes = root.findAll(Node.class, Node.TreeTraversal.POSTORDER);
             assertEquals(
                     Arrays.asList(
