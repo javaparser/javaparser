@@ -171,16 +171,6 @@ public class InstanceOfTest {
             + "        }\n"
             + "    }\n"
             + "\n"
-            + "    public void if_conditional_negated_no_braces_on_else_mixed() {\n"
-            + "        List<Integer> s;\n"
-            + "        boolean result;\n"
-            + "        String obj = \"abc\";\n"
-            + "        if (!(obj instanceof String s) && true) {\n"
-            + "            // Empty BlockStmt\n"
-            + "        } else\n"
-            + "            result = s.contains(\"in scope\");\n"
-            + "    }\n"
-            + "\n"
             + "    public void if_conditional_negated_no_braces_on_if_shouldResolveToLocalVariableNotPattern() {\n"
             + "        List<Integer> s;\n"
             + "        boolean result;\n"
@@ -470,25 +460,6 @@ public class InstanceOfTest {
         }
 
         @Test
-        public void givenInstanceOfPattern_andField_else_skipBraces_thenResolvesToPattern() {
-            MethodDeclaration methodDeclaration = getMethodByName("if_conditional_negated_no_braces_on_else_mixed");
-            final List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
-            assertEquals(1, methodCalls.size());
-
-            MethodCallExpr methodCallExprInElse = methodCalls.get(0);
-
-            // Resolving the method call .contains()
-            final ResolvedMethodDeclaration resolve = methodCallExprInElse.resolve();
-
-            // The method call in the else block should be in scope of the pattern (String) due to the negated condition
-            assertEquals("java.lang.String.contains(java.lang.CharSequence)", resolve.getQualifiedSignature());
-            assertEquals("boolean", resolve.getReturnType().describe());
-            assertEquals("contains", resolve.getName());
-            assertEquals(1, resolve.getNumberOfParams());
-            assertEquals("contains(java.lang.CharSequence)", resolve.getSignature());
-        }
-
-        @Test
         public void givenInstanceOfPattern_andField_skipBraces_thenResolvesToPattern() {
             MethodDeclaration methodDeclaration =
                     getMethodByName("if_conditional_negated_no_braces_on_if_shouldResolveToLocalVariableNotPattern");
@@ -558,6 +529,173 @@ public class InstanceOfTest {
 
             NameExpr name = Navigator.findNameExpression(cu, "s").get();
             assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable1() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "      return;\n"
+                    + "    }\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable2() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o) {\n"
+                    + "    if (!(o instanceof String s)) {}\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable3() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {\n"
+                    + "        System.out.println(s);\n"
+                    + "    }\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable4() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o) {\n"
+                    + "    if (!(o instanceof String s) || false) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {\n"
+                    + "        System.out.println(s);\n"
+                    + "    }\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable5() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        // do nothing\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {\n"
+                    + "        System.out.println(s);\n"
+                    + "    }\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable6() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        // do nothing\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } \n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable7() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        return;\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } \n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable8() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        return;\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {}\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable9() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        return;\n"
+                    + "    } else if (b) {\n"
+                    + "        // do nothing\n"
+                    + "    } else {\n"
+                    + "        return;\n"
+                    + "    }\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertEquals("java.lang.String", name.resolve().getType().describe());
+        }
+
+        @Test
+        public void ifIntroducesPatternVariable10() {
+            CompilationUnit cu = parse("public class Test {\n"
+                    + "  public void foo(Object o, boolean b) {\n"
+                    + "    if (!(o instanceof String s)) {\n"
+                    + "        return;\n"
+                    + "    } else if (b) {\n"
+                    + "        throw new RuntimeException();\n"
+                    + "    } else {\n"
+                    + "        return;"
+                    + "    }\n"
+                    + "    System.out.println(s);\n"
+                    + "  }\n"
+                    + "}");
+
+            NameExpr name = Navigator.findNameExpression(cu, "s").get();
+            assertThrows(UnsolvedSymbolException.class, () -> name.resolve());
         }
     }
 

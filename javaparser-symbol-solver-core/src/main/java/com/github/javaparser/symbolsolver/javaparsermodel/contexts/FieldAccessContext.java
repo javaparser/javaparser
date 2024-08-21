@@ -43,7 +43,7 @@ import java.util.Optional;
 /**
  * @author Federico Tomassetti
  */
-public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExpr> {
+public class FieldAccessContext extends ExpressionContext<FieldAccessExpr> {
 
     private static final String ARRAY_LENGTH_FIELD_NAME = "length";
 
@@ -67,8 +67,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
                 }
             }
         }
-        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver)
-                .solveSymbol(name);
+        return super.solveSymbol(name);
     }
 
     @Override
@@ -100,7 +99,7 @@ public class FieldAccessContext extends AbstractJavaParserContext<FieldAccessExp
             }
             return Optional.empty();
         }
-        return solveSymbolAsValueInParentContext(name);
+        return super.solveSymbolAsValue(name);
     }
 
     /*

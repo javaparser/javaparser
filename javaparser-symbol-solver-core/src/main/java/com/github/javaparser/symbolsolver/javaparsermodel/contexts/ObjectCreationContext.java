@@ -30,7 +30,6 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
@@ -40,7 +39,7 @@ import java.util.List;
 /**
  * @author Federico Tomassetti
  */
-public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreationExpr> {
+public class ObjectCreationContext extends ExpressionContext<ObjectCreationExpr> {
 
     public ObjectCreationContext(ObjectCreationExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -69,12 +68,6 @@ public class ObjectCreationContext extends AbstractJavaParserContext<ObjectCreat
             parentNode = demandParentNode(parentNode);
         }
         return JavaParserFactory.getContext(parentNode, typeSolver).solveType(name, typeArguments);
-    }
-
-    @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name) {
-        return JavaParserFactory.getContext(demandParentNode(wrappedNode), typeSolver)
-                .solveSymbol(name);
     }
 
     @Override

@@ -25,7 +25,6 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.PatternExpr;
 import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.stmt.Statement;
@@ -38,7 +37,6 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
@@ -220,27 +218,17 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
             return symbolReference;
         }
 
-        /*
-         * If we're in a statement that contains a pattern expression.
-         * Example: {@code double x = a instanceof String s;}
-         */
-        List<TypePatternExpr> patternExprs = typePatternExprsExposedFromChildren();
-        for (int i = 0; i < patternExprs.size(); i++) {
-            PatternExpr patternExpr = patternExprs.get(i);
-            if (patternExpr.isTypePatternExpr()) {
-                TypePatternExpr typePatternExpr = patternExpr.asTypePatternExpr();
-                if (typePatternExpr.getNameAsString().equals(name)) {
-                    return SymbolReference.solved(JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver));
-                }
-            }
-        }
-
         Optional<Node> optionalParentNode = wrappedNode.getParentNode();
         if (!optionalParentNode.isPresent()) {
             return SymbolReference.unsolved();
         }
 
         Node parentOfWrappedNode = optionalParentNode.get();
+
+        symbolReference = findExposedPatternInParentContext(parentOfWrappedNode, name);
+        if (symbolReference.isSolved()) {
+            return symbolReference;
+        }
 
         if (parentOfWrappedNode instanceof MethodDeclaration) {
             return solveSymbolInParentContext(name);
@@ -334,15 +322,7 @@ public class StatementContext<N extends Statement> extends AbstractJavaParserCon
         return solveMethodInParentContext(name, argumentsTypes, false);
     }
 
-    @Override
-    public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
-        // Statements never make pattern expressions available.
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<TypePatternExpr> negatedTypePatternExprsExposedFromChildren() {
-        // Statements never make pattern expressions available.
+    public List<TypePatternExpr> getIntroducedTypePatterns() {
         return Collections.emptyList();
     }
 }

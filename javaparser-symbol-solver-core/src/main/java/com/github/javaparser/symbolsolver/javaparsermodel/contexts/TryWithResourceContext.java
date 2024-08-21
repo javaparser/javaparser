@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TryWithResourceContext extends AbstractJavaParserContext<TryStmt> {
+public class TryWithResourceContext extends StatementContext<TryStmt> {
 
     public TryWithResourceContext(TryStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);

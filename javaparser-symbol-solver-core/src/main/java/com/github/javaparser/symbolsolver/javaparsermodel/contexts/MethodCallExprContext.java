@@ -31,7 +31,6 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
 import com.github.javaparser.resolution.logic.MethodResolutionLogic;
 import com.github.javaparser.resolution.model.SymbolReference;
-import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.model.typesystem.LazyType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
@@ -41,7 +40,7 @@ import com.github.javaparser.utils.Pair;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallExpr> {
+public class MethodCallExprContext extends ExpressionContext<MethodCallExpr> {
 
     ///
     /// Constructors
@@ -145,11 +144,6 @@ public class MethodCallExprContext extends AbstractJavaParserContext<MethodCallE
         }
 
         return methodUsage;
-    }
-
-    @Override
-    public Optional<Value> solveSymbolAsValue(String name) {
-        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override

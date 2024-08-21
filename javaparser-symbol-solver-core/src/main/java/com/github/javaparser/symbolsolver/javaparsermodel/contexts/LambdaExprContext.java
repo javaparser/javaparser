@@ -54,7 +54,7 @@ import java.util.*;
 /**
  * @author Federico Tomassetti
  */
-public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
+public class LambdaExprContext extends ExpressionContext<LambdaExpr> {
 
     public LambdaExprContext(LambdaExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -174,8 +174,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             }
         }
 
-        // if nothing is found we should ask the parent context
-        return solveSymbolAsValueInParentContext(name);
+        // if nothing is found we should check for patterns and ask the parent context
+        return super.solveSymbolAsValue(name);
     }
 
     /*
@@ -216,8 +216,8 @@ public class LambdaExprContext extends AbstractJavaParserContext<LambdaExpr> {
             }
         }
 
-        // if nothing is found we should ask the parent context
-        return solveSymbolInParentContext(name);
+        // if nothing is found we should check for patterns and ask the parent context
+        return super.solveSymbol(name);
     }
 
     @Override

@@ -29,14 +29,12 @@ import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserSymbolDeclaration;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserTypePatternDeclaration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
  * @author Roger Howell
  */
-public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfExpr> {
+public class InstanceOfExprContext extends ExpressionContext<InstanceOfExpr> {
 
     public InstanceOfExprContext(InstanceOfExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -71,19 +69,7 @@ public class InstanceOfExprContext extends AbstractJavaParserContext<InstanceOfE
             }
         } // TODO: Also consider unary expr context
 
-        // if nothing is found we should ask the parent context
-        return solveSymbolInParentContext(name);
-    }
-
-    @Override
-    public List<TypePatternExpr> typePatternExprsExposedFromChildren() {
-        List<TypePatternExpr> results = new ArrayList<>();
-
-        // If this instanceof expression has a pattern, add it to the list.
-        wrappedNode
-                .getPattern()
-                .ifPresent(patternExpr -> results.addAll(typePatternExprsDiscoveredInPattern(patternExpr)));
-
-        return results;
+        // if nothing is found we should check for existing patterns and ask the parent context
+        return super.solveSymbol(name);
     }
 }

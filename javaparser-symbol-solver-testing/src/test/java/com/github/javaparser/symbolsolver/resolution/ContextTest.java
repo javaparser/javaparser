@@ -50,7 +50,6 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -961,38 +960,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
             assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "i", message);
             assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "b", message);
         }
-
-        @Test
-        void recordPatternExprInBinaryExpr() {
-            String message = "Only s must be available from this expression.";
-            BinaryExpr binaryExpr = parse(
-                            ParserConfiguration.LanguageLevel.JAVA_21,
-                            "true == a instanceof Box(String s, Box(Integer i, Boolean b))",
-                            ParseStart.EXPRESSION)
-                    .asBinaryExpr();
-            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
-            assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
-            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
-            assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
-        }
-
-        @Test
-        void recordPatternExprInNegatedBinaryExpr() {
-            String message = "Only s must be available from this expression.";
-            BinaryExpr binaryExpr = parse(
-                            ParserConfiguration.LanguageLevel.JAVA_21,
-                            "true != a instanceof Box(String s, Box(Integer i, Boolean b))",
-                            ParseStart.EXPRESSION)
-                    .asBinaryExpr();
-            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
-            assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
-            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "i", message);
-            assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "b", message);
-        }
     }
 
     @Nested
@@ -1106,181 +1073,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                         unaryExpr,
                         "s",
                         message + " -- " + "Double negative means that it is true - it should be available.");
-            }
-        }
-
-        @Nested
-        class TypePatternExprBinaryExprTests {
-
-            @Test
-            void instanceOfPatternExprBinaryExpr1() {
-                String message = "Only s must be available from this expression.";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "a instanceof String s == true",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr2() {
-                String message = "Only s must be available from this expression.";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "true == a instanceof String s",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr3() {
-                String message = "Only s (NEGATED) must be available from this expression.";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "a instanceof String s == false",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr4() {
-                String message = "Only s (NEGATED) must be available from this expression.";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "false == a instanceof String s",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr5() {
-                String message = "Only s (NEGATED) must be available from this expression.";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "a instanceof String s != true",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr5_negated() {
-                String message = "Only s (NEGATED) must be available from this expression.";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "a instanceof String s != true",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr5b() {
-                String message = "Only s (NEGATED) must be available from this expression.";
-                EnclosedExpr enclosedExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "(a instanceof String s != true)",
-                                ParseStart.EXPRESSION)
-                        .asEnclosedExpr();
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr5b_negated() {
-                String message = "Only s (NEGATED) must be available from this expression.";
-                EnclosedExpr enclosedExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "(a instanceof String s != true)",
-                                ParseStart.EXPRESSION)
-                        .asEnclosedExpr();
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(enclosedExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr6() {
-                String message = "Only s (NEGATED) must be available from this expression.";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "a instanceof String s != false",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr6_negated() {
-                String message = "Only s (NEGATED) must be available from this expression.";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "a instanceof String s != false",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr7() {
-                String message = "Only s (NEGATED) must be available from this double-negated expression.";
-                UnaryExpr unaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "!(a instanceof String s != true)",
-                                ParseStart.EXPRESSION)
-                        .asUnaryExpr();
-                assertOnePatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr7_negated() {
-                String message = "Only s must be available from this double-negated expression.";
-                UnaryExpr unaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "!(a instanceof String s != true)",
-                                ParseStart.EXPRESSION)
-                        .asUnaryExpr();
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr8() {
-                String message = "Only s must be available from this double-negated expression.";
-                UnaryExpr unaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "!(a instanceof String s != false)",
-                                ParseStart.EXPRESSION)
-                        .asUnaryExpr();
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr8_negated() {
-                String message = "Only s must be available from this double-negated expression.";
-                UnaryExpr unaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "!(a instanceof String s != false)",
-                                ParseStart.EXPRESSION)
-                        .asUnaryExpr();
-                assertOneNegatedPatternExprsExposedToImmediateParentInContextNamed(unaryExpr, "s", message);
-            }
-
-            @Test
-            void instanceOfPatternExprBinaryExpr9() {
-                String message =
-                        "Must be no patterns available from this || expression (neither is guaranteed to be true).";
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "(a instanceof String s) || a instanceof String s2",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-                assertNoPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
-                assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(binaryExpr, "s", message);
             }
         }
 
@@ -1536,35 +1328,6 @@ class ContextTest extends AbstractSymbolResolutionTest {
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s", message);
                 assertOnePatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
                 assertNoNegatedPatternExprsExposedToImmediateParentInContextNamed(rightBranch, "s2", message);
-            }
-
-            @Test
-            void instanceOfPatternExprResolution_expr_AND_solving1() {
-                BinaryExpr binaryExpr = parse(
-                                ParserConfiguration.LanguageLevel.JAVA_14_PREVIEW,
-                                "a instanceof String s && s instanceof String s2",
-                                ParseStart.EXPRESSION)
-                        .asBinaryExpr();
-
-                String message;
-
-                message = "Only s must be available on the LEFT branch of an AND.";
-                Expression leftBranch = binaryExpr.getLeft();
-                Context leftBranchContext = JavaParserFactory.getContext(leftBranch, typeSolver);
-                SymbolReference<? extends ResolvedValueDeclaration> left_s = leftBranchContext.solveSymbol("s");
-                assertTrue(left_s.isSolved());
-                Optional<TypePatternExpr> optionalPatternExpr = leftBranchContext.typePatternExprInScope("s");
-                assertTrue(optionalPatternExpr.isPresent());
-                SymbolReference<? extends ResolvedValueDeclaration> left_s2 = leftBranchContext.solveSymbol("s2");
-                assertFalse(left_s2.isSolved());
-
-                message = "s and s2 must be available on the RIGHT branch of an AND.";
-                Expression rightBranch = binaryExpr.getRight();
-                Context rightBranchContext = JavaParserFactory.getContext(rightBranch, typeSolver);
-                SymbolReference<? extends ResolvedValueDeclaration> right_s = rightBranchContext.solveSymbol("s");
-                assertTrue(right_s.isSolved());
-                SymbolReference<? extends ResolvedValueDeclaration> right_s2 = rightBranchContext.solveSymbol("s2");
-                assertTrue(right_s2.isSolved());
             }
 
             @Test

@@ -72,6 +72,12 @@ public class JavaParserFactory {
         if (node instanceof IfStmt) {
             return new IfStatementContext((IfStmt) node, typeSolver);
         }
+        if (node instanceof WhileStmt) {
+            return new WhileStatementContext((WhileStmt) node, typeSolver);
+        }
+        if (node instanceof DoStmt) {
+            return new DoStatementContext((DoStmt) node, typeSolver);
+        }
         if (node instanceof InstanceOfExpr) {
             return new InstanceOfExprContext((InstanceOfExpr) node, typeSolver);
         }
@@ -129,6 +135,9 @@ public class JavaParserFactory {
         }
         if (node instanceof ObjectCreationExpr) {
             return new ObjectCreationContext((ObjectCreationExpr) node, typeSolver);
+        }
+        if (node instanceof ConditionalExpr) {
+            return new ConditionalExprContext((ConditionalExpr) node, typeSolver);
         }
         if (node instanceof NameExpr) {
             // to resolve a name when in a fieldAccess context, we can go up until we get a node other than

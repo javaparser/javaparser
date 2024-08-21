@@ -45,7 +45,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import java.util.*;
 
-public class MethodReferenceExprContext extends AbstractJavaParserContext<MethodReferenceExpr> {
+public class MethodReferenceExprContext extends ExpressionContext<MethodReferenceExpr> {
 
     ///
     /// Constructors

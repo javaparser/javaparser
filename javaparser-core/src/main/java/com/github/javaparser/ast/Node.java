@@ -1143,6 +1143,7 @@ public abstract class Node
      * @see <a href="https://en.wikipedia.org/wiki/Post-order">Post-order traversal</a>
      */
     public static class PostOrderIterator implements Iterator<Node> {
+
         private final Stack<Level> stack = new Stack<>();
 
         public PostOrderIterator(Node root) {
@@ -1192,8 +1193,11 @@ public abstract class Node
          * has been expanded, i.e., if its children have been processed.
          */
         private static class Level {
+
             private final List<Node> nodes;
+
             private int index = 0;
+
             private boolean expanded = false;
 
             public Level(List<Node> nodes) {
