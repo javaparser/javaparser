@@ -14,7 +14,7 @@
     <groupId>com.github.javaparser</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.26.2-SNAPSHOT</version>
+    <version>3.26.2</version>
 
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>
@@ -149,7 +149,7 @@
         <java.version>1.8</java.version>
         <byte-buddy.version>1.15.1</byte-buddy.version>
         <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
-        <build.timestamp>2024-06-21T00:00:00Z</build.timestamp>
+        <build.timestamp>2024-09-02T00:00:00Z</build.timestamp>
         <!-- Maven Plugins -->
     </properties>
 
