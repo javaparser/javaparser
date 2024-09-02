@@ -1,7 +1,7 @@
 
-Next Release (Version 3.26.2-snapshot)
+Next Release (Version 3.26.3-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/209?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/210?closed=1)
 
 ### Added
 ### Changed
@@ -9,6 +9,53 @@ Next Release (Version 3.26.2-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+Version 3.26.2
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/209?closed=1)
+
+
+### Changed
+
+* Move formatting workflows into separate file (PR [#4480](https://github.com/javaparser/javaparser/pull/4480) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Exclude unavailable macos <-> java version combinations from github tests (PR [#4479](https://github.com/javaparser/javaparser/pull/4479) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### Fixed
+
+* Fixes #4526. Fix Node.PostOrderIterator for roots without children (PR [#4538](https://github.com/javaparser/javaparser/pull/4538) by [@ktul](https://github.com/ktul))
+* Add missing copyright notice to RecordPatternExpr.java (PR [#4527](https://github.com/javaparser/javaparser/pull/4527) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Add missing type erasure in ClassOrInterfaceType.toDescriptor (PR [#4522](https://github.com/javaparser/javaparser/pull/4522) by [@johanneskloos](https://github.com/johanneskloos))
+* Allow primitive types for patterns (PR [#4506](https://github.com/javaparser/javaparser/pull/4506) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix project formatting (PR [#4499](https://github.com/javaparser/javaparser/pull/4499) by [@johannescoetzee](https://github.com/johannescoetzee))
+* Fix: issue 4492 resolve LambdaExpr has NullPointException (PR [#4497](https://github.com/javaparser/javaparser/pull/4497) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 2738 UnsolvedSymbolException while trying to ResolvedMethodDeclaration from MethodCallExpr (PR [#4482](https://github.com/javaparser/javaparser/pull/4482) by [@jlerbsc](https://github.com/jlerbsc))
+
+### Developer Changes
+
+* fix(deps): update byte-buddy.version to v1.15.1 (PR [#4547](https://github.com/javaparser/javaparser/pull/4547) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update byte-buddy.version to v1.15.0 (PR [#4543](https://github.com/javaparser/javaparser/pull/4543) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency com.google.guava:guava to v33.3.0-jre (PR [#4532](https://github.com/javaparser/javaparser/pull/4532) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency net.bytebuddy:byte-buddy-agent to v1.14.19 (PR [#4531](https://github.com/javaparser/javaparser/pull/4531) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update junit5 monorepo to v5.11.0 (PR [#4528](https://github.com/javaparser/javaparser/pull/4528) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update byte-buddy.version to v1.14.18 (PR [#4493](https://github.com/javaparser/javaparser/pull/4493) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v4.1.7 (PR [#4486](https://github.com/javaparser/javaparser/pull/4486) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v4.0.0 (PR [#4485](https://github.com/javaparser/javaparser/pull/4485) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update junit5 monorepo to v5.10.3 (PR [#4483](https://github.com/javaparser/javaparser/pull/4483) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### Uncategorised
+
+* Add better instructions for re-formatting the project (PR [#4540](https://github.com/javaparser/javaparser/pull/4540) by [@johannescoetzee](https://github.com/johannescoetzee))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@johanneskloos](https://github.com/johanneskloos)
+* [@ktul](https://github.com/ktul)
+* [@johannescoetzee](https://github.com/johannescoetzee)
+* [@kamilkrzywanski](https://github.com/kamilkrzywanski)
+* [@jlerbsc](https://github.com/jlerbsc)
+
 
 Version 3.26.1
 --------------
