@@ -20,15 +20,14 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
 import org.junit.jupiter.api.Test;
 
 public class Issue4560Test extends AbstractResolutionTest {
@@ -36,14 +35,14 @@ public class Issue4560Test extends AbstractResolutionTest {
     @Test
     void test() {
 
-    	String code = "public class MyExample {\n"
-				+ "\n"
-				+ "  public static void main(String[] args) {\n"
-				+ "    \"\"\"\n"
-				+ "        Hello multiple %s!\n"
-				+ "        \"\"\".format(\"world\");\n"
-				+ "  }\n"
-				+ "}";
+        String code = "public class MyExample {\n"
+                + "\n"
+                + "  public static void main(String[] args) {\n"
+                + "    \"\"\"\n"
+                + "        Hello multiple %s!\n"
+                + "        \"\"\".format(\"world\");\n"
+                + "  }\n"
+                + "}";
 
         ParserConfiguration parserConfiguration = new ParserConfiguration()
                 .setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_15)
