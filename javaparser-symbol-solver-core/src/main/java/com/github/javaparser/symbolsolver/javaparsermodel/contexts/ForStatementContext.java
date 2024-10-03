@@ -32,6 +32,7 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
+import com.github.javaparser.resolution.model.Value;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.NormalCompletionVisitor;
 import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableResult;
@@ -120,6 +121,29 @@ public class ForStatementContext extends StatementContext<ForStmt> {
             return StatementContext.solveInBlock(name, typeSolver, wrappedNode);
         }
         return solveSymbolInParentContext(name);
+    }
+
+    @Override
+    public Optional<Value> solveSymbolAsValue(String name) {
+        for (Expression expression : wrappedNode.getInitialization()) {
+            if (expression instanceof VariableDeclarationExpr) {
+                VariableDeclarationExpr variableDeclarationExpr = (VariableDeclarationExpr) expression;
+                for (VariableDeclarator variableDeclarator : variableDeclarationExpr.getVariables()) {
+                    if (variableDeclarator.getName().getId().equals(name)) {
+                        return Optional.of(Value.from(variableDeclarator.resolve()));
+                    }
+                }
+            } else if (!(expression instanceof AssignExpr
+                    || expression instanceof MethodCallExpr
+                    || expression instanceof UnaryExpr)) {
+                throw new UnsupportedOperationException(expression.getClass().getCanonicalName());
+            }
+        }
+
+        if (demandParentNode(wrappedNode) instanceof NodeWithStatements) {
+            return StatementContext.solveInBlockAsValue(name, typeSolver, wrappedNode);
+        }
+        return solveSymbolAsValueInParentContext(name);
     }
 
     @Override
