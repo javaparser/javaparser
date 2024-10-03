@@ -538,7 +538,7 @@ public class TypeExtractor extends DefaultVisitorAdapter {
             return result;
         }
         if (parentNode instanceof ObjectCreationExpr) {
-        	ObjectCreationExpr expr = (ObjectCreationExpr) parentNode;
+            ObjectCreationExpr expr = (ObjectCreationExpr) parentNode;
             ResolvedType result = expr.getType().resolve();
 
             if (solveLambdas) {
