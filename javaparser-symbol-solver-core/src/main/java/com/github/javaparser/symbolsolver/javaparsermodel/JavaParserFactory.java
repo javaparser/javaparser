@@ -23,6 +23,8 @@ package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
+import java.util.Optional;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
@@ -184,15 +186,25 @@ public class JavaParserFactory {
         }
         if (node instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) node;
-            if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
+            if (expressionStmt.getExpression().isVariableDeclarationExpr()){
                 return new VariableSymbolDeclarator(
-                        (VariableDeclarationExpr) (expressionStmt.getExpression()), typeSolver);
+                        expressionStmt.getExpression().asVariableDeclarationExpr(), typeSolver);
             }
             return new NoSymbolDeclarator<>(expressionStmt, typeSolver);
         }
         if (node instanceof ForEachStmt) {
             ForEachStmt foreachStmt = (ForEachStmt) node;
             return new VariableSymbolDeclarator(foreachStmt.getVariable(), typeSolver);
+        }
+        if (node instanceof ForStmt) {
+            ForStmt forStmt = (ForStmt) node;
+            Optional<VariableDeclarationExpr> variableDecl = forStmt.getInitialization().stream()
+            		.filter(expr -> expr.isVariableDeclarationExpr())
+            		.map(expr -> expr.asVariableDeclarationExpr())
+            		.findFirst();
+            if (variableDecl.isPresent()) {
+            	return new VariableSymbolDeclarator(variableDecl.get(), typeSolver);
+            }
         }
         return new NoSymbolDeclarator<>(node, typeSolver);
     }
