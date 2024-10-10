@@ -52,7 +52,6 @@ public class VarValidator implements TypedValidator<VarType> {
         if (node.hasParentNode() && node.getParentNode().get() instanceof TypePatternExpr) {
             return;
         }
-
         // All allowed locations are within a VariableDeclaration inside a VariableDeclarationExpr inside something
         // else.
         Optional<VariableDeclarator> variableDeclarator = node.findAncestor(VariableDeclarator.class);
