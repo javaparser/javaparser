@@ -1,4 +1,0 @@
-package another;
-
-interface A {
-}

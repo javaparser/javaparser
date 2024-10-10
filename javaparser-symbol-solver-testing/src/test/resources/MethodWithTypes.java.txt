@@ -1,6 +1,0 @@
-class Main {
-    public void methodWithLocalTypes() {
-        class LocalClass {
-        }
-    }
-}

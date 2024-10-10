@@ -1,3 +1,0 @@
-class A<A, B extends Object, C> {
-
-}

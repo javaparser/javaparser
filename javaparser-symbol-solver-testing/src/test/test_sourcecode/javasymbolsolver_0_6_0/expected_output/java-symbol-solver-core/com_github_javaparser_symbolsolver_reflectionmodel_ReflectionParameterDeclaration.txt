@@ -1,1 +1,0 @@
-  Line 73) ReflectionFactory.typeUsageFor(genericType, typeSolver) ==> com.github.javaparser.symbolsolver.reflectionmodel.ReflectionFactory.typeUsageFor(java.lang.reflect.Type, com.github.javaparser.symbolsolver.model.resolution.TypeSolver)

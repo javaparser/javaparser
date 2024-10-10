@@ -1,7 +1,0 @@
-package java.lang;
-
-public class ReflectionTypeSolverConstructionResolution extends AbstractStringBuilder {
-    public ReflectionTypeSolverConstructionResolution(int i) {
-        super(i);
-    }
-}

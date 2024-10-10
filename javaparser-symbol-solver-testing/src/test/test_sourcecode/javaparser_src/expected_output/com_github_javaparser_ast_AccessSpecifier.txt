@@ -1,2 +1,0 @@
-  Line 41) this.codeRepresenation = codeRepresentation ==> java.lang.String
-  Line 45) this.codeRepresenation ==> java.lang.String

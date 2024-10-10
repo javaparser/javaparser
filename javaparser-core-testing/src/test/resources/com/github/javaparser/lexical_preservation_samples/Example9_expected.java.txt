@@ -1,4 +1,0 @@
-// This is my class, with my comment
-class A {
-    int a = 10, b[];
-}

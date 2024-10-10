@@ -545,7 +545,7 @@ public class Difference {
                 }
                 // If in front we have one space and before also we had space let's drop one space
                 if (originalElements.size() > originalIndex && originalIndex > 0) {
-                    if (originalElements.get(originalIndex).isWhiteSpace()
+                    if (originalElements.get(originalIndex).isWhiteSpace() && !originalElements.get(originalIndex).isEndOfLine()
                             && originalElements.get(originalIndex - 1).isWhiteSpace()) {
                         // However we do not want to do that when we are about to adding or removing elements
                         // The intention is not very clear maybe it should clarify this with examples!
