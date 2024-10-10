@@ -1,0 +1,34 @@
+
+[ Class com.github.javaparser.ast.expr.MethodCallExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 47) setScope(scope) ==> void
+  Line 48) setName(name) ==> void
+  Line 52) setScope(scope) ==> void
+  Line 53) setName(name) ==> void
+  Line 54) setArgs(args) ==> void
+  Line 59) beginLine ==> int
+  Line 59) beginColumn ==> int
+  Line 59) endLine ==> int
+  Line 59) endColumn ==> int
+  Line 60) setScope(scope) ==> void
+  Line 61) setTypeArgs(typeArgs) ==> void
+  Line 62) setName(name) ==> void
+  Line 63) setArgs(args) ==> void
+  Line 67) v.visit(this, arg) ==> R
+  Line 71) v.visit(this, arg) ==> void
+  Line 75) args ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 79) name.getName() ==> java.lang.String
+  Line 83) name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 87) scope ==> com.github.javaparser.ast.expr.Expression
+  Line 91) typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 95) this.args = args ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 96) setAsParentNodeOf(this.args) ==> void
+  Line 100) this.name = new NameExpr(name) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 104) this.name = name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 108) this.scope = scope ==> com.github.javaparser.ast.expr.Expression
+  Line 109) setAsParentNodeOf(this.scope) ==> void
+  Line 113) this.typeArgs = typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 114) setAsParentNodeOf(this.typeArgs) ==> void

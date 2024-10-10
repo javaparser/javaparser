@@ -1,0 +1,15 @@
+
+[ Class com.github.javaparser.ast.expr.MarkerAnnotationExpr ]
+  superclass: com.github.javaparser.ast.expr.AnnotationExpr
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 36) setName(name) ==> void
+  Line 41) beginLine ==> int
+  Line 41) beginColumn ==> int
+  Line 41) endLine ==> int
+  Line 41) endColumn ==> int
+  Line 42) setName(name) ==> void
+  Line 46) v.visit(this, arg) ==> R
+  Line 50) v.visit(this, arg) ==> void

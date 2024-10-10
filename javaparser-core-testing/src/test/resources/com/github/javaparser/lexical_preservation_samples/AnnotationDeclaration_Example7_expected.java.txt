@@ -1,0 +1,11 @@
+// some example
+
+public @interface ClassPreamble {
+   String author();
+   String date();
+   int foo();
+   String lastModified() default "N/A";
+   String lastModifiedBy() default "N/A";
+   // Note use of array
+   String[] reviewers();
+}

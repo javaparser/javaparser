@@ -1,0 +1,7 @@
+  Line 25) setDimension(dimension) ==> com.github.javaparser.ast.ArrayCreationLevel.setDimension(com.github.javaparser.ast.expr.Expression)
+  Line 26) setAnnotations(annotations) ==> com.github.javaparser.ast.ArrayCreationLevel.setAnnotations(java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>)
+  Line 30) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.ArrayCreationLevel, A)
+  Line 34) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.ArrayCreationLevel, A)
+  Line 39) setAsParentNodeOf(dimension) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
+  Line 47) ensureNotNull(annotations) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
+  Line 52) setAsParentNodeOf(annotations) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)

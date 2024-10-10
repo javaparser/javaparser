@@ -1,0 +1,21 @@
+
+[ Class com.github.javaparser.ast.stmt.LabeledStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 40) setLabel(label) ==> void
+  Line 41) setStmt(stmt) ==> void
+  Line 46) beginLine ==> int
+  Line 46) beginColumn ==> int
+  Line 46) endLine ==> int
+  Line 46) endColumn ==> int
+  Line 47) setLabel(label) ==> void
+  Line 48) setStmt(stmt) ==> void
+  Line 52) v.visit(this, arg) ==> R
+  Line 56) v.visit(this, arg) ==> void
+  Line 60) label ==> java.lang.String
+  Line 64) stmt ==> com.github.javaparser.ast.stmt.Statement
+  Line 68) this.label = label ==> java.lang.String
+  Line 72) this.stmt = stmt ==> com.github.javaparser.ast.stmt.Statement
+  Line 73) setAsParentNodeOf(this.stmt) ==> void

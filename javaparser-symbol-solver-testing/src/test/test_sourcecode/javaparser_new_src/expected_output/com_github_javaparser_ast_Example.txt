@@ -1,0 +1,2 @@
+  Line 26) code.getBytes("UTF-8") ==> java.lang.String.getBytes(java.lang.String)
+  Line 27) JavaParser.parse(stream) ==> com.github.javaparser.JavaParser.parse(java.io.InputStream)

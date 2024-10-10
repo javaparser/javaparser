@@ -1,0 +1,30 @@
+
+[ Class com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 49) setThis(isThis) ==> void
+  Line 50) setExpr(expr) ==> void
+  Line 51) setArgs(args) ==> void
+  Line 58) beginLine ==> int
+  Line 58) beginColumn ==> int
+  Line 58) endLine ==> int
+  Line 58) endColumn ==> int
+  Line 59) setTypeArgs(typeArgs) ==> void
+  Line 60) setThis(isThis) ==> void
+  Line 61) setExpr(expr) ==> void
+  Line 62) setArgs(args) ==> void
+  Line 67) v.visit(this, arg) ==> R
+  Line 72) v.visit(this, arg) ==> void
+  Line 76) args ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 80) expr ==> com.github.javaparser.ast.expr.Expression
+  Line 84) typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 88) isThis ==> boolean
+  Line 92) this.args = args ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 93) setAsParentNodeOf(this.args) ==> void
+  Line 97) this.expr = expr ==> com.github.javaparser.ast.expr.Expression
+  Line 98) setAsParentNodeOf(this.expr) ==> void
+  Line 102) this.isThis = isThis ==> boolean
+  Line 106) this.typeArgs = typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 107) setAsParentNodeOf(this.typeArgs) ==> void

@@ -1,0 +1,32 @@
+
+[ Class com.github.javaparser.ast.TypeParameter ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  Line 55) setName(name) ==> void
+  Line 56) setTypeBound(typeBound) ==> void
+  Line 61) beginLine ==> int
+  Line 61) beginColumn ==> int
+  Line 61) endLine ==> int
+  Line 61) endColumn ==> int
+  Line 62) setName(name) ==> void
+  Line 63) setTypeBound(typeBound) ==> void
+  Line 68) beginLine ==> int
+  Line 68) beginColumn ==> int
+  Line 68) endLine ==> int
+  Line 68) endColumn ==> int
+  Line 68) name ==> java.lang.String
+  Line 68) typeBound ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 69) setName(name) ==> void
+  Line 70) setTypeBound(typeBound) ==> void
+  Line 71) this.annotations = annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 75) v.visit(this, arg) ==> R
+  Line 79) v.visit(this, arg) ==> void
+  Line 88) name ==> java.lang.String
+  Line 98) typeBound ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 108) this.name = name ==> java.lang.String
+  Line 118) this.typeBound = typeBound ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 119) setAsParentNodeOf(typeBound) ==> void
+  Line 123) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 127) this.annotations = annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>

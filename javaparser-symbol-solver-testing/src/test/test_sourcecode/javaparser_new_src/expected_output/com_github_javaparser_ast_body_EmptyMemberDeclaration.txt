@@ -1,0 +1,4 @@
+  Line 46) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.body.EmptyMemberDeclaration, A)
+  Line 51) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.body.EmptyMemberDeclaration, A)
+  Line 56) getComment() ==> com.github.javaparser.ast.Node.getComment()
+  Line 57) getComment() ==> com.github.javaparser.ast.Node.getComment()

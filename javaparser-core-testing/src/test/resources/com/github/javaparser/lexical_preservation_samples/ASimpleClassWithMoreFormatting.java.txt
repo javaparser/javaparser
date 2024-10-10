@@ -1,0 +1,26 @@
+package com.github.javaparser.examples;
+
+
+/**
+ * A class with some uncommon formatting, to check the lexical preservation
+ */
+public class
+ASimpleClass
+{
+
+    boolean aField;
+
+    public ASimpleClass(boolean aField)
+    {
+        this.aField = aField;
+    }
+
+
+    // Some empty lines
+
+
+    public boolean getAField()
+    {
+        return aField;
+    }
+}

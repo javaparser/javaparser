@@ -1,0 +1,19 @@
+import java.util.Map;
+
+public class GenericsWildcard {
+
+    public static class Foo {
+        public String bar() {
+            return "";
+        }
+    }
+
+    public String unbounded(Map<String, ?> map) {
+        return map.get("").toString();
+    }
+
+    public String bounded(Map<String, ? extends Foo> map) {
+        return map.get("").bar();
+    }
+
+}

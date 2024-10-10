@@ -1,0 +1,3 @@
+  Line 29) typeSolver.solveType(qualifiedName) ==> com.github.javaparser.symbolsolver.model.resolution.TypeSolver.solveType(java.lang.String)
+  Line 30) typeDeclaration.getTypeParameters().isEmpty() ==> java.util.List.isEmpty()
+  Line 30) typeDeclaration.getTypeParameters() ==> com.github.javaparser.symbolsolver.model.declarations.TypeParametrizable.getTypeParameters()

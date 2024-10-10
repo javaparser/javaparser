@@ -1,0 +1,3 @@
+  Line 49) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.NameExpr, A)
+  Line 53) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.NameExpr, A)
+  Line 77) qualifiedName.split("\\.") ==> java.lang.String.split(java.lang.String)

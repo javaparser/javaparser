@@ -1,0 +1,17 @@
+
+[ Class com.github.javaparser.ast.type.Type ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 40) this.annotations = annotation ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 44) beginLine ==> int
+  Line 44) beginColumn ==> int
+  Line 44) endLine ==> int
+  Line 44) endColumn ==> int
+  Line 48) beginLine ==> int
+  Line 48) beginColumn ==> int
+  Line 48) endLine ==> int
+  Line 48) endColumn ==> int
+  Line 49) this.annotations = annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 53) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 57) this.annotations = annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>

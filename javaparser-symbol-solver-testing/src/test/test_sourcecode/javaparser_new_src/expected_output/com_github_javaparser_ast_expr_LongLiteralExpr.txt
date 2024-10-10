@@ -1,0 +1,7 @@
+  Line 49) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.LongLiteralExpr, A)
+  Line 53) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.LongLiteralExpr, A)
+  Line 58) value.length() ==> java.lang.String.length()
+  Line 59) //
+value.startsWith(UNSIGNED_MIN_VALUE) ==> java.lang.String.startsWith(java.lang.String)
+  Line 60) value.charAt(19) ==> java.lang.String.charAt(int)
+  Line 60) value.charAt(19) ==> java.lang.String.charAt(int)

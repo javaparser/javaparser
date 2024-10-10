@@ -1,0 +1,23 @@
+
+[ Class com.github.javaparser.ast.stmt.AssertStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 41) setCheck(check) ==> void
+  Line 45) setCheck(check) ==> void
+  Line 46) setMessage(msg) ==> void
+  Line 51) beginLine ==> int
+  Line 51) beginColumn ==> int
+  Line 51) endLine ==> int
+  Line 51) endColumn ==> int
+  Line 53) setCheck(check) ==> void
+  Line 54) setMessage(msg) ==> void
+  Line 59) v.visit(this, arg) ==> R
+  Line 63) v.visit(this, arg) ==> void
+  Line 67) check ==> com.github.javaparser.ast.expr.Expression
+  Line 71) msg ==> com.github.javaparser.ast.expr.Expression
+  Line 75) this.check = check ==> com.github.javaparser.ast.expr.Expression
+  Line 76) setAsParentNodeOf(this.check) ==> void
+  Line 80) this.msg = msg ==> com.github.javaparser.ast.expr.Expression
+  Line 81) setAsParentNodeOf(this.msg) ==> void

@@ -1,0 +1,79 @@
+
+[ Class com.github.javaparser.ASTHelper ]
+  superclass: java.lang.Object
+  Line 58) new PrimitiveType(Primitive.Byte) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 60) new PrimitiveType(Primitive.Short) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 62) new PrimitiveType(Primitive.Int) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 64) new PrimitiveType(Primitive.Long) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 66) new PrimitiveType(Primitive.Float) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 68) new PrimitiveType(Primitive.Double) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 70) new PrimitiveType(Primitive.Boolean) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 72) new PrimitiveType(Primitive.Char) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 74) new VoidType() ==> com.github.javaparser.ast.type.VoidType
+  Line 89) String[] split = qualifiedName.split("\\.") ==> java.lang.String[]
+  Line 89) qualifiedName.split("\\.") ==> java.lang.String[]
+  Line 90) NameExpr ret = new NameExpr(split[0]) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 90) new NameExpr(split[0]) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 91) int i = 1 ==> int
+  Line 91) 1 ==> int
+  Line 91) i < split.length ==> boolean
+  Line 91) i++ ==> int
+  Line 92) ret = new QualifiedNameExpr(ret, split[i]) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 94) ret ==> com.github.javaparser.ast.expr.NameExpr
+  Line 107) new Parameter(type, new VariableDeclaratorId(name)) ==> com.github.javaparser.ast.body.Parameter
+  Line 122) List<VariableDeclarator> variables = new ArrayList<VariableDeclarator>() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 122) new ArrayList<VariableDeclarator>() ==> java.util.ArrayList<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 123) variables.add(variable) ==> boolean
+  Line 124) FieldDeclaration ret = new FieldDeclaration(modifiers, type, variables) ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 124) new FieldDeclaration(modifiers, type, variables) ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 125) ret ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 140) VariableDeclaratorId id = new VariableDeclaratorId(name) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 140) new VariableDeclaratorId(name) ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 141) VariableDeclarator variable = new VariableDeclarator(id) ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 141) new VariableDeclarator(id) ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 142) createFieldDeclaration(modifiers, type, variable) ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 155) List<VariableDeclarator> vars = new ArrayList<VariableDeclarator>() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 155) new ArrayList<VariableDeclarator>() ==> java.util.ArrayList<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 156) vars.add(new VariableDeclarator(new VariableDeclaratorId(name))) ==> boolean
+  Line 157) new VariableDeclarationExpr(type, vars) ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 170) List<Parameter> parameters = method.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 170) method.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 171) parameters == null ==> boolean
+  Line 172) parameters = new ArrayList<Parameter>() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 173) method.setParameters(parameters) ==> void
+  Line 175) parameters.add(parameter) ==> boolean
+  Line 188) List<Expression> args = call.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 188) call.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 189) args == null ==> boolean
+  Line 190) args = new ArrayList<Expression>() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 191) call.setArgs(args) ==> void
+  Line 193) args.add(arg) ==> boolean
+  Line 206) List<TypeDeclaration> types = cu.getTypes() ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 206) cu.getTypes() ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 207) types == null ==> boolean
+  Line 208) types = new ArrayList<TypeDeclaration>() ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 209) cu.setTypes(types) ==> void
+  Line 211) types.add(type) ==> boolean
+  Line 225) new ReferenceType(new ClassOrInterfaceType(name), arrayCount) ==> com.github.javaparser.ast.type.ReferenceType
+  Line 238) new ReferenceType(type, arrayCount) ==> com.github.javaparser.ast.type.ReferenceType
+  Line 249) List<Statement> stmts = block.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 249) block.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 250) stmts == null ==> boolean
+  Line 251) stmts = new ArrayList<Statement>() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 252) block.setStmts(stmts) ==> void
+  Line 254) stmts.add(stmt) ==> boolean
+  Line 265) addStmt(block, new ExpressionStmt(expr)) ==> void
+  Line 278) List<BodyDeclaration> members = type.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 278) type.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 279) members == null ==> boolean
+  Line 280) members = new ArrayList<BodyDeclaration>() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 281) type.setMembers(members) ==> void
+  Line 283) members.add(decl) ==> boolean
+  Line 287) List<N> nodes = new ArrayList<N>() ==> java.util.List<N>
+  Line 287) new ArrayList<N>() ==> java.util.ArrayList<N>
+  Line 288) Node child ==> com.github.javaparser.ast.Node
+  Line 288) container.getChildrenNodes() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 289) clazz.isInstance(child) ==> boolean
+  Line 290) nodes.add(clazz.cast(child)) ==> boolean
+  Line 292) nodes.addAll(getNodesByType(child, clazz)) ==> boolean
+  Line 294) nodes ==> java.util.List<N>

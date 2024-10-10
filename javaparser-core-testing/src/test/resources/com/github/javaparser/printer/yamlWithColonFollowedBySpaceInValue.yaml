@@ -1,0 +1,4 @@
+---
+root(Type=StringLiteralExpr): 
+    value: "a\\\\: b"
+...

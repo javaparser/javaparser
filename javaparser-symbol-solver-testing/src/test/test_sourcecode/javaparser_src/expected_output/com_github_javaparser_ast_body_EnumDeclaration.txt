@@ -1,0 +1,38 @@
+
+[ Class com.github.javaparser.ast.body.EnumDeclaration ]
+  superclass: com.github.javaparser.ast.body.TypeDeclaration
+  superclass: com.github.javaparser.ast.body.BodyDeclaration
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.DocumentableNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  interface: com.github.javaparser.ast.NamedNode
+  Line 46) modifiers ==> int
+  Line 46) name ==> java.lang.String
+  Line 50) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 50) modifiers ==> int
+  Line 50) name ==> java.lang.String
+  Line 50) members ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 51) setImplements(implementsList) ==> void
+  Line 52) setEntries(entries) ==> void
+  Line 56) beginLine ==> int
+  Line 56) beginColumn ==> int
+  Line 56) endLine ==> int
+  Line 56) endColumn ==> int
+  Line 56) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 56) modifiers ==> int
+  Line 56) name ==> java.lang.String
+  Line 56) members ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 57) setImplements(implementsList) ==> void
+  Line 58) setEntries(entries) ==> void
+  Line 63) v.visit(this, arg) ==> R
+  Line 69) v.visit(this, arg) ==> void
+  Line 73) entries ==> java.util.List<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 77) implementsList ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 81) this.entries = entries ==> java.util.List<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 82) setAsParentNodeOf(this.entries) ==> void
+  Line 86) this.implementsList = implementsList ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 87) setAsParentNodeOf(this.implementsList) ==> void
+  Line 92) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 97) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

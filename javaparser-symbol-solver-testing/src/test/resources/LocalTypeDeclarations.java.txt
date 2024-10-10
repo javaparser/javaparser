@@ -1,0 +1,14 @@
+class Foo {
+
+    void bar(){
+        int a;
+        Integer b;
+        Class<Integer> c;
+        Class<? super Integer> d;
+        Class<? extends Integer> e;
+        Class<? extends Class<? super Class<? extends Integer>>> f;
+        Class<? super Class<? extends Class<? super Integer>>> g;
+        a;b;c;d;e;f;g;
+    }
+
+}

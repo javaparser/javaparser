@@ -1,0 +1,33 @@
+class GenericMethodArguments {
+
+    static class Items<T> {
+        public <Output extends T> Output apply(Transform<? super Items<T>, Output> t) {
+            return null;
+        }
+    }
+
+    static class Transforms {
+        public static <I, O> Transform<I, O> of(DoFn<I, O> fn) {
+            return null;
+        }
+    }
+
+    static class Transform<Input, Output> {}
+
+    static class DoFn<Input, Output> {}
+
+    static class MyFn1<T> extends DoFn<T, Long> {}
+
+    static class MyFn2 extends MyFn1<Integer> {}
+
+    private Items<Integer> items;
+
+    public void useCase1() {
+        items.apply(Transforms.of(new MyFn2()));
+    }
+
+    public void useCase2() {
+        items.apply(Transforms.of(new DoFn<Integer,Long>(){}));
+    }
+
+}

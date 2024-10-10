@@ -1,0 +1,95 @@
+
+[ Class com.github.javaparser.ast.Node ]
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 52) new LinkedList<Node>() ==> java.util.LinkedList<com.github.javaparser.ast.Node>
+  Line 53) new LinkedList<Comment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.Comment>
+  Line 66) this.beginLine = beginLine ==> int
+  Line 67) this.beginColumn = beginColumn ==> int
+  Line 68) this.endLine = endLine ==> int
+  Line 69) this.endColumn = endColumn ==> int
+  Line 105) beginColumn ==> int
+  Line 114) beginLine ==> int
+  Line 123) comment ==> com.github.javaparser.ast.comments.Comment
+  Line 132) data ==> java.lang.Object
+  Line 141) endColumn ==> int
+  Line 150) endLine ==> int
+  Line 160) this.beginColumn = beginColumn ==> int
+  Line 170) this.beginLine = beginLine ==> int
+  Line 179) comment != null && (this instanceof Comment) ==> boolean
+  Line 180) new RuntimeException("A comment can not be commented") ==> java.lang.RuntimeException
+  Line 182) this.comment != null ==> boolean
+  Line 184) this.comment.setCommentedNode(null) ==> void
+  Line 186) this.comment = comment ==> com.github.javaparser.ast.comments.Comment
+  Line 187) comment != null ==> boolean
+  Line 188) this.comment.setCommentedNode(this) ==> void
+  Line 198) this.data = data ==> java.lang.Object
+  Line 208) this.endColumn = endColumn ==> int
+  Line 218) this.endLine = endLine ==> int
+  Line 228) final DumpVisitor visitor = new DumpVisitor() ==> com.github.javaparser.ast.visitor.DumpVisitor
+  Line 228) new DumpVisitor() ==> com.github.javaparser.ast.visitor.DumpVisitor
+  Line 229) accept(visitor, null) ==> void
+  Line 230) visitor.getSource() ==> java.lang.String
+  Line 234) final DumpVisitor visitor = new DumpVisitor(false) ==> com.github.javaparser.ast.visitor.DumpVisitor
+  Line 234) new DumpVisitor(false) ==> com.github.javaparser.ast.visitor.DumpVisitor
+  Line 235) accept(visitor, null) ==> void
+  Line 236) visitor.getSource() ==> java.lang.String
+  Line 241) toString().hashCode() ==> int
+  Line 246) obj == null || !(obj instanceof Node) ==> boolean
+  Line 247) false ==> boolean
+  Line 249) EqualsVisitor.equals(this, (Node) obj) ==> boolean
+  Line 254) this.accept(new CloneVisitor(), null) ==> com.github.javaparser.ast.Node
+  Line 258) parentNode ==> com.github.javaparser.ast.Node
+  Line 262) childrenNodes ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 266) getBeginLine() > other.getBeginLine() ==> boolean
+  Line 266) false ==> boolean
+  Line 267) getBeginLine() == other.getBeginLine() && getBeginColumn() > other.getBeginColumn() ==> boolean
+  Line 267) false ==> boolean
+  Line 268) getEndLine() < other.getEndLine() ==> boolean
+  Line 268) false ==> boolean
+  Line 269) getEndLine() == other.getEndLine() && getEndColumn() < other.getEndColumn() ==> boolean
+  Line 269) false ==> boolean
+  Line 270) true ==> boolean
+  Line 274) orphanComments.add(comment) ==> boolean
+  Line 275) comment.setParentNode(this) ==> void
+  Line 290) orphanComments ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 300) List<Comment> comments = new LinkedList<Comment>() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 300) new LinkedList<Comment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.Comment>
+  Line 301) comments.addAll(getOrphanComments()) ==> boolean
+  Line 303) Node child ==> com.github.javaparser.ast.Node
+  Line 303) getChildrenNodes() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 304) child.getComment() != null ==> boolean
+  Line 305) comments.add(child.getComment()) ==> boolean
+  Line 307) comments.addAll(child.getAllContainedComments()) ==> boolean
+  Line 310) comments ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 321) this.parentNode != null ==> boolean
+  Line 322) this.parentNode.childrenNodes.remove(this) ==> boolean
+  Line 324) this.parentNode = parentNode ==> com.github.javaparser.ast.Node
+  Line 326) this.parentNode != null ==> boolean
+  Line 327) this.parentNode.childrenNodes.add(this) ==> boolean
+  Line 332) childNodes != null ==> boolean
+  Line 333) Iterator<? extends Node> it = childNodes.iterator() ==> java.util.Iterator<? extends com.github.javaparser.ast.Node>
+  Line 333) childNodes.iterator() ==> java.util.Iterator<? extends com.github.javaparser.ast.Node>
+  Line 334) it.hasNext() ==> boolean
+  Line 335) Node current = it.next() ==> com.github.javaparser.ast.Node
+  Line 335) it.next() ==> ? extends com.github.javaparser.ast.Node
+  Line 336) current.setParentNode(this) ==> void
+  Line 342) childNode != null ==> boolean
+  Line 343) childNode.setParentNode(this) ==> void
+  Line 347) -1 ==> int
+  Line 348) -2 ==> int
+  Line 351) line == ABSOLUTE_BEGIN_LINE ==> boolean
+  Line 351) true ==> boolean
+  Line 352) getBeginLine() > line ==> boolean
+  Line 353) true ==> boolean
+  Line 354) getBeginLine() == line ==> boolean
+  Line 355) getBeginColumn() > column ==> boolean
+  Line 357) false ==> boolean
+  Line 362) line == ABSOLUTE_END_LINE ==> boolean
+  Line 362) true ==> boolean
+  Line 363) getEndLine() < line ==> boolean
+  Line 364) true ==> boolean
+  Line 365) getEndLine() == line ==> boolean
+  Line 366) getEndColumn() < column ==> boolean
+  Line 368) false ==> boolean
+  Line 374) comment != null ==> boolean

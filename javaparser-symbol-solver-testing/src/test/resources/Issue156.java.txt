@@ -1,0 +1,9 @@
+public class Issue156 {
+    String myField;
+
+    class Inner {
+        void foo() {
+            Issue156.this.myField.charAt(0);
+       }
+    }
+}

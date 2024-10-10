@@ -1,0 +1,4 @@
+package another;
+
+interface A {
+}

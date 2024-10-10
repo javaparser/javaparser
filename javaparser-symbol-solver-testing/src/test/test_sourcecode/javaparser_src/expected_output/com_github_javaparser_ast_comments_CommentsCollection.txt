@@ -1,0 +1,39 @@
+
+[ Class com.github.javaparser.ast.comments.CommentsCollection ]
+  superclass: java.lang.Object
+  Line 31) new LinkedList<LineComment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.LineComment>
+  Line 32) new LinkedList<BlockComment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.BlockComment>
+  Line 33) new LinkedList<JavadocComment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.JavadocComment>
+  Line 36) lineComments ==> java.util.List<com.github.javaparser.ast.comments.LineComment>
+  Line 40) blockComments ==> java.util.List<com.github.javaparser.ast.comments.BlockComment>
+  Line 44) javadocComments ==> java.util.List<com.github.javaparser.ast.comments.JavadocComment>
+  Line 48) this.lineComments.add(lineComment) ==> boolean
+  Line 52) this.blockComments.add(blockComment) ==> boolean
+  Line 56) this.javadocComments.add(javadocComment) ==> boolean
+  Line 60) Comment c ==> com.github.javaparser.ast.comments.Comment
+  Line 60) getAll() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 63) c.getBeginLine() == comment.getBeginLine() && c.getBeginColumn() == comment.getBeginColumn() && c.getEndLine() == comment.getEndLine() && Math.abs(c.getEndColumn() - comment.getEndColumn()) < 2 ==> boolean
+  Line 67) true ==> boolean
+  Line 70) false ==> boolean
+  Line 74) List<Comment> comments = new LinkedList<Comment>() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 74) new LinkedList<Comment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.Comment>
+  Line 75) comments.addAll(lineComments) ==> boolean
+  Line 76) comments.addAll(blockComments) ==> boolean
+  Line 77) comments.addAll(javadocComments) ==> boolean
+  Line 78) comments ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 82) lineComments.size() + blockComments.size() + javadocComments.size() ==> int
+  Line 86) CommentsCollection result = new CommentsCollection() ==> com.github.javaparser.ast.comments.CommentsCollection
+  Line 86) new CommentsCollection() ==> com.github.javaparser.ast.comments.CommentsCollection
+  Line 87) LineComment comment ==> com.github.javaparser.ast.comments.LineComment
+  Line 87) lineComments ==> java.util.List<com.github.javaparser.ast.comments.LineComment>
+  Line 88) !other.contains(comment) ==> boolean
+  Line 89) result.lineComments.add(comment) ==> boolean
+  Line 92) BlockComment comment ==> com.github.javaparser.ast.comments.BlockComment
+  Line 92) blockComments ==> java.util.List<com.github.javaparser.ast.comments.BlockComment>
+  Line 93) !other.contains(comment) ==> boolean
+  Line 94) result.blockComments.add(comment) ==> boolean
+  Line 97) JavadocComment comment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 97) javadocComments ==> java.util.List<com.github.javaparser.ast.comments.JavadocComment>
+  Line 98) !other.contains(comment) ==> boolean
+  Line 99) result.javadocComments.add(comment) ==> boolean
+  Line 102) result ==> com.github.javaparser.ast.comments.CommentsCollection

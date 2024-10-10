@@ -1,0 +1,9 @@
+class ArrayAccess {
+
+	private String[] array;
+
+	private char access() {
+		return array[0].trim();
+	}
+
+}

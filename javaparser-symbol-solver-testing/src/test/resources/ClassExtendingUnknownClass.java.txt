@@ -1,0 +1,20 @@
+import com.third.party.library.UnknownClass;
+
+public class ClassExtendingUnknownClass extends UnknownClass {
+
+    private int foo;
+
+    public int getFoo() {
+        return foo;
+    }
+
+    public int getFoo2() {
+        return this.foo;
+    }
+
+    public void foo(String s) {
+        bar(s);
+    }
+
+    public void bar(String s) {}
+}

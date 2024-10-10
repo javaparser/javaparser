@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.stmt.SwitchEntryStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 43) setLabel(label) ==> void
+  Line 44) setStmts(stmts) ==> void
+  Line 50) beginLine ==> int
+  Line 50) beginColumn ==> int
+  Line 50) endLine ==> int
+  Line 50) endColumn ==> int
+  Line 51) setLabel(label) ==> void
+  Line 52) setStmts(stmts) ==> void
+  Line 57) v.visit(this, arg) ==> R
+  Line 62) v.visit(this, arg) ==> void
+  Line 66) label ==> com.github.javaparser.ast.expr.Expression
+  Line 70) stmts ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 74) this.label = label ==> com.github.javaparser.ast.expr.Expression
+  Line 75) setAsParentNodeOf(this.label) ==> void
+  Line 79) this.stmts = stmts ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 80) setAsParentNodeOf(this.stmts) ==> void

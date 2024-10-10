@@ -1,0 +1,155 @@
+
+[ Class com.github.javaparser.JavaParser ]
+  superclass: java.lang.Object
+  Line 68) true ==> boolean
+  Line 70) false ==> boolean
+  Line 74) _doNotConsiderAnnotationsAsNodeStartForCodeAttribution ==> boolean
+  Line 78) _doNotConsiderAnnotationsAsNodeStartForCodeAttribution = doNotConsiderAnnotationsAsNodeStartForCodeAttribution ==> boolean
+  Line 83) _doNotAssignCommentsPreceedingEmptyLines ==> boolean
+  Line 88) _doNotAssignCommentsPreceedingEmptyLines = doNotAssignCommentsPreceedingEmptyLines ==> boolean
+  Line 93) parse(in, encoding, true) ==> com.github.javaparser.ast.CompilationUnit
+  Line 111) String code = SourcesHelper.streamToString(in, encoding) ==> java.lang.String
+  Line 111) SourcesHelper.streamToString(in, encoding) ==> java.lang.String
+  Line 112) InputStream in1 = SourcesHelper.stringToStream(code, encoding) ==> java.io.InputStream
+  Line 112) SourcesHelper.stringToStream(code, encoding) ==> java.io.InputStream
+  Line 113) CompilationUnit cu = new ASTParser(in1, encoding).CompilationUnit() ==> com.github.javaparser.ast.CompilationUnit
+  Line 113) new ASTParser(in1, encoding).CompilationUnit() ==> com.github.javaparser.ast.CompilationUnit
+  Line 114) considerComments ==> boolean
+  Line 115) insertComments(cu, code) ==> void
+  Line 117) cu ==> com.github.javaparser.ast.CompilationUnit
+  Line 119) new ParseException(ioe.getMessage()) ==> com.github.javaparser.ParseException
+  Line 135) parse(in, null, true) ==> com.github.javaparser.ast.CompilationUnit
+  Line 140) parse(file, encoding, true) ==> com.github.javaparser.ast.CompilationUnit
+  Line 158) final FileInputStream in = new FileInputStream(file) ==> java.io.FileInputStream
+  Line 158) new FileInputStream(file) ==> java.io.FileInputStream
+  Line 160) parse(in, encoding, considerComments) ==> com.github.javaparser.ast.CompilationUnit
+  Line 162) in.close() ==> void
+  Line 179) parse(file, null, true) ==> com.github.javaparser.ast.CompilationUnit
+  Line 185) String code = SourcesHelper.readerToString(reader) ==> java.lang.String
+  Line 185) SourcesHelper.readerToString(reader) ==> java.lang.String
+  Line 186) Reader reader1 = SourcesHelper.stringToReader(code) ==> java.io.Reader
+  Line 186) SourcesHelper.stringToReader(code) ==> java.io.Reader
+  Line 187) CompilationUnit cu = new ASTParser(reader1).CompilationUnit() ==> com.github.javaparser.ast.CompilationUnit
+  Line 187) new ASTParser(reader1).CompilationUnit() ==> com.github.javaparser.ast.CompilationUnit
+  Line 188) considerComments ==> boolean
+  Line 189) insertComments(cu, code) ==> void
+  Line 191) cu ==> com.github.javaparser.ast.CompilationUnit
+  Line 193) new ParseException(ioe.getMessage()) ==> com.github.javaparser.ParseException
+  Line 209) StringReader sr = new StringReader(blockStatement) ==> java.io.StringReader
+  Line 209) new StringReader(blockStatement) ==> java.io.StringReader
+  Line 210) BlockStmt result = new ASTParser(sr).Block() ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 210) new ASTParser(sr).Block() ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 211) sr.close() ==> void
+  Line 212) result ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 226) StringReader sr = new StringReader(statement) ==> java.io.StringReader
+  Line 226) new StringReader(statement) ==> java.io.StringReader
+  Line 227) Statement stmt = new ASTParser(sr).Statement() ==> com.github.javaparser.ast.stmt.Statement
+  Line 227) new ASTParser(sr).Statement() ==> com.github.javaparser.ast.stmt.Statement
+  Line 228) sr.close() ==> void
+  Line 229) stmt ==> com.github.javaparser.ast.stmt.Statement
+  Line 243) StringReader sr = new StringReader(importDeclaration) ==> java.io.StringReader
+  Line 243) new StringReader(importDeclaration) ==> java.io.StringReader
+  Line 244) ImportDeclaration id = new ASTParser(sr).ImportDeclaration() ==> com.github.javaparser.ast.ImportDeclaration
+  Line 244) new ASTParser(sr).ImportDeclaration() ==> com.github.javaparser.ast.ImportDeclaration
+  Line 245) sr.close() ==> void
+  Line 246) id ==> com.github.javaparser.ast.ImportDeclaration
+  Line 260) StringReader sr = new StringReader(expression) ==> java.io.StringReader
+  Line 260) new StringReader(expression) ==> java.io.StringReader
+  Line 261) Expression e = new ASTParser(sr).Expression() ==> com.github.javaparser.ast.expr.Expression
+  Line 261) new ASTParser(sr).Expression() ==> com.github.javaparser.ast.expr.Expression
+  Line 262) sr.close() ==> void
+  Line 263) e ==> com.github.javaparser.ast.expr.Expression
+  Line 277) StringReader sr = new StringReader(annotation) ==> java.io.StringReader
+  Line 277) new StringReader(annotation) ==> java.io.StringReader
+  Line 278) AnnotationExpr ae = new ASTParser(sr).Annotation() ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 278) new ASTParser(sr).Annotation() ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 279) sr.close() ==> void
+  Line 280) ae ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 294) StringReader sr = new StringReader(body) ==> java.io.StringReader
+  Line 294) new StringReader(body) ==> java.io.StringReader
+  Line 295) BodyDeclaration bd = new ASTParser(sr).AnnotationBodyDeclaration() ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 295) new ASTParser(sr).AnnotationBodyDeclaration() ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 296) sr.close() ==> void
+  Line 297) bd ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 305) commentsCollection.size() == 0 ==> boolean
+  Line 312) List<Comment> comments = commentsCollection.getAll() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 312) commentsCollection.getAll() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 313) PositionUtils.sortByBeginPosition(comments) ==> void
+  Line 314) List<Node> children = cu.getChildrenNodes() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 314) cu.getChildrenNodes() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 315) PositionUtils.sortByBeginPosition(children) ==> void
+  Line 317) cu.getPackage() != null && (children.size() == 0 || PositionUtils.areInOrder(comments.get(0), children.get(0))) ==> boolean
+  Line 318) cu.setComment(comments.get(0)) ==> void
+  Line 319) comments.remove(0) ==> com.github.javaparser.ast.comments.Comment
+  Line 322) insertCommentsInNode(cu, comments) ==> void
+  Line 329) node.getBeginLine() == lineComment.getBeginLine() && !node.hasComment() ==> boolean
+  Line 331) node.setComment(lineComment) ==> void
+  Line 332) true ==> boolean
+  Line 336) List<Node> children = new LinkedList<Node>() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 336) new LinkedList<Node>() ==> java.util.LinkedList<com.github.javaparser.ast.Node>
+  Line 337) children.addAll(node.getChildrenNodes()) ==> boolean
+  Line 338) PositionUtils.sortByBeginPosition(children) ==> void
+  Line 339) Collections.reverse(children) ==> void
+  Line 341) Node child ==> com.github.javaparser.ast.Node
+  Line 341) children ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 343) attributeLineCommentToNodeOrChild(child, lineComment) ==> boolean
+  Line 345) true ==> boolean
+  Line 349) false ==> boolean
+  Line 358) commentsToAttribute.size() == 0 ==> boolean
+  Line 365) List<Node> children = node.getChildrenNodes() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 365) node.getChildrenNodes() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 366) PositionUtils.sortByBeginPosition(children) ==> void
+  Line 368) Node child ==> com.github.javaparser.ast.Node
+  Line 368) children ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 369) List<Comment> commentsInsideChild = new LinkedList<Comment>() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 369) new LinkedList<Comment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.Comment>
+  Line 370) Comment c ==> com.github.javaparser.ast.comments.Comment
+  Line 370) commentsToAttribute ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 371) PositionUtils.nodeContains(child, c, _doNotConsiderAnnotationsAsNodeStartForCodeAttribution) ==> boolean
+  Line 372) commentsInsideChild.add(c) ==> boolean
+  Line 375) commentsToAttribute.removeAll(commentsInsideChild) ==> boolean
+  Line 376) insertCommentsInNode(child, commentsInsideChild) ==> void
+  Line 381) List<Comment> attributedComments = new LinkedList<Comment>() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 381) new LinkedList<Comment>() ==> java.util.LinkedList<com.github.javaparser.ast.comments.Comment>
+  Line 382) Comment comment ==> com.github.javaparser.ast.comments.Comment
+  Line 382) commentsToAttribute ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 384) comment.isLineComment() ==> boolean
+  Line 386) Node child ==> com.github.javaparser.ast.Node
+  Line 386) children ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 388) child.getEndLine() == comment.getBeginLine() ==> boolean
+  Line 390) attributeLineCommentToNodeOrChild(child, comment.asLineComment()) ==> boolean
+  Line 392) attributedComments.add(comment) ==> boolean
+  Line 400) Comment previousComment = null ==> com.github.javaparser.ast.comments.Comment
+  Line 400) null ==> null
+  Line 401) attributedComments = new LinkedList<Comment>() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 402) List<Node> childrenAndComments = new LinkedList<Node>() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 402) new LinkedList<Node>() ==> java.util.LinkedList<com.github.javaparser.ast.Node>
+  Line 403) childrenAndComments.addAll(children) ==> boolean
+  Line 404) childrenAndComments.addAll(commentsToAttribute) ==> boolean
+  Line 405) PositionUtils.sortByBeginPosition(childrenAndComments, _doNotConsiderAnnotationsAsNodeStartForCodeAttribution) ==> void
+  Line 407) Node thing ==> com.github.javaparser.ast.Node
+  Line 407) childrenAndComments ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 408) thing instanceof Comment ==> boolean
+  Line 409) previousComment = (Comment) thing ==> com.github.javaparser.ast.comments.Comment
+  Line 410) !previousComment.isOrphan() ==> boolean
+  Line 412) previousComment = null ==> com.github.javaparser.ast.comments.Comment
+  Line 415) previousComment != null && !thing.hasComment() ==> boolean
+  Line 416) !_doNotAssignCommentsPreceedingEmptyLines || !thereAreLinesBetween(previousComment, thing) ==> boolean
+  Line 417) thing.setComment(previousComment) ==> void
+  Line 418) attributedComments.add(previousComment) ==> boolean
+  Line 419) previousComment = null ==> com.github.javaparser.ast.comments.Comment
+  Line 425) commentsToAttribute.removeAll(attributedComments) ==> boolean
+  Line 428) Comment c ==> com.github.javaparser.ast.comments.Comment
+  Line 428) commentsToAttribute ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 429) c.isOrphan() ==> boolean
+  Line 430) node.addOrphanComment(c) ==> void
+  Line 437) !PositionUtils.areInOrder(a, b) ==> boolean
+  Line 439) thereAreLinesBetween(b, a) ==> boolean
+  Line 441) int endOfA = a.getEndLine() ==> int
+  Line 441) a.getEndLine() ==> int
+  Line 442) b.getBeginLine() > (a.getEndLine() + 1) ==> boolean
+  Line 446) CommentsParser commentsParser = new CommentsParser() ==> com.github.javaparser.ast.comments.CommentsParser
+  Line 446) new CommentsParser() ==> com.github.javaparser.ast.comments.CommentsParser
+  Line 447) CommentsCollection allComments = commentsParser.parse(code) ==> com.github.javaparser.ast.comments.CommentsCollection
+  Line 447) commentsParser.parse(code) ==> com.github.javaparser.ast.comments.CommentsCollection
+  Line 449) insertCommentsInCu(cu, allComments) ==> void

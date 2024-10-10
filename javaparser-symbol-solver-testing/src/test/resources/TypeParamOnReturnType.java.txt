@@ -1,0 +1,15 @@
+public interface GenericVisitor<R, A> {
+
+}
+
+class Node {
+    public abstract <R, A> R accept(GenericVisitor<R, A> v, A arg);
+}
+
+class TypeParamOnReturnType implements GenericVisitor<Boolean, Node> {
+
+	private <T extends Node> boolean nodeEquals(final T n1, final T n2) {
+		return n1.accept(this, n2).booleanValue();
+	}
+
+}

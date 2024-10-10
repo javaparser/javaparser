@@ -1,0 +1,6 @@
+  Line 22) getImplements().add(classOrInterfaceType) ==> java.util.List.add(E)
+  Line 22) getImplements() ==> com.github.javaparser.ast.nodeTypes.NodeWithImplements.getImplements()
+  Line 23) classOrInterfaceType.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)
+  Line 34) ((Node) this).tryAddImportToParentCompilationUnit(clazz) ==> com.github.javaparser.ast.Node.tryAddImportToParentCompilationUnit(java.lang.Class<?>)
+  Line 35) addImplements(clazz.getSimpleName()) ==> com.github.javaparser.ast.nodeTypes.NodeWithImplements.addImplements(java.lang.String)
+  Line 35) clazz.getSimpleName() ==> java.lang.Class.getSimpleName()

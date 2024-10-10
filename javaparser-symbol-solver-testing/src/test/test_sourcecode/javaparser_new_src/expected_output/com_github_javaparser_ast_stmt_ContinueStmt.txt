@@ -1,0 +1,2 @@
+  Line 48) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.stmt.ContinueStmt, A)
+  Line 52) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.stmt.ContinueStmt, A)

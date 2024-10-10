@@ -1,0 +1,55 @@
+/**
+ * Created by federico on 02/08/15.
+ */
+public class OverloadedMethods {
+
+    public void overloaded(Object o){
+
+    }
+
+    public void overloaded(String o){
+
+    }
+
+    public void m1(){
+        overloaded(null);
+    }
+
+    public void m2(){
+        String s = null;
+        overloaded(s);
+    }
+
+    public void m3(){
+        Object o = null;
+        overloaded(o);
+    }
+
+    public void complexOverloading1(String... s) {}
+    public void complexOverloading1(String s1, String s2) {}
+
+    public void testComplex1() {
+        complexOverloading1("a", "b");
+    }
+
+    public void complexOverloading2(String... s) {}
+    public void complexOverloading2(String s1, String s2, Object s3) {}
+
+    public void testComplex2() {
+        complexOverloading2("a", "b");
+    }
+
+    public void complexOverloading3(Integer i) {}
+    public void complexOverloading3(long l) {}
+
+    public void testComplex3() {
+        complexOverloading3(1);
+    }
+
+    public void complexOverloading4(long l, int i) {}
+    public void complexOverloading4(int i, int... is) {}
+
+    public void testComplex4() {
+        complexOverloading4(1, 2);
+    }
+}

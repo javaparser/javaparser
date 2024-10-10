@@ -1,0 +1,39 @@
+class Super {
+    protected boolean k;
+    public static char m;
+}
+
+interface SuperSuperInterface {
+    public int o;
+}
+
+interface SuperInterface extends SuperSuperInterface {
+    public int p;
+}
+
+class A extends Super implements SuperInterface {
+
+    private int i;
+    private static long j;
+
+    public void foo1(){
+        return i;
+    }
+
+    public void foo2(){
+        return j;
+    }
+
+    public void foo3(){
+        return k;
+    }
+
+    public void foo4(){
+        return m;
+    }
+
+    public void foo5(){
+        return o;
+    }
+
+}

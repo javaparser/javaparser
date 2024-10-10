@@ -1,0 +1,9 @@
+import java.util.EnumSet;
+
+class ClassExpression {
+
+	private void foo() {
+		EnumSet.noneOf(java.util.Locale.Category.class);
+	}
+
+}

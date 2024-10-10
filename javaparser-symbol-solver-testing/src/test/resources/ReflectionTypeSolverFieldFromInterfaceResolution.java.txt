@@ -1,0 +1,7 @@
+import javax.swing.JDialog;
+
+public class Test {
+    public int foo() {
+        return JDialog.DISPOSE_ON_CLOSE;
+    }
+}

@@ -1,0 +1,13 @@
+class MyClass {
+    public enum EnumPublic {
+    }
+
+    protected enum EnumProtected {
+    }
+
+    private enum EnumPrivate {
+    }
+
+    enum EnumDefault {
+    }
+}

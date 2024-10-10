@@ -1,0 +1,4 @@
+  Line 43) setAnnotations(annotations) ==> com.github.javaparser.ast.body.BodyDeclaration.setAnnotations(java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>)
+  Line 48) setAnnotations(annotations) ==> com.github.javaparser.ast.body.BodyDeclaration.setAnnotations(java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>)
+  Line 53) Utils.ensureNotNull(annotations) ==> com.github.javaparser.utils.Utils.ensureNotNull(java.util.List<T>)
+  Line 66) setAsParentNodeOf(this.annotations) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(java.util.List<? extends com.github.javaparser.ast.Node>)

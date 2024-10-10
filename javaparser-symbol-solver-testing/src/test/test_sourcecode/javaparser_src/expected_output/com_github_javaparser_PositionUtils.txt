@@ -1,0 +1,68 @@
+
+[ Class com.github.javaparser.PositionUtils ]
+  superclass: java.lang.Object
+  Line 46) sortByBeginPosition(nodes, false) ==> void
+  Line 50) Collections.sort(nodes, new Comparator<Node>() {
+
+    @Override
+    public int compare(Node o1, Node o2) {
+        return PositionUtils.compare(o1, o2, ignoringAnnotations);
+    }
+}) ==> void
+  Line 53) PositionUtils.compare(o1, o2, ignoringAnnotations) ==> int
+  Line 59) areInOrder(a, b, false) ==> boolean
+  Line 63) compare(a, b, ignoringAnnotations) <= 0 ==> boolean
+  Line 67) ignoringAnnotations ==> boolean
+  Line 68) int signLine = signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b)) ==> int
+  Line 68) signum(beginLineWithoutConsideringAnnotation(a) - beginLineWithoutConsideringAnnotation(b)) ==> int
+  Line 69) signLine == 0 ==> boolean
+  Line 70) signum(beginColumnWithoutConsideringAnnotation(a) - beginColumnWithoutConsideringAnnotation(b)) ==> int
+  Line 72) signLine ==> int
+  Line 76) int signLine = signum(a.getBeginLine() - b.getBeginLine()) ==> int
+  Line 76) signum(a.getBeginLine() - b.getBeginLine()) ==> int
+  Line 77) signLine == 0 ==> boolean
+  Line 78) signum(a.getBeginColumn() - b.getBeginColumn()) ==> int
+  Line 80) signLine ==> int
+  Line 85) node instanceof AnnotableNode ==> boolean
+  Line 86) List<AnnotationExpr> annotations = new LinkedList<AnnotationExpr>() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 86) new LinkedList<AnnotationExpr>() ==> java.util.LinkedList<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 87) annotations.addAll(((AnnotableNode) node).getAnnotations()) ==> boolean
+  Line 88) annotations.size() == 0 ==> boolean
+  Line 89) null ==> null
+  Line 91) sortByBeginPosition(annotations) ==> void
+  Line 92) annotations.get(annotations.size() - 1) ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 94) null ==> null
+  Line 99) beginNodeWithoutConsideringAnnotations(node).getBeginLine() ==> int
+  Line 104) beginNodeWithoutConsideringAnnotations(node).getBeginColumn() ==> int
+  Line 108) node instanceof MethodDeclaration ==> boolean
+  Line 109) MethodDeclaration casted = (MethodDeclaration) node ==> com.github.javaparser.ast.body.MethodDeclaration
+  Line 109) (MethodDeclaration) node ==> com.github.javaparser.ast.body.MethodDeclaration
+  Line 110) casted.getType() ==> com.github.javaparser.ast.type.Type
+  Line 111) node instanceof FieldDeclaration ==> boolean
+  Line 112) FieldDeclaration casted = (FieldDeclaration) node ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 112) (FieldDeclaration) node ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 113) casted.getType() ==> com.github.javaparser.ast.type.Type
+  Line 114) node instanceof ClassOrInterfaceDeclaration ==> boolean
+  Line 115) ClassOrInterfaceDeclaration casted = (ClassOrInterfaceDeclaration) node ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+  Line 115) (ClassOrInterfaceDeclaration) node ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+  Line 116) casted.getNameExpr() ==> com.github.javaparser.ast.expr.NameExpr
+  Line 118) node ==> com.github.javaparser.ast.Node
+  Line 123) !ignoringAnnotations || PositionUtils.getLastAnnotation(container) == null ==> boolean
+  Line 124) container.contains(contained) ==> boolean
+  Line 126) !container.contains(contained) ==> boolean
+  Line 127) false ==> boolean
+  Line 131) container instanceof AnnotableNode ==> boolean
+  Line 132) int bl = beginLineWithoutConsideringAnnotation(container) ==> int
+  Line 132) beginLineWithoutConsideringAnnotation(container) ==> int
+  Line 133) int bc = beginColumnWithoutConsideringAnnotation(container) ==> int
+  Line 133) beginColumnWithoutConsideringAnnotation(container) ==> int
+  Line 134) bl > contained.getBeginLine() ==> boolean
+  Line 134) false ==> boolean
+  Line 135) bl == contained.getBeginLine() && bc > contained.getBeginColumn() ==> boolean
+  Line 135) false ==> boolean
+  Line 136) container.getEndLine() < contained.getEndLine() ==> boolean
+  Line 136) false ==> boolean
+  Line 137) container.getEndLine() == contained.getEndLine() && container.getEndColumn() < contained.getEndColumn() ==> boolean
+  Line 137) false ==> boolean
+  Line 138) true ==> boolean
+  Line 140) true ==> boolean

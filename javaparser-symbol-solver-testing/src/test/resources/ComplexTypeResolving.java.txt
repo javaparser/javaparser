@@ -1,0 +1,23 @@
+public class Main {
+	public class ResolveMe {
+		public String s = "correct";
+	}
+
+	class Child extends ParentClass {
+		void foo() {
+			ResolveMe x = new ResolveMe();
+		}
+	}
+}
+
+class ParentClass extends SuperParentClass {
+	private class ResolveMe {
+		public String s = "incorrect";
+	}
+}
+
+class SuperParentClass {
+	public class ResolveMe {
+		public String s = "also incorrect";
+	}
+}

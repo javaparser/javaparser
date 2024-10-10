@@ -1,0 +1,23 @@
+import java.util.*;
+import java.util.stream.*;
+
+public class JavaTest {
+
+    public void foo(){
+        List<String> myList = Arrays.asList("a1", "a2", "b1", "c2", "c1");
+
+        Stream<String> myStream = myList.stream();
+
+        myStream.map(s -> s + ":)")
+        	        .filter(s -> s.length()>1)
+        		    .flatMap(s -> Arrays.stream(s.split("")));
+    }
+
+    public void bar(){
+        Stream<String> myStream;
+        myStream.filter(s -> s.contains("Hamlet"))
+            .map(l -> l.length())
+            .filter(s -> s > 15)
+            .count();
+    }
+}

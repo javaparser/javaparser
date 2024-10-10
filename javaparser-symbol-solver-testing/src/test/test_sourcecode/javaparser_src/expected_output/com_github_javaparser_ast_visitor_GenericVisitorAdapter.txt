@@ -1,0 +1,836 @@
+
+[ Class com.github.javaparser.ast.visitor.GenericVisitorAdapter ]
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.visitor.GenericVisitor
+  Line 80) n.getJavaDoc() != null ==> boolean
+  Line 82) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 82) n.getJavaDoc().accept(this, arg) ==> R
+  Line 83) result != null ==> boolean
+  Line 84) result ==> R
+  Line 88) n.getAnnotations() != null ==> boolean
+  Line 89) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 89) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 91) R result = a.accept(this, arg) ==> R
+  Line 91) a.accept(this, arg) ==> R
+  Line 92) result != null ==> boolean
+  Line 93) result ==> R
+  Line 98) n.getMembers() != null ==> boolean
+  Line 99) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 99) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 101) R result = member.accept(this, arg) ==> R
+  Line 101) member.accept(this, arg) ==> R
+  Line 102) result != null ==> boolean
+  Line 103) result ==> R
+  Line 108) null ==> null
+  Line 113) n.getJavaDoc() != null ==> boolean
+  Line 115) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 115) n.getJavaDoc().accept(this, arg) ==> R
+  Line 116) result != null ==> boolean
+  Line 117) result ==> R
+  Line 121) n.getAnnotations() != null ==> boolean
+  Line 122) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 122) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 124) R result = a.accept(this, arg) ==> R
+  Line 124) a.accept(this, arg) ==> R
+  Line 125) result != null ==> boolean
+  Line 126) result ==> R
+  Line 132) R result = n.getType().accept(this, arg) ==> R
+  Line 132) n.getType().accept(this, arg) ==> R
+  Line 133) result != null ==> boolean
+  Line 134) result ==> R
+  Line 137) n.getDefaultValue() != null ==> boolean
+  Line 139) R result = n.getDefaultValue().accept(this, arg) ==> R
+  Line 139) n.getDefaultValue().accept(this, arg) ==> R
+  Line 140) result != null ==> boolean
+  Line 141) result ==> R
+  Line 145) null ==> null
+  Line 151) R result = n.getName().accept(this, arg) ==> R
+  Line 151) n.getName().accept(this, arg) ==> R
+  Line 152) result != null ==> boolean
+  Line 153) result ==> R
+  Line 157) R result = n.getIndex().accept(this, arg) ==> R
+  Line 157) n.getIndex().accept(this, arg) ==> R
+  Line 158) result != null ==> boolean
+  Line 159) result ==> R
+  Line 162) null ==> null
+  Line 168) R result = n.getType().accept(this, arg) ==> R
+  Line 168) n.getType().accept(this, arg) ==> R
+  Line 169) result != null ==> boolean
+  Line 170) result ==> R
+  Line 173) n.getDimensions() != null ==> boolean
+  Line 174) final Expression dim ==> com.github.javaparser.ast.expr.Expression
+  Line 174) n.getDimensions() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 176) R result = dim.accept(this, arg) ==> R
+  Line 176) dim.accept(this, arg) ==> R
+  Line 177) result != null ==> boolean
+  Line 178) result ==> R
+  Line 184) R result = n.getInitializer().accept(this, arg) ==> R
+  Line 184) n.getInitializer().accept(this, arg) ==> R
+  Line 185) result != null ==> boolean
+  Line 186) result ==> R
+  Line 190) null ==> null
+  Line 195) n.getValues() != null ==> boolean
+  Line 196) final Expression expr ==> com.github.javaparser.ast.expr.Expression
+  Line 196) n.getValues() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 198) R result = expr.accept(this, arg) ==> R
+  Line 198) expr.accept(this, arg) ==> R
+  Line 199) result != null ==> boolean
+  Line 200) result ==> R
+  Line 205) null ==> null
+  Line 211) R result = n.getCheck().accept(this, arg) ==> R
+  Line 211) n.getCheck().accept(this, arg) ==> R
+  Line 212) result != null ==> boolean
+  Line 213) result ==> R
+  Line 216) n.getMessage() != null ==> boolean
+  Line 218) R result = n.getMessage().accept(this, arg) ==> R
+  Line 218) n.getMessage().accept(this, arg) ==> R
+  Line 219) result != null ==> boolean
+  Line 220) result ==> R
+  Line 224) null ==> null
+  Line 230) R result = n.getTarget().accept(this, arg) ==> R
+  Line 230) n.getTarget().accept(this, arg) ==> R
+  Line 231) result != null ==> boolean
+  Line 232) result ==> R
+  Line 236) R result = n.getValue().accept(this, arg) ==> R
+  Line 236) n.getValue().accept(this, arg) ==> R
+  Line 237) result != null ==> boolean
+  Line 238) result ==> R
+  Line 241) null ==> null
+  Line 247) R result = n.getLeft().accept(this, arg) ==> R
+  Line 247) n.getLeft().accept(this, arg) ==> R
+  Line 248) result != null ==> boolean
+  Line 249) result ==> R
+  Line 253) R result = n.getRight().accept(this, arg) ==> R
+  Line 253) n.getRight().accept(this, arg) ==> R
+  Line 254) result != null ==> boolean
+  Line 255) result ==> R
+  Line 258) null ==> null
+  Line 263) n.getStmts() != null ==> boolean
+  Line 264) final Statement s ==> com.github.javaparser.ast.stmt.Statement
+  Line 264) n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 266) R result = s.accept(this, arg) ==> R
+  Line 266) s.accept(this, arg) ==> R
+  Line 267) result != null ==> boolean
+  Line 268) result ==> R
+  Line 273) null ==> null
+  Line 279) null ==> null
+  Line 284) null ==> null
+  Line 290) R result = n.getType().accept(this, arg) ==> R
+  Line 290) n.getType().accept(this, arg) ==> R
+  Line 291) result != null ==> boolean
+  Line 292) result ==> R
+  Line 296) R result = n.getExpr().accept(this, arg) ==> R
+  Line 296) n.getExpr().accept(this, arg) ==> R
+  Line 297) result != null ==> boolean
+  Line 298) result ==> R
+  Line 301) null ==> null
+  Line 307) R result = n.getExcept().accept(this, arg) ==> R
+  Line 307) n.getExcept().accept(this, arg) ==> R
+  Line 308) result != null ==> boolean
+  Line 309) result ==> R
+  Line 313) R result = n.getCatchBlock().accept(this, arg) ==> R
+  Line 313) n.getCatchBlock().accept(this, arg) ==> R
+  Line 314) result != null ==> boolean
+  Line 315) result ==> R
+  Line 318) null ==> null
+  Line 324) null ==> null
+  Line 330) R result = n.getType().accept(this, arg) ==> R
+  Line 330) n.getType().accept(this, arg) ==> R
+  Line 331) result != null ==> boolean
+  Line 332) result ==> R
+  Line 335) null ==> null
+  Line 340) n.getJavaDoc() != null ==> boolean
+  Line 342) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 342) n.getJavaDoc().accept(this, arg) ==> R
+  Line 343) result != null ==> boolean
+  Line 344) result ==> R
+  Line 348) n.getAnnotations() != null ==> boolean
+  Line 349) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 349) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 351) R result = a.accept(this, arg) ==> R
+  Line 351) a.accept(this, arg) ==> R
+  Line 352) result != null ==> boolean
+  Line 353) result ==> R
+  Line 358) n.getTypeParameters() != null ==> boolean
+  Line 359) final TypeParameter t ==> com.github.javaparser.ast.TypeParameter
+  Line 359) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 361) R result = t.accept(this, arg) ==> R
+  Line 361) t.accept(this, arg) ==> R
+  Line 362) result != null ==> boolean
+  Line 363) result ==> R
+  Line 368) n.getExtends() != null ==> boolean
+  Line 369) final ClassOrInterfaceType c ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 369) n.getExtends() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 371) R result = c.accept(this, arg) ==> R
+  Line 371) c.accept(this, arg) ==> R
+  Line 372) result != null ==> boolean
+  Line 373) result ==> R
+  Line 379) n.getImplements() != null ==> boolean
+  Line 380) final ClassOrInterfaceType c ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 380) n.getImplements() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 382) R result = c.accept(this, arg) ==> R
+  Line 382) c.accept(this, arg) ==> R
+  Line 383) result != null ==> boolean
+  Line 384) result ==> R
+  Line 389) n.getMembers() != null ==> boolean
+  Line 390) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 390) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 392) R result = member.accept(this, arg) ==> R
+  Line 392) member.accept(this, arg) ==> R
+  Line 393) result != null ==> boolean
+  Line 394) result ==> R
+  Line 399) null ==> null
+  Line 404) n.getScope() != null ==> boolean
+  Line 406) R result = n.getScope().accept(this, arg) ==> R
+  Line 406) n.getScope().accept(this, arg) ==> R
+  Line 407) result != null ==> boolean
+  Line 408) result ==> R
+  Line 412) n.getTypeArgs() != null ==> boolean
+  Line 413) final Type t ==> com.github.javaparser.ast.type.Type
+  Line 413) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 415) R result = t.accept(this, arg) ==> R
+  Line 415) t.accept(this, arg) ==> R
+  Line 416) result != null ==> boolean
+  Line 417) result ==> R
+  Line 422) null ==> null
+  Line 427) n.getPackage() != null ==> boolean
+  Line 429) R result = n.getPackage().accept(this, arg) ==> R
+  Line 429) n.getPackage().accept(this, arg) ==> R
+  Line 430) result != null ==> boolean
+  Line 431) result ==> R
+  Line 435) n.getImports() != null ==> boolean
+  Line 436) final ImportDeclaration i ==> com.github.javaparser.ast.ImportDeclaration
+  Line 436) n.getImports() ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 438) R result = i.accept(this, arg) ==> R
+  Line 438) i.accept(this, arg) ==> R
+  Line 439) result != null ==> boolean
+  Line 440) result ==> R
+  Line 445) n.getTypes() != null ==> boolean
+  Line 446) final TypeDeclaration typeDeclaration ==> com.github.javaparser.ast.body.TypeDeclaration
+  Line 446) n.getTypes() ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 448) R result = typeDeclaration.accept(this, arg) ==> R
+  Line 448) typeDeclaration.accept(this, arg) ==> R
+  Line 449) result != null ==> boolean
+  Line 450) result ==> R
+  Line 455) null ==> null
+  Line 461) R result = n.getCondition().accept(this, arg) ==> R
+  Line 461) n.getCondition().accept(this, arg) ==> R
+  Line 462) result != null ==> boolean
+  Line 463) result ==> R
+  Line 467) R result = n.getThenExpr().accept(this, arg) ==> R
+  Line 467) n.getThenExpr().accept(this, arg) ==> R
+  Line 468) result != null ==> boolean
+  Line 469) result ==> R
+  Line 473) R result = n.getElseExpr().accept(this, arg) ==> R
+  Line 473) n.getElseExpr().accept(this, arg) ==> R
+  Line 474) result != null ==> boolean
+  Line 475) result ==> R
+  Line 478) null ==> null
+  Line 483) n.getJavaDoc() != null ==> boolean
+  Line 485) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 485) n.getJavaDoc().accept(this, arg) ==> R
+  Line 486) result != null ==> boolean
+  Line 487) result ==> R
+  Line 491) n.getAnnotations() != null ==> boolean
+  Line 492) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 492) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 494) R result = a.accept(this, arg) ==> R
+  Line 494) a.accept(this, arg) ==> R
+  Line 495) result != null ==> boolean
+  Line 496) result ==> R
+  Line 501) n.getTypeParameters() != null ==> boolean
+  Line 502) final TypeParameter t ==> com.github.javaparser.ast.TypeParameter
+  Line 502) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 504) R result = t.accept(this, arg) ==> R
+  Line 504) t.accept(this, arg) ==> R
+  Line 505) result != null ==> boolean
+  Line 506) result ==> R
+  Line 511) n.getParameters() != null ==> boolean
+  Line 512) final Parameter p ==> com.github.javaparser.ast.body.Parameter
+  Line 512) n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 514) R result = p.accept(this, arg) ==> R
+  Line 514) p.accept(this, arg) ==> R
+  Line 515) result != null ==> boolean
+  Line 516) result ==> R
+  Line 521) n.getThrows() != null ==> boolean
+  Line 522) final NameExpr name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 522) n.getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 524) R result = name.accept(this, arg) ==> R
+  Line 524) name.accept(this, arg) ==> R
+  Line 525) result != null ==> boolean
+  Line 526) result ==> R
+  Line 532) R result = n.getBlock().accept(this, arg) ==> R
+  Line 532) n.getBlock().accept(this, arg) ==> R
+  Line 533) result != null ==> boolean
+  Line 534) result ==> R
+  Line 537) null ==> null
+  Line 542) null ==> null
+  Line 548) R result = n.getBody().accept(this, arg) ==> R
+  Line 548) n.getBody().accept(this, arg) ==> R
+  Line 549) result != null ==> boolean
+  Line 550) result ==> R
+  Line 554) R result = n.getCondition().accept(this, arg) ==> R
+  Line 554) n.getCondition().accept(this, arg) ==> R
+  Line 555) result != null ==> boolean
+  Line 556) result ==> R
+  Line 559) null ==> null
+  Line 564) null ==> null
+  Line 569) n.getJavaDoc() != null ==> boolean
+  Line 571) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 571) n.getJavaDoc().accept(this, arg) ==> R
+  Line 572) result != null ==> boolean
+  Line 573) result ==> R
+  Line 577) null ==> null
+  Line 582) null ==> null
+  Line 587) n.getJavaDoc() != null ==> boolean
+  Line 589) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 589) n.getJavaDoc().accept(this, arg) ==> R
+  Line 590) result != null ==> boolean
+  Line 591) result ==> R
+  Line 595) null ==> null
+  Line 601) R result = n.getInner().accept(this, arg) ==> R
+  Line 601) n.getInner().accept(this, arg) ==> R
+  Line 602) result != null ==> boolean
+  Line 603) result ==> R
+  Line 606) null ==> null
+  Line 611) n.getJavaDoc() != null ==> boolean
+  Line 613) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 613) n.getJavaDoc().accept(this, arg) ==> R
+  Line 614) result != null ==> boolean
+  Line 615) result ==> R
+  Line 619) n.getAnnotations() != null ==> boolean
+  Line 620) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 620) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 622) R result = a.accept(this, arg) ==> R
+  Line 622) a.accept(this, arg) ==> R
+  Line 623) result != null ==> boolean
+  Line 624) result ==> R
+  Line 629) n.getArgs() != null ==> boolean
+  Line 630) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 630) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 632) R result = e.accept(this, arg) ==> R
+  Line 632) e.accept(this, arg) ==> R
+  Line 633) result != null ==> boolean
+  Line 634) result ==> R
+  Line 639) n.getClassBody() != null ==> boolean
+  Line 640) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 640) n.getClassBody() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 642) R result = member.accept(this, arg) ==> R
+  Line 642) member.accept(this, arg) ==> R
+  Line 643) result != null ==> boolean
+  Line 644) result ==> R
+  Line 649) null ==> null
+  Line 654) n.getJavaDoc() != null ==> boolean
+  Line 656) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 656) n.getJavaDoc().accept(this, arg) ==> R
+  Line 657) result != null ==> boolean
+  Line 658) result ==> R
+  Line 662) n.getAnnotations() != null ==> boolean
+  Line 663) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 663) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 665) R result = a.accept(this, arg) ==> R
+  Line 665) a.accept(this, arg) ==> R
+  Line 666) result != null ==> boolean
+  Line 667) result ==> R
+  Line 672) n.getImplements() != null ==> boolean
+  Line 673) final ClassOrInterfaceType c ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 673) n.getImplements() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 675) R result = c.accept(this, arg) ==> R
+  Line 675) c.accept(this, arg) ==> R
+  Line 676) result != null ==> boolean
+  Line 677) result ==> R
+  Line 682) n.getEntries() != null ==> boolean
+  Line 683) final EnumConstantDeclaration e ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 683) n.getEntries() ==> java.util.List<com.github.javaparser.ast.body.EnumConstantDeclaration>
+  Line 685) R result = e.accept(this, arg) ==> R
+  Line 685) e.accept(this, arg) ==> R
+  Line 686) result != null ==> boolean
+  Line 687) result ==> R
+  Line 692) n.getMembers() != null ==> boolean
+  Line 693) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 693) n.getMembers() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 695) R result = member.accept(this, arg) ==> R
+  Line 695) member.accept(this, arg) ==> R
+  Line 696) result != null ==> boolean
+  Line 697) result ==> R
+  Line 702) null ==> null
+  Line 707) !n.isThis() ==> boolean
+  Line 708) n.getExpr() != null ==> boolean
+  Line 710) R result = n.getExpr().accept(this, arg) ==> R
+  Line 710) n.getExpr().accept(this, arg) ==> R
+  Line 711) result != null ==> boolean
+  Line 712) result ==> R
+  Line 717) n.getTypeArgs() != null ==> boolean
+  Line 718) final Type t ==> com.github.javaparser.ast.type.Type
+  Line 718) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 720) R result = t.accept(this, arg) ==> R
+  Line 720) t.accept(this, arg) ==> R
+  Line 721) result != null ==> boolean
+  Line 722) result ==> R
+  Line 727) n.getArgs() != null ==> boolean
+  Line 728) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 728) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 730) R result = e.accept(this, arg) ==> R
+  Line 730) e.accept(this, arg) ==> R
+  Line 731) result != null ==> boolean
+  Line 732) result ==> R
+  Line 737) null ==> null
+  Line 743) R result = n.getExpression().accept(this, arg) ==> R
+  Line 743) n.getExpression().accept(this, arg) ==> R
+  Line 744) result != null ==> boolean
+  Line 745) result ==> R
+  Line 748) null ==> null
+  Line 754) R result = n.getScope().accept(this, arg) ==> R
+  Line 754) n.getScope().accept(this, arg) ==> R
+  Line 755) result != null ==> boolean
+  Line 756) result ==> R
+  Line 759) null ==> null
+  Line 764) n.getJavaDoc() != null ==> boolean
+  Line 766) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 766) n.getJavaDoc().accept(this, arg) ==> R
+  Line 767) result != null ==> boolean
+  Line 768) result ==> R
+  Line 772) n.getAnnotations() != null ==> boolean
+  Line 773) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 773) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 775) R result = a.accept(this, arg) ==> R
+  Line 775) a.accept(this, arg) ==> R
+  Line 776) result != null ==> boolean
+  Line 777) result ==> R
+  Line 783) R result = n.getType().accept(this, arg) ==> R
+  Line 783) n.getType().accept(this, arg) ==> R
+  Line 784) result != null ==> boolean
+  Line 785) result ==> R
+  Line 788) final VariableDeclarator var ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 788) n.getVariables() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 790) R result = var.accept(this, arg) ==> R
+  Line 790) var.accept(this, arg) ==> R
+  Line 791) result != null ==> boolean
+  Line 792) result ==> R
+  Line 796) null ==> null
+  Line 802) R result = n.getVariable().accept(this, arg) ==> R
+  Line 802) n.getVariable().accept(this, arg) ==> R
+  Line 803) result != null ==> boolean
+  Line 804) result ==> R
+  Line 808) R result = n.getIterable().accept(this, arg) ==> R
+  Line 808) n.getIterable().accept(this, arg) ==> R
+  Line 809) result != null ==> boolean
+  Line 810) result ==> R
+  Line 814) R result = n.getBody().accept(this, arg) ==> R
+  Line 814) n.getBody().accept(this, arg) ==> R
+  Line 815) result != null ==> boolean
+  Line 816) result ==> R
+  Line 819) null ==> null
+  Line 824) n.getInit() != null ==> boolean
+  Line 825) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 825) n.getInit() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 827) R result = e.accept(this, arg) ==> R
+  Line 827) e.accept(this, arg) ==> R
+  Line 828) result != null ==> boolean
+  Line 829) result ==> R
+  Line 834) n.getCompare() != null ==> boolean
+  Line 836) R result = n.getCompare().accept(this, arg) ==> R
+  Line 836) n.getCompare().accept(this, arg) ==> R
+  Line 837) result != null ==> boolean
+  Line 838) result ==> R
+  Line 842) n.getUpdate() != null ==> boolean
+  Line 843) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 843) n.getUpdate() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 845) R result = e.accept(this, arg) ==> R
+  Line 845) e.accept(this, arg) ==> R
+  Line 846) result != null ==> boolean
+  Line 847) result ==> R
+  Line 853) R result = n.getBody().accept(this, arg) ==> R
+  Line 853) n.getBody().accept(this, arg) ==> R
+  Line 854) result != null ==> boolean
+  Line 855) result ==> R
+  Line 858) null ==> null
+  Line 864) R result = n.getCondition().accept(this, arg) ==> R
+  Line 864) n.getCondition().accept(this, arg) ==> R
+  Line 865) result != null ==> boolean
+  Line 866) result ==> R
+  Line 870) R result = n.getThenStmt().accept(this, arg) ==> R
+  Line 870) n.getThenStmt().accept(this, arg) ==> R
+  Line 871) result != null ==> boolean
+  Line 872) result ==> R
+  Line 875) n.getElseStmt() != null ==> boolean
+  Line 877) R result = n.getElseStmt().accept(this, arg) ==> R
+  Line 877) n.getElseStmt().accept(this, arg) ==> R
+  Line 878) result != null ==> boolean
+  Line 879) result ==> R
+  Line 883) null ==> null
+  Line 889) R result = n.getName().accept(this, arg) ==> R
+  Line 889) n.getName().accept(this, arg) ==> R
+  Line 890) result != null ==> boolean
+  Line 891) result ==> R
+  Line 894) null ==> null
+  Line 899) n.getJavaDoc() != null ==> boolean
+  Line 901) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 901) n.getJavaDoc().accept(this, arg) ==> R
+  Line 902) result != null ==> boolean
+  Line 903) result ==> R
+  Line 908) R result = n.getBlock().accept(this, arg) ==> R
+  Line 908) n.getBlock().accept(this, arg) ==> R
+  Line 909) result != null ==> boolean
+  Line 910) result ==> R
+  Line 913) null ==> null
+  Line 919) R result = n.getExpr().accept(this, arg) ==> R
+  Line 919) n.getExpr().accept(this, arg) ==> R
+  Line 920) result != null ==> boolean
+  Line 921) result ==> R
+  Line 925) R result = n.getType().accept(this, arg) ==> R
+  Line 925) n.getType().accept(this, arg) ==> R
+  Line 926) result != null ==> boolean
+  Line 927) result ==> R
+  Line 930) null ==> null
+  Line 935) null ==> null
+  Line 940) null ==> null
+  Line 945) null ==> null
+  Line 951) R result = n.getStmt().accept(this, arg) ==> R
+  Line 951) n.getStmt().accept(this, arg) ==> R
+  Line 952) result != null ==> boolean
+  Line 953) result ==> R
+  Line 956) null ==> null
+  Line 961) null ==> null
+  Line 966) null ==> null
+  Line 972) R result = n.getName().accept(this, arg) ==> R
+  Line 972) n.getName().accept(this, arg) ==> R
+  Line 973) result != null ==> boolean
+  Line 974) result ==> R
+  Line 977) null ==> null
+  Line 983) R result = n.getValue().accept(this, arg) ==> R
+  Line 983) n.getValue().accept(this, arg) ==> R
+  Line 984) result != null ==> boolean
+  Line 985) result ==> R
+  Line 988) null ==> null
+  Line 993) n.getScope() != null ==> boolean
+  Line 995) R result = n.getScope().accept(this, arg) ==> R
+  Line 995) n.getScope().accept(this, arg) ==> R
+  Line 996) result != null ==> boolean
+  Line 997) result ==> R
+  Line 1001) n.getTypeArgs() != null ==> boolean
+  Line 1002) final Type t ==> com.github.javaparser.ast.type.Type
+  Line 1002) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 1004) R result = t.accept(this, arg) ==> R
+  Line 1004) t.accept(this, arg) ==> R
+  Line 1005) result != null ==> boolean
+  Line 1006) result ==> R
+  Line 1011) n.getArgs() != null ==> boolean
+  Line 1012) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 1012) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 1014) R result = e.accept(this, arg) ==> R
+  Line 1014) e.accept(this, arg) ==> R
+  Line 1015) result != null ==> boolean
+  Line 1016) result ==> R
+  Line 1021) null ==> null
+  Line 1026) n.getJavaDoc() != null ==> boolean
+  Line 1028) R result = n.getJavaDoc().accept(this, arg) ==> R
+  Line 1028) n.getJavaDoc().accept(this, arg) ==> R
+  Line 1029) result != null ==> boolean
+  Line 1030) result ==> R
+  Line 1034) n.getAnnotations() != null ==> boolean
+  Line 1035) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 1035) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 1037) R result = a.accept(this, arg) ==> R
+  Line 1037) a.accept(this, arg) ==> R
+  Line 1038) result != null ==> boolean
+  Line 1039) result ==> R
+  Line 1044) n.getTypeParameters() != null ==> boolean
+  Line 1045) final TypeParameter t ==> com.github.javaparser.ast.TypeParameter
+  Line 1045) n.getTypeParameters() ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 1047) R result = t.accept(this, arg) ==> R
+  Line 1047) t.accept(this, arg) ==> R
+  Line 1048) result != null ==> boolean
+  Line 1049) result ==> R
+  Line 1055) R result = n.getType().accept(this, arg) ==> R
+  Line 1055) n.getType().accept(this, arg) ==> R
+  Line 1056) result != null ==> boolean
+  Line 1057) result ==> R
+  Line 1060) n.getParameters() != null ==> boolean
+  Line 1061) final Parameter p ==> com.github.javaparser.ast.body.Parameter
+  Line 1061) n.getParameters() ==> java.util.List<com.github.javaparser.ast.body.Parameter>
+  Line 1063) R result = p.accept(this, arg) ==> R
+  Line 1063) p.accept(this, arg) ==> R
+  Line 1064) result != null ==> boolean
+  Line 1065) result ==> R
+  Line 1070) n.getThrows() != null ==> boolean
+  Line 1071) final NameExpr name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 1071) n.getThrows() ==> java.util.List<com.github.javaparser.ast.expr.NameExpr>
+  Line 1073) R result = name.accept(this, arg) ==> R
+  Line 1073) name.accept(this, arg) ==> R
+  Line 1074) result != null ==> boolean
+  Line 1075) result ==> R
+  Line 1080) n.getBody() != null ==> boolean
+  Line 1082) R result = n.getBody().accept(this, arg) ==> R
+  Line 1082) n.getBody().accept(this, arg) ==> R
+  Line 1083) result != null ==> boolean
+  Line 1084) result ==> R
+  Line 1088) null ==> null
+  Line 1093) null ==> null
+  Line 1099) R result = n.getName().accept(this, arg) ==> R
+  Line 1099) n.getName().accept(this, arg) ==> R
+  Line 1100) result != null ==> boolean
+  Line 1101) result ==> R
+  Line 1104) n.getPairs() != null ==> boolean
+  Line 1105) final MemberValuePair m ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 1105) n.getPairs() ==> java.util.List<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 1107) R result = m.accept(this, arg) ==> R
+  Line 1107) m.accept(this, arg) ==> R
+  Line 1108) result != null ==> boolean
+  Line 1109) result ==> R
+  Line 1114) null ==> null
+  Line 1119) null ==> null
+  Line 1124) n.getScope() != null ==> boolean
+  Line 1126) R result = n.getScope().accept(this, arg) ==> R
+  Line 1126) n.getScope().accept(this, arg) ==> R
+  Line 1127) result != null ==> boolean
+  Line 1128) result ==> R
+  Line 1132) n.getTypeArgs() != null ==> boolean
+  Line 1133) final Type t ==> com.github.javaparser.ast.type.Type
+  Line 1133) n.getTypeArgs() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 1135) R result = t.accept(this, arg) ==> R
+  Line 1135) t.accept(this, arg) ==> R
+  Line 1136) result != null ==> boolean
+  Line 1137) result ==> R
+  Line 1143) R result = n.getType().accept(this, arg) ==> R
+  Line 1143) n.getType().accept(this, arg) ==> R
+  Line 1144) result != null ==> boolean
+  Line 1145) result ==> R
+  Line 1148) n.getArgs() != null ==> boolean
+  Line 1149) final Expression e ==> com.github.javaparser.ast.expr.Expression
+  Line 1149) n.getArgs() ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 1151) R result = e.accept(this, arg) ==> R
+  Line 1151) e.accept(this, arg) ==> R
+  Line 1152) result != null ==> boolean
+  Line 1153) result ==> R
+  Line 1158) n.getAnonymousClassBody() != null ==> boolean
+  Line 1159) final BodyDeclaration member ==> com.github.javaparser.ast.body.BodyDeclaration
+  Line 1159) n.getAnonymousClassBody() ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 1161) R result = member.accept(this, arg) ==> R
+  Line 1161) member.accept(this, arg) ==> R
+  Line 1162) result != null ==> boolean
+  Line 1163) result ==> R
+  Line 1168) null ==> null
+  Line 1173) n.getAnnotations() != null ==> boolean
+  Line 1174) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 1174) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 1176) R result = a.accept(this, arg) ==> R
+  Line 1176) a.accept(this, arg) ==> R
+  Line 1177) result != null ==> boolean
+  Line 1178) result ==> R
+  Line 1184) R result = n.getName().accept(this, arg) ==> R
+  Line 1184) n.getName().accept(this, arg) ==> R
+  Line 1185) result != null ==> boolean
+  Line 1186) result ==> R
+  Line 1189) null ==> null
+  Line 1194) n.getAnnotations() != null ==> boolean
+  Line 1195) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 1195) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 1197) R result = a.accept(this, arg) ==> R
+  Line 1197) a.accept(this, arg) ==> R
+  Line 1198) result != null ==> boolean
+  Line 1199) result ==> R
+  Line 1205) R result = n.getType().accept(this, arg) ==> R
+  Line 1205) n.getType().accept(this, arg) ==> R
+  Line 1206) result != null ==> boolean
+  Line 1207) result ==> R
+  Line 1211) R result = n.getId().accept(this, arg) ==> R
+  Line 1211) n.getId().accept(this, arg) ==> R
+  Line 1212) result != null ==> boolean
+  Line 1213) result ==> R
+  Line 1216) null ==> null
+  Line 1221) n.getAnnotations() != null ==> boolean
+  Line 1222) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 1222) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 1224) R result = a.accept(this, arg) ==> R
+  Line 1224) a.accept(this, arg) ==> R
+  Line 1225) result != null ==> boolean
+  Line 1226) result ==> R
+  Line 1232) final Type type ==> com.github.javaparser.ast.type.Type
+  Line 1232) n.getTypes() ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 1233) R result = type.accept(this, arg) ==> R
+  Line 1233) type.accept(this, arg) ==> R
+  Line 1234) result != null ==> boolean
+  Line 1235) result ==> R
+  Line 1240) R result = n.getId().accept(this, arg) ==> R
+  Line 1240) n.getId().accept(this, arg) ==> R
+  Line 1241) result != null ==> boolean
+  Line 1242) result ==> R
+  Line 1245) null ==> null
+  Line 1250) null ==> null
+  Line 1256) R result = n.getQualifier().accept(this, arg) ==> R
+  Line 1256) n.getQualifier().accept(this, arg) ==> R
+  Line 1257) result != null ==> boolean
+  Line 1258) result ==> R
+  Line 1261) null ==> null
+  Line 1267) R result = n.getType().accept(this, arg) ==> R
+  Line 1267) n.getType().accept(this, arg) ==> R
+  Line 1268) result != null ==> boolean
+  Line 1269) result ==> R
+  Line 1272) null ==> null
+  Line 1277) n.getExpr() != null ==> boolean
+  Line 1279) R result = n.getExpr().accept(this, arg) ==> R
+  Line 1279) n.getExpr().accept(this, arg) ==> R
+  Line 1280) result != null ==> boolean
+  Line 1281) result ==> R
+  Line 1285) null ==> null
+  Line 1291) R result = n.getName().accept(this, arg) ==> R
+  Line 1291) n.getName().accept(this, arg) ==> R
+  Line 1292) result != null ==> boolean
+  Line 1293) result ==> R
+  Line 1297) R result = n.getMemberValue().accept(this, arg) ==> R
+  Line 1297) n.getMemberValue().accept(this, arg) ==> R
+  Line 1298) result != null ==> boolean
+  Line 1299) result ==> R
+  Line 1302) null ==> null
+  Line 1307) null ==> null
+  Line 1312) n.getClassExpr() != null ==> boolean
+  Line 1314) R result = n.getClassExpr().accept(this, arg) ==> R
+  Line 1314) n.getClassExpr().accept(this, arg) ==> R
+  Line 1315) result != null ==> boolean
+  Line 1316) result ==> R
+  Line 1320) null ==> null
+  Line 1325) n.getLabel() != null ==> boolean
+  Line 1327) R result = n.getLabel().accept(this, arg) ==> R
+  Line 1327) n.getLabel().accept(this, arg) ==> R
+  Line 1328) result != null ==> boolean
+  Line 1329) result ==> R
+  Line 1333) n.getStmts() != null ==> boolean
+  Line 1334) final Statement s ==> com.github.javaparser.ast.stmt.Statement
+  Line 1334) n.getStmts() ==> java.util.List<com.github.javaparser.ast.stmt.Statement>
+  Line 1336) R result = s.accept(this, arg) ==> R
+  Line 1336) s.accept(this, arg) ==> R
+  Line 1337) result != null ==> boolean
+  Line 1338) result ==> R
+  Line 1343) null ==> null
+  Line 1349) R result = n.getSelector().accept(this, arg) ==> R
+  Line 1349) n.getSelector().accept(this, arg) ==> R
+  Line 1350) result != null ==> boolean
+  Line 1351) result ==> R
+  Line 1354) n.getEntries() != null ==> boolean
+  Line 1355) final SwitchEntryStmt e ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 1355) n.getEntries() ==> java.util.List<com.github.javaparser.ast.stmt.SwitchEntryStmt>
+  Line 1357) R result = e.accept(this, arg) ==> R
+  Line 1357) e.accept(this, arg) ==> R
+  Line 1358) result != null ==> boolean
+  Line 1359) result ==> R
+  Line 1364) null ==> null
+  Line 1371) n.getExpr() != null ==> boolean
+  Line 1372) R result = n.getExpr().accept(this, arg) ==> R
+  Line 1372) n.getExpr().accept(this, arg) ==> R
+  Line 1373) result != null ==> boolean
+  Line 1374) result ==> R
+  Line 1379) R result = n.getBlock().accept(this, arg) ==> R
+  Line 1379) n.getBlock().accept(this, arg) ==> R
+  Line 1380) result != null ==> boolean
+  Line 1381) result ==> R
+  Line 1384) null ==> null
+  Line 1389) n.getClassExpr() != null ==> boolean
+  Line 1391) R result = n.getClassExpr().accept(this, arg) ==> R
+  Line 1391) n.getClassExpr().accept(this, arg) ==> R
+  Line 1392) result != null ==> boolean
+  Line 1393) result ==> R
+  Line 1397) null ==> null
+  Line 1403) R result = n.getExpr().accept(this, arg) ==> R
+  Line 1403) n.getExpr().accept(this, arg) ==> R
+  Line 1404) result != null ==> boolean
+  Line 1405) result ==> R
+  Line 1408) null ==> null
+  Line 1413) n.getResources() != null ==> boolean
+  Line 1414) final VariableDeclarationExpr v ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 1414) n.getResources() ==> java.util.List<com.github.javaparser.ast.expr.VariableDeclarationExpr>
+  Line 1416) R result = v.accept(this, arg) ==> R
+  Line 1416) v.accept(this, arg) ==> R
+  Line 1417) result != null ==> boolean
+  Line 1418) result ==> R
+  Line 1424) R result = n.getTryBlock().accept(this, arg) ==> R
+  Line 1424) n.getTryBlock().accept(this, arg) ==> R
+  Line 1425) result != null ==> boolean
+  Line 1426) result ==> R
+  Line 1429) n.getCatchs() != null ==> boolean
+  Line 1430) final CatchClause c ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 1430) n.getCatchs() ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 1432) R result = c.accept(this, arg) ==> R
+  Line 1432) c.accept(this, arg) ==> R
+  Line 1433) result != null ==> boolean
+  Line 1434) result ==> R
+  Line 1439) n.getFinallyBlock() != null ==> boolean
+  Line 1441) R result = n.getFinallyBlock().accept(this, arg) ==> R
+  Line 1441) n.getFinallyBlock().accept(this, arg) ==> R
+  Line 1442) result != null ==> boolean
+  Line 1443) result ==> R
+  Line 1447) null ==> null
+  Line 1453) R result = n.getTypeDeclaration().accept(this, arg) ==> R
+  Line 1453) n.getTypeDeclaration().accept(this, arg) ==> R
+  Line 1454) result != null ==> boolean
+  Line 1455) result ==> R
+  Line 1458) null ==> null
+  Line 1463) n.getTypeBound() != null ==> boolean
+  Line 1464) final ClassOrInterfaceType c ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 1464) n.getTypeBound() ==> java.util.List<com.github.javaparser.ast.type.ClassOrInterfaceType>
+  Line 1466) R result = c.accept(this, arg) ==> R
+  Line 1466) c.accept(this, arg) ==> R
+  Line 1467) result != null ==> boolean
+  Line 1468) result ==> R
+  Line 1473) null ==> null
+  Line 1479) R result = n.getExpr().accept(this, arg) ==> R
+  Line 1479) n.getExpr().accept(this, arg) ==> R
+  Line 1480) result != null ==> boolean
+  Line 1481) result ==> R
+  Line 1484) null ==> null
+  Line 1489) null ==> null
+  Line 1494) n.getAnnotations() != null ==> boolean
+  Line 1495) final AnnotationExpr a ==> com.github.javaparser.ast.expr.AnnotationExpr
+  Line 1495) n.getAnnotations() ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 1497) R result = a.accept(this, arg) ==> R
+  Line 1497) a.accept(this, arg) ==> R
+  Line 1498) result != null ==> boolean
+  Line 1499) result ==> R
+  Line 1505) R result = n.getType().accept(this, arg) ==> R
+  Line 1505) n.getType().accept(this, arg) ==> R
+  Line 1506) result != null ==> boolean
+  Line 1507) result ==> R
+  Line 1510) final VariableDeclarator v ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 1510) n.getVars() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 1512) R result = v.accept(this, arg) ==> R
+  Line 1512) v.accept(this, arg) ==> R
+  Line 1513) result != null ==> boolean
+  Line 1514) result ==> R
+  Line 1518) null ==> null
+  Line 1524) R result = n.getId().accept(this, arg) ==> R
+  Line 1524) n.getId().accept(this, arg) ==> R
+  Line 1525) result != null ==> boolean
+  Line 1526) result ==> R
+  Line 1529) n.getInit() != null ==> boolean
+  Line 1531) R result = n.getInit().accept(this, arg) ==> R
+  Line 1531) n.getInit().accept(this, arg) ==> R
+  Line 1532) result != null ==> boolean
+  Line 1533) result ==> R
+  Line 1537) null ==> null
+  Line 1542) null ==> null
+  Line 1547) null ==> null
+  Line 1553) R result = n.getCondition().accept(this, arg) ==> R
+  Line 1553) n.getCondition().accept(this, arg) ==> R
+  Line 1554) result != null ==> boolean
+  Line 1555) result ==> R
+  Line 1559) R result = n.getBody().accept(this, arg) ==> R
+  Line 1559) n.getBody().accept(this, arg) ==> R
+  Line 1560) result != null ==> boolean
+  Line 1561) result ==> R
+  Line 1564) null ==> null
+  Line 1569) n.getExtends() != null ==> boolean
+  Line 1571) R result = n.getExtends().accept(this, arg) ==> R
+  Line 1571) n.getExtends().accept(this, arg) ==> R
+  Line 1572) result != null ==> boolean
+  Line 1573) result ==> R
+  Line 1577) n.getSuper() != null ==> boolean
+  Line 1579) R result = n.getSuper().accept(this, arg) ==> R
+  Line 1579) n.getSuper().accept(this, arg) ==> R
+  Line 1580) result != null ==> boolean
+  Line 1581) result ==> R
+  Line 1585) null ==> null
+  Line 1590) null ==> null
+  Line 1595) null ==> null
+  Line 1600) null ==> null
+  Line 1605) null ==> null
+  Line 1610) null ==> null

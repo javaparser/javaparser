@@ -1,0 +1,720 @@
+
+[ Class com.github.javaparser.ast.visitor.EqualsVisitor ]
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.visitor.GenericVisitor
+  Line 80) new EqualsVisitor() ==> com.github.javaparser.ast.visitor.EqualsVisitor
+  Line 83) SINGLETON.nodeEquals(n1, n2) ==> boolean
+  Line 95) !nodeEquals(n1.getComment(), n2.getComment()) ==> boolean
+  Line 96) false ==> boolean
+  Line 98) !nodesEquals(n1.getOrphanComments(), n2.getOrphanComments()) ==> boolean
+  Line 99) false ==> boolean
+  Line 101) true ==> boolean
+  Line 105) nodes1 == null ==> boolean
+  Line 106) nodes2 == null ==> boolean
+  Line 107) true ==> boolean
+  Line 109) false ==> boolean
+  Line 110) nodes2 == null ==> boolean
+  Line 111) false ==> boolean
+  Line 113) nodes1.size() != nodes2.size() ==> boolean
+  Line 114) false ==> boolean
+  Line 116) int i = 0 ==> int
+  Line 116) 0 ==> int
+  Line 116) i < nodes1.size() ==> boolean
+  Line 116) i++ ==> int
+  Line 117) !nodeEquals(nodes1.get(i), nodes2.get(i)) ==> boolean
+  Line 118) false ==> boolean
+  Line 121) true ==> boolean
+  Line 125) n1 == n2 ==> boolean
+  Line 126) true ==> boolean
+  Line 128) n1 == null ==> boolean
+  Line 129) n2 == null ==> boolean
+  Line 130) true ==> boolean
+  Line 132) false ==> boolean
+  Line 133) n2 == null ==> boolean
+  Line 134) false ==> boolean
+  Line 136) n1.getClass() != n2.getClass() ==> boolean
+  Line 137) false ==> boolean
+  Line 139) !commonNodeEquality(n1, n2) ==> boolean
+  Line 140) false ==> boolean
+  Line 142) n1.accept(this, n2).booleanValue() ==> boolean
+  Line 146) n1 == n2 ==> boolean
+  Line 147) true ==> boolean
+  Line 149) n1 == null ==> boolean
+  Line 150) n2 == null ==> boolean
+  Line 151) true ==> boolean
+  Line 153) false ==> boolean
+  Line 154) n2 == null ==> boolean
+  Line 155) false ==> boolean
+  Line 157) n1.equals(n2) ==> boolean
+  Line 161) final CompilationUnit n2 = (CompilationUnit) arg ==> com.github.javaparser.ast.CompilationUnit
+  Line 161) (CompilationUnit) arg ==> com.github.javaparser.ast.CompilationUnit
+  Line 163) !nodeEquals(n1.getPackage(), n2.getPackage()) ==> boolean
+  Line 164) Boolean.FALSE ==> java.lang.Boolean
+  Line 167) !nodesEquals(n1.getImports(), n2.getImports()) ==> boolean
+  Line 168) Boolean.FALSE ==> java.lang.Boolean
+  Line 171) !nodesEquals(n1.getTypes(), n2.getTypes()) ==> boolean
+  Line 172) Boolean.FALSE ==> java.lang.Boolean
+  Line 175) !nodesEquals(n1.getComments(), n2.getComments()) ==> boolean
+  Line 176) Boolean.FALSE ==> java.lang.Boolean
+  Line 179) Boolean.TRUE ==> java.lang.Boolean
+  Line 183) final PackageDeclaration n2 = (PackageDeclaration) arg ==> com.github.javaparser.ast.PackageDeclaration
+  Line 183) (PackageDeclaration) arg ==> com.github.javaparser.ast.PackageDeclaration
+  Line 185) !nodeEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 186) Boolean.FALSE ==> java.lang.Boolean
+  Line 189) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 190) Boolean.FALSE ==> java.lang.Boolean
+  Line 193) Boolean.TRUE ==> java.lang.Boolean
+  Line 197) final ImportDeclaration n2 = (ImportDeclaration) arg ==> com.github.javaparser.ast.ImportDeclaration
+  Line 197) (ImportDeclaration) arg ==> com.github.javaparser.ast.ImportDeclaration
+  Line 199) !nodeEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 200) Boolean.FALSE ==> java.lang.Boolean
+  Line 203) Boolean.TRUE ==> java.lang.Boolean
+  Line 207) final TypeParameter n2 = (TypeParameter) arg ==> com.github.javaparser.ast.TypeParameter
+  Line 207) (TypeParameter) arg ==> com.github.javaparser.ast.TypeParameter
+  Line 209) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 210) Boolean.FALSE ==> java.lang.Boolean
+  Line 213) !nodesEquals(n1.getTypeBound(), n2.getTypeBound()) ==> boolean
+  Line 214) Boolean.FALSE ==> java.lang.Boolean
+  Line 216) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 217) Boolean.FALSE ==> java.lang.Boolean
+  Line 219) Boolean.TRUE ==> java.lang.Boolean
+  Line 223) final LineComment n2 = (LineComment) arg ==> com.github.javaparser.ast.comments.LineComment
+  Line 223) (LineComment) arg ==> com.github.javaparser.ast.comments.LineComment
+  Line 225) !objEquals(n1.getContent(), n2.getContent()) ==> boolean
+  Line 226) Boolean.FALSE ==> java.lang.Boolean
+  Line 229) !objEquals(n1.getBeginLine(), n2.getBeginLine()) ==> boolean
+  Line 230) Boolean.FALSE ==> java.lang.Boolean
+  Line 233) Boolean.TRUE ==> java.lang.Boolean
+  Line 237) final BlockComment n2 = (BlockComment) arg ==> com.github.javaparser.ast.comments.BlockComment
+  Line 237) (BlockComment) arg ==> com.github.javaparser.ast.comments.BlockComment
+  Line 239) !objEquals(n1.getContent(), n2.getContent()) ==> boolean
+  Line 240) Boolean.FALSE ==> java.lang.Boolean
+  Line 243) !objEquals(n1.getBeginLine(), n2.getBeginLine()) ==> boolean
+  Line 244) Boolean.FALSE ==> java.lang.Boolean
+  Line 247) Boolean.TRUE ==> java.lang.Boolean
+  Line 251) final ClassOrInterfaceDeclaration n2 = (ClassOrInterfaceDeclaration) arg ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+  Line 251) (ClassOrInterfaceDeclaration) arg ==> com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+  Line 255) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 256) Boolean.FALSE ==> java.lang.Boolean
+  Line 259) n1.isInterface() != n2.isInterface() ==> boolean
+  Line 260) Boolean.FALSE ==> java.lang.Boolean
+  Line 263) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 264) Boolean.FALSE ==> java.lang.Boolean
+  Line 267) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 268) Boolean.FALSE ==> java.lang.Boolean
+  Line 271) !nodesEquals(n1.getTypeParameters(), n2.getTypeParameters()) ==> boolean
+  Line 272) Boolean.FALSE ==> java.lang.Boolean
+  Line 275) !nodesEquals(n1.getExtends(), n2.getExtends()) ==> boolean
+  Line 276) Boolean.FALSE ==> java.lang.Boolean
+  Line 279) !nodesEquals(n1.getImplements(), n2.getImplements()) ==> boolean
+  Line 280) Boolean.FALSE ==> java.lang.Boolean
+  Line 283) !nodesEquals(n1.getMembers(), n2.getMembers()) ==> boolean
+  Line 284) Boolean.FALSE ==> java.lang.Boolean
+  Line 287) Boolean.TRUE ==> java.lang.Boolean
+  Line 291) final EnumDeclaration n2 = (EnumDeclaration) arg ==> com.github.javaparser.ast.body.EnumDeclaration
+  Line 291) (EnumDeclaration) arg ==> com.github.javaparser.ast.body.EnumDeclaration
+  Line 295) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 296) Boolean.FALSE ==> java.lang.Boolean
+  Line 299) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 300) Boolean.FALSE ==> java.lang.Boolean
+  Line 303) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 304) Boolean.FALSE ==> java.lang.Boolean
+  Line 307) !nodesEquals(n1.getImplements(), n2.getImplements()) ==> boolean
+  Line 308) Boolean.FALSE ==> java.lang.Boolean
+  Line 311) !nodesEquals(n1.getEntries(), n2.getEntries()) ==> boolean
+  Line 312) Boolean.FALSE ==> java.lang.Boolean
+  Line 315) !nodesEquals(n1.getMembers(), n2.getMembers()) ==> boolean
+  Line 316) Boolean.FALSE ==> java.lang.Boolean
+  Line 319) Boolean.TRUE ==> java.lang.Boolean
+  Line 323) Boolean.TRUE ==> java.lang.Boolean
+  Line 327) final EnumConstantDeclaration n2 = (EnumConstantDeclaration) arg ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 327) (EnumConstantDeclaration) arg ==> com.github.javaparser.ast.body.EnumConstantDeclaration
+  Line 331) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 332) Boolean.FALSE ==> java.lang.Boolean
+  Line 335) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 336) Boolean.FALSE ==> java.lang.Boolean
+  Line 339) !nodesEquals(n1.getArgs(), n2.getArgs()) ==> boolean
+  Line 340) Boolean.FALSE ==> java.lang.Boolean
+  Line 343) !nodesEquals(n1.getClassBody(), n2.getClassBody()) ==> boolean
+  Line 344) Boolean.FALSE ==> java.lang.Boolean
+  Line 347) Boolean.TRUE ==> java.lang.Boolean
+  Line 351) final AnnotationDeclaration n2 = (AnnotationDeclaration) arg ==> com.github.javaparser.ast.body.AnnotationDeclaration
+  Line 351) (AnnotationDeclaration) arg ==> com.github.javaparser.ast.body.AnnotationDeclaration
+  Line 355) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 356) Boolean.FALSE ==> java.lang.Boolean
+  Line 359) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 360) Boolean.FALSE ==> java.lang.Boolean
+  Line 363) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 364) Boolean.FALSE ==> java.lang.Boolean
+  Line 367) !nodesEquals(n1.getMembers(), n2.getMembers()) ==> boolean
+  Line 368) Boolean.FALSE ==> java.lang.Boolean
+  Line 371) Boolean.TRUE ==> java.lang.Boolean
+  Line 375) final AnnotationMemberDeclaration n2 = (AnnotationMemberDeclaration) arg ==> com.github.javaparser.ast.body.AnnotationMemberDeclaration
+  Line 375) (AnnotationMemberDeclaration) arg ==> com.github.javaparser.ast.body.AnnotationMemberDeclaration
+  Line 379) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 380) Boolean.FALSE ==> java.lang.Boolean
+  Line 383) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 384) Boolean.FALSE ==> java.lang.Boolean
+  Line 387) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 388) Boolean.FALSE ==> java.lang.Boolean
+  Line 391) !nodeEquals(n1.getDefaultValue(), n2.getDefaultValue()) ==> boolean
+  Line 392) Boolean.FALSE ==> java.lang.Boolean
+  Line 395) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 396) Boolean.FALSE ==> java.lang.Boolean
+  Line 399) Boolean.TRUE ==> java.lang.Boolean
+  Line 403) final FieldDeclaration n2 = (FieldDeclaration) arg ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 403) (FieldDeclaration) arg ==> com.github.javaparser.ast.body.FieldDeclaration
+  Line 407) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 408) Boolean.FALSE ==> java.lang.Boolean
+  Line 411) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 412) Boolean.FALSE ==> java.lang.Boolean
+  Line 415) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 416) Boolean.FALSE ==> java.lang.Boolean
+  Line 419) !nodesEquals(n1.getVariables(), n2.getVariables()) ==> boolean
+  Line 420) Boolean.FALSE ==> java.lang.Boolean
+  Line 423) Boolean.TRUE ==> java.lang.Boolean
+  Line 427) final VariableDeclarator n2 = (VariableDeclarator) arg ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 427) (VariableDeclarator) arg ==> com.github.javaparser.ast.body.VariableDeclarator
+  Line 429) !nodeEquals(n1.getId(), n2.getId()) ==> boolean
+  Line 430) Boolean.FALSE ==> java.lang.Boolean
+  Line 433) !nodeEquals(n1.getInit(), n2.getInit()) ==> boolean
+  Line 434) Boolean.FALSE ==> java.lang.Boolean
+  Line 437) Boolean.TRUE ==> java.lang.Boolean
+  Line 441) final VariableDeclaratorId n2 = (VariableDeclaratorId) arg ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 441) (VariableDeclaratorId) arg ==> com.github.javaparser.ast.body.VariableDeclaratorId
+  Line 443) n1.getArrayCount() != n2.getArrayCount() ==> boolean
+  Line 444) Boolean.FALSE ==> java.lang.Boolean
+  Line 447) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 448) Boolean.FALSE ==> java.lang.Boolean
+  Line 451) Boolean.TRUE ==> java.lang.Boolean
+  Line 455) final ConstructorDeclaration n2 = (ConstructorDeclaration) arg ==> com.github.javaparser.ast.body.ConstructorDeclaration
+  Line 455) (ConstructorDeclaration) arg ==> com.github.javaparser.ast.body.ConstructorDeclaration
+  Line 459) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 460) Boolean.FALSE ==> java.lang.Boolean
+  Line 463) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 464) Boolean.FALSE ==> java.lang.Boolean
+  Line 467) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 468) Boolean.FALSE ==> java.lang.Boolean
+  Line 471) !nodeEquals(n1.getBlock(), n2.getBlock()) ==> boolean
+  Line 472) Boolean.FALSE ==> java.lang.Boolean
+  Line 475) !nodesEquals(n1.getParameters(), n2.getParameters()) ==> boolean
+  Line 476) Boolean.FALSE ==> java.lang.Boolean
+  Line 479) !nodesEquals(n1.getThrows(), n2.getThrows()) ==> boolean
+  Line 480) Boolean.FALSE ==> java.lang.Boolean
+  Line 483) !nodesEquals(n1.getTypeParameters(), n2.getTypeParameters()) ==> boolean
+  Line 484) Boolean.FALSE ==> java.lang.Boolean
+  Line 487) Boolean.TRUE ==> java.lang.Boolean
+  Line 491) final MethodDeclaration n2 = (MethodDeclaration) arg ==> com.github.javaparser.ast.body.MethodDeclaration
+  Line 491) (MethodDeclaration) arg ==> com.github.javaparser.ast.body.MethodDeclaration
+  Line 495) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 496) Boolean.FALSE ==> java.lang.Boolean
+  Line 499) n1.getArrayCount() != n2.getArrayCount() ==> boolean
+  Line 500) Boolean.FALSE ==> java.lang.Boolean
+  Line 503) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 504) Boolean.FALSE ==> java.lang.Boolean
+  Line 507) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 508) Boolean.FALSE ==> java.lang.Boolean
+  Line 511) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 512) Boolean.FALSE ==> java.lang.Boolean
+  Line 515) !nodeEquals(n1.getBody(), n2.getBody()) ==> boolean
+  Line 516) Boolean.FALSE ==> java.lang.Boolean
+  Line 519) !nodesEquals(n1.getParameters(), n2.getParameters()) ==> boolean
+  Line 520) Boolean.FALSE ==> java.lang.Boolean
+  Line 523) !nodesEquals(n1.getThrows(), n2.getThrows()) ==> boolean
+  Line 524) Boolean.FALSE ==> java.lang.Boolean
+  Line 527) !nodesEquals(n1.getTypeParameters(), n2.getTypeParameters()) ==> boolean
+  Line 528) Boolean.FALSE ==> java.lang.Boolean
+  Line 530) n1.isDefault() != n2.isDefault() ==> boolean
+  Line 531) Boolean.FALSE ==> java.lang.Boolean
+  Line 533) Boolean.TRUE ==> java.lang.Boolean
+  Line 537) final Parameter n2 = (Parameter) arg ==> com.github.javaparser.ast.body.Parameter
+  Line 537) (Parameter) arg ==> com.github.javaparser.ast.body.Parameter
+  Line 538) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 539) Boolean.FALSE ==> java.lang.Boolean
+  Line 541) visit((BaseParameter) n1, arg) ==> java.lang.Boolean
+  Line 545) MultiTypeParameter n2 = (MultiTypeParameter) arg ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 545) (MultiTypeParameter) arg ==> com.github.javaparser.ast.body.MultiTypeParameter
+  Line 546) n1.getTypes().size() != n2.getTypes().size() ==> boolean
+  Line 547) Boolean.FALSE ==> java.lang.Boolean
+  Line 549) Iterator<Type> n1types = n1.getTypes().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.Type>
+  Line 549) n1.getTypes().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.Type>
+  Line 550) Iterator<Type> n2types = n2.getTypes().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.Type>
+  Line 550) n2.getTypes().iterator() ==> java.util.Iterator<com.github.javaparser.ast.type.Type>
+  Line 551) n1types.hasNext() && n2types.hasNext() ==> boolean
+  Line 552) !nodeEquals(n1types.next(), n2types.next()) ==> boolean
+  Line 553) Boolean.FALSE ==> java.lang.Boolean
+  Line 556) visit((BaseParameter) n1, arg) ==> java.lang.Boolean
+  Line 560) final BaseParameter n2 = (BaseParameter) arg ==> com.github.javaparser.ast.body.BaseParameter
+  Line 560) (BaseParameter) arg ==> com.github.javaparser.ast.body.BaseParameter
+  Line 562) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 563) Boolean.FALSE ==> java.lang.Boolean
+  Line 566) !nodeEquals(n1.getId(), n2.getId()) ==> boolean
+  Line 567) Boolean.FALSE ==> java.lang.Boolean
+  Line 570) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 571) Boolean.FALSE ==> java.lang.Boolean
+  Line 574) Boolean.TRUE ==> java.lang.Boolean
+  Line 578) Boolean.TRUE ==> java.lang.Boolean
+  Line 582) final InitializerDeclaration n2 = (InitializerDeclaration) arg ==> com.github.javaparser.ast.body.InitializerDeclaration
+  Line 582) (InitializerDeclaration) arg ==> com.github.javaparser.ast.body.InitializerDeclaration
+  Line 584) !nodeEquals(n1.getBlock(), n2.getBlock()) ==> boolean
+  Line 585) Boolean.FALSE ==> java.lang.Boolean
+  Line 588) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 589) Boolean.FALSE ==> java.lang.Boolean
+  Line 592) Boolean.TRUE ==> java.lang.Boolean
+  Line 596) final JavadocComment n2 = (JavadocComment) arg ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 596) (JavadocComment) arg ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 598) !objEquals(n1.getContent(), n2.getContent()) ==> boolean
+  Line 599) Boolean.FALSE ==> java.lang.Boolean
+  Line 602) Boolean.TRUE ==> java.lang.Boolean
+  Line 606) final ClassOrInterfaceType n2 = (ClassOrInterfaceType) arg ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 606) (ClassOrInterfaceType) arg ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 608) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 609) Boolean.FALSE ==> java.lang.Boolean
+  Line 612) !nodeEquals(n1.getScope(), n2.getScope()) ==> boolean
+  Line 613) Boolean.FALSE ==> java.lang.Boolean
+  Line 616) !nodesEquals(n1.getTypeArgs(), n2.getTypeArgs()) ==> boolean
+  Line 617) Boolean.FALSE ==> java.lang.Boolean
+  Line 619) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 620) Boolean.FALSE ==> java.lang.Boolean
+  Line 622) Boolean.TRUE ==> java.lang.Boolean
+  Line 626) final PrimitiveType n2 = (PrimitiveType) arg ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 626) (PrimitiveType) arg ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 628) n1.getType() != n2.getType() ==> boolean
+  Line 629) Boolean.FALSE ==> java.lang.Boolean
+  Line 631) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 632) Boolean.FALSE ==> java.lang.Boolean
+  Line 634) Boolean.TRUE ==> java.lang.Boolean
+  Line 638) final ReferenceType n2 = (ReferenceType) arg ==> com.github.javaparser.ast.type.ReferenceType
+  Line 638) (ReferenceType) arg ==> com.github.javaparser.ast.type.ReferenceType
+  Line 640) n1.getArrayCount() != n2.getArrayCount() ==> boolean
+  Line 641) Boolean.FALSE ==> java.lang.Boolean
+  Line 643) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 644) Boolean.FALSE ==> java.lang.Boolean
+  Line 646) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 647) Boolean.FALSE ==> java.lang.Boolean
+  Line 649) List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 649) n1.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 650) List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 650) n2.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 652) n1a != null && n2a != null ==> boolean
+  Line 653) n1a.size() != n2a.size() ==> boolean
+  Line 654) Boolean.FALSE ==> java.lang.Boolean
+  Line 657) int i = 0 ==> int
+  Line 657) 0 ==> int
+  Line 658) List<AnnotationExpr> aux ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 658) n1a ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 659) !nodesEquals(aux, n2a.get(i)) ==> boolean
+  Line 660) Boolean.FALSE ==> java.lang.Boolean
+  Line 662) i++ ==> int
+  Line 666) n1a != n2a ==> boolean
+  Line 667) Boolean.FALSE ==> java.lang.Boolean
+  Line 669) Boolean.TRUE ==> java.lang.Boolean
+  Line 673) VoidType n2 = (VoidType) arg ==> com.github.javaparser.ast.type.VoidType
+  Line 673) (VoidType) arg ==> com.github.javaparser.ast.type.VoidType
+  Line 674) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 675) Boolean.FALSE ==> java.lang.Boolean
+  Line 677) Boolean.TRUE ==> java.lang.Boolean
+  Line 681) final WildcardType n2 = (WildcardType) arg ==> com.github.javaparser.ast.type.WildcardType
+  Line 681) (WildcardType) arg ==> com.github.javaparser.ast.type.WildcardType
+  Line 683) !nodeEquals(n1.getExtends(), n2.getExtends()) ==> boolean
+  Line 684) Boolean.FALSE ==> java.lang.Boolean
+  Line 687) !nodeEquals(n1.getSuper(), n2.getSuper()) ==> boolean
+  Line 688) Boolean.FALSE ==> java.lang.Boolean
+  Line 690) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 691) Boolean.FALSE ==> java.lang.Boolean
+  Line 693) Boolean.TRUE ==> java.lang.Boolean
+  Line 697) final WildcardType n2 = (WildcardType) arg ==> com.github.javaparser.ast.type.WildcardType
+  Line 697) (WildcardType) arg ==> com.github.javaparser.ast.type.WildcardType
+  Line 699) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 700) Boolean.FALSE ==> java.lang.Boolean
+  Line 702) Boolean.TRUE ==> java.lang.Boolean
+  Line 706) final ArrayAccessExpr n2 = (ArrayAccessExpr) arg ==> com.github.javaparser.ast.expr.ArrayAccessExpr
+  Line 706) (ArrayAccessExpr) arg ==> com.github.javaparser.ast.expr.ArrayAccessExpr
+  Line 708) !nodeEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 709) Boolean.FALSE ==> java.lang.Boolean
+  Line 712) !nodeEquals(n1.getIndex(), n2.getIndex()) ==> boolean
+  Line 713) Boolean.FALSE ==> java.lang.Boolean
+  Line 716) Boolean.TRUE ==> java.lang.Boolean
+  Line 720) final ArrayCreationExpr n2 = (ArrayCreationExpr) arg ==> com.github.javaparser.ast.expr.ArrayCreationExpr
+  Line 720) (ArrayCreationExpr) arg ==> com.github.javaparser.ast.expr.ArrayCreationExpr
+  Line 722) n1.getArrayCount() != n2.getArrayCount() ==> boolean
+  Line 723) Boolean.FALSE ==> java.lang.Boolean
+  Line 726) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 727) Boolean.FALSE ==> java.lang.Boolean
+  Line 730) !nodeEquals(n1.getInitializer(), n2.getInitializer()) ==> boolean
+  Line 731) Boolean.FALSE ==> java.lang.Boolean
+  Line 734) !nodesEquals(n1.getDimensions(), n2.getDimensions()) ==> boolean
+  Line 735) Boolean.FALSE ==> java.lang.Boolean
+  Line 737) List<List<AnnotationExpr>> n1a = n1.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 737) n1.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 738) List<List<AnnotationExpr>> n2a = n2.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 738) n2.getArraysAnnotations() ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 740) n1a != null && n2a != null ==> boolean
+  Line 741) n1a.size() != n2a.size() ==> boolean
+  Line 742) Boolean.FALSE ==> java.lang.Boolean
+  Line 745) int i = 0 ==> int
+  Line 745) 0 ==> int
+  Line 746) List<AnnotationExpr> aux ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 746) n1a ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 747) !nodesEquals(aux, n2a.get(i)) ==> boolean
+  Line 748) Boolean.FALSE ==> java.lang.Boolean
+  Line 750) i++ ==> int
+  Line 754) n1a != n2a ==> boolean
+  Line 755) Boolean.FALSE ==> java.lang.Boolean
+  Line 757) Boolean.TRUE ==> java.lang.Boolean
+  Line 761) final ArrayInitializerExpr n2 = (ArrayInitializerExpr) arg ==> com.github.javaparser.ast.expr.ArrayInitializerExpr
+  Line 761) (ArrayInitializerExpr) arg ==> com.github.javaparser.ast.expr.ArrayInitializerExpr
+  Line 763) !nodesEquals(n1.getValues(), n2.getValues()) ==> boolean
+  Line 764) Boolean.FALSE ==> java.lang.Boolean
+  Line 767) Boolean.TRUE ==> java.lang.Boolean
+  Line 771) final AssignExpr n2 = (AssignExpr) arg ==> com.github.javaparser.ast.expr.AssignExpr
+  Line 771) (AssignExpr) arg ==> com.github.javaparser.ast.expr.AssignExpr
+  Line 773) n1.getOperator() != n2.getOperator() ==> boolean
+  Line 774) Boolean.FALSE ==> java.lang.Boolean
+  Line 777) !nodeEquals(n1.getTarget(), n2.getTarget()) ==> boolean
+  Line 778) Boolean.FALSE ==> java.lang.Boolean
+  Line 781) !nodeEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 782) Boolean.FALSE ==> java.lang.Boolean
+  Line 785) Boolean.TRUE ==> java.lang.Boolean
+  Line 789) final BinaryExpr n2 = (BinaryExpr) arg ==> com.github.javaparser.ast.expr.BinaryExpr
+  Line 789) (BinaryExpr) arg ==> com.github.javaparser.ast.expr.BinaryExpr
+  Line 791) n1.getOperator() != n2.getOperator() ==> boolean
+  Line 792) Boolean.FALSE ==> java.lang.Boolean
+  Line 795) !nodeEquals(n1.getLeft(), n2.getLeft()) ==> boolean
+  Line 796) Boolean.FALSE ==> java.lang.Boolean
+  Line 799) !nodeEquals(n1.getRight(), n2.getRight()) ==> boolean
+  Line 800) Boolean.FALSE ==> java.lang.Boolean
+  Line 803) Boolean.TRUE ==> java.lang.Boolean
+  Line 807) final CastExpr n2 = (CastExpr) arg ==> com.github.javaparser.ast.expr.CastExpr
+  Line 807) (CastExpr) arg ==> com.github.javaparser.ast.expr.CastExpr
+  Line 809) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 810) Boolean.FALSE ==> java.lang.Boolean
+  Line 813) !nodeEquals(n1.getExpr(), n2.getExpr()) ==> boolean
+  Line 814) Boolean.FALSE ==> java.lang.Boolean
+  Line 817) Boolean.TRUE ==> java.lang.Boolean
+  Line 821) final ClassExpr n2 = (ClassExpr) arg ==> com.github.javaparser.ast.expr.ClassExpr
+  Line 821) (ClassExpr) arg ==> com.github.javaparser.ast.expr.ClassExpr
+  Line 823) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 824) Boolean.FALSE ==> java.lang.Boolean
+  Line 827) Boolean.TRUE ==> java.lang.Boolean
+  Line 831) final ConditionalExpr n2 = (ConditionalExpr) arg ==> com.github.javaparser.ast.expr.ConditionalExpr
+  Line 831) (ConditionalExpr) arg ==> com.github.javaparser.ast.expr.ConditionalExpr
+  Line 833) !nodeEquals(n1.getCondition(), n2.getCondition()) ==> boolean
+  Line 834) Boolean.FALSE ==> java.lang.Boolean
+  Line 837) !nodeEquals(n1.getThenExpr(), n2.getThenExpr()) ==> boolean
+  Line 838) Boolean.FALSE ==> java.lang.Boolean
+  Line 841) !nodeEquals(n1.getElseExpr(), n2.getElseExpr()) ==> boolean
+  Line 842) Boolean.FALSE ==> java.lang.Boolean
+  Line 845) Boolean.TRUE ==> java.lang.Boolean
+  Line 849) final EnclosedExpr n2 = (EnclosedExpr) arg ==> com.github.javaparser.ast.expr.EnclosedExpr
+  Line 849) (EnclosedExpr) arg ==> com.github.javaparser.ast.expr.EnclosedExpr
+  Line 851) !nodeEquals(n1.getInner(), n2.getInner()) ==> boolean
+  Line 852) Boolean.FALSE ==> java.lang.Boolean
+  Line 855) Boolean.TRUE ==> java.lang.Boolean
+  Line 859) final FieldAccessExpr n2 = (FieldAccessExpr) arg ==> com.github.javaparser.ast.expr.FieldAccessExpr
+  Line 859) (FieldAccessExpr) arg ==> com.github.javaparser.ast.expr.FieldAccessExpr
+  Line 861) !nodeEquals(n1.getScope(), n2.getScope()) ==> boolean
+  Line 862) Boolean.FALSE ==> java.lang.Boolean
+  Line 865) !objEquals(n1.getField(), n2.getField()) ==> boolean
+  Line 866) Boolean.FALSE ==> java.lang.Boolean
+  Line 869) !nodesEquals(n1.getTypeArgs(), n2.getTypeArgs()) ==> boolean
+  Line 870) Boolean.FALSE ==> java.lang.Boolean
+  Line 873) Boolean.TRUE ==> java.lang.Boolean
+  Line 877) final InstanceOfExpr n2 = (InstanceOfExpr) arg ==> com.github.javaparser.ast.expr.InstanceOfExpr
+  Line 877) (InstanceOfExpr) arg ==> com.github.javaparser.ast.expr.InstanceOfExpr
+  Line 879) !nodeEquals(n1.getExpr(), n2.getExpr()) ==> boolean
+  Line 880) Boolean.FALSE ==> java.lang.Boolean
+  Line 883) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 884) Boolean.FALSE ==> java.lang.Boolean
+  Line 887) Boolean.TRUE ==> java.lang.Boolean
+  Line 891) final StringLiteralExpr n2 = (StringLiteralExpr) arg ==> com.github.javaparser.ast.expr.StringLiteralExpr
+  Line 891) (StringLiteralExpr) arg ==> com.github.javaparser.ast.expr.StringLiteralExpr
+  Line 893) !objEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 894) Boolean.FALSE ==> java.lang.Boolean
+  Line 897) Boolean.TRUE ==> java.lang.Boolean
+  Line 901) final IntegerLiteralExpr n2 = (IntegerLiteralExpr) arg ==> com.github.javaparser.ast.expr.IntegerLiteralExpr
+  Line 901) (IntegerLiteralExpr) arg ==> com.github.javaparser.ast.expr.IntegerLiteralExpr
+  Line 903) !objEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 904) Boolean.FALSE ==> java.lang.Boolean
+  Line 907) Boolean.TRUE ==> java.lang.Boolean
+  Line 911) final LongLiteralExpr n2 = (LongLiteralExpr) arg ==> com.github.javaparser.ast.expr.LongLiteralExpr
+  Line 911) (LongLiteralExpr) arg ==> com.github.javaparser.ast.expr.LongLiteralExpr
+  Line 913) !objEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 914) Boolean.FALSE ==> java.lang.Boolean
+  Line 917) Boolean.TRUE ==> java.lang.Boolean
+  Line 921) final IntegerLiteralMinValueExpr n2 = (IntegerLiteralMinValueExpr) arg ==> com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr
+  Line 921) (IntegerLiteralMinValueExpr) arg ==> com.github.javaparser.ast.expr.IntegerLiteralMinValueExpr
+  Line 923) !objEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 924) Boolean.FALSE ==> java.lang.Boolean
+  Line 927) Boolean.TRUE ==> java.lang.Boolean
+  Line 931) final LongLiteralMinValueExpr n2 = (LongLiteralMinValueExpr) arg ==> com.github.javaparser.ast.expr.LongLiteralMinValueExpr
+  Line 931) (LongLiteralMinValueExpr) arg ==> com.github.javaparser.ast.expr.LongLiteralMinValueExpr
+  Line 933) !objEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 934) Boolean.FALSE ==> java.lang.Boolean
+  Line 937) Boolean.TRUE ==> java.lang.Boolean
+  Line 941) final CharLiteralExpr n2 = (CharLiteralExpr) arg ==> com.github.javaparser.ast.expr.CharLiteralExpr
+  Line 941) (CharLiteralExpr) arg ==> com.github.javaparser.ast.expr.CharLiteralExpr
+  Line 943) !objEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 944) Boolean.FALSE ==> java.lang.Boolean
+  Line 947) Boolean.TRUE ==> java.lang.Boolean
+  Line 951) final DoubleLiteralExpr n2 = (DoubleLiteralExpr) arg ==> com.github.javaparser.ast.expr.DoubleLiteralExpr
+  Line 951) (DoubleLiteralExpr) arg ==> com.github.javaparser.ast.expr.DoubleLiteralExpr
+  Line 953) !objEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 954) Boolean.FALSE ==> java.lang.Boolean
+  Line 957) Boolean.TRUE ==> java.lang.Boolean
+  Line 961) final BooleanLiteralExpr n2 = (BooleanLiteralExpr) arg ==> com.github.javaparser.ast.expr.BooleanLiteralExpr
+  Line 961) (BooleanLiteralExpr) arg ==> com.github.javaparser.ast.expr.BooleanLiteralExpr
+  Line 963) n1.getValue() != n2.getValue() ==> boolean
+  Line 964) Boolean.FALSE ==> java.lang.Boolean
+  Line 967) Boolean.TRUE ==> java.lang.Boolean
+  Line 971) Boolean.TRUE ==> java.lang.Boolean
+  Line 975) final MethodCallExpr n2 = (MethodCallExpr) arg ==> com.github.javaparser.ast.expr.MethodCallExpr
+  Line 975) (MethodCallExpr) arg ==> com.github.javaparser.ast.expr.MethodCallExpr
+  Line 977) !nodeEquals(n1.getScope(), n2.getScope()) ==> boolean
+  Line 978) Boolean.FALSE ==> java.lang.Boolean
+  Line 981) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 982) Boolean.FALSE ==> java.lang.Boolean
+  Line 985) !nodesEquals(n1.getArgs(), n2.getArgs()) ==> boolean
+  Line 986) Boolean.FALSE ==> java.lang.Boolean
+  Line 989) !nodesEquals(n1.getTypeArgs(), n2.getTypeArgs()) ==> boolean
+  Line 990) Boolean.FALSE ==> java.lang.Boolean
+  Line 993) Boolean.TRUE ==> java.lang.Boolean
+  Line 997) final NameExpr n2 = (NameExpr) arg ==> com.github.javaparser.ast.expr.NameExpr
+  Line 997) (NameExpr) arg ==> com.github.javaparser.ast.expr.NameExpr
+  Line 999) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 1000) Boolean.FALSE ==> java.lang.Boolean
+  Line 1003) Boolean.TRUE ==> java.lang.Boolean
+  Line 1007) final ObjectCreationExpr n2 = (ObjectCreationExpr) arg ==> com.github.javaparser.ast.expr.ObjectCreationExpr
+  Line 1007) (ObjectCreationExpr) arg ==> com.github.javaparser.ast.expr.ObjectCreationExpr
+  Line 1009) !nodeEquals(n1.getScope(), n2.getScope()) ==> boolean
+  Line 1010) Boolean.FALSE ==> java.lang.Boolean
+  Line 1013) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 1014) Boolean.FALSE ==> java.lang.Boolean
+  Line 1017) !nodesEquals(n1.getAnonymousClassBody(), n2.getAnonymousClassBody()) ==> boolean
+  Line 1018) Boolean.FALSE ==> java.lang.Boolean
+  Line 1021) !nodesEquals(n1.getArgs(), n2.getArgs()) ==> boolean
+  Line 1022) Boolean.FALSE ==> java.lang.Boolean
+  Line 1025) !nodesEquals(n1.getTypeArgs(), n2.getTypeArgs()) ==> boolean
+  Line 1026) Boolean.FALSE ==> java.lang.Boolean
+  Line 1029) Boolean.TRUE ==> java.lang.Boolean
+  Line 1033) final QualifiedNameExpr n2 = (QualifiedNameExpr) arg ==> com.github.javaparser.ast.expr.QualifiedNameExpr
+  Line 1033) (QualifiedNameExpr) arg ==> com.github.javaparser.ast.expr.QualifiedNameExpr
+  Line 1035) !nodeEquals(n1.getQualifier(), n2.getQualifier()) ==> boolean
+  Line 1036) Boolean.FALSE ==> java.lang.Boolean
+  Line 1039) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 1040) Boolean.FALSE ==> java.lang.Boolean
+  Line 1043) Boolean.TRUE ==> java.lang.Boolean
+  Line 1047) final ThisExpr n2 = (ThisExpr) arg ==> com.github.javaparser.ast.expr.ThisExpr
+  Line 1047) (ThisExpr) arg ==> com.github.javaparser.ast.expr.ThisExpr
+  Line 1049) !nodeEquals(n1.getClassExpr(), n2.getClassExpr()) ==> boolean
+  Line 1050) Boolean.FALSE ==> java.lang.Boolean
+  Line 1053) Boolean.TRUE ==> java.lang.Boolean
+  Line 1057) final SuperExpr n2 = (SuperExpr) arg ==> com.github.javaparser.ast.expr.SuperExpr
+  Line 1057) (SuperExpr) arg ==> com.github.javaparser.ast.expr.SuperExpr
+  Line 1059) !nodeEquals(n1.getClassExpr(), n2.getClassExpr()) ==> boolean
+  Line 1060) Boolean.FALSE ==> java.lang.Boolean
+  Line 1063) Boolean.TRUE ==> java.lang.Boolean
+  Line 1067) final UnaryExpr n2 = (UnaryExpr) arg ==> com.github.javaparser.ast.expr.UnaryExpr
+  Line 1067) (UnaryExpr) arg ==> com.github.javaparser.ast.expr.UnaryExpr
+  Line 1069) n1.getOperator() != n2.getOperator() ==> boolean
+  Line 1070) Boolean.FALSE ==> java.lang.Boolean
+  Line 1073) !nodeEquals(n1.getExpr(), n2.getExpr()) ==> boolean
+  Line 1074) Boolean.FALSE ==> java.lang.Boolean
+  Line 1077) Boolean.TRUE ==> java.lang.Boolean
+  Line 1081) final VariableDeclarationExpr n2 = (VariableDeclarationExpr) arg ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 1081) (VariableDeclarationExpr) arg ==> com.github.javaparser.ast.expr.VariableDeclarationExpr
+  Line 1083) n1.getModifiers() != n2.getModifiers() ==> boolean
+  Line 1084) Boolean.FALSE ==> java.lang.Boolean
+  Line 1087) !nodesEquals(n1.getAnnotations(), n2.getAnnotations()) ==> boolean
+  Line 1088) Boolean.FALSE ==> java.lang.Boolean
+  Line 1091) !nodeEquals(n1.getType(), n2.getType()) ==> boolean
+  Line 1092) Boolean.FALSE ==> java.lang.Boolean
+  Line 1095) !nodesEquals(n1.getVars(), n2.getVars()) ==> boolean
+  Line 1096) Boolean.FALSE ==> java.lang.Boolean
+  Line 1099) Boolean.TRUE ==> java.lang.Boolean
+  Line 1103) final MarkerAnnotationExpr n2 = (MarkerAnnotationExpr) arg ==> com.github.javaparser.ast.expr.MarkerAnnotationExpr
+  Line 1103) (MarkerAnnotationExpr) arg ==> com.github.javaparser.ast.expr.MarkerAnnotationExpr
+  Line 1105) !nodeEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 1106) Boolean.FALSE ==> java.lang.Boolean
+  Line 1109) Boolean.TRUE ==> java.lang.Boolean
+  Line 1113) final SingleMemberAnnotationExpr n2 = (SingleMemberAnnotationExpr) arg ==> com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
+  Line 1113) (SingleMemberAnnotationExpr) arg ==> com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
+  Line 1115) !nodeEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 1116) Boolean.FALSE ==> java.lang.Boolean
+  Line 1119) !nodeEquals(n1.getMemberValue(), n2.getMemberValue()) ==> boolean
+  Line 1120) Boolean.FALSE ==> java.lang.Boolean
+  Line 1123) Boolean.TRUE ==> java.lang.Boolean
+  Line 1127) final NormalAnnotationExpr n2 = (NormalAnnotationExpr) arg ==> com.github.javaparser.ast.expr.NormalAnnotationExpr
+  Line 1127) (NormalAnnotationExpr) arg ==> com.github.javaparser.ast.expr.NormalAnnotationExpr
+  Line 1129) !nodeEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 1130) Boolean.FALSE ==> java.lang.Boolean
+  Line 1133) !nodesEquals(n1.getPairs(), n2.getPairs()) ==> boolean
+  Line 1134) Boolean.FALSE ==> java.lang.Boolean
+  Line 1137) Boolean.TRUE ==> java.lang.Boolean
+  Line 1141) final MemberValuePair n2 = (MemberValuePair) arg ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 1141) (MemberValuePair) arg ==> com.github.javaparser.ast.expr.MemberValuePair
+  Line 1143) !objEquals(n1.getName(), n2.getName()) ==> boolean
+  Line 1144) Boolean.FALSE ==> java.lang.Boolean
+  Line 1147) !nodeEquals(n1.getValue(), n2.getValue()) ==> boolean
+  Line 1148) Boolean.FALSE ==> java.lang.Boolean
+  Line 1151) Boolean.TRUE ==> java.lang.Boolean
+  Line 1155) final ExplicitConstructorInvocationStmt n2 = (ExplicitConstructorInvocationStmt) arg ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
+  Line 1155) (ExplicitConstructorInvocationStmt) arg ==> com.github.javaparser.ast.stmt.ExplicitConstructorInvocationStmt
+  Line 1157) !nodeEquals(n1.getExpr(), n2.getExpr()) ==> boolean
+  Line 1158) Boolean.FALSE ==> java.lang.Boolean
+  Line 1161) !nodesEquals(n1.getArgs(), n2.getArgs()) ==> boolean
+  Line 1162) Boolean.FALSE ==> java.lang.Boolean
+  Line 1165) !nodesEquals(n1.getTypeArgs(), n2.getTypeArgs()) ==> boolean
+  Line 1166) Boolean.FALSE ==> java.lang.Boolean
+  Line 1169) Boolean.TRUE ==> java.lang.Boolean
+  Line 1173) final TypeDeclarationStmt n2 = (TypeDeclarationStmt) arg ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt
+  Line 1173) (TypeDeclarationStmt) arg ==> com.github.javaparser.ast.stmt.TypeDeclarationStmt
+  Line 1175) !nodeEquals(n1.getTypeDeclaration(), n2.getTypeDeclaration()) ==> boolean
+  Line 1176) Boolean.FALSE ==> java.lang.Boolean
+  Line 1179) Boolean.TRUE ==> java.lang.Boolean
+  Line 1183) final AssertStmt n2 = (AssertStmt) arg ==> com.github.javaparser.ast.stmt.AssertStmt
+  Line 1183) (AssertStmt) arg ==> com.github.javaparser.ast.stmt.AssertStmt
+  Line 1185) !nodeEquals(n1.getCheck(), n2.getCheck()) ==> boolean
+  Line 1186) Boolean.FALSE ==> java.lang.Boolean
+  Line 1189) !nodeEquals(n1.getMessage(), n2.getMessage()) ==> boolean
+  Line 1190) Boolean.FALSE ==> java.lang.Boolean
+  Line 1193) Boolean.TRUE ==> java.lang.Boolean
+  Line 1197) final BlockStmt n2 = (BlockStmt) arg ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1197) (BlockStmt) arg ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 1199) !nodesEquals(n1.getStmts(), n2.getStmts()) ==> boolean
+  Line 1200) Boolean.FALSE ==> java.lang.Boolean
+  Line 1203) Boolean.TRUE ==> java.lang.Boolean
+  Line 1207) final LabeledStmt n2 = (LabeledStmt) arg ==> com.github.javaparser.ast.stmt.LabeledStmt
+  Line 1207) (LabeledStmt) arg ==> com.github.javaparser.ast.stmt.LabeledStmt
+  Line 1209) !nodeEquals(n1.getStmt(), n2.getStmt()) ==> boolean
+  Line 1210) Boolean.FALSE ==> java.lang.Boolean
+  Line 1213) Boolean.TRUE ==> java.lang.Boolean
+  Line 1217) Boolean.TRUE ==> java.lang.Boolean
+  Line 1221) final ExpressionStmt n2 = (ExpressionStmt) arg ==> com.github.javaparser.ast.stmt.ExpressionStmt
+  Line 1221) (ExpressionStmt) arg ==> com.github.javaparser.ast.stmt.ExpressionStmt
+  Line 1223) !nodeEquals(n1.getExpression(), n2.getExpression()) ==> boolean
+  Line 1224) Boolean.FALSE ==> java.lang.Boolean
+  Line 1227) Boolean.TRUE ==> java.lang.Boolean
+  Line 1231) final SwitchStmt n2 = (SwitchStmt) arg ==> com.github.javaparser.ast.stmt.SwitchStmt
+  Line 1231) (SwitchStmt) arg ==> com.github.javaparser.ast.stmt.SwitchStmt
+  Line 1233) !nodeEquals(n1.getSelector(), n2.getSelector()) ==> boolean
+  Line 1234) Boolean.FALSE ==> java.lang.Boolean
+  Line 1237) !nodesEquals(n1.getEntries(), n2.getEntries()) ==> boolean
+  Line 1238) Boolean.FALSE ==> java.lang.Boolean
+  Line 1241) Boolean.TRUE ==> java.lang.Boolean
+  Line 1245) final SwitchEntryStmt n2 = (SwitchEntryStmt) arg ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 1245) (SwitchEntryStmt) arg ==> com.github.javaparser.ast.stmt.SwitchEntryStmt
+  Line 1247) !nodeEquals(n1.getLabel(), n2.getLabel()) ==> boolean
+  Line 1248) Boolean.FALSE ==> java.lang.Boolean
+  Line 1251) !nodesEquals(n1.getStmts(), n2.getStmts()) ==> boolean
+  Line 1252) Boolean.FALSE ==> java.lang.Boolean
+  Line 1255) Boolean.TRUE ==> java.lang.Boolean
+  Line 1259) final BreakStmt n2 = (BreakStmt) arg ==> com.github.javaparser.ast.stmt.BreakStmt
+  Line 1259) (BreakStmt) arg ==> com.github.javaparser.ast.stmt.BreakStmt
+  Line 1261) !objEquals(n1.getId(), n2.getId()) ==> boolean
+  Line 1262) Boolean.FALSE ==> java.lang.Boolean
+  Line 1265) Boolean.TRUE ==> java.lang.Boolean
+  Line 1269) final ReturnStmt n2 = (ReturnStmt) arg ==> com.github.javaparser.ast.stmt.ReturnStmt
+  Line 1269) (ReturnStmt) arg ==> com.github.javaparser.ast.stmt.ReturnStmt
+  Line 1271) !nodeEquals(n1.getExpr(), n2.getExpr()) ==> boolean
+  Line 1272) Boolean.FALSE ==> java.lang.Boolean
+  Line 1275) Boolean.TRUE ==> java.lang.Boolean
+  Line 1279) final IfStmt n2 = (IfStmt) arg ==> com.github.javaparser.ast.stmt.IfStmt
+  Line 1279) (IfStmt) arg ==> com.github.javaparser.ast.stmt.IfStmt
+  Line 1281) !nodeEquals(n1.getCondition(), n2.getCondition()) ==> boolean
+  Line 1282) Boolean.FALSE ==> java.lang.Boolean
+  Line 1285) !nodeEquals(n1.getThenStmt(), n2.getThenStmt()) ==> boolean
+  Line 1286) Boolean.FALSE ==> java.lang.Boolean
+  Line 1289) !nodeEquals(n1.getElseStmt(), n2.getElseStmt()) ==> boolean
+  Line 1290) Boolean.FALSE ==> java.lang.Boolean
+  Line 1293) Boolean.TRUE ==> java.lang.Boolean
+  Line 1297) final WhileStmt n2 = (WhileStmt) arg ==> com.github.javaparser.ast.stmt.WhileStmt
+  Line 1297) (WhileStmt) arg ==> com.github.javaparser.ast.stmt.WhileStmt
+  Line 1299) !nodeEquals(n1.getCondition(), n2.getCondition()) ==> boolean
+  Line 1300) Boolean.FALSE ==> java.lang.Boolean
+  Line 1303) !nodeEquals(n1.getBody(), n2.getBody()) ==> boolean
+  Line 1304) Boolean.FALSE ==> java.lang.Boolean
+  Line 1307) Boolean.TRUE ==> java.lang.Boolean
+  Line 1311) final ContinueStmt n2 = (ContinueStmt) arg ==> com.github.javaparser.ast.stmt.ContinueStmt
+  Line 1311) (ContinueStmt) arg ==> com.github.javaparser.ast.stmt.ContinueStmt
+  Line 1313) !objEquals(n1.getId(), n2.getId()) ==> boolean
+  Line 1314) Boolean.FALSE ==> java.lang.Boolean
+  Line 1317) Boolean.TRUE ==> java.lang.Boolean
+  Line 1321) final DoStmt n2 = (DoStmt) arg ==> com.github.javaparser.ast.stmt.DoStmt
+  Line 1321) (DoStmt) arg ==> com.github.javaparser.ast.stmt.DoStmt
+  Line 1323) !nodeEquals(n1.getBody(), n2.getBody()) ==> boolean
+  Line 1324) Boolean.FALSE ==> java.lang.Boolean
+  Line 1327) !nodeEquals(n1.getCondition(), n2.getCondition()) ==> boolean
+  Line 1328) Boolean.FALSE ==> java.lang.Boolean
+  Line 1331) Boolean.TRUE ==> java.lang.Boolean
+  Line 1335) final ForeachStmt n2 = (ForeachStmt) arg ==> com.github.javaparser.ast.stmt.ForeachStmt
+  Line 1335) (ForeachStmt) arg ==> com.github.javaparser.ast.stmt.ForeachStmt
+  Line 1337) !nodeEquals(n1.getVariable(), n2.getVariable()) ==> boolean
+  Line 1338) Boolean.FALSE ==> java.lang.Boolean
+  Line 1341) !nodeEquals(n1.getIterable(), n2.getIterable()) ==> boolean
+  Line 1342) Boolean.FALSE ==> java.lang.Boolean
+  Line 1345) !nodeEquals(n1.getBody(), n2.getBody()) ==> boolean
+  Line 1346) Boolean.FALSE ==> java.lang.Boolean
+  Line 1349) Boolean.TRUE ==> java.lang.Boolean
+  Line 1353) final ForStmt n2 = (ForStmt) arg ==> com.github.javaparser.ast.stmt.ForStmt
+  Line 1353) (ForStmt) arg ==> com.github.javaparser.ast.stmt.ForStmt
+  Line 1355) !nodesEquals(n1.getInit(), n2.getInit()) ==> boolean
+  Line 1356) Boolean.FALSE ==> java.lang.Boolean
+  Line 1359) !nodeEquals(n1.getCompare(), n2.getCompare()) ==> boolean
+  Line 1360) Boolean.FALSE ==> java.lang.Boolean
+  Line 1363) !nodesEquals(n1.getUpdate(), n2.getUpdate()) ==> boolean
+  Line 1364) Boolean.FALSE ==> java.lang.Boolean
+  Line 1367) !nodeEquals(n1.getBody(), n2.getBody()) ==> boolean
+  Line 1368) Boolean.FALSE ==> java.lang.Boolean
+  Line 1371) Boolean.TRUE ==> java.lang.Boolean
+  Line 1375) final ThrowStmt n2 = (ThrowStmt) arg ==> com.github.javaparser.ast.stmt.ThrowStmt
+  Line 1375) (ThrowStmt) arg ==> com.github.javaparser.ast.stmt.ThrowStmt
+  Line 1377) !nodeEquals(n1.getExpr(), n2.getExpr()) ==> boolean
+  Line 1378) Boolean.FALSE ==> java.lang.Boolean
+  Line 1381) Boolean.TRUE ==> java.lang.Boolean
+  Line 1385) final SynchronizedStmt n2 = (SynchronizedStmt) arg ==> com.github.javaparser.ast.stmt.SynchronizedStmt
+  Line 1385) (SynchronizedStmt) arg ==> com.github.javaparser.ast.stmt.SynchronizedStmt
+  Line 1387) !nodeEquals(n1.getExpr(), n2.getExpr()) ==> boolean
+  Line 1388) Boolean.FALSE ==> java.lang.Boolean
+  Line 1391) !nodeEquals(n1.getBlock(), n2.getBlock()) ==> boolean
+  Line 1392) Boolean.FALSE ==> java.lang.Boolean
+  Line 1395) Boolean.TRUE ==> java.lang.Boolean
+  Line 1399) final TryStmt n2 = (TryStmt) arg ==> com.github.javaparser.ast.stmt.TryStmt
+  Line 1399) (TryStmt) arg ==> com.github.javaparser.ast.stmt.TryStmt
+  Line 1401) !nodeEquals(n1.getTryBlock(), n2.getTryBlock()) ==> boolean
+  Line 1402) Boolean.FALSE ==> java.lang.Boolean
+  Line 1405) !nodesEquals(n1.getCatchs(), n2.getCatchs()) ==> boolean
+  Line 1406) Boolean.FALSE ==> java.lang.Boolean
+  Line 1409) !nodeEquals(n1.getFinallyBlock(), n2.getFinallyBlock()) ==> boolean
+  Line 1410) Boolean.FALSE ==> java.lang.Boolean
+  Line 1413) Boolean.TRUE ==> java.lang.Boolean
+  Line 1417) final CatchClause n2 = (CatchClause) arg ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 1417) (CatchClause) arg ==> com.github.javaparser.ast.stmt.CatchClause
+  Line 1419) !nodeEquals(n1.getExcept(), n2.getExcept()) ==> boolean
+  Line 1420) Boolean.FALSE ==> java.lang.Boolean
+  Line 1423) !nodeEquals(n1.getCatchBlock(), n2.getCatchBlock()) ==> boolean
+  Line 1424) Boolean.FALSE ==> java.lang.Boolean
+  Line 1427) Boolean.TRUE ==> java.lang.Boolean
+  Line 1432) LambdaExpr n2 = (LambdaExpr) arg ==> com.github.javaparser.ast.expr.LambdaExpr
+  Line 1432) (LambdaExpr) arg ==> com.github.javaparser.ast.expr.LambdaExpr
+  Line 1433) !nodesEquals(n1.getParameters(), n2.getParameters()) ==> boolean
+  Line 1434) Boolean.FALSE ==> java.lang.Boolean
+  Line 1436) n1.isParametersEnclosed() != n2.isParametersEnclosed() ==> boolean
+  Line 1437) Boolean.FALSE ==> java.lang.Boolean
+  Line 1439) !nodeEquals(n1.getBody(), n2.getBody()) ==> boolean
+  Line 1440) Boolean.FALSE ==> java.lang.Boolean
+  Line 1442) Boolean.TRUE ==> java.lang.Boolean
+  Line 1447) MethodReferenceExpr n2 = (MethodReferenceExpr) arg ==> com.github.javaparser.ast.expr.MethodReferenceExpr
+  Line 1447) (MethodReferenceExpr) arg ==> com.github.javaparser.ast.expr.MethodReferenceExpr
+  Line 1448) !nodeEquals(n1.getScope(), n2.getScope()) ==> boolean
+  Line 1449) Boolean.FALSE ==> java.lang.Boolean
+  Line 1451) !nodesEquals(n1.getTypeParameters(), n2.getTypeParameters()) ==> boolean
+  Line 1452) Boolean.FALSE ==> java.lang.Boolean
+  Line 1454) !objEquals(n1.getIdentifier(), n2.getIdentifier()) ==> boolean
+  Line 1455) Boolean.FALSE ==> java.lang.Boolean
+  Line 1457) Boolean.TRUE ==> java.lang.Boolean
+  Line 1462) TypeExpr n2 = (TypeExpr) arg ==> com.github.javaparser.ast.expr.TypeExpr
+  Line 1462) (TypeExpr) arg ==> com.github.javaparser.ast.expr.TypeExpr
+  Line 1463) !nodeEquals(n.getType(), n2.getType()) ==> boolean
+  Line 1464) Boolean.FALSE ==> java.lang.Boolean
+  Line 1466) Boolean.TRUE ==> java.lang.Boolean

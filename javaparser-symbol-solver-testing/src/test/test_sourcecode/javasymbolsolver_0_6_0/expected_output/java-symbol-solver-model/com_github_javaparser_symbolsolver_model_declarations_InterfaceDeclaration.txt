@@ -1,0 +1,4 @@
+  Line 46) getInterfacesExtended() ==> com.github.javaparser.symbolsolver.model.declarations.InterfaceDeclaration.getInterfacesExtended()
+  Line 47) interfaces.add(interfaceDeclaration) ==> java.util.List.add(E)
+  Line 48) interfaces.addAll(interfaceDeclaration.getAllInterfacesAncestors()) ==> java.util.List.addAll(java.util.Collection<? extends E>)
+  Line 48) interfaceDeclaration.getAllInterfacesAncestors() ==> com.github.javaparser.symbolsolver.model.typesystem.ReferenceType.getAllInterfacesAncestors()

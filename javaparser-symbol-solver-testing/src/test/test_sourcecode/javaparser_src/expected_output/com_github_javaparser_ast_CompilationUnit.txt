@@ -1,0 +1,28 @@
+
+[ Class com.github.javaparser.ast.CompilationUnit ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 63) setPackage(pakage) ==> void
+  Line 64) setImports(imports) ==> void
+  Line 65) setTypes(types) ==> void
+  Line 69) beginLine ==> int
+  Line 69) beginColumn ==> int
+  Line 69) endLine ==> int
+  Line 69) endColumn ==> int
+  Line 70) setPackage(pakage) ==> void
+  Line 71) setImports(imports) ==> void
+  Line 72) setTypes(types) ==> void
+  Line 77) v.visit(this, arg) ==> R
+  Line 82) v.visit(this, arg) ==> void
+  Line 98) this.getAllContainedComments() ==> java.util.List<com.github.javaparser.ast.comments.Comment>
+  Line 108) imports ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 119) pakage ==> com.github.javaparser.ast.PackageDeclaration
+  Line 133) types ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 143) new RuntimeException("Not implemented!") ==> java.lang.RuntimeException
+  Line 154) this.imports = imports ==> java.util.List<com.github.javaparser.ast.ImportDeclaration>
+  Line 155) setAsParentNodeOf(this.imports) ==> void
+  Line 166) this.pakage = pakage ==> com.github.javaparser.ast.PackageDeclaration
+  Line 167) setAsParentNodeOf(this.pakage) ==> void
+  Line 177) this.types = types ==> java.util.List<com.github.javaparser.ast.body.TypeDeclaration>
+  Line 178) setAsParentNodeOf(this.types) ==> void

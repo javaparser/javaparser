@@ -1,0 +1,6 @@
+  Line 77) Primitive.values() ==> com.github.javaparser.ast.type.PrimitiveType.Primitive.values()
+  Line 78) unboxMap.put(unboxedType.nameOfBoxedType, unboxedType) ==> java.util.HashMap.put(K, V)
+  Line 93) setType(type) ==> com.github.javaparser.ast.type.PrimitiveType.setType(com.github.javaparser.ast.type.PrimitiveType.Primitive)
+  Line 97) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.type.PrimitiveType, A)
+  Line 101) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.type.PrimitiveType, A)
+  Line 109) type.toBoxedType() ==> com.github.javaparser.ast.type.PrimitiveType.Primitive.toBoxedType()

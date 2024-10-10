@@ -1,0 +1,52 @@
+class ConstructorCalls {
+
+    void testNormalConstructor() {
+        new OtherClass();
+    }
+
+    void testInnerClassConstructor() {
+        OtherClass oc = new OtherClass();
+        oc.new InnerClass();
+    }
+
+    void testInnerClassConstructorWithNewScope() {
+        new OtherClass().new InnerClass();
+    }
+
+    void testInnerInnerClassConstructor() {
+        new OtherClass().new InnerClass().new InnerInnerClass();
+    }
+
+    void testAnonymousInnerClassEmptyConstructor() {
+        new OtherClass() {};
+    }
+
+    void testAnonymousInnerClassEmptyConstructorInterface() {
+        new OtherInterface() {};
+    }
+
+    void testAnonymousInnerClassStringConstructor() {
+        new OtherClass("foo") {};
+    }
+}
+
+class OtherClass {
+
+    OtherClass() {}
+
+    OtherClass(String foo) {}
+
+    class InnerClass {
+
+        InnerClass() {}
+
+        class InnerInnerClass {
+
+            InnerInnerClass() {}
+        }
+    }
+}
+
+interface OtherInterface {
+
+}

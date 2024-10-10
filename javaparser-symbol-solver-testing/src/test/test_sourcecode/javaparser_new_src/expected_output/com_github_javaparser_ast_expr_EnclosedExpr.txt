@@ -1,0 +1,5 @@
+  Line 39) setInner(inner) ==> com.github.javaparser.ast.expr.EnclosedExpr.setInner(com.github.javaparser.ast.expr.Expression)
+  Line 44) setInner(inner) ==> com.github.javaparser.ast.expr.EnclosedExpr.setInner(com.github.javaparser.ast.expr.Expression)
+  Line 48) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.EnclosedExpr, A)
+  Line 52) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.EnclosedExpr, A)
+  Line 61) setAsParentNodeOf(this.inner) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

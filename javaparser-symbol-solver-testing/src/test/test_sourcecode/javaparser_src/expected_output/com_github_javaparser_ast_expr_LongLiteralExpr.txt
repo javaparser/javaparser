@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.expr.LongLiteralExpr ]
+  superclass: com.github.javaparser.ast.expr.StringLiteralExpr
+  superclass: com.github.javaparser.ast.expr.LiteralExpr
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 32) "9223372036854775808" ==> java.lang.String
+  Line 34) "-" + UNSIGNED_MIN_VALUE + "L" ==> java.lang.String
+  Line 40) value ==> java.lang.String
+  Line 45) beginLine ==> int
+  Line 45) beginColumn ==> int
+  Line 45) endLine ==> int
+  Line 45) endColumn ==> int
+  Line 45) value ==> java.lang.String
+  Line 49) v.visit(this, arg) ==> R
+  Line 53) v.visit(this, arg) ==> void
+  Line 57) //
+value != null && //
+value.length() == 20 && //
+value.startsWith(UNSIGNED_MIN_VALUE) && (value.charAt(19) == 'L' || value.charAt(19) == 'l') ==> boolean

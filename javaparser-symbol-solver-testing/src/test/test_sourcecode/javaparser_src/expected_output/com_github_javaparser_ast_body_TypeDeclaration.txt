@@ -1,0 +1,31 @@
+
+[ Class com.github.javaparser.ast.body.TypeDeclaration ]
+  superclass: com.github.javaparser.ast.body.BodyDeclaration
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  Line 45) setName(name) ==> void
+  Line 46) setModifiers(modifiers) ==> void
+  Line 52) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 53) setName(name) ==> void
+  Line 54) setModifiers(modifiers) ==> void
+  Line 55) setMembers(members) ==> void
+  Line 62) beginLine ==> int
+  Line 62) beginColumn ==> int
+  Line 62) endLine ==> int
+  Line 62) endColumn ==> int
+  Line 62) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 63) setName(name) ==> void
+  Line 64) setModifiers(modifiers) ==> void
+  Line 65) setMembers(members) ==> void
+  Line 69) members ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 79) modifiers ==> int
+  Line 83) name.getName() ==> java.lang.String
+  Line 87) this.members = members ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 88) setAsParentNodeOf(this.members) ==> void
+  Line 92) this.modifiers = modifiers ==> int
+  Line 96) this.name = new NameExpr(name) ==> com.github.javaparser.ast.expr.NameExpr
+  Line 100) this.name = nameExpr ==> com.github.javaparser.ast.expr.NameExpr
+  Line 104) name ==> com.github.javaparser.ast.expr.NameExpr

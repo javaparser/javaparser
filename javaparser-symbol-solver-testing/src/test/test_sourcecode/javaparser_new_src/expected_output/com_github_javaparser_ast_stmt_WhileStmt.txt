@@ -1,0 +1,8 @@
+  Line 43) setCondition(condition) ==> com.github.javaparser.ast.stmt.WhileStmt.setCondition(com.github.javaparser.ast.expr.Expression)
+  Line 44) setBody(body) ==> com.github.javaparser.ast.stmt.WhileStmt.setBody(com.github.javaparser.ast.stmt.Statement)
+  Line 49) setCondition(condition) ==> com.github.javaparser.ast.stmt.WhileStmt.setCondition(com.github.javaparser.ast.expr.Expression)
+  Line 50) setBody(body) ==> com.github.javaparser.ast.stmt.WhileStmt.setBody(com.github.javaparser.ast.stmt.Statement)
+  Line 54) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.stmt.WhileStmt, A)
+  Line 58) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.stmt.WhileStmt, A)
+  Line 73) setAsParentNodeOf(this.body) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)
+  Line 79) setAsParentNodeOf(this.condition) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

@@ -1,0 +1,28 @@
+
+[ Class com.github.javaparser.ast.body.AnnotationDeclaration ]
+  superclass: com.github.javaparser.ast.body.TypeDeclaration
+  superclass: com.github.javaparser.ast.body.BodyDeclaration
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.DocumentableNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  interface: com.github.javaparser.ast.NamedNode
+  Line 41) modifiers ==> int
+  Line 41) name ==> java.lang.String
+  Line 45) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 45) modifiers ==> int
+  Line 45) name ==> java.lang.String
+  Line 45) members ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 49) beginLine ==> int
+  Line 49) beginColumn ==> int
+  Line 49) endLine ==> int
+  Line 49) endColumn ==> int
+  Line 49) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 49) modifiers ==> int
+  Line 49) name ==> java.lang.String
+  Line 49) members ==> java.util.List<com.github.javaparser.ast.body.BodyDeclaration>
+  Line 54) v.visit(this, arg) ==> R
+  Line 59) v.visit(this, arg) ==> void
+  Line 64) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 69) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

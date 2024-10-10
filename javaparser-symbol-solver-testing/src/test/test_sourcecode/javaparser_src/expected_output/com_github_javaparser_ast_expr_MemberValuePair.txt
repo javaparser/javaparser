@@ -1,0 +1,21 @@
+
+[ Class com.github.javaparser.ast.expr.MemberValuePair ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  Line 42) setName(name) ==> void
+  Line 43) setValue(value) ==> void
+  Line 48) beginLine ==> int
+  Line 48) beginColumn ==> int
+  Line 48) endLine ==> int
+  Line 48) endColumn ==> int
+  Line 49) setName(name) ==> void
+  Line 50) setValue(value) ==> void
+  Line 54) v.visit(this, arg) ==> R
+  Line 58) v.visit(this, arg) ==> void
+  Line 62) name ==> java.lang.String
+  Line 66) value ==> com.github.javaparser.ast.expr.Expression
+  Line 70) this.name = name ==> java.lang.String
+  Line 74) this.value = value ==> com.github.javaparser.ast.expr.Expression
+  Line 75) setAsParentNodeOf(this.value) ==> void

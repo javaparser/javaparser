@@ -1,0 +1,23 @@
+
+[ Class com.github.javaparser.ast.expr.MethodReferenceExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 55) beginLine ==> int
+  Line 55) beginColumn ==> int
+  Line 55) endLine ==> int
+  Line 55) endColumn ==> int
+  Line 56) setIdentifier(identifier) ==> void
+  Line 57) setScope(scope) ==> void
+  Line 58) setTypeParameters(typeParameters) ==> void
+  Line 64) v.visit(this, arg) ==> R
+  Line 69) v.visit(this, arg) ==> void
+  Line 73) scope ==> com.github.javaparser.ast.expr.Expression
+  Line 77) this.scope = scope ==> com.github.javaparser.ast.expr.Expression
+  Line 78) setAsParentNodeOf(this.scope) ==> void
+  Line 82) typeParameters ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 86) this.typeParameters = typeParameters ==> java.util.List<com.github.javaparser.ast.TypeParameter>
+  Line 87) setAsParentNodeOf(this.typeParameters) ==> void
+  Line 91) identifier ==> java.lang.String
+  Line 95) this.identifier = identifier ==> java.lang.String

@@ -1,0 +1,75 @@
+class AnonymousClassDeclarations {
+
+    static class DoFn<I,O> {
+        static class ProcessContext {
+            public Long innerClassMethod() {}
+        }
+
+        enum MyEnum {
+            E1, E2, E3
+        }
+
+        public void process(ProcessContext context) {}
+    }
+
+    static class Transform<I,O> {}
+
+    static class ParDo {
+        static <I,O> Transform<I,O> of(DoFn<I,O> doFn) {
+            return null;
+        }
+    }
+
+    void fooBar1() {
+        ParDo.of(new DoFn<Integer,Long>() {});
+    }
+
+    void fooBar2() {
+        ParDo.of(new DoFn<Integer,Long>() {
+            public void process(ProcessContext c){
+                return c.innerClassMethod();
+            }
+        });
+    }
+
+    void fooBar3() {
+        ParDo.of(new DoFn<Integer,Long>() {
+
+            void callAnnonClassInnerMethod() {}
+
+            public void process(ProcessContext c) {
+                callAnnonClassInnerMethod();
+            }
+        });
+    }
+
+     void fooBar4() {
+        ParDo.of(new DoFn<Integer,Long>() {
+
+            void callAnnonClassInnerMethod() {}
+
+            public void process(ProcessContext c) {
+                MyEnum.E3.toString();
+            }
+        });
+    }
+
+    void fooBar5() {
+        ParDo.of(new DoFn<Integer,Long>() {
+
+            void callAnnonClassInnerMethod() {}
+
+            enum MyInnerEnum {
+                E1, E2, E3
+            }
+            public void process(ProcessContext c) {
+                MyInnerEnum.E3.toString();
+            }
+        });
+    }
+
+    void fooBar6() {
+        new DoFn.ProcessContext() {}.innerClassMethod();
+    }
+
+}

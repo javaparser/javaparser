@@ -1,0 +1,7 @@
+  Line 52) setExpr(expr) ==> com.github.javaparser.ast.expr.UnaryExpr.setExpr(com.github.javaparser.ast.expr.Expression)
+  Line 53) setOperator(op) ==> com.github.javaparser.ast.expr.UnaryExpr.setOperator(com.github.javaparser.ast.expr.UnaryExpr.Operator)
+  Line 58) setExpr(expr) ==> com.github.javaparser.ast.expr.UnaryExpr.setExpr(com.github.javaparser.ast.expr.Expression)
+  Line 59) setOperator(op) ==> com.github.javaparser.ast.expr.UnaryExpr.setOperator(com.github.javaparser.ast.expr.UnaryExpr.Operator)
+  Line 63) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.UnaryExpr, A)
+  Line 67) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.UnaryExpr, A)
+  Line 80) setAsParentNodeOf(this.expr) ==> com.github.javaparser.ast.Node.setAsParentNodeOf(com.github.javaparser.ast.Node)

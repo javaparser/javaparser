@@ -1,0 +1,32 @@
+
+[ Class com.github.javaparser.ast.expr.VariableDeclarationExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 49) setType(type) ==> void
+  Line 50) setVars(vars) ==> void
+  Line 54) setModifiers(modifiers) ==> void
+  Line 55) setType(type) ==> void
+  Line 56) setVars(vars) ==> void
+  Line 62) beginLine ==> int
+  Line 62) beginColumn ==> int
+  Line 62) endLine ==> int
+  Line 62) endColumn ==> int
+  Line 63) setModifiers(modifiers) ==> void
+  Line 64) setAnnotations(annotations) ==> void
+  Line 65) setType(type) ==> void
+  Line 66) setVars(vars) ==> void
+  Line 70) v.visit(this, arg) ==> R
+  Line 74) v.visit(this, arg) ==> void
+  Line 78) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 88) modifiers ==> int
+  Line 92) type ==> com.github.javaparser.ast.type.Type
+  Line 96) vars ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 100) this.annotations = annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 101) setAsParentNodeOf(this.annotations) ==> void
+  Line 105) this.modifiers = modifiers ==> int
+  Line 109) this.type = type ==> com.github.javaparser.ast.type.Type
+  Line 110) setAsParentNodeOf(this.type) ==> void
+  Line 114) this.vars = vars ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 115) setAsParentNodeOf(this.vars) ==> void

@@ -1,0 +1,20 @@
+
+[ Class com.github.javaparser.ast.expr.NormalAnnotationExpr ]
+  superclass: com.github.javaparser.ast.expr.AnnotationExpr
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 40) setName(name) ==> void
+  Line 41) setPairs(pairs) ==> void
+  Line 46) beginLine ==> int
+  Line 46) beginColumn ==> int
+  Line 46) endLine ==> int
+  Line 46) endColumn ==> int
+  Line 47) setName(name) ==> void
+  Line 48) setPairs(pairs) ==> void
+  Line 52) v.visit(this, arg) ==> R
+  Line 56) v.visit(this, arg) ==> void
+  Line 60) pairs ==> java.util.List<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 64) this.pairs = pairs ==> java.util.List<com.github.javaparser.ast.expr.MemberValuePair>
+  Line 65) setAsParentNodeOf(this.pairs) ==> void

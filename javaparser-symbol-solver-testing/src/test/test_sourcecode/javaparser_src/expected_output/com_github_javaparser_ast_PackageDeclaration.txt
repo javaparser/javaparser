@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.PackageDeclaration ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 54) setName(name) ==> void
+  Line 58) setAnnotations(annotations) ==> void
+  Line 59) setName(name) ==> void
+  Line 63) beginLine ==> int
+  Line 63) beginColumn ==> int
+  Line 63) endLine ==> int
+  Line 63) endColumn ==> int
+  Line 64) setAnnotations(annotations) ==> void
+  Line 65) setName(name) ==> void
+  Line 70) v.visit(this, arg) ==> R
+  Line 75) v.visit(this, arg) ==> void
+  Line 85) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 94) name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 102) this.annotations = annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 103) setAsParentNodeOf(this.annotations) ==> void
+  Line 113) this.name = name ==> com.github.javaparser.ast.expr.NameExpr
+  Line 114) setAsParentNodeOf(this.name) ==> void

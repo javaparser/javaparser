@@ -1,0 +1,8 @@
+class QualifiedNameTest {
+
+	public void foo1() {
+		java.util.Scanner s;
+		return s;
+	}
+
+}

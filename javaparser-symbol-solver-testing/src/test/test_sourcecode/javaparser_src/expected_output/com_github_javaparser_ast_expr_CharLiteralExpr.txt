@@ -1,0 +1,16 @@
+
+[ Class com.github.javaparser.ast.expr.CharLiteralExpr ]
+  superclass: com.github.javaparser.ast.expr.StringLiteralExpr
+  superclass: com.github.javaparser.ast.expr.LiteralExpr
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 36) value ==> java.lang.String
+  Line 40) beginLine ==> int
+  Line 40) beginColumn ==> int
+  Line 40) endLine ==> int
+  Line 40) endColumn ==> int
+  Line 40) value ==> java.lang.String
+  Line 45) v.visit(this, arg) ==> R
+  Line 50) v.visit(this, arg) ==> void

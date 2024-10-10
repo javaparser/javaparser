@@ -1,0 +1,32 @@
+
+[ Class com.github.javaparser.ast.stmt.ForStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 48) setCompare(compare) ==> void
+  Line 49) setInit(init) ==> void
+  Line 50) setUpdate(update) ==> void
+  Line 51) setBody(body) ==> void
+  Line 58) beginLine ==> int
+  Line 58) beginColumn ==> int
+  Line 58) endLine ==> int
+  Line 58) endColumn ==> int
+  Line 59) setCompare(compare) ==> void
+  Line 60) setInit(init) ==> void
+  Line 61) setUpdate(update) ==> void
+  Line 62) setBody(body) ==> void
+  Line 67) v.visit(this, arg) ==> R
+  Line 72) v.visit(this, arg) ==> void
+  Line 76) body ==> com.github.javaparser.ast.stmt.Statement
+  Line 80) compare ==> com.github.javaparser.ast.expr.Expression
+  Line 84) init ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 88) update ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 92) this.body = body ==> com.github.javaparser.ast.stmt.Statement
+  Line 93) setAsParentNodeOf(this.body) ==> void
+  Line 97) this.compare = compare ==> com.github.javaparser.ast.expr.Expression
+  Line 98) setAsParentNodeOf(this.compare) ==> void
+  Line 102) this.init = init ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 103) setAsParentNodeOf(this.init) ==> void
+  Line 107) this.update = update ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 108) setAsParentNodeOf(this.update) ==> void

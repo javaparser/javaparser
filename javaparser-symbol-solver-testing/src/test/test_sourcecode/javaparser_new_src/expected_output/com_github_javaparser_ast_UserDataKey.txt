@@ -1,0 +1,5 @@
+  Line 28) getClass().hashCode() ==> java.lang.Object.hashCode()
+  Line 28) getClass() ==> java.lang.Object.getClass()
+  Line 37) getClass().equals(obj.getClass()) ==> java.lang.Object.equals(java.lang.Object)
+  Line 37) getClass() ==> java.lang.Object.getClass()
+  Line 37) obj.getClass() ==> java.lang.Object.getClass()

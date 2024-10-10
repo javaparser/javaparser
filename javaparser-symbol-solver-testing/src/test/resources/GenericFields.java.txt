@@ -1,0 +1,15 @@
+interface I {
+    int i = 0;
+}
+
+class CA<T> implements I {
+
+    T t;
+
+}
+
+class CB extends CA<java.util.List<Boolean>> {
+
+    String s;
+
+}

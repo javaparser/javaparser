@@ -1,0 +1,9 @@
+
+[ Class com.github.javaparser.ast.expr.Expression ]
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 35) beginLine ==> int
+  Line 35) beginColumn ==> int
+  Line 35) endLine ==> int
+  Line 35) endColumn ==> int

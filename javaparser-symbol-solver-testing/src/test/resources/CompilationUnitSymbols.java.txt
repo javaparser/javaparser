@@ -1,0 +1,5 @@
+package com.foo;
+
+import static org.junit.Assert.assertEquals;
+import static java.lang.System.out;
+import static java.lang.System.*;

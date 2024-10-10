@@ -1,0 +1,4 @@
+  Line 37) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
+  Line 41) EnumSet.noneOf(Modifier.class) ==> java.util.EnumSet.noneOf(java.lang.Class<E>)
+  Line 46) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.body.EmptyTypeDeclaration, A)
+  Line 51) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.body.EmptyTypeDeclaration, A)

@@ -1,0 +1,41 @@
+
+[ Class com.github.javaparser.ast.body.FieldDeclaration ]
+  superclass: com.github.javaparser.ast.body.BodyDeclaration
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.DocumentableNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  Line 49) setModifiers(modifiers) ==> void
+  Line 50) setType(type) ==> void
+  Line 51) List<VariableDeclarator> aux = new ArrayList<VariableDeclarator>() ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 51) new ArrayList<VariableDeclarator>() ==> java.util.ArrayList<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 52) aux.add(variable) ==> boolean
+  Line 53) setVariables(aux) ==> void
+  Line 57) setModifiers(modifiers) ==> void
+  Line 58) setType(type) ==> void
+  Line 59) setVariables(variables) ==> void
+  Line 63) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 64) setModifiers(modifiers) ==> void
+  Line 65) setType(type) ==> void
+  Line 66) setVariables(variables) ==> void
+  Line 70) beginLine ==> int
+  Line 70) beginColumn ==> int
+  Line 70) endLine ==> int
+  Line 70) endColumn ==> int
+  Line 70) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 71) setModifiers(modifiers) ==> void
+  Line 72) setType(type) ==> void
+  Line 73) setVariables(variables) ==> void
+  Line 78) v.visit(this, arg) ==> R
+  Line 83) v.visit(this, arg) ==> void
+  Line 93) modifiers ==> int
+  Line 97) type ==> com.github.javaparser.ast.type.Type
+  Line 101) variables ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 105) this.modifiers = modifiers ==> int
+  Line 109) this.type = type ==> com.github.javaparser.ast.type.Type
+  Line 110) setAsParentNodeOf(this.type) ==> void
+  Line 114) this.variables = variables ==> java.util.List<com.github.javaparser.ast.body.VariableDeclarator>
+  Line 115) setAsParentNodeOf(this.variables) ==> void
+  Line 120) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 125) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

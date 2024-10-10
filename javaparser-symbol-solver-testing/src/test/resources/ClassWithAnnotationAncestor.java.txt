@@ -1,0 +1,16 @@
+public class ClassWithAnnotationAncestor implements SuppressWarnings {
+
+    public String testMethod() {
+        return "result";
+    }
+
+    @Override
+    public String[] value() {
+        return new String[0];
+    }
+
+    @Override
+    public Class<? extends Annotation> annotationType() {
+        return null;
+    }
+}

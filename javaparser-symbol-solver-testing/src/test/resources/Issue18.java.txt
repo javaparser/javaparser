@@ -1,0 +1,8 @@
+import java.util.*;
+
+class Foo {
+    void bar() {
+        Map m = new HashMap();
+        m.put("a", "b");
+    }
+}

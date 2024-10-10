@@ -1,0 +1,41 @@
+
+[ Class com.github.javaparser.ast.body.AnnotationMemberDeclaration ]
+  superclass: com.github.javaparser.ast.body.BodyDeclaration
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: com.github.javaparser.ast.DocumentableNode
+  interface: com.github.javaparser.ast.NamedNode
+  interface: java.lang.Cloneable
+  interface: com.github.javaparser.ast.body.AnnotableNode
+  Line 52) setModifiers(modifiers) ==> void
+  Line 53) setType(type) ==> void
+  Line 54) setName(name) ==> void
+  Line 55) setDefaultValue(defaultValue) ==> void
+  Line 59) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 60) setModifiers(modifiers) ==> void
+  Line 61) setType(type) ==> void
+  Line 62) setName(name) ==> void
+  Line 63) setDefaultValue(defaultValue) ==> void
+  Line 67) beginLine ==> int
+  Line 67) beginColumn ==> int
+  Line 67) endLine ==> int
+  Line 67) endColumn ==> int
+  Line 67) annotations ==> java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>
+  Line 68) setModifiers(modifiers) ==> void
+  Line 69) setType(type) ==> void
+  Line 70) setName(name) ==> void
+  Line 71) setDefaultValue(defaultValue) ==> void
+  Line 76) v.visit(this, arg) ==> R
+  Line 81) v.visit(this, arg) ==> void
+  Line 85) defaultValue ==> com.github.javaparser.ast.expr.Expression
+  Line 95) modifiers ==> int
+  Line 99) name ==> java.lang.String
+  Line 103) type ==> com.github.javaparser.ast.type.Type
+  Line 107) this.defaultValue = defaultValue ==> com.github.javaparser.ast.expr.Expression
+  Line 108) setAsParentNodeOf(defaultValue) ==> void
+  Line 112) this.modifiers = modifiers ==> int
+  Line 116) this.name = name ==> java.lang.String
+  Line 120) this.type = type ==> com.github.javaparser.ast.type.Type
+  Line 121) setAsParentNodeOf(type) ==> void
+  Line 126) this.javadocComment = javadocComment ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 131) javadocComment ==> com.github.javaparser.ast.comments.JavadocComment

@@ -1,0 +1,12 @@
+class Node {
+    abstract java.util.List<Node> getChildrenNodes();
+}
+
+class Foo {
+
+    public Object bar() {
+        Node node;
+        java.util.List<Node> children = new java.util.LinkedList<Node>();
+        return children.addAll(node.getChildrenNodes());
+    }
+}

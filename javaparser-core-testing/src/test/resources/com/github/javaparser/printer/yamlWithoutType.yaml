@@ -1,0 +1,8 @@
+---
+root: 
+    operator: "PLUS"
+    left: 
+        value: "1"
+    right: 
+        value: "1"
+...

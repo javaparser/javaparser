@@ -1,0 +1,14 @@
+
+[ Class com.github.javaparser.ast.comments.BlockComment ]
+  superclass: com.github.javaparser.ast.comments.Comment
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 42) content ==> java.lang.String
+  Line 46) beginLine ==> int
+  Line 46) beginColumn ==> int
+  Line 46) endLine ==> int
+  Line 46) endColumn ==> int
+  Line 46) content ==> java.lang.String
+  Line 51) v.visit(this, arg) ==> R
+  Line 56) v.visit(this, arg) ==> void

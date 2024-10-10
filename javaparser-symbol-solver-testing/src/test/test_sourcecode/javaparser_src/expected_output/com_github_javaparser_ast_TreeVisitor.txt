@@ -1,0 +1,7 @@
+
+[ Class com.github.javaparser.ast.TreeVisitor ]
+  superclass: java.lang.Object
+  Line 27) process(node) ==> void
+  Line 28) Node child ==> com.github.javaparser.ast.Node
+  Line 28) node.getChildrenNodes() ==> java.util.List<com.github.javaparser.ast.Node>
+  Line 29) visitDepthFirst(child) ==> void

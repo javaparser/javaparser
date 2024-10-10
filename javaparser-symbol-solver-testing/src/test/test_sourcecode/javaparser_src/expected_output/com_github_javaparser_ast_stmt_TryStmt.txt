@@ -1,0 +1,31 @@
+
+[ Class com.github.javaparser.ast.stmt.TryStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 48) setTryBlock(tryBlock) ==> void
+  Line 49) setCatchs(catchs) ==> void
+  Line 50) setFinallyBlock(finallyBlock) ==> void
+  Line 56) beginLine ==> int
+  Line 56) beginColumn ==> int
+  Line 56) endLine ==> int
+  Line 56) endColumn ==> int
+  Line 57) setResources(resources) ==> void
+  Line 58) setTryBlock(tryBlock) ==> void
+  Line 59) setCatchs(catchs) ==> void
+  Line 60) setFinallyBlock(finallyBlock) ==> void
+  Line 65) v.visit(this, arg) ==> R
+  Line 70) v.visit(this, arg) ==> void
+  Line 74) catchs ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 78) finallyBlock ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 82) tryBlock ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 86) resources ==> java.util.List<com.github.javaparser.ast.expr.VariableDeclarationExpr>
+  Line 90) this.catchs = catchs ==> java.util.List<com.github.javaparser.ast.stmt.CatchClause>
+  Line 91) setAsParentNodeOf(this.catchs) ==> void
+  Line 95) this.finallyBlock = finallyBlock ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 96) setAsParentNodeOf(this.finallyBlock) ==> void
+  Line 100) this.tryBlock = tryBlock ==> com.github.javaparser.ast.stmt.BlockStmt
+  Line 101) setAsParentNodeOf(this.tryBlock) ==> void
+  Line 105) this.resources = resources ==> java.util.List<com.github.javaparser.ast.expr.VariableDeclarationExpr>
+  Line 106) setAsParentNodeOf(this.resources) ==> void

@@ -1,0 +1,104 @@
+
+[ Class com.github.javaparser.ast.comments.CommentsParser ]
+  superclass: java.lang.Object
+  Line 41) 4 ==> int
+  Line 44) InputStream in = new ByteArrayInputStream(source.getBytes(Charset.defaultCharset())) ==> java.io.InputStream
+  Line 44) new ByteArrayInputStream(source.getBytes(Charset.defaultCharset())) ==> java.io.ByteArrayInputStream
+  Line 45) parse(in, Charset.defaultCharset().name()) ==> com.github.javaparser.ast.comments.CommentsCollection
+  Line 49) boolean lastWasASlashR = false ==> boolean
+  Line 49) false ==> boolean
+  Line 50) BufferedReader br = new BufferedReader(new InputStreamReader(in, charsetName)) ==> java.io.BufferedReader
+  Line 50) new BufferedReader(new InputStreamReader(in, charsetName)) ==> java.io.BufferedReader
+  Line 51) CommentsCollection comments = new CommentsCollection() ==> com.github.javaparser.ast.comments.CommentsCollection
+  Line 51) new CommentsCollection() ==> com.github.javaparser.ast.comments.CommentsCollection
+  Line 52) int r ==> int
+  Line 54) Deque prevTwoChars = new LinkedList<Character>(Arrays.asList('z', 'z')) ==> java.util.Deque
+  Line 54) new LinkedList<Character>(Arrays.asList('z', 'z')) ==> java.util.LinkedList<java.lang.Character>
+  Line 56) State state = State.CODE ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 56) State.CODE ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 57) LineComment currentLineComment = null ==> com.github.javaparser.ast.comments.LineComment
+  Line 57) null ==> null
+  Line 58) BlockComment currentBlockComment = null ==> com.github.javaparser.ast.comments.BlockComment
+  Line 58) null ==> null
+  Line 59) StringBuffer currentContent = null ==> java.lang.StringBuffer
+  Line 59) null ==> null
+  Line 61) int currLine = 1 ==> int
+  Line 61) 1 ==> int
+  Line 62) int currCol = 1 ==> int
+  Line 62) 1 ==> int
+  Line 64) (r = br.read()) != -1 ==> boolean
+  Line 65) char c = (char) r ==> char
+  Line 65) (char) r ==> char
+  Line 66) c == '\r' ==> boolean
+  Line 67) lastWasASlashR = true ==> boolean
+  Line 68) c == '\n' && lastWasASlashR ==> boolean
+  Line 69) lastWasASlashR = false ==> boolean
+  Line 72) lastWasASlashR = false ==> boolean
+  Line 74) state ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 75) CODE ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 76) prevTwoChars.peekLast().equals('/') && c == '/' ==> boolean
+  Line 77) currentLineComment = new LineComment() ==> com.github.javaparser.ast.comments.LineComment
+  Line 78) currentLineComment.setBeginLine(currLine) ==> void
+  Line 79) currentLineComment.setBeginColumn(currCol - 1) ==> void
+  Line 80) state = State.IN_LINE_COMMENT ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 81) currentContent = new StringBuffer() ==> java.lang.StringBuffer
+  Line 82) prevTwoChars.peekLast().equals('/') && c == '*' ==> boolean
+  Line 83) currentBlockComment = new BlockComment() ==> com.github.javaparser.ast.comments.BlockComment
+  Line 84) currentBlockComment.setBeginLine(currLine) ==> void
+  Line 85) currentBlockComment.setBeginColumn(currCol - 1) ==> void
+  Line 86) state = State.IN_BLOCK_COMMENT ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 87) currentContent = new StringBuffer() ==> java.lang.StringBuffer
+  Line 88) c == '"' ==> boolean
+  Line 89) state = State.IN_STRING ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 90) c == '\'' ==> boolean
+  Line 91) state = State.IN_CHAR ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 96) IN_LINE_COMMENT ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 97) c == '\n' || c == '\r' ==> boolean
+  Line 98) currentLineComment.setContent(currentContent.toString()) ==> void
+  Line 99) currentLineComment.setEndLine(currLine) ==> void
+  Line 100) currentLineComment.setEndColumn(currCol) ==> void
+  Line 101) comments.addComment(currentLineComment) ==> void
+  Line 102) state = State.CODE ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 104) currentContent.append(c) ==> java.lang.StringBuffer
+  Line 107) IN_BLOCK_COMMENT ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 108) prevTwoChars.peekLast().equals('*') && c == '/' && !prevTwoChars.peekFirst().equals('/') ==> boolean
+  Line 111) String content = currentContent.deleteCharAt(currentContent.toString().length() - 1).toString() ==> java.lang.String
+  Line 111) currentContent.deleteCharAt(currentContent.toString().length() - 1).toString() ==> java.lang.String
+  Line 113) content.startsWith("*") ==> boolean
+  Line 114) JavadocComment javadocComment = new JavadocComment() ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 114) new JavadocComment() ==> com.github.javaparser.ast.comments.JavadocComment
+  Line 115) javadocComment.setContent(content.substring(1)) ==> void
+  Line 116) javadocComment.setBeginLine(currentBlockComment.getBeginLine()) ==> void
+  Line 117) javadocComment.setBeginColumn(currentBlockComment.getBeginColumn()) ==> void
+  Line 118) javadocComment.setEndLine(currLine) ==> void
+  Line 119) javadocComment.setEndColumn(currCol + 1) ==> void
+  Line 120) comments.addComment(javadocComment) ==> void
+  Line 122) currentBlockComment.setContent(content) ==> void
+  Line 123) currentBlockComment.setEndLine(currLine) ==> void
+  Line 124) currentBlockComment.setEndColumn(currCol + 1) ==> void
+  Line 125) comments.addComment(currentBlockComment) ==> void
+  Line 127) state = State.CODE ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 129) currentContent.append(c == '\r' ? '\n' : c) ==> java.lang.StringBuffer
+  Line 132) IN_STRING ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 133) !prevTwoChars.peekLast().equals('\\') && c == '"' ==> boolean
+  Line 134) state = State.CODE ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 137) IN_CHAR ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 138) !prevTwoChars.peekLast().equals('\\') && c == '\'' ==> boolean
+  Line 139) state = State.CODE ==> com.github.javaparser.ast.comments.CommentsParser.State
+  Line 143) new RuntimeException("Unexpected") ==> java.lang.RuntimeException
+  Line 145) c ==> char
+  Line 146) '\n' ==> char
+  Line 147) '\r' ==> char
+  Line 148) currLine += 1 ==> int
+  Line 149) currCol = 1 ==> int
+  Line 151) '\t' ==> char
+  Line 152) currCol += COLUMNS_PER_TAB ==> int
+  Line 155) currCol += 1 ==> int
+  Line 157) prevTwoChars.remove() ==> java.lang.Object
+  Line 158) prevTwoChars.add(c) ==> boolean
+  Line 161) state == State.IN_LINE_COMMENT ==> boolean
+  Line 162) currentLineComment.setContent(currentContent.toString()) ==> void
+  Line 163) currentLineComment.setEndLine(currLine) ==> void
+  Line 164) currentLineComment.setEndColumn(currCol) ==> void
+  Line 165) comments.addComment(currentLineComment) ==> void
+  Line 168) comments ==> com.github.javaparser.ast.comments.CommentsCollection

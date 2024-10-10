@@ -1,0 +1,7 @@
+class Foo<A, B> {
+    public void foo(A a);
+
+    public void usage(A a) {
+        return foo(a);
+    }
+}

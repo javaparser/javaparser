@@ -1,0 +1,9 @@
+import java.io.File;
+
+class MethodLikeSignaturesTest {
+
+	public void foo() {
+		File file = new File("somepath");
+		file.delete();
+	}
+}

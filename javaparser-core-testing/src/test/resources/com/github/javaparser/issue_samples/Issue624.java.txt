@@ -1,0 +1,14 @@
+package z;
+public class A  {
+
+	@Override
+	protected void getDataForCalcul() {
+
+		a.b(c)//
+				.success(data -> {
+					// DATA STD MACHINE
+					dosomething();
+				})//
+				.error(defaultErrorConsumer);
+	}
+}

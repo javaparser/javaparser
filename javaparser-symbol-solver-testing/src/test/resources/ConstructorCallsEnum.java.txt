@@ -1,0 +1,10 @@
+public enum ConstructorCallsEnum {
+    ONE(1),
+    TWO(2);
+
+    private final int i;
+
+    ConstructorCallsEnum(int i) {
+        this.i = i;
+    }
+}

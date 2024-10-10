@@ -1,0 +1,12 @@
+package test;
+
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.visitor.GenericVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+
+public class OverloadedMethodCall {
+    public void foo(Node node) {
+        node.accept((GenericVisitor) null, null);
+        node.accept((VoidVisitor) null, null);
+    }
+}

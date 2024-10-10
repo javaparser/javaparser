@@ -1,0 +1,17 @@
+class Foo {
+    static class Bar {
+        static class Baz {}
+    }
+    static void new_Bar_Baz_direct() {
+        new Bar.Baz();
+    }
+    static void new_Bar_Baz() {
+        new Bar.Baz() {};
+    }
+    static void new_Bar() {
+        new Bar() {};
+    }
+    static void new_Foo_Bar() {
+        new Foo.Bar() {};
+    }
+}

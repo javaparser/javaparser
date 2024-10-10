@@ -1,0 +1,91 @@
+package foo.bar;
+
+import java.lang.annotation.*;
+import java.beans.*;
+import org.junit.*;
+import com.github.javaparser.symbolsolver.testingclasses.TargetType;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation {
+}
+
+public @interface MyAnnotation2 {
+}
+
+public @interface MyAnnotationWithSingleValue {
+    int value();
+}
+
+public @interface MyAnnotationWithElements {
+    int num();
+    String str();
+}
+
+public @interface MyAnnotationWithInnerClass {
+    MyInnerClass value();
+    class MyInnerClass {
+    }
+}
+
+public @interface MyAnnotationWithDefaultValue {
+    int value() default 0;
+}
+
+@MyAnnotation
+class CA {
+    @Override
+    public boolean equals(Object o) { return true; }
+
+    @Before
+    public void setUp() {}
+}
+
+@MyAnnotation2
+class CB extends CA {
+
+}
+
+@MyAnnotationWithSingleValue(42)
+class CC {
+    public boolean foo(Object o) { @SuppressWarnings("unchecked") String s = (String) o; }
+
+    @Ignore("lalala") @Test public void testSomething() {}
+}
+
+@MyAnnotationWithElements(num = 42, str = "test")
+class CD {
+    @Test(expected = Throwable.class, timeout = 42L) public void testSomethingElse() {}
+}
+
+@foo.bar.MyAnnotation
+@org.junit.runner.RunWith(CE.class)
+class CE {
+	@org.junit.Ignore("ignore text") public void testSomething() {}
+}
+
+@MyAnnotationWithDefaultValue()
+class CF {
+}
+
+@MyAnnotationWithDefaultValue()
+class CG {
+    @Ignore public void testSomething() {}
+}
+
+class CH {
+    @Transient public String field;
+}
+
+@TargetType
+class CI {
+}
+
+@Inherited
+public @interface InheritedAnnotation {
+}
+
+@InheritedAnnotation
+class Parent {}
+class Child extends Parent {}
+

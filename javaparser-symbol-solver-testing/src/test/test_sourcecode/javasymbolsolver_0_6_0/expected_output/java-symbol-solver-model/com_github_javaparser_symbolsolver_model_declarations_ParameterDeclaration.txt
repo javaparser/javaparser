@@ -1,0 +1,7 @@
+  Line 46) isVariadic() ==> com.github.javaparser.symbolsolver.model.declarations.ParameterDeclaration.isVariadic()
+  Line 47) getType().asArrayType().getComponentType().describe() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.describe()
+  Line 47) getType().asArrayType().getComponentType() ==> com.github.javaparser.symbolsolver.model.typesystem.ArrayType.getComponentType()
+  Line 47) getType().asArrayType() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.asArrayType()
+  Line 47) getType() ==> com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration.getType()
+  Line 49) getType().describe() ==> com.github.javaparser.symbolsolver.model.typesystem.Type.describe()
+  Line 49) getType() ==> com.github.javaparser.symbolsolver.model.declarations.ValueDeclaration.getType()

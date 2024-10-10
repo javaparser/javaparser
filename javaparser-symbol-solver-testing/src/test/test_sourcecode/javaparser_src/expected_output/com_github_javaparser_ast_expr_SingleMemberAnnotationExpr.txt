@@ -1,0 +1,20 @@
+
+[ Class com.github.javaparser.ast.expr.SingleMemberAnnotationExpr ]
+  superclass: com.github.javaparser.ast.expr.AnnotationExpr
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 38) setName(name) ==> void
+  Line 39) setMemberValue(memberValue) ==> void
+  Line 44) beginLine ==> int
+  Line 44) beginColumn ==> int
+  Line 44) endLine ==> int
+  Line 44) endColumn ==> int
+  Line 45) setName(name) ==> void
+  Line 46) setMemberValue(memberValue) ==> void
+  Line 50) v.visit(this, arg) ==> R
+  Line 54) v.visit(this, arg) ==> void
+  Line 58) memberValue ==> com.github.javaparser.ast.expr.Expression
+  Line 62) this.memberValue = memberValue ==> com.github.javaparser.ast.expr.Expression
+  Line 63) setAsParentNodeOf(this.memberValue) ==> void

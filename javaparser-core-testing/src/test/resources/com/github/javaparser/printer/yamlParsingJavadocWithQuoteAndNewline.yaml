@@ -1,0 +1,13 @@
+---
+root(Type=CompilationUnit): 
+    types: 
+        - type(Type=ClassOrInterfaceDeclaration): 
+            isInterface: "false"
+            name(Type=SimpleName): 
+                identifier: "Dog"
+            comment(Type=JavadocComment): 
+                content: "\n * \" this comment contains a quote and newlines\n "
+            modifiers: 
+                - modifier(Type=Modifier): 
+                    keyword: "PUBLIC"
+...

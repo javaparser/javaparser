@@ -1,0 +1,15 @@
+
+[ Class com.github.javaparser.ast.comments.LineComment ]
+  superclass: com.github.javaparser.ast.comments.Comment
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 41) content ==> java.lang.String
+  Line 45) beginLine ==> int
+  Line 45) beginColumn ==> int
+  Line 45) endLine ==> int
+  Line 45) endColumn ==> int
+  Line 45) content ==> java.lang.String
+  Line 50) v.visit(this, arg) ==> R
+  Line 55) v.visit(this, arg) ==> void
+  Line 60) true ==> boolean

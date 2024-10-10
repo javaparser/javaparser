@@ -1,0 +1,21 @@
+
+[ Class com.github.javaparser.ast.expr.UnaryExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 51) setExpr(expr) ==> void
+  Line 52) setOperator(op) ==> void
+  Line 57) beginLine ==> int
+  Line 57) beginColumn ==> int
+  Line 57) endLine ==> int
+  Line 57) endColumn ==> int
+  Line 58) setExpr(expr) ==> void
+  Line 59) setOperator(op) ==> void
+  Line 63) v.visit(this, arg) ==> R
+  Line 67) v.visit(this, arg) ==> void
+  Line 71) expr ==> com.github.javaparser.ast.expr.Expression
+  Line 75) op ==> com.github.javaparser.ast.expr.UnaryExpr.Operator
+  Line 79) this.expr = expr ==> com.github.javaparser.ast.expr.Expression
+  Line 80) setAsParentNodeOf(this.expr) ==> void
+  Line 84) this.op = op ==> com.github.javaparser.ast.expr.UnaryExpr.Operator

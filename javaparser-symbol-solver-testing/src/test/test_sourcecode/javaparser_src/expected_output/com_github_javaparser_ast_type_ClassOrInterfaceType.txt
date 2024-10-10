@@ -1,0 +1,30 @@
+
+[ Class com.github.javaparser.ast.type.ClassOrInterfaceType ]
+  superclass: com.github.javaparser.ast.type.Type
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 44) setName(name) ==> void
+  Line 48) setScope(scope) ==> void
+  Line 49) setName(name) ==> void
+  Line 54) beginLine ==> int
+  Line 54) beginColumn ==> int
+  Line 54) endLine ==> int
+  Line 54) endColumn ==> int
+  Line 55) setScope(scope) ==> void
+  Line 56) setName(name) ==> void
+  Line 57) setTypeArgs(typeArgs) ==> void
+  Line 62) v.visit(this, arg) ==> R
+  Line 67) v.visit(this, arg) ==> void
+  Line 71) name ==> java.lang.String
+  Line 75) scope ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 79) typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 83) PrimitiveType.unboxMap.containsKey(name) ==> boolean
+  Line 87) !isBoxedType() ==> boolean
+  Line 87) new UnsupportedOperationException(name + " isn't a boxed type.") ==> java.lang.UnsupportedOperationException
+  Line 88) new PrimitiveType(PrimitiveType.unboxMap.get(name)) ==> com.github.javaparser.ast.type.PrimitiveType
+  Line 92) this.name = name ==> java.lang.String
+  Line 96) this.scope = scope ==> com.github.javaparser.ast.type.ClassOrInterfaceType
+  Line 97) setAsParentNodeOf(this.scope) ==> void
+  Line 101) this.typeArgs = typeArgs ==> java.util.List<com.github.javaparser.ast.type.Type>
+  Line 102) setAsParentNodeOf(this.typeArgs) ==> void

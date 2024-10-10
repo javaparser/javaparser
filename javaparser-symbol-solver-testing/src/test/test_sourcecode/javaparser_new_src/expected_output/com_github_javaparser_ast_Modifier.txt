@@ -1,0 +1,4 @@
+  Line 32) EnumSet.of(this) ==> java.util.EnumSet.of(E)
+  Line 36) modifiers.contains(Modifier.PUBLIC) ==> java.util.AbstractCollection.contains(java.lang.Object)
+  Line 38) modifiers.contains(Modifier.PROTECTED) ==> java.util.AbstractCollection.contains(java.lang.Object)
+  Line 40) modifiers.contains(Modifier.PRIVATE) ==> java.util.AbstractCollection.contains(java.lang.Object)

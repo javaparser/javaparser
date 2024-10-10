@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <!-- THIS IS A TEMPLATE/SAMPLE FOR THE ~/.m2/settings.xml CONFIGURATION FILE, USED e.g. WHEN PERFORMING A RELEASE -->
+    <!-- Values should be placed into environment variables (preferred), though you _can_ insert the values directly below. -->
+
+    <servers>
+        <server>
+            <!-- Credentials for Sonatype OSSRH (OSS Repository Hosting) -->
+            <!-- These are the same credentials you use for https://oss.sonatype.org/ and their JIRA ticketing system. -->
+            <!-- https://central.sonatype.org/pages/apache-maven.html -->
+            <id>ossrh</id>
+            <username>${env.MAVEN_OSSRH_USERNAME}</username>
+            <password>${env.MAVEN_OSSRH_PASSWORD}</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>ossrh</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- You may need to adjust to the reflect the executable within your environment e.g. `gpg2` -->
+                <gpg.executable>gpg</gpg.executable>
+                <gpg.keyname>${env.MAVEN_GPG_KEYNAME}</gpg.keyname>
+                <gpg.passphrase>${env.MAVEN_GPG_PASSPHRASE}</gpg.passphrase>
+            </properties>
+        </profile>
+    </profiles>
+
+</settings>

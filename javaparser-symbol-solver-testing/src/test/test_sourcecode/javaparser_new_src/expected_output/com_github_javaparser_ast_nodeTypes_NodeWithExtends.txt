@@ -1,0 +1,6 @@
+  Line 20) ((Node) this).tryAddImportToParentCompilationUnit(clazz) ==> com.github.javaparser.ast.Node.tryAddImportToParentCompilationUnit(java.lang.Class<?>)
+  Line 21) addExtends(clazz.getSimpleName()) ==> com.github.javaparser.ast.nodeTypes.NodeWithExtends.addExtends(java.lang.String)
+  Line 21) clazz.getSimpleName() ==> java.lang.Class.getSimpleName()
+  Line 33) getExtends().add(classOrInterfaceType) ==> java.util.List.add(E)
+  Line 33) getExtends() ==> com.github.javaparser.ast.nodeTypes.NodeWithExtends.getExtends()
+  Line 34) classOrInterfaceType.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)

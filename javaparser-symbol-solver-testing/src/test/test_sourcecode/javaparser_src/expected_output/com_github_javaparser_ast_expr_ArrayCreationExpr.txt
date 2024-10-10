@@ -1,0 +1,45 @@
+
+[ Class com.github.javaparser.ast.expr.ArrayCreationExpr ]
+  superclass: com.github.javaparser.ast.expr.Expression
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 49) setType(type) ==> void
+  Line 50) setArrayCount(arrayCount) ==> void
+  Line 51) setInitializer(initializer) ==> void
+  Line 52) setDimensions(null) ==> void
+  Line 56) beginLine ==> int
+  Line 56) beginColumn ==> int
+  Line 56) endLine ==> int
+  Line 56) endColumn ==> int
+  Line 57) setType(type) ==> void
+  Line 58) setArrayCount(arrayCount) ==> void
+  Line 59) setInitializer(initializer) ==> void
+  Line 60) setDimensions(null) ==> void
+  Line 64) setType(type) ==> void
+  Line 65) setArrayCount(arrayCount) ==> void
+  Line 66) setDimensions(dimensions) ==> void
+  Line 67) setInitializer(null) ==> void
+  Line 71) beginLine ==> int
+  Line 71) beginColumn ==> int
+  Line 71) endLine ==> int
+  Line 71) endColumn ==> int
+  Line 72) setType(type) ==> void
+  Line 73) setArrayCount(arrayCount) ==> void
+  Line 74) setDimensions(dimensions) ==> void
+  Line 75) setInitializer(null) ==> void
+  Line 80) v.visit(this, arg) ==> R
+  Line 85) v.visit(this, arg) ==> void
+  Line 89) arrayCount ==> int
+  Line 93) dimensions ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 97) initializer ==> com.github.javaparser.ast.expr.ArrayInitializerExpr
+  Line 101) type ==> com.github.javaparser.ast.type.Type
+  Line 105) this.arrayCount = arrayCount ==> int
+  Line 109) this.dimensions = dimensions ==> java.util.List<com.github.javaparser.ast.expr.Expression>
+  Line 110) setAsParentNodeOf(this.dimensions) ==> void
+  Line 114) this.initializer = initializer ==> com.github.javaparser.ast.expr.ArrayInitializerExpr
+  Line 115) setAsParentNodeOf(this.initializer) ==> void
+  Line 119) this.type = type ==> com.github.javaparser.ast.type.Type
+  Line 120) setAsParentNodeOf(this.type) ==> void
+  Line 124) arraysAnnotations ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>
+  Line 129) this.arraysAnnotations = arraysAnnotations ==> java.util.List<java.util.List<com.github.javaparser.ast.expr.AnnotationExpr>>

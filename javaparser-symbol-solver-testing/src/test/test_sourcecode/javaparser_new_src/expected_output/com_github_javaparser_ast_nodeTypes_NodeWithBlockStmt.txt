@@ -1,0 +1,2 @@
+  Line 13) setBody(block) ==> com.github.javaparser.ast.nodeTypes.NodeWithBlockStmt.setBody(com.github.javaparser.ast.stmt.BlockStmt)
+  Line 14) block.setParentNode((Node) this) ==> com.github.javaparser.ast.Node.setParentNode(com.github.javaparser.ast.Node)

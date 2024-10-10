@@ -1,0 +1,22 @@
+
+[ Class com.github.javaparser.ast.stmt.WhileStmt ]
+  superclass: com.github.javaparser.ast.stmt.Statement
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 41) setCondition(condition) ==> void
+  Line 42) setBody(body) ==> void
+  Line 47) beginLine ==> int
+  Line 47) beginColumn ==> int
+  Line 47) endLine ==> int
+  Line 47) endColumn ==> int
+  Line 48) setCondition(condition) ==> void
+  Line 49) setBody(body) ==> void
+  Line 53) v.visit(this, arg) ==> R
+  Line 57) v.visit(this, arg) ==> void
+  Line 61) body ==> com.github.javaparser.ast.stmt.Statement
+  Line 65) condition ==> com.github.javaparser.ast.expr.Expression
+  Line 69) this.body = body ==> com.github.javaparser.ast.stmt.Statement
+  Line 70) setAsParentNodeOf(this.body) ==> void
+  Line 74) this.condition = condition ==> com.github.javaparser.ast.expr.Expression
+  Line 75) setAsParentNodeOf(this.condition) ==> void

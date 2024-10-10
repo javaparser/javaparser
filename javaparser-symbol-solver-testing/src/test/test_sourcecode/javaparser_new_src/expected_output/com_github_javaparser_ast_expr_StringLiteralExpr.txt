@@ -1,0 +1,5 @@
+  Line 42) value.contains("\n") ==> java.lang.String.contains(java.lang.CharSequence)
+  Line 42) value.contains("\r") ==> java.lang.String.contains(java.lang.CharSequence)
+  Line 52) Utils.escapeEndOfLines(string) ==> com.github.javaparser.utils.Utils.escapeEndOfLines(java.lang.String)
+  Line 61) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.GenericVisitor.visit(com.github.javaparser.ast.expr.StringLiteralExpr, A)
+  Line 65) v.visit(this, arg) ==> com.github.javaparser.ast.visitor.VoidVisitor.visit(com.github.javaparser.ast.expr.StringLiteralExpr, A)

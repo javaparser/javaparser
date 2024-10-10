@@ -1,0 +1,168 @@
+import java.util.ArrayList;
+import java.util.List;
+
+
+public interface Predicate<T> {
+    boolean test(T t);
+}
+
+interface Function<T, R> {
+    R apply(T t);
+}
+
+interface Consumer<T> {
+    void accept(T t);
+}
+
+interface Supplier<T> {
+    T get();
+}
+
+interface BiFunction<T, U, R> {
+    R apply(T t, U u);
+}
+
+interface TriFunction<T, U, V, R> {
+    R apply(T t, U u, V v);
+}
+
+public class SuperClass {
+
+    public SuperClass() {
+
+    }
+
+    public SuperClass(String s) {
+
+    }
+
+    void print(Integer val) {
+        System.out.println(val);
+    }
+
+    static void print(Boolean val) {
+        System.out.println(val);
+    }
+
+    boolean isEqual(Integer i, Integer j) {
+        return i.equals(j);
+    }
+
+    boolean isEqualAsStrings(Integer i, String j) {
+        return i.toString().equals(j);
+    }
+
+    int add(Integer i, Integer j) {
+        return i + j;
+    }
+
+    String getOneNumberAsString(Integer i, Integer j, Integer k) {
+        return i.toString();
+    }
+
+    int returnSameValue(Integer i) {
+        return i;
+    }
+
+    String returnSameValue(String s) {
+        return s;
+    }
+}
+
+public class MethodReferences extends SuperClass {
+
+    List<Integer> list = new ArrayList<>();
+
+    void print(String s) {
+        System.out.println(s);
+    }
+
+    boolean isAnyEqualToString5(List<Integer> list, BiFunction<Integer, String, Boolean> biFunction) {
+        for (Integer integer : list) {
+            if (biFunction.apply(integer, "5")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Function<Object, Integer> classMethod() {
+        return Object::hashCode;
+    }
+
+    Function<SuperClass, Integer> superclassMethodNotOverridden() {
+        return SuperClass::hashCode;
+    }
+
+    Function<String, Integer> superclassMethodOverridden() {
+        return String::hashCode;
+    }
+
+    Function<Object, Integer> superclassMethodWithSubclassType() {
+        return Object::hashCode;
+    }
+
+    Consumer<String> fieldAccessMethod() {
+        return System.out::println;
+    }
+
+    Consumer<String> thisClassMethod() {
+        return this::print;
+    }
+
+    Consumer<Integer> superclassMethod() {
+        return super::print;
+    }
+
+    Function<Integer, Boolean> instanceMethod() {
+        return list::add;
+    }
+
+    Supplier<SuperClass> zeroArgumentConstructor() {
+        return SuperClass::new;
+    }
+
+    Function<String, SuperClass> singleArgumentConstructor() {
+        return SuperClass::new;
+    }
+
+    Consumer<Boolean> staticMethod() {
+        return SuperClass::print;
+    }
+
+    BiFunction<Integer, String, Boolean> biFunction() {
+        return super::isEqualAsStrings;
+    }
+
+    TriFunction<Integer, Integer, Integer, String> customTriFunction() {
+        return super::getOneNumberAsString;
+    }
+
+    void consumerDeclaredInMethod() {
+        Consumer<String> stringConsumer = this::print;
+    }
+
+    void functionDeclaredInMethod() {
+        Function<String, String> stringFunction = super::returnSameValue;
+    }
+
+    void biFunctionDeclaredInMethod() {
+        BiFunction<Integer, Integer, Boolean> biFunction = super::isEqual;
+    }
+
+    void consumerUsedInStream() {
+        list.stream().forEach(super::print);
+    }
+
+    void functionUsedInStream() {
+        list.stream().map(super::returnSameValue);
+    }
+
+    void biFunctionUsedInStream() {
+        list.stream().reduce(0, super::add);
+    }
+
+    void biFunctionInMethodCall() {
+        isAnyEqualToString5(list, super::isEqualAsStrings);
+    }
+}

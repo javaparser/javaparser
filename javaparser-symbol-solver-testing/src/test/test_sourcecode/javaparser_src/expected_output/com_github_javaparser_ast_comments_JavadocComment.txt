@@ -1,0 +1,14 @@
+
+[ Class com.github.javaparser.ast.comments.JavadocComment ]
+  superclass: com.github.javaparser.ast.comments.Comment
+  superclass: com.github.javaparser.ast.Node
+  superclass: java.lang.Object
+  interface: java.lang.Cloneable
+  Line 36) content ==> java.lang.String
+  Line 40) beginLine ==> int
+  Line 40) beginColumn ==> int
+  Line 40) endLine ==> int
+  Line 40) endColumn ==> int
+  Line 40) content ==> java.lang.String
+  Line 45) v.visit(this, arg) ==> R
+  Line 50) v.visit(this, arg) ==> void

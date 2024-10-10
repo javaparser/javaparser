@@ -1,0 +1,13 @@
+    class Foo {
+        void foo() { }
+    }
+
+    class Bar {
+        void bar() {
+            new Foo() {
+                void extraFoo() {
+                    this.foo();
+                }
+            };
+        }
+    }
