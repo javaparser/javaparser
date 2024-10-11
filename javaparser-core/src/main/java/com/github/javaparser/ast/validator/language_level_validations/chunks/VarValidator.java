@@ -23,10 +23,7 @@ package com.github.javaparser.ast.validator.language_level_validations.chunks;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.ArrayInitializerExpr;
-import com.github.javaparser.ast.expr.LambdaExpr;
-import com.github.javaparser.ast.expr.NullLiteralExpr;
-import com.github.javaparser.ast.expr.VariableDeclarationExpr;
+import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
@@ -46,6 +43,15 @@ public class VarValidator implements TypedValidator<VarType> {
 
     @Override
     public void accept(VarType node, ProblemReporter reporter) {
+        // Allowed in type pattern expression. For example
+        // record Name(String fName, String lName, String mName) {};
+        // Name host = new Name("William", "Michael", "Korando");
+        // String printName = switch(person){
+        //   case Name(var fName, var lName, var mName) -> lName + ", " + fName + " " + mName;
+        // };
+        if (node.hasParentNode() && node.getParentNode().get() instanceof TypePatternExpr) {
+            return;
+        }
         // All allowed locations are within a VariableDeclaration inside a VariableDeclarationExpr inside something
         // else.
         Optional<VariableDeclarator> variableDeclarator = node.findAncestor(VariableDeclarator.class);
