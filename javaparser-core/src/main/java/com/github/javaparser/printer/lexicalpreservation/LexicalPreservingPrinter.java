@@ -29,6 +29,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.Range;
+import com.github.javaparser.TokenTypes;
 import com.github.javaparser.ast.DataKey;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
@@ -115,7 +116,7 @@ public class LexicalPreservingPrinter {
     // Constructor and setup
     //
     private static AstObserver createObserver() {
-        return new LexicalPreservingPrinter.Observer();
+        return new Observer();
     }
 
     private static class Observer extends PropagatingAstObserver {
@@ -428,10 +429,10 @@ public class LexicalPreservingPrinter {
                 NodeList<?> changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
             final List<DifferenceElement> differenceElements;
-            if (type == AstObserver.ListChangeType.REMOVAL) {
+            if (type == ListChangeType.REMOVAL) {
                 differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListRemovalDifference(
                         findNodeListName(changedList), changedList, index);
-            } else if (type == AstObserver.ListChangeType.ADDITION) {
+            } else if (type == ListChangeType.ADDITION) {
                 differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListAdditionDifference(
                         findNodeListName(changedList), changedList, index, nodeAddedOrRemoved);
             } else {
@@ -602,6 +603,11 @@ public class LexicalPreservingPrinter {
         interpret(node, ConcreteSyntaxModel.forClass(node.getClass()), nodeText);
     }
 
+    private static int detectIndentationLevel(Node node) {
+        List<TextElement> indentation = findIndentation(node);
+        return indentation.size();
+    }
+
     /**
      * TODO: Process CsmIndent and CsmUnindent before reaching this point
      */
@@ -620,12 +626,19 @@ public class LexicalPreservingPrinter {
                 calculatedSyntaxModel.elements.add(0, new CsmChild(comment));
             }
         });
+        int existingIndentationLevel = detectIndentationLevel(node);
         for (CsmElement element : calculatedSyntaxModel.elements) {
             if (element instanceof CsmIndent) {
                 int indexCurrentElement = calculatedSyntaxModel.elements.indexOf(element);
                 if (calculatedSyntaxModel.elements.size() > indexCurrentElement
                         && !(calculatedSyntaxModel.elements.get(indexCurrentElement + 1) instanceof CsmUnindent)) {
                     for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE; i++) {
+                        indentation.add(new TokenTextElement(SPACE, " "));
+                    }
+                }
+                else if (indexCurrentElement > 0 && TokenTypes.isEndOfLineToken(IF)
+                        && !(calculatedSyntaxModel.elements.get(indexCurrentElement - 1) instanceof CsmUnindent)) {
+                    for (int i = 0; i < existingIndentationLevel; i++) {
                         indentation.add(new TokenTextElement(SPACE, " "));
                     }
                 }
@@ -638,8 +651,8 @@ public class LexicalPreservingPrinter {
                 indentation.forEach(nodeText::addElement);
             }
             pendingIndentation = false;
-            if (element instanceof LexicalDifferenceCalculator.CsmChild) {
-                nodeText.addChild(((LexicalDifferenceCalculator.CsmChild) element).getChild());
+            if (element instanceof CsmChild) {
+                nodeText.addChild(((CsmChild) element).getChild());
             } else if (element instanceof CsmToken) {
                 CsmToken csmToken = (CsmToken) element;
                 nodeText.addToken(csmToken.getTokenType(), csmToken.getContent());
