@@ -55,9 +55,7 @@ public class ResolutionOfOverloadedMethodsWithTypeVariablesInvolvedTest {
         for (MethodCallExpr methodCallExpr : methodCallExprs) {
             final String expr = methodCallExpr.toString();
             result.add(expr);
-            System.err.println(expr);
             final String methodDeclaration = methodCallExpr.resolve().toString();
-            System.err.println(methodDeclaration);
             result.add(methodDeclaration);
         }
 
