@@ -11,10 +11,6 @@ import org.junit.jupiter.api.Test;
 
 public class ResolutionOfOverloadedMethodsWithTypeVariablesInvolvedTest {
 
-    public static final String EXPR = "builder.append(element == this ? \"(this box)\" : element)";
-    public static final String METHOD_NAME = "append";
-    public static final String PARAM_TYPE = "java.lang.Object";
-
     @Test
     void test() {
         String code = "public class Box<E> {\n"
@@ -36,8 +32,10 @@ public class ResolutionOfOverloadedMethodsWithTypeVariablesInvolvedTest {
 
         final List<MethodCallExpr> methodCallExprs = cu.findAll(MethodCallExpr.class);
         MethodCallExpr methodCallExpr = methodCallExprs.get(0);
-        assertEquals(EXPR, methodCallExpr.toString());
-        assertEquals(METHOD_NAME, methodCallExpr.resolve().getName());
-        assertEquals(PARAM_TYPE, methodCallExpr.resolve().getParam(0).getType().describe());
+        assertEquals("builder.append(element == this ? \"(this box)\" : element)", methodCallExpr.toString());
+        assertEquals("append", methodCallExpr.resolve().getName());
+        assertEquals(
+                "java.lang.Object",
+                methodCallExpr.resolve().getParam(0).getType().describe());
     }
 }
