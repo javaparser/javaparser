@@ -636,12 +636,6 @@ public class LexicalPreservingPrinter {
                         indentation.add(new TokenTextElement(SPACE, " "));
                     }
                 }
-                else if (indexCurrentElement > 0 && TokenTypes.isEndOfLineToken(IF)
-                        && !(calculatedSyntaxModel.elements.get(indexCurrentElement - 1) instanceof CsmUnindent)) {
-                    for (int i = 0; i < existingIndentationLevel; i++) {
-                        indentation.add(new TokenTextElement(SPACE, " "));
-                    }
-                }
             } else if (element instanceof CsmUnindent) {
                 for (int i = 0; i < Difference.STANDARD_INDENTATION_SIZE && indentation.size() > 0; i++) {
                     indentation.remove(indentation.size() - 1);
