@@ -184,7 +184,8 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("LambdaVoid");
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaEmpty");
-        MethodCallExpr methodCallExpr = Navigator.findMethodCall(method, "forEach").get();
+        MethodCallExpr methodCallExpr =
+                Navigator.findMethodCall(method, "forEach").get();
         LambdaExpr lambdaExpr = (LambdaExpr) methodCallExpr.getArguments().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
