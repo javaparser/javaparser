@@ -152,7 +152,7 @@ public class VisitorSet<N extends Node> implements Set<N> {
         StringBuilder sb = new StringBuilder("[");
         if (size() == 0) return sb.append("]").toString();
         for (EqualsHashcodeOverridingFacade facade : innerSet) {
-            sb.append(facade.overridden.toString() + ",");
+            sb.append(facade.overridden.toString() + ", ");
         }
         return sb.replace(sb.length() - 2, sb.length(), "]").toString();
     }
