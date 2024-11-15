@@ -34,7 +34,7 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class NullLiteralExprMetaModel extends LiteralExprMetaModel {
+public class NullLiteralExprMetaModel extends LiteralExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     NullLiteralExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {

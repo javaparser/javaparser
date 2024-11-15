@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 /**
  * An object that can have a parent node.
  */
-public  interface HasParentNode<T> extends Observable {
+public interface HasParentNode<T> extends Observable {
 
     /**
      * Returns true if the parent has a parent

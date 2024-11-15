@@ -28,19 +28,19 @@ import com.github.javaparser.ast.expr.SimpleName;
  * Validates that identifiers are not keywords - this for the few keywords that the parser
  * accepts because they were added after Java 1.0.
  */
-public  class ReservedKeywordValidator extends VisitorValidator {
+public class ReservedKeywordValidator extends VisitorValidator {
 
     private final String keyword;
 
     private final String error;
 
-    public  ReservedKeywordValidator(String keyword) {
+    public ReservedKeywordValidator(String keyword) {
         this.keyword = keyword;
         error = f("'%s' cannot be used as an identifier as it is a keyword.", keyword);
     }
 
     @Override
-    public  void visit(Name n, ProblemReporter arg) {
+    public void visit(Name n, ProblemReporter arg) {
         if (n.getIdentifier().equals(keyword)) {
             arg.report(n, error);
         }
@@ -48,7 +48,7 @@ public  class ReservedKeywordValidator extends VisitorValidator {
     }
 
     @Override
-    public  void visit(SimpleName n, ProblemReporter arg) {
+    public void visit(SimpleName n, ProblemReporter arg) {
         if (n.getIdentifier().equals(keyword)) {
             arg.report(n, error);
         }

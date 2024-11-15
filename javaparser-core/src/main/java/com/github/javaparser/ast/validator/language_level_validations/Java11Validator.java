@@ -30,11 +30,11 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Var
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/11/">https://openjdk.java.net/projects/jdk/11/</a>
  */
-public  class Java11Validator extends Java10Validator {
+public class Java11Validator extends Java10Validator {
 
     final Validator varAlsoInLambdaParameters = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(true));
 
-    public  Java11Validator() {
+    public Java11Validator() {
         super();
         {
             /*

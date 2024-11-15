@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * The replacement of an element in a list.
  */
-public  class ListReplacementChange implements Change {
+public class ListReplacementChange implements Change {
 
     private final ObservableProperty observableProperty;
 
@@ -36,14 +36,14 @@ public  class ListReplacementChange implements Change {
 
     private final Node newValue;
 
-    public  ListReplacementChange(ObservableProperty observableProperty, int index, Node newValue) {
+    public ListReplacementChange(ObservableProperty observableProperty, int index, Node newValue) {
         this.observableProperty = observableProperty;
         this.index = index;
         this.newValue = newValue;
     }
 
     @Override
-    public  Object getValue(ObservableProperty property, Node node) {
+    public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
             Object currentRawValue = new NoChange().getValue(property, node);
             if (currentRawValue instanceof Optional) {
@@ -67,7 +67,7 @@ public  class ListReplacementChange implements Change {
     }
 
     @Override
-    public  ObservableProperty getProperty() {
+    public ObservableProperty getProperty() {
         return observableProperty;
     }
 }

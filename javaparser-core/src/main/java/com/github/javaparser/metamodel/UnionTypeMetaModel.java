@@ -34,12 +34,12 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class UnionTypeMetaModel extends TypeMetaModel {
+public class UnionTypeMetaModel extends TypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     UnionTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, UnionType.class, "UnionType", "com.github.javaparser.ast.type", false, false);
     }
 
-    public  PropertyMetaModel elementsPropertyMetaModel;
+    public PropertyMetaModel elementsPropertyMetaModel;
 }

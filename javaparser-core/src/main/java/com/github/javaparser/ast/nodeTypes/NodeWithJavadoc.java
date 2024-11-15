@@ -29,7 +29,7 @@ import java.util.Optional;
 /**
  * A node that can be documented with a Javadoc comment.
  */
-public  interface NodeWithJavadoc<N extends Node> {
+public interface NodeWithJavadoc<N extends Node> {
 
     Optional<Comment> getComment();
 

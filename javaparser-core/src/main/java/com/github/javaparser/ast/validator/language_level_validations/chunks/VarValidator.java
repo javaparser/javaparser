@@ -36,16 +36,16 @@ import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.TypedValidator;
 import java.util.Optional;
 
-public  class VarValidator implements TypedValidator<VarType> {
+public class VarValidator implements TypedValidator<VarType> {
 
     private boolean varAllowedInLambdaParameters;
 
-    public  VarValidator(boolean varAllowedInLambdaParameters) {
+    public VarValidator(boolean varAllowedInLambdaParameters) {
         this.varAllowedInLambdaParameters = varAllowedInLambdaParameters;
     }
 
     @Override
-    public  void accept(VarType node, ProblemReporter reporter) {
+    public void accept(VarType node, ProblemReporter reporter) {
         // All allowed locations are within a VariableDeclaration inside a VariableDeclarationExpr inside something
         // else.
         Optional<VariableDeclarator> variableDeclarator = node.findAncestor(VariableDeclarator.class);

@@ -1,6 +1,6 @@
 package com.github.javaparser.jml;
 
-public  class StringConstructor {
+public class StringConstructor {
 
     private final StringBuilder sb = new StringBuilder(1024);
 
@@ -9,7 +9,7 @@ public  class StringConstructor {
 
     private int curColumn = 1;
 
-    public  StringConstructor append(String value) {
+    public StringConstructor append(String value) {
         sb.ensureCapacity(sb.length() + value.length() + 1);
         for (char c : value.toCharArray()) {
             sb.append(c);
@@ -23,7 +23,7 @@ public  class StringConstructor {
         return this;
     }
 
-    public  StringConstructor expandTo(int line, int column) {
+    public StringConstructor expandTo(int line, int column) {
         if (curLine > line || (curLine == line && curColumn > column)) {
             throw new IllegalArgumentException();
         }
@@ -38,11 +38,11 @@ public  class StringConstructor {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return sb.toString();
     }
 
-    public  StringBuilder getBuffer() {
+    public StringBuilder getBuffer() {
         return sb;
     }
 }

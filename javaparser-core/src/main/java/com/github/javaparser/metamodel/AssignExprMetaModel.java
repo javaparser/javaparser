@@ -34,16 +34,16 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class AssignExprMetaModel extends ExpressionMetaModel {
+public class AssignExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     AssignExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, AssignExpr.class, "AssignExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
-    public  PropertyMetaModel operatorPropertyMetaModel;
+    public PropertyMetaModel operatorPropertyMetaModel;
 
-    public  PropertyMetaModel targetPropertyMetaModel;
+    public PropertyMetaModel targetPropertyMetaModel;
 
-    public  PropertyMetaModel valuePropertyMetaModel;
+    public PropertyMetaModel valuePropertyMetaModel;
 }

@@ -20,12 +20,12 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public  class JmlCallableClause extends JmlClause {
+public class JmlCallableClause extends JmlClause {
 
     private NodeList<JmlMethodSignature> methodSignatures = new NodeList<JmlMethodSignature>();
 
     @AllFieldsConstructor
-    public  JmlCallableClause(SimpleName name, NodeList<JmlMethodSignature> methodSignatures) {
+    public JmlCallableClause(SimpleName name, NodeList<JmlMethodSignature> methodSignatures) {
         super(name);
     }
 
@@ -33,71 +33,71 @@ public  class JmlCallableClause extends JmlClause {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlCallableClause(TokenRange tokenRange) {
+    public JmlCallableClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlCallableClause clone() {
+    public JmlCallableClause clone() {
         return (JmlCallableClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlCallableClauseMetaModel getMetaModel() {
+    public JmlCallableClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlCallableClauseMetaModel;
     }
 
     @Override
-    public  JmlClauseKind getKind() {
+    public JmlClauseKind getKind() {
         return JmlClauseKind.CALLABLE;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlCallableClause() {
+    public boolean isJmlCallableClause() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlCallableClause asJmlCallableClause() {
+    public JmlCallableClause asJmlCallableClause() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlCallableClause> toJmlCallableClause() {
+    public Optional<JmlCallableClause> toJmlCallableClause() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlCallableClause(Consumer<JmlCallableClause> action) {
+    public void ifJmlCallableClause(Consumer<JmlCallableClause> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<JmlMethodSignature> getMethodSignatures() {
+    public NodeList<JmlMethodSignature> getMethodSignatures() {
         return methodSignatures;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlCallableClause setMethodSignatures(final NodeList<JmlMethodSignature> methodSignatures) {
+    public JmlCallableClause setMethodSignatures(final NodeList<JmlMethodSignature> methodSignatures) {
         assertNotNull(methodSignatures);
         if (methodSignatures == this.methodSignatures) {
             return this;
@@ -112,7 +112,7 @@ public  class JmlCallableClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -127,7 +127,7 @@ public  class JmlCallableClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -144,7 +144,7 @@ public  class JmlCallableClause extends JmlClause {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlCallableClause(TokenRange tokenRange, SimpleName name, NodeList<JmlMethodSignature> methodSignatures) {
+    public JmlCallableClause(TokenRange tokenRange, SimpleName name, NodeList<JmlMethodSignature> methodSignatures) {
         super(tokenRange, name);
         setMethodSignatures(methodSignatures);
         customInitialization();

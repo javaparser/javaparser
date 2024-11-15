@@ -27,7 +27,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 /**
  * A node that can be public.
  */
-public  interface NodeWithPublicModifier<N extends Node> extends NodeWithModifiers<N> {
+public interface NodeWithPublicModifier<N extends Node> extends NodeWithModifiers<N> {
 
     default boolean isPublic() {
         return hasModifier(PUBLIC);

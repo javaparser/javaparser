@@ -35,13 +35,13 @@ import java.util.Optional;
  * {@code @since v0.0.1}
  * {@code @author Jim O'Java}
  */
-public  class JavadocBlockTag {
+public class JavadocBlockTag {
 
     /**
      * The type of tag: it could either correspond to a known tag (param, return, etc.) or represent
      * an unknown tag.
      */
-    public  enum Type {
+    public enum Type {
 
         AUTHOR,
         DEPRECATED,
@@ -85,7 +85,7 @@ public  class JavadocBlockTag {
 
     private String tagName;
 
-    public  JavadocBlockTag(Type type, String content) {
+    public JavadocBlockTag(Type type, String content) {
         this.type = type;
         this.tagName = type.keyword;
         if (type.hasName()) {
@@ -95,7 +95,7 @@ public  class JavadocBlockTag {
         this.content = JavadocDescription.parseText(content);
     }
 
-    public  JavadocBlockTag(String tagName, String content) {
+    public JavadocBlockTag(String tagName, String content) {
         this(Type.fromName(tagName), content);
         this.tagName = tagName;
     }
@@ -104,23 +104,23 @@ public  class JavadocBlockTag {
         return new JavadocBlockTag(Type.PARAM, paramName + " " + content);
     }
 
-    public  Type getType() {
+    public Type getType() {
         return type;
     }
 
-    public  JavadocDescription getContent() {
+    public JavadocDescription getContent() {
         return content;
     }
 
-    public  Optional<String> getName() {
+    public Optional<String> getName() {
         return name;
     }
 
-    public  String getTagName() {
+    public String getTagName() {
         return tagName;
     }
 
-    public  String toText() {
+    public String toText() {
         StringBuilder sb = new StringBuilder();
         sb.append("@");
         sb.append(tagName);
@@ -133,7 +133,7 @@ public  class JavadocBlockTag {
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -147,7 +147,7 @@ public  class JavadocBlockTag {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         int result = type.hashCode();
         result = 31 * result + content.hashCode();
         result = 31 * result + name.hashCode();
@@ -155,7 +155,7 @@ public  class JavadocBlockTag {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "JavadocBlockTag{" + "type=" + type + ", content='" + content + '\'' + ", name=" + name + '}';
     }
 }

@@ -15,13 +15,13 @@ import java.util.regex.Pattern;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public  record JmlDocSanitizer(Set<String> enabledKeys) {
+public record JmlDocSanitizer(Set<String> enabledKeys) {
 
-    public  String asString(NodeList<JmlDoc> jmlDocs) {
+    public String asString(NodeList<JmlDoc> jmlDocs) {
         return asString(jmlDocs, true);
     }
 
-    public  String asStringJT(Collection<JavaToken> jmlDocs, boolean emulateGlobalPosition) {
+    public String asStringJT(Collection<JavaToken> jmlDocs, boolean emulateGlobalPosition) {
         if (jmlDocs.isEmpty())
             return "";
         StringConstructor s = new StringConstructor();
@@ -40,7 +40,7 @@ public  record JmlDocSanitizer(Set<String> enabledKeys) {
         return toSanitizedString(s.getBuffer());
     }
 
-    public  String asString(Collection<Token> jmlDocs, boolean emulateGlobalPosition) {
+    public String asString(Collection<Token> jmlDocs, boolean emulateGlobalPosition) {
         if (jmlDocs.isEmpty())
             return "";
         StringConstructor s = new StringConstructor();
@@ -55,11 +55,11 @@ public  record JmlDocSanitizer(Set<String> enabledKeys) {
         return toSanitizedString(s.getBuffer());
     }
 
-    public  String asString(NodeList<JmlDoc> jmlDocs, boolean emulateGlobalPosition) {
+    public String asString(NodeList<JmlDoc> jmlDocs, boolean emulateGlobalPosition) {
         return asStringJT(jmlDocs.stream().map(JmlDoc::getContent).toList(), emulateGlobalPosition);
     }
 
-    public  String toSanitizedString(StringBuilder s) {
+    public String toSanitizedString(StringBuilder s) {
         cleanComments(s);
         cleanAtSigns(s);
         return s.toString();
@@ -184,7 +184,7 @@ public  record JmlDocSanitizer(Set<String> enabledKeys) {
         return (!plusKeyFound || enabledPlusKeyFound) && !enabledNegativeKeyFound;
     }
 
-    public  boolean isActiveJmlSpec(String[] keys) {
+    public boolean isActiveJmlSpec(String[] keys) {
         return isActiveJmlSpec(enabledKeys, keys);
     }
 

@@ -67,7 +67,7 @@ import static java.util.stream.Collectors.joining;
  *
  * @author Julio Vilmar Gesser
  */
-public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpleName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType>, NodeWithTypeArguments<ClassOrInterfaceType> {
+public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpleName<ClassOrInterfaceType>, NodeWithAnnotations<ClassOrInterfaceType>, NodeWithTypeArguments<ClassOrInterfaceType> {
 
     @OptionalProperty
     private ClassOrInterfaceType scope;
@@ -77,27 +77,27 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
     @OptionalProperty
     private NodeList<Type> typeArguments;
 
-    public  ClassOrInterfaceType() {
+    public ClassOrInterfaceType() {
         this(null, null, new SimpleName(), null, new NodeList<>());
     }
 
     /**
      * @deprecated use JavaParser.parseClassOrInterfaceType instead. This constructor does not understand generics.
      */
-    public  ClassOrInterfaceType(final String name) {
+    public ClassOrInterfaceType(final String name) {
         this(null, null, new SimpleName(name), null, new NodeList<>());
     }
 
-    public  ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
+    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final String name) {
         this(null, scope, new SimpleName(name), null, new NodeList<>());
     }
 
-    public  ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments) {
+    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments) {
         this(null, scope, name, typeArguments, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public  ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments, final NodeList<AnnotationExpr> annotations) {
+    public ClassOrInterfaceType(final ClassOrInterfaceType scope, final SimpleName name, final NodeList<Type> typeArguments, final NodeList<AnnotationExpr> annotations) {
         this(null, scope, name, typeArguments, annotations);
     }
 
@@ -105,7 +105,7 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  ClassOrInterfaceType(TokenRange tokenRange, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
+    public ClassOrInterfaceType(TokenRange tokenRange, ClassOrInterfaceType scope, SimpleName name, NodeList<Type> typeArguments, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
         setScope(scope);
         setName(name);
@@ -115,22 +115,22 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SimpleName getName() {
+    public SimpleName getName() {
         return name;
     }
 
-    public  String getNameWithScope() {
+    public String getNameWithScope() {
         StringBuilder str = new StringBuilder();
         getScope().ifPresent(s -> str.append(s.getNameWithScope()).append("."));
         str.append(name.asString());
@@ -138,15 +138,15 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<ClassOrInterfaceType> getScope() {
+    public Optional<ClassOrInterfaceType> getScope() {
         return Optional.ofNullable(scope);
     }
 
-    public  boolean isBoxedType() {
+    public boolean isBoxedType() {
         return PrimitiveType.unboxMap.containsKey(name.getIdentifier());
     }
 
-    public  PrimitiveType toUnboxedType() throws UnsupportedOperationException {
+    public PrimitiveType toUnboxedType() throws UnsupportedOperationException {
         if (!isBoxedType()) {
             throw new UnsupportedOperationException(name + " isn't a boxed type.");
         }
@@ -154,7 +154,7 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ClassOrInterfaceType setName(final SimpleName name) {
+    public ClassOrInterfaceType setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -174,7 +174,7 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
      * @return this, the ClassOrInterfaceType
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
+    public ClassOrInterfaceType setScope(final ClassOrInterfaceType scope) {
         if (scope == this.scope) {
             return this;
         }
@@ -187,7 +187,7 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<NodeList<Type>> getTypeArguments() {
+    public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -198,7 +198,7 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
      * @return this, the ClassOrInterfaceType
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ClassOrInterfaceType setTypeArguments(final NodeList<Type> typeArguments) {
+    public ClassOrInterfaceType setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
@@ -211,13 +211,13 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
     }
 
     @Override
-    public  ClassOrInterfaceType setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public ClassOrInterfaceType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (ClassOrInterfaceType) super.setAnnotations(annotations);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -239,7 +239,7 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
     }
 
     @Override
-    public  String asString() {
+    public String asString() {
         StringBuilder str = new StringBuilder();
         getScope().ifPresent(s -> str.append(s.asString()).append("."));
         str.append(name.asString());
@@ -252,30 +252,30 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
      * for example java/lang/Object
      */
     @Override
-    public  String toDescriptor() {
+    public String toDescriptor() {
         return String.format("L%s;", resolve().erasure().asReferenceType().getQualifiedName().replace(".", "/"));
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  ClassOrInterfaceType removeScope() {
+    public ClassOrInterfaceType removeScope() {
         return setScope((ClassOrInterfaceType) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  ClassOrInterfaceType clone() {
+    public ClassOrInterfaceType clone() {
         return (ClassOrInterfaceType) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ClassOrInterfaceTypeMetaModel getMetaModel() {
+    public ClassOrInterfaceTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.classOrInterfaceTypeMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -302,30 +302,30 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isClassOrInterfaceType() {
+    public boolean isClassOrInterfaceType() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ClassOrInterfaceType asClassOrInterfaceType() {
+    public ClassOrInterfaceType asClassOrInterfaceType() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifClassOrInterfaceType(Consumer<ClassOrInterfaceType> action) {
+    public void ifClassOrInterfaceType(Consumer<ClassOrInterfaceType> action) {
         action.accept(this);
     }
 
     @Override
-    public  ResolvedType resolve() {
+    public ResolvedType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedType.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ClassOrInterfaceType> toClassOrInterfaceType() {
+    public Optional<ClassOrInterfaceType> toClassOrInterfaceType() {
         return Optional.of(this);
     }
 
@@ -337,7 +337,7 @@ public  class ClassOrInterfaceType extends ReferenceType implements NodeWithSimp
      * @return The type resolved.
      */
     @Override
-    public  ResolvedType convertToUsage(Context context) {
+    public ResolvedType convertToUsage(Context context) {
         String name = getNameWithScope();
         SymbolReference<ResolvedTypeDeclaration> ref = context.solveType(name);
         if (!ref.isSolved()) {

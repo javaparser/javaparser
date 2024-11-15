@@ -84,9 +84,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @see SwitchStmt
  * @see com.github.javaparser.ast.expr.SwitchExpr
  */
-public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
+public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry> {
 
-    public  enum Type {
+    public enum Type {
 
         STATEMENT_GROUP, EXPRESSION, BLOCK, THROWS_STATEMENT
     }
@@ -102,7 +102,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
     @OptionalProperty
     private Expression guard;
 
-    public  SwitchEntry() {
+    public SwitchEntry() {
         this(null, new NodeList<Expression>(), Type.STATEMENT_GROUP, new NodeList<>(), false, null);
     }
 
@@ -110,7 +110,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
      * This constructor exists for backwards compatibility for code that instantiated `SwitchEntries` before
      * the `isDefault` and guard fields were added.
      */
-    public  SwitchEntry(final TokenRange tokenRange, final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
+    public SwitchEntry(final TokenRange tokenRange, final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
         this(tokenRange, labels, type, statements, false, null);
     }
 
@@ -118,12 +118,12 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
      * This constructor exists for backwards compatibility for code that instantiated `SwitchEntries` before
      * the `isDefault` and guard fields were added.
      */
-    public  SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements) {
         this(null, labels, type, statements, false, null);
     }
 
     @AllFieldsConstructor
-    public  SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements, final boolean isDefault) {
+    public SwitchEntry(final NodeList<Expression> labels, final Type type, final NodeList<Statement> statements, final boolean isDefault) {
         this(null, labels, type, statements, isDefault, null);
     }
 
@@ -131,7 +131,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, boolean isDefault, Expression guard) {
+    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, boolean isDefault, Expression guard) {
         super(tokenRange);
         setLabels(labels);
         setType(type);
@@ -150,29 +150,29 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
      * are for the various switch expressions.
      */
     @DerivedProperty
-    public  boolean isSwitchStatementEntry() {
+    public boolean isSwitchStatementEntry() {
         return type == Type.STATEMENT_GROUP;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Expression> getLabels() {
+    public NodeList<Expression> getLabels() {
         return labels;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Statement> getStatements() {
+    public NodeList<Statement> getStatements() {
         return statements;
     }
 
@@ -183,7 +183,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
      * @return this, the SwitchEntry
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SwitchEntry setLabels(final NodeList<Expression> labels) {
+    public SwitchEntry setLabels(final NodeList<Expression> labels) {
         assertNotNull(labels);
         if (labels == this.labels) {
             return this;
@@ -197,7 +197,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SwitchEntry setStatements(final NodeList<Statement> statements) {
+    public SwitchEntry setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
             return this;
@@ -212,7 +212,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -239,23 +239,23 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  SwitchEntry clone() {
+    public SwitchEntry clone() {
         return (SwitchEntry) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  SwitchEntryMetaModel getMetaModel() {
+    public SwitchEntryMetaModel getMetaModel() {
         return JavaParserMetaModel.switchEntryMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Type getType() {
+    public Type getType() {
         return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SwitchEntry setType(final Type type) {
+    public SwitchEntry setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -267,7 +267,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -293,12 +293,12 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  boolean isDefault() {
+    public boolean isDefault() {
         return isDefault;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SwitchEntry setDefault(final boolean isDefault) {
+    public SwitchEntry setDefault(final boolean isDefault) {
         if (isDefault == this.isDefault) {
             return this;
         }
@@ -308,12 +308,12 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<Expression> getGuard() {
+    public Optional<Expression> getGuard() {
         return Optional.ofNullable(guard);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SwitchEntry setGuard(final Expression guard) {
+    public SwitchEntry setGuard(final Expression guard) {
         if (guard == this.guard) {
             return this;
         }
@@ -326,7 +326,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  SwitchEntry removeGuard() {
+    public SwitchEntry removeGuard() {
         return setGuard((Expression) null);
     }
 
@@ -334,7 +334,7 @@ public  class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, boolean isDefault) {
+    public SwitchEntry(TokenRange tokenRange, NodeList<Expression> labels, Type type, NodeList<Statement> statements, boolean isDefault) {
         super(tokenRange);
         setLabels(labels);
         setType(type);

@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
  *
  * @author Federico Tomassetti
  */
-public  class ResolvedIntersectionType implements ResolvedType {
+public class ResolvedIntersectionType implements ResolvedType {
 
     private List<ResolvedType> elements;
 
-    public  ResolvedIntersectionType(Collection<ResolvedType> elements) {
+    public ResolvedIntersectionType(Collection<ResolvedType> elements) {
         if (elements.size() < 2) {
             throw new IllegalArgumentException("An intersection type should have at least two elements. This has " + elements.size());
         }
@@ -41,7 +41,7 @@ public  class ResolvedIntersectionType implements ResolvedType {
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -51,22 +51,22 @@ public  class ResolvedIntersectionType implements ResolvedType {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return new HashSet<>(elements).hashCode();
     }
 
     @Override
-    public  String describe() {
+    public String describe() {
         return String.join(" & ", elements.stream().map(ResolvedType::describe).collect(Collectors.toList()));
     }
 
     @Override
-    public  boolean isAssignableBy(ResolvedType other) {
+    public boolean isAssignableBy(ResolvedType other) {
         return elements.stream().allMatch(e -> e.isAssignableBy(other));
     }
 
     @Override
-    public  ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tp, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         List<ResolvedType> elementsReplaced = elements.stream().map(e -> e.replaceTypeVariables(tp, replaced, inferredTypes)).collect(Collectors.toList());
         if (elementsReplaced.equals(elements)) {
             return this;
@@ -77,7 +77,7 @@ public  class ResolvedIntersectionType implements ResolvedType {
     /*
      * Returns the list of the resolved types
      */
-    public  List<ResolvedType> getElements() {
+    public List<ResolvedType> getElements() {
         return elements;
     }
 }

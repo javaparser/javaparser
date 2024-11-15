@@ -29,7 +29,7 @@ import java.util.function.BiConsumer;
 /**
  * A validator that validates a known node type.
  */
-public  interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemReporter> {
+public interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemReporter> {
 
     /**
      * @param node            the node that wants to be validated
@@ -42,7 +42,7 @@ public  interface TypedValidator<N extends Node> extends BiConsumer<N, ProblemRe
         return new Processor() {
 
             @Override
-            public  void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+            public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
                 result.getResult().ifPresent(node -> accept((N) node, new ProblemReporter(problem -> result.getProblems().add(problem))));
             }
         };

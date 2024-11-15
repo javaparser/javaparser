@@ -34,16 +34,16 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class EnumConstantDeclarationMetaModel extends BodyDeclarationMetaModel {
+public class EnumConstantDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     EnumConstantDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, EnumConstantDeclaration.class, "EnumConstantDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
-    public  PropertyMetaModel argumentsPropertyMetaModel;
+    public PropertyMetaModel argumentsPropertyMetaModel;
 
-    public  PropertyMetaModel classBodyPropertyMetaModel;
+    public PropertyMetaModel classBodyPropertyMetaModel;
 
-    public  PropertyMetaModel namePropertyMetaModel;
+    public PropertyMetaModel namePropertyMetaModel;
 }

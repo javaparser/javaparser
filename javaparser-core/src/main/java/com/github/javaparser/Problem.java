@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * A problem that was encountered during parsing.
  */
-public  class Problem {
+public class Problem {
 
     private final String message;
 
@@ -36,7 +36,7 @@ public  class Problem {
 
     private final Throwable cause;
 
-    public  Problem(String message, TokenRange location, Throwable cause) {
+    public Problem(String message, TokenRange location, Throwable cause) {
         assertNotNull(message);
         this.message = message;
         this.location = location;
@@ -44,7 +44,7 @@ public  class Problem {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         final StringBuilder str = new StringBuilder(getVerboseMessage());
         if (cause != null) {
             str.append(LineSeparator.SYSTEM).append("Problem stacktrace : ").append(LineSeparator.SYSTEM);
@@ -61,28 +61,28 @@ public  class Problem {
     /**
      * @return the message that was passed into the constructor.
      */
-    public  String getMessage() {
+    public String getMessage() {
         return message;
     }
 
     /**
      * @return the message plus location information.
      */
-    public  String getVerboseMessage() {
+    public String getVerboseMessage() {
         return getLocation().map(l -> l.getBegin().getRange().map(r -> r.begin.toString()).orElse("(line ?,col ?)") + " " + message).orElse(message);
     }
 
     /**
      * @return the location that was passed into the constructor.
      */
-    public  Optional<TokenRange> getLocation() {
+    public Optional<TokenRange> getLocation() {
         return Optional.ofNullable(location);
     }
 
     /**
      * @return the cause that was passed into the constructor.
      */
-    public  Optional<Throwable> getCause() {
+    public Optional<Throwable> getCause() {
         return Optional.ofNullable(cause);
     }
 

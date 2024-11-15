@@ -21,7 +21,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import java.util.NoSuchElementException;
 
-public  interface LookaheadIterator<E> {
+public interface LookaheadIterator<E> {
 
     /**
      * Returns the next element in iteration without advancing the underlying iterator.
@@ -35,7 +35,7 @@ public  interface LookaheadIterator<E> {
      *
      * @return the next element from the iterator
      */
-    public  E peek();
+    public E peek();
 
     /**
      * Returns the next element in iteration without advancing the underlying iterator.
@@ -44,5 +44,5 @@ public  interface LookaheadIterator<E> {
      * @return the next element from the iterator
      * @throws NoSuchElementException if the iterator is already exhausted according to {@link #hasNext()}
      */
-    public  E element();
+    public E element();
 }

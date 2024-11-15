@@ -53,12 +53,12 @@ class LexicalDifferenceCalculator {
             this.elements = elements;
         }
 
-        public  CalculatedSyntaxModel from(int index) {
+        public CalculatedSyntaxModel from(int index) {
             return new CalculatedSyntaxModel(new ArrayList<>(elements.subList(index, elements.size())));
         }
 
         @Override
-        public  String toString() {
+        public String toString() {
             return "CalculatedSyntaxModel{" + "elements=" + elements + '}';
         }
 
@@ -75,7 +75,7 @@ class LexicalDifferenceCalculator {
 
         private final Node child;
 
-        public  Node getChild() {
+        public Node getChild() {
             return child;
         }
 
@@ -84,7 +84,7 @@ class LexicalDifferenceCalculator {
         }
 
         @Override
-        public  void prettyPrint(Node node, SourcePrinter printer) {
+        public void prettyPrint(Node node, SourcePrinter printer) {
             throw new UnsupportedOperationException("The prettyPrint method is not supported or implemented");
         }
 
@@ -92,17 +92,17 @@ class LexicalDifferenceCalculator {
          * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
          */
         @Override
-        public  boolean isCorrespondingElement(TextElement textElement) {
+        public boolean isCorrespondingElement(TextElement textElement) {
             return (textElement instanceof ChildTextElement) && ((ChildTextElement) textElement).getChild() == getChild();
         }
 
         @Override
-        public  String toString() {
+        public String toString() {
             return "child(" + child.getClass().getSimpleName() + ")";
         }
 
         @Override
-        public  boolean equals(Object o) {
+        public boolean equals(Object o) {
             if (this == o)
                 return true;
             if (o == null || getClass() != o.getClass())
@@ -112,7 +112,7 @@ class LexicalDifferenceCalculator {
         }
 
         @Override
-        public  int hashCode() {
+        public int hashCode() {
             return child.hashCode();
         }
     }

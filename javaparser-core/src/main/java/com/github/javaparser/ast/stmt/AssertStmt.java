@@ -43,23 +43,23 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class AssertStmt extends Statement {
+public class AssertStmt extends Statement {
 
     private Expression check;
 
     @OptionalProperty
     private Expression message;
 
-    public  AssertStmt() {
+    public AssertStmt() {
         this(null, new BooleanLiteralExpr(), null);
     }
 
-    public  AssertStmt(final Expression check) {
+    public AssertStmt(final Expression check) {
         this(null, check, null);
     }
 
     @AllFieldsConstructor
-    public  AssertStmt(final Expression check, final Expression message) {
+    public AssertStmt(final Expression check, final Expression message) {
         this(null, check, message);
     }
 
@@ -67,7 +67,7 @@ public  class AssertStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  AssertStmt(TokenRange tokenRange, Expression check, Expression message) {
+    public AssertStmt(TokenRange tokenRange, Expression check, Expression message) {
         super(tokenRange);
         setCheck(check);
         setMessage(message);
@@ -76,28 +76,28 @@ public  class AssertStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getCheck() {
+    public Expression getCheck() {
         return check;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<Expression> getMessage() {
+    public Optional<Expression> getMessage() {
         return Optional.ofNullable(message);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  AssertStmt setCheck(final Expression check) {
+    public AssertStmt setCheck(final Expression check) {
         assertNotNull(check);
         if (check == this.check) {
             return this;
@@ -117,7 +117,7 @@ public  class AssertStmt extends Statement {
      * @return this, the AssertStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  AssertStmt setMessage(final Expression message) {
+    public AssertStmt setMessage(final Expression message) {
         if (message == this.message) {
             return this;
         }
@@ -131,7 +131,7 @@ public  class AssertStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -145,25 +145,25 @@ public  class AssertStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  AssertStmt removeMessage() {
+    public AssertStmt removeMessage() {
         return setMessage((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  AssertStmt clone() {
+    public AssertStmt clone() {
         return (AssertStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  AssertStmtMetaModel getMetaModel() {
+    public AssertStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.assertStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -182,25 +182,25 @@ public  class AssertStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isAssertStmt() {
+    public boolean isAssertStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  AssertStmt asAssertStmt() {
+    public AssertStmt asAssertStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifAssertStmt(Consumer<AssertStmt> action) {
+    public void ifAssertStmt(Consumer<AssertStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<AssertStmt> toAssertStmt() {
+    public Optional<AssertStmt> toAssertStmt() {
         return Optional.of(this);
     }
 }

@@ -27,7 +27,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 /**
  * A node that can be protected.
  */
-public  interface NodeWithProtectedModifier<N extends Node> extends NodeWithModifiers<N> {
+public interface NodeWithProtectedModifier<N extends Node> extends NodeWithModifiers<N> {
 
     default boolean isProtected() {
         return hasModifier(PROTECTED);

@@ -4,7 +4,7 @@ import com.github.javaparser.ast.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
-public  class JmlAnnotationConfiguration {
+public class JmlAnnotationConfiguration {
 
     public static final String NOT_NULL = "org.jetbrains.annotations.NotNull";
 
@@ -14,7 +14,7 @@ public  class JmlAnnotationConfiguration {
 
     private final Map<String, Modifier.DefaultKeyword> annotationToModifier = new HashMap<>();
 
-    public  Map<String, Modifier.DefaultKeyword> getAnnotationToModifier() {
+    public Map<String, Modifier.DefaultKeyword> getAnnotationToModifier() {
         return annotationToModifier;
     }
 

@@ -34,18 +34,18 @@ import java.util.List;
  * An example would be the text contained in this very Javadoc comment. At the moment
  * of this writing this comment does not contain any block tags (such as {@code @see AnotherClass})
  */
-public  class Javadoc {
+public class Javadoc {
 
     private JavadocDescription description;
 
     private List<JavadocBlockTag> blockTags;
 
-    public  Javadoc(JavadocDescription description) {
+    public Javadoc(JavadocDescription description) {
         this.description = description;
         this.blockTags = new LinkedList<>();
     }
 
-    public  Javadoc addBlockTag(JavadocBlockTag blockTag) {
+    public Javadoc addBlockTag(JavadocBlockTag blockTag) {
         this.blockTags.add(blockTag);
         return this;
     }
@@ -55,7 +55,7 @@ public  class Javadoc {
      * tagName is "return",
      * and the rest is content.
      */
-    public  Javadoc addBlockTag(String tagName, String content) {
+    public Javadoc addBlockTag(String tagName, String content) {
         return addBlockTag(new JavadocBlockTag(tagName, content));
     }
 
@@ -65,11 +65,11 @@ public  class Javadoc {
      * parameter is "abc"
      * and the rest is content.
      */
-    public  Javadoc addBlockTag(String tagName, String parameter, String content) {
+    public Javadoc addBlockTag(String tagName, String parameter, String content) {
         return addBlockTag(tagName, parameter + " " + content);
     }
 
-    public  Javadoc addBlockTag(String tagName) {
+    public Javadoc addBlockTag(String tagName) {
         return addBlockTag(tagName, "");
     }
 
@@ -77,7 +77,7 @@ public  class Javadoc {
      * Return the text content of the document. It does not containing trailing spaces and asterisks
      * at the start of the line.
      */
-    public  String toText() {
+    public String toText() {
         StringBuilder sb = new StringBuilder();
         if (!description.isEmpty()) {
             sb.append(description.toText());
@@ -96,14 +96,14 @@ public  class Javadoc {
     /**
      * Create a JavadocComment, by formatting the text of the Javadoc using no indentation (expecting the pretty printer to do the formatting.)
      */
-    public  JavadocComment toComment() {
+    public JavadocComment toComment() {
         return toComment("");
     }
 
     /**
      * Create a JavadocComment, by formatting the text of the Javadoc using the given indentation.
      */
-    public  JavadocComment toComment(String indentation) {
+    public JavadocComment toComment(String indentation) {
         for (char c : indentation.toCharArray()) {
             if (!Character.isWhitespace(c)) {
                 throw new IllegalArgumentException("The indentation string should be composed only by whitespace characters");
@@ -125,19 +125,19 @@ public  class Javadoc {
         return new JavadocComment(sb.toString());
     }
 
-    public  JavadocDescription getDescription() {
+    public JavadocDescription getDescription() {
         return description;
     }
 
     /**
      * @return the current List of associated JavadocBlockTags
      */
-    public  List<JavadocBlockTag> getBlockTags() {
+    public List<JavadocBlockTag> getBlockTags() {
         return this.blockTags;
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -147,14 +147,14 @@ public  class Javadoc {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         int result = description.hashCode();
         result = 31 * result + blockTags.hashCode();
         return result;
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "Javadoc{" + "description=" + description + ", blockTags=" + blockTags + '}';
     }
 }

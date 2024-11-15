@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * A node that has an optional label.
  */
-public  interface NodeWithOptionalLabel<T extends Node> {
+public interface NodeWithOptionalLabel<T extends Node> {
 
     Optional<SimpleName> getLabel();
 

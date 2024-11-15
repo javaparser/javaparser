@@ -21,14 +21,14 @@ import java.util.function.Consumer;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public  class JmlSignalsClause extends JmlClause implements MethodContractable, BlockContractable {
+public class JmlSignalsClause extends JmlClause implements MethodContractable, BlockContractable {
 
     private Parameter parameter;
 
     private Expression expression;
 
     @AllFieldsConstructor
-    public  JmlSignalsClause(SimpleName name, Parameter parameter, Expression expression) {
+    public JmlSignalsClause(SimpleName name, Parameter parameter, Expression expression) {
         this(null, name, parameter, expression);
     }
 
@@ -36,7 +36,7 @@ public  class JmlSignalsClause extends JmlClause implements MethodContractable, 
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlSignalsClause(TokenRange tokenRange, SimpleName name, Parameter parameter, Expression expression) {
+    public JmlSignalsClause(TokenRange tokenRange, SimpleName name, Parameter parameter, Expression expression) {
         super(tokenRange, name);
         setParameter(parameter);
         setExpression(expression);
@@ -45,13 +45,13 @@ public  class JmlSignalsClause extends JmlClause implements MethodContractable, 
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -59,18 +59,18 @@ public  class JmlSignalsClause extends JmlClause implements MethodContractable, 
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlSignalsClause(TokenRange tokenRange) {
+    public JmlSignalsClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getExpression() {
+    public Expression getExpression() {
         return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlSignalsClause setExpression(final Expression expression) {
+    public JmlSignalsClause setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -85,22 +85,22 @@ public  class JmlSignalsClause extends JmlClause implements MethodContractable, 
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlSignalsClauseMetaModel getMetaModel() {
+    public JmlSignalsClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlSignalsClauseMetaModel;
     }
 
     @Override
-    public  JmlClauseKind getKind() {
+    public JmlClauseKind getKind() {
         return JmlClauseKind.SIGNALS;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Parameter getParameter() {
+    public Parameter getParameter() {
         return parameter;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlSignalsClause setParameter(final Parameter parameter) {
+    public JmlSignalsClause setParameter(final Parameter parameter) {
         assertNotNull(parameter);
         if (parameter == this.parameter) {
             return this;
@@ -115,7 +115,7 @@ public  class JmlSignalsClause extends JmlClause implements MethodContractable, 
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -132,31 +132,31 @@ public  class JmlSignalsClause extends JmlClause implements MethodContractable, 
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlSignalsClause clone() {
+    public JmlSignalsClause clone() {
         return (JmlSignalsClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlSignalsClause() {
+    public boolean isJmlSignalsClause() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlSignalsClause asJmlSignalsClause() {
+    public JmlSignalsClause asJmlSignalsClause() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlSignalsClause> toJmlSignalsClause() {
+    public Optional<JmlSignalsClause> toJmlSignalsClause() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlSignalsClause(Consumer<JmlSignalsClause> action) {
+    public void ifJmlSignalsClause(Consumer<JmlSignalsClause> action) {
         action.accept(this);
     }
 }

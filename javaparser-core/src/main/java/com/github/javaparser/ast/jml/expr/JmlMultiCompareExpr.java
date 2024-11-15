@@ -21,15 +21,15 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public  class JmlMultiCompareExpr extends Expression implements Jmlish {
+public class JmlMultiCompareExpr extends Expression implements Jmlish {
 
-    public  JmlMultiCompareExpr(TokenRange range, NodeList<Expression> expressions, List<BinaryExpr.Operator> ops) {
+    public JmlMultiCompareExpr(TokenRange range, NodeList<Expression> expressions, List<BinaryExpr.Operator> ops) {
         this(range, expressions, new Operators(ops));
     }
 
     public static class Operators extends ArrayList<BinaryExpr.Operator> {
 
-        public  Operators(List<BinaryExpr.Operator> ops) {
+        public Operators(List<BinaryExpr.Operator> ops) {
             super(ops);
         }
     }
@@ -40,7 +40,7 @@ public  class JmlMultiCompareExpr extends Expression implements Jmlish {
     private Operators operators;
 
     @AllFieldsConstructor
-    public  JmlMultiCompareExpr(NodeList<Expression> expressions, Operators operators) {
+    public JmlMultiCompareExpr(NodeList<Expression> expressions, Operators operators) {
         this(null, expressions, operators);
     }
 
@@ -48,7 +48,7 @@ public  class JmlMultiCompareExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlMultiCompareExpr(TokenRange tokenRange, NodeList<Expression> expressions, Operators operators) {
+    public JmlMultiCompareExpr(TokenRange tokenRange, NodeList<Expression> expressions, Operators operators) {
         super(tokenRange);
         setExpressions(expressions);
         setOperators(operators);
@@ -57,49 +57,49 @@ public  class JmlMultiCompareExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlMultiCompareExpr() {
+    public boolean isJmlMultiCompareExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlMultiCompareExpr asJmlMultiCompareExpr() {
+    public JmlMultiCompareExpr asJmlMultiCompareExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlMultiCompareExpr> toJmlMultiCompareExpr() {
+    public Optional<JmlMultiCompareExpr> toJmlMultiCompareExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlMultiCompareExpr(Consumer<JmlMultiCompareExpr> action) {
+    public void ifJmlMultiCompareExpr(Consumer<JmlMultiCompareExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlMultiCompareExpr clone() {
+    public JmlMultiCompareExpr clone() {
         return (JmlMultiCompareExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlMultiCompareExprMetaModel getMetaModel() {
+    public JmlMultiCompareExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlMultiCompareExprMetaModel;
     }
 
@@ -107,18 +107,18 @@ public  class JmlMultiCompareExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlMultiCompareExpr(TokenRange tokenRange) {
+    public JmlMultiCompareExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Expression> getExpressions() {
+    public NodeList<Expression> getExpressions() {
         return expressions;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlMultiCompareExpr setExpressions(final NodeList<Expression> expressions) {
+    public JmlMultiCompareExpr setExpressions(final NodeList<Expression> expressions) {
         assertNotNull(expressions);
         if (expressions == this.expressions) {
             return this;
@@ -132,12 +132,12 @@ public  class JmlMultiCompareExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Operators getOperators() {
+    public Operators getOperators() {
         return operators;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlMultiCompareExpr setOperators(final Operators operators) {
+    public JmlMultiCompareExpr setOperators(final Operators operators) {
         assertNotNull(operators);
         if (operators == this.operators) {
             return this;
@@ -149,7 +149,7 @@ public  class JmlMultiCompareExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -164,7 +164,7 @@ public  class JmlMultiCompareExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }

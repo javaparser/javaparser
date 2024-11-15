@@ -28,13 +28,13 @@ import com.github.javaparser.resolution.types.ResolvedType;
  *
  * @author Federico Tomassetti
  */
-public  class Value {
+public class Value {
 
     private ResolvedType type;
 
     private String name;
 
-    public  Value(ResolvedType type, String name) {
+    public Value(ResolvedType type, String name) {
         this.type = type;
         this.name = name;
     }
@@ -48,15 +48,15 @@ public  class Value {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "Value{" + "type=" + type + ", name='" + name + '\'' + '}';
     }
 
-    public  String getName() {
+    public String getName() {
         return name;
     }
 
-    public  ResolvedType getType() {
+    public ResolvedType getType() {
         return type;
     }
 }

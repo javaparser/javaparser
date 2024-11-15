@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Optional;
 
-public  enum JmlClauseKind implements JmlKeyword {
+public enum JmlClauseKind implements JmlKeyword {
 
     ENSURES(GeneratedJavaParserConstants.ENSURES),
     ENSURES_FREE(GeneratedJavaParserConstants.ENSURES_FREE),
@@ -77,7 +77,7 @@ public  enum JmlClauseKind implements JmlKeyword {
     }
 
     @Override
-    public  String jmlSymbol() {
+    public String jmlSymbol() {
         return jmlSymbol;
     }
 

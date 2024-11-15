@@ -26,7 +26,7 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import java.util.Optional;
 
-public  class TokenTextElement extends TextElement {
+public class TokenTextElement extends TextElement {
 
     private final JavaToken token;
 
@@ -43,25 +43,25 @@ public  class TokenTextElement extends TextElement {
     }
 
     @Override
-    public  String expand() {
+    public String expand() {
         return token.getText();
     }
 
     // Visible for testing
-    public  String getText() {
+    public String getText() {
         return token.getText();
     }
 
-    public  int getTokenKind() {
+    public int getTokenKind() {
         return token.getKind();
     }
 
-    public  JavaToken getToken() {
+    public JavaToken getToken() {
         return token;
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -71,12 +71,12 @@ public  class TokenTextElement extends TextElement {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return token.hashCode();
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return token.toString();
     }
 
@@ -91,52 +91,52 @@ public  class TokenTextElement extends TextElement {
     }
 
     @Override
-    public  boolean isWhiteSpace() {
+    public boolean isWhiteSpace() {
         return token.getCategory().isWhitespace();
     }
 
     @Override
-    public  boolean isSpaceOrTab() {
+    public boolean isSpaceOrTab() {
         return token.getCategory().isWhitespaceButNotEndOfLine();
     }
 
     @Override
-    public  boolean isComment() {
+    public boolean isComment() {
         return token.getCategory().isComment();
     }
 
     @Override
-    public  boolean isSeparator() {
+    public boolean isSeparator() {
         return token.getCategory().isSeparator();
     }
 
     @Override
-    public  boolean isNewline() {
+    public boolean isNewline() {
         return token.getCategory().isEndOfLine();
     }
 
     @Override
-    public  boolean isChildOfClass(Class<? extends Node> nodeClass) {
+    public boolean isChildOfClass(Class<? extends Node> nodeClass) {
         return false;
     }
 
     @Override
-    public  boolean isIdentifier() {
+    public boolean isIdentifier() {
         return getToken().getCategory().isIdentifier();
     }
 
     @Override
-    public  boolean isKeyword() {
+    public boolean isKeyword() {
         return getToken().getCategory().isKeyword();
     }
 
     @Override
-    public  boolean isLiteral() {
+    public boolean isLiteral() {
         return getToken().getCategory().isLiteral();
     }
 
     @Override
-    public  boolean isPrimitive() {
+    public boolean isPrimitive() {
         return Kind.valueOf(getTokenKind()).isPrimitive();
     }
 
@@ -146,7 +146,7 @@ public  class TokenTextElement extends TextElement {
     }
 
     @Override
-    public  void accept(LexicalPreservingVisitor visitor) {
+    public void accept(LexicalPreservingVisitor visitor) {
         visitor.visit(this);
     }
 }

@@ -40,18 +40,18 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public  class ArrayAccessExpr extends Expression {
+public class ArrayAccessExpr extends Expression {
 
     private Expression name;
 
     private Expression index;
 
-    public  ArrayAccessExpr() {
+    public ArrayAccessExpr() {
         this(null, new NameExpr(), new IntegerLiteralExpr());
     }
 
     @AllFieldsConstructor
-    public  ArrayAccessExpr(Expression name, Expression index) {
+    public ArrayAccessExpr(Expression name, Expression index) {
         this(null, name, index);
     }
 
@@ -59,7 +59,7 @@ public  class ArrayAccessExpr extends Expression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  ArrayAccessExpr(TokenRange tokenRange, Expression name, Expression index) {
+    public ArrayAccessExpr(TokenRange tokenRange, Expression name, Expression index) {
         super(tokenRange);
         setName(name);
         setIndex(index);
@@ -73,28 +73,28 @@ public  class ArrayAccessExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getIndex() {
+    public Expression getIndex() {
         return index;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getName() {
+    public Expression getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ArrayAccessExpr setIndex(final Expression index) {
+    public ArrayAccessExpr setIndex(final Expression index) {
         assertNotNull(index);
         if (index == this.index) {
             return this;
@@ -108,7 +108,7 @@ public  class ArrayAccessExpr extends Expression {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ArrayAccessExpr setName(final Expression name) {
+    public ArrayAccessExpr setName(final Expression name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -123,19 +123,19 @@ public  class ArrayAccessExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  ArrayAccessExpr clone() {
+    public ArrayAccessExpr clone() {
         return (ArrayAccessExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ArrayAccessExprMetaModel getMetaModel() {
+    public ArrayAccessExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayAccessExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -152,25 +152,25 @@ public  class ArrayAccessExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isArrayAccessExpr() {
+    public boolean isArrayAccessExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ArrayAccessExpr asArrayAccessExpr() {
+    public ArrayAccessExpr asArrayAccessExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifArrayAccessExpr(Consumer<ArrayAccessExpr> action) {
+    public void ifArrayAccessExpr(Consumer<ArrayAccessExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ArrayAccessExpr> toArrayAccessExpr() {
+    public Optional<ArrayAccessExpr> toArrayAccessExpr() {
         return Optional.of(this);
     }
 }

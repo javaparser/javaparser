@@ -25,7 +25,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 
-public  class Added implements DifferenceElement {
+public class Added implements DifferenceElement {
 
     private final CsmElement element;
 
@@ -34,12 +34,12 @@ public  class Added implements DifferenceElement {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "Added{" + element + '}';
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -49,35 +49,35 @@ public  class Added implements DifferenceElement {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return element.hashCode();
     }
 
     @Override
-    public  CsmElement getElement() {
+    public CsmElement getElement() {
         return element;
     }
 
     @Override
-    public  boolean isAdded() {
+    public boolean isAdded() {
         return true;
     }
 
     @Override
-    public  boolean isRemoved() {
+    public boolean isRemoved() {
         return false;
     }
 
     @Override
-    public  boolean isKept() {
+    public boolean isKept() {
         return false;
     }
 
-    public  boolean isIndent() {
+    public boolean isIndent() {
         return element instanceof CsmIndent;
     }
 
-    public  boolean isUnindent() {
+    public boolean isUnindent() {
         return element instanceof CsmUnindent;
     }
 
@@ -85,7 +85,7 @@ public  class Added implements DifferenceElement {
         return element instanceof CsmToken;
     }
 
-    public  TextElement toTextElement() {
+    public TextElement toTextElement() {
         if (element instanceof LexicalDifferenceCalculator.CsmChild) {
             return new ChildTextElement(((LexicalDifferenceCalculator.CsmChild) element).getChild());
         }
@@ -100,14 +100,14 @@ public  class Added implements DifferenceElement {
      * with the specified line separator. The line separator parameter must be a CsmToken with a valid line separator.
      */
     @Override
-    public  DifferenceElement replaceEolTokens(CsmElement lineSeparator) {
+    public DifferenceElement replaceEolTokens(CsmElement lineSeparator) {
         return isNewLine() ? new Added(lineSeparator) : this;
     }
 
     /*
      * Return true if the wrapped {@code CsmElement} is a new line token
      */
-    public  boolean isNewLine() {
+    public boolean isNewLine() {
         return isToken() && ((CsmToken) element).isNewLine();
     }
 }

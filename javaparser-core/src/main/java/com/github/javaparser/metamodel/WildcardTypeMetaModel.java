@@ -34,14 +34,14 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class WildcardTypeMetaModel extends TypeMetaModel {
+public class WildcardTypeMetaModel extends TypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     WildcardTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, WildcardType.class, "WildcardType", "com.github.javaparser.ast.type", false, false);
     }
 
-    public  PropertyMetaModel extendedTypePropertyMetaModel;
+    public PropertyMetaModel extendedTypePropertyMetaModel;
 
-    public  PropertyMetaModel superTypePropertyMetaModel;
+    public PropertyMetaModel superTypePropertyMetaModel;
 }

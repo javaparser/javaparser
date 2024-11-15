@@ -8,7 +8,7 @@ import com.github.javaparser.ast.expr.SimpleName;
  * @author Alexander Weigl
  * @version 1 (30.05.22)
  */
-public  interface NodeWithJmlTags<R extends Node> {
+public interface NodeWithJmlTags<R extends Node> {
 
     NodeList<SimpleName> getJmlTags();
 

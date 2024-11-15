@@ -34,7 +34,7 @@ import java.util.*;
  *
  * @author Federico Tomassetti
  */
-public  class MethodUsage implements ResolvedTypeParametrized {
+public class MethodUsage implements ResolvedTypeParametrized {
 
     private ResolvedMethodDeclaration declaration;
 
@@ -46,7 +46,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
 
     private ResolvedTypeParametersMap typeParametersMap;
 
-    public  MethodUsage(ResolvedMethodDeclaration declaration) {
+    public MethodUsage(ResolvedMethodDeclaration declaration) {
         this.typeParametersMap = ResolvedTypeParametersMap.empty();
         this.declaration = declaration;
         paramTypes.addAll(declaration.formalParameterTypes());
@@ -54,11 +54,11 @@ public  class MethodUsage implements ResolvedTypeParametrized {
         returnType = declaration.getReturnType();
     }
 
-    public  MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType) {
+    public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType) {
         this(declaration, paramTypes, returnType, declaration.getSpecifiedExceptions(), ResolvedTypeParametersMap.empty());
     }
 
-    public  MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType, List<ResolvedType> exceptionTypes) {
+    public MethodUsage(ResolvedMethodDeclaration declaration, List<ResolvedType> paramTypes, ResolvedType returnType, List<ResolvedType> exceptionTypes) {
         this(declaration, paramTypes, returnType, exceptionTypes, ResolvedTypeParametersMap.empty());
     }
 
@@ -71,31 +71,31 @@ public  class MethodUsage implements ResolvedTypeParametrized {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "MethodUsage{" + "declaration=" + declaration + ", paramTypes=" + paramTypes + '}';
     }
 
-    public  ResolvedMethodDeclaration getDeclaration() {
+    public ResolvedMethodDeclaration getDeclaration() {
         return declaration;
     }
 
-    public  String getName() {
+    public String getName() {
         return declaration.getName();
     }
 
-    public  ResolvedReferenceTypeDeclaration declaringType() {
+    public ResolvedReferenceTypeDeclaration declaringType() {
         return declaration.declaringType();
     }
 
-    public  ResolvedType returnType() {
+    public ResolvedType returnType() {
         return returnType;
     }
 
-    public  List<ResolvedType> getParamTypes() {
+    public List<ResolvedType> getParamTypes() {
         return paramTypes;
     }
 
-    public  MethodUsage replaceParamType(int i, ResolvedType replaced) {
+    public MethodUsage replaceParamType(int i, ResolvedType replaced) {
         if (i < 0 || i >= getNoParams()) {
             throw new IllegalArgumentException();
         }
@@ -107,7 +107,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
         return new MethodUsage(declaration, newParams, returnType, exceptionTypes, typeParametersMap);
     }
 
-    public  MethodUsage replaceExceptionType(int i, ResolvedType replaced) {
+    public MethodUsage replaceExceptionType(int i, ResolvedType replaced) {
         if (i < 0 || i >= exceptionTypes.size()) {
             throw new IllegalArgumentException();
         }
@@ -119,7 +119,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
         return new MethodUsage(declaration, paramTypes, returnType, newTypes, typeParametersMap);
     }
 
-    public  MethodUsage replaceReturnType(ResolvedType returnType) {
+    public MethodUsage replaceReturnType(ResolvedType returnType) {
         if (returnType == this.returnType) {
             return this;
         }
@@ -129,18 +129,18 @@ public  class MethodUsage implements ResolvedTypeParametrized {
     /**
      * Return the number of formal arguments accepted by this method.
      */
-    public  int getNoParams() {
+    public int getNoParams() {
         return paramTypes.size();
     }
 
     /**
      * Return the type of the formal argument at the given position.
      */
-    public  ResolvedType getParamType(int i) {
+    public ResolvedType getParamType(int i) {
         return paramTypes.get(i);
     }
 
-    public  MethodUsage replaceTypeParameter(ResolvedTypeParameterDeclaration typeParameter, ResolvedType type) {
+    public MethodUsage replaceTypeParameter(ResolvedTypeParameterDeclaration typeParameter, ResolvedType type) {
         if (type == null) {
             throw new IllegalArgumentException();
         }
@@ -164,7 +164,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
     }
 
     @Override
-    public  ResolvedTypeParametersMap typeParametersMap() {
+    public ResolvedTypeParametersMap typeParametersMap() {
         return typeParametersMap;
     }
 
@@ -172,14 +172,14 @@ public  class MethodUsage implements ResolvedTypeParametrized {
      * The qualified signature of the method. It is composed by the qualified name of the declaring type
      * followed by the signature of the method.
      */
-    public  String getQualifiedSignature() {
+    public String getQualifiedSignature() {
         return getDeclaration().declaringType().getQualifiedName() + "." + getSignature();
     }
 
     /**
      * The signature of the method.
      */
-    public  String getSignature() {
+    public String getSignature() {
         StringBuilder sb = new StringBuilder();
         sb.append(getName());
         sb.append("(");
@@ -201,7 +201,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
     /**
      * The erased signature of the method.
      */
-    public  String getErasedSignature() {
+    public String getErasedSignature() {
         StringBuilder sb = new StringBuilder();
         sb.append(getName());
         sb.append("(");
@@ -220,7 +220,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
         return sb.toString();
     }
 
-    public  List<ResolvedType> exceptionTypes() {
+    public List<ResolvedType> exceptionTypes() {
         return exceptionTypes;
     }
 
@@ -232,7 +232,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
      * https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html
      * This method returns an approximation of this rule.
      */
-    public  boolean isSameSignature(MethodUsage otherMethodUsage) {
+    public boolean isSameSignature(MethodUsage otherMethodUsage) {
         return getSignature().equals(otherMethodUsage.getSignature());
     }
 
@@ -241,7 +241,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
      * m2 has the same signature as m1, or
      * the signature of m1 is the same as the erasure (§4.6) of the signature of m2.
      */
-    public  boolean isSubSignature(MethodUsage otherMethodUsage) {
+    public boolean isSubSignature(MethodUsage otherMethodUsage) {
         return getErasedSignature().equals(otherMethodUsage.getErasedSignature());
     }
 
@@ -254,7 +254,7 @@ public  class MethodUsage implements ResolvedTypeParametrized {
      * R1 can be converted to a subtype of R2 by unchecked conversion (§5.1.9).
      * d1 does not have the same signature as d2 (§8.4.2), and R1 = |R2|.
      */
-    public  boolean isReturnTypeSubstituable(MethodUsage otherMethodUsage) {
+    public boolean isReturnTypeSubstituable(MethodUsage otherMethodUsage) {
         return getDeclaration().isReturnTypeSubstituable(otherMethodUsage.getDeclaration().getReturnType());
     }
 }

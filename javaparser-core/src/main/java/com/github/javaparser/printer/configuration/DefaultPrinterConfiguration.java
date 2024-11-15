@@ -31,9 +31,9 @@ import java.util.Set;
 /**
  * Configuration options for the {@link Printer}.
  */
-public  class DefaultPrinterConfiguration implements PrinterConfiguration {
+public class DefaultPrinterConfiguration implements PrinterConfiguration {
 
-    public  enum ConfigOption {
+    public enum ConfigOption {
 
         /**
          * Order imports alphabetically
@@ -142,14 +142,14 @@ public  class DefaultPrinterConfiguration implements PrinterConfiguration {
     // an option contained in the set is considered as activated
     private Set<ConfigurationOption> defaultOptions = new HashSet<>(Arrays.asList(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS, ConfigOption.PRINT_COMMENTS.defaultValue), new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC, ConfigOption.PRINT_JAVADOC.defaultValue), new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS, ConfigOption.SPACE_AROUND_OPERATORS.defaultValue), new DefaultConfigurationOption(ConfigOption.INDENT_CASE_IN_SWITCH, ConfigOption.INDENT_CASE_IN_SWITCH.defaultValue), new DefaultConfigurationOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY, ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY.defaultValue), new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, ConfigOption.END_OF_LINE_CHARACTER.defaultValue), new DefaultConfigurationOption(ConfigOption.INDENTATION, ConfigOption.INDENTATION.defaultValue)));
 
-    public  DefaultPrinterConfiguration() {
+    public DefaultPrinterConfiguration() {
     }
 
     /*
      * add the specified option if it does not exist or replace the existing option
      */
     @Override
-    public  PrinterConfiguration addOption(ConfigurationOption option) {
+    public PrinterConfiguration addOption(ConfigurationOption option) {
         removeOption(option);
         defaultOptions.add(option);
         return this;
@@ -159,7 +159,7 @@ public  class DefaultPrinterConfiguration implements PrinterConfiguration {
      * remove the specified option
      */
     @Override
-    public  PrinterConfiguration removeOption(ConfigurationOption option) {
+    public PrinterConfiguration removeOption(ConfigurationOption option) {
         defaultOptions.remove(option);
         return this;
     }
@@ -168,7 +168,7 @@ public  class DefaultPrinterConfiguration implements PrinterConfiguration {
      * True if an option is activated
      */
     @Override
-    public  boolean isActivated(ConfigurationOption option) {
+    public boolean isActivated(ConfigurationOption option) {
         return defaultOptions.contains(option);
     }
 
@@ -176,7 +176,7 @@ public  class DefaultPrinterConfiguration implements PrinterConfiguration {
      * returns the specified option
      */
     @Override
-    public  Optional<ConfigurationOption> get(ConfigurationOption option) {
+    public Optional<ConfigurationOption> get(ConfigurationOption option) {
         return defaultOptions.stream().filter(o -> o.equals(option)).findFirst();
     }
 
@@ -184,7 +184,7 @@ public  class DefaultPrinterConfiguration implements PrinterConfiguration {
      * returns all options configured
      */
     @Override
-    public  Set<ConfigurationOption> get() {
+    public Set<ConfigurationOption> get() {
         return defaultOptions;
     }
 }

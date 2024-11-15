@@ -23,7 +23,7 @@ package com.github.javaparser.ast.nodeTypes;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import com.github.javaparser.ast.Node;
 
-public  interface NodeWithIdentifier<N extends Node> {
+public interface NodeWithIdentifier<N extends Node> {
 
     String getIdentifier();
 

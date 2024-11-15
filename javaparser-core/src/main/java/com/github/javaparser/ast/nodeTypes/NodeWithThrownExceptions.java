@@ -28,7 +28,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 /**
  * A node that declares the types of exception it throws.
  */
-public  interface NodeWithThrownExceptions<N extends Node> {
+public interface NodeWithThrownExceptions<N extends Node> {
 
     N setThrownExceptions(NodeList<ReferenceType> thrownExceptions);
 

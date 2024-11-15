@@ -34,12 +34,12 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class IntersectionTypeMetaModel extends TypeMetaModel {
+public class IntersectionTypeMetaModel extends TypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     IntersectionTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, IntersectionType.class, "IntersectionType", "com.github.javaparser.ast.type", false, false);
     }
 
-    public  PropertyMetaModel elementsPropertyMetaModel;
+    public PropertyMetaModel elementsPropertyMetaModel;
 }

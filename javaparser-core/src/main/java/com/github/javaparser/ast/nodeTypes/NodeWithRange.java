@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * A node that has a Range, which is every Node.
  */
-public  interface NodeWithRange<N> {
+public interface NodeWithRange<N> {
 
     Optional<Range> getRange();
 

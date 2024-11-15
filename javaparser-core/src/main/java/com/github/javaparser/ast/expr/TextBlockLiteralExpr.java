@@ -44,9 +44,9 @@ import com.github.javaparser.ast.Node;
  * A text block is a multi-line string. It was introduced in JEP 355.
  * The content of "value" is byte-for-byte exactly what is in the source code.
  */
-public  class TextBlockLiteralExpr extends LiteralStringValueExpr {
+public class TextBlockLiteralExpr extends LiteralStringValueExpr {
 
-    public  TextBlockLiteralExpr() {
+    public TextBlockLiteralExpr() {
         this(null, "empty");
     }
 
@@ -56,7 +56,7 @@ public  class TextBlockLiteralExpr extends LiteralStringValueExpr {
      * @param value the value of the literal
      */
     @AllFieldsConstructor
-    public  TextBlockLiteralExpr(final String value) {
+    public TextBlockLiteralExpr(final String value) {
         this(null, value);
     }
 
@@ -64,56 +64,56 @@ public  class TextBlockLiteralExpr extends LiteralStringValueExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  TextBlockLiteralExpr(TokenRange tokenRange, String value) {
+    public TextBlockLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isTextBlockLiteralExpr() {
+    public boolean isTextBlockLiteralExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  TextBlockLiteralExpr asTextBlockLiteralExpr() {
+    public TextBlockLiteralExpr asTextBlockLiteralExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<TextBlockLiteralExpr> toTextBlockLiteralExpr() {
+    public Optional<TextBlockLiteralExpr> toTextBlockLiteralExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
+    public void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  TextBlockLiteralExpr clone() {
+    public TextBlockLiteralExpr clone() {
         return (TextBlockLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  TextBlockLiteralExprMetaModel getMetaModel() {
+    public TextBlockLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.textBlockLiteralExprMetaModel;
     }
 
@@ -121,7 +121,7 @@ public  class TextBlockLiteralExpr extends LiteralStringValueExpr {
      * Most of the algorithm for stripIndent, stopping just before concatenating all the lines into a single string.
      * Useful for tools.
      */
-    public  Stream<String> stripIndentOfLines() {
+    public Stream<String> stripIndentOfLines() {
         /* Split the content of the text block at every LF, producing a list of individual lines.
         Note that any line in the content which was just an LF will become an empty line in the list of individual lines. */
         String[] rawLines = getValue().split("\\R", -1);
@@ -141,7 +141,7 @@ public  class TextBlockLiteralExpr extends LiteralStringValueExpr {
     /**
      * @return The algorithm from String::stripIndent in JDK 13.
      */
-    public  String stripIndent() {
+    public String stripIndent() {
         /* Construct the result string by joining all the lines in the modified list of individual lines from step 6, using LF as the separator between lines.
         If the final line in the list from step 6 is empty, then the joining LF from the previous line will be the last character in the result string. */
         return stripIndentOfLines().collect(joining("\n"));
@@ -150,14 +150,14 @@ public  class TextBlockLiteralExpr extends LiteralStringValueExpr {
     /**
      * @return The algorithm from String::translateEscapes in JDK 13.
      */
-    public  String translateEscapes() {
+    public String translateEscapes() {
         return unescapeJavaTextBlock(stripIndent());
     }
 
     /**
      * @return the final string value of this text block after all processing.
      */
-    public  String asString() {
+    public String asString() {
         return translateEscapes();
     }
 

@@ -31,25 +31,25 @@ import java.util.Map;
  *
  * @author Federico Tomassetti
  */
-public  class ResolvedTypeVariable implements ResolvedType {
+public class ResolvedTypeVariable implements ResolvedType {
 
     private ResolvedTypeParameterDeclaration typeParameter;
 
-    public  ResolvedTypeVariable(ResolvedTypeParameterDeclaration typeParameter) {
+    public ResolvedTypeVariable(ResolvedTypeParameterDeclaration typeParameter) {
         this.typeParameter = typeParameter;
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "TypeVariable {" + typeParameter.toString() + "}";
     }
 
-    public  String qualifiedName() {
+    public String qualifiedName() {
         return this.typeParameter.getQualifiedName();
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -65,17 +65,17 @@ public  class ResolvedTypeVariable implements ResolvedType {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return typeParameter.hashCode();
     }
 
     @Override
-    public  boolean isArray() {
+    public boolean isArray() {
         return false;
     }
 
     @Override
-    public  ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToBeReplaced, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToBeReplaced, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (tpToBeReplaced.getName().equals(this.typeParameter.getName())) {
             inferredTypes.put(this.asTypeParameter(), replaced);
             return replaced;
@@ -84,32 +84,32 @@ public  class ResolvedTypeVariable implements ResolvedType {
     }
 
     @Override
-    public  boolean isReferenceType() {
+    public boolean isReferenceType() {
         return false;
     }
 
     @Override
-    public  String describe() {
+    public String describe() {
         return typeParameter.getName();
     }
 
     @Override
-    public  ResolvedTypeParameterDeclaration asTypeParameter() {
+    public ResolvedTypeParameterDeclaration asTypeParameter() {
         return typeParameter;
     }
 
     @Override
-    public  ResolvedTypeVariable asTypeVariable() {
+    public ResolvedTypeVariable asTypeVariable() {
         return this;
     }
 
     @Override
-    public  boolean isTypeVariable() {
+    public boolean isTypeVariable() {
         return true;
     }
 
     @Override
-    public  boolean isAssignableBy(ResolvedType other) {
+    public boolean isAssignableBy(ResolvedType other) {
         if (other.isTypeVariable()) {
             // if we want to compare something like @{code C extends Comparable<C>} with @{code K extends Comparable<K>}
             // we have to compare the type of the bound. For the moment we are focusing solely on the first type.
@@ -122,7 +122,7 @@ public  class ResolvedTypeVariable implements ResolvedType {
     }
 
     @Override
-    public  boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
+    public boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
         return typeParameters.contains(typeParameter);
     }
 
@@ -133,7 +133,7 @@ public  class ResolvedTypeVariable implements ResolvedType {
     // If no bound is declared for a type variable, Object is assumed.
     //
     @Override
-    public  ResolvedType erasure() {
+    public ResolvedType erasure() {
         if (typeParameter.isBounded()) {
             return typeParameter.getBounds().get(0).getType();
         }
@@ -144,12 +144,12 @@ public  class ResolvedTypeVariable implements ResolvedType {
      * Returns the resolved type for a type variable.
      */
     @Override
-    public  ResolvedType solveGenericTypes(Context context) {
+    public ResolvedType solveGenericTypes(Context context) {
         return context.solveGenericType(describe()).orElse(this);
     }
 
     @Override
-    public  String toDescriptor() {
+    public String toDescriptor() {
         return String.format("L%s;", qualifiedName());
     }
 }

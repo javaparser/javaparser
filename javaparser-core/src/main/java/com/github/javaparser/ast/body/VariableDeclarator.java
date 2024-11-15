@@ -56,7 +56,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator>, Resolvable<ResolvedValueDeclaration> {
+public class VariableDeclarator extends Node implements NodeWithType<VariableDeclarator, Type>, NodeWithSimpleName<VariableDeclarator>, Resolvable<ResolvedValueDeclaration> {
 
     private SimpleName name;
 
@@ -66,19 +66,19 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
 
     private Type type;
 
-    public  VariableDeclarator() {
+    public VariableDeclarator() {
         this(null, new ClassOrInterfaceType(), new SimpleName(), null);
     }
 
-    public  VariableDeclarator(Type type, String variableName) {
+    public VariableDeclarator(Type type, String variableName) {
         this(null, type, new SimpleName(variableName), null);
     }
 
-    public  VariableDeclarator(Type type, SimpleName name) {
+    public VariableDeclarator(Type type, SimpleName name) {
         this(null, type, name, null);
     }
 
-    public  VariableDeclarator(Type type, String variableName, Expression initializer) {
+    public VariableDeclarator(Type type, String variableName, Expression initializer) {
         this(null, type, new SimpleName(variableName), initializer);
     }
 
@@ -90,7 +90,7 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
      *                    is unnecessary as the {@code =} operator is already added.
      */
     @AllFieldsConstructor
-    public  VariableDeclarator(Type type, SimpleName name, Expression initializer) {
+    public VariableDeclarator(Type type, SimpleName name, Expression initializer) {
         this(null, type, name, initializer);
     }
 
@@ -98,7 +98,7 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  VariableDeclarator(TokenRange tokenRange, Type type, SimpleName name, Expression initializer) {
+    public VariableDeclarator(TokenRange tokenRange, Type type, SimpleName name, Expression initializer) {
         super(tokenRange);
         setType(type);
         setName(name);
@@ -113,7 +113,7 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
         register(new AstObserverAdapter() {
 
             @Override
-            public  void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 if (property == ObservableProperty.TYPE) {
                     VariableDeclarator vd = VariableDeclarator.this;
                     if (vd.getParentNode().isPresent() && vd.getParentNode().get() instanceof NodeWithVariables) {
@@ -139,28 +139,28 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<Expression> getInitializer() {
+    public Optional<Expression> getInitializer() {
         return Optional.ofNullable(initializer);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SimpleName getName() {
+    public SimpleName getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  VariableDeclarator setName(final SimpleName name) {
+    public VariableDeclarator setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -180,7 +180,7 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
      * @return this, the VariableDeclarator
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  VariableDeclarator setInitializer(final Expression initializer) {
+    public VariableDeclarator setInitializer(final Expression initializer) {
         if (initializer == this.initializer) {
             return this;
         }
@@ -198,17 +198,17 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
      * @param init the initializer expression, can be null
      * @return this, the VariableDeclarator
      */
-    public  VariableDeclarator setInitializer(String init) {
+    public VariableDeclarator setInitializer(String init) {
         return setInitializer(new NameExpr(assertNonEmpty(init)));
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Type getType() {
+    public Type getType() {
         return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  VariableDeclarator setType(final Type type) {
+    public VariableDeclarator setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -223,7 +223,7 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -237,25 +237,25 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  VariableDeclarator removeInitializer() {
+    public VariableDeclarator removeInitializer() {
         return setInitializer((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  VariableDeclarator clone() {
+    public VariableDeclarator clone() {
         return (VariableDeclarator) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  VariableDeclaratorMetaModel getMetaModel() {
+    public VariableDeclaratorMetaModel getMetaModel() {
         return JavaParserMetaModel.variableDeclaratorMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -277,7 +277,7 @@ public  class VariableDeclarator extends Node implements NodeWithType<VariableDe
     }
 
     @Override
-    public  ResolvedValueDeclaration resolve() {
+    public ResolvedValueDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
 }

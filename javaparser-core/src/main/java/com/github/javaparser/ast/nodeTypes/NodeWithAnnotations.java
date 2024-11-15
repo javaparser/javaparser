@@ -34,7 +34,7 @@ import java.util.Optional;
  * @author Federico Tomassetti
  * @since July 2014
  */
-public  interface NodeWithAnnotations<N extends Node> {
+public interface NodeWithAnnotations<N extends Node> {
 
     NodeList<AnnotationExpr> getAnnotations();
 

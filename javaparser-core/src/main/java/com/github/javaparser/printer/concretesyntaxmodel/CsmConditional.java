@@ -27,7 +27,7 @@ import com.github.javaparser.printer.SourcePrinter;
 import java.util.Arrays;
 import java.util.List;
 
-public  class CsmConditional implements CsmElement {
+public class CsmConditional implements CsmElement {
 
     private final Condition condition;
 
@@ -37,30 +37,30 @@ public  class CsmConditional implements CsmElement {
 
     private final CsmElement elseElement;
 
-    public  Condition getCondition() {
+    public Condition getCondition() {
         return condition;
     }
 
-    public  ObservableProperty getProperty() {
+    public ObservableProperty getProperty() {
         if (properties.size() > 1) {
             throw new IllegalStateException();
         }
         return properties.get(0);
     }
 
-    public  List<ObservableProperty> getProperties() {
+    public List<ObservableProperty> getProperties() {
         return properties;
     }
 
-    public  CsmElement getThenElement() {
+    public CsmElement getThenElement() {
         return thenElement;
     }
 
-    public  CsmElement getElseElement() {
+    public CsmElement getElseElement() {
         return elseElement;
     }
 
-    public  enum Condition {
+    public enum Condition {
 
         IS_EMPTY {
 
@@ -97,14 +97,14 @@ public  class CsmConditional implements CsmElement {
         abstract boolean evaluate(Node node, ObservableProperty property);
     }
 
-    public  CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
+    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement, CsmElement elseElement) {
         this.properties = Arrays.asList(property);
         this.condition = condition;
         this.thenElement = thenElement;
         this.elseElement = elseElement;
     }
 
-    public  CsmConditional(List<ObservableProperty> properties, Condition condition, CsmElement thenElement, CsmElement elseElement) {
+    public CsmConditional(List<ObservableProperty> properties, Condition condition, CsmElement thenElement, CsmElement elseElement) {
         if (properties.size() < 1) {
             throw new IllegalArgumentException();
         }
@@ -114,12 +114,12 @@ public  class CsmConditional implements CsmElement {
         this.elseElement = elseElement;
     }
 
-    public  CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement) {
+    public CsmConditional(ObservableProperty property, Condition condition, CsmElement thenElement) {
         this(property, condition, thenElement, new CsmNone());
     }
 
     @Override
-    public  void prettyPrint(Node node, SourcePrinter printer) {
+    public void prettyPrint(Node node, SourcePrinter printer) {
         boolean test = false;
         for (ObservableProperty prop : properties) {
             test = test || condition.evaluate(node, prop);

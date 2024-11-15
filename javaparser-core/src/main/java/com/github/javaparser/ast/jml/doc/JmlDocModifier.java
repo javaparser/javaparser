@@ -8,26 +8,26 @@ import com.github.javaparser.ast.NodeList;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public  class JmlDocModifier implements Modifier.Keyword, JmlDocContainer {
+public class JmlDocModifier implements Modifier.Keyword, JmlDocContainer {
 
     private final NodeList<JmlDoc> jmlComments;
 
     @AllFieldsConstructor
-    public  JmlDocModifier(NodeList<JmlDoc> jmlComments) {
+    public JmlDocModifier(NodeList<JmlDoc> jmlComments) {
         this.jmlComments = jmlComments;
     }
 
     @Override
-    public  String asString() {
+    public String asString() {
         return "[[JML modifiers]]";
     }
 
     @Override
-    public  String name() {
+    public String name() {
         return asString();
     }
 
-    public  NodeList<JmlDoc> getJmlComments() {
+    public NodeList<JmlDoc> getJmlComments() {
         return jmlComments;
     }
 }

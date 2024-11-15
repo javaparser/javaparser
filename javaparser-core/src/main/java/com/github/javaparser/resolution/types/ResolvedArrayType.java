@@ -28,11 +28,11 @@ import java.util.Map;
  *
  * @author Federico Tomassetti
  */
-public  class ResolvedArrayType implements ResolvedType {
+public class ResolvedArrayType implements ResolvedType {
 
     private ResolvedType baseType;
 
-    public  ResolvedArrayType(ResolvedType baseType) {
+    public ResolvedArrayType(ResolvedType baseType) {
         this.baseType = baseType;
     }
 
@@ -40,7 +40,7 @@ public  class ResolvedArrayType implements ResolvedType {
     // / Object methods
     // /
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -52,12 +52,12 @@ public  class ResolvedArrayType implements ResolvedType {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return baseType.hashCode();
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "ResolvedArrayType{" + baseType + "}";
     }
 
@@ -65,26 +65,26 @@ public  class ResolvedArrayType implements ResolvedType {
     // / Type methods
     // /
     @Override
-    public  ResolvedArrayType asArrayType() {
+    public ResolvedArrayType asArrayType() {
         return this;
     }
 
     @Override
-    public  boolean isArray() {
+    public boolean isArray() {
         return true;
     }
 
     @Override
-    public  String describe() {
+    public String describe() {
         return baseType.describe() + "[]";
     }
 
-    public  ResolvedType getComponentType() {
+    public ResolvedType getComponentType() {
         return baseType;
     }
 
     @Override
-    public  // https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.2
+    public // https://docs.oracle.com/javase/specs/jls/se8/html/jls-5.html#jls-5.2
     boolean isAssignableBy(ResolvedType other) {
         if (other.isNull()) {
             return true;
@@ -106,7 +106,7 @@ public  class ResolvedArrayType implements ResolvedType {
     }
 
     @Override
-    public  ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         ResolvedType baseTypeReplaced = baseType.replaceTypeVariables(tpToReplace, replaced, inferredTypes);
         if (baseTypeReplaced == baseType) {
             return this;
@@ -119,12 +119,12 @@ public  class ResolvedArrayType implements ResolvedType {
     // /
     // The erasure of an array type T[] is |T|[].
     @Override
-    public  ResolvedType erasure() {
+    public ResolvedType erasure() {
         return new ResolvedArrayType(baseType.erasure());
     }
 
     @Override
-    public  String toDescriptor() {
+    public String toDescriptor() {
         StringBuffer sb = new StringBuffer();
         sb.append("[");
         sb.append(baseType.toDescriptor());

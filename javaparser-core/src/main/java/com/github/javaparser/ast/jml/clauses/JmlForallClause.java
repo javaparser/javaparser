@@ -20,12 +20,12 @@ import java.util.function.Consumer;
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public  class JmlForallClause extends JmlClause implements MethodContractable {
+public class JmlForallClause extends JmlClause implements MethodContractable {
 
     private NodeList<Parameter> boundedVariables;
 
     @AllFieldsConstructor
-    public  JmlForallClause(NodeList<Parameter> boundedVariables) {
+    public JmlForallClause(NodeList<Parameter> boundedVariables) {
         this(null, boundedVariables);
     }
 
@@ -33,7 +33,7 @@ public  class JmlForallClause extends JmlClause implements MethodContractable {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlForallClause(TokenRange tokenRange, NodeList<Parameter> boundedVariables) {
+    public JmlForallClause(TokenRange tokenRange, NodeList<Parameter> boundedVariables) {
         super(tokenRange);
         setBoundedVariables(boundedVariables);
         customInitialization();
@@ -41,23 +41,23 @@ public  class JmlForallClause extends JmlClause implements MethodContractable {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Parameter> getBoundedVariables() {
+    public NodeList<Parameter> getBoundedVariables() {
         return boundedVariables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlForallClause setBoundedVariables(final NodeList<Parameter> boundedVariables) {
+    public JmlForallClause setBoundedVariables(final NodeList<Parameter> boundedVariables) {
         assertNotNull(boundedVariables);
         if (boundedVariables == this.boundedVariables) {
             return this;
@@ -72,7 +72,7 @@ public  class JmlForallClause extends JmlClause implements MethodContractable {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -87,7 +87,7 @@ public  class JmlForallClause extends JmlClause implements MethodContractable {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -102,42 +102,42 @@ public  class JmlForallClause extends JmlClause implements MethodContractable {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlForallClause clone() {
+    public JmlForallClause clone() {
         return (JmlForallClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlForallClauseMetaModel getMetaModel() {
+    public JmlForallClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlForallClauseMetaModel;
     }
 
     @Override
-    public  JmlClauseKind getKind() {
+    public JmlClauseKind getKind() {
         return JmlClauseKind.FORALL;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlForallClause() {
+    public boolean isJmlForallClause() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlForallClause asJmlForallClause() {
+    public JmlForallClause asJmlForallClause() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlForallClause> toJmlForallClause() {
+    public Optional<JmlForallClause> toJmlForallClause() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlForallClause(Consumer<JmlForallClause> action) {
+    public void ifJmlForallClause(Consumer<JmlForallClause> action) {
         action.accept(this);
     }
 }

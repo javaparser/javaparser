@@ -29,7 +29,7 @@ import java.util.function.Function;
 /**
  * Pretty printer for AST nodes.
  */
-public  class DefaultPrettyPrinter implements Printer {
+public class DefaultPrettyPrinter implements Printer {
 
     private PrinterConfiguration configuration;
 
@@ -49,7 +49,7 @@ public  class DefaultPrettyPrinter implements Printer {
     /**
      * Build a new DefaultPrettyPrinter with a default configuration and a default factory
      */
-    public  DefaultPrettyPrinter() {
+    public DefaultPrettyPrinter() {
         this(createDefaultConfiguration());
     }
 
@@ -58,7 +58,7 @@ public  class DefaultPrettyPrinter implements Printer {
      *
      * @param configuration
      */
-    public  DefaultPrettyPrinter(PrinterConfiguration configuration) {
+    public DefaultPrettyPrinter(PrinterConfiguration configuration) {
         this(createDefaultVisitor(), configuration);
     }
 
@@ -68,7 +68,7 @@ public  class DefaultPrettyPrinter implements Printer {
      * @param visitorFactory
      * @param configuration  Configuration to apply
      */
-    public  DefaultPrettyPrinter(Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory, PrinterConfiguration configuration) {
+    public DefaultPrettyPrinter(Function<PrinterConfiguration, VoidVisitor<Void>> visitorFactory, PrinterConfiguration configuration) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }
@@ -77,20 +77,20 @@ public  class DefaultPrettyPrinter implements Printer {
     /*
      * Returns the Printer configuration
      */
-    public  PrinterConfiguration getConfiguration() {
+    public PrinterConfiguration getConfiguration() {
         return configuration;
     }
 
     /*
      * set or update the PrettyPrinter configuration
      */
-    public  Printer setConfiguration(PrinterConfiguration configuration) {
+    public Printer setConfiguration(PrinterConfiguration configuration) {
         this.configuration = configuration;
         return this;
     }
 
     @Override
-    public  String print(Node node) {
+    public String print(Node node) {
         // lazy initialization of visitor which can have a state (like a buffer)
         VoidVisitor<Void> visitor = visitorFactory.apply(configuration);
         node.accept(visitor, null);

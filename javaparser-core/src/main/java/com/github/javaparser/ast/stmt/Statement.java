@@ -41,7 +41,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 public abstract class Statement extends Node {
 
     @AllFieldsConstructor
-    public  Statement() {
+    public Statement() {
         this(null);
     }
 
@@ -49,729 +49,729 @@ public abstract class Statement extends Node {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  Statement(TokenRange tokenRange) {
+    public Statement(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  Statement clone() {
+    public Statement clone() {
         return (Statement) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  StatementMetaModel getMetaModel() {
+    public StatementMetaModel getMetaModel() {
         return JavaParserMetaModel.statementMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isAssertStmt() {
+    public boolean isAssertStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  AssertStmt asAssertStmt() {
+    public AssertStmt asAssertStmt() {
         throw new IllegalStateException(f("%s is not AssertStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isBlockStmt() {
+    public boolean isBlockStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  BlockStmt asBlockStmt() {
+    public BlockStmt asBlockStmt() {
         throw new IllegalStateException(f("%s is not BlockStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isBreakStmt() {
+    public boolean isBreakStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  BreakStmt asBreakStmt() {
+    public BreakStmt asBreakStmt() {
         throw new IllegalStateException(f("%s is not BreakStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isContinueStmt() {
+    public boolean isContinueStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ContinueStmt asContinueStmt() {
+    public ContinueStmt asContinueStmt() {
         throw new IllegalStateException(f("%s is not ContinueStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isDoStmt() {
+    public boolean isDoStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  DoStmt asDoStmt() {
+    public DoStmt asDoStmt() {
         throw new IllegalStateException(f("%s is not DoStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isEmptyStmt() {
+    public boolean isEmptyStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  EmptyStmt asEmptyStmt() {
+    public EmptyStmt asEmptyStmt() {
         throw new IllegalStateException(f("%s is not EmptyStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isExplicitConstructorInvocationStmt() {
+    public boolean isExplicitConstructorInvocationStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ExplicitConstructorInvocationStmt asExplicitConstructorInvocationStmt() {
+    public ExplicitConstructorInvocationStmt asExplicitConstructorInvocationStmt() {
         throw new IllegalStateException(f("%s is not ExplicitConstructorInvocationStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isExpressionStmt() {
+    public boolean isExpressionStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ExpressionStmt asExpressionStmt() {
+    public ExpressionStmt asExpressionStmt() {
         throw new IllegalStateException(f("%s is not ExpressionStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isForStmt() {
+    public boolean isForStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ForStmt asForStmt() {
+    public ForStmt asForStmt() {
         throw new IllegalStateException(f("%s is not ForStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isIfStmt() {
+    public boolean isIfStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  IfStmt asIfStmt() {
+    public IfStmt asIfStmt() {
         throw new IllegalStateException(f("%s is not IfStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isLabeledStmt() {
+    public boolean isLabeledStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  LabeledStmt asLabeledStmt() {
+    public LabeledStmt asLabeledStmt() {
         throw new IllegalStateException(f("%s is not LabeledStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isLocalClassDeclarationStmt() {
+    public boolean isLocalClassDeclarationStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isLocalRecordDeclarationStmt() {
+    public boolean isLocalRecordDeclarationStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  LocalClassDeclarationStmt asLocalClassDeclarationStmt() {
+    public LocalClassDeclarationStmt asLocalClassDeclarationStmt() {
         throw new IllegalStateException(f("%s is not LocalClassDeclarationStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  LocalRecordDeclarationStmt asLocalRecordDeclarationStmt() {
+    public LocalRecordDeclarationStmt asLocalRecordDeclarationStmt() {
         throw new IllegalStateException(f("%s is not LocalRecordDeclarationStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isReturnStmt() {
+    public boolean isReturnStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ReturnStmt asReturnStmt() {
+    public ReturnStmt asReturnStmt() {
         throw new IllegalStateException(f("%s is not ReturnStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isSwitchStmt() {
+    public boolean isSwitchStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  SwitchStmt asSwitchStmt() {
+    public SwitchStmt asSwitchStmt() {
         throw new IllegalStateException(f("%s is not SwitchStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isSynchronizedStmt() {
+    public boolean isSynchronizedStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  SynchronizedStmt asSynchronizedStmt() {
+    public SynchronizedStmt asSynchronizedStmt() {
         throw new IllegalStateException(f("%s is not SynchronizedStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isThrowStmt() {
+    public boolean isThrowStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ThrowStmt asThrowStmt() {
+    public ThrowStmt asThrowStmt() {
         throw new IllegalStateException(f("%s is not ThrowStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isTryStmt() {
+    public boolean isTryStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  TryStmt asTryStmt() {
+    public TryStmt asTryStmt() {
         throw new IllegalStateException(f("%s is not TryStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isUnparsableStmt() {
+    public boolean isUnparsableStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  UnparsableStmt asUnparsableStmt() {
+    public UnparsableStmt asUnparsableStmt() {
         throw new IllegalStateException(f("%s is not UnparsableStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isWhileStmt() {
+    public boolean isWhileStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  WhileStmt asWhileStmt() {
+    public WhileStmt asWhileStmt() {
         throw new IllegalStateException(f("%s is not WhileStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifAssertStmt(Consumer<AssertStmt> action) {
+    public void ifAssertStmt(Consumer<AssertStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifBlockStmt(Consumer<BlockStmt> action) {
+    public void ifBlockStmt(Consumer<BlockStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifBreakStmt(Consumer<BreakStmt> action) {
+    public void ifBreakStmt(Consumer<BreakStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifContinueStmt(Consumer<ContinueStmt> action) {
+    public void ifContinueStmt(Consumer<ContinueStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifDoStmt(Consumer<DoStmt> action) {
+    public void ifDoStmt(Consumer<DoStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifEmptyStmt(Consumer<EmptyStmt> action) {
+    public void ifEmptyStmt(Consumer<EmptyStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifExplicitConstructorInvocationStmt(Consumer<ExplicitConstructorInvocationStmt> action) {
+    public void ifExplicitConstructorInvocationStmt(Consumer<ExplicitConstructorInvocationStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifExpressionStmt(Consumer<ExpressionStmt> action) {
+    public void ifExpressionStmt(Consumer<ExpressionStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifForStmt(Consumer<ForStmt> action) {
+    public void ifForStmt(Consumer<ForStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifIfStmt(Consumer<IfStmt> action) {
+    public void ifIfStmt(Consumer<IfStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifLabeledStmt(Consumer<LabeledStmt> action) {
+    public void ifLabeledStmt(Consumer<LabeledStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
+    public void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifLocalRecordDeclarationStmt(Consumer<LocalRecordDeclarationStmt> action) {
+    public void ifLocalRecordDeclarationStmt(Consumer<LocalRecordDeclarationStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifReturnStmt(Consumer<ReturnStmt> action) {
+    public void ifReturnStmt(Consumer<ReturnStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifSwitchStmt(Consumer<SwitchStmt> action) {
+    public void ifSwitchStmt(Consumer<SwitchStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
+    public void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifThrowStmt(Consumer<ThrowStmt> action) {
+    public void ifThrowStmt(Consumer<ThrowStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifTryStmt(Consumer<TryStmt> action) {
+    public void ifTryStmt(Consumer<TryStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifUnparsableStmt(Consumer<UnparsableStmt> action) {
+    public void ifUnparsableStmt(Consumer<UnparsableStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifWhileStmt(Consumer<WhileStmt> action) {
+    public void ifWhileStmt(Consumer<WhileStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<AssertStmt> toAssertStmt() {
+    public Optional<AssertStmt> toAssertStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<BlockStmt> toBlockStmt() {
+    public Optional<BlockStmt> toBlockStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<BreakStmt> toBreakStmt() {
+    public Optional<BreakStmt> toBreakStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ContinueStmt> toContinueStmt() {
+    public Optional<ContinueStmt> toContinueStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<DoStmt> toDoStmt() {
+    public Optional<DoStmt> toDoStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<EmptyStmt> toEmptyStmt() {
+    public Optional<EmptyStmt> toEmptyStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ExplicitConstructorInvocationStmt> toExplicitConstructorInvocationStmt() {
+    public Optional<ExplicitConstructorInvocationStmt> toExplicitConstructorInvocationStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ExpressionStmt> toExpressionStmt() {
+    public Optional<ExpressionStmt> toExpressionStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ForStmt> toForStmt() {
+    public Optional<ForStmt> toForStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<IfStmt> toIfStmt() {
+    public Optional<IfStmt> toIfStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<LabeledStmt> toLabeledStmt() {
+    public Optional<LabeledStmt> toLabeledStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<LocalClassDeclarationStmt> toLocalClassDeclarationStmt() {
+    public Optional<LocalClassDeclarationStmt> toLocalClassDeclarationStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<LocalRecordDeclarationStmt> toLocalRecordDeclarationStmt() {
+    public Optional<LocalRecordDeclarationStmt> toLocalRecordDeclarationStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ReturnStmt> toReturnStmt() {
+    public Optional<ReturnStmt> toReturnStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<SwitchStmt> toSwitchStmt() {
+    public Optional<SwitchStmt> toSwitchStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<SynchronizedStmt> toSynchronizedStmt() {
+    public Optional<SynchronizedStmt> toSynchronizedStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ThrowStmt> toThrowStmt() {
+    public Optional<ThrowStmt> toThrowStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<TryStmt> toTryStmt() {
+    public Optional<TryStmt> toTryStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<UnparsableStmt> toUnparsableStmt() {
+    public Optional<UnparsableStmt> toUnparsableStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<WhileStmt> toWhileStmt() {
+    public Optional<WhileStmt> toWhileStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isForEachStmt() {
+    public boolean isForEachStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ForEachStmt asForEachStmt() {
+    public ForEachStmt asForEachStmt() {
         throw new IllegalStateException(f("%s is not ForEachStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ForEachStmt> toForEachStmt() {
+    public Optional<ForEachStmt> toForEachStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifForEachStmt(Consumer<ForEachStmt> action) {
+    public void ifForEachStmt(Consumer<ForEachStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isYieldStmt() {
+    public boolean isYieldStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  YieldStmt asYieldStmt() {
+    public YieldStmt asYieldStmt() {
         throw new IllegalStateException(f("%s is not YieldStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<YieldStmt> toYieldStmt() {
+    public Optional<YieldStmt> toYieldStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifYieldStmt(Consumer<YieldStmt> action) {
+    public void ifYieldStmt(Consumer<YieldStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlAssertStmt() {
+    public boolean isJmlAssertStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlExpressionStmt asJmlAssertStmt() {
+    public JmlExpressionStmt asJmlAssertStmt() {
         throw new IllegalStateException(f("%s is not JmlAssertStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlExpressionStmt> toJmlAssertStmt() {
+    public Optional<JmlExpressionStmt> toJmlAssertStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlAssertStmt(Consumer<JmlExpressionStmt> action) {
+    public void ifJmlAssertStmt(Consumer<JmlExpressionStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlAssumeStmt() {
+    public boolean isJmlAssumeStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlSetStmt() {
+    public boolean isJmlSetStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isUnreachableStmt() {
+    public boolean isUnreachableStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlUnreachableStmt asUnreachableStmt() {
+    public JmlUnreachableStmt asUnreachableStmt() {
         throw new IllegalStateException(f("%s is not UnreachableStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlUnreachableStmt> toUnreachableStmt() {
+    public Optional<JmlUnreachableStmt> toUnreachableStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
+    public void ifUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlDebugStmt() {
+    public boolean isJmlDebugStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlHenceByStmt() {
+    public boolean isJmlHenceByStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlRefiningStmt() {
+    public boolean isJmlRefiningStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlRefiningStmt asJmlRefiningStmt() {
+    public JmlRefiningStmt asJmlRefiningStmt() {
         throw new IllegalStateException(f("%s is not JmlRefiningStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlRefiningStmt> toJmlRefiningStmt() {
+    public Optional<JmlRefiningStmt> toJmlRefiningStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlRefiningStmt(Consumer<JmlRefiningStmt> action) {
+    public void ifJmlRefiningStmt(Consumer<JmlRefiningStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlStatement() {
+    public boolean isJmlStatement() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlStatement asJmlStatement() {
+    public JmlStatement asJmlStatement() {
         throw new IllegalStateException(f("%s is not JmlStatement, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlStatement> toJmlStatement() {
+    public Optional<JmlStatement> toJmlStatement() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlStatement(Consumer<JmlStatement> action) {
+    public void ifJmlStatement(Consumer<JmlStatement> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlStatements() {
+    public boolean isJmlStatements() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlUnreachableStmt() {
+    public boolean isJmlUnreachableStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlUnreachableStmt asJmlUnreachableStmt() {
+    public JmlUnreachableStmt asJmlUnreachableStmt() {
         throw new IllegalStateException(f("%s is not JmlUnreachableStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlUnreachableStmt> toJmlUnreachableStmt() {
+    public Optional<JmlUnreachableStmt> toJmlUnreachableStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
+    public void ifJmlUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlStmtWithExpression() {
+    public boolean isJmlStmtWithExpression() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlExpressionStmt asJmlStmtWithExpression() {
+    public JmlExpressionStmt asJmlStmtWithExpression() {
         throw new IllegalStateException(f("%s is not JmlStmtWithExpression, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlExpressionStmt> toJmlStmtWithExpression() {
+    public Optional<JmlExpressionStmt> toJmlStmtWithExpression() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlStmtWithExpression(Consumer<JmlExpressionStmt> action) {
+    public void ifJmlStmtWithExpression(Consumer<JmlExpressionStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlGhostStatements() {
+    public boolean isJmlGhostStatements() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlGhostStmt asJmlGhostStatements() {
+    public JmlGhostStmt asJmlGhostStatements() {
         throw new IllegalStateException(f("%s is not JmlGhostStatements, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlGhostStmt> toJmlGhostStatements() {
+    public Optional<JmlGhostStmt> toJmlGhostStatements() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlGhostStatements(Consumer<JmlGhostStmt> action) {
+    public void ifJmlGhostStatements(Consumer<JmlGhostStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlDocStmt() {
+    public boolean isJmlDocStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlDocStmt asJmlDocStmt() {
+    public JmlDocStmt asJmlDocStmt() {
         throw new IllegalStateException(f("%s is not JmlDocStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlDocStmt> toJmlDocStmt() {
+    public Optional<JmlDocStmt> toJmlDocStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlDocStmt(Consumer<JmlDocStmt> action) {
+    public void ifJmlDocStmt(Consumer<JmlDocStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlGhostStatement() {
+    public boolean isJmlGhostStatement() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlGhostStmt asJmlGhostStatement() {
+    public JmlGhostStmt asJmlGhostStatement() {
         throw new IllegalStateException(f("%s is not JmlGhostStatement, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlGhostStmt> toJmlGhostStatement() {
+    public Optional<JmlGhostStmt> toJmlGhostStatement() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlGhostStatement(Consumer<JmlGhostStmt> action) {
+    public void ifJmlGhostStatement(Consumer<JmlGhostStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlBeginStmt() {
+    public boolean isJmlBeginStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlBeginStmt asJmlBeginStmt() {
+    public JmlBeginStmt asJmlBeginStmt() {
         throw new IllegalStateException(f("%s is not JmlBeginStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlBeginStmt> toJmlBeginStmt() {
+    public Optional<JmlBeginStmt> toJmlBeginStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlBeginStmt(Consumer<JmlBeginStmt> action) {
+    public void ifJmlBeginStmt(Consumer<JmlBeginStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlEndStmt() {
+    public boolean isJmlEndStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlEndStmt asJmlEndStmt() {
+    public JmlEndStmt asJmlEndStmt() {
         throw new IllegalStateException(f("%s is not JmlEndStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlEndStmt> toJmlEndStmt() {
+    public Optional<JmlEndStmt> toJmlEndStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlEndStmt(Consumer<JmlEndStmt> action) {
+    public void ifJmlEndStmt(Consumer<JmlEndStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlExpressionStmt() {
+    public boolean isJmlExpressionStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlExpressionStmt asJmlExpressionStmt() {
+    public JmlExpressionStmt asJmlExpressionStmt() {
         throw new IllegalStateException(f("%s is not JmlExpressionStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlExpressionStmt> toJmlExpressionStmt() {
+    public Optional<JmlExpressionStmt> toJmlExpressionStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlExpressionStmt(Consumer<JmlExpressionStmt> action) {
+    public void ifJmlExpressionStmt(Consumer<JmlExpressionStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlGhostStmt() {
+    public boolean isJmlGhostStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlGhostStmt asJmlGhostStmt() {
+    public JmlGhostStmt asJmlGhostStmt() {
         throw new IllegalStateException(f("%s is not JmlGhostStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlGhostStmt> toJmlGhostStmt() {
+    public Optional<JmlGhostStmt> toJmlGhostStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlGhostStmt(Consumer<JmlGhostStmt> action) {
+    public void ifJmlGhostStmt(Consumer<JmlGhostStmt> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlLabelStmt() {
+    public boolean isJmlLabelStmt() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlLabelStmt asJmlLabelStmt() {
+    public JmlLabelStmt asJmlLabelStmt() {
         throw new IllegalStateException(f("%s is not JmlLabelStmt, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlLabelStmt> toJmlLabelStmt() {
+    public Optional<JmlLabelStmt> toJmlLabelStmt() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlLabelStmt(Consumer<JmlLabelStmt> action) {
+    public void ifJmlLabelStmt(Consumer<JmlLabelStmt> action) {
     }
 }

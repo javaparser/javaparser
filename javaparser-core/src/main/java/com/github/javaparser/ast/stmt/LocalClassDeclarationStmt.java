@@ -46,16 +46,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Julio Vilmar Gesser
  * @see ClassOrInterfaceDeclaration
  */
-public  class LocalClassDeclarationStmt extends Statement {
+public class LocalClassDeclarationStmt extends Statement {
 
     private ClassOrInterfaceDeclaration classDeclaration;
 
-    public  LocalClassDeclarationStmt() {
+    public LocalClassDeclarationStmt() {
         this(null, new ClassOrInterfaceDeclaration());
     }
 
     @AllFieldsConstructor
-    public  LocalClassDeclarationStmt(final ClassOrInterfaceDeclaration classDeclaration) {
+    public LocalClassDeclarationStmt(final ClassOrInterfaceDeclaration classDeclaration) {
         this(null, classDeclaration);
     }
 
@@ -63,7 +63,7 @@ public  class LocalClassDeclarationStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  LocalClassDeclarationStmt(TokenRange tokenRange, ClassOrInterfaceDeclaration classDeclaration) {
+    public LocalClassDeclarationStmt(TokenRange tokenRange, ClassOrInterfaceDeclaration classDeclaration) {
         super(tokenRange);
         setClassDeclaration(classDeclaration);
         customInitialization();
@@ -71,23 +71,23 @@ public  class LocalClassDeclarationStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ClassOrInterfaceDeclaration getClassDeclaration() {
+    public ClassOrInterfaceDeclaration getClassDeclaration() {
         return classDeclaration;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  LocalClassDeclarationStmt setClassDeclaration(final ClassOrInterfaceDeclaration classDeclaration) {
+    public LocalClassDeclarationStmt setClassDeclaration(final ClassOrInterfaceDeclaration classDeclaration) {
         assertNotNull(classDeclaration);
         if (classDeclaration == this.classDeclaration) {
             return this;
@@ -102,19 +102,19 @@ public  class LocalClassDeclarationStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  LocalClassDeclarationStmt clone() {
+    public LocalClassDeclarationStmt clone() {
         return (LocalClassDeclarationStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  LocalClassDeclarationStmtMetaModel getMetaModel() {
+    public LocalClassDeclarationStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.localClassDeclarationStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -127,25 +127,25 @@ public  class LocalClassDeclarationStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isLocalClassDeclarationStmt() {
+    public boolean isLocalClassDeclarationStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  LocalClassDeclarationStmt asLocalClassDeclarationStmt() {
+    public LocalClassDeclarationStmt asLocalClassDeclarationStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
+    public void ifLocalClassDeclarationStmt(Consumer<LocalClassDeclarationStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<LocalClassDeclarationStmt> toLocalClassDeclarationStmt() {
+    public Optional<LocalClassDeclarationStmt> toLocalClassDeclarationStmt() {
         return Optional.of(this);
     }
 }

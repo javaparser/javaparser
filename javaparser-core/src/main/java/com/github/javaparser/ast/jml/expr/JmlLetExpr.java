@@ -21,66 +21,66 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public  class JmlLetExpr extends Expression implements Jmlish {
+public class JmlLetExpr extends Expression implements Jmlish {
 
     private VariableDeclarationExpr variables;
 
     private Expression body;
 
     @AllFieldsConstructor
-    public  JmlLetExpr(VariableDeclarationExpr variables, Expression body) {
+    public JmlLetExpr(VariableDeclarationExpr variables, Expression body) {
         this.variables = variables;
         this.body = body;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
-    public  boolean hasParentNode() {
+    public boolean hasParentNode() {
         return false;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlLetExpr() {
+    public boolean isJmlLetExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlLetExpr asJmlLetExpr() {
+    public JmlLetExpr asJmlLetExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlLetExpr> toJmlLetExpr() {
+    public Optional<JmlLetExpr> toJmlLetExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlLetExpr(Consumer<JmlLetExpr> action) {
+    public void ifJmlLetExpr(Consumer<JmlLetExpr> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getBody() {
+    public Expression getBody() {
         return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlLetExpr setBody(final Expression body) {
+    public JmlLetExpr setBody(final Expression body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -94,12 +94,12 @@ public  class JmlLetExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  VariableDeclarationExpr getVariables() {
+    public VariableDeclarationExpr getVariables() {
         return variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlLetExpr setVariables(final VariableDeclarationExpr variables) {
+    public JmlLetExpr setVariables(final VariableDeclarationExpr variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -114,7 +114,7 @@ public  class JmlLetExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -131,13 +131,13 @@ public  class JmlLetExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlLetExpr clone() {
+    public JmlLetExpr clone() {
         return (JmlLetExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlLetExprMetaModel getMetaModel() {
+    public JmlLetExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlLetExprMetaModel;
     }
 
@@ -145,7 +145,7 @@ public  class JmlLetExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlLetExpr(TokenRange tokenRange, VariableDeclarationExpr variables, Expression body) {
+    public JmlLetExpr(TokenRange tokenRange, VariableDeclarationExpr variables, Expression body) {
         super(tokenRange);
         setVariables(variables);
         setBody(body);

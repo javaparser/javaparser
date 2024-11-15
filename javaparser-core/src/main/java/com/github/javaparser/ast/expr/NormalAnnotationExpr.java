@@ -40,16 +40,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class NormalAnnotationExpr extends AnnotationExpr {
+public class NormalAnnotationExpr extends AnnotationExpr {
 
     private NodeList<MemberValuePair> pairs;
 
-    public  NormalAnnotationExpr() {
+    public NormalAnnotationExpr() {
         this(null, new Name(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public  NormalAnnotationExpr(final Name name, final NodeList<MemberValuePair> pairs) {
+    public NormalAnnotationExpr(final Name name, final NodeList<MemberValuePair> pairs) {
         this(null, name, pairs);
     }
 
@@ -57,7 +57,7 @@ public  class NormalAnnotationExpr extends AnnotationExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  NormalAnnotationExpr(TokenRange tokenRange, Name name, NodeList<MemberValuePair> pairs) {
+    public NormalAnnotationExpr(TokenRange tokenRange, Name name, NodeList<MemberValuePair> pairs) {
         super(tokenRange, name);
         setPairs(pairs);
         customInitialization();
@@ -65,23 +65,23 @@ public  class NormalAnnotationExpr extends AnnotationExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<MemberValuePair> getPairs() {
+    public NodeList<MemberValuePair> getPairs() {
         return pairs;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
+    public NormalAnnotationExpr setPairs(final NodeList<MemberValuePair> pairs) {
         assertNotNull(pairs);
         if (pairs == this.pairs) {
             return this;
@@ -99,7 +99,7 @@ public  class NormalAnnotationExpr extends AnnotationExpr {
      *
      * @return this, the {@link NormalAnnotationExpr}
      */
-    public  NormalAnnotationExpr addPair(String key, String value) {
+    public NormalAnnotationExpr addPair(String key, String value) {
         return addPair(key, new NameExpr(value));
     }
 
@@ -108,7 +108,7 @@ public  class NormalAnnotationExpr extends AnnotationExpr {
      *
      * @return this, the {@link NormalAnnotationExpr}
      */
-    public  NormalAnnotationExpr addPair(String key, Expression value) {
+    public NormalAnnotationExpr addPair(String key, Expression value) {
         MemberValuePair memberValuePair = new MemberValuePair(key, value);
         getPairs().add(memberValuePair);
         return this;
@@ -116,7 +116,7 @@ public  class NormalAnnotationExpr extends AnnotationExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -131,19 +131,19 @@ public  class NormalAnnotationExpr extends AnnotationExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  NormalAnnotationExpr clone() {
+    public NormalAnnotationExpr clone() {
         return (NormalAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  NormalAnnotationExprMetaModel getMetaModel() {
+    public NormalAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.normalAnnotationExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -158,25 +158,25 @@ public  class NormalAnnotationExpr extends AnnotationExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isNormalAnnotationExpr() {
+    public boolean isNormalAnnotationExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  NormalAnnotationExpr asNormalAnnotationExpr() {
+    public NormalAnnotationExpr asNormalAnnotationExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifNormalAnnotationExpr(Consumer<NormalAnnotationExpr> action) {
+    public void ifNormalAnnotationExpr(Consumer<NormalAnnotationExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<NormalAnnotationExpr> toNormalAnnotationExpr() {
+    public Optional<NormalAnnotationExpr> toNormalAnnotationExpr() {
         return Optional.of(this);
     }
 }

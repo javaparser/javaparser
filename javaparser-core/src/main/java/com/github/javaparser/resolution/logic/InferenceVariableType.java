@@ -36,10 +36,10 @@ import java.util.stream.Collectors;
  *
  * @author Federico Tomassetti
  */
-public  class InferenceVariableType implements ResolvedType {
+public class InferenceVariableType implements ResolvedType {
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "InferenceVariableType{" + "id=" + id + '}';
     }
 
@@ -47,7 +47,7 @@ public  class InferenceVariableType implements ResolvedType {
 
     private ResolvedTypeParameterDeclaration correspondingTp;
 
-    public  void setCorrespondingTp(ResolvedTypeParameterDeclaration correspondingTp) {
+    public void setCorrespondingTp(ResolvedTypeParameterDeclaration correspondingTp) {
         this.correspondingTp = correspondingTp;
     }
 
@@ -55,12 +55,12 @@ public  class InferenceVariableType implements ResolvedType {
 
     private TypeSolver typeSolver;
 
-    public  void registerEquivalentType(ResolvedType type) {
+    public void registerEquivalentType(ResolvedType type) {
         this.equivalentTypes.add(type);
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof InferenceVariableType))
@@ -70,24 +70,24 @@ public  class InferenceVariableType implements ResolvedType {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return id;
     }
 
     private Set<ResolvedType> superTypes = new HashSet<>();
 
-    public  InferenceVariableType(int id, TypeSolver typeSolver) {
+    public InferenceVariableType(int id, TypeSolver typeSolver) {
         this.id = id;
         this.typeSolver = typeSolver;
     }
 
     @Override
-    public  String describe() {
+    public String describe() {
         return "InferenceVariable_" + id;
     }
 
     @Override
-    public  boolean isAssignableBy(ResolvedType other) {
+    public boolean isAssignableBy(ResolvedType other) {
         throw new UnsupportedOperationException();
     }
 
@@ -104,7 +104,7 @@ public  class InferenceVariableType implements ResolvedType {
         return result;
     }
 
-    public  ResolvedType equivalentType() {
+    public ResolvedType equivalentType() {
         Set<ResolvedType> concreteEquivalent = concreteEquivalentTypesAlsoIndirectly(new HashSet<>(), this);
         if (concreteEquivalent.isEmpty()) {
             if (correspondingTp == null) {

@@ -25,10 +25,10 @@ import com.github.javaparser.printer.SourcePrinter;
 import com.github.javaparser.printer.lexicalpreservation.TextElement;
 import com.github.javaparser.printer.lexicalpreservation.TokenTextElement;
 
-public  class CsmIndent implements CsmElement {
+public class CsmIndent implements CsmElement {
 
     @Override
-    public  void prettyPrint(Node node, SourcePrinter printer) {
+    public void prettyPrint(Node node, SourcePrinter printer) {
         printer.indent();
     }
 
@@ -36,17 +36,17 @@ public  class CsmIndent implements CsmElement {
      * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
      */
     @Override
-    public  boolean isCorrespondingElement(TextElement textElement) {
+    public boolean isCorrespondingElement(TextElement textElement) {
         return (textElement instanceof TokenTextElement) && ((TokenTextElement) textElement).isSpaceOrTab();
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return 1;
     }
 
     @Override
-    public  boolean equals(Object obj) {
+    public boolean equals(Object obj) {
         return obj instanceof CsmIndent;
     }
 }

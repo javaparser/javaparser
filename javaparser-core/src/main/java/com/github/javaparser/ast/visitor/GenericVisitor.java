@@ -43,7 +43,7 @@ import com.github.javaparser.ast.type.*;
  *
  * @author Julio Vilmar Gesser
  */
-public  interface GenericVisitor<R, A> {
+public interface GenericVisitor<R, A> {
 
     // - Compilation Unit ----------------------------------
     R visit(CompilationUnit n, A arg);

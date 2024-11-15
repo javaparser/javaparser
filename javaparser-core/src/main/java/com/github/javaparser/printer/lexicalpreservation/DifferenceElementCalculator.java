@@ -46,7 +46,7 @@ class DifferenceElementCalculator {
         }
 
         @Override
-        public  boolean equals(Object other) {
+        public boolean equals(Object other) {
             if (other == null || !(other instanceof ChildPositionInfo))
                 return false;
             ChildPositionInfo cpi = (ChildPositionInfo) other;
@@ -58,7 +58,7 @@ class DifferenceElementCalculator {
         }
 
         @Override
-        public  int hashCode() {
+        public int hashCode() {
             return node.hashCode() + position.hashCode();
         }
     }

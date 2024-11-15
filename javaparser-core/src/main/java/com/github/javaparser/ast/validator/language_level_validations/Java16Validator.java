@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/16/">https://openjdk.java.net/projects/jdk/16/</a>
  */
-public  class Java16Validator extends Java15Validator {
+public class Java16Validator extends Java15Validator {
 
-    public  Java16Validator() {
+    public Java16Validator() {
         super();
         // Released Language Features
         // Pattern Matching for instanceof released within Java 16 - https://openjdk.java.net/jeps/305

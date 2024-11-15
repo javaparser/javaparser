@@ -19,7 +19,7 @@
  */
 package com.github.javaparser.resolution.cache;
 
-public  interface CacheStats {
+public interface CacheStats {
 
     /**
      * Returns the number of times lookup methods have returned either a cached or

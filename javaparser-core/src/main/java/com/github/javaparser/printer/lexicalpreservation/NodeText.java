@@ -125,7 +125,7 @@ class NodeText {
     //
     // Removing single elements
     //
-    public  void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
+    public void remove(TextElementMatcher matcher, boolean potentiallyFollowingWhitespace) {
         int i = 0;
         for (TextElement e : elements) {
             if (matcher.match(e)) {
@@ -189,7 +189,7 @@ class NodeText {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "NodeText{" + elements + '}';
     }
 }

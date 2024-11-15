@@ -32,7 +32,7 @@ import java.util.Optional;
  * (Awkwardly named "Java"Token since JavaCC already generates an internal class Token.)
  * It is a node in a double linked list called token list.
  */
-public  class JavaToken {
+public class JavaToken {
 
     public static final JavaToken INVALID = new JavaToken();
 
@@ -50,7 +50,7 @@ public  class JavaToken {
         this(null, 0, "INVALID", null, null);
     }
 
-    public  JavaToken(int kind, String text) {
+    public JavaToken(int kind, String text) {
         this(null, kind, text, null, null);
     }
 
@@ -110,7 +110,7 @@ public  class JavaToken {
     /**
      * Create a token of a certain kind.
      */
-    public  JavaToken(int kind) {
+    public JavaToken(int kind) {
         String content = GeneratedJavaParserConstants.tokenImage[kind];
         if (content.startsWith("\"")) {
             content = content.substring(1, content.length() - 1);
@@ -124,7 +124,7 @@ public  class JavaToken {
         this.text = content;
     }
 
-    public  JavaToken(Range range, int kind, String text, JavaToken previousToken, JavaToken nextToken) {
+    public JavaToken(Range range, int kind, String text, JavaToken previousToken, JavaToken nextToken) {
         assertNotNull(text);
         this.range = range;
         this.kind = kind;
@@ -133,18 +133,18 @@ public  class JavaToken {
         this.nextToken = nextToken;
     }
 
-    public  Optional<Range> getRange() {
+    public Optional<Range> getRange() {
         return Optional.ofNullable(range);
     }
 
     /*
      * Returns true if the token has a range
      */
-    public  boolean hasRange() {
+    public boolean hasRange() {
         return getRange().isPresent();
     }
 
-    public  int getKind() {
+    public int getKind() {
         return kind;
     }
 
@@ -152,39 +152,39 @@ public  class JavaToken {
         this.kind = kind;
     }
 
-    public  String getText() {
+    public String getText() {
         return text;
     }
 
-    public  Optional<JavaToken> getNextToken() {
+    public Optional<JavaToken> getNextToken() {
         return Optional.ofNullable(nextToken);
     }
 
-    public  Optional<JavaToken> getPreviousToken() {
+    public Optional<JavaToken> getPreviousToken() {
         return Optional.ofNullable(previousToken);
     }
 
-    public  void setRange(Range range) {
+    public void setRange(Range range) {
         this.range = range;
     }
 
-    public  void setText(String text) {
+    public void setText(String text) {
         this.text = text;
     }
 
-    public  String asString() {
+    public String asString() {
         return text;
     }
 
     /**
      * @return the token range that goes from the beginning to the end of the token list this token is a part of.
      */
-    public  TokenRange toTokenRange() {
+    public TokenRange toTokenRange() {
         return new TokenRange(findFirstToken(), findLastToken());
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         String text = getText().replace("\n", "\\n").replace("\r", "\\r").replace("\r\n", "\\r\\n").replace("\t", "\\t");
         return f("\"%s\"   <%s>   %s", text, getKind(), getRange().map(Range::toString).orElse("(?)-(?)"));
     }
@@ -192,18 +192,18 @@ public  class JavaToken {
     /**
      * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
      */
-    public  boolean valid() {
+    public boolean valid() {
         return !invalid();
     }
 
     /**
      * Used by the parser while constructing nodes. No tokens should be invalid when the parser is done.
      */
-    public  boolean invalid() {
+    public boolean invalid() {
         return this == INVALID;
     }
 
-    public  enum Category {
+    public enum Category {
 
         WHITESPACE_NO_EOL,
         EOL,
@@ -214,49 +214,49 @@ public  class JavaToken {
         SEPARATOR,
         OPERATOR;
 
-        public  boolean isWhitespaceOrComment() {
+        public boolean isWhitespaceOrComment() {
             return isWhitespace() || this == COMMENT;
         }
 
-        public  boolean isWhitespace() {
+        public boolean isWhitespace() {
             return this == WHITESPACE_NO_EOL || this == EOL;
         }
 
-        public  boolean isEndOfLine() {
+        public boolean isEndOfLine() {
             return this == EOL;
         }
 
-        public  boolean isComment() {
+        public boolean isComment() {
             return this == COMMENT;
         }
 
-        public  boolean isWhitespaceButNotEndOfLine() {
+        public boolean isWhitespaceButNotEndOfLine() {
             return this == WHITESPACE_NO_EOL;
         }
 
-        public  boolean isIdentifier() {
+        public boolean isIdentifier() {
             return this == IDENTIFIER;
         }
 
-        public  boolean isKeyword() {
+        public boolean isKeyword() {
             return this == KEYWORD;
         }
 
-        public  boolean isLiteral() {
+        public boolean isLiteral() {
             return this == LITERAL;
         }
 
-        public  boolean isSeparator() {
+        public boolean isSeparator() {
             return this == SEPARATOR;
         }
 
-        public  boolean isOperator() {
+        public boolean isOperator() {
             return this == OPERATOR;
         }
     }
 
     @Generated("com.github.javaparser.generator.core.other.TokenKindGenerator")
-    public  enum Kind {
+    public enum Kind {
 
         EOF(0),
         SPACE(1),
@@ -1301,23 +1301,23 @@ public  class JavaToken {
             }
         }
 
-        public  boolean isPrimitive() {
+        public boolean isPrimitive() {
             return this == BYTE || this == CHAR || this == SHORT || this == INT || this == LONG || this == FLOAT || this == DOUBLE;
         }
 
-        public  int getKind() {
+        public int getKind() {
             return kind;
         }
     }
 
-    public  JavaToken.Category getCategory() {
+    public JavaToken.Category getCategory() {
         return TokenTypes.getCategory(kind);
     }
 
     /**
      * Inserts newToken into the token list just before this token.
      */
-    public  void insert(JavaToken newToken) {
+    public void insert(JavaToken newToken) {
         assertNotNull(newToken);
         getPreviousToken().ifPresent(p -> {
             p.nextToken = newToken;
@@ -1330,7 +1330,7 @@ public  class JavaToken {
     /**
      * Inserts newToken into the token list just after this token.
      */
-    public  void insertAfter(JavaToken newToken) {
+    public void insertAfter(JavaToken newToken) {
         assertNotNull(newToken);
         getNextToken().ifPresent(n -> {
             n.previousToken = newToken;
@@ -1343,7 +1343,7 @@ public  class JavaToken {
     /**
      * Links the tokens around the current token together, making the current token disappear from the list.
      */
-    public  void deleteToken() {
+    public void deleteToken() {
         final Optional<JavaToken> nextToken = getNextToken();
         final Optional<JavaToken> previousToken = getPreviousToken();
         previousToken.ifPresent(p -> p.nextToken = nextToken.orElse(null));
@@ -1353,7 +1353,7 @@ public  class JavaToken {
     /**
      * Replaces the current token with newToken.
      */
-    public  void replaceToken(JavaToken newToken) {
+    public void replaceToken(JavaToken newToken) {
         assertNotNull(newToken);
         getPreviousToken().ifPresent(p -> {
             p.nextToken = newToken;
@@ -1368,7 +1368,7 @@ public  class JavaToken {
     /**
      * @return the last token in the token list.
      */
-    public  JavaToken findLastToken() {
+    public JavaToken findLastToken() {
         JavaToken current = this;
         while (current.getNextToken().isPresent()) {
             current = current.getNextToken().get();
@@ -1379,7 +1379,7 @@ public  class JavaToken {
     /**
      * @return the first token in the token list.
      */
-    public  JavaToken findFirstToken() {
+    public JavaToken findFirstToken() {
         JavaToken current = this;
         while (current.getPreviousToken().isPresent()) {
             current = current.getPreviousToken().get();
@@ -1388,14 +1388,14 @@ public  class JavaToken {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         int result = kind;
         result = 31 * result + text.hashCode();
         return result;
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())

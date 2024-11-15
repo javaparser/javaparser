@@ -35,25 +35,25 @@ import static com.github.javaparser.utils.Utils.*;
  * @deprecated This class could be removed in a future version. Use defaultPrinterConfiguration.
  */
 @Deprecated
-public  class PrettyPrinterConfiguration implements PrinterConfiguration {
+public class PrettyPrinterConfiguration implements PrinterConfiguration {
 
     PrinterConfiguration wrappedConfiguration;
 
     /*
      * Default constructor
      */
-    public  PrettyPrinterConfiguration() {
+    public PrettyPrinterConfiguration() {
         this.wrappedConfiguration = new DefaultPrinterConfiguration();
     }
 
     /*
      * returns the indentation parameters
      */
-    public  Indentation getIndentation() {
+    public Indentation getIndentation() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.INDENTATION)).get().asValue();
     }
 
-    public  PrettyPrinterConfiguration setIndentation(Indentation indentation) {
+    public PrettyPrinterConfiguration setIndentation(Indentation indentation) {
         wrappedConfiguration.addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, indentation));
         return this;
     }
@@ -63,7 +63,7 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * @deprecated (@ see Indentation.getIndent ())
      */
     @Deprecated
-    public  String getIndent() {
+    public String getIndent() {
         return getIndentation().getIndent();
     }
 
@@ -72,7 +72,7 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * @deprecated (@ see Indentation.size)
      */
     @Deprecated
-    public  int getIndentSize() {
+    public int getIndentSize() {
         return getIndentation().getSize();
     }
 
@@ -82,7 +82,7 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * @deprecated (@ see Indentation.size ())
      */
     @Deprecated
-    public  PrettyPrinterConfiguration setIndentSize(int indentSize) {
+    public PrettyPrinterConfiguration setIndentSize(int indentSize) {
         Indentation indentation = getIndentation().setSize(assertNonNegative(indentSize));
         setIndentation(indentation);
         return this;
@@ -94,7 +94,7 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * @deprecated (@ see Indentation.type)
      */
     @Deprecated
-    public  IndentType getIndentType() {
+    public IndentType getIndentType() {
         return getIndentation().getType();
     }
 
@@ -104,7 +104,7 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * @deprecated (@ see Indentation.type ())
      */
     @Deprecated
-    public  PrettyPrinterConfiguration setIndentType(IndentType indentType) {
+    public PrettyPrinterConfiguration setIndentType(IndentType indentType) {
         Indentation indentation = getIndentation().setType(assertNotNull(indentType));
         setIndentation(indentation);
         return this;
@@ -116,7 +116,7 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * @deprecated (@ see Indentation.size)
      */
     @Deprecated
-    public  int getTabWidth() {
+    public int getTabWidth() {
         return getIndentation().getSize();
     }
 
@@ -126,40 +126,40 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * @deprecated (@ see Indentation.size)
      */
     @Deprecated
-    public  PrettyPrinterConfiguration setTabWidth(int tabWidth) {
+    public PrettyPrinterConfiguration setTabWidth(int tabWidth) {
         setIndentSize(assertPositive(tabWidth));
         return this;
     }
 
-    public  boolean isOrderImports() {
+    public boolean isOrderImports() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.ORDER_IMPORTS)).isPresent();
     }
 
-    public  boolean isPrintComments() {
+    public boolean isPrintComments() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS)).isPresent();
     }
 
-    public  boolean isIgnoreComments() {
+    public boolean isIgnoreComments() {
         return !wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS)).isPresent();
     }
 
-    public  boolean isSpaceAroundOperators() {
+    public boolean isSpaceAroundOperators() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS)).isPresent();
     }
 
-    public  boolean isPrintJavadoc() {
+    public boolean isPrintJavadoc() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC)).isPresent();
     }
 
-    public  boolean isColumnAlignParameters() {
+    public boolean isColumnAlignParameters() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS)).isPresent();
     }
 
-    public  boolean isColumnAlignFirstMethodChain() {
+    public boolean isColumnAlignFirstMethodChain() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN)).isPresent();
     }
 
-    public  boolean isIndentCaseInSwitch() {
+    public boolean isIndentCaseInSwitch() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.INDENT_CASE_IN_SWITCH)).isPresent();
     }
 
@@ -167,7 +167,7 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * When true, all comments will be printed, unless printJavadoc is false, then only line and block comments will be
      * printed.
      */
-    public  PrettyPrinterConfiguration setPrintComments(boolean printComments) {
+    public PrettyPrinterConfiguration setPrintComments(boolean printComments) {
         wrappedConfiguration = printComments ? addOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS)) : removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_COMMENTS));
         return this;
     }
@@ -175,7 +175,7 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
     /**
      * When true, Javadoc will be printed.
      */
-    public  PrettyPrinterConfiguration setPrintJavadoc(boolean printJavadoc) {
+    public PrettyPrinterConfiguration setPrintJavadoc(boolean printJavadoc) {
         wrappedConfiguration = printJavadoc ? addOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC)) : removeOption(new DefaultConfigurationOption(ConfigOption.PRINT_JAVADOC));
         return this;
     }
@@ -183,34 +183,34 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
     /**
      * Set if there should be spaces between operators
      */
-    public  PrettyPrinterConfiguration setSpaceAroundOperators(boolean spaceAroundOperators) {
+    public PrettyPrinterConfiguration setSpaceAroundOperators(boolean spaceAroundOperators) {
         wrappedConfiguration = spaceAroundOperators ? addOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS)) : removeOption(new DefaultConfigurationOption(ConfigOption.SPACE_AROUND_OPERATORS));
         return this;
     }
 
-    public  PrettyPrinterConfiguration setColumnAlignParameters(boolean columnAlignParameters) {
+    public PrettyPrinterConfiguration setColumnAlignParameters(boolean columnAlignParameters) {
         wrappedConfiguration = columnAlignParameters ? addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS)) : removeOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS));
         return this;
     }
 
-    public  PrettyPrinterConfiguration setColumnAlignFirstMethodChain(boolean columnAlignFirstMethodChain) {
+    public PrettyPrinterConfiguration setColumnAlignFirstMethodChain(boolean columnAlignFirstMethodChain) {
         wrappedConfiguration = columnAlignFirstMethodChain ? addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN)) : removeOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
         return this;
     }
 
-    public  PrettyPrinterConfiguration setIndentCaseInSwitch(boolean indentInSwitch) {
+    public PrettyPrinterConfiguration setIndentCaseInSwitch(boolean indentInSwitch) {
         wrappedConfiguration = indentInSwitch ? addOption(new DefaultConfigurationOption(ConfigOption.INDENT_CASE_IN_SWITCH)) : removeOption(new DefaultConfigurationOption(ConfigOption.INDENT_CASE_IN_SWITCH));
         return this;
     }
 
-    public  String getEndOfLineCharacter() {
+    public String getEndOfLineCharacter() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asValue();
     }
 
     /**
      * Set the character to append when a line should end. Example values: "\n", "\r\n", "".
      */
-    public  PrettyPrinterConfiguration setEndOfLineCharacter(String endOfLineCharacter) {
+    public PrettyPrinterConfiguration setEndOfLineCharacter(String endOfLineCharacter) {
         addOption(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER, endOfLineCharacter));
         return this;
     }
@@ -218,12 +218,12 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
     /**
      * When true, orders imports by alphabetically.
      */
-    public  PrettyPrinterConfiguration setOrderImports(boolean orderImports) {
+    public PrettyPrinterConfiguration setOrderImports(boolean orderImports) {
         wrappedConfiguration = orderImports ? addOption(new DefaultConfigurationOption(ConfigOption.ORDER_IMPORTS)) : removeOption(new DefaultConfigurationOption(ConfigOption.ORDER_IMPORTS));
         return this;
     }
 
-    public  int getMaxEnumConstantsToAlignHorizontally() {
+    public int getMaxEnumConstantsToAlignHorizontally() {
         return wrappedConfiguration.get(new DefaultConfigurationOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY)).get().asInteger();
     }
 
@@ -250,33 +250,33 @@ public  class PrettyPrinterConfiguration implements PrinterConfiguration {
      * Set it to a large number to always align horizontally.
      * Set it to 1 or less to always align vertically.
      */
-    public  PrettyPrinterConfiguration setMaxEnumConstantsToAlignHorizontally(int maxEnumConstantsToAlignHorizontally) {
+    public PrettyPrinterConfiguration setMaxEnumConstantsToAlignHorizontally(int maxEnumConstantsToAlignHorizontally) {
         addOption(new DefaultConfigurationOption(ConfigOption.MAX_ENUM_CONSTANTS_TO_ALIGN_HORIZONTALLY, maxEnumConstantsToAlignHorizontally));
         return this;
     }
 
     @Override
-    public  PrinterConfiguration addOption(ConfigurationOption option) {
+    public PrinterConfiguration addOption(ConfigurationOption option) {
         return wrappedConfiguration.addOption(option);
     }
 
     @Override
-    public  boolean isActivated(ConfigurationOption option) {
+    public boolean isActivated(ConfigurationOption option) {
         return wrappedConfiguration.isActivated(option);
     }
 
     @Override
-    public  Optional<ConfigurationOption> get(ConfigurationOption option) {
+    public Optional<ConfigurationOption> get(ConfigurationOption option) {
         return wrappedConfiguration.get(option);
     }
 
     @Override
-    public  Set<ConfigurationOption> get() {
+    public Set<ConfigurationOption> get() {
         return wrappedConfiguration.get();
     }
 
     @Override
-    public  PrinterConfiguration removeOption(ConfigurationOption option) {
+    public PrinterConfiguration removeOption(ConfigurationOption option) {
         return wrappedConfiguration.removeOption(option);
     }
 }

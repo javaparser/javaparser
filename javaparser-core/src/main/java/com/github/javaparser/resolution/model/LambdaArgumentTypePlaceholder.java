@@ -29,42 +29,42 @@ import com.github.javaparser.resolution.types.ResolvedType;
  *
  * @author Federico Tomassetti
  */
-public  class LambdaArgumentTypePlaceholder implements ResolvedType {
+public class LambdaArgumentTypePlaceholder implements ResolvedType {
 
     private int pos;
 
     private SymbolReference<? extends ResolvedMethodLikeDeclaration> method;
 
-    public  LambdaArgumentTypePlaceholder(int pos) {
+    public LambdaArgumentTypePlaceholder(int pos) {
         this.pos = pos;
     }
 
     @Override
-    public  boolean isArray() {
+    public boolean isArray() {
         return false;
     }
 
     @Override
-    public  boolean isReferenceType() {
+    public boolean isReferenceType() {
         return false;
     }
 
     @Override
-    public  String describe() {
+    public String describe() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public  boolean isTypeVariable() {
+    public boolean isTypeVariable() {
         return false;
     }
 
-    public  void setMethod(SymbolReference<? extends ResolvedMethodLikeDeclaration> method) {
+    public void setMethod(SymbolReference<? extends ResolvedMethodLikeDeclaration> method) {
         this.method = method;
     }
 
     @Override
-    public  boolean isAssignableBy(ResolvedType other) {
+    public boolean isAssignableBy(ResolvedType other) {
         throw new UnsupportedOperationException();
     }
 }

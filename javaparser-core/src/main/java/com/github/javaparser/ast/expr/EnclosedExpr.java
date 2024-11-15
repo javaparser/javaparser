@@ -40,16 +40,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class EnclosedExpr extends Expression {
+public class EnclosedExpr extends Expression {
 
     private Expression inner;
 
-    public  EnclosedExpr() {
+    public EnclosedExpr() {
         this(null, new StringLiteralExpr());
     }
 
     @AllFieldsConstructor
-    public  EnclosedExpr(final Expression inner) {
+    public EnclosedExpr(final Expression inner) {
         this(null, inner);
     }
 
@@ -57,7 +57,7 @@ public  class EnclosedExpr extends Expression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  EnclosedExpr(TokenRange tokenRange, Expression inner) {
+    public EnclosedExpr(TokenRange tokenRange, Expression inner) {
         super(tokenRange);
         setInner(inner);
         customInitialization();
@@ -65,18 +65,18 @@ public  class EnclosedExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getInner() {
+    public Expression getInner() {
         return inner;
     }
 
@@ -87,7 +87,7 @@ public  class EnclosedExpr extends Expression {
      * @return this, the EnclosedExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  EnclosedExpr setInner(final Expression inner) {
+    public EnclosedExpr setInner(final Expression inner) {
         assertNotNull(inner);
         if (inner == this.inner) {
             return this;
@@ -102,19 +102,19 @@ public  class EnclosedExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  EnclosedExpr clone() {
+    public EnclosedExpr clone() {
         return (EnclosedExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  EnclosedExprMetaModel getMetaModel() {
+    public EnclosedExprMetaModel getMetaModel() {
         return JavaParserMetaModel.enclosedExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -127,25 +127,25 @@ public  class EnclosedExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isEnclosedExpr() {
+    public boolean isEnclosedExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  EnclosedExpr asEnclosedExpr() {
+    public EnclosedExpr asEnclosedExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifEnclosedExpr(Consumer<EnclosedExpr> action) {
+    public void ifEnclosedExpr(Consumer<EnclosedExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<EnclosedExpr> toEnclosedExpr() {
+    public Optional<EnclosedExpr> toEnclosedExpr() {
         return Optional.of(this);
     }
 
@@ -154,7 +154,7 @@ public  class EnclosedExpr extends Expression {
      * (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.8.5)
      */
     @Override
-    public  boolean isPolyExpression() {
+    public boolean isPolyExpression() {
         return getInner().isPolyExpression();
     }
 }

@@ -42,18 +42,18 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration> implements NodeWithJavadoc<InitializerDeclaration>, NodeWithBlockStmt<InitializerDeclaration> {
+public class InitializerDeclaration extends BodyDeclaration<InitializerDeclaration> implements NodeWithJavadoc<InitializerDeclaration>, NodeWithBlockStmt<InitializerDeclaration> {
 
     private boolean isStatic;
 
     private BlockStmt body;
 
-    public  InitializerDeclaration() {
+    public InitializerDeclaration() {
         this(null, false, new BlockStmt());
     }
 
     @AllFieldsConstructor
-    public  InitializerDeclaration(boolean isStatic, BlockStmt body) {
+    public InitializerDeclaration(boolean isStatic, BlockStmt body) {
         this(null, isStatic, body);
     }
 
@@ -61,7 +61,7 @@ public  class InitializerDeclaration extends BodyDeclaration<InitializerDeclarat
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  InitializerDeclaration(TokenRange tokenRange, boolean isStatic, BlockStmt body) {
+    public InitializerDeclaration(TokenRange tokenRange, boolean isStatic, BlockStmt body) {
         super(tokenRange);
         setStatic(isStatic);
         setBody(body);
@@ -70,28 +70,28 @@ public  class InitializerDeclaration extends BodyDeclaration<InitializerDeclarat
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  BlockStmt getBody() {
+    public BlockStmt getBody() {
         return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  boolean isStatic() {
+    public boolean isStatic() {
         return isStatic;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  InitializerDeclaration setBody(final BlockStmt body) {
+    public InitializerDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
@@ -105,7 +105,7 @@ public  class InitializerDeclaration extends BodyDeclaration<InitializerDeclarat
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  InitializerDeclaration setStatic(final boolean isStatic) {
+    public InitializerDeclaration setStatic(final boolean isStatic) {
         if (isStatic == this.isStatic) {
             return this;
         }
@@ -116,19 +116,19 @@ public  class InitializerDeclaration extends BodyDeclaration<InitializerDeclarat
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  InitializerDeclaration clone() {
+    public InitializerDeclaration clone() {
         return (InitializerDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  InitializerDeclarationMetaModel getMetaModel() {
+    public InitializerDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.initializerDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -141,25 +141,25 @@ public  class InitializerDeclaration extends BodyDeclaration<InitializerDeclarat
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isInitializerDeclaration() {
+    public boolean isInitializerDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  InitializerDeclaration asInitializerDeclaration() {
+    public InitializerDeclaration asInitializerDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifInitializerDeclaration(Consumer<InitializerDeclaration> action) {
+    public void ifInitializerDeclaration(Consumer<InitializerDeclaration> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<InitializerDeclaration> toInitializerDeclaration() {
+    public Optional<InitializerDeclaration> toInitializerDeclaration() {
         return Optional.of(this);
     }
 }

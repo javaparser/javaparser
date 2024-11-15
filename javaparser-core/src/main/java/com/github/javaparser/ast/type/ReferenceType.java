@@ -39,12 +39,12 @@ import com.github.javaparser.ast.Node;
  */
 public abstract class ReferenceType extends Type {
 
-    public  ReferenceType() {
+    public ReferenceType() {
         this(null, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public  ReferenceType(NodeList<AnnotationExpr> annotations) {
+    public ReferenceType(NodeList<AnnotationExpr> annotations) {
         this(null, annotations);
     }
 
@@ -52,44 +52,44 @@ public abstract class ReferenceType extends Type {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  ReferenceType(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
+    public ReferenceType(TokenRange tokenRange, NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  ReferenceType clone() {
+    public ReferenceType clone() {
         return (ReferenceType) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ReferenceTypeMetaModel getMetaModel() {
+    public ReferenceTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.referenceTypeMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isReferenceType() {
+    public boolean isReferenceType() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ReferenceType asReferenceType() {
+    public ReferenceType asReferenceType() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifReferenceType(Consumer<ReferenceType> action) {
+    public void ifReferenceType(Consumer<ReferenceType> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ReferenceType> toReferenceType() {
+    public Optional<ReferenceType> toReferenceType() {
         return Optional.of(this);
     }
 

@@ -25,7 +25,7 @@ package com.github.javaparser.resolution;
  *
  * @author Federico Tomassetti
  */
-public  class UnsolvedSymbolException extends RuntimeException {
+public class UnsolvedSymbolException extends RuntimeException {
 
     /**
      * The name of the symbol that could not be resolved.
@@ -44,31 +44,31 @@ public  class UnsolvedSymbolException extends RuntimeException {
      */
     private Throwable cause;
 
-    public  UnsolvedSymbolException(String name) {
+    public UnsolvedSymbolException(String name) {
         this(name, null, null);
     }
 
-    public  UnsolvedSymbolException(String name, String context) {
+    public UnsolvedSymbolException(String name, String context) {
         this(name, context, null);
     }
 
-    public  UnsolvedSymbolException(String name, Throwable cause) {
+    public UnsolvedSymbolException(String name, Throwable cause) {
         this(name, null, cause);
     }
 
-    public  UnsolvedSymbolException(String name, String context, Throwable cause) {
+    public UnsolvedSymbolException(String name, String context, Throwable cause) {
         super("Unsolved symbol" + (context != null ? " in " + context : "") + " : " + name, cause);
         this.name = name;
         this.context = context;
         this.cause = cause;
     }
 
-    public  String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "UnsolvedSymbolException{" + "context='" + context + "'" + ", name='" + name + "'" + ", cause='" + cause + "'" + "}";
     }
 }

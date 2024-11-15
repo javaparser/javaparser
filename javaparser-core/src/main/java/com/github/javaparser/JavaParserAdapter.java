@@ -41,7 +41,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public  class JavaParserAdapter {
+public class JavaParserAdapter {
 
     /**
      * Wraps the {@link JavaParser}.
@@ -56,11 +56,11 @@ public  class JavaParserAdapter {
 
     private final JavaParser parser;
 
-    public  JavaParserAdapter(JavaParser parser) {
+    public JavaParserAdapter(JavaParser parser) {
         this.parser = Objects.requireNonNull(parser, "A non-null parser should be provided.");
     }
 
-    public  JavaParser getParser() {
+    public JavaParser getParser() {
         return parser;
     }
 
@@ -80,119 +80,119 @@ public  class JavaParserAdapter {
         throw new ParseProblemException(result.getProblems());
     }
 
-    public  ParserConfiguration getParserConfiguration() {
+    public ParserConfiguration getParserConfiguration() {
         return parser.getParserConfiguration();
     }
 
-    public  CompilationUnit parse(InputStream in) {
+    public CompilationUnit parse(InputStream in) {
         return handleResult(getParser().parse(in));
     }
 
-    public  CompilationUnit parse(File file) throws FileNotFoundException {
+    public CompilationUnit parse(File file) throws FileNotFoundException {
         return handleResult(getParser().parse(file));
     }
 
-    public  CompilationUnit parse(Path path) throws IOException {
+    public CompilationUnit parse(Path path) throws IOException {
         return handleResult(getParser().parse(path));
     }
 
-    public  CompilationUnit parse(Reader reader) {
+    public CompilationUnit parse(Reader reader) {
         return handleResult(getParser().parse(reader));
     }
 
-    public  CompilationUnit parse(String code) {
+    public CompilationUnit parse(String code) {
         return handleResult(getParser().parse(code));
     }
 
-    public  CompilationUnit parseResource(String path) throws IOException {
+    public CompilationUnit parseResource(String path) throws IOException {
         return handleResult(getParser().parseResource(path));
     }
 
-    public  BlockStmt parseBlock(String blockStatement) {
+    public BlockStmt parseBlock(String blockStatement) {
         return handleResult(getParser().parseBlock(blockStatement));
     }
 
-    public  Statement parseStatement(String statement) {
+    public Statement parseStatement(String statement) {
         return handleResult(getParser().parseStatement(statement));
     }
 
-    public  ImportDeclaration parseImport(String importDeclaration) {
+    public ImportDeclaration parseImport(String importDeclaration) {
         return handleResult(getParser().parseImport(importDeclaration));
     }
 
-    public  <T extends Expression> T parseExpression(String expression) {
+    public <T extends Expression> T parseExpression(String expression) {
         return handleResult(getParser().parseExpression(expression));
     }
 
-    public  AnnotationExpr parseAnnotation(String annotation) {
+    public AnnotationExpr parseAnnotation(String annotation) {
         return handleResult(getParser().parseAnnotation(annotation));
     }
 
-    public  BodyDeclaration<?> parseAnnotationBodyDeclaration(String body) {
+    public BodyDeclaration<?> parseAnnotationBodyDeclaration(String body) {
         return handleResult(getParser().parseAnnotationBodyDeclaration(body));
     }
 
-    public  BodyDeclaration<?> parseBodyDeclaration(String body) {
+    public BodyDeclaration<?> parseBodyDeclaration(String body) {
         return handleResult(getParser().parseBodyDeclaration(body));
     }
 
-    public  ClassOrInterfaceType parseClassOrInterfaceType(String type) {
+    public ClassOrInterfaceType parseClassOrInterfaceType(String type) {
         return handleResult(getParser().parseClassOrInterfaceType(type));
     }
 
-    public  Type parseType(String type) {
+    public Type parseType(String type) {
         return handleResult(getParser().parseType(type));
     }
 
-    public  VariableDeclarationExpr parseVariableDeclarationExpr(String declaration) {
+    public VariableDeclarationExpr parseVariableDeclarationExpr(String declaration) {
         return handleResult(getParser().parseVariableDeclarationExpr(declaration));
     }
 
-    public  Javadoc parseJavadoc(String content) {
+    public Javadoc parseJavadoc(String content) {
         return JavadocParser.parse(content);
     }
 
-    public  ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
+    public ExplicitConstructorInvocationStmt parseExplicitConstructorInvocationStmt(String statement) {
         return handleResult(getParser().parseExplicitConstructorInvocationStmt(statement));
     }
 
-    public  Name parseName(String qualifiedName) {
+    public Name parseName(String qualifiedName) {
         return handleResult(getParser().parseName(qualifiedName));
     }
 
-    public  SimpleName parseSimpleName(String name) {
+    public SimpleName parseSimpleName(String name) {
         return handleResult(getParser().parseSimpleName(name));
     }
 
-    public  Parameter parseParameter(String parameter) {
+    public Parameter parseParameter(String parameter) {
         return handleResult(getParser().parseParameter(parameter));
     }
 
-    public  PackageDeclaration parsePackageDeclaration(String packageDeclaration) {
+    public PackageDeclaration parsePackageDeclaration(String packageDeclaration) {
         return handleResult(getParser().parsePackageDeclaration(packageDeclaration));
     }
 
-    public  TypeDeclaration<?> parseTypeDeclaration(String typeDeclaration) {
+    public TypeDeclaration<?> parseTypeDeclaration(String typeDeclaration) {
         return handleResult(getParser().parseTypeDeclaration(typeDeclaration));
     }
 
-    public  ModuleDeclaration parseModuleDeclaration(String moduleDeclaration) {
+    public ModuleDeclaration parseModuleDeclaration(String moduleDeclaration) {
         return handleResult(getParser().parseModuleDeclaration(moduleDeclaration));
     }
 
-    public  ModuleDirective parseModuleDirective(String moduleDirective) {
+    public ModuleDirective parseModuleDirective(String moduleDirective) {
         return handleResult(getParser().parseModuleDirective(moduleDirective));
     }
 
-    public  TypeParameter parseTypeParameter(String typeParameter) {
+    public TypeParameter parseTypeParameter(String typeParameter) {
         return handleResult(getParser().parseTypeParameter(typeParameter));
     }
 
-    public  MethodDeclaration parseMethodDeclaration(String methodDeclaration) {
+    public MethodDeclaration parseMethodDeclaration(String methodDeclaration) {
         return handleResult(getParser().parseMethodDeclaration(methodDeclaration));
     }
 
-    public  ArrayInitializerExpr parseArrayInitializerExpr(String arrayInitializerExpr) {
+    public ArrayInitializerExpr parseArrayInitializerExpr(String arrayInitializerExpr) {
         return handleResult(getParser().parseArrayInitializerExpr(arrayInitializerExpr));
     }
 }

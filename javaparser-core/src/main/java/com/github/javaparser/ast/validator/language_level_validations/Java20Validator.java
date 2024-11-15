@@ -24,9 +24,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/20/">https://openjdk.java.net/projects/jdk/20/</a>
  */
-public  class Java20Validator extends Java19Validator {
+public class Java20Validator extends Java19Validator {
 
-    public  Java20Validator() {
+    public Java20Validator() {
         super();
     }
 }

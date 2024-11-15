@@ -27,7 +27,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 /**
  * A node that can be strictfp.
  */
-public  interface NodeWithStrictfpModifier<N extends Node> extends NodeWithModifiers<N> {
+public interface NodeWithStrictfpModifier<N extends Node> extends NodeWithModifiers<N> {
 
     default boolean isStrictfp() {
         return hasModifier(STRICTFP);

@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<List<R>, A> {
 
     @Override
-    public  List<R> visit(final AnnotationDeclaration n, final A arg) {
+    public List<R> visit(final AnnotationDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -84,7 +84,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final AnnotationMemberDeclaration n, final A arg) {
+    public List<R> visit(final AnnotationMemberDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getDefaultValue().isPresent()) {
@@ -121,7 +121,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ArrayAccessExpr n, final A arg) {
+    public List<R> visit(final ArrayAccessExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -143,7 +143,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ArrayCreationExpr n, final A arg) {
+    public List<R> visit(final ArrayCreationExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -170,7 +170,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ArrayCreationLevel n, final A arg) {
+    public List<R> visit(final ArrayCreationLevel n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -192,7 +192,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ArrayInitializerExpr n, final A arg) {
+    public List<R> visit(final ArrayInitializerExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -209,7 +209,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ArrayType n, final A arg) {
+    public List<R> visit(final ArrayType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -231,7 +231,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final AssertStmt n, final A arg) {
+    public List<R> visit(final AssertStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -253,7 +253,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final AssignExpr n, final A arg) {
+    public List<R> visit(final AssignExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -275,7 +275,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final BinaryExpr n, final A arg) {
+    public List<R> visit(final BinaryExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -297,7 +297,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final BlockComment n, final A arg) {
+    public List<R> visit(final BlockComment n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -309,7 +309,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final BlockStmt n, final A arg) {
+    public List<R> visit(final BlockStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -331,7 +331,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final BooleanLiteralExpr n, final A arg) {
+    public List<R> visit(final BooleanLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -343,7 +343,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final BreakStmt n, final A arg) {
+    public List<R> visit(final BreakStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getLabel().isPresent()) {
@@ -360,7 +360,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final CastExpr n, final A arg) {
+    public List<R> visit(final CastExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -382,7 +382,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final CatchClause n, final A arg) {
+    public List<R> visit(final CatchClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -404,7 +404,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final CharLiteralExpr n, final A arg) {
+    public List<R> visit(final CharLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -416,7 +416,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ClassExpr n, final A arg) {
+    public List<R> visit(final ClassExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -433,7 +433,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ClassOrInterfaceDeclaration n, final A arg) {
+    public List<R> visit(final ClassOrInterfaceDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -485,7 +485,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ClassOrInterfaceType n, final A arg) {
+    public List<R> visit(final ClassOrInterfaceType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -517,7 +517,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final CompilationUnit n, final A arg) {
+    public List<R> visit(final CompilationUnit n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -549,7 +549,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ConditionalExpr n, final A arg) {
+    public List<R> visit(final ConditionalExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -576,7 +576,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ConstructorDeclaration n, final A arg) {
+    public List<R> visit(final ConstructorDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -633,7 +633,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ContinueStmt n, final A arg) {
+    public List<R> visit(final ContinueStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getLabel().isPresent()) {
@@ -650,7 +650,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final DoStmt n, final A arg) {
+    public List<R> visit(final DoStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -677,7 +677,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final DoubleLiteralExpr n, final A arg) {
+    public List<R> visit(final DoubleLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -689,7 +689,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final EmptyStmt n, final A arg) {
+    public List<R> visit(final EmptyStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -701,7 +701,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final EnclosedExpr n, final A arg) {
+    public List<R> visit(final EnclosedExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -718,7 +718,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final EnumConstantDeclaration n, final A arg) {
+    public List<R> visit(final EnumConstantDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -750,7 +750,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final EnumDeclaration n, final A arg) {
+    public List<R> visit(final EnumDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -792,7 +792,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ExplicitConstructorInvocationStmt n, final A arg) {
+    public List<R> visit(final ExplicitConstructorInvocationStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -819,7 +819,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ExpressionStmt n, final A arg) {
+    public List<R> visit(final ExpressionStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -836,7 +836,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final FieldAccessExpr n, final A arg) {
+    public List<R> visit(final FieldAccessExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -863,7 +863,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final FieldDeclaration n, final A arg) {
+    public List<R> visit(final FieldDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -890,7 +890,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ForStmt n, final A arg) {
+    public List<R> visit(final ForStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -927,7 +927,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ForEachStmt n, final A arg) {
+    public List<R> visit(final ForEachStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -959,7 +959,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final IfStmt n, final A arg) {
+    public List<R> visit(final IfStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -986,7 +986,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ImportDeclaration n, final A arg) {
+    public List<R> visit(final ImportDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1003,7 +1003,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final InitializerDeclaration n, final A arg) {
+    public List<R> visit(final InitializerDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1025,7 +1025,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final InstanceOfExpr n, final A arg) {
+    public List<R> visit(final InstanceOfExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1052,7 +1052,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final IntegerLiteralExpr n, final A arg) {
+    public List<R> visit(final IntegerLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -1064,7 +1064,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final IntersectionType n, final A arg) {
+    public List<R> visit(final IntersectionType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1086,7 +1086,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JavadocComment n, final A arg) {
+    public List<R> visit(final JavadocComment n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -1098,7 +1098,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final LabeledStmt n, final A arg) {
+    public List<R> visit(final LabeledStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1120,7 +1120,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final LambdaExpr n, final A arg) {
+    public List<R> visit(final LambdaExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1147,7 +1147,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final LineComment n, final A arg) {
+    public List<R> visit(final LineComment n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -1159,7 +1159,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final LocalClassDeclarationStmt n, final A arg) {
+    public List<R> visit(final LocalClassDeclarationStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1176,7 +1176,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final LocalRecordDeclarationStmt n, final A arg) {
+    public List<R> visit(final LocalRecordDeclarationStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1193,7 +1193,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final LongLiteralExpr n, final A arg) {
+    public List<R> visit(final LongLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -1205,7 +1205,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final MarkerAnnotationExpr n, final A arg) {
+    public List<R> visit(final MarkerAnnotationExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1222,7 +1222,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final MemberValuePair n, final A arg) {
+    public List<R> visit(final MemberValuePair n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1244,7 +1244,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final MethodCallExpr n, final A arg) {
+    public List<R> visit(final MethodCallExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1276,7 +1276,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final MethodDeclaration n, final A arg) {
+    public List<R> visit(final MethodDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getBody().isPresent()) {
@@ -1338,7 +1338,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final MethodReferenceExpr n, final A arg) {
+    public List<R> visit(final MethodReferenceExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1360,7 +1360,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final NameExpr n, final A arg) {
+    public List<R> visit(final NameExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1377,7 +1377,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final Name n, final A arg) {
+    public List<R> visit(final Name n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getQualifier().isPresent()) {
@@ -1394,7 +1394,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final NormalAnnotationExpr n, final A arg) {
+    public List<R> visit(final NormalAnnotationExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1416,7 +1416,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final NullLiteralExpr n, final A arg) {
+    public List<R> visit(final NullLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -1428,7 +1428,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ObjectCreationExpr n, final A arg) {
+    public List<R> visit(final ObjectCreationExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getAnonymousClassBody().isPresent()) {
@@ -1465,7 +1465,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final PackageDeclaration n, final A arg) {
+    public List<R> visit(final PackageDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1487,7 +1487,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final Parameter n, final A arg) {
+    public List<R> visit(final Parameter n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1524,7 +1524,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final PrimitiveType n, final A arg) {
+    public List<R> visit(final PrimitiveType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1541,7 +1541,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ReturnStmt n, final A arg) {
+    public List<R> visit(final ReturnStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getExpression().isPresent()) {
@@ -1558,7 +1558,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final SimpleName n, final A arg) {
+    public List<R> visit(final SimpleName n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -1570,7 +1570,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final SingleMemberAnnotationExpr n, final A arg) {
+    public List<R> visit(final SingleMemberAnnotationExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1592,7 +1592,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final StringLiteralExpr n, final A arg) {
+    public List<R> visit(final StringLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -1604,7 +1604,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final SuperExpr n, final A arg) {
+    public List<R> visit(final SuperExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getTypeName().isPresent()) {
@@ -1621,7 +1621,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final SwitchEntry n, final A arg) {
+    public List<R> visit(final SwitchEntry n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getGuard().isPresent()) {
@@ -1648,7 +1648,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final SwitchStmt n, final A arg) {
+    public List<R> visit(final SwitchStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1670,7 +1670,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final SynchronizedStmt n, final A arg) {
+    public List<R> visit(final SynchronizedStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1692,7 +1692,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ThisExpr n, final A arg) {
+    public List<R> visit(final ThisExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getTypeName().isPresent()) {
@@ -1709,7 +1709,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ThrowStmt n, final A arg) {
+    public List<R> visit(final ThrowStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1726,7 +1726,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final TryStmt n, final A arg) {
+    public List<R> visit(final TryStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1758,7 +1758,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final TypeExpr n, final A arg) {
+    public List<R> visit(final TypeExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1775,7 +1775,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final TypeParameter n, final A arg) {
+    public List<R> visit(final TypeParameter n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1802,7 +1802,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final UnaryExpr n, final A arg) {
+    public List<R> visit(final UnaryExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1819,7 +1819,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final UnionType n, final A arg) {
+    public List<R> visit(final UnionType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1841,7 +1841,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final UnknownType n, final A arg) {
+    public List<R> visit(final UnknownType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1858,7 +1858,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final VariableDeclarationExpr n, final A arg) {
+    public List<R> visit(final VariableDeclarationExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1885,7 +1885,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final VariableDeclarator n, final A arg) {
+    public List<R> visit(final VariableDeclarator n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getInitializer().isPresent()) {
@@ -1912,7 +1912,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final VoidType n, final A arg) {
+    public List<R> visit(final VoidType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1929,7 +1929,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final WhileStmt n, final A arg) {
+    public List<R> visit(final WhileStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -1956,7 +1956,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final WildcardType n, final A arg) {
+    public List<R> visit(final WildcardType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getExtendedType().isPresent()) {
@@ -1983,12 +1983,12 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(NodeList n, A arg) {
+    public List<R> visit(NodeList n, A arg) {
         return ((NodeList<? extends Node>) n).stream().filter(Objects::nonNull).flatMap(v -> v.accept(this, arg).stream()).collect(Collectors.toList());
     }
 
     @Override
-    public  List<R> visit(final ModuleDeclaration n, final A arg) {
+    public List<R> visit(final ModuleDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2015,7 +2015,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ModuleExportsDirective n, final A arg) {
+    public List<R> visit(final ModuleExportsDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2037,7 +2037,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ModuleOpensDirective n, final A arg) {
+    public List<R> visit(final ModuleOpensDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2059,7 +2059,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ModuleProvidesDirective n, final A arg) {
+    public List<R> visit(final ModuleProvidesDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2081,7 +2081,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ModuleRequiresDirective n, final A arg) {
+    public List<R> visit(final ModuleRequiresDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2103,7 +2103,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ModuleUsesDirective n, final A arg) {
+    public List<R> visit(final ModuleUsesDirective n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2120,7 +2120,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final UnparsableStmt n, final A arg) {
+    public List<R> visit(final UnparsableStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2132,7 +2132,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final ReceiverParameter n, final A arg) {
+    public List<R> visit(final ReceiverParameter n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2159,7 +2159,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final VarType n, final A arg) {
+    public List<R> visit(final VarType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2176,7 +2176,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final Modifier n, final A arg) {
+    public List<R> visit(final Modifier n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2188,7 +2188,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final SwitchExpr n, final A arg) {
+    public List<R> visit(final SwitchExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2210,7 +2210,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final YieldStmt n, final A arg) {
+    public List<R> visit(final YieldStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2227,7 +2227,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final TextBlockLiteralExpr n, final A arg) {
+    public List<R> visit(final TextBlockLiteralExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -2239,7 +2239,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final TypePatternExpr n, final A arg) {
+    public List<R> visit(final TypePatternExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2266,7 +2266,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlQuantifiedExpr n, final A arg) {
+    public List<R> visit(final JmlQuantifiedExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2288,7 +2288,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlClauseLabel n, final A arg) {
+    public List<R> visit(final JmlClauseLabel n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2315,7 +2315,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlExpressionStmt n, final A arg) {
+    public List<R> visit(final JmlExpressionStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2337,7 +2337,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlLabelExpr n, final A arg) {
+    public List<R> visit(final JmlLabelExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2359,7 +2359,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlLetExpr n, final A arg) {
+    public List<R> visit(final JmlLetExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2381,7 +2381,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlMultiCompareExpr n, final A arg) {
+    public List<R> visit(final JmlMultiCompareExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2398,7 +2398,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlSimpleExprClause n, final A arg) {
+    public List<R> visit(final JmlSimpleExprClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2425,7 +2425,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlSignalsClause n, final A arg) {
+    public List<R> visit(final JmlSignalsClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2452,7 +2452,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlSignalsOnlyClause n, final A arg) {
+    public List<R> visit(final JmlSignalsOnlyClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2474,7 +2474,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlUnreachableStmt n, final A arg) {
+    public List<R> visit(final JmlUnreachableStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2491,7 +2491,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlCallableClause n, final A arg) {
+    public List<R> visit(final JmlCallableClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2513,7 +2513,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlForallClause n, final A arg) {
+    public List<R> visit(final JmlForallClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2535,7 +2535,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlRefiningStmt n, final A arg) {
+    public List<R> visit(final JmlRefiningStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2552,7 +2552,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlClauseIf n, final A arg) {
+    public List<R> visit(final JmlClauseIf n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2579,7 +2579,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlClassExprDeclaration n, final A arg) {
+    public List<R> visit(final JmlClassExprDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2621,7 +2621,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlClassAccessibleDeclaration n, final A arg) {
+    public List<R> visit(final JmlClassAccessibleDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2663,7 +2663,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlRepresentsDeclaration n, final A arg) {
+    public List<R> visit(final JmlRepresentsDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2700,7 +2700,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlContract n, final A arg) {
+    public List<R> visit(final JmlContract n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2737,7 +2737,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlSetComprehensionExpr n, final A arg) {
+    public List<R> visit(final JmlSetComprehensionExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2759,7 +2759,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlGhostStmt n, final A arg) {
+    public List<R> visit(final JmlGhostStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2781,7 +2781,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final RecordDeclaration n, final A arg) {
+    public List<R> visit(final RecordDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2833,7 +2833,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final CompactConstructorDeclaration n, final A arg) {
+    public List<R> visit(final CompactConstructorDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2875,7 +2875,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final RecordPatternExpr n, final A arg) {
+    public List<R> visit(final RecordPatternExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2902,7 +2902,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlMethodDeclaration n, final A arg) {
+    public List<R> visit(final JmlMethodDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getContract().isPresent()) {
@@ -2934,7 +2934,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlBinaryInfixExpr n, final A arg) {
+    public List<R> visit(final JmlBinaryInfixExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2961,7 +2961,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlDocDeclaration n, final A arg) {
+    public List<R> visit(final JmlDocDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -2983,7 +2983,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlDocStmt n, final A arg) {
+    public List<R> visit(final JmlDocStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3000,7 +3000,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlDoc n, final A arg) {
+    public List<R> visit(final JmlDoc n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         if (n.getComment().isPresent()) {
@@ -3012,7 +3012,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlDocType n, final A arg) {
+    public List<R> visit(final JmlDocType n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3049,7 +3049,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlFieldDeclaration n, final A arg) {
+    public List<R> visit(final JmlFieldDeclaration n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3076,7 +3076,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlOldClause n, final A arg) {
+    public List<R> visit(final JmlOldClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3098,7 +3098,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlTypeExpr n, final A arg) {
+    public List<R> visit(final JmlTypeExpr n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3115,7 +3115,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlMultiExprClause n, final A arg) {
+    public List<R> visit(final JmlMultiExprClause n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3142,7 +3142,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlBeginStmt n, final A arg) {
+    public List<R> visit(final JmlBeginStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3159,7 +3159,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlEndStmt n, final A arg) {
+    public List<R> visit(final JmlEndStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3176,7 +3176,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlLabelStmt n, final A arg) {
+    public List<R> visit(final JmlLabelStmt n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {
@@ -3198,7 +3198,7 @@ public abstract class GenericListVisitorAdapter<R, A> implements GenericVisitor<
     }
 
     @Override
-    public  List<R> visit(final JmlMethodSignature n, final A arg) {
+    public List<R> visit(final JmlMethodSignature n, final A arg) {
         List<R> result = new ArrayList<>();
         List<R> tmp;
         {

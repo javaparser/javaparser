@@ -29,16 +29,16 @@ import com.github.javaparser.ast.expr.SimpleName;
  * Validates that "record" cannot be used as identifier for type declarations (e.g., classes, enums, and records).
  * For details, see <a href="https://openjdk.java.net/jeps/395">JEP 395</a>
  */
-public  class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
+public class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
 
     private final String error;
 
-    public  RecordAsTypeIdentifierNotAllowed() {
+    public RecordAsTypeIdentifierNotAllowed() {
         error = "'record' is a restricted identifier and cannot be used for type declarations";
     }
 
     @Override
-    public  void visit(Name n, ProblemReporter arg) {
+    public void visit(Name n, ProblemReporter arg) {
         if ("record".equals(n.getIdentifier()) && !validUsage(n)) {
             arg.report(n, error);
         }
@@ -46,7 +46,7 @@ public  class RecordAsTypeIdentifierNotAllowed extends VisitorValidator {
     }
 
     @Override
-    public  void visit(SimpleName n, ProblemReporter arg) {
+    public void visit(SimpleName n, ProblemReporter arg) {
         if ("record".equals(n.getIdentifier()) && !validUsage(n)) {
             arg.report(n, error);
         }

@@ -31,5 +31,5 @@ import java.lang.annotation.Target;
  */
 @Retention(RUNTIME)
 @Target(FIELD)
-public  @interface OptionalProperty {
+public @interface OptionalProperty {
 }

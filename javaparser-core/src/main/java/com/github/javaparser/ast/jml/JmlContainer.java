@@ -14,7 +14,7 @@ import com.github.javaparser.ast.expr.SimpleName;
  * @version 1 (3/21/21)
  */
 @Deprecated
-public  interface JmlContainer<R extends Node, T extends Node> extends Jmlish {
+public interface JmlContainer<R extends Node, T extends Node> extends Jmlish {
 
     NodeList<T> getElements();
 

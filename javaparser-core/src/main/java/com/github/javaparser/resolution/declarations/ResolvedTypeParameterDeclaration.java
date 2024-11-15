@@ -36,7 +36,7 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public  interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaration {
+public interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclaration {
 
     /**
      * Instantiate a TypeParameter defined on a Type with the given data.
@@ -45,57 +45,57 @@ public  interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclarati
         return new ResolvedTypeParameterDeclaration() {
 
             @Override
-            public  String getName() {
+            public String getName() {
                 return name;
             }
 
             @Override
-            public  boolean declaredOnType() {
+            public boolean declaredOnType() {
                 return true;
             }
 
             @Override
-            public  boolean declaredOnMethod() {
+            public boolean declaredOnMethod() {
                 return false;
             }
 
             @Override
-            public  boolean declaredOnConstructor() {
+            public boolean declaredOnConstructor() {
                 return false;
             }
 
             @Override
-            public  String getContainerQualifiedName() {
+            public String getContainerQualifiedName() {
                 return classQName;
             }
 
             @Override
-            public  String getContainerId() {
+            public String getContainerId() {
                 return classQName;
             }
 
             @Override
-            public  ResolvedTypeParametrizable getContainer() {
+            public ResolvedTypeParametrizable getContainer() {
                 return null;
             }
 
             @Override
-            public  List<Bound> getBounds() {
+            public List<Bound> getBounds() {
                 return bounds;
             }
 
             @Override
-            public  String toString() {
+            public String toString() {
                 return "TypeParameter onType " + name;
             }
 
             @Override
-            public  Optional<ResolvedReferenceTypeDeclaration> containerType() {
+            public Optional<ResolvedReferenceTypeDeclaration> containerType() {
                 throw new UnsupportedOperationException();
             }
 
             @Override
-            public  ResolvedReferenceType object() {
+            public ResolvedReferenceType object() {
                 throw new UnsupportedOperationException();
             }
         };
@@ -303,31 +303,31 @@ public  interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclarati
         /**
          * Get the type used in the Bound.
          */
-        public  ResolvedType getType() {
+        public ResolvedType getType() {
             return type;
         }
 
         /**
          * Is this an extends bound?
          */
-        public  boolean isExtends() {
+        public boolean isExtends() {
             return extendsBound;
         }
 
         /**
          * Is this a super bound?
          */
-        public  boolean isSuper() {
+        public boolean isSuper() {
             return !isExtends();
         }
 
         @Override
-        public  String toString() {
+        public String toString() {
             return "Bound{" + "extendsBound=" + extendsBound + ", type=" + type + '}';
         }
 
         @Override
-        public  boolean equals(Object o) {
+        public boolean equals(Object o) {
             if (this == o)
                 return true;
             if (o == null || getClass() != o.getClass())
@@ -339,7 +339,7 @@ public  interface ResolvedTypeParameterDeclaration extends ResolvedTypeDeclarati
         }
 
         @Override
-        public  int hashCode() {
+        public int hashCode() {
             int result = (extendsBound ? 1 : 0);
             result = 31 * result + (type != null ? type.hashCode() : 0);
             return result;

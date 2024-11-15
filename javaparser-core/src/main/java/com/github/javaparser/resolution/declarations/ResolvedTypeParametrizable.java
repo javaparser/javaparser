@@ -28,7 +28,7 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public  interface ResolvedTypeParametrizable {
+public interface ResolvedTypeParametrizable {
 
     /**
      * The list of type parameters defined on this element.

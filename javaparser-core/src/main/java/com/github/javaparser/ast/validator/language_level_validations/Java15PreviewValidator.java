@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
  */
-public  class Java15PreviewValidator extends Java15Validator {
+public class Java15PreviewValidator extends Java15Validator {
 
-    public  Java15PreviewValidator() {
+    public Java15PreviewValidator() {
         super();
         // Incubator
         // No new incubator language features added within Java 15

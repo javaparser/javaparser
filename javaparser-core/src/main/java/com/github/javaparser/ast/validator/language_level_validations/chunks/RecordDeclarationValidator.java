@@ -24,10 +24,10 @@ import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.TypedValidator;
 
-public  class RecordDeclarationValidator implements TypedValidator<RecordDeclaration> {
+public class RecordDeclarationValidator implements TypedValidator<RecordDeclaration> {
 
     @Override
-    public  void accept(RecordDeclaration node, ProblemReporter reporter) {
+    public void accept(RecordDeclaration node, ProblemReporter reporter) {
         forbidAbstractModifier(node, reporter);
         forbidNonStaticFieldsInRecords(node, reporter);
         validateRecordComponentAccessorMethods(node, reporter);

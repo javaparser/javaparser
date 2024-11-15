@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  * A declaration that can be potentially associated with an AST node.
  */
-public  interface AssociableToAST {
+public interface AssociableToAST {
 
     /**
      * If the declaration is associated to an AST node return it, otherwise it return empty.

@@ -27,20 +27,20 @@ import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
-public  class CsmAttribute implements CsmElement {
+public class CsmAttribute implements CsmElement {
 
-    public  ObservableProperty getProperty() {
+    public ObservableProperty getProperty() {
         return property;
     }
 
     private final ObservableProperty property;
 
-    public  CsmAttribute(ObservableProperty property) {
+    public CsmAttribute(ObservableProperty property) {
         this.property = property;
     }
 
     @Override
-    public  void prettyPrint(Node node, SourcePrinter printer) {
+    public void prettyPrint(Node node, SourcePrinter printer) {
         Object value = property.getRawValue(node);
         printer.print(PrintingHelper.printToString(value));
     }
@@ -51,7 +51,7 @@ public  class CsmAttribute implements CsmElement {
      *
      * @param tokenText Operator's token text
      */
-    public  int getTokenType(Node node, String text, String tokenText) {
+    public int getTokenType(Node node, String text, String tokenText) {
         switch(property) {
             case IDENTIFIER:
                 return GeneratedJavaParserConstants.IDENTIFIER;
@@ -87,7 +87,7 @@ public  class CsmAttribute implements CsmElement {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 }

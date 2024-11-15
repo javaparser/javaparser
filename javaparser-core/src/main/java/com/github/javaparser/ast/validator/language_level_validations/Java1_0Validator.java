@@ -40,7 +40,7 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.NoU
 /**
  * This validator validates according to Java 1.0 syntax rules.
  */
-public  class Java1_0Validator extends Validators {
+public class Java1_0Validator extends Validators {
 
     final Validator modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods = new ModifierValidator(false, false, false);
 
@@ -130,7 +130,7 @@ public  class Java1_0Validator extends Validators {
         }
     });
 
-    public  Java1_0Validator() {
+    public Java1_0Validator() {
         super(new CommonValidators());
         add(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
         add(noAssertKeyword);

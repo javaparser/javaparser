@@ -30,21 +30,21 @@ import com.github.javaparser.printer.lexicalpreservation.TextElement;
 import com.github.javaparser.printer.lexicalpreservation.TokenTextElement;
 import com.github.javaparser.utils.LineSeparator;
 
-public  class CsmToken implements CsmElement {
+public class CsmToken implements CsmElement {
 
     private final int tokenType;
 
     private String content;
 
-    public  int getTokenType() {
+    public int getTokenType() {
         return tokenType;
     }
 
-    public  String getContent() {
+    public String getContent() {
         return content;
     }
 
-    public  CsmToken(int tokenType) {
+    public CsmToken(int tokenType) {
         this.tokenType = tokenType;
         this.content = GeneratedJavaParserConstants.tokenImage[tokenType];
         if (content.startsWith("\"")) {
@@ -60,13 +60,13 @@ public  class CsmToken implements CsmElement {
         }
     }
 
-    public  CsmToken(int tokenType, String content) {
+    public CsmToken(int tokenType, String content) {
         this.tokenType = tokenType;
         this.content = content;
     }
 
     @Override
-    public  void prettyPrint(Node node, SourcePrinter printer) {
+    public void prettyPrint(Node node, SourcePrinter printer) {
         if (isEndOfLineToken(tokenType)) {
             printer.println();
         } else {
@@ -75,12 +75,12 @@ public  class CsmToken implements CsmElement {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return String.format("%s(property:%s)", this.getClass().getSimpleName(), content);
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -94,21 +94,21 @@ public  class CsmToken implements CsmElement {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         int result = tokenType;
         result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
     }
 
-    public  boolean isWhiteSpace() {
+    public boolean isWhiteSpace() {
         return TokenTypes.isWhitespace(tokenType);
     }
 
-    public  boolean isWhiteSpaceNotEol() {
+    public boolean isWhiteSpaceNotEol() {
         return isWhiteSpace() && !isNewLine();
     }
 
-    public  boolean isNewLine() {
+    public boolean isNewLine() {
         return TokenTypes.isEndOfLineToken(tokenType);
     }
 
@@ -116,7 +116,7 @@ public  class CsmToken implements CsmElement {
      * Verifies if the content of the {@code CsmElement} is the same as the provided {@code TextElement}
      */
     @Override
-    public  boolean isCorrespondingElement(TextElement textElement) {
+    public boolean isCorrespondingElement(TextElement textElement) {
         return (textElement instanceof TokenTextElement) && ((TokenTextElement) textElement).getTokenKind() == getTokenType() && ((TokenTextElement) textElement).getText().equals(getContent());
     }
 }

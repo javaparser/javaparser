@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * @author Federico Tomassetti
  */
-public  interface ResolvedTypeParameterValueProvider {
+public interface ResolvedTypeParameterValueProvider {
 
     /**
      * Calculate the value for the given type parameter.

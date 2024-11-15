@@ -39,16 +39,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class SingleMemberAnnotationExpr extends AnnotationExpr {
+public class SingleMemberAnnotationExpr extends AnnotationExpr {
 
     private Expression memberValue;
 
-    public  SingleMemberAnnotationExpr() {
+    public SingleMemberAnnotationExpr() {
         this(null, new Name(), new StringLiteralExpr());
     }
 
     @AllFieldsConstructor
-    public  SingleMemberAnnotationExpr(final Name name, final Expression memberValue) {
+    public SingleMemberAnnotationExpr(final Name name, final Expression memberValue) {
         this(null, name, memberValue);
     }
 
@@ -56,7 +56,7 @@ public  class SingleMemberAnnotationExpr extends AnnotationExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  SingleMemberAnnotationExpr(TokenRange tokenRange, Name name, Expression memberValue) {
+    public SingleMemberAnnotationExpr(TokenRange tokenRange, Name name, Expression memberValue) {
         super(tokenRange, name);
         setMemberValue(memberValue);
         customInitialization();
@@ -64,23 +64,23 @@ public  class SingleMemberAnnotationExpr extends AnnotationExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getMemberValue() {
+    public Expression getMemberValue() {
         return memberValue;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
+    public SingleMemberAnnotationExpr setMemberValue(final Expression memberValue) {
         assertNotNull(memberValue);
         if (memberValue == this.memberValue) {
             return this;
@@ -95,19 +95,19 @@ public  class SingleMemberAnnotationExpr extends AnnotationExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  SingleMemberAnnotationExpr clone() {
+    public SingleMemberAnnotationExpr clone() {
         return (SingleMemberAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  SingleMemberAnnotationExprMetaModel getMetaModel() {
+    public SingleMemberAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.singleMemberAnnotationExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -120,25 +120,25 @@ public  class SingleMemberAnnotationExpr extends AnnotationExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isSingleMemberAnnotationExpr() {
+    public boolean isSingleMemberAnnotationExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  SingleMemberAnnotationExpr asSingleMemberAnnotationExpr() {
+    public SingleMemberAnnotationExpr asSingleMemberAnnotationExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifSingleMemberAnnotationExpr(Consumer<SingleMemberAnnotationExpr> action) {
+    public void ifSingleMemberAnnotationExpr(Consumer<SingleMemberAnnotationExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<SingleMemberAnnotationExpr> toSingleMemberAnnotationExpr() {
+    public Optional<SingleMemberAnnotationExpr> toSingleMemberAnnotationExpr() {
         return Optional.of(this);
     }
 }

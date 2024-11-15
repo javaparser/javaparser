@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
  * @author Alexander Weigl
  * @version 1 (13.10.22)
  */
-public  class JmlUtility {
+public class JmlUtility {
 
     public static void fixRangeContracts(@NotNull NodeWithContracts<? extends Node> n) {
         Preconditions.checkNotNull(n, "Parameter n can't be null.");
@@ -46,7 +46,7 @@ class NodeSpliterator implements Spliterator<Node> {
 
     private final Queue<Node> toSupply = new LinkedList<>();
 
-    public  NodeSpliterator(Node node) {
+    public NodeSpliterator(Node node) {
         toExplore.add(node);
     }
 
@@ -59,7 +59,7 @@ class NodeSpliterator implements Spliterator<Node> {
     }
 
     @Override
-    public  boolean tryAdvance(Consumer<? super Node> action) {
+    public boolean tryAdvance(Consumer<? super Node> action) {
         if (toSupply.isEmpty()) {
             explore();
         }
@@ -71,7 +71,7 @@ class NodeSpliterator implements Spliterator<Node> {
     }
 
     @Override
-    public  Spliterator<Node> trySplit() {
+    public Spliterator<Node> trySplit() {
         if (!toExplore.isEmpty()) {
             return new NodeSpliterator(toExplore.poll());
         }
@@ -79,12 +79,12 @@ class NodeSpliterator implements Spliterator<Node> {
     }
 
     @Override
-    public  long estimateSize() {
+    public long estimateSize() {
         return 64;
     }
 
     @Override
-    public  int characteristics() {
+    public int characteristics() {
         return Spliterator.NONNULL | Spliterator.IMMUTABLE;
     }
 }
@@ -95,12 +95,12 @@ class NodeIterator implements Iterator<Node> {
 
     private final Queue<Node> toSupply = new LinkedList<>();
 
-    public  NodeIterator(Node node) {
+    public NodeIterator(Node node) {
         toExplore.add(node);
     }
 
     @Override
-    public  Node next() {
+    public Node next() {
         if (toSupply.isEmpty()) {
             explore();
         }
@@ -110,7 +110,7 @@ class NodeIterator implements Iterator<Node> {
     }
 
     @Override
-    public  boolean hasNext() {
+    public boolean hasNext() {
         return !toSupply.isEmpty() || !toExplore.isEmpty();
     }
 

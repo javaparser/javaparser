@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * {@link Provider} un-escaping unicode escape sequences in the input sequence.
  */
-public  class UnicodeEscapeProcessingProvider implements Provider {
+public class UnicodeEscapeProcessingProvider implements Provider {
 
     private static final char LF = '\n';
 
@@ -63,14 +63,14 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
     /**
      * Creates a {@link UnicodeEscapeProcessingProvider}.
      */
-    public  UnicodeEscapeProcessingProvider(Provider input) {
+    public UnicodeEscapeProcessingProvider(Provider input) {
         this(2048, input);
     }
 
     /**
      * Creates a {@link UnicodeEscapeProcessingProvider}.
      */
-    public  UnicodeEscapeProcessingProvider(int bufferSize, Provider input) {
+    public UnicodeEscapeProcessingProvider(int bufferSize, Provider input) {
         _input = input;
         _data = new char[bufferSize];
     }
@@ -78,19 +78,19 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
     /**
      * The {@link LineCounter} of the input file.
      */
-    public  LineCounter getInputCounter() {
+    public LineCounter getInputCounter() {
         return _inputLine;
     }
 
     /**
      * The {@link LineCounter} of the output file.
      */
-    public  LineCounter getOutputCounter() {
+    public LineCounter getOutputCounter() {
         return _outputLine;
     }
 
     @Override
-    public  int read(char[] buffer, final int offset, int len) throws IOException {
+    public int read(char[] buffer, final int offset, int len) throws IOException {
         int pos = offset;
         int stop = offset + len;
         while (pos < stop) {
@@ -109,7 +109,7 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
     }
 
     @Override
-    public  void close() throws IOException {
+    public void close() throws IOException {
         _input.close();
     }
 
@@ -309,7 +309,7 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
     /**
      * The {@link PositionMapping} being built during processing the file.
      */
-    public  PositionMapping getPositionMapping() {
+    public PositionMapping getPositionMapping() {
         return _mappingBuilder.getMapping();
     }
 
@@ -323,14 +323,14 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
         /**
          * Creates a {@link UnicodeEscapeProcessingProvider.PositionMapping}.
          */
-        public  PositionMapping() {
+        public PositionMapping() {
             super();
         }
 
         /**
          * Whether this is the identity transformation.
          */
-        public  boolean isEmpty() {
+        public boolean isEmpty() {
             return _deltas.isEmpty();
         }
 
@@ -341,7 +341,7 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
         /**
          * Looks up the {@link PositionUpdate} for the given Position.
          */
-        public  PositionUpdate lookup(Position position) {
+        public PositionUpdate lookup(Position position) {
             int result = Collections.binarySearch(_deltas, position);
             if (result >= 0) {
                 return _deltas.get(result);
@@ -366,17 +366,17 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
             PositionUpdate NONE = new PositionUpdate() {
 
                 @Override
-                public  int transformLine(int line) {
+                public int transformLine(int line) {
                     return line;
                 }
 
                 @Override
-                public  int transformColumn(int column) {
+                public int transformColumn(int column) {
                     return column;
                 }
 
                 @Override
-                public  Position transform(Position pos) {
+                public Position transform(Position pos) {
                     return pos;
                 }
             };
@@ -420,24 +420,24 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
             /**
              * Creates a {@link PositionUpdate}.
              */
-            public  DeltaInfo(int line, int column, int lineDelta, int columnDelta) {
+            public DeltaInfo(int line, int column, int lineDelta, int columnDelta) {
                 super(line, column);
                 _lineDelta = lineDelta;
                 _columnDelta = columnDelta;
             }
 
             @Override
-            public  int transformLine(int sourceLine) {
+            public int transformLine(int sourceLine) {
                 return sourceLine + _lineDelta;
             }
 
             @Override
-            public  int transformColumn(int sourceColumn) {
+            public int transformColumn(int sourceColumn) {
                 return sourceColumn + _columnDelta;
             }
 
             @Override
-            public  String toString() {
+            public String toString() {
                 return "(" + line + ", " + column + ": " + _lineDelta + ", " + _columnDelta + ")";
             }
         }
@@ -445,14 +445,14 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
         /**
          * Transforms the given {@link Position}.
          */
-        public  Position transform(Position pos) {
+        public Position transform(Position pos) {
             return lookup(pos).transform(pos);
         }
 
         /**
          * Transforms the given {@link Range}.
          */
-        public  Range transform(Range range) {
+        public Range transform(Range range) {
             Position begin = transform(range.begin);
             Position end = transform(range.end);
             if (begin == range.begin && end == range.end) {
@@ -481,7 +481,7 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
          * @param left The source {@link LineCounter}.
          * @param right The target {@link LineCounter}.
          */
-        public  PositionMappingBuilder(LineCounter left, LineCounter right) {
+        public PositionMappingBuilder(LineCounter left, LineCounter right) {
             _left = left;
             _right = right;
             update();
@@ -490,11 +490,11 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
         /**
          * The built {@link PositionMapping}.
          */
-        public  PositionMapping getMapping() {
+        public PositionMapping getMapping() {
             return _mapping;
         }
 
-        public  void update() {
+        public void update() {
             int lineDelta = _right.getLine() - _left.getLine();
             int columnDelta = _right.getColumn() - _left.getColumn();
             if (lineDelta != _lineDelta || columnDelta != _columnDelta) {
@@ -525,35 +525,35 @@ public  class UnicodeEscapeProcessingProvider implements Provider {
         /**
          * Creates a {@link UnicodeEscapeProcessingProvider.LineCounter}.
          */
-        public  LineCounter() {
+        public LineCounter() {
             super();
         }
 
         /**
          * The line of the currently processed input character.
          */
-        public  int getLine() {
+        public int getLine() {
             return _line;
         }
 
         /**
          * The column of the currently processed input character.
          */
-        public  int getColumn() {
+        public int getColumn() {
             return _column;
         }
 
         /**
          * The current position.
          */
-        public  Position getPosition() {
+        public Position getPosition() {
             return new Position(getLine(), getColumn());
         }
 
         /**
          * Analyzes the given character for line feed.
          */
-        public  int process(int ch) {
+        public int process(int ch) {
             switch(ch) {
                 case EOF:
                     {

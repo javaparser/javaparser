@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/11/">https://openjdk.java.net/projects/jdk/11/</a>
  */
-public  class Java11PreviewValidator extends Java11Validator {
+public class Java11PreviewValidator extends Java11Validator {
 
-    public  Java11PreviewValidator() {
+    public Java11PreviewValidator() {
         super();
         // Incubator
         // No incubator language features added within Java 11

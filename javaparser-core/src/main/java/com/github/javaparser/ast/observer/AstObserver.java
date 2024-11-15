@@ -26,7 +26,7 @@ import com.github.javaparser.ast.NodeList;
 /**
  * An Observer for an AST element (either a Node or a NodeList).
  */
-public  interface AstObserver {
+public interface AstObserver {
 
     /**
      * Type of change occurring on a List

@@ -30,7 +30,7 @@ import java.util.Optional;
 /**
  * The common interface of {@link com.github.javaparser.ast.expr.SwitchExpr} and {@link com.github.javaparser.ast.stmt.SwitchStmt}
  */
-public  interface SwitchNode {
+public interface SwitchNode {
 
     NodeList<SwitchEntry> getEntries();
 

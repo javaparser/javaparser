@@ -31,7 +31,7 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public  class SymbolReference<S extends ResolvedDeclaration> {
+public class SymbolReference<S extends ResolvedDeclaration> {
 
     /**
      * Create a solve reference to the given symbol.
@@ -94,26 +94,26 @@ public  class SymbolReference<S extends ResolvedDeclaration> {
      *
      * @return an {@link Optional} with a present value if the symbol is solved, otherwise an empty {@link Optional}.
      */
-    public  Optional<S> getDeclaration() {
+    public Optional<S> getDeclaration() {
         return Optional.ofNullable(correspondingDeclaration);
     }
 
     /**
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
      */
-    public  S getCorrespondingDeclaration() {
+    public S getCorrespondingDeclaration() {
         return getDeclaration().orElseThrow(() -> new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol."));
     }
 
     /**
      * Is the reference solved?
      */
-    public  boolean isSolved() {
+    public boolean isSolved() {
         return getDeclaration().isPresent();
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "SymbolReference{" + correspondingDeclaration + "}";
     }
 }

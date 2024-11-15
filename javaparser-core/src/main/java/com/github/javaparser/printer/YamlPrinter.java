@@ -31,17 +31,17 @@ import static java.util.stream.Collectors.toList;
 /**
  * Outputs a YAML file containing the AST meant for inspecting it.
  */
-public  class YamlPrinter {
+public class YamlPrinter {
 
     private static final int NUM_SPACES_FOR_INDENT = 4;
 
     private final boolean outputNodeType;
 
-    public  YamlPrinter(boolean outputNodeType) {
+    public YamlPrinter(boolean outputNodeType) {
         this.outputNodeType = outputNodeType;
     }
 
-    public  String output(Node node) {
+    public String output(Node node) {
         StringBuilder output = new StringBuilder();
         output.append("---");
         output(node, "root", 0, output);
@@ -49,7 +49,7 @@ public  class YamlPrinter {
         return output.toString();
     }
 
-    public  void output(Node node, String name, int level, StringBuilder builder) {
+    public void output(Node node, String name, int level, StringBuilder builder) {
         assertNotNull(node);
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();

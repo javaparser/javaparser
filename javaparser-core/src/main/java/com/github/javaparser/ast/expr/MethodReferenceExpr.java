@@ -54,7 +54,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Raquel Pau
  */
-public  class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr>, NodeWithIdentifier<MethodReferenceExpr>, Resolvable<ResolvedMethodDeclaration> {
+public class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr>, NodeWithIdentifier<MethodReferenceExpr>, Resolvable<ResolvedMethodDeclaration> {
 
     private Expression scope;
 
@@ -64,12 +64,12 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
     @NonEmptyProperty
     private String identifier;
 
-    public  MethodReferenceExpr() {
+    public MethodReferenceExpr() {
         this(null, new ClassExpr(), null, "empty");
     }
 
     @AllFieldsConstructor
-    public  MethodReferenceExpr(Expression scope, NodeList<Type> typeArguments, String identifier) {
+    public MethodReferenceExpr(Expression scope, NodeList<Type> typeArguments, String identifier) {
         this(null, scope, typeArguments, identifier);
     }
 
@@ -77,7 +77,7 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  MethodReferenceExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, String identifier) {
+    public MethodReferenceExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, String identifier) {
         super(tokenRange);
         setScope(scope);
         setTypeArguments(typeArguments);
@@ -87,23 +87,23 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getScope() {
+    public Expression getScope() {
         return scope;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  MethodReferenceExpr setScope(final Expression scope) {
+    public MethodReferenceExpr setScope(final Expression scope) {
         assertNotNull(scope);
         if (scope == this.scope) {
             return this;
@@ -117,7 +117,7 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<NodeList<Type>> getTypeArguments() {
+    public Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -128,7 +128,7 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
      * @return this, the MethodReferenceExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
+    public MethodReferenceExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
@@ -141,12 +141,12 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  String getIdentifier() {
+    public String getIdentifier() {
         return identifier;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  MethodReferenceExpr setIdentifier(final String identifier) {
+    public MethodReferenceExpr setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         if (identifier == this.identifier) {
             return this;
@@ -158,7 +158,7 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -175,19 +175,19 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  MethodReferenceExpr clone() {
+    public MethodReferenceExpr clone() {
         return (MethodReferenceExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  MethodReferenceExprMetaModel getMetaModel() {
+    public MethodReferenceExprMetaModel getMetaModel() {
         return JavaParserMetaModel.methodReferenceExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -208,25 +208,25 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isMethodReferenceExpr() {
+    public boolean isMethodReferenceExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  MethodReferenceExpr asMethodReferenceExpr() {
+    public MethodReferenceExpr asMethodReferenceExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifMethodReferenceExpr(Consumer<MethodReferenceExpr> action) {
+    public void ifMethodReferenceExpr(Consumer<MethodReferenceExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<MethodReferenceExpr> toMethodReferenceExpr() {
+    public Optional<MethodReferenceExpr> toMethodReferenceExpr() {
         return Optional.of(this);
     }
 
@@ -234,7 +234,7 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
      * @return the method declaration this method reference is referencing.
      */
     @Override
-    public  ResolvedMethodDeclaration resolve() {
+    public ResolvedMethodDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedMethodDeclaration.class);
     }
 
@@ -243,7 +243,7 @@ public  class MethodReferenceExpr extends Expression implements NodeWithTypeArgu
      * (https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html 15.13. Method Reference Expressions)
      */
     @Override
-    public  boolean isPolyExpression() {
+    public boolean isPolyExpression() {
         return true;
     }
 }

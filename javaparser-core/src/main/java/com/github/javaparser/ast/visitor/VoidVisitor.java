@@ -43,7 +43,7 @@ import com.github.javaparser.ast.type.*;
  *
  * @author Julio Vilmar Gesser
  */
-public  interface VoidVisitor<A> {
+public interface VoidVisitor<A> {
 
     void visit(NodeList n, A arg);
 

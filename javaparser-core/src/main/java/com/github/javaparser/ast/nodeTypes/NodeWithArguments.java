@@ -29,7 +29,7 @@ import java.util.function.Function;
 /**
  * A node with arguments.
  */
-public  interface NodeWithArguments<N extends Node> {
+public interface NodeWithArguments<N extends Node> {
 
     N setArguments(NodeList<Expression> arguments);
 

@@ -43,7 +43,7 @@ import java.util.Optional;
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getMembers
  * method.
  */
-public  interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
+public interface NodeWithMembers<N extends Node> extends NodeWithSimpleName<N> {
 
     /**
      * @return all members inside the braces of this node,

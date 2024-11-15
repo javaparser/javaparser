@@ -37,10 +37,10 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public  class EmptyStmt extends Statement {
+public class EmptyStmt extends Statement {
 
     @AllFieldsConstructor
-    public  EmptyStmt() {
+    public EmptyStmt() {
         this(null);
     }
 
@@ -48,56 +48,56 @@ public  class EmptyStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  EmptyStmt(TokenRange tokenRange) {
+    public EmptyStmt(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  EmptyStmt clone() {
+    public EmptyStmt clone() {
         return (EmptyStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  EmptyStmtMetaModel getMetaModel() {
+    public EmptyStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.emptyStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isEmptyStmt() {
+    public boolean isEmptyStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  EmptyStmt asEmptyStmt() {
+    public EmptyStmt asEmptyStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifEmptyStmt(Consumer<EmptyStmt> action) {
+    public void ifEmptyStmt(Consumer<EmptyStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<EmptyStmt> toEmptyStmt() {
+    public Optional<EmptyStmt> toEmptyStmt() {
         return Optional.of(this);
     }
 }

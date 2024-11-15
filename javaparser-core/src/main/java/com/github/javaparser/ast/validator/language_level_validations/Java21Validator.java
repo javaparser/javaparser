@@ -24,9 +24,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/21/">https://openjdk.java.net/projects/jdk/21/</a>
  */
-public  class Java21Validator extends Java20Validator {
+public class Java21Validator extends Java20Validator {
 
-    public  Java21Validator() {
+    public Java21Validator() {
         super();
         remove(noSwitchNullDefault);
         remove(noSwitchPatterns);

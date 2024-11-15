@@ -26,7 +26,7 @@ import com.github.javaparser.utils.LineSeparator;
 /**
  * Complements GeneratedJavaParserConstants
  */
-public  class TokenTypes {
+public class TokenTypes {
 
     public static boolean isWhitespace(int kind) {
         return getCategory(kind).isWhitespace();

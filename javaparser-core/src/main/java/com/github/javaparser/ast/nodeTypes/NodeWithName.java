@@ -32,7 +32,7 @@ import com.github.javaparser.ast.expr.Name;
  *
  * @since 2.0.1
  */
-public  interface NodeWithName<N extends Node> {
+public interface NodeWithName<N extends Node> {
 
     Name getName();
 

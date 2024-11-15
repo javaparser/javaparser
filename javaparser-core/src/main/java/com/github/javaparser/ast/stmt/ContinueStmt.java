@@ -43,21 +43,21 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public  class ContinueStmt extends Statement implements NodeWithOptionalLabel<ContinueStmt> {
+public class ContinueStmt extends Statement implements NodeWithOptionalLabel<ContinueStmt> {
 
     @OptionalProperty
     private SimpleName label;
 
-    public  ContinueStmt() {
+    public ContinueStmt() {
         this(null, null);
     }
 
-    public  ContinueStmt(final String label) {
+    public ContinueStmt(final String label) {
         this(null, new SimpleName(label));
     }
 
     @AllFieldsConstructor
-    public  ContinueStmt(final SimpleName label) {
+    public ContinueStmt(final SimpleName label) {
         this(null, label);
     }
 
@@ -65,7 +65,7 @@ public  class ContinueStmt extends Statement implements NodeWithOptionalLabel<Co
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  ContinueStmt(TokenRange tokenRange, SimpleName label) {
+    public ContinueStmt(TokenRange tokenRange, SimpleName label) {
         super(tokenRange);
         setLabel(label);
         customInitialization();
@@ -73,18 +73,18 @@ public  class ContinueStmt extends Statement implements NodeWithOptionalLabel<Co
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<SimpleName> getLabel() {
+    public Optional<SimpleName> getLabel() {
         return Optional.ofNullable(label);
     }
 
@@ -95,7 +95,7 @@ public  class ContinueStmt extends Statement implements NodeWithOptionalLabel<Co
      * @return this, the ContinueStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ContinueStmt setLabel(final SimpleName label) {
+    public ContinueStmt setLabel(final SimpleName label) {
         if (label == this.label) {
             return this;
         }
@@ -109,7 +109,7 @@ public  class ContinueStmt extends Statement implements NodeWithOptionalLabel<Co
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -123,25 +123,25 @@ public  class ContinueStmt extends Statement implements NodeWithOptionalLabel<Co
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  ContinueStmt removeLabel() {
+    public ContinueStmt removeLabel() {
         return setLabel((SimpleName) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  ContinueStmt clone() {
+    public ContinueStmt clone() {
         return (ContinueStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ContinueStmtMetaModel getMetaModel() {
+    public ContinueStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.continueStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -156,25 +156,25 @@ public  class ContinueStmt extends Statement implements NodeWithOptionalLabel<Co
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isContinueStmt() {
+    public boolean isContinueStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ContinueStmt asContinueStmt() {
+    public ContinueStmt asContinueStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifContinueStmt(Consumer<ContinueStmt> action) {
+    public void ifContinueStmt(Consumer<ContinueStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ContinueStmt> toContinueStmt() {
+    public Optional<ContinueStmt> toContinueStmt() {
         return Optional.of(this);
     }
 }

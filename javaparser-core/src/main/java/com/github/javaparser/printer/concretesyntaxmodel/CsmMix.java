@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 /**
  * A group of elements that could be in any order.
  */
-public  class CsmMix implements CsmElement {
+public class CsmMix implements CsmElement {
 
     private List<CsmElement> elements;
 
-    public  CsmMix(List<CsmElement> elements) {
+    public CsmMix(List<CsmElement> elements) {
         if (elements == null) {
             throw new NullPointerException();
         }
@@ -43,17 +43,17 @@ public  class CsmMix implements CsmElement {
         this.elements = elements;
     }
 
-    public  List<CsmElement> getElements() {
+    public List<CsmElement> getElements() {
         return elements;
     }
 
     @Override
-    public  void prettyPrint(Node node, SourcePrinter printer) {
+    public void prettyPrint(Node node, SourcePrinter printer) {
         elements.forEach(e -> e.prettyPrint(node, printer));
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -63,12 +63,12 @@ public  class CsmMix implements CsmElement {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return elements != null ? elements.hashCode() : 0;
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return elements.stream().map(e -> e.toString()).collect(Collectors.joining(",", "CsmMix[", "]"));
     }
 }

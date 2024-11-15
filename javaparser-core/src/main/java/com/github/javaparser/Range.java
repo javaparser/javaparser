@@ -23,7 +23,7 @@ package com.github.javaparser;
 /**
  * A range of characters in a source file, from "begin" to "end", including the characters at "begin" and "end".
  */
-public  class Range {
+public class Range {
 
     public final Position begin;
 
@@ -38,7 +38,7 @@ public  class Range {
      * @param begin The starting position of the range.
      * @param end   The end position of the range.
      */
-    public  Range(Position begin, Position end) {
+    public Range(Position begin, Position end) {
         if (begin == null) {
             throw new IllegalArgumentException("begin can't be null");
         }
@@ -85,7 +85,7 @@ public  class Range {
      *                    Valid values are per the constructor of{@link Position}.
      * @return A copy of this `Range` object, but with the begin column number replaced with the given column number.
      */
-    public  Range withBeginColumn(int beginColumn) {
+    public Range withBeginColumn(int beginColumn) {
         return range(begin.withColumn(beginColumn), end);
     }
 
@@ -94,7 +94,7 @@ public  class Range {
      *                  Valid values are per the constructor of{@link Position}.
      * @return A copy of this `Range` object, but with the begin line number replaced with the given line number.
      */
-    public  Range withBeginLine(int beginLine) {
+    public Range withBeginLine(int beginLine) {
         return range(begin.withLine(beginLine), end);
     }
 
@@ -103,7 +103,7 @@ public  class Range {
      *                  Valid values are per the constructor of{@link Position}.
      * @return A copy of this `Range` object, but with the end column number replaced with the given line column.
      */
-    public  Range withEndColumn(int endColumn) {
+    public Range withEndColumn(int endColumn) {
         return range(begin, end.withColumn(endColumn));
     }
 
@@ -112,7 +112,7 @@ public  class Range {
      *                Valid values are per the constructor of{@link Position}.
      * @return A copy of this `Range` object, but with the end line number replaced with the given line number.
      */
-    public  Range withEndLine(int endLine) {
+    public Range withEndLine(int endLine) {
         return range(begin, end.withLine(endLine));
     }
 
@@ -120,7 +120,7 @@ public  class Range {
      * @param begin The value used to replace the current begin position.
      * @return A copy of this `Range` object, but with the begin position replaced with the given position.
      */
-    public  Range withBegin(Position begin) {
+    public Range withBegin(Position begin) {
         return range(begin, this.end);
     }
 
@@ -128,7 +128,7 @@ public  class Range {
      * @param end The value used to replace the current end position.
      * @return A copy of this `Range` object, but with the end position replaced with the given position.
      */
-    public  Range withEnd(Position end) {
+    public Range withEnd(Position end) {
         return range(this.begin, end);
     }
 
@@ -138,7 +138,7 @@ public  class Range {
      * As {@link #strictlyContains(Range)}, but also allow ranges which have an equal start and/or end position.
      * In these cases, the `other` range is not strictly "inside" of this range.
      */
-    public  boolean contains(Range other) {
+    public boolean contains(Range other) {
         boolean beginResult = (begin.isBeforeOrEqual(other.begin));
         if (!beginResult)
             return false;
@@ -153,7 +153,7 @@ public  class Range {
      * For example, if the given position is equal to the start or end position of this range.
      * In these cases, the `other` range is not strictly "inside" of this range.
      */
-    public  boolean contains(Position position) {
+    public boolean contains(Position position) {
         return strictlyContains(position) || begin.equals(position) || end.equals(position);
     }
 
@@ -162,7 +162,7 @@ public  class Range {
      * <p>
      * It means that this has to be larger than other and it has to start before other and end after other.
      */
-    public  boolean strictlyContains(Range other) {
+    public boolean strictlyContains(Range other) {
         boolean beginResult = (begin.isBefore(other.begin));
         boolean endResult = (end.isAfter(other.end));
         return beginResult && endResult;
@@ -173,7 +173,7 @@ public  class Range {
      * <p>
      * It means that the position is after the begin of this range and before the end of this range.
      */
-    public  boolean strictlyContains(Position position) {
+    public boolean strictlyContains(Position position) {
         return position.isAfter(begin) && position.isBefore(end);
     }
 
@@ -190,7 +190,7 @@ public  class Range {
      * Range 1: ABC
      * Range 2:   CDE</pre>
      */
-    public  boolean overlapsWith(Range other) {
+    public boolean overlapsWith(Range other) {
         return (contains(other.begin) || contains(other.end)) || (other.contains(begin) || other.contains(end));
     }
 
@@ -198,7 +198,7 @@ public  class Range {
      * @param position The position to compare against.
      * @return True if the end of this range is before (but not equal to) the given position to compare against.
      */
-    public  boolean isBefore(Position position) {
+    public boolean isBefore(Position position) {
         return end.isBefore(position);
     }
 
@@ -206,7 +206,7 @@ public  class Range {
      * @param other The range to compare against.
      * @return True if the end of this range is before (but not equal to) the given position to compare against.
      */
-    public  boolean isBefore(Range other) {
+    public boolean isBefore(Range other) {
         return end.isBefore(other.begin);
     }
 
@@ -214,7 +214,7 @@ public  class Range {
      * @param position The position to compare against.
      * @return True if the start of this range is after (but not equal to) the given position to compare against.
      */
-    public  boolean isAfter(Position position) {
+    public boolean isAfter(Position position) {
         return begin.isAfter(position);
     }
 
@@ -222,12 +222,12 @@ public  class Range {
      * @param other The range to compare against.
      * @return True if the start of this range is after (but not equal to) the given position to compare against.
      */
-    public  boolean isAfter(Range other) {
+    public boolean isAfter(Range other) {
         return begin.isAfter(other.end);
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -237,12 +237,12 @@ public  class Range {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return 31 * begin.hashCode() + end.hashCode();
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return begin + "-" + end;
     }
 
@@ -251,7 +251,7 @@ public  class Range {
      * <p>
      * If the start line and end line are the same, this range is limited to just one line.
      */
-    public  int getLineCount() {
+    public int getLineCount() {
         return end.line - begin.line + 1;
     }
 }

@@ -20,12 +20,12 @@ import java.util.function.Consumer;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public  class JmlSignalsOnlyClause extends JmlClause implements MethodContractable, BlockContractable {
+public class JmlSignalsOnlyClause extends JmlClause implements MethodContractable, BlockContractable {
 
     private NodeList<Type> types;
 
     @AllFieldsConstructor
-    public  JmlSignalsOnlyClause(NodeList<Type> types) {
+    public JmlSignalsOnlyClause(NodeList<Type> types) {
         this(null, types);
     }
 
@@ -33,35 +33,35 @@ public  class JmlSignalsOnlyClause extends JmlClause implements MethodContractab
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlSignalsOnlyClause(TokenRange tokenRange, NodeList<Type> types) {
+    public JmlSignalsOnlyClause(TokenRange tokenRange, NodeList<Type> types) {
         super(tokenRange);
         setTypes(types);
         customInitialization();
     }
 
-    public  JmlSignalsOnlyClause() {
+    public JmlSignalsOnlyClause() {
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
-    public  boolean hasParentNode() {
+    public boolean hasParentNode() {
         return false;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -76,7 +76,7 @@ public  class JmlSignalsOnlyClause extends JmlClause implements MethodContractab
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -91,7 +91,7 @@ public  class JmlSignalsOnlyClause extends JmlClause implements MethodContractab
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlSignalsOnlyClause clone() {
+    public JmlSignalsOnlyClause clone() {
         return (JmlSignalsOnlyClause) accept(new CloneVisitor(), null);
     }
 
@@ -99,18 +99,18 @@ public  class JmlSignalsOnlyClause extends JmlClause implements MethodContractab
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlSignalsOnlyClause(TokenRange tokenRange) {
+    public JmlSignalsOnlyClause(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Type> getTypes() {
+    public NodeList<Type> getTypes() {
         return types;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlSignalsOnlyClause setTypes(final NodeList<Type> types) {
+    public JmlSignalsOnlyClause setTypes(final NodeList<Type> types) {
         assertNotNull(types);
         if (types == this.types) {
             return this;
@@ -125,36 +125,36 @@ public  class JmlSignalsOnlyClause extends JmlClause implements MethodContractab
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlSignalsOnlyClauseMetaModel getMetaModel() {
+    public JmlSignalsOnlyClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlSignalsOnlyClauseMetaModel;
     }
 
     @Override
-    public  JmlClauseKind getKind() {
+    public JmlClauseKind getKind() {
         return JmlClauseKind.SIGNALS_ONLY;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlSignalsOnlyClause() {
+    public boolean isJmlSignalsOnlyClause() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlSignalsOnlyClause asJmlSignalsOnlyClause() {
+    public JmlSignalsOnlyClause asJmlSignalsOnlyClause() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlSignalsOnlyClause> toJmlSignalsOnlyClause() {
+    public Optional<JmlSignalsOnlyClause> toJmlSignalsOnlyClause() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlSignalsOnlyClause(Consumer<JmlSignalsOnlyClause> action) {
+    public void ifJmlSignalsOnlyClause(Consumer<JmlSignalsOnlyClause> action) {
         action.accept(this);
     }
 }

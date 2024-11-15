@@ -18,7 +18,7 @@ import com.github.javaparser.metamodel.OptionalProperty;
  * @author Alexander Weigl
  * @version 1 (12/14/21)
  */
-public  class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelProgram>, NodeWithAnnotations<JmlModelProgram>, NodeWithContracts<JmlModelProgram> {
+public class JmlModelProgram extends Node implements NodeWithModifiers<JmlModelProgram>, NodeWithAnnotations<JmlModelProgram>, NodeWithContracts<JmlModelProgram> {
 
     private Modifier modifiers;
 
@@ -29,55 +29,55 @@ public  class JmlModelProgram extends Node implements NodeWithModifiers<JmlModel
 
     private NodeList<Statement> statements;
 
-    public  JmlModelProgram(TokenRange tokenRange) {
+    public JmlModelProgram(TokenRange tokenRange) {
         this(null, new NodeList<>(), new NodeList<>(), null, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public  JmlModelProgram(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, JmlContract contracts, NodeList<Statement> statements) {
+    public JmlModelProgram(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, JmlContract contracts, NodeList<Statement> statements) {
         this(null, modifiers, annotations, contracts, statements);
     }
 
-    public  JmlModelProgram(TokenRange range, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, JmlContract contracts, NodeList<Statement> statements) {
+    public JmlModelProgram(TokenRange range, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, JmlContract contracts, NodeList<Statement> statements) {
         super(range);
     }
 
     @Override
-    public  <R, A> R accept(GenericVisitor<R, A> v, A arg) {
+    public <R, A> R accept(GenericVisitor<R, A> v, A arg) {
         return null;
     }
 
     @Override
-    public  <A> void accept(VoidVisitor<A> v, A arg) {
+    public <A> void accept(VoidVisitor<A> v, A arg) {
     }
 
     @Override
-    public  NodeList<JmlContract> getContracts() {
+    public NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
     @Override
-    public  JmlModelProgram setContracts(NodeList<JmlContract> contracts) {
+    public JmlModelProgram setContracts(NodeList<JmlContract> contracts) {
         return null;
     }
 
     @Override
-    public  NodeList<AnnotationExpr> getAnnotations() {
+    public NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
     @Override
-    public  JmlModelProgram setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public JmlModelProgram setAnnotations(NodeList<AnnotationExpr> annotations) {
         return null;
     }
 
     @Override
-    public  NodeList<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return null;
     }
 
     @Override
-    public  JmlModelProgram setModifiers(NodeList<Modifier> modifiers) {
+    public JmlModelProgram setModifiers(NodeList<Modifier> modifiers) {
         return null;
     }
 }

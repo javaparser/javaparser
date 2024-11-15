@@ -38,7 +38,7 @@ import com.github.javaparser.ast.Node;
 public abstract class LiteralExpr extends Expression {
 
     @AllFieldsConstructor
-    public  LiteralExpr() {
+    public LiteralExpr() {
         this(null);
     }
 
@@ -46,44 +46,44 @@ public abstract class LiteralExpr extends Expression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  LiteralExpr(TokenRange tokenRange) {
+    public LiteralExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  LiteralExpr clone() {
+    public LiteralExpr clone() {
         return (LiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  LiteralExprMetaModel getMetaModel() {
+    public LiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.literalExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isLiteralExpr() {
+    public boolean isLiteralExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  LiteralExpr asLiteralExpr() {
+    public LiteralExpr asLiteralExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifLiteralExpr(Consumer<LiteralExpr> action) {
+    public void ifLiteralExpr(Consumer<LiteralExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<LiteralExpr> toLiteralExpr() {
+    public Optional<LiteralExpr> toLiteralExpr() {
         return Optional.of(this);
     }
 }

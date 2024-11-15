@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/16/">https://openjdk.java.net/projects/jdk/16/</a>
  */
-public  class Java16PreviewValidator extends Java16Validator {
+public class Java16PreviewValidator extends Java16Validator {
 
-    public  Java16PreviewValidator() {
+    public Java16PreviewValidator() {
         super();
         // Incubator
         // No new incubator language features added in Java 16

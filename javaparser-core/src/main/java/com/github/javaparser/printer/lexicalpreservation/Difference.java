@@ -48,7 +48,7 @@ import java.util.stream.IntStream;
  *
  * I should later be able to apply such difference to a nodeText.
  */
-public  class Difference {
+public class Difference {
 
     public static final int STANDARD_INDENTATION_SIZE = 4;
 
@@ -262,11 +262,11 @@ public  class Difference {
 
         int extraCharacters;
 
-        public  EnforcingIndentationContext(int start) {
+        public EnforcingIndentationContext(int start) {
             this(start, 0);
         }
 
-        public  EnforcingIndentationContext(int start, int extraCharacters) {
+        public EnforcingIndentationContext(int start, int extraCharacters) {
             this.start = start;
             this.extraCharacters = extraCharacters;
         }
@@ -553,9 +553,9 @@ public  class Difference {
             if (isRemovingIndentationActivable(removedGroup)) {
                 originalIndex = considerRemovingIndentation(nodeText, originalIndex);
             }
-        } else if (removed.isToken() && originalElementIsToken && (removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind() || // handle EOLs separately as their token kind might not be equal. This is because the
+        } else if (removed.isToken() && originalElementIsToken && (// handle EOLs separately as their token kind might not be equal. This is because the
         // 'removed'
-        // element always has the current operating system's EOL as type
+        removed.getTokenType() == ((TokenTextElement) originalElement).getTokenKind() || // element always has the current operating system's EOL as type
         (((TokenTextElement) originalElement).getToken().getCategory().isEndOfLine() && removed.isNewLine()))) {
             nodeText.removeElement(originalIndex);
             diffIndex++;
@@ -1018,64 +1018,64 @@ public  class Difference {
 
         ListIterator<T> iterator;
 
-        public  ArrayIterator(List<T> elements) {
+        public ArrayIterator(List<T> elements) {
             this(elements, 0);
         }
 
-        public  ArrayIterator(List<T> elements, int index) {
+        public ArrayIterator(List<T> elements, int index) {
             this.iterator = elements.listIterator(index);
         }
 
         @Override
-        public  boolean hasNext() {
+        public boolean hasNext() {
             return iterator.hasNext();
         }
 
         @Override
-        public  T next() {
+        public T next() {
             return iterator.next();
         }
 
         @Override
-        public  boolean hasPrevious() {
+        public boolean hasPrevious() {
             return iterator.hasPrevious();
         }
 
         @Override
-        public  T previous() {
+        public T previous() {
             return iterator.previous();
         }
 
         @Override
-        public  int nextIndex() {
+        public int nextIndex() {
             return iterator.nextIndex();
         }
 
         @Override
-        public  int previousIndex() {
+        public int previousIndex() {
             return iterator.previousIndex();
         }
 
         /*
          * Returns the current index in the underlying list
          */
-        public  int index() {
+        public int index() {
             return iterator.nextIndex() - 1;
         }
 
         @Override
-        public  void remove() {
+        public void remove() {
             iterator.remove();
             ;
         }
 
         @Override
-        public  void set(T e) {
+        public void set(T e) {
             iterator.set(e);
         }
 
         @Override
-        public  void add(T e) {
+        public void add(T e) {
             iterator.add(e);
             ;
         }
@@ -1124,7 +1124,7 @@ public  class Difference {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "Difference{" + diffElements + '}';
     }
 }

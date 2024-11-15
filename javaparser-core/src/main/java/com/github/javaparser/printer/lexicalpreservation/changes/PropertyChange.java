@@ -26,7 +26,7 @@ import com.github.javaparser.ast.observer.ObservableProperty;
 /**
  * The change in value of a property.
  */
-public  class PropertyChange implements Change {
+public class PropertyChange implements Change {
 
     private final ObservableProperty property;
 
@@ -34,27 +34,27 @@ public  class PropertyChange implements Change {
 
     private final Object newValue;
 
-    public  PropertyChange(ObservableProperty property, Object oldValue, Object newValue) {
+    public PropertyChange(ObservableProperty property, Object oldValue, Object newValue) {
         this.property = property;
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
 
     @Override
-    public  ObservableProperty getProperty() {
+    public ObservableProperty getProperty() {
         return property;
     }
 
-    public  Object getOldValue() {
+    public Object getOldValue() {
         return oldValue;
     }
 
-    public  Object getNewValue() {
+    public Object getNewValue() {
         return newValue;
     }
 
     @Override
-    public  Object getValue(ObservableProperty property, Node node) {
+    public Object getValue(ObservableProperty property, Node node) {
         if (property == this.property) {
             return newValue;
         }

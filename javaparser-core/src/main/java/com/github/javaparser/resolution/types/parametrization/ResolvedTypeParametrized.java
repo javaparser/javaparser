@@ -25,7 +25,7 @@ package com.github.javaparser.resolution.types.parametrization;
  *
  * @author Federico Tomassetti
  */
-public  interface ResolvedTypeParametrized {
+public interface ResolvedTypeParametrized {
 
     ResolvedTypeParametersMap typeParametersMap();
 }

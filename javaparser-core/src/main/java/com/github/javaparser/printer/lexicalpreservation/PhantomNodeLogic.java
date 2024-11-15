@@ -33,7 +33,7 @@ import java.util.Map;
  * @deprecated This class is no longer used phantom node are now an attribute of each node
  */
 @Deprecated
-public  class PhantomNodeLogic {
+public class PhantomNodeLogic {
 
     private static final int LEVELS_TO_EXPLORE = 3;
 
@@ -42,7 +42,7 @@ public  class PhantomNodeLogic {
     private static final AstObserver cacheCleaner = new AstObserverAdapter() {
 
         @Override
-        public  void parentChange(Node observedNode, Node previousParent, Node newParent) {
+        public void parentChange(Node observedNode, Node previousParent, Node newParent) {
             isPhantomNodeCache.remove(observedNode);
         }
     };

@@ -42,17 +42,17 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public  class ReturnStmt extends Statement {
+public class ReturnStmt extends Statement {
 
     @OptionalProperty
     private Expression expression;
 
-    public  ReturnStmt() {
+    public ReturnStmt() {
         this(null, null);
     }
 
     @AllFieldsConstructor
-    public  ReturnStmt(final Expression expression) {
+    public ReturnStmt(final Expression expression) {
         this(null, expression);
     }
 
@@ -60,7 +60,7 @@ public  class ReturnStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  ReturnStmt(TokenRange tokenRange, Expression expression) {
+    public ReturnStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);
         setExpression(expression);
         customInitialization();
@@ -69,24 +69,24 @@ public  class ReturnStmt extends Statement {
     /**
      * Will create a NameExpr with the string param
      */
-    public  ReturnStmt(String expression) {
+    public ReturnStmt(String expression) {
         this(null, new NameExpr(expression));
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<Expression> getExpression() {
+    public Optional<Expression> getExpression() {
         return Optional.ofNullable(expression);
     }
 
@@ -97,7 +97,7 @@ public  class ReturnStmt extends Statement {
      * @return this, the ReturnStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ReturnStmt setExpression(final Expression expression) {
+    public ReturnStmt setExpression(final Expression expression) {
         if (expression == this.expression) {
             return this;
         }
@@ -111,7 +111,7 @@ public  class ReturnStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -125,25 +125,25 @@ public  class ReturnStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  ReturnStmt removeExpression() {
+    public ReturnStmt removeExpression() {
         return setExpression((Expression) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  ReturnStmt clone() {
+    public ReturnStmt clone() {
         return (ReturnStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ReturnStmtMetaModel getMetaModel() {
+    public ReturnStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.returnStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -158,25 +158,25 @@ public  class ReturnStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isReturnStmt() {
+    public boolean isReturnStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ReturnStmt asReturnStmt() {
+    public ReturnStmt asReturnStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifReturnStmt(Consumer<ReturnStmt> action) {
+    public void ifReturnStmt(Consumer<ReturnStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ReturnStmt> toReturnStmt() {
+    public Optional<ReturnStmt> toReturnStmt() {
         return Optional.of(this);
     }
 }

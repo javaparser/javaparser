@@ -33,7 +33,7 @@ import java.util.List;
  * A Node with Modifiers.
  * Note that not all modifiers may be valid for this node.
  */
-public  interface NodeWithModifiers<N extends Node> {
+public interface NodeWithModifiers<N extends Node> {
 
     /**
      * Return the modifiers of this variable declaration.

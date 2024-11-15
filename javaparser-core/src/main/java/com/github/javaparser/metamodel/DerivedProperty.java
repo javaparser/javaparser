@@ -33,5 +33,5 @@ import java.lang.annotation.Target;
  */
 @Retention(RUNTIME)
 @Target(METHOD)
-public  @interface DerivedProperty {
+public @interface DerivedProperty {
 }

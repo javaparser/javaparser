@@ -27,17 +27,17 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (3/20/21)
  */
-public  class JmlSetComprehensionExpr extends Expression implements Jmlish {
+public class JmlSetComprehensionExpr extends Expression implements Jmlish {
 
     private VariableDeclarator binding;
 
     private Expression predicate;
 
-    public  JmlSetComprehensionExpr() {
+    public JmlSetComprehensionExpr() {
     }
 
     @AllFieldsConstructor
-    public  JmlSetComprehensionExpr(VariableDeclarator binding, Expression predicate) {
+    public JmlSetComprehensionExpr(VariableDeclarator binding, Expression predicate) {
         this.binding = binding;
         this.predicate = predicate;
     }
@@ -46,7 +46,7 @@ public  class JmlSetComprehensionExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlSetComprehensionExpr(TokenRange tokenRange, VariableDeclarator binding, Expression predicate) {
+    public JmlSetComprehensionExpr(TokenRange tokenRange, VariableDeclarator binding, Expression predicate) {
         super(tokenRange);
         setBinding(binding);
         setPredicate(predicate);
@@ -55,47 +55,47 @@ public  class JmlSetComprehensionExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlSetComprehension() {
+    public boolean isJmlSetComprehension() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlSetComprehensionExpr asJmlSetComprehension() {
+    public JmlSetComprehensionExpr asJmlSetComprehension() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlSetComprehensionExpr> toJmlSetComprehension() {
+    public Optional<JmlSetComprehensionExpr> toJmlSetComprehension() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlSetComprehension(Consumer<JmlSetComprehensionExpr> action) {
+    public void ifJmlSetComprehension(Consumer<JmlSetComprehensionExpr> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  VariableDeclarator getBinding() {
+    public VariableDeclarator getBinding() {
         return binding;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlSetComprehensionExpr setBinding(final VariableDeclarator binding) {
+    public JmlSetComprehensionExpr setBinding(final VariableDeclarator binding) {
         assertNotNull(binding);
         if (binding == this.binding) {
             return this;
@@ -109,12 +109,12 @@ public  class JmlSetComprehensionExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getPredicate() {
+    public Expression getPredicate() {
         return predicate;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlSetComprehensionExpr setPredicate(final Expression predicate) {
+    public JmlSetComprehensionExpr setPredicate(final Expression predicate) {
         assertNotNull(predicate);
         if (predicate == this.predicate) {
             return this;
@@ -129,7 +129,7 @@ public  class JmlSetComprehensionExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -146,37 +146,37 @@ public  class JmlSetComprehensionExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlSetComprehensionExpr clone() {
+    public JmlSetComprehensionExpr clone() {
         return (JmlSetComprehensionExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlSetComprehensionExprMetaModel getMetaModel() {
+    public JmlSetComprehensionExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlSetComprehensionExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlSetComprehensionExpr() {
+    public boolean isJmlSetComprehensionExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlSetComprehensionExpr asJmlSetComprehensionExpr() {
+    public JmlSetComprehensionExpr asJmlSetComprehensionExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlSetComprehensionExpr> toJmlSetComprehensionExpr() {
+    public Optional<JmlSetComprehensionExpr> toJmlSetComprehensionExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlSetComprehensionExpr(Consumer<JmlSetComprehensionExpr> action) {
+    public void ifJmlSetComprehensionExpr(Consumer<JmlSetComprehensionExpr> action) {
         action.accept(this);
     }
 }

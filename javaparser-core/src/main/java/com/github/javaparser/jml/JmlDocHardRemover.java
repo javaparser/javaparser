@@ -22,10 +22,10 @@ import java.util.Optional;
  * @author Alexander Weigl
  * @version 1 (2/1/22)
  */
-public  class JmlDocHardRemover extends Processor {
+public class JmlDocHardRemover extends Processor {
 
     @Override
-    public  void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+    public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (configuration.isProcessJml()) {
             final Optional<? extends Node> r = result.getResult();
             final Optional<CommentsCollection> comments = result.getCommentsCollection();
@@ -44,19 +44,19 @@ public  class JmlDocHardRemover extends Processor {
         private final List<Node> docs = new LinkedList<>();
 
         @Override
-        public  JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {
+        public JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {
             docs.add(n);
             return n;
         }
 
         @Override
-        public  Visitable visit(JmlDocStmt n, Void arg) {
+        public Visitable visit(JmlDocStmt n, Void arg) {
             docs.add(n);
             return n;
         }
 
         @Override
-        public  Visitable visit(Modifier n, Void arg) {
+        public Visitable visit(Modifier n, Void arg) {
             if (n.getKeyword() instanceof JmlDocModifier) {
                 docs.add(n);
             }
@@ -64,7 +64,7 @@ public  class JmlDocHardRemover extends Processor {
         }
 
         @Override
-        public  JmlDocType visit(JmlDocType n, Void arg) {
+        public JmlDocType visit(JmlDocType n, Void arg) {
             docs.add(n);
             return n;
         }

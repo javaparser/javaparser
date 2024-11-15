@@ -241,12 +241,12 @@ final class RemovedGroup implements Iterable<Removed> {
             private int currentIndex = 0;
 
             @Override
-            public  boolean hasNext() {
+            public boolean hasNext() {
                 return currentIndex < removedList.size() && removedList.get(currentIndex) != null;
             }
 
             @Override
-            public  Removed next() {
+            public Removed next() {
                 return removedList.get(currentIndex++);
             }
         };

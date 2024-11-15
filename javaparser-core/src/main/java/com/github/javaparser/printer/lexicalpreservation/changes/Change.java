@@ -28,7 +28,7 @@ import com.github.javaparser.utils.Utils;
 /**
  * This represents a change that has happened to a specific Node.
  */
-public  interface Change {
+public interface Change {
 
     default boolean evaluate(CsmConditional csmConditional, Node node) {
         switch(csmConditional.getCondition()) {

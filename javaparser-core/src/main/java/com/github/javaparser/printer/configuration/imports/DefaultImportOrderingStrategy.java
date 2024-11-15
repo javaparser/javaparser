@@ -28,12 +28,12 @@ import java.util.Comparator;
 import java.util.List;
 import static java.util.Comparator.comparingInt;
 
-public  class DefaultImportOrderingStrategy implements ImportOrderingStrategy {
+public class DefaultImportOrderingStrategy implements ImportOrderingStrategy {
 
     private boolean sortImportsAlphabetically = false;
 
     @Override
-    public  List<NodeList<ImportDeclaration>> sortImports(NodeList<ImportDeclaration> nodes) {
+    public List<NodeList<ImportDeclaration>> sortImports(NodeList<ImportDeclaration> nodes) {
         if (sortImportsAlphabetically) {
             Comparator<ImportDeclaration> sortLogic = comparingInt((ImportDeclaration i) -> i.isStatic() ? 0 : 1).thenComparing(NodeWithName::getNameAsString);
             nodes.sort(sortLogic);
@@ -42,12 +42,12 @@ public  class DefaultImportOrderingStrategy implements ImportOrderingStrategy {
     }
 
     @Override
-    public  void setSortImportsAlphabetically(boolean sortImportsAlphabetically) {
+    public void setSortImportsAlphabetically(boolean sortImportsAlphabetically) {
         this.sortImportsAlphabetically = sortImportsAlphabetically;
     }
 
     @Override
-    public  boolean isSortImportsAlphabetically() {
+    public boolean isSortImportsAlphabetically() {
         return sortImportsAlphabetically;
     }
 }

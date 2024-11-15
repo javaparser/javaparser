@@ -44,22 +44,22 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements NodeWithImplements<EnumDeclaration>, Resolvable<ResolvedEnumDeclaration> {
+public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements NodeWithImplements<EnumDeclaration>, Resolvable<ResolvedEnumDeclaration> {
 
     private NodeList<ClassOrInterfaceType> implementedTypes;
 
     private NodeList<EnumConstantDeclaration> entries;
 
-    public  EnumDeclaration() {
+    public EnumDeclaration() {
         this(null, new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
-    public  EnumDeclaration(NodeList<Modifier> modifiers, String name) {
+    public EnumDeclaration(NodeList<Modifier> modifiers, String name) {
         this(null, modifiers, new NodeList<>(), new SimpleName(name), new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public  EnumDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries, NodeList<BodyDeclaration<?>> members) {
+    public EnumDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries, NodeList<BodyDeclaration<?>> members) {
         this(null, modifiers, annotations, name, implementedTypes, entries, members);
     }
 
@@ -67,7 +67,7 @@ public  class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implement
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  EnumDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries, NodeList<BodyDeclaration<?>> members) {
+    public EnumDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<ClassOrInterfaceType> implementedTypes, NodeList<EnumConstantDeclaration> entries, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
         setImplementedTypes(implementedTypes);
         setEntries(entries);
@@ -76,42 +76,42 @@ public  class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implement
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<EnumConstantDeclaration> getEntries() {
+    public NodeList<EnumConstantDeclaration> getEntries() {
         return entries;
     }
 
-    public  EnumConstantDeclaration getEntry(int i) {
+    public EnumConstantDeclaration getEntry(int i) {
         return getEntries().get(i);
     }
 
-    public  EnumDeclaration setEntry(int i, EnumConstantDeclaration element) {
+    public EnumDeclaration setEntry(int i, EnumConstantDeclaration element) {
         getEntries().set(i, element);
         return this;
     }
 
-    public  EnumDeclaration addEntry(EnumConstantDeclaration element) {
+    public EnumDeclaration addEntry(EnumConstantDeclaration element) {
         getEntries().add(element);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<ClassOrInterfaceType> getImplementedTypes() {
+    public NodeList<ClassOrInterfaceType> getImplementedTypes() {
         return implementedTypes;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  EnumDeclaration setEntries(final NodeList<EnumConstantDeclaration> entries) {
+    public EnumDeclaration setEntries(final NodeList<EnumConstantDeclaration> entries) {
         assertNotNull(entries);
         if (entries == this.entries) {
             return this;
@@ -125,7 +125,7 @@ public  class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implement
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  EnumDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
+    public EnumDeclaration setImplementedTypes(final NodeList<ClassOrInterfaceType> implementedTypes) {
         assertNotNull(implementedTypes);
         if (implementedTypes == this.implementedTypes) {
             return this;
@@ -138,7 +138,7 @@ public  class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implement
         return this;
     }
 
-    public  EnumConstantDeclaration addEnumConstant(String name) {
+    public EnumConstantDeclaration addEnumConstant(String name) {
         assertNonEmpty(name);
         EnumConstantDeclaration enumConstant = new EnumConstantDeclaration(name);
         getEntries().add(enumConstant);
@@ -147,7 +147,7 @@ public  class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implement
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -168,19 +168,19 @@ public  class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implement
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  EnumDeclaration clone() {
+    public EnumDeclaration clone() {
         return (EnumDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  EnumDeclarationMetaModel getMetaModel() {
+    public EnumDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.enumDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -201,30 +201,30 @@ public  class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implement
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isEnumDeclaration() {
+    public boolean isEnumDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  EnumDeclaration asEnumDeclaration() {
+    public EnumDeclaration asEnumDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifEnumDeclaration(Consumer<EnumDeclaration> action) {
+    public void ifEnumDeclaration(Consumer<EnumDeclaration> action) {
         action.accept(this);
     }
 
     @Override
-    public  ResolvedEnumDeclaration resolve() {
+    public ResolvedEnumDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedEnumDeclaration.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<EnumDeclaration> toEnumDeclaration() {
+    public Optional<EnumDeclaration> toEnumDeclaration() {
         return Optional.of(this);
     }
 }

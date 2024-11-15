@@ -35,7 +35,7 @@ import com.github.javaparser.ast.Node;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class TypeDeclarationMetaModel extends BodyDeclarationMetaModel {
+public class TypeDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     TypeDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
@@ -47,9 +47,9 @@ public  class TypeDeclarationMetaModel extends BodyDeclarationMetaModel {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 
-    public  PropertyMetaModel membersPropertyMetaModel;
+    public PropertyMetaModel membersPropertyMetaModel;
 
-    public  PropertyMetaModel modifiersPropertyMetaModel;
+    public PropertyMetaModel modifiersPropertyMetaModel;
 
-    public  PropertyMetaModel namePropertyMetaModel;
+    public PropertyMetaModel namePropertyMetaModel;
 }

@@ -46,18 +46,18 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public  class IntegerLiteralExpr extends LiteralStringValueExpr {
+public class IntegerLiteralExpr extends LiteralStringValueExpr {
 
     public static final String MAX_31_BIT_UNSIGNED_VALUE_AS_STRING = "2147483648";
 
     public static final long MAX_31_BIT_UNSIGNED_VALUE_AS_LONG = 2147483648L;
 
-    public  IntegerLiteralExpr() {
+    public IntegerLiteralExpr() {
         this(null, "0");
     }
 
     @AllFieldsConstructor
-    public  IntegerLiteralExpr(final String value) {
+    public IntegerLiteralExpr(final String value) {
         this(null, value);
     }
 
@@ -65,7 +65,7 @@ public  class IntegerLiteralExpr extends LiteralStringValueExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  IntegerLiteralExpr(TokenRange tokenRange, String value) {
+    public IntegerLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
         customInitialization();
     }
@@ -75,19 +75,19 @@ public  class IntegerLiteralExpr extends LiteralStringValueExpr {
      * {@link #asNumber()} function for valid formats and how to construct literals holding negative values.
      */
     @Deprecated
-    public  IntegerLiteralExpr(final int value) {
+    public IntegerLiteralExpr(final int value) {
         this(null, String.valueOf(value));
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -98,7 +98,7 @@ public  class IntegerLiteralExpr extends LiteralStringValueExpr {
      * future releases
      */
     @Deprecated
-    public  int asInt() {
+    public int asInt() {
         String result = value.replaceAll("_", "");
         if (result.startsWith("0x") || result.startsWith("0X")) {
             return Integer.parseUnsignedInt(result.substring(2), 16);
@@ -126,7 +126,7 @@ public  class IntegerLiteralExpr extends LiteralStringValueExpr {
      *
      * @return the literal value as a number while respecting different number representations
      */
-    public  Number asNumber() {
+    public Number asNumber() {
         if (Objects.equals(value, MAX_31_BIT_UNSIGNED_VALUE_AS_STRING) && hasUnaryMinusAsParent(this)) {
             return MAX_31_BIT_UNSIGNED_VALUE_AS_LONG;
         }
@@ -138,44 +138,44 @@ public  class IntegerLiteralExpr extends LiteralStringValueExpr {
      * #asNumber()} function for valid formats and how to construct literals holding negative values.
      */
     @Deprecated
-    public  IntegerLiteralExpr setInt(int value) {
+    public IntegerLiteralExpr setInt(int value) {
         this.value = String.valueOf(value);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  IntegerLiteralExpr clone() {
+    public IntegerLiteralExpr clone() {
         return (IntegerLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  IntegerLiteralExprMetaModel getMetaModel() {
+    public IntegerLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.integerLiteralExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isIntegerLiteralExpr() {
+    public boolean isIntegerLiteralExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  IntegerLiteralExpr asIntegerLiteralExpr() {
+    public IntegerLiteralExpr asIntegerLiteralExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifIntegerLiteralExpr(Consumer<IntegerLiteralExpr> action) {
+    public void ifIntegerLiteralExpr(Consumer<IntegerLiteralExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<IntegerLiteralExpr> toIntegerLiteralExpr() {
+    public Optional<IntegerLiteralExpr> toIntegerLiteralExpr() {
         return Optional.of(this);
     }
 }

@@ -43,16 +43,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class ClassExpr extends Expression implements NodeWithType<ClassExpr, Type> {
+public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Type> {
 
     private Type type;
 
-    public  ClassExpr() {
+    public ClassExpr() {
         this(null, new ClassOrInterfaceType());
     }
 
     @AllFieldsConstructor
-    public  ClassExpr(Type type) {
+    public ClassExpr(Type type) {
         this(null, type);
     }
 
@@ -60,7 +60,7 @@ public  class ClassExpr extends Expression implements NodeWithType<ClassExpr, Ty
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  ClassExpr(TokenRange tokenRange, Type type) {
+    public ClassExpr(TokenRange tokenRange, Type type) {
         super(tokenRange);
         setType(type);
         customInitialization();
@@ -68,23 +68,23 @@ public  class ClassExpr extends Expression implements NodeWithType<ClassExpr, Ty
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Type getType() {
+    public Type getType() {
         return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ClassExpr setType(final Type type) {
+    public ClassExpr setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -99,19 +99,19 @@ public  class ClassExpr extends Expression implements NodeWithType<ClassExpr, Ty
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  ClassExpr clone() {
+    public ClassExpr clone() {
         return (ClassExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ClassExprMetaModel getMetaModel() {
+    public ClassExprMetaModel getMetaModel() {
         return JavaParserMetaModel.classExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -124,25 +124,25 @@ public  class ClassExpr extends Expression implements NodeWithType<ClassExpr, Ty
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isClassExpr() {
+    public boolean isClassExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ClassExpr asClassExpr() {
+    public ClassExpr asClassExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifClassExpr(Consumer<ClassExpr> action) {
+    public void ifClassExpr(Consumer<ClassExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ClassExpr> toClassExpr() {
+    public Optional<ClassExpr> toClassExpr() {
         return Optional.of(this);
     }
 }

@@ -40,18 +40,18 @@ import java.util.function.Consumer;
 /**
  * A require directive in module-info.java. {@code require a.b.C;}
  */
-public  class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
+public class ModuleRequiresDirective extends ModuleDirective implements NodeWithStaticModifier<ModuleRequiresDirective>, NodeWithName<ModuleRequiresDirective> {
 
     private NodeList<Modifier> modifiers;
 
     private Name name;
 
-    public  ModuleRequiresDirective() {
+    public ModuleRequiresDirective() {
         this(null, new NodeList<>(), new Name());
     }
 
     @AllFieldsConstructor
-    public  ModuleRequiresDirective(NodeList<Modifier> modifiers, Name name) {
+    public ModuleRequiresDirective(NodeList<Modifier> modifiers, Name name) {
         this(null, modifiers, name);
     }
 
@@ -59,7 +59,7 @@ public  class ModuleRequiresDirective extends ModuleDirective implements NodeWit
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  ModuleRequiresDirective(TokenRange tokenRange, NodeList<Modifier> modifiers, Name name) {
+    public ModuleRequiresDirective(TokenRange tokenRange, NodeList<Modifier> modifiers, Name name) {
         super(tokenRange);
         setModifiers(modifiers);
         setName(name);
@@ -68,23 +68,23 @@ public  class ModuleRequiresDirective extends ModuleDirective implements NodeWit
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ModuleRequiresDirective setModifiers(final NodeList<Modifier> modifiers) {
+    public ModuleRequiresDirective setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -98,12 +98,12 @@ public  class ModuleRequiresDirective extends ModuleDirective implements NodeWit
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Name getName() {
+    public Name getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ModuleRequiresDirective setName(final Name name) {
+    public ModuleRequiresDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -119,7 +119,7 @@ public  class ModuleRequiresDirective extends ModuleDirective implements NodeWit
     /*
      * A requires static directive indicates that a module is required at compile time, but is optional at runtime.
      */
-    public  boolean isStatic() {
+    public boolean isStatic() {
         return hasModifier(STATIC);
     }
 
@@ -127,17 +127,17 @@ public  class ModuleRequiresDirective extends ModuleDirective implements NodeWit
      * Requires transitive—implied readability.
      * To specify a dependency on another module and to ensure that other modules reading your module also read that dependency
      */
-    public  boolean isTransitive() {
+    public boolean isTransitive() {
         return hasModifier(TRANSITIVE);
     }
 
-    public  ModuleRequiresDirective setTransitive(boolean set) {
+    public ModuleRequiresDirective setTransitive(boolean set) {
         return setModifier(TRANSITIVE, set);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -152,13 +152,13 @@ public  class ModuleRequiresDirective extends ModuleDirective implements NodeWit
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  ModuleRequiresDirective clone() {
+    public ModuleRequiresDirective clone() {
         return (ModuleRequiresDirective) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -177,54 +177,54 @@ public  class ModuleRequiresDirective extends ModuleDirective implements NodeWit
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isModuleRequiresStmt() {
+    public boolean isModuleRequiresStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ModuleRequiresDirective asModuleRequiresStmt() {
+    public ModuleRequiresDirective asModuleRequiresStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifModuleRequiresStmt(Consumer<ModuleRequiresDirective> action) {
+    public void ifModuleRequiresStmt(Consumer<ModuleRequiresDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ModuleRequiresDirective> toModuleRequiresStmt() {
+    public Optional<ModuleRequiresDirective> toModuleRequiresStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isModuleRequiresDirective() {
+    public boolean isModuleRequiresDirective() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ModuleRequiresDirective asModuleRequiresDirective() {
+    public ModuleRequiresDirective asModuleRequiresDirective() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ModuleRequiresDirective> toModuleRequiresDirective() {
+    public Optional<ModuleRequiresDirective> toModuleRequiresDirective() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifModuleRequiresDirective(Consumer<ModuleRequiresDirective> action) {
+    public void ifModuleRequiresDirective(Consumer<ModuleRequiresDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ModuleRequiresDirectiveMetaModel getMetaModel() {
+    public ModuleRequiresDirectiveMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleRequiresDirectiveMetaModel;
     }
 }

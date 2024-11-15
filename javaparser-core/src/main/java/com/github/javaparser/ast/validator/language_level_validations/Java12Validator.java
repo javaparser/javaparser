@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/12/">https://openjdk.java.net/projects/jdk/12/</a>
  */
-public  class Java12Validator extends Java11Validator {
+public class Java12Validator extends Java11Validator {
 
-    public  Java12Validator() {
+    public Java12Validator() {
         super();
         // Released Language Features
         // No new released language features added within Java 12

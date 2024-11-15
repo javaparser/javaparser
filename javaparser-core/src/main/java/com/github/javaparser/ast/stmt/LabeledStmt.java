@@ -40,22 +40,22 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class LabeledStmt extends Statement {
+public class LabeledStmt extends Statement {
 
     private SimpleName label;
 
     private Statement statement;
 
-    public  LabeledStmt() {
+    public LabeledStmt() {
         this(null, new SimpleName(), new ReturnStmt());
     }
 
-    public  LabeledStmt(final String label, final Statement statement) {
+    public LabeledStmt(final String label, final Statement statement) {
         this(null, new SimpleName(label), statement);
     }
 
     @AllFieldsConstructor
-    public  LabeledStmt(final SimpleName label, final Statement statement) {
+    public LabeledStmt(final SimpleName label, final Statement statement) {
         this(null, label, statement);
     }
 
@@ -63,7 +63,7 @@ public  class LabeledStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  LabeledStmt(TokenRange tokenRange, SimpleName label, Statement statement) {
+    public LabeledStmt(TokenRange tokenRange, SimpleName label, Statement statement) {
         super(tokenRange);
         setLabel(label);
         setStatement(statement);
@@ -72,23 +72,23 @@ public  class LabeledStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Statement getStatement() {
+    public Statement getStatement() {
         return statement;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  LabeledStmt setStatement(final Statement statement) {
+    public LabeledStmt setStatement(final Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
             return this;
@@ -102,12 +102,12 @@ public  class LabeledStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SimpleName getLabel() {
+    public SimpleName getLabel() {
         return label;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  LabeledStmt setLabel(final SimpleName label) {
+    public LabeledStmt setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -122,19 +122,19 @@ public  class LabeledStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  LabeledStmt clone() {
+    public LabeledStmt clone() {
         return (LabeledStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  LabeledStmtMetaModel getMetaModel() {
+    public LabeledStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.labeledStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -151,25 +151,25 @@ public  class LabeledStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isLabeledStmt() {
+    public boolean isLabeledStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  LabeledStmt asLabeledStmt() {
+    public LabeledStmt asLabeledStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifLabeledStmt(Consumer<LabeledStmt> action) {
+    public void ifLabeledStmt(Consumer<LabeledStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<LabeledStmt> toLabeledStmt() {
+    public Optional<LabeledStmt> toLabeledStmt() {
         return Optional.of(this);
     }
 }

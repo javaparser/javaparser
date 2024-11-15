@@ -20,7 +20,7 @@
  */
 package com.github.javaparser.resolution.types;
 
-public  class ResolvedLambdaConstraintType implements ResolvedType {
+public class ResolvedLambdaConstraintType implements ResolvedType {
 
     private ResolvedType bound;
 
@@ -29,21 +29,21 @@ public  class ResolvedLambdaConstraintType implements ResolvedType {
     }
 
     @Override
-    public  String describe() {
+    public String describe() {
         return "? super " + bound.describe();
     }
 
-    public  ResolvedType getBound() {
+    public ResolvedType getBound() {
         return bound;
     }
 
     @Override
-    public  boolean isConstraint() {
+    public boolean isConstraint() {
         return true;
     }
 
     @Override
-    public  ResolvedLambdaConstraintType asConstraintType() {
+    public ResolvedLambdaConstraintType asConstraintType() {
         return this;
     }
 
@@ -52,12 +52,12 @@ public  class ResolvedLambdaConstraintType implements ResolvedType {
     }
 
     @Override
-    public  boolean isAssignableBy(ResolvedType other) {
+    public boolean isAssignableBy(ResolvedType other) {
         return bound.isAssignableBy(other);
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "LambdaConstraintType{" + "bound=" + bound + '}';
     }
 }

@@ -27,7 +27,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 /**
  * A node that can be static.
  */
-public  interface NodeWithStaticModifier<N extends Node> extends NodeWithModifiers<N> {
+public interface NodeWithStaticModifier<N extends Node> extends NodeWithModifiers<N> {
 
     /**
      * @return true, if the modifier {@code static} is explicitly added to this node. If the node is implicitly static

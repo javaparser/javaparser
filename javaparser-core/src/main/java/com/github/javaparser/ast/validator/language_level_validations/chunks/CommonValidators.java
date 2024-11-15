@@ -34,9 +34,9 @@ import com.github.javaparser.metamodel.PropertyMetaModel;
 /**
  * Contains validations that are valid for every Java version.
  */
-public  class CommonValidators extends Validators {
+public class CommonValidators extends Validators {
 
-    public  CommonValidators() {
+    public CommonValidators() {
         super(new SimpleValidator<>(ClassOrInterfaceDeclaration.class, n -> !n.isInterface() && n.getExtendedTypes().size() > 1, (n, reporter) -> reporter.report(n.getExtendedTypes(1), "A class cannot extend more than one other class.")), new SimpleValidator<>(ClassOrInterfaceDeclaration.class, n -> n.isInterface() && !n.getImplementedTypes().isEmpty(), (n, reporter) -> reporter.report(n.getImplementedTypes(0), "An interface cannot implement other interfaces.")), new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, (n, reporter) -> {
             if (n.isInterface()) {
                 n.getMembers().forEach(mem -> {

@@ -34,14 +34,14 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class ArrayTypeMetaModel extends ReferenceTypeMetaModel {
+public class ArrayTypeMetaModel extends ReferenceTypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ArrayTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, ArrayType.class, "ArrayType", "com.github.javaparser.ast.type", false, false);
     }
 
-    public  PropertyMetaModel componentTypePropertyMetaModel;
+    public PropertyMetaModel componentTypePropertyMetaModel;
 
-    public  PropertyMetaModel originPropertyMetaModel;
+    public PropertyMetaModel originPropertyMetaModel;
 }

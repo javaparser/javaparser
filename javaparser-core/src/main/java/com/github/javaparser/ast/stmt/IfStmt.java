@@ -46,7 +46,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
+public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     private Expression condition;
 
@@ -55,12 +55,12 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     @OptionalProperty
     private Statement elseStmt;
 
-    public  IfStmt() {
+    public IfStmt() {
         this(null, new BooleanLiteralExpr(), new ReturnStmt(), null);
     }
 
     @AllFieldsConstructor
-    public  IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
+    public IfStmt(final Expression condition, final Statement thenStmt, final Statement elseStmt) {
         this(null, condition, thenStmt, elseStmt);
     }
 
@@ -68,7 +68,7 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  IfStmt(TokenRange tokenRange, Expression condition, Statement thenStmt, Statement elseStmt) {
+    public IfStmt(TokenRange tokenRange, Expression condition, Statement thenStmt, Statement elseStmt) {
         super(tokenRange);
         setCondition(condition);
         setThenStmt(thenStmt);
@@ -78,33 +78,33 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Expression getCondition() {
+    public Expression getCondition() {
         return condition;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<Statement> getElseStmt() {
+    public Optional<Statement> getElseStmt() {
         return Optional.ofNullable(elseStmt);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Statement getThenStmt() {
+    public Statement getThenStmt() {
         return thenStmt;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  IfStmt setCondition(final Expression condition) {
+    public IfStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
@@ -124,7 +124,7 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
      * @return this, the IfStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  IfStmt setElseStmt(final Statement elseStmt) {
+    public IfStmt setElseStmt(final Statement elseStmt) {
         if (elseStmt == this.elseStmt) {
             return this;
         }
@@ -137,7 +137,7 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  IfStmt setThenStmt(final Statement thenStmt) {
+    public IfStmt setThenStmt(final Statement thenStmt) {
         assertNotNull(thenStmt);
         if (thenStmt == this.thenStmt) {
             return this;
@@ -152,7 +152,7 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -166,7 +166,7 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  IfStmt removeElseStmt() {
+    public IfStmt removeElseStmt() {
         return setElseStmt((Statement) null);
     }
 
@@ -174,7 +174,7 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
      * This method returns true if the then branch (which should be always present) is a block statement.
      */
     @DerivedProperty
-    public  boolean hasThenBlock() {
+    public boolean hasThenBlock() {
         return thenStmt instanceof BlockStmt;
     }
 
@@ -182,7 +182,7 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
      * This method returns true if the If Statement has an else branch and that branch is a block statement.
      */
     @DerivedProperty
-    public  boolean hasElseBlock() {
+    public boolean hasElseBlock() {
         return elseStmt instanceof BlockStmt;
     }
 
@@ -190,7 +190,7 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
      * This method returns true if the If Statement has an else branch and that branch is another If Statement.
      */
     @DerivedProperty
-    public  boolean hasCascadingIfStmt() {
+    public boolean hasCascadingIfStmt() {
         return elseStmt instanceof IfStmt;
     }
 
@@ -198,25 +198,25 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
      * This method returns true if the If Statement has an else branch.
      */
     @DerivedProperty
-    public  boolean hasElseBranch() {
+    public boolean hasElseBranch() {
         return elseStmt != null;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  IfStmt clone() {
+    public IfStmt clone() {
         return (IfStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  IfStmtMetaModel getMetaModel() {
+    public IfStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.ifStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -239,25 +239,25 @@ public  class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isIfStmt() {
+    public boolean isIfStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  IfStmt asIfStmt() {
+    public IfStmt asIfStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifIfStmt(Consumer<IfStmt> action) {
+    public void ifIfStmt(Consumer<IfStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<IfStmt> toIfStmt() {
+    public Optional<IfStmt> toIfStmt() {
         return Optional.of(this);
     }
 }

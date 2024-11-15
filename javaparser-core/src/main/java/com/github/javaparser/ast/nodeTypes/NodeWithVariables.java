@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * A node which has a list of variables.
  */
-public  interface NodeWithVariables<N extends Node> {
+public interface NodeWithVariables<N extends Node> {
 
     NodeList<VariableDeclarator> getVariables();
 

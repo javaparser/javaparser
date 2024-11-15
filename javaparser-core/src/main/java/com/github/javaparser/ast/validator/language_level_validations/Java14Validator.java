@@ -31,7 +31,7 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Rec
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/14/">https://openjdk.java.net/projects/jdk/14/</a>
  */
-public  class Java14Validator extends Java13Validator {
+public class Java14Validator extends Java13Validator {
 
     /**
      * With the introduction of record classes, {@code record} is no longer permitted as an identifier.
@@ -48,7 +48,7 @@ public  class Java14Validator extends Java13Validator {
 
     final Validator recordDeclarationValidator = new SingleNodeTypeValidator<>(RecordDeclaration.class, new RecordDeclarationValidator());
 
-    public  Java14Validator() {
+    public Java14Validator() {
         super();
         // Released Language Features
         {

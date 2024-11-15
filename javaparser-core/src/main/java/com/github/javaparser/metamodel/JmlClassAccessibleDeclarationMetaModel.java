@@ -34,20 +34,20 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class JmlClassAccessibleDeclarationMetaModel extends JmlClassLevelDeclarationMetaModel {
+public class JmlClassAccessibleDeclarationMetaModel extends JmlClassLevelDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlClassAccessibleDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlClassAccessibleDeclaration.class, "JmlClassAccessibleDeclaration", "com.github.javaparser.ast.jml.body", false, false);
     }
 
-    public  PropertyMetaModel expressionsPropertyMetaModel;
+    public PropertyMetaModel expressionsPropertyMetaModel;
 
-    public  PropertyMetaModel jmlTagsPropertyMetaModel;
+    public PropertyMetaModel jmlTagsPropertyMetaModel;
 
-    public  PropertyMetaModel measuredByPropertyMetaModel;
+    public PropertyMetaModel measuredByPropertyMetaModel;
 
-    public  PropertyMetaModel modifiersPropertyMetaModel;
+    public PropertyMetaModel modifiersPropertyMetaModel;
 
-    public  PropertyMetaModel variablePropertyMetaModel;
+    public PropertyMetaModel variablePropertyMetaModel;
 }

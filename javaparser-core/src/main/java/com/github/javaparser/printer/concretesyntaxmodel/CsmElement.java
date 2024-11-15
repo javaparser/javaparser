@@ -31,7 +31,7 @@ import com.github.javaparser.utils.LineSeparator;
 import java.util.Arrays;
 import java.util.List;
 
-public  interface CsmElement {
+public interface CsmElement {
 
     void prettyPrint(Node node, SourcePrinter printer);
 

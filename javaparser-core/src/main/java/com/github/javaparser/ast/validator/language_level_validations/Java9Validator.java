@@ -31,7 +31,7 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Und
  *
  * @see <a href="https://openjdk.java.net/projects/jdk9/">https://openjdk.java.net/projects/jdk9/</a>
  */
-public  class Java9Validator extends Java8Validator {
+public class Java9Validator extends Java8Validator {
 
     final Validator underscoreKeywordValidator = new UnderscoreKeywordValidator();
 
@@ -43,7 +43,7 @@ public  class Java9Validator extends Java8Validator {
         }
     });
 
-    public  Java9Validator() {
+    public Java9Validator() {
         super();
         // Released Language Features
         /*

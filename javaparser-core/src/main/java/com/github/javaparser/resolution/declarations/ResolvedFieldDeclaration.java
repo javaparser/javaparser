@@ -25,7 +25,7 @@ package com.github.javaparser.resolution.declarations;
  *
  * @author Federico Tomassetti
  */
-public  interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier {
+public interface ResolvedFieldDeclaration extends ResolvedValueDeclaration, HasAccessSpecifier {
 
     /**
      * Is the field static?

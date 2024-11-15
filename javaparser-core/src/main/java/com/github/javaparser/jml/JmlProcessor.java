@@ -42,10 +42,10 @@ import java.util.stream.IntStream;
  * @see ParserConfiguration#isProcessJml()
  * @see ParserConfiguration#getJmlKeys()
  */
-public  class JmlProcessor extends Processor {
+public class JmlProcessor extends Processor {
 
     @Override
-    public  void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+    public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (configuration.isProcessJml()) {
             final Optional<? extends Node> r = result.getResult();
             final Optional<CommentsCollection> comments = result.getCommentsCollection();
@@ -137,7 +137,7 @@ public  class JmlProcessor extends Processor {
         }
 
         @Override
-        public  JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {
+        public JmlDocDeclaration visit(JmlDocDeclaration n, Void arg) {
             processedJmlDoc.add(n);
             ArbitraryNodeContainer t = parseJmlClasslevel(n.getJmlComments());
             if (t != null) {
@@ -178,7 +178,7 @@ public  class JmlProcessor extends Processor {
         }
 
         @Override
-        public  Visitable visit(JmlDocType n, Void arg) {
+        public Visitable visit(JmlDocType n, Void arg) {
             processedJmlDoc.add(n);
             ArbitraryNodeContainer t = parseJmlTypeLevel(n.getJmlComments());
             if (t != null) {
@@ -201,7 +201,7 @@ public  class JmlProcessor extends Processor {
         }
 
         @Override
-        public  BlockStmt visit(BlockStmt n, Void arg) {
+        public BlockStmt visit(BlockStmt n, Void arg) {
             n.getContracts().accept(this, arg);
             for (int pos = 0; pos < n.getStatements().size(); pos++) {
                 Statement s = n.getStatement(pos);
@@ -266,7 +266,7 @@ public  class JmlProcessor extends Processor {
         }
 
         @Override
-        public  Visitable visit(Modifier n, Void arg) {
+        public Visitable visit(Modifier n, Void arg) {
             if (n.getKeyword() instanceof JmlDocModifier) {
                 handleModifier(n);
                 return null;

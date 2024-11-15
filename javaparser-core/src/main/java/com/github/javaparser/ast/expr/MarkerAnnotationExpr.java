@@ -39,18 +39,18 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public  class MarkerAnnotationExpr extends AnnotationExpr {
+public class MarkerAnnotationExpr extends AnnotationExpr {
 
-    public  MarkerAnnotationExpr() {
+    public MarkerAnnotationExpr() {
         this(null, new Name());
     }
 
-    public  MarkerAnnotationExpr(final String name) {
+    public MarkerAnnotationExpr(final String name) {
         this(null, parseName(name));
     }
 
     @AllFieldsConstructor
-    public  MarkerAnnotationExpr(final Name name) {
+    public MarkerAnnotationExpr(final Name name) {
         this(null, name);
     }
 
@@ -58,56 +58,56 @@ public  class MarkerAnnotationExpr extends AnnotationExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  MarkerAnnotationExpr(TokenRange tokenRange, Name name) {
+    public MarkerAnnotationExpr(TokenRange tokenRange, Name name) {
         super(tokenRange, name);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  MarkerAnnotationExpr clone() {
+    public MarkerAnnotationExpr clone() {
         return (MarkerAnnotationExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  MarkerAnnotationExprMetaModel getMetaModel() {
+    public MarkerAnnotationExprMetaModel getMetaModel() {
         return JavaParserMetaModel.markerAnnotationExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isMarkerAnnotationExpr() {
+    public boolean isMarkerAnnotationExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  MarkerAnnotationExpr asMarkerAnnotationExpr() {
+    public MarkerAnnotationExpr asMarkerAnnotationExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifMarkerAnnotationExpr(Consumer<MarkerAnnotationExpr> action) {
+    public void ifMarkerAnnotationExpr(Consumer<MarkerAnnotationExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<MarkerAnnotationExpr> toMarkerAnnotationExpr() {
+    public Optional<MarkerAnnotationExpr> toMarkerAnnotationExpr() {
         return Optional.of(this);
     }
 }

@@ -58,7 +58,7 @@ import java.util.*;
  * operating on the AST and then used them to reproduce the source code
  * in its original formatting including the AST changes.
  */
-public  class LexicalPreservingPrinter {
+public class LexicalPreservingPrinter {
 
     private static String JAVA_UTIL_OPTIONAL = Optional.class.getCanonicalName();
 
@@ -121,7 +121,7 @@ public  class LexicalPreservingPrinter {
     private static class Observer extends PropagatingAstObserver {
 
         @Override
-        public  void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+        public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
             if (oldValue == newValue) {
                 // Not really a change, ignore
                 return;
@@ -134,9 +134,10 @@ public  class LexicalPreservingPrinter {
                 NodeText nodeText = parentNode.map(parent -> getOrCreateNodeText(parentNode.get())).orElseGet(() -> getOrCreateNodeText(observedNode));
                 if (oldValue == null) {
                     // this case corresponds to the addition of a comment
-                    int index = parentNode.isPresent() ? // Find the position of the comment node and put in front of it the [...]
-                    nodeText.findChild(observedNode) : //
-                    0;
+                    // Find the position of the comment node and put in front of it the [...]
+                    int // Find the position of the comment node and put in front of it the [...]
+                    index = //
+                    parentNode.isPresent() ? nodeText.findChild(observedNode) : 0;
                     /* Add the same indentation to the comment as the previous node
                      * for example if we want to add a comment on the body of the method declaration :
                      * Actual code
@@ -378,7 +379,7 @@ public  class LexicalPreservingPrinter {
         }
 
         @Override
-        public  void concreteListChange(NodeList<?> changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+        public void concreteListChange(NodeList<?> changedList, ListChangeType type, int index, Node nodeAddedOrRemoved) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
             final List<DifferenceElement> differenceElements;
             if (type == AstObserver.ListChangeType.REMOVAL) {
@@ -393,7 +394,7 @@ public  class LexicalPreservingPrinter {
         }
 
         @Override
-        public  void concreteListReplacement(NodeList<?> changedList, int index, Node oldValue, Node newValue) {
+        public void concreteListReplacement(NodeList<?> changedList, int index, Node oldValue, Node newValue) {
             NodeText nodeText = getOrCreateNodeText(changedList.getParentNodeForChildren());
             List<DifferenceElement> differenceElements = LEXICAL_DIFFERENCE_CALCULATOR.calculateListReplacementDifference(findNodeListName(changedList), changedList, index, newValue);
             Difference difference = new Difference(differenceElements, nodeText, changedList.getParentNodeForChildren());
@@ -419,7 +420,7 @@ public  class LexicalPreservingPrinter {
             new TreeVisitor() {
 
                 @Override
-                public  void process(Node node) {
+                public void process(Node node) {
                     if (!node.isPhantom()) {
                         storeInitialTextForOneNode(node, tokensByNode.get(node));
                     }

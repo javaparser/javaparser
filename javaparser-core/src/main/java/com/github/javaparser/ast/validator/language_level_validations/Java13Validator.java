@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/13/">https://openjdk.java.net/projects/jdk/13/</a>
  */
-public  class Java13Validator extends Java12Validator {
+public class Java13Validator extends Java12Validator {
 
-    public  Java13Validator() {
+    public Java13Validator() {
         super();
         // Released Language Features
         // No new released language features added in Java 13

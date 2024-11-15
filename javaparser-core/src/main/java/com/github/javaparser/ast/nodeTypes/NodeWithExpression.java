@@ -27,7 +27,7 @@ import com.github.javaparser.ast.expr.Expression;
 /**
  * A node that has an expression in it.
  */
-public  interface NodeWithExpression<N extends Node> {
+public interface NodeWithExpression<N extends Node> {
 
     Expression getExpression();
 

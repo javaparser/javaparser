@@ -27,7 +27,7 @@ import java.util.Optional;
  * Represents a node which has a scope expression that can be traversed/walked.
  * This unifies scope access for NodeWithScope and NodeWithOptionalScope.
  */
-public  interface NodeWithTraversableScope {
+public interface NodeWithTraversableScope {
 
     /**
      * @return the scope of this node, regardless of optionality.

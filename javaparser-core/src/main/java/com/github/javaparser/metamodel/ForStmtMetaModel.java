@@ -34,20 +34,20 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class ForStmtMetaModel extends StatementMetaModel {
+public class ForStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ForStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, ForStmt.class, "ForStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public  PropertyMetaModel bodyPropertyMetaModel;
+    public PropertyMetaModel bodyPropertyMetaModel;
 
-    public  PropertyMetaModel comparePropertyMetaModel;
+    public PropertyMetaModel comparePropertyMetaModel;
 
-    public  PropertyMetaModel contractsPropertyMetaModel;
+    public PropertyMetaModel contractsPropertyMetaModel;
 
-    public  PropertyMetaModel initializationPropertyMetaModel;
+    public PropertyMetaModel initializationPropertyMetaModel;
 
-    public  PropertyMetaModel updatePropertyMetaModel;
+    public PropertyMetaModel updatePropertyMetaModel;
 }

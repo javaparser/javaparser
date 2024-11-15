@@ -21,60 +21,60 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (06.03.22)
  */
-public  class JmlEndStmt extends JmlStatement implements NodeWithJmlTags<JmlEndStmt> {
+public class JmlEndStmt extends JmlStatement implements NodeWithJmlTags<JmlEndStmt> {
 
     private NodeList<SimpleName> jmlTags;
 
     @AllFieldsConstructor
-    public  JmlEndStmt(NodeList<SimpleName> jmlTags) {
+    public JmlEndStmt(NodeList<SimpleName> jmlTags) {
         this(null, jmlTags);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlEndStmt() {
+    public boolean isJmlEndStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlEndStmt asJmlEndStmt() {
+    public JmlEndStmt asJmlEndStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlEndStmt> toJmlEndStmt() {
+    public Optional<JmlEndStmt> toJmlEndStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlEndStmt(Consumer<JmlEndStmt> action) {
+    public void ifJmlEndStmt(Consumer<JmlEndStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlEndStmt clone() {
+    public JmlEndStmt clone() {
         return (JmlEndStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlEndStmtMetaModel getMetaModel() {
+    public JmlEndStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlEndStmtMetaModel;
     }
 
@@ -82,19 +82,19 @@ public  class JmlEndStmt extends JmlStatement implements NodeWithJmlTags<JmlEndS
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlEndStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags) {
+    public JmlEndStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags) {
         super(tokenRange);
         setJmlTags(jmlTags);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<SimpleName> getJmlTags() {
+    public NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlEndStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlEndStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -109,7 +109,7 @@ public  class JmlEndStmt extends JmlStatement implements NodeWithJmlTags<JmlEndS
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -124,7 +124,7 @@ public  class JmlEndStmt extends JmlStatement implements NodeWithJmlTags<JmlEndS
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }

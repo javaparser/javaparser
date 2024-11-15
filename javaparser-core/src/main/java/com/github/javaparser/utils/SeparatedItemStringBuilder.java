@@ -25,7 +25,7 @@ package com.github.javaparser.utils;
  * <br>Example: (1,2,3) which has prefix "(", separator ",", postfix ")" and the items 1 through 3.
  * <p>Java 8 offers the very nice Collectors.joining(String, String, String) which does the same thing.
  */
-public  class SeparatedItemStringBuilder {
+public class SeparatedItemStringBuilder {
 
     private final String separator;
 
@@ -35,7 +35,7 @@ public  class SeparatedItemStringBuilder {
 
     private StringBuilder builder;
 
-    public  SeparatedItemStringBuilder(String prefix, String separator, String postfix) {
+    public SeparatedItemStringBuilder(String prefix, String separator, String postfix) {
         builder = new StringBuilder(prefix);
         this.separator = separator;
         this.postfix = postfix;
@@ -44,7 +44,7 @@ public  class SeparatedItemStringBuilder {
     /**
      * Add one item. Either pass a string, or a format for String.format and corresponding arguments.
      */
-    public  SeparatedItemStringBuilder append(CharSequence format, Object... args) {
+    public SeparatedItemStringBuilder append(CharSequence format, Object... args) {
         if (hasItems) {
             builder.append(separator);
         }
@@ -53,7 +53,7 @@ public  class SeparatedItemStringBuilder {
         return this;
     }
 
-    public  boolean hasItems() {
+    public boolean hasItems() {
         return hasItems;
     }
 
@@ -61,7 +61,7 @@ public  class SeparatedItemStringBuilder {
      * Convert the builder into its final string representation.
      */
     @Override
-    public  String toString() {
+    public String toString() {
         // This order of toStringing avoids debuggers from making a mess.
         return builder.toString() + postfix;
     }

@@ -40,16 +40,16 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public  class BooleanLiteralExpr extends LiteralExpr {
+public class BooleanLiteralExpr extends LiteralExpr {
 
     private boolean value;
 
-    public  BooleanLiteralExpr() {
+    public BooleanLiteralExpr() {
         this(null, false);
     }
 
     @AllFieldsConstructor
-    public  BooleanLiteralExpr(boolean value) {
+    public BooleanLiteralExpr(boolean value) {
         this(null, value);
     }
 
@@ -57,7 +57,7 @@ public  class BooleanLiteralExpr extends LiteralExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  BooleanLiteralExpr(TokenRange tokenRange, boolean value) {
+    public BooleanLiteralExpr(TokenRange tokenRange, boolean value) {
         super(tokenRange);
         setValue(value);
         customInitialization();
@@ -65,13 +65,13 @@ public  class BooleanLiteralExpr extends LiteralExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -80,16 +80,16 @@ public  class BooleanLiteralExpr extends LiteralExpr {
      * but "getValue" does the same and makes more sense.
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  boolean isValue() {
+    public boolean isValue() {
         return value;
     }
 
-    public  boolean getValue() {
+    public boolean getValue() {
         return isValue();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  BooleanLiteralExpr setValue(final boolean value) {
+    public BooleanLiteralExpr setValue(final boolean value) {
         if (value == this.value) {
             return this;
         }
@@ -100,37 +100,37 @@ public  class BooleanLiteralExpr extends LiteralExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  BooleanLiteralExpr clone() {
+    public BooleanLiteralExpr clone() {
         return (BooleanLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  BooleanLiteralExprMetaModel getMetaModel() {
+    public BooleanLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.booleanLiteralExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isBooleanLiteralExpr() {
+    public boolean isBooleanLiteralExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  BooleanLiteralExpr asBooleanLiteralExpr() {
+    public BooleanLiteralExpr asBooleanLiteralExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifBooleanLiteralExpr(Consumer<BooleanLiteralExpr> action) {
+    public void ifBooleanLiteralExpr(Consumer<BooleanLiteralExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<BooleanLiteralExpr> toBooleanLiteralExpr() {
+    public Optional<BooleanLiteralExpr> toBooleanLiteralExpr() {
         return Optional.of(this);
     }
 }

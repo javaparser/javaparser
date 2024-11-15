@@ -34,7 +34,7 @@ import java.util.Objects;
  * @param <E> the type of elements returned by this iterator.
  * @since 4.0
  */
-public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E> {
+public class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E> {
 
     /**
      * The iterator being decorated.
@@ -66,7 +66,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
      * @return a new peeking iterator
      * @throws NullPointerException if the iterator is null
      */
-    public  <E> PeekingIterator<E> peekingIterator(final ListIterator<E> iterator) {
+    public <E> PeekingIterator<E> peekingIterator(final ListIterator<E> iterator) {
         Objects.requireNonNull(iterator, "iterator");
         if (iterator instanceof PeekingIterator<?>) {
             final PeekingIterator<E> it = (PeekingIterator<E>) iterator;
@@ -80,7 +80,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
      *
      * @param iterator  the iterator to decorate
      */
-    public  PeekingIterator(final ListIterator<E> iterator) {
+    public PeekingIterator(final ListIterator<E> iterator) {
         this.iterator = iterator;
     }
 
@@ -89,7 +89,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
      *
      * @param list  the provider of the iterator to decorate
      */
-    public  PeekingIterator(final List<E> list) {
+    public PeekingIterator(final List<E> list) {
         this.iterator = list.listIterator();
     }
 
@@ -108,7 +108,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
     }
 
     @Override
-    public  boolean hasNext() {
+    public boolean hasNext() {
         if (exhausted) {
             return false;
         }
@@ -128,7 +128,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
      * @return the next element from the iterator
      */
     @Override
-    public  E peek() {
+    public E peek() {
         fill();
         return exhausted ? null : slot;
     }
@@ -141,7 +141,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
      * @throws NoSuchElementException if the iterator is already exhausted according to {@link #hasNext()}
      */
     @Override
-    public  E element() {
+    public E element() {
         fill();
         if (exhausted) {
             throw new NoSuchElementException();
@@ -150,7 +150,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
     }
 
     @Override
-    public  E next() {
+    public E next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
@@ -168,7 +168,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
      *   prior to the call to {@link #remove()}
      */
     @Override
-    public  void remove() {
+    public void remove() {
         if (slotFilled) {
             throw new IllegalStateException("peek() or element() called before remove()");
         }
@@ -176,17 +176,17 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
     }
 
     @Override
-    public  boolean hasPrevious() {
+    public boolean hasPrevious() {
         return iterator.hasPrevious();
     }
 
     @Override
-    public  E previous() {
+    public E previous() {
         return iterator.previous();
     }
 
     @Override
-    public  int nextIndex() {
+    public int nextIndex() {
         return iterator.nextIndex();
     }
 
@@ -195,19 +195,19 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
      * Returns list size - 1 if the listiterator is at the end of the list.
      * Returns -1 if the listiterator is at the beginning of the list.
      */
-    public  int currentIndex() {
+    public int currentIndex() {
         if (!hasPrevious())
             return previousIndex();
         return nextIndex() - 1;
     }
 
     @Override
-    public  int previousIndex() {
+    public int previousIndex() {
         return iterator.previousIndex();
     }
 
     @Override
-    public  void set(E e) {
+    public void set(E e) {
         if (slotFilled) {
             throw new IllegalStateException("peek() or element() called before set()");
         }
@@ -215,7 +215,7 @@ public  class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E
     }
 
     @Override
-    public  void add(E e) {
+    public void add(E e) {
         if (slotFilled) {
             throw new IllegalStateException("peek() or element() called before add()");
         }

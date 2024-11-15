@@ -21,64 +21,64 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public  class JmlDocStmt extends Statement implements JmlDocContainer {
+public class JmlDocStmt extends Statement implements JmlDocContainer {
 
     private NodeList<JmlDoc> jmlComments;
 
     @AllFieldsConstructor
-    public  JmlDocStmt(NodeList<JmlDoc> jmlComments) {
+    public JmlDocStmt(NodeList<JmlDoc> jmlComments) {
         this(null, jmlComments);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlDocStmt() {
+    public boolean isJmlDocStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlDocStmt asJmlDocStmt() {
+    public JmlDocStmt asJmlDocStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlDocStmt> toJmlDocStmt() {
+    public Optional<JmlDocStmt> toJmlDocStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlDocStmt(Consumer<JmlDocStmt> action) {
+    public void ifJmlDocStmt(Consumer<JmlDocStmt> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<JmlDoc> getJmlComments() {
+    public NodeList<JmlDoc> getJmlComments() {
         return jmlComments;
     }
 
-    public  JmlDocStmt setJmlComments(final JavaToken jmlComments) {
+    public JmlDocStmt setJmlComments(final JavaToken jmlComments) {
         assertNotNull(jmlComments);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -93,7 +93,7 @@ public  class JmlDocStmt extends Statement implements JmlDocContainer {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -108,27 +108,27 @@ public  class JmlDocStmt extends Statement implements JmlDocContainer {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlDocStmt clone() {
+    public JmlDocStmt clone() {
         return (JmlDocStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlDocStmtMetaModel getMetaModel() {
+    public JmlDocStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlDocStmtMetaModel;
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
-    public  JmlDocStmt(TokenRange tokenRange, JavaToken jmlComments) {
+    public JmlDocStmt(TokenRange tokenRange, JavaToken jmlComments) {
         super(tokenRange);
         setJmlComments(jmlComments);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlDocStmt setJmlComments(final NodeList<JmlDoc> jmlComments) {
+    public JmlDocStmt setJmlComments(final NodeList<JmlDoc> jmlComments) {
         assertNotNull(jmlComments);
         if (jmlComments == this.jmlComments) {
             return this;
@@ -145,7 +145,7 @@ public  class JmlDocStmt extends Statement implements JmlDocContainer {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlDocStmt(TokenRange tokenRange, NodeList<JmlDoc> jmlComments) {
+    public JmlDocStmt(TokenRange tokenRange, NodeList<JmlDoc> jmlComments) {
         super(tokenRange);
         setJmlComments(jmlComments);
         customInitialization();

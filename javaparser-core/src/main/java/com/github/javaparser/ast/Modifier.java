@@ -34,7 +34,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 /**
  * A modifier, like private, public, or volatile.
  */
-public  class Modifier extends Node {
+public class Modifier extends Node {
 
     public static Modifier publicModifier() {
         return new Modifier(DefaultKeyword.PUBLIC);
@@ -120,7 +120,7 @@ public  class Modifier extends Node {
         return new Modifier(DefaultKeyword.JML_SPEC_PRIVATE);
     }
 
-    public  interface Keyword {
+    public interface Keyword {
 
         String asString();
 
@@ -138,7 +138,7 @@ public  class Modifier extends Node {
     /**
      * The Java modifier keywords.
      */
-    public  enum DefaultKeyword implements Keyword {
+    public enum DefaultKeyword implements Keyword {
 
         DEFAULT("default"),
         PUBLIC("public"),
@@ -193,19 +193,19 @@ public  class Modifier extends Node {
          * @return the Java keyword represented by this enum constant.
          */
         @Override
-        public  String asString() {
+        public String asString() {
             return codeRepresentation;
         }
     }
 
     private Keyword keyword;
 
-    public  Modifier() {
+    public Modifier() {
         this(DefaultKeyword.PUBLIC);
     }
 
     @AllFieldsConstructor
-    public  Modifier(Keyword keyword) {
+    public Modifier(Keyword keyword) {
         this(null, keyword);
     }
 
@@ -213,7 +213,7 @@ public  class Modifier extends Node {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  Modifier(TokenRange tokenRange, Keyword keyword) {
+    public Modifier(TokenRange tokenRange, Keyword keyword) {
         super(tokenRange);
         setKeyword(keyword);
         customInitialization();
@@ -221,23 +221,23 @@ public  class Modifier extends Node {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Keyword getKeyword() {
+    public Keyword getKeyword() {
         return keyword;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Modifier setKeyword(final Keyword keyword) {
+    public Modifier setKeyword(final Keyword keyword) {
         assertNotNull(keyword);
         if (keyword == this.keyword) {
             return this;
@@ -257,13 +257,13 @@ public  class Modifier extends Node {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  Modifier clone() {
+    public Modifier clone() {
         return (Modifier) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ModifierMetaModel getMetaModel() {
+    public ModifierMetaModel getMetaModel() {
         return JavaParserMetaModel.modifierMetaModel;
     }
 
@@ -271,7 +271,7 @@ public  class Modifier extends Node {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  Modifier(TokenRange tokenRange) {
+    public Modifier(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }

@@ -8,7 +8,7 @@ import java.util.Set;
  * @author Alexander Weigl
  * @version 1 (3/17/21)
  */
-public  class JmlSpecification {
+public class JmlSpecification {
 
     /*<T extends Node & Jmlish>*/
     private boolean singleLine;

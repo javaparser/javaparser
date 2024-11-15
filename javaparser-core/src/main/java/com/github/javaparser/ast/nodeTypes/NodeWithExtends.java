@@ -28,7 +28,7 @@ import com.github.javaparser.ast.type.ClassOrInterfaceType;
 /**
  * A node that explicitly extends other types, using the {@code extends} keyword.
  */
-public  interface NodeWithExtends<N extends Node> {
+public interface NodeWithExtends<N extends Node> {
 
     /**
      * @return All extended types that have been explicitly added (thus exist within the AST).

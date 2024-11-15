@@ -33,7 +33,7 @@ import com.github.javaparser.ast.type.TypeParameter;
  *     class X&lt;C,D&gt; {}   --&gt; typeParameters = [C,D]
  * </pre>
  */
-public  interface NodeWithTypeParameters<N extends Node> {
+public interface NodeWithTypeParameters<N extends Node> {
 
     NodeList<TypeParameter> getTypeParameters();
 

@@ -27,7 +27,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 /**
  * A node that can be final.
  */
-public  interface NodeWithFinalModifier<N extends Node> extends NodeWithModifiers<N> {
+public interface NodeWithFinalModifier<N extends Node> extends NodeWithModifiers<N> {
 
     /**
      * @return true, if the modifier {@code final} is explicitly added to this node. If the node is implicitly final

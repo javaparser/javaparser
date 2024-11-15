@@ -35,7 +35,7 @@ import java.util.Optional;
  * A strategy for discovering the structure of a project.
  * Implementations could read a pom.xml, a Gradle build file, a makefile...
  */
-public  interface CollectionStrategy {
+public interface CollectionStrategy {
 
     ParserConfiguration getParserConfiguration();
 

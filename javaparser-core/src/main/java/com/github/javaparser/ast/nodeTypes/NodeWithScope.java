@@ -27,7 +27,7 @@ import java.util.Optional;
 /**
  * Represents a node which has a required scope expression eg. field access (object.method).
  */
-public  interface NodeWithScope<N extends Node> extends NodeWithTraversableScope {
+public interface NodeWithScope<N extends Node> extends NodeWithTraversableScope {
 
     Expression getScope();
 

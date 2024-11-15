@@ -21,60 +21,60 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (06.03.22)
  */
-public  class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLabelStmt> {
+public class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLabelStmt> {
 
     private SimpleName label;
 
     private NodeList<SimpleName> jmlTags;
 
     @AllFieldsConstructor
-    public  JmlLabelStmt(NodeList<SimpleName> jmlTags, SimpleName label) {
+    public JmlLabelStmt(NodeList<SimpleName> jmlTags, SimpleName label) {
         this(null, jmlTags, label);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlLabelStmt() {
+    public boolean isJmlLabelStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlLabelStmt asJmlLabelStmt() {
+    public JmlLabelStmt asJmlLabelStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlLabelStmt> toJmlLabelStmt() {
+    public Optional<JmlLabelStmt> toJmlLabelStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlLabelStmt(Consumer<JmlLabelStmt> action) {
+    public void ifJmlLabelStmt(Consumer<JmlLabelStmt> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SimpleName getLabel() {
+    public SimpleName getLabel() {
         return label;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlLabelStmt setLabel(final SimpleName label) {
+    public JmlLabelStmt setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -89,7 +89,7 @@ public  class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLa
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -108,13 +108,13 @@ public  class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLa
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlLabelStmt clone() {
+    public JmlLabelStmt clone() {
         return (JmlLabelStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlLabelStmtMetaModel getMetaModel() {
+    public JmlLabelStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlLabelStmtMetaModel;
     }
 
@@ -122,7 +122,7 @@ public  class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLa
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlLabelStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, SimpleName label) {
+    public JmlLabelStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, SimpleName label) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setLabel(label);
@@ -130,12 +130,12 @@ public  class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLa
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<SimpleName> getJmlTags() {
+    public NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlLabelStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlLabelStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -150,7 +150,7 @@ public  class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLa
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }

@@ -53,7 +53,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithPublicModifier<AnnotationMemberDeclaration>, NodeWithAbstractModifier<AnnotationMemberDeclaration>, Resolvable<ResolvedAnnotationMemberDeclaration> {
+public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemberDeclaration> implements NodeWithJavadoc<AnnotationMemberDeclaration>, NodeWithSimpleName<AnnotationMemberDeclaration>, NodeWithType<AnnotationMemberDeclaration, Type>, NodeWithPublicModifier<AnnotationMemberDeclaration>, NodeWithAbstractModifier<AnnotationMemberDeclaration>, Resolvable<ResolvedAnnotationMemberDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
@@ -64,16 +64,16 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
     @OptionalProperty
     private Expression defaultValue;
 
-    public  AnnotationMemberDeclaration() {
+    public AnnotationMemberDeclaration() {
         this(null, new NodeList<>(), new NodeList<>(), new ClassOrInterfaceType(), new SimpleName(), null);
     }
 
-    public  AnnotationMemberDeclaration(NodeList<Modifier> modifiers, Type type, String name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(NodeList<Modifier> modifiers, Type type, String name, Expression defaultValue) {
         this(null, modifiers, new NodeList<>(), type, new SimpleName(name), defaultValue);
     }
 
     @AllFieldsConstructor
-    public  AnnotationMemberDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
         this(null, modifiers, annotations, type, name, defaultValue);
     }
 
@@ -81,7 +81,7 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  AnnotationMemberDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
+    public AnnotationMemberDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, Type type, SimpleName name, Expression defaultValue) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setType(type);
@@ -92,18 +92,18 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Optional<Expression> getDefaultValue() {
+    public Optional<Expression> getDefaultValue() {
         return Optional.ofNullable(defaultValue);
     }
 
@@ -114,22 +114,22 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
      * @see Modifier
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SimpleName getName() {
+    public SimpleName getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Type getType() {
+    public Type getType() {
         return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  AnnotationMemberDeclaration removeDefaultValue() {
+    public AnnotationMemberDeclaration removeDefaultValue() {
         return setDefaultValue((Expression) null);
     }
 
@@ -140,7 +140,7 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
      * @return this, the AnnotationMemberDeclaration
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
+    public AnnotationMemberDeclaration setDefaultValue(final Expression defaultValue) {
         if (defaultValue == this.defaultValue) {
             return this;
         }
@@ -153,7 +153,7 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  AnnotationMemberDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public AnnotationMemberDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -167,7 +167,7 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  AnnotationMemberDeclaration setName(final SimpleName name) {
+    public AnnotationMemberDeclaration setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -181,7 +181,7 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  AnnotationMemberDeclaration setType(final Type type) {
+    public AnnotationMemberDeclaration setType(final Type type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -196,7 +196,7 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -217,19 +217,19 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  AnnotationMemberDeclaration clone() {
+    public AnnotationMemberDeclaration clone() {
         return (AnnotationMemberDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  AnnotationMemberDeclarationMetaModel getMetaModel() {
+    public AnnotationMemberDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationMemberDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -258,30 +258,30 @@ public  class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMemb
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isAnnotationMemberDeclaration() {
+    public boolean isAnnotationMemberDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  AnnotationMemberDeclaration asAnnotationMemberDeclaration() {
+    public AnnotationMemberDeclaration asAnnotationMemberDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifAnnotationMemberDeclaration(Consumer<AnnotationMemberDeclaration> action) {
+    public void ifAnnotationMemberDeclaration(Consumer<AnnotationMemberDeclaration> action) {
         action.accept(this);
     }
 
     @Override
-    public  ResolvedAnnotationMemberDeclaration resolve() {
+    public ResolvedAnnotationMemberDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedAnnotationMemberDeclaration.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<AnnotationMemberDeclaration> toAnnotationMemberDeclaration() {
+    public Optional<AnnotationMemberDeclaration> toAnnotationMemberDeclaration() {
         return Optional.of(this);
     }
 }

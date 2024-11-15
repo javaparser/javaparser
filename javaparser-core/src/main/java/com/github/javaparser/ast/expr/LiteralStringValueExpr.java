@@ -40,7 +40,7 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     protected String value;
 
     @AllFieldsConstructor
-    public  LiteralStringValueExpr(final String value) {
+    public LiteralStringValueExpr(final String value) {
         this(null, value);
     }
 
@@ -48,19 +48,19 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  LiteralStringValueExpr(TokenRange tokenRange, String value) {
+    public LiteralStringValueExpr(TokenRange tokenRange, String value) {
         super(tokenRange);
         setValue(value);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  String getValue() {
+    public String getValue() {
         return value;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  LiteralStringValueExpr setValue(final String value) {
+    public LiteralStringValueExpr setValue(final String value) {
         assertNotNull(value);
         if (value == this.value) {
             return this;
@@ -72,37 +72,37 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  LiteralStringValueExpr clone() {
+    public LiteralStringValueExpr clone() {
         return (LiteralStringValueExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  LiteralStringValueExprMetaModel getMetaModel() {
+    public LiteralStringValueExprMetaModel getMetaModel() {
         return JavaParserMetaModel.literalStringValueExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isLiteralStringValueExpr() {
+    public boolean isLiteralStringValueExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  LiteralStringValueExpr asLiteralStringValueExpr() {
+    public LiteralStringValueExpr asLiteralStringValueExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifLiteralStringValueExpr(Consumer<LiteralStringValueExpr> action) {
+    public void ifLiteralStringValueExpr(Consumer<LiteralStringValueExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<LiteralStringValueExpr> toLiteralStringValueExpr() {
+    public Optional<LiteralStringValueExpr> toLiteralStringValueExpr() {
         return Optional.of(this);
     }
 }

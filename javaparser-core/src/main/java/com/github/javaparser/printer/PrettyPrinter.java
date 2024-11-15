@@ -34,21 +34,21 @@ import java.util.function.Function;
  * @deprecated This class could be removed in a future version. Use defaultPrettyPrinter.
  */
 @Deprecated
-public  class PrettyPrinter implements Printer {
+public class PrettyPrinter implements Printer {
 
     private PrinterConfiguration configuration;
 
     private Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory;
 
-    public  PrettyPrinter() {
+    public PrettyPrinter() {
         this(new PrettyPrinterConfiguration());
     }
 
-    public  PrettyPrinter(PrettyPrinterConfiguration configuration) {
+    public PrettyPrinter(PrettyPrinterConfiguration configuration) {
         this(configuration, PrettyPrintVisitor::new);
     }
 
-    public  PrettyPrinter(PrettyPrinterConfiguration configuration, Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory) {
+    public PrettyPrinter(PrettyPrinterConfiguration configuration, Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }
@@ -56,14 +56,14 @@ public  class PrettyPrinter implements Printer {
     /*
      * Returns the PrettyPrinter configuration
      */
-    public  PrinterConfiguration getConfiguration() {
+    public PrinterConfiguration getConfiguration() {
         return configuration;
     }
 
     /*
      * set or update the PrettyPrinter configuration
      */
-    public  Printer setConfiguration(PrinterConfiguration configuration) {
+    public Printer setConfiguration(PrinterConfiguration configuration) {
         if (!(configuration instanceof PrettyPrinterConfiguration))
             throw new IllegalArgumentException("PrettyPrinter must be configured with a PrettyPrinterConfiguration class");
         this.configuration = configuration;
@@ -71,7 +71,7 @@ public  class PrettyPrinter implements Printer {
     }
 
     @Override
-    public  String print(Node node) {
+    public String print(Node node) {
         final VoidVisitor<Void> visitor = visitorFactory.apply((PrettyPrinterConfiguration) configuration);
         node.accept(visitor, null);
         return visitor.toString();

@@ -27,7 +27,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmIndent;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmUnindent;
 
-public  class Kept implements DifferenceElement {
+public class Kept implements DifferenceElement {
 
     private final CsmElement element;
 
@@ -36,12 +36,12 @@ public  class Kept implements DifferenceElement {
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "Kept{" + element + '}';
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -51,16 +51,16 @@ public  class Kept implements DifferenceElement {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return element.hashCode();
     }
 
     @Override
-    public  CsmElement getElement() {
+    public CsmElement getElement() {
         return element;
     }
 
-    public  int getTokenType() {
+    public int getTokenType() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.getTokenType();
@@ -69,33 +69,33 @@ public  class Kept implements DifferenceElement {
     }
 
     @Override
-    public  boolean isAdded() {
+    public boolean isAdded() {
         return false;
     }
 
     @Override
-    public  boolean isRemoved() {
+    public boolean isRemoved() {
         return false;
     }
 
     @Override
-    public  boolean isKept() {
+    public boolean isKept() {
         return true;
     }
 
-    public  boolean isIndent() {
+    public boolean isIndent() {
         return element instanceof CsmIndent;
     }
 
-    public  boolean isUnindent() {
+    public boolean isUnindent() {
         return element instanceof CsmUnindent;
     }
 
-    public  boolean isToken() {
+    public boolean isToken() {
         return element instanceof CsmToken;
     }
 
-    public  boolean isPrimitiveType() {
+    public boolean isPrimitiveType() {
         if (isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;
             return csmChild.getChild() instanceof PrimitiveType;
@@ -103,7 +103,7 @@ public  class Kept implements DifferenceElement {
         return false;
     }
 
-    public  boolean isWhiteSpace() {
+    public boolean isWhiteSpace() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isWhiteSpace();
@@ -111,7 +111,7 @@ public  class Kept implements DifferenceElement {
         return false;
     }
 
-    public  boolean isWhiteSpaceOrComment() {
+    public boolean isWhiteSpaceOrComment() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return TokenTypes.isWhitespaceOrComment(csmToken.getTokenType());
@@ -119,7 +119,7 @@ public  class Kept implements DifferenceElement {
         return false;
     }
 
-    public  boolean isNewLine() {
+    public boolean isNewLine() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isNewLine();

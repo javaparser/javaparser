@@ -33,7 +33,7 @@ import java.util.Optional;
  * Properties considered by the AstObserver
  */
 @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-public  enum ObservableProperty {
+public enum ObservableProperty {
 
     ANNOTATIONS(Type.MULTIPLE_REFERENCE),
     ANONYMOUS_CLASS_BODY(Type.MULTIPLE_REFERENCE),
@@ -205,31 +205,31 @@ public  enum ObservableProperty {
         this(Type.SINGLE_REFERENCE, false);
     }
 
-    public  boolean isDerived() {
+    public boolean isDerived() {
         return derived;
     }
 
-    public  boolean isAboutNodes() {
+    public boolean isAboutNodes() {
         return type.node;
     }
 
-    public  boolean isAboutValues() {
+    public boolean isAboutValues() {
         return !isAboutNodes();
     }
 
-    public  boolean isMultiple() {
+    public boolean isMultiple() {
         return type.multiple;
     }
 
-    public  boolean isSingle() {
+    public boolean isSingle() {
         return !isMultiple();
     }
 
-    public  String camelCaseName() {
+    public String camelCaseName() {
         return Utils.screamingToCamelCase(name());
     }
 
-    public  Node getValueAsSingleReference(Node node) {
+    public Node getValueAsSingleReference(Node node) {
         Object rawValue = getRawValue(node);
         try {
             if (rawValue instanceof Node) {
@@ -257,7 +257,7 @@ public  enum ObservableProperty {
         }
     }
 
-    public  NodeList<? extends Node> getValueAsMultipleReference(Node node) {
+    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {
         Object rawValue = getRawValue(node);
         try {
             if (rawValue == null) {
@@ -276,7 +276,7 @@ public  enum ObservableProperty {
         }
     }
 
-    public  Collection<?> getValueAsCollection(Node node) {
+    public Collection<?> getValueAsCollection(Node node) {
         Object rawValue = getRawValue(node);
         try {
             return (Collection) rawValue;
@@ -285,15 +285,15 @@ public  enum ObservableProperty {
         }
     }
 
-    public  String getValueAsStringAttribute(Node node) {
+    public String getValueAsStringAttribute(Node node) {
         return (String) getRawValue(node);
     }
 
-    public  Boolean getValueAsBooleanAttribute(Node node) {
+    public Boolean getValueAsBooleanAttribute(Node node) {
         return (Boolean) getRawValue(node);
     }
 
-    public  Object getRawValue(Node node) {
+    public Object getRawValue(Node node) {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         if (!hasMethod(node, getterName)) {
             getterName = "is" + Utils.capitalize(camelCaseName());
@@ -308,15 +308,15 @@ public  enum ObservableProperty {
         }
     }
 
-    public  boolean isNull(Node node) {
+    public boolean isNull(Node node) {
         return null == getRawValue(node);
     }
 
-    public  boolean isNullOrNotPresent(Node node) {
+    public boolean isNullOrNotPresent(Node node) {
         return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
     }
 
-    public  boolean isNullOrEmpty(Node node) {
+    public boolean isNullOrEmpty(Node node) {
         return Utils.valueIsNullOrEmpty(getRawValue(node));
     }
 }

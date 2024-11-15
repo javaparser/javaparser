@@ -47,7 +47,7 @@ import java.util.Map;
  *
  * @author Federico Tomassetti
  */
-public  interface ResolvedType {
+public interface ResolvedType {
 
     // /
     // / Relation with other types

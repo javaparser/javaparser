@@ -40,7 +40,7 @@ import java.util.zip.ZipFile;
  * A collection of Java source files and its sub-directories located in a ZIP or JAR file on the file system.
  * Files can be parsed with a callback.
  */
-public  class SourceZip {
+public class SourceZip {
 
     private final Path zipPath;
 
@@ -52,7 +52,7 @@ public  class SourceZip {
      *
      * @param zipPath The absolute path of ZIP file to parse.
      */
-    public  SourceZip(Path zipPath) {
+    public SourceZip(Path zipPath) {
         this(zipPath, new ParserConfiguration());
     }
 
@@ -63,7 +63,7 @@ public  class SourceZip {
      * @param zipPath The absolute path of ZIP file to parse.
      * @param configuration The configuration to initiate the default parser with.
      */
-    public  SourceZip(Path zipPath, ParserConfiguration configuration) {
+    public SourceZip(Path zipPath, ParserConfiguration configuration) {
         assertNotNull(zipPath);
         assertNotNull(configuration);
         this.zipPath = zipPath.normalize();
@@ -79,7 +79,7 @@ public  class SourceZip {
      *
      * @throws IOException If an error occurs while trying to parse the given source.
      */
-    public  List<Pair<Path, ParseResult<CompilationUnit>>> parse() throws IOException {
+    public List<Pair<Path, ParseResult<CompilationUnit>>> parse() throws IOException {
         Log.info("Parsing zip at \"%s\"", () -> zipPath);
         List<Pair<Path, ParseResult<CompilationUnit>>> results = new ArrayList<>();
         parse((path, result) -> results.add(new Pair<>(path, result)));
@@ -94,7 +94,7 @@ public  class SourceZip {
      *
      * @throws IOException If an error occurs while trying to parse the given source.
      */
-    public  SourceZip parse(Callback callback) throws IOException {
+    public SourceZip parse(Callback callback) throws IOException {
         Log.info("Parsing zip at \"%s\"", () -> zipPath);
         JavaParser javaParser = new JavaParser(parserConfiguration);
         try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
@@ -113,7 +113,7 @@ public  class SourceZip {
      * An interface to define a callback for each file that's parsed.
      */
     @FunctionalInterface
-    public  interface Callback {
+    public interface Callback {
 
         /**
          * Process the given parse result.
@@ -129,15 +129,15 @@ public  class SourceZip {
      *
      * @return The absolute path of this ZIP file.
      */
-    public  Path getZipPath() {
+    public Path getZipPath() {
         return zipPath;
     }
 
-    public  ParserConfiguration getParserConfiguration() {
+    public ParserConfiguration getParserConfiguration() {
         return parserConfiguration;
     }
 
-    public  SourceZip setParserConfiguration(ParserConfiguration parserConfiguration) {
+    public SourceZip setParserConfiguration(ParserConfiguration parserConfiguration) {
         assertNotNull(parserConfiguration);
         this.parserConfiguration = parserConfiguration;
         return this;

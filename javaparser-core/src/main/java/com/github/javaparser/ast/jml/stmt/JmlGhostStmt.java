@@ -22,14 +22,14 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (3/26/21)
  */
-public  class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGhostStmt> {
+public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGhostStmt> {
 
     private Statement statement;
 
     private NodeList<SimpleName> jmlTags;
 
     @AllFieldsConstructor
-    public  JmlGhostStmt(NodeList<SimpleName> jmlTags, Statement statement) {
+    public JmlGhostStmt(NodeList<SimpleName> jmlTags, Statement statement) {
         this(null, jmlTags, statement);
     }
 
@@ -37,7 +37,7 @@ public  class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGh
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlGhostStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, Statement statement) {
+    public JmlGhostStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, Statement statement) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setStatement(statement);
@@ -46,23 +46,23 @@ public  class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGh
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Statement getStatement() {
+    public Statement getStatement() {
         return statement;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlGhostStmt setstatement(final Statement statement) {
+    public JmlGhostStmt setstatement(final Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
             return this;
@@ -77,7 +77,7 @@ public  class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGh
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -96,36 +96,36 @@ public  class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGh
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlGhostStmt clone() {
+    public JmlGhostStmt clone() {
         return (JmlGhostStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlGhostStatement() {
+    public boolean isJmlGhostStatement() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlGhostStmt asJmlGhostStatement() {
+    public JmlGhostStmt asJmlGhostStatement() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlGhostStmt> toJmlGhostStatement() {
+    public Optional<JmlGhostStmt> toJmlGhostStatement() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlGhostStatement(Consumer<JmlGhostStmt> action) {
+    public void ifJmlGhostStatement(Consumer<JmlGhostStmt> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlGhostStmt setStatement(final Statement statement) {
+    public JmlGhostStmt setStatement(final Statement statement) {
         assertNotNull(statement);
         if (statement == this.statement) {
             return this;
@@ -140,41 +140,41 @@ public  class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGh
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlGhostStmtMetaModel getMetaModel() {
+    public JmlGhostStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlGhostStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlGhostStmt() {
+    public boolean isJmlGhostStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlGhostStmt asJmlGhostStmt() {
+    public JmlGhostStmt asJmlGhostStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlGhostStmt> toJmlGhostStmt() {
+    public Optional<JmlGhostStmt> toJmlGhostStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlGhostStmt(Consumer<JmlGhostStmt> action) {
+    public void ifJmlGhostStmt(Consumer<JmlGhostStmt> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<SimpleName> getJmlTags() {
+    public NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlGhostStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlGhostStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -189,7 +189,7 @@ public  class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGh
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }

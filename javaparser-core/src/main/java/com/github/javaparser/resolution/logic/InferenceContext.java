@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 /**
  * @author Federico Tomassetti
  */
-public  class InferenceContext {
+public class InferenceContext {
 
     private int nextInferenceVariableId = 0;
 
@@ -42,7 +42,7 @@ public  class InferenceContext {
 
     private Map<String, InferenceVariableType> inferenceVariableTypeMap = new HashMap<>();
 
-    public  InferenceContext(TypeSolver typeSolver) {
+    public InferenceContext(TypeSolver typeSolver) {
         this.typeSolver = typeSolver;
     }
 
@@ -59,14 +59,14 @@ public  class InferenceContext {
     /**
      * @return the actual with the inference variable inserted
      */
-    public  ResolvedType addPair(ResolvedType target, ResolvedType actual) {
+    public ResolvedType addPair(ResolvedType target, ResolvedType actual) {
         target = placeInferenceVariables(target);
         actual = placeInferenceVariables(actual);
         registerCorrespondance(target, actual);
         return target;
     }
 
-    public  ResolvedType addSingle(ResolvedType actual) {
+    public ResolvedType addSingle(ResolvedType actual) {
         return placeInferenceVariables(actual);
     }
 
@@ -212,7 +212,7 @@ public  class InferenceContext {
         throw new UnsupportedOperationException(type.describe());
     }
 
-    public  ResolvedType resolve(ResolvedType type) {
+    public ResolvedType resolve(ResolvedType type) {
         if (type instanceof InferenceVariableType) {
             InferenceVariableType inferenceVariableType = (InferenceVariableType) type;
             return inferenceVariableType.equivalentType();

@@ -44,14 +44,14 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public  class CharLiteralExpr extends LiteralStringValueExpr {
+public class CharLiteralExpr extends LiteralStringValueExpr {
 
-    public  CharLiteralExpr() {
+    public CharLiteralExpr() {
         this(null, "?");
     }
 
     @AllFieldsConstructor
-    public  CharLiteralExpr(String value) {
+    public CharLiteralExpr(String value) {
         this(null, value);
     }
 
@@ -60,7 +60,7 @@ public  class CharLiteralExpr extends LiteralStringValueExpr {
      *
      * @param value a char
      */
-    public  CharLiteralExpr(char value) {
+    public CharLiteralExpr(char value) {
         this(null, StringEscapeUtils.escapeJava(String.valueOf(value)));
     }
 
@@ -68,7 +68,7 @@ public  class CharLiteralExpr extends LiteralStringValueExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  CharLiteralExpr(TokenRange tokenRange, String value) {
+    public CharLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
         customInitialization();
     }
@@ -82,20 +82,20 @@ public  class CharLiteralExpr extends LiteralStringValueExpr {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     /**
      * @return the unescaped value character of this literal
      */
-    public  char asChar() {
+    public char asChar() {
         return StringEscapeUtils.unescapeJava(value).charAt(0);
     }
 
@@ -105,44 +105,44 @@ public  class CharLiteralExpr extends LiteralStringValueExpr {
      * @param value a char
      * @return this expression
      */
-    public  CharLiteralExpr setChar(char value) {
+    public CharLiteralExpr setChar(char value) {
         this.value = String.valueOf(value);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  CharLiteralExpr clone() {
+    public CharLiteralExpr clone() {
         return (CharLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  CharLiteralExprMetaModel getMetaModel() {
+    public CharLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.charLiteralExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isCharLiteralExpr() {
+    public boolean isCharLiteralExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  CharLiteralExpr asCharLiteralExpr() {
+    public CharLiteralExpr asCharLiteralExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifCharLiteralExpr(Consumer<CharLiteralExpr> action) {
+    public void ifCharLiteralExpr(Consumer<CharLiteralExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<CharLiteralExpr> toCharLiteralExpr() {
+    public Optional<CharLiteralExpr> toCharLiteralExpr() {
         return Optional.of(this);
     }
 }

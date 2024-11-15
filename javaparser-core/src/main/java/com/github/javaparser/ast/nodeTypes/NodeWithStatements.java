@@ -32,7 +32,7 @@ import com.github.javaparser.ast.stmt.Statement;
 /**
  * A node that contains a list of statements.
  */
-public  interface NodeWithStatements<N extends Node> {
+public interface NodeWithStatements<N extends Node> {
 
     NodeList<Statement> getStatements();
 

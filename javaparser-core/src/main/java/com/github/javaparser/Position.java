@@ -26,7 +26,7 @@ import java.util.Objects;
 /**
  * A position in a source file. Lines and columns start counting at 1.
  */
-public  class Position implements Comparable<Position> {
+public class Position implements Comparable<Position> {
 
     public final int line;
 
@@ -58,7 +58,7 @@ public  class Position implements Comparable<Position> {
      * TODO: Do we refer to the characters as columns,
      *  ...or the spaces between (thus also before/after) characters as columns?
      */
-    public  Position(int line, int column) {
+    public Position(int line, int column) {
         if (line < Position.ABSOLUTE_END_LINE) {
             throw new IllegalArgumentException("Can't position at line " + line);
         }
@@ -86,28 +86,28 @@ public  class Position implements Comparable<Position> {
     /**
      * @return Jump to the given column number, while retaining the current line number.
      */
-    public  Position withColumn(int column) {
+    public Position withColumn(int column) {
         return new Position(this.line, column);
     }
 
     /**
      * @return Jump to the given line number, while retaining the current column number.
      */
-    public  Position withLine(int line) {
+    public Position withLine(int line) {
         return new Position(line, this.column);
     }
 
     /**
      * @return a position that is "characters" characters more to the right than this position.
      */
-    public  Position right(int characters) {
+    public Position right(int characters) {
         return new Position(line, this.column + characters);
     }
 
     /**
      * @return a position that is on the start of the next line from this position.
      */
-    public  Position nextLine() {
+    public Position nextLine() {
         return new Position(line + 1, FIRST_COLUMN);
     }
 
@@ -118,7 +118,7 @@ public  class Position implements Comparable<Position> {
      *
      * @return true if the position is usable or a special position.
      */
-    public  boolean valid() {
+    public boolean valid() {
         return ABSOLUTE_END_LINE == line || ABSOLUTE_BEGIN_LINE == line || line >= FIRST_LINE && column >= FIRST_COLUMN;
     }
 
@@ -126,7 +126,7 @@ public  class Position implements Comparable<Position> {
      * @return The inverse of {@link #valid()}
      * @see #valid()
      */
-    public  boolean invalid() {
+    public boolean invalid() {
         return !valid();
     }
 
@@ -135,7 +135,7 @@ public  class Position implements Comparable<Position> {
      * Otherwise, if the alternativePosition is valid, return that.
      * Otherwise, just return this.
      */
-    public  Position orIfInvalid(Position alternativePosition) {
+    public Position orIfInvalid(Position alternativePosition) {
         assertNotNull(alternativePosition);
         if (this.valid()) {
             return this;
@@ -147,7 +147,7 @@ public  class Position implements Comparable<Position> {
      * @param otherPosition the other position to compare to
      * @return true if this position is after the given position
      */
-    public  boolean isAfter(Position otherPosition) {
+    public boolean isAfter(Position otherPosition) {
         assertNotNull(otherPosition);
         if (line == otherPosition.line) {
             return column > otherPosition.column;
@@ -155,7 +155,7 @@ public  class Position implements Comparable<Position> {
         return line > otherPosition.line || otherPosition.line == Position.ABSOLUTE_BEGIN_LINE;
     }
 
-    public  boolean isAfterOrEqual(Position otherPosition) {
+    public boolean isAfterOrEqual(Position otherPosition) {
         return isAfter(otherPosition) || equals(otherPosition);
     }
 
@@ -163,7 +163,7 @@ public  class Position implements Comparable<Position> {
      * @param otherPosition the other position to compare to
      * @return true if this position is before the given position
      */
-    public  boolean isBefore(Position otherPosition) {
+    public boolean isBefore(Position otherPosition) {
         assertNotNull(otherPosition);
         if (line == otherPosition.line) {
             return column < otherPosition.column;
@@ -171,12 +171,12 @@ public  class Position implements Comparable<Position> {
         return line < otherPosition.line || otherPosition.line == Position.ABSOLUTE_END_LINE;
     }
 
-    public  boolean isBeforeOrEqual(Position otherPosition) {
+    public boolean isBeforeOrEqual(Position otherPosition) {
         return isBefore(otherPosition) || equals(otherPosition);
     }
 
     @Override
-    public  int compareTo(Position otherPosition) {
+    public int compareTo(Position otherPosition) {
         assertNotNull(otherPosition);
         if (isBefore(otherPosition)) {
             return -1;
@@ -188,7 +188,7 @@ public  class Position implements Comparable<Position> {
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -198,12 +198,12 @@ public  class Position implements Comparable<Position> {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return Objects.hash(line, column);
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "(line " + line + ",col " + column + ")";
     }
 }

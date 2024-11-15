@@ -17,34 +17,34 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public  class JmlDoc extends Node {
+public class JmlDoc extends Node {
 
     private JavaToken content;
 
     @AllFieldsConstructor
-    public  JmlDoc(JavaToken content) {
+    public JmlDoc(JavaToken content) {
         this(new TokenRange(content, content), content);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JavaToken getContent() {
+    public JavaToken getContent() {
         return content;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlDoc setContent(final JavaToken content) {
+    public JmlDoc setContent(final JavaToken content) {
         assertNotNull(content);
         if (content == this.content) {
             return this;
@@ -56,13 +56,13 @@ public  class JmlDoc extends Node {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlDoc clone() {
+    public JmlDoc clone() {
         return (JmlDoc) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlDocMetaModel getMetaModel() {
+    public JmlDocMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlDocMetaModel;
     }
 
@@ -70,7 +70,7 @@ public  class JmlDoc extends Node {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlDoc(TokenRange tokenRange, JavaToken content) {
+    public JmlDoc(TokenRange tokenRange, JavaToken content) {
         super(tokenRange);
         setContent(content);
         customInitialization();

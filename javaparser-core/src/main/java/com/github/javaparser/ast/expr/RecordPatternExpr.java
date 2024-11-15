@@ -75,18 +75,18 @@ import java.util.function.Consumer;
  * @see com.github.javaparser.ast.expr.TypePatternExpr
  * @see <a href="https://openjdk.org/jeps/440">JEP 440: Record Patterns</a>
  */
-public  class RecordPatternExpr extends PatternExpr implements NodeWithFinalModifier<RecordPatternExpr> {
+public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModifier<RecordPatternExpr> {
 
     private NodeList<Modifier> modifiers;
 
     private NodeList<PatternExpr> patternList;
 
-    public  RecordPatternExpr() {
+    public RecordPatternExpr() {
         this(new NodeList<>(), new ClassOrInterfaceType(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public  RecordPatternExpr(final NodeList<Modifier> modifiers, final Type type, final NodeList<PatternExpr> patternList) {
+    public RecordPatternExpr(final NodeList<Modifier> modifiers, final Type type, final NodeList<PatternExpr> patternList) {
         this(null, modifiers, type, patternList);
     }
 
@@ -95,29 +95,29 @@ public  class RecordPatternExpr extends PatternExpr implements NodeWithFinalModi
      * types.
      */
     @Override
-    public  ReferenceType getType() {
+    public ReferenceType getType() {
         return super.getType().asReferenceType();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  RecordPatternExpr setModifiers(final NodeList<Modifier> modifiers) {
+    public RecordPatternExpr setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -132,35 +132,35 @@ public  class RecordPatternExpr extends PatternExpr implements NodeWithFinalModi
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isRecordPatternExpr() {
+    public boolean isRecordPatternExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  RecordPatternExpr asRecordPatternExpr() {
+    public RecordPatternExpr asRecordPatternExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<RecordPatternExpr> toRecordPatternExpr() {
+    public Optional<RecordPatternExpr> toRecordPatternExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifRecordPatternExpr(Consumer<RecordPatternExpr> action) {
+    public void ifRecordPatternExpr(Consumer<RecordPatternExpr> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<PatternExpr> getPatternList() {
+    public NodeList<PatternExpr> getPatternList() {
         return patternList;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  RecordPatternExpr setPatternList(final NodeList<PatternExpr> patternList) {
+    public RecordPatternExpr setPatternList(final NodeList<PatternExpr> patternList) {
         assertNotNull(patternList);
         if (patternList == this.patternList) {
             return this;
@@ -175,7 +175,7 @@ public  class RecordPatternExpr extends PatternExpr implements NodeWithFinalModi
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -196,7 +196,7 @@ public  class RecordPatternExpr extends PatternExpr implements NodeWithFinalModi
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -217,13 +217,13 @@ public  class RecordPatternExpr extends PatternExpr implements NodeWithFinalModi
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  RecordPatternExpr clone() {
+    public RecordPatternExpr clone() {
         return (RecordPatternExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  RecordPatternExprMetaModel getMetaModel() {
+    public RecordPatternExprMetaModel getMetaModel() {
         return JavaParserMetaModel.recordPatternExprMetaModel;
     }
 
@@ -231,7 +231,7 @@ public  class RecordPatternExpr extends PatternExpr implements NodeWithFinalModi
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  RecordPatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, NodeList<PatternExpr> patternList) {
+    public RecordPatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, NodeList<PatternExpr> patternList) {
         super(tokenRange, type);
         setModifiers(modifiers);
         setPatternList(patternList);

@@ -29,7 +29,7 @@ import java.util.Optional;
 /**
  * {@link Provider} un-escaping unicode escape sequences in the input sequence.
  */
-public  class LineEndingProcessingProvider implements Provider {
+public class LineEndingProcessingProvider implements Provider {
 
     private static final int EOF = -1;
 
@@ -57,17 +57,17 @@ public  class LineEndingProcessingProvider implements Provider {
 
     private final Map<LineSeparator, Integer> eolCounts = new HashMap<>();
 
-    public  LineEndingProcessingProvider(Provider input) {
+    public LineEndingProcessingProvider(Provider input) {
         this(DEFAULT_BUFFER_SIZE, input);
     }
 
-    public  LineEndingProcessingProvider(int bufferSize, Provider input) {
+    public LineEndingProcessingProvider(int bufferSize, Provider input) {
         _input = input;
         _data = new char[bufferSize];
     }
 
     @Override
-    public  void close() throws IOException {
+    public void close() throws IOException {
         _input.close();
     }
 
@@ -80,7 +80,7 @@ public  class LineEndingProcessingProvider implements Provider {
         return direct;
     }
 
-    public  LineSeparator getDetectedLineEnding() {
+    public LineSeparator getDetectedLineEnding() {
         return LineSeparator.getLineEnding(eolCounts.getOrDefault(LineSeparator.CR, 0), eolCounts.getOrDefault(LineSeparator.LF, 0), eolCounts.getOrDefault(LineSeparator.CRLF, 0));
     }
 
@@ -104,7 +104,7 @@ public  class LineEndingProcessingProvider implements Provider {
     }
 
     @Override
-    public  int read(char[] buffer, final int offset, int len) throws IOException {
+    public int read(char[] buffer, final int offset, int len) throws IOException {
         int pos = offset;
         int stop = offset + len;
         LineSeparator previousLineSeparator = null;

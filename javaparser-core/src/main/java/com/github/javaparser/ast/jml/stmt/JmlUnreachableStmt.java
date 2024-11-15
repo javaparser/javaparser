@@ -21,54 +21,54 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public  class JmlUnreachableStmt extends JmlStatement implements NodeWithJmlTags<JmlUnreachableStmt> {
+public class JmlUnreachableStmt extends JmlStatement implements NodeWithJmlTags<JmlUnreachableStmt> {
 
     private NodeList<SimpleName> jmlTags;
 
     @AllFieldsConstructor
-    public  JmlUnreachableStmt(NodeList<SimpleName> jmlTags) {
+    public JmlUnreachableStmt(NodeList<SimpleName> jmlTags) {
         this(null, jmlTags);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isUnreachableStmt() {
+    public boolean isUnreachableStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlUnreachableStmt asUnreachableStmt() {
+    public JmlUnreachableStmt asUnreachableStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlUnreachableStmt> toUnreachableStmt() {
+    public Optional<JmlUnreachableStmt> toUnreachableStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
+    public void ifUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlUnreachableStmt clone() {
+    public JmlUnreachableStmt clone() {
         return (JmlUnreachableStmt) accept(new CloneVisitor(), null);
     }
 
@@ -76,7 +76,7 @@ public  class JmlUnreachableStmt extends JmlStatement implements NodeWithJmlTags
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlUnreachableStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags) {
+    public JmlUnreachableStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags) {
         super(tokenRange);
         setJmlTags(jmlTags);
         customInitialization();
@@ -84,41 +84,41 @@ public  class JmlUnreachableStmt extends JmlStatement implements NodeWithJmlTags
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlUnreachableStmt() {
+    public boolean isJmlUnreachableStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlUnreachableStmt asJmlUnreachableStmt() {
+    public JmlUnreachableStmt asJmlUnreachableStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlUnreachableStmt> toJmlUnreachableStmt() {
+    public Optional<JmlUnreachableStmt> toJmlUnreachableStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
+    public void ifJmlUnreachableStmt(Consumer<JmlUnreachableStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlUnreachableStmtMetaModel getMetaModel() {
+    public JmlUnreachableStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlUnreachableStmtMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<SimpleName> getJmlTags() {
+    public NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlUnreachableStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlUnreachableStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -133,7 +133,7 @@ public  class JmlUnreachableStmt extends JmlStatement implements NodeWithJmlTags
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -148,7 +148,7 @@ public  class JmlUnreachableStmt extends JmlStatement implements NodeWithJmlTags
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }

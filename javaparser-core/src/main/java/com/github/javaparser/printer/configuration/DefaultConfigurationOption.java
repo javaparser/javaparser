@@ -25,24 +25,24 @@ import com.github.javaparser.utils.Utils;
 /*
  * An option is a pair of ConfigOption and a currentValue
  */
-public  class DefaultConfigurationOption implements ConfigurationOption {
+public class DefaultConfigurationOption implements ConfigurationOption {
 
     ConfigOption configOption;
 
     Object currentValue;
 
-    public  DefaultConfigurationOption(ConfigOption configOption) {
+    public DefaultConfigurationOption(ConfigOption configOption) {
         this(configOption, null);
     }
 
-    public  DefaultConfigurationOption(ConfigOption configOption, Object value) {
+    public DefaultConfigurationOption(ConfigOption configOption, Object value) {
         this.configOption = configOption;
         if (value != null)
             value(value);
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (o == null || !(o instanceof DefaultConfigurationOption))
             return false;
         DefaultConfigurationOption other = (DefaultConfigurationOption) o;
@@ -50,7 +50,7 @@ public  class DefaultConfigurationOption implements ConfigurationOption {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return configOption.hashCode();
     }
 
@@ -58,7 +58,7 @@ public  class DefaultConfigurationOption implements ConfigurationOption {
      * Set a currentValue to an option
      */
     @Override
-    public  ConfigurationOption value(Object value) {
+    public ConfigurationOption value(Object value) {
         Utils.assertNotNull(value);
         this.currentValue = value;
         // verify the currentValue's type
@@ -72,7 +72,7 @@ public  class DefaultConfigurationOption implements ConfigurationOption {
      * returns True if the option has a currentValue
      */
     @Override
-    public  boolean hasValue() {
+    public boolean hasValue() {
         return this.currentValue != null;
     }
 
@@ -80,7 +80,7 @@ public  class DefaultConfigurationOption implements ConfigurationOption {
      * returns the currentValue as an Integer
      */
     @Override
-    public  Integer asInteger() {
+    public Integer asInteger() {
         return cast();
     }
 
@@ -88,7 +88,7 @@ public  class DefaultConfigurationOption implements ConfigurationOption {
      * returns the currentValue as a String
      */
     @Override
-    public  String asString() {
+    public String asString() {
         return cast();
     }
 
@@ -96,12 +96,12 @@ public  class DefaultConfigurationOption implements ConfigurationOption {
      * returns the currentValue as a Boolean
      */
     @Override
-    public  Boolean asBoolean() {
+    public Boolean asBoolean() {
         return cast();
     }
 
     @Override
-    public  <T extends Object> T asValue() {
+    public <T extends Object> T asValue() {
         return cast();
     }
 

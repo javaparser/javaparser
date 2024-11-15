@@ -32,17 +32,17 @@ import static java.util.stream.Collectors.toList;
 /**
  * Outputs a Graphviz diagram of the AST.
  */
-public  class DotPrinter {
+public class DotPrinter {
 
     private int nodeCount;
 
     private final boolean outputNodeType;
 
-    public  DotPrinter(boolean outputNodeType) {
+    public DotPrinter(boolean outputNodeType) {
         this.outputNodeType = outputNodeType;
     }
 
-    public  String output(Node node) {
+    public String output(Node node) {
         nodeCount = 0;
         StringBuilder output = new StringBuilder();
         output.append("digraph {");
@@ -51,7 +51,7 @@ public  class DotPrinter {
         return output.toString();
     }
 
-    public  void output(Node node, String parentNodeName, String name, StringBuilder builder) {
+    public void output(Node node, String parentNodeName, String name, StringBuilder builder) {
         assertNotNull(node);
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();

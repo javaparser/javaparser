@@ -25,7 +25,7 @@ import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 import com.github.javaparser.printer.lexicalpreservation.Difference.ArrayIterator;
 import java.util.*;
 
-public  class ReshuffledDiffElementExtractor {
+public class ReshuffledDiffElementExtractor {
 
     private final NodeText nodeText;
 
@@ -52,7 +52,7 @@ public  class ReshuffledDiffElementExtractor {
         this.nodeText = nodeText;
     }
 
-    public  void extract(List<DifferenceElement> diffElements) {
+    public void extract(List<DifferenceElement> diffElements) {
         ArrayIterator<DifferenceElement> iterator = new ArrayIterator<>(diffElements);
         while (iterator.hasNext()) {
             DifferenceElement diffElement = iterator.next();

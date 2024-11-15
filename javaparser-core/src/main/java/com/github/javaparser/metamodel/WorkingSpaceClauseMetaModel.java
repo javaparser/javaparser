@@ -34,7 +34,7 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class WorkingSpaceClauseMetaModel extends JmlClauseMetaModel {
+public class WorkingSpaceClauseMetaModel extends JmlClauseMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     WorkingSpaceClauseMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {

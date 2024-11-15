@@ -34,18 +34,18 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class ClassOrInterfaceTypeMetaModel extends ReferenceTypeMetaModel {
+public class ClassOrInterfaceTypeMetaModel extends ReferenceTypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ClassOrInterfaceTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, ClassOrInterfaceType.class, "ClassOrInterfaceType", "com.github.javaparser.ast.type", false, false);
     }
 
-    public  PropertyMetaModel namePropertyMetaModel;
+    public PropertyMetaModel namePropertyMetaModel;
 
-    public  PropertyMetaModel scopePropertyMetaModel;
+    public PropertyMetaModel scopePropertyMetaModel;
 
-    public  PropertyMetaModel typeArgumentsPropertyMetaModel;
+    public PropertyMetaModel typeArgumentsPropertyMetaModel;
 
-    public  PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
+    public PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
 }

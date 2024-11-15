@@ -21,18 +21,18 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (3/11/21)
  */
-public  class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclaration> {
+public class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclaration> {
 
     private FieldDeclaration decl;
 
     private NodeList<SimpleName> jmlTags;
 
-    public  JmlFieldDeclaration() {
+    public JmlFieldDeclaration() {
         this(null, null);
     }
 
     @AllFieldsConstructor
-    public  JmlFieldDeclaration(NodeList<SimpleName> jmlTags, FieldDeclaration decl) {
+    public JmlFieldDeclaration(NodeList<SimpleName> jmlTags, FieldDeclaration decl) {
         this(null, jmlTags, decl);
     }
 
@@ -40,7 +40,7 @@ public  class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDecla
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlFieldDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, FieldDeclaration decl) {
+    public JmlFieldDeclaration(TokenRange tokenRange, NodeList<SimpleName> jmlTags, FieldDeclaration decl) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setDecl(decl);
@@ -49,47 +49,47 @@ public  class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDecla
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlFieldDeclaration() {
+    public boolean isJmlFieldDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlFieldDeclaration asJmlFieldDeclaration() {
+    public JmlFieldDeclaration asJmlFieldDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlFieldDeclaration> toJmlFieldDeclaration() {
+    public Optional<JmlFieldDeclaration> toJmlFieldDeclaration() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlFieldDeclaration(Consumer<JmlFieldDeclaration> action) {
+    public void ifJmlFieldDeclaration(Consumer<JmlFieldDeclaration> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  FieldDeclaration getDecl() {
+    public FieldDeclaration getDecl() {
         return decl;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlFieldDeclaration setDecl(final FieldDeclaration decl) {
+    public JmlFieldDeclaration setDecl(final FieldDeclaration decl) {
         assertNotNull(decl);
         if (decl == this.decl) {
             return this;
@@ -104,7 +104,7 @@ public  class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDecla
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -123,24 +123,24 @@ public  class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDecla
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlFieldDeclaration clone() {
+    public JmlFieldDeclaration clone() {
         return (JmlFieldDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlFieldDeclarationMetaModel getMetaModel() {
+    public JmlFieldDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlFieldDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<SimpleName> getJmlTags() {
+    public NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  JmlFieldDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public JmlFieldDeclaration setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -155,7 +155,7 @@ public  class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDecla
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }

@@ -29,19 +29,19 @@ import java.util.Optional;
 /**
  * The removal of an element from a list.
  */
-public  class ListRemovalChange implements Change {
+public class ListRemovalChange implements Change {
 
     private final ObservableProperty observableProperty;
 
     private final int index;
 
-    public  ListRemovalChange(ObservableProperty observableProperty, int index) {
+    public ListRemovalChange(ObservableProperty observableProperty, int index) {
         this.observableProperty = observableProperty;
         this.index = index;
     }
 
     @Override
-    public  Object getValue(ObservableProperty property, Node node) {
+    public Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
             Object currentRawValue = new NoChange().getValue(property, node);
             if (currentRawValue instanceof Optional) {
@@ -83,7 +83,7 @@ public  class ListRemovalChange implements Change {
     }
 
     @Override
-    public  ObservableProperty getProperty() {
+    public ObservableProperty getProperty() {
         return observableProperty;
     }
 }

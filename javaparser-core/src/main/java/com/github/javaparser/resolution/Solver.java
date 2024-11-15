@@ -29,7 +29,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.List;
 import java.util.Optional;
 
-public  interface Solver {
+public interface Solver {
 
     SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, Context context);
 

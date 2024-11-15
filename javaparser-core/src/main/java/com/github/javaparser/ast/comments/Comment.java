@@ -50,7 +50,7 @@ public abstract class Comment extends Node {
     private Node commentedNode;
 
     @AllFieldsConstructor
-    public  Comment(String content) {
+    public Comment(String content) {
         this(null, content);
     }
 
@@ -58,7 +58,7 @@ public abstract class Comment extends Node {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  Comment(TokenRange tokenRange, String content) {
+    public Comment(TokenRange tokenRange, String content) {
         super(tokenRange);
         setContent(content);
         customInitialization();
@@ -70,7 +70,7 @@ public abstract class Comment extends Node {
      * @return text of the comment
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  String getContent() {
+    public String getContent() {
         return content;
     }
 
@@ -80,7 +80,7 @@ public abstract class Comment extends Node {
      * @param content the text of the comment to set
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Comment setContent(final String content) {
+    public Comment setContent(final String content) {
         assertNotNull(content);
         if (content == this.content) {
             return this;
@@ -91,16 +91,16 @@ public abstract class Comment extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isLineComment() {
+    public boolean isLineComment() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  LineComment asLineComment() {
+    public LineComment asLineComment() {
         throw new IllegalStateException(f("%s is not LineComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
-    public  Optional<Node> getCommentedNode() {
+    public Optional<Node> getCommentedNode() {
         return Optional.ofNullable(this.commentedNode);
     }
 
@@ -110,7 +110,7 @@ public abstract class Comment extends Node {
      * @param commentedNode the commentedNode, can be null
      * @return this, the Comment
      */
-    public  Comment setCommentedNode(Node commentedNode) {
+    public Comment setCommentedNode(Node commentedNode) {
         notifyPropertyChange(ObservableProperty.COMMENTED_NODE, this.commentedNode, commentedNode);
         if (commentedNode == null) {
             this.commentedNode = null;
@@ -126,12 +126,12 @@ public abstract class Comment extends Node {
         return this;
     }
 
-    public  boolean isOrphan() {
+    public boolean isOrphan() {
         return this.commentedNode == null;
     }
 
     @Override
-    public  Node setComment(final Comment comment) {
+    public Node setComment(final Comment comment) {
         // comments on comments are not allowed, so we override setComment(Comment) here
         if (comment != null) {
             throw new IllegalArgumentException("A comment cannot be commented.");
@@ -140,7 +140,7 @@ public abstract class Comment extends Node {
     }
 
     @Override
-    public  boolean remove() {
+    public boolean remove() {
         if (this.commentedNode != null) {
             this.commentedNode.setComment(null);
             return true;
@@ -152,7 +152,7 @@ public abstract class Comment extends Node {
     }
 
     @Override
-    public  Node findRootNode() {
+    public Node findRootNode() {
         // (Non-orphan) comments are not integrated into the normal AST; we need to get the commented node first.
         Node n = getCommentedNode().orElse(this);
         while (n.getParentNode().isPresent()) {
@@ -163,60 +163,60 @@ public abstract class Comment extends Node {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  Comment clone() {
+    public Comment clone() {
         return (Comment) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  CommentMetaModel getMetaModel() {
+    public CommentMetaModel getMetaModel() {
         return JavaParserMetaModel.commentMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isBlockComment() {
+    public boolean isBlockComment() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  BlockComment asBlockComment() {
+    public BlockComment asBlockComment() {
         throw new IllegalStateException(f("%s is not BlockComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJavadocComment() {
+    public boolean isJavadocComment() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JavadocComment asJavadocComment() {
+    public JavadocComment asJavadocComment() {
         throw new IllegalStateException(f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifBlockComment(Consumer<BlockComment> action) {
+    public void ifBlockComment(Consumer<BlockComment> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJavadocComment(Consumer<JavadocComment> action) {
+    public void ifJavadocComment(Consumer<JavadocComment> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifLineComment(Consumer<LineComment> action) {
+    public void ifLineComment(Consumer<LineComment> action) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<BlockComment> toBlockComment() {
+    public Optional<BlockComment> toBlockComment() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JavadocComment> toJavadocComment() {
+    public Optional<JavadocComment> toJavadocComment() {
         return Optional.empty();
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<LineComment> toLineComment() {
+    public Optional<LineComment> toLineComment() {
         return Optional.empty();
     }
 
@@ -233,7 +233,7 @@ public abstract class Comment extends Node {
     /*
      * Returns the content of the comment with header and footer
      */
-    public  String asString() {
+    public String asString() {
         return getHeader() + getContent() + getFooter();
     }
 }

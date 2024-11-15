@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 /**
  * @author Fred Lefévère-Laoide
  */
-public  class ConstructorResolutionLogic {
+public class ConstructorResolutionLogic {
 
     private static List<ResolvedType> groupVariadicParamValues(List<ResolvedType> argumentsTypes, int startVariadic, ResolvedType variadicType) {
         List<ResolvedType> res = new ArrayList<>(argumentsTypes.subList(0, startVariadic));

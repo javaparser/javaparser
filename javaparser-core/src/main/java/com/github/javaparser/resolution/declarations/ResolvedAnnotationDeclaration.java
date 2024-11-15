@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * @author Federico Tomassetti
  */
-public  interface ResolvedAnnotationDeclaration extends ResolvedReferenceTypeDeclaration {
+public interface ResolvedAnnotationDeclaration extends ResolvedReferenceTypeDeclaration {
 
     @Override
     default boolean isAnnotation() {

@@ -24,9 +24,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/18/">https://openjdk.java.net/projects/jdk/18/</a>
  */
-public  class Java18Validator extends Java17Validator {
+public class Java18Validator extends Java17Validator {
 
-    public  Java18Validator() {
+    public Java18Validator() {
         super();
     }
 }

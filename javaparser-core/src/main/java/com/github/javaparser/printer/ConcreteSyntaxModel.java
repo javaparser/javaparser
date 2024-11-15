@@ -44,7 +44,7 @@ import static com.github.javaparser.printer.concretesyntaxmodel.CsmElement.*;
  * The Concrete Syntax Model for a single node type. It knows the syntax used to represent a certain element in Java
  * code.
  */
-public  class ConcreteSyntaxModel {
+public class ConcreteSyntaxModel {
 
     private static final Map<Class, CsmElement> concreteSyntaxModelByClass = new HashMap<>();
 

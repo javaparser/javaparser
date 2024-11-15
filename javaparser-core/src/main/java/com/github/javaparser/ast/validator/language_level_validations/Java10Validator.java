@@ -30,11 +30,11 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Var
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/10/">https://openjdk.java.net/projects/jdk/10/</a>
  */
-public  class Java10Validator extends Java9Validator {
+public class Java10Validator extends Java9Validator {
 
     final Validator varOnlyOnLocalVariableDefinitionAndForAndTry = new SingleNodeTypeValidator<>(VarType.class, new VarValidator(false));
 
-    public  Java10Validator() {
+    public Java10Validator() {
         super();
         // Released Language Features
         {

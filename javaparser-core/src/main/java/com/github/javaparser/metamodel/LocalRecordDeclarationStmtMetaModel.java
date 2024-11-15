@@ -34,12 +34,12 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public  class LocalRecordDeclarationStmtMetaModel extends StatementMetaModel {
+public class LocalRecordDeclarationStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     LocalRecordDeclarationStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, LocalRecordDeclarationStmt.class, "LocalRecordDeclarationStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public  PropertyMetaModel recordDeclarationPropertyMetaModel;
+    public PropertyMetaModel recordDeclarationPropertyMetaModel;
 }

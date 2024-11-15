@@ -31,7 +31,7 @@ import java.util.Set;
  *
  * @author Federico Tomassetti
  */
-public  interface ResolvedTypeDeclaration extends ResolvedDeclaration {
+public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
 
     // /
     // / Containment

@@ -19,51 +19,51 @@ import com.github.javaparser.ast.Node;
 public abstract class JmlStatement extends Statement implements Jmlish {
 
     @AllFieldsConstructor
-    public  JmlStatement() {
+    public JmlStatement() {
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  JmlStatement(TokenRange tokenRange) {
+    public JmlStatement(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isJmlStatement() {
+    public boolean isJmlStatement() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  JmlStatement asJmlStatement() {
+    public JmlStatement asJmlStatement() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<JmlStatement> toJmlStatement() {
+    public Optional<JmlStatement> toJmlStatement() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifJmlStatement(Consumer<JmlStatement> action) {
+    public void ifJmlStatement(Consumer<JmlStatement> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  JmlStatement clone() {
+    public JmlStatement clone() {
         return (JmlStatement) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  JmlStatementMetaModel getMetaModel() {
+    public JmlStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlStatementMetaModel;
     }
 }

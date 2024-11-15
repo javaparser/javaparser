@@ -47,7 +47,7 @@ import com.github.javaparser.ast.type.TypeParameter;
  * @see JavaParser#parse(ParseStart, Provider)
  */
 @FunctionalInterface
-public  interface ParseStart<R> {
+public interface ParseStart<R> {
 
     ParseStart<CompilationUnit> COMPILATION_UNIT = GeneratedJavaParser::CompilationUnit;
 

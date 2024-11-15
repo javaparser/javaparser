@@ -39,7 +39,7 @@ import java.util.Optional;
  *
  * @author Federico Tomassetti
  */
-public  interface Context {
+public interface Context {
 
     /**
      * Returns the node wrapped in the context

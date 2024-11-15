@@ -37,7 +37,7 @@ import java.util.Optional;
 /**
  * This validator validates according to Java 5 syntax rules.
  */
-public  class Java5Validator extends Java1_4Validator {
+public class Java5Validator extends Java1_4Validator {
 
     final Validator genericsWithoutDiamondOperator = new TreeVisitorValidator((node, reporter) -> {
         if (node instanceof NodeWithTypeArguments) {
@@ -71,7 +71,7 @@ public  class Java5Validator extends Java1_4Validator {
 
     final Validator enumNotAllowed = new ReservedKeywordValidator("enum");
 
-    public  Java5Validator() {
+    public Java5Validator() {
         super();
         replace(noGenerics, genericsWithoutDiamondOperator);
         add(noPrimitiveGenericArguments);

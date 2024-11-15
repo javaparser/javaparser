@@ -23,7 +23,7 @@ package com.github.javaparser.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-public  class ClassUtils {
+public class ClassUtils {
 
     /**
      * Maps primitive {@code Class}es to their corresponding wrapper {@code Class}.

@@ -41,18 +41,18 @@ import java.util.function.Consumer;
 /**
  * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}
  */
-public  class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {
+public class ModuleExportsDirective extends ModuleDirective implements NodeWithName<ModuleExportsDirective> {
 
     private Name name;
 
     private NodeList<Name> moduleNames;
 
-    public  ModuleExportsDirective() {
+    public ModuleExportsDirective() {
         this(null, new Name(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public  ModuleExportsDirective(Name name, NodeList<Name> moduleNames) {
+    public ModuleExportsDirective(Name name, NodeList<Name> moduleNames) {
         this(null, name, moduleNames);
     }
 
@@ -60,7 +60,7 @@ public  class ModuleExportsDirective extends ModuleDirective implements NodeWith
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  ModuleExportsDirective(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {
+    public ModuleExportsDirective(TokenRange tokenRange, Name name, NodeList<Name> moduleNames) {
         super(tokenRange);
         setName(name);
         setModuleNames(moduleNames);
@@ -69,19 +69,19 @@ public  class ModuleExportsDirective extends ModuleDirective implements NodeWith
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -95,12 +95,12 @@ public  class ModuleExportsDirective extends ModuleDirective implements NodeWith
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  Name getName() {
+    public Name getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ModuleExportsDirective setName(final Name name) {
+    public ModuleExportsDirective setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -114,12 +114,12 @@ public  class ModuleExportsDirective extends ModuleDirective implements NodeWith
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Name> getModuleNames() {
+    public NodeList<Name> getModuleNames() {
         return moduleNames;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  ModuleExportsDirective setModuleNames(final NodeList<Name> moduleNames) {
+    public ModuleExportsDirective setModuleNames(final NodeList<Name> moduleNames) {
         assertNotNull(moduleNames);
         if (moduleNames == this.moduleNames) {
             return this;
@@ -134,13 +134,13 @@ public  class ModuleExportsDirective extends ModuleDirective implements NodeWith
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  ModuleExportsDirective clone() {
+    public ModuleExportsDirective clone() {
         return (ModuleExportsDirective) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -159,59 +159,59 @@ public  class ModuleExportsDirective extends ModuleDirective implements NodeWith
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isModuleExportsStmt() {
+    public boolean isModuleExportsStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ModuleExportsDirective asModuleExportsStmt() {
+    public ModuleExportsDirective asModuleExportsStmt() {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {
+    public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ModuleExportsDirective> toModuleExportsStmt() {
+    public Optional<ModuleExportsDirective> toModuleExportsStmt() {
         return Optional.of(this);
     }
 
-    public  ModuleExportsDirective addModuleName(String name) {
+    public ModuleExportsDirective addModuleName(String name) {
         moduleNames.add(parseName(name));
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isModuleExportsDirective() {
+    public boolean isModuleExportsDirective() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  ModuleExportsDirective asModuleExportsDirective() {
+    public ModuleExportsDirective asModuleExportsDirective() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<ModuleExportsDirective> toModuleExportsDirective() {
+    public Optional<ModuleExportsDirective> toModuleExportsDirective() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {
+    public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  ModuleExportsDirectiveMetaModel getMetaModel() {
+    public ModuleExportsDirectiveMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleExportsDirectiveMetaModel;
     }
 }

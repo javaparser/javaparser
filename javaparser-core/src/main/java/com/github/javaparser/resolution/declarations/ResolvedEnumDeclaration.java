@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public  interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaration, HasAccessSpecifier {
+public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaration, HasAccessSpecifier {
 
     @Override
     default boolean isEnum() {

@@ -29,7 +29,7 @@ import java.util.List;
  * <p>
  * For example <code>This class is totally unrelated to {@link com.github.javaparser.Range}</code>
  */
-public  class JavadocDescription {
+public class JavadocDescription {
 
     private List<JavadocDescriptionElement> elements;
 
@@ -63,35 +63,35 @@ public  class JavadocDescription {
         return new Pair<>(index, closeIndex);
     }
 
-    public  JavadocDescription() {
+    public JavadocDescription() {
         elements = new LinkedList<>();
     }
 
-    public  JavadocDescription(List<JavadocDescriptionElement> elements) {
+    public JavadocDescription(List<JavadocDescriptionElement> elements) {
         this();
         this.elements.addAll(elements);
     }
 
-    public  boolean addElement(JavadocDescriptionElement element) {
+    public boolean addElement(JavadocDescriptionElement element) {
         return this.elements.add(element);
     }
 
-    public  List<JavadocDescriptionElement> getElements() {
+    public List<JavadocDescriptionElement> getElements() {
         return this.elements;
     }
 
-    public  String toText() {
+    public String toText() {
         StringBuilder sb = new StringBuilder();
         elements.forEach(e -> sb.append(e.toText()));
         return sb.toString();
     }
 
-    public  boolean isEmpty() {
+    public boolean isEmpty() {
         return toText().isEmpty();
     }
 
     @Override
-    public  boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -101,12 +101,12 @@ public  class JavadocDescription {
     }
 
     @Override
-    public  int hashCode() {
+    public int hashCode() {
         return elements.hashCode();
     }
 
     @Override
-    public  String toString() {
+    public String toString() {
         return "JavadocDescription{" + "elements=" + elements + '}';
     }
 }

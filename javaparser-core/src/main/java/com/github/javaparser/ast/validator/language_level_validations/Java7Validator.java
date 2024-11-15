@@ -28,7 +28,7 @@ import com.github.javaparser.ast.validator.SingleNodeTypeValidator;
 /**
  * This validator validates according to Java 7 syntax rules.
  */
-public  class Java7Validator extends Java6Validator {
+public class Java7Validator extends Java6Validator {
 
     final SingleNodeTypeValidator<TryStmt> tryWithLimitedResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
         if (n.getCatchClauses().isEmpty() && n.getResources().isEmpty() && !n.getFinallyBlock().isPresent()) {
@@ -48,7 +48,7 @@ public  class Java7Validator extends Java6Validator {
         }
     });
 
-    public  Java7Validator() {
+    public Java7Validator() {
         super();
         remove(genericsWithoutDiamondOperator);
         replace(tryWithoutResources, tryWithLimitedResources);

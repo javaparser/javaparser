@@ -54,16 +54,16 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     private NodeList<BodyDeclaration<?>> members;
 
-    public  TypeDeclaration() {
+    public TypeDeclaration() {
         this(null, new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>());
     }
 
-    public  TypeDeclaration(NodeList<Modifier> modifiers, String name) {
+    public TypeDeclaration(NodeList<Modifier> modifiers, String name) {
         this(null, modifiers, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public  TypeDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+    public TypeDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         this(null, modifiers, annotations, name, members);
     }
 
@@ -71,7 +71,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public  TypeDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
+    public TypeDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setName(name);
@@ -84,14 +84,14 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      *
      * @param decl member declaration
      */
-    public  T addMember(BodyDeclaration<?> decl) {
+    public T addMember(BodyDeclaration<?> decl) {
         NodeList<BodyDeclaration<?>> members = getMembers();
         members.add(decl);
         return (T) this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<BodyDeclaration<?>> getMembers() {
+    public NodeList<BodyDeclaration<?>> getMembers() {
         return members;
     }
 
@@ -102,13 +102,13 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * @see Modifier
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  NodeList<Modifier> getModifiers() {
+    public NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public  T setMembers(final NodeList<BodyDeclaration<?>> members) {
+    public T setMembers(final NodeList<BodyDeclaration<?>> members) {
         assertNotNull(members);
         if (members == this.members) {
             return (T) this;
@@ -123,7 +123,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public  T setModifiers(final NodeList<Modifier> modifiers) {
+    public T setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return (T) this;
@@ -138,7 +138,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     @SuppressWarnings("unchecked")
-    public  T setName(final SimpleName name) {
+    public T setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return (T) this;
@@ -152,13 +152,13 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public  SimpleName getName() {
+    public SimpleName getName() {
         return name;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public  boolean remove(Node node) {
+    public boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -180,14 +180,14 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     /**
      * @return is this type's parent a CompilationUnit?
      */
-    public  boolean isTopLevelType() {
+    public boolean isTopLevelType() {
         return getParentNode().map(p -> p instanceof CompilationUnit).orElse(false);
     }
 
     /**
      * @return methods or constructors whose signatures match the passed signature.
      */
-    public  List<CallableDeclaration<?>> getCallablesWithSignature(CallableDeclaration.Signature signature) {
+    public List<CallableDeclaration<?>> getCallablesWithSignature(CallableDeclaration.Signature signature) {
         return getMembers().stream().filter(m -> m instanceof CallableDeclaration).map(m -> ((CallableDeclaration<?>) m)).filter(m -> m.getSignature().equals(signature)).collect(toList());
     }
 
@@ -200,7 +200,7 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * @see com.github.javaparser.ast.stmt.LocalClassDeclarationStmt
      * @see com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt
      */
-    public  Optional<String> getFullyQualifiedName() {
+    public Optional<String> getFullyQualifiedName() {
         if (isTopLevelType()) {
             return findCompilationUnit().map(cu -> cu.getPackageDeclaration().map(pd -> pd.getNameAsString()).map(pkg -> pkg + "." + getNameAsString()).orElseGet(() -> getNameAsString()));
         }
@@ -211,25 +211,25 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
      * @return is this type's parent a TypeDeclaration?
      * NOTE: many people are confused over terminology. Refer to https://docs.oracle.com/javase/tutorial/java/javaOO/nested.html .
      */
-    public  boolean isNestedType() {
+    public boolean isNestedType() {
         return getParentNode().map(p -> p instanceof TypeDeclaration).orElse(false);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public  TypeDeclaration<?> clone() {
+    public TypeDeclaration<?> clone() {
         return (TypeDeclaration<?>) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public  TypeDeclarationMetaModel getMetaModel() {
+    public TypeDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.typeDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public  boolean replace(Node node, Node replacementNode) {
+    public boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -254,25 +254,25 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  boolean isTypeDeclaration() {
+    public boolean isTypeDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  TypeDeclaration asTypeDeclaration() {
+    public TypeDeclaration asTypeDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
+    public void ifTypeDeclaration(Consumer<TypeDeclaration> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public  Optional<TypeDeclaration> toTypeDeclaration() {
+    public Optional<TypeDeclaration> toTypeDeclaration() {
         return Optional.of(this);
     }
 
