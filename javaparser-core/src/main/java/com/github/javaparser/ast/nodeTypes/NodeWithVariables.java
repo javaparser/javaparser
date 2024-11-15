@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * A node which has a list of variables.
  */
-public interface NodeWithVariables<N extends Node> {
+public  interface NodeWithVariables<N extends Node> {
 
     NodeList<VariableDeclarator> getVariables();
 
@@ -123,8 +123,7 @@ public interface NodeWithVariables<N extends Node> {
      */
     @DerivedProperty
     default Optional<Type> getMaximumCommonType() {
-        return calculateMaximumCommonType(
-                getVariables().stream().map(v -> v.getType()).collect(Collectors.toList()));
+        return calculateMaximumCommonType(getVariables().stream().map(v -> v.getType()).collect(Collectors.toList()));
     }
 
     static Optional<Type> calculateMaximumCommonType(List<Type> types) {
@@ -158,13 +157,10 @@ public interface NodeWithVariables<N extends Node> {
             // Now, given that equality on nodes consider the position the simplest way is to compare
             // the pretty-printed string got for a node. We just check all them are the same and if they
             // are we just just is not null
-            Object[] values = types.stream()
-                    .map(v -> {
-                        Optional<Type> t = helper.toArrayLevel(v, currentLevel);
-                        return t.map(Node::toString).orElse(null);
-                    })
-                    .distinct()
-                    .toArray();
+            Object[] values = types.stream().map(v -> {
+                Optional<Type> t = helper.toArrayLevel(v, currentLevel);
+                return t.map(Node::toString).orElse(null);
+            }).distinct().toArray();
             if (values.length == 1 && values[0] != null) {
                 level++;
             } else {

@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.metamodel;
 
+import java.util.Optional;
+import com.github.javaparser.ast.body.CallableDeclaration;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.CallableDeclaration;
-import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -35,39 +35,29 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class CallableDeclarationMetaModel extends BodyDeclarationMetaModel {
+public  class CallableDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     CallableDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                CallableDeclaration.class,
-                "CallableDeclaration",
-                "com.github.javaparser.ast.body",
-                true,
-                true);
+        super(superBaseNodeMetaModel, CallableDeclaration.class, "CallableDeclaration", "com.github.javaparser.ast.body", true, true);
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    protected CallableDeclarationMetaModel(
-            Optional<BaseNodeMetaModel> superNodeMetaModel,
-            Class<? extends Node> type,
-            String name,
-            String packageName,
-            boolean isAbstract,
-            boolean hasWildcard) {
+    protected CallableDeclarationMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 
-    public PropertyMetaModel modifiersPropertyMetaModel;
+    public  PropertyMetaModel contractsPropertyMetaModel;
 
-    public PropertyMetaModel namePropertyMetaModel;
+    public  PropertyMetaModel modifiersPropertyMetaModel;
 
-    public PropertyMetaModel parametersPropertyMetaModel;
+    public  PropertyMetaModel namePropertyMetaModel;
 
-    public PropertyMetaModel receiverParameterPropertyMetaModel;
+    public  PropertyMetaModel parametersPropertyMetaModel;
 
-    public PropertyMetaModel thrownExceptionsPropertyMetaModel;
+    public  PropertyMetaModel receiverParameterPropertyMetaModel;
 
-    public PropertyMetaModel typeParametersPropertyMetaModel;
+    public  PropertyMetaModel thrownExceptionsPropertyMetaModel;
+
+    public  PropertyMetaModel typeParametersPropertyMetaModel;
 }

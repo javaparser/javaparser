@@ -21,7 +21,7 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
-import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -83,7 +83,7 @@ class NodeWithModifiersTest {
         assertEquals(createModifierList(SYNCHRONIZED), node.getModifiers());
     }
 
-    private NodeWithModifiers anythingWithModifiers(Modifier.Keyword... keywords) {
+    private NodeWithModifiers anythingWithModifiers(Modifier.DefaultKeyword... keywords) {
         ClassOrInterfaceDeclaration foo = new ClassOrInterfaceDeclaration(new NodeList<>(), false, "Foo");
         foo.addModifier(keywords);
         return foo;

@@ -24,7 +24,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlLabelExpr extends Expression implements Jmlish {
+public  class JmlLabelExpr extends Expression implements Jmlish {
 
     private Kind kind;
 
@@ -33,11 +33,11 @@ public class JmlLabelExpr extends Expression implements Jmlish {
     private Expression expression;
 
     @AllFieldsConstructor
-    public JmlLabelExpr(final Kind kind, SimpleName label, final Expression expression) {
+    public  JmlLabelExpr(final Kind kind, SimpleName label, final Expression expression) {
         this(null, kind, label, expression);
     }
 
-    public JmlLabelExpr(TokenRange range, JavaToken quant, SimpleName name, Expression expr) {
+    public  JmlLabelExpr(TokenRange range, JavaToken quant, SimpleName name, Expression expr) {
         this(range, token2Kind(quant), name, expr);
     }
 
@@ -45,7 +45,7 @@ public class JmlLabelExpr extends Expression implements Jmlish {
         return Arrays.stream(Kind.values()).filter(it -> it.jmlSymbol().equals(token.getText())).findFirst().get();
     }
 
-    public enum Kind implements JmlKeyword {
+    public  enum Kind implements JmlKeyword {
 
         NEUTRAL("\\lbl"), POSITIVE("\\lblpos"), NEGATIVE("\\lblneg");
 
@@ -56,55 +56,55 @@ public class JmlLabelExpr extends Expression implements Jmlish {
         }
 
         @Override
-        public String jmlSymbol() {
+        public  String jmlSymbol() {
             return symbol;
         }
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
-    public boolean hasParentNode() {
+    public  boolean hasParentNode() {
         return false;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlLabel() {
+    public  boolean isJmlLabel() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlLabelExpr asJmlLabel() {
+    public  JmlLabelExpr asJmlLabel() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlLabelExpr> toJmlLabel() {
+    public  Optional<JmlLabelExpr> toJmlLabel() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlLabel(Consumer<JmlLabelExpr> action) {
+    public  void ifJmlLabel(Consumer<JmlLabelExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -121,7 +121,7 @@ public class JmlLabelExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlLabelExpr clone() {
+    public  JmlLabelExpr clone() {
         return (JmlLabelExpr) accept(new CloneVisitor(), null);
     }
 
@@ -129,18 +129,18 @@ public class JmlLabelExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlLabelExpr(TokenRange tokenRange) {
+    public  JmlLabelExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getExpression() {
+    public  Expression getExpression() {
         return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabelExpr setExpression(final Expression expression) {
+    public  JmlLabelExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -154,12 +154,12 @@ public class JmlLabelExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Kind getKind() {
+    public  Kind getKind() {
         return kind;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabelExpr setKind(final Kind kind) {
+    public  JmlLabelExpr setKind(final Kind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -172,7 +172,7 @@ public class JmlLabelExpr extends Expression implements Jmlish {
     /**
      * This constructor is used by the parser and is considered private.
      */
-    public JmlLabelExpr(TokenRange tokenRange, Kind kind, Expression expression) {
+    public  JmlLabelExpr(TokenRange tokenRange, Kind kind, Expression expression) {
         super(tokenRange);
         setKind(kind);
         setExpression(expression);
@@ -180,12 +180,12 @@ public class JmlLabelExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getLabel() {
+    public  SimpleName getLabel() {
         return label;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlLabelExpr setLabel(final SimpleName label) {
+    public  JmlLabelExpr setLabel(final SimpleName label) {
         assertNotNull(label);
         if (label == this.label) {
             return this;
@@ -202,7 +202,7 @@ public class JmlLabelExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlLabelExpr(TokenRange tokenRange, Kind kind, SimpleName label, Expression expression) {
+    public  JmlLabelExpr(TokenRange tokenRange, Kind kind, SimpleName label, Expression expression) {
         super(tokenRange);
         setKind(kind);
         setLabel(label);
@@ -212,31 +212,31 @@ public class JmlLabelExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlLabelExpr() {
+    public  boolean isJmlLabelExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlLabelExpr asJmlLabelExpr() {
+    public  JmlLabelExpr asJmlLabelExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlLabelExpr> toJmlLabelExpr() {
+    public  Optional<JmlLabelExpr> toJmlLabelExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlLabelExpr(Consumer<JmlLabelExpr> action) {
+    public  void ifJmlLabelExpr(Consumer<JmlLabelExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlLabelExprMetaModel getMetaModel() {
+    public  JmlLabelExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlLabelExprMetaModel;
     }
 }

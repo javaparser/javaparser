@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.body.CompactConstructorDeclaration;
 import java.util.Optional;
+import com.github.javaparser.ast.body.CompactConstructorDeclaration;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,26 +34,20 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class CompactConstructorDeclarationMetaModel extends BodyDeclarationMetaModel {
+public  class CompactConstructorDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     CompactConstructorDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                CompactConstructorDeclaration.class,
-                "CompactConstructorDeclaration",
-                "com.github.javaparser.ast.body",
-                false,
-                false);
+        super(superBaseNodeMetaModel, CompactConstructorDeclaration.class, "CompactConstructorDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
-    public PropertyMetaModel bodyPropertyMetaModel;
+    public  PropertyMetaModel bodyPropertyMetaModel;
 
-    public PropertyMetaModel modifiersPropertyMetaModel;
+    public  PropertyMetaModel modifiersPropertyMetaModel;
 
-    public PropertyMetaModel namePropertyMetaModel;
+    public  PropertyMetaModel namePropertyMetaModel;
 
-    public PropertyMetaModel thrownExceptionsPropertyMetaModel;
+    public  PropertyMetaModel thrownExceptionsPropertyMetaModel;
 
-    public PropertyMetaModel typeParametersPropertyMetaModel;
+    public  PropertyMetaModel typeParametersPropertyMetaModel;
 }

@@ -45,10 +45,10 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
+public  class VoidType extends Type implements NodeWithAnnotations<VoidType> {
 
     @AllFieldsConstructor
-    public VoidType() {
+    public  VoidType() {
         this(null);
     }
 
@@ -56,81 +56,81 @@ public class VoidType extends Type implements NodeWithAnnotations<VoidType> {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public VoidType(TokenRange tokenRange) {
+    public  VoidType(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
-    public VoidType setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public  VoidType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (VoidType) super.setAnnotations(annotations);
     }
 
     @Override
-    public String asString() {
+    public  String asString() {
         return "void";
     }
 
     @Override
-    public String toDescriptor() {
+    public  String toDescriptor() {
         return "V";
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public VoidType clone() {
+    public  VoidType clone() {
         return (VoidType) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public VoidTypeMetaModel getMetaModel() {
+    public  VoidTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.voidTypeMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isVoidType() {
+    public  boolean isVoidType() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public VoidType asVoidType() {
+    public  VoidType asVoidType() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifVoidType(Consumer<VoidType> action) {
+    public  void ifVoidType(Consumer<VoidType> action) {
         action.accept(this);
     }
 
     @Override
-    public ResolvedVoidType resolve() {
+    public  ResolvedVoidType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedVoidType.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<VoidType> toVoidType() {
+    public  Optional<VoidType> toVoidType() {
         return Optional.of(this);
     }
 
     @Override
-    public ResolvedType convertToUsage(Context context) {
+    public  ResolvedType convertToUsage(Context context) {
         return ResolvedVoidType.INSTANCE;
     }
 }

@@ -20,13 +20,11 @@
  */
 package com.github.javaparser.ast.body;
 
-import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.Modifier.Keyword;
@@ -62,36 +60,27 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
  *
  * @author Julio Vilmar Gesser
  */
-public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
-        implements NodeWithJavadoc<FieldDeclaration>,
-                NodeWithVariables<FieldDeclaration>,
-                NodeWithAccessModifiers<FieldDeclaration>,
-                NodeWithStaticModifier<FieldDeclaration>,
-                NodeWithFinalModifier<FieldDeclaration>,
-                Resolvable<ResolvedFieldDeclaration> {
+public  class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implements NodeWithJavadoc<FieldDeclaration>, NodeWithVariables<FieldDeclaration>, NodeWithAccessModifiers<FieldDeclaration>, NodeWithStaticModifier<FieldDeclaration>, NodeWithFinalModifier<FieldDeclaration>, Resolvable<ResolvedFieldDeclaration> {
 
     private NodeList<Modifier> modifiers;
 
     @NonEmptyProperty
     private NodeList<VariableDeclarator> variables;
 
-    public FieldDeclaration() {
+    public  FieldDeclaration() {
         this(null, new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
-    public FieldDeclaration(NodeList<Modifier> modifiers, VariableDeclarator variable) {
+    public  FieldDeclaration(NodeList<Modifier> modifiers, VariableDeclarator variable) {
         this(null, modifiers, new NodeList<>(), nodeList(variable));
     }
 
-    public FieldDeclaration(NodeList<Modifier> modifiers, NodeList<VariableDeclarator> variables) {
+    public  FieldDeclaration(NodeList<Modifier> modifiers, NodeList<VariableDeclarator> variables) {
         this(null, modifiers, new NodeList<>(), variables);
     }
 
     @AllFieldsConstructor
-    public FieldDeclaration(
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            NodeList<VariableDeclarator> variables) {
+    public  FieldDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         this(null, modifiers, annotations, variables);
     }
 
@@ -99,11 +88,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public FieldDeclaration(
-            TokenRange tokenRange,
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            NodeList<VariableDeclarator> variables) {
+    public  FieldDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<VariableDeclarator> variables) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setVariables(variables);
@@ -117,19 +102,19 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * @param type      type
      * @param name      field name
      */
-    public FieldDeclaration(NodeList<Modifier> modifiers, Type type, String name) {
+    public  FieldDeclaration(NodeList<Modifier> modifiers, Type type, String name) {
         this(assertNotNull(modifiers), new VariableDeclarator(type, assertNotNull(name)));
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -140,36 +125,38 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * @see Modifier
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> getModifiers() {
+    public  NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<VariableDeclarator> getVariables() {
+    public  NodeList<VariableDeclarator> getVariables() {
         return variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public  FieldDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null) this.modifiers.setParentNode(null);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
+    public  FieldDeclaration setVariables(final NodeList<VariableDeclarator> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.VARIABLES, this.variables, variables);
-        if (this.variables != null) this.variables.setParentNode(null);
+        if (this.variables != null)
+            this.variables.setParentNode(null);
         this.variables = variables;
         setAsParentNodeOf(variables);
         return this;
@@ -183,21 +170,18 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
      *                               class or enum
      */
-    public MethodDeclaration createGetter() {
+    public  MethodDeclaration createGetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
         Optional<ClassOrInterfaceDeclaration> parentClass = findAncestor(ClassOrInterfaceDeclaration.class);
         Optional<EnumDeclaration> parentEnum = findAncestor(EnumDeclaration.class);
-        if (!(parentClass.isPresent() || parentEnum.isPresent())
-                || (parentClass.isPresent() && parentClass.get().isInterface()))
+        if (!(parentClass.isPresent() || parentEnum.isPresent()) || (parentClass.isPresent() && parentClass.get().isInterface()))
             throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
         String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().charAt(0) + fieldName.substring(1);
         final MethodDeclaration getter;
-        getter = parentClass
-                .map(clazz -> clazz.addMethod("get" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC))
-                .orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC));
+        getter = parentClass.map(clazz -> clazz.addMethod("get" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("get" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC));
         getter.setType(variable.getType());
         BlockStmt blockStmt = new BlockStmt();
         getter.setBody(blockStmt);
@@ -213,43 +197,39 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * @throws IllegalStateException if there is more than 1 variable identifier or if this field isn't attached to a
      *                               class or enum
      */
-    public MethodDeclaration createSetter() {
+    public  MethodDeclaration createSetter() {
         if (getVariables().size() != 1)
             throw new IllegalStateException("You can use this only when the field declares only 1 variable name");
         Optional<ClassOrInterfaceDeclaration> parentClass = findAncestor(ClassOrInterfaceDeclaration.class);
         Optional<EnumDeclaration> parentEnum = findAncestor(EnumDeclaration.class);
-        if (!(parentClass.isPresent() || parentEnum.isPresent())
-                || (parentClass.isPresent() && parentClass.get().isInterface()))
+        if (!(parentClass.isPresent() || parentEnum.isPresent()) || (parentClass.isPresent() && parentClass.get().isInterface()))
             throw new IllegalStateException("You can use this only when the field is attached to a class or an enum");
         VariableDeclarator variable = getVariable(0);
         String fieldName = variable.getNameAsString();
         String fieldNameUpper = fieldName.toUpperCase().charAt(0) + fieldName.substring(1);
         final MethodDeclaration setter;
-        setter = parentClass
-                .map(clazz -> clazz.addMethod("set" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC))
-                .orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC));
+        setter = parentClass.map(clazz -> clazz.addMethod("set" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC)).orElseGet(() -> parentEnum.get().addMethod("set" + fieldNameUpper, Modifier.DefaultKeyword.PUBLIC));
         setter.setType(new VoidType());
         setter.getParameters().add(new Parameter(variable.getType(), fieldName));
         BlockStmt blockStmt2 = new BlockStmt();
         setter.setBody(blockStmt2);
-        blockStmt2.addStatement(
-                new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.ASSIGN));
+        blockStmt2.addStatement(new AssignExpr(new NameExpr("this." + fieldName), new NameExpr(fieldName), Operator.ASSIGN));
         return setter;
     }
 
-    public boolean isTransient() {
+    public  boolean isTransient() {
         return hasModifier(Modifier.DefaultKeyword.TRANSIENT);
     }
 
-    public boolean isVolatile() {
+    public  boolean isVolatile() {
         return hasModifier(Modifier.DefaultKeyword.VOLATILE);
     }
 
-    public FieldDeclaration setTransient(boolean set) {
+    public  FieldDeclaration setTransient(boolean set) {
         return setModifier(Modifier.DefaultKeyword.TRANSIENT, set);
     }
 
-    public FieldDeclaration setVolatile(boolean set) {
+    public  FieldDeclaration setVolatile(boolean set) {
         return setModifier(Modifier.DefaultKeyword.VOLATILE, set);
     }
 
@@ -257,7 +237,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * Every field declaration in the body of an interface is implicitly public, static, and final.
      */
     @Override
-    public boolean isStatic() {
+    public  boolean isStatic() {
         return hasModifier(STATIC) || isDeclaredInInterface();
     }
 
@@ -265,7 +245,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * Every field declaration in the body of an interface is implicitly public, static, and final.
      */
     @Override
-    public boolean isFinal() {
+    public  boolean isFinal() {
         return hasModifier(FINAL) || isDeclaredInInterface();
     }
 
@@ -273,7 +253,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
      * Every field declaration in the body of an interface is implicitly public, static, and final.
      */
     @Override
-    public boolean isPublic() {
+    public  boolean isPublic() {
         return hasModifier(PUBLIC) || isDeclaredInInterface();
     }
 
@@ -287,7 +267,7 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -308,19 +288,19 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public FieldDeclaration clone() {
+    public  FieldDeclaration clone() {
         return (FieldDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public FieldDeclarationMetaModel getMetaModel() {
+    public  FieldDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.fieldDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -341,30 +321,30 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration>
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isFieldDeclaration() {
+    public  boolean isFieldDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public FieldDeclaration asFieldDeclaration() {
+    public  FieldDeclaration asFieldDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifFieldDeclaration(Consumer<FieldDeclaration> action) {
+    public  void ifFieldDeclaration(Consumer<FieldDeclaration> action) {
         action.accept(this);
     }
 
     @Override
-    public ResolvedFieldDeclaration resolve() {
+    public  ResolvedFieldDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedFieldDeclaration.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<FieldDeclaration> toFieldDeclaration() {
+    public  Optional<FieldDeclaration> toFieldDeclaration() {
         return Optional.of(this);
     }
 }

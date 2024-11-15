@@ -27,7 +27,7 @@ import java.util.Optional;
 /**
  * Represents a node which has an optional scope expression eg. method calls (object.method()).
  */
-public interface NodeWithOptionalScope<N extends Node> extends NodeWithTraversableScope {
+public  interface NodeWithOptionalScope<N extends Node> extends NodeWithTraversableScope {
 
     Optional<Expression> getScope();
 

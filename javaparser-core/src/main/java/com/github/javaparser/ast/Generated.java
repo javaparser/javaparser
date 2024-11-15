@@ -22,7 +22,6 @@ package com.github.javaparser.ast;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
@@ -33,8 +32,8 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
  * and will be overwritten the next time the generators are run.
  */
 @Retention(SOURCE)
-@Target({PACKAGE, TYPE, ANNOTATION_TYPE, METHOD, CONSTRUCTOR, FIELD, LOCAL_VARIABLE, PARAMETER})
-public @interface Generated {
+@Target({ PACKAGE, TYPE, ANNOTATION_TYPE, METHOD, CONSTRUCTOR, FIELD, LOCAL_VARIABLE, PARAMETER })
+public  @interface Generated {
 
     /**
      * The value element must have the name of the code generator.

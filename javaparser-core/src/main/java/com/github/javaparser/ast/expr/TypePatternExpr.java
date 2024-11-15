@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
@@ -71,19 +70,18 @@ import java.util.function.Consumer;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public class TypePatternExpr extends PatternExpr
-        implements NodeWithSimpleName<TypePatternExpr>, NodeWithFinalModifier<TypePatternExpr> {
+public  class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<TypePatternExpr>, NodeWithFinalModifier<TypePatternExpr> {
 
     private NodeList<Modifier> modifiers;
 
     private SimpleName name;
 
-    public TypePatternExpr() {
+    public  TypePatternExpr() {
         this(null, new NodeList<>(), new ClassOrInterfaceType(), new SimpleName());
     }
 
     @AllFieldsConstructor
-    public TypePatternExpr(final NodeList<Modifier> modifiers, final Type type, SimpleName name) {
+    public  TypePatternExpr(final NodeList<Modifier> modifiers, final Type type, SimpleName name) {
         this(null, modifiers, type, name);
     }
 
@@ -91,7 +89,7 @@ public class TypePatternExpr extends PatternExpr
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TypePatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, SimpleName name) {
+    public  TypePatternExpr(TokenRange tokenRange, NodeList<Modifier> modifiers, Type type, SimpleName name) {
         super(tokenRange, type);
         setModifiers(modifiers);
         setName(name);
@@ -100,29 +98,30 @@ public class TypePatternExpr extends PatternExpr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getName() {
+    public  SimpleName getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypePatternExpr setName(final SimpleName name) {
+    public  TypePatternExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -130,7 +129,7 @@ public class TypePatternExpr extends PatternExpr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -149,29 +148,30 @@ public class TypePatternExpr extends PatternExpr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public TypePatternExpr clone() {
+    public  TypePatternExpr clone() {
         return (TypePatternExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public TypePatternExprMetaModel getMetaModel() {
+    public  TypePatternExprMetaModel getMetaModel() {
         return JavaParserMetaModel.typePatternExprMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> getModifiers() {
+    public  NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public TypePatternExpr setModifiers(final NodeList<Modifier> modifiers) {
+    public  TypePatternExpr setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null) this.modifiers.setParentNode(null);
+        if (this.modifiers != null)
+            this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return this;
@@ -179,7 +179,7 @@ public class TypePatternExpr extends PatternExpr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -194,25 +194,25 @@ public class TypePatternExpr extends PatternExpr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isTypePatternExpr() {
+    public  boolean isTypePatternExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public TypePatternExpr asTypePatternExpr() {
+    public  TypePatternExpr asTypePatternExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<TypePatternExpr> toTypePatternExpr() {
+    public  Optional<TypePatternExpr> toTypePatternExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifTypePatternExpr(Consumer<TypePatternExpr> action) {
+    public  void ifTypePatternExpr(Consumer<TypePatternExpr> action) {
         action.accept(this);
     }
 }

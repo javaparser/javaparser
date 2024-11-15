@@ -44,15 +44,15 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Alexander Weigl
  */
-public class JmlQuantifiedExpr extends Expression implements Jmlish {
+public  class JmlQuantifiedExpr extends Expression implements Jmlish {
 
-    public interface JmlBinder extends JmlKeyword {
+    public  interface JmlBinder extends JmlKeyword {
     }
 
     /**
      * 12.4.24.2 Generalized Quantifiers
      */
-    public enum JmlDefaultBinder implements JmlBinder {
+    public  enum JmlDefaultBinder implements JmlBinder {
 
         FORALL("\\forall"),
         EXISTS("\\exists"),
@@ -83,7 +83,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
         }
 
         @Override
-        public String jmlSymbol() {
+        public  String jmlSymbol() {
             return symbol;
         }
     }
@@ -96,20 +96,20 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     @NonEmptyProperty
     private NodeList<Expression> expressions;
 
-    public JmlQuantifiedExpr() {
+    public  JmlQuantifiedExpr() {
         this(null, JmlDefaultBinder.EXISTS, new NodeList<>(), new NodeList<>());
     }
 
-    public JmlQuantifiedExpr(final NodeList<Parameter> variables, final Expression expressions) {
+    public  JmlQuantifiedExpr(final NodeList<Parameter> variables, final Expression expressions) {
         this(null, JmlDefaultBinder.EXISTS, variables, new NodeList<>(expressions));
     }
 
     @AllFieldsConstructor
-    public JmlQuantifiedExpr(final JmlBinder binder, final NodeList<Parameter> variables, final Expression expressions) {
+    public  JmlQuantifiedExpr(final JmlBinder binder, final NodeList<Parameter> variables, final Expression expressions) {
         this(null, binder, variables, new NodeList<>(expressions));
     }
 
-    public JmlQuantifiedExpr(TokenRange tokenRange, JavaToken binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
+    public  JmlQuantifiedExpr(TokenRange tokenRange, JavaToken binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
         this(tokenRange, JmlDefaultBinder.valueOf(binder), variables, new NodeList<>(expressions));
     }
 
@@ -117,7 +117,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlQuantifiedExpr(TokenRange tokenRange, JmlBinder binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
+    public  JmlQuantifiedExpr(TokenRange tokenRange, JmlBinder binder, NodeList<Parameter> variables, NodeList<Expression> expressions) {
         super(tokenRange);
         setBinder(binder);
         setVariables(variables);
@@ -127,47 +127,47 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlBindingExpr() {
+    public  boolean isJmlBindingExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlQuantifiedExpr asJmlBindingExpr() {
+    public  JmlQuantifiedExpr asJmlBindingExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlQuantifiedExpr> toJmlBindingExpr() {
+    public  Optional<JmlQuantifiedExpr> toJmlBindingExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlBindingExpr(Consumer<JmlQuantifiedExpr> action) {
+    public  void ifJmlBindingExpr(Consumer<JmlQuantifiedExpr> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getExpressions() {
+    public  NodeList<Expression> getExpressions() {
         return expressions;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlQuantifiedExpr setExpressions(final NodeList<Expression> expressions) {
+    public  JmlQuantifiedExpr setExpressions(final NodeList<Expression> expressions) {
         assertNotNull(expressions);
         if (expressions == this.expressions) {
             return this;
@@ -181,12 +181,12 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Parameter> getVariables() {
+    public  NodeList<Parameter> getVariables() {
         return variables;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlQuantifiedExpr setVariables(final NodeList<Parameter> variables) {
+    public  JmlQuantifiedExpr setVariables(final NodeList<Parameter> variables) {
         assertNotNull(variables);
         if (variables == this.variables) {
             return this;
@@ -201,7 +201,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -222,7 +222,7 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -243,17 +243,17 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlQuantifiedExpr clone() {
+    public  JmlQuantifiedExpr clone() {
         return (JmlQuantifiedExpr) accept(new CloneVisitor(), null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlBinder getBinder() {
+    public  JmlBinder getBinder() {
         return binder;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlQuantifiedExpr setBinder(final JmlBinder binder) {
+    public  JmlQuantifiedExpr setBinder(final JmlBinder binder) {
         assertNotNull(binder);
         if (binder == this.binder) {
             return this;
@@ -265,31 +265,31 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlQuantifiedExpr() {
+    public  boolean isJmlQuantifiedExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlQuantifiedExpr asJmlQuantifiedExpr() {
+    public  JmlQuantifiedExpr asJmlQuantifiedExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlQuantifiedExpr> toJmlQuantifiedExpr() {
+    public  Optional<JmlQuantifiedExpr> toJmlQuantifiedExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlQuantifiedExpr(Consumer<JmlQuantifiedExpr> action) {
+    public  void ifJmlQuantifiedExpr(Consumer<JmlQuantifiedExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlQuantifiedExprMetaModel getMetaModel() {
+    public  JmlQuantifiedExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlQuantifiedExprMetaModel;
     }
 }

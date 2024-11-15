@@ -26,11 +26,11 @@ package com.github.javaparser.javadoc.description;
  * For example in <code>A class totally unrelated to {@link String}, I swear!</code> we would have two snippets: one
  * before and one after the inline tag (<code>{@link String}</code>).
  */
-public class JavadocSnippet implements JavadocDescriptionElement {
+public  class JavadocSnippet implements JavadocDescriptionElement {
 
     private String text;
 
-    public JavadocSnippet(String text) {
+    public  JavadocSnippet(String text) {
         if (text == null) {
             throw new NullPointerException();
         }
@@ -38,25 +38,27 @@ public class JavadocSnippet implements JavadocDescriptionElement {
     }
 
     @Override
-    public String toText() {
+    public  String toText() {
         return this.text;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         JavadocSnippet that = (JavadocSnippet) o;
         return text.equals(that.text);
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         return text.hashCode();
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return "JavadocSnippet{" + "text='" + text + '\'' + '}';
     }
 }

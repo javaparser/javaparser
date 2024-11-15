@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.metamodel;
 
+import java.util.Optional;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.TypeDeclaration;
-import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -35,33 +35,21 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class TypeDeclarationMetaModel extends BodyDeclarationMetaModel {
+public  class TypeDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     TypeDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                TypeDeclaration.class,
-                "TypeDeclaration",
-                "com.github.javaparser.ast.body",
-                true,
-                true);
+        super(superBaseNodeMetaModel, TypeDeclaration.class, "TypeDeclaration", "com.github.javaparser.ast.body", true, true);
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    protected TypeDeclarationMetaModel(
-            Optional<BaseNodeMetaModel> superNodeMetaModel,
-            Class<? extends Node> type,
-            String name,
-            String packageName,
-            boolean isAbstract,
-            boolean hasWildcard) {
+    protected TypeDeclarationMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 
-    public PropertyMetaModel membersPropertyMetaModel;
+    public  PropertyMetaModel membersPropertyMetaModel;
 
-    public PropertyMetaModel modifiersPropertyMetaModel;
+    public  PropertyMetaModel modifiersPropertyMetaModel;
 
-    public PropertyMetaModel namePropertyMetaModel;
+    public  PropertyMetaModel namePropertyMetaModel;
 }

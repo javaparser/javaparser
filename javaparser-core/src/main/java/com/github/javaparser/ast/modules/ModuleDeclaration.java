@@ -22,7 +22,6 @@ package com.github.javaparser.ast.modules;
 
 import static com.github.javaparser.StaticJavaParser.parseModuleDirective;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -42,8 +41,7 @@ import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
 /**
  * A Java 9 Jigsaw module declaration. {@code @Foo module com.github.abc { requires a.B; }}
  */
-public class ModuleDeclaration extends Node
-        implements NodeWithName<ModuleDeclaration>, NodeWithAnnotations<ModuleDeclaration> {
+public  class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclaration>, NodeWithAnnotations<ModuleDeclaration> {
 
     private Name name;
 
@@ -53,17 +51,16 @@ public class ModuleDeclaration extends Node
 
     private NodeList<ModuleDirective> directives;
 
-    public ModuleDeclaration() {
+    public  ModuleDeclaration() {
         this(null, new NodeList<>(), new Name(), false, new NodeList<>());
     }
 
-    public ModuleDeclaration(Name name, boolean isOpen) {
+    public  ModuleDeclaration(Name name, boolean isOpen) {
         this(null, new NodeList<>(), name, isOpen, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ModuleDeclaration(
-            NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
+    public  ModuleDeclaration(NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
         this(null, annotations, name, isOpen, directives);
     }
 
@@ -71,12 +68,7 @@ public class ModuleDeclaration extends Node
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ModuleDeclaration(
-            TokenRange tokenRange,
-            NodeList<AnnotationExpr> annotations,
-            Name name,
-            boolean isOpen,
-            NodeList<ModuleDirective> directives) {
+    public  ModuleDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name, boolean isOpen, NodeList<ModuleDirective> directives) {
         super(tokenRange);
         setAnnotations(annotations);
         setName(name);
@@ -87,47 +79,49 @@ public class ModuleDeclaration extends Node
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name getName() {
+    public  Name getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration setName(final Name name) {
+    public  ModuleDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> getAnnotations() {
+    public  NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public  ModuleDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null) this.annotations.setParentNode(null);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;
@@ -135,7 +129,7 @@ public class ModuleDeclaration extends Node
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -155,12 +149,12 @@ public class ModuleDeclaration extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public boolean isOpen() {
+    public  boolean isOpen() {
         return isOpen;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration setOpen(final boolean isOpen) {
+    public  ModuleDeclaration setOpen(final boolean isOpen) {
         if (isOpen == this.isOpen) {
             return this;
         }
@@ -170,18 +164,19 @@ public class ModuleDeclaration extends Node
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ModuleDirective> getDirectives() {
+    public  NodeList<ModuleDirective> getDirectives() {
         return directives;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ModuleDeclaration setDirectives(final NodeList<ModuleDirective> directives) {
+    public  ModuleDeclaration setDirectives(final NodeList<ModuleDirective> directives) {
         assertNotNull(directives);
         if (directives == this.directives) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.DIRECTIVES, this.directives, directives);
-        if (this.directives != null) this.directives.setParentNode(null);
+        if (this.directives != null)
+            this.directives.setParentNode(null);
         this.directives = directives;
         setAsParentNodeOf(directives);
         return this;
@@ -189,19 +184,19 @@ public class ModuleDeclaration extends Node
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ModuleDeclaration clone() {
+    public  ModuleDeclaration clone() {
         return (ModuleDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ModuleDeclarationMetaModel getMetaModel() {
+    public  ModuleDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -227,11 +222,11 @@ public class ModuleDeclaration extends Node
     /**
      * Add a directive to the module, like "exports R.S to T1.U1, T2.U2;"
      */
-    public ModuleDeclaration addDirective(String directive) {
+    public  ModuleDeclaration addDirective(String directive) {
         return addDirective(parseModuleDirective(directive));
     }
 
-    public ModuleDeclaration addDirective(ModuleDirective directive) {
+    public  ModuleDeclaration addDirective(ModuleDirective directive) {
         getDirectives().add(directive);
         return this;
     }

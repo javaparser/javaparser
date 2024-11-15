@@ -21,7 +21,6 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-
 import com.github.javaparser.ast.jml.body.JmlClassLevelDeclaration;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
@@ -36,7 +35,7 @@ import com.github.javaparser.ast.Node;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JmlClassLevelDeclarationMetaModel extends BodyDeclarationMetaModel {
+public  class JmlClassLevelDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlClassLevelDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {

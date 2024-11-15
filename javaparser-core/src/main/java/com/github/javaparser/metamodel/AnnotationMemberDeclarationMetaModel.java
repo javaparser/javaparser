@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
 import java.util.Optional;
+import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,24 +34,18 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class AnnotationMemberDeclarationMetaModel extends BodyDeclarationMetaModel {
+public  class AnnotationMemberDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     AnnotationMemberDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                AnnotationMemberDeclaration.class,
-                "AnnotationMemberDeclaration",
-                "com.github.javaparser.ast.body",
-                false,
-                false);
+        super(superBaseNodeMetaModel, AnnotationMemberDeclaration.class, "AnnotationMemberDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
-    public PropertyMetaModel defaultValuePropertyMetaModel;
+    public  PropertyMetaModel defaultValuePropertyMetaModel;
 
-    public PropertyMetaModel modifiersPropertyMetaModel;
+    public  PropertyMetaModel modifiersPropertyMetaModel;
 
-    public PropertyMetaModel namePropertyMetaModel;
+    public  PropertyMetaModel namePropertyMetaModel;
 
-    public PropertyMetaModel typePropertyMetaModel;
+    public  PropertyMetaModel typePropertyMetaModel;
 }

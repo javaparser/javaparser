@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  * @author Alexander Weigl
  * @version 1 (25.02.22)
  */
-public class JmlMultiExprClause extends JmlClause {
+public  class JmlMultiExprClause extends JmlClause {
 
     private JmlClauseKind kind;
 
@@ -33,39 +33,39 @@ public class JmlMultiExprClause extends JmlClause {
     private NodeList<Expression> expressions;
 
     @AllFieldsConstructor
-    public JmlMultiExprClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expressions) {
+    public  JmlMultiExprClause(JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expressions) {
         this(null, kind, name, heaps, expressions);
     }
 
-    public JmlMultiExprClause(TokenRange range, JavaToken begin, SimpleName label, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
+    public  JmlMultiExprClause(TokenRange range, JavaToken begin, SimpleName label, NodeList<SimpleName> heaps, NodeList<Expression> exprs) {
         this(range, JmlClauseKind.getKindByToken(begin), label, heaps, exprs);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseKind getKind() {
+    public  JmlClauseKind getKind() {
         return kind;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getExpressions() {
+    public  NodeList<Expression> getExpressions() {
         return expressions;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiExprClause setExpressions(final NodeList<Expression> expressions) {
+    public  JmlMultiExprClause setExpressions(final NodeList<Expression> expressions) {
         assertNotNull(expressions);
         if (expressions == this.expressions) {
             return this;
@@ -79,12 +79,12 @@ public class JmlMultiExprClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<NodeList<SimpleName>> getHeaps() {
+    public  Optional<NodeList<SimpleName>> getHeaps() {
         return Optional.ofNullable(heaps);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiExprClause setHeaps(final NodeList<SimpleName> heaps) {
+    public  JmlMultiExprClause setHeaps(final NodeList<SimpleName> heaps) {
         if (heaps == this.heaps) {
             return this;
         }
@@ -97,7 +97,7 @@ public class JmlMultiExprClause extends JmlClause {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMultiExprClause setKind(final JmlClauseKind kind) {
+    public  JmlMultiExprClause setKind(final JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -109,7 +109,7 @@ public class JmlMultiExprClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -132,7 +132,7 @@ public class JmlMultiExprClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -155,13 +155,13 @@ public class JmlMultiExprClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlMultiExprClause clone() {
+    public  JmlMultiExprClause clone() {
         return (JmlMultiExprClause) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlMultiExprClauseMetaModel getMetaModel() {
+    public  JmlMultiExprClauseMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlMultiExprClauseMetaModel;
     }
 
@@ -169,7 +169,7 @@ public class JmlMultiExprClause extends JmlClause {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlMultiExprClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expressions) {
+    public  JmlMultiExprClause(TokenRange tokenRange, JmlClauseKind kind, SimpleName name, NodeList<SimpleName> heaps, NodeList<Expression> expressions) {
         super(tokenRange, name);
         setKind(kind);
         setHeaps(heaps);
@@ -177,11 +177,11 @@ public class JmlMultiExprClause extends JmlClause {
         customInitialization();
     }
 
-    public NodeList<Expression> getExpression() {
+    public  NodeList<Expression> getExpression() {
         return expressions;
     }
 
-    public JmlMultiExprClause setExpression(final NodeList<Expression> expressions) {
+    public  JmlMultiExprClause setExpression(final NodeList<Expression> expressions) {
         assertNotNull(expressions);
         if (expressions == this.expressions) {
             return this;
@@ -196,25 +196,25 @@ public class JmlMultiExprClause extends JmlClause {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlMultiExprClause() {
+    public  boolean isJmlMultiExprClause() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlMultiExprClause asJmlMultiExprClause() {
+    public  JmlMultiExprClause asJmlMultiExprClause() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlMultiExprClause> toJmlMultiExprClause() {
+    public  Optional<JmlMultiExprClause> toJmlMultiExprClause() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlMultiExprClause(Consumer<JmlMultiExprClause> action) {
+    public  void ifJmlMultiExprClause(Consumer<JmlMultiExprClause> action) {
         action.accept(this);
     }
 }

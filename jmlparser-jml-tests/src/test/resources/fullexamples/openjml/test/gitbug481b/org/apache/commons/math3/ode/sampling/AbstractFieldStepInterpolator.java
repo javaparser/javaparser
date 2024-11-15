@@ -122,7 +122,7 @@ public abstract class AbstractFieldStepInterpolator<T extends RealFieldElement<T
      * @param newMapper              equations mapper for the all equations
      * @return a new instance
      */
-    protected abstract AbstractFieldStepInterpolator<T> create(boolean newForward,
+    protected abstractFieldStepInterpolator<T> create(boolean newForward,
                                                                FieldODEStateAndDerivative<T> newGlobalPreviousState,
                                                                FieldODEStateAndDerivative<T> newGlobalCurrentState,
                                                                FieldODEStateAndDerivative<T> newSoftPreviousState,

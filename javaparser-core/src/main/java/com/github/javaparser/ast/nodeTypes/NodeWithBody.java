@@ -25,7 +25,7 @@ import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.EmptyStmt;
 import com.github.javaparser.ast.stmt.Statement;
 
-public interface NodeWithBody<N extends Node> {
+public  interface NodeWithBody<N extends Node> {
 
     Statement getBody();
 

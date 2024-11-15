@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaration, HasAccessSpecifier {
+public  interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaration, HasAccessSpecifier {
 
     @Override
     default boolean isEnum() {
@@ -46,9 +46,6 @@ public interface ResolvedEnumDeclaration extends ResolvedReferenceTypeDeclaratio
     }
 
     default ResolvedEnumConstantDeclaration getEnumConstant(final String name) {
-        return getEnumConstants().stream()
-                .filter(c -> c.getName().equals(name))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No constant named " + name));
+        return getEnumConstants().stream().filter(c -> c.getName().equals(name)).findFirst().orElseThrow(() -> new IllegalArgumentException("No constant named " + name));
     }
 }

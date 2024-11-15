@@ -25,9 +25,9 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<JmlExpressionStmt> {
+public  class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<JmlExpressionStmt> {
 
-    public enum JmlStmtKind implements JmlKeyword {
+    public  enum JmlStmtKind implements JmlKeyword {
 
         ASSERT(GeneratedJavaParserConstants.ASSERT),
         ASSERT_REDUNDANTLY(GeneratedJavaParserConstants.ASSERT_REDUNDANTLY),
@@ -44,7 +44,7 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
         }
 
         @Override
-        public String jmlSymbol() {
+        public  String jmlSymbol() {
             return name().toLowerCase();
         }
     }
@@ -56,11 +56,11 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
     private NodeList<SimpleName> jmlTags;
 
     @AllFieldsConstructor
-    public JmlExpressionStmt(NodeList<SimpleName> jmlTags, final JmlStmtKind kind, final Expression expression) {
+    public  JmlExpressionStmt(NodeList<SimpleName> jmlTags, final JmlStmtKind kind, final Expression expression) {
         this(null, jmlTags, kind, expression);
     }
 
-    public JmlExpressionStmt(TokenRange range, NodeList<SimpleName> jmlTags, final Expression expression) {
+    public  JmlExpressionStmt(TokenRange range, NodeList<SimpleName> jmlTags, final Expression expression) {
         this(range, jmlTags, JmlStmtKind.ASSERT, expression);
         int tt = range.getBegin().getKind();
         Optional<JmlStmtKind> k = Arrays.stream(JmlStmtKind.values()).filter(i -> i.tokenType == tt).findFirst();
@@ -72,43 +72,43 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlAssertStmt() {
+    public  boolean isJmlAssertStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlExpressionStmt asJmlAssertStmt() {
+    public  JmlExpressionStmt asJmlAssertStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlExpressionStmt> toJmlAssertStmt() {
+    public  Optional<JmlExpressionStmt> toJmlAssertStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlAssertStmt(Consumer<JmlExpressionStmt> action) {
+    public  void ifJmlAssertStmt(Consumer<JmlExpressionStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -127,13 +127,13 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlExpressionStmt clone() {
+    public  JmlExpressionStmt clone() {
         return (JmlExpressionStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlExpressionStmtMetaModel getMetaModel() {
+    public  JmlExpressionStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlExpressionStmtMetaModel;
     }
 
@@ -141,18 +141,18 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlExpressionStmt(TokenRange tokenRange) {
+    public  JmlExpressionStmt(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getExpression() {
+    public  Expression getExpression() {
         return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlExpressionStmt setExpression(final Expression expression) {
+    public  JmlExpressionStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
@@ -169,7 +169,7 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlExpressionStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, JmlStmtKind kind, Expression expression) {
+    public  JmlExpressionStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags, JmlStmtKind kind, Expression expression) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setKind(kind);
@@ -179,35 +179,35 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlStmtWithExpression() {
+    public  boolean isJmlStmtWithExpression() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlExpressionStmt asJmlStmtWithExpression() {
+    public  JmlExpressionStmt asJmlStmtWithExpression() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlExpressionStmt> toJmlStmtWithExpression() {
+    public  Optional<JmlExpressionStmt> toJmlStmtWithExpression() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlStmtWithExpression(Consumer<JmlExpressionStmt> action) {
+    public  void ifJmlStmtWithExpression(Consumer<JmlExpressionStmt> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlStmtKind getKind() {
+    public  JmlStmtKind getKind() {
         return kind;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlExpressionStmt setKind(final JmlStmtKind kind) {
+    public  JmlExpressionStmt setKind(final JmlStmtKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -219,35 +219,35 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlExpressionStmt() {
+    public  boolean isJmlExpressionStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlExpressionStmt asJmlExpressionStmt() {
+    public  JmlExpressionStmt asJmlExpressionStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlExpressionStmt> toJmlExpressionStmt() {
+    public  Optional<JmlExpressionStmt> toJmlExpressionStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlExpressionStmt(Consumer<JmlExpressionStmt> action) {
+    public  void ifJmlExpressionStmt(Consumer<JmlExpressionStmt> action) {
         action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> getJmlTags() {
+    public  NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlExpressionStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public  JmlExpressionStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -262,7 +262,7 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }

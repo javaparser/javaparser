@@ -45,23 +45,18 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration>
-        implements NodeWithAbstractModifier<AnnotationDeclaration>, Resolvable<ResolvedAnnotationDeclaration> {
+public  class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration> implements NodeWithAbstractModifier<AnnotationDeclaration>, Resolvable<ResolvedAnnotationDeclaration> {
 
-    public AnnotationDeclaration() {
+    public  AnnotationDeclaration() {
         this(null, new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>());
     }
 
-    public AnnotationDeclaration(NodeList<Modifier> modifiers, String name) {
+    public  AnnotationDeclaration(NodeList<Modifier> modifiers, String name) {
         this(null, modifiers, new NodeList<>(), new SimpleName(name), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public AnnotationDeclaration(
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            SimpleName name,
-            NodeList<BodyDeclaration<?>> members) {
+    public  AnnotationDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         this(null, modifiers, annotations, name, members);
     }
 
@@ -69,71 +64,66 @@ public class AnnotationDeclaration extends TypeDeclaration<AnnotationDeclaration
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public AnnotationDeclaration(
-            TokenRange tokenRange,
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            SimpleName name,
-            NodeList<BodyDeclaration<?>> members) {
+    public  AnnotationDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, SimpleName name, NodeList<BodyDeclaration<?>> members) {
         super(tokenRange, modifiers, annotations, name, members);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public AnnotationDeclaration clone() {
+    public  AnnotationDeclaration clone() {
         return (AnnotationDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public AnnotationDeclarationMetaModel getMetaModel() {
+    public  AnnotationDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.annotationDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isAnnotationDeclaration() {
+    public  boolean isAnnotationDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public AnnotationDeclaration asAnnotationDeclaration() {
+    public  AnnotationDeclaration asAnnotationDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifAnnotationDeclaration(Consumer<AnnotationDeclaration> action) {
+    public  void ifAnnotationDeclaration(Consumer<AnnotationDeclaration> action) {
         action.accept(this);
     }
 
     @Override
-    public ResolvedAnnotationDeclaration resolve() {
+    public  ResolvedAnnotationDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedAnnotationDeclaration.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<AnnotationDeclaration> toAnnotationDeclaration() {
+    public  Optional<AnnotationDeclaration> toAnnotationDeclaration() {
         return Optional.of(this);
     }
 
     @Override
-    public FieldDeclaration addField(Type type, String name, Modifier.DefaultKeyword... modifiers) {
+    public  FieldDeclaration addField(Type type, String name, Modifier.DefaultKeyword... modifiers) {
         throw new IllegalStateException("Cannot add a field to an annotation declaration.");
     }
 }

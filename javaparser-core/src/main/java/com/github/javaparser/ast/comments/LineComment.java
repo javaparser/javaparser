@@ -40,14 +40,14 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public class LineComment extends Comment {
+public  class LineComment extends Comment {
 
-    public LineComment() {
+    public  LineComment() {
         this(null, "empty");
     }
 
     @AllFieldsConstructor
-    public LineComment(String content) {
+    public  LineComment(String content) {
         this(null, content);
     }
 
@@ -55,66 +55,66 @@ public class LineComment extends Comment {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LineComment(TokenRange tokenRange, String content) {
+    public  LineComment(TokenRange tokenRange, String content) {
         super(tokenRange, content);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isLineComment() {
+    public  boolean isLineComment() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public LineComment clone() {
+    public  LineComment clone() {
         return (LineComment) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public LineCommentMetaModel getMetaModel() {
+    public  LineCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.lineCommentMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LineComment asLineComment() {
+    public  LineComment asLineComment() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLineComment(Consumer<LineComment> action) {
+    public  void ifLineComment(Consumer<LineComment> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LineComment> toLineComment() {
+    public  Optional<LineComment> toLineComment() {
         return Optional.of(this);
     }
 
     @Override
-    public String getHeader() {
+    public  String getHeader() {
         return "//";
     }
 
     @Override
-    public String getFooter() {
+    public  String getFooter() {
         return "";
     }
 }

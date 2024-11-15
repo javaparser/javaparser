@@ -20,15 +20,14 @@
  */
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 
 /**
  * A node that can be public.
  */
-public interface NodeWithPublicModifier<N extends Node> extends NodeWithModifiers<N> {
+public  interface NodeWithPublicModifier<N extends Node> extends NodeWithModifiers<N> {
 
     default boolean isPublic() {
         return hasModifier(PUBLIC);

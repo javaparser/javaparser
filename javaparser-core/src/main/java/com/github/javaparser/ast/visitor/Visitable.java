@@ -20,7 +20,7 @@
  */
 package com.github.javaparser.ast.visitor;
 
-public interface Visitable {
+public  interface Visitable {
 
     /**
      * Accept method for visitor support.

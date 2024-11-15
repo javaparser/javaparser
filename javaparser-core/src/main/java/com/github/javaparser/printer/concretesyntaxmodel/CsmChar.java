@@ -24,27 +24,27 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
-public class CsmChar implements CsmElement {
+public  class CsmChar implements CsmElement {
 
     private final ObservableProperty property;
 
-    public CsmChar(ObservableProperty property) {
+    public  CsmChar(ObservableProperty property) {
         this.property = property;
     }
 
-    public ObservableProperty getProperty() {
+    public  ObservableProperty getProperty() {
         return property;
     }
 
     @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
+    public  void prettyPrint(Node node, SourcePrinter printer) {
         printer.print("'");
         printer.print(property.getValueAsStringAttribute(node));
         printer.print("'");
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 }

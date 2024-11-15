@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.Modifier;
 import java.util.Optional;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,12 +34,12 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class ModifierMetaModel extends NodeMetaModel {
+public  class ModifierMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ModifierMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, Modifier.class, "Modifier", "com.github.javaparser.ast", false, false);
     }
 
-    public PropertyMetaModel keywordPropertyMetaModel;
+    public  PropertyMetaModel keywordPropertyMetaModel;
 }

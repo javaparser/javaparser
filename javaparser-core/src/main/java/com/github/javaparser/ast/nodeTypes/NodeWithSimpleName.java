@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.expr.SimpleName;
@@ -31,7 +30,7 @@ import com.github.javaparser.ast.expr.SimpleName;
  * <p>
  * The main reason for this interface is to permit users to manipulate homogeneously all nodes with a getName method.
  */
-public interface NodeWithSimpleName<N extends Node> {
+public  interface NodeWithSimpleName<N extends Node> {
 
     SimpleName getName();
 

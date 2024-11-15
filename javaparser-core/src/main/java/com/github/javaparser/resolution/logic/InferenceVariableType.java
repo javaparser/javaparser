@@ -36,10 +36,10 @@ import java.util.stream.Collectors;
  *
  * @author Federico Tomassetti
  */
-public class InferenceVariableType implements ResolvedType {
+public  class InferenceVariableType implements ResolvedType {
 
     @Override
-    public String toString() {
+    public  String toString() {
         return "InferenceVariableType{" + "id=" + id + '}';
     }
 
@@ -47,7 +47,7 @@ public class InferenceVariableType implements ResolvedType {
 
     private ResolvedTypeParameterDeclaration correspondingTp;
 
-    public void setCorrespondingTp(ResolvedTypeParameterDeclaration correspondingTp) {
+    public  void setCorrespondingTp(ResolvedTypeParameterDeclaration correspondingTp) {
         this.correspondingTp = correspondingTp;
     }
 
@@ -55,59 +55,56 @@ public class InferenceVariableType implements ResolvedType {
 
     private TypeSolver typeSolver;
 
-    public void registerEquivalentType(ResolvedType type) {
+    public  void registerEquivalentType(ResolvedType type) {
         this.equivalentTypes.add(type);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InferenceVariableType)) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof InferenceVariableType))
+            return false;
         InferenceVariableType that = (InferenceVariableType) o;
         return id == that.id;
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         return id;
     }
 
     private Set<ResolvedType> superTypes = new HashSet<>();
 
-    public InferenceVariableType(int id, TypeSolver typeSolver) {
+    public  InferenceVariableType(int id, TypeSolver typeSolver) {
         this.id = id;
         this.typeSolver = typeSolver;
     }
 
     @Override
-    public String describe() {
+    public  String describe() {
         return "InferenceVariable_" + id;
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType other) {
+    public  boolean isAssignableBy(ResolvedType other) {
         throw new UnsupportedOperationException();
     }
 
-    private Set<ResolvedType> concreteEquivalentTypesAlsoIndirectly(
-            Set<InferenceVariableType> considered, InferenceVariableType inferenceVariableType) {
+    private Set<ResolvedType> concreteEquivalentTypesAlsoIndirectly(Set<InferenceVariableType> considered, InferenceVariableType inferenceVariableType) {
         considered.add(inferenceVariableType);
         Set<ResolvedType> result = new HashSet<>();
-        result.addAll(inferenceVariableType.equivalentTypes.stream()
-                .filter(t -> !t.isTypeVariable() && !(t instanceof InferenceVariableType))
-                .collect(Collectors.toSet()));
-        inferenceVariableType.equivalentTypes.stream()
-                .filter(t -> t instanceof InferenceVariableType)
-                .forEach(t -> {
-                    InferenceVariableType ivt = (InferenceVariableType) t;
-                    if (!considered.contains(ivt)) {
-                        result.addAll(concreteEquivalentTypesAlsoIndirectly(considered, ivt));
-                    }
-                });
+        result.addAll(inferenceVariableType.equivalentTypes.stream().filter(t -> !t.isTypeVariable() && !(t instanceof InferenceVariableType)).collect(Collectors.toSet()));
+        inferenceVariableType.equivalentTypes.stream().filter(t -> t instanceof InferenceVariableType).forEach(t -> {
+            InferenceVariableType ivt = (InferenceVariableType) t;
+            if (!considered.contains(ivt)) {
+                result.addAll(concreteEquivalentTypesAlsoIndirectly(considered, ivt));
+            }
+        });
         return result;
     }
 
-    public ResolvedType equivalentType() {
+    public  ResolvedType equivalentType() {
         Set<ResolvedType> concreteEquivalent = concreteEquivalentTypesAlsoIndirectly(new HashSet<>(), this);
         if (concreteEquivalent.isEmpty()) {
             if (correspondingTp == null) {
@@ -118,9 +115,7 @@ public class InferenceVariableType implements ResolvedType {
         if (concreteEquivalent.size() == 1) {
             return concreteEquivalent.iterator().next();
         }
-        Set<ResolvedType> notTypeVariables = equivalentTypes.stream()
-                .filter(t -> !t.isTypeVariable() && !hasInferenceVariables(t))
-                .collect(Collectors.toSet());
+        Set<ResolvedType> notTypeVariables = equivalentTypes.stream().filter(t -> !t.isTypeVariable() && !hasInferenceVariables(t)).collect(Collectors.toSet());
         if (notTypeVariables.size() == 1) {
             return notTypeVariables.iterator().next();
         }

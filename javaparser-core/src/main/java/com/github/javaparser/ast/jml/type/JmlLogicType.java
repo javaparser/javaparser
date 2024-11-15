@@ -35,15 +35,15 @@ import com.github.javaparser.resolution.types.ResolvedType;
 /**
  * A primitive type in JML.
  */
-public class JmlLogicType extends Type implements Jmlish {
+public  class JmlLogicType extends Type implements Jmlish {
 
-    public enum Primitive implements JmlKeyword {
+    public  enum Primitive implements JmlKeyword {
 
         SET("\\set"), SEQ("\\seq"), MAP("\\map"), BIGINT("\\bigint"), BIGFLOAT("\\bigfloat");
 
         final String symbol;
 
-        public String jmlSymbol() {
+        public  String jmlSymbol() {
             return symbol;
         }
 
@@ -54,53 +54,53 @@ public class JmlLogicType extends Type implements Jmlish {
 
     private final Primitive type;
 
-    public JmlLogicType() {
+    public  JmlLogicType() {
         this(null, Primitive.BIGINT);
     }
 
     @AllFieldsConstructor
-    public JmlLogicType(Primitive type) {
+    public  JmlLogicType(Primitive type) {
         this(null, type);
     }
 
-    public JmlLogicType(TokenRange range, final Primitive type) {
+    public  JmlLogicType(TokenRange range, final Primitive type) {
         super(range);
         this.type = type;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return null;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Primitive getType() {
+    public  Primitive getType() {
         return type;
     }
 
     @Override
-    public String toDescriptor() {
+    public  String toDescriptor() {
         return type.symbol;
     }
 
     @Override
-    public String asString() {
+    public  String asString() {
         return toDescriptor();
     }
 
     @Override
-    public ResolvedPrimitiveType resolve() {
+    public  ResolvedPrimitiveType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedPrimitiveType.class);
     }
 
     @Override
-    public ResolvedType convertToUsage(Context context) {
+    public  ResolvedType convertToUsage(Context context) {
         return resolve();
     }
 }

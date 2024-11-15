@@ -31,7 +31,6 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PackageDeclarationMetaModel;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -41,23 +40,22 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class PackageDeclaration extends Node
-        implements NodeWithAnnotations<PackageDeclaration>, NodeWithName<PackageDeclaration> {
+public  class PackageDeclaration extends Node implements NodeWithAnnotations<PackageDeclaration>, NodeWithName<PackageDeclaration> {
 
     private NodeList<AnnotationExpr> annotations = new NodeList<>();
 
     private Name name;
 
-    public PackageDeclaration() {
+    public  PackageDeclaration() {
         this(null, new NodeList<>(), new Name());
     }
 
-    public PackageDeclaration(Name name) {
+    public  PackageDeclaration(Name name) {
         this(null, new NodeList<>(), name);
     }
 
     @AllFieldsConstructor
-    public PackageDeclaration(NodeList<AnnotationExpr> annotations, Name name) {
+    public  PackageDeclaration(NodeList<AnnotationExpr> annotations, Name name) {
         this(null, annotations, name);
     }
 
@@ -65,7 +63,7 @@ public class PackageDeclaration extends Node
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public PackageDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name) {
+    public  PackageDeclaration(TokenRange tokenRange, NodeList<AnnotationExpr> annotations, Name name) {
         super(tokenRange);
         setAnnotations(annotations);
         setName(name);
@@ -74,13 +72,13 @@ public class PackageDeclaration extends Node
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -91,7 +89,7 @@ public class PackageDeclaration extends Node
      * @return list of annotations or {@code null}
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<AnnotationExpr> getAnnotations() {
+    public  NodeList<AnnotationExpr> getAnnotations() {
         return annotations;
     }
 
@@ -101,7 +99,7 @@ public class PackageDeclaration extends Node
      * @return the name of the package
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Name getName() {
+    public  Name getName() {
         return name;
     }
 
@@ -109,13 +107,14 @@ public class PackageDeclaration extends Node
      * @param annotations the annotations to set
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PackageDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
+    public  PackageDeclaration setAnnotations(final NodeList<AnnotationExpr> annotations) {
         assertNotNull(annotations);
         if (annotations == this.annotations) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ANNOTATIONS, this.annotations, annotations);
-        if (this.annotations != null) this.annotations.setParentNode(null);
+        if (this.annotations != null)
+            this.annotations.setParentNode(null);
         this.annotations = annotations;
         setAsParentNodeOf(annotations);
         return this;
@@ -127,13 +126,14 @@ public class PackageDeclaration extends Node
      * @param name the name to set
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public PackageDeclaration setName(final Name name) {
+    public  PackageDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -141,7 +141,7 @@ public class PackageDeclaration extends Node
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -156,19 +156,19 @@ public class PackageDeclaration extends Node
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public PackageDeclaration clone() {
+    public  PackageDeclaration clone() {
         return (PackageDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public PackageDeclarationMetaModel getMetaModel() {
+    public  PackageDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.packageDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }

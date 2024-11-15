@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -51,11 +50,7 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public class FieldAccessExpr extends Expression
-        implements NodeWithSimpleName<FieldAccessExpr>,
-                NodeWithTypeArguments<FieldAccessExpr>,
-                NodeWithScope<FieldAccessExpr>,
-                Resolvable<ResolvedValueDeclaration> {
+public  class FieldAccessExpr extends Expression implements NodeWithSimpleName<FieldAccessExpr>, NodeWithTypeArguments<FieldAccessExpr>, NodeWithScope<FieldAccessExpr>, Resolvable<ResolvedValueDeclaration> {
 
     private Expression scope;
 
@@ -64,16 +59,16 @@ public class FieldAccessExpr extends Expression
 
     private SimpleName name;
 
-    public FieldAccessExpr() {
+    public  FieldAccessExpr() {
         this(null, new ThisExpr(), null, new SimpleName());
     }
 
-    public FieldAccessExpr(final Expression scope, final String name) {
+    public  FieldAccessExpr(final Expression scope, final String name) {
         this(null, scope, null, new SimpleName(name));
     }
 
     @AllFieldsConstructor
-    public FieldAccessExpr(final Expression scope, final NodeList<Type> typeArguments, final SimpleName name) {
+    public  FieldAccessExpr(final Expression scope, final NodeList<Type> typeArguments, final SimpleName name) {
         this(null, scope, typeArguments, name);
     }
 
@@ -81,7 +76,7 @@ public class FieldAccessExpr extends Expression
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public FieldAccessExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, SimpleName name) {
+    public  FieldAccessExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, SimpleName name) {
         super(tokenRange);
         setScope(scope);
         setTypeArguments(typeArguments);
@@ -89,38 +84,44 @@ public class FieldAccessExpr extends Expression
         customInitialization();
     }
 
+    public static Expression allMemberAccess(TokenRange range, Expression scope) {
+        SimpleName fieldName = new SimpleName(range, "*");
+        return new FieldAccessExpr(scope, null, fieldName);
+    }
+
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getName() {
+    public  SimpleName getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldAccessExpr setName(final SimpleName name) {
+    public  FieldAccessExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getScope() {
+    public  Expression getScope() {
         return scope;
     }
 
@@ -131,20 +132,21 @@ public class FieldAccessExpr extends Expression
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldAccessExpr setScope(final Expression scope) {
+    public  FieldAccessExpr setScope(final Expression scope) {
         assertNotNull(scope);
         if (scope == this.scope) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
-        if (this.scope != null) this.scope.setParentNode(null);
+        if (this.scope != null)
+            this.scope.setParentNode(null);
         this.scope = scope;
         setAsParentNodeOf(scope);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<NodeList<Type>> getTypeArguments() {
+    public  Optional<NodeList<Type>> getTypeArguments() {
         return Optional.ofNullable(typeArguments);
     }
 
@@ -155,12 +157,13 @@ public class FieldAccessExpr extends Expression
      * @return this, the FieldAccessExpr
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public FieldAccessExpr setTypeArguments(final NodeList<Type> typeArguments) {
+    public  FieldAccessExpr setTypeArguments(final NodeList<Type> typeArguments) {
         if (typeArguments == this.typeArguments) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null) this.typeArguments.setParentNode(null);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(typeArguments);
         return this;
@@ -168,19 +171,19 @@ public class FieldAccessExpr extends Expression
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public FieldAccessExpr clone() {
+    public  FieldAccessExpr clone() {
         return (FieldAccessExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public FieldAccessExprMetaModel getMetaModel() {
+    public  FieldAccessExprMetaModel getMetaModel() {
         return JavaParserMetaModel.fieldAccessExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -197,7 +200,7 @@ public class FieldAccessExpr extends Expression
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -222,19 +225,19 @@ public class FieldAccessExpr extends Expression
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isFieldAccessExpr() {
+    public  boolean isFieldAccessExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public FieldAccessExpr asFieldAccessExpr() {
+    public  FieldAccessExpr asFieldAccessExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
+    public  void ifFieldAccessExpr(Consumer<FieldAccessExpr> action) {
         action.accept(this);
     }
 
@@ -252,27 +255,27 @@ public class FieldAccessExpr extends Expression
      * @see ExplicitConstructorInvocationStmt#resolve()
      */
     @Override
-    public ResolvedValueDeclaration resolve() {
+    public  ResolvedValueDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<FieldAccessExpr> toFieldAccessExpr() {
+    public  Optional<FieldAccessExpr> toFieldAccessExpr() {
         return Optional.of(this);
     }
 
     /**
      * Indicate if this FieldAccessExpr is an element directly contained in a larger FieldAccessExpr.
      */
-    public boolean isInternal() {
+    public  boolean isInternal() {
         return this.getParentNode().isPresent() && this.getParentNode().get() instanceof FieldAccessExpr;
     }
 
     /**
      * Indicate if this FieldAccessExpr is top level, i.e., it is not directly contained in a larger FieldAccessExpr.
      */
-    public boolean isTopLevel() {
+    public  boolean isTopLevel() {
         return !isInternal();
     }
 }

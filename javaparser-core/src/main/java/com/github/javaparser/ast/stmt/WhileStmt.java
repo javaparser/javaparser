@@ -24,8 +24,11 @@ import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.BooleanLiteralExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.jml.NodeWithContracts;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.nodeTypes.NodeWithBody;
 import com.github.javaparser.ast.nodeTypes.NodeWithCondition;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -34,10 +37,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.WhileStmtMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,7 +47,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, NodeWithCondition<WhileStmt>, NodeWithContracts<WhileStmt> {
+public  class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, NodeWithCondition<WhileStmt>, NodeWithContracts<WhileStmt> {
 
     private NodeList<JmlContract> contracts;
 
@@ -54,20 +55,20 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
 
     private Statement body;
 
-    public WhileStmt() {
+    public  WhileStmt() {
         this(new BooleanLiteralExpr(), new ReturnStmt());
     }
 
-    public WhileStmt(final Expression condition, final Statement body) {
+    public  WhileStmt(final Expression condition, final Statement body) {
         this(condition, body, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public WhileStmt(final Expression condition, final Statement body, final NodeList<JmlContract> contracts) {
+    public  WhileStmt(final Expression condition, final Statement body, final NodeList<JmlContract> contracts) {
         this(null, condition, body, contracts);
     }
 
-    public WhileStmt(TokenRange tokenRange, Expression condition, Statement body) {
+    public  WhileStmt(TokenRange tokenRange, Expression condition, Statement body) {
         this(tokenRange, condition, body, new NodeList<>());
     }
 
@@ -75,7 +76,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public WhileStmt(TokenRange tokenRange, Expression condition, Statement body, NodeList<JmlContract> contracts) {
+    public  WhileStmt(TokenRange tokenRange, Expression condition, Statement body, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setCondition(condition);
         setBody(body);
@@ -85,47 +86,49 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Statement getBody() {
+    public  Statement getBody() {
         return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getCondition() {
+    public  Expression getCondition() {
         return condition;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WhileStmt setBody(final Statement body) {
+    public  WhileStmt setBody(final Statement body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) this.body.setParentNode(null);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WhileStmt setCondition(final Expression condition) {
+    public  WhileStmt setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CONDITION, this.condition, condition);
-        if (this.condition != null) this.condition.setParentNode(null);
+        if (this.condition != null)
+            this.condition.setParentNode(null);
         this.condition = condition;
         setAsParentNodeOf(condition);
         return this;
@@ -133,7 +136,7 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -148,19 +151,19 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public WhileStmt clone() {
+    public  WhileStmt clone() {
         return (WhileStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public WhileStmtMetaModel getMetaModel() {
+    public  WhileStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.whileStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -183,35 +186,35 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isWhileStmt() {
+    public  boolean isWhileStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public WhileStmt asWhileStmt() {
+    public  WhileStmt asWhileStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifWhileStmt(Consumer<WhileStmt> action) {
+    public  void ifWhileStmt(Consumer<WhileStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<WhileStmt> toWhileStmt() {
+    public  Optional<WhileStmt> toWhileStmt() {
         return Optional.of(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> getContracts() {
+    public  NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public WhileStmt setContracts(final NodeList<JmlContract> contracts) {
+    public  WhileStmt setContracts(final NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;

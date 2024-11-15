@@ -103,7 +103,7 @@ public abstract class AbstractListChromosome<T> extends Chromosome {
      * @param chromosomeRepresentation the inner array representation of the new chromosome.
      * @return new instance extended from FixedLengthChromosome with the given arrayRepresentation
      */
-    public abstract AbstractListChromosome<T> newFixedLengthChromosome(final List<T> chromosomeRepresentation);
+    public abstractListChromosome<T> newFixedLengthChromosome(final List<T> chromosomeRepresentation);
 
     /**
      * {@inheritDoc}

@@ -21,7 +21,6 @@
 package com.github.javaparser.metamodel;
 
 import static com.github.javaparser.utils.Utils.decapitalize;
-
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -55,13 +54,7 @@ public abstract class BaseNodeMetaModel {
 
     private final boolean hasWildcard;
 
-    public BaseNodeMetaModel(
-            Optional<BaseNodeMetaModel> superNodeMetaModel,
-            Class<? extends Node> type,
-            String name,
-            String packageName,
-            boolean isAbstract,
-            boolean hasWildcard) {
+    public  BaseNodeMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
         this.superNodeMetaModel = superNodeMetaModel;
         this.type = type;
         this.name = name;
@@ -73,14 +66,14 @@ public abstract class BaseNodeMetaModel {
     /**
      * @return is this the meta model for this node class?
      */
-    public boolean is(Class<? extends Node> c) {
+    public  boolean is(Class<? extends Node> c) {
         return type.equals(c);
     }
 
     /**
      * @return package name + class name
      */
-    public String getQualifiedClassName() {
+    public  String getQualifiedClassName() {
         return packageName + "." + name;
     }
 
@@ -88,7 +81,7 @@ public abstract class BaseNodeMetaModel {
      * @return the meta model for the node that this node extends. Note that this is to be used to find properties
      * defined in superclasses of a Node.
      */
-    public Optional<BaseNodeMetaModel> getSuperNodeMetaModel() {
+    public  Optional<BaseNodeMetaModel> getSuperNodeMetaModel() {
         return superNodeMetaModel;
     }
 
@@ -96,11 +89,11 @@ public abstract class BaseNodeMetaModel {
      * @return a list of all properties declared directly in this node (not its parent nodes.) These are also available
      * as fields.
      */
-    public List<PropertyMetaModel> getDeclaredPropertyMetaModels() {
+    public  List<PropertyMetaModel> getDeclaredPropertyMetaModels() {
         return declaredPropertyMetaModels;
     }
 
-    public List<PropertyMetaModel> getDerivedPropertyMetaModels() {
+    public  List<PropertyMetaModel> getDerivedPropertyMetaModels() {
         return derivedPropertyMetaModels;
     }
 
@@ -108,7 +101,7 @@ public abstract class BaseNodeMetaModel {
      * @return a list of all properties that describe the parameters to the all-fields (but not "range" and "comment")
      * constructor, in the order of appearance in the constructor parameter list.
      */
-    public List<PropertyMetaModel> getConstructorParameters() {
+    public  List<PropertyMetaModel> getConstructorParameters() {
         return constructorParameters;
     }
 
@@ -116,7 +109,7 @@ public abstract class BaseNodeMetaModel {
      * @return a list of all properties in this node and its parents. Note that a new list is created every time this
      * method is called.
      */
-    public List<PropertyMetaModel> getAllPropertyMetaModels() {
+    public  List<PropertyMetaModel> getAllPropertyMetaModels() {
         List<PropertyMetaModel> allPropertyMetaModels = new ArrayList<>(getDeclaredPropertyMetaModels());
         BaseNodeMetaModel walkNode = this;
         while (walkNode.getSuperNodeMetaModel().isPresent()) {
@@ -126,7 +119,7 @@ public abstract class BaseNodeMetaModel {
         return allPropertyMetaModels;
     }
 
-    public boolean isInstanceOfMetaModel(BaseNodeMetaModel baseMetaModel) {
+    public  boolean isInstanceOfMetaModel(BaseNodeMetaModel baseMetaModel) {
         if (this == baseMetaModel) {
             return true;
         }
@@ -139,61 +132,64 @@ public abstract class BaseNodeMetaModel {
     /**
      * @return the class for this AST node type.
      */
-    public Class<? extends Node> getType() {
+    public  Class<? extends Node> getType() {
         return type;
     }
 
     /**
      * @return the package containing this AST node class.
      */
-    public String getPackageName() {
+    public  String getPackageName() {
         return packageName;
     }
 
     /**
      * @return whether this AST node is abstract.
      */
-    public boolean isAbstract() {
+    public  boolean isAbstract() {
         return isAbstract;
     }
 
     /**
      * @return whether this AST node has a &lt;?&gt; at the end of its type.
      */
-    public boolean hasWildcard() {
+    public  boolean hasWildcard() {
         return hasWildcard;
     }
 
     /**
      * @return whether this AST node is the root node, meaning that it is the meta model for "Node": "NodeMetaModel".
      */
-    public boolean isRootNode() {
+    public  boolean isRootNode() {
         return !superNodeMetaModel.isPresent();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         BaseNodeMetaModel classMetaModel = (BaseNodeMetaModel) o;
-        if (!type.equals(classMetaModel.type)) return false;
+        if (!type.equals(classMetaModel.type))
+            return false;
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         return type.hashCode();
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return name;
     }
 
     /**
      * @return the type name, with generics.
      */
-    public String getTypeNameGenerified() {
+    public  String getTypeNameGenerified() {
         if (hasWildcard) {
             return getTypeName() + "<?>";
         }
@@ -203,14 +199,14 @@ public abstract class BaseNodeMetaModel {
     /**
      * @return the raw type name, so nothing but the name.
      */
-    public String getTypeName() {
+    public  String getTypeName() {
         return type.getSimpleName();
     }
 
     /**
      * The name of the field in JavaParserMetaModel for this node meta model.
      */
-    public String getMetaModelFieldName() {
+    public  String getMetaModelFieldName() {
         return decapitalize(getClass().getSimpleName());
     }
 
@@ -220,7 +216,7 @@ public abstract class BaseNodeMetaModel {
      * @param parameters a map of propertyName -&gt; value.
      * This should at least contain a pair for every required property for this node.
      */
-    public Node construct(Map<String, Object> parameters) {
+    public  Node construct(Map<String, Object> parameters) {
         for (Constructor<?> constructor : getType().getConstructors()) {
             if (constructor.getAnnotation(AllFieldsConstructor.class) != null) {
                 try {

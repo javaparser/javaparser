@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class CsmSequence implements CsmElement {
+public  class CsmSequence implements CsmElement {
 
     private List<CsmElement> elements;
 
-    public CsmSequence(List<CsmElement> elements) {
+    public  CsmSequence(List<CsmElement> elements) {
         if (elements == null) {
             throw new NullPointerException();
         }
@@ -40,17 +40,17 @@ public class CsmSequence implements CsmElement {
         this.elements = elements;
     }
 
-    public List<CsmElement> getElements() {
+    public  List<CsmElement> getElements() {
         return elements;
     }
 
     @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
+    public  void prettyPrint(Node node, SourcePrinter printer) {
         elements.forEach(e -> e.prettyPrint(node, printer));
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return elements.stream().map(e -> e.toString()).collect(Collectors.joining(",", "CsmSequence[", "]"));
     }
 }

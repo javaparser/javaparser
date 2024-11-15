@@ -32,7 +32,7 @@ public abstract class AbstractTypeDeclarationTest extends AbstractSymbolResoluti
         implements ResolvedReferenceTypeDeclarationTest {
 
     @Override
-    public abstract AbstractTypeDeclaration createValue();
+    public abstractTypeDeclaration createValue();
 
     /**
      * Should say if an {@link AbstractTypeDeclaration} is functional interface.

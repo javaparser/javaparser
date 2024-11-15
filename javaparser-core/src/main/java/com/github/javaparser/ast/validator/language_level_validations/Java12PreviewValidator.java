@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/12/">https://openjdk.java.net/projects/jdk/12/</a>
  */
-public class Java12PreviewValidator extends Java12Validator {
+public  class Java12PreviewValidator extends Java12Validator {
 
-    public Java12PreviewValidator() {
+    public  Java12PreviewValidator() {
         super();
         // Incubator
         // No new incubator language features added within Java 12

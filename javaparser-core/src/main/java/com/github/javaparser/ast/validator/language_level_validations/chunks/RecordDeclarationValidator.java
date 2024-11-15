@@ -24,10 +24,10 @@ import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.TypedValidator;
 
-public class RecordDeclarationValidator implements TypedValidator<RecordDeclaration> {
+public  class RecordDeclarationValidator implements TypedValidator<RecordDeclaration> {
 
     @Override
-    public void accept(RecordDeclaration node, ProblemReporter reporter) {
+    public  void accept(RecordDeclaration node, ProblemReporter reporter) {
         forbidAbstractModifier(node, reporter);
         forbidNonStaticFieldsInRecords(node, reporter);
         validateRecordComponentAccessorMethods(node, reporter);
@@ -40,9 +40,7 @@ public class RecordDeclarationValidator implements TypedValidator<RecordDeclarat
     }
 
     private void forbidNonStaticFieldsInRecords(RecordDeclaration n, ProblemReporter reporter) {
-        long nonStaticFieldCount = n.getFields().stream()
-                .filter(fieldDeclaration -> !fieldDeclaration.isStatic())
-                .count();
+        long nonStaticFieldCount = n.getFields().stream().filter(fieldDeclaration -> !fieldDeclaration.isStatic()).count();
         if (nonStaticFieldCount > 0) {
             reporter.report(n, "Record Declarations must have zero non-static fields.");
         }
@@ -77,18 +75,11 @@ public class RecordDeclarationValidator implements TypedValidator<RecordDeclarat
      */
     private void validateRecordComponentAccessorMethods(RecordDeclaration n, ProblemReporter reporter) {
         n.getParameters().forEach(parameter -> {
-            n.getMethodsByName(parameter.getNameAsString()).stream()
-                    .filter(methodDeclaration ->
-                            methodDeclaration.getParameters().isEmpty())
-                    .forEach(methodDeclaration -> {
-                        if (!methodDeclaration.getType().equals(parameter.getType())) {
-                            reporter.report(
-                                    n,
-                                    String.format(
-                                            "Incorrect component accessor return type. Expected: '%s', found: '%s'.",
-                                            parameter.getTypeAsString(), methodDeclaration.getTypeAsString()));
-                        }
-                    });
+            n.getMethodsByName(parameter.getNameAsString()).stream().filter(methodDeclaration -> methodDeclaration.getParameters().isEmpty()).forEach(methodDeclaration -> {
+                if (!methodDeclaration.getType().equals(parameter.getType())) {
+                    reporter.report(n, String.format("Incorrect component accessor return type. Expected: '%s', found: '%s'.", parameter.getTypeAsString(), methodDeclaration.getTypeAsString()));
+                }
+            });
         });
     }
 }

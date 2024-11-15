@@ -22,7 +22,7 @@ import com.github.javaparser.ast.Generated;
  * @author Alexander Weigl
  * @version 1 (02.05.24)
  */
-public class JmlMethodSignature extends Node {
+public  class JmlMethodSignature extends Node {
 
     @OptionalProperty
     private Type receiver;
@@ -38,23 +38,23 @@ public class JmlMethodSignature extends Node {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Type> getArgumentTypes() {
+    public  NodeList<Type> getArgumentTypes() {
         return argumentTypes;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMethodSignature setArgumentTypes(final NodeList<Type> argumentTypes) {
+    public  JmlMethodSignature setArgumentTypes(final NodeList<Type> argumentTypes) {
         assertNotNull(argumentTypes);
         if (argumentTypes == this.argumentTypes) {
             return this;
@@ -68,12 +68,12 @@ public class JmlMethodSignature extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getName() {
+    public  SimpleName getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMethodSignature setName(final SimpleName name) {
+    public  JmlMethodSignature setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
@@ -87,12 +87,12 @@ public class JmlMethodSignature extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<Type> getReceiver() {
+    public  Optional<Type> getReceiver() {
         return Optional.ofNullable(receiver);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlMethodSignature setReceiver(final Type receiver) {
+    public  JmlMethodSignature setReceiver(final Type receiver) {
         if (receiver == this.receiver) {
             return this;
         }
@@ -105,13 +105,13 @@ public class JmlMethodSignature extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public JmlMethodSignature removeReceiver() {
+    public  JmlMethodSignature removeReceiver() {
         return setReceiver((Type) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -132,7 +132,7 @@ public class JmlMethodSignature extends Node {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -157,13 +157,13 @@ public class JmlMethodSignature extends Node {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlMethodSignature clone() {
+    public  JmlMethodSignature clone() {
         return (JmlMethodSignature) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlMethodSignatureMetaModel getMetaModel() {
+    public  JmlMethodSignatureMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlMethodSignatureMetaModel;
     }
 
@@ -171,7 +171,7 @@ public class JmlMethodSignature extends Node {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlMethodSignature(TokenRange tokenRange, Type receiver, SimpleName name, NodeList<Type> argumentTypes) {
+    public  JmlMethodSignature(TokenRange tokenRange, Type receiver, SimpleName name, NodeList<Type> argumentTypes) {
         super(tokenRange);
         setReceiver(receiver);
         setName(name);

@@ -26,7 +26,7 @@ package com.github.javaparser.ast.nodeTypes;
  * @author Federico Tomassetti
  * @since July 2014
  */
-public interface NodeWithDeclaration {
+public  interface NodeWithDeclaration {
 
     /**
      * As {@link NodeWithDeclaration#getDeclarationAsString(boolean, boolean, boolean)} including

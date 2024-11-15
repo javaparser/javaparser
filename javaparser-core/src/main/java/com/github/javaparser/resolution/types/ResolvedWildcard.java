@@ -34,7 +34,7 @@ import java.util.Map;
  *
  * @author Federico Tomassetti
  */
-public class ResolvedWildcard implements ResolvedType {
+public  class ResolvedWildcard implements ResolvedType {
 
     public static ResolvedWildcard UNBOUNDED = new ResolvedWildcard(null, null);
 
@@ -62,39 +62,43 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return "WildcardUsage{" + "type=" + type + ", boundedType=" + boundedType + '}';
     }
 
     @Override
-    public boolean isWildcard() {
+    public  boolean isWildcard() {
         return true;
     }
 
     @Override
-    public ResolvedWildcard asWildcard() {
+    public  ResolvedWildcard asWildcard() {
         return this;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ResolvedWildcard)) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof ResolvedWildcard))
+            return false;
         ResolvedWildcard that = (ResolvedWildcard) o;
-        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null) return false;
-        if (type != that.type) return false;
+        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null)
+            return false;
+        if (type != that.type)
+            return false;
         return true;
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         int result = type != null ? type.hashCode() : 0;
         result = 31 * result + (boundedType != null ? boundedType.hashCode() : 0);
         return result;
     }
 
     @Override
-    public String describe() {
+    public  String describe() {
         if (type == null) {
             return "?";
         }
@@ -107,19 +111,19 @@ public class ResolvedWildcard implements ResolvedType {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isSuper() {
+    public  boolean isSuper() {
         return type == BoundType.SUPER;
     }
 
-    public boolean isExtends() {
+    public  boolean isExtends() {
         return type == BoundType.EXTENDS;
     }
 
-    public boolean isBounded() {
+    public  boolean isBounded() {
         return isSuper() || isExtends();
     }
 
-    public ResolvedType getBoundedType() {
+    public  ResolvedType getBoundedType() {
         if (boundedType == null) {
             throw new IllegalStateException();
         }
@@ -127,7 +131,7 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType other) {
+    public  boolean isAssignableBy(ResolvedType other) {
         if (boundedType == null) {
             // return other.isReferenceType() &&
             // other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
@@ -143,10 +147,7 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(
-            ResolvedTypeParameterDeclaration tpToReplace,
-            ResolvedType replaced,
-            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public  ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
@@ -164,28 +165,28 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     @Override
-    public boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
+    public  boolean mention(List<ResolvedTypeParameterDeclaration> typeParameters) {
         return boundedType != null && boundedType.mention(typeParameters);
     }
 
-    public boolean isUpperBounded() {
+    public  boolean isUpperBounded() {
         return isExtends();
     }
 
-    public boolean isLowerBounded() {
+    public  boolean isLowerBounded() {
         return isSuper();
     }
 
-    public enum BoundType {
-        SUPER,
-        EXTENDS
+    public  enum BoundType {
+
+        SUPER, EXTENDS
     }
 
     /*
      * Returns the bounded resolved type.
      */
     @Override
-    public ResolvedType solveGenericTypes(Context context) {
+    public  ResolvedType solveGenericTypes(Context context) {
         if (isExtends() || isSuper()) {
             ResolvedType boundResolved = getBoundedType().solveGenericTypes(context);
             if (isExtends()) {
@@ -203,7 +204,7 @@ public class ResolvedWildcard implements ResolvedType {
     // This method returns null if no bound is declared. This is probably a limitation.
     //
     @Override
-    public ResolvedType erasure() {
+    public  ResolvedType erasure() {
         return boundedType;
     }
 }

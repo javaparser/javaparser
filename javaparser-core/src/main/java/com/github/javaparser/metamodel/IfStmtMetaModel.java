@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.stmt.IfStmt;
 import java.util.Optional;
+import com.github.javaparser.ast.stmt.IfStmt;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,24 +34,24 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class IfStmtMetaModel extends StatementMetaModel {
+public  class IfStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     IfStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, IfStmt.class, "IfStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public PropertyMetaModel conditionPropertyMetaModel;
+    public  PropertyMetaModel conditionPropertyMetaModel;
 
-    public PropertyMetaModel elseStmtPropertyMetaModel;
+    public  PropertyMetaModel elseStmtPropertyMetaModel;
 
-    public PropertyMetaModel thenStmtPropertyMetaModel;
+    public  PropertyMetaModel thenStmtPropertyMetaModel;
 
-    public PropertyMetaModel cascadingIfStmtPropertyMetaModel;
+    public  PropertyMetaModel cascadingIfStmtPropertyMetaModel;
 
-    public PropertyMetaModel elseBlockPropertyMetaModel;
+    public  PropertyMetaModel elseBlockPropertyMetaModel;
 
-    public PropertyMetaModel elseBranchPropertyMetaModel;
+    public  PropertyMetaModel elseBranchPropertyMetaModel;
 
-    public PropertyMetaModel thenBlockPropertyMetaModel;
+    public  PropertyMetaModel thenBlockPropertyMetaModel;
 }

@@ -22,7 +22,6 @@ package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Name;
 
@@ -33,7 +32,7 @@ import com.github.javaparser.ast.expr.Name;
  *
  * @since 2.0.1
  */
-public interface NodeWithName<N extends Node> {
+public  interface NodeWithName<N extends Node> {
 
     Name getName();
 

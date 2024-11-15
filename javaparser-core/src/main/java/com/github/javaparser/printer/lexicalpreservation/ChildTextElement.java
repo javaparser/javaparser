@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * Represent the position of a child node in the NodeText of its parent.
  */
-public class ChildTextElement extends TextElement {
+public  class ChildTextElement extends TextElement {
 
     private final Node child;
 
@@ -37,21 +37,21 @@ public class ChildTextElement extends TextElement {
     }
 
     @Override
-    public String expand() {
+    public  String expand() {
         return LexicalPreservingPrinter.print(child);
     }
 
-    public Node getChild() {
+    public  Node getChild() {
         return child;
     }
 
     @Override
-    public boolean isToken(int tokenKind) {
+    public  boolean isToken(int tokenKind) {
         return false;
     }
 
     @Override
-    public boolean isNode(Node node) {
+    public  boolean isNode(Node node) {
         return node == child;
     }
 
@@ -60,70 +60,72 @@ public class ChildTextElement extends TextElement {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ChildTextElement that = (ChildTextElement) o;
         return child.equals(that.child);
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         return child.hashCode();
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return "ChildTextElement{" + child + '}';
     }
 
     @Override
-    public boolean isWhiteSpace() {
+    public  boolean isWhiteSpace() {
         return false;
     }
 
     @Override
-    public boolean isSpaceOrTab() {
+    public  boolean isSpaceOrTab() {
         return false;
     }
 
     @Override
-    public boolean isNewline() {
+    public  boolean isNewline() {
         return false;
     }
 
     @Override
-    public boolean isComment() {
+    public  boolean isComment() {
         return child instanceof Comment;
     }
 
     @Override
-    public boolean isSeparator() {
+    public  boolean isSeparator() {
         return false;
     }
 
     @Override
-    public boolean isIdentifier() {
+    public  boolean isIdentifier() {
         return false;
     }
 
     @Override
-    public boolean isKeyword() {
+    public  boolean isKeyword() {
         return false;
     }
 
     @Override
-    public boolean isPrimitive() {
+    public  boolean isPrimitive() {
         return false;
     }
 
     @Override
-    public boolean isLiteral() {
+    public  boolean isLiteral() {
         return false;
     }
 
     @Override
-    public boolean isChildOfClass(Class<? extends Node> nodeClass) {
+    public  boolean isChildOfClass(Class<? extends Node> nodeClass) {
         return nodeClass.isInstance(child);
     }
 
@@ -133,7 +135,7 @@ public class ChildTextElement extends TextElement {
     }
 
     @Override
-    public void accept(LexicalPreservingVisitor visitor) {
+    public  void accept(LexicalPreservingVisitor visitor) {
         NodeText nodeText = getNodeTextForWrappedNode();
         nodeText.getElements().forEach(element -> element.accept(visitor));
     }

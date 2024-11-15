@@ -34,10 +34,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SynchronizedStmtMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -46,19 +44,18 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class SynchronizedStmt extends Statement
-        implements NodeWithBlockStmt<SynchronizedStmt>, NodeWithExpression<SynchronizedStmt> {
+public  class SynchronizedStmt extends Statement implements NodeWithBlockStmt<SynchronizedStmt>, NodeWithExpression<SynchronizedStmt> {
 
     private Expression expression;
 
     private BlockStmt body;
 
-    public SynchronizedStmt() {
+    public  SynchronizedStmt() {
         this(null, new NameExpr(), new BlockStmt());
     }
 
     @AllFieldsConstructor
-    public SynchronizedStmt(final Expression expression, final BlockStmt body) {
+    public  SynchronizedStmt(final Expression expression, final BlockStmt body) {
         this(null, expression, body);
     }
 
@@ -66,7 +63,7 @@ public class SynchronizedStmt extends Statement
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SynchronizedStmt(TokenRange tokenRange, Expression expression, BlockStmt body) {
+    public  SynchronizedStmt(TokenRange tokenRange, Expression expression, BlockStmt body) {
         super(tokenRange);
         setExpression(expression);
         setBody(body);
@@ -75,47 +72,49 @@ public class SynchronizedStmt extends Statement
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getExpression() {
+    public  Expression getExpression() {
         return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SynchronizedStmt setExpression(final Expression expression) {
+    public  SynchronizedStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) this.expression.setParentNode(null);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt getBody() {
+    public  BlockStmt getBody() {
         return body;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SynchronizedStmt setBody(final BlockStmt body) {
+    public  SynchronizedStmt setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) this.body.setParentNode(null);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
@@ -123,19 +122,19 @@ public class SynchronizedStmt extends Statement
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public SynchronizedStmt clone() {
+    public  SynchronizedStmt clone() {
         return (SynchronizedStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SynchronizedStmtMetaModel getMetaModel() {
+    public  SynchronizedStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.synchronizedStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -152,25 +151,25 @@ public class SynchronizedStmt extends Statement
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isSynchronizedStmt() {
+    public  boolean isSynchronizedStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public SynchronizedStmt asSynchronizedStmt() {
+    public  SynchronizedStmt asSynchronizedStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
+    public  void ifSynchronizedStmt(Consumer<SynchronizedStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<SynchronizedStmt> toSynchronizedStmt() {
+    public  Optional<SynchronizedStmt> toSynchronizedStmt() {
         return Optional.of(this);
     }
 }

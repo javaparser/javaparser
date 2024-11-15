@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.StaticJavaParser.parseTypeParameter;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.TypeParameter;
@@ -34,7 +33,7 @@ import com.github.javaparser.ast.type.TypeParameter;
  *     class X&lt;C,D&gt; {}   --&gt; typeParameters = [C,D]
  * </pre>
  */
-public interface NodeWithTypeParameters<N extends Node> {
+public  interface NodeWithTypeParameters<N extends Node> {
 
     NodeList<TypeParameter> getTypeParameters();
 

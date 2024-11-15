@@ -22,70 +22,69 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (11/23/21)
  */
-public class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> implements JmlDocContainer {
+public  class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> implements JmlDocContainer {
 
     private NodeList<JmlDoc> jmlComments;
 
     @AllFieldsConstructor
-    public JmlDocDeclaration(NodeList<JmlDoc> jmlComments) {
+    public  JmlDocDeclaration(NodeList<JmlDoc> jmlComments) {
         super((TokenRange) null);
         this.jmlComments = jmlComments;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlDoc> getJmlComments() {
+    public  NodeList<JmlDoc> getJmlComments() {
         return jmlComments;
     }
 
-    public void setJmlComments(List<JavaToken> jmlComments) {
+    public  void setJmlComments(List<JavaToken> jmlComments) {
         // this.jmlComments = jmlComments;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlDocDeclaration() {
+    public  boolean isJmlDocDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlDocDeclaration asJmlDocDeclaration() {
+    public  JmlDocDeclaration asJmlDocDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlDocDeclaration> toJmlDocDeclaration() {
+    public  Optional<JmlDocDeclaration> toJmlDocDeclaration() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlDocDeclaration(Consumer<JmlDocDeclaration> action) {
+    public  void ifJmlDocDeclaration(Consumer<JmlDocDeclaration> action) {
         action.accept(this);
     }
 
-    public JmlDocDeclaration setJmlComments(final JavaToken jmlComments) {
+    public  JmlDocDeclaration setJmlComments(final JavaToken jmlComments) {
         assertNotNull(jmlComments);
-        notifyPropertyChange(ObservableProperty.JML_COMMENTS, this.jmlComments, jmlComments);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -100,7 +99,7 @@ public class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> implem
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -115,27 +114,27 @@ public class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> implem
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlDocDeclaration clone() {
+    public  JmlDocDeclaration clone() {
         return (JmlDocDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlDocDeclarationMetaModel getMetaModel() {
+    public  JmlDocDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlDocDeclarationMetaModel;
     }
 
     /**
      * This constructor is used by the parser and is considered private.
      */
-    public JmlDocDeclaration(TokenRange tokenRange, JavaToken jmlComments) {
+    public  JmlDocDeclaration(TokenRange tokenRange, JavaToken jmlComments) {
         super(tokenRange);
         setJmlComments(jmlComments);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlDocDeclaration setJmlComments(final NodeList<JmlDoc> jmlComments) {
+    public  JmlDocDeclaration setJmlComments(final NodeList<JmlDoc> jmlComments) {
         assertNotNull(jmlComments);
         if (jmlComments == this.jmlComments) {
             return this;
@@ -152,7 +151,7 @@ public class JmlDocDeclaration extends BodyDeclaration<JmlDocDeclaration> implem
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlDocDeclaration(TokenRange tokenRange, NodeList<JmlDoc> jmlComments) {
+    public  JmlDocDeclaration(TokenRange tokenRange, NodeList<JmlDoc> jmlComments) {
         super(tokenRange);
         setJmlComments(jmlComments);
         customInitialization();

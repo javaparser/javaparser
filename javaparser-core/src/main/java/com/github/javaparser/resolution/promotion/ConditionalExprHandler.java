@@ -21,7 +21,7 @@ package com.github.javaparser.resolution.promotion;
 
 import com.github.javaparser.resolution.types.ResolvedType;
 
-public interface ConditionalExprHandler {
+public  interface ConditionalExprHandler {
 
     ResolvedType resolveType();
 }

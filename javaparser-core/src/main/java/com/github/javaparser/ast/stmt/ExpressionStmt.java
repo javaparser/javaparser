@@ -33,10 +33,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ExpressionStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -44,16 +42,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class ExpressionStmt extends Statement implements NodeWithExpression<ExpressionStmt> {
+public  class ExpressionStmt extends Statement implements NodeWithExpression<ExpressionStmt> {
 
     private Expression expression;
 
-    public ExpressionStmt() {
+    public  ExpressionStmt() {
         this(null, new BooleanLiteralExpr());
     }
 
     @AllFieldsConstructor
-    public ExpressionStmt(final Expression expression) {
+    public  ExpressionStmt(final Expression expression) {
         this(null, expression);
     }
 
@@ -61,7 +59,7 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ExpressionStmt(TokenRange tokenRange, Expression expression) {
+    public  ExpressionStmt(TokenRange tokenRange, Expression expression) {
         super(tokenRange);
         setExpression(expression);
         customInitialization();
@@ -69,29 +67,30 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getExpression() {
+    public  Expression getExpression() {
         return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ExpressionStmt setExpression(final Expression expression) {
+    public  ExpressionStmt setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) this.expression.setParentNode(null);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
@@ -99,19 +98,19 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ExpressionStmt clone() {
+    public  ExpressionStmt clone() {
         return (ExpressionStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ExpressionStmtMetaModel getMetaModel() {
+    public  ExpressionStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.expressionStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -124,25 +123,25 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isExpressionStmt() {
+    public  boolean isExpressionStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ExpressionStmt asExpressionStmt() {
+    public  ExpressionStmt asExpressionStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifExpressionStmt(Consumer<ExpressionStmt> action) {
+    public  void ifExpressionStmt(Consumer<ExpressionStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ExpressionStmt> toExpressionStmt() {
+    public  Optional<ExpressionStmt> toExpressionStmt() {
         return Optional.of(this);
     }
 }

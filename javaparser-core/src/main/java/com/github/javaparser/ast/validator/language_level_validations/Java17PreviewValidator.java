@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/17/">https://openjdk.java.net/projects/jdk/17/</a>
  */
-public class Java17PreviewValidator extends Java17Validator {
+public  class Java17PreviewValidator extends Java17Validator {
 
-    public Java17PreviewValidator() {
+    public  Java17PreviewValidator() {
         super();
         // Incubator
         // No new incubator language features added in Java 17

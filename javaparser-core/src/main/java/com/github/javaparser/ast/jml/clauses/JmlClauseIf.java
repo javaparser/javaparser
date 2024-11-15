@@ -20,7 +20,7 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
  * @author Alexander Weigl
  * @version 1 (2/22/21)
  */
-public class JmlClauseIf extends JmlClause implements MethodContractable {
+public  class JmlClauseIf extends JmlClause implements MethodContractable {
 
     private JmlClauseKind kind;
 
@@ -29,7 +29,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     private Expression condition;
 
     @AllFieldsConstructor
-    public JmlClauseIf(SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
+    public  JmlClauseIf(SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
         this(null, name, condition, kind, then);
     }
 
@@ -37,14 +37,14 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseIf(TokenRange tokenRange) {
+    public  JmlClauseIf(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -61,35 +61,35 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlClauseIf clone() {
+    public  JmlClauseIf clone() {
         return (JmlClauseIf) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseKind getKind() {
+    public  JmlClauseKind getKind() {
         return kind;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getCondition() {
+    public  Expression getCondition() {
         return condition;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setCondition(final Expression condition) {
+    public  JmlClauseIf setCondition(final Expression condition) {
         assertNotNull(condition);
         if (condition == this.condition) {
             return this;
@@ -103,7 +103,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setKind(final JmlClauseKind kind) {
+    public  JmlClauseIf setKind(final JmlClauseKind kind) {
         assertNotNull(kind);
         if (kind == this.kind) {
             return this;
@@ -114,12 +114,12 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getThen() {
+    public  Expression getThen() {
         return then;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlClauseIf setThen(final Expression then) {
+    public  JmlClauseIf setThen(final Expression then) {
         assertNotNull(then);
         if (then == this.then) {
             return this;
@@ -134,31 +134,31 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlClauseIf() {
+    public  boolean isJmlClauseIf() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlClauseIf asJmlClauseIf() {
+    public  JmlClauseIf asJmlClauseIf() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlClauseIf> toJmlClauseIf() {
+    public  Optional<JmlClauseIf> toJmlClauseIf() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlClauseIf(Consumer<JmlClauseIf> action) {
+    public  void ifJmlClauseIf(Consumer<JmlClauseIf> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlClauseIfMetaModel getMetaModel() {
+    public  JmlClauseIfMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlClauseIfMetaModel;
     }
 
@@ -166,7 +166,7 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlClauseIf(TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
+    public  JmlClauseIf(TokenRange tokenRange, SimpleName name, Expression condition, JmlClauseKind kind, Expression then) {
         super(tokenRange, name);
         setCondition(condition);
         setKind(kind);

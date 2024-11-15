@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -95,8 +94,7 @@ import java.util.function.Consumer;
  * @see <a href="https://bugs.openjdk.java.net/browse/JDK-8181287">JEP305: https://bugs.openjdk.java.net/browse/JDK-8181287</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20">https://docs.oracle.com/javase/specs/jls/se11/html/jls-15.html#jls-15.20</a>
  */
-public class InstanceOfExpr extends Expression
-        implements NodeWithType<InstanceOfExpr, ReferenceType>, NodeWithExpression<InstanceOfExpr> {
+public  class InstanceOfExpr extends Expression implements NodeWithType<InstanceOfExpr, ReferenceType>, NodeWithExpression<InstanceOfExpr> {
 
     private Expression expression;
 
@@ -105,16 +103,16 @@ public class InstanceOfExpr extends Expression
 
     private ReferenceType type;
 
-    public InstanceOfExpr() {
+    public  InstanceOfExpr() {
         this(null, new NameExpr(), new ClassOrInterfaceType(), null);
     }
 
-    public InstanceOfExpr(final Expression expression, final ReferenceType type) {
+    public  InstanceOfExpr(final Expression expression, final ReferenceType type) {
         this(null, expression, type, null);
     }
 
     @AllFieldsConstructor
-    public InstanceOfExpr(final Expression expression, final ReferenceType type, final PatternExpr pattern) {
+    public  InstanceOfExpr(final Expression expression, final ReferenceType type, final PatternExpr pattern) {
         this(null, expression, type, pattern);
     }
 
@@ -122,7 +120,7 @@ public class InstanceOfExpr extends Expression
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public InstanceOfExpr(TokenRange tokenRange, Expression expression, ReferenceType type, PatternExpr pattern) {
+    public  InstanceOfExpr(TokenRange tokenRange, Expression expression, ReferenceType type, PatternExpr pattern) {
         super(tokenRange);
         setExpression(expression);
         setType(type);
@@ -138,7 +136,7 @@ public class InstanceOfExpr extends Expression
      * <br>
      * <br>In this example, {@code getName()} returns {@code stringName}
      */
-    public Optional<SimpleName> getName() {
+    public  Optional<SimpleName> getName() {
         if (pattern == null) {
             return Optional.empty();
         }
@@ -150,64 +148,64 @@ public class InstanceOfExpr extends Expression
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public InstanceOfExpr asInstanceOfExpr() {
+    public  InstanceOfExpr asInstanceOfExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public InstanceOfExpr clone() {
+    public  InstanceOfExpr clone() {
         return (InstanceOfExpr) accept(new CloneVisitor(), null);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getExpression() {
+    public  Expression getExpression() {
         return expression;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public InstanceOfExprMetaModel getMetaModel() {
+    public  InstanceOfExprMetaModel getMetaModel() {
         return JavaParserMetaModel.instanceOfExprMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<PatternExpr> getPattern() {
+    public  Optional<PatternExpr> getPattern() {
         return Optional.ofNullable(pattern);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ReferenceType getType() {
+    public  ReferenceType getType() {
         return type;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifInstanceOfExpr(Consumer<InstanceOfExpr> action) {
+    public  void ifInstanceOfExpr(Consumer<InstanceOfExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isInstanceOfExpr() {
+    public  boolean isInstanceOfExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -221,13 +219,13 @@ public class InstanceOfExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public InstanceOfExpr removePattern() {
+    public  InstanceOfExpr removePattern() {
         return setPattern((PatternExpr) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -249,38 +247,41 @@ public class InstanceOfExpr extends Expression
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setExpression(final Expression expression) {
+    public  InstanceOfExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) this.expression.setParentNode(null);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setPattern(final PatternExpr pattern) {
+    public  InstanceOfExpr setPattern(final PatternExpr pattern) {
         if (pattern == this.pattern) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.PATTERN, this.pattern, pattern);
-        if (this.pattern != null) this.pattern.setParentNode(null);
+        if (this.pattern != null)
+            this.pattern.setParentNode(null);
         this.pattern = pattern;
         setAsParentNodeOf(pattern);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public InstanceOfExpr setType(final ReferenceType type) {
+    public  InstanceOfExpr setType(final ReferenceType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) this.type.setParentNode(null);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;
@@ -288,7 +289,7 @@ public class InstanceOfExpr extends Expression
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<InstanceOfExpr> toInstanceOfExpr() {
+    public  Optional<InstanceOfExpr> toInstanceOfExpr() {
         return Optional.of(this);
     }
 }

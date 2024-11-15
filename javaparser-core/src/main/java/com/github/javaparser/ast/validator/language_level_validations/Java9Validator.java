@@ -31,22 +31,19 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Und
  *
  * @see <a href="https://openjdk.java.net/projects/jdk9/">https://openjdk.java.net/projects/jdk9/</a>
  */
-public class Java9Validator extends Java8Validator {
+public  class Java9Validator extends Java8Validator {
 
     final Validator underscoreKeywordValidator = new UnderscoreKeywordValidator();
 
     final Validator modifiers = new ModifierValidator(true, true, true);
 
-    final SingleNodeTypeValidator<TryStmt> tryWithResources =
-            new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
-                if (n.getCatchClauses().isEmpty()
-                        && n.getResources().isEmpty()
-                        && !n.getFinallyBlock().isPresent()) {
-                    reporter.report(n, "Try has no finally, no catch, and no resources.");
-                }
-            });
+    final SingleNodeTypeValidator<TryStmt> tryWithResources = new SingleNodeTypeValidator<>(TryStmt.class, (n, reporter) -> {
+        if (n.getCatchClauses().isEmpty() && n.getResources().isEmpty() && !n.getFinallyBlock().isPresent()) {
+            reporter.report(n, "Try has no finally, no catch, and no resources.");
+        }
+    });
 
-    public Java9Validator() {
+    public  Java9Validator() {
         super();
         // Released Language Features
         /*

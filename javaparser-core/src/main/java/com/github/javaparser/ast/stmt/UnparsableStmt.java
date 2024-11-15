@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.stmt;
 
 import static com.github.javaparser.ast.Node.Parsedness.UNPARSABLE;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -32,15 +31,16 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.UnparsableStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Node;
 
 /**
  * A statement that had parse errors.
  * Nothing is known about it except the tokens it covers.
  */
-public class UnparsableStmt extends Statement {
+public  class UnparsableStmt extends Statement {
 
     @AllFieldsConstructor
-    public UnparsableStmt() {
+    public  UnparsableStmt() {
         this(null);
     }
 
@@ -48,61 +48,61 @@ public class UnparsableStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public UnparsableStmt(TokenRange tokenRange) {
+    public  UnparsableStmt(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public UnparsableStmt clone() {
+    public  UnparsableStmt clone() {
         return (UnparsableStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public UnparsableStmtMetaModel getMetaModel() {
+    public  UnparsableStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.unparsableStmtMetaModel;
     }
 
     @Override
-    public Parsedness getParsed() {
+    public  Parsedness getParsed() {
         return UNPARSABLE;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isUnparsableStmt() {
+    public  boolean isUnparsableStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public UnparsableStmt asUnparsableStmt() {
+    public  UnparsableStmt asUnparsableStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifUnparsableStmt(Consumer<UnparsableStmt> action) {
+    public  void ifUnparsableStmt(Consumer<UnparsableStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<UnparsableStmt> toUnparsableStmt() {
+    public  Optional<UnparsableStmt> toUnparsableStmt() {
         return Optional.of(this);
     }
 }

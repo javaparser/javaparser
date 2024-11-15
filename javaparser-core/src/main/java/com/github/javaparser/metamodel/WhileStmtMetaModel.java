@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.stmt.WhileStmt;
 import java.util.Optional;
+import com.github.javaparser.ast.stmt.WhileStmt;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,14 +34,16 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class WhileStmtMetaModel extends StatementMetaModel {
+public  class WhileStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     WhileStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, WhileStmt.class, "WhileStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public PropertyMetaModel bodyPropertyMetaModel;
+    public  PropertyMetaModel bodyPropertyMetaModel;
 
-    public PropertyMetaModel conditionPropertyMetaModel;
+    public  PropertyMetaModel conditionPropertyMetaModel;
+
+    public  PropertyMetaModel contractsPropertyMetaModel;
 }

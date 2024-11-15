@@ -24,20 +24,20 @@ import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
-public class CsmTextBlock implements CsmElement {
+public  class CsmTextBlock implements CsmElement {
 
     private final ObservableProperty property;
 
-    public CsmTextBlock(ObservableProperty property) {
+    public  CsmTextBlock(ObservableProperty property) {
         this.property = property;
     }
 
-    public ObservableProperty getProperty() {
+    public  ObservableProperty getProperty() {
         return property;
     }
 
     @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
+    public  void prettyPrint(Node node, SourcePrinter printer) {
         printer.print("\"\"\"");
         // Per https://openjdk.java.net/jeps/378#1--Line-terminators, any 'CRLF' and 'CR' are turned into 'LF' before
         // interpreting the text
@@ -48,7 +48,7 @@ public class CsmTextBlock implements CsmElement {
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 }

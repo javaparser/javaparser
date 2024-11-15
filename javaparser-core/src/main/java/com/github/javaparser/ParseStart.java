@@ -47,7 +47,7 @@ import com.github.javaparser.ast.type.TypeParameter;
  * @see JavaParser#parse(ParseStart, Provider)
  */
 @FunctionalInterface
-public interface ParseStart<R> {
+public  interface ParseStart<R> {
 
     ParseStart<CompilationUnit> COMPILATION_UNIT = GeneratedJavaParser::CompilationUnit;
 
@@ -71,11 +71,9 @@ public interface ParseStart<R> {
 
     ParseStart<TypeParameter> TYPE_PARAMETER = GeneratedJavaParser::TypeParameterParseStart;
 
-    ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR =
-            GeneratedJavaParser::VariableDeclarationExpressionParseStart;
+    ParseStart<VariableDeclarationExpr> VARIABLE_DECLARATION_EXPR = GeneratedJavaParser::VariableDeclarationExpressionParseStart;
 
-    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT =
-            GeneratedJavaParser::ExplicitConstructorInvocationParseStart;
+    ParseStart<ExplicitConstructorInvocationStmt> EXPLICIT_CONSTRUCTOR_INVOCATION_STMT = GeneratedJavaParser::ExplicitConstructorInvocationParseStart;
 
     ParseStart<Name> NAME = GeneratedJavaParser::NameParseStart;
 

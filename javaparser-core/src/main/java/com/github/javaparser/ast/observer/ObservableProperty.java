@@ -33,21 +33,32 @@ import java.util.Optional;
  * Properties considered by the AstObserver
  */
 @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-public enum ObservableProperty {
+public  enum ObservableProperty {
+
     ANNOTATIONS(Type.MULTIPLE_REFERENCE),
     ANONYMOUS_CLASS_BODY(Type.MULTIPLE_REFERENCE),
     ARGUMENTS(Type.MULTIPLE_REFERENCE),
+    ARGUMENT_TYPES(Type.MULTIPLE_REFERENCE),
     ASTERISK(Type.SINGLE_ATTRIBUTE),
+    BEHAVIOR(Type.SINGLE_ATTRIBUTE),
+    BINDER(Type.SINGLE_ATTRIBUTE),
+    BINDING(Type.SINGLE_REFERENCE),
     BODY(Type.SINGLE_REFERENCE),
+    BOUNDED_VARIABLES(Type.MULTIPLE_REFERENCE),
     CATCH_CLAUSES(Type.MULTIPLE_REFERENCE),
     CHECK(Type.SINGLE_REFERENCE),
     CLASS_BODY(Type.MULTIPLE_REFERENCE),
     CLASS_DECLARATION(Type.SINGLE_REFERENCE),
+    CLAUSES(Type.MULTIPLE_REFERENCE),
     COMMENT(Type.SINGLE_REFERENCE),
     COMPARE(Type.SINGLE_REFERENCE),
     COMPONENT_TYPE(Type.SINGLE_REFERENCE),
     CONDITION(Type.SINGLE_REFERENCE),
     CONTENT(Type.SINGLE_ATTRIBUTE),
+    CONTRACT(Type.SINGLE_REFERENCE),
+    CONTRACTS(Type.MULTIPLE_REFERENCE),
+    DECL(Type.SINGLE_REFERENCE),
+    DECLARATIONS(Type.SINGLE_REFERENCE),
     DEFAULT(Type.SINGLE_ATTRIBUTE),
     DEFAULT_VALUE(Type.SINGLE_REFERENCE),
     DIMENSION(Type.SINGLE_REFERENCE),
@@ -58,11 +69,14 @@ public enum ObservableProperty {
     ELSE_STMT(Type.SINGLE_REFERENCE),
     ENCLOSING_PARAMETERS(Type.SINGLE_ATTRIBUTE),
     ENTRIES(Type.MULTIPLE_REFERENCE),
+    EXPR(Type.SINGLE_REFERENCE),
     EXPRESSION(Type.SINGLE_REFERENCE),
+    EXPRESSIONS(Type.MULTIPLE_REFERENCE),
     EXTENDED_TYPE(Type.SINGLE_REFERENCE),
     EXTENDED_TYPES(Type.MULTIPLE_REFERENCE),
     FINALLY_BLOCK(Type.SINGLE_REFERENCE),
     GUARD(Type.SINGLE_REFERENCE),
+    HEAPS(Type.MULTIPLE_REFERENCE),
     IDENTIFIER(Type.SINGLE_ATTRIBUTE),
     IMPLEMENTED_TYPES(Type.MULTIPLE_REFERENCE),
     IMPORTS(Type.MULTIPLE_REFERENCE),
@@ -71,21 +85,30 @@ public enum ObservableProperty {
     INITIALIZER(Type.SINGLE_REFERENCE),
     INNER(Type.SINGLE_REFERENCE),
     INTERFACE(Type.SINGLE_ATTRIBUTE),
+    INVARIANT(Type.SINGLE_REFERENCE),
     ITERABLE(Type.SINGLE_REFERENCE),
+    JML_COMMENTS(Type.MULTIPLE_REFERENCE),
+    JML_MODEL(Type.SINGLE_ATTRIBUTE),
+    JML_TAGS(Type.MULTIPLE_REFERENCE),
     KEYWORD(Type.SINGLE_ATTRIBUTE),
+    KIND(Type.SINGLE_ATTRIBUTE),
     LABEL(Type.SINGLE_REFERENCE),
     LABELS(Type.MULTIPLE_REFERENCE),
     LEFT(Type.SINGLE_REFERENCE),
     LEVELS(Type.MULTIPLE_REFERENCE),
+    MEASURED_BY(Type.SINGLE_REFERENCE),
     MEMBERS(Type.MULTIPLE_REFERENCE),
     MEMBER_VALUE(Type.SINGLE_REFERENCE),
     MESSAGE(Type.SINGLE_REFERENCE),
+    METHOD_DECLARATION(Type.SINGLE_REFERENCE),
+    METHOD_SIGNATURES(Type.MULTIPLE_REFERENCE),
     MODIFIERS(Type.MULTIPLE_REFERENCE),
     MODULE(Type.SINGLE_REFERENCE),
     MODULE_NAMES(Type.MULTIPLE_REFERENCE),
     NAME(Type.SINGLE_REFERENCE),
     OPEN(Type.SINGLE_ATTRIBUTE),
     OPERATOR(Type.SINGLE_ATTRIBUTE),
+    OPERATORS(Type.SINGLE_ATTRIBUTE),
     ORIGIN(Type.SINGLE_ATTRIBUTE),
     PACKAGE_DECLARATION(Type.SINGLE_REFERENCE),
     PAIRS(Type.MULTIPLE_REFERENCE),
@@ -94,7 +117,9 @@ public enum ObservableProperty {
     PATTERN(Type.SINGLE_REFERENCE),
     PATTERN_LIST(Type.MULTIPLE_REFERENCE),
     PERMITTED_TYPES(Type.MULTIPLE_REFERENCE),
+    PREDICATE(Type.SINGLE_REFERENCE),
     QUALIFIER(Type.SINGLE_REFERENCE),
+    RECEIVER(Type.SINGLE_REFERENCE),
     RECEIVER_PARAMETER(Type.SINGLE_REFERENCE),
     RECORD_DECLARATION(Type.SINGLE_REFERENCE),
     RESOURCES(Type.MULTIPLE_REFERENCE),
@@ -104,8 +129,10 @@ public enum ObservableProperty {
     STATEMENT(Type.SINGLE_REFERENCE),
     STATEMENTS(Type.MULTIPLE_REFERENCE),
     STATIC(Type.SINGLE_ATTRIBUTE),
+    SUB_CONTRACTS(Type.MULTIPLE_REFERENCE),
     SUPER_TYPE(Type.SINGLE_REFERENCE),
     TARGET(Type.SINGLE_REFERENCE),
+    THEN(Type.SINGLE_REFERENCE),
     THEN_EXPR(Type.SINGLE_REFERENCE),
     THEN_STMT(Type.SINGLE_REFERENCE),
     THIS(Type.SINGLE_ATTRIBUTE),
@@ -139,10 +166,8 @@ public enum ObservableProperty {
     COMMENTED_NODE;
 
     enum Type {
-        SINGLE_ATTRIBUTE(false, false),
-        SINGLE_REFERENCE(false, true),
-        MULTIPLE_ATTRIBUTE(true, false),
-        MULTIPLE_REFERENCE(true, true);
+
+        SINGLE_ATTRIBUTE(false, false), SINGLE_REFERENCE(false, true), MULTIPLE_ATTRIBUTE(true, false), MULTIPLE_REFERENCE(true, true);
 
         private boolean multiple;
 
@@ -159,9 +184,7 @@ public enum ObservableProperty {
     private boolean derived;
 
     public static ObservableProperty fromCamelCaseName(String camelCaseName) {
-        Optional<ObservableProperty> observableProperty = Arrays.stream(values())
-                .filter(v -> v.camelCaseName().equals(camelCaseName))
-                .findFirst();
+        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();
         if (observableProperty.isPresent()) {
             return observableProperty.get();
         }
@@ -182,31 +205,31 @@ public enum ObservableProperty {
         this(Type.SINGLE_REFERENCE, false);
     }
 
-    public boolean isDerived() {
+    public  boolean isDerived() {
         return derived;
     }
 
-    public boolean isAboutNodes() {
+    public  boolean isAboutNodes() {
         return type.node;
     }
 
-    public boolean isAboutValues() {
+    public  boolean isAboutValues() {
         return !isAboutNodes();
     }
 
-    public boolean isMultiple() {
+    public  boolean isMultiple() {
         return type.multiple;
     }
 
-    public boolean isSingle() {
+    public  boolean isSingle() {
         return !isMultiple();
     }
 
-    public String camelCaseName() {
+    public  String camelCaseName() {
         return Utils.screamingToCamelCase(name());
     }
 
-    public Node getValueAsSingleReference(Node node) {
+    public  Node getValueAsSingleReference(Node node) {
         Object rawValue = getRawValue(node);
         try {
             if (rawValue instanceof Node) {
@@ -219,9 +242,7 @@ public enum ObservableProperty {
                 }
                 return null;
             }
-            throw new RuntimeException(String.format(
-                    "Property %s returned %s (%s)",
-                    this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
+            throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
         } catch (ClassCastException e) {
             throw new RuntimeException(e);
         }
@@ -236,7 +257,7 @@ public enum ObservableProperty {
         }
     }
 
-    public NodeList<? extends Node> getValueAsMultipleReference(Node node) {
+    public  NodeList<? extends Node> getValueAsMultipleReference(Node node) {
         Object rawValue = getRawValue(node);
         try {
             if (rawValue == null) {
@@ -251,34 +272,28 @@ public enum ObservableProperty {
             }
             return null;
         } catch (ClassCastException e) {
-            throw new RuntimeException(
-                    "Unable to get list value for " + this.name() + " from " + node + " (class: "
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
-    public Collection<?> getValueAsCollection(Node node) {
+    public  Collection<?> getValueAsCollection(Node node) {
         Object rawValue = getRawValue(node);
         try {
             return (Collection) rawValue;
         } catch (ClassCastException e) {
-            throw new RuntimeException(
-                    "Unable to get list value for " + this.name() + " from " + node + " (class: "
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
-    public String getValueAsStringAttribute(Node node) {
+    public  String getValueAsStringAttribute(Node node) {
         return (String) getRawValue(node);
     }
 
-    public Boolean getValueAsBooleanAttribute(Node node) {
+    public  Boolean getValueAsBooleanAttribute(Node node) {
         return (Boolean) getRawValue(node);
     }
 
-    public Object getRawValue(Node node) {
+    public  Object getRawValue(Node node) {
         String getterName = "get" + Utils.capitalize(camelCaseName());
         if (!hasMethod(node, getterName)) {
             getterName = "is" + Utils.capitalize(camelCaseName());
@@ -289,22 +304,19 @@ public enum ObservableProperty {
         try {
             return node.getClass().getMethod(getterName).invoke(node);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(
-                    "Unable to get value for " + this.name() + " from " + node + " ("
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e);
         }
     }
 
-    public boolean isNull(Node node) {
+    public  boolean isNull(Node node) {
         return null == getRawValue(node);
     }
 
-    public boolean isNullOrNotPresent(Node node) {
+    public  boolean isNullOrNotPresent(Node node) {
         return Utils.valueIsNullOrEmptyStringOrOptional(getRawValue(node));
     }
 
-    public boolean isNullOrEmpty(Node node) {
+    public  boolean isNullOrEmpty(Node node) {
         return Utils.valueIsNullOrEmpty(getRawValue(node));
     }
 }

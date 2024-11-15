@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.body.EnumDeclaration;
 import java.util.Optional;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,20 +34,14 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class EnumDeclarationMetaModel extends TypeDeclarationMetaModel {
+public  class EnumDeclarationMetaModel extends TypeDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     EnumDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                EnumDeclaration.class,
-                "EnumDeclaration",
-                "com.github.javaparser.ast.body",
-                false,
-                false);
+        super(superBaseNodeMetaModel, EnumDeclaration.class, "EnumDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
-    public PropertyMetaModel entriesPropertyMetaModel;
+    public  PropertyMetaModel entriesPropertyMetaModel;
 
-    public PropertyMetaModel implementedTypesPropertyMetaModel;
+    public  PropertyMetaModel implementedTypesPropertyMetaModel;
 }

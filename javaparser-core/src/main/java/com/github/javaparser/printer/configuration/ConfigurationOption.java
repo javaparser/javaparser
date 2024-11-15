@@ -19,7 +19,7 @@
  */
 package com.github.javaparser.printer.configuration;
 
-public interface ConfigurationOption {
+public  interface ConfigurationOption {
 
     /*
      * Set a currentValue to an option

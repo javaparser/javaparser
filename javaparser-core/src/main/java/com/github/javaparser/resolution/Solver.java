@@ -29,7 +29,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.List;
 import java.util.Optional;
 
-public interface Solver {
+public  interface Solver {
 
     SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, Context context);
 
@@ -57,8 +57,7 @@ public interface Solver {
      * <p>
      * It should contain its own private fields but not inherited private fields.
      */
-    SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(
-            ResolvedTypeDeclaration typeDeclaration, String name);
+    SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration, String name);
 
     /**
      * Try to solve a symbol just in the declaration, it does not delegate to the container.

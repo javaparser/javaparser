@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.stmt.SynchronizedStmt;
 import java.util.Optional;
+import com.github.javaparser.ast.stmt.SynchronizedStmt;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,20 +34,14 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class SynchronizedStmtMetaModel extends StatementMetaModel {
+public  class SynchronizedStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     SynchronizedStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                SynchronizedStmt.class,
-                "SynchronizedStmt",
-                "com.github.javaparser.ast.stmt",
-                false,
-                false);
+        super(superBaseNodeMetaModel, SynchronizedStmt.class, "SynchronizedStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public PropertyMetaModel bodyPropertyMetaModel;
+    public  PropertyMetaModel bodyPropertyMetaModel;
 
-    public PropertyMetaModel expressionPropertyMetaModel;
+    public  PropertyMetaModel expressionPropertyMetaModel;
 }

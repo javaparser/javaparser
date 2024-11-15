@@ -34,14 +34,14 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JmlFieldDeclarationMetaModel extends JmlClassLevelDeclarationMetaModel {
+public  class JmlFieldDeclarationMetaModel extends JmlClassLevelDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlFieldDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlFieldDeclaration.class, "JmlFieldDeclaration", "com.github.javaparser.ast.jml.body", false, false);
     }
 
-    public PropertyMetaModel declPropertyMetaModel;
+    public  PropertyMetaModel declPropertyMetaModel;
 
-    public PropertyMetaModel jmlTagsPropertyMetaModel;
+    public  PropertyMetaModel jmlTagsPropertyMetaModel;
 }

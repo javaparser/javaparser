@@ -46,10 +46,10 @@ import com.github.javaparser.ast.Node;
  *
  * @author Didier Villevalois
  */
-public class UnknownType extends Type {
+public  class UnknownType extends Type {
 
     @AllFieldsConstructor
-    public UnknownType() {
+    public  UnknownType() {
         this(null);
     }
 
@@ -57,25 +57,25 @@ public class UnknownType extends Type {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public UnknownType(TokenRange tokenRange) {
+    public  UnknownType(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
-    public UnknownType setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public  UnknownType setAnnotations(NodeList<AnnotationExpr> annotations) {
         if (annotations.size() > 0) {
             throw new IllegalStateException("Inferred lambda types cannot be annotated.");
         }
@@ -83,48 +83,48 @@ public class UnknownType extends Type {
     }
 
     @Override
-    public String asString() {
+    public  String asString() {
         return "";
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public UnknownType clone() {
+    public  UnknownType clone() {
         return (UnknownType) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public UnknownTypeMetaModel getMetaModel() {
+    public  UnknownTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.unknownTypeMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isUnknownType() {
+    public  boolean isUnknownType() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public UnknownType asUnknownType() {
+    public  UnknownType asUnknownType() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifUnknownType(Consumer<UnknownType> action) {
+    public  void ifUnknownType(Consumer<UnknownType> action) {
         action.accept(this);
     }
 
     @Override
-    public ResolvedType resolve() {
+    public  ResolvedType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedReferenceType.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<UnknownType> toUnknownType() {
+    public  Optional<UnknownType> toUnknownType() {
         return Optional.of(this);
     }
 
@@ -132,7 +132,7 @@ public class UnknownType extends Type {
      * A "phantom" node, is a node that is not really an AST node (like the fake type of variable in FieldDeclaration)
      */
     @Override
-    public boolean isPhantom() {
+    public  boolean isPhantom() {
         return true;
     }
 
@@ -144,7 +144,7 @@ public class UnknownType extends Type {
      * @return The type resolved.
      */
     @Override
-    public ResolvedType convertToUsage(Context context) {
+    public  ResolvedType convertToUsage(Context context) {
         throw new IllegalArgumentException("Inferred lambda parameter type");
     }
 }

@@ -9,7 +9,7 @@ import com.github.javaparser.jml.JmlUtility;
  * @author Alexander Weigl
  * @version 1 (12/9/21)
  */
-public interface NodeWithContracts<T extends Node> {
+public  interface NodeWithContracts<T extends Node> {
 
     NodeList<JmlContract> getContracts();
 

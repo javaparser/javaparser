@@ -22,9 +22,9 @@ package com.github.javaparser.printer.configuration;
 /**
  * This class defines the characteristics of an indentation: the type (space, tabs..) and the size (How many characters must be used to indent the code).
  */
-public class Indentation {
+public  class Indentation {
 
-    public enum IndentType {
+    public  enum IndentType {
 
         /**
          * Indent with spaces.
@@ -67,11 +67,11 @@ public class Indentation {
             this.width = width;
         }
 
-        public Character getCar() {
+        public  Character getCar() {
             return car;
         }
 
-        public int getWidth() {
+        public  int getWidth() {
             return width;
         }
     }
@@ -91,7 +91,7 @@ public class Indentation {
     /*
      * Creates an Indentation with a type and size
      */
-    public Indentation(IndentType type, int size) {
+    public  Indentation(IndentType type, int size) {
         this.type = type;
         this.size = size;
         format();
@@ -100,40 +100,40 @@ public class Indentation {
     /*
      * Creates an Indentation with the default size
      */
-    public Indentation(IndentType type) {
+    public  Indentation(IndentType type) {
         this(type, DEFAULT_SIZE);
     }
 
     /*
      * set the size of the indentation (how many spaces or tabs?)
      */
-    public Indentation setSize(int size) {
+    public  Indentation setSize(int size) {
         this.size = size;
         format();
         return this;
     }
 
-    public int getSize() {
+    public  int getSize() {
         return size;
     }
 
     /*
      * set the type of the indentation (spaces, tabs...)
      */
-    public Indentation setType(IndentType type) {
+    public  Indentation setType(IndentType type) {
         this.type = type;
         format();
         return this;
     }
 
-    public IndentType getType() {
+    public  IndentType getType() {
         return type;
     }
 
     /*
      * returns the formatted string that represents the identification
      */
-    public String getIndent() {
+    public  String getIndent() {
         return formattedIndentation;
     }
 
@@ -148,7 +148,7 @@ public class Indentation {
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return type.name() + " size=" + size;
     }
 }

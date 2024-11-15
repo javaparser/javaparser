@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.expr.UnaryExpr;
 import java.util.Optional;
+import com.github.javaparser.ast.expr.UnaryExpr;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,18 +34,18 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class UnaryExprMetaModel extends ExpressionMetaModel {
+public  class UnaryExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     UnaryExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, UnaryExpr.class, "UnaryExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
-    public PropertyMetaModel expressionPropertyMetaModel;
+    public  PropertyMetaModel expressionPropertyMetaModel;
 
-    public PropertyMetaModel operatorPropertyMetaModel;
+    public  PropertyMetaModel operatorPropertyMetaModel;
 
-    public PropertyMetaModel postfixPropertyMetaModel;
+    public  PropertyMetaModel postfixPropertyMetaModel;
 
-    public PropertyMetaModel prefixPropertyMetaModel;
+    public  PropertyMetaModel prefixPropertyMetaModel;
 }

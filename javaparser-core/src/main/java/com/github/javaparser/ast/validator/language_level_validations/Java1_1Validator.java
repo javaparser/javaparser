@@ -29,20 +29,14 @@ import com.github.javaparser.ast.validator.Validator;
 /**
  * This validator validates according to Java 1.1 syntax rules.
  */
-public class Java1_1Validator extends Java1_0Validator {
+public  class Java1_1Validator extends Java1_0Validator {
 
-    final Validator innerClasses =
-            new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, (n, reporter) -> n.getParentNode()
-                    .ifPresent(p -> {
-                        if (p instanceof LocalClassDeclarationStmt && n.isInterface())
-                            reporter.report(
-                                    n,
-                                    new UpgradeJavaMessage(
-                                            "There is no such thing as a local interface.",
-                                            ParserConfiguration.LanguageLevel.JAVA_16));
-                    }));
+    final Validator innerClasses = new SingleNodeTypeValidator<>(ClassOrInterfaceDeclaration.class, (n, reporter) -> n.getParentNode().ifPresent(p -> {
+        if (p instanceof LocalClassDeclarationStmt && n.isInterface())
+            reporter.report(n, new UpgradeJavaMessage("There is no such thing as a local interface.", ParserConfiguration.LanguageLevel.JAVA_16));
+    }));
 
-    public Java1_1Validator() {
+    public  Java1_1Validator() {
         super();
         replace(noInnerClasses, innerClasses);
         remove(noReflection);

@@ -22,7 +22,7 @@
 package com.github.javaparser.steps;
 
 import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.ast.Modifier.staticModifier;
 import static com.github.javaparser.ast.NodeList.nodeList;

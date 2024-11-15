@@ -29,67 +29,65 @@ import java.util.stream.Collectors;
  *
  * @author Federico Tomassetti
  */
-public class ResolvedUnionType implements ResolvedType {
+public  class ResolvedUnionType implements ResolvedType {
 
     private List<ResolvedType> elements;
 
-    public ResolvedUnionType(List<ResolvedType> elements) {
+    public  ResolvedUnionType(List<ResolvedType> elements) {
         if (elements.size() < 2) {
-            throw new IllegalArgumentException(
-                    "An union type should have at least two elements. This has " + elements.size());
+            throw new IllegalArgumentException("An union type should have at least two elements. This has " + elements.size());
         }
         this.elements = new LinkedList<>(elements);
     }
 
-    public Optional<ResolvedReferenceType> getCommonAncestor() {
-        Optional<List<ResolvedReferenceType>> reduce = elements.stream()
-                .map(ResolvedType::asReferenceType)
-                .map(rt -> rt.getAllAncestors(ResolvedReferenceTypeDeclaration.breadthFirstFunc))
-                .reduce((a, b) -> {
-                    ArrayList<ResolvedReferenceType> common = new ArrayList<>(a);
-                    common.retainAll(b);
-                    return common;
-                });
+    public  Optional<ResolvedReferenceType> getCommonAncestor() {
+        Optional<List<ResolvedReferenceType>> reduce = elements.stream().map(ResolvedType::asReferenceType).map(rt -> rt.getAllAncestors(ResolvedReferenceTypeDeclaration.breadthFirstFunc)).reduce((a, b) -> {
+            ArrayList<ResolvedReferenceType> common = new ArrayList<>(a);
+            common.retainAll(b);
+            return common;
+        });
         return reduce.orElse(new ArrayList<>()).stream().findFirst();
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         ResolvedUnionType that = (ResolvedUnionType) o;
         return new HashSet<>(elements).equals(new HashSet<>(that.elements));
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         return new HashSet<>(elements).hashCode();
     }
 
     @Override
-    public String describe() {
+    public  String describe() {
         return String.join(" | ", elements.stream().map(ResolvedType::describe).collect(Collectors.toList()));
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType other) {
+    public  boolean isAssignableBy(ResolvedType other) {
         return elements.stream().allMatch(e -> e.isAssignableBy(other));
     }
 
     @Override
-    public boolean isUnionType() {
+    public  boolean isUnionType() {
         return true;
     }
 
     @Override
-    public ResolvedUnionType asUnionType() {
+    public  ResolvedUnionType asUnionType() {
         return this;
     }
 
     /*
      * Returns the list of the resolved types
      */
-    public List<ResolvedType> getElements() {
+    public  List<ResolvedType> getElements() {
         return elements;
     }
 }

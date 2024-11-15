@@ -22,7 +22,7 @@
 package com.github.javaparser.builders;
 
 import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.ast.CompilationUnit;

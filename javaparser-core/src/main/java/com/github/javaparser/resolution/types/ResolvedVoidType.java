@@ -25,19 +25,20 @@ package com.github.javaparser.resolution.types;
  *
  * @author Federico Tomassetti
  */
-public class ResolvedVoidType implements ResolvedType {
+public  class ResolvedVoidType implements ResolvedType {
 
     public static final ResolvedType INSTANCE = new ResolvedVoidType();
 
-    private ResolvedVoidType() {}
+    private ResolvedVoidType() {
+    }
 
     @Override
-    public String describe() {
+    public  String describe() {
         return "void";
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType other) {
+    public  boolean isAssignableBy(ResolvedType other) {
         // According to https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.8:
         // """
         // Note that the Java programming language does not allow a "cast to void" - void is not a type - so the
@@ -53,12 +54,12 @@ public class ResolvedVoidType implements ResolvedType {
     }
 
     @Override
-    public boolean isVoid() {
+    public  boolean isVoid() {
         return true;
     }
 
     @Override
-    public String toDescriptor() {
+    public  String toDescriptor() {
         return "V";
     }
 }

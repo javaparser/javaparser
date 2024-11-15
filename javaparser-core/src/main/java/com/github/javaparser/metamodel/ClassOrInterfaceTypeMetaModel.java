@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import java.util.Optional;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,24 +34,18 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class ClassOrInterfaceTypeMetaModel extends ReferenceTypeMetaModel {
+public  class ClassOrInterfaceTypeMetaModel extends ReferenceTypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ClassOrInterfaceTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                ClassOrInterfaceType.class,
-                "ClassOrInterfaceType",
-                "com.github.javaparser.ast.type",
-                false,
-                false);
+        super(superBaseNodeMetaModel, ClassOrInterfaceType.class, "ClassOrInterfaceType", "com.github.javaparser.ast.type", false, false);
     }
 
-    public PropertyMetaModel namePropertyMetaModel;
+    public  PropertyMetaModel namePropertyMetaModel;
 
-    public PropertyMetaModel scopePropertyMetaModel;
+    public  PropertyMetaModel scopePropertyMetaModel;
 
-    public PropertyMetaModel typeArgumentsPropertyMetaModel;
+    public  PropertyMetaModel typeArgumentsPropertyMetaModel;
 
-    public PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
+    public  PropertyMetaModel usingDiamondOperatorPropertyMetaModel;
 }

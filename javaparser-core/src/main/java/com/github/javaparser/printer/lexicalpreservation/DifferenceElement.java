@@ -22,7 +22,7 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 
-public interface DifferenceElement {
+public  interface DifferenceElement {
 
     static DifferenceElement added(CsmElement element) {
         return new Added(element);

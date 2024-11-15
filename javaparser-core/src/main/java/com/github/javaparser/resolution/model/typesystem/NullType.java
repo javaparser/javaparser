@@ -27,7 +27,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
  *
  * @author Federico Tomassetti
  */
-public class NullType implements ResolvedType {
+public  class NullType implements ResolvedType {
 
     public static final NullType INSTANCE = new NullType();
 
@@ -36,32 +36,31 @@ public class NullType implements ResolvedType {
     }
 
     @Override
-    public boolean isArray() {
+    public  boolean isArray() {
         return false;
     }
 
-    public boolean isNull() {
+    public  boolean isNull() {
         return true;
     }
 
     @Override
-    public boolean isReferenceType() {
+    public  boolean isReferenceType() {
         return false;
     }
 
     @Override
-    public String describe() {
+    public  String describe() {
         return "null";
     }
 
     @Override
-    public boolean isTypeVariable() {
+    public  boolean isTypeVariable() {
         return false;
     }
 
     @Override
-    public boolean isAssignableBy(ResolvedType other) {
-        throw new UnsupportedOperationException(
-                "It does not make sense to assign a value to null, it can only be assigned");
+    public  boolean isAssignableBy(ResolvedType other) {
+        throw new UnsupportedOperationException("It does not make sense to assign a value to null, it can only be assigned");
     }
 }

@@ -33,12 +33,12 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JmlDocModifierMetaModel extends ModifierMetaModel {
+public  class JmlDocModifierMetaModel extends ModifierMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlDocModifierMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel);
     }
 
-    public PropertyMetaModel jmlCommentsPropertyMetaModel;
+    public  PropertyMetaModel jmlCommentsPropertyMetaModel;
 }

@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * Elements in a CsmMix have been reshuffled. It could also mean that
  * some new elements have been added or removed to the mix.
  */
-public class Reshuffled implements DifferenceElement {
+public  class Reshuffled implements DifferenceElement {
 
     private final CsmMix previousOrder;
 
@@ -42,51 +42,54 @@ public class Reshuffled implements DifferenceElement {
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return "Reshuffled{" + nextOrder + ", previous=" + previousOrder + '}';
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Reshuffled that = (Reshuffled) o;
-        if (!previousOrder.equals(that.previousOrder)) return false;
+        if (!previousOrder.equals(that.previousOrder))
+            return false;
         return nextOrder.equals(that.nextOrder);
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         int result = previousOrder.hashCode();
         result = 31 * result + nextOrder.hashCode();
         return result;
     }
 
     @Override
-    public CsmMix getElement() {
+    public  CsmMix getElement() {
         return nextOrder;
     }
 
-    public CsmMix getPreviousOrder() {
+    public  CsmMix getPreviousOrder() {
         return previousOrder;
     }
 
-    public CsmMix getNextOrder() {
+    public  CsmMix getNextOrder() {
         return nextOrder;
     }
 
     @Override
-    public boolean isAdded() {
+    public  boolean isAdded() {
         return false;
     }
 
     @Override
-    public boolean isRemoved() {
+    public  boolean isRemoved() {
         return false;
     }
 
     @Override
-    public boolean isKept() {
+    public  boolean isKept() {
         return false;
     }
 
@@ -95,7 +98,7 @@ public class Reshuffled implements DifferenceElement {
      * with all eof token replaced by the specified line separator. The line separator parameter must be a CsmToken with a valid line separator.
      */
     @Override
-    public DifferenceElement replaceEolTokens(CsmElement lineSeparator) {
+    public  DifferenceElement replaceEolTokens(CsmElement lineSeparator) {
         CsmMix modifiedNextOrder = new CsmMix(replaceTokens(nextOrder.getElements(), lineSeparator));
         CsmMix modifiedPreviousOrder = new CsmMix(replaceTokens(previousOrder.getElements(), lineSeparator));
         return new Reshuffled(modifiedPreviousOrder, modifiedNextOrder);
@@ -105,9 +108,7 @@ public class Reshuffled implements DifferenceElement {
      * Replaces all eol tokens in the list by the specified line separator token
      */
     private List<CsmElement> replaceTokens(List<CsmElement> elements, CsmElement lineSeparator) {
-        return elements.stream()
-                .map(element -> isNewLineToken(element) ? lineSeparator : element)
-                .collect(Collectors.toList());
+        return elements.stream().map(element -> isNewLineToken(element) ? lineSeparator : element).collect(Collectors.toList());
     }
 
     /*

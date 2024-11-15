@@ -21,7 +21,7 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.STATIC;
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
 import com.github.javaparser.StaticJavaParser;

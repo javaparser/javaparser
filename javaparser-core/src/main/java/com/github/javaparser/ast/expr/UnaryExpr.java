@@ -33,10 +33,8 @@ import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.printer.Stringable;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -49,9 +47,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExpr> {
+public  class UnaryExpr extends Expression implements NodeWithExpression<UnaryExpr> {
 
-    public enum Operator implements Stringable {
+    public  enum Operator implements Stringable {
+
         PLUS("+", false),
         MINUS("-", false),
         PREFIX_INCREMENT("++", false),
@@ -70,15 +69,15 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
             this.isPostfix = isPostfix;
         }
 
-        public String asString() {
+        public  String asString() {
             return codeRepresentation;
         }
 
-        public boolean isPostfix() {
+        public  boolean isPostfix() {
             return isPostfix;
         }
 
-        public boolean isPrefix() {
+        public  boolean isPrefix() {
             return !isPostfix();
         }
     }
@@ -87,12 +86,12 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
 
     private Operator operator;
 
-    public UnaryExpr() {
+    public  UnaryExpr() {
         this(null, new IntegerLiteralExpr(), Operator.POSTFIX_INCREMENT);
     }
 
     @AllFieldsConstructor
-    public UnaryExpr(final Expression expression, final Operator operator) {
+    public  UnaryExpr(final Expression expression, final Operator operator) {
         this(null, expression, operator);
     }
 
@@ -100,7 +99,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public UnaryExpr(TokenRange tokenRange, Expression expression, Operator operator) {
+    public  UnaryExpr(TokenRange tokenRange, Expression expression, Operator operator) {
         super(tokenRange);
         setExpression(expression);
         setOperator(operator);
@@ -109,41 +108,42 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Expression getExpression() {
+    public  Expression getExpression() {
         return expression;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Operator getOperator() {
+    public  Operator getOperator() {
         return operator;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public UnaryExpr setExpression(final Expression expression) {
+    public  UnaryExpr setExpression(final Expression expression) {
         assertNotNull(expression);
         if (expression == this.expression) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null) this.expression.setParentNode(null);
+        if (this.expression != null)
+            this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public UnaryExpr setOperator(final Operator operator) {
+    public  UnaryExpr setOperator(final Operator operator) {
         assertNotNull(operator);
         if (operator == this.operator) {
             return this;
@@ -154,30 +154,30 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     }
 
     @DerivedProperty
-    public boolean isPostfix() {
+    public  boolean isPostfix() {
         return operator.isPostfix();
     }
 
     @DerivedProperty
-    public boolean isPrefix() {
+    public  boolean isPrefix() {
         return !isPostfix();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public UnaryExpr clone() {
+    public  UnaryExpr clone() {
         return (UnaryExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public UnaryExprMetaModel getMetaModel() {
+    public  UnaryExprMetaModel getMetaModel() {
         return JavaParserMetaModel.unaryExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -190,25 +190,25 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isUnaryExpr() {
+    public  boolean isUnaryExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public UnaryExpr asUnaryExpr() {
+    public  UnaryExpr asUnaryExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifUnaryExpr(Consumer<UnaryExpr> action) {
+    public  void ifUnaryExpr(Consumer<UnaryExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<UnaryExpr> toUnaryExpr() {
+    public  Optional<UnaryExpr> toUnaryExpr() {
         return Optional.of(this);
     }
 }

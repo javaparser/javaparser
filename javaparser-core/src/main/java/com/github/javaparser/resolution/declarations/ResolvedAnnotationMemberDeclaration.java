@@ -25,7 +25,7 @@ import com.github.javaparser.ast.expr.Expression;
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedAnnotationMemberDeclaration extends ResolvedValueDeclaration {
+public  interface ResolvedAnnotationMemberDeclaration extends ResolvedValueDeclaration {
 
     Expression getDefaultValue();
 }

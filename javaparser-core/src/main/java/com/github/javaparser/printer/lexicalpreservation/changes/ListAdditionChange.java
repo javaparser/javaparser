@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * The Addition of an element to a list.
  */
-public class ListAdditionChange implements Change {
+public  class ListAdditionChange implements Change {
 
     private final ObservableProperty observableProperty;
 
@@ -36,14 +36,14 @@ public class ListAdditionChange implements Change {
 
     private final Node nodeAdded;
 
-    public ListAdditionChange(ObservableProperty observableProperty, int index, Node nodeAdded) {
+    public  ListAdditionChange(ObservableProperty observableProperty, int index, Node nodeAdded) {
         this.observableProperty = observableProperty;
         this.index = index;
         this.nodeAdded = nodeAdded;
     }
 
     @Override
-    public Object getValue(ObservableProperty property, Node node) {
+    public  Object getValue(ObservableProperty property, Node node) {
         if (property == observableProperty) {
             Object currentRawValue = new NoChange().getValue(property, node);
             if (currentRawValue instanceof Optional) {
@@ -51,8 +51,7 @@ public class ListAdditionChange implements Change {
                 currentRawValue = optional.orElse(null);
             }
             if (!(currentRawValue instanceof NodeList)) {
-                throw new IllegalStateException(
-                        "Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
+                throw new IllegalStateException("Expected NodeList, found " + currentRawValue.getClass().getCanonicalName());
             }
             NodeList<Node> currentNodeList = (NodeList<Node>) currentRawValue;
             // Note: When adding to a node list children get assigned the list's parent, thus we must set the list's
@@ -68,7 +67,7 @@ public class ListAdditionChange implements Change {
     }
 
     @Override
-    public ObservableProperty getProperty() {
+    public  ObservableProperty getProperty() {
         return observableProperty;
     }
 }

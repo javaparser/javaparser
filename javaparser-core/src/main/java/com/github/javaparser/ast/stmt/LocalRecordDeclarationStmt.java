@@ -31,10 +31,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LocalRecordDeclarationStmtMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -43,16 +41,16 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Roger Howell
  * @see RecordDeclaration
  */
-public class LocalRecordDeclarationStmt extends Statement {
+public  class LocalRecordDeclarationStmt extends Statement {
 
     private RecordDeclaration recordDeclaration;
 
-    public LocalRecordDeclarationStmt() {
+    public  LocalRecordDeclarationStmt() {
         this(null, new RecordDeclaration());
     }
 
     @AllFieldsConstructor
-    public LocalRecordDeclarationStmt(final RecordDeclaration recordDeclaration) {
+    public  LocalRecordDeclarationStmt(final RecordDeclaration recordDeclaration) {
         this(null, recordDeclaration);
     }
 
@@ -60,7 +58,7 @@ public class LocalRecordDeclarationStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LocalRecordDeclarationStmt(TokenRange tokenRange, RecordDeclaration recordDeclaration) {
+    public  LocalRecordDeclarationStmt(TokenRange tokenRange, RecordDeclaration recordDeclaration) {
         super(tokenRange);
         setRecordDeclaration(recordDeclaration);
         customInitialization();
@@ -68,29 +66,30 @@ public class LocalRecordDeclarationStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public RecordDeclaration getRecordDeclaration() {
+    public  RecordDeclaration getRecordDeclaration() {
         return recordDeclaration;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public LocalRecordDeclarationStmt setRecordDeclaration(final RecordDeclaration recordDeclaration) {
+    public  LocalRecordDeclarationStmt setRecordDeclaration(final RecordDeclaration recordDeclaration) {
         assertNotNull(recordDeclaration);
         if (recordDeclaration == this.recordDeclaration) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.RECORD_DECLARATION, this.recordDeclaration, recordDeclaration);
-        if (this.recordDeclaration != null) this.recordDeclaration.setParentNode(null);
+        if (this.recordDeclaration != null)
+            this.recordDeclaration.setParentNode(null);
         this.recordDeclaration = recordDeclaration;
         setAsParentNodeOf(recordDeclaration);
         return this;
@@ -98,19 +97,19 @@ public class LocalRecordDeclarationStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public LocalRecordDeclarationStmt clone() {
+    public  LocalRecordDeclarationStmt clone() {
         return (LocalRecordDeclarationStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public LocalRecordDeclarationStmtMetaModel getMetaModel() {
+    public  LocalRecordDeclarationStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.localRecordDeclarationStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -123,25 +122,25 @@ public class LocalRecordDeclarationStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isLocalRecordDeclarationStmt() {
+    public  boolean isLocalRecordDeclarationStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LocalRecordDeclarationStmt asLocalRecordDeclarationStmt() {
+    public  LocalRecordDeclarationStmt asLocalRecordDeclarationStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLocalRecordDeclarationStmt(Consumer<LocalRecordDeclarationStmt> action) {
+    public  void ifLocalRecordDeclarationStmt(Consumer<LocalRecordDeclarationStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LocalRecordDeclarationStmt> toLocalRecordDeclarationStmt() {
+    public  Optional<LocalRecordDeclarationStmt> toLocalRecordDeclarationStmt() {
         return Optional.of(this);
     }
 }

@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -44,16 +43,16 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public class ArrayInitializerExpr extends Expression {
+public  class ArrayInitializerExpr extends Expression {
 
     private NodeList<Expression> values;
 
-    public ArrayInitializerExpr() {
+    public  ArrayInitializerExpr() {
         this(null, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ArrayInitializerExpr(NodeList<Expression> values) {
+    public  ArrayInitializerExpr(NodeList<Expression> values) {
         this(null, values);
     }
 
@@ -61,7 +60,7 @@ public class ArrayInitializerExpr extends Expression {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ArrayInitializerExpr(TokenRange tokenRange, NodeList<Expression> values) {
+    public  ArrayInitializerExpr(TokenRange tokenRange, NodeList<Expression> values) {
         super(tokenRange);
         setValues(values);
         customInitialization();
@@ -69,29 +68,30 @@ public class ArrayInitializerExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Expression> getValues() {
+    public  NodeList<Expression> getValues() {
         return values;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ArrayInitializerExpr setValues(final NodeList<Expression> values) {
+    public  ArrayInitializerExpr setValues(final NodeList<Expression> values) {
         assertNotNull(values);
         if (values == this.values) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.VALUES, this.values, values);
-        if (this.values != null) this.values.setParentNode(null);
+        if (this.values != null)
+            this.values.setParentNode(null);
         this.values = values;
         setAsParentNodeOf(values);
         return this;
@@ -99,7 +99,7 @@ public class ArrayInitializerExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -114,19 +114,19 @@ public class ArrayInitializerExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ArrayInitializerExpr clone() {
+    public  ArrayInitializerExpr clone() {
         return (ArrayInitializerExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ArrayInitializerExprMetaModel getMetaModel() {
+    public  ArrayInitializerExprMetaModel getMetaModel() {
         return JavaParserMetaModel.arrayInitializerExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -141,25 +141,25 @@ public class ArrayInitializerExpr extends Expression {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isArrayInitializerExpr() {
+    public  boolean isArrayInitializerExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ArrayInitializerExpr asArrayInitializerExpr() {
+    public  ArrayInitializerExpr asArrayInitializerExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifArrayInitializerExpr(Consumer<ArrayInitializerExpr> action) {
+    public  void ifArrayInitializerExpr(Consumer<ArrayInitializerExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ArrayInitializerExpr> toArrayInitializerExpr() {
+    public  Optional<ArrayInitializerExpr> toArrayInitializerExpr() {
         return Optional.of(this);
     }
 }

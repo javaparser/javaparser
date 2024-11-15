@@ -23,7 +23,7 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
 import java.util.List;
 
-public interface ImportOrderingStrategy {
+public  interface ImportOrderingStrategy {
 
     /**
      * Sort the list of imports into groups.

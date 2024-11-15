@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * Processes the generic AST into a Java 10 AST and validates it.
  */
-public class Java10PostProcessor extends PostProcessors {
+public  class Java10PostProcessor extends PostProcessors {
 
     // List of parent contexts in which a var type must not be detected.
     // for example: in this statement var.class.getCanonicalName(), var must not be considered as a VarType
@@ -47,7 +47,7 @@ public class Java10PostProcessor extends PostProcessors {
     protected final Processor varNodeCreator = new Processor() {
 
         @Override
-        public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+        public  void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
             result.getResult().ifPresent(node -> {
                 node.findAll(ClassOrInterfaceType.class).forEach(n -> {
                     if ("var".equals(n.getNameAsString()) && !matchForbiddenContext(n)) {
@@ -58,13 +58,11 @@ public class Java10PostProcessor extends PostProcessors {
         }
 
         private boolean matchForbiddenContext(ClassOrInterfaceType cit) {
-            return cit.getParentNode().isPresent()
-                    && FORBIDEN_PARENT_CONTEXT_TO_DETECT_POTENTIAL_VAR_TYPE.stream()
-                            .anyMatch(cl -> cl.isInstance(cit.getParentNode().get()));
+            return cit.getParentNode().isPresent() && FORBIDEN_PARENT_CONTEXT_TO_DETECT_POTENTIAL_VAR_TYPE.stream().anyMatch(cl -> cl.isInstance(cit.getParentNode().get()));
         }
     };
 
-    public Java10PostProcessor() {
+    public  Java10PostProcessor() {
         add(varNodeCreator);
     }
 }

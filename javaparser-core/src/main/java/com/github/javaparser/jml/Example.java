@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
  * @author Alexander Weigl
  * @version 1 (2/26/21)
  */
-public class Example {
+public  class Example {
 
     public static void main(String[] args) throws FileNotFoundException {
         /*GeneratedJavaParserTokenManager manager = new GeneratedJavaParserTokenManager(

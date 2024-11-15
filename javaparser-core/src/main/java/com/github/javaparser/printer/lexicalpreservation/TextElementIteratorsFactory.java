@@ -43,13 +43,13 @@ class TextElementIteratorsFactory {
 
         private boolean lastReturnedFromNext = false;
 
-        public CascadingIterator(Iterator<E> current, Provider<E> nextProvider) {
+        public  CascadingIterator(Iterator<E> current, Provider<E> nextProvider) {
             this.nextProvider = nextProvider;
             this.current = current;
         }
 
         @Override
-        public boolean hasNext() {
+        public  boolean hasNext() {
             if (current.hasNext()) {
                 return true;
             }
@@ -60,7 +60,7 @@ class TextElementIteratorsFactory {
         }
 
         @Override
-        public E next() {
+        public  E next() {
             if (current.hasNext()) {
                 lastReturnedFromCurrent = true;
                 lastReturnedFromNext = false;
@@ -75,7 +75,7 @@ class TextElementIteratorsFactory {
         }
 
         @Override
-        public void remove() {
+        public  void remove() {
             if (lastReturnedFromCurrent) {
                 current.remove();
                 return;
@@ -91,12 +91,12 @@ class TextElementIteratorsFactory {
     static class EmptyIterator<E> implements Iterator<E> {
 
         @Override
-        public boolean hasNext() {
+        public  boolean hasNext() {
             return false;
         }
 
         @Override
-        public E next() {
+        public  E next() {
             throw new IllegalArgumentException();
         }
     }
@@ -112,18 +112,19 @@ class TextElementIteratorsFactory {
         }
 
         @Override
-        public boolean hasNext() {
+        public  boolean hasNext() {
             return !returned;
         }
 
         @Override
-        public E next() {
+        public  E next() {
             returned = true;
             return element;
         }
 
         @Override
-        public void remove() {}
+        public  void remove() {
+        }
     }
 
     static class ComposedIterator<E> implements Iterator<E> {
@@ -138,7 +139,7 @@ class TextElementIteratorsFactory {
         }
 
         @Override
-        public boolean hasNext() {
+        public  boolean hasNext() {
             if (currIndex >= elements.size()) {
                 return false;
             }
@@ -150,7 +151,7 @@ class TextElementIteratorsFactory {
         }
 
         @Override
-        public E next() {
+        public  E next() {
             if (!hasNext()) {
                 throw new IllegalArgumentException();
             }
@@ -158,7 +159,7 @@ class TextElementIteratorsFactory {
         }
 
         @Override
-        public void remove() {
+        public  void remove() {
             elements.get(currIndex).remove();
         }
     }
@@ -169,7 +170,7 @@ class TextElementIteratorsFactory {
             return new SingleElementIterator<TokenTextElement>((TokenTextElement) textElement) {
 
                 @Override
-                public void remove() {
+                public  void remove() {
                     nodeText.removeElement(index);
                 }
             };

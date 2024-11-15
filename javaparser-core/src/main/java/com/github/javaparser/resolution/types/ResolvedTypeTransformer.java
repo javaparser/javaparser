@@ -24,7 +24,7 @@ package com.github.javaparser.resolution.types;
  * @author Federico Tomassetti
  */
 @FunctionalInterface
-public interface ResolvedTypeTransformer {
+public  interface ResolvedTypeTransformer {
 
     ResolvedType transform(ResolvedType type);
 }

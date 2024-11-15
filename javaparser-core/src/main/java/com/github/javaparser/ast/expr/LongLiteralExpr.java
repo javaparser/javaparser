@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.hasUnaryMinusAsParent;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -34,6 +33,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Node;
 
 /**
  * All ways to specify a long literal.
@@ -48,18 +48,18 @@ import java.util.function.Consumer;
  *
  * @author Julio Vilmar Gesser
  */
-public class LongLiteralExpr extends LiteralStringValueExpr {
+public  class LongLiteralExpr extends LiteralStringValueExpr {
 
     public static final String MAX_63_BIT_UNSIGNED_VALUE_AS_STRING = "9223372036854775808L";
 
     public static final BigInteger MAX_63_BIT_UNSIGNED_VALUE_AS_BIG_INTEGER = new BigInteger("9223372036854775808");
 
-    public LongLiteralExpr() {
+    public  LongLiteralExpr() {
         this(null, "0");
     }
 
     @AllFieldsConstructor
-    public LongLiteralExpr(final String value) {
+    public  LongLiteralExpr(final String value) {
         this(null, value);
     }
 
@@ -67,7 +67,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public LongLiteralExpr(TokenRange tokenRange, String value) {
+    public  LongLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
         customInitialization();
     }
@@ -77,19 +77,19 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      * #asNumber()} function for valid formats and how to construct literals holding negative values.
      */
     @Deprecated
-    public LongLiteralExpr(final long value) {
+    public  LongLiteralExpr(final long value) {
         this(null, String.valueOf(value));
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
@@ -100,7 +100,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      * releases
      */
     @Deprecated
-    public long asLong() {
+    public  long asLong() {
         String result = value.replaceAll("_", "");
         char lastChar = result.charAt(result.length() - 1);
         if (lastChar == 'l' || lastChar == 'L') {
@@ -133,7 +133,7 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      *
      * @return the literal value as a number while respecting different number representations
      */
-    public Number asNumber() {
+    public  Number asNumber() {
         if (Objects.equals(value, MAX_63_BIT_UNSIGNED_VALUE_AS_STRING) && hasUnaryMinusAsParent(this)) {
             return MAX_63_BIT_UNSIGNED_VALUE_AS_BIG_INTEGER;
         }
@@ -145,44 +145,44 @@ public class LongLiteralExpr extends LiteralStringValueExpr {
      * #asNumber()} function for valid formats and how to construct literals holding negative values.
      */
     @Deprecated
-    public LongLiteralExpr setLong(long value) {
+    public  LongLiteralExpr setLong(long value) {
         this.value = String.valueOf(value);
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public LongLiteralExpr clone() {
+    public  LongLiteralExpr clone() {
         return (LongLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public LongLiteralExprMetaModel getMetaModel() {
+    public  LongLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.longLiteralExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isLongLiteralExpr() {
+    public  boolean isLongLiteralExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public LongLiteralExpr asLongLiteralExpr() {
+    public  LongLiteralExpr asLongLiteralExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLongLiteralExpr(Consumer<LongLiteralExpr> action) {
+    public  void ifLongLiteralExpr(Consumer<LongLiteralExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<LongLiteralExpr> toLongLiteralExpr() {
+    public  Optional<LongLiteralExpr> toLongLiteralExpr() {
         return Optional.of(this);
     }
 }

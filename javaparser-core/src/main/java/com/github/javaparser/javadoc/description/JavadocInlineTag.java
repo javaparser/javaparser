@@ -28,7 +28,7 @@ import static com.github.javaparser.utils.Utils.screamingToCamelCase;
  * <p>
  * For example <code>{@link String}</code>
  */
-public class JavadocInlineTag implements JavadocDescriptionElement {
+public  class JavadocInlineTag implements JavadocDescriptionElement {
 
     public static JavadocDescriptionElement fromText(String text) {
         if (!text.startsWith("{@")) {
@@ -48,7 +48,8 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
      * The type of tag: it could either correspond to a known tag (code, docRoot, etc.) or represent
      * an unknown tag.
      */
-    public enum Type {
+    public  enum Type {
+
         CODE,
         DOC_ROOT,
         INHERIT_DOC,
@@ -81,41 +82,45 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
 
     private String content;
 
-    public JavadocInlineTag(String tagName, Type type, String content) {
+    public  JavadocInlineTag(String tagName, Type type, String content) {
         this.tagName = tagName;
         this.type = type;
         this.content = content;
     }
 
-    public Type getType() {
+    public  Type getType() {
         return type;
     }
 
-    public String getContent() {
+    public  String getContent() {
         return content;
     }
 
-    public String getName() {
+    public  String getName() {
         return tagName;
     }
 
     @Override
-    public String toText() {
+    public  String toText() {
         return "{@" + tagName + this.content + "}";
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         JavadocInlineTag that = (JavadocInlineTag) o;
-        if (tagName != null ? !tagName.equals(that.tagName) : that.tagName != null) return false;
-        if (type != that.type) return false;
+        if (tagName != null ? !tagName.equals(that.tagName) : that.tagName != null)
+            return false;
+        if (type != that.type)
+            return false;
         return content != null ? content.equals(that.content) : that.content == null;
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         int result = tagName != null ? tagName.hashCode() : 0;
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
@@ -123,8 +128,7 @@ public class JavadocInlineTag implements JavadocDescriptionElement {
     }
 
     @Override
-    public String toString() {
-        return "JavadocInlineTag{" + "tagName='" + tagName + '\'' + ", type=" + type + ", content='" + content + '\''
-                + '}';
+    public  String toString() {
+        return "JavadocInlineTag{" + "tagName='" + tagName + '\'' + ", type=" + type + ", content='" + content + '\'' + '}';
     }
 }

@@ -25,7 +25,7 @@ import com.github.javaparser.ast.type.PrimitiveType;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement;
 import com.github.javaparser.printer.concretesyntaxmodel.CsmToken;
 
-public class Removed implements DifferenceElement {
+public  class Removed implements DifferenceElement {
 
     private final CsmElement element;
 
@@ -34,38 +34,39 @@ public class Removed implements DifferenceElement {
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return "Removed{" + element + '}';
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Removed removed = (Removed) o;
         return element.equals(removed.element);
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         return element.hashCode();
     }
 
     @Override
-    public CsmElement getElement() {
+    public  CsmElement getElement() {
         return element;
     }
 
-    public Node getChild() {
+    public  Node getChild() {
         if (isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;
             return csmChild.getChild();
         }
-        throw new IllegalStateException(
-                "Removed is not a " + LexicalDifferenceCalculator.CsmChild.class.getSimpleName());
+        throw new IllegalStateException("Removed is not a " + LexicalDifferenceCalculator.CsmChild.class.getSimpleName());
     }
 
-    public int getTokenType() {
+    public  int getTokenType() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.getTokenType();
@@ -74,25 +75,25 @@ public class Removed implements DifferenceElement {
     }
 
     @Override
-    public boolean isAdded() {
+    public  boolean isAdded() {
         return false;
     }
 
     @Override
-    public boolean isRemoved() {
+    public  boolean isRemoved() {
         return true;
     }
 
     @Override
-    public boolean isKept() {
+    public  boolean isKept() {
         return false;
     }
 
-    public boolean isToken() {
+    public  boolean isToken() {
         return element instanceof CsmToken;
     }
 
-    public boolean isPrimitiveType() {
+    public  boolean isPrimitiveType() {
         if (isChild()) {
             LexicalDifferenceCalculator.CsmChild csmChild = (LexicalDifferenceCalculator.CsmChild) element;
             return csmChild.getChild() instanceof PrimitiveType;
@@ -100,7 +101,7 @@ public class Removed implements DifferenceElement {
         return false;
     }
 
-    public boolean isWhiteSpace() {
+    public  boolean isWhiteSpace() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isWhiteSpace();
@@ -108,7 +109,7 @@ public class Removed implements DifferenceElement {
         return false;
     }
 
-    public boolean isWhiteSpaceNotEol() {
+    public  boolean isWhiteSpaceNotEol() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isWhiteSpaceNotEol();
@@ -116,7 +117,7 @@ public class Removed implements DifferenceElement {
         return false;
     }
 
-    public boolean isNewLine() {
+    public  boolean isNewLine() {
         if (isToken()) {
             CsmToken csmToken = (CsmToken) element;
             return csmToken.isNewLine();

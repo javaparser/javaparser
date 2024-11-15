@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author Federico Tomassetti
  */
-public interface SymbolDeclarator {
+public  interface SymbolDeclarator {
 
     List<ResolvedValueDeclaration> getSymbolDeclarations();
 }

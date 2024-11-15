@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/15/">https://openjdk.java.net/projects/jdk/15/</a>
  */
-public class Java15Validator extends Java14Validator {
+public  class Java15Validator extends Java14Validator {
 
-    public Java15Validator() {
+    public  Java15Validator() {
         super();
         // Released Language Features
         // Text Block Literals - released within Java 15 - https://openjdk.java.net/jeps/378

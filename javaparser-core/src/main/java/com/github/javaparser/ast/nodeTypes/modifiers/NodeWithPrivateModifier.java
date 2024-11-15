@@ -20,15 +20,14 @@
  */
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
-
+import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
 
 /**
  * A node that can be private.
  */
-public interface NodeWithPrivateModifier<N extends Node> extends NodeWithModifiers<N> {
+public  interface NodeWithPrivateModifier<N extends Node> extends NodeWithModifiers<N> {
 
     default boolean isPrivate() {
         return hasModifier(PRIVATE);

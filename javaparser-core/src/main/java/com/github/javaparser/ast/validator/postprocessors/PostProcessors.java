@@ -31,37 +31,37 @@ import java.util.List;
 /**
  * A post processor that will call a collection of post processors.
  */
-public class PostProcessors {
+public  class PostProcessors {
 
     private final List<Processor> postProcessors = new ArrayList<>();
 
-    public PostProcessors(Processor... postProcessors) {
+    public  PostProcessors(Processor... postProcessors) {
         this.postProcessors.addAll(Arrays.asList(postProcessors));
     }
 
-    public List<Processor> getPostProcessors() {
+    public  List<Processor> getPostProcessors() {
         return postProcessors;
     }
 
-    public PostProcessors remove(Processor postProcessor) {
+    public  PostProcessors remove(Processor postProcessor) {
         if (!postProcessors.remove(postProcessor)) {
             throw new AssertionError("Trying to remove a post processor that isn't there.");
         }
         return this;
     }
 
-    public PostProcessors replace(Processor oldProcessor, Processor newProcessor) {
+    public  PostProcessors replace(Processor oldProcessor, Processor newProcessor) {
         remove(oldProcessor);
         add(newProcessor);
         return this;
     }
 
-    public PostProcessors add(Processor newProcessor) {
+    public  PostProcessors add(Processor newProcessor) {
         postProcessors.add(newProcessor);
         return this;
     }
 
-    public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+    public  void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         postProcessors.forEach(pp -> pp.postProcess(result, configuration));
     }
 }

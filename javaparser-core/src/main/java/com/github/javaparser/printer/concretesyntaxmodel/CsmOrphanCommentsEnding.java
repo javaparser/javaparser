@@ -21,17 +21,16 @@
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import static com.github.javaparser.utils.PositionUtils.sortByBeginPosition;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.printer.SourcePrinter;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CsmOrphanCommentsEnding implements CsmElement {
+public  class CsmOrphanCommentsEnding implements CsmElement {
 
     @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
+    public  void prettyPrint(Node node, SourcePrinter printer) {
         List<Node> everything = new LinkedList<>();
         everything.addAll(node.getChildNodes());
         sortByBeginPosition(everything);

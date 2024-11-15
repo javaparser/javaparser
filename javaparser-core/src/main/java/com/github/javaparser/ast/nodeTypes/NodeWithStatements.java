@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.StaticJavaParser.parseStatement;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -33,7 +32,7 @@ import com.github.javaparser.ast.stmt.Statement;
 /**
  * A node that contains a list of statements.
  */
-public interface NodeWithStatements<N extends Node> {
+public  interface NodeWithStatements<N extends Node> {
 
     NodeList<Statement> getStatements();
 

@@ -29,7 +29,7 @@ import com.github.javaparser.resolution.model.SymbolReference;
  *
  * @author Federico Tomassetti
  */
-public interface TypeSolver {
+public  interface TypeSolver {
 
     String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 

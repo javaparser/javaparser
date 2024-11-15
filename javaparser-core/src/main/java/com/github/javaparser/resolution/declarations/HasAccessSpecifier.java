@@ -28,7 +28,7 @@ import com.github.javaparser.ast.AccessSpecifier;
  * @author Federico Tomassetti
  * @see AccessSpecifier
  */
-public interface HasAccessSpecifier {
+public  interface HasAccessSpecifier {
 
     /**
      * The access specifier of this element.

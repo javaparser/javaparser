@@ -31,7 +31,7 @@ import java.util.LinkedList;
 /**
  * A support class for code that outputs formatted source code.
  */
-public class SourcePrinter {
+public  class SourcePrinter {
 
     private String endOfLineCharacter;
 
@@ -59,15 +59,7 @@ public class SourcePrinter {
     }
 
     SourcePrinter(final PrinterConfiguration configuration) {
-        this(
-                configuration
-                        .get(new DefaultConfigurationOption(ConfigOption.INDENTATION))
-                        .get()
-                        .asValue(),
-                configuration
-                        .get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER))
-                        .get()
-                        .asString());
+        this(configuration.get(new DefaultConfigurationOption(ConfigOption.INDENTATION)).get().asValue(), configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString());
     }
 
     SourcePrinter(Indentation indentation, String eol) {
@@ -80,9 +72,9 @@ public class SourcePrinter {
      * Add the default indentation to the current indentation and push it on the indentation stack.
      * Does not actually output anything.
      */
-    public SourcePrinter indent() {
+    public  SourcePrinter indent() {
         String currentIndent = indents.peek();
-        switch (indentation.getType()) {
+        switch(indentation.getType()) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 indents.push(currentIndent + indentation.getIndent());
@@ -100,7 +92,7 @@ public class SourcePrinter {
      * Add to the current indentation until it is reaches "column" and push it on the indentation stack.
      * Does not actually output anything.
      */
-    public SourcePrinter indentWithAlignTo(int column) {
+    public  SourcePrinter indentWithAlignTo(int column) {
         indents.push(calculateIndentWithAlignTo(column));
         return this;
     }
@@ -110,7 +102,7 @@ public class SourcePrinter {
             throw new IllegalStateException("Attempt to indent less than the previous indent.");
         }
         StringBuilder newIndent = new StringBuilder(lastPrintedIndent);
-        switch (indentation.getType()) {
+        switch(indentation.getType()) {
             case SPACES:
             case TABS_WITH_SPACE_ALIGN:
                 while (newIndent.length() < column) {
@@ -133,15 +125,9 @@ public class SourcePrinter {
                     fullTab.append(IndentType.SPACES.getCar());
                 }
                 String fullTabString = fullTab.toString();
-                if ((newIndent.length() >= currentIndentType.getWidth())
-                        && newIndent
-                                .substring(newIndent.length() - currentIndentType.getWidth())
-                                .equals(fullTabString)) {
+                if ((newIndent.length() >= currentIndentType.getWidth()) && newIndent.substring(newIndent.length() - currentIndentType.getWidth()).equals(fullTabString)) {
                     int i = newIndent.indexOf(fullTabString);
-                    newIndent.replace(
-                            i,
-                            i + currentIndentType.getWidth(),
-                            currentIndentType.getCar().toString());
+                    newIndent.replace(i, i + currentIndentType.getWidth(), currentIndentType.getCar().toString());
                 }
                 break;
             default:
@@ -154,7 +140,7 @@ public class SourcePrinter {
      * Pop the last indentation of the indentation stack.
      * Does not actually output anything.
      */
-    public SourcePrinter unindent() {
+    public  SourcePrinter unindent() {
         if (indents.isEmpty()) {
             // Since we start out with an empty indent on the stack, this will only occur
             // the second time we over-unindent.
@@ -182,7 +168,7 @@ public class SourcePrinter {
      * @return this instance, for nesting calls to method as fluent interface
      * @see SourcePrinter#println(String)
      */
-    public SourcePrinter print(final String arg) {
+    public  SourcePrinter print(final String arg) {
         if (!indented) {
             lastPrintedIndent = indents.peek();
             append(lastPrintedIndent);
@@ -203,7 +189,7 @@ public class SourcePrinter {
      * @param arg source line to be printed (should not contain newline/carriage-return characters)
      * @return this instance, for nesting calls to method as fluent interface
      */
-    public SourcePrinter println(final String arg) {
+    public  SourcePrinter println(final String arg) {
         print(arg);
         println();
         return this;
@@ -214,7 +200,7 @@ public class SourcePrinter {
      *
      * @return this instance, for nesting calls to method as fluent interface
      */
-    public SourcePrinter println() {
+    public  SourcePrinter println() {
         buf.append(endOfLineCharacter);
         // Start before the first column
         cursor = new Position(cursor.line + 1, Position.FIRST_COLUMN - 1);
@@ -232,7 +218,7 @@ public class SourcePrinter {
      *
      * @return the current cursor position (line, column).
      */
-    public Position getCursor() {
+    public  Position getCursor() {
         return cursor;
     }
 
@@ -241,7 +227,7 @@ public class SourcePrinter {
      * @deprecated use toString()
      */
     @Deprecated
-    public String getSource() {
+    public  String getSource() {
         return toString();
     }
 
@@ -249,14 +235,14 @@ public class SourcePrinter {
      * @return the currently printed source code.
      */
     @Override
-    public String toString() {
+    public  String toString() {
         return buf.toString();
     }
 
     /**
      * Changes all EOL characters in "content" to the EOL character this SourcePrinter is using.
      */
-    public String normalizeEolInTextBlock(String content) {
+    public  String normalizeEolInTextBlock(String content) {
         return Utils.normalizeEolInTextBlock(content, endOfLineCharacter);
     }
 
@@ -264,7 +250,7 @@ public class SourcePrinter {
      * Set the top-most indent to the column the cursor is currently in, can be undone with
      * {@link #reindentToPreviousLevel()}. Does not actually output anything.
      */
-    public void reindentWithAlignToCursor() {
+    public  void reindentWithAlignToCursor() {
         String newIndent = calculateIndentWithAlignTo(cursor.column);
         reindentedIndents.push(indents.pop());
         indents.push(newIndent);
@@ -274,7 +260,7 @@ public class SourcePrinter {
      * Set the top-most indent to the column the cursor was before the last {@link #reindentWithAlignToCursor()} call.
      * Does not actually output anything.
      */
-    public void reindentToPreviousLevel() {
+    public  void reindentToPreviousLevel() {
         if (reindentedIndents.isEmpty()) {
             throw new IllegalStateException("Reindent calls are not well-balanced.");
         }
@@ -288,7 +274,7 @@ public class SourcePrinter {
      * Once you do know, you can pop this indent ("unindent") and indent to the right column.
      * (Does not actually output anything.)
      */
-    public void duplicateIndent() {
+    public  void duplicateIndent() {
         indents.push(indents.peek());
     }
 }

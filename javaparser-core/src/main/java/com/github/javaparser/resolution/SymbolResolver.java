@@ -26,7 +26,7 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 
-public interface SymbolResolver {
+public  interface SymbolResolver {
 
     /**
      * For a reference it would find the corresponding declaration.

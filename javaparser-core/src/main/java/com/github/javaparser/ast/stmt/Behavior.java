@@ -7,7 +7,7 @@ import com.github.javaparser.ast.jml.JmlKeyword;
  * @author Alexander Weigl
  * @version 1 (3/14/21)
  */
-public enum Behavior implements Jmlish, JmlKeyword {
+public  enum Behavior implements Jmlish, JmlKeyword {
 
     NONE(""),
     BEHAVIOR("behavior"),
@@ -26,7 +26,7 @@ public enum Behavior implements Jmlish, JmlKeyword {
     }
 
     @Override
-    public String jmlSymbol() {
+    public  String jmlSymbol() {
         return symbol;
     }
 }

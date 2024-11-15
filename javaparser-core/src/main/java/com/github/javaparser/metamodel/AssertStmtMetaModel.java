@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.stmt.AssertStmt;
 import java.util.Optional;
+import com.github.javaparser.ast.stmt.AssertStmt;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,14 +34,14 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class AssertStmtMetaModel extends StatementMetaModel {
+public  class AssertStmtMetaModel extends StatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     AssertStmtMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, AssertStmt.class, "AssertStmt", "com.github.javaparser.ast.stmt", false, false);
     }
 
-    public PropertyMetaModel checkPropertyMetaModel;
+    public  PropertyMetaModel checkPropertyMetaModel;
 
-    public PropertyMetaModel messagePropertyMetaModel;
+    public  PropertyMetaModel messagePropertyMetaModel;
 }

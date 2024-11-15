@@ -21,7 +21,6 @@
 package com.github.javaparser.utils;
 
 import static java.nio.file.FileVisitResult.*;
-
 import com.github.javaparser.ParserConfiguration;
 import java.io.IOException;
 import java.nio.file.*;
@@ -36,25 +35,25 @@ import java.nio.file.attribute.BasicFileAttributes;
  * Note that any build artifacts will also be detected: jar files in target directories and so on.
  * Note that if your project has a module-info.java file, ensure that you have set the language level to at least 9.
  */
-public class ParserCollectionStrategy implements CollectionStrategy {
+public  class ParserCollectionStrategy implements CollectionStrategy {
 
     private final ParserConfiguration parserConfiguration;
 
-    public ParserCollectionStrategy() {
+    public  ParserCollectionStrategy() {
         this(new ParserConfiguration());
     }
 
-    public ParserCollectionStrategy(ParserConfiguration parserConfiguration) {
+    public  ParserCollectionStrategy(ParserConfiguration parserConfiguration) {
         this.parserConfiguration = parserConfiguration;
     }
 
     @Override
-    public ParserConfiguration getParserConfiguration() {
+    public  ParserConfiguration getParserConfiguration() {
         return parserConfiguration;
     }
 
     @Override
-    public ProjectRoot collect(Path path) {
+    public  ProjectRoot collect(Path path) {
         ProjectRoot projectRoot = new ProjectRoot(path, parserConfiguration);
         try {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
@@ -64,7 +63,7 @@ public class ParserCollectionStrategy implements CollectionStrategy {
                 final PathMatcher javaMatcher = getPathMatcher("glob:**.java");
 
                 @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                public  FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                     if ("module-info.java".equals(file.getFileName().toString())) {
                         // module-info.java is useless for finding the source root, since it can be placed within any
                         // directory.
@@ -80,7 +79,7 @@ public class ParserCollectionStrategy implements CollectionStrategy {
                 }
 
                 @Override
-                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                public  FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                     if (Files.isHidden(dir) || (current_root != null && dir.startsWith(current_root))) {
                         return SKIP_SUBTREE;
                     }
@@ -88,7 +87,7 @@ public class ParserCollectionStrategy implements CollectionStrategy {
                 }
 
                 @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+                public  FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
                     if (current_root != null && Files.isSameFile(dir, current_root)) {
                         projectRoot.addSourceRoot(dir);
                         current_root = null;

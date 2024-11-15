@@ -8,35 +8,35 @@ import com.github.javaparser.ast.expr.SimpleName;
  * @author Alexander Weigl
  * @version 1 (3/21/21)
  */
-public class DefaultJmlContainer implements JmlContainer {
+public  class DefaultJmlContainer implements JmlContainer {
 
     @Override
-    public NodeList getElements() {
+    public  NodeList getElements() {
         return null;
     }
 
     @Override
-    public Node setElements(NodeList elements) {
+    public  Node setElements(NodeList elements) {
         return null;
     }
 
     @Override
-    public NodeList<SimpleName> getJmlTags() {
+    public  NodeList<SimpleName> getJmlTags() {
         return null;
     }
 
     @Override
-    public boolean isSingleLine() {
+    public  boolean isSingleLine() {
         return false;
     }
 
     @Override
-    public Node setSingleLine(boolean singleLine) {
+    public  Node setSingleLine(boolean singleLine) {
         return null;
     }
 
     @Override
-    public Node setJmlTags(NodeList jmlTags) {
+    public  Node setJmlTags(NodeList jmlTags) {
         return null;
     }
 }

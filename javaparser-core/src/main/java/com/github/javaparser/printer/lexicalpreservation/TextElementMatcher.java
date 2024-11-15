@@ -20,7 +20,7 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
-public interface TextElementMatcher {
+public  interface TextElementMatcher {
 
     boolean match(TextElement textElement);
 

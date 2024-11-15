@@ -23,18 +23,22 @@ package com.github.javaparser.serialization;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 
+import com.google.common.truth.Truth;
 import jakarta.json.Json;
 import jakarta.json.stream.JsonGenerator;
 import jakarta.json.stream.JsonGeneratorFactory;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class JavaParserJsonSerializerTest {
     @Test
@@ -45,7 +49,7 @@ class JavaParserJsonSerializerTest {
         InputStream is = getClass().getResourceAsStream("/example.json");
         byte[] buffer = new byte[1024 * 1024];
         int len = is.read(buffer);
-        Assume.assumeTrue(len > 0);
+        Assumptions.assumeTrue(len > 0);
         String expected = new String(buffer, 0, len);
         System.out.println(serialized);
         Truth.assertThat(serialized).isEqualTo(expected);

@@ -27,18 +27,15 @@ import com.github.javaparser.ast.validator.language_level_validations.chunks.Mod
 /**
  * This validator validates according to Java 1.2 syntax rules.
  */
-public class Java1_2Validator extends Java1_1Validator {
+public  class Java1_2Validator extends Java1_1Validator {
 
-    final Validator modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods =
-            new ModifierValidator(true, false, false);
+    final Validator modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods = new ModifierValidator(true, false, false);
 
     final Validator strictfpNotAllowed = new ReservedKeywordValidator("strictfp");
 
-    public Java1_2Validator() {
+    public  Java1_2Validator() {
         super();
-        replace(
-                modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods,
-                modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
+        replace(modifiersWithoutStrictfpAndDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods, modifiersWithoutDefaultAndStaticInterfaceMethodsAndPrivateInterfaceMethods);
         add(strictfpNotAllowed);
     }
 }

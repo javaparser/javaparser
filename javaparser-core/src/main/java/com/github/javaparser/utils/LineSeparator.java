@@ -29,7 +29,7 @@ import java.util.Optional;
  * @author Roger Howell
  * @see <a href="https://github.com/javaparser/javaparser/issues/2647">https://github.com/javaparser/javaparser/issues/2647</a>
  */
-public enum LineSeparator {
+public  enum LineSeparator {
 
     /**
      * The CR {@code \r} line ending is the default line separator for classic MacOS
@@ -46,10 +46,7 @@ public enum LineSeparator {
     /**
      * This line ending is set to whatever the host system's line separator is
      */
-    SYSTEM(
-            System.getProperty("line.separator"),
-            "SYSTEM : ("
-                    + System.getProperty("line.separator").replace("\r", "\\r").replace("\n", "\\n") + ")"),
+    SYSTEM(System.getProperty("line.separator"), "SYSTEM : (" + System.getProperty("line.separator").replace("\r", "\\r").replace("\n", "\\n") + ")"),
     /**
      * The ARBITRARY line ending can be used where we do not care about the line separator,
      * only that we use the same one consistently
@@ -148,26 +145,26 @@ public enum LineSeparator {
         return Optional.empty();
     }
 
-    public String describe() {
+    public  String describe() {
         // TODO: Return a generated description rather than one hardcoded via constructor.
         return description;
     }
 
-    public boolean equalsString(LineSeparator lineSeparator) {
+    public  boolean equalsString(LineSeparator lineSeparator) {
         return text.equals(lineSeparator.asRawString());
     }
 
-    public boolean isStandardEol() {
+    public  boolean isStandardEol() {
         // Compare based on the strings to allow for e.g. LineSeparator.SYSTEM
         return equalsString(LineSeparator.CR) || equalsString(LineSeparator.LF) || equalsString(LineSeparator.CRLF);
     }
 
-    public String asEscapedString() {
+    public  String asEscapedString() {
         String result = text.replace("\r", "\\r").replace("\n", "\\n");
         return result;
     }
 
-    public String asRawString() {
+    public  String asRawString() {
         return text;
     }
 
@@ -183,7 +180,7 @@ public enum LineSeparator {
     //        return Optional.empty();
     //    }
     @Override
-    public String toString() {
+    public  String toString() {
         return asRawString();
     }
 }

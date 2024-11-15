@@ -21,27 +21,26 @@
 package com.github.javaparser.printer.concretesyntaxmodel;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
 
-public class CsmAttribute implements CsmElement {
+public  class CsmAttribute implements CsmElement {
 
-    public ObservableProperty getProperty() {
+    public  ObservableProperty getProperty() {
         return property;
     }
 
     private final ObservableProperty property;
 
-    public CsmAttribute(ObservableProperty property) {
+    public  CsmAttribute(ObservableProperty property) {
         this.property = property;
     }
 
     @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
+    public  void prettyPrint(Node node, SourcePrinter printer) {
         Object value = property.getRawValue(node);
         printer.print(PrintingHelper.printToString(value));
     }
@@ -52,33 +51,31 @@ public class CsmAttribute implements CsmElement {
      *
      * @param tokenText Operator's token text
      */
-    public int getTokenType(Node node, String text, String tokenText) {
-        switch (property) {
+    public  int getTokenType(Node node, String text, String tokenText) {
+        switch(property) {
             case IDENTIFIER:
                 return GeneratedJavaParserConstants.IDENTIFIER;
-            case TYPE: {
-                String expectedImage = "\"" + text.toLowerCase() + "\"";
-                for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
-                    if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
-                        return i;
+            case TYPE:
+                {
+                    String expectedImage = "\"" + text.toLowerCase() + "\"";
+                    for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
+                        if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
+                            return i;
+                        }
                     }
+                    throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), text));
                 }
-                throw new RuntimeException(f(
-                        "Attribute '%s' does not corresponding to any expected value. Text: %s",
-                        property.camelCaseName(), text));
-            }
             case KEYWORD:
-            case OPERATOR: {
-                String expectedImage = "\"" + tokenText.toLowerCase() + "\"";
-                for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
-                    if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
-                        return i;
+            case OPERATOR:
+                {
+                    String expectedImage = "\"" + tokenText.toLowerCase() + "\"";
+                    for (int i = 0; i < GeneratedJavaParserConstants.tokenImage.length; i++) {
+                        if (GeneratedJavaParserConstants.tokenImage[i].equals(expectedImage)) {
+                            return i;
+                        }
                     }
+                    throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), tokenText));
                 }
-                throw new RuntimeException(f(
-                        "Attribute '%s' does not corresponding to any expected value. Text: %s",
-                        property.camelCaseName(), tokenText));
-            }
             case VALUE:
                 if (node instanceof IntegerLiteralExpr) {
                     return GeneratedJavaParserConstants.INTEGER_LITERAL;
@@ -86,12 +83,11 @@ public class CsmAttribute implements CsmElement {
             case NAME:
                 return GeneratedJavaParserConstants.IDENTIFIER;
         }
-        throw new UnsupportedOperationException(
-                "getTokenType does not know how to handle property " + property + " with text: " + text);
+        throw new UnsupportedOperationException("getTokenType does not know how to handle property " + property + " with text: " + text);
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 }

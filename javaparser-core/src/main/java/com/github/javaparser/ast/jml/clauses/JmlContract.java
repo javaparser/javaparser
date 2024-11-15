@@ -20,7 +20,7 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (3/14/21)
  */
-public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract>, NodeWithJmlTags<JmlContract> {
+public  class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlContract>, NodeWithJmlTags<JmlContract> {
 
     private NodeList<SimpleName> jmlTags = new NodeList<>();
 
@@ -37,42 +37,42 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     private NodeList<JmlContract> subContracts = new NodeList<>();
 
-    public JmlContract() {
+    public  JmlContract() {
         this((TokenRange) null, new NodeList<>(), ContractType.METHOD, Behavior.NONE, null, new NodeList<>(), new NodeList<>(), new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public JmlContract(NodeList<SimpleName> jmlTags, ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public  JmlContract(NodeList<SimpleName> jmlTags, ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         this(null, jmlTags, type, behavior, name, modifiers, clauses, subContracts);
     }
 
-    public JmlContract(ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public  JmlContract(ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         this((TokenRange) null, new NodeList<>(), type, behavior, name, modifiers, clauses, subContracts);
     }
 
-    public JmlContract(TokenRange range, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public  JmlContract(TokenRange range, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         this(range, new NodeList<>(), ContractType.METHOD, behavior, null, modifiers, clauses, subContracts);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Behavior getBehavior() {
+    public  Behavior getBehavior() {
         return behavior;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setBehavior(final Behavior behavior) {
+    public  JmlContract setBehavior(final Behavior behavior) {
         assertNotNull(behavior);
         if (behavior == this.behavior) {
             return this;
@@ -83,12 +83,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlClause> getClauses() {
+    public  NodeList<JmlClause> getClauses() {
         return clauses;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setClauses(final NodeList<JmlClause> clauses) {
+    public  JmlContract setClauses(final NodeList<JmlClause> clauses) {
         assertNotNull(clauses);
         if (clauses == this.clauses) {
             return this;
@@ -102,12 +102,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Modifier> getModifiers() {
+    public  NodeList<Modifier> getModifiers() {
         return modifiers;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setModifiers(final NodeList<Modifier> modifiers) {
+    public  JmlContract setModifiers(final NodeList<Modifier> modifiers) {
         assertNotNull(modifiers);
         if (modifiers == this.modifiers) {
             return this;
@@ -121,12 +121,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> getSubContracts() {
+    public  NodeList<JmlContract> getSubContracts() {
         return subContracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setSubContracts(final NodeList<JmlContract> subContracts) {
+    public  JmlContract setSubContracts(final NodeList<JmlContract> subContracts) {
         assertNotNull(subContracts);
         if (subContracts == this.subContracts) {
             return this;
@@ -141,7 +141,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -180,7 +180,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -219,7 +219,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlContract clone() {
+    public  JmlContract clone() {
         return (JmlContract) accept(new CloneVisitor(), null);
     }
 
@@ -227,7 +227,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlContract(TokenRange tokenRange, boolean isLoopContract, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public  JmlContract(TokenRange tokenRange, boolean isLoopContract, Behavior behavior, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
         setLoopContract(isLoopContract);
         setBehavior(behavior);
@@ -239,27 +239,27 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlContractMetaModel getMetaModel() {
+    public  JmlContractMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlContractMetaModel;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public boolean isLoopContract() {
+    public  boolean isLoopContract() {
         return false;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setLoopContract(final boolean isLoopContract) {
+    public  JmlContract setLoopContract(final boolean isLoopContract) {
         return this;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> getJmlTags() {
+    public  NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public  JmlContract setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -273,12 +273,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<SimpleName> getName() {
+    public  Optional<SimpleName> getName() {
         return Optional.ofNullable(name);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setName(final SimpleName name) {
+    public  JmlContract setName(final SimpleName name) {
         if (name == this.name) {
             return this;
         }
@@ -291,12 +291,12 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ContractType getType() {
+    public  ContractType getType() {
         return type;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlContract setType(final ContractType type) {
+    public  JmlContract setType(final ContractType type) {
         assertNotNull(type);
         if (type == this.type) {
             return this;
@@ -307,7 +307,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public JmlContract removeName() {
+    public  JmlContract removeName() {
         return setName((SimpleName) null);
     }
 
@@ -315,7 +315,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlContract(TokenRange tokenRange, ContractType type, boolean isLoopContract, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public  JmlContract(TokenRange tokenRange, ContractType type, boolean isLoopContract, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
         setType(type);
         setLoopContract(isLoopContract);
@@ -331,7 +331,7 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlContract(TokenRange tokenRange, NodeList<SimpleName> jmlTags, ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
+    public  JmlContract(TokenRange tokenRange, NodeList<SimpleName> jmlTags, ContractType type, Behavior behavior, SimpleName name, NodeList<Modifier> modifiers, NodeList<JmlClause> clauses, NodeList<JmlContract> subContracts) {
         super(tokenRange);
         setJmlTags(jmlTags);
         setType(type);

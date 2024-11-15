@@ -25,9 +25,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
-
 import java.util.List;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import java.io.StringWriter;
@@ -40,13 +38,13 @@ import javax.xml.stream.XMLStreamWriter;
 /**
  * Outputs an XML file containing the AST meant for inspecting it.
  */
-public class XmlPrinter {
+public  class XmlPrinter {
 
     private final boolean outputNodeType;
 
     private static final Class<?> TYPE_CLASS = Type.class;
 
-    public XmlPrinter(boolean outputNodeType) {
+    public  XmlPrinter(boolean outputNodeType) {
         this.outputNodeType = outputNodeType;
     }
 
@@ -56,7 +54,7 @@ public class XmlPrinter {
      * @param node AST node to be converted to XML
      * @return XML document corresponding to node
      */
-    public String output(Node node) {
+    public  String output(Node node) {
         return stringWriterOutput(node, "root").toString();
     }
 
@@ -70,7 +68,7 @@ public class XmlPrinter {
      * @param builder Target object to receive the generated XML
      */
     @Deprecated
-    public void output(Node node, String name, int level, StringBuilder builder) {
+    public  void output(Node node, String name, int level, StringBuilder builder) {
         builder.append(stringWriterOutput(node, name).toString());
     }
 
@@ -87,7 +85,7 @@ public class XmlPrinter {
      * @throws RuntimeXMLStreamException Unchecked exception wrapping checked {@link XMLStreamException}, when any
      *                                   error on producing XML output occours
      */
-    public StringWriter stringWriterOutput(Node node, String name) {
+    public  StringWriter stringWriterOutput(Node node, String name) {
         StringWriter stringWriter = new StringWriter();
         try {
             outputDocument(node, name, stringWriter);
@@ -112,7 +110,7 @@ public class XmlPrinter {
      * @param writer Target to get the document writen to
      * @throws XMLStreamException When any error on outputting XML occours
      */
-    public void outputDocument(Node node, String name, Writer writer) throws XMLStreamException {
+    public  void outputDocument(Node node, String name, Writer writer) throws XMLStreamException {
         XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
         XMLStreamWriter xmlWriter = outputFactory.createXMLStreamWriter(writer);
         try {
@@ -145,7 +143,7 @@ public class XmlPrinter {
      * @throws XMLStreamException When any error on outputting XML occours
      * @see outputNode(String, Node, XMLStreamWriter)
      */
-    public void outputDocument(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
+    public  void outputDocument(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
         xmlWriter.writeStartDocument();
         outputNode(node, name, xmlWriter);
         xmlWriter.writeEndDocument();
@@ -171,15 +169,14 @@ public class XmlPrinter {
      * @throws XMLStreamException When any error on outputting XML occours
      * @see outputDocument(String, Node, XMLStreamWriter)
      */
-    public void outputNode(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
+    public  void outputNode(Node node, String name, XMLStreamWriter xmlWriter) throws XMLStreamException {
         assertNotNull(node);
         assertNonEmpty(name);
         assertNotNull(xmlWriter);
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
         Predicate<PropertyMetaModel> nonNullNode = propertyMetaModel -> propertyMetaModel.getValue(node) != null;
-        Predicate<PropertyMetaModel> nonEmptyList =
-                propertyMetaModel -> ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
+        Predicate<PropertyMetaModel> nonEmptyList = propertyMetaModel -> ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
         Predicate<PropertyMetaModel> typeList = propertyMetaModel -> TYPE_CLASS == propertyMetaModel.getType();
         xmlWriter.writeStartElement(name);
         // Output node type attribute
@@ -191,8 +188,7 @@ public class XmlPrinter {
             allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute).filter(PropertyMetaModel::isSingular).forEach(attributeMetaModel -> {
                 try {
                     final String attributeName = attributeMetaModel.getName();
-                            final String attributeValue =
-                                    attributeMetaModel.getValue(node).toString();
+                    final String attributeValue = attributeMetaModel.getValue(node).toString();
                     xmlWriter.writeAttribute(attributeName, attributeValue);
                 } catch (XMLStreamException ex) {
                     throw new RuntimeXMLStreamException(ex);
@@ -243,11 +239,11 @@ public class XmlPrinter {
  */
 class RuntimeXMLStreamException extends RuntimeException {
 
-    public RuntimeXMLStreamException(XMLStreamException cause) {
+    public  RuntimeXMLStreamException(XMLStreamException cause) {
         super(cause);
     }
 
-    public XMLStreamException getXMLStreamCause() {
+    public  XMLStreamException getXMLStreamCause() {
         return (XMLStreamException) super.getCause();
     }
 }

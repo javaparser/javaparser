@@ -25,7 +25,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 /**
  * Convert a {@link Type} into a {@link ResolvedType}.
  */
-public interface ConvertibleToUsage {
+public  interface ConvertibleToUsage {
 
     ResolvedType convertToUsage(Context context);
 }

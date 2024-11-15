@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -41,17 +40,17 @@ import com.github.javaparser.metamodel.SimpleNameMetaModel;
  *
  * @see Name
  */
-public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
+public  class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     @NonEmptyProperty
     private String identifier;
 
-    public SimpleName() {
+    public  SimpleName() {
         this(null, "empty");
     }
 
     @AllFieldsConstructor
-    public SimpleName(final String identifier) {
+    public  SimpleName(final String identifier) {
         this(null, identifier);
     }
 
@@ -59,7 +58,7 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public SimpleName(TokenRange tokenRange, String identifier) {
+    public  SimpleName(TokenRange tokenRange, String identifier) {
         super(tokenRange);
         setIdentifier(identifier);
         customInitialization();
@@ -67,23 +66,23 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public String getIdentifier() {
+    public  String getIdentifier() {
         return identifier;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName setIdentifier(final String identifier) {
+    public  SimpleName setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
         if (identifier == this.identifier) {
             return this;
@@ -93,19 +92,19 @@ public class SimpleName extends Node implements NodeWithIdentifier<SimpleName> {
         return this;
     }
 
-    public String asString() {
+    public  String asString() {
         return identifier;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public SimpleName clone() {
+    public  SimpleName clone() {
         return (SimpleName) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public SimpleNameMetaModel getMetaModel() {
+    public  SimpleNameMetaModel getMetaModel() {
         return JavaParserMetaModel.simpleNameMetaModel;
     }
 }

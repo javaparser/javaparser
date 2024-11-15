@@ -27,11 +27,9 @@ package com.github.javaparser.ast;
  * @author Federico Tomassetti
  * @since July 2014
  */
-public enum AccessSpecifier {
-    PUBLIC("public"),
-    PRIVATE("private"),
-    PROTECTED("protected"),
-    NONE("");
+public  enum AccessSpecifier {
+
+    PUBLIC("public"), PRIVATE("private"), PROTECTED("protected"), NONE("");
 
     private final String codeRepresenation;
 
@@ -39,7 +37,7 @@ public enum AccessSpecifier {
         this.codeRepresenation = codeRepresentation;
     }
 
-    public String asString() {
+    public  String asString() {
         return this.codeRepresenation;
     }
 }

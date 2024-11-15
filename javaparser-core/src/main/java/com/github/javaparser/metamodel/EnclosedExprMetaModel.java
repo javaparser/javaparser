@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.expr.EnclosedExpr;
 import java.util.Optional;
+import com.github.javaparser.ast.expr.EnclosedExpr;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,18 +34,12 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class EnclosedExprMetaModel extends ExpressionMetaModel {
+public  class EnclosedExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     EnclosedExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                EnclosedExpr.class,
-                "EnclosedExpr",
-                "com.github.javaparser.ast.expr",
-                false,
-                false);
+        super(superBaseNodeMetaModel, EnclosedExpr.class, "EnclosedExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
-    public PropertyMetaModel innerPropertyMetaModel;
+    public  PropertyMetaModel innerPropertyMetaModel;
 }

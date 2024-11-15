@@ -21,14 +21,13 @@
 package com.github.javaparser.ast.body;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.nodeTypes.modifiers.NodeWithAccessModifiers;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -51,86 +50,36 @@ import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclarat
  *
  * @author Julio Vilmar Gesser
  */
-public class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration>
-        implements NodeWithBlockStmt<ConstructorDeclaration>,
-                NodeWithAccessModifiers<ConstructorDeclaration>,
-                NodeWithJavadoc<ConstructorDeclaration>,
-                NodeWithSimpleName<ConstructorDeclaration>,
-                NodeWithParameters<ConstructorDeclaration>,
-                NodeWithThrownExceptions<ConstructorDeclaration>,
-                NodeWithTypeParameters<ConstructorDeclaration>,
-                Resolvable<ResolvedConstructorDeclaration> {
+public  class ConstructorDeclaration extends CallableDeclaration<ConstructorDeclaration> implements NodeWithBlockStmt<ConstructorDeclaration>, NodeWithAccessModifiers<ConstructorDeclaration>, NodeWithJavadoc<ConstructorDeclaration>, NodeWithSimpleName<ConstructorDeclaration>, NodeWithParameters<ConstructorDeclaration>, NodeWithThrownExceptions<ConstructorDeclaration>, NodeWithTypeParameters<ConstructorDeclaration>, Resolvable<ResolvedConstructorDeclaration> {
 
     private BlockStmt body;
 
-    public ConstructorDeclaration() {
-        this(
-                null,
-                new NodeList<>(),
-                new NodeList<>(),
-                new NodeList<>(),
-                new SimpleName(),
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt(),
-                null, new NodeList<>());
+    public  ConstructorDeclaration() {
+        this(null, new NodeList<>(), new NodeList<>(), new NodeList<>(), new SimpleName(), new NodeList<>(), new NodeList<>(), new BlockStmt(), null, new NodeList<>());
     }
 
-    public ConstructorDeclaration(String name) {
-        this(
-                null,
-                new NodeList<>(new Modifier()),
-                new NodeList<>(),
-                new NodeList<>(),
-                new SimpleName(name),
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt(),
-                null, new NodeList<>());
+    public  ConstructorDeclaration(String name) {
+        this(null, new NodeList<>(new Modifier()), new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt(), null, new NodeList<>());
     }
 
-    public ConstructorDeclaration(NodeList<Modifier> modifiers, String name) {
-        this(
-                null,
-                modifiers,
-                new NodeList<>(),
-                new NodeList<>(),
-                new SimpleName(name),
-                new NodeList<>(),
-                new NodeList<>(),
-                new BlockStmt(),
-                null, new NodeList<>());
+    public  ConstructorDeclaration(NodeList<Modifier> modifiers, String name) {
+        this(null, modifiers, new NodeList<>(), new NodeList<>(), new SimpleName(name), new NodeList<>(), new NodeList<>(), new BlockStmt(), null, new NodeList<>());
     }
 
-    public ConstructorDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, NodeList<JmlContract> contracts) {
+    public  ConstructorDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, NodeList<JmlContract> contracts) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, null, contracts);
     }
 
-    public ConstructorDeclaration(
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            NodeList<TypeParameter> typeParameters,
-            SimpleName name,
-            NodeList<Parameter> parameters,
-            NodeList<ReferenceType> thrownExceptions,
-            BlockStmt body, ReceiverParameter receiverParameter) {
+    public  ConstructorDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
         this(modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, receiverParameter, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public ConstructorDeclaration(
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            NodeList<TypeParameter> typeParameters,
-            SimpleName name,
-            NodeList<Parameter> parameters,
-            NodeList<ReferenceType> thrownExceptions,
-            BlockStmt body,
-            ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
+    public  ConstructorDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, receiverParameter, contracts);
     }
 
-    public ConstructorDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
+    public  ConstructorDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter) {
         this(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, body, receiverParameter, new NodeList<>());
     }
 
@@ -138,43 +87,26 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public ConstructorDeclaration(
-            TokenRange tokenRange,
-            NodeList<Modifier> modifiers,
-            NodeList<AnnotationExpr> annotations,
-            NodeList<TypeParameter> typeParameters,
-            SimpleName name,
-            NodeList<Parameter> parameters,
-            NodeList<ReferenceType> thrownExceptions,
-            BlockStmt body,
-            ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
-        super(
-                tokenRange,
-                modifiers,
-                annotations,
-                typeParameters,
-                name,
-                parameters,
-                thrownExceptions,
-                receiverParameter, contracts);
+    public  ConstructorDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, BlockStmt body, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
+        super(tokenRange, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter, contracts);
         setBody(body);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt getBody() {
+    public  BlockStmt getBody() {
         return body;
     }
 
@@ -185,40 +117,41 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * @return this, the ConstructorDeclaration
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public ConstructorDeclaration setBody(final BlockStmt body) {
+    public  ConstructorDeclaration setBody(final BlockStmt body) {
         assertNotNull(body);
         if (body == this.body) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.BODY, this.body, body);
-        if (this.body != null) this.body.setParentNode(null);
+        if (this.body != null)
+            this.body.setParentNode(null);
         this.body = body;
         setAsParentNodeOf(body);
         return this;
     }
 
     @Override
-    public ConstructorDeclaration setModifiers(final NodeList<Modifier> modifiers) {
+    public  ConstructorDeclaration setModifiers(final NodeList<Modifier> modifiers) {
         return super.setModifiers(modifiers);
     }
 
     @Override
-    public ConstructorDeclaration setName(final SimpleName name) {
+    public  ConstructorDeclaration setName(final SimpleName name) {
         return super.setName(name);
     }
 
     @Override
-    public ConstructorDeclaration setParameters(final NodeList<Parameter> parameters) {
+    public  ConstructorDeclaration setParameters(final NodeList<Parameter> parameters) {
         return super.setParameters(parameters);
     }
 
     @Override
-    public ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
+    public  ConstructorDeclaration setThrownExceptions(final NodeList<ReferenceType> thrownExceptions) {
         return super.setThrownExceptions(thrownExceptions);
     }
 
     @Override
-    public ConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
+    public  ConstructorDeclaration setTypeParameters(final NodeList<TypeParameter> typeParameters) {
         return super.setTypeParameters(typeParameters);
     }
 
@@ -229,8 +162,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
      * [throws exceptionsList]
      */
     @Override
-    public String getDeclarationAsString(
-            boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
+    public  String getDeclarationAsString(boolean includingModifiers, boolean includingThrows, boolean includingParameterName) {
         StringBuilder sb = new StringBuilder();
         if (includingModifiers) {
             AccessSpecifier accessSpecifier = getAccessSpecifier();
@@ -259,7 +191,7 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
     /*
      * Returns the constructor descriptor
      */
-    public String toDescriptor() {
+    public  String toDescriptor() {
         StringBuilder sb = new StringBuilder();
         sb.append('(');
         for (int i = 0; i < getParameters().size(); i++) {
@@ -270,19 +202,19 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public ConstructorDeclaration clone() {
+    public  ConstructorDeclaration clone() {
         return (ConstructorDeclaration) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public ConstructorDeclarationMetaModel getMetaModel() {
+    public  ConstructorDeclarationMetaModel getMetaModel() {
         return JavaParserMetaModel.constructorDeclarationMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -295,30 +227,30 @@ public class ConstructorDeclaration extends CallableDeclaration<ConstructorDecla
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isConstructorDeclaration() {
+    public  boolean isConstructorDeclaration() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public ConstructorDeclaration asConstructorDeclaration() {
+    public  ConstructorDeclaration asConstructorDeclaration() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifConstructorDeclaration(Consumer<ConstructorDeclaration> action) {
+    public  void ifConstructorDeclaration(Consumer<ConstructorDeclaration> action) {
         action.accept(this);
     }
 
     @Override
-    public ResolvedConstructorDeclaration resolve() {
+    public  ResolvedConstructorDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedConstructorDeclaration.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<ConstructorDeclaration> toConstructorDeclaration() {
+    public  Optional<ConstructorDeclaration> toConstructorDeclaration() {
         return Optional.of(this);
     }
 }

@@ -22,26 +22,25 @@ package com.github.javaparser;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.singletonList;
-
 import com.github.javaparser.utils.LineSeparator;
 import java.util.List;
 
 /**
  * Thrown when parsing problems occur during parsing with the static methods on JavaParser.
  */
-public class ParseProblemException extends RuntimeException {
+public  class ParseProblemException extends RuntimeException {
 
     /**
      * The problems that were encountered during parsing
      */
     private final List<Problem> problems;
 
-    public ParseProblemException(List<Problem> problems) {
+    public  ParseProblemException(List<Problem> problems) {
         super(createMessage(assertNotNull(problems)));
         this.problems = problems;
     }
 
-    public ParseProblemException(Throwable throwable) {
+    public  ParseProblemException(Throwable throwable) {
         this(singletonList(new Problem(throwable.getMessage(), null, throwable)));
     }
 
@@ -53,7 +52,7 @@ public class ParseProblemException extends RuntimeException {
         return message.toString();
     }
 
-    public List<Problem> getProblems() {
+    public  List<Problem> getProblems() {
         return problems;
     }
 }

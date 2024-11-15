@@ -35,10 +35,8 @@ import com.github.javaparser.metamodel.NameExprMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -47,20 +45,20 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>, Resolvable<ResolvedValueDeclaration> {
+public  class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>, Resolvable<ResolvedValueDeclaration> {
 
     private SimpleName name;
 
-    public NameExpr() {
+    public  NameExpr() {
         this(null, new SimpleName());
     }
 
-    public NameExpr(final String name) {
+    public  NameExpr(final String name) {
         this(null, new SimpleName(name));
     }
 
     @AllFieldsConstructor
-    public NameExpr(final SimpleName name) {
+    public  NameExpr(final SimpleName name) {
         this(name.getTokenRange().orElse(null), name);
         setRange(name.getRange().orElse(null));
     }
@@ -69,7 +67,7 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public NameExpr(TokenRange tokenRange, SimpleName name) {
+    public  NameExpr(TokenRange tokenRange, SimpleName name) {
         super(tokenRange);
         setName(name);
         customInitialization();
@@ -77,29 +75,30 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public SimpleName getName() {
+    public  SimpleName getName() {
         return name;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NameExpr setName(final SimpleName name) {
+    public  NameExpr setName(final SimpleName name) {
         assertNotNull(name);
         if (name == this.name) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -107,19 +106,19 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public NameExpr clone() {
+    public  NameExpr clone() {
         return (NameExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public NameExprMetaModel getMetaModel() {
+    public  NameExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nameExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -132,19 +131,19 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isNameExpr() {
+    public  boolean isNameExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public NameExpr asNameExpr() {
+    public  NameExpr asNameExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifNameExpr(Consumer<NameExpr> action) {
+    public  void ifNameExpr(Consumer<NameExpr> action) {
         action.accept(this);
     }
 
@@ -161,13 +160,13 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
      * @see ExplicitConstructorInvocationStmt#resolve()
      */
     @Override
-    public ResolvedValueDeclaration resolve() {
+    public  ResolvedValueDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<NameExpr> toNameExpr() {
+    public  Optional<NameExpr> toNameExpr() {
         return Optional.of(this);
     }
 }

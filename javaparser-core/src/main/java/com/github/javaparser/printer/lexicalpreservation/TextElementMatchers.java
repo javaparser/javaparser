@@ -32,12 +32,12 @@ class TextElementMatchers {
         return new TextElementMatcher() {
 
             @Override
-            public boolean match(TextElement textElement) {
+            public  boolean match(TextElement textElement) {
                 return textElement.isNode(node);
             }
 
             @Override
-            public String toString() {
+            public  String toString() {
                 return "match node " + node;
             }
         };

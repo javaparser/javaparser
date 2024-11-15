@@ -19,16 +19,16 @@ import java.util.Map;
  * @author Alexander Weigl
  * @version 1 (4/10/20)
  */
-public class JmlAnnotationSupport extends Processor {
+public  class JmlAnnotationSupport extends Processor {
 
     public final JmlAnnotationConfiguration configuration;
 
-    public JmlAnnotationSupport(JmlAnnotationConfiguration configuration) {
+    public  JmlAnnotationSupport(JmlAnnotationConfiguration configuration) {
         this.configuration = configuration;
     }
 
     @Override
-    public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+    public  void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (result.isSuccessful()) {
             Map<String, Modifier.DefaultKeyword> a2m = JmlAnnotationSupport.this.configuration.getAnnotationToModifier();
             TreeVisitor visitor = new JmlAnnotationTranslator(a2m, result.getProblems());
@@ -43,13 +43,13 @@ class JmlAnnotationTranslator extends TreeVisitor {
 
     private final ProblemReporter problemReport;
 
-    public JmlAnnotationTranslator(Map<String, Modifier.DefaultKeyword> a2m, List<Problem> problems) {
+    public  JmlAnnotationTranslator(Map<String, Modifier.DefaultKeyword> a2m, List<Problem> problems) {
         this.a2m = a2m;
         problemReport = new ProblemReporter(problems::add);
     }
 
     @Override
-    public void process(Node node) {
+    public  void process(Node node) {
         if (node instanceof NodeWithAnnotations<?>) {
             NodeWithAnnotations<?> n = (NodeWithAnnotations<?>) node;
             for (AnnotationExpr annotation : n.getAnnotations()) {

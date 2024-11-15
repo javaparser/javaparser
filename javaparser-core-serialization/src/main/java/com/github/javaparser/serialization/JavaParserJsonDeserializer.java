@@ -22,6 +22,7 @@ package com.github.javaparser.serialization;
 
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.comments.Comment;
@@ -108,7 +109,7 @@ public class JavaParserJsonDeserializer {
                         parameters.put(name, Boolean.parseBoolean(nodeJson.getString(name)));
                     } else if (Enum.class.isAssignableFrom(type)) {
                         parameters.put(name, Enum.valueOf((Class<? extends Enum>) type, nodeJson.getString(name)));
-                    } else if (type == Modifier.Keyword.class) {
+                    } else if (type == Modifier.DefaultKeyword.class) {
                         //TODO weigl handle JmlDocModifier?
                         parameters.put(name, Enum.valueOf(Modifier.DefaultKeyword.class, nodeJson.getString(name)));
                     } else {

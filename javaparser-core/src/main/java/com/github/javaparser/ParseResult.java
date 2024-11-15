@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 /**
  * The results given when parsing with an instance of JavaParser.
  */
-public class ParseResult<T> {
+public  class ParseResult<T> {
 
     private final T result;
 
@@ -43,7 +43,7 @@ public class ParseResult<T> {
      * @param result the AST, or empty if it wasn't created.
      * @param problems a list of encountered parsing problems.
      */
-    public ParseResult(T result, List<Problem> problems, CommentsCollection commentsCollection) {
+    public  ParseResult(T result, List<Problem> problems, CommentsCollection commentsCollection) {
         this.commentsCollection = commentsCollection;
         this.result = result;
         this.problems = problems;
@@ -52,14 +52,14 @@ public class ParseResult<T> {
     /**
      * @return if parsing was successful, meaning no errors of any kind were encountered.
      */
-    public boolean isSuccessful() {
+    public  boolean isSuccessful() {
         return problems.isEmpty() && result != null;
     }
 
     /**
      * Calls the consumer with the result if parsing was succesful.
      */
-    public void ifSuccessful(Consumer<T> consumer) {
+    public  void ifSuccessful(Consumer<T> consumer) {
         if (isSuccessful()) {
             consumer.accept(result);
         }
@@ -68,33 +68,33 @@ public class ParseResult<T> {
     /**
      * @return the list of encountered parsing problems. Empty when no problems were encountered.
      */
-    public List<Problem> getProblems() {
+    public  List<Problem> getProblems() {
         return problems;
     }
 
     /**
      * @return the {@code i}'th encountered parsing problem. May throw <code>IndexOutOfBoundsException</code>.
      */
-    public Problem getProblem(int i) {
+    public  Problem getProblem(int i) {
         return getProblems().get(i);
     }
 
     /**
      * @return the complete collection of comments encountered while parsing.
      */
-    public Optional<CommentsCollection> getCommentsCollection() {
+    public  Optional<CommentsCollection> getCommentsCollection() {
         return Optional.ofNullable(commentsCollection);
     }
 
     /**
      * @return the AST of the parsed source code, or empty if parsing failed completely.
      */
-    public Optional<T> getResult() {
+    public  Optional<T> getResult() {
         return Optional.ofNullable(result);
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         if (isSuccessful()) {
             return "Parsing successful";
         }

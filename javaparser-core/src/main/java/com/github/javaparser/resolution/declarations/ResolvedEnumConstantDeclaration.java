@@ -23,7 +23,7 @@ package com.github.javaparser.resolution.declarations;
 /**
  * @author Federico Tomassetti
  */
-public interface ResolvedEnumConstantDeclaration extends ResolvedValueDeclaration {
+public  interface ResolvedEnumConstantDeclaration extends ResolvedValueDeclaration {
 
     String getName();
 

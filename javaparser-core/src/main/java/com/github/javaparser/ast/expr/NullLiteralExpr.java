@@ -38,10 +38,10 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public class NullLiteralExpr extends LiteralExpr {
+public  class NullLiteralExpr extends LiteralExpr {
 
     @AllFieldsConstructor
-    public NullLiteralExpr() {
+    public  NullLiteralExpr() {
         this(null);
     }
 
@@ -49,56 +49,56 @@ public class NullLiteralExpr extends LiteralExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public NullLiteralExpr(TokenRange tokenRange) {
+    public  NullLiteralExpr(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public NullLiteralExpr clone() {
+    public  NullLiteralExpr clone() {
         return (NullLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public NullLiteralExprMetaModel getMetaModel() {
+    public  NullLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.nullLiteralExprMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isNullLiteralExpr() {
+    public  boolean isNullLiteralExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public NullLiteralExpr asNullLiteralExpr() {
+    public  NullLiteralExpr asNullLiteralExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifNullLiteralExpr(Consumer<NullLiteralExpr> action) {
+    public  void ifNullLiteralExpr(Consumer<NullLiteralExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<NullLiteralExpr> toNullLiteralExpr() {
+    public  Optional<NullLiteralExpr> toNullLiteralExpr() {
         return Optional.of(this);
     }
 }

@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.type.ArrayType;
 import java.util.Optional;
+import com.github.javaparser.ast.type.ArrayType;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -34,14 +34,14 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class ArrayTypeMetaModel extends ReferenceTypeMetaModel {
+public  class ArrayTypeMetaModel extends ReferenceTypeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ArrayTypeMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, ArrayType.class, "ArrayType", "com.github.javaparser.ast.type", false, false);
     }
 
-    public PropertyMetaModel componentTypePropertyMetaModel;
+    public  PropertyMetaModel componentTypePropertyMetaModel;
 
-    public PropertyMetaModel originPropertyMetaModel;
+    public  PropertyMetaModel originPropertyMetaModel;
 }

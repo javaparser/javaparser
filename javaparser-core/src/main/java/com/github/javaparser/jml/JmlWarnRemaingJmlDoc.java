@@ -17,10 +17,10 @@ import java.util.Optional;
  * @author Alexander Weigl
  * @version 1 (2/1/22)
  */
-public class JmlWarnRemaingJmlDoc extends Processor {
+public  class JmlWarnRemaingJmlDoc extends Processor {
 
     @Override
-    public void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
+    public  void postProcess(ParseResult<? extends Node> result, ParserConfiguration configuration) {
         if (configuration.isProcessJml()) {
             final Optional<? extends Node> r = result.getResult();
             final Optional<CommentsCollection> comments = result.getCommentsCollection();
@@ -36,30 +36,30 @@ public class JmlWarnRemaingJmlDoc extends Processor {
 
         private final ProblemReporter problems;
 
-        public JmlWarnRemainingJmlDocVisitor(List<Problem> problems) {
+        public  JmlWarnRemainingJmlDocVisitor(List<Problem> problems) {
             this.problems = new ProblemReporter(problems::add);
         }
 
         @Override
-        public Void visit(JmlDocDeclaration n, Void arg) {
+        public  Void visit(JmlDocDeclaration n, Void arg) {
             problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             return null;
         }
 
         @Override
-        public Void visit(JmlDocStmt n, Void arg) {
+        public  Void visit(JmlDocStmt n, Void arg) {
             problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             return null;
         }
 
         @Override
-        public Void visit(JmlDoc n, Void arg) {
+        public  Void visit(JmlDoc n, Void arg) {
             problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             return null;
         }
 
         @Override
-        public Void visit(Modifier n, Void arg) {
+        public  Void visit(Modifier n, Void arg) {
             if (n.getKeyword() instanceof JmlDocModifier) {
                 problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             }
@@ -67,7 +67,7 @@ public class JmlWarnRemaingJmlDoc extends Processor {
         }
 
         @Override
-        public Void visit(JmlDocType n, Void arg) {
+        public  Void visit(JmlDocType n, Void arg) {
             problems.report(n, FOUND_JML_DOCUMENTATION_COMMENT + n.getMetaModel().getTypeName());
             return null;
         }

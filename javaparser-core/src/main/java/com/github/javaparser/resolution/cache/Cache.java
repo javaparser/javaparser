@@ -31,7 +31,7 @@ import java.util.Optional;
  * @param <K> The type of the key.
  * @param <V> The type of the value.
  */
-public interface Cache<K, V> {
+public  interface Cache<K, V> {
 
     /**
      * Associates value with key in this cache.

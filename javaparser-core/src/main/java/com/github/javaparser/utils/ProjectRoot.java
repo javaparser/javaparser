@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>A project has a root directory, and it has zero or more directories that contain source code.
  * <p>To create a ProjectRoot use a CollectionStrategy, or instantiate ProjectRoot yourself.
  */
-public class ProjectRoot {
+public  class ProjectRoot {
 
     private final Path root;
 
@@ -43,33 +43,33 @@ public class ProjectRoot {
 
     private final ParserConfiguration parserConfiguration;
 
-    public ProjectRoot(Path root) {
+    public  ProjectRoot(Path root) {
         this(root, new ParserConfiguration());
     }
 
-    public ProjectRoot(Path root, ParserConfiguration parserConfiguration) {
+    public  ProjectRoot(Path root, ParserConfiguration parserConfiguration) {
         this.root = root;
         this.parserConfiguration = parserConfiguration;
     }
 
-    public Optional<SourceRoot> getSourceRoot(Path sourceRoot) {
+    public  Optional<SourceRoot> getSourceRoot(Path sourceRoot) {
         return Optional.ofNullable(cache.get(sourceRoot));
     }
 
-    public List<SourceRoot> getSourceRoots() {
+    public  List<SourceRoot> getSourceRoots() {
         return new ArrayList<>(cache.values());
     }
 
-    public void addSourceRoot(Path path) {
+    public  void addSourceRoot(Path path) {
         cache.put(path, new SourceRoot(path).setParserConfiguration(parserConfiguration));
     }
 
-    public Path getRoot() {
+    public  Path getRoot() {
         return root;
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return "ProjectRoot at " + root + " with " + cache.values().toString();
     }
 }

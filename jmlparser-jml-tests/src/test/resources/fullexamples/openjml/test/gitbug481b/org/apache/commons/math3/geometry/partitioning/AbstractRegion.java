@@ -191,7 +191,7 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
     /**
      * {@inheritDoc}
      */
-    public abstract AbstractRegion<S, T> buildNew(BSPTree<S> newTree);
+    public abstractRegion<S, T> buildNew(BSPTree<S> newTree);
 
     /**
      * Get the tolerance below which points are considered to belong to hyperplanes.

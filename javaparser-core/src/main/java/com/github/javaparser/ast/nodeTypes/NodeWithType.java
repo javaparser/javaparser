@@ -22,7 +22,6 @@ package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.StaticJavaParser.parseType;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.type.Type;
@@ -35,7 +34,7 @@ import com.github.javaparser.ast.type.Type;
  *
  * @since 2.3.1
  */
-public interface NodeWithType<N extends Node, T extends Type> {
+public  interface NodeWithType<N extends Node, T extends Type> {
 
     /**
      * Gets the type

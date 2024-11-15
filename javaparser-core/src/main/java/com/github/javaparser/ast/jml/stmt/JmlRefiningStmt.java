@@ -21,60 +21,60 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  * @author Alexander Weigl
  * @version 1 (2/21/21)
  */
-public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<JmlRefiningStmt> {
+public  class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<JmlRefiningStmt> {
 
     private NodeList<SimpleName> jmlTags;
 
     @AllFieldsConstructor
-    public JmlRefiningStmt(NodeList<SimpleName> jmlTags) {
+    public  JmlRefiningStmt(NodeList<SimpleName> jmlTags) {
         this(null, jmlTags);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isJmlRefiningStmt() {
+    public  boolean isJmlRefiningStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public JmlRefiningStmt asJmlRefiningStmt() {
+    public  JmlRefiningStmt asJmlRefiningStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<JmlRefiningStmt> toJmlRefiningStmt() {
+    public  Optional<JmlRefiningStmt> toJmlRefiningStmt() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJmlRefiningStmt(Consumer<JmlRefiningStmt> action) {
+    public  void ifJmlRefiningStmt(Consumer<JmlRefiningStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public JmlRefiningStmt clone() {
+    public  JmlRefiningStmt clone() {
         return (JmlRefiningStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public JmlRefiningStmtMetaModel getMetaModel() {
+    public  JmlRefiningStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlRefiningStmtMetaModel;
     }
 
@@ -82,19 +82,19 @@ public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<Jml
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public JmlRefiningStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags) {
+    public  JmlRefiningStmt(TokenRange tokenRange, NodeList<SimpleName> jmlTags) {
         super(tokenRange);
         setJmlTags(jmlTags);
         customInitialization();
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<SimpleName> getJmlTags() {
+    public  NodeList<SimpleName> getJmlTags() {
         return jmlTags;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public JmlRefiningStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
+    public  JmlRefiningStmt setJmlTags(final NodeList<SimpleName> jmlTags) {
         assertNotNull(jmlTags);
         if (jmlTags == this.jmlTags) {
             return this;
@@ -109,7 +109,7 @@ public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<Jml
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -124,7 +124,7 @@ public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<Jml
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }

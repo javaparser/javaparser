@@ -26,16 +26,16 @@ import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.validator.ProblemReporter;
 import com.github.javaparser.ast.validator.VisitorValidator;
 
-public class UnderscoreKeywordValidator extends VisitorValidator {
+public  class UnderscoreKeywordValidator extends VisitorValidator {
 
     @Override
-    public void visit(Name n, ProblemReporter arg) {
+    public  void visit(Name n, ProblemReporter arg) {
         validateIdentifier(n, n.getIdentifier(), arg);
         super.visit(n, arg);
     }
 
     @Override
-    public void visit(SimpleName n, ProblemReporter arg) {
+    public  void visit(SimpleName n, ProblemReporter arg) {
         validateIdentifier(n, n.getIdentifier(), arg);
         super.visit(n, arg);
     }

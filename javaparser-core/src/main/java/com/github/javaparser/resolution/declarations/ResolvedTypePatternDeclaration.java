@@ -30,7 +30,7 @@ import com.github.javaparser.ast.expr.TypePatternExpr;
  * @author Roger Howell
  * @see TypePatternExpr
  */
-public interface ResolvedTypePatternDeclaration extends ResolvedValueDeclaration {
+public  interface ResolvedTypePatternDeclaration extends ResolvedValueDeclaration {
 
     @Override
     default boolean isTypePattern() {

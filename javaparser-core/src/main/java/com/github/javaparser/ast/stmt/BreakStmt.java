@@ -55,21 +55,21 @@ import java.util.function.Consumer;
  * @see com.github.javaparser.ast.expr.SwitchExpr
  * @see YieldStmt
  */
-public class BreakStmt extends Statement {
+public  class BreakStmt extends Statement {
 
     @OptionalProperty
     private SimpleName label;
 
-    public BreakStmt() {
+    public  BreakStmt() {
         this(null, null);
     }
 
-    public BreakStmt(final String label) {
+    public  BreakStmt(final String label) {
         this(null, new SimpleName(label));
     }
 
     @AllFieldsConstructor
-    public BreakStmt(final SimpleName label) {
+    public  BreakStmt(final SimpleName label) {
         this(null, label);
     }
 
@@ -77,7 +77,7 @@ public class BreakStmt extends Statement {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BreakStmt(TokenRange tokenRange, SimpleName label) {
+    public  BreakStmt(TokenRange tokenRange, SimpleName label) {
         super(tokenRange);
         setLabel(label);
         customInitialization();
@@ -85,18 +85,18 @@ public class BreakStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public Optional<SimpleName> getLabel() {
+    public  Optional<SimpleName> getLabel() {
         return Optional.ofNullable(label);
     }
 
@@ -107,12 +107,13 @@ public class BreakStmt extends Statement {
      * @return this, the BreakStmt
      */
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BreakStmt setLabel(final SimpleName label) {
+    public  BreakStmt setLabel(final SimpleName label) {
         if (label == this.label) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null) this.label.setParentNode(null);
+        if (this.label != null)
+            this.label.setParentNode(null);
         this.label = label;
         setAsParentNodeOf(label);
         return this;
@@ -120,7 +121,7 @@ public class BreakStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -134,25 +135,25 @@ public class BreakStmt extends Statement {
     }
 
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public BreakStmt removeLabel() {
+    public  BreakStmt removeLabel() {
         return setLabel((SimpleName) null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public BreakStmt clone() {
+    public  BreakStmt clone() {
         return (BreakStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public BreakStmtMetaModel getMetaModel() {
+    public  BreakStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.breakStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -167,25 +168,25 @@ public class BreakStmt extends Statement {
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isBreakStmt() {
+    public  boolean isBreakStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public BreakStmt asBreakStmt() {
+    public  BreakStmt asBreakStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifBreakStmt(Consumer<BreakStmt> action) {
+    public  void ifBreakStmt(Consumer<BreakStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<BreakStmt> toBreakStmt() {
+    public  Optional<BreakStmt> toBreakStmt() {
         return Optional.of(this);
     }
 }

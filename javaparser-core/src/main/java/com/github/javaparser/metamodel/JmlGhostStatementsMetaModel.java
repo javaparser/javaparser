@@ -34,12 +34,12 @@ import java.util.Optional;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JmlGhostStatementsMetaModel extends JmlStatementMetaModel {
+public  class JmlGhostStatementsMetaModel extends JmlStatementMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlGhostStatementsMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlGhostStmt.class, "JmlGhostStatements", "com.github.javaparser.ast.jml.stmt", false, false);
     }
 
-    public PropertyMetaModel statementsPropertyMetaModel;
+    public  PropertyMetaModel statementsPropertyMetaModel;
 }

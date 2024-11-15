@@ -39,19 +39,17 @@ public abstract class PropagatingAstObserver implements AstObserver {
         return new PropagatingAstObserver() {
 
             @Override
-            public void concretePropertyChange(
-                    Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+            public  void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 observer.propertyChange(observedNode, property, oldValue, newValue);
             }
 
             @Override
-            public void concreteListChange(
-                    NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+            public  void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
                 observer.listChange(observedNode, type, index, nodeAddedOrRemoved);
             }
 
             @Override
-            public void parentChange(Node observedNode, Node previousParent, Node newParent) {
+            public  void parentChange(Node observedNode, Node previousParent, Node newParent) {
                 observer.parentChange(observedNode, previousParent, newParent);
             }
         };
@@ -75,7 +73,7 @@ public abstract class PropagatingAstObserver implements AstObserver {
     }
 
     @Override
-    public void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
+    public  void listReplacement(NodeList<?> observedNode, int index, Node oldNode, Node newNode) {
         if (oldNode == newNode) {
             return;
         }
@@ -84,21 +82,20 @@ public abstract class PropagatingAstObserver implements AstObserver {
         concreteListReplacement(observedNode, index, oldNode, newNode);
     }
 
-    public void concretePropertyChange(
-            Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+    public  void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
         // do nothing
     }
 
-    public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+    public  void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
         // do nothing
     }
 
-    public void concreteListReplacement(NodeList<?> observedNode, int index, Node oldValue, Node newValue) {
+    public  void concreteListReplacement(NodeList<?> observedNode, int index, Node oldValue, Node newValue) {
         // do nothing
     }
 
     @Override
-    public void parentChange(Node observedNode, Node previousParent, Node newParent) {
+    public  void parentChange(Node observedNode, Node previousParent, Node newParent) {
         // do nothing
     }
 

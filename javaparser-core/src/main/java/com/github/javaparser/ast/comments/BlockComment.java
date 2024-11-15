@@ -41,14 +41,14 @@ import com.github.javaparser.ast.Node;
  *
  * @author Julio Vilmar Gesser
  */
-public class BlockComment extends Comment {
+public  class BlockComment extends Comment {
 
-    public BlockComment() {
+    public  BlockComment() {
         this(null, "empty");
     }
 
     @AllFieldsConstructor
-    public BlockComment(String content) {
+    public  BlockComment(String content) {
         this(null, content);
     }
 
@@ -56,66 +56,66 @@ public class BlockComment extends Comment {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BlockComment(TokenRange tokenRange, String content) {
+    public  BlockComment(TokenRange tokenRange, String content) {
         super(tokenRange, content);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public BlockComment clone() {
+    public  BlockComment clone() {
         return (BlockComment) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public BlockCommentMetaModel getMetaModel() {
+    public  BlockCommentMetaModel getMetaModel() {
         return JavaParserMetaModel.blockCommentMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isBlockComment() {
+    public  boolean isBlockComment() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public BlockComment asBlockComment() {
+    public  BlockComment asBlockComment() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifBlockComment(Consumer<BlockComment> action) {
+    public  void ifBlockComment(Consumer<BlockComment> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<BlockComment> toBlockComment() {
+    public  Optional<BlockComment> toBlockComment() {
         return Optional.of(this);
     }
 
     @Override
-    public String getHeader() {
+    public  String getHeader() {
         return "/*";
     }
 
     @Override
-    public String getFooter() {
+    public  String getFooter() {
         return "*/";
     }
 }

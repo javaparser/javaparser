@@ -25,7 +25,7 @@ package com.github.javaparser.resolution.declarations;
  *
  * @author Federico Tomassetti
  */
-public interface ResolvedParameterDeclaration extends ResolvedValueDeclaration {
+public  interface ResolvedParameterDeclaration extends ResolvedValueDeclaration {
 
     @Override
     default boolean isParameter() {

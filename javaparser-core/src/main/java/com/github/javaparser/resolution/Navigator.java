@@ -52,13 +52,8 @@ public final class Navigator {
         return cd;
     }
 
-    public static ClassOrInterfaceDeclaration demandClassOrInterface(
-            CompilationUnit compilationUnit, String qualifiedName) {
-        return findType(compilationUnit, qualifiedName)
-                .map(res -> res.toClassOrInterfaceDeclaration()
-                        .orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is "
-                                + res.getClass().getCanonicalName())))
-                .orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
+    public static ClassOrInterfaceDeclaration demandClassOrInterface(CompilationUnit compilationUnit, String qualifiedName) {
+        return findType(compilationUnit, qualifiedName).map(res -> res.toClassOrInterfaceDeclaration().orElseThrow(() -> new IllegalStateException("Type is not a class or an interface, it is " + res.getClass().getCanonicalName()))).orElseThrow(() -> new IllegalStateException("No type named '" + qualifiedName + "'found"));
     }
 
     /**
@@ -147,9 +142,7 @@ public final class Navigator {
     }
 
     public static Node demandParentNode(Node node) {
-        return node.getParentNode()
-                .orElseThrow(() -> new IllegalStateException(
-                        "Parent not found, the node does not appear to be inserted in a correct AST"));
+        return node.getParentNode().orElseThrow(() -> new IllegalStateException("Parent not found, the node does not appear to be inserted in a correct AST"));
     }
 
     /**
@@ -231,9 +224,7 @@ public final class Navigator {
             return Optional.empty();
         }
         final String typeName = getOuterTypeName(qualifiedName);
-        Optional<TypeDeclaration<?>> type = cu.getTypes().stream()
-                .filter((t) -> t.getName().getId().equals(typeName))
-                .findFirst();
+        Optional<TypeDeclaration<?>> type = cu.getTypes().stream().filter((t) -> t.getName().getId().equals(typeName)).findFirst();
         final String innerTypeName = getInnerTypeName(qualifiedName);
         if (type.isPresent() && !innerTypeName.isEmpty()) {
             return findType(type.get(), innerTypeName);
@@ -251,8 +242,7 @@ public final class Navigator {
         final String typeName = getOuterTypeName(qualifiedName);
         Optional<TypeDeclaration<?>> type = Optional.empty();
         for (Node n : td.getMembers()) {
-            if (n instanceof TypeDeclaration
-                    && ((TypeDeclaration<?>) n).getName().getId().equals(typeName)) {
+            if (n instanceof TypeDeclaration && ((TypeDeclaration<?>) n).getName().getId().equals(typeName)) {
                 type = Optional.of((TypeDeclaration<?>) n);
                 break;
             }

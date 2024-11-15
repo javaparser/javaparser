@@ -27,12 +27,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class IntelliJImportOrderingStrategy implements ImportOrderingStrategy {
+public  class IntelliJImportOrderingStrategy implements ImportOrderingStrategy {
 
     private boolean sortImportsAlphabetically = false;
 
     @Override
-    public List<NodeList<ImportDeclaration>> sortImports(NodeList<ImportDeclaration> nodes) {
+    public  List<NodeList<ImportDeclaration>> sortImports(NodeList<ImportDeclaration> nodes) {
         NodeList<ImportDeclaration> otherImports = new NodeList<>();
         NodeList<ImportDeclaration> javaImports = new NodeList<>();
         NodeList<ImportDeclaration> staticImports = new NodeList<>();
@@ -59,12 +59,12 @@ public class IntelliJImportOrderingStrategy implements ImportOrderingStrategy {
     }
 
     @Override
-    public void setSortImportsAlphabetically(boolean sortAlphabetically) {
+    public  void setSortImportsAlphabetically(boolean sortAlphabetically) {
         sortImportsAlphabetically = sortAlphabetically;
     }
 
     @Override
-    public boolean isSortImportsAlphabetically() {
+    public  boolean isSortImportsAlphabetically() {
         return sortImportsAlphabetically;
     }
 }

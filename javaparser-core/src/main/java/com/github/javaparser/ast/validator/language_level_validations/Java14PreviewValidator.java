@@ -25,9 +25,9 @@ package com.github.javaparser.ast.validator.language_level_validations;
  *
  * @see <a href="https://openjdk.java.net/projects/jdk/14/">https://openjdk.java.net/projects/jdk/14/</a>
  */
-public class Java14PreviewValidator extends Java14Validator {
+public  class Java14PreviewValidator extends Java14Validator {
 
-    public Java14PreviewValidator() {
+    public  Java14PreviewValidator() {
         super();
         // Incubator
         // No new incubator language features added within Java 14

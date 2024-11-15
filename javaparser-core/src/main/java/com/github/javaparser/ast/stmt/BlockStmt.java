@@ -25,6 +25,8 @@ import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
+import com.github.javaparser.ast.jml.NodeWithContracts;
+import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.nodeTypes.NodeWithStatements;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.ast.visitor.CloneVisitor;
@@ -32,10 +34,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -43,26 +43,26 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
  *
  * @author Julio Vilmar Gesser
  */
-public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt>, NodeWithContracts<BlockStmt> {
+public  class BlockStmt extends Statement implements NodeWithStatements<BlockStmt>, NodeWithContracts<BlockStmt> {
 
     private NodeList<Statement> statements;
 
     private NodeList<JmlContract> contracts = new NodeList<>();
 
-    public BlockStmt() {
+    public  BlockStmt() {
         this(null, new NodeList<>(), new NodeList<>());
     }
 
-    public BlockStmt(NodeList<Statement> statements) {
+    public  BlockStmt(NodeList<Statement> statements) {
         this(null, statements, new NodeList<>());
     }
 
     @AllFieldsConstructor
-    public BlockStmt(final NodeList<Statement> statements, final NodeList<JmlContract> contracts) {
+    public  BlockStmt(final NodeList<Statement> statements, final NodeList<JmlContract> contracts) {
         this(null, statements, contracts);
     }
 
-    public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements) {
+    public  BlockStmt(TokenRange tokenRange, NodeList<Statement> statements) {
         this(tokenRange, statements, new NodeList<>());
     }
 
@@ -70,7 +70,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public BlockStmt(TokenRange tokenRange, NodeList<Statement> statements, NodeList<JmlContract> contracts) {
+    public  BlockStmt(TokenRange tokenRange, NodeList<Statement> statements, NodeList<JmlContract> contracts) {
         super(tokenRange);
         setStatements(statements);
         setContracts(contracts);
@@ -79,29 +79,30 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<Statement> getStatements() {
+    public  NodeList<Statement> getStatements() {
         return statements;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt setStatements(final NodeList<Statement> statements) {
+    public  BlockStmt setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
-        if (this.statements != null) this.statements.setParentNode(null);
+        if (this.statements != null)
+            this.statements.setParentNode(null);
         this.statements = statements;
         setAsParentNodeOf(statements);
         return this;
@@ -109,7 +110,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -130,19 +131,19 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public BlockStmt clone() {
+    public  BlockStmt clone() {
         return (BlockStmt) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public BlockStmtMetaModel getMetaModel() {
+    public  BlockStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.blockStmtMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -163,35 +164,35 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isBlockStmt() {
+    public  boolean isBlockStmt() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public BlockStmt asBlockStmt() {
+    public  BlockStmt asBlockStmt() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifBlockStmt(Consumer<BlockStmt> action) {
+    public  void ifBlockStmt(Consumer<BlockStmt> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<BlockStmt> toBlockStmt() {
+    public  Optional<BlockStmt> toBlockStmt() {
         return Optional.of(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<JmlContract> getContracts() {
+    public  NodeList<JmlContract> getContracts() {
         return contracts;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public BlockStmt setContracts(final NodeList<JmlContract> contracts) {
+    public  BlockStmt setContracts(final NodeList<JmlContract> contracts) {
         assertNotNull(contracts);
         if (contracts == this.contracts) {
             return this;

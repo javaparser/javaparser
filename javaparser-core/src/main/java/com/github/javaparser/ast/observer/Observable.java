@@ -23,7 +23,7 @@ package com.github.javaparser.ast.observer;
 /**
  * Observable element.
  */
-public interface Observable {
+public  interface Observable {
 
     /**
      * Register an observer.

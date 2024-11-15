@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.nodeTypes;
 
 import static com.github.javaparser.ast.NodeList.nodeList;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
@@ -39,7 +38,7 @@ import java.util.Optional;
  * Only ObjectCreationExpr uses the diamond operator.
  * On other nodes it is treated the same as the first case.
  */
-public interface NodeWithTypeArguments<N extends Node> {
+public  interface NodeWithTypeArguments<N extends Node> {
 
     /**
      * @return the types that can be found in the type arguments: {@code  <String, Integer>}.

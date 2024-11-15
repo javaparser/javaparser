@@ -25,7 +25,7 @@ import com.github.javaparser.ast.type.VoidType;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-public class TypeUtils {
+public  class TypeUtils {
 
     /*
      * Returns the method descriptor (https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3)
@@ -54,10 +54,7 @@ public class TypeUtils {
             String descriptor = getPrimitiveTypeDescriptor(currentClass);
             stringBuilder.append(descriptor);
         } else {
-            stringBuilder
-                    .append("L")
-                    .append(currentClass.getName().replace(".", "/"))
-                    .append(";");
+            stringBuilder.append("L").append(currentClass.getName().replace(".", "/")).append(";");
         }
     }
 

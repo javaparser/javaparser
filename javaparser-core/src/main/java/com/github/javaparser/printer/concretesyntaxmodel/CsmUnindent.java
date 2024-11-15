@@ -23,20 +23,20 @@ package com.github.javaparser.printer.concretesyntaxmodel;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.printer.SourcePrinter;
 
-public class CsmUnindent implements CsmElement {
+public  class CsmUnindent implements CsmElement {
 
     @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
+    public  void prettyPrint(Node node, SourcePrinter printer) {
         printer.unindent();
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         return 2;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public  boolean equals(Object obj) {
         return obj instanceof CsmUnindent;
     }
 }

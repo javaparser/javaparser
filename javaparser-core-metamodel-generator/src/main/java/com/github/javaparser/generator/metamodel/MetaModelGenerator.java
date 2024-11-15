@@ -25,6 +25,11 @@ import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.jml.expr.*;
+import com.github.javaparser.ast.jml.clauses.*;
+import com.github.javaparser.ast.jml.stmt.*;
+import com.github.javaparser.ast.jml.body.*;
+import com.github.javaparser.ast.jml.doc.*;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.CompactConstructorDeclaration;
@@ -151,18 +156,18 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.expr.UnaryExpr.class);
             add(com.github.javaparser.ast.expr.VariableDeclarationExpr.class);
 
-        add(JmlDoc.class);
-        add(JmlDocDeclaration.class);
-        add(JmlDocStmt.class);
-        add(JmlDocType.class);
+            add(JmlDoc.class);
+            add(JmlDocDeclaration.class);
+            add(JmlDocStmt.class);
+            add(JmlDocType.class);
 
-        add(JmlQuantifiedExpr.class);
-        add(JmlTypeExpr.class);
-        add(JmlBinaryInfixExpr.class);
-        add(JmlLetExpr.class);
-        add(JmlMultiCompareExpr.class);
-        add(JmlLabelExpr.class);
-        add(JmlSetComprehensionExpr.class);
+            add(JmlQuantifiedExpr.class);
+            add(JmlTypeExpr.class);
+            add(JmlBinaryInfixExpr.class);
+            add(JmlLetExpr.class);
+            add(JmlMultiCompareExpr.class);
+            add(JmlLabelExpr.class);
+            add(JmlSetComprehensionExpr.class);
 
             add(com.github.javaparser.ast.stmt.AssertStmt.class);
             add(com.github.javaparser.ast.stmt.BlockStmt.class);
@@ -189,36 +194,36 @@ public class MetaModelGenerator extends AbstractGenerator {
             add(com.github.javaparser.ast.stmt.WhileStmt.class);
             add(com.github.javaparser.ast.stmt.YieldStmt.class);
 
-        add(JmlStatement.class);
-        add(JmlGhostStmt.class);
-        add(JmlExpressionStmt.class);
-        add(JmlRefiningStmt.class);
-        add(JmlUnreachableStmt.class);
-        add(JmlLabelStmt.class);
-        add(JmlBeginStmt.class);
-        add(JmlEndStmt.class);
+            add(JmlStatement.class);
+            add(JmlGhostStmt.class);
+            add(JmlExpressionStmt.class);
+            add(JmlRefiningStmt.class);
+            add(JmlUnreachableStmt.class);
+            add(JmlLabelStmt.class);
+            add(JmlBeginStmt.class);
+            add(JmlEndStmt.class);
 
-        add(JmlClassLevelDeclaration.class);
-        add(JmlMethodDeclaration.class);
-        add(JmlFieldDeclaration.class);
-        add(JmlClause.class);
-        add(JmlSimpleExprClause.class);
-        add(JmlMultiExprClause.class);
-        add(JmlSignalsClause.class);
-        add(JmlSignalsOnlyClause.class);
-        add(JmlClauseLabel.class);
-        add(JmlForallClause.class);
-        add(JmlOldClause.class);
-        add(JmlCallableClause.class);
-        add(JmlClauseIf.class);
-        add(JmlMethodSignature.class);
-        add(com.github.javaparser.ast.jml.clauses.JmlContract.class);
+            add(JmlClassLevelDeclaration.class);
+            add(JmlMethodDeclaration.class);
+            add(JmlFieldDeclaration.class);
+            add(JmlClause.class);
+            add(JmlSimpleExprClause.class);
+            add(JmlMultiExprClause.class);
+            add(JmlSignalsClause.class);
+            add(JmlSignalsOnlyClause.class);
+            add(JmlClauseLabel.class);
+            add(JmlForallClause.class);
+            add(JmlOldClause.class);
+            add(JmlCallableClause.class);
+            add(JmlClauseIf.class);
+            add(JmlMethodSignature.class);
+            add(com.github.javaparser.ast.jml.clauses.JmlContract.class);
 
-        //add(com.github.javaparser.ast.JmlBoundVariable.class);
+            //add(com.github.javaparser.ast.JmlBoundVariable.class);
 
-        add(JmlClassExprDeclaration.class);
-        add(JmlRepresentsDeclaration.class);
-        add(JmlClassAccessibleDeclaration.class);
+            add(JmlClassExprDeclaration.class);
+            add(JmlRepresentsDeclaration.class);
+            add(JmlClassAccessibleDeclaration.class);
 
             add(com.github.javaparser.ast.type.ArrayType.class);
             add(com.github.javaparser.ast.type.ClassOrInterfaceType.class);

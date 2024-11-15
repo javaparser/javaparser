@@ -30,7 +30,7 @@ import java.util.*;
  *
  * @author Federico Tomassetti
  */
-public class ResolvedTypeParametersMap {
+public  class ResolvedTypeParametersMap {
 
     public static class Builder {
 
@@ -38,25 +38,23 @@ public class ResolvedTypeParametersMap {
 
         private Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration;
 
-        public Builder() {
+        public  Builder() {
             nameToValue = new HashMap<>();
             nameToDeclaration = new HashMap<>();
         }
 
-        private Builder(
-                Map<String, ResolvedType> nameToValue,
-                Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+        private Builder(Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
             this.nameToValue = new HashMap<>();
             this.nameToValue.putAll(nameToValue);
             this.nameToDeclaration = new HashMap<>();
             this.nameToDeclaration.putAll(nameToDeclaration);
         }
 
-        public ResolvedTypeParametersMap build() {
+        public  ResolvedTypeParametersMap build() {
             return new ResolvedTypeParametersMap(nameToValue, nameToDeclaration);
         }
 
-        public Builder setValue(ResolvedTypeParameterDeclaration typeParameter, ResolvedType value) {
+        public  Builder setValue(ResolvedTypeParameterDeclaration typeParameter, ResolvedType value) {
             // TODO: we shouldn't just silently overwrite existing types!
             String qualifiedName = typeParameter.getQualifiedName();
             nameToValue.put(qualifiedName, value);
@@ -66,20 +64,22 @@ public class ResolvedTypeParametersMap {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ResolvedTypeParametersMap)) return false;
+    public  boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof ResolvedTypeParametersMap))
+            return false;
         ResolvedTypeParametersMap that = (ResolvedTypeParametersMap) o;
         return nameToValue.equals(that.nameToValue) && nameToDeclaration.equals(that.nameToDeclaration);
     }
 
     @Override
-    public int hashCode() {
+    public  int hashCode() {
         return nameToValue.hashCode();
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return "TypeParametersMap{" + "nameToValue=" + nameToValue + '}';
     }
 
@@ -91,15 +91,14 @@ public class ResolvedTypeParametersMap {
         return new Builder().build();
     }
 
-    private ResolvedTypeParametersMap(
-            Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+    private ResolvedTypeParametersMap(Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
         this.nameToValue = new HashMap<>();
         this.nameToValue.putAll(nameToValue);
         this.nameToDeclaration = new HashMap<>();
         this.nameToDeclaration.putAll(nameToDeclaration);
     }
 
-    public ResolvedType getValue(ResolvedTypeParameterDeclaration typeParameter) {
+    public  ResolvedType getValue(ResolvedTypeParameterDeclaration typeParameter) {
         String qualifiedName = typeParameter.getQualifiedName();
         if (nameToValue.containsKey(qualifiedName)) {
             return nameToValue.get(qualifiedName);
@@ -107,34 +106,33 @@ public class ResolvedTypeParametersMap {
         return new ResolvedTypeVariable(typeParameter);
     }
 
-    public Optional<ResolvedType> getValueBySignature(String signature) {
+    public  Optional<ResolvedType> getValueBySignature(String signature) {
         if (nameToValue.containsKey(signature)) {
             return Optional.of(nameToValue.get(signature));
         }
         return Optional.empty();
     }
 
-    public List<String> getNames() {
+    public  List<String> getNames() {
         return new ArrayList<>(nameToValue.keySet());
     }
 
-    public List<ResolvedType> getTypes() {
+    public  List<ResolvedType> getTypes() {
         return new ArrayList<>(nameToValue.values());
     }
 
-    public Builder toBuilder() {
+    public  Builder toBuilder() {
         return new Builder(nameToValue, nameToDeclaration);
     }
 
-    public boolean isEmpty() {
+    public  boolean isEmpty() {
         return nameToValue.isEmpty();
     }
 
-    public ResolvedType replaceAll(ResolvedType type) {
+    public  ResolvedType replaceAll(ResolvedType type) {
         Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
         for (ResolvedTypeParameterDeclaration typeParameterDeclaration : this.nameToDeclaration.values()) {
-            type = type.replaceTypeVariables(
-                    typeParameterDeclaration, getValue(typeParameterDeclaration), inferredTypes);
+            type = type.replaceTypeVariables(typeParameterDeclaration, getValue(typeParameterDeclaration), inferredTypes);
         }
         return type;
     }

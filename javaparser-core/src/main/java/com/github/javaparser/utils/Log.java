@@ -21,7 +21,6 @@
 package com.github.javaparser.utils;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -32,7 +31,7 @@ import java.util.function.Supplier;
  * <p>
  * See <a href="http://javaparser.org/javaparsers-logging-framework-in-one-file/">a blog about this</a>
  */
-public class Log {
+public  class Log {
 
     /**
      * This adapter logs to standard out and standard error.
@@ -40,17 +39,17 @@ public class Log {
     public static class StandardOutStandardErrorAdapter implements Adapter {
 
         @Override
-        public void info(Supplier<String> messageSupplier) {
+        public  void info(Supplier<String> messageSupplier) {
             System.out.println(messageSupplier.get());
         }
 
         @Override
-        public void trace(Supplier<String> messageSupplier) {
+        public  void trace(Supplier<String> messageSupplier) {
             System.out.println(messageSupplier.get());
         }
 
         @Override
-        public void error(Supplier<Throwable> throwableSupplier, Supplier<String> messageSupplier) {
+        public  void error(Supplier<Throwable> throwableSupplier, Supplier<String> messageSupplier) {
             Throwable throwable = throwableSupplier.get();
             String message = messageSupplier.get();
             if (message == null) {
@@ -66,7 +65,7 @@ public class Log {
 
         private void printStackTrace(Throwable throwable) {
             try (StringWriter sw = new StringWriter();
-                    PrintWriter pw = new PrintWriter(sw)) {
+                PrintWriter pw = new PrintWriter(sw)) {
                 throwable.printStackTrace(pw);
                 trace(sw::toString);
             } catch (IOException e) {
@@ -81,16 +80,19 @@ public class Log {
     public static class SilentAdapter implements Adapter {
 
         @Override
-        public void info(Supplier<String> messageSupplier) {}
+        public  void info(Supplier<String> messageSupplier) {
+        }
 
         @Override
-        public void trace(Supplier<String> messageSupplier) {}
+        public  void trace(Supplier<String> messageSupplier) {
+        }
 
         @Override
-        public void error(Supplier<Throwable> throwableSupplier, Supplier<String> messageSupplier) {}
+        public  void error(Supplier<Throwable> throwableSupplier, Supplier<String> messageSupplier) {
+        }
     }
 
-    public interface Adapter {
+    public  interface Adapter {
 
         void info(Supplier<String> message);
 

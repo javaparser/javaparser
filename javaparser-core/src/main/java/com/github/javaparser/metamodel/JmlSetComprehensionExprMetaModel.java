@@ -21,7 +21,6 @@
 package com.github.javaparser.metamodel;
 
 import java.util.Optional;
-
 import com.github.javaparser.ast.jml.expr.JmlSetComprehensionExpr;
 import com.github.javaparser.ast.Generated;
 
@@ -35,14 +34,14 @@ import com.github.javaparser.ast.Generated;
  * For this reason, any changes made directly to this file will be overwritten the next time generators are run.
  */
 @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-public class JmlSetComprehensionExprMetaModel extends ExpressionMetaModel {
+public  class JmlSetComprehensionExprMetaModel extends ExpressionMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     JmlSetComprehensionExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
         super(superBaseNodeMetaModel, JmlSetComprehensionExpr.class, "JmlSetComprehensionExpr", "com.github.javaparser.ast.jml.expr", false, false);
     }
 
-    public PropertyMetaModel bindingPropertyMetaModel;
+    public  PropertyMetaModel bindingPropertyMetaModel;
 
-    public PropertyMetaModel predicatePropertyMetaModel;
+    public  PropertyMetaModel predicatePropertyMetaModel;
 }

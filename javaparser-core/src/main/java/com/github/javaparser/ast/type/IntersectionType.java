@@ -37,10 +37,8 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
@@ -56,13 +54,13 @@ import static java.util.stream.Collectors.joining;
  *
  * @since 3.0.0
  */
-public class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
+public  class IntersectionType extends Type implements NodeWithAnnotations<IntersectionType> {
 
     @NonEmptyProperty
     private NodeList<ReferenceType> elements;
 
     @AllFieldsConstructor
-    public IntersectionType(NodeList<ReferenceType> elements) {
+    public  IntersectionType(NodeList<ReferenceType> elements) {
         this(null, elements);
     }
 
@@ -70,7 +68,7 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public IntersectionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
+    public  IntersectionType(TokenRange tokenRange, NodeList<ReferenceType> elements) {
         super(tokenRange);
         setElements(elements);
         customInitialization();
@@ -78,42 +76,43 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public NodeList<ReferenceType> getElements() {
+    public  NodeList<ReferenceType> getElements() {
         return elements;
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
-    public IntersectionType setElements(final NodeList<ReferenceType> elements) {
+    public  IntersectionType setElements(final NodeList<ReferenceType> elements) {
         assertNotNull(elements);
         if (elements == this.elements) {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ELEMENTS, this.elements, elements);
-        if (this.elements != null) this.elements.setParentNode(null);
+        if (this.elements != null)
+            this.elements.setParentNode(null);
         this.elements = elements;
         setAsParentNodeOf(elements);
         return this;
     }
 
     @Override
-    public IntersectionType setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public  IntersectionType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (IntersectionType) super.setAnnotations(annotations);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
-    public boolean remove(Node node) {
+    public  boolean remove(Node node) {
         if (node == null) {
             return false;
         }
@@ -127,25 +126,25 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     }
 
     @Override
-    public String asString() {
+    public  String asString() {
         return elements.stream().map(Type::asString).collect(joining("&"));
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public IntersectionType clone() {
+    public  IntersectionType clone() {
         return (IntersectionType) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public IntersectionTypeMetaModel getMetaModel() {
+    public  IntersectionTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.intersectionTypeMetaModel;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.ReplaceMethodGenerator")
-    public boolean replace(Node node, Node replacementNode) {
+    public  boolean replace(Node node, Node replacementNode) {
         if (node == null) {
             return false;
         }
@@ -160,35 +159,35 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isIntersectionType() {
+    public  boolean isIntersectionType() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public IntersectionType asIntersectionType() {
+    public  IntersectionType asIntersectionType() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifIntersectionType(Consumer<IntersectionType> action) {
+    public  void ifIntersectionType(Consumer<IntersectionType> action) {
         action.accept(this);
     }
 
     @Override
-    public ResolvedIntersectionType resolve() {
+    public  ResolvedIntersectionType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedIntersectionType.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<IntersectionType> toIntersectionType() {
+    public  Optional<IntersectionType> toIntersectionType() {
         return Optional.of(this);
     }
 
     @Override
-    public ResolvedType convertToUsage(Context context) {
+    public  ResolvedType convertToUsage(Context context) {
         throw new UnsupportedOperationException(getClass().getCanonicalName());
     }
 }

@@ -21,28 +21,28 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import java.io.StringWriter;
 
-public class LexicalPreservingVisitor {
+public  class LexicalPreservingVisitor {
 
     private StringWriter writer;
 
-    public LexicalPreservingVisitor() {
+    public  LexicalPreservingVisitor() {
         this(new StringWriter());
     }
 
-    public LexicalPreservingVisitor(StringWriter writer) {
+    public  LexicalPreservingVisitor(StringWriter writer) {
         this.writer = writer;
     }
 
-    public void visit(ChildTextElement child) {
+    public  void visit(ChildTextElement child) {
         child.accept(this);
     }
 
-    public void visit(TokenTextElement token) {
+    public  void visit(TokenTextElement token) {
         writer.append(token.getText());
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return writer.toString();
     }
 }

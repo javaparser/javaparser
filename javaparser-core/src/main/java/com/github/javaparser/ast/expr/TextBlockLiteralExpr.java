@@ -29,15 +29,14 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TextBlockLiteralExprMetaModel;
 import com.github.javaparser.utils.Pair;
-
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-
 import static com.github.javaparser.utils.StringEscapeUtils.unescapeJavaTextBlock;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
+import com.github.javaparser.ast.Node;
 
 /**
  * <h1>A text block</h1>
@@ -45,9 +44,9 @@ import static java.util.stream.IntStream.range;
  * A text block is a multi-line string. It was introduced in JEP 355.
  * The content of "value" is byte-for-byte exactly what is in the source code.
  */
-public class TextBlockLiteralExpr extends LiteralStringValueExpr {
+public  class TextBlockLiteralExpr extends LiteralStringValueExpr {
 
-    public TextBlockLiteralExpr() {
+    public  TextBlockLiteralExpr() {
         this(null, "empty");
     }
 
@@ -57,7 +56,7 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
      * @param value the value of the literal
      */
     @AllFieldsConstructor
-    public TextBlockLiteralExpr(final String value) {
+    public  TextBlockLiteralExpr(final String value) {
         this(null, value);
     }
 
@@ -65,56 +64,56 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public TextBlockLiteralExpr(TokenRange tokenRange, String value) {
+    public  TextBlockLiteralExpr(TokenRange tokenRange, String value) {
         super(tokenRange, value);
         customInitialization();
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isTextBlockLiteralExpr() {
+    public  boolean isTextBlockLiteralExpr() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public TextBlockLiteralExpr asTextBlockLiteralExpr() {
+    public  TextBlockLiteralExpr asTextBlockLiteralExpr() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<TextBlockLiteralExpr> toTextBlockLiteralExpr() {
+    public  Optional<TextBlockLiteralExpr> toTextBlockLiteralExpr() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
+    public  void ifTextBlockLiteralExpr(Consumer<TextBlockLiteralExpr> action) {
         action.accept(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public TextBlockLiteralExpr clone() {
+    public  TextBlockLiteralExpr clone() {
         return (TextBlockLiteralExpr) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public TextBlockLiteralExprMetaModel getMetaModel() {
+    public  TextBlockLiteralExprMetaModel getMetaModel() {
         return JavaParserMetaModel.textBlockLiteralExprMetaModel;
     }
 
@@ -122,7 +121,7 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
      * Most of the algorithm for stripIndent, stopping just before concatenating all the lines into a single string.
      * Useful for tools.
      */
-    public Stream<String> stripIndentOfLines() {
+    public  Stream<String> stripIndentOfLines() {
         /* Split the content of the text block at every LF, producing a list of individual lines.
         Note that any line in the content which was just an LF will become an empty line in the list of individual lines. */
         String[] rawLines = getValue().split("\\R", -1);
@@ -132,24 +131,17 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
         /* If the last line in the list of individual lines (i.e., the line with the closing delimiter) is blank, then add it to the set of determining lines.
         (The indentation of the closing delimiter should influence the indentation of the content as a whole -- a "significant trailing line" policy.) */
         /* Compute the common white space prefix of the set of determining lines, by counting the number of leading white space characters on each line and taking the minimum count. */
-        int commonWhiteSpacePrefixSize = range(0, rawLines.length)
-                .mapToObj(nr -> new Pair<>(nr, rawLines[nr]))
-                .filter(l -> !emptyOrWhitespace(l.b) || isLastLine(rawLines, l.a))
-                .map(l -> indentSize(l.b))
-                .min(Integer::compare)
-                .orElse(0);
+        int commonWhiteSpacePrefixSize = range(0, rawLines.length).mapToObj(nr -> new Pair<>(nr, rawLines[nr])).filter(l -> !emptyOrWhitespace(l.b) || isLastLine(rawLines, l.a)).map(l -> indentSize(l.b)).min(Integer::compare).orElse(0);
         /* Remove the common white space prefix from each non-blank line in the list of individual lines. */
         /* Remove all trailing white space from all lines in the modified list of individual lines from step 5.
         This step collapses wholly-whitespace lines in the modified list so that they are empty, but does not discard them. */
-        return Arrays.stream(rawLines)
-                .map(l -> l.length() < commonWhiteSpacePrefixSize ? l : l.substring(commonWhiteSpacePrefixSize))
-                .map(this::trimTrailing);
+        return Arrays.stream(rawLines).map(l -> l.length() < commonWhiteSpacePrefixSize ? l : l.substring(commonWhiteSpacePrefixSize)).map(this::trimTrailing);
     }
 
     /**
      * @return The algorithm from String::stripIndent in JDK 13.
      */
-    public String stripIndent() {
+    public  String stripIndent() {
         /* Construct the result string by joining all the lines in the modified list of individual lines from step 6, using LF as the separator between lines.
         If the final line in the list from step 6 is empty, then the joining LF from the previous line will be the last character in the result string. */
         return stripIndentOfLines().collect(joining("\n"));
@@ -158,14 +150,14 @@ public class TextBlockLiteralExpr extends LiteralStringValueExpr {
     /**
      * @return The algorithm from String::translateEscapes in JDK 13.
      */
-    public String translateEscapes() {
+    public  String translateEscapes() {
         return unescapeJavaTextBlock(stripIndent());
     }
 
     /**
      * @return the final string value of this text block after all processing.
      */
-    public String asString() {
+    public  String asString() {
         return translateEscapes();
     }
 

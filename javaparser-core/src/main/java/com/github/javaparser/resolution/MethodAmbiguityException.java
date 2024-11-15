@@ -25,12 +25,12 @@ package com.github.javaparser.resolution;
  *
  * @author Federico Tomassetti
  */
-public class MethodAmbiguityException extends RuntimeException {
+public  class MethodAmbiguityException extends RuntimeException {
 
     /**
      * Create an instance from a description of the reason why there is ambiguity in this particular case.
      */
-    public MethodAmbiguityException(String description) {
+    public  MethodAmbiguityException(String description) {
         super(description);
     }
 }

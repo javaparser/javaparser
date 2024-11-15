@@ -25,7 +25,7 @@ package com.github.javaparser.javadoc.description;
  * <p>
  * So for example {@code a text} or <code>{@link String}</code> could be valid description elements.
  */
-public interface JavadocDescriptionElement {
+public  interface JavadocDescriptionElement {
 
     String toText();
 }

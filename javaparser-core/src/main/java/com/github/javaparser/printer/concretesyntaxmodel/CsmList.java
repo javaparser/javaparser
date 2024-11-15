@@ -28,7 +28,7 @@ import com.github.javaparser.printer.SourcePrinter;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class CsmList implements CsmElement {
+public  class CsmList implements CsmElement {
 
     private final ObservableProperty property;
 
@@ -40,40 +40,35 @@ public class CsmList implements CsmElement {
 
     private final CsmElement following;
 
-    public ObservableProperty getProperty() {
+    public  ObservableProperty getProperty() {
         return property;
     }
 
-    public CsmElement getSeparatorPost() {
+    public  CsmElement getSeparatorPost() {
         return separatorPost;
     }
 
-    public CsmElement getSeparatorPre() {
+    public  CsmElement getSeparatorPre() {
         return separatorPre;
     }
 
-    public CsmElement getPreceeding() {
+    public  CsmElement getPreceeding() {
         return preceeding;
     }
 
-    public CsmElement getFollowing() {
+    public  CsmElement getFollowing() {
         return following;
     }
 
-    public CsmList(ObservableProperty property, CsmElement separator) {
+    public  CsmList(ObservableProperty property, CsmElement separator) {
         this(property, new CsmNone(), separator, new CsmNone(), new CsmNone());
     }
 
-    public CsmList(ObservableProperty property) {
+    public  CsmList(ObservableProperty property) {
         this(property, new CsmNone(), new CsmNone(), new CsmNone(), new CsmNone());
     }
 
-    public CsmList(
-            ObservableProperty property,
-            CsmElement separatorPre,
-            CsmElement separatorPost,
-            CsmElement preceeding,
-            CsmElement following) {
+    public  CsmList(ObservableProperty property, CsmElement separatorPre, CsmElement separatorPost, CsmElement preceeding, CsmElement following) {
         this.property = property;
         this.separatorPre = separatorPre;
         this.separatorPost = separatorPost;
@@ -82,7 +77,7 @@ public class CsmList implements CsmElement {
     }
 
     @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {
+    public  void prettyPrint(Node node, SourcePrinter printer) {
         if (property.isAboutNodes()) {
             NodeList<? extends Node> nodeList = property.getValueAsMultipleReference(node);
             if (nodeList == null) {
@@ -127,7 +122,7 @@ public class CsmList implements CsmElement {
     }
 
     @Override
-    public String toString() {
+    public  String toString() {
         return String.format("%s(property:%s)", this.getClass().getSimpleName(), getProperty());
     }
 }

@@ -40,7 +40,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -53,12 +52,12 @@ import java.util.function.Consumer;
  * <li><b>var</b> a = new ArrayList&lt;String&gt;();</li>
  * </ol>
  */
-public class VarType extends Type {
+public  class VarType extends Type {
 
     private static final String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
     @AllFieldsConstructor
-    public VarType() {
+    public  VarType() {
         this(null);
     }
 
@@ -66,76 +65,76 @@ public class VarType extends Type {
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public VarType(TokenRange tokenRange) {
+    public  VarType(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
     }
 
     @Override
-    public VarType setAnnotations(NodeList<AnnotationExpr> annotations) {
+    public  VarType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (VarType) super.setAnnotations(annotations);
     }
 
     @Override
-    public String asString() {
+    public  String asString() {
         return "var";
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.CloneGenerator")
-    public VarType clone() {
+    public  VarType clone() {
         return (VarType) accept(new CloneVisitor(), null);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
-    public VarTypeMetaModel getMetaModel() {
+    public  VarTypeMetaModel getMetaModel() {
         return JavaParserMetaModel.varTypeMetaModel;
     }
 
     @Override
-    public ResolvedType resolve() {
+    public  ResolvedType resolve() {
         return getSymbolResolver().toResolvedType(this, ResolvedType.class);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
+    public  <R, A> R accept(final GenericVisitor<R, A> v, final A arg) {
         return v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
-    public <A> void accept(final VoidVisitor<A> v, final A arg) {
+    public  <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isVarType() {
+    public  boolean isVarType() {
         return true;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public VarType asVarType() {
+    public  VarType asVarType() {
         return this;
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<VarType> toVarType() {
+    public  Optional<VarType> toVarType() {
         return Optional.of(this);
     }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifVarType(Consumer<VarType> action) {
+    public  void ifVarType(Consumer<VarType> action) {
         action.accept(this);
     }
 
     @Override
-    public ResolvedType convertToUsage(Context context) {
+    public  ResolvedType convertToUsage(Context context) {
         Node parent = getParentNode().get();
         if (!(parent instanceof VariableDeclarator)) {
             throw new IllegalStateException("Trying to resolve a `var` which is not in a variable declaration.");
@@ -157,14 +156,10 @@ public class VarType extends Type {
                 if (iterType.isReferenceType()) {
                     // The type of a variable in a for-each loop with an
                     // Iterable with parameter type
-                    List<ResolvedType> parametersType =
-                            iterType.asReferenceType().typeParametersMap().getTypes();
+                    List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
                     if (parametersType.isEmpty()) {
-                        Optional<ResolvedTypeDeclaration> oObjectDeclaration =
-                                context.solveType(JAVA_LANG_OBJECT).getDeclaration();
-                        return oObjectDeclaration
-                                .map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
-                                .orElseThrow(() -> new UnsupportedOperationException());
+                        Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT).getDeclaration();
+                        return oObjectDeclaration.map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType())).orElseThrow(() -> new UnsupportedOperationException());
                     }
                     return parametersType.get(0);
                 }
