@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
@@ -31,13 +33,10 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
-
-import static com.github.javaparser.StaticJavaParser.parse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class Issue257Test extends AbstractSymbolResolutionTest {
 
@@ -58,10 +57,15 @@ class Issue257Test extends AbstractSymbolResolutionTest {
     void issue257() throws IOException {
         Path pathToSourceFile = adaptPath("src/test/resources/issue257/A.java.txt");
         CompilationUnit cu = parse(pathToSourceFile);
-        Statement statement = cu.getClassByName("A").get().getMethodsByName("run").get(0).getBody().get().getStatement(0);
+        Statement statement = cu.getClassByName("A")
+                .get()
+                .getMethodsByName("run")
+                .get(0)
+                .getBody()
+                .get()
+                .getStatement(0);
         ExpressionStmt expressionStmt = (ExpressionStmt) statement;
         Expression expression = expressionStmt.getExpression();
         JavaParserFacade.get(typeSolver).getType(expression);
     }
-
 }

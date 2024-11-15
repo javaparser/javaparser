@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -33,15 +36,11 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 class Issue3099Test extends AbstractResolutionTest {
 
@@ -49,11 +48,11 @@ class Issue3099Test extends AbstractResolutionTest {
     void illegalArgumentExceptionWhenSolvingName() throws IOException {
 
         // Setup symbol solver
-        JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(adaptPath("src/test/resources/issue3099/"));
+        JavaParserTypeSolver javaParserTypeSolver =
+                new JavaParserTypeSolver(adaptPath("src/test/resources/issue3099/"));
         StaticJavaParser.getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(
-                        new CombinedTypeSolver(new ReflectionTypeSolver(), javaParserTypeSolver))
-                );
+                .setSymbolResolver(
+                        new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver(), javaParserTypeSolver)));
 
         // Parse the File
         Path filePath = adaptPath("src/test/resources/issue3099/com/example/Beta.java");
@@ -74,5 +73,4 @@ class Issue3099Test extends AbstractResolutionTest {
         assertTrue(resolvedType.isPresent());
         assertEquals(innerInterface, resolvedType.get().getTypeDeclaration().orElse(null));
     }
-
 }

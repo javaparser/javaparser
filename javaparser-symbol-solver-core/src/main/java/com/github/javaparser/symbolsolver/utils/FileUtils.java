@@ -21,7 +21,6 @@
 package com.github.javaparser.symbolsolver.utils;
 
 import com.github.javaparser.utils.Utils;
-
 import java.io.File;
 
 public class FileUtils {
@@ -42,5 +41,4 @@ public class FileUtils {
         int lastIndex = filename.lastIndexOf(File.separator);
         return filename.substring(0, lastIndex);
     }
-
 }

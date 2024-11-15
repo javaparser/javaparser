@@ -33,8 +33,10 @@ import com.github.javaparser.metamodel.DerivedProperty;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.printer.Stringable;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -50,7 +52,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExpr> {
 
     public enum Operator implements Stringable {
-
         PLUS("+", false),
         MINUS("-", false),
         PREFIX_INCREMENT("++", false),
@@ -135,8 +136,7 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXPRESSION, this.expression, expression);
-        if (this.expression != null)
-            this.expression.setParentNode(null);
+        if (this.expression != null) this.expression.setParentNode(null);
         this.expression = expression;
         setAsParentNodeOf(expression);
         return this;

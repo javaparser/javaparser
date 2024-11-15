@@ -20,6 +20,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
@@ -32,23 +34,18 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class Issue2210Test extends AbstractResolutionTest {
 
     @BeforeEach
-    void setup() {
-    }
+    void setup() {}
 
     @Test
     void test2210Issue() {
         // Source code
-        String sourceCode =
-                "class A {" +
-                        " public void m() {\n" +
-                        "   java.util.Arrays.asList(1, 2, 3).forEach(System.out::println);" +
-                        " }\n" +
-                        "}";
+        String sourceCode = "class A {" + " public void m() {\n"
+                + "   java.util.Arrays.asList(1, 2, 3).forEach(System.out::println);"
+                + " }\n"
+                + "}";
         // Setup symbol solver
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
@@ -60,5 +57,4 @@ public class Issue2210Test extends AbstractResolutionTest {
         ResolvedType type = expr.calculateResolvedType();
         assertEquals("java.util.function.Consumer<? super T>", type.describe());
     }
-
 }

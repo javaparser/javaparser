@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.Navigator;
@@ -30,14 +32,13 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class Issue84Test extends AbstractResolutionTest {
 
     @Test
     void variadicIssue() {
         CompilationUnit cu = parseSample("Issue84");
-        final MethodCallExpr methodCall = Navigator.findMethodCall(cu, "variadicMethod").get();
+        final MethodCallExpr methodCall =
+                Navigator.findMethodCall(cu, "variadicMethod").get();
 
         final JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         final ResolvedType type = javaParserFacade.getType(methodCall);

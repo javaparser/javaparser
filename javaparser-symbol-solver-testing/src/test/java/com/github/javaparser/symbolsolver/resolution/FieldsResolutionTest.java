@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -43,13 +46,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
+import java.nio.file.Path;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FieldsResolutionTest extends AbstractResolutionTest {
 
@@ -63,7 +62,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessClassMemberThroughThis");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessClassMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(clazz, "getLabel2");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
@@ -75,14 +75,17 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessClassMemberThroughThis");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessClassMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(clazz, "setLabel");
-        ExpressionStmt expressionStmt = (ExpressionStmt) method.getBody().get().getStatements().get(0);
+        ExpressionStmt expressionStmt =
+                (ExpressionStmt) method.getBody().get().getStatements().get(0);
         AssignExpr assignExpr = (AssignExpr) expressionStmt.getExpression();
         FieldAccessExpr fieldAccessExpr = (FieldAccessExpr) assignExpr.getTarget();
 
         Path src = adaptPath("src/test/resources");
-        CombinedTypeSolver typeSolver = new CombinedTypeSolver(new JavaParserTypeSolver(src, new LeanParserConfiguration()), new ReflectionTypeSolver());
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver(
+                new JavaParserTypeSolver(src, new LeanParserConfiguration()), new ReflectionTypeSolver());
         Solver symbolSolver = new SymbolSolver(typeSolver);
-        SymbolReference<? extends ResolvedValueDeclaration> ref = symbolSolver.solveSymbol(fieldAccessExpr.getName().getId(), fieldAccessExpr);
+        SymbolReference<? extends ResolvedValueDeclaration> ref =
+                symbolSolver.solveSymbol(fieldAccessExpr.getName().getId(), fieldAccessExpr);
 
         assertTrue(ref.isSolved());
         assertTrue(ref.getCorrespondingDeclaration().isField());
@@ -105,7 +108,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessEnumMemberThroughThis");
         EnumDeclaration enumDecl = Navigator.demandEnum(cu, "AccessEnumMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(enumDecl, "getLabel2");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
@@ -117,7 +121,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessThroughSuper");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "fieldTest");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);
@@ -133,7 +138,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessClassMemberThroughThis");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessClassMemberThroughThis");
         MethodDeclaration method = Navigator.demandMethod(clazz, "getLabel2");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
         FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
 
         // resolve field access expression
@@ -143,7 +149,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "label");
 
         // check that the expected field declaration equals the resolved field declaration
-        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+        assertEquals(
+                variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
     }
 
     @Test
@@ -155,7 +162,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AccessThroughSuper");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "AccessThroughSuper.SubClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "fieldTest");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
         FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
 
         // resolve field access expression
@@ -166,7 +174,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "field");
 
         // check that the expected field declaration equals the resolved field declaration
-        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+        assertEquals(
+                variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
     }
 
     @Test
@@ -178,7 +187,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExtendingUnknownClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "getFoo");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
         NameExpr expression = returnStmt.getExpression().get().asNameExpr();
 
         // resolve field access expression
@@ -188,7 +198,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "foo");
 
         // check that the expected field declaration equals the resolved field declaration
-        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+        assertEquals(
+                variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
     }
 
     @Test
@@ -200,7 +211,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ClassExtendingUnknownClass");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "ClassExtendingUnknownClass");
         MethodDeclaration method = Navigator.demandMethod(clazz, "getFoo2");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
         FieldAccessExpr expression = returnStmt.getExpression().get().asFieldAccessExpr();
 
         // resolve field access expression
@@ -210,7 +222,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         VariableDeclarator variableDeclarator = Navigator.demandField(clazz, "foo");
 
         // check that the expected field declaration equals the resolved field declaration
-        assertEquals(variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
+        assertEquals(
+                variableDeclarator, ((JavaParserFieldDeclaration) resolvedValueDeclaration).getVariableDeclarator());
     }
 
     @Test
@@ -222,7 +235,8 @@ class FieldsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("ReflectionTypeSolverFieldFromInterfaceResolution");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Test");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
-        ReturnStmt returnStmt = (ReturnStmt) method.getBody().get().getStatements().get(0);
+        ReturnStmt returnStmt =
+                (ReturnStmt) method.getBody().get().getStatements().get(0);
         Expression expression = returnStmt.getExpression().get();
 
         ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(expression);

@@ -64,5 +64,4 @@ public enum NameCategory {
     public boolean isValid() {
         return this != COMPILATION_ERROR;
     }
-
 }

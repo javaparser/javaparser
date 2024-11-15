@@ -22,45 +22,89 @@ package com.github.javaparser.symbolsolver.javaparsermodel.contexts;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.Expression;
-import com.github.javaparser.ast.expr.PatternExpr;
+import com.github.javaparser.ast.expr.TypePatternExpr;
 import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFactory;
-
-import java.util.ArrayList;
+import com.github.javaparser.symbolsolver.javaparsermodel.NormalCompletionVisitor;
+import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableResult;
+import com.github.javaparser.symbolsolver.javaparsermodel.PatternVariableVisitor;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class IfStatementContext extends StatementContext<IfStmt> {
-//public class IfStatementContext extends AbstractJavaParserContext<IfStmt> {
 
     public IfStatementContext(IfStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
     }
 
-
+    /**
+     * The following rules apply to a statement if (e) S:
+     * - A pattern variable introduced by e when true is definitely matched at S.
+     *
+     *  The following rules apply to a statement if (e) S else T:
+     *  - A pattern variable introduced by e when true is definitely matched at S.
+     *  - A pattern variable introduced by e when false is definitely matched at T.
+     *
+     *  https://docs.oracle.com/javase/specs/jls/se22/html/jls-6.html#jls-6.3.2.2
+     */
     @Override
-    public List<PatternExpr> patternExprsExposedToChild(Node child) {
-        Expression condition = wrappedNode.getCondition();
-        Context conditionContext = JavaParserFactory.getContext(condition, typeSolver);
+    public List<TypePatternExpr> typePatternExprsExposedToChild(Node child) {
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
+        List<TypePatternExpr> results = new LinkedList<>();
 
-        List<PatternExpr> results = new ArrayList<>();
+        Expression condition = wrappedNode.getCondition();
+        PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
 
         boolean givenNodeIsWithinThenStatement = wrappedNode.getThenStmt().containsWithinRange(child);
         if (givenNodeIsWithinThenStatement) {
-            results.addAll(conditionContext.patternExprsExposedFromChildren());
+            results.addAll(patternsInScope.getVariablesIntroducedIfTrue());
         }
 
         wrappedNode.getElseStmt().ifPresent(elseStatement -> {
             boolean givenNodeIsWithinElseStatement = elseStatement.containsWithinRange(child);
             if (givenNodeIsWithinElseStatement) {
-                results.addAll(conditionContext.negatedPatternExprsExposedFromChildren());
+                results.addAll(patternsInScope.getVariablesIntroducedIfFalse());
             }
         });
 
         return results;
     }
 
+    /**
+     * The following rules apply to a statement if (e) S:
+     * - A pattern variable is introduced by if (e) S iff
+     *   (i) it is introduced by e when false and
+     *   (ii) S cannot complete normally.
+     *
+     * The following rules apply to a statement if (e) S else T:
+     * - A pattern variable is introduced by if (e) S else T iff either:
+     *   - It is introduced by e when true, and S can complete normally, and T cannot complete normally; or
+     *   - It is introduced by e when false, and S cannot complete normally, and T can complete normally.
+     */
+    @Override
+    public List<TypePatternExpr> getIntroducedTypePatterns() {
+        PatternVariableVisitor variableVisitor = new PatternVariableVisitor();
+        Expression condition = wrappedNode.getCondition();
+        PatternVariableResult patternsInScope = condition.accept(variableVisitor, null);
+
+        NormalCompletionVisitor completionVisitor = new NormalCompletionVisitor();
+        boolean thenCanCompleteNormally = wrappedNode.getThenStmt().accept(completionVisitor, null);
+        // If there is no else block, then we can treat it as an empty block which can complete normally by definition
+        boolean elseCanCompleteNormally = !wrappedNode.getElseStmt().isPresent()
+                || wrappedNode.getElseStmt().get().accept(completionVisitor, null);
+
+        if (thenCanCompleteNormally && !elseCanCompleteNormally) {
+            return patternsInScope.getVariablesIntroducedIfTrue();
+        }
+
+        if (!thenCanCompleteNormally && elseCanCompleteNormally) {
+            return patternsInScope.getVariablesIntroducedIfFalse();
+        }
+
+        return Collections.emptyList();
+    }
 
     /**
      * <pre>{@code
@@ -154,7 +198,6 @@ public class IfStatementContext extends StatementContext<IfStmt> {
 
         return false;
     }
-
 
     public boolean nodeContextIsConditionOfIfStmt(Context parentContext) {
         if (!(parentContext instanceof AbstractJavaParserContext)) {

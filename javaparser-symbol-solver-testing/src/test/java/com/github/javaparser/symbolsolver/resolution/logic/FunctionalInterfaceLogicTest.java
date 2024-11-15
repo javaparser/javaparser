@@ -23,12 +23,6 @@ package com.github.javaparser.symbolsolver.resolution.logic;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -41,6 +35,10 @@ import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 
@@ -58,14 +56,13 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void simpleExampleOfFunctionnalInterface() {
-        String code = "interface Runnable {\n"
-                + "    void run();\n"
-                + "}";
+        String code = "interface Runnable {\n" + "    void run();\n" + "}";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
-        ClassOrInterfaceDeclaration classOrInterfaceDecl = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ClassOrInterfaceDeclaration classOrInterfaceDecl =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
     }
@@ -76,14 +73,13 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void notFunctionalBecauseItDeclaresNothingWhichIsNotAlreadyAMemberOfObject() {
-        String code = "interface NonFunc {\n"
-                + "    boolean equals(Object obj);\n"
-                + "}";
+        String code = "interface NonFunc {\n" + "    boolean equals(Object obj);\n" + "}";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
-        ClassOrInterfaceDeclaration classOrInterfaceDecl = cu.findFirst(ClassOrInterfaceDeclaration.class).get();
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ClassOrInterfaceDeclaration classOrInterfaceDecl =
+                cu.findFirst(ClassOrInterfaceDeclaration.class).get();
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertFalse(methodUsage.isPresent());
     }
@@ -101,8 +97,8 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Func");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
     }
@@ -119,8 +115,8 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Comparator");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
     }
@@ -132,15 +128,12 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void isNotFunctionalBecauseItDeclaresTwoAbstractMethodsWhichAreNotPublicMembersOfObject() {
-        String code = "interface Foo {\n"
-                + "    int m();\n"
-                + "    Object clone();\n"
-                + "}";
+        String code = "interface Foo {\n" + "    int m();\n" + "    Object clone();\n" + "}";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Foo");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertFalse(methodUsage.isPresent());
     }
@@ -158,8 +151,8 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Z");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
     }
@@ -177,8 +170,8 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Z");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
     }
@@ -193,14 +186,12 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
      */
     @Test
     void isNotFunctionalInterfaceBecauseNoneOfItsAbstractMembersAreReturnTypeSubstitutableForAllOtherAbstractMembers() {
-        String code = "interface X { long m(); }\n"
-                + "interface Y { int m(); }\n"
-                + "interface Z extends X, Y {}";
+        String code = "interface X { long m(); }\n" + "interface Y { int m(); }\n" + "interface Z extends X, Y {}";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Z");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertFalse(methodUsage.isPresent());
     }
@@ -225,95 +216,88 @@ class FunctionalInterfaceLogicTest extends AbstractSymbolResolutionTest {
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Baz");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
 
         classOrInterfaceDecl = Navigator.demandInterface(cu, "Bar");
-        resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertFalse(methodUsage.isPresent());
     }
 
-	/*
-	 * Functional: signatures are logically "the same"
-	 */
-	@Test
-	void withGenericMethodsWithSameSignatures() {
-		String code = "interface Action<T> {};\n"
-				+ "interface X { <T> T execute(Action<T> a); }\n"
-				+ "interface Y { <S> S execute(Action<S> a); }\n"
-				+ "interface Exec extends X, Y {}\n";
+    /*
+     * Functional: signatures are logically "the same"
+     */
+    @Test
+    void withGenericMethodsWithSameSignatures() {
+        String code = "interface Action<T> {};\n"
+                + "interface X { <T> T execute(Action<T> a); }\n"
+                + "interface Y { <S> S execute(Action<S> a); }\n"
+                + "interface Exec extends X, Y {}\n";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Exec");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
-
     }
 
-	/*
-	 * Error: different signatures, same erasure
-	 */
-	@Test
-	void withGenericMethodsWithDifferentSignaturesAndSameErasure() {
-		String code = "interface Action<T> {};\n"
-				+ "interface X { <T>   T execute(Action<T> a); }\n"
-				+ "interface Y { <S,T> S execute(Action<S> a); }\n"
-				+ "interface Exec extends X, Y {}";
+    /*
+     * Error: different signatures, same erasure
+     */
+    @Test
+    void withGenericMethodsWithDifferentSignaturesAndSameErasure() {
+        String code = "interface Action<T> {};\n"
+                + "interface X { <T>   T execute(Action<T> a); }\n"
+                + "interface Y { <S,T> S execute(Action<S> a); }\n"
+                + "interface Exec extends X, Y {}";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Exec");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
-
     }
 
-	/*
-	 * Functional interfaces can be generic, such as
-	 * java.util.function.Predicate<T>. Such a functional interface may be
-	 * parameterized in a way that produces distinct abstract methods - that is,
-	 * multiple methods that cannot be legally overridden with a single declaration.
-	 */
-	@Test
-	@Disabled("Waiting Return-Type-Substituable is fully implemented on reference type.")
-	void genericFunctionalInterfacesWithReturnTypeSubstituable() {
-		String code = "interface I    { Object m(Class c); }\r\n"
-				+ "interface J<S> { S m(Class<?> c); }\r\n"
-				+ "interface K<T> { T m(Class<?> c); }\r\n"
-				+ "interface Functional<S,T> extends I, J<S>, K<T> {}";
+    /*
+     * Functional interfaces can be generic, such as
+     * java.util.function.Predicate<T>. Such a functional interface may be
+     * parameterized in a way that produces distinct abstract methods - that is,
+     * multiple methods that cannot be legally overridden with a single declaration.
+     */
+    @Test
+    @Disabled("Waiting Return-Type-Substituable is fully implemented on reference type.")
+    void genericFunctionalInterfacesWithReturnTypeSubstituable() {
+        String code = "interface I    { Object m(Class c); }\r\n"
+                + "interface J<S> { S m(Class<?> c); }\r\n"
+                + "interface K<T> { T m(Class<?> c); }\r\n"
+                + "interface Functional<S,T> extends I, J<S>, K<T> {}";
 
         CompilationUnit cu = StaticJavaParser.parse(code);
         ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Functional");
-        ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-                typeSolver);
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
         Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
         assertTrue(methodUsage.isPresent());
-
     }
 
-	@Test
-	@Disabled("Waiting Return-Type-Substituable is fully implemented on reference type.")
-	void genericFunctionalInterfacesWithGenericParameter() {
-		String code =
-				"    public interface Foo<T> extends java.util.function.Function<String, T> {\n" +
-                "        @Override\n" +
-                "        T apply(String c);\n" +
-                "    }\n";
+    @Test
+    @Disabled("Waiting Return-Type-Substituable is fully implemented on reference type.")
+    void genericFunctionalInterfacesWithGenericParameter() {
+        String code =
+                "    public interface Foo<T> extends java.util.function.Function<String, T> {\n" + "        @Override\n"
+                        + "        T apply(String c);\n"
+                        + "    }\n";
 
-		CompilationUnit cu = StaticJavaParser.parse(code);
-		ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Foo");
-		ResolvedInterfaceDeclaration resolvedDecl = new JavaParserInterfaceDeclaration(classOrInterfaceDecl,
-				typeSolver);
-		Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
-		assertTrue(methodUsage.isPresent());
-
-	}
-
+        CompilationUnit cu = StaticJavaParser.parse(code);
+        ClassOrInterfaceDeclaration classOrInterfaceDecl = Navigator.demandInterface(cu, "Foo");
+        ResolvedInterfaceDeclaration resolvedDecl =
+                new JavaParserInterfaceDeclaration(classOrInterfaceDecl, typeSolver);
+        Optional<MethodUsage> methodUsage = FunctionalInterfaceLogic.getFunctionalMethod(resolvedDecl);
+        assertTrue(methodUsage.isPresent());
+    }
 }

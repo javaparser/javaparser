@@ -24,7 +24,6 @@ package com.github.javaparser.symbolsolver.resolution.typesolvers;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -41,10 +40,7 @@ public class MemoryTypeSolver implements TypeSolver {
 
     @Override
     public String toString() {
-        return "MemoryTypeSolver{" +
-                "parent=" + parent +
-                ", declarationMap=" + declarationMap +
-                '}';
+        return "MemoryTypeSolver{" + "parent=" + parent + ", declarationMap=" + declarationMap + '}';
     }
 
     @Override
@@ -56,7 +52,6 @@ public class MemoryTypeSolver implements TypeSolver {
 
         if (parent != null ? !parent.equals(that.parent) : that.parent != null) return false;
         return !(declarationMap != null ? !declarationMap.equals(that.declarationMap) : that.declarationMap != null);
-
     }
 
     @Override
@@ -94,5 +89,4 @@ public class MemoryTypeSolver implements TypeSolver {
         }
         return SymbolReference.unsolved();
     }
-
 }

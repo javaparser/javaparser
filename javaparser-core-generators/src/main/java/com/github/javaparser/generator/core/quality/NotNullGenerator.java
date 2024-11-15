@@ -21,6 +21,8 @@
 
 package com.github.javaparser.generator.core.quality;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
@@ -38,12 +40,9 @@ import com.github.javaparser.generator.CompilationUnitGenerator;
 import com.github.javaparser.quality.NotNull;
 import com.github.javaparser.quality.Preconditions;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Generator to process annotations {@link com.github.javaparser.quality.NotNull}.
@@ -72,8 +71,10 @@ public class NotNullGenerator extends CompilationUnitGenerator {
      * @param methodDeclaration The method declaration to generate.
      */
     protected void generateQualityForMethod(MethodDeclaration methodDeclaration) {
-        methodDeclaration.getBody().ifPresent(blockStmt ->
-                generateQualityForParameter(methodDeclaration, methodDeclaration.getParameters(), blockStmt));
+        methodDeclaration
+                .getBody()
+                .ifPresent(blockStmt ->
+                        generateQualityForParameter(methodDeclaration, methodDeclaration.getParameters(), blockStmt));
     }
 
     /**
@@ -88,7 +89,8 @@ public class NotNullGenerator extends CompilationUnitGenerator {
      * @param constructorDeclaration The constructor declaration to generate.
      */
     protected void generateQualityForConstructor(ConstructorDeclaration constructorDeclaration) {
-        generateQualityForParameter(constructorDeclaration, constructorDeclaration.getParameters(), constructorDeclaration.getBody());
+        generateQualityForParameter(
+                constructorDeclaration, constructorDeclaration.getParameters(), constructorDeclaration.getBody());
     }
 
     /**
@@ -100,13 +102,14 @@ public class NotNullGenerator extends CompilationUnitGenerator {
      * If annotated with {@link com.github.javaparser.quality.Nullable}, other annotation or none, nothing should be
      * changed.
      *
-     * @param callableDeclaration The declaration where the parameters belong.
-     * @param parameters          The list of parameters.
-     * @param blockStmt           The block where the assertions should be added.
-     * @param <N>                 The callable declaration type.
+     * @param callableDeclaration 	The declaration where the parameters belong.
+     * @param parameters 			The list of parameters.
+     * @param blockStmt 			The block where the assertions should be added.
+     *
+     * @param <N>					The callable declaration type.
      */
-    protected <N extends CallableDeclaration<?>>
-    void generateQualityForParameter(N callableDeclaration, NodeList<Parameter> parameters, BlockStmt blockStmt) {
+    protected <N extends CallableDeclaration<?>> void generateQualityForParameter(
+            N callableDeclaration, NodeList<Parameter> parameters, BlockStmt blockStmt) {
 
         List<Statement> assertions = new ArrayList<>();
 
@@ -124,31 +127,31 @@ public class NotNullGenerator extends CompilationUnitGenerator {
      * Create assertion for the parameters.
      *
      * @param parameter The parameter to create the assertion.
+     *
      * @return The assertion to be added to the code.
      */
     private Statement createAssertion(Parameter parameter) {
 
         parameter.tryAddImportToParentCompilationUnit(Preconditions.class);
-        return StaticJavaParser.parseStatement(
-                f("Preconditions.checkNotNull(%s, \"Parameter %s can't be null.\");", parameter.getNameAsString(),
-                        parameter.getNameAsString())
-        );
+        return StaticJavaParser.parseStatement(f(
+                "Preconditions.checkNotNull(%s, \"Parameter %s can't be null.\");",
+                parameter.getNameAsString(), parameter.getNameAsString()));
     }
 
     /**
      * Insert the assertions into the block.
      *
-     * @param callableDeclaration The declaration where the parameters belong.
-     * @param blockStmt           The block where the assertions should be added.
-     * @param assertions          The list of assertions to be inserted.
-     * @param <N>                 The callable declaration type.
+     * @param callableDeclaration 	The declaration where the parameters belong.
+     * @param blockStmt 			The block where the assertions should be added.
+     * @param assertions 			The list of assertions to be inserted.
+     *
+     * @param <N>					The callable declaration type.
      */
-    private <N extends CallableDeclaration<?>>
-    void insertAssertionsInBlock(N callableDeclaration, BlockStmt blockStmt, List<Statement> assertions) {
+    private <N extends CallableDeclaration<?>> void insertAssertionsInBlock(
+            N callableDeclaration, BlockStmt blockStmt, List<Statement> assertions) {
 
         // If there's nothing to add, just ignore
-        if (assertions.isEmpty())
-            return;
+        if (assertions.isEmpty()) return;
 
         int position = 0;
         NodeList<Statement> statements = blockStmt.getStatements();
@@ -182,24 +185,21 @@ public class NotNullGenerator extends CompilationUnitGenerator {
 
     private Optional<? extends Statement> getSimilarAssertionInBlock(Statement assertion, BlockStmt blockStmt) {
 
-        MethodCallExpr assertionCall = assertion.asExpressionStmt().getExpression().asMethodCallExpr();
+        MethodCallExpr assertionCall =
+                assertion.asExpressionStmt().getExpression().asMethodCallExpr();
         List<MethodCallExpr> methodCallExpressions = blockStmt.findAll(MethodCallExpr.class);
 
         for (MethodCallExpr blockMethodCall : methodCallExpressions) {
 
             // Check if the method calls name match
-            if (
-                    blockMethodCall.getNameAsExpression().equals(assertionCall.getNameAsExpression()) &&
-                            blockMethodCall.getScope().equals(assertionCall.getScope()) &&
-                            blockMethodCall.getArguments().size() == 2 &&
-                            blockMethodCall.getArguments().get(0).equals(assertionCall.getArgument(0))
-            ) {
+            if (blockMethodCall.getNameAsExpression().equals(assertionCall.getNameAsExpression())
+                    && blockMethodCall.getScope().equals(assertionCall.getScope())
+                    && blockMethodCall.getArguments().size() == 2
+                    && blockMethodCall.getArguments().get(0).equals(assertionCall.getArgument(0))) {
                 return blockMethodCall.findAncestor(ExpressionStmt.class);
             }
-
         }
         // TODO:
         return Optional.empty();
     }
-
 }

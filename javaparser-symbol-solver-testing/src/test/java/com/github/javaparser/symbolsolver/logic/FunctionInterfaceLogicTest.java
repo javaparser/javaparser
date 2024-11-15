@@ -23,11 +23,6 @@ package com.github.javaparser.symbolsolver.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.logic.FunctionalInterfaceLogic;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -35,6 +30,9 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import org.junit.jupiter.api.Test;
 
 class FunctionInterfaceLogicTest {
 
@@ -49,11 +47,17 @@ class FunctionInterfaceLogicTest {
     void testGetFunctionalMethodPositiveCasesOnInterfaces() {
         TypeSolver typeSolver = new ReflectionTypeSolver();
         ResolvedType function = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Function.class, typeSolver));
-        assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
-        assertEquals("apply", FunctionalInterfaceLogic.getFunctionalMethod(function).get().getName());
+        assertEquals(
+                true, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
+        assertEquals(
+                "apply",
+                FunctionalInterfaceLogic.getFunctionalMethod(function).get().getName());
         ResolvedType consumer = new ReferenceTypeImpl(new ReflectionInterfaceDeclaration(Consumer.class, typeSolver));
-        assertEquals(true, FunctionalInterfaceLogic.getFunctionalMethod(consumer).isPresent());
-        assertEquals("accept", FunctionalInterfaceLogic.getFunctionalMethod(consumer).get().getName());
+        assertEquals(
+                true, FunctionalInterfaceLogic.getFunctionalMethod(consumer).isPresent());
+        assertEquals(
+                "accept",
+                FunctionalInterfaceLogic.getFunctionalMethod(consumer).get().getName());
     }
 
     @Test
@@ -65,7 +69,8 @@ class FunctionInterfaceLogicTest {
         // This interface is not fonctional because it inherits two abstract methods
         // which are not members of Object and the default apply method does not override the abstract apply method
         // defined in the Function interface.
-        assertEquals(false, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
+        assertEquals(
+                false, FunctionalInterfaceLogic.getFunctionalMethod(function).isPresent());
     }
 
     public static interface Foo<S, T> extends Function<S, T> {

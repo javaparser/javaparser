@@ -21,6 +21,10 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_17;
+import static com.github.javaparser.Providers.provider;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -28,10 +32,6 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_17;
-import static com.github.javaparser.Providers.provider;
 
 class Java17ValidatorTest {
 
@@ -42,7 +42,8 @@ class Java17ValidatorTest {
 
         @Test
         void sealedAllowed() {
-            ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("sealed class X permits Y, Z {}"));
+            ParseResult<CompilationUnit> result =
+                    javaParser.parse(COMPILATION_UNIT, provider("sealed class X permits Y, Z {}"));
             TestUtils.assertNoProblems(result);
         }
 
@@ -51,7 +52,5 @@ class Java17ValidatorTest {
             ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("non-sealed class X {}"));
             TestUtils.assertNoProblems(result);
         }
-
     }
-
 }

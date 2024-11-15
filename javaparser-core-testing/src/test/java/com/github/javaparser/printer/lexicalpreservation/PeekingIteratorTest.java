@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import org.junit.jupiter.api.*;
 
 class PeekingIteratorTest {
@@ -38,12 +37,10 @@ class PeekingIteratorTest {
     private PeekingIterator<String> peekingIterator;
 
     @BeforeAll
-    static void setUpBeforeClass() throws Exception {
-    }
+    static void setUpBeforeClass() throws Exception {}
 
     @AfterAll
-    static void tearDownAfterClass() throws Exception {
-    }
+    static void tearDownAfterClass() throws Exception {}
 
     @BeforeEach
     void setUp() throws Exception {
@@ -51,8 +48,7 @@ class PeekingIteratorTest {
     }
 
     @AfterEach
-    void tearDown() throws Exception {
-    }
+    void tearDown() throws Exception {}
 
     @Test
     void testHasNext() {
@@ -142,5 +138,4 @@ class PeekingIteratorTest {
         peekingIterator.set("D");
         assertEquals(3, NON_EMPTY_LIST.size());
     }
-
 }

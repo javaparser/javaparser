@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest.adaptPath;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
@@ -31,13 +34,9 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
-
-import static com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest.adaptPath;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  * IndexOutOfBoundsException when attempting to resolve super() #1511
@@ -61,15 +60,18 @@ public class Issue1511Test {
 
         // get compilation unit & extract explicit constructor invocation statement
         CompilationUnit cu = StaticJavaParser.parse(file.toFile());
-        ExplicitConstructorInvocationStmt ecis = cu.getPrimaryType().orElseThrow(IllegalStateException::new)
-                .asClassOrInterfaceDeclaration().getMember(0)
-                .asConstructorDeclaration().getBody().getStatement(0)
+        ExplicitConstructorInvocationStmt ecis = cu.getPrimaryType()
+                .orElseThrow(IllegalStateException::new)
+                .asClassOrInterfaceDeclaration()
+                .getMember(0)
+                .asConstructorDeclaration()
+                .getBody()
+                .getStatement(0)
                 .asExplicitConstructorInvocationStmt();
 
         // attempt to resolve explicit constructor invocation statement
-        ResolvedConstructorDeclaration rcd = ecis.resolve(); //.resolveInvokedConstructor(); // <-- exception occurs
+        ResolvedConstructorDeclaration rcd = ecis.resolve(); // .resolveInvokedConstructor(); // <-- exception occurs
     }
-
 
     @Test
     public void exploratory_resolveAndGetSuperClass() {
@@ -79,9 +81,13 @@ public class Issue1511Test {
         JavaParser javaParser = new JavaParser(configuration);
 
         CompilationUnit foo = javaParser.parse("class A {}").getResult().orElseThrow(IllegalStateException::new);
-        ResolvedReferenceType a = foo.getClassByName("A").orElseThrow(IllegalStateException::new).resolve().asClass().getSuperClass().get();
+        ResolvedReferenceType a = foo.getClassByName("A")
+                .orElseThrow(IllegalStateException::new)
+                .resolve()
+                .asClass()
+                .getSuperClass()
+                .get();
 
         assertEquals("java.lang.Object", a.getQualifiedName());
     }
-
 }

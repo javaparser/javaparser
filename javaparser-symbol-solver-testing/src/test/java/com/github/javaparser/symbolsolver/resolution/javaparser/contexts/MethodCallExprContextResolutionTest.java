@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -43,16 +46,12 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.Test;
-
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Malte Langkabel
@@ -105,8 +104,11 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
         Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, Collections.emptyList());
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
-        assertEquals(Collections.singletonList("java.lang.Integer"), ref.get().typeParametersMap().getTypes().stream()
-                .map(ty -> ty.asReferenceType().describe()).collect(Collectors.toList()));
+        assertEquals(
+                Collections.singletonList("java.lang.Integer"),
+                ref.get().typeParametersMap().getTypes().stream()
+                        .map(ty -> ty.asReferenceType().describe())
+                        .collect(Collectors.toList()));
     }
 
     @Test
@@ -133,14 +135,17 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
         Optional<MethodUsage> ref = context.solveMethodAsUsage(callMethodName, argumentsTypes);
         assertTrue(ref.isPresent());
         assertEquals("MethodCalls", ref.get().declaringType().getQualifiedName());
-        assertEquals(Collections.singletonList("java.lang.String"), ref.get().typeParametersMap().getTypes().stream()
-                .map(ty -> ty.asReferenceType().describe()).collect(Collectors.toList()));
+        assertEquals(
+                Collections.singletonList("java.lang.String"),
+                ref.get().typeParametersMap().getTypes().stream()
+                        .map(ty -> ty.asReferenceType().describe())
+                        .collect(Collectors.toList()));
     }
 
     @Test
     public void test() {
-        ParserConfiguration config = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
         StaticJavaParser.setConfiguration(config);
         CompilationUnit cu = parseSample("Issue2258");
         List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
@@ -151,8 +156,8 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     public void testGenericParameter() {
-        ParserConfiguration config = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
         StaticJavaParser.setConfiguration(config);
         CompilationUnit cu = parseSample("ISSUES_Generic_Parameter");
         List<MethodCallExpr> expressions = cu.getChildNodesByType(MethodCallExpr.class);
@@ -166,10 +171,10 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
         Path pathToJar = adaptPath("src/test/resources/issue2667/jsonobject.jar");
 
         CombinedTypeSolver typeSolver = createTypeSolver();
-        typeSolver.add(new ClassLoaderTypeSolver(new URLClassLoader(new URL[]{pathToJar.toUri().toURL()})));
+        typeSolver.add(new ClassLoaderTypeSolver(
+                new URLClassLoader(new URL[] {pathToJar.toUri().toURL()})));
 
-        ParserConfiguration config = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        ParserConfiguration config = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         StaticJavaParser.setConfiguration(config);
         CompilationUnit cu = parseSample("Issue2667");
         Set<MethodCallExpr> methodCallExpr = new HashSet<>(cu.findAll(MethodCallExpr.class));
@@ -189,8 +194,8 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
 
     @Test
     void solveVariadicStaticGenericMethodCallCanInferFromArguments() {
-        ParserConfiguration config = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
         StaticJavaParser.setConfiguration(config);
         MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", "variadicStaticGenericMethod");
 
@@ -201,8 +206,8 @@ class MethodCallExprContextResolutionTest extends AbstractResolutionTest {
     // Related to issue #3195
     @Test
     void solveVariadicStaticGenericMethodCallCanInferFromArguments2() {
-        ParserConfiguration config = new ParserConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
+        ParserConfiguration config =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(createTypeSolver()));
         StaticJavaParser.setConfiguration(config);
         MethodCallExpr methodCallExpr = getMethodCallExpr("genericMethodTest", "asList");
 

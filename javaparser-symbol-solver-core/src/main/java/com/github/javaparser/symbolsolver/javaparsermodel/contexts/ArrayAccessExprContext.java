@@ -76,7 +76,7 @@ import com.github.javaparser.resolution.model.SymbolReference;
  *
  * @author Roger Howell
  */
-public class ArrayAccessExprContext extends AbstractJavaParserContext<ArrayAccessExpr> {
+public class ArrayAccessExprContext extends ExpressionContext<ArrayAccessExpr> {
 
     public ArrayAccessExprContext(ArrayAccessExpr wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
@@ -90,5 +90,4 @@ public class ArrayAccessExprContext extends AbstractJavaParserContext<ArrayAcces
          */
         return super.solveSymbolInParentContext(name);
     }
-
 }

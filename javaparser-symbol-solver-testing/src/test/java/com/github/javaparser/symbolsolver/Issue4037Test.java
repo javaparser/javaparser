@@ -22,30 +22,27 @@ package com.github.javaparser.symbolsolver;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodReferenceExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class Issue4037Test extends AbstractResolutionTest {
 
     @Test
     void test() {
 
-        String code =
-                "public class Test1 {\n"
-                        + "	    public static Integer getD2() { return null; }\n"
-                        + "	    public static Integer getD1() { return null; }\n"
-                        + "	    public void m(java.util.function.Supplier... rs) { }\n"
-                        + "\n"
-                        + "	    public void test() {\n"
-                        + "	        new Test1().m(Test1::getD1, Test1::getD2);    // exception throws\n"
-                        + "	    }\n"
-                        + "	}";
+        String code = "public class Test1 {\n"
+                + "	    public static Integer getD2() { return null; }\n"
+                + "	    public static Integer getD1() { return null; }\n"
+                + "	    public void m(java.util.function.Supplier... rs) { }\n"
+                + "\n"
+                + "	    public void test() {\n"
+                + "	        new Test1().m(Test1::getD1, Test1::getD2);    // exception throws\n"
+                + "	    }\n"
+                + "	}";
 
         JavaParserAdapter parser = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()));
         CompilationUnit cu = parser.parse(code);

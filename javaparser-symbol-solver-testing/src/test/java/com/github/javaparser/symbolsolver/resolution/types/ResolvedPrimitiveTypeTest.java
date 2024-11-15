@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.types;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -30,8 +32,6 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
 
@@ -54,8 +54,9 @@ class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
 
     @Test
     void bnp() {
-        //Binary primitive promotion
-        assertTrue(ResolvedPrimitiveType.DOUBLE.bnp(ResolvedPrimitiveType.DOUBLE).equals(ResolvedPrimitiveType.DOUBLE));
+        // Binary primitive promotion
+        assertTrue(
+                ResolvedPrimitiveType.DOUBLE.bnp(ResolvedPrimitiveType.DOUBLE).equals(ResolvedPrimitiveType.DOUBLE));
         assertTrue(ResolvedPrimitiveType.FLOAT.bnp(ResolvedPrimitiveType.FLOAT).equals(ResolvedPrimitiveType.FLOAT));
         assertTrue(ResolvedPrimitiveType.LONG.bnp(ResolvedPrimitiveType.LONG).equals(ResolvedPrimitiveType.LONG));
         assertTrue(ResolvedPrimitiveType.INT.bnp(ResolvedPrimitiveType.INT).equals(ResolvedPrimitiveType.INT));
@@ -66,7 +67,8 @@ class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
 
     @Test
     void unp() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false))));
+        StaticJavaParser.setConfiguration(
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false))));
         ResolvedType rByte = getType("class A {java.lang.Byte x;}");
         ResolvedType rShort = getType("class A {java.lang.Short x;}");
         ResolvedType rChar = getType("class A {java.lang.Character x;}");
@@ -95,7 +97,8 @@ class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
 
     @Test
     void isBoxType() {
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false))));
+        StaticJavaParser.setConfiguration(
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver(false))));
         ResolvedType rByte = getType("class A {java.lang.Byte x;}");
         ResolvedType rShort = getType("class A {java.lang.Short x;}");
         ResolvedType rChar = getType("class A {java.lang.Character x;}");
@@ -116,6 +119,10 @@ class ResolvedPrimitiveTypeTest extends AbstractResolutionTest {
     }
 
     private ResolvedType getType(String code) {
-        return StaticJavaParser.parse(code).findFirst(FieldDeclaration.class).get().resolve().getType();
+        return StaticJavaParser.parse(code)
+                .findFirst(FieldDeclaration.class)
+                .get()
+                .resolve()
+                .getType();
     }
 }

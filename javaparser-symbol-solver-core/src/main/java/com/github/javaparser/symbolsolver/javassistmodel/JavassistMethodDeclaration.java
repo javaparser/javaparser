@@ -33,10 +33,9 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.TypeVariableResolutionCapability;
 import com.github.javaparser.symbolsolver.declarations.common.MethodDeclarationCommonLogic;
-import javassist.CtMethod;
-
 import java.lang.reflect.Modifier;
 import java.util.List;
+import javassist.CtMethod;
 
 /**
  * @author Federico Tomassetti
@@ -64,9 +63,7 @@ public class JavassistMethodDeclaration implements ResolvedMethodDeclaration, Ty
 
     @Override
     public String toString() {
-        return "JavassistMethodDeclaration{" +
-                "ctMethod=" + ctMethod +
-                '}';
+        return "JavassistMethodDeclaration{" + "ctMethod=" + ctMethod + '}';
     }
 
     @Override

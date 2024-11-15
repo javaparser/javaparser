@@ -47,8 +47,12 @@ public interface ResolvedTypeParameterValueProvider {
                 Optional<ResolvedType> typeParam = typeParamValue(typeParameter);
                 if (typeParam.isPresent()) {
                     ResolvedType resolvedTypeParam = typeParam.get();
-                    // Try to avoid an infinite loop when the type is a wildcard type bounded by a type variable like "? super T"
-                    if (resolvedTypeParam.isWildcard() && (!resolvedTypeParam.asWildcard().equals(ResolvedWildcard.UNBOUNDED) && type.equals(resolvedTypeParam.asWildcard().getBoundedType()))) {
+                    // Try to avoid an infinite loop when the type is a wildcard type bounded by a type variable like "?
+                    // super T"
+                    if (resolvedTypeParam.isWildcard()
+                            && (!resolvedTypeParam.asWildcard().equals(ResolvedWildcard.UNBOUNDED)
+                                    && type.equals(
+                                            resolvedTypeParam.asWildcard().getBoundedType()))) {
                         return type;
                     }
                     type = resolvedTypeParam;
@@ -57,9 +61,11 @@ public interface ResolvedTypeParameterValueProvider {
         }
         if (type.isWildcard() && type.asWildcard().isBounded()) {
             if (type.asWildcard().isExtends()) {
-                return ResolvedWildcard.extendsBound(useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
+                return ResolvedWildcard.extendsBound(
+                        useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
             }
-            return ResolvedWildcard.superBound(useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
+            return ResolvedWildcard.superBound(
+                    useThisTypeParametersOnTheGivenType(type.asWildcard().getBoundedType()));
         }
         if (type.isReferenceType()) {
             type = type.asReferenceType().transformTypeParameters(this::useThisTypeParametersOnTheGivenType);

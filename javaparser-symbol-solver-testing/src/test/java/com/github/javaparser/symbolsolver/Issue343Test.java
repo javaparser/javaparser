@@ -21,6 +21,11 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.resolution.Solver;
 import com.github.javaparser.resolution.TypeSolver;
@@ -33,13 +38,10 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * Note this issue number refers to the archived `javasymbolsolver` repository,
  * whose issues prior to it being integrated into JavaParser itself are numbered separately:
- * <p>
+ *
  * https://github.com/javaparser/javasymbolsolver/issues/343
  */
 class Issue343Test extends AbstractResolutionTest {
@@ -59,32 +61,43 @@ class Issue343Test extends AbstractResolutionTest {
 
     @Test
     void resolveStringLiteralOutsideAST() {
-        assertTrue(symbolSolver.classToResolvedType(String.class).equals(getExpressionType(typeResolver, new StringLiteralExpr(""))));
+        assertTrue(symbolSolver
+                .classToResolvedType(String.class)
+                .equals(getExpressionType(typeResolver, new StringLiteralExpr(""))));
     }
 
     @Test
     void resolveIntegerLiteralOutsideAST() {
-        assertEquals(symbolSolver.classToResolvedType(int.class), getExpressionType(typeResolver, new IntegerLiteralExpr(2)));
+        assertEquals(
+                symbolSolver.classToResolvedType(int.class),
+                getExpressionType(typeResolver, new IntegerLiteralExpr(2)));
     }
 
     @Test
     void toResolveDoubleWeNeedTheAST() {
-        assertThrows(UnsolvedSymbolException.class, () -> getExpressionType(typeResolver, parseExpression("new Double[]{2.0d, 3.0d}[1]")));
+        assertThrows(
+                UnsolvedSymbolException.class,
+                () -> getExpressionType(typeResolver, parseExpression("new Double[]{2.0d, 3.0d}[1]")));
     }
-
 
     @Test
     void toResolveFloatWeNeedTheAST() {
-        assertThrows(UnsolvedSymbolException.class, () -> getExpressionType(typeResolver, parseExpression("new Float[]{2.0d, 3.0d}[1]")));
+        assertThrows(
+                UnsolvedSymbolException.class,
+                () -> getExpressionType(typeResolver, parseExpression("new Float[]{2.0d, 3.0d}[1]")));
     }
 
     @Test
     void resolveMethodCallOnStringLiteralOutsideAST() {
-        assertTrue(symbolSolver.classToResolvedType(int.class).equals(getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length"))));
+        assertTrue(symbolSolver
+                .classToResolvedType(int.class)
+                .equals(getExpressionType(typeResolver, new MethodCallExpr(new StringLiteralExpr("hello"), "length"))));
     }
 
     @Test
     void resolveLocaleOutsideAST() {
-        assertThrows(IllegalStateException.class, () -> getExpressionType(typeResolver, new FieldAccessExpr(new NameExpr("Locale"), "US")));
+        assertThrows(
+                UnsolvedSymbolException.class,
+                () -> getExpressionType(typeResolver, new FieldAccessExpr(new NameExpr("Locale"), "US")));
     }
 }

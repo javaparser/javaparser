@@ -28,45 +28,45 @@ import com.github.javaparser.ast.expr.TextBlockLiteralExpr;
 import org.junit.jupiter.api.Test;
 
 public class Issue3936Test extends AbstractLexicalPreservingTest {
-	static final String given = "package some.project;\n"
-			+ "\n"
-			+ "import java.util.Optional;\n"
-			+ "\n"
-			+ "public class SomeClass {\n"
-			+ "\n"
-			+ "	String html = \"\" + \"<html>\\n\"\n"
-			+ "			+ \"\\t<head>\\n\"\n"
-			+ "			+ \"\\t\\t<meta charset=\\\"utf-8\\\">\\n\"\n"
-			+ "			+ \"\\t</head>\\n\"\n"
-			+ "			+ \"\\t<body class=\\\"default-view\\\" style=\\\"word-wrap: break-word;\\\">\\n\"\n"
-			+ "			+ \"\\t\\t<p>Hello, world</p>\\n\"\n"
-			+ "			+ \"\\t</body>\\n\"\n"
-			+ "			+ \"</html>\\n\";\n"
-			+ "}";
+    static final String given = "package some.project;\n"
+            + "\n"
+            + "import java.util.Optional;\n"
+            + "\n"
+            + "public class SomeClass {\n"
+            + "\n"
+            + "	String html = \"\" + \"<html>\\n\"\n"
+            + "			+ \"\\t<head>\\n\"\n"
+            + "			+ \"\\t\\t<meta charset=\\\"utf-8\\\">\\n\"\n"
+            + "			+ \"\\t</head>\\n\"\n"
+            + "			+ \"\\t<body class=\\\"default-view\\\" style=\\\"word-wrap: break-word;\\\">\\n\"\n"
+            + "			+ \"\\t\\t<p>Hello, world</p>\\n\"\n"
+            + "			+ \"\\t</body>\\n\"\n"
+            + "			+ \"</html>\\n\";\n"
+            + "}";
 
-	@Test
+    @Test
     void test() {
-		considerCode(given);
+        considerCode(given);
 
-		String newText = "\tfirstRow\n\tsecondRow\n\tthirdRow";
+        String newText = "\tfirstRow\n\tsecondRow\n\tthirdRow";
 
-		LexicalPreservingPrinter.setup(cu);
+        LexicalPreservingPrinter.setup(cu);
 
-		VariableDeclarator expr = cu.findFirst(VariableDeclarator.class).get();
-		expr.setInitializer(new TextBlockLiteralExpr(newText));
+        VariableDeclarator expr = cu.findFirst(VariableDeclarator.class).get();
+        expr.setInitializer(new TextBlockLiteralExpr(newText));
 
-		String actual = LexicalPreservingPrinter.print(cu);
-		String expected ="package some.project;\n"
-				+ "\n"
-				+ "import java.util.Optional;\n"
-				+ "\n"
-				+ "public class SomeClass {\n"
-				+ "\n"
-				+ "	String html = \"\"\"\n"
-				+ "\tfirstRow\n"
-				+ "\tsecondRow\n"
-				+ "\tthirdRow\"\"\";\n"
-				+ "}";
-		assertEqualsStringIgnoringEol(expected, actual);
+        String actual = LexicalPreservingPrinter.print(cu);
+        String expected = "package some.project;\n"
+                + "\n"
+                + "import java.util.Optional;\n"
+                + "\n"
+                + "public class SomeClass {\n"
+                + "\n"
+                + "	String html = \"\"\"\n"
+                + "\tfirstRow\n"
+                + "\tsecondRow\n"
+                + "\tthirdRow\"\"\";\n"
+                + "}";
+        assertEqualsStringIgnoringEol(expected, actual);
     }
 }

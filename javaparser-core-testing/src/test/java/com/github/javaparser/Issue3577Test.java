@@ -22,25 +22,23 @@ package com.github.javaparser;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ParserConfiguration.LanguageLevel;
+import org.junit.jupiter.api.Test;
 
 public class Issue3577Test {
 
     @Test
     public void test() {
         String str = "public class MyClass {\n"
-        		+ "    public static void main(String args[]) {\n"
-        		+ "      System.out.println(\"Hello\\sWorld\");\n"
-        		+ "    }\n"
-        		+ "}";
+                + "    public static void main(String args[]) {\n"
+                + "      System.out.println(\"Hello\\sWorld\");\n"
+                + "    }\n"
+                + "}";
 
         ParserConfiguration config = new ParserConfiguration().setLanguageLevel(LanguageLevel.JAVA_15);
         StaticJavaParser.setConfiguration(config);
 
         assertDoesNotThrow(() -> StaticJavaParser.parse(str));
-//        unitOpt.getProblems().stream().forEach(p -> System.err.println(p.toString()));
+        //        unitOpt.getProblems().stream().forEach(p -> System.err.println(p.toString()));
     }
-
 }

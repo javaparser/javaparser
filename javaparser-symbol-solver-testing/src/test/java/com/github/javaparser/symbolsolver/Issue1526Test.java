@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,19 +34,12 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
+import org.junit.jupiter.api.Test;
 
 /**
  * CompilationUnitContext.solveType(String name, TypeSolver typeSolver) checks package and imports in wrong order.
- *
  * @see <a href="https://github.com/javaparser/javaparser/issues/1526">https://github.com/javaparser/javaparser/issues/1526</a>
  */
 public class Issue1526Test extends AbstractSymbolResolutionTest {
@@ -82,11 +79,9 @@ public class Issue1526Test extends AbstractSymbolResolutionTest {
         ParseResult<CompilationUnit> cu = javaParser.parse(file);
         assumeTrue(cu.isSuccessful(), "the file should compile -- errors are expected when attempting to resolve.");
 
-        cu.getResult().get().findAll(MethodCallExpr.class)
-                .forEach(methodCallExpr -> {
-                    methodCallExpr.resolve();
-                    methodCallExpr.calculateResolvedType();
-                });
+        cu.getResult().get().findAll(MethodCallExpr.class).forEach(methodCallExpr -> {
+            methodCallExpr.resolve();
+            methodCallExpr.calculateResolvedType();
+        });
     }
-
 }

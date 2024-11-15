@@ -21,13 +21,12 @@
 
 package com.github.javaparser.symbolsolver.cache;
 
+import com.github.javaparser.resolution.cache.Cache;
+import com.github.javaparser.resolution.cache.CacheStats;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.WeakHashMap;
-
-import com.github.javaparser.resolution.cache.Cache;
-import com.github.javaparser.resolution.cache.CacheStats;
 
 /**
  * A cache implementation that stores the information in memory.
@@ -63,9 +62,7 @@ public class InMemoryCache<K, V> implements Cache<K, V> {
 
     @Override
     public Optional<V> get(K key) {
-        return Optional.ofNullable(
-                mappedValues.get(key)
-        );
+        return Optional.ofNullable(mappedValues.get(key));
     }
 
     @Override
@@ -94,8 +91,7 @@ public class InMemoryCache<K, V> implements Cache<K, V> {
     }
 
     @Override
-	public CacheStats stats() {
-		return new DefaultCacheStats();
-	}
-
+    public CacheStats stats() {
+        return new DefaultCacheStats();
+    }
 }

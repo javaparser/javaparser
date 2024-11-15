@@ -21,16 +21,15 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.resolution.TypeSolver;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.github.javaparser.resolution.TypeSolver;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * TypeSolverBuilder was created with the objective of simplifying
@@ -293,5 +292,4 @@ public class TypeSolverBuilder {
         // Combine all type solver
         return new CombinedTypeSolver(typeSolvers);
     }
-
 }

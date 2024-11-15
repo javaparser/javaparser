@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.stmt.LocalRecordDeclarationStmt;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
  * Validates that identifiers are not keywords - this for the few keywords that the parser
@@ -38,11 +38,6 @@ public class ReservedKeywordValidator extends VisitorValidator {
     public ReservedKeywordValidator(String keyword) {
         this.keyword = keyword;
         error = f("'%s' cannot be used as an identifier as it is a keyword.", keyword);
-    }
-
-    @Override
-    public void visit(LocalRecordDeclarationStmt n, ProblemReporter arg) {
-        n.getRecordDeclaration().accept(this, arg);
     }
 
     @Override

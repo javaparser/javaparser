@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser.contexts;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -33,16 +35,13 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /**
  *
  */
 class BlockStmtContextResolutionTest extends AbstractResolutionTest {
 
     @BeforeEach
-    void setup() {
-    }
+    void setup() {}
 
     // issue #3526
     @Test
@@ -82,5 +81,4 @@ class BlockStmtContextResolutionTest extends AbstractResolutionTest {
         ResolvedType rt2 = expr.calculateResolvedType();
         assertEquals("java.lang.String", rt2.describe());
     }
-
 }

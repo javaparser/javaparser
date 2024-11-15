@@ -21,16 +21,15 @@
 
 package com.github.javaparser.javadoc;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-
-import static com.github.javaparser.StaticJavaParser.parse;
+import org.junit.jupiter.api.Test;
 
 class JavadocExtractorTest {
 

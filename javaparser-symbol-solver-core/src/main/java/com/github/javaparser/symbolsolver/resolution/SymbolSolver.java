@@ -55,7 +55,8 @@ public class SymbolSolver implements Solver {
 
     public SymbolSolver(TypeSolver typeSolver) {
         if (typeSolver == null) {
-            throw new IllegalArgumentException("Missing Parameter - Cannot initialise a SymbolSolver, without a way to solve types.");
+            throw new IllegalArgumentException(
+                    "Missing Parameter - Cannot initialise a SymbolSolver, without a way to solve types.");
         }
 
         this.typeSolver = typeSolver;
@@ -113,9 +114,11 @@ public class SymbolSolver implements Solver {
             // FIXME should call typesolver here!
 
             String name = ((ClassOrInterfaceType) type).getNameWithScope();
-            SymbolReference<ResolvedTypeDeclaration> ref = JavaParserFactory.getContext(type, typeSolver).solveType(name);
+            SymbolReference<ResolvedTypeDeclaration> ref =
+                    JavaParserFactory.getContext(type, typeSolver).solveType(name);
             if (!ref.isSolved()) {
-                throw new UnsolvedSymbolException(JavaParserFactory.getContext(type, typeSolver).toString(), name);
+                throw new UnsolvedSymbolException(
+                        JavaParserFactory.getContext(type, typeSolver).toString(), name);
             }
             return ref.getCorrespondingDeclaration();
         }
@@ -139,7 +142,8 @@ public class SymbolSolver implements Solver {
      * It should contain its own private fields but not inherited private fields.
      */
     @Override
-    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(ResolvedTypeDeclaration typeDeclaration, String name) {
+    public SymbolReference<? extends ResolvedValueDeclaration> solveSymbolInType(
+            ResolvedTypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof SymbolResolutionCapability) {
             return ((SymbolResolutionCapability) typeDeclaration).solveSymbol(name, typeSolver);
         }
@@ -154,7 +158,8 @@ public class SymbolSolver implements Solver {
      */
     @Override
     @Deprecated
-    public SymbolReference<ResolvedTypeDeclaration> solveTypeInType(ResolvedTypeDeclaration typeDeclaration, String name) {
+    public SymbolReference<ResolvedTypeDeclaration> solveTypeInType(
+            ResolvedTypeDeclaration typeDeclaration, String name) {
         if (typeDeclaration instanceof JavaParserClassDeclaration) {
             return ((JavaParserClassDeclaration) typeDeclaration).solveType(name);
         }

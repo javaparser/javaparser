@@ -21,28 +21,23 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class Issue1713Test extends AbstractResolutionTest {
 
     @Test()
     void test() throws IOException {
 
-        String src =
-                "class X {\n" +
-                        "  @SuppressWarnings(value = \"unchecked\")\n" +
-                        "  void x() {}\n" +
-                        "}";
+        String src = "class X {\n" + "  @SuppressWarnings(value = \"unchecked\")\n" + "  void x() {}\n" + "}";
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new ReflectionTypeSolver()));
@@ -52,6 +47,5 @@ class Issue1713Test extends AbstractResolutionTest {
 
         NormalAnnotationExpr nae = cu.findFirst(NormalAnnotationExpr.class).get();
         assertEquals("java.lang.SuppressWarnings", nae.resolve().getQualifiedName());
-
     }
 }

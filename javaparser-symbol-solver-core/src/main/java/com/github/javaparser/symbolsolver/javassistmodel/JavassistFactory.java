@@ -29,10 +29,9 @@ import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedVoidType;
+import java.lang.reflect.Modifier;
 import javassist.CtClass;
 import javassist.NotFoundException;
-
-import java.lang.reflect.Modifier;
 
 /**
  * @author Federico Tomassetti
@@ -48,15 +47,15 @@ public class JavassistFactory {
                 if (ctClazz.getName().equals("void")) {
                     return ResolvedVoidType.INSTANCE;
                 }
-                    return ResolvedPrimitiveType.byName(ctClazz.getName());
-                }
-                if (ctClazz.isInterface()) {
-                    return new ReferenceTypeImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver));
-                }
-            if (ctClazz.isEnum()) {
-                    return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctClazz, typeSolver));
+                return ResolvedPrimitiveType.byName(ctClazz.getName());
             }
-                    return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver));
+            if (ctClazz.isInterface()) {
+                return new ReferenceTypeImpl(new JavassistInterfaceDeclaration(ctClazz, typeSolver));
+            }
+            if (ctClazz.isEnum()) {
+                return new ReferenceTypeImpl(new JavassistEnumDeclaration(ctClazz, typeSolver));
+            }
+            return new ReferenceTypeImpl(new JavassistClassDeclaration(ctClazz, typeSolver));
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -75,8 +74,11 @@ public class JavassistFactory {
         if (ctClazz.isArray()) {
             throw new IllegalArgumentException("This method should not be called passing an array");
         }
-            return new JavassistClassDeclaration(ctClazz, typeSolver);
+        if (ctClazz.getAttribute("Record") != null) {
+            return new JavassistRecordDeclaration(ctClazz, typeSolver);
         }
+        return new JavassistClassDeclaration(ctClazz, typeSolver);
+    }
 
     static AccessSpecifier modifiersToAccessLevel(final int modifiers) {
         if (Modifier.isPublic(modifiers)) {
@@ -88,7 +90,6 @@ public class JavassistFactory {
         if (Modifier.isPrivate(modifiers)) {
             return AccessSpecifier.PRIVATE;
         }
-            return AccessSpecifier.NONE;
-        }
-
+        return AccessSpecifier.NONE;
+    }
 }

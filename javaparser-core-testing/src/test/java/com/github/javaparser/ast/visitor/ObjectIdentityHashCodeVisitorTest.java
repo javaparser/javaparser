@@ -21,6 +21,10 @@
 
 package com.github.javaparser.ast.visitor;
 
+import static com.github.javaparser.ast.type.PrimitiveType.intType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -31,10 +35,6 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ast.type.PrimitiveType.intType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.spy;
 
 class ObjectIdentityHashCodeVisitorTest {
 
@@ -449,8 +449,14 @@ class ObjectIdentityHashCodeVisitorTest {
     }
 
     @Test
-    void testVisitPatternExpr() {
-        PatternExpr node = spy(new PatternExpr());
+    void testVisitTypePatternExpr() {
+        TypePatternExpr node = spy(new TypePatternExpr());
+        assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));
+    }
+
+    @Test
+    void testVisitRecordPatternExpr() {
+        RecordPatternExpr node = spy(new RecordPatternExpr());
         assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));
     }
 
@@ -621,5 +627,4 @@ class ObjectIdentityHashCodeVisitorTest {
         YieldStmt node = spy(new YieldStmt());
         assertEquals(node.hashCode(), ObjectIdentityHashCodeVisitor.hashCode(node));
     }
-
 }

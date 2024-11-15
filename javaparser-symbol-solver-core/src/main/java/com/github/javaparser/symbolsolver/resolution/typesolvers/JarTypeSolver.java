@@ -26,14 +26,13 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javassistmodel.JavassistFactory;
-import javassist.ClassPool;
-import javassist.NotFoundException;
-
 import java.io.*;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import javassist.ClassPool;
+import javassist.NotFoundException;
 
 /**
  * Will let the symbol solver look inside a jar file while solving types.
@@ -56,11 +55,12 @@ public class JarTypeSolver implements TypeSolver {
 
     /**
      * Convert the entry path into a qualified name.
-     * <p>
+     *
      * The entries in Jar files follows the format {@code com/github/javaparser/ASTParser$JJCalls.class}
      * while in the type solver we need to work with {@code com.github.javaparser.ASTParser.JJCalls}.
      *
      * @param entryPath The entryPath to be converted.
+     *
      * @return The qualified name for the entryPath.
      */
     private static String convertEntryPathToClassName(String entryPath) {
@@ -75,11 +75,12 @@ public class JarTypeSolver implements TypeSolver {
 
     /**
      * Convert the entry path into a qualified name to be used in {@link ClassPool}.
-     * <p>
+     *
      * The entries in Jar files follows the format {@code com/github/javaparser/ASTParser$JJCalls.class}
      * while in the class pool we need to work with {@code com.github.javaparser.ASTParser$JJCalls}.
      *
      * @param entryPath The entryPath to be converted.
+     *
      * @return The qualified name to be used in the class pool.
      */
     private static String convertEntryPathToClassPoolName(String entryPath) {
@@ -99,6 +100,7 @@ public class JarTypeSolver implements TypeSolver {
      * Create a {@link JarTypeSolver} from a {@link Path}.
      *
      * @param pathToJar The path where the jar is located.
+     *
      * @throws IOException If an I/O exception occurs while reading the Jar.
      */
     public JarTypeSolver(Path pathToJar) throws IOException {
@@ -109,6 +111,7 @@ public class JarTypeSolver implements TypeSolver {
      * Create a {@link JarTypeSolver} from a {@link File}.
      *
      * @param pathToJar The file pointing to the jar is located.
+     *
      * @throws IOException If an I/O exception occurs while reading the Jar.
      */
     public JarTypeSolver(File pathToJar) throws IOException {
@@ -119,6 +122,7 @@ public class JarTypeSolver implements TypeSolver {
      * Create a {@link JarTypeSolver} from a path in a {@link String} format.
      *
      * @param pathToJar The path pointing to the jar.
+     *
      * @throws IOException If an I/O exception occurs while reading the Jar.
      */
     public JarTypeSolver(String pathToJar) throws IOException {
@@ -127,10 +131,11 @@ public class JarTypeSolver implements TypeSolver {
 
     /**
      * Create a {@link JarTypeSolver} from a {@link InputStream}.
-     * <p>
+     *
      * The content will be dumped into a temporary file to be used in the type solver.
      *
      * @param jarInputStream The input stream to be used.
+     *
      * @throws IOException If an I/O exception occurs while creating the temporary file.
      */
     public JarTypeSolver(InputStream jarInputStream) throws IOException {
@@ -139,11 +144,13 @@ public class JarTypeSolver implements TypeSolver {
 
     /**
      * Utility function to dump the input stream into a temporary file.
-     * <p>
+     *
      * This file will be deleted when the virtual machine terminates.
      *
      * @param inputStream The input to be dumped.
+     *
      * @return The created file with the dumped information.
+     *
      * @throws IOException If an I/O exception occurs while creating the temporary file.
      */
     private File dumpToTempFile(InputStream inputStream) throws IOException {
@@ -167,6 +174,7 @@ public class JarTypeSolver implements TypeSolver {
      * Utility method to register a new class path.
      *
      * @param pathToJar The path pointing to the jar file.
+     *
      * @throws IOException If an I/O error occurs while reading the JarFile.
      */
     private void addPathToJar(String pathToJar) throws IOException {
@@ -184,11 +192,12 @@ public class JarTypeSolver implements TypeSolver {
 
     /**
      * Register the list of known classes.
-     * <p>
+     *
      * When we create a new {@link JarTypeSolver} we should store the list of
      * solvable types.
      *
      * @param pathToJar The path to the jar file.
+     *
      * @throws IOException If an I/O error occurs while reading the JarFile.
      */
     private void registerKnownClassesFor(String pathToJar) throws IOException {
@@ -212,7 +221,6 @@ public class JarTypeSolver implements TypeSolver {
                     }
                 }
             }
-
         }
     }
 
@@ -257,8 +265,8 @@ public class JarTypeSolver implements TypeSolver {
             // The names in stored key should always be resolved.
             // But if for some reason this happen, the user is notified.
             throw new IllegalStateException(String.format(
-                    "Unable to get class with name %s from class pool." +
-                            "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
+                    "Unable to get class with name %s from class pool."
+                            + "This was not suppose to happen, please report at https://github.com/javaparser/javaparser/issues",
                     storedKey));
         }
     }
@@ -271,5 +279,4 @@ public class JarTypeSolver implements TypeSolver {
         }
         throw new UnsolvedSymbolException(name);
     }
-
 }

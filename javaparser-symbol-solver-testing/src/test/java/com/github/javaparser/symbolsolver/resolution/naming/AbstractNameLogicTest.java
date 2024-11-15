@@ -21,17 +21,16 @@
 
 package com.github.javaparser.symbolsolver.resolution.naming;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.*;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
 
@@ -66,12 +65,11 @@ public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
         return root;
     }
 
-    private Node getNameInCode(String code, String name, ParseStart parseStart, boolean tollerant,
-                               Optional<TypeSolver> typeSolver) {
+    private Node getNameInCode(
+            String code, String name, ParseStart parseStart, boolean tollerant, Optional<TypeSolver> typeSolver) {
         Node root = parse(code, parseStart, typeSolver);
-        List<Node> allNames = root.findAll(Node.class).stream()
-                .filter(NameLogic::isAName)
-                .collect(Collectors.toList());
+        List<Node> allNames =
+                root.findAll(Node.class).stream().filter(NameLogic::isAName).collect(Collectors.toList());
         List<Node> matchingNames = allNames.stream()
                 .filter(n -> NameLogic.nameAsString(n).equals(name))
                 .collect(Collectors.toList());
@@ -80,7 +78,8 @@ public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
             Node container = matchingNames.get(i);
             for (int j = i + 1; j < matchingNames.size(); j++) {
                 Node contained = matchingNames.get(j);
-                if (contained.getParentNode().isPresent() && contained.getParentNode().get() == container
+                if (contained.getParentNode().isPresent()
+                        && contained.getParentNode().get() == container
                         && NameLogic.nameAsString(contained).equals(NameLogic.nameAsString(container))) {
                     matchingNames.remove(j);
                     j--;
@@ -89,8 +88,9 @@ public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
         }
 
         if (matchingNames.size() == 0) {
-            throw new IllegalArgumentException("Not found. Names found: " + String.join(", ",
-                    allNames.stream().map(NameLogic::nameAsString).collect(Collectors.toList())));
+            throw new IllegalArgumentException("Not found. Names found: "
+                    + String.join(
+                            ", ", allNames.stream().map(NameLogic::nameAsString).collect(Collectors.toList())));
         } else if (matchingNames.size() > 1) {
             if (tollerant) {
                 return matchingNames.get(matchingNames.size() - 1);
@@ -101,5 +101,4 @@ public abstract class AbstractNameLogicTest extends AbstractResolutionTest {
             return matchingNames.get(0);
         }
     }
-
 }

@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
@@ -34,13 +36,10 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.time.Duration;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Dominik Hardtke
@@ -68,8 +67,7 @@ class Issue1814Test extends AbstractResolutionTest {
             }
 
             @Override
-            public void setParent(TypeSolver parent) {
-            }
+            public void setParent(TypeSolver parent) {}
 
             @Override
             public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
@@ -90,16 +88,18 @@ class Issue1814Test extends AbstractResolutionTest {
     @Test
     void getAllMethodsVisibleToInheritors() {
         assertTimeoutPreemptively(Duration.ofMillis(1000L), () -> {
-            String code = String.join(System.lineSeparator(), "public class AbstractExercise extends java.lang.Object {", "}");
-            ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+            String code = String.join(
+                    System.lineSeparator(), "public class AbstractExercise extends java.lang.Object {", "}");
+            ParseResult<CompilationUnit> parseResult =
+                    javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
             assertTrue(parseResult.isSuccessful());
             assertTrue(parseResult.getResult().isPresent());
-            List<ClassOrInterfaceType> referenceTypes = parseResult.getResult().get().findAll(ClassOrInterfaceType.class);
+            List<ClassOrInterfaceType> referenceTypes =
+                    parseResult.getResult().get().findAll(ClassOrInterfaceType.class);
             assertTrue(referenceTypes.size() > 0);
-            final List<ResolvedMethodDeclaration> methods = referenceTypes.get(0).resolve().asReferenceType().getAllMethodsVisibleToInheritors();
+            final List<ResolvedMethodDeclaration> methods =
+                    referenceTypes.get(0).resolve().asReferenceType().getAllMethodsVisibleToInheritors();
             assertEquals(1, methods.size());
         });
-
-
     }
 }

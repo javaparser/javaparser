@@ -21,13 +21,12 @@
 
 package com.github.javaparser;
 
-import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.ast.CompilationUnit;
 import java.io.IOException;
 import java.nio.charset.Charset;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class ProvidersTest {
 
@@ -52,9 +51,7 @@ class ProvidersTest {
     @Test
     void testResourceProviderWithEncoding() throws IOException {
         Provider provider = Providers.resourceProvider(
-                "com/github/javaparser/TestFileIso88591.java",
-                Charset.forName("ISO-8859-1")
-        );
+                "com/github/javaparser/TestFileIso88591.java", Charset.forName("ISO-8859-1"));
         assertNotNull(provider);
         JavaParser parser = new JavaParser();
         ParseResult<CompilationUnit> parse = parser.parse(ParseStart.COMPILATION_UNIT, provider);

@@ -39,7 +39,8 @@ public class CsmTextBlock implements CsmElement {
     @Override
     public void prettyPrint(Node node, SourcePrinter printer) {
         printer.print("\"\"\"");
-        // Per https://openjdk.java.net/jeps/378#1--Line-terminators, any 'CRLF' and 'CR' are turned into 'LF' before interpreting the text
+        // Per https://openjdk.java.net/jeps/378#1--Line-terminators, any 'CRLF' and 'CR' are turned into 'LF' before
+        // interpreting the text
         printer.println();
         // TODO: Confirm if we need to force this to use {@code \n} separators
         printer.print(property.getValueAsStringAttribute(node));

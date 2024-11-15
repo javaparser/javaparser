@@ -21,6 +21,10 @@
 
 package com.github.javaparser.steps;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.core.Is.is;
+
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.ArrayCreationLevel;
 import com.github.javaparser.ast.CompilationUnit;
@@ -34,10 +38,6 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.core.Is.is;
 
 /**
  * The <code>ExistenceOfParentNodeVerifier</code> verifies that each node of the compilation unit has a parent set.
@@ -547,5 +547,4 @@ class ExistenceOfParentNodeVerifier {
             super.visit(n, arg);
         }
     }
-
 }

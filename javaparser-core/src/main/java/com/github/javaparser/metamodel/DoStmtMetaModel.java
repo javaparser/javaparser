@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.stmt.DoStmt;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.stmt.DoStmt;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -44,6 +44,4 @@ public class DoStmtMetaModel extends StatementMetaModel {
     public PropertyMetaModel bodyPropertyMetaModel;
 
     public PropertyMetaModel conditionPropertyMetaModel;
-
-    public PropertyMetaModel contractsPropertyMetaModel;
 }

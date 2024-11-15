@@ -21,6 +21,10 @@
 
 package com.github.javaparser.ast.comments;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -34,16 +38,13 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.Indentation;
 import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CommentTest {
 
-    private static final PrinterConfiguration PRETTY_PRINTER_CONFIG_TWO_INDENT = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, new Indentation(IndentType.SPACES, 2)));
+    private static final PrinterConfiguration PRETTY_PRINTER_CONFIG_TWO_INDENT = new DefaultPrinterConfiguration()
+            .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, new Indentation(IndentType.SPACES, 2)));
 
     @Test
     void removeOrphanComment() {
@@ -81,118 +82,122 @@ class CommentTest {
     @Test
     void testReplaceDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                "}" + SYSTEM_EOL);
+        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void anotherMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
-        MethodDeclaration methodDeclaration = cu.findFirst(MethodDeclaration.class).get();
+        MethodDeclaration methodDeclaration =
+                cu.findFirst(MethodDeclaration.class).get();
 
         // Act
         Javadoc javadoc = new Javadoc(JavadocDescription.parseText("Change Javadoc"));
         methodDeclaration.setJavadocComment("", javadoc);
 
         // Assert
-        assertEqualsStringIgnoringEol("public class MyClass {\n" +
-                "\n" +
-                "  /**\n" +
-                "   * Change Javadoc\n" +
-                "   */\n" +
-                "  public void oneMethod() {\n" +
-                "  }\n" +
-                "\n" +
-                "  /**\n" +
-                "   * Comment A\n" +
-                "   */\n" +
-                "  public void anotherMethod() {\n" +
-                "  }\n" +
-                "}\n", cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n"
+                        + "  /**\n"
+                        + "   * Change Javadoc\n"
+                        + "   */\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  /**\n"
+                        + "   * Comment A\n"
+                        + "   */\n"
+                        + "  public void anotherMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 
     @Test
     void testRemoveDuplicateComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                "}" +
-                SYSTEM_EOL);
+        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void anotherMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
-        MethodDeclaration methodDeclaration = cu.findFirst(MethodDeclaration.class).get();
+        MethodDeclaration methodDeclaration =
+                cu.findFirst(MethodDeclaration.class).get();
 
         // Act
         methodDeclaration.removeComment();
 
         // Assert
-        assertEqualsStringIgnoringEol("public class MyClass {\n" +
-                "\n" +
-                "  public void oneMethod() {\n" +
-                "  }\n" +
-                "\n" +
-                "  /**\n" +
-                "   * Comment A\n" +
-                "   */\n" +
-                "  public void anotherMethod() {\n" +
-                "  }\n" +
-                "}\n", cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  /**\n"
+                        + "   * Comment A\n"
+                        + "   */\n"
+                        + "  public void anotherMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 
     @Test
     void testRemoveDuplicateJavaDocComment() {
         // Arrange
-        CompilationUnit cu = parse("public class MyClass {" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void oneMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                SYSTEM_EOL +
-                "  /**" + SYSTEM_EOL +
-                "   * Comment A" + SYSTEM_EOL +
-                "   */" + SYSTEM_EOL +
-                "  public void anotherMethod() {" + SYSTEM_EOL +
-                "  }" + SYSTEM_EOL +
-                "}" +
-                SYSTEM_EOL);
+        CompilationUnit cu = parse("public class MyClass {" + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void oneMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + LineSeparator.SYSTEM
+                + "  /**"
+                + LineSeparator.SYSTEM + "   * Comment A"
+                + LineSeparator.SYSTEM + "   */"
+                + LineSeparator.SYSTEM + "  public void anotherMethod() {"
+                + LineSeparator.SYSTEM + "  }"
+                + LineSeparator.SYSTEM + "}"
+                + LineSeparator.SYSTEM);
 
-        MethodDeclaration methodDeclaration = cu.findAll(MethodDeclaration.class).get(1);
+        MethodDeclaration methodDeclaration =
+                cu.findAll(MethodDeclaration.class).get(1);
 
         // Act
         methodDeclaration.removeJavaDocComment();
 
         // Assert
-        assertEqualsStringIgnoringEol("public class MyClass {\n" +
-                "\n" +
-                "  /**\n" +
-                "   * Comment A\n" +
-                "   */\n" +
-                "  public void oneMethod() {\n" +
-                "  }\n" +
-                "\n" +
-                "  public void anotherMethod() {\n" +
-                "  }\n" +
-                "}\n", cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
+        assertEqualsStringIgnoringEol(
+                "public class MyClass {\n" + "\n"
+                        + "  /**\n"
+                        + "   * Comment A\n"
+                        + "   */\n"
+                        + "  public void oneMethod() {\n"
+                        + "  }\n"
+                        + "\n"
+                        + "  public void anotherMethod() {\n"
+                        + "  }\n"
+                        + "}\n",
+                cu.toString(PRETTY_PRINTER_CONFIG_TWO_INDENT));
     }
 
     @Test()

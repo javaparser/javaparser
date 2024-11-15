@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.NodeList;
@@ -35,18 +37,14 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserAnnotationDeclaration;
-import com.github.javaparser.symbolsolver.javassistmodel.JavassistAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionAnnotationDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests resolution of annotation expressions.
@@ -172,10 +170,13 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("Annotations");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "CC");
         MethodDeclaration method = Navigator.demandMethod(clazz, "foo");
-        SingleMemberAnnotationExpr annotationExpr =
-                (SingleMemberAnnotationExpr) method.getBody().get().getStatement(0)
-                        .asExpressionStmt().getExpression()
-                        .asVariableDeclarationExpr().getAnnotation(0);
+        SingleMemberAnnotationExpr annotationExpr = (SingleMemberAnnotationExpr) method.getBody()
+                .get()
+                .getStatement(0)
+                .asExpressionStmt()
+                .getExpression()
+                .asVariableDeclarationExpr()
+                .getAnnotation(0);
 
         // resolve annotation expression
         ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
@@ -349,16 +350,27 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
     @Test
     void solvePrimitiveAnnotationMember() throws IOException {
         CompilationUnit cu = parseSample("Annotations");
-        AnnotationDeclaration ad = Navigator.findType(cu, "MyAnnotationWithSingleValue").get().asAnnotationDeclaration();
-        assertEquals(ad.getMember(0).asAnnotationMemberDeclaration().resolve().getType().asPrimitive().describe(), "int");
+        AnnotationDeclaration ad =
+                Navigator.findType(cu, "MyAnnotationWithSingleValue").get().asAnnotationDeclaration();
+        assertEquals(
+                ad.getMember(0)
+                        .asAnnotationMemberDeclaration()
+                        .resolve()
+                        .getType()
+                        .asPrimitive()
+                        .describe(),
+                "int");
     }
 
     @Test
     void solveInnerClassAnnotationMember() throws IOException {
         CompilationUnit cu = parseSample("Annotations");
-        AnnotationDeclaration ad = Navigator.findType(cu, "MyAnnotationWithInnerClass").get().asAnnotationDeclaration();
-        ResolvedAnnotationMemberDeclaration am = ad.getMember(0).asAnnotationMemberDeclaration().resolve();
-        assertEquals(am.getType().asReferenceType().getQualifiedName(), "foo.bar.MyAnnotationWithInnerClass.MyInnerClass");
+        AnnotationDeclaration ad =
+                Navigator.findType(cu, "MyAnnotationWithInnerClass").get().asAnnotationDeclaration();
+        ResolvedAnnotationMemberDeclaration am =
+                ad.getMember(0).asAnnotationMemberDeclaration().resolve();
+        assertEquals(
+                am.getType().asReferenceType().getQualifiedName(), "foo.bar.MyAnnotationWithInnerClass.MyInnerClass");
     }
 
     @Test
@@ -373,7 +385,8 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // Class<?>[] - {}
-        Expression arrayExpr = findAnnotationMemberByName(resolved, "packagesOf").getDefaultValue();
+        Expression arrayExpr =
+                findAnnotationMemberByName(resolved, "packagesOf").getDefaultValue();
         assertInstanceOf(ArrayInitializerExpr.class, arrayExpr);
         final NodeList<Expression> values = ((ArrayInitializerExpr) arrayExpr).getValues();
         assertTrue(values.isNonEmpty());
@@ -393,7 +406,8 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // Class<?> - LambdaMetafactory.class
-        ClassExpr classExpr = assertInstanceOf(ClassExpr.class, findAnnotationMemberByName(resolved, "clazz").getDefaultValue());
+        ClassExpr classExpr = assertInstanceOf(
+                ClassExpr.class, findAnnotationMemberByName(resolved, "clazz").getDefaultValue());
         final ClassOrInterfaceType type = assertInstanceOf(ClassOrInterfaceType.class, classExpr.getType());
         assertEquals("LambdaMetafactory", type.getNameAsString());
     }
@@ -429,16 +443,18 @@ class AnnotationsResolutionTest extends AbstractResolutionTest {
         ResolvedAnnotationDeclaration resolved = annotationExpr.resolve();
 
         // NestedAnnotation - @NestedAnnotation
-        Expression nestedExpr = findAnnotationMemberByName(resolved, "nestedAnnotation").getDefaultValue();
+        Expression nestedExpr =
+                findAnnotationMemberByName(resolved, "nestedAnnotation").getDefaultValue();
         assertInstanceOf(NormalAnnotationExpr.class, nestedExpr);
         assertEquals("NestedAnnotation", nestedExpr.asNormalAnnotationExpr().getNameAsString());
     }
 
-    private ResolvedAnnotationMemberDeclaration findAnnotationMemberByName(ResolvedAnnotationDeclaration resolved, String memberName) {
+    private ResolvedAnnotationMemberDeclaration findAnnotationMemberByName(
+            ResolvedAnnotationDeclaration resolved, String memberName) {
         return resolved.getAnnotationMembers().stream()
                 .filter(a -> memberName.equals(a.getName()))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Could not find annotation member %s in %s",
-                        memberName, resolved.getName())));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("Could not find annotation member %s in %s", memberName, resolved.getName())));
     }
 }

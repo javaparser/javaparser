@@ -51,5 +51,4 @@ class OperatorTransformationsTest extends AbstractLexicalPreservingTest {
         expression.asAssignExpr().setValue(new IntegerLiteralExpr(2));
         assertTransformedToString("a <<= 2", expression);
     }
-
 }

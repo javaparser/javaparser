@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,12 +32,9 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
 
@@ -116,9 +115,7 @@ class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
 
     @Test
     void isAnnotationInheritable() {
-        String sourceCode = "import java.lang.annotation.Inherited;\n" +
-                "    @Inherited\n" +
-                "    @interface Foo {}";
+        String sourceCode = "import java.lang.annotation.Inherited;\n" + "    @Inherited\n" + "    @interface Foo {}";
 
         ParseResult<CompilationUnit> result = javaParser.parse(sourceCode);
         assertTrue(result.getResult().isPresent());
@@ -129,5 +126,4 @@ class JavaParserAnnotationDeclarationTest extends AbstractResolutionTest {
 
         assertTrue(annotation.get().resolve().isInheritable());
     }
-
 }

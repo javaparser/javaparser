@@ -29,8 +29,7 @@ public class ResolvedVoidType implements ResolvedType {
 
     public static final ResolvedType INSTANCE = new ResolvedVoidType();
 
-    private ResolvedVoidType() {
-    }
+    private ResolvedVoidType() {}
 
     @Override
     public String describe() {

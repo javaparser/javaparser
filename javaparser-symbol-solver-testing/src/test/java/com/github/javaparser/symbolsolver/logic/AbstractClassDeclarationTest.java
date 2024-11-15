@@ -23,10 +23,9 @@ package com.github.javaparser.symbolsolver.logic;
 
 import com.github.javaparser.resolution.declarations.ResolvedClassDeclarationTest;
 
-public abstract class AbstractClassDeclarationTest extends AbstractTypeDeclarationTest implements ResolvedClassDeclarationTest,
-        MethodResolutionCapabilityTest {
+public abstract class AbstractClassDeclarationTest extends AbstractTypeDeclarationTest
+        implements ResolvedClassDeclarationTest, MethodResolutionCapabilityTest {
 
     @Override
     public abstract AbstractClassDeclaration createValue();
-
 }

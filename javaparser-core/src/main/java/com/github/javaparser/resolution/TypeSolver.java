@@ -33,6 +33,9 @@ public interface TypeSolver {
 
     String JAVA_LANG_OBJECT = Object.class.getCanonicalName();
 
+    // Can't use java.lang.Record.class.getCanonicalName() since records were only added in Java 14.
+    String JAVA_LANG_RECORD = "java.lang.Record";
+
     /**
      * Get the root of the hierarchy of type solver.
      */
@@ -75,6 +78,13 @@ public interface TypeSolver {
      */
     default ResolvedReferenceTypeDeclaration getSolvedJavaLangObject() throws UnsolvedSymbolException {
         return solveType(JAVA_LANG_OBJECT);
+    }
+
+    /**
+     * @return A resolved reference to {@code java.lang.Record}
+     */
+    default ResolvedReferenceTypeDeclaration getSolvedJavaLangRecord() throws UnsolvedSymbolException {
+        return solveType(JAVA_LANG_RECORD);
     }
 
     default boolean hasType(String name) {

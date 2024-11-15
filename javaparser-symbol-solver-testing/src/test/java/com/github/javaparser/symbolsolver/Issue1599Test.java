@@ -21,20 +21,19 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
 
 class Issue1599Test extends AbstractResolutionTest {
 
@@ -42,17 +41,15 @@ class Issue1599Test extends AbstractResolutionTest {
     void test() throws IOException {
         Path rootSourceDir = adaptPath("src/test/resources/issue1599");
 
-        String src =
-                "public class Foo {\n" +
-                        "  public void m() {\n" +
-                        "    A myVar = new A() {\n" +
-                        "      public void bar() {}\n" +
-                        "      public void bar2() {}\n" +
-                        "    };\n" +
-                        "    myVar.bar();\n" +
-                        "    myVar.bar2();\n" +
-                        "  }\n" +
-                        "}";
+        String src = "public class Foo {\n" + "  public void m() {\n"
+                + "    A myVar = new A() {\n"
+                + "      public void bar() {}\n"
+                + "      public void bar2() {}\n"
+                + "    };\n"
+                + "    myVar.bar();\n"
+                + "    myVar.bar2();\n"
+                + "  }\n"
+                + "}";
 
         ParserConfiguration config = new ParserConfiguration();
         config.setSymbolResolver(new JavaSymbolSolver(new JavaParserTypeSolver(rootSourceDir.toFile())));

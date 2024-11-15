@@ -20,15 +20,15 @@
  */
 package com.github.javaparser.resolution.declarations;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.MethodUsage;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
+import java.io.Serializable;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -42,6 +42,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
     String JAVA_IO_SERIALIZABLE = Serializable.class.getCanonicalName();
 
     String JAVA_LANG_OBJECT = java.lang.Object.class.getCanonicalName();
+
+    // Can't use java.lang.Record.class.getCanonicalName() since records were only added in Java 14.
+    String JAVA_LANG_RECORD = "java.lang.Record";
 
     @Override
     default ResolvedReferenceTypeDeclaration asReferenceType() {
@@ -111,7 +114,8 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * if A inherits from B, and B inherits from C and implements D, and C inherits from E
      * Apply the specified traversal
      */
-    default List<ResolvedReferenceType> getAllAncestors(Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
+    default List<ResolvedReferenceType> getAllAncestors(
+            Function<ResolvedReferenceTypeDeclaration, List<ResolvedReferenceType>> traverser) {
         return traverser.apply(this);
     }
 
@@ -148,14 +152,16 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
             ancestors.addAll(queuedAncestors);
             while (!queuedAncestors.isEmpty()) {
                 ResolvedReferenceType queuedAncestor = queuedAncestors.removeFirst();
-                queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<>(queuedAncestor.getDirectAncestors()).stream().forEach(ancestor -> {
-                    // add this ancestor to the queue (for a deferred search)
-                    queuedAncestors.add(ancestor);
-                    // add this ancestor to the list of ancestors
-                    if (!ancestors.contains(ancestor)) {
-                        ancestors.add(ancestor);
-                    }
-                }));
+                queuedAncestor.getTypeDeclaration().ifPresent(rtd -> new LinkedHashSet<>(
+                                queuedAncestor.getDirectAncestors())
+                        .stream().forEach(ancestor -> {
+                            // add this ancestor to the queue (for a deferred search)
+                            queuedAncestors.add(ancestor);
+                            // add this ancestor to the list of ancestors
+                            if (!ancestors.contains(ancestor)) {
+                                ancestors.add(ancestor);
+                            }
+                        }));
             }
         }
         return ancestors;
@@ -176,7 +182,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Bar I should get a FieldDeclaration with type String.
      */
     default ResolvedFieldDeclaration getField(String name) {
-        Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedFieldDeclaration> field = this.getAllFields().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
         if (field.isPresent()) {
             return field.get();
         }
@@ -187,7 +195,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Consider only field or inherited field which is not private.
      */
     default ResolvedFieldDeclaration getVisibleField(String name) {
-        Optional<ResolvedFieldDeclaration> field = getVisibleFields().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedFieldDeclaration> field = getVisibleFields().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
         if (field.isPresent()) {
             return field.get();
         }
@@ -217,7 +227,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Return a list of all fields declared and the inherited ones which are not private.
      */
     default List<ResolvedFieldDeclaration> getVisibleFields() {
-        return getAllFields().stream().filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE).collect(Collectors.toList());
+        return getAllFields().stream()
+                .filter(f -> f.declaringType().equals(this) || f.accessSpecifier() != AccessSpecifier.PRIVATE)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -238,7 +250,9 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Return a list of all the fields declared in this type.
      */
     default List<ResolvedFieldDeclaration> getDeclaredFields() {
-        return getAllFields().stream().filter(it -> it.declaringType().getQualifiedName().equals(getQualifiedName())).collect(Collectors.toList());
+        return getAllFields().stream()
+                .filter(it -> it.declaringType().getQualifiedName().equals(getQualifiedName()))
+                .collect(Collectors.toList());
     }
 
     // /
@@ -295,7 +309,14 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
         if (hasDirectlyAnnotation(qualifiedName)) {
             return true;
         }
-        return isClass() && getAllAncestors().stream().filter(it -> it.asReferenceType().getTypeDeclaration().isPresent()).filter(it -> it.asReferenceType().getTypeDeclaration().get().isClass()).map(it -> it.asReferenceType().getTypeDeclaration().get()).anyMatch(rrtd -> rrtd.hasDirectlyAnnotation(qualifiedName) && rrtd.isInheritedAnnotation(qualifiedName));
+        return isClass()
+                && getAllAncestors().stream()
+                        .filter(it -> it.asReferenceType().getTypeDeclaration().isPresent())
+                        .filter(it ->
+                                it.asReferenceType().getTypeDeclaration().get().isClass())
+                        .map(it -> it.asReferenceType().getTypeDeclaration().get())
+                        .anyMatch(rrtd ->
+                                rrtd.hasDirectlyAnnotation(qualifiedName) && rrtd.isInheritedAnnotation(qualifiedName));
     }
 
     /**
@@ -310,14 +331,17 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * Returns the resolved annotation corresponding to the specified name and declared in this type declaration.
      */
     default Optional<ResolvedAnnotationDeclaration> getDeclaredAnnotation(String name) {
-        return getDeclaredAnnotations().stream().filter(annotation -> annotation.getQualifiedName().endsWith(name)).findFirst();
+        return getDeclaredAnnotations().stream()
+                .filter(annotation -> annotation.getQualifiedName().endsWith(name))
+                .findFirst();
     }
 
     /**
      * Return a collection of all annotations declared in this type declaration.
      */
     default Set<ResolvedAnnotationDeclaration> getDeclaredAnnotations() {
-        throw new UnsupportedOperationException("Getting declared annotation is not supproted on this type " + this.getName());
+        throw new UnsupportedOperationException(
+                "Getting declared annotation is not supproted on this type " + this.getName());
     }
 
     /**
@@ -353,8 +377,11 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      * @see <a href="https://github.com/javaparser/javaparser/issues/2044">https://github.com/javaparser/javaparser/issues/2044</a>
      */
     default boolean isJavaLangObject() {
-        return // Consider anonymous classes
-                this.isClass() && !isAnonymousClass() && hasName() && JAVA_LANG_OBJECT.equals(getQualifiedName());
+        return this.isClass()
+                && !isAnonymousClass()
+                && // Consider anonymous classes
+                hasName()
+                && JAVA_LANG_OBJECT.equals(getQualifiedName());
     }
 
     /**
@@ -363,5 +390,13 @@ public interface ResolvedReferenceTypeDeclaration extends ResolvedTypeDeclaratio
      */
     default boolean isJavaLangEnum() {
         return this.isEnum() && JAVA_LANG_ENUM.equals(getQualifiedName());
+    }
+
+    /**
+     * @return true if this represents {@code java.lang.Record}
+     * @see ResolvedReferenceType#isJavaLangRecord()
+     */
+    default boolean isJavaLangRecord() {
+        return this.isRecord() && JAVA_LANG_RECORD.equals(getQualifiedName());
     }
 }

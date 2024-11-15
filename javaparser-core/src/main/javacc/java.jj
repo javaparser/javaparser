@@ -647,6 +647,7 @@ TOKEN :
 | < EXPORTS: "exports" >
 | < PROVIDES: "provides" >
 | < TRANSITIVE: "transitive" >
+| < WHEN: "when" >
 }
 
 /* LITERALS */
@@ -3345,6 +3346,9 @@ String Identifier():
         // Make sure the module info keywords don't interfere with normal Java parsing by matching them as normal identifiers.
         <MODULE> | <REQUIRES> | <TO> | <WITH> | <OPEN> | <OPENS> | <USES> | <EXPORTS> | <PROVIDES> | <TRANSITIVE> |
         // Make sure older Java versions parse
+        <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED> | <WHEN> |
+        // An actual plain old identifier
+        <IDENTIFIER>
         <ENUM> | <STRICTFP> | <YIELD> | <RECORD> | <PERMITS> | <SEALED>
         // or a bunch of JML clause words
        | <INVARIANT> | <ABRUPT_BEHAVIOR> | <ABRUPT_BEHAVIOUR> | <ACCESSIBLE> | <ACCESSIBLE_REDUNDANTLY>
@@ -3754,6 +3758,19 @@ Expression EqualityExpression():
     { return ret; }
 }
 
+PatternExpr PatternExpression():
+{
+    PatternExpr ret;
+}
+{
+	(
+		LOOKAHEAD(TypePatternExpression())
+		ret = TypePatternExpression()
+	  |
+	    ret = RecordPatternExpression()
+	)
+    { return ret; }
+}
 
 /**
  * https://openjdk.java.net/jeps/375
@@ -3763,17 +3780,62 @@ Expression EqualityExpression():
  *         ReferenceType Identifier
  * }<pre>
  */
-PatternExpr PatternExpression():
+TypePatternExpr TypePatternExpression():
 {
     ModifierHolder modifier;
-    ReferenceType type;
+    Type type;
     SimpleName name;
 }
 {
     modifier = Modifiers()
-    type = ReferenceType(modifier.annotations)
+    type = Type(modifier.annotations)
     name = SimpleName()
-    { return new PatternExpr(range(type, token()), modifier.modifiers, type, name); }
+    { return new TypePatternExpr(range(type, token()), modifier.modifiers, type, name); }
+}
+
+/**
+ * https://openjdk.org/jeps/440
+ * <pre><code>
+ * RecordPattern:
+ *     ReferenceType ( [PatternList] )
+ * PatternList:
+ *     Pattern {, Pattern }
+ * </code></pre>
+ */
+RecordPatternExpr RecordPatternExpression():
+{
+	ModifierHolder modifier;
+	ReferenceType type;
+	NodeList<PatternExpr> patternList;
+}
+{
+	modifier = Modifiers()
+	type = ReferenceType(modifier.annotations)
+	patternList = PatternList()
+	{ return new RecordPatternExpr(range(type, token()), modifier.modifiers, type, patternList); }
+}
+
+/**
+ * https://openjdk.org/jeps/440
+ * <pre><code>
+ * PatternList:
+ *     Pattern {, Pattern }
+ * </code></pre>
+ */
+NodeList<PatternExpr> PatternList():
+{
+    PatternExpr pattern;
+	NodeList<PatternExpr> ret = new NodeList<>();
+}
+{
+	"("
+    pattern = PatternExpression() { ret.add(pattern); }
+    (
+        ","
+        pattern = PatternExpression() { ret.add(pattern); }
+    )*
+	")"
+    { return ret; }
 }
 
 
@@ -3810,7 +3872,10 @@ Expression InstanceOfExpression():
             (
                 LOOKAHEAD(PatternExpression())
                 pattern = PatternExpression()
-                { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType(), pattern); }
+            // From the JLS https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-Pattern, the type of
+            // a top-level pattern must be a reference type. This means that converting the pattern type to a
+            // reference type here is always safe if the code being parsed compiles.
+            { ret = new InstanceOfExpr(range(ret, token()), ret, pattern.getType().asReferenceType(), pattern); }
              |
                 type = AnnotatedReferenceType()
                 { ret = new InstanceOfExpr(range(ret, token()), ret, type, null); }
@@ -5192,9 +5257,15 @@ SwitchExpr SwitchExpression():
  *         SwitchLabel : {SwitchLabel :} BlockStatements
  *     SwitchLabel:
  *         case CaseConstant {, CaseConstant}
+ *         case null [, default]
+ *         case CasePattern [Guard]
  *         default
  *     CaseConstant:
  *         ConditionalExpression
+ *     CasePattern:
+ *         Pattern
+ *     Guard:
+ *         when Expression
  * }</pre>
  */
 SwitchEntry SwitchEntry():
@@ -5204,47 +5275,81 @@ SwitchEntry SwitchEntry():
     NodeList<Statement> stmts = emptyNodeList();
     JavaToken begin;
     SwitchEntry ret;
-    Expression expression = null;
     Statement stmt = null;
+    Expression expr = null;
+    boolean isDefault = false;
+    Expression guard = null;
 }
 {
     (
         "case" { begin=token(); }
-        label = ConditionalExpression() { labels = add(labels, label); }
         (
+            /**
+             * For the sake of keeping the lookaheads simple and fast, the cases here aren't checked
+             * in the order in which they appear in the JLS. The order checked here corresponds to
+             *
+             * SwitchLabel:
+             *   case null [, default]
+             *   case CasePattern [Guard]
+             *   case CaseConstant {, CaseConstant}
+             *
+             * This LOOKAHEAD(3) checks specifically for the "null , default" token sequence.
+             */
+            LOOKAHEAD(3)
+            label = NullLiteral() { labels = add(labels, label); }
             ","
-            label = ConditionalExpression()  { labels = add(labels, label); }
-        )*
+            "default" { isDefault = true; }
+          |
+            /**
+            * This lookahead is necessary to avoid ambiguity with the ConditionalExpression branch
+            * below.
+            */
+            LOOKAHEAD(PatternExpression())
+            label = PatternExpression() { labels = add(labels, label); }
+            [
+              "when"
+              guard = ConditionalExpression()
+            ]
+          |
+            label = ConditionalExpression() { labels = add(labels, label); }
+            (
+                ","
+                label = ConditionalExpression()  { labels = add(labels, label); }
+            )*
+        )
      |
-        "default" { begin=token(); }
+        "default" { begin=token(); isDefault = true; }
     )
     (
         ":"
         stmts = Statements()
-        { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts); }
+        { ret = new SwitchEntry(range(begin, token()), labels, STATEMENT_GROUP, stmts, isDefault, guard); }
      |
         "->"
         (
-            expression = Expression()
-            ";"
-            {
-                TokenRange r=range(begin, token());
-                stmts.add(new ExpressionStmt(expression.getTokenRange().get(), expression));
-                ret = new SwitchEntry(r, labels, EXPRESSION, stmts);
-            }
+            (
+                expr = Expression()
+                {
+                    TokenRange r=range(begin, token());
+                    // expr.getTokenRange() will not be present if storeTokens is false
+                    stmts.add(new ExpressionStmt(expr.getTokenRange().orElse(null), expr));
+                    ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault, guard);
+                }
+                ";"
+            )
          |
             stmt = Block()
             {
                 TokenRange r=range(begin, token());
                 stmts.add(stmt);
-                ret = new SwitchEntry(r, labels, BLOCK, stmts);
+                ret = new SwitchEntry(r, labels, BLOCK, stmts, isDefault, guard);
             }
          |
             stmt = ThrowStatement()
             {
                 TokenRange r=range(begin, token());
                 stmts.add(stmt);
-                ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts);
+                ret = new SwitchEntry(r, labels, THROWS_STATEMENT, stmts, isDefault, guard);
             }
         )
     )
@@ -6112,6 +6217,10 @@ NodeList<BodyDeclaration<?>> AnnotationTypeBody():
  *         (one of)
  *         Annotation public
  *         abstract
+ *     ClassDeclaration:
+ *         NormalClassDeclaration
+ *         EnumDeclaration
+ *         RecordDeclaration
  * }<pre>
  * For Convenience:
  * <pre>{@code
@@ -6127,6 +6236,10 @@ BodyDeclaration<?> AnnotationBodyDeclaration():
 {
     modifier = Modifiers()
     (
+        // This case must be checked before AnnotationTypeMemberDeclaration since the prefixes are the same
+        LOOKAHEAD(RecordDeclaration())
+        ret = RecordDeclaration(modifier)
+     |
         LOOKAHEAD(Type() Identifier() "(")
         ret = AnnotationTypeMemberDeclaration(modifier)
      |

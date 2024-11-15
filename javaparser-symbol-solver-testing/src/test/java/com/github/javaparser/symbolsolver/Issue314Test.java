@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
@@ -34,9 +37,6 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Issue314Test extends AbstractResolutionTest {
 
@@ -55,23 +55,21 @@ class Issue314Test extends AbstractResolutionTest {
 
     @Test
     void resolveReferenceToFieldInheritedByInterface() {
-        String code = "package foo.bar;\n" +
-                "interface  A {\n" +
-                "        int a = 0;\n" +
-                "    }\n" +
-                "    \n" +
-                "    class B implements A {\n" +
-                "        int getA() {\n" +
-                "            return a;\n" +
-                "        }\n" +
-                "    }";
+        String code = "package foo.bar;\n" + "interface  A {\n"
+                + "        int a = 0;\n"
+                + "    }\n"
+                + "    \n"
+                + "    class B implements A {\n"
+                + "        int getA() {\n"
+                + "            return a;\n"
+                + "        }\n"
+                + "    }";
         CompilationUnit cu = parse(code);
-        NameExpr refToA = Navigator.findNameExpression(Navigator.demandClass(cu, "B"), "a").get();
+        NameExpr refToA = Navigator.findNameExpression(Navigator.demandClass(cu, "B"), "a")
+                .get();
         SymbolReference<? extends ResolvedValueDeclaration> symbolReference = javaParserFacade.solve(refToA);
         assertEquals(true, symbolReference.isSolved());
         assertEquals(true, symbolReference.getCorrespondingDeclaration().isField());
         assertEquals("a", symbolReference.getCorrespondingDeclaration().getName());
     }
-
-
 }

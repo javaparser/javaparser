@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -33,8 +35,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 public class NotQuiteCyclicParentTest extends AbstractResolutionTest {
 
     @Test
@@ -42,8 +42,8 @@ public class NotQuiteCyclicParentTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("NotQuiteCyclicParent");
         ClassOrInterfaceDeclaration clazz = Navigator.demandInterface(cu, "NotQuiteCyclicParent");
         MethodDeclaration method = Navigator.demandMethod(clazz, "main");
-        VariableDeclarationExpr varDec =
-                (VariableDeclarationExpr) ((ExpressionStmt) method.getBody().get().getStatement(0)).getExpression();
+        VariableDeclarationExpr varDec = (VariableDeclarationExpr)
+                ((ExpressionStmt) method.getBody().get().getStatement(0)).getExpression();
 
         try {
             ResolvedType ref = JavaParserFacade.get(new ReflectionTypeSolver()).getType(varDec);
@@ -53,5 +53,4 @@ public class NotQuiteCyclicParentTest extends AbstractResolutionTest {
 
         fail("We shouldn't be able to resolve the type (it is not defined).");
     }
-
 }

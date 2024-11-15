@@ -21,12 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javassistmodel;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.*;
@@ -36,7 +30,11 @@ import com.github.javaparser.resolution.model.typesystem.NullType;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
@@ -67,7 +65,8 @@ public class JavassistTypeDeclarationAdapter {
     private TypeSolver typeSolver;
     private ResolvedReferenceTypeDeclaration typeDeclaration;
 
-    public JavassistTypeDeclarationAdapter(CtClass ctClass, TypeSolver typeSolver, ResolvedReferenceTypeDeclaration typeDeclaration) {
+    public JavassistTypeDeclarationAdapter(
+            CtClass ctClass, TypeSolver typeSolver, ResolvedReferenceTypeDeclaration typeDeclaration) {
         this.ctClass = ctClass;
         this.typeSolver = typeSolver;
         this.typeDeclaration = typeDeclaration;
@@ -80,20 +79,18 @@ public class JavassistTypeDeclarationAdapter {
                 return Optional.empty();
             }
             if (ctClass.getGenericSignature() == null) {
-                // Compiled classes have generic types erased, but can be made available for reflection via getGenericSignature().
+                // Compiled classes have generic types erased, but can be made available for reflection via
+                // getGenericSignature().
                 // If it is absent, then no further work is needed and we can return a reference type without generics.
-                return Optional.of(new ReferenceTypeImpl(
-                        typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(ctClass.getClassFile().getSuperclass()))
-                ));
+                return Optional.of(
+                        new ReferenceTypeImpl(typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(
+                                ctClass.getClassFile().getSuperclass()))));
             }
-            SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+            SignatureAttribute.ClassSignature classSignature =
+                    SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
             return Optional.ofNullable(
-                        JavassistUtils.signatureTypeToType(
-                                classSignature.getSuperClass(),
-                                typeSolver,
-                                typeDeclaration
-                        ).asReferenceType()
-                );
+                    JavassistUtils.signatureTypeToType(classSignature.getSuperClass(), typeSolver, typeDeclaration)
+                            .asReferenceType());
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }
@@ -109,7 +106,8 @@ public class JavassistTypeDeclarationAdapter {
             if (ctClass.getGenericSignature() == null) {
                 for (String interfaceType : ctClass.getClassFile().getInterfaces()) {
                     try {
-                        ResolvedReferenceTypeDeclaration declaration = typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(interfaceType));
+                        ResolvedReferenceTypeDeclaration declaration =
+                                typeSolver.solveType(JavassistUtils.internalNameToCanonicalName(interfaceType));
                         interfaces.add(new ReferenceTypeImpl(declaration));
                     } catch (UnsolvedSymbolException e) {
                         if (!acceptIncompleteList) {
@@ -118,10 +116,12 @@ public class JavassistTypeDeclarationAdapter {
                     }
                 }
             } else {
-                SignatureAttribute.ClassSignature classSignature = SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+                SignatureAttribute.ClassSignature classSignature =
+                        SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
                 for (SignatureAttribute.ClassType interfaceType : classSignature.getInterfaces()) {
                     try {
-                        interfaces.add(JavassistUtils.signatureTypeToType(interfaceType, typeSolver, typeDeclaration).asReferenceType());
+                        interfaces.add(JavassistUtils.signatureTypeToType(interfaceType, typeSolver, typeDeclaration)
+                                .asReferenceType());
                     } catch (UnsolvedSymbolException e) {
                         if (!acceptIncompleteList) {
                             throw e;
@@ -154,13 +154,15 @@ public class JavassistTypeDeclarationAdapter {
         return Arrays.stream(ctClass.getDeclaredMethods())
                 .filter(m -> ((m.getMethodInfo().getAccessFlags() & AccessFlag.BRIDGE) == 0)
                         && ((m.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0))
-                .map(m -> new JavassistMethodDeclaration(m, typeSolver)).collect(Collectors.toSet());
+                .map(m -> new JavassistMethodDeclaration(m, typeSolver))
+                .collect(Collectors.toSet());
     }
 
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return Arrays.stream(ctClass.getConstructors())
                 .filter(m -> (m.getMethodInfo().getAccessFlags() & AccessFlag.SYNTHETIC) == 0)
-                .map(m -> new JavassistConstructorDeclaration(m, typeSolver)).collect(Collectors.toList());
+                .map(m -> new JavassistConstructorDeclaration(m, typeSolver))
+                .collect(Collectors.toList());
     }
 
     public List<ResolvedFieldDeclaration> getDeclaredFields() {
@@ -197,14 +199,13 @@ public class JavassistTypeDeclarationAdapter {
             // There is nothing to do except returns an empty set
         }
         return Collections.EMPTY_SET;
-
     }
 
     private String getAnnotationType(Object annotation) {
         String typeName = null;
         try {
-            Class<?> annotationClass = (Class<?>) Proxy.getInvocationHandler(annotation)
-                    .invoke(annotation, JDK_ANNOTATION_TYPE_METHOD, null);
+            Class<?> annotationClass = (Class<?>)
+                    Proxy.getInvocationHandler(annotation).invoke(annotation, JDK_ANNOTATION_TYPE_METHOD, null);
             typeName = annotationClass.getTypeName();
         } catch (Throwable e) {
         }
@@ -216,21 +217,22 @@ public class JavassistTypeDeclarationAdapter {
             return Collections.emptyList();
         }
         try {
-                SignatureAttribute.ClassSignature classSignature =
-                        SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
-                return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters())
-                        .map((tp) -> new JavassistTypeParameter(tp, JavassistFactory.toTypeDeclaration(ctClass, typeSolver), typeSolver))
-                        .collect(Collectors.toList());
-            } catch (BadBytecode badBytecode) {
-                throw new RuntimeException(badBytecode);
-            }
+            SignatureAttribute.ClassSignature classSignature =
+                    SignatureAttribute.toClassSignature(ctClass.getGenericSignature());
+            return Arrays.<SignatureAttribute.TypeParameter>stream(classSignature.getParameters())
+                    .map((tp) -> new JavassistTypeParameter(
+                            tp, JavassistFactory.toTypeDeclaration(ctClass, typeSolver), typeSolver))
+                    .collect(Collectors.toList());
+        } catch (BadBytecode badBytecode) {
+            throw new RuntimeException(badBytecode);
+        }
     }
 
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         try {
-            return ctClass.getDeclaringClass() == null ?
-                    Optional.empty() :
-                    Optional.of(JavassistFactory.toTypeDeclaration(ctClass.getDeclaringClass(), typeSolver));
+            return ctClass.getDeclaringClass() == null
+                    ? Optional.empty()
+                    : Optional.of(JavassistFactory.toTypeDeclaration(ctClass.getDeclaringClass(), typeSolver));
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -286,8 +288,8 @@ public class JavassistTypeDeclarationAdapter {
                     .collect(Collectors.toSet());
         } catch (NotFoundException e) {
             // This should never happen, since the nested type is defined in the current class
-            throw new UnsupportedOperationException("Please report this issue at https://github.com/javaparser/javaparser/issues/new/choose", e);
+            throw new UnsupportedOperationException(
+                    "Please report this issue at https://github.com/javaparser/javaparser/issues/new/choose", e);
         }
     }
-
 }

@@ -33,8 +33,7 @@ import java.util.HashSet;
  */
 public final class StringEscapeUtils {
 
-    private StringEscapeUtils() {
-    }
+    private StringEscapeUtils() {}
 
     /**
      * <p>Escapes the characters in a {@code String} using Java String rules.</p>
@@ -80,15 +79,28 @@ public final class StringEscapeUtils {
     }
 
     // TODO do we need to integrate /s escape sequence because there is a compilation error?
-    private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(new String[][] { { "\\b", "\b" }, { "\\n", "\n" }, { "\\t", "\t" }, { "\\f", "\f" }, { "\\r", "\r" } });
+    private static final LookupTranslator JAVA_CTRL_CHARS_UNESCAPE = new LookupTranslator(
+            new String[][] {{"\\b", "\b"}, {"\\n", "\n"}, {"\\t", "\t"}, {"\\f", "\f"}, {"\\r", "\r"}});
 
-    private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(new String[][]{{"\b", "\\b"}, {"\n", "\\n"}, {"\t", "\\t"}, {"\f", "\\f"}, {"\r", "\\r"}});
+    private static final LookupTranslator JAVA_CTRL_CHARS_ESCAPE = new LookupTranslator(
+            new String[][] {{"\b", "\\b"}, {"\n", "\\n"}, {"\t", "\\t"}, {"\f", "\\f"}, {"\r", "\\r"}});
 
-    private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(new LookupTranslator(new String[][]{{"\"", "\\\""}, {"\\", "\\\\"}}), JAVA_CTRL_CHARS_ESCAPE);
+    private static final CharSequenceTranslator ESCAPE_JAVA = new AggregateTranslator(
+            new LookupTranslator(new String[][] {{"\"", "\\\""}, {"\\", "\\\\"}}), JAVA_CTRL_CHARS_ESCAPE);
 
-    private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(new OctalUnescaper(), new UnicodeUnescaper(), JAVA_CTRL_CHARS_UNESCAPE, new LookupTranslator(new String[][]{{"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}}));
+    private static final CharSequenceTranslator UNESCAPE_JAVA = new AggregateTranslator(
+            new OctalUnescaper(),
+            new UnicodeUnescaper(),
+            JAVA_CTRL_CHARS_UNESCAPE,
+            new LookupTranslator(new String[][] {{"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}}));
 
-    private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(new OctalUnescaper(), new UnicodeUnescaper(), JAVA_CTRL_CHARS_UNESCAPE, new LookupTranslator(new String[][]{{"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}, {"\\s", " "}, {"\\\n", ""}}));
+    private static final CharSequenceTranslator UNESCAPE_JAVA_TEXT_BLOCK = new AggregateTranslator(
+            new OctalUnescaper(),
+            new UnicodeUnescaper(),
+            JAVA_CTRL_CHARS_UNESCAPE,
+            new LookupTranslator(
+                    new String[][] {{"\\\\", "\\"}, {"\\\"", "\""}, {"\\'", "'"}, {"\\", ""}, {"\\s", " "}, {"\\\n", ""}
+                    }));
 
     /**
      * Adapted from apache commons-lang3 project.
@@ -99,7 +111,7 @@ public final class StringEscapeUtils {
      *
      * @since 3.0
      */
-    private static abstract class CharSequenceTranslator {
+    private abstract static class CharSequenceTranslator {
 
         /**
          * Translate a set of codepoints, represented by an int index into a CharSequence,
@@ -109,7 +121,7 @@ public final class StringEscapeUtils {
          *
          * @param input CharSequence that is being translated
          * @param index int representing the current point of translation
-         * @param out   Writer to translate the text to
+         * @param out Writer to translate the text to
          * @return int count of codepoints consumed
          * @throws IOException if and only if the Writer produces an IOException
          */
@@ -140,7 +152,7 @@ public final class StringEscapeUtils {
          * tightly coupled with the abstract method of this class.
          *
          * @param input CharSequence that is being translated
-         * @param out   Writer to translate the text to
+         * @param out Writer to translate the text to
          * @throws IOException if and only if the Writer produces an IOException
          */
         private void translate(final CharSequence input, final Writer out) throws IOException {
@@ -387,7 +399,8 @@ public final class StringEscapeUtils {
                     }
                     return i + 4;
                 }
-                throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '" + input.subSequence(index, input.length()) + "' due to end of CharSequence");
+                throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '"
+                        + input.subSequence(index, input.length()) + "' due to end of CharSequence");
             }
             return 0;
         }

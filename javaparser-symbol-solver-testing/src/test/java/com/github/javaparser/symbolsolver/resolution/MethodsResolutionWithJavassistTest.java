@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -36,12 +38,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.Log;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MethodsResolutionWithJavassistTest extends AbstractResolutionTest {
 
@@ -63,15 +62,20 @@ public class MethodsResolutionWithJavassistTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration classA = Navigator.demandClass(cu, "OverloadedMethodCall");
         MethodDeclaration method = Navigator.demandMethod(classA, "foo");
 
-        List<MethodCallExpr> calls = method.findAll(MethodCallExpr.class, n -> n.getNameAsString().equals("accept"));
+        List<MethodCallExpr> calls =
+                method.findAll(MethodCallExpr.class, n -> n.getNameAsString().equals("accept"));
         assertEquals(2, calls.size());
 
         // node.accept((GenericVisitor) null, null);
         MethodUsage methodUsage1 = JavaParserFacade.get(typeSolver).solveMethodAsUsage(calls.get(0));
-        assertEquals("com.github.javaparser.ast.visitor.GenericVisitor<R, A>", methodUsage1.getParamType(0).describe());
+        assertEquals(
+                "com.github.javaparser.ast.visitor.GenericVisitor<R, A>",
+                methodUsage1.getParamType(0).describe());
 
         // node.accept((VoidVisitor) null, null);
         MethodUsage methodUsage2 = JavaParserFacade.get(typeSolver).solveMethodAsUsage(calls.get(1));
-        assertEquals("com.github.javaparser.ast.visitor.VoidVisitor<A>", methodUsage2.getParamType(0).describe());
+        assertEquals(
+                "com.github.javaparser.ast.visitor.VoidVisitor<A>",
+                methodUsage2.getParamType(0).describe());
     }
 }

@@ -26,12 +26,12 @@ import java.io.InputStream;
 public class TestUtils {
 
     public static InputStream getSampleStream(String sampleName) {
-        InputStream is = TestUtils.class.getClassLoader().getResourceAsStream("com/github/javaparser/samples/"
-                + sampleName + ".java");
+        InputStream is = TestUtils.class
+                .getClassLoader()
+                .getResourceAsStream("com/github/javaparser/samples/" + sampleName + ".java");
         if (is == null) {
             throw new RuntimeException("Example not found, check your test. Sample name: " + sampleName);
         }
         return is;
     }
-
 }

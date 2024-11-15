@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.lang.annotation.Inherited;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.AnnotationMemberDeclaration;
@@ -34,6 +30,9 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import java.lang.annotation.Inherited;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
@@ -112,7 +111,8 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
 
     @Override
     public String getQualifiedName() {
-        String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
+        String containerName =
+                AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
         }
@@ -138,7 +138,8 @@ public class JavaParserAnnotationDeclaration extends AbstractTypeDeclaration imp
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         // TODO #1841
-        throw new UnsupportedOperationException("containerType is not supported for " + this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(
+                "containerType is not supported for " + this.getClass().getCanonicalName());
     }
 
     @Override

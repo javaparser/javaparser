@@ -24,7 +24,6 @@ package com.github.javaparser.generator;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.util.List;
 
 public abstract class CompilationUnitGenerator extends Generator {
@@ -42,5 +41,4 @@ public abstract class CompilationUnitGenerator extends Generator {
     }
 
     protected abstract void generateCompilationUnit(CompilationUnit compilationUnit);
-
 }

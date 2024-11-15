@@ -30,14 +30,14 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Solving generic types that are of type java.lang.Object
- *
  * @see <a href="https://github.com/javaparser/javaparser/issues/1370">https://github.com/javaparser/javaparser/issues/1370</a>
  */
 public class Issue1370Test {
 
     @Test
     public void test() {
-        final String source = String.join(System.lineSeparator(),
+        final String source = String.join(
+                System.lineSeparator(),
                 "package graph;",
                 "class Vertex<Data> {",
                 "    private final Data data;",
@@ -53,17 +53,20 @@ public class Issue1370Test {
 
         final JavaParserFacade facade = JavaParserFacade.get(new ReflectionTypeSolver(false));
 
-        StaticJavaParser.parse(source).accept(new VoidVisitorAdapter<Void>() {
-            @Override
-            public void visit(final MethodCallExpr n, final Void arg) {
-                super.visit(n, arg);
+        StaticJavaParser.parse(source)
+                .accept(
+                        new VoidVisitorAdapter<Void>() {
+                            @Override
+                            public void visit(final MethodCallExpr n, final Void arg) {
+                                super.visit(n, arg);
 
-                try {
-                    System.out.printf("Node: %s, solved Type: %s%n", n, facade.solve(n));
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, null);
+                                try {
+                                    System.out.printf("Node: %s, solved Type: %s%n", n, facade.solve(n));
+                                } catch (RuntimeException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        null);
     }
 }

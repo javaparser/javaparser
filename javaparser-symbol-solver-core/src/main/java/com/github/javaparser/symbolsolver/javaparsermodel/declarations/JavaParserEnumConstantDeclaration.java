@@ -21,16 +21,15 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Optional;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -40,14 +39,16 @@ public class JavaParserEnumConstantDeclaration implements ResolvedEnumConstantDe
     private TypeSolver typeSolver;
     private com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode;
 
-    public JavaParserEnumConstantDeclaration(com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode, TypeSolver typeSolver) {
+    public JavaParserEnumConstantDeclaration(
+            com.github.javaparser.ast.body.EnumConstantDeclaration wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
         this.typeSolver = typeSolver;
     }
 
     @Override
     public ResolvedType getType() {
-        return new ReferenceTypeImpl(new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(wrappedNode), typeSolver));
+        return new ReferenceTypeImpl(
+                new JavaParserEnumDeclaration((EnumDeclaration) demandParentNode(wrappedNode), typeSolver));
     }
 
     @Override
@@ -68,5 +69,4 @@ public class JavaParserEnumConstantDeclaration implements ResolvedEnumConstantDe
     public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
-
 }

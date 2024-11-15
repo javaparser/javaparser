@@ -21,9 +21,6 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -44,14 +41,17 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
-public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T> & NodeWithAnnotations<T>> {
+public class JavaParserTypeAdapter<
+        T extends Node & NodeWithSimpleName<T> & NodeWithMembers<T> & NodeWithAnnotations<T>> {
 
-    private final T wrappedNode;
-    private final TypeSolver typeSolver;
+    private T wrappedNode;
+    private TypeSolver typeSolver;
 
     public JavaParserTypeAdapter(T wrappedNode, TypeSolver typeSolver) {
         this.wrappedNode = wrappedNode;
@@ -67,7 +67,8 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     }
 
     public String getQualifiedName() {
-        String containerName = AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
+        String containerName =
+                AstResolutionUtils.containerName(wrappedNode.getParentNode().orElse(null));
         if (containerName.isEmpty()) {
             return wrappedNode.getName().getId();
         }
@@ -97,10 +98,7 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
     }
 
     /**
-     * This method is deprecated because it receives the TypesSolver as a parameter.
-     * Eventually we would like to remove all usages of TypeSolver as a parameter.
-     * <p>
-     * Also, resolution should move out of declarations, so that they are pure declarations and the resolution should
+     * Resolution should move out of declarations, so that they are pure declarations and the resolution should
      * work for JavaParser, Reflection and Javassist classes in the same way and not be specific to the three
      * implementations.
      */
@@ -118,35 +116,53 @@ public class JavaParserTypeAdapter<T extends Node & NodeWithSimpleName<T> & Node
         // Member classes & interfaces
         for (BodyDeclaration<?> member : this.wrappedNode.getMembers()) {
             if (member instanceof com.github.javaparser.ast.body.TypeDeclaration) {
-                com.github.javaparser.ast.body.TypeDeclaration<?> internalType = (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
+                com.github.javaparser.ast.body.TypeDeclaration<?> internalType =
+                        (com.github.javaparser.ast.body.TypeDeclaration<?>) member;
                 String prefix = internalType.getName().asString() + ".";
                 if (internalType.getName().getId().equals(name)) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
-                            return SymbolReference.solved(new JavaParserInterfaceDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
+                            return SymbolReference.solved(new JavaParserInterfaceDeclaration(
+                                    (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType,
+                                    typeSolver));
                         }
-                        return SymbolReference.solved(new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
+                        return SymbolReference.solved(new JavaParserClassDeclaration(
+                                (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver));
                     }
                     if (internalType instanceof EnumDeclaration) {
-                        return SymbolReference.solved(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver));
+                        return SymbolReference.solved(new JavaParserEnumDeclaration(
+                                (com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver));
                     }
                     if (internalType instanceof AnnotationDeclaration) {
-                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration(
+                                (com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
                     }
                     throw new UnsupportedOperationException();
                 }
                 if (name.startsWith(prefix) && name.length() > prefix.length()) {
                     if (internalType instanceof ClassOrInterfaceDeclaration) {
                         if (((ClassOrInterfaceDeclaration) internalType).isInterface()) {
-                            return new JavaParserInterfaceDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()));
+                            return new JavaParserInterfaceDeclaration(
+                                            (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType,
+                                            typeSolver)
+                                    .solveType(name.substring(prefix.length()));
                         }
-                        return new JavaParserClassDeclaration((com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType, typeSolver).solveType(name.substring(prefix.length()));
+                        return new JavaParserClassDeclaration(
+                                        (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) internalType,
+                                        typeSolver)
+                                .solveType(name.substring(prefix.length()));
                     }
                     if (internalType instanceof EnumDeclaration) {
-                        return new SymbolSolver(typeSolver).solveTypeInType(new JavaParserEnumDeclaration((com.github.javaparser.ast.body.EnumDeclaration) internalType, typeSolver), name.substring(prefix.length()));
+                        return new SymbolSolver(typeSolver)
+                                .solveTypeInType(
+                                        new JavaParserEnumDeclaration(
+                                                (com.github.javaparser.ast.body.EnumDeclaration) internalType,
+                                                typeSolver),
+                                        name.substring(prefix.length()));
                     }
                     if (internalType instanceof AnnotationDeclaration) {
-                        return SymbolReference.solved(new JavaParserAnnotationDeclaration((com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
+                        return SymbolReference.solved(new JavaParserAnnotationDeclaration(
+                                (com.github.javaparser.ast.body.AnnotationDeclaration) internalType, typeSolver));
                     }
                     throw new UnsupportedOperationException();
                 }

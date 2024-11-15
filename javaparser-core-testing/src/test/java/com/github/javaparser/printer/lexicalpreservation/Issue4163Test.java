@@ -23,8 +23,6 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -35,6 +33,7 @@ import com.github.javaparser.printer.configuration.DefaultConfigurationOption;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration;
 import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.ConfigOption;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
+import org.junit.jupiter.api.Test;
 
 public class Issue4163Test extends AbstractLexicalPreservingTest {
 
@@ -47,13 +46,7 @@ public class Issue4163Test extends AbstractLexicalPreservingTest {
                 System.out.println(n.getComment());
             }
         };
-        String code =
-                "class Foo {\n"
-                        + "		/*\n"
-                        + "      * comment\n"
-                        + "      */\n"
-                        + "		void m() {}\n"
-                        + "	}";
+        String code = "class Foo {\n" + "		/*\n" + "      * comment\n" + "      */\n" + "		void m() {}\n" + "	}";
 
         // setup pretty printer to print comments
         PrinterConfiguration config = new DefaultPrinterConfiguration()

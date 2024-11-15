@@ -21,6 +21,17 @@
 
 package com.github.javaparser.steps;
 
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.ast.Modifier.staticModifier;
+import static com.github.javaparser.ast.NodeList.nodeList;
+import static com.github.javaparser.ast.type.PrimitiveType.intType;
+import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -35,23 +46,11 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.TryStmt;
 import com.github.javaparser.ast.type.VoidType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import java.util.Map;
 import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-
-import java.util.Map;
-
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.ast.Modifier.staticModifier;
-import static com.github.javaparser.ast.NodeList.nodeList;
-import static com.github.javaparser.ast.type.PrimitiveType.intType;
-import static com.github.javaparser.steps.SharedSteps.getMethodByPositionAndClassPosition;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ManipulationSteps {
 
@@ -137,7 +136,8 @@ public class ManipulationSteps {
         state.put("cu1", compilationUnit);
     }
 
-    @When("a public static method called \"$methodName\" returning void is added to class $position in the compilation unit")
+    @When(
+            "a public static method called \"$methodName\" returning void is added to class $position in the compilation unit")
     public void whenAStaticMethodCalledReturningIsAddedToClassInTheCompilationUnit(String methodName, int position) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         TypeDeclaration<?> type = compilationUnit.getType(position - 1);
@@ -150,7 +150,8 @@ public class ManipulationSteps {
     }
 
     @When("$typeName varargs called \"$parameterName\" are added to method $methodPosition in class $classPosition")
-    public void whenVarargsCalledAreAddedToMethodInClass(String typeName, String parameterName, int methodPosition, int classPosition) {
+    public void whenVarargsCalledAreAddedToMethodInClass(
+            String typeName, String parameterName, int methodPosition, int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition)
                 .addAndGetParameter(typeName, parameterName)
@@ -164,9 +165,15 @@ public class ManipulationSteps {
         method.setBody(new BlockStmt());
     }
 
-    @When("$className.$fieldName.$methodName(\"$stringValue\"); is added to the body of method $methodPosition in class $classPosition")
-    public void whenHelloWorldIsAddedToTheBodyOfMethodInClass(String className, String fieldName, String methodName, String stringValue,
-                                                              int methodPosition, int classPosition) {
+    @When(
+            "$className.$fieldName.$methodName(\"$stringValue\"); is added to the body of method $methodPosition in class $classPosition")
+    public void whenHelloWorldIsAddedToTheBodyOfMethodInClass(
+            String className,
+            String fieldName,
+            String methodName,
+            String stringValue,
+            int methodPosition,
+            int classPosition) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         NameExpr clazz = new NameExpr(className);
@@ -235,7 +242,8 @@ public class ManipulationSteps {
 
     @Then("all the VariableDeclarations parent is the TryStmt")
     public void thenAllTheVariableDeclarationsParentIsTheTryStmt() {
-        variableDeclarationExprList.forEach(expr -> assertThat(expr.getParentNode().get(), is(tryStmt)));
+        variableDeclarationExprList.forEach(
+                expr -> assertThat(expr.getParentNode().get(), is(tryStmt)));
     }
 
     @Then("the TryStmt has no child nodes")
@@ -259,8 +267,10 @@ public class ManipulationSteps {
         assertThat(method.getParameters().size(), is(expectedCount));
     }
 
-    @Then("method $methodPosition in class $classPosition parameter $parameterPosition is type int called \"$expectedName\"")
-    public void thenMethodInClassParameterIsTypeIntCalled(int methodPosition, int classPosition, int parameterPosition, String expectedName) {
+    @Then(
+            "method $methodPosition in class $classPosition parameter $parameterPosition is type int called \"$expectedName\"")
+    public void thenMethodInClassParameterIsTypeIntCalled(
+            int methodPosition, int classPosition, int parameterPosition, String expectedName) {
         CompilationUnit compilationUnit = (CompilationUnit) state.get("cu1");
         MethodDeclaration method = getMethodByPositionAndClassPosition(compilationUnit, methodPosition, classPosition);
         Parameter parameter = method.getParameter(parameterPosition - 1);
@@ -282,4 +292,3 @@ public class ManipulationSteps {
         }
     }
 }
-

@@ -21,9 +21,9 @@
 
 package com.github.javaparser;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class RangeTest {
 
@@ -46,15 +46,19 @@ class RangeTest {
 
     private final Range arbitraryRange = Range.range(1, 1, 3, 10);
 
-    // Potential expansion option for a larger variety of these categories of values to be provided to parameterised tests.
-    //@formatter:off
-    private final Range[] rangePair_overlappingButNotContained = new Range[]{Range.range(posA1, posC1), Range.range(posB1, posE1)};
-    private final Range[] rangePair_unrelated = new Range[]{Range.range(posA1, posB1), Range.range(posD1, posE1)};
-    private final Range[] rangePair_equalBeginEnd = new Range[]{Range.range(posA1, posB1), Range.range(posA1, posB1)};
-    private final Range[] rangePair_strictlyContained = new Range[]{Range.range(posA1, posE1), Range.range(posB1, posD1)};
-    private final Range[] rangePair_touchingLineAndColumn = new Range[]{Range.range(posA1, posC1), Range.range(posC1, posE1)};
-    private final Range[] rangePair_touchingLineNotColumn = new Range[]{Range.range(posA1, posC1), Range.range(posC5, posD1)};
-    //@formatter:on
+    // Potential expansion option for a larger variety of these categories of values to be provided to parameterised
+    // tests.
+    // @formatter:off
+    private Range[] rangePair_overlappingButNotContained =
+            new Range[] {Range.range(posA1, posC1), Range.range(posB1, posE1)};
+    private Range[] rangePair_unrelated = new Range[] {Range.range(posA1, posB1), Range.range(posD1, posE1)};
+    private Range[] rangePair_equalBeginEnd = new Range[] {Range.range(posA1, posB1), Range.range(posA1, posB1)};
+    private Range[] rangePair_strictlyContained = new Range[] {Range.range(posA1, posE1), Range.range(posB1, posD1)};
+    private Range[] rangePair_touchingLineAndColumn =
+            new Range[] {Range.range(posA1, posC1), Range.range(posC1, posE1)};
+    private Range[] rangePair_touchingLineNotColumn =
+            new Range[] {Range.range(posA1, posC1), Range.range(posC5, posD1)};
+    // @formatter:on
 
     @Test
     void constructorWithOrderedPositions() {
@@ -169,7 +173,6 @@ class RangeTest {
         assertFalse(r1.overlapsWith(r2));
         assertFalse(r2.overlapsWith(r1));
     }
-
 
     @Test
     void lineCountIsReturned() {
@@ -291,5 +294,4 @@ class RangeTest {
         assertFalse(r1.isAfter(r2));
         assertFalse(r1.isAfter(r3));
     }
-
 }

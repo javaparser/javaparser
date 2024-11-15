@@ -23,15 +23,15 @@ package com.github.javaparser.ast.body;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
-import com.github.javaparser.ast.jml.NodeWithContracts;
-import com.github.javaparser.ast.jml.clauses.JmlContract;
 import com.github.javaparser.ast.nodeTypes.*;
 import com.github.javaparser.ast.nodeTypes.modifiers.*;
 import com.github.javaparser.ast.observer.ObservableProperty;
@@ -47,7 +47,18 @@ import com.github.javaparser.metamodel.OptionalProperty;
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
  */
-public abstract class CallableDeclaration<T extends CallableDeclaration<?>> extends BodyDeclaration<T> implements NodeWithAccessModifiers<T>, NodeWithDeclaration, NodeWithSimpleName<T>, NodeWithParameters<T>, NodeWithThrownExceptions<T>, NodeWithTypeParameters<T>, NodeWithJavadoc<T>, NodeWithAbstractModifier<T>, NodeWithStaticModifier<T>, NodeWithFinalModifier<T>, NodeWithStrictfpModifier<T>, NodeWithContracts<T> {
+public abstract class CallableDeclaration<T extends CallableDeclaration<?>> extends BodyDeclaration<T>
+        implements NodeWithAccessModifiers<T>,
+                NodeWithDeclaration,
+                NodeWithSimpleName<T>,
+                NodeWithParameters<T>,
+                NodeWithThrownExceptions<T>,
+                NodeWithTypeParameters<T>,
+                NodeWithJavadoc<T>,
+                NodeWithAbstractModifier<T>,
+                NodeWithStaticModifier<T>,
+                NodeWithFinalModifier<T>,
+                NodeWithStrictfpModifier<T>, NodeWithContracts<T> {
 
     private NodeList<Modifier> modifiers;
 
@@ -65,7 +76,14 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     private NodeList<JmlContract> contracts = new NodeList<>();
 
     @AllFieldsConstructor
-    CallableDeclaration(NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
+    CallableDeclaration(
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            NodeList<TypeParameter> typeParameters,
+            SimpleName name,
+            NodeList<Parameter> parameters,
+            NodeList<ReferenceType> thrownExceptions,
+            ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
         this(null, modifiers, annotations, typeParameters, name, parameters, thrownExceptions, receiverParameter, contracts);
     }
 
@@ -73,7 +91,15 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public CallableDeclaration(TokenRange tokenRange, NodeList<Modifier> modifiers, NodeList<AnnotationExpr> annotations, NodeList<TypeParameter> typeParameters, SimpleName name, NodeList<Parameter> parameters, NodeList<ReferenceType> thrownExceptions, ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
+    public CallableDeclaration(
+            TokenRange tokenRange,
+            NodeList<Modifier> modifiers,
+            NodeList<AnnotationExpr> annotations,
+            NodeList<TypeParameter> typeParameters,
+            SimpleName name,
+            NodeList<Parameter> parameters,
+            NodeList<ReferenceType> thrownExceptions,
+            ReceiverParameter receiverParameter, NodeList<JmlContract> contracts) {
         super(tokenRange, annotations);
         setModifiers(modifiers);
         setTypeParameters(typeParameters);
@@ -104,8 +130,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.MODIFIERS, this.modifiers, modifiers);
-        if (this.modifiers != null)
-            this.modifiers.setParentNode(null);
+        if (this.modifiers != null) this.modifiers.setParentNode(null);
         this.modifiers = modifiers;
         setAsParentNodeOf(modifiers);
         return (T) this;
@@ -124,8 +149,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return (T) this;
@@ -144,8 +168,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.PARAMETERS, this.parameters, parameters);
-        if (this.parameters != null)
-            this.parameters.setParentNode(null);
+        if (this.parameters != null) this.parameters.setParentNode(null);
         this.parameters = parameters;
         setAsParentNodeOf(parameters);
         return (T) this;
@@ -164,8 +187,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.THROWN_EXCEPTIONS, this.thrownExceptions, thrownExceptions);
-        if (this.thrownExceptions != null)
-            this.thrownExceptions.setParentNode(null);
+        if (this.thrownExceptions != null) this.thrownExceptions.setParentNode(null);
         this.thrownExceptions = thrownExceptions;
         setAsParentNodeOf(thrownExceptions);
         return (T) this;
@@ -184,8 +206,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_PARAMETERS, this.typeParameters, typeParameters);
-        if (this.typeParameters != null)
-            this.typeParameters.setParentNode(null);
+        if (this.typeParameters != null) this.typeParameters.setParentNode(null);
         this.typeParameters = typeParameters;
         setAsParentNodeOf(typeParameters);
         return (T) this;
@@ -279,13 +300,10 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
         @Override
         public boolean equals(Object o) {
-            if (this == o)
-                return true;
-            if (o == null || getClass() != o.getClass())
-                return false;
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
             Signature signature = (Signature) o;
-            if (!name.equals(signature.name))
-                return false;
+            if (!name.equals(signature.name)) return false;
             return parameterTypes.equals(signature.parameterTypes);
         }
 
@@ -307,7 +325,13 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
     }
 
     public Signature getSignature() {
-        return new Signature(getName().getIdentifier(), getParameters().stream().map(this::getTypeWithVarargsAsArray).map(this::stripGenerics).map(this::stripAnnotations).collect(toList()));
+        return new Signature(
+                getName().getIdentifier(),
+                getParameters().stream()
+                        .map(this::getTypeWithVarargsAsArray)
+                        .map(this::stripGenerics)
+                        .map(this::stripAnnotations)
+                        .collect(toList()));
     }
 
     private Type stripAnnotations(Type type) {
@@ -326,8 +350,8 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
 
     private Type getTypeWithVarargsAsArray(Parameter p) {
         /* A signature includes the varargs ellipsis.
-         This is a field on parameter which we lose when we only get the type,
-         so we represent it as an additional [] on the type. */
+        This is a field on parameter which we lose when we only get the type,
+        so we represent it as an additional [] on the type. */
         Type t = p.getType().clone();
         if (p.isVarArgs()) {
             t = new ArrayType(t);
@@ -426,8 +450,7 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
             return (T) this;
         }
         notifyPropertyChange(ObservableProperty.RECEIVER_PARAMETER, this.receiverParameter, receiverParameter);
-        if (this.receiverParameter != null)
-            this.receiverParameter.setParentNode(null);
+        if (this.receiverParameter != null) this.receiverParameter.setParentNode(null);
         this.receiverParameter = receiverParameter;
         setAsParentNodeOf(receiverParameter);
         return (T) this;

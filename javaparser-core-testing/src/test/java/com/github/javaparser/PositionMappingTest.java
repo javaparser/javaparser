@@ -20,17 +20,16 @@
  */
 package com.github.javaparser;
 
-import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
-import org.junit.jupiter.api.Test;
+import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.process;
+import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.provider;
+import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.UnicodeEscapeProcessingProvider.PositionMapping;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.process;
-import static com.github.javaparser.UnicodeEscapeProcessingProviderTest.provider;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link PositionMapping}.
@@ -42,11 +41,8 @@ public class PositionMappingTest {
 
     @Test
     public void testNoMapping() throws IOException {
-        List<List<String>> input = lines(
-                line("Hello World !\n"),
-                line("Next Line\r"),
-                line("Third Line\r\n"),
-                line("Fourth Line."));
+        List<List<String>> input =
+                lines(line("Hello World !\n"), line("Next Line\r"), line("Third Line\r\n"), line("Fourth Line."));
         String inputText = text(input);
         UnicodeEscapeProcessingProvider provider = provider(inputText);
         String outputText = process(provider);
@@ -60,11 +56,8 @@ public class PositionMappingTest {
 
     @Test
     public void testEncodedLineFeed() throws IOException {
-        List<List<String>> input = lines(
-                line("B", "\\u000A", "C"));
-        List<List<String>> output = lines(
-                line("B", "\n"),
-                line("C"));
+        List<List<String>> input = lines(line("B", "\\u000A", "C"));
+        List<List<String>> output = lines(line("B", "\n"), line("C"));
 
         checkConvert(input, output);
     }
@@ -75,7 +68,19 @@ public class PositionMappingTest {
                 // Character positions:
                 //                      111    1 11111    1222    2 2222     2
                 //    1    2 34567    89012    3 45678    9012    3 45678    9
-                line("H", "\\u00E4", "llo W", "\\u00F6", "rld!", "\\u000A", "123 N", "\\u00E4", "xt Line", "\\u000D", "Third Line", "\r\n"),
+                line(
+                        "H",
+                        "\\u00E4",
+                        "llo W",
+                        "\\u00F6",
+                        "rld!",
+                        "\\u000A",
+                        "123 N",
+                        "\\u00E4",
+                        "xt Line",
+                        "\\u000D",
+                        "Third Line",
+                        "\r\n"),
                 line("Fo", "\\u00FC", "rth Line."));
         List<List<String>> output = lines(
                 line("H", "ä", "llo W", "ö", "rld!", "\n"),
@@ -86,8 +91,7 @@ public class PositionMappingTest {
         checkConvert(input, output);
     }
 
-    private void checkConvert(List<List<String>> input,
-                              List<List<String>> output) throws IOException {
+    private void checkConvert(List<List<String>> input, List<List<String>> output) throws IOException {
         UnicodeEscapeProcessingProvider provider = provider(text(input));
         String decoded = process(provider);
         assertEquals(text(output), decoded);
@@ -116,7 +120,9 @@ public class PositionMappingTest {
                 Position outPos = new Position(outPosLine, outPosColumn);
                 Position transfomedOutPos = mapping.transform(outPos);
 
-                assertEquals(inPos, transfomedOutPos,
+                assertEquals(
+                        inPos,
+                        transfomedOutPos,
                         "Position mismatch at '" + outPart + "' " + outPos + " -> '" + inPart + "' " + inPos + ".");
 
                 outPosColumn += outPart.length();
@@ -161,5 +167,4 @@ public class PositionMappingTest {
     private static List<List<String>> lines(List<String>... lines) {
         return Arrays.asList(lines);
     }
-
 }

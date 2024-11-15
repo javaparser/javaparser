@@ -21,22 +21,29 @@
 
 package com.github.javaparser.utils;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class SourceZipTest {
 
     private final Path testDir = CodeGenerationUtils.mavenModuleRoot(SourceZipTest.class)
-            .resolve(Paths.get("..", "javaparser-core-testing", "src", "test", "resources", "com", "github", "javaparser",
+            .resolve(Paths.get(
+                    "..",
+                    "javaparser-core-testing",
+                    "src",
+                    "test",
+                    "resources",
+                    "com",
+                    "github",
+                    "javaparser",
                     "source_zip"))
             .normalize();
 

@@ -21,23 +21,18 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+
 public class AnnotationSpaceTest extends AbstractLexicalPreservingTest {
-    /**
-     * Tests that inserted annotations on types are followed by a space.
-     */
+    /** Tests that inserted annotations on types are followed by a space. */
     @Test
     public void test() {
-        considerCode("public class Foo {\n" +
-                "    void myMethod(String param);\n" +
-                "}");
+        considerCode("public class Foo {\n" + "    void myMethod(String param);\n" + "}");
         // Insert the annotation onto the String parameter type.
         Optional<ClassOrInterfaceType> type = cu.findFirst(ClassOrInterfaceType.class);
         type.get().addAnnotation(new MarkerAnnotationExpr("Nullable"));

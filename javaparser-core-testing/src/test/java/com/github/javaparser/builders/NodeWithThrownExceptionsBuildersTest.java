@@ -21,14 +21,14 @@
 
 package com.github.javaparser.builders;
 
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import org.junit.jupiter.api.Test;
 
 class NodeWithThrownExceptionsBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();

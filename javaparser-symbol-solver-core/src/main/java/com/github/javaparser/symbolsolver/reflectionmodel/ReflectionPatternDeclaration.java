@@ -22,7 +22,7 @@
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedPatternDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedTypePatternDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 /**
@@ -30,7 +30,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
  *
  * @author Roger Howell
  */
-public class ReflectionPatternDeclaration implements ResolvedPatternDeclaration {
+public class ReflectionPatternDeclaration implements ResolvedTypePatternDeclaration {
 
     private Class<?> type;
     private TypeSolver typeSolver;
@@ -68,7 +68,7 @@ public class ReflectionPatternDeclaration implements ResolvedPatternDeclaration 
     }
 
     @Override
-    public boolean isPattern() {
+    public boolean isTypePattern() {
         return true;
     }
 
@@ -81,5 +81,4 @@ public class ReflectionPatternDeclaration implements ResolvedPatternDeclaration 
     public ResolvedType getType() {
         return ReflectionFactory.typeUsageFor(type, typeSolver);
     }
-
 }

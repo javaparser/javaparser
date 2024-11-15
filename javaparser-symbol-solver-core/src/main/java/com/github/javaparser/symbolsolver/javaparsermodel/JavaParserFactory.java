@@ -21,28 +21,19 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.clauses.JmlContract;
-import com.github.javaparser.ast.jml.clauses.JmlSignalsClause;
-import com.github.javaparser.ast.jml.expr.JmlLetExpr;
-import com.github.javaparser.ast.jml.expr.JmlQuantifiedExpr;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.SymbolDeclarator;
 import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.contexts.*;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlContractContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlLetExprContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlQuantifiedExprContext;
-import com.github.javaparser.symbolsolver.javaparsermodel.contexts.jml.JmlSignalsClauseContext;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarators.*;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -52,19 +43,6 @@ public class JavaParserFactory {
     public static Context getContext(Node node, TypeSolver typeSolver) {
         if (node == null) {
             throw new NullPointerException("Node should not be null");
-        }
-
-        // TODO: Is order important here?
-        if (JavaSymbolSolver.ENABLE_JML_RESOLUTION) {
-            if (node instanceof JmlLetExpr) {
-                return new JmlLetExprContext((JmlLetExpr) node, typeSolver);
-            } else if (node instanceof JmlContract) {
-                return new JmlContractContext((JmlContract) node, typeSolver);
-            } else if (node instanceof JmlSignalsClause) {
-                return new JmlSignalsClauseContext((JmlSignalsClause) node, typeSolver);
-            } else if (node instanceof JmlQuantifiedExpr) {
-                return new JmlQuantifiedExprContext((JmlQuantifiedExpr) node, typeSolver);
-            }
         }
 
         if (node instanceof ArrayAccessExpr) {
@@ -94,6 +72,12 @@ public class JavaParserFactory {
         if (node instanceof IfStmt) {
             return new IfStatementContext((IfStmt) node, typeSolver);
         }
+        if (node instanceof WhileStmt) {
+            return new WhileStatementContext((WhileStmt) node, typeSolver);
+        }
+        if (node instanceof DoStmt) {
+            return new DoStatementContext((DoStmt) node, typeSolver);
+        }
         if (node instanceof InstanceOfExpr) {
             return new InstanceOfExprContext((InstanceOfExpr) node, typeSolver);
         }
@@ -117,6 +101,9 @@ public class JavaParserFactory {
         }
         if (node instanceof EnumDeclaration) {
             return new EnumDeclarationContext((EnumDeclaration) node, typeSolver);
+        }
+        if (node instanceof RecordDeclaration) {
+            return new RecordDeclarationContext((RecordDeclaration) node, typeSolver);
         }
         if (node instanceof FieldAccessExpr) {
             return new FieldAccessContext((FieldAccessExpr) node, typeSolver);
@@ -142,40 +129,46 @@ public class JavaParserFactory {
         if (node instanceof VariableDeclarationExpr) {
             return new VariableDeclarationExprContext((VariableDeclarationExpr) node, typeSolver);
         }
-        if (node instanceof ObjectCreationExpr &&
-                ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
+        if (node instanceof ObjectCreationExpr
+                && ((ObjectCreationExpr) node).getAnonymousClassBody().isPresent()) {
             return new AnonymousClassDeclarationContext((ObjectCreationExpr) node, typeSolver);
         }
         if (node instanceof ObjectCreationExpr) {
             return new ObjectCreationContext((ObjectCreationExpr) node, typeSolver);
         }
+        if (node instanceof ConditionalExpr) {
+            return new ConditionalExprContext((ConditionalExpr) node, typeSolver);
+        }
         if (node instanceof NameExpr) {
-                // to resolve a name when in a fieldAccess context, we can go up until we get a node other than FieldAccessExpr,
-                // in order to prevent a infinite loop if the name is the same as the field (ie x.x, x.y.x, or x.y.z.x)
-                if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr) {
-                    Node ancestor = node.getParentNode().get();
-                    while (ancestor.getParentNode().isPresent()) {
-                        ancestor = ancestor.getParentNode().get();
-                        if (!(ancestor instanceof FieldAccessExpr)) {
-                            break;
-                        }
+            // to resolve a name when in a fieldAccess context, we can go up until we get a node other than
+            // FieldAccessExpr,
+            // in order to prevent a infinite loop if the name is the same as the field (ie x.x, x.y.x, or x.y.z.x)
+            if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof FieldAccessExpr) {
+                Node ancestor = node.getParentNode().get();
+                while (ancestor.getParentNode().isPresent()) {
+                    ancestor = ancestor.getParentNode().get();
+                    if (!(ancestor instanceof FieldAccessExpr)) {
+                        break;
                     }
-                    return getContext(ancestor, typeSolver);
                 }
-                if (node.getParentNode().isPresent() && node.getParentNode().get() instanceof ObjectCreationExpr && node.getParentNode().get().getParentNode().isPresent()) {
-                    return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
-                }
+                return getContext(ancestor, typeSolver);
             }
+            if (node.getParentNode().isPresent()
+                    && node.getParentNode().get() instanceof ObjectCreationExpr
+                    && node.getParentNode().get().getParentNode().isPresent()) {
+                return getContext(node.getParentNode().get().getParentNode().get(), typeSolver);
+            }
+        }
         final Node parentNode = demandParentNode(node);
         if (node instanceof ClassOrInterfaceType && parentNode instanceof ClassOrInterfaceDeclaration) {
-                ClassOrInterfaceDeclaration parentDeclaration = (ClassOrInterfaceDeclaration) parentNode;
-                if (parentDeclaration.getImplementedTypes().contains(node) ||
-                        parentDeclaration.getExtendedTypes().contains(node)) {
-                    // When resolving names in implements and extends the body of the declaration
-                    // should not be searched so use limited context.
-                    return new ClassOrInterfaceDeclarationExtendsContext(parentDeclaration, typeSolver);
-                }
+            ClassOrInterfaceDeclaration parentDeclaration = (ClassOrInterfaceDeclaration) parentNode;
+            if (parentDeclaration.getImplementedTypes().contains(node)
+                    || parentDeclaration.getExtendedTypes().contains(node)) {
+                // When resolving names in implements and extends the body of the declaration
+                // should not be searched so use limited context.
+                return new ClassOrInterfaceDeclarationExtendsContext(parentDeclaration, typeSolver);
             }
+        }
         return getContext(parentNode, typeSolver);
     }
 
@@ -186,14 +179,14 @@ public class JavaParserFactory {
         if (node instanceof Parameter) {
             return new ParameterSymbolDeclarator((Parameter) node, typeSolver);
         }
-        if (node instanceof PatternExpr) {
-            return new PatternSymbolDeclarator((PatternExpr) node, typeSolver);
+        if (node instanceof TypePatternExpr) {
+            return new TypePatternSymbolDeclarator((TypePatternExpr) node, typeSolver);
         }
         if (node instanceof ExpressionStmt) {
             ExpressionStmt expressionStmt = (ExpressionStmt) node;
             if (expressionStmt.getExpression() instanceof VariableDeclarationExpr) {
-                return new VariableSymbolDeclarator((VariableDeclarationExpr) (expressionStmt.getExpression()),
-                        typeSolver);
+                return new VariableSymbolDeclarator(
+                        (VariableDeclarationExpr) (expressionStmt.getExpression()), typeSolver);
             }
             return new NoSymbolDeclarator<>(expressionStmt, typeSolver);
         }
@@ -203,5 +196,4 @@ public class JavaParserFactory {
         }
         return new NoSymbolDeclarator<>(node, typeSolver);
     }
-
 }

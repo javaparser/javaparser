@@ -20,6 +20,10 @@
  */
 package com.github.javaparser.utils;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -32,9 +36,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A collection of Java source files and its sub-directories located in a ZIP or JAR file on the file system.
@@ -60,7 +61,7 @@ public class SourceZip {
      * Create a new ZIP parser. An instance of {@link JavaParser} with the given configuration will be used to parse
      * the ZIP.
      *
-     * @param zipPath       The absolute path of ZIP file to parse.
+     * @param zipPath The absolute path of ZIP file to parse.
      * @param configuration The configuration to initiate the default parser with.
      */
     public SourceZip(Path zipPath, ParserConfiguration configuration) {
@@ -76,6 +77,7 @@ public class SourceZip {
      * results in a list.
      *
      * @return A list of path-compilation unit pairs.
+     *
      * @throws IOException If an error occurs while trying to parse the given source.
      */
     public List<Pair<Path, ParseResult<CompilationUnit>>> parse() throws IOException {
@@ -90,6 +92,7 @@ public class SourceZip {
      * results in a list.
      *
      * @return A list of path-compilation unit pairs.
+     *
      * @throws IOException If an error occurs while trying to parse the given source.
      */
     public SourceZip parse(Callback callback) throws IOException {
@@ -99,7 +102,8 @@ public class SourceZip {
             for (ZipEntry entry : Collections.list(zipFile.entries())) {
                 if (!entry.isDirectory() && entry.getName().endsWith(".java")) {
                     Log.info("Parsing zip entry \"%s\"", () -> entry.getName());
-                    final ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(zipFile.getInputStream(entry)));
+                    final ParseResult<CompilationUnit> result =
+                            javaParser.parse(COMPILATION_UNIT, provider(zipFile.getInputStream(entry)));
                     callback.process(Paths.get(entry.getName()), result);
                 }
             }
@@ -117,7 +121,7 @@ public class SourceZip {
          * Process the given parse result.
          *
          * @param relativeZipEntryPath The relative path of the entry in the ZIP file that was parsed.
-         * @param result               The parse result of file located at <i>absolutePath</i>.
+         * @param result The parse result of file located at <i>absolutePath</i>.
          */
         void process(Path relativeZipEntryPath, ParseResult<CompilationUnit> result);
     }

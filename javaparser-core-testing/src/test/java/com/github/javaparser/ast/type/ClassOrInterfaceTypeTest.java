@@ -20,18 +20,17 @@
 
 package com.github.javaparser.ast.type;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ClassOrInterfaceTypeTest {
 
@@ -69,8 +68,8 @@ class ClassOrInterfaceTypeTest {
     @Test
     void testWithAnnotations() {
         AnnotationExpr annotationExpr = StaticJavaParser.parseAnnotation("@Override");
-        ClassOrInterfaceType classA = new ClassOrInterfaceType(
-                null, new SimpleName("A"), null, new NodeList<>(annotationExpr));
+        ClassOrInterfaceType classA =
+                new ClassOrInterfaceType(null, new SimpleName("A"), null, new NodeList<>(annotationExpr));
 
         assertEquals(1, classA.getAnnotations().size());
         assertEquals(annotationExpr, classA.getAnnotation(0));
@@ -126,14 +125,15 @@ class ClassOrInterfaceTypeTest {
     @Test
     void testAcceptVoidVisitor() {
         ClassOrInterfaceType classA = new ClassOrInterfaceType(null, "A");
-        classA.accept(new VoidVisitorAdapter<Object>() {
-            @Override
-            public void visit(ClassOrInterfaceType classOrInterfaceType, Object object) {
-                super.visit(classOrInterfaceType, object);
+        classA.accept(
+                new VoidVisitorAdapter<Object>() {
+                    @Override
+                    public void visit(ClassOrInterfaceType classOrInterfaceType, Object object) {
+                        super.visit(classOrInterfaceType, object);
 
-                assertEquals(classA, classOrInterfaceType);
-            }
-        }, null);
+                        assertEquals(classA, classOrInterfaceType);
+                    }
+                },
+                null);
     }
-
 }

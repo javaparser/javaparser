@@ -22,29 +22,28 @@ package com.github.javaparser.symbolsolver;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.JavaParserAdapter;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
+import org.junit.jupiter.api.Test;
 
 public class Issue4124Test extends AbstractResolutionTest {
 
     @Test
     void issue4124_withDifferentTypeParameterName() {
 
-        String code =
-                "import java.util.Collections;\n"
-                        + "import java.util.List;\n"
-                        + "public class Foo<E> {\n"
-                        + "    public void test(List<E> ls){\n"
-                        + "        Collections.synchronizedList(ls);\n"
-                        + "    }\n"
-                        + "}\n";
+        String code = "import java.util.Collections;\n"
+                + "import java.util.List;\n"
+                + "public class Foo<E> {\n"
+                + "    public void test(List<E> ls){\n"
+                + "        Collections.synchronizedList(ls);\n"
+                + "    }\n"
+                + "}\n";
 
-        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
+                .parse(code);
 
         MethodCallExpr m = cu.findFirst(MethodCallExpr.class).get();
         ResolvedMethodDeclaration rmd = m.resolve();
@@ -53,16 +52,16 @@ public class Issue4124Test extends AbstractResolutionTest {
 
     @Test
     void issue4124_withSameTypeParameterName() {
-        String code =
-                "import java.util.Collections;\n"
-                        + "import java.util.List;\n"
-                        + "public class Foo<T> {\n"
-                        + "    public void test(List<T> ls){\n"
-                        + "        Collections.synchronizedList(ls);\n"
-                        + "    }\n"
-                        + "}\n";
+        String code = "import java.util.Collections;\n"
+                + "import java.util.List;\n"
+                + "public class Foo<T> {\n"
+                + "    public void test(List<T> ls){\n"
+                + "        Collections.synchronizedList(ls);\n"
+                + "    }\n"
+                + "}\n";
 
-        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver())).parse(code);
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
+                .parse(code);
 
         MethodCallExpr m = cu.findFirst(MethodCallExpr.class).get();
         ResolvedMethodDeclaration rmd = m.resolve();

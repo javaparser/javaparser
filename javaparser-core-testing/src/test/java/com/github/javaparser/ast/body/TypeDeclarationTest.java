@@ -21,13 +21,13 @@
 
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.ast.Node;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.utils.TestParser.parseBodyDeclaration;
 import static com.github.javaparser.utils.TestParser.parseCompilationUnit;
 import static java.util.stream.Collectors.joining;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.ast.Node;
+import org.junit.jupiter.api.Test;
 
 class TypeDeclarationTest {
     @Test
@@ -57,7 +57,9 @@ class TypeDeclarationTest {
 
     @Test
     void qualifiedNameOfNestedClassInAPackage() {
-        assertFQN("a.b.c.Outer,a.b.c.Outer.Nested", parseCompilationUnit("package a.b.c; class Outer{ class Nested {} }"));
+        assertFQN(
+                "a.b.c.Outer,a.b.c.Outer.Nested",
+                parseCompilationUnit("package a.b.c; class Outer{ class Nested {} }"));
     }
 
     @Test
@@ -76,9 +78,11 @@ class TypeDeclarationTest {
     }
 
     void assertFQN(String fqn, Node node) {
-        assertEquals(fqn, node.findAll(TypeDeclaration.class).stream()
-                .map(td -> (TypeDeclaration<?>) td)
-                .map(td -> td.getFullyQualifiedName().orElse("?"))
-                .collect(joining(",")));
+        assertEquals(
+                fqn,
+                node.findAll(TypeDeclaration.class).stream()
+                        .map(td -> (TypeDeclaration<?>) td)
+                        .map(td -> td.getFullyQualifiedName().orElse("?"))
+                        .collect(joining(",")));
     }
 }

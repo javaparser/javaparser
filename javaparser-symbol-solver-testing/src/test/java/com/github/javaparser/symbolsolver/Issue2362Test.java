@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
@@ -30,14 +32,11 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class Issue2362Test extends AbstractSymbolResolutionTest {
 
@@ -54,8 +53,12 @@ class Issue2362Test extends AbstractSymbolResolutionTest {
 
         JavaParser javaParser = new JavaParser(pc);
 
-        CompilationUnit unit = javaParser.parse(ParseStart.COMPILATION_UNIT,
-                new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name())).getResult().get();
+        CompilationUnit unit = javaParser
+                .parse(
+                        ParseStart.COMPILATION_UNIT,
+                        new StreamProvider(Files.newInputStream(file), StandardCharsets.UTF_8.name()))
+                .getResult()
+                .get();
 
         ObjectCreationExpr oce = unit.findFirst(ObjectCreationExpr.class).get();
         assertEquals(oce.resolve().getSignature(), "InnerClass(int)");

@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -34,8 +36,6 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class Issue116Test extends AbstractResolutionTest {
 
     @Test
@@ -45,11 +45,13 @@ class Issue116Test extends AbstractResolutionTest {
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "foo");
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
-        com.github.javaparser.ast.type.Type typeNode = methodDeclaration.getParameters().get(0).getType();
+        com.github.javaparser.ast.type.Type typeNode =
+                methodDeclaration.getParameters().get(0).getType();
         ResolvedType type = javaParserFacade.convert(typeNode, typeNode);
         assertEquals("java.lang.String[]", type.describe());
 
-        ExpressionStmt expressionStmt = (ExpressionStmt) methodDeclaration.getBody().get().getStatements().get(0);
+        ExpressionStmt expressionStmt = (ExpressionStmt)
+                methodDeclaration.getBody().get().getStatements().get(0);
         Expression argRef = expressionStmt.getExpression();
         assertEquals("java.lang.String[]", javaParserFacade.getType(argRef).describe());
     }

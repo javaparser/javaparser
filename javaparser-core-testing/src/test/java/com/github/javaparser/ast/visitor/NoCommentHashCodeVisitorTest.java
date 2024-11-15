@@ -21,6 +21,12 @@
 
 package com.github.javaparser.ast.visitor;
 
+import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.ast.type.PrimitiveType.intType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.Mockito.*;
+
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.BlockComment;
@@ -31,12 +37,6 @@ import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parse;
-import static com.github.javaparser.ast.type.PrimitiveType.intType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.mockito.Mockito.*;
 
 class NoCommentHashCodeVisitorTest {
 
@@ -1055,8 +1055,8 @@ class NoCommentHashCodeVisitorTest {
     }
 
     @Test
-    void testVisitPatternExpr() {
-        PatternExpr node = spy(new PatternExpr());
+    void testVisitTypePatternExpr() {
+        TypePatternExpr node = spy(new TypePatternExpr());
         NoCommentHashCodeVisitor.hashCode(node);
 
         verify(node, times(1)).getName();
@@ -1064,4 +1064,13 @@ class NoCommentHashCodeVisitorTest {
         verify(node, never()).getComment();
     }
 
+    @Test
+    void testVisitRecordPatternExpr() {
+        RecordPatternExpr node = spy(new RecordPatternExpr());
+        NoCommentHashCodeVisitor.hashCode(node);
+
+        verify(node, times(1)).getType();
+        verify(node, times(1)).getPatternList();
+        verify(node, never()).getComment();
+    }
 }

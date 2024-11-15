@@ -39,9 +39,11 @@ public interface Change {
             case IS_EMPTY:
                 return Utils.valueIsNullOrEmpty(getValue(csmConditional.getProperty(), node));
             case IS_PRESENT:
-                return !Utils.valueIsNullOrEmptyStringOrOptional(getValue(csmConditional.getProperty(), node)) && !isEvaluatedOnDerivedProperty(csmConditional.getProperty());
+                return !Utils.valueIsNullOrEmptyStringOrOptional(getValue(csmConditional.getProperty(), node))
+                        && !isEvaluatedOnDerivedProperty(csmConditional.getProperty());
             default:
-                throw new UnsupportedOperationException("" + csmConditional.getProperty() + " " + csmConditional.getCondition());
+                throw new UnsupportedOperationException(
+                        "" + csmConditional.getProperty() + " " + csmConditional.getCondition());
         }
     }
 
@@ -96,7 +98,8 @@ public interface Change {
          * field but the validation condition must not be checked.
          * Be careful because NoChange property must not affect this evaluation.
          */
-        return currentProperty != null && (property.isDerived() && property.name().endsWith(currentProperty.name()));
+        return currentProperty != null
+                && (property.isDerived() && property.name().endsWith(currentProperty.name()));
     }
 
     /*

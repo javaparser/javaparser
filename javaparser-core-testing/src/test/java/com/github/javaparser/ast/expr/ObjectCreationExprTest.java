@@ -21,10 +21,10 @@
 
 package com.github.javaparser.ast.expr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ObjectCreationExprTest {
     @Test

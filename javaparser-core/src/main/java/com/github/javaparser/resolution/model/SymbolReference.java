@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.resolution.model;
 
-import java.util.Optional;
 import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedDeclaration;
+import java.util.Optional;
 
 /**
  * A reference to a symbol. It can solved or not solved. If solved the corresponding
@@ -43,8 +43,9 @@ public class SymbolReference<S extends ResolvedDeclaration> {
     /**
      * Create a reference for an unsolved symbol.
      *
-     * @param <S> The symbol reference type.
      * @return The created unsolved symbol reference.
+     *
+     * @param <S> The symbol reference type.
      */
     public static <S extends ResolvedDeclaration> SymbolReference<S> unsolved() {
         return new SymbolReference<>(null);
@@ -65,11 +66,14 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      *
      * @param ref   The reference to be adapted.
      * @param clazz The final type to be used.
-     * @param <I>   The Symbol Reference before adapting.
-     * @param <O>   The Symbol Reference after adapting.
+     *
      * @return The adapted symbol reference.
+     *
+     * @param <I> The Symbol Reference before adapting.
+     * @param <O> The Symbol Reference after adapting.
      */
-    public static <I extends ResolvedDeclaration, O extends ResolvedDeclaration> SymbolReference<O> adapt(SymbolReference<I> ref, Class<O> clazz) {
+    public static <I extends ResolvedDeclaration, O extends ResolvedDeclaration> SymbolReference<O> adapt(
+            SymbolReference<I> ref, Class<O> clazz) {
         Optional<I> declaration = ref.getDeclaration();
         if (declaration.isPresent()) {
             I symbol = declaration.get();
@@ -99,11 +103,9 @@ public class SymbolReference<S extends ResolvedDeclaration> {
      * The corresponding declaration. If not solve this throws UnsupportedOperationException.
      */
     public S getCorrespondingDeclaration() {
-        Optional<S> declaration = getDeclaration();
-        if (declaration.isPresent()) {
-            return declaration.get();
-        }
-        throw new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol.");
+        return getDeclaration()
+                .orElseThrow(() ->
+                        new UnsolvedSymbolException("Corresponding declaration not available for unsolved symbol."));
     }
 
     /**

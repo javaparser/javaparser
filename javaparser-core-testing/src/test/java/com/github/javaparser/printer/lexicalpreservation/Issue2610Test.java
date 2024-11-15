@@ -24,9 +24,8 @@ package com.github.javaparser.printer.lexicalpreservation;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-import org.junit.jupiter.api.Test;
-
 import java.util.Optional;
+import org.junit.jupiter.api.Test;
 
 public class Issue2610Test extends AbstractLexicalPreservingTest {
 
@@ -36,14 +35,11 @@ public class Issue2610Test extends AbstractLexicalPreservingTest {
     @Test
     public void test() {
 
-        considerCode(
-                "public class Bar {\n" +
-                        "    public void foo() {\n" +
-                        "          // comment\n" +
-                        "          System.out.print(\"error\");\n" +
-                        "    }\n" +
-                        "}"
-        );
+        considerCode("public class Bar {\n" + "    public void foo() {\n"
+                + "          // comment\n"
+                + "          System.out.print(\"error\");\n"
+                + "    }\n"
+                + "}");
         // contruct a statement with a comment
         Expression expr = StaticJavaParser.parseExpression("System.out.println(\"warning\")");
         // Replace the method expression

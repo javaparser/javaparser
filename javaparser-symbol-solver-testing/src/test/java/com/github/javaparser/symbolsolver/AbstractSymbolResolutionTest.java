@@ -21,13 +21,6 @@
 
 package com.github.javaparser.symbolsolver;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.resolution.SymbolResolver;
@@ -35,6 +28,11 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.utils.CodeGenerationUtils;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 
 public abstract class AbstractSymbolResolutionTest {
 
@@ -42,11 +40,12 @@ public abstract class AbstractSymbolResolutionTest {
     public void reset() {
         // reset configuration to not potentially disturb others tests.
         // So we have to set specific configuration between each test.
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setSymbolResolver(symbolResolver(defaultTypeSolver())));
+        StaticJavaParser.setConfiguration(
+                new ParserConfiguration().setSymbolResolver(symbolResolver(defaultTypeSolver())));
     }
 
     @AfterAll
-    static public void tearDown() {
+    public static void tearDown() {
         // clear internal caches
         JavaParserFacade.clearInstances();
     }
@@ -129,10 +128,9 @@ public abstract class AbstractSymbolResolutionTest {
         @Deprecated
         @Override
         public String toString() {
-            return "TestJdk{" +
-                    "System.getProperty(\"java.version\")=" + System.getProperty("java.version") +
-                    ",major=" + major +
-                    '}';
+            return "TestJdk{" + "System.getProperty(\"java.version\")="
+                    + System.getProperty("java.version") + ",major="
+                    + major + '}';
         }
     }
 
@@ -140,7 +138,9 @@ public abstract class AbstractSymbolResolutionTest {
         if (Files.exists(path)) {
             return path.toAbsolutePath();
         }
-        Path underSymbolSolver = CodeGenerationUtils.mavenModuleRoot(AbstractSymbolResolutionTest.class).resolve("javaparser-symbol-solver-testing").resolve(path);
+        Path underSymbolSolver = CodeGenerationUtils.mavenModuleRoot(AbstractSymbolResolutionTest.class)
+                .resolve("javaparser-symbol-solver-testing")
+                .resolve(path);
         if (Files.exists(underSymbolSolver)) {
             return underSymbolSolver;
         } else {

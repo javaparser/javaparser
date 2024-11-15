@@ -21,15 +21,15 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.StaticJavaParser.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.printer.ConcreteSyntaxModel;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.*;
 
 class NameTest {
 
@@ -54,7 +54,7 @@ class NameTest {
     void importName() {
         ImportDeclaration importDeclaration = parseImport("import java.util.List;");
 
-        assertEquals("import java.util.List;" + SYSTEM_EOL, importDeclaration.toString());
+        assertEquals("import java.util.List;" + LineSeparator.SYSTEM, importDeclaration.toString());
         assertEquals("import java.util.List;", ConcreteSyntaxModel.genericPrettyPrint(importDeclaration));
     }
 
@@ -62,8 +62,10 @@ class NameTest {
     void packageName() {
         CompilationUnit cu = parse("package p1.p2;");
 
-        assertEquals("package p1.p2;" + SYSTEM_EOL + SYSTEM_EOL, cu.toString());
-        assertEquals("package p1.p2;" + SYSTEM_EOL + SYSTEM_EOL, ConcreteSyntaxModel.genericPrettyPrint(cu));
+        assertEquals("package p1.p2;" + LineSeparator.SYSTEM + LineSeparator.SYSTEM, cu.toString());
+        assertEquals(
+                "package p1.p2;" + LineSeparator.SYSTEM + LineSeparator.SYSTEM,
+                ConcreteSyntaxModel.genericPrettyPrint(cu));
     }
 
     @Test
@@ -75,21 +77,15 @@ class NameTest {
     @Test
     void isInternalPositive() {
         Name name = parseName("a.b.c");
-        assertTrue(name
-                .getQualifier().get().isInternal());
-        assertTrue(name
-                .getQualifier().get()
-                .getQualifier().get().isInternal());
+        assertTrue(name.getQualifier().get().isInternal());
+        assertTrue(name.getQualifier().get().getQualifier().get().isInternal());
     }
 
     @Test
     void isTopLevelNegative() {
         Name name = parseName("a.b.c");
-        assertFalse(name
-                .getQualifier().get().isTopLevel());
-        assertFalse(name
-                .getQualifier().get()
-                .getQualifier().get().isTopLevel());
+        assertFalse(name.getQualifier().get().isTopLevel());
+        assertFalse(name.getQualifier().get().getQualifier().get().isTopLevel());
     }
 
     @Test
@@ -97,5 +93,4 @@ class NameTest {
         Name name = parseName("a.b.c");
         assertTrue(name.isTopLevel());
     }
-
 }

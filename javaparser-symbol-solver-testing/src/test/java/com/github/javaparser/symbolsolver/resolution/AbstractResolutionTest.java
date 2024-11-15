@@ -27,7 +27,6 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
-
 import java.io.InputStream;
 
 /**
@@ -65,11 +64,13 @@ public abstract class AbstractResolutionTest extends AbstractSymbolResolutionTes
             throw new RuntimeException("Unable to find sample " + sampleName);
         }
         JavaParser javaParser = createParserWithResolver(typeSolver);
-        return javaParser.parse(is).getResult().orElseThrow(() -> new IllegalArgumentException("Sample does not parse: " + sampleName));
+        return javaParser
+                .parse(is)
+                .getResult()
+                .orElseThrow(() -> new IllegalArgumentException("Sample does not parse: " + sampleName));
     }
 
     protected JavaParser createParserWithResolver(TypeSolver typeSolver) {
         return new JavaParser(new ParserConfiguration().setSymbolResolver(symbolResolver(typeSolver)));
     }
-
 }

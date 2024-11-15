@@ -20,8 +20,9 @@
  */
 package com.github.javaparser;
 
-import com.github.javaparser.utils.LineSeparator;
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
+
+import com.github.javaparser.utils.LineSeparator;
 
 /**
  * Complements GeneratedJavaParserConstants
@@ -42,9 +43,9 @@ public class TokenTypes {
 
     /**
      * @deprecated Use {@link #isWhitespaceButNotEndOfLine(int)} which more explicitly reflects that this also includes
-     * other whitespace e.g. {@code EOF} and {@code CTRL_Z} and a large number of other characters.
-     * See the grammar for details of exactly which characters are included as a "space" (.
-     * <pre>{@code
+     *  other whitespace e.g. {@code EOF} and {@code CTRL_Z} and a large number of other characters.
+     *  See the grammar for details of exactly which characters are included as a "space" (.
+     *  <pre>{@code
      *   <SPACE: [" ", "\t", "\f", "\u0085", "\u00A0", "\u1680", "\u180e", "\u2000", "\u2001", "\u2002", "\u2003", "\u2004", "\u2005",
      *       "\u2006", "\u2007", "\u2008", "\u2009", "\u200a", "\u200b", "\u200c", "\u200d", "\u2028", "\u2029", "\u202f", "\u205f", "\u2060", "\u3000", "\ufeff"]>
      *  }</pre>
@@ -108,93 +109,6 @@ public class TokenTypes {
             case MULTI_LINE_COMMENT:
                 return JavaToken.Category.COMMENT;
             case ABSTRACT:
-            case AXIOM:
-            case BEHAVIOUR:
-            case BIGINT:
-            case BIGINT_MATH:
-            case BREAK_BEHAVIOR:
-            case FEASIBLE_BEHAVIOR:
-            case FEASIBLE_BEHAVIOUR:
-            case BREAK_BEHAVIOUR:
-                //case BY:
-            case CALLABLE_REDUNDANTLY:
-            case DURATION:
-            case CALLABLE:
-            case CAPTURES:
-            case CAPTURES_REDUNDANTLY:
-            case CHOOSE:
-            case CHOOSE_IF:
-            case CONSTRAINT:
-            case CONSTRAINT_REDUNDANTLY:
-            case CONSTRUCTOR:
-            case CONTINUE_BEHAVIOUR:
-            case DECLASSIFIES:
-            case DECREASES:
-            case DECREASES_REDUNDANTLY:
-            case DECREASING_REDUNDANTLY:
-            case DURATION_REDUNDANTLY:
-                //case ELEMTYPE:
-            case MODEL_BEHAVIOR:
-            case MODEL_BEHAVIOUR:
-            case ENSURES_REDUNDANTLY:
-            case ERASES:
-            case EXAMPLE:
-            case EXCEPTIONAL_EXAMPLE:
-            case EXSURES:
-            case EXSURES_REDUNDANTLY:
-            case EXTRACT:
-            case FIELD:
-            case BEGIN:
-            case END:
-                //case FRESH:
-            case HELPER:
-            case INITIALIZER:
-            case INITIALLY:
-            case INSTANCE:
-                //case INTO:
-            case INVARIANT_REDUNDANTLY:
-                //case INVARIANT_FOR:
-            case IN_REDUNDANTLY:
-                //case IS_INITIALIZED:
-            case JAVA_MATH:
-            case LBLNEG:
-            case LBLPOS:
-            case LBL:
-            case MAINTAINING_REDUNDANTLY:
-            case MAPS:
-            case MAPS_REDUNDANTLY:
-            case MODEL_PROGRAM:
-            case MODIFIES:
-            case MONITORED:
-            case MONITORS_FOR:
-            case JML_BLOCK_COMMENT:
-            case JML_LINE_COMMENT:
-                //case NONNULLELEMENTS:
-            case NON_NULL:
-                //case NOT_SPECIFIED:
-            /*case ONLY_ACCESSED:
-            case ONLY_ASSIGNED:
-            case ONLY_CALLED:
-            case ONLY_CAPTURED:*/
-            case OR:
-            case PRODUCT:
-                //case REACH:
-            case READABLE:
-            case LOOP_INVARIANT_FREE:
-                //case REAL:
-            case REFINING:
-            case REQUIRES_REDUNDANTLY:
-            case RETURN_BEHAVIOUR:
-                //case SPACE_ESC:
-            case SPEC_SAFE_MATH:
-            case STATIC_INITIALIZER:
-            case SUBTYPE:
-            case TYPE:
-                //case TYPEOF:
-            case UNINITIALIZED:
-            case WRITABLE:
-                //case NEW_OBJECTS:
-                //case INFINITE_UNION:
             case ASSERT:
             case BOOLEAN:
             case BREAK:
@@ -238,17 +152,10 @@ public class TokenTypes {
             case SWITCH:
             case SYNCHRONIZED:
             case THIS:
-                //case STOREREF:
             case THROW:
             case THROWS:
             case TRANSIENT:
             case TRY:
-            case RESULT:
-            case LOOP_CONTRACT:
-            case LOOP_INVARIANT:
-            case LOOP_INVARIANT_REDUNDANTLY:
-            case MAINTAINING:
-            case DECREASING:
             case VOID:
             case VOLATILE:
             case WHILE:
@@ -263,131 +170,10 @@ public class TokenTypes {
             case EXPORTS:
             case PROVIDES:
             case TRANSITIVE:
-            case INVARIANT:
-            case ACCESSIBLE:
-            case ENSURES:
-            case NORMAL_BEHAVIOR:
-            case EXCEPTIONAL_BEHAVIOR:
-            case BEHAVIOR:
-            case CONTINUE_BEHAVIOR:
-            case BREAKS:
-            case ENSURES_FREE:
-            case REQUIRES_FREE:
-            case CONTINUES:
-            case FORALL:
-            case FOR_EXAMPLE:
-            case FORALLQ:
-            case HENCE_BY_REDUNDANTLY:
-            case HENCE_BY:
-            case ASSERT_REDUNDANTLY:
-            case ASSUME_REDUNDANTLY:
-            case ASSIGNABLE:
-            case ASSIGNABLE_REDUNDANTLY:
-            case REPRESENTS:
-            case REPRESENTS_REDUNDANTLY:
-            case ACCESSIBLE_REDUNDANTLY:
-            case OLD:
-                //case OLD_ESC:
-            case PRE_ESC:
-            case PRE:
-            case PRE_REDUNDANTLY:
-            case POST:
-            case POST_REDUNDANTLY:
-            case ABRUPT_BEHAVIOR:
-            case ABRUPT_BEHAVIOUR:
-            case NORMAL_BEHAVIOUR:
-            case BREAKS_REDUNDANTLY:
-            case CONTINUES_REDUNDANTLY:
-            case EXCEPTIONAL_BEHAVIOUR:
-                //case SINGLETON:
-                //case LOCKSET:
-                //            case LOCSET:
-                //            case UNION:
-                //            case INTERSECT:
-                //            case SUBSET:
-                //            case DISJOINT:
-                //            case SETMINUS:
-            case NEW_OBJECT:
-                //case NEWELEMSFRESH:
-                //case EMPTYSET:
-                //case NOT_ASSIGNED:
-                //case NOT_MODIFIED:
-                //case NOTHING:
-            case STRICTLY_PURE:
-            case PURE:
-                //case STRICTLY_NOTHING:
-                //case EVERYTHING:
-            case DIVERGES:
-            case DIVERGES_REDUNDANTLY:
-            case WORKING_SPACE:
-            case WORKING_SPACE_ESC:
-            case WORKING_SPACE_REDUNDANTLY:
-            case SIGNALS_ONLY:
-            case SIGNALS_ONLY_REDUNDANTLY:
-            case SIGNALS_REDUNDANTLY:
-            case SIGNALS:
-            case ESC_MEASURED_BY:
-            case MEASURED_BY:
-            case MEASURED_BY_REDUNDANTLY:
-            case MODEL:
-            case REP:
-            case PEER:
-            case IMMUTABLE:
-            case READ_ONLY:
-            case MODIFIABLE:
-            case MODIFIABLE_REDUNDANTLY:
-            case MODIFIES_REDUNDANTLY:
-            case RETURNS_REDUNDANTLY:
-            case RETURNS:
-            case RETURN_BEHAVIOR:
-            case LET:
-                //case SAME:
-            case SET:
-            case SAFE_MATH:
-            case CODE:
-            case CODE_BIGINT_MATH:
-            case CODE_JAVA_MATH:
-            case CODE_SAFE_MATH:
-            case SPEC_PACKAGE:
-            case SPEC_PRIVATE:
-            case SPEC_BIGINT_MATH:
-            case SPEC_PUBLIC:
-            case SPEC_PROTECTED:
-            case SPEC_JAVA_MATH:
-            case SUM:
-            case EXISTS:
-            case NULLABLE:
-            case NULLABLE_BY_DEFAULT:
-            case NUM_OF:
-            case MIN:
-            case MAX:
-            case WARN:
-            case WARN_OP:
-            case NOWARN:
-            case NOWARN_OP:
-            case GHOST:
-            case WHEN:
-            case WHEN_REDUNDANTLY:
-                //case STATIC_INVARIANT_FOR:
-            case SUCH_THAT:
-            case ALSO:
-            case NESTED_CONTRACT_END:
-            case NESTED_CONTRACT_START:
-            case ASSUME:
-            case IN:
-            case IMPLIES_THAT:
-            case METHOD:
-            case DETERMINES:
-            case UNREACHABLE:
-            case NORMAL_EXAMPLE:
-            case TWO_STATE:
-            case NON_NULL_BY_DEFAULT:
-            case NO_STATE:
-            case LOOP_MODIFIES:
-            case NONNULLELEMENTS:
             case PERMITS:
             case SEALED:
             case NON_SEALED:
+            case WHEN:
                 return JavaToken.Category.KEYWORD;
             case LONG_LITERAL:
             case INTEGER_LITERAL:
@@ -407,8 +193,6 @@ public class TokenTypes {
             case FALSE:
             case NULL:
                 return JavaToken.Category.LITERAL;
-            case SYNTH_IDENTIFIER:
-            case JML_IDENTIFIER:
             case IDENTIFIER:
                 return JavaToken.Category.IDENTIFIER;
             case LPAREN:
@@ -420,15 +204,10 @@ public class TokenTypes {
             case SEMICOLON:
             case COMMA:
             case DOT:
-            case DOTDOT:
             case ELLIPSIS:
             case AT:
             case DOUBLECOLON:
                 return JavaToken.Category.SEPARATOR;
-            case EQUIVALENCE:
-            case UNKNOWN_OP:
-            case UNKNOWN_OP_EQ:
-            case ANTIVALENCE:
             case ASSIGN:
             case LT:
             case BANG:
@@ -439,7 +218,6 @@ public class TokenTypes {
             case LE:
             case GE:
             case NE:
-            case BACKARROW:
             case SC_OR:
             case SC_AND:
             case INCR:
@@ -467,26 +245,22 @@ public class TokenTypes {
             case ARROW:
             case RUNSIGNEDSHIFT:
             case RSIGNEDSHIFT:
-            case IMPLICATION:
-            case IMPLICATION_BACKWARD:
             case GT:
                 return JavaToken.Category.OPERATOR;
-            // The following are tokens that are only used internally by the lexer
+                // The following are tokens that are only used internally by the lexer
             case ENTER_JAVADOC_COMMENT:
-            case JML_ENTER_MULTILINE_COMMENT:
             case ENTER_MULTILINE_COMMENT:
-            case ENTER_JML_BLOCK_COMMENT:
             case COMMENT_CONTENT:
-            case JML_MULTI_LINE_COMMENT:
             case HEX_DIGITS:
             case LETTER:
             case UNICODE_ESCAPE:
             case PART_LETTER:
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
-                throw new IllegalArgumentException("Internal token kind given " + kind);
             default:
-                throw new AssertionError("Unable to categorise token kind " + kind + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
+                throw new AssertionError(
+                        "Unable to categorise token kind " + kind
+                                + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
         }
     }
 }

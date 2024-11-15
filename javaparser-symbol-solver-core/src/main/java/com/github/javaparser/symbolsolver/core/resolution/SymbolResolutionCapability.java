@@ -29,7 +29,7 @@ import com.github.javaparser.resolution.model.SymbolReference;
  */
 public interface SymbolResolutionCapability {
     /**
-     * @param name       Field / symbol name.
+     * @param name Field / symbol name.
      * @param typeSolver Symbol solver to resolve type usage.
      * @return Symbol reference of the resolved value.
      */

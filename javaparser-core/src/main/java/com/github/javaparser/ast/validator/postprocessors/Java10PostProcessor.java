@@ -58,7 +58,9 @@ public class Java10PostProcessor extends PostProcessors {
         }
 
         private boolean matchForbiddenContext(ClassOrInterfaceType cit) {
-            return cit.getParentNode().isPresent() && FORBIDEN_PARENT_CONTEXT_TO_DETECT_POTENTIAL_VAR_TYPE.stream().anyMatch(cl -> cl.isInstance(cit.getParentNode().get()));
+            return cit.getParentNode().isPresent()
+                    && FORBIDEN_PARENT_CONTEXT_TO_DETECT_POTENTIAL_VAR_TYPE.stream()
+                            .anyMatch(cl -> cl.isInstance(cit.getParentNode().get()));
         }
     };
 

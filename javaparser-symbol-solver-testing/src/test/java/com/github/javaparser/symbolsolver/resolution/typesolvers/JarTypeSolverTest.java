@@ -21,22 +21,20 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.google.common.collect.Sets;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Supplier;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
 
@@ -57,11 +55,26 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
     void initial() throws IOException {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         JarTypeSolver jarTypeSolver = new JarTypeSolver(pathToJar);
-        assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.SourcesHelper").isSolved());
-        assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.Token").isSolved());
-        assertEquals(true, jarTypeSolver.tryToSolveType("com.github.javaparser.ASTParser.JJCalls").isSolved());
-        assertEquals(false, jarTypeSolver.tryToSolveType("com.github.javaparser.ASTParser.Foo").isSolved());
-        assertEquals(false, jarTypeSolver.tryToSolveType("com.github.javaparser.Foo").isSolved());
+        assertEquals(
+                true,
+                jarTypeSolver
+                        .tryToSolveType("com.github.javaparser.SourcesHelper")
+                        .isSolved());
+        assertEquals(
+                true,
+                jarTypeSolver.tryToSolveType("com.github.javaparser.Token").isSolved());
+        assertEquals(
+                true,
+                jarTypeSolver
+                        .tryToSolveType("com.github.javaparser.ASTParser.JJCalls")
+                        .isSolved());
+        assertEquals(
+                false,
+                jarTypeSolver
+                        .tryToSolveType("com.github.javaparser.ASTParser.Foo")
+                        .isSolved());
+        assertEquals(
+                false, jarTypeSolver.tryToSolveType("com.github.javaparser.Foo").isSolved());
         assertEquals(false, jarTypeSolver.tryToSolveType("Foo").isSolved());
     }
 
@@ -81,7 +94,8 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
         assertThrows(UnsolvedSymbolException.class, () -> {
             Path pathToJar2 = adaptPath("src/test/resources/jar2.jar");
             JarTypeSolver jarTypeSolver2 = new JarTypeSolver(pathToJar2);
-            ResolvedReferenceTypeDeclaration b = jarTypeSolver2.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
+            ResolvedReferenceTypeDeclaration b =
+                    jarTypeSolver2.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
             b.getAncestors();
         });
     }
@@ -96,7 +110,8 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(jarTypeSolver1, jarTypeSolver2);
 
-        ResolvedReferenceTypeDeclaration b = combinedTypeSolver.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
+        ResolvedReferenceTypeDeclaration b =
+                combinedTypeSolver.tryToSolveType("foo.zum.B").getCorrespondingDeclaration();
         List<ResolvedReferenceType> ancestors = b.getAncestors();
         assertEquals(1, ancestors.size());
     }
@@ -134,7 +149,8 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
         Path pathToJar = adaptPath("src/test/resources/javaparser-core-2.1.0.jar");
         try (FileInputStream fileInputStream = new FileInputStream(pathToJar.toFile())) {
             JarTypeSolver typeSolver = new JarTypeSolver(fileInputStream);
-            assertTrue(typeSolver.tryToSolveType("com.github.javaparser.ast.Node").isSolved());
+            assertTrue(
+                    typeSolver.tryToSolveType("com.github.javaparser.ast.Node").isSolved());
         }
     }
 
@@ -161,5 +177,4 @@ class JarTypeSolverTest extends AbstractTypeSolverTest<JarTypeSolver> {
         assertTrue(jarTypeSolver2.tryToSolveType(typeB).isSolved());
         assertFalse(jarTypeSolver2.tryToSolveType(typeA).isSolved());
     }
-
 }

@@ -21,10 +21,6 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.ast.AccessSpecifier;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.MethodUsage;
@@ -40,13 +36,18 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Federico Tomassetti
  */
 public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
-        implements ResolvedEnumDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
-        SymbolResolutionCapability {
+        implements ResolvedEnumDeclaration,
+                MethodResolutionCapability,
+                MethodUsageResolutionCapability,
+                SymbolResolutionCapability {
 
     ///
     /// Fields
@@ -72,6 +73,12 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
         }
         if (clazz.isArray()) {
             throw new IllegalArgumentException("Class should not be an array");
+        }
+        if (clazz.isLocalClass()) {
+            throw new IllegalArgumentException("Class should not be a local class");
+        }
+        if (isRecordType(clazz)) {
+            throw new IllegalArgumentException("Class should not be a record");
         }
         if (!clazz.isEnum()) {
             throw new IllegalArgumentException("Class should be an enum");
@@ -190,16 +197,19 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
     }
 
     @Override
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
-        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
-                typeSolver, this, clazz);
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
+        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly, typeSolver, this, clazz);
     }
 
     @Override
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
-                                                    Context invokationContext, List<ResolvedType> typeParameterValues) {
-        Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
-                typeParameterValues, this, clazz);
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> parameterTypes,
+            Context invokationContext,
+            List<ResolvedType> typeParameterValues) {
+        Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(
+                name, parameterTypes, typeSolver, invokationContext, typeParameterValues, this, clazz);
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
             InferenceContext inferenceContext = new InferenceContext(typeSolver);
@@ -210,23 +220,23 @@ public class ReflectionEnumDeclaration extends AbstractTypeDeclaration
                 ResolvedType formalType = methodUsage.getParamType(i);
                 // We need to replace the class type typeParametersValues (while we derive the method ones)
 
-            parameters.add(inferenceContext.addPair(formalType, actualType));
-            i++;
-        }
-        try {
-          ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
-            for (int j=0;j<parameters.size();j++) {
-                methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
+                parameters.add(inferenceContext.addPair(formalType, actualType));
+                i++;
             }
-            methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
-            return Optional.of(methodUsage);
-        } catch (ConflictingGenericTypesException e) {
-            return Optional.empty();
+            try {
+                ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
+                for (int j = 0; j < parameters.size(); j++) {
+                    methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
+                }
+                methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
+                return Optional.of(methodUsage);
+            } catch (ConflictingGenericTypesException e) {
+                return Optional.empty();
+            }
+        } else {
+            return res;
         }
-    } else {
-        return res;
     }
-}
 
     @Override
     public SymbolReference<? extends ResolvedValueDeclaration> solveSymbol(String name, TypeSolver typeSolver) {

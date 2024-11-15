@@ -24,11 +24,6 @@ package com.github.javaparser.symbolsolver;
 import static com.github.javaparser.Providers.provider;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -41,6 +36,9 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @see <a href="https://github.com/javaparser/javaparser/issues/2162">https://github.com/javaparser/javaparser/issues/2162</a>
@@ -54,7 +52,6 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
     private List<MethodDeclaration> classMethods;
     private List<MethodCallExpr> methodCallExprs;
 
-
     @BeforeEach
     public void setUp() {
         typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
@@ -62,53 +59,49 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
 
         javaParser = new JavaParser(configuration);
 
-        //language=JAVA
-        String src = "" +
-                "import java.awt.*;\n" +
-                "\n" +
-                "abstract class Screen <V extends Component> {\n" +
-                "    abstract V getView();\n" +
-                "}\n" +
-                "\n" +
-                "class D extends Component {\n" +
-                "    void getTest() {\n" +
-                "    }\n" +
-                "}\n" +
-                "\n" +
-                "class B extends Screen<D> {\n" +
-                "    @Override\n" +
-                "    D getView() {\n" +
-                "        return new D();\n" +
-                "    }\n" +
-                "}\n" +
-                "\n" +
-                "class Run {\n" +
-                "    public static void main(String[] args) {\n" +
-                "        B b1 = new B();\n" +
-                "        b1.getView(); // b1.getView() -> B#getView(), overriding Screen#getView() -> returns object of type D.\n" +
-                "        \n" +
-                "        // Note that if `b2.getView` is parsed as Screen#getView (as B extends Screen), it will return type `V extends Component` thus will fail to locate the method `Component#getTest()` \n" +
-                "        B b2 = new B();\n" +
-                "        b2.getView().getTest(); // b2.getView() -> returns object of type D, per above // D#getTest returns void.\n" +
-                "        \n" +
-                "        // This part is expected to fail as D#getView does not exist (where D is of type `V extends Component`)\n" +
-                "        B b3 = new B();\n" +
-                "        b3.getView().getView(); // b3.getView() -> returns object of type D, per above // D#getView doesn't exist, thus resolution will fail.\n" +
-                "    }\n" +
-                "}\n" +
-                "";
+        // language=JAVA
+        String src = "" + "import java.awt.*;\n"
+                + "\n"
+                + "abstract class Screen <V extends Component> {\n"
+                + "    abstract V getView();\n"
+                + "}\n"
+                + "\n"
+                + "class D extends Component {\n"
+                + "    void getTest() {\n"
+                + "    }\n"
+                + "}\n"
+                + "\n"
+                + "class B extends Screen<D> {\n"
+                + "    @Override\n"
+                + "    D getView() {\n"
+                + "        return new D();\n"
+                + "    }\n"
+                + "}\n"
+                + "\n"
+                + "class Run {\n"
+                + "    public static void main(String[] args) {\n"
+                + "        B b1 = new B();\n"
+                + "        b1.getView(); // b1.getView() -> B#getView(), overriding Screen#getView() -> returns object of type D.\n"
+                + "        \n"
+                + "        // Note that if `b2.getView` is parsed as Screen#getView (as B extends Screen), it will return type `V extends Component` thus will fail to locate the method `Component#getTest()` \n"
+                + "        B b2 = new B();\n"
+                + "        b2.getView().getTest(); // b2.getView() -> returns object of type D, per above // D#getTest returns void.\n"
+                + "        \n"
+                + "        // This part is expected to fail as D#getView does not exist (where D is of type `V extends Component`)\n"
+                + "        B b3 = new B();\n"
+                + "        b3.getView().getView(); // b3.getView() -> returns object of type D, per above // D#getView doesn't exist, thus resolution will fail.\n"
+                + "    }\n"
+                + "}\n"
+                + "";
 
+        ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(src));
 
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(
-                ParseStart.COMPILATION_UNIT,
-                provider(src)
-        );
-
-
-//        parseResult.getProblems().forEach(problem -> System.out.println("problem.getVerboseMessage() = " + problem.getVerboseMessage()));
+        //        parseResult.getProblems().forEach(problem -> System.out.println("problem.getVerboseMessage() = " +
+        // problem.getVerboseMessage()));
 
         assertTrue(parseResult.isSuccessful());
-        assertEquals(0, parseResult.getProblems().size(), "Expected zero errors when attempting to parse the input code.");
+        assertEquals(
+                0, parseResult.getProblems().size(), "Expected zero errors when attempting to parse the input code.");
         assertTrue(parseResult.getResult().isPresent(), "Must have a parse result to run this test.");
 
         this.cu = parseResult.getResult().get();
@@ -120,29 +113,59 @@ public class Issue2162Test extends AbstractSymbolResolutionTest {
         assertTrue(methodCallExprs.size() > 0, "Expected more than one method call.");
     }
 
-
     @Test
     public void doTest_withJavaParserFacade_explicit() {
         JavaParserFacade javaParserFacade = JavaParserFacade.get(this.typeSolver);
 
-//        assertEquals(5, methodCallExprs.size(), "Unexpected number of method calls -- has the test code been updated, without also updating this test case?");
+        //        assertEquals(5, methodCallExprs.size(), "Unexpected number of method calls -- has the test code been
+        // updated, without also updating this test case?");
 
         // b1.getView()
-        assertEquals("D", javaParserFacade.solve(methodCallExprs.get(0)).getCorrespondingDeclaration().getReturnType().describe());
+        assertEquals(
+                "D",
+                javaParserFacade
+                        .solve(methodCallExprs.get(0))
+                        .getCorrespondingDeclaration()
+                        .getReturnType()
+                        .describe());
 
         // b2.getView()
-        assertEquals("D", javaParserFacade.solve(methodCallExprs.get(2)).getCorrespondingDeclaration().getReturnType().describe());
+        assertEquals(
+                "D",
+                javaParserFacade
+                        .solve(methodCallExprs.get(2))
+                        .getCorrespondingDeclaration()
+                        .getReturnType()
+                        .describe());
         // b2.getView().getTest()
-        assertEquals("void", javaParserFacade.solve(methodCallExprs.get(1)).getCorrespondingDeclaration().getReturnType().describe());
+        assertEquals(
+                "void",
+                javaParserFacade
+                        .solve(methodCallExprs.get(1))
+                        .getCorrespondingDeclaration()
+                        .getReturnType()
+                        .describe());
 
         // b3.getView()
-        assertEquals("D", javaParserFacade.solve(methodCallExprs.get(4)).getCorrespondingDeclaration().getReturnType().describe());
-        assertThrows(UnsolvedSymbolException.class, () -> {
-            // b3.getView().getView() -- causing error
-            assertEquals("V", javaParserFacade.solve(methodCallExprs.get(3)).getCorrespondingDeclaration().getReturnType().describe());
-        }, "Exected this resolution to fail due to the chained methods -- `getView()` shouldn't exist on the return value from the first call to `getView()`.");
-
+        assertEquals(
+                "D",
+                javaParserFacade
+                        .solve(methodCallExprs.get(4))
+                        .getCorrespondingDeclaration()
+                        .getReturnType()
+                        .describe());
+        assertThrows(
+                UnsolvedSymbolException.class,
+                () -> {
+                    // b3.getView().getView() -- causing error
+                    assertEquals(
+                            "V",
+                            javaParserFacade
+                                    .solve(methodCallExprs.get(3))
+                                    .getCorrespondingDeclaration()
+                                    .getReturnType()
+                                    .describe());
+                },
+                "Exected this resolution to fail due to the chained methods -- `getView()` shouldn't exist on the return value from the first call to `getView()`.");
     }
-
-
 }

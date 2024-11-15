@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.modules;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -34,7 +36,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleUsesDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A uses directive in module-info.java. {@code uses V.W;}
@@ -78,11 +79,10 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     public ModuleUsesDirective setType(final Name name) {
         assertNotNull(name);
         if (name == this.name) {
-            return this;
+            return (ModuleUsesDirective) this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;
@@ -129,8 +129,7 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null)
-            this.name.setParentNode(null);
+        if (this.name != null) this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

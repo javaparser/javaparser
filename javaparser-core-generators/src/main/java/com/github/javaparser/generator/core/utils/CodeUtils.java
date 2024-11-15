@@ -34,23 +34,22 @@ public final class CodeUtils {
      * <br>
      * Given the following example:
      * <code>
-     * int withoutCast = 1;
-     * double withCast = (double) 1;
+     *     int withoutCast = 1;
+     *     double withCast = (double) 1;
      * </code>
      * The variable withoutCast doesn't need to be casted, since we have int as required type and int as value type.
      * While in the variable withCast we have double as required type and int as value type.
      *
-     * @param value        The value to be returned.
-     * @param requiredType The expected type to be casted if needed.
-     * @param valueType    The type of the value to be returned.
+     * @param value           The value to be returned.
+     * @param requiredType    The expected type to be casted if needed.
+     * @param valueType       The type of the value to be returned.
+     *
      * @return The value casted if needed.
      */
     public static String castValue(String value, Type requiredType, String valueType) {
         String requiredTypeName = requiredType.asString();
 
-        if (requiredTypeName.equals(valueType))
-            return value;
+        if (requiredTypeName.equals(valueType)) return value;
         return String.format("(%s) %s", requiredTypeName, value);
-	}
-
+    }
 }

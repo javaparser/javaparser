@@ -20,10 +20,11 @@
  */
 package com.github.javaparser;
 
-import java.util.List;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.singletonList;
+
+import com.github.javaparser.utils.LineSeparator;
+import java.util.List;
 
 /**
  * Thrown when parsing problems occur during parsing with the static methods on JavaParser.
@@ -47,7 +48,7 @@ public class ParseProblemException extends RuntimeException {
     private static String createMessage(List<Problem> problems) {
         StringBuilder message = new StringBuilder();
         for (Problem problem : problems) {
-            message.append(problem.toString()).append(SYSTEM_EOL);
+            message.append(problem.toString()).append(LineSeparator.SYSTEM);
         }
         return message.toString();
     }

@@ -20,9 +20,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration.Bound;
@@ -38,6 +35,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Sets;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class LeastUpperBoundLogic {
 
@@ -47,8 +46,7 @@ public class LeastUpperBoundLogic {
         return new LeastUpperBoundLogic();
     }
 
-    private LeastUpperBoundLogic() {
-    }
+    private LeastUpperBoundLogic() {}
 
     /**
      * See JLS 4.10.4. Least Upper Bound.
@@ -58,13 +56,18 @@ public class LeastUpperBoundLogic {
             throw new IllegalArgumentException();
         }
 
+        // If there is only one type then the lub is the type itself
+        if (types.size() == 1) {
+            return types.iterator().next();
+        }
+
         // The direct supertypes of the null type are all reference types other than the null type itself.
         // One way to handle this case is to remove the type null from the list of types.
         // Provides the concret type of Lazy type if needed
         Set<ResolvedType> resolvedTypes = types.stream()
-        		.filter(type -> !(type instanceof NullType))
-        		.map(type -> concreteType(type))
-        		.collect(Collectors.toSet());
+                .filter(type -> !(type instanceof NullType))
+                .map(type -> concreteType(type))
+                .collect(Collectors.toSet());
 
         // reduces the set in the presence of enumeration type because members are
         // not equal and they do not have an explicit super type.
@@ -142,8 +145,8 @@ public class LeastUpperBoundLogic {
         // In our running example, the only generic element of MEC is List, and Relevant(List) = { List<String>,
         // List<Object> }.
 
-        Multimap<ResolvedType, ResolvedType> relevantParameterizations = relevantParameterizations(
-                minimalErasedCandidates, supertypes);
+        Multimap<ResolvedType, ResolvedType> relevantParameterizations =
+                relevantParameterizations(minimalErasedCandidates, supertypes);
 
         // We will now seek to find a type argument for List that contains (§4.5.1) both String and Object.
         //
@@ -225,19 +228,20 @@ public class LeastUpperBoundLogic {
         }
         return erasedBest;
     }
-    
+
     /*
      * Provides concrete type of Lazy type
      */
     private ResolvedType concreteType(ResolvedType type) {
-    	return type instanceof LazyType ? LazyType.class.cast(type).getType() : type;
+        return type instanceof LazyType ? LazyType.class.cast(type).getType() : type;
     }
 
     /*
      * Check the type declaration if it is an enum
      */
     private boolean isEnum(ResolvedType type) {
-        return type.isReferenceType() && type.asReferenceType().getTypeDeclaration().get().isEnum();
+        return type.isReferenceType()
+                && type.asReferenceType().getTypeDeclaration().get().isEnum();
     }
 
     /*
@@ -249,7 +253,11 @@ public class LeastUpperBoundLogic {
         for (ResolvedType type : resolvedTypes) {
             if (isEnum(type)) {
                 // enum qualified name i.e. java.math.RoundingMode
-                String qn = type.asReferenceType().getTypeDeclaration().get().asEnum().getQualifiedName();
+                String qn = type.asReferenceType()
+                        .getTypeDeclaration()
+                        .get()
+                        .asEnum()
+                        .getQualifiedName();
                 // Save the first occurrence and mark the others so they can be deleted
                 ResolvedType returnedType = enumTypes.putIfAbsent(qn, type);
                 if (returnedType != null) {
@@ -268,8 +276,7 @@ public class LeastUpperBoundLogic {
 
     private Set<ResolvedType> supertypes(ResolvedType type) {
         // How to deal with other types like for example type variable?
-        return type.isReferenceType() ? supertypes(type.asReferenceType())
-                : new LinkedHashSet<>();
+        return type.isReferenceType() ? supertypes(type.asReferenceType()) : new LinkedHashSet<>();
     }
 
     private Set<ResolvedType> supertypes(ResolvedReferenceType type) {
@@ -281,8 +288,8 @@ public class LeastUpperBoundLogic {
 
     private List<Set<ResolvedType>> erased(List<Set<ResolvedType>> typeSets) {
         return typeSets.stream()
-                .map(set -> set.stream().map(ResolvedType::erasure)
-                        .collect(Collectors.toCollection(LinkedHashSet::new)))
+                .map(set ->
+                        set.stream().map(ResolvedType::erasure).collect(Collectors.toCollection(LinkedHashSet::new)))
                 .collect(Collectors.toList());
     }
 
@@ -319,8 +326,8 @@ public class LeastUpperBoundLogic {
      * @param supertypes
      * @return the set of known parameterizations for each generic type G of MEC
      */
-    private Multimap<ResolvedType, ResolvedType> relevantParameterizations(List<ResolvedType> minimalErasedCandidates,
-                                                                           List<Set<ResolvedType>> supertypes) {
+    private Multimap<ResolvedType, ResolvedType> relevantParameterizations(
+            List<ResolvedType> minimalErasedCandidates, List<Set<ResolvedType>> supertypes) {
         Multimap<ResolvedType, ResolvedType> result = Multimaps.newSetMultimap(new HashMap<>(), LinkedHashSet::new);
         for (Set<ResolvedType> supertypesSet : supertypes) {
             for (ResolvedType supertype : supertypesSet) {
@@ -337,8 +344,10 @@ public class LeastUpperBoundLogic {
         Collections.sort(minimalCandidates, (t1, t2) -> {
             // Sort minimal candidates by name with classes before interfaces, to guarantee always the same type is
             // returned when approximated.
-            ResolvedReferenceTypeDeclaration t1Symbol = t1.asReferenceType().getTypeDeclaration().get();
-            ResolvedReferenceTypeDeclaration t2Symbol = t2.asReferenceType().getTypeDeclaration().get();
+            ResolvedReferenceTypeDeclaration t1Symbol =
+                    t1.asReferenceType().getTypeDeclaration().get();
+            ResolvedReferenceTypeDeclaration t2Symbol =
+                    t2.asReferenceType().getTypeDeclaration().get();
             if (t1Symbol.isInterface() && t2Symbol.isInterface()) {
                 return t1Symbol.getQualifiedName().compareTo(t2Symbol.getQualifiedName());
             }
@@ -427,7 +436,7 @@ public class LeastUpperBoundLogic {
         private List<ResolvedTypeParameterDeclaration> typeParameterDeclarations;
         private List<ResolvedType> types;
 
-        private final static TypeSubstitution EMPTY = new TypeSubstitution();
+        private static final TypeSubstitution EMPTY = new TypeSubstitution();
 
         public static TypeSubstitution empty() {
             return new TypeSubstitution();
@@ -455,7 +464,6 @@ public class LeastUpperBoundLogic {
             int index = typeParameterDeclarations.indexOf(typeDecl);
             return index > -1 ? types.get(index) : typeDecl.object();
         }
-
     }
 
     private TypeSubstitution substitution(List<Pair<ResolvedTypeParameterDeclaration, ResolvedType>> pairs) {
@@ -539,7 +547,8 @@ public class LeastUpperBoundLogic {
      */
     private ResolvedType bound(ResolvedType type, BoundType boundType) {
         if (type != null && type.isReferenceType() && type.asReferenceType().isJavaLangObject()) return type;
-        return boundType.equals(BoundType.EXTENDS) ? ResolvedWildcard.extendsBound(type)
+        return boundType.equals(BoundType.EXTENDS)
+                ? ResolvedWildcard.extendsBound(type)
                 : ResolvedWildcard.superBound(type);
     }
 

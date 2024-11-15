@@ -21,13 +21,12 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import com.github.javaparser.ast.Node;
-import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import com.github.javaparser.ast.Node;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
 
 public interface AssociableToASTTest {
 
@@ -40,9 +39,9 @@ public interface AssociableToASTTest {
      * @return The instance casted as the correct type.
      */
     default <T extends AssociableToAST> T safeCast(AssociableToAST instance, Class<T> clazz) {
-        if (clazz.isInstance(instance))
-            return clazz.cast(instance);
-        throw new UnsupportedOperationException(String.format("Unable to cast %s into %s.", instance.getClass().getName(), clazz.getName()));
+        if (clazz.isInstance(instance)) return clazz.cast(instance);
+        throw new UnsupportedOperationException(
+                String.format("Unable to cast %s into %s.", instance.getClass().getName(), clazz.getName()));
     }
 
     /**
@@ -64,10 +63,8 @@ public interface AssociableToASTTest {
     default void checkThatToASTMatchesTheCorrectWrappedNode() {
         AssociableToAST associableToAST = createValue();
         Optional<Node> wrappedNode = getWrappedDeclaration(associableToAST);
-        if (wrappedNode.isPresent())
-            assertEquals(wrappedNode, associableToAST.toAst());
-        else
-            assertFalse(associableToAST.toAst().isPresent());
+        if (wrappedNode.isPresent()) assertEquals(wrappedNode, associableToAST.toAst());
+        else assertFalse(associableToAST.toAst().isPresent());
     }
 
     @Test
@@ -76,9 +73,6 @@ public interface AssociableToASTTest {
         Optional<Node> wrappedNode = getWrappedDeclaration(associableToAST);
         if (wrappedNode.isPresent())
             assertEquals(wrappedNode, associableToAST.toAst(wrappedNode.get().getClass()));
-        else
-            assertFalse(associableToAST.toAst().isPresent());
-
+        else assertFalse(associableToAST.toAst().isPresent());
     }
-
 }

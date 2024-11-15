@@ -21,32 +21,22 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ast.body.FieldDeclaration;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.github.javaparser.ast.body.FieldDeclaration;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class Issue3750Test extends AbstractLexicalPreservingTest {
 
     @Test
     void test() {
-        considerCode(
-                "public class MyClass {\n"
-                        + " String s0;\n"
-                        + " // Comment\n"
-                        + " String s1;\n"
-                        + "}");
+        considerCode("public class MyClass {\n" + " String s0;\n" + " // Comment\n" + " String s1;\n" + "}");
 
         List<FieldDeclaration> fields = cu.findAll(FieldDeclaration.class);
         FieldDeclaration field = fields.get(0);
 
-        String expected =
-                "public class MyClass {\n"
-                        + " // Comment\n"
-                        + " String s1;\n"
-                        + "}";
+        String expected = "public class MyClass {\n" + " // Comment\n" + " String s1;\n" + "}";
 
         field.remove();
 

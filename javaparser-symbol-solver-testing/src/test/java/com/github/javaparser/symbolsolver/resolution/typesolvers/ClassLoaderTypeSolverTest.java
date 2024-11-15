@@ -20,15 +20,14 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.resolution.model.SymbolReference;
-import org.junit.jupiter.api.Test;
-
-import java.util.Map;
-import java.util.function.Supplier;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
+import com.github.javaparser.resolution.model.SymbolReference;
+import java.util.Map;
+import java.util.function.Supplier;
+import org.junit.jupiter.api.Test;
 
 abstract class ClassLoaderTypeSolverTest<T extends ClassLoaderTypeSolver> extends AbstractTypeSolverTest<T> {
 
@@ -52,5 +51,4 @@ abstract class ClassLoaderTypeSolverTest<T extends ClassLoaderTypeSolver> extend
         ResolvedReferenceTypeDeclaration resolvedDeclaration = solvedType.getCorrespondingDeclaration();
         assertEquals(expectedCanonicalName, resolvedDeclaration.getQualifiedName());
     }
-
 }

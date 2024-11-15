@@ -191,13 +191,12 @@ public class PeekingIterator<E> implements ListIterator<E>, LookaheadIterator<E>
     }
 
     /*
-	 * Returns the index of the element that would be returned by the last call to next.
-	 * Returns list size - 1 if the listiterator is at the end of the list.
-	 * Returns -1 if the listiterator is at the beginning of the list.
-	 */
+     * Returns the index of the element that would be returned by the last call to next.
+     * Returns list size - 1 if the listiterator is at the end of the list.
+     * Returns -1 if the listiterator is at the beginning of the list.
+     */
     public int currentIndex() {
-        if (!hasPrevious())
-            return previousIndex();
+        if (!hasPrevious()) return previousIndex();
         return nextIndex() - 1;
     }
 

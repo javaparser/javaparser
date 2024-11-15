@@ -21,7 +21,7 @@ package com.github.javaparser.printer.lexicalpreservation;
  * GNU Lesser General Public License for more details.
  */
 
-import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Modifier.Keyword;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -38,19 +38,16 @@ public class Issue1467Test extends AbstractLexicalPreservingTest {
 
     @Test
     public void test() {
-        considerCode(
-                "public class Bar {\n" +
-                        "    public void foo() {\n" +
-                        "        System.out.print(\"Hello\");\n" +
-                        "    }\n" +
-                        "}");
-        String expected =
-                "public void f() {\n" +
-                        "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" +
-                        "    }";
+        considerCode("public class Bar {\n" + "    public void foo() {\n"
+                + "        System.out.print(\"Hello\");\n"
+                + "    }\n"
+                + "}");
+        String expected = "public void f() {\n"
+                + "        throw new UnsupportedOperationException(\"Not supported yet.\");\n" + "    }";
         // add method declaration
-        MethodDeclaration decl = cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Modifier.DefaultKeyword.PUBLIC);
-        // create body 
+        MethodDeclaration decl =
+                cu.getChildNodesByType(ClassOrInterfaceDeclaration.class).get(0).addMethod("f", Keyword.PUBLIC);
+        // create body
         BlockStmt body = new BlockStmt();
         NodeList<Statement> statements = new NodeList<>();
         ObjectCreationExpr exception = new ObjectCreationExpr();

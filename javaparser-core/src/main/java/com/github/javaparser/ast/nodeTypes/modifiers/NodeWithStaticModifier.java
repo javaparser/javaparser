@@ -20,9 +20,10 @@
  */
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
+import static com.github.javaparser.ast.Modifier.Keyword.STATIC;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.STATIC;
 
 /**
  * A node that can be static.

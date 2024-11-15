@@ -21,6 +21,11 @@
 
 package com.github.javaparser.builders;
 
+import static com.github.javaparser.StaticJavaParser.parseImport;
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -29,18 +34,12 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.expr.Name;
-import org.junit.jupiter.api.Test;
-
+import com.github.javaparser.utils.LineSeparator;
 import java.lang.annotation.ElementType;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
-import static com.github.javaparser.StaticJavaParser.parseImport;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class CompilationUnitBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
@@ -57,26 +56,33 @@ class CompilationUnitBuildersTest {
         cu.addImport(com.github.javaparser.StaticJavaParser.class.getCanonicalName() + ".parseImport", true, false);
         assertEquals(3, cu.getImports().size());
 
-        assertEquals("import " + Map.class.getCanonicalName() + ";" + SYSTEM_EOL, cu.getImport(0).toString());
-        assertEquals("import " + List.class.getCanonicalName() + ";" + SYSTEM_EOL, cu.getImport(1).toString());
-        assertEquals("import static " + com.github.javaparser.StaticJavaParser.class.getCanonicalName() + ".parseImport;" + SYSTEM_EOL,
+        assertEquals(
+                "import " + Map.class.getCanonicalName() + ";" + LineSeparator.SYSTEM,
+                cu.getImport(0).toString());
+        assertEquals(
+                "import " + List.class.getCanonicalName() + ";" + LineSeparator.SYSTEM,
+                cu.getImport(1).toString());
+        assertEquals(
+                "import static " + com.github.javaparser.StaticJavaParser.class.getCanonicalName() + ".parseImport;"
+                        + LineSeparator.SYSTEM,
                 cu.getImport(2).toString());
     }
 
-    public class $tartsWith$ {
-    }
+    public class $tartsWith$ {}
 
     @Test
     public void test$ImportStarts() {
         cu.addImport($tartsWith$.class);
         cu.addImport("my.$tartsWith$");
         assertEquals(2, cu.getImports().size());
-        assertEquals("import " + $tartsWith$.class.getCanonicalName() + ";" + SYSTEM_EOL, cu.getImport(0).toString());
-        assertEquals("import my.$tartsWith$;" + SYSTEM_EOL, cu.getImport(1).toString());
+        assertEquals(
+                "import " + $tartsWith$.class.getCanonicalName() + ";" + LineSeparator.SYSTEM,
+                cu.getImport(0).toString());
+        assertEquals(
+                "import my.$tartsWith$;" + LineSeparator.SYSTEM, cu.getImport(1).toString());
     }
 
-    public class F$F {
-    }
+    public class F$F {}
 
     @Test
     public void test$Import() {
@@ -84,8 +90,10 @@ class CompilationUnitBuildersTest {
         cu.addImport("my.F$F");
         // doesnt fail, but imports class "F.F"
         assertEquals(2, cu.getImports().size());
-        assertEquals("import " + F$F.class.getCanonicalName() + ";" + SYSTEM_EOL, cu.getImport(0).toString());
-        assertEquals("import my.F$F;" + SYSTEM_EOL, cu.getImport(1).toString());
+        assertEquals(
+                "import " + F$F.class.getCanonicalName() + ";" + LineSeparator.SYSTEM,
+                cu.getImport(0).toString());
+        assertEquals("import my.F$F;" + LineSeparator.SYSTEM, cu.getImport(1).toString());
     }
 
     @Test
@@ -103,18 +111,23 @@ class CompilationUnitBuildersTest {
         assertEquals(0, cu.getImports().size());
         cu.addImport("one.two.three.DoNotIgnoreImportWithinSubPackage");
         assertEquals(1, cu.getImports().size());
-        assertEquals("import one.two.three.DoNotIgnoreImportWithinSubPackage;" + SYSTEM_EOL, cu.getImport(0).toString());
+        assertEquals(
+                "import one.two.three.DoNotIgnoreImportWithinSubPackage;" + LineSeparator.SYSTEM,
+                cu.getImport(0).toString());
     }
 
     @Test
     void throwIllegalArgumentExceptionOnImportingAnonymousClass() {
-        assertThrows(IllegalArgumentException.class, () -> cu.addImport(new Comparator<Long>() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> cu.addImport(
+                        new Comparator<Long>() {
 
-            @Override
-            public int compare(Long o1, Long o2) {
-                return o1.compareTo(o2);
-            }
-        }.getClass()));
+                            @Override
+                            public int compare(Long o1, Long o2) {
+                                return o1.compareTo(o2);
+                            }
+                        }.getClass()));
     }
 
     @Test
@@ -144,12 +157,15 @@ class CompilationUnitBuildersTest {
         cu.addImport("my.AnotherImport");
         cu.addImport("my.other.Import");
         assertEquals(2, cu.getImports().size());
-        assertEquals("import my.*;" + SYSTEM_EOL, cu.getImport(0).toString());
-        assertEquals("import my.other.Import;" + SYSTEM_EOL, cu.getImport(1).toString());
+        assertEquals("import my.*;" + LineSeparator.SYSTEM, cu.getImport(0).toString());
+        assertEquals(
+                "import my.other.Import;" + LineSeparator.SYSTEM,
+                cu.getImport(1).toString());
         cu.addImport("my.other.*");
         assertEquals(2, cu.getImports().size());
-        assertEquals("import my.*;" + SYSTEM_EOL, cu.getImport(0).toString());
-        assertEquals("import my.other.*;" + SYSTEM_EOL, cu.getImport(1).toString());
+        assertEquals("import my.*;" + LineSeparator.SYSTEM, cu.getImport(0).toString());
+        assertEquals(
+                "import my.other.*;" + LineSeparator.SYSTEM, cu.getImport(1).toString());
     }
 
     @Test
@@ -162,7 +178,9 @@ class CompilationUnitBuildersTest {
     void typesInSubPackagesOfTheJavaLangPackageRequireExplicitImports() {
         cu.addImport(ElementType.class);
         assertEquals(1, cu.getImports().size());
-        assertEquals("import java.lang.annotation.ElementType;" + SYSTEM_EOL, cu.getImport(0).toString());
+        assertEquals(
+                "import java.lang.annotation.ElementType;" + LineSeparator.SYSTEM,
+                cu.getImport(0).toString());
     }
 
     @Test
@@ -200,18 +218,18 @@ class CompilationUnitBuildersTest {
         cu.addImport(Integer[][][].class);
         cu.addImport(List[][][].class);
         assertEquals(2, cu.getImports().size());
-        assertEquals("com.github.javaparser.ast.CompilationUnit", cu.getImport(0).getNameAsString());
+        assertEquals(
+                "com.github.javaparser.ast.CompilationUnit", cu.getImport(0).getNameAsString());
         assertEquals("java.util.List", cu.getImport(1).getNameAsString());
     }
 
-    class testInnerClass {
-
-    }
+    class testInnerClass {}
 
     @Test
     void testAddImportAnonymousClass() {
         cu.addImport(testInnerClass.class);
-        assertEquals("import " + testInnerClass.class.getCanonicalName().replace("$", ".") + ";" + SYSTEM_EOL,
+        assertEquals(
+                "import " + testInnerClass.class.getCanonicalName().replace("$", ".") + ";" + LineSeparator.SYSTEM,
                 cu.getImport(0).toString());
     }
 
@@ -281,12 +299,16 @@ class CompilationUnitBuildersTest {
 
     @Test
     void testGetAnnotationDeclarationByName() {
-        assertEquals(cu.addAnnotationDeclaration("test"), cu.getAnnotationDeclarationByName("test").get());
+        assertEquals(
+                cu.addAnnotationDeclaration("test"),
+                cu.getAnnotationDeclarationByName("test").get());
     }
 
     @Test
     void testGetRecordByName() {
-        assertEquals(cu.addType(new RecordDeclaration(Modifier.createModifierList(), "test")).getType(0),
+        assertEquals(
+                cu.addType(new RecordDeclaration(Modifier.createModifierList(), "test"))
+                        .getType(0),
                 cu.getRecordByName("test").get());
     }
 }

@@ -21,6 +21,11 @@
 
 package com.github.javaparser.symbolsolver.resolution.javaparser;
 
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10;
+import static com.github.javaparser.Providers.provider;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
@@ -35,20 +40,17 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_10;
-import static com.github.javaparser.Providers.provider;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 class VarTypeTest {
     private final TypeSolver typeSolver = new ReflectionTypeSolver();
-    private final JavaParser javaParser = new JavaParser(new ParserConfiguration()
-            .setLanguageLevel(JAVA_10)
-            .setSymbolResolver(new JavaSymbolSolver(typeSolver)));
+    private final JavaParser javaParser = new JavaParser(
+            new ParserConfiguration().setLanguageLevel(JAVA_10).setSymbolResolver(new JavaSymbolSolver(typeSolver)));
 
     @Test
     void resolveAPrimitive() {
-        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc = 1;}}")).getResult().get();
+        CompilationUnit ast = javaParser
+                .parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc = 1;}}"))
+                .getResult()
+                .get();
         VarType varType = ast.findFirst(VarType.class).get();
 
         ResolvedType resolvedType = varType.resolve();
@@ -58,7 +60,10 @@ class VarTypeTest {
 
     @Test
     void resolveAReferenceType() {
-        CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc = \"\";}}")).getResult().get();
+        CompilationUnit ast = javaParser
+                .parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc = \"\";}}"))
+                .getResult()
+                .get();
         VarType varType = ast.findFirst(VarType.class).get();
 
         ResolvedType resolvedType = varType.resolve();
@@ -69,20 +74,24 @@ class VarTypeTest {
     @Test
     void failResolveNoInitializer() {
         assertThrows(IllegalStateException.class, () -> {
-            CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc;}}")).getResult().get();
+            CompilationUnit ast = javaParser
+                    .parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(){var abc;}}"))
+                    .getResult()
+                    .get();
             VarType varType = ast.findFirst(VarType.class).get();
             varType.resolve();
         });
-
     }
 
     @Test
     void failResolveWrongLocation() {
         assertThrows(IllegalStateException.class, () -> {
-            CompilationUnit ast = javaParser.parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(var x){};}")).getResult().get();
+            CompilationUnit ast = javaParser
+                    .parse(ParseStart.COMPILATION_UNIT, provider("class X{void x(var x){};}"))
+                    .getResult()
+                    .get();
             VarType varType = ast.findFirst(VarType.class).get();
             varType.resolve();
         });
-
     }
 }

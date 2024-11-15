@@ -21,15 +21,15 @@
 
 package com.github.javaparser.printer.lexicalpreservation.transformations.ast.body;
 
+import static com.github.javaparser.ast.Modifier.Keyword.PROTECTED;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.printer.lexicalpreservation.AbstractLexicalPreservingTest;
+import com.github.javaparser.utils.LineSeparator;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PROTECTED;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * Transforming FieldDeclaration and verifying the LexicalPreservation works as expected.
@@ -93,18 +93,15 @@ class FieldDeclarationTransformationsTest extends AbstractLexicalPreservingTest 
     // Annotations
     @Test
     void removingAnnotations() {
-        FieldDeclaration it = consider(SYSTEM_EOL +
-                "@Annotation" + SYSTEM_EOL +
-                "public int A;");
+        FieldDeclaration it = consider(LineSeparator.SYSTEM + "@Annotation" + LineSeparator.SYSTEM + "public int A;");
         it.getAnnotationByName("Annotation").get().remove();
         assertTransformedToString("public int A;", it);
     }
 
     @Test
     void removingAnnotationsWithSpaces() {
-        FieldDeclaration it = consider(SYSTEM_EOL +
-                "  @Annotation " + SYSTEM_EOL +
-                "public int A;");
+        FieldDeclaration it =
+                consider(LineSeparator.SYSTEM + "  @Annotation " + LineSeparator.SYSTEM + "public int A;");
         it.getAnnotationByName("Annotation").get().remove();
         assertTransformedToString("public int A;", it);
     }

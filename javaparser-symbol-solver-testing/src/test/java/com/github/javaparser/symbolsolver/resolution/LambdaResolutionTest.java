@@ -23,8 +23,6 @@ package com.github.javaparser.symbolsolver.resolution;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
@@ -35,6 +33,7 @@ import com.github.javaparser.resolution.Navigator;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
 
 class LambdaResolutionTest extends AbstractResolutionTest {
 
@@ -44,12 +43,14 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpression().get();
+        MethodCallExpr methodCallExpr =
+                (MethodCallExpr) returnStmt.getExpression().get();
         Expression expression = methodCallExpr.getArguments().get(0);
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(new ReflectionTypeSolver());
         ResolvedType type = javaParserFacade.getType(expression);
-        assertEquals("java.util.function.Function<? super java.lang.String, ? extends java.lang.String>", type.describe());
+        assertEquals(
+                "java.util.function.Function<? super java.lang.String, ? extends java.lang.String>", type.describe());
     }
 
     @Test
@@ -129,7 +130,8 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         com.github.javaparser.ast.body.ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Agenda");
         MethodDeclaration method = Navigator.demandMethod(clazz, "lambdaMap");
         ReturnStmt returnStmt = Navigator.demandReturnStmt(method);
-        MethodCallExpr methodCallExpr = (MethodCallExpr) returnStmt.getExpression().get();
+        MethodCallExpr methodCallExpr =
+                (MethodCallExpr) returnStmt.getExpression().get();
         // Collectors.toList()
         Expression expression = methodCallExpr.getArguments().get(0);
 
@@ -190,6 +192,4 @@ class LambdaResolutionTest extends AbstractResolutionTest {
         ResolvedType type = javaParserFacade.getType(lambdaExpr);
         assertEquals("java.util.function.Consumer<? super java.lang.String>", type.describe());
     }
-
-
 }

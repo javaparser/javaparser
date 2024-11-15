@@ -50,7 +50,6 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
         this.typeSolver = typeSolver;
     }
 
-
     @Override
     public String getName() {
         return ctField.getName();
@@ -66,10 +65,6 @@ public class JavassistEnumConstantDeclaration implements ResolvedEnumConstantDec
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{" +
-                "ctField=" + ctField.getName() +
-                ", typeSolver=" + typeSolver +
-                '}';
+        return getClass().getSimpleName() + "{" + "ctField=" + ctField.getName() + ", typeSolver=" + typeSolver + '}';
     }
-
 }

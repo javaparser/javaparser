@@ -31,7 +31,6 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -45,6 +44,7 @@ import java.util.function.Function;
 public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotationMemberDeclaration {
 
     private static Map<Class<?>, Function<Object, ? extends Expression>> valueAsExpressionConverters = new HashMap<>();
+
     static {
         valueAsExpressionConverters.put(Boolean.class, (value) -> new BooleanLiteralExpr((Boolean) value));
         valueAsExpressionConverters.put(Character.class, (value) -> new CharLiteralExpr((Character) value));
@@ -73,9 +73,8 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
 
         if (value.getClass().isArray()) {
             Object[] values = (Object[]) value;
-            final NodeList<Expression> expressions = Arrays.stream(values)
-                    .map(this::transformDefaultValue)
-                    .collect(NodeList.toNodeList());
+            final NodeList<Expression> expressions =
+                    Arrays.stream(values).map(this::transformDefaultValue).collect(NodeList.toNodeList());
             return new ArrayInitializerExpr(expressions);
         }
 
@@ -92,7 +91,8 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
             final Method[] declaredMethods = annotationType.getDeclaredMethods();
             final NodeList<MemberValuePair> pairs = Arrays.stream(declaredMethods)
                     .map(m -> {
-                        final ReflectionAnnotationMemberDeclaration nestedMemberDeclaration = new ReflectionAnnotationMemberDeclaration(m, typeSolver);
+                        final ReflectionAnnotationMemberDeclaration nestedMemberDeclaration =
+                                new ReflectionAnnotationMemberDeclaration(m, typeSolver);
                         return new MemberValuePair(m.getName(), nestedMemberDeclaration.getDefaultValue());
                     })
                     .collect(NodeList.toNodeList());
@@ -102,10 +102,9 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
 
         Function<Object, ? extends Expression> fn = valueAsExpressionConverters.get(value.getClass());
         if (fn == null)
-            throw new UnsupportedOperationException(
-                    String.format("Obtaining the default value of the annotation member %s (of type %s) is not supported yet.",
-                            annotationMember.getName(), value.getClass().getSimpleName())
-            );
+            throw new UnsupportedOperationException(String.format(
+                    "Obtaining the default value of the annotation member %s (of type %s) is not supported yet.",
+                    annotationMember.getName(), value.getClass().getSimpleName()));
         return fn.apply(value);
     }
 
@@ -119,7 +118,8 @@ public class ReflectionAnnotationMemberDeclaration implements ResolvedAnnotation
         if (rrtd.isSolved()) {
             return new ReferenceTypeImpl(rrtd.getCorrespondingDeclaration());
         }
-        throw new UnsupportedOperationException(String.format("Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
+        throw new UnsupportedOperationException(String.format(
+                "Obtaining the type of the annotation member %s is not supported yet.", annotationMember.getName()));
     }
 
     @Override

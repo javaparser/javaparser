@@ -21,39 +21,23 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class Issue3746Test extends AbstractLexicalPreservingTest {
 
     @Test
     void test() {
+        considerCode("public class MyClass {\n" + " String s0;\n" + " // Comment\n" + " String s1;\n" + "}");
+
         considerCode(
-                "public class MyClass {\n"
-                        + " String s0;\n"
-                        + " // Comment\n"
-                        + " String s1;\n"
-                        + "}");
+                "class A {\n" + "  void foo() {\n" + "    int first = 1;\n" + "    int second = 2;\n" + "  }\n" + "}");
 
-        considerCode("class A {\n"
-                + "  void foo() {\n"
-                + "    int first = 1;\n"
-                + "    int second = 2;\n"
-                + "  }\n"
-                + "}"
-        );
-
-        String expected =
-                "class A {\n"
-                        + "  void foo() {\n"
-                        + "    foo();\n"
-                        + "    int second = 2;\n"
-                        + "  }\n"
-                        + "}";
+        String expected = "class A {\n" + "  void foo() {\n" + "    foo();\n" + "    int second = 2;\n" + "  }\n" + "}";
         BlockStmt block = cu.findAll(BlockStmt.class).get(0);
         ExpressionStmt newStmt = new ExpressionStmt(new MethodCallExpr("foo"));
         block.addStatement(1, newStmt);

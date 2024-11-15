@@ -21,6 +21,10 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -33,10 +37,6 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
 
     @Test
@@ -48,13 +48,15 @@ class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        MethodUsage methodUsage =
-                JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
+        MethodUsage methodUsage = JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
 
-        assertThat(methodUsage.getDeclaration().getQualifiedSignature(),
+        assertThat(
+                methodUsage.getDeclaration().getQualifiedSignature(),
                 is("AnonymousClassDeclarations.ParDo.of(AnonymousClassDeclarations.DoFn<I, O>)"));
-        assertThat(methodUsage.getQualifiedSignature(),
-                is("AnonymousClassDeclarations.ParDo.of(AnonymousClassDeclarations.DoFn<java.lang.Integer, java.lang.Long>)"));
+        assertThat(
+                methodUsage.getQualifiedSignature(),
+                is(
+                        "AnonymousClassDeclarations.ParDo.of(AnonymousClassDeclarations.DoFn<java.lang.Integer, java.lang.Long>)"));
     }
 
     @Test
@@ -62,14 +64,15 @@ class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AnonymousClassDeclarations");
         ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
         MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar2");
-        MethodCallExpr methodCall = Navigator.findMethodCall(method, "innerClassMethod").get();
+        MethodCallExpr methodCall =
+                Navigator.findMethodCall(method, "innerClassMethod").get();
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        MethodUsage methodUsage =
-                JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
+        MethodUsage methodUsage = JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
 
-        assertThat(methodUsage.getQualifiedSignature(),
+        assertThat(
+                methodUsage.getQualifiedSignature(),
                 is("AnonymousClassDeclarations.DoFn.ProcessContext.innerClassMethod()"));
     }
 
@@ -78,12 +81,12 @@ class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AnonymousClassDeclarations");
         ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
         MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar3");
-        MethodCallExpr methodCall = Navigator.findMethodCall(method, "callAnnonClassInnerMethod").get();
+        MethodCallExpr methodCall =
+                Navigator.findMethodCall(method, "callAnnonClassInnerMethod").get();
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        MethodUsage methodUsage =
-                JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
+        MethodUsage methodUsage = JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
 
         assertTrue(methodUsage.getQualifiedSignature().startsWith("AnonymousClassDeclarations"));
         assertTrue(methodUsage.getQualifiedSignature().contains("Anonymous-"));
@@ -99,8 +102,7 @@ class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        MethodUsage methodUsage =
-                JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
+        MethodUsage methodUsage = JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
 
         assertThat(methodUsage.getQualifiedSignature(), is("java.lang.Enum.toString()"));
     }
@@ -114,8 +116,7 @@ class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        MethodUsage methodUsage =
-                JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
+        MethodUsage methodUsage = JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
 
         assertThat(methodUsage.getQualifiedSignature(), is("java.lang.Enum.toString()"));
     }
@@ -125,13 +126,15 @@ class JavaParserAnonymousClassDeclarationTest extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("AnonymousClassDeclarations");
         ClassOrInterfaceDeclaration aClass = Navigator.demandClass(cu, "AnonymousClassDeclarations");
         MethodDeclaration method = Navigator.demandMethod(aClass, "fooBar6");
-        MethodCallExpr methodCall = Navigator.findMethodCall(method, "innerClassMethod").get();
+        MethodCallExpr methodCall =
+                Navigator.findMethodCall(method, "innerClassMethod").get();
 
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver();
         combinedTypeSolver.add(new ReflectionTypeSolver());
-        MethodUsage methodUsage =
-                JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
+        MethodUsage methodUsage = JavaParserFacade.get(combinedTypeSolver).solveMethodAsUsage(methodCall);
 
-        assertThat(methodUsage.getQualifiedSignature(), is("AnonymousClassDeclarations.DoFn.ProcessContext.innerClassMethod()"));
+        assertThat(
+                methodUsage.getQualifiedSignature(),
+                is("AnonymousClassDeclarations.DoFn.ProcessContext.innerClassMethod()"));
     }
 }

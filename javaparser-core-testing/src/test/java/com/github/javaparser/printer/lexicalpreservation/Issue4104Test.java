@@ -23,53 +23,51 @@ package com.github.javaparser.printer.lexicalpreservation;
 
 import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
 
-import org.junit.jupiter.api.Test;
-
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.stmt.BreakStmt;
 import com.github.javaparser.ast.stmt.SwitchEntry;
 import com.github.javaparser.ast.stmt.SwitchStmt;
+import org.junit.jupiter.api.Test;
 
 public class Issue4104Test extends AbstractLexicalPreservingTest {
 
     @Test
     void test() {
-        considerCode(
-                "class Foo {\n"
-                        + "  void foo() {\n"
-                        + "    switch(bar) {\n"
-                        + "      default:\n"
-                        + "        break;\n"
-                        + "    }\n"
-                        + "  }\n"
-                        + "}");
+        considerCode("class Foo {\n"
+                + "  void foo() {\n"
+                + "    switch(bar) {\n"
+                + "      default:\n"
+                + "        break;\n"
+                + "    }\n"
+                + "  }\n"
+                + "}");
         // should be this
-//		String expected =
-//				"class Foo {\n"
-//				+ "  void foo() {\n"
-//				+ "    switch(bar) {\n"
-//				+ "      default:\n"
-//				+ "        break;\n"
-//				+ "      case 0:\n"
-//				+ "          break;\n"
-//				+ "    }\n"
-//				+ "  }\n"
-//				+ "}";
+        //		String expected =
+        //				"class Foo {\n"
+        //				+ "  void foo() {\n"
+        //				+ "    switch(bar) {\n"
+        //				+ "      default:\n"
+        //				+ "        break;\n"
+        //				+ "      case 0:\n"
+        //				+ "          break;\n"
+        //				+ "    }\n"
+        //				+ "  }\n"
+        //				+ "}";
 
-        String expected =
-                "class Foo {\n"
-                        + "  void foo() {\n"
-                        + "    switch(bar) {\n"
-                        + "      default:\n"
-                        + "        break;\n"
-                        + "      case 0:\n"
-                        + "          break;\n"
-                        + "      }\n"
-                        + "  }\n"
-                        + "}";
+        String expected = "class Foo {\n"
+                + "  void foo() {\n"
+                + "    switch(bar) {\n"
+                + "      default:\n"
+                + "        break;\n"
+                + "      case 0:\n"
+                + "          break;\n"
+                + "      }\n"
+                + "  }\n"
+                + "}";
 
-        SwitchStmt switchStmt = cu.findAll(SwitchStmt.class).stream().findFirst().get();
+        SwitchStmt switchStmt =
+                cu.findAll(SwitchStmt.class).stream().findFirst().get();
 
         SwitchEntry newEntry = new SwitchEntry();
         newEntry.setLabels(NodeList.nodeList(new IntegerLiteralExpr(0)));

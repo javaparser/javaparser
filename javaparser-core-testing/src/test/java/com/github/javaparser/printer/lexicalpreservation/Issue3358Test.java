@@ -21,11 +21,11 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
-import com.github.javaparser.ast.Modifier;
-import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PRIVATE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Modifier.Keyword;
+import org.junit.jupiter.api.Test;
 
 public class Issue3358Test extends AbstractLexicalPreservingTest {
 
@@ -35,7 +35,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int[] i"));
     }
 
@@ -45,7 +45,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int [] i"));
     }
 
@@ -55,7 +55,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int [ ] i"));
     }
 
@@ -65,10 +65,10 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int   [   ]   i"));
     }
 
-// TODO This syntax {@code int i[]} does not work!
+    // TODO This syntax {@code int i[]} does not work!
 
 }

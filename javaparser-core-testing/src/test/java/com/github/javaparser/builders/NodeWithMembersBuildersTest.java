@@ -21,17 +21,16 @@
 
 package com.github.javaparser.builders;
 
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.ast.Modifier.Keyword.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
 import java.util.Optional;
-
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class NodeWithMembersBuildersTest {
     private final CompilationUnit cu = new CompilationUnit();
@@ -100,16 +99,28 @@ class NodeWithMembersBuildersTest {
         MethodDeclaration mFooInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i"); // foo(int)
         ClassOrInterfaceType type = parseClassOrInterfaceType("List");
         type.setTypeArguments(parseClassOrInterfaceType("String"));
-        MethodDeclaration mFooIntList = classDeclaration.addMethod("foo", PUBLIC).addParameter(int.class, "i").addParameter(type, "l"); // foo(int, List)
-        MethodDeclaration mFooListInt = classDeclaration.addMethod("foo", PUBLIC).addParameter(type, "l").addParameter(int.class, "i"); // foo(List, int)
-        MethodDeclaration mFoo2Int = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "i"); // foo2(int)
-        MethodDeclaration mFoo2IntInt = classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "i").addParameter(int.class, "j"); // foo2(int, int)
+        MethodDeclaration mFooIntList = classDeclaration
+                .addMethod("foo", PUBLIC)
+                .addParameter(int.class, "i")
+                .addParameter(type, "l"); // foo(int, List)
+        MethodDeclaration mFooListInt = classDeclaration
+                .addMethod("foo", PUBLIC)
+                .addParameter(type, "l")
+                .addParameter(int.class, "i"); // foo(List, int)
+        MethodDeclaration mFoo2Int =
+                classDeclaration.addMethod("foo2", PUBLIC).addParameter(int.class, "i"); // foo2(int)
+        MethodDeclaration mFoo2IntInt = classDeclaration
+                .addMethod("foo2", PUBLIC)
+                .addParameter(int.class, "i")
+                .addParameter(int.class, "j"); // foo2(int, int)
 
-        List<MethodDeclaration> methodsWithNoParams = classDeclaration.getMethodsByParameterTypes(new Class[0]); // should return foo()
+        List<MethodDeclaration> methodsWithNoParams =
+                classDeclaration.getMethodsByParameterTypes(new Class[0]); // should return foo()
         assertEquals(1, methodsWithNoParams.size());
         assertTrue(methodsWithNoParams.contains(mFoo));
 
-        List<MethodDeclaration> methodsWithIntParam = classDeclaration.getMethodsByParameterTypes(int.class); // should return foo(int) and foo2(int)
+        List<MethodDeclaration> methodsWithIntParam =
+                classDeclaration.getMethodsByParameterTypes(int.class); // should return foo(int) and foo2(int)
         assertEquals(2, methodsWithIntParam.size());
         assertTrue(methodsWithIntParam.contains(mFooInt));
         assertTrue(methodsWithIntParam.contains(mFoo2Int));
@@ -117,15 +128,18 @@ class NodeWithMembersBuildersTest {
         List<MethodDeclaration> methodsWithListParam = classDeclaration.getMethodsByParameterTypes("List<String>");
         assertEquals(0, methodsWithListParam.size());
 
-        List<MethodDeclaration> methodsWithIntAndListParams = classDeclaration.getMethodsByParameterTypes("int", "List<String>");
+        List<MethodDeclaration> methodsWithIntAndListParams =
+                classDeclaration.getMethodsByParameterTypes("int", "List<String>");
         assertEquals(1, methodsWithIntAndListParams.size());
         assertTrue(methodsWithIntAndListParams.contains(mFooIntList));
 
-        List<MethodDeclaration> methodsWithListAndIntParams = classDeclaration.getMethodsByParameterTypes(List.class, int.class);
+        List<MethodDeclaration> methodsWithListAndIntParams =
+                classDeclaration.getMethodsByParameterTypes(List.class, int.class);
         assertEquals(1, methodsWithListAndIntParams.size());
         assertTrue(methodsWithListAndIntParams.contains(mFooListInt));
 
-        List<MethodDeclaration> methodsWithIntAndIntParams = classDeclaration.getMethodsByParameterTypes(int.class, int.class);
+        List<MethodDeclaration> methodsWithIntAndIntParams =
+                classDeclaration.getMethodsByParameterTypes(int.class, int.class);
         assertEquals(1, methodsWithListAndIntParams.size());
         assertTrue(methodsWithIntAndIntParams.contains(mFoo2IntInt));
     }
@@ -133,7 +147,8 @@ class NodeWithMembersBuildersTest {
     @Test
     void testGetConstructors() {
         ConstructorDeclaration addConstructor = classDeclaration.addConstructor(PUBLIC);
-        ConstructorDeclaration addConstructor2 = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "overload");
+        ConstructorDeclaration addConstructor2 =
+                classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "overload");
 
         List<ConstructorDeclaration> constructors = classDeclaration.getConstructors();
 
@@ -148,30 +163,44 @@ class NodeWithMembersBuildersTest {
         ConstructorDeclaration cInt = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i"); // Foo(int)
         ClassOrInterfaceType type = parseClassOrInterfaceType("List");
         type.setTypeArguments(parseClassOrInterfaceType("String"));
-        ConstructorDeclaration cIntList = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i").addParameter(type, "l"); // Foo(int, List)
-        ConstructorDeclaration cListInt = classDeclaration.addConstructor(PUBLIC).addParameter(type, "l").addParameter(int.class, "i"); // Foo(List, int)
-        ConstructorDeclaration cIntInt = classDeclaration.addConstructor(PUBLIC).addParameter(int.class, "i").addParameter(int.class, "j"); // Foo(int, int)
+        ConstructorDeclaration cIntList = classDeclaration
+                .addConstructor(PUBLIC)
+                .addParameter(int.class, "i")
+                .addParameter(type, "l"); // Foo(int, List)
+        ConstructorDeclaration cListInt = classDeclaration
+                .addConstructor(PUBLIC)
+                .addParameter(type, "l")
+                .addParameter(int.class, "i"); // Foo(List, int)
+        ConstructorDeclaration cIntInt = classDeclaration
+                .addConstructor(PUBLIC)
+                .addParameter(int.class, "i")
+                .addParameter(int.class, "j"); // Foo(int, int)
 
         Optional<ConstructorDeclaration> constructorWithNoParams = classDeclaration.getDefaultConstructor();
         assertTrue(constructorWithNoParams.isPresent());
         assertSame(c, constructorWithNoParams.get());
 
-        Optional<ConstructorDeclaration> constructorWithIntParam = classDeclaration.getConstructorByParameterTypes(int.class);
+        Optional<ConstructorDeclaration> constructorWithIntParam =
+                classDeclaration.getConstructorByParameterTypes(int.class);
         assertTrue(constructorWithIntParam.isPresent());
         assertSame(cInt, constructorWithIntParam.get());
 
-        Optional<ConstructorDeclaration> constructorWithListParam = classDeclaration.getConstructorByParameterTypes("List<String>");
+        Optional<ConstructorDeclaration> constructorWithListParam =
+                classDeclaration.getConstructorByParameterTypes("List<String>");
         assertFalse(constructorWithListParam.isPresent());
 
-        Optional<ConstructorDeclaration> constructorWithIntAndListParams = classDeclaration.getConstructorByParameterTypes("int", "List<String>");
+        Optional<ConstructorDeclaration> constructorWithIntAndListParams =
+                classDeclaration.getConstructorByParameterTypes("int", "List<String>");
         assertTrue(constructorWithIntAndListParams.isPresent());
         assertSame(cIntList, constructorWithIntAndListParams.get());
 
-        Optional<ConstructorDeclaration> constructorWithListAndIntParams = classDeclaration.getConstructorByParameterTypes(List.class, int.class);
+        Optional<ConstructorDeclaration> constructorWithListAndIntParams =
+                classDeclaration.getConstructorByParameterTypes(List.class, int.class);
         assertTrue(constructorWithListAndIntParams.isPresent());
         assertSame(cListInt, constructorWithListAndIntParams.get());
 
-        Optional<ConstructorDeclaration> constructorWithIntAndIntParams = classDeclaration.getConstructorByParameterTypes(int.class, int.class);
+        Optional<ConstructorDeclaration> constructorWithIntAndIntParams =
+                classDeclaration.getConstructorByParameterTypes(int.class, int.class);
         assertTrue(constructorWithIntAndIntParams.isPresent());
         assertSame(cIntInt, constructorWithIntAndIntParams.get());
     }
@@ -180,7 +209,8 @@ class NodeWithMembersBuildersTest {
     void testGetFieldWithName() {
         FieldDeclaration addField = classDeclaration.addField(int.class, "fieldName", PRIVATE);
         classDeclaration.addField(float.class, "secondField", PRIVATE);
-        FieldDeclaration fieldByName = classDeclaration.getFieldByName("fieldName").get();
+        FieldDeclaration fieldByName =
+                classDeclaration.getFieldByName("fieldName").get();
         assertEquals(addField, fieldByName);
     }
 
@@ -204,9 +234,12 @@ class NodeWithMembersBuildersTest {
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
-        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        FieldDeclaration fieldDeclaration =
+                classOrInterfaceDeclaration.getFields().get(0);
         assertEquals(PRIVATE, fieldDeclaration.getModifiers().iterator().next().getKeyword());
-        assertEquals("java.lang.String", fieldDeclaration.getVariables().get(0).getType().toString());
+        assertEquals(
+                "java.lang.String",
+                fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("name", fieldDeclaration.getVariables().get(0).getName().toString());
     }
 
@@ -219,9 +252,12 @@ class NodeWithMembersBuildersTest {
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
-        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        FieldDeclaration fieldDeclaration =
+                classOrInterfaceDeclaration.getFields().get(0);
         assertEquals(PUBLIC, fieldDeclaration.getModifiers().iterator().next().getKeyword());
-        assertEquals("java.lang.String", fieldDeclaration.getVariables().get(0).getType().toString());
+        assertEquals(
+                "java.lang.String",
+                fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("name", fieldDeclaration.getVariables().get(0).getName().toString());
     }
 
@@ -234,9 +270,13 @@ class NodeWithMembersBuildersTest {
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
-        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
-        assertEquals(PROTECTED, fieldDeclaration.getModifiers().iterator().next().getKeyword());
-        assertEquals("java.lang.String", fieldDeclaration.getVariables().get(0).getType().toString());
+        FieldDeclaration fieldDeclaration =
+                classOrInterfaceDeclaration.getFields().get(0);
+        assertEquals(
+                PROTECTED, fieldDeclaration.getModifiers().iterator().next().getKeyword());
+        assertEquals(
+                "java.lang.String",
+                fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("name", fieldDeclaration.getVariables().get(0).getName().toString());
     }
 
@@ -245,18 +285,20 @@ class NodeWithMembersBuildersTest {
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addFieldWithInitializer(
-                "java.lang.String",
-                "name",
-                parseExpression("John"),
-                PUBLIC);
+                "java.lang.String", "name", parseExpression("John"), PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
-        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        FieldDeclaration fieldDeclaration =
+                classOrInterfaceDeclaration.getFields().get(0);
         assertEquals(PUBLIC, fieldDeclaration.getModifiers().iterator().next().getKeyword());
-        assertEquals("java.lang.String", fieldDeclaration.getVariables().get(0).getType().toString());
+        assertEquals(
+                "java.lang.String",
+                fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("name", fieldDeclaration.getVariables().get(0).getName().toString());
-        assertEquals("John", fieldDeclaration.getVariables().get(0).getInitializer().get().toString());
+        assertEquals(
+                "John",
+                fieldDeclaration.getVariables().get(0).getInitializer().get().toString());
     }
 
     @Test
@@ -264,17 +306,17 @@ class NodeWithMembersBuildersTest {
         CompilationUnit compilationUnit = new CompilationUnit();
         ClassOrInterfaceDeclaration classOrInterfaceDeclaration = compilationUnit.addClass("Person");
         classOrInterfaceDeclaration.addFieldWithInitializer(
-                List.class,
-                "skills",
-                parseExpression("new ArrayList()"),
-                PUBLIC);
+                List.class, "skills", parseExpression("new ArrayList()"), PUBLIC);
         assertNotNull(classOrInterfaceDeclaration.getFields());
         assertEquals(1, classOrInterfaceDeclaration.getFields().size());
 
-        FieldDeclaration fieldDeclaration = classOrInterfaceDeclaration.getFields().get(0);
+        FieldDeclaration fieldDeclaration =
+                classOrInterfaceDeclaration.getFields().get(0);
         assertEquals(PUBLIC, fieldDeclaration.getModifiers().iterator().next().getKeyword());
         assertEquals("List", fieldDeclaration.getVariables().get(0).getType().toString());
         assertEquals("skills", fieldDeclaration.getVariables().get(0).getName().toString());
-        assertEquals("new ArrayList()", fieldDeclaration.getVariables().get(0).getInitializer().get().toString());
+        assertEquals(
+                "new ArrayList()",
+                fieldDeclaration.getVariables().get(0).getInitializer().get().toString());
     }
 }

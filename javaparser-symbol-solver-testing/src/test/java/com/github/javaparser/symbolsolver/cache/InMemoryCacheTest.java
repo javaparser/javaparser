@@ -21,12 +21,11 @@
 
 package com.github.javaparser.symbolsolver.cache;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class InMemoryCacheTest {
 
@@ -136,5 +135,4 @@ class InMemoryCacheTest {
         memoryCache.remove(key);
         assertTrue(memoryCache.isEmpty());
     }
-
 }

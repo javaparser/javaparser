@@ -43,7 +43,9 @@ public class ResolvedTypeParametersMap {
             nameToDeclaration = new HashMap<>();
         }
 
-        private Builder(Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+        private Builder(
+                Map<String, ResolvedType> nameToValue,
+                Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
             this.nameToValue = new HashMap<>();
             this.nameToValue.putAll(nameToValue);
             this.nameToDeclaration = new HashMap<>();
@@ -65,10 +67,8 @@ public class ResolvedTypeParametersMap {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof ResolvedTypeParametersMap))
-            return false;
+        if (this == o) return true;
+        if (!(o instanceof ResolvedTypeParametersMap)) return false;
         ResolvedTypeParametersMap that = (ResolvedTypeParametersMap) o;
         return nameToValue.equals(that.nameToValue) && nameToDeclaration.equals(that.nameToDeclaration);
     }
@@ -91,7 +91,8 @@ public class ResolvedTypeParametersMap {
         return new Builder().build();
     }
 
-    private ResolvedTypeParametersMap(Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
+    private ResolvedTypeParametersMap(
+            Map<String, ResolvedType> nameToValue, Map<String, ResolvedTypeParameterDeclaration> nameToDeclaration) {
         this.nameToValue = new HashMap<>();
         this.nameToValue.putAll(nameToValue);
         this.nameToDeclaration = new HashMap<>();
@@ -132,7 +133,8 @@ public class ResolvedTypeParametersMap {
     public ResolvedType replaceAll(ResolvedType type) {
         Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes = new HashMap<>();
         for (ResolvedTypeParameterDeclaration typeParameterDeclaration : this.nameToDeclaration.values()) {
-            type = type.replaceTypeVariables(typeParameterDeclaration, getValue(typeParameterDeclaration), inferredTypes);
+            type = type.replaceTypeVariables(
+                    typeParameterDeclaration, getValue(typeParameterDeclaration), inferredTypes);
         }
         return type;
     }

@@ -17,7 +17,7 @@ jobs:
 
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.7
 
       # Setup Java 11 environment for the next steps
       - name: Setup Java

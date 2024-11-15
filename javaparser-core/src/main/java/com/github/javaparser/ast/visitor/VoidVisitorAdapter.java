@@ -26,14 +26,6 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
-import com.github.javaparser.ast.jml.body.*;
-import com.github.javaparser.ast.jml.clauses.*;
-import com.github.javaparser.ast.jml.doc.JmlDoc;
-import com.github.javaparser.ast.jml.doc.JmlDocDeclaration;
-import com.github.javaparser.ast.jml.doc.JmlDocStmt;
-import com.github.javaparser.ast.jml.doc.JmlDocType;
-import com.github.javaparser.ast.jml.expr.*;
-import com.github.javaparser.ast.jml.stmt.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
@@ -516,6 +508,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
 
     @Override
     public void visit(final SwitchEntry n, final A arg) {
+        n.getGuard().ifPresent(l -> l.accept(this, arg));
         n.getLabels().forEach(p -> p.accept(this, arg));
         n.getStatements().forEach(p -> p.accept(this, arg));
         n.getComment().ifPresent(l -> l.accept(this, arg));
@@ -737,7 +730,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
     }
 
     @Override
-    public void visit(final PatternExpr n, final A arg) {
+    public void visit(final TypePatternExpr n, final A arg) {
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getName().accept(this, arg);
         n.getType().accept(this, arg);
@@ -920,6 +913,14 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getThrownExceptions().forEach(p -> p.accept(this, arg));
         n.getTypeParameters().forEach(p -> p.accept(this, arg));
         n.getAnnotations().forEach(p -> p.accept(this, arg));
+        n.getComment().ifPresent(l -> l.accept(this, arg));
+    }
+
+    @Override
+    public void visit(final RecordPatternExpr n, final A arg) {
+        n.getModifiers().forEach(p -> p.accept(this, arg));
+        n.getPatternList().forEach(p -> p.accept(this, arg));
+        n.getType().accept(this, arg);
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 

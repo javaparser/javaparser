@@ -20,12 +20,13 @@
  */
 package com.github.javaparser;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.utils.LineSeparator;
 import java.util.List;
 import java.util.Optional;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * A token from a parsed source file.
@@ -76,9 +77,12 @@ public class JavaToken {
         // So in the case of:
         //
         // List<List<Set<String>>>>
-        // ___   -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this class
-        // ___  -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this class
-        // __  -> recognized as ">>", then ">" put back in the stream but Token(type=GT, image=">>") passed to this class
+        // ___   -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this
+        // class
+        // ___  -> recognized as ">>>", then ">>" put back in the stream but Token(type=GT, image=">>>") passed to this
+        // class
+        // __  -> recognized as ">>", then ">" put back in the stream but Token(type=GT, image=">>") passed to this
+        // class
         // _  -> Token(type=GT, image=">") good!
         //
         // So given the image could be wrong but the type is correct, we look at the type of the token and we fix
@@ -113,7 +117,7 @@ public class JavaToken {
             content = content.substring(1, content.length() - 1);
         }
         if (TokenTypes.isEndOfLineToken(kind)) {
-            content = SYSTEM_EOL;
+            content = LineSeparator.SYSTEM.asRawString();
         } else if (TokenTypes.isWhitespace(kind)) {
             content = " ";
         }
@@ -182,8 +186,14 @@ public class JavaToken {
 
     @Override
     public String toString() {
-        String text = getText().replace("\n", "\\n").replace("\r", "\\r").replace("\r\n", "\\r\\n").replace("\t", "\\t");
-        return f("\"%s\"   <%s>   %s", text, getKind(), getRange().map(Range::toString).orElse("(?)-(?)"));
+        String text = getText()
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\r\n", "\\r\\n")
+                .replace("\t", "\\t");
+        return f(
+                "\"%s\"   <%s>   %s",
+                text, getKind(), getRange().map(Range::toString).orElse("(?)-(?)"));
     }
 
     /**
@@ -201,7 +211,6 @@ public class JavaToken {
     }
 
     public enum Category {
-
         WHITESPACE_NO_EOL,
         EOL,
         COMMENT,
@@ -254,350 +263,158 @@ public class JavaToken {
 
     @Generated("com.github.javaparser.generator.core.other.TokenKindGenerator")
     public enum Kind {
-
         EOF(0),
         SPACE(1),
         WINDOWS_EOL(2),
         UNIX_EOL(3),
         OLD_MAC_EOL(4),
-        INVARIANT(5),
-        ABRUPT_BEHAVIOR(6),
-        ABRUPT_BEHAVIOUR(7),
-        MODEL_BEHAVIOR(8),
-        MODEL_BEHAVIOUR(9),
-        ACCESSIBLE(10),
-        ACCESSIBLE_REDUNDANTLY(11),
-        ALSO(12),
-        ANTIVALENCE(13),
-        ASSERT_REDUNDANTLY(14),
-        ASSIGNABLE(15),
-        ASSIGNABLE_REDUNDANTLY(16),
-        ASSUME(17),
-        ASSUME_REDUNDANTLY(18),
-        AXIOM(19),
-        BEHAVIOR(20),
-        BEHAVIOUR(21),
-        BIGINT(22),
-        BIGINT_MATH(23),
-        BREAKS(24),
-        BREAKS_REDUNDANTLY(25),
-        BREAK_BEHAVIOR(26),
-        BREAK_BEHAVIOUR(27),
-        CALLABLE(28),
-        CALLABLE_REDUNDANTLY(29),
-        CAPTURES(30),
-        CAPTURES_REDUNDANTLY(31),
-        CHOOSE(32),
-        CHOOSE_IF(33),
-        CODE(34),
-        CODE_BIGINT_MATH(35),
-        CODE_JAVA_MATH(36),
-        CODE_SAFE_MATH(37),
-        IMMUTABLE(38),
-        CONSTRAINT(39),
-        CONSTRAINT_REDUNDANTLY(40),
-        CONSTRUCTOR(41),
-        CONTINUES(42),
-        CONTINUES_REDUNDANTLY(43),
-        CONTINUE_BEHAVIOR(44),
-        CONTINUE_BEHAVIOUR(45),
-        DECLASSIFIES(46),
-        DECREASES(47),
-        DECREASES_REDUNDANTLY(48),
-        DECREASING(49),
-        DECREASING_REDUNDANTLY(50),
-        DETERMINES(51),
-        DIVERGES(52),
-        DIVERGES_REDUNDANTLY(53),
-        DURATION(54),
-        DURATION_REDUNDANTLY(55),
-        ENSURES(56),
-        ENSURES_REDUNDANTLY(57),
-        ENSURES_FREE(58),
-        REQUIRES_FREE(59),
-        EQUIVALENCE(60),
-        IMPLICATION(61),
-        IMPLICATION_BACKWARD(62),
-        ERASES(63),
-        EXAMPLE(64),
-        EXCEPTIONAL_BEHAVIOR(65),
-        EXCEPTIONAL_BEHAVIOUR(66),
-        EXCEPTIONAL_EXAMPLE(67),
-        EXISTS(68),
-        EXSURES(69),
-        EXSURES_REDUNDANTLY(70),
-        EXTRACT(71),
-        FIELD(72),
-        FORALLQ(73),
-        LET(74),
-        FORALL(75),
-        FOR_EXAMPLE(76),
-        PEER(77),
-        REP(78),
-        READ_ONLY(79),
-        GHOST(80),
-        BEGIN(81),
-        END(82),
-        HELPER(83),
-        HENCE_BY(84),
-        HENCE_BY_REDUNDANTLY(85),
-        IMPLIES_THAT(86),
-        IN(87),
-        INITIALIZER(88),
-        INITIALLY(89),
-        INSTANCE(90),
-        TWO_STATE(91),
-        NO_STATE(92),
-        NON_NULL_BY_DEFAULT(93),
-        INVARIANT_REDUNDANTLY(94),
-        IN_REDUNDANTLY(95),
-        JAVA_MATH(96),
-        LBLNEG(97),
-        LBLPOS(98),
-        LBL(99),
-        LOOP_CONTRACT(100),
-        LOOP_INVARIANT(101),
-        LOOP_INVARIANT_FREE(102),
-        LOOP_INVARIANT_REDUNDANTLY(103),
-        MAINTAINING(104),
-        MAINTAINING_REDUNDANTLY(105),
-        MAPS(106),
-        MAPS_REDUNDANTLY(107),
-        MAX(108),
-        MEASURED_BY(109),
-        ESC_MEASURED_BY(110),
-        MEASURED_BY_REDUNDANTLY(111),
-        METHOD(112),
-        MIN(113),
-        MODEL(114),
-        MODEL_PROGRAM(115),
-        MODIFIABLE(116),
-        MODIFIABLE_REDUNDANTLY(117),
-        LOOP_MODIFIES(118),
-        MODIFIES(119),
-        MODIFIES_REDUNDANTLY(120),
-        MONITORED(121),
-        MONITORS_FOR(122),
-        NESTED_CONTRACT_END(123),
-        NESTED_CONTRACT_START(124),
-        NEW_OBJECT(125),
-        NONNULLELEMENTS(126),
-        NON_NULL(127),
-        NORMAL_BEHAVIOR(128),
-        NORMAL_BEHAVIOUR(129),
-        FEASIBLE_BEHAVIOR(130),
-        FEASIBLE_BEHAVIOUR(131),
-        NORMAL_EXAMPLE(132),
-        NOWARN(133),
-        NOWARN_OP(134),
-        NULLABLE(135),
-        NULLABLE_BY_DEFAULT(136),
-        NUM_OF(137),
-        OLD(138),
-        OR(139),
-        POST(140),
-        POST_REDUNDANTLY(141),
-        PRE_ESC(142),
-        PRE(143),
-        PRE_REDUNDANTLY(144),
-        PRODUCT(145),
-        PURE(146),
-        READABLE(147),
-        REFINING(148),
-        REPRESENTS(149),
-        REPRESENTS_REDUNDANTLY(150),
-        REQUIRES_REDUNDANTLY(151),
-        RESULT(152),
-        RETURNS(153),
-        RETURNS_REDUNDANTLY(154),
-        RETURN_BEHAVIOR(155),
-        BACKARROW(156),
-        RETURN_BEHAVIOUR(157),
-        SAFE_MATH(158),
-        SET(159),
-        SIGNALS(160),
-        SIGNALS_ONLY(161),
-        SIGNALS_ONLY_REDUNDANTLY(162),
-        SIGNALS_REDUNDANTLY(163),
-        SPEC_BIGINT_MATH(164),
-        SPEC_JAVA_MATH(165),
-        SPEC_PACKAGE(166),
-        SPEC_PRIVATE(167),
-        SPEC_PROTECTED(168),
-        SPEC_PUBLIC(169),
-        SPEC_SAFE_MATH(170),
-        STATIC_INITIALIZER(171),
-        STRICTLY_PURE(172),
-        SUBTYPE(173),
-        SUCH_THAT(174),
-        SUM(175),
-        TYPE(176),
-        UNINITIALIZED(177),
-        UNKNOWN_OP(178),
-        UNKNOWN_OP_EQ(179),
-        UNREACHABLE(180),
-        WARN(181),
-        WARN_OP(182),
-        WHEN(183),
-        WHEN_REDUNDANTLY(184),
-        WORKING_SPACE_ESC(185),
-        WORKING_SPACE(186),
-        WORKING_SPACE_REDUNDANTLY(187),
-        WRITABLE(188),
-        DOTDOT(189),
-        JML_LINE_COMMENT(190),
-        SINGLE_LINE_COMMENT(191),
-        JML_ENTER_MULTILINE_COMMENT(192),
-        ENTER_JAVADOC_COMMENT(193),
-        ENTER_JML_BLOCK_COMMENT(194),
-        ENTER_MULTILINE_COMMENT(195),
-        JML_BLOCK_COMMENT(196),
-        JAVADOC_COMMENT(197),
-        MULTI_LINE_COMMENT(198),
-        JML_MULTI_LINE_COMMENT(199),
-        COMMENT_CONTENT(200),
-        ABSTRACT(201),
-        ASSERT(202),
-        BOOLEAN(203),
-        BREAK(204),
-        BYTE(205),
-        CASE(206),
-        CATCH(207),
-        CHAR(208),
-        CLASS(209),
-        CONST(210),
-        CONTINUE(211),
-        _DEFAULT(212),
-        DO(213),
-        DOUBLE(214),
-        ELSE(215),
-        ENUM(216),
-        EXTENDS(217),
-        FALSE(218),
-        FINAL(219),
-        FINALLY(220),
-        FLOAT(221),
-        FOR(222),
-        GOTO(223),
-        IF(224),
-        IMPLEMENTS(225),
-        IMPORT(226),
-        INSTANCEOF(227),
-        INT(228),
-        INTERFACE(229),
-        LONG(230),
-        NATIVE(231),
-        NEW(232),
-        NON_SEALED(233),
-        NULL(234),
-        PACKAGE(235),
-        PERMITS(236),
-        PRIVATE(237),
-        PROTECTED(238),
-        PUBLIC(239),
-        RECORD(240),
-        RETURN(241),
-        SEALED(242),
-        SHORT(243),
-        STATIC(244),
-        STRICTFP(245),
-        SUPER(246),
-        SWITCH(247),
-        SYNCHRONIZED(248),
-        THIS(249),
-        THROW(250),
-        THROWS(251),
-        TRANSIENT(252),
-        TRUE(253),
-        TRY(254),
-        VOID(255),
-        VOLATILE(256),
-        WHILE(257),
-        YIELD(258),
-        REQUIRES(259),
-        TO(260),
-        WITH(261),
-        OPEN(262),
-        OPENS(263),
-        USES(264),
-        MODULE(265),
-        EXPORTS(266),
-        PROVIDES(267),
-        TRANSITIVE(268),
-        LONG_LITERAL(269),
-        INTEGER_LITERAL(270),
-        DECIMAL_LITERAL(271),
-        HEX_LITERAL(272),
-        OCTAL_LITERAL(273),
-        BINARY_LITERAL(274),
-        FLOATING_POINT_LITERAL(275),
-        DECIMAL_FLOATING_POINT_LITERAL(276),
-        DECIMAL_EXPONENT(277),
-        HEXADECIMAL_FLOATING_POINT_LITERAL(278),
-        HEXADECIMAL_EXPONENT(279),
-        HEX_DIGITS(280),
-        UNICODE_ESCAPE(281),
-        CHARACTER_LITERAL(282),
-        STRING_LITERAL(283),
-        ENTER_TEXT_BLOCK(284),
-        TEXT_BLOCK_LITERAL(285),
-        TEXT_BLOCK_CONTENT(286),
-        JML_IDENTIFIER(287),
-        IDENTIFIER(288),
-        SYNTH_IDENTIFIER(289),
-        LETTER(290),
-        PART_LETTER(291),
-        LPAREN(292),
-        RPAREN(293),
-        LBRACE(294),
-        RBRACE(295),
-        LBRACKET(296),
-        RBRACKET(297),
-        SEMICOLON(298),
-        COMMA(299),
-        DOT(300),
-        ELLIPSIS(301),
-        AT(302),
-        DOUBLECOLON(303),
-        ASSIGN(304),
-        LT(305),
-        BANG(306),
-        TILDE(307),
-        HOOK(308),
-        COLON(309),
-        ARROW(310),
-        EQ(311),
-        GE(312),
-        LE(313),
-        NE(314),
-        SC_AND(315),
-        SC_OR(316),
-        INCR(317),
-        DECR(318),
-        PLUS(319),
-        MINUS(320),
-        STAR(321),
-        SLASH(322),
-        BIT_AND(323),
-        BIT_OR(324),
-        XOR(325),
-        REM(326),
-        LSHIFT(327),
-        PLUSASSIGN(328),
-        MINUSASSIGN(329),
-        STARASSIGN(330),
-        SLASHASSIGN(331),
-        ANDASSIGN(332),
-        ORASSIGN(333),
-        XORASSIGN(334),
-        REMASSIGN(335),
-        LSHIFTASSIGN(336),
-        RSIGNEDSHIFTASSIGN(337),
-        RUNSIGNEDSHIFTASSIGN(338),
-        RUNSIGNEDSHIFT(339),
-        RSIGNEDSHIFT(340),
-        GT(341),
-        CTRL_Z(342);
+        SINGLE_LINE_COMMENT(5),
+        ENTER_JAVADOC_COMMENT(6),
+        ENTER_MULTILINE_COMMENT(7),
+        JAVADOC_COMMENT(8),
+        MULTI_LINE_COMMENT(9),
+        COMMENT_CONTENT(10),
+        ABSTRACT(11),
+        ASSERT(12),
+        BOOLEAN(13),
+        BREAK(14),
+        BYTE(15),
+        CASE(16),
+        CATCH(17),
+        CHAR(18),
+        CLASS(19),
+        CONST(20),
+        CONTINUE(21),
+        _DEFAULT(22),
+        DO(23),
+        DOUBLE(24),
+        ELSE(25),
+        ENUM(26),
+        EXTENDS(27),
+        FALSE(28),
+        FINAL(29),
+        FINALLY(30),
+        FLOAT(31),
+        FOR(32),
+        GOTO(33),
+        IF(34),
+        IMPLEMENTS(35),
+        IMPORT(36),
+        INSTANCEOF(37),
+        INT(38),
+        INTERFACE(39),
+        LONG(40),
+        NATIVE(41),
+        NEW(42),
+        NON_SEALED(43),
+        NULL(44),
+        PACKAGE(45),
+        PERMITS(46),
+        PRIVATE(47),
+        PROTECTED(48),
+        PUBLIC(49),
+        RECORD(50),
+        RETURN(51),
+        SEALED(52),
+        SHORT(53),
+        STATIC(54),
+        STRICTFP(55),
+        SUPER(56),
+        SWITCH(57),
+        SYNCHRONIZED(58),
+        THIS(59),
+        THROW(60),
+        THROWS(61),
+        TRANSIENT(62),
+        TRUE(63),
+        TRY(64),
+        VOID(65),
+        VOLATILE(66),
+        WHILE(67),
+        YIELD(68),
+        REQUIRES(69),
+        TO(70),
+        WITH(71),
+        OPEN(72),
+        OPENS(73),
+        USES(74),
+        MODULE(75),
+        EXPORTS(76),
+        PROVIDES(77),
+        TRANSITIVE(78),
+        WHEN(79),
+        LONG_LITERAL(80),
+        INTEGER_LITERAL(81),
+        DECIMAL_LITERAL(82),
+        HEX_LITERAL(83),
+        OCTAL_LITERAL(84),
+        BINARY_LITERAL(85),
+        FLOATING_POINT_LITERAL(86),
+        DECIMAL_FLOATING_POINT_LITERAL(87),
+        DECIMAL_EXPONENT(88),
+        HEXADECIMAL_FLOATING_POINT_LITERAL(89),
+        HEXADECIMAL_EXPONENT(90),
+        HEX_DIGITS(91),
+        UNICODE_ESCAPE(92),
+        CHARACTER_LITERAL(93),
+        STRING_LITERAL(94),
+        ENTER_TEXT_BLOCK(95),
+        TEXT_BLOCK_LITERAL(96),
+        TEXT_BLOCK_CONTENT(97),
+        IDENTIFIER(98),
+        LETTER(99),
+        PART_LETTER(100),
+        LPAREN(101),
+        RPAREN(102),
+        LBRACE(103),
+        RBRACE(104),
+        LBRACKET(105),
+        RBRACKET(106),
+        SEMICOLON(107),
+        COMMA(108),
+        DOT(109),
+        ELLIPSIS(110),
+        AT(111),
+        DOUBLECOLON(112),
+        ASSIGN(113),
+        LT(114),
+        BANG(115),
+        TILDE(116),
+        HOOK(117),
+        COLON(118),
+        ARROW(119),
+        EQ(120),
+        GE(121),
+        LE(122),
+        NE(123),
+        SC_AND(124),
+        SC_OR(125),
+        INCR(126),
+        DECR(127),
+        PLUS(128),
+        MINUS(129),
+        STAR(130),
+        SLASH(131),
+        BIT_AND(132),
+        BIT_OR(133),
+        XOR(134),
+        REM(135),
+        LSHIFT(136),
+        PLUSASSIGN(137),
+        MINUSASSIGN(138),
+        STARASSIGN(139),
+        SLASHASSIGN(140),
+        ANDASSIGN(141),
+        ORASSIGN(142),
+        XORASSIGN(143),
+        REMASSIGN(144),
+        LSHIFTASSIGN(145),
+        RSIGNEDSHIFTASSIGN(146),
+        RUNSIGNEDSHIFTASSIGN(147),
+        RUNSIGNEDSHIFT(148),
+        RSIGNEDSHIFT(149),
+        GT(150),
+        CTRL_Z(151);
 
         private final int kind;
 
@@ -607,682 +424,300 @@ public class JavaToken {
 
         public static Kind valueOf(int kind) {
             switch (kind) {
-                case 342:
-                    return CTRL_Z;
-                case 341:
-                    return GT;
-                case 340:
-                    return RSIGNEDSHIFT;
-                case 339:
-                    return RUNSIGNEDSHIFT;
-                case 338:
-                    return RUNSIGNEDSHIFTASSIGN;
-                case 337:
-                    return RSIGNEDSHIFTASSIGN;
-                case 336:
-                    return LSHIFTASSIGN;
-                case 335:
-                    return REMASSIGN;
-                case 334:
-                    return XORASSIGN;
-                case 333:
-                    return ORASSIGN;
-                case 332:
-                    return ANDASSIGN;
-                case 331:
-                    return SLASHASSIGN;
-                case 330:
-                    return STARASSIGN;
-                case 329:
-                    return MINUSASSIGN;
-                case 328:
-                    return PLUSASSIGN;
-                case 327:
-                    return LSHIFT;
-                case 326:
-                    return REM;
-                case 325:
-                    return XOR;
-                case 324:
-                    return BIT_OR;
-                case 323:
-                    return BIT_AND;
-                case 322:
-                    return SLASH;
-                case 321:
-                    return STAR;
-                case 320:
-                    return MINUS;
-                case 319:
-                    return PLUS;
-                case 318:
-                    return DECR;
-                case 317:
-                    return INCR;
-                case 316:
-                    return SC_OR;
-                case 315:
-                    return SC_AND;
-                case 314:
-                    return NE;
-                case 313:
-                    return LE;
-                case 312:
-                    return GE;
-                case 311:
-                    return EQ;
-                case 310:
-                    return ARROW;
-                case 309:
-                    return COLON;
-                case 308:
-                    return HOOK;
-                case 307:
-                    return TILDE;
-                case 306:
-                    return BANG;
-                case 305:
-                    return LT;
-                case 304:
-                    return ASSIGN;
-                case 303:
-                    return DOUBLECOLON;
-                case 302:
-                    return AT;
-                case 301:
-                    return ELLIPSIS;
-                case 300:
-                    return DOT;
-                case 299:
-                    return COMMA;
-                case 298:
-                    return SEMICOLON;
-                case 297:
-                    return RBRACKET;
-                case 296:
-                    return LBRACKET;
-                case 295:
-                    return RBRACE;
-                case 294:
-                    return LBRACE;
-                case 293:
-                    return RPAREN;
-                case 292:
-                    return LPAREN;
-                case 291:
-                    return PART_LETTER;
-                case 290:
-                    return LETTER;
-                case 289:
-                    return SYNTH_IDENTIFIER;
-                case 288:
-                    return IDENTIFIER;
-                case 287:
-                    return JML_IDENTIFIER;
-                case 286:
-                    return TEXT_BLOCK_CONTENT;
-                case 285:
-                    return TEXT_BLOCK_LITERAL;
-                case 284:
-                    return ENTER_TEXT_BLOCK;
-                case 283:
-                    return STRING_LITERAL;
-                case 282:
-                    return CHARACTER_LITERAL;
-                case 281:
-                    return UNICODE_ESCAPE;
-                case 280:
-                    return HEX_DIGITS;
-                case 279:
-                    return HEXADECIMAL_EXPONENT;
-                case 278:
-                    return HEXADECIMAL_FLOATING_POINT_LITERAL;
-                case 277:
-                    return DECIMAL_EXPONENT;
-                case 276:
-                    return DECIMAL_FLOATING_POINT_LITERAL;
-                case 275:
-                    return FLOATING_POINT_LITERAL;
-                case 274:
-                    return BINARY_LITERAL;
-                case 273:
-                    return OCTAL_LITERAL;
-                case 272:
-                    return HEX_LITERAL;
-                case 271:
-                    return DECIMAL_LITERAL;
-                case 270:
-                    return INTEGER_LITERAL;
-                case 269:
-                    return LONG_LITERAL;
-                case 268:
-                    return TRANSITIVE;
-                case 267:
-                    return PROVIDES;
-                case 266:
-                    return EXPORTS;
-                case 265:
-                    return MODULE;
-                case 264:
-                    return USES;
-                case 263:
-                    return OPENS;
-                case 262:
-                    return OPEN;
-                case 261:
-                    return WITH;
-                case 260:
-                    return TO;
-                case 259:
-                    return REQUIRES;
-                case 258:
-                    return YIELD;
-                case 257:
-                    return WHILE;
-                case 256:
-                    return VOLATILE;
-                case 255:
-                    return VOID;
-                case 254:
-                    return TRY;
-                case 253:
-                    return TRUE;
-                case 252:
-                    return TRANSIENT;
-                case 251:
-                    return THROWS;
-                case 250:
-                    return THROW;
-                case 249:
-                    return THIS;
-                case 248:
-                    return SYNCHRONIZED;
-                case 247:
-                    return SWITCH;
-                case 246:
-                    return SUPER;
-                case 245:
-                    return STRICTFP;
-                case 244:
-                    return STATIC;
-                case 243:
-                    return SHORT;
-                case 242:
-                    return SEALED;
-                case 241:
-                    return RETURN;
-                case 240:
-                    return RECORD;
-                case 239:
-                    return PUBLIC;
-                case 238:
-                    return PROTECTED;
-                case 237:
-                    return PRIVATE;
-                case 236:
-                    return PERMITS;
-                case 235:
-                    return PACKAGE;
-                case 234:
-                    return NULL;
-                case 233:
-                    return NON_SEALED;
-                case 232:
-                    return NEW;
-                case 231:
-                    return NATIVE;
-                case 230:
-                    return LONG;
-                case 229:
-                    return INTERFACE;
-                case 228:
-                    return INT;
-                case 227:
-                    return INSTANCEOF;
-                case 226:
-                    return IMPORT;
-                case 225:
-                    return IMPLEMENTS;
-                case 224:
-                    return IF;
-                case 223:
-                    return GOTO;
-                case 222:
-                    return FOR;
-                case 221:
-                    return FLOAT;
-                case 220:
-                    return FINALLY;
-                case 219:
-                    return FINAL;
-                case 218:
-                    return FALSE;
-                case 217:
-                    return EXTENDS;
-                case 216:
-                    return ENUM;
-                case 215:
-                    return ELSE;
-                case 214:
-                    return DOUBLE;
-                case 213:
-                    return DO;
-                case 212:
-                    return _DEFAULT;
-                case 211:
-                    return CONTINUE;
-                case 210:
-                    return CONST;
-                case 209:
-                    return CLASS;
-                case 208:
-                    return CHAR;
-                case 207:
-                    return CATCH;
-                case 206:
-                    return CASE;
-                case 205:
-                    return BYTE;
-                case 204:
-                    return BREAK;
-                case 203:
-                    return BOOLEAN;
-                case 202:
-                    return ASSERT;
-                case 201:
-                    return ABSTRACT;
-                case 200:
-                    return COMMENT_CONTENT;
-                case 199:
-                    return JML_MULTI_LINE_COMMENT;
-                case 198:
-                    return MULTI_LINE_COMMENT;
-                case 197:
-                    return JAVADOC_COMMENT;
-                case 196:
-                    return JML_BLOCK_COMMENT;
-                case 195:
-                    return ENTER_MULTILINE_COMMENT;
-                case 194:
-                    return ENTER_JML_BLOCK_COMMENT;
-                case 193:
-                    return ENTER_JAVADOC_COMMENT;
-                case 192:
-                    return JML_ENTER_MULTILINE_COMMENT;
-                case 191:
-                    return SINGLE_LINE_COMMENT;
-                case 190:
-                    return JML_LINE_COMMENT;
-                case 189:
-                    return DOTDOT;
-                case 188:
-                    return WRITABLE;
-                case 187:
-                    return WORKING_SPACE_REDUNDANTLY;
-                case 186:
-                    return WORKING_SPACE;
-                case 185:
-                    return WORKING_SPACE_ESC;
-                case 184:
-                    return WHEN_REDUNDANTLY;
-                case 183:
-                    return WHEN;
-                case 182:
-                    return WARN_OP;
-                case 181:
-                    return WARN;
-                case 180:
-                    return UNREACHABLE;
-                case 179:
-                    return UNKNOWN_OP_EQ;
-                case 178:
-                    return UNKNOWN_OP;
-                case 177:
-                    return UNINITIALIZED;
-                case 176:
-                    return TYPE;
-                case 175:
-                    return SUM;
-                case 174:
-                    return SUCH_THAT;
-                case 173:
-                    return SUBTYPE;
-                case 172:
-                    return STRICTLY_PURE;
-                case 171:
-                    return STATIC_INITIALIZER;
-                case 170:
-                    return SPEC_SAFE_MATH;
-                case 169:
-                    return SPEC_PUBLIC;
-                case 168:
-                    return SPEC_PROTECTED;
-                case 167:
-                    return SPEC_PRIVATE;
-                case 166:
-                    return SPEC_PACKAGE;
-                case 165:
-                    return SPEC_JAVA_MATH;
-                case 164:
-                    return SPEC_BIGINT_MATH;
-                case 163:
-                    return SIGNALS_REDUNDANTLY;
-                case 162:
-                    return SIGNALS_ONLY_REDUNDANTLY;
-                case 161:
-                    return SIGNALS_ONLY;
-                case 160:
-                    return SIGNALS;
-                case 159:
-                    return SET;
-                case 158:
-                    return SAFE_MATH;
-                case 157:
-                    return RETURN_BEHAVIOUR;
-                case 156:
-                    return BACKARROW;
-                case 155:
-                    return RETURN_BEHAVIOR;
-                case 154:
-                    return RETURNS_REDUNDANTLY;
-                case 153:
-                    return RETURNS;
-                case 152:
-                    return RESULT;
                 case 151:
-                    return REQUIRES_REDUNDANTLY;
+                    return CTRL_Z;
                 case 150:
-                    return REPRESENTS_REDUNDANTLY;
+                    return GT;
                 case 149:
-                    return REPRESENTS;
+                    return RSIGNEDSHIFT;
                 case 148:
-                    return REFINING;
+                    return RUNSIGNEDSHIFT;
                 case 147:
-                    return READABLE;
+                    return RUNSIGNEDSHIFTASSIGN;
                 case 146:
-                    return PURE;
+                    return RSIGNEDSHIFTASSIGN;
                 case 145:
-                    return PRODUCT;
+                    return LSHIFTASSIGN;
                 case 144:
-                    return PRE_REDUNDANTLY;
+                    return REMASSIGN;
                 case 143:
-                    return PRE;
+                    return XORASSIGN;
                 case 142:
-                    return PRE_ESC;
+                    return ORASSIGN;
                 case 141:
-                    return POST_REDUNDANTLY;
+                    return ANDASSIGN;
                 case 140:
-                    return POST;
+                    return SLASHASSIGN;
                 case 139:
-                    return OR;
+                    return STARASSIGN;
                 case 138:
-                    return OLD;
+                    return MINUSASSIGN;
                 case 137:
-                    return NUM_OF;
+                    return PLUSASSIGN;
                 case 136:
-                    return NULLABLE_BY_DEFAULT;
+                    return LSHIFT;
                 case 135:
-                    return NULLABLE;
+                    return REM;
                 case 134:
-                    return NOWARN_OP;
+                    return XOR;
                 case 133:
-                    return NOWARN;
+                    return BIT_OR;
                 case 132:
-                    return NORMAL_EXAMPLE;
+                    return BIT_AND;
                 case 131:
-                    return FEASIBLE_BEHAVIOUR;
+                    return SLASH;
                 case 130:
-                    return FEASIBLE_BEHAVIOR;
+                    return STAR;
                 case 129:
-                    return NORMAL_BEHAVIOUR;
+                    return MINUS;
                 case 128:
-                    return NORMAL_BEHAVIOR;
+                    return PLUS;
                 case 127:
-                    return NON_NULL;
+                    return DECR;
                 case 126:
-                    return NONNULLELEMENTS;
+                    return INCR;
                 case 125:
-                    return NEW_OBJECT;
+                    return SC_OR;
                 case 124:
-                    return NESTED_CONTRACT_START;
+                    return SC_AND;
                 case 123:
-                    return NESTED_CONTRACT_END;
+                    return NE;
                 case 122:
-                    return MONITORS_FOR;
+                    return LE;
                 case 121:
-                    return MONITORED;
+                    return GE;
                 case 120:
-                    return MODIFIES_REDUNDANTLY;
+                    return EQ;
                 case 119:
-                    return MODIFIES;
+                    return ARROW;
                 case 118:
-                    return LOOP_MODIFIES;
+                    return COLON;
                 case 117:
-                    return MODIFIABLE_REDUNDANTLY;
+                    return HOOK;
                 case 116:
-                    return MODIFIABLE;
+                    return TILDE;
                 case 115:
-                    return MODEL_PROGRAM;
+                    return BANG;
                 case 114:
-                    return MODEL;
+                    return LT;
                 case 113:
-                    return MIN;
+                    return ASSIGN;
                 case 112:
-                    return METHOD;
+                    return DOUBLECOLON;
                 case 111:
-                    return MEASURED_BY_REDUNDANTLY;
+                    return AT;
                 case 110:
-                    return ESC_MEASURED_BY;
+                    return ELLIPSIS;
                 case 109:
-                    return MEASURED_BY;
+                    return DOT;
                 case 108:
-                    return MAX;
+                    return COMMA;
                 case 107:
-                    return MAPS_REDUNDANTLY;
+                    return SEMICOLON;
                 case 106:
-                    return MAPS;
+                    return RBRACKET;
                 case 105:
-                    return MAINTAINING_REDUNDANTLY;
+                    return LBRACKET;
                 case 104:
-                    return MAINTAINING;
+                    return RBRACE;
                 case 103:
-                    return LOOP_INVARIANT_REDUNDANTLY;
+                    return LBRACE;
                 case 102:
-                    return LOOP_INVARIANT_FREE;
+                    return RPAREN;
                 case 101:
-                    return LOOP_INVARIANT;
+                    return LPAREN;
                 case 100:
-                    return LOOP_CONTRACT;
+                    return PART_LETTER;
                 case 99:
-                    return LBL;
+                    return LETTER;
                 case 98:
-                    return LBLPOS;
+                    return IDENTIFIER;
                 case 97:
-                    return LBLNEG;
+                    return TEXT_BLOCK_CONTENT;
                 case 96:
-                    return JAVA_MATH;
+                    return TEXT_BLOCK_LITERAL;
                 case 95:
-                    return IN_REDUNDANTLY;
+                    return ENTER_TEXT_BLOCK;
                 case 94:
-                    return INVARIANT_REDUNDANTLY;
+                    return STRING_LITERAL;
                 case 93:
-                    return NON_NULL_BY_DEFAULT;
+                    return CHARACTER_LITERAL;
                 case 92:
-                    return NO_STATE;
+                    return UNICODE_ESCAPE;
                 case 91:
-                    return TWO_STATE;
+                    return HEX_DIGITS;
                 case 90:
-                    return INSTANCE;
+                    return HEXADECIMAL_EXPONENT;
                 case 89:
-                    return INITIALLY;
+                    return HEXADECIMAL_FLOATING_POINT_LITERAL;
                 case 88:
-                    return INITIALIZER;
+                    return DECIMAL_EXPONENT;
                 case 87:
-                    return IN;
+                    return DECIMAL_FLOATING_POINT_LITERAL;
                 case 86:
-                    return IMPLIES_THAT;
+                    return FLOATING_POINT_LITERAL;
                 case 85:
-                    return HENCE_BY_REDUNDANTLY;
+                    return BINARY_LITERAL;
                 case 84:
-                    return HENCE_BY;
+                    return OCTAL_LITERAL;
                 case 83:
-                    return HELPER;
+                    return HEX_LITERAL;
                 case 82:
-                    return END;
+                    return DECIMAL_LITERAL;
                 case 81:
-                    return BEGIN;
+                    return INTEGER_LITERAL;
                 case 80:
-                    return GHOST;
+                    return LONG_LITERAL;
                 case 79:
-                    return READ_ONLY;
+                    return WHEN;
                 case 78:
-                    return REP;
+                    return TRANSITIVE;
                 case 77:
-                    return PEER;
+                    return PROVIDES;
                 case 76:
-                    return FOR_EXAMPLE;
+                    return EXPORTS;
                 case 75:
-                    return FORALL;
+                    return MODULE;
                 case 74:
-                    return LET;
+                    return USES;
                 case 73:
-                    return FORALLQ;
+                    return OPENS;
                 case 72:
-                    return FIELD;
+                    return OPEN;
                 case 71:
-                    return EXTRACT;
+                    return WITH;
                 case 70:
-                    return EXSURES_REDUNDANTLY;
+                    return TO;
                 case 69:
-                    return EXSURES;
+                    return REQUIRES;
                 case 68:
-                    return EXISTS;
+                    return YIELD;
                 case 67:
-                    return EXCEPTIONAL_EXAMPLE;
+                    return WHILE;
                 case 66:
-                    return EXCEPTIONAL_BEHAVIOUR;
+                    return VOLATILE;
                 case 65:
-                    return EXCEPTIONAL_BEHAVIOR;
+                    return VOID;
                 case 64:
-                    return EXAMPLE;
+                    return TRY;
                 case 63:
-                    return ERASES;
+                    return TRUE;
                 case 62:
-                    return IMPLICATION_BACKWARD;
+                    return TRANSIENT;
                 case 61:
-                    return IMPLICATION;
+                    return THROWS;
                 case 60:
-                    return EQUIVALENCE;
+                    return THROW;
                 case 59:
-                    return REQUIRES_FREE;
+                    return THIS;
                 case 58:
-                    return ENSURES_FREE;
+                    return SYNCHRONIZED;
                 case 57:
-                    return ENSURES_REDUNDANTLY;
+                    return SWITCH;
                 case 56:
-                    return ENSURES;
+                    return SUPER;
                 case 55:
-                    return DURATION_REDUNDANTLY;
+                    return STRICTFP;
                 case 54:
-                    return DURATION;
+                    return STATIC;
                 case 53:
-                    return DIVERGES_REDUNDANTLY;
+                    return SHORT;
                 case 52:
-                    return DIVERGES;
+                    return SEALED;
                 case 51:
-                    return DETERMINES;
+                    return RETURN;
                 case 50:
-                    return DECREASING_REDUNDANTLY;
+                    return RECORD;
                 case 49:
-                    return DECREASING;
+                    return PUBLIC;
                 case 48:
-                    return DECREASES_REDUNDANTLY;
+                    return PROTECTED;
                 case 47:
-                    return DECREASES;
+                    return PRIVATE;
                 case 46:
-                    return DECLASSIFIES;
+                    return PERMITS;
                 case 45:
-                    return CONTINUE_BEHAVIOUR;
+                    return PACKAGE;
                 case 44:
-                    return CONTINUE_BEHAVIOR;
+                    return NULL;
                 case 43:
-                    return CONTINUES_REDUNDANTLY;
+                    return NON_SEALED;
                 case 42:
-                    return CONTINUES;
+                    return NEW;
                 case 41:
-                    return CONSTRUCTOR;
+                    return NATIVE;
                 case 40:
-                    return CONSTRAINT_REDUNDANTLY;
+                    return LONG;
                 case 39:
-                    return CONSTRAINT;
+                    return INTERFACE;
                 case 38:
-                    return IMMUTABLE;
+                    return INT;
                 case 37:
-                    return CODE_SAFE_MATH;
+                    return INSTANCEOF;
                 case 36:
-                    return CODE_JAVA_MATH;
+                    return IMPORT;
                 case 35:
-                    return CODE_BIGINT_MATH;
+                    return IMPLEMENTS;
                 case 34:
-                    return CODE;
+                    return IF;
                 case 33:
-                    return CHOOSE_IF;
+                    return GOTO;
                 case 32:
-                    return CHOOSE;
+                    return FOR;
                 case 31:
-                    return CAPTURES_REDUNDANTLY;
+                    return FLOAT;
                 case 30:
-                    return CAPTURES;
+                    return FINALLY;
                 case 29:
-                    return CALLABLE_REDUNDANTLY;
+                    return FINAL;
                 case 28:
-                    return CALLABLE;
+                    return FALSE;
                 case 27:
-                    return BREAK_BEHAVIOUR;
+                    return EXTENDS;
                 case 26:
-                    return BREAK_BEHAVIOR;
+                    return ENUM;
                 case 25:
-                    return BREAKS_REDUNDANTLY;
+                    return ELSE;
                 case 24:
-                    return BREAKS;
+                    return DOUBLE;
                 case 23:
-                    return BIGINT_MATH;
+                    return DO;
                 case 22:
-                    return BIGINT;
+                    return _DEFAULT;
                 case 21:
-                    return BEHAVIOUR;
+                    return CONTINUE;
                 case 20:
-                    return BEHAVIOR;
+                    return CONST;
                 case 19:
-                    return AXIOM;
+                    return CLASS;
                 case 18:
-                    return ASSUME_REDUNDANTLY;
+                    return CHAR;
                 case 17:
-                    return ASSUME;
+                    return CATCH;
                 case 16:
-                    return ASSIGNABLE_REDUNDANTLY;
+                    return CASE;
                 case 15:
-                    return ASSIGNABLE;
+                    return BYTE;
                 case 14:
-                    return ASSERT_REDUNDANTLY;
+                    return BREAK;
                 case 13:
-                    return ANTIVALENCE;
+                    return BOOLEAN;
                 case 12:
-                    return ALSO;
+                    return ASSERT;
                 case 11:
-                    return ACCESSIBLE_REDUNDANTLY;
+                    return ABSTRACT;
                 case 10:
-                    return ACCESSIBLE;
+                    return COMMENT_CONTENT;
                 case 9:
-                    return MODEL_BEHAVIOUR;
+                    return MULTI_LINE_COMMENT;
                 case 8:
-                    return MODEL_BEHAVIOR;
+                    return JAVADOC_COMMENT;
                 case 7:
-                    return ABRUPT_BEHAVIOUR;
+                    return ENTER_MULTILINE_COMMENT;
                 case 6:
-                    return ABRUPT_BEHAVIOR;
+                    return ENTER_JAVADOC_COMMENT;
                 case 5:
-                    return INVARIANT;
+                    return SINGLE_LINE_COMMENT;
                 case 4:
                     return OLD_MAC_EOL;
                 case 3:
@@ -1299,7 +734,13 @@ public class JavaToken {
         }
 
         public boolean isPrimitive() {
-            return this == BYTE || this == CHAR || this == SHORT || this == INT || this == LONG || this == FLOAT || this == DOUBLE;
+            return this == BYTE
+                    || this == CHAR
+                    || this == SHORT
+                    || this == INT
+                    || this == LONG
+                    || this == FLOAT
+                    || this == DOUBLE;
         }
 
         public int getKind() {
@@ -1393,13 +834,11 @@ public class JavaToken {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         JavaToken javaToken = (JavaToken) o;
-        if (kind != javaToken.kind)
-            return false;
-        return text.equals(javaToken.text);
+        if (kind != javaToken.kind) return false;
+        if (!text.equals(javaToken.text)) return false;
+        return true;
     }
 }

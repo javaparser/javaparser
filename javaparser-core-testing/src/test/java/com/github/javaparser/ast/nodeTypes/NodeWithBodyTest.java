@@ -21,12 +21,12 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.utils.TestParser;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NodeWithBodyTest {
     @Test

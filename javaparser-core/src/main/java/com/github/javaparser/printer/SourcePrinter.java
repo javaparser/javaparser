@@ -59,7 +59,15 @@ public class SourcePrinter {
     }
 
     SourcePrinter(final PrinterConfiguration configuration) {
-        this(configuration.get(new DefaultConfigurationOption(ConfigOption.INDENTATION)).get().asValue(), configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString());
+        this(
+                configuration
+                        .get(new DefaultConfigurationOption(ConfigOption.INDENTATION))
+                        .get()
+                        .asValue(),
+                configuration
+                        .get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER))
+                        .get()
+                        .asString());
     }
 
     SourcePrinter(Indentation indentation, String eol) {
@@ -125,9 +133,15 @@ public class SourcePrinter {
                     fullTab.append(IndentType.SPACES.getCar());
                 }
                 String fullTabString = fullTab.toString();
-                if ((newIndent.length() >= currentIndentType.getWidth()) && newIndent.substring(newIndent.length() - currentIndentType.getWidth()).equals(fullTabString)) {
+                if ((newIndent.length() >= currentIndentType.getWidth())
+                        && newIndent
+                                .substring(newIndent.length() - currentIndentType.getWidth())
+                                .equals(fullTabString)) {
                     int i = newIndent.indexOf(fullTabString);
-                    newIndent.replace(i, i + currentIndentType.getWidth(), currentIndentType.getCar().toString());
+                    newIndent.replace(
+                            i,
+                            i + currentIndentType.getWidth(),
+                            currentIndentType.getCar().toString());
                 }
                 break;
             default:

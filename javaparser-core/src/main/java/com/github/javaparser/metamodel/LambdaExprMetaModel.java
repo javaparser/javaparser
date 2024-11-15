@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.expr.LambdaExpr;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -42,8 +42,6 @@ public class LambdaExprMetaModel extends ExpressionMetaModel {
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;
-
-    public PropertyMetaModel contractsPropertyMetaModel;
 
     public PropertyMetaModel isEnclosingParametersPropertyMetaModel;
 

@@ -20,6 +20,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -31,15 +33,12 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class Issue3028Test extends AbstractResolutionTest {
 
     @Test
     void varArgsIssue() {
 
-        TypeSolver typeSolver = new CombinedTypeSolver(
-                new ReflectionTypeSolver());
+        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
 
         StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
@@ -48,8 +47,8 @@ public class Issue3028Test extends AbstractResolutionTest {
 
         final MethodCallExpr mce = Navigator.findMethodCall(cu, "doSomething").get();
         ResolvedMethodDeclaration rmd = mce.resolve();
-        assertEquals("AParserTest.doSomething(java.lang.String, java.util.function.Supplier<?>...)", rmd.getQualifiedSignature());
-
+        assertEquals(
+                "AParserTest.doSomething(java.lang.String, java.util.function.Supplier<?>...)",
+                rmd.getQualifiedSignature());
     }
-
 }

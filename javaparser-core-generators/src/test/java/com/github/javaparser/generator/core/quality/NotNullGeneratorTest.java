@@ -21,18 +21,17 @@
 
 package com.github.javaparser.generator.core.quality;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.DefaultPrettyPrinter;
 import com.github.javaparser.utils.SourceRoot;
-import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.Test;
 
 class NotNullGeneratorTest {
 
@@ -77,5 +76,4 @@ class NotNullGeneratorTest {
             }
         }
     }
-
 }

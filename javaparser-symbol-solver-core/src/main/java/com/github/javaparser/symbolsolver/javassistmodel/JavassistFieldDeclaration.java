@@ -27,11 +27,10 @@ import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.types.ResolvedType;
+import java.lang.reflect.Modifier;
 import javassist.CtField;
 import javassist.bytecode.BadBytecode;
 import javassist.bytecode.SignatureAttribute;
-
-import java.lang.reflect.Modifier;
 
 /**
  * @author Federico Tomassetti
@@ -53,7 +52,8 @@ public class JavassistFieldDeclaration implements ResolvedFieldDeclaration {
                 signature = ctField.getSignature();
             }
             SignatureAttribute.Type genericSignatureType = SignatureAttribute.toTypeSignature(signature);
-            return JavassistUtils.signatureTypeToType(genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
+            return JavassistUtils.signatureTypeToType(
+                    genericSignatureType, typeSolver, (ResolvedTypeParametrizable) declaringType());
         } catch (BadBytecode e) {
             throw new RuntimeException(e);
         }

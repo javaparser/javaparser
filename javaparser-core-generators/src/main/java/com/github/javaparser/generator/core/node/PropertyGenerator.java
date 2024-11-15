@@ -21,6 +21,13 @@
 
 package com.github.javaparser.generator.core.node;
 
+import static com.github.javaparser.StaticJavaParser.parseType;
+import static com.github.javaparser.ast.Modifier.Keyword.FINAL;
+import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
+import static com.github.javaparser.ast.Modifier.createModifierList;
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -35,15 +42,7 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
-
 import java.util.*;
-
-import static com.github.javaparser.StaticJavaParser.parseType;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.FINAL;
-import static com.github.javaparser.ast.Modifier.DefaultKeyword.PUBLIC;
-import static com.github.javaparser.ast.Modifier.createModifierList;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
-import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
 public class PropertyGenerator extends NodeGenerator {
 
@@ -55,7 +54,8 @@ public class PropertyGenerator extends NodeGenerator {
     }
 
     @Override
-    protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
+    protected void generateNode(
+            BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             generateGetter(nodeMetaModel, nodeCoid, property);
             generateSetter(nodeMetaModel, nodeCoid, property);
@@ -63,7 +63,8 @@ public class PropertyGenerator extends NodeGenerator {
         nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> derivedProperties.put(p.getName(), p));
     }
 
-    private void generateSetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
+    private void generateSetter(
+            BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
         // Ensure the relevant imports have been added for the methods/annotations used
         nodeCoid.findCompilationUnit().get().addImport(ObservableProperty.class);
 
@@ -77,7 +78,10 @@ public class PropertyGenerator extends NodeGenerator {
             return;
         }
 
-        final MethodDeclaration setter = new MethodDeclaration(createModifierList(PUBLIC), parseType(property.getContainingNodeMetaModel().getTypeNameGenerified()), property.getSetterMethodName());
+        final MethodDeclaration setter = new MethodDeclaration(
+                createModifierList(PUBLIC),
+                parseType(property.getContainingNodeMetaModel().getTypeNameGenerified()),
+                property.getSetterMethodName());
         annotateWhenOverridden(nodeMetaModel, setter);
         if (property.getContainingNodeMetaModel().hasWildcard()) {
             setter.setType(parseType("T"));
@@ -91,10 +95,14 @@ public class PropertyGenerator extends NodeGenerator {
         if (property.isRequired()) {
             Class<?> type = property.getType();
             if (property.isNonEmpty() && property.isSingular()) {
-                nodeCoid.findCompilationUnit().get().addImport("com.github.javaparser.utils.Utils.assertNonEmpty", true, false);
+                nodeCoid.findCompilationUnit()
+                        .get()
+                        .addImport("com.github.javaparser.utils.Utils.assertNonEmpty", true, false);
                 body.addStatement(f("assertNonEmpty(%s);", name));
             } else if (type != boolean.class && type != int.class) {
-                nodeCoid.findCompilationUnit().get().addImport("com.github.javaparser.utils.Utils.assertNotNull", true, false);
+                nodeCoid.findCompilationUnit()
+                        .get()
+                        .addImport("com.github.javaparser.utils.Utils.assertNotNull", true, false);
                 body.addStatement(f("assertNotNull(%s);", name));
             }
         }
@@ -122,8 +130,10 @@ public class PropertyGenerator extends NodeGenerator {
         }
     }
 
-    private void generateGetter(BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
-        final MethodDeclaration getter = new MethodDeclaration(createModifierList(PUBLIC), parseType(property.getTypeNameForGetter()), property.getGetterMethodName());
+    private void generateGetter(
+            BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
+        final MethodDeclaration getter = new MethodDeclaration(
+                createModifierList(PUBLIC), parseType(property.getTypeNameForGetter()), property.getGetterMethodName());
         annotateWhenOverridden(nodeMetaModel, getter);
         final BlockStmt body = getter.getBody().get();
         body.getStatements().clear();
@@ -137,7 +147,8 @@ public class PropertyGenerator extends NodeGenerator {
         addOrReplaceWhenSameSignature(nodeCoid, getter);
     }
 
-    private void generateObservableProperty(EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {
+    private void generateObservableProperty(
+            EnumDeclaration observablePropertyEnum, PropertyMetaModel property, boolean derived) {
         boolean isAttribute = !Node.class.isAssignableFrom(property.getType());
         String name = property.getName();
         String constantName = camelCaseToScreaming(name.startsWith("is") ? name.substring(2) : name);
@@ -158,8 +169,12 @@ public class PropertyGenerator extends NodeGenerator {
 
     @Override
     protected void after() throws Exception {
-        CompilationUnit observablePropertyCu = sourceRoot.tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java").getResult().get();
-        EnumDeclaration observablePropertyEnum = observablePropertyCu.getEnumByName("ObservableProperty").get();
+        CompilationUnit observablePropertyCu = sourceRoot
+                .tryToParse("com.github.javaparser.ast.observer", "ObservableProperty.java")
+                .getResult()
+                .get();
+        EnumDeclaration observablePropertyEnum =
+                observablePropertyCu.getEnumByName("ObservableProperty").get();
         observablePropertyEnum.getEntries().clear();
         List<String> observablePropertyNames = new LinkedList<>(declaredProperties.keySet());
         observablePropertyNames.sort(String::compareTo);

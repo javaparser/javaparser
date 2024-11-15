@@ -21,7 +21,8 @@
 
 package com.github.javaparser.resolution.declarations;
 
-public interface ResolvedMethodLikeDeclarationTest extends ResolvedDeclarationTest, ResolvedTypeParametrizableTest, HasAccessSpecifierTest {
+public interface ResolvedMethodLikeDeclarationTest
+        extends ResolvedDeclarationTest, ResolvedTypeParametrizableTest, HasAccessSpecifierTest {
 
     @Override
     ResolvedMethodLikeDeclaration createValue();

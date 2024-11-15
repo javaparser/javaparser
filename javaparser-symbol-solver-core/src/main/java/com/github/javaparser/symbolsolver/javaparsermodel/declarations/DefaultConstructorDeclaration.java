@@ -27,7 +27,6 @@ import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaratio
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +36,8 @@ import java.util.List;
  *
  * @author Federico Tomassetti
  */
-public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclaration> implements ResolvedConstructorDeclaration {
+public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclaration>
+        implements ResolvedConstructorDeclaration {
 
     private N declaringType;
 
@@ -84,5 +84,4 @@ public class DefaultConstructorDeclaration<N extends ResolvedReferenceTypeDeclar
     public ResolvedType getSpecifiedException(int index) {
         throw new UnsupportedOperationException("The default constructor does not throw exceptions");
     }
-
 }

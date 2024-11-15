@@ -27,12 +27,11 @@ import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedAnnotationMemberDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Optional;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
-
-import java.util.Optional;
 
 class JavassistAnnotationMemberDeclarationTest implements ResolvedAnnotationMemberDeclarationTest {
 
@@ -41,9 +40,7 @@ class JavassistAnnotationMemberDeclarationTest implements ResolvedAnnotationMemb
         try {
             TypeSolver typeSolver = new ReflectionTypeSolver();
             CtClass clazz = ClassPool.getDefault().getCtClass("java.lang.StringBuilder");
-            CtClass[] args = {
-                    ClassPool.getDefault().get("java.lang.Object")
-            };
+            CtClass[] args = {ClassPool.getDefault().get("java.lang.Object")};
             CtMethod method = clazz.getDeclaredMethod("append", args);
             return new JavassistAnnotationMemberDeclaration(method, typeSolver);
         } catch (NotFoundException e) {

@@ -20,6 +20,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -27,12 +29,8 @@ import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import org.junit.jupiter.api.Test;
 
 public class Issue1817Test extends AbstractSymbolResolutionTest {
 
@@ -45,15 +43,14 @@ public class Issue1817Test extends AbstractSymbolResolutionTest {
         typeSolver.add(new ReflectionTypeSolver());
         typeSolver.add(new JavaParserTypeSolver(testResources));
 
-        StaticJavaParser.setConfiguration(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver)));
+        StaticJavaParser.setConfiguration(
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver)));
 
-        String s =
-                "interface A extends X.A {\n" +
-                        "    default void foo() {\n" +
-                        "        X.A xa = null;\n" +
-                        "        xa.bar();\n" +
-                        "    }\n" +
-                        "}";
+        String s = "interface A extends X.A {\n" + "    default void foo() {\n"
+                + "        X.A xa = null;\n"
+                + "        xa.bar();\n"
+                + "    }\n"
+                + "}";
 
         CompilationUnit cu = StaticJavaParser.parse(s);
 
@@ -61,5 +58,4 @@ public class Issue1817Test extends AbstractSymbolResolutionTest {
 
         assertEquals("X.A.bar", mce.resolve().getQualifiedName());
     }
-
 }

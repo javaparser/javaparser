@@ -21,10 +21,10 @@
 package com.github.javaparser;
 
 import com.github.javaparser.ast.comments.CommentsCollection;
+import com.github.javaparser.utils.LineSeparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.SYSTEM_EOL;
 
 /**
  * The results given when parsing with an instance of JavaParser.
@@ -40,7 +40,7 @@ public class ParseResult<T> {
     /**
      * General constructor.
      *
-     * @param result   the AST, or empty if it wasn't created.
+     * @param result the AST, or empty if it wasn't created.
      * @param problems a list of encountered parsing problems.
      */
     public ParseResult(T result, List<Problem> problems, CommentsCollection commentsCollection) {
@@ -98,9 +98,9 @@ public class ParseResult<T> {
         if (isSuccessful()) {
             return "Parsing successful";
         }
-        StringBuilder message = new StringBuilder("Parsing failed:").append(SYSTEM_EOL);
+        StringBuilder message = new StringBuilder("Parsing failed:").append(LineSeparator.SYSTEM);
         for (Problem problem : problems) {
-            message.append(problem.toString()).append(SYSTEM_EOL);
+            message.append(problem.toString()).append(LineSeparator.SYSTEM);
         }
         return message.toString();
     }

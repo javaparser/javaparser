@@ -20,11 +20,11 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
-import java.util.Optional;
 import com.github.javaparser.JavaToken;
 import com.github.javaparser.JavaToken.Kind;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
+import java.util.Optional;
 
 public class TokenTextElement extends TextElement {
 
@@ -62,10 +62,8 @@ public class TokenTextElement extends TextElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         TokenTextElement that = (TokenTextElement) o;
         return token.equals(that.token);
     }

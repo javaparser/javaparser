@@ -21,6 +21,11 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParseStart.STATEMENT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16;
+import static com.github.javaparser.Providers.provider;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -29,11 +34,6 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.utils.TestUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParseStart.STATEMENT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16;
-import static com.github.javaparser.Providers.provider;
 
 class Java16ValidatorTest {
 
@@ -46,7 +46,23 @@ class Java16ValidatorTest {
             ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("switch(x){case 3: yield 6;}"));
             TestUtils.assertNoProblems(result);
         }
+    }
 
+    @Nested
+    class PatternMatching {
+        @Test
+        void patternMatchingAllowed() {
+            ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("if (a instanceof String s) {}"));
+            TestUtils.assertNoProblems(result);
+        }
+
+        @Test
+        void recordPatternsForbidden() {
+            ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("if (a instanceof Box(String s)) {}"));
+            TestUtils.assertProblems(
+                    result,
+                    "(line 1,col 18) Record patterns are not supported. Pay attention that this feature is supported starting from 'JAVA_21' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        }
     }
 
     /**
@@ -62,21 +78,27 @@ class Java16ValidatorTest {
             void recordUsedAsClassIdentifier() {
                 String s = "public class record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 14) 'record' is a restricted identifier and cannot be used for type declarations");
+                TestUtils.assertProblems(
+                        result,
+                        "(line 1,col 14) 'record' is a restricted identifier and cannot be used for type declarations");
             }
 
             @Test
             void recordUsedAsEnumIdentifier() {
                 String s = "public enum record {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 13) 'record' is a restricted identifier and cannot be used for type declarations");
+                TestUtils.assertProblems(
+                        result,
+                        "(line 1,col 13) 'record' is a restricted identifier and cannot be used for type declarations");
             }
 
             @Test
             void recordUsedAsRecordIdentifier() {
                 String s = "public record record() {}";
                 ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider(s));
-                TestUtils.assertProblems(result, "(line 1,col 15) 'record' is a restricted identifier and cannot be used for type declarations");
+                TestUtils.assertProblems(
+                        result,
+                        "(line 1,col 15) 'record' is a restricted identifier and cannot be used for type declarations");
             }
         }
 

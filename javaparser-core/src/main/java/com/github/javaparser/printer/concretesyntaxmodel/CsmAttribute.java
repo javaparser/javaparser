@@ -20,12 +20,13 @@
  */
 package com.github.javaparser.printer.concretesyntaxmodel;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.f;
+
 import com.github.javaparser.GeneratedJavaParserConstants;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.IntegerLiteralExpr;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import com.github.javaparser.printer.SourcePrinter;
-import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 public class CsmAttribute implements CsmElement {
 
@@ -62,7 +63,9 @@ public class CsmAttribute implements CsmElement {
                         return i;
                     }
                 }
-                throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), text));
+                throw new RuntimeException(f(
+                        "Attribute '%s' does not corresponding to any expected value. Text: %s",
+                        property.camelCaseName(), text));
             }
             case KEYWORD:
             case OPERATOR: {
@@ -72,7 +75,9 @@ public class CsmAttribute implements CsmElement {
                         return i;
                     }
                 }
-                throw new RuntimeException(f("Attribute '%s' does not corresponding to any expected value. Text: %s", property.camelCaseName(), tokenText));
+                throw new RuntimeException(f(
+                        "Attribute '%s' does not corresponding to any expected value. Text: %s",
+                        property.camelCaseName(), tokenText));
             }
             case VALUE:
                 if (node instanceof IntegerLiteralExpr) {
@@ -81,7 +86,8 @@ public class CsmAttribute implements CsmElement {
             case NAME:
                 return GeneratedJavaParserConstants.IDENTIFIER;
         }
-        throw new UnsupportedOperationException("getTokenType does not know how to handle property " + property + " with text: " + text);
+        throw new UnsupportedOperationException(
+                "getTokenType does not know how to handle property " + property + " with text: " + text);
     }
 
     @Override

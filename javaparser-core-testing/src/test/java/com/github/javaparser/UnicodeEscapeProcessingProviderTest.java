@@ -20,11 +20,10 @@
  */
 package com.github.javaparser;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link UnicodeEscapeProcessingProvider}.
@@ -126,13 +125,11 @@ public class UnicodeEscapeProcessingProviderTest {
     }
 
     static UnicodeEscapeProcessingProvider provider(String source) {
-        UnicodeEscapeProcessingProvider provider = new UnicodeEscapeProcessingProvider(10,
-                new StringProvider(source));
+        UnicodeEscapeProcessingProvider provider = new UnicodeEscapeProcessingProvider(10, new StringProvider(source));
         return provider;
     }
 
-    static String process(UnicodeEscapeProcessingProvider provider)
-            throws IOException {
+    static String process(UnicodeEscapeProcessingProvider provider) throws IOException {
         StringBuilder result = new StringBuilder();
         char[] buffer = new char[10];
         while (true) {

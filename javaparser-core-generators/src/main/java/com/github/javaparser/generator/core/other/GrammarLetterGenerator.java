@@ -28,8 +28,16 @@ import java.util.function.Function;
  */
 public class GrammarLetterGenerator {
     public static void main(String[] args) {
-        generate("LETTER", c -> Character.isJavaIdentifierStart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
-        generate("PART_LETTER", c -> Character.isJavaIdentifierPart(c) || Character.isHighSurrogate((char) (int) c) || Character.isLowSurrogate((char) (int) c));
+        generate(
+                "LETTER",
+                c -> Character.isJavaIdentifierStart(c)
+                        || Character.isHighSurrogate((char) (int) c)
+                        || Character.isLowSurrogate((char) (int) c));
+        generate(
+                "PART_LETTER",
+                c -> Character.isJavaIdentifierPart(c)
+                        || Character.isHighSurrogate((char) (int) c)
+                        || Character.isLowSurrogate((char) (int) c));
     }
 
     private static void generate(String tokenName, Function<Integer, Boolean> f) {

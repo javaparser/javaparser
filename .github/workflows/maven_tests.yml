@@ -37,6 +37,18 @@ jobs:
         ### exclude pre-8 (min development version jdk8)
         ### exclude post-12 (changes to jdk causes reflection tests to fail due to added methods #1701 )
         jdk: [ 17 ]
+        # The below configurations are no longer available on github runners and is not supported by the
+        # setup-java action, nor are they available from the supported distributions.
+        # See https://github.com/actions/setup-java for details
+        exclude:
+          - os: macos-latest
+            jdk: 9
+          - os: macos-latest
+            jdk: 10
+          - os: macos-latest
+            jdk: 12
+          - os: macos-latest
+            jdk: 14
     env:
       OS: ${{ matrix.os }}
       JDK: ${{ matrix.jdk }}
@@ -46,7 +58,7 @@ jobs:
     steps:
       ## Checkout the current version of the code from the repo.
       - name: Checkout latest code
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v4.1.7
         with:
           fetch-depth: "0"
 

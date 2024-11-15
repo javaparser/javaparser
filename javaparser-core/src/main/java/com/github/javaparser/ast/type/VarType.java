@@ -40,6 +40,7 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
 import com.github.javaparser.resolution.types.ResolvedType;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -156,10 +157,14 @@ public class VarType extends Type {
                 if (iterType.isReferenceType()) {
                     // The type of a variable in a for-each loop with an
                     // Iterable with parameter type
-                    List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
+                    List<ResolvedType> parametersType =
+                            iterType.asReferenceType().typeParametersMap().getTypes();
                     if (parametersType.isEmpty()) {
-                        Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT).getDeclaration();
-                        return oObjectDeclaration.map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType())).orElseThrow(() -> new UnsupportedOperationException());
+                        Optional<ResolvedTypeDeclaration> oObjectDeclaration =
+                                context.solveType(JAVA_LANG_OBJECT).getDeclaration();
+                        return oObjectDeclaration
+                                .map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
+                                .orElseThrow(() -> new UnsupportedOperationException());
                     }
                     return parametersType.get(0);
                 }

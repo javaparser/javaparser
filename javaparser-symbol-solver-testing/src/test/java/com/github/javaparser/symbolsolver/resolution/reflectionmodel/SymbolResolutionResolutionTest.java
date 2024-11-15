@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.resolution.reflectionmodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -35,8 +37,6 @@ import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SymbolResolutionResolutionTest extends AbstractResolutionTest {
 
@@ -58,7 +58,8 @@ class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         VariableDeclarator field = Navigator.demandField(clazz, "PUBLIC");
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
-        ResolvedType ref = JavaParserFacade.get(typeSolver).getType(field.getInitializer().get());
+        ResolvedType ref =
+                JavaParserFacade.get(typeSolver).getType(field.getInitializer().get());
         assertEquals("int", ref.describe());
     }
 
@@ -86,5 +87,4 @@ class SymbolResolutionResolutionTest extends AbstractResolutionTest {
         ResolvedType ref = JavaParserFacade.get(typeSolver).getType(expression);
         assertEquals("java.lang.String", ref.describe());
     }
-
 }

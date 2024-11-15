@@ -20,19 +20,18 @@
 
 package com.github.javaparser.ast;
 
-import com.github.javaparser.ast.observer.AstObserver;
-import com.github.javaparser.ast.observer.AstObserverAdapter;
-import com.github.javaparser.ast.observer.ObservableProperty;
-import com.github.javaparser.ast.type.PrimitiveType;
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.github.javaparser.ast.observer.AstObserver;
+import com.github.javaparser.ast.observer.AstObserverAdapter;
+import com.github.javaparser.ast.observer.ObservableProperty;
+import com.github.javaparser.ast.type.PrimitiveType;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class ObservationTest {
 
@@ -43,8 +42,11 @@ public class ObservationTest {
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
-            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format("%s.%s changed from %s to %s", observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+            public void propertyChange(
+                    Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                changes.add(String.format(
+                        "%s.%s changed from %s to %s",
+                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };
         cu.registerForSubtree(observer);
@@ -54,16 +56,31 @@ public class ObservationTest {
         cu.getClassByName("A").get().setName("MyCoolClass");
         assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
 
-        cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
-        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
-                "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .getFieldByName("f")
+                .get()
+                .getVariable(0)
+                .setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
+        assertThat(changes)
+                .containsExactlyInAnyOrder(
+                        "ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                        "FieldDeclaration.maximum_common_type changed from int to boolean",
+                        "VariableDeclarator.type changed from int to boolean");
 
-        cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
-        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
-                "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean",
-                "Parameter.name changed from p to myParam");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .getMethodsByName("foo")
+                .get(0)
+                .getParameterByName("p")
+                .get()
+                .setName("myParam");
+        assertThat(changes)
+                .containsExactlyInAnyOrder(
+                        "ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                        "FieldDeclaration.maximum_common_type changed from int to boolean",
+                        "VariableDeclarator.type changed from int to boolean",
+                        "Parameter.name changed from p to myParam");
     }
 
     @Test
@@ -73,8 +90,11 @@ public class ObservationTest {
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
-            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format("%s.%s changed from %s to %s", observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+            public void propertyChange(
+                    Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                changes.add(String.format(
+                        "%s.%s changed from %s to %s",
+                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };
         cu.getClassByName("A").get().register(observer, Node.ObserverRegistrationMode.JUST_THIS_NODE);
@@ -84,13 +104,29 @@ public class ObservationTest {
         cu.getClassByName("A").get().setName("MyCoolClass");
         assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
 
-        cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .getFieldByName("f")
+                .get()
+                .getVariable(0)
+                .setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
         assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
 
-        cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .getMethodsByName("foo")
+                .get(0)
+                .getParameterByName("p")
+                .get()
+                .setName("myParam");
         assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
 
-        cu.getClassByName("MyCoolClass").get().addField("int", "bar").getVariables().get(0).setInitializer("0");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .addField("int", "bar")
+                .getVariables()
+                .get(0)
+                .setInitializer("0");
         assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
     }
 
@@ -101,33 +137,60 @@ public class ObservationTest {
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
-            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format("%s.%s changed from %s to %s", observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+            public void propertyChange(
+                    Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                changes.add(String.format(
+                        "%s.%s changed from %s to %s",
+                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };
-        cu.getClassByName("A").get().register(observer, Node.ObserverRegistrationMode.THIS_NODE_AND_EXISTING_DESCENDANTS);
+        cu.getClassByName("A")
+                .get()
+                .register(observer, Node.ObserverRegistrationMode.THIS_NODE_AND_EXISTING_DESCENDANTS);
 
         assertThat(changes).isEmpty();
 
         cu.getClassByName("A").get().setName("MyCoolClass");
         assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
 
-        cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
-        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
-                "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .getFieldByName("f")
+                .get()
+                .getVariable(0)
+                .setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
+        assertThat(changes)
+                .containsExactlyInAnyOrder(
+                        "ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                        "FieldDeclaration.maximum_common_type changed from int to boolean",
+                        "VariableDeclarator.type changed from int to boolean");
 
-        cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
-        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
-                "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean",
-                "Parameter.name changed from p to myParam");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .getMethodsByName("foo")
+                .get(0)
+                .getParameterByName("p")
+                .get()
+                .setName("myParam");
+        assertThat(changes)
+                .containsExactlyInAnyOrder(
+                        "ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                        "FieldDeclaration.maximum_common_type changed from int to boolean",
+                        "VariableDeclarator.type changed from int to boolean",
+                        "Parameter.name changed from p to myParam");
 
-        cu.getClassByName("MyCoolClass").get().addField("int", "bar").getVariables().get(0).setInitializer("0");
-        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
-                "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean",
-                "Parameter.name changed from p to myParam");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .addField("int", "bar")
+                .getVariables()
+                .get(0)
+                .setInitializer("0");
+        assertThat(changes)
+                .containsExactlyInAnyOrder(
+                        "ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                        "FieldDeclaration.maximum_common_type changed from int to boolean",
+                        "VariableDeclarator.type changed from int to boolean",
+                        "Parameter.name changed from p to myParam");
     }
 
     @Test
@@ -137,8 +200,11 @@ public class ObservationTest {
         List<String> changes = new ArrayList<>();
         AstObserver observer = new AstObserverAdapter() {
             @Override
-            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
-                changes.add(String.format("%s.%s changed from %s to %s", observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
+            public void propertyChange(
+                    Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+                changes.add(String.format(
+                        "%s.%s changed from %s to %s",
+                        observedNode.getClass().getSimpleName(), property.name().toLowerCase(), oldValue, newValue));
             }
         };
         cu.getClassByName("A").get().register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
@@ -148,25 +214,45 @@ public class ObservationTest {
         cu.getClassByName("A").get().setName("MyCoolClass");
         assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass");
 
-        cu.getClassByName("MyCoolClass").get().getFieldByName("f").get().getVariable(0).setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
-        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
-                "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .getFieldByName("f")
+                .get()
+                .getVariable(0)
+                .setType(new PrimitiveType(PrimitiveType.Primitive.BOOLEAN));
+        assertThat(changes)
+                .containsExactlyInAnyOrder(
+                        "ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                        "FieldDeclaration.maximum_common_type changed from int to boolean",
+                        "VariableDeclarator.type changed from int to boolean");
 
-        cu.getClassByName("MyCoolClass").get().getMethodsByName("foo").get(0).getParameterByName("p").get().setName("myParam");
-        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
-                "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean",
-                "Parameter.name changed from p to myParam");
+        cu.getClassByName("MyCoolClass")
+                .get()
+                .getMethodsByName("foo")
+                .get(0)
+                .getParameterByName("p")
+                .get()
+                .setName("myParam");
+        assertThat(changes)
+                .containsExactlyInAnyOrder(
+                        "ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                        "FieldDeclaration.maximum_common_type changed from int to boolean",
+                        "VariableDeclarator.type changed from int to boolean",
+                        "Parameter.name changed from p to myParam");
 
-        cu.getClassByName("MyCoolClass").get()
+        cu.getClassByName("MyCoolClass")
+                .get()
                 .addField("int", "bar")
-                .getVariables().get(0).setInitializer("0");
-        assertThat(changes).containsExactlyInAnyOrder("ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
-                "FieldDeclaration.maximum_common_type changed from int to boolean",
-                "VariableDeclarator.type changed from int to boolean",
-                "Parameter.name changed from p to myParam",
-                "VariableDeclarator.initializer changed from null to 0");
+                .getVariables()
+                .get(0)
+                .setInitializer("0");
+        assertThat(changes)
+                .containsExactlyInAnyOrder(
+                        "ClassOrInterfaceDeclaration.name changed from A to MyCoolClass",
+                        "FieldDeclaration.maximum_common_type changed from int to boolean",
+                        "VariableDeclarator.type changed from int to boolean",
+                        "Parameter.name changed from p to myParam",
+                        "VariableDeclarator.initializer changed from null to 0");
     }
 
     @Test
@@ -183,7 +269,12 @@ public class ObservationTest {
         };
         cu.register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
 
-        cu.getClassByName("A").get().getMethodsByName("foo").get(0).getParameter(0).remove();
+        cu.getClassByName("A")
+                .get()
+                .getMethodsByName("foo")
+                .get(0)
+                .getParameter(0)
+                .remove();
         assertThat(changes).containsExactlyInAnyOrder("removing [int p] from index 0");
     }
 
@@ -214,7 +305,8 @@ public class ObservationTest {
         AstObserver observer = new AstObserverAdapter() {
 
             @Override
-            public void propertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+            public void propertyChange(
+                    Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 changes.add("setting [" + property + "] to " + newValue);
             }
 
@@ -225,8 +317,13 @@ public class ObservationTest {
         };
         cu.register(observer, Node.ObserverRegistrationMode.SELF_PROPAGATING);
 
-        assertTrue(cu.getClassByName("A").get().getMethodsByName("foo").get(0).getBody().get().remove());
+        assertTrue(cu.getClassByName("A")
+                .get()
+                .getMethodsByName("foo")
+                .get(0)
+                .getBody()
+                .get()
+                .remove());
         assertThat(changes).containsExactlyInAnyOrder("setting [BODY] to null");
     }
-
 }

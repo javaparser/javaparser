@@ -27,7 +27,6 @@ import com.github.javaparser.resolution.cache.Cache;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.cache.InMemoryCache;
-
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -48,7 +47,7 @@ public class CombinedTypeSolver implements TypeSolver {
      * A predicate which determines what to do if an exception is raised during the parsing process.
      * If it returns {@code true} the exception will be ignored, and solving will continue using the next solver in line.
      * If it returns {@code false} the exception will be thrown, stopping the solving process.
-     * <p>
+     *
      * Main use case for this is to circumvent bugs or missing functionality in some type solvers.
      * If for example solver A has a bug resulting in a {@link NullPointerException}, you could use a {@link ExceptionHandlers#getTypeBasedWhitelist(Class...) whitelist} to ignore that type of exception.
      * A secondary solver would then be able to step in when such an error occurs.
@@ -70,9 +69,7 @@ public class CombinedTypeSolver implements TypeSolver {
         this(ExceptionHandlers.IGNORE_NONE, elements);
     }
 
-    /**
-     * @see #exceptionHandler
-     */
+    /** @see #exceptionHandler */
     public CombinedTypeSolver(Predicate<Exception> exceptionHandler, Iterable<TypeSolver> elements) {
         this(exceptionHandler, elements, InMemoryCache.create());
     }
@@ -80,14 +77,16 @@ public class CombinedTypeSolver implements TypeSolver {
     /**
      * Create a new instance of {@link CombinedTypeSolver} with a custom symbol cache.
      *
-     * @param exceptionHandler How exception should be handled.
-     * @param elements         The list of elements to include by default.
-     * @param typeCache        The cache to be used to store symbols.
+     * @param exceptionHandler  How exception should be handled.
+     * @param elements          The list of elements to include by default.
+     * @param typeCache       The cache to be used to store symbols.
+     *
      * @see #exceptionHandler
      */
-    public CombinedTypeSolver(Predicate<Exception> exceptionHandler,
-                              Iterable<TypeSolver> elements,
-                              Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> typeCache) {
+    public CombinedTypeSolver(
+            Predicate<Exception> exceptionHandler,
+            Iterable<TypeSolver> elements,
+            Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> typeCache) {
         Objects.requireNonNull(typeCache, "The typeCache can't be null.");
 
         setExceptionHandler(exceptionHandler);
@@ -98,9 +97,7 @@ public class CombinedTypeSolver implements TypeSolver {
         }
     }
 
-    /**
-     * @see #exceptionHandler
-     */
+    /** @see #exceptionHandler */
     public void setExceptionHandler(Predicate<Exception> exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
     }
@@ -190,19 +187,14 @@ public class CombinedTypeSolver implements TypeSolver {
 
     /**
      * Provides some convenience exception handler implementations
-     *
      * @see CombinedTypeSolver#setExceptionHandler(Predicate)
      */
     public static class ExceptionHandlers {
 
-        /**
-         * Doesn't ignore any exceptions (default)
-         */
+        /** Doesn't ignore any exceptions (default) */
         public static final Predicate<Exception> IGNORE_NONE = e -> false;
 
-        /**
-         * Ignores all exceptions
-         */
+        /** Ignores all exceptions */
         public static final Predicate<Exception> IGNORE_ALL = e -> true;
 
         /**
@@ -211,8 +203,8 @@ public class CombinedTypeSolver implements TypeSolver {
          *
          * @see #getTypeBasedWhitelist(Class...)
          */
-        public static final Predicate<Exception> IGNORE_UNSUPPORTED_OPERATION = getTypeBasedWhitelist(
-                UnsupportedOperationException.class);
+        public static final Predicate<Exception> IGNORE_UNSUPPORTED_OPERATION =
+                getTypeBasedWhitelist(UnsupportedOperationException.class);
 
         /**
          * Ignores any exception that is {@link Class#isAssignableFrom(Class) assignable from}
@@ -220,8 +212,8 @@ public class CombinedTypeSolver implements TypeSolver {
          *
          * @see #getTypeBasedWhitelist(Class...)
          */
-        public static final Predicate<Exception> IGNORE_UNSOLVED_SYMBOL = getTypeBasedWhitelist(
-                UnsolvedSymbolException.class);
+        public static final Predicate<Exception> IGNORE_UNSOLVED_SYMBOL =
+                getTypeBasedWhitelist(UnsolvedSymbolException.class);
 
         /**
          * Ignores any exception that is {@link Class#isAssignableFrom(Class) assignable from} either
@@ -231,15 +223,16 @@ public class CombinedTypeSolver implements TypeSolver {
          * @see #IGNORE_UNSUPPORTED_OPERATION
          * @see #getTypeBasedWhitelist(Class...)
          */
-        public static final Predicate<Exception> IGNORE_UNSUPPORTED_AND_UNSOLVED = getTypeBasedWhitelist(
-                UnsupportedOperationException.class, UnsolvedSymbolException.class);
+        public static final Predicate<Exception> IGNORE_UNSUPPORTED_AND_UNSOLVED =
+                getTypeBasedWhitelist(UnsupportedOperationException.class, UnsolvedSymbolException.class);
 
         /**
-         * @return A filter that ignores an exception if <b>none</b> of the listed classes are
-         * {@link Class#isAssignableFrom(Class) assignable from}
-         * the thrown exception class.
          * @see CombinedTypeSolver#setExceptionHandler(Predicate)
          * @see #getTypeBasedWhitelist(Class...)
+         *
+         * @return A filter that ignores an exception if <b>none</b> of the listed classes are
+         *         {@link Class#isAssignableFrom(Class) assignable from}
+         *         the thrown exception class.
          */
         public static Predicate<Exception> getTypeBasedBlacklist(Class<? extends Exception>... blacklist) {
             return e -> {
@@ -253,11 +246,12 @@ public class CombinedTypeSolver implements TypeSolver {
         }
 
         /**
-         * @return A filter that ignores an exception if <b>any</b> of the listed classes are
-         * {@link Class#isAssignableFrom(Class) assignable from}
-         * the thrown exception class.
          * @see CombinedTypeSolver#setExceptionHandler(Predicate)
          * @see #getTypeBasedBlacklist(Class...)
+         *
+         * @return A filter that ignores an exception if <b>any</b> of the listed classes are
+         *         {@link Class#isAssignableFrom(Class) assignable from}
+         *         the thrown exception class.
          */
         public static Predicate<Exception> getTypeBasedWhitelist(Class<? extends Exception>... whitelist) {
             return e -> {

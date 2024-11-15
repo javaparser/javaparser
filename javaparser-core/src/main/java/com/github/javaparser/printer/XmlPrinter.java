@@ -25,7 +25,9 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.metamodel.NodeMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
+
 import java.util.List;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import java.io.StringWriter;
@@ -176,7 +178,8 @@ public class XmlPrinter {
         NodeMetaModel metaModel = node.getMetaModel();
         List<PropertyMetaModel> allPropertyMetaModels = metaModel.getAllPropertyMetaModels();
         Predicate<PropertyMetaModel> nonNullNode = propertyMetaModel -> propertyMetaModel.getValue(node) != null;
-        Predicate<PropertyMetaModel> nonEmptyList = propertyMetaModel -> ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
+        Predicate<PropertyMetaModel> nonEmptyList =
+                propertyMetaModel -> ((NodeList) propertyMetaModel.getValue(node)).isNonEmpty();
         Predicate<PropertyMetaModel> typeList = propertyMetaModel -> TYPE_CLASS == propertyMetaModel.getType();
         xmlWriter.writeStartElement(name);
         // Output node type attribute
@@ -188,7 +191,8 @@ public class XmlPrinter {
             allPropertyMetaModels.stream().filter(PropertyMetaModel::isAttribute).filter(PropertyMetaModel::isSingular).forEach(attributeMetaModel -> {
                 try {
                     final String attributeName = attributeMetaModel.getName();
-                    final String attributeValue = attributeMetaModel.getValue(node).toString();
+                            final String attributeValue =
+                                    attributeMetaModel.getValue(node).toString();
                     xmlWriter.writeAttribute(attributeName, attributeValue);
                 } catch (XMLStreamException ex) {
                     throw new RuntimeXMLStreamException(ex);

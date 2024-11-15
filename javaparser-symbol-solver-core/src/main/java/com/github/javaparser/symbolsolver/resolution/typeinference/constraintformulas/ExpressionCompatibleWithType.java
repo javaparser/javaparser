@@ -25,11 +25,6 @@ import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHe
 import static com.github.javaparser.symbolsolver.resolution.typeinference.TypeHelper.isProperType;
 import static java.util.stream.Collectors.toList;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import com.github.javaparser.ast.expr.ConditionalExpr;
 import com.github.javaparser.ast.expr.EnclosedExpr;
 import com.github.javaparser.ast.expr.Expression;
@@ -44,6 +39,10 @@ import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.resolution.typeinference.*;
 import com.github.javaparser.utils.Pair;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * An expression is compatible in a loose invocation context with type T
@@ -90,7 +89,8 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
 
             if (expression.isEnclosedExpr()) {
                 EnclosedExpr enclosedExpr = expression.asEnclosedExpr();
-                return ReductionResult.oneConstraint(new ExpressionCompatibleWithType(typeSolver, enclosedExpr.getInner(), T));
+                return ReductionResult.oneConstraint(
+                        new ExpressionCompatibleWithType(typeSolver, enclosedExpr.getInner(), T));
             }
 
             // - If the expression is a class instance creation expression or a method invocation expression, the
@@ -123,7 +123,8 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
             // - If the expression is a lambda expression or a method reference expression, the result is specified
             //   below.
 
-            // A constraint formula of the form ‹LambdaExpression → T›, where T mentions at least one inference variable, is reduced as follows:
+            // A constraint formula of the form ‹LambdaExpression → T›, where T mentions at least one inference
+            // variable, is reduced as follows:
 
             if (expression.isLambdaExpr()) {
                 LambdaExpr lambdaExpr = expression.asLambdaExpr();
@@ -158,7 +159,8 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 //     - If the number of lambda parameters differs from the number of parameter types of the function
                 //       type, the constraint reduces to false.
 
-                if (targetFunctionType.getFormalArgumentTypes().size() != lambdaExpr.getParameters().size()) {
+                if (targetFunctionType.getFormalArgumentTypes().size()
+                        != lambdaExpr.getParameters().size()) {
                     return ReductionResult.falseResult();
                 }
 
@@ -178,7 +180,8 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 //     - If the function type's result is not void and the lambda body is a block that is not
                 //       value-compatible, the constraint reduces to false.
 
-                if (!targetFunctionType.getReturnType().isVoid() && lambdaExpr.getBody().isBlockStmt()
+                if (!targetFunctionType.getReturnType().isVoid()
+                        && lambdaExpr.getBody().isBlockStmt()
                         && !isValueCompatibleBlock(lambdaExpr.getBody())) {
                     return ReductionResult.falseResult();
                 }
@@ -189,7 +192,8 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 //       - If the lambda parameters have explicitly declared types F1, ..., Fn and the function type
                 //         has parameter types G1, ..., Gn, then i) for all i (1 ≤ i ≤ n), ‹Fi = Gi›, and ii) ‹T' <: T›.
 
-                boolean hasExplicitlyDeclaredTypes = lambdaExpr.getParameters().stream().anyMatch(p -> !(p.getType().isUnknownType()));
+                boolean hasExplicitlyDeclaredTypes = lambdaExpr.getParameters().stream()
+                        .anyMatch(p -> !(p.getType().isUnknownType()));
                 if (hasExplicitlyDeclaredTypes) {
                     throw new UnsupportedOperationException();
                 }
@@ -203,37 +207,49 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
 
                     if (TypeHelper.isProperType(R)) {
 
-                        //         - If R is a proper type, and if the lambda body or some result expression in the lambda body
+                        //         - If R is a proper type, and if the lambda body or some result expression in the
+                        // lambda body
                         //           is not compatible in an assignment context with R, then false.
 
                         if (lambdaExpr.getBody().isBlockStmt()) {
-                            List<Expression> resultExpressions = getResultExpressions(lambdaExpr.getBody().asBlockStmt());
+                            List<Expression> resultExpressions =
+                                    getResultExpressions(lambdaExpr.getBody().asBlockStmt());
                             for (Expression e : resultExpressions) {
                                 if (!isCompatibleInAssignmentContext(e, R, typeSolver)) {
                                     return ReductionResult.falseResult();
                                 }
                             }
                         } else {
-                            Expression e = lambdaExpr.getBody().asExpressionStmt().getExpression();
+                            Expression e =
+                                    lambdaExpr.getBody().asExpressionStmt().getExpression();
                             if (!isCompatibleInAssignmentContext(e, R, typeSolver)) {
                                 return ReductionResult.falseResult();
                             }
                         }
                     } else {
-                        //         - Otherwise, if R is not a proper type, then where the lambda body has the form Expression,
+                        //         - Otherwise, if R is not a proper type, then where the lambda body has the form
+                        // Expression,
                         //           the constraint ‹Expression → R›; or where the lambda body is a block with result
                         //           expressions e1, ..., em, for all i (1 ≤ i ≤ m), ‹ei → R›.
 
                         if (lambdaExpr.getBody().isBlockStmt()) {
-                            getAllReturnExpressions(lambdaExpr.getBody().asBlockStmt()).forEach(e -> constraints.add(new ExpressionCompatibleWithType(typeSolver, e, R)));
+                            getAllReturnExpressions(lambdaExpr.getBody().asBlockStmt())
+                                    .forEach(e -> constraints.add(new ExpressionCompatibleWithType(typeSolver, e, R)));
                         } else {
                             // FEDERICO: Added - Start
                             for (int i = 0; i < lambdaExpr.getParameters().size(); i++) {
-                                ResolvedType paramType = targetFunctionType.getFormalArgumentTypes().get(i);
-                                TypeInferenceCache.addRecord(typeSolver, lambdaExpr, lambdaExpr.getParameter(i).getNameAsString(), paramType);
+                                ResolvedType paramType = targetFunctionType
+                                        .getFormalArgumentTypes()
+                                        .get(i);
+                                TypeInferenceCache.addRecord(
+                                        typeSolver,
+                                        lambdaExpr,
+                                        lambdaExpr.getParameter(i).getNameAsString(),
+                                        paramType);
                             }
                             // FEDERICO: Added - End
-                            Expression e = lambdaExpr.getBody().asExpressionStmt().getExpression();
+                            Expression e =
+                                    lambdaExpr.getBody().asExpressionStmt().getExpression();
                             constraints.add(new ExpressionCompatibleWithType(typeSolver, e, R));
                         }
                     }
@@ -242,35 +258,58 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
                 return ReductionResult.withConstraints(constraints);
             }
 
-            // A constraint formula of the form ‹MethodReference → T›, where T mentions at least one inference variable, is reduced as follows:
+            // A constraint formula of the form ‹MethodReference → T›, where T mentions at least one inference variable,
+            // is reduced as follows:
 
             if (expression.isMethodReferenceExpr()) {
 
-                // - If T is not a functional interface type, or if T is a functional interface type that does not have a function type (§9.9), the constraint reduces to false.
+                // - If T is not a functional interface type, or if T is a functional interface type that does not have
+                // a function type (§9.9), the constraint reduces to false.
                 //
-                // - Otherwise, if there does not exist a potentially applicable method for the method reference when targeting T, the constraint reduces to false.
+                // - Otherwise, if there does not exist a potentially applicable method for the method reference when
+                // targeting T, the constraint reduces to false.
                 //
-                // - Otherwise, if the method reference is exact (§15.13.1), then let P1, ..., Pn be the parameter types of the function type of T, and let F1, ..., Fk be the parameter types of the potentially applicable method. The constraint reduces to a new set of constraints, as follows:
+                // - Otherwise, if the method reference is exact (§15.13.1), then let P1, ..., Pn be the parameter types
+                // of the function type of T, and let F1, ..., Fk be the parameter types of the potentially applicable
+                // method. The constraint reduces to a new set of constraints, as follows:
                 //
-                //   - In the special case where n = k+1, the parameter of type P1 is to act as the target reference of the invocation. The method reference expression necessarily has the form ReferenceType :: [TypeArguments] Identifier. The constraint reduces to ‹P1 <: ReferenceType› and, for all i (2 ≤ i ≤ n), ‹Pi → Fi-1›.
+                //   - In the special case where n = k+1, the parameter of type P1 is to act as the target reference of
+                // the invocation. The method reference expression necessarily has the form ReferenceType ::
+                // [TypeArguments] Identifier. The constraint reduces to ‹P1 <: ReferenceType› and, for all i (2 ≤ i ≤
+                // n), ‹Pi → Fi-1›.
                 //
                 //     In all other cases, n = k, and the constraint reduces to, for all i (1 ≤ i ≤ n), ‹Pi → Fi›.
                 //
-                //   - If the function type's result is not void, let R be its return type. Then, if the result of the potentially applicable compile-time declaration is void, the constraint reduces to false. Otherwise, the constraint reduces to ‹R' → R›, where R' is the result of applying capture conversion (§5.1.10) to the return type of the potentially applicable compile-time declaration.
+                //   - If the function type's result is not void, let R be its return type. Then, if the result of the
+                // potentially applicable compile-time declaration is void, the constraint reduces to false. Otherwise,
+                // the constraint reduces to ‹R' → R›, where R' is the result of applying capture conversion (§5.1.10)
+                // to the return type of the potentially applicable compile-time declaration.
                 //
                 // - Otherwise, the method reference is inexact, and:
                 //
-                //   - If one or more of the function type's parameter types is not a proper type, the constraint reduces to false.
+                //   - If one or more of the function type's parameter types is not a proper type, the constraint
+                // reduces to false.
                 //
-                //     This condition never arises in practice, due to the handling of inexact method references in §18.5.1 and the substitution applied to the target type in §18.5.2.
+                //     This condition never arises in practice, due to the handling of inexact method references in
+                // §18.5.1 and the substitution applied to the target type in §18.5.2.
                 //
-                //   - Otherwise, a search for a compile-time declaration is performed, as specified in §15.13.1. If there is no compile-time declaration for the method reference, the constraint reduces to false. Otherwise, there is a compile-time declaration, and:
+                //   - Otherwise, a search for a compile-time declaration is performed, as specified in §15.13.1. If
+                // there is no compile-time declaration for the method reference, the constraint reduces to false.
+                // Otherwise, there is a compile-time declaration, and:
                 //
                 //     - If the result of the function type is void, the constraint reduces to true.
                 //
-                //     - Otherwise, if the method reference expression elides TypeArguments, and the compile-time declaration is a generic method, and the return type of the compile-time declaration mentions at least one of the method's type parameters, then the constraint reduces to the bound set B3 which would be used to determine the method reference's invocation type when targeting the return type of the function type, as defined in §18.5.2. B3 may contain new inference variables, as well as dependencies between these new variables and the inference variables in T.
+                //     - Otherwise, if the method reference expression elides TypeArguments, and the compile-time
+                // declaration is a generic method, and the return type of the compile-time declaration mentions at
+                // least one of the method's type parameters, then the constraint reduces to the bound set B3 which
+                // would be used to determine the method reference's invocation type when targeting the return type of
+                // the function type, as defined in §18.5.2. B3 may contain new inference variables, as well as
+                // dependencies between these new variables and the inference variables in T.
                 //
-                //     - Otherwise, let R be the return type of the function type, and let R' be the result of applying capture conversion (§5.1.10) to the return type of the invocation type (§15.12.2.6) of the compile-time declaration. If R' is void, the constraint reduces to false; otherwise, the constraint reduces to ‹R' → R›.
+                //     - Otherwise, let R be the return type of the function type, and let R' be the result of applying
+                // capture conversion (§5.1.10) to the return type of the invocation type (§15.12.2.6) of the
+                // compile-time declaration. If R' is void, the constraint reduces to false; otherwise, the constraint
+                // reduces to ‹R' → R›.
 
                 throw new UnsupportedOperationException();
             }
@@ -332,11 +371,10 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
 
     @Override
     public String toString() {
-        return "ExpressionCompatibleWithType{" +
-                "typeSolver=" + typeSolver +
-                ", expression=" + expression +
-                ", T=" + T +
-                '}';
+        return "ExpressionCompatibleWithType{" + "typeSolver="
+                + typeSolver + ", expression="
+                + expression + ", T="
+                + T + '}';
     }
 
     private MethodType replaceTypeVariablesWithInferenceVariables(MethodType methodType) {
@@ -346,14 +384,19 @@ public class ExpressionCompatibleWithType extends ConstraintFormula {
         for (ResolvedType formalArg : methodType.getFormalArgumentTypes()) {
             newFormalArgumentTypes.add(replaceTypeVariablesWithInferenceVariables(formalArg, correspondences));
         }
-        ResolvedType newReturnType = replaceTypeVariablesWithInferenceVariables(methodType.getReturnType(), correspondences);
-        return new MethodType(methodType.getTypeParameters(), newFormalArgumentTypes, newReturnType, methodType.getExceptionTypes());
+        ResolvedType newReturnType =
+                replaceTypeVariablesWithInferenceVariables(methodType.getReturnType(), correspondences);
+        return new MethodType(
+                methodType.getTypeParameters(), newFormalArgumentTypes, newReturnType, methodType.getExceptionTypes());
     }
 
-    private ResolvedType replaceTypeVariablesWithInferenceVariables(ResolvedType originalType, Map<ResolvedTypeVariable, InferenceVariable> correspondences) {
+    private ResolvedType replaceTypeVariablesWithInferenceVariables(
+            ResolvedType originalType, Map<ResolvedTypeVariable, InferenceVariable> correspondences) {
         if (originalType.isTypeVariable()) {
             if (!correspondences.containsKey(originalType.asTypeVariable())) {
-                correspondences.put(originalType.asTypeVariable(), InferenceVariable.unnamed(originalType.asTypeVariable().asTypeParameter()));
+                correspondences.put(
+                        originalType.asTypeVariable(),
+                        InferenceVariable.unnamed(originalType.asTypeVariable().asTypeParameter()));
             }
             return correspondences.get(originalType.asTypeVariable());
         }

@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.printer.lexicalpreservation;
 
-import java.util.Optional;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.comments.Comment;
+import java.util.Optional;
 
 /**
  * Represent the position of a child node in the NodeText of its parent.
@@ -61,10 +61,8 @@ public class ChildTextElement extends TextElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         ChildTextElement that = (ChildTextElement) o;
         return child.equals(that.child);
     }

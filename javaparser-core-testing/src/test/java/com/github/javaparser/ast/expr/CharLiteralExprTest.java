@@ -21,14 +21,14 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseStart;
 import com.github.javaparser.ParserConfiguration;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CharLiteralExprTest {
     @Test
@@ -63,10 +63,13 @@ class CharLiteralExprTest {
 
     @Test
     void parseUnicodeEscapedEscape() {
-        JavaParser javaParser = new JavaParser(new ParserConfiguration()
-                .setPreprocessUnicodeEscapes(true));
+        JavaParser javaParser = new JavaParser(new ParserConfiguration().setPreprocessUnicodeEscapes(true));
 
-        CharLiteralExpr c = javaParser.parse(ParseStart.EXPRESSION, provider("'\\u005c''")).getResult().get().asCharLiteralExpr();
+        CharLiteralExpr c = javaParser
+                .parse(ParseStart.EXPRESSION, provider("'\\u005c''"))
+                .getResult()
+                .get()
+                .asCharLiteralExpr();
         assertEquals("\\'", c.getValue());
     }
 }

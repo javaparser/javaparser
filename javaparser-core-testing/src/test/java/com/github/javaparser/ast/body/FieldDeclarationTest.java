@@ -21,24 +21,22 @@
 
 package com.github.javaparser.ast.body;
 
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.Modifier;
-import com.github.javaparser.ast.NodeList;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.StaticJavaParser.parse;
 import static com.github.javaparser.StaticJavaParser.parseBodyDeclaration;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
+import com.github.javaparser.ast.Modifier.Keyword;
+import com.github.javaparser.ast.NodeList;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 class FieldDeclarationTest {
     @Test
     void wofjweoifj() {
-        CompilationUnit compilationUnit = parse("" +
-                "class A {\n" +
-                "    int a, b;\n" +
-                "}");
+        CompilationUnit compilationUnit = parse("" + "class A {\n" + "    int a, b;\n" + "}");
 
         BodyDeclaration<?> declaration = compilationUnit.getType(0).getMembers().get(0);
         FieldDeclaration fieldDeclaration = declaration.asFieldDeclaration();
@@ -50,13 +48,15 @@ class FieldDeclarationTest {
 
     @Test
     void setModifiersPrimitiveType() {
-        FieldDeclaration field = parseBodyDeclaration("public static final int var = 1;").asFieldDeclaration();
+        FieldDeclaration field =
+                parseBodyDeclaration("public static final int var = 1;").asFieldDeclaration();
         testChangingModifiers(field);
     }
 
     @Test
     void setModifiersNonPrimitiveType() {
-        FieldDeclaration field = parseBodyDeclaration("public static final String var = \"a\";").asFieldDeclaration();
+        FieldDeclaration field =
+                parseBodyDeclaration("public static final String var = \"a\";").asFieldDeclaration();
         testChangingModifiers(field);
     }
 
@@ -71,7 +71,7 @@ class FieldDeclarationTest {
         modifiers = field.getModifiers();
         assertEquals(0, modifiers.size());
 
-        field.setModifiers(Modifier.DefaultKeyword.PRIVATE, Modifier.DefaultKeyword.SYNCHRONIZED);
+        field.setModifiers(Keyword.PRIVATE, Keyword.SYNCHRONIZED);
         modifiers = field.getModifiers();
         assertTrue(modifiers.contains(Modifier.privateModifier()));
         assertTrue(modifiers.contains(Modifier.synchronizedModifier()));
@@ -80,19 +80,19 @@ class FieldDeclarationTest {
 
     @Test
     void interfaceFieldTest() {
-        CompilationUnit compilationUnit = parse("" +
-                "interface A {\n" +
-                "    int a = 1;\n" +
-                "    static int a_s = 1;\n" +
-                "    final int a_f = 1;\n" +
-                "    static final int a_s_f = 1;\n" +
-                "    String b = \"b\";\n" +
-                "    static String b_s = \"b\";\n" +
-                "    final String b_f = \"b\";\n" +
-                "    static final String b_s_f = \"b\";\n" +
-                "}\n");
+        CompilationUnit compilationUnit = parse("" + "interface A {\n"
+                + "    int a = 1;\n"
+                + "    static int a_s = 1;\n"
+                + "    final int a_f = 1;\n"
+                + "    static final int a_s_f = 1;\n"
+                + "    String b = \"b\";\n"
+                + "    static String b_s = \"b\";\n"
+                + "    final String b_f = \"b\";\n"
+                + "    static final String b_s_f = \"b\";\n"
+                + "}\n");
         for (int i = 0; i < 8; ++i) {
-            BodyDeclaration<?> declaration = compilationUnit.getType(0).getMembers().get(i);
+            BodyDeclaration<?> declaration =
+                    compilationUnit.getType(0).getMembers().get(i);
             FieldDeclaration fieldDeclaration = declaration.asFieldDeclaration();
             Assertions.assertTrue(fieldDeclaration.isStatic());
             Assertions.assertTrue(fieldDeclaration.isFinal());
@@ -104,27 +104,27 @@ class FieldDeclarationTest {
      */
     @Test
     void testEnumWithPrivateFieldInsideInterface() {
-        String source = "interface Outer {\n" +
-                "  enum Numbers {\n" +
-                "    ONE(1),\n" +
-                "    TWO(2),\n" +
-                "    THREE(3);\n" +
-                "\n" +
-                "    Numbers(int i) {\n" +
-                "      this.i = i;\n" +
-                "    }\n" +
-                "\n" +
-                "    private int i;\n" +
-                "  }\n" +
-                "}";
+        String source = "interface Outer {\n" + "  enum Numbers {\n"
+                + "    ONE(1),\n"
+                + "    TWO(2),\n"
+                + "    THREE(3);\n"
+                + "\n"
+                + "    Numbers(int i) {\n"
+                + "      this.i = i;\n"
+                + "    }\n"
+                + "\n"
+                + "    private int i;\n"
+                + "  }\n"
+                + "}";
         CompilationUnit cu = StaticJavaParser.parse(source);
-        FieldDeclaration i = cu.getTypes().get(0).asClassOrInterfaceDeclaration()
-                .getMembers().get(0).asEnumDeclaration()
-                .getFields().get(0);
-        assertAll(
-                () -> assertFalse(i.isPublic()),
-                () -> assertFalse(i.isStatic()),
-                () -> assertFalse(i.isFinal())
-        );
+        FieldDeclaration i = cu.getTypes()
+                .get(0)
+                .asClassOrInterfaceDeclaration()
+                .getMembers()
+                .get(0)
+                .asEnumDeclaration()
+                .getFields()
+                .get(0);
+        assertAll(() -> assertFalse(i.isPublic()), () -> assertFalse(i.isStatic()), () -> assertFalse(i.isFinal()));
     }
 }

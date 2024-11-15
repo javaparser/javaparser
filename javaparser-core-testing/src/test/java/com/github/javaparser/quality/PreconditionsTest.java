@@ -21,11 +21,11 @@
 
 package com.github.javaparser.quality;
 
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.quality.Preconditions.checkArgument;
 import static com.github.javaparser.quality.Preconditions.checkNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 class PreconditionsTest {
 
@@ -48,5 +48,4 @@ class PreconditionsTest {
     void checkNotNull_withNull() {
         assertThrows(IllegalArgumentException.class, () -> checkNotNull(null));
     }
-
 }
