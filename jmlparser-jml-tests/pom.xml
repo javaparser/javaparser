@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>jmlparser-parent</artifactId>
 		<groupId>io.github.jmltoolkit</groupId>
-		<version>3.26.2</version>
+		<version>3.26.2-b6-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
