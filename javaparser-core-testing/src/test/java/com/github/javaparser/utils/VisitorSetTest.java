@@ -136,8 +136,7 @@ class VisitorSetTest {
 
     @Test
     void visitorSetForType() {
-        Set<Type> set =
-                new VisitorSet<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        Set<Type> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         set.addAll(parseMethodDeclaration("public void main(String args) {}").findAll(Type.class));
         System.out.println(set);
     }
