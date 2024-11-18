@@ -138,6 +138,12 @@ class VisitorSetTest {
     }
 
     @Test
+    void visitSetWithEmpty() {
+        Set<Type> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        assertEquals("[]", set.toString());
+    }
+
+    @Test
     void visitSetWithOneElement() {
         Set<Type> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
         set.addAll(parseMethodDeclaration("public void main() {}").findAll(Type.class));
