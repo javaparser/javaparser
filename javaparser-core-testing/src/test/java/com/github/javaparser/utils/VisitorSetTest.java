@@ -22,13 +22,18 @@
 package com.github.javaparser.utils;
 
 import static com.github.javaparser.StaticJavaParser.parse;
+import static com.github.javaparser.StaticJavaParser.parseMethodDeclaration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 
 class VisitorSetTest {
@@ -131,4 +136,19 @@ class VisitorSetTest {
         set.addAll(list);
         for (CompilationUnit u : set.toArray(new CompilationUnit[2])) assertTrue(set.contains(u));
     }
+
+    @Test
+    void visitSetWithOneElement() {
+        Set<Type> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        set.addAll(parseMethodDeclaration("public void main() {}").findAll(Type.class));
+        assertEquals("[void]", set.toString());
+    }
+
+    @Test
+    void visitSetWithMultiElements() {
+        Set<Type> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
+        set.addAll(parseMethodDeclaration("public void main(String arg1, Integer arg2) {}").findAll(Type.class));
+        assertEquals("[void, Integer, String]", set.toString());
+    }
+
 }
