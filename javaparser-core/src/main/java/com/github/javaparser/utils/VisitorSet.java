@@ -149,12 +149,7 @@ public class VisitorSet<N extends Node> implements Set<N> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("[");
-        if (size() == 0) return sb.append("]").toString();
-        for (EqualsHashcodeOverridingFacade facade : innerSet) {
-            sb.append(facade.overridden.toString() + ",");
-        }
-        return sb.replace(sb.length() - 2, sb.length(), "]").toString();
+        return innerSet.stream().map(facade -> facade.overridden.toString()).collect(Collectors.joining(",", "[", "]"));
     }
 
     private class EqualsHashcodeOverridingFacade implements Visitable {
