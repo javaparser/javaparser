@@ -151,7 +151,7 @@ public class VisitorSet<N extends Node> implements Set<N> {
     public String toString() {
         return innerSet.stream()
                 .map(facade -> facade.overridden.toString())
-                .collect(Collectors.joining(", ", "[", "]"));
+                .collect(Collectors.joining(",", "[", "]"));
     }
 
     private class EqualsHashcodeOverridingFacade implements Visitable {
