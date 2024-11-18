@@ -31,7 +31,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.ObjectIdentityEqualsVisitor;
 import com.github.javaparser.ast.visitor.ObjectIdentityHashCodeVisitor;
 import java.util.*;
-
 import org.junit.jupiter.api.Test;
 
 class VisitorSetTest {
@@ -151,8 +150,8 @@ class VisitorSetTest {
     @Test
     void visitSetWithMultiElements() {
         Set<Type> set = new VisitorSet<>(new ObjectIdentityHashCodeVisitor(), new ObjectIdentityEqualsVisitor());
-        set.addAll(parseMethodDeclaration("public void main(String arg1, Integer arg2) {}").findAll(Type.class));
+        set.addAll(parseMethodDeclaration("public void main(String arg1, Integer arg2) {}")
+                .findAll(Type.class));
         assertEquals("[void,Integer,String]", set.toString());
     }
-
 }
