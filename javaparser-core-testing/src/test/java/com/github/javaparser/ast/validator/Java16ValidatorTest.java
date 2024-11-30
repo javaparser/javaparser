@@ -25,8 +25,8 @@ import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
 import static com.github.javaparser.ParseStart.STATEMENT;
 import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_16;
 import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.TestUtils.assertProblems;
 import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
