@@ -20,9 +20,10 @@
  */
 package com.github.javaparser.ast.nodeTypes.modifiers;
 
+import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.nodeTypes.NodeWithModifiers;
-import static com.github.javaparser.ast.Modifier.Keyword.PRIVATE;
 
 /**
  * A node that can be private.

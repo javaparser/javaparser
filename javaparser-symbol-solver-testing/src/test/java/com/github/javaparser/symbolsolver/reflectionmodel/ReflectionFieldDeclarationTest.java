@@ -21,15 +21,14 @@
 
 package com.github.javaparser.symbolsolver.reflectionmodel;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 class ReflectionFieldDeclarationTest extends AbstractSymbolResolutionTest {
 
@@ -40,7 +39,7 @@ class ReflectionFieldDeclarationTest extends AbstractSymbolResolutionTest {
         ReflectionClassDeclaration rcd = new ReflectionClassDeclaration(AtomicBoolean.class, typeSolver);
         assertTrue(rcd.getField("value").isVolatile());
     }
-    
+
     @Test
     void verifyIsNotVolatileVariableDeclaration() {
         ReflectionClassDeclaration rcd = new ReflectionClassDeclaration(String.class, typeSolver);

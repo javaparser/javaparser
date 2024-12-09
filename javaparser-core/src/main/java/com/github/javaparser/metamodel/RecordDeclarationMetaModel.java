@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.body.RecordDeclaration;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.body.RecordDeclaration;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,7 +38,13 @@ public class RecordDeclarationMetaModel extends TypeDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     RecordDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, RecordDeclaration.class, "RecordDeclaration", "com.github.javaparser.ast.body", false, false);
+        super(
+                superBaseNodeMetaModel,
+                RecordDeclaration.class,
+                "RecordDeclaration",
+                "com.github.javaparser.ast.body",
+                false,
+                false);
     }
 
     public PropertyMetaModel implementedTypesPropertyMetaModel;

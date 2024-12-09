@@ -21,11 +21,10 @@
 
 package com.github.javaparser.symbolsolver.cache;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import com.github.javaparser.resolution.cache.Cache;
 import com.github.javaparser.resolution.cache.CacheStats;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This class is used to wrap a Guava {@link com.google.common.cache.Cache}.
@@ -33,7 +32,7 @@ import com.github.javaparser.resolution.cache.CacheStats;
  * @param <K> The type of the key.
  * @param <V> The type of the value.
  */
-public class GuavaCache<K, V> implements Cache<K, V>  {
+public class GuavaCache<K, V> implements Cache<K, V> {
 
     /**
      * Wrap a Guava cache with a custom cache.
@@ -45,7 +44,8 @@ public class GuavaCache<K, V> implements Cache<K, V>  {
      *
      * @return A newly created instance of {@link NoCache}.
      */
-    public static <expectedK, expectedV> GuavaCache<expectedK, expectedV> create(com.google.common.cache.Cache<expectedK, expectedV> guavaCache) {
+    public static <expectedK, expectedV> GuavaCache<expectedK, expectedV> create(
+            com.google.common.cache.Cache<expectedK, expectedV> guavaCache) {
         return new GuavaCache<>(guavaCache);
     }
 
@@ -62,9 +62,7 @@ public class GuavaCache<K, V> implements Cache<K, V>  {
 
     @Override
     public Optional<V> get(K key) {
-        return Optional.ofNullable(
-                guavaCache.getIfPresent(key)
-        );
+        return Optional.ofNullable(guavaCache.getIfPresent(key));
     }
 
     @Override
@@ -92,11 +90,15 @@ public class GuavaCache<K, V> implements Cache<K, V>  {
         return size() == 0;
     }
 
-	@Override
-	public CacheStats stats() {
-		com.google.common.cache.CacheStats stats = guavaCache.stats();
-		return new DefaultCacheStats(stats.hitCount(), stats.missCount(), stats.loadSuccessCount(),
-				stats.loadExceptionCount(), stats.totalLoadTime(), stats.evictionCount());
-	}
-
+    @Override
+    public CacheStats stats() {
+        com.google.common.cache.CacheStats stats = guavaCache.stats();
+        return new DefaultCacheStats(
+                stats.hitCount(),
+                stats.missCount(),
+                stats.loadSuccessCount(),
+                stats.loadExceptionCount(),
+                stats.totalLoadTime(),
+                stats.evictionCount());
+    }
 }

@@ -94,8 +94,7 @@ public class ThisExpr extends Expression implements Resolvable<ResolvedTypeDecla
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
-        if (this.typeName != null)
-            this.typeName.setParentNode(null);
+        if (this.typeName != null) this.typeName.setParentNode(null);
         this.typeName = typeName;
         setAsParentNodeOf(typeName);
         return this;

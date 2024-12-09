@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -33,46 +36,41 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 class Issue3099Test extends AbstractResolutionTest {
 
-	@Test
-	void illegalArgumentExceptionWhenSolvingName() throws IOException {
+    @Test
+    void illegalArgumentExceptionWhenSolvingName() throws IOException {
 
-		// Setup symbol solver
-		JavaParserTypeSolver javaParserTypeSolver = new JavaParserTypeSolver(adaptPath("src/test/resources/issue3099/"));
-		StaticJavaParser.getConfiguration()
-				.setSymbolResolver(new JavaSymbolSolver(
-						new CombinedTypeSolver(new ReflectionTypeSolver(), javaParserTypeSolver))
-				);
+        // Setup symbol solver
+        JavaParserTypeSolver javaParserTypeSolver =
+                new JavaParserTypeSolver(adaptPath("src/test/resources/issue3099/"));
+        StaticJavaParser.getConfiguration()
+                .setSymbolResolver(
+                        new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver(), javaParserTypeSolver)));
 
-		// Parse the File
-		Path filePath = adaptPath("src/test/resources/issue3099/com/example/Beta.java");
-		CompilationUnit cu = StaticJavaParser.parse(filePath);
+        // Parse the File
+        Path filePath = adaptPath("src/test/resources/issue3099/com/example/Beta.java");
+        CompilationUnit cu = StaticJavaParser.parse(filePath);
 
-		// Get the expected inner class
-		List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
-		assertEquals(2, classes.size());
-		ResolvedReferenceTypeDeclaration innerInterface = classes.get(1).resolve();
-		assertTrue(innerInterface.isInterface());
+        // Get the expected inner class
+        List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
+        assertEquals(2, classes.size());
+        ResolvedReferenceTypeDeclaration innerInterface = classes.get(1).resolve();
+        assertTrue(innerInterface.isInterface());
 
-		// Check if the value is present
-		Optional<ResolvedReferenceType> resolvedType = cu.findFirst(VariableDeclarator.class)
-				.map(VariableDeclarator::getType)
-				.map(Type::resolve)
-				.filter(ResolvedType::isReferenceType)
-				.map(ResolvedType::asReferenceType);
-		assertTrue(resolvedType.isPresent());
-		assertEquals(innerInterface, resolvedType.get().getTypeDeclaration().orElse(null));
-	}
-
+        // Check if the value is present
+        Optional<ResolvedReferenceType> resolvedType = cu.findFirst(VariableDeclarator.class)
+                .map(VariableDeclarator::getType)
+                .map(Type::resolve)
+                .filter(ResolvedType::isReferenceType)
+                .map(ResolvedType::asReferenceType);
+        assertTrue(resolvedType.isPresent());
+        assertEquals(innerInterface, resolvedType.get().getTypeDeclaration().orElse(null));
+    }
 }

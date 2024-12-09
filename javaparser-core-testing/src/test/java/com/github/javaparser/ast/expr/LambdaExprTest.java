@@ -21,17 +21,17 @@
 
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.StaticJavaParser.parseBlock;
+import static com.github.javaparser.StaticJavaParser.parseExpression;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.type.UnknownType;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseBlock;
-import static com.github.javaparser.StaticJavaParser.parseExpression;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LambdaExprTest {
     @Test
@@ -78,13 +78,17 @@ class LambdaExprTest {
 
     @Test
     void multipleParametersAndExpressionUtilityConstructor() {
-        LambdaExpr expr = new LambdaExpr(new NodeList<>(new Parameter(new UnknownType(), "a"), new Parameter(new UnknownType(), "b")), parseExpression("5"));
+        LambdaExpr expr = new LambdaExpr(
+                new NodeList<>(new Parameter(new UnknownType(), "a"), new Parameter(new UnknownType(), "b")),
+                parseExpression("5"));
         assertEquals("(a, b) -> 5", expr.toString());
     }
 
     @Test
     void multipleParametersAndStatementUtilityConstructor() {
-        LambdaExpr expr = new LambdaExpr(new NodeList<>(new Parameter(new UnknownType(), "a"), new Parameter(new UnknownType(), "b")), parseBlock("{return 5;}"));
+        LambdaExpr expr = new LambdaExpr(
+                new NodeList<>(new Parameter(new UnknownType(), "a"), new Parameter(new UnknownType(), "b")),
+                parseBlock("{return 5;}"));
         assertEqualsStringIgnoringEol("(a, b) -> {\n    return 5;\n}", expr.toString());
     }
 
@@ -93,5 +97,4 @@ class LambdaExprTest {
         LambdaExpr expr = new LambdaExpr(new NodeList<>(), parseBlock("{return 5;}"));
         assertEqualsStringIgnoringEol("() -> {\n    return 5;\n}", expr.toString());
     }
-
 }

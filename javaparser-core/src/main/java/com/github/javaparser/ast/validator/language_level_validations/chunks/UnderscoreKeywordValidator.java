@@ -41,7 +41,7 @@ public class UnderscoreKeywordValidator extends VisitorValidator {
     }
 
     private static void validateIdentifier(Node n, String id, ProblemReporter arg) {
-        if (id.equals("_")) {
+        if ("_".equals(id)) {
             arg.report(n, "'_' is a reserved keyword.");
         }
     }

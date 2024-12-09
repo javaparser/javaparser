@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.model.typesystem;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
@@ -32,13 +34,10 @@ import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclara
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionInterfaceDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.google.common.collect.ImmutableList;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ArrayTypeTest {
 
@@ -143,18 +142,28 @@ class ArrayTypeTest {
         assertSame(arrayOfStrings, arrayOfStrings.replaceTypeVariables(tpA, OBJECT));
         assertEquals(arrayOfListOfStrings, arrayOfListOfStrings.replaceTypeVariables(tpA, OBJECT));
         ResolvedArrayType arrayOfListOfObjects = new ResolvedArrayType(new ReferenceTypeImpl(
-                new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                ImmutableList.of(OBJECT)));
+                new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(OBJECT)));
         assertTrue(arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).isArray());
-        assertEquals(ImmutableList.of(OBJECT),
-                arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType()
-                        .asReferenceType().typeParametersValues());
-        assertEquals(new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType()
-                        .asReferenceType().getTypeDeclaration().get());
-        assertEquals(new ReferenceTypeImpl(
-                        new ReflectionInterfaceDeclaration(List.class, typeSolver),
-                        ImmutableList.of(OBJECT)),
+        assertEquals(
+                ImmutableList.of(OBJECT),
+                arrayOfListOfA
+                        .replaceTypeVariables(tpA, OBJECT)
+                        .asArrayType()
+                        .getComponentType()
+                        .asReferenceType()
+                        .typeParametersValues());
+        assertEquals(
+                new ReflectionInterfaceDeclaration(List.class, typeSolver),
+                arrayOfListOfA
+                        .replaceTypeVariables(tpA, OBJECT)
+                        .asArrayType()
+                        .getComponentType()
+                        .asReferenceType()
+                        .getTypeDeclaration()
+                        .get());
+        assertEquals(
+                new ReferenceTypeImpl(
+                        new ReflectionInterfaceDeclaration(List.class, typeSolver), ImmutableList.of(OBJECT)),
                 arrayOfListOfA.replaceTypeVariables(tpA, OBJECT).asArrayType().getComponentType());
         assertEquals(arrayOfListOfObjects, arrayOfListOfA.replaceTypeVariables(tpA, OBJECT));
         assertEquals(arrayOfListOfStrings, arrayOfListOfA.replaceTypeVariables(tpA, STRING));
@@ -185,5 +194,4 @@ class ArrayTypeTest {
         assertEquals(false, arrayOfListOfStrings.isAssignableBy(arrayOfListOfA));
         assertEquals(true, arrayOfListOfStrings.isAssignableBy(arrayOfListOfStrings));
     }
-
 }

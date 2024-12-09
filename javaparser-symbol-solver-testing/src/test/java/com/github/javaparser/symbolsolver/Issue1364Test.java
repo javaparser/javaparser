@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -32,13 +34,10 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.time.Duration;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Dominik Hardtke
@@ -59,8 +58,7 @@ class Issue1364Test extends AbstractResolutionTest {
             }
 
             @Override
-            public void setParent(TypeSolver parent) {
-            }
+            public void setParent(TypeSolver parent) {}
 
             @Override
             public SymbolReference<ResolvedReferenceTypeDeclaration> tryToSolveType(String name) {
@@ -81,21 +79,25 @@ class Issue1364Test extends AbstractResolutionTest {
     @Test
     void resolveSubClassOfObject() {
         assertTimeoutPreemptively(Duration.ofMillis(1000L), () -> {
-            String code = String.join(System.lineSeparator(), "package graph;", "public class Vertex {", "    public static void main(String[] args) {", "        System.out.println();", "    }", "}");
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
-        assertTrue(parseResult.isSuccessful());
-        assertTrue(parseResult.getResult().isPresent());
-        List<MethodCallExpr> methodCallExprs = parseResult.getResult().get().findAll(MethodCallExpr.class);
-        assertEquals(1, methodCallExprs.size());
-        try {
-            methodCallExprs.get(0).calculateResolvedType();
-        fail("An UnsolvedSymbolException should be thrown");
-    } catch (UnsolvedSymbolException ignored) {
+            String code = String.join(
+                    System.lineSeparator(),
+                    "package graph;",
+                    "public class Vertex {",
+                    "    public static void main(String[] args) {",
+                    "        System.out.println();",
+                    "    }",
+                    "}");
+            ParseResult<CompilationUnit> parseResult =
+                    javaParser.parse(ParseStart.COMPILATION_UNIT, Providers.provider(code));
+            assertTrue(parseResult.isSuccessful());
+            assertTrue(parseResult.getResult().isPresent());
+            List<MethodCallExpr> methodCallExprs = parseResult.getResult().get().findAll(MethodCallExpr.class);
+            assertEquals(1, methodCallExprs.size());
+            try {
+                methodCallExprs.get(0).calculateResolvedType();
+                fail("An UnsolvedSymbolException should be thrown");
+            } catch (UnsolvedSymbolException ignored) {
+            }
+        });
     }
-    });
-
-                        
-                
 }
-}
-

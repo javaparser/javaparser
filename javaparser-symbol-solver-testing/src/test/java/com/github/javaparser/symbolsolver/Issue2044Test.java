@@ -21,6 +21,11 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static com.github.javaparser.Providers.provider;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParseStart;
@@ -36,46 +41,38 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static com.github.javaparser.Providers.provider;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import org.junit.jupiter.api.Test;
 
 public class Issue2044Test {
 
     @Test
     public void issue2044_typeVariableExtendsObject() {
 
-        String x = "public class X <K extends Object> {\n" +
-                "    private int getPartition(final K key) {\n" +
-                "        int x = (new Object()).hashCode();\n" +
-                "        return key.hashCode() / getHashes().length;\n" +
-                "    }\n" +
-                "}";
+        String x = "public class X <K extends Object> {\n" + "    private int getPartition(final K key) {\n"
+                + "        int x = (new Object()).hashCode();\n"
+                + "        return key.hashCode() / getHashes().length;\n"
+                + "    }\n"
+                + "}";
 
         doTestSimple(x);
     }
 
-
     @Test
     public void issue2044_simpleTypeVariable() {
-        String x = "public class X <K> {\n" +
-                "    private int getPartition(final K key) {\n" +
-                "        int x = (new Object()).hashCode();\n" +
-                "        return key.hashCode() / getHashes().length;\n" +
-                "    }\n" +
-                "}";
+        String x = "public class X <K> {\n" + "    private int getPartition(final K key) {\n"
+                + "        int x = (new Object()).hashCode();\n"
+                + "        return key.hashCode() / getHashes().length;\n"
+                + "    }\n"
+                + "}";
 
         doTestSimple(x);
     }
 
     private void doTestSimple(String x) {
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
-        ParserConfiguration configuration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        ParserConfiguration configuration =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         JavaParser javaParser = new JavaParser(configuration);
 
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
@@ -91,34 +88,33 @@ public class Issue2044Test {
 
             // throws RuntimeException - stack trace below
             methodCallExpr.calculateResolvedType();
-/*
-java.lang.RuntimeException: Method 'hashCode' cannot be resolved in context key.hashCode() (line: 3) MethodCallExprContext{wrapped=key.hashCode()}. Parameter types: []
+            /*
+            java.lang.RuntimeException: Method 'hashCode' cannot be resolved in context key.hashCode() (line: 3) MethodCallExprContext{wrapped=key.hashCode()}. Parameter types: []
 
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(JavaParserFacade.java:586)
-	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:267)
-	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:44)
-	at com.github.javaparser.ast.expr.MethodCallExpr.accept(MethodCallExpr.java:115)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(JavaParserFacade.java:447)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:310)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:292)
-	at com.github.javaparser.symbolsolver.JavaSymbolSolver.calculateType(JavaSymbolSolver.java:250)
-	at com.github.javaparser.ast.expr.Expression.calculateResolvedType(Expression.java:564)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:81)
-	at java.util.ArrayList.forEach(ArrayList.java:1249)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$issue2044$1(Issue2044.java:49)
-*/
-
+            	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(JavaParserFacade.java:586)
+            	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:267)
+            	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:44)
+            	at com.github.javaparser.ast.expr.MethodCallExpr.accept(MethodCallExpr.java:115)
+            	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(JavaParserFacade.java:447)
+            	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:310)
+            	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:292)
+            	at com.github.javaparser.symbolsolver.JavaSymbolSolver.calculateType(JavaSymbolSolver.java:250)
+            	at com.github.javaparser.ast.expr.Expression.calculateResolvedType(Expression.java:564)
+            	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:81)
+            	at java.util.ArrayList.forEach(ArrayList.java:1249)
+            	at com.github.javaparser.symbolsolver.Issue2044.lambda$issue2044$1(Issue2044.java:49)
+            */
 
             // throws UnsolvedSymbolException - stack trace below
             methodCallExpr.resolve();
-/*
-Unsolved symbol : We are unable to find the method declaration corresponding to key.hashCode()
-UnsolvedSymbolException{context='null', name='We are unable to find the method declaration corresponding to key.hashCode()', cause='null'}
+            /*
+            Unsolved symbol : We are unable to find the method declaration corresponding to key.hashCode()
+            UnsolvedSymbolException{context='null', name='We are unable to find the method declaration corresponding to key.hashCode()', cause='null'}
 
-	at com.github.javaparser.symbolsolver.JavaSymbolSolver.resolveDeclaration(JavaSymbolSolver.java:146)
-	at com.github.javaparser.ast.expr.MethodCallExpr.resolve(MethodCallExpr.java:313)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:101)
-*/
+            	at com.github.javaparser.symbolsolver.JavaSymbolSolver.resolveDeclaration(JavaSymbolSolver.java:146)
+            	at com.github.javaparser.ast.expr.MethodCallExpr.resolve(MethodCallExpr.java:313)
+            	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:101)
+            */
 
         });
     }
@@ -126,7 +122,8 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
     private void doTest(String x) {
 
         TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
-        ParserConfiguration configuration = new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
+        ParserConfiguration configuration =
+                new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(typeSolver));
         JavaParser javaParser = new JavaParser(configuration);
         ParseResult<CompilationUnit> result = javaParser.parse(ParseStart.COMPILATION_UNIT, provider(x));
 
@@ -137,7 +134,8 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
 
                 // Method declaration
                 ResolvedMethodDeclaration resolvedMethodDeclaration = methodDeclaration.resolve();
-                String resolvedReturnType = resolvedMethodDeclaration.getReturnType().describe();
+                String resolvedReturnType =
+                        resolvedMethodDeclaration.getReturnType().describe();
                 assertEquals("int", resolvedReturnType);
 
                 // Parameters
@@ -151,7 +149,6 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
                 assertEquals("K", parameter.resolve().getType().describe());
                 assertEquals("K", parameter.resolve().describeType());
 
-
                 // Method calls inside declaration
                 List<MethodCallExpr> methodCalls = methodDeclaration.findAll(MethodCallExpr.class);
                 assertEquals(3, methodCalls.size());
@@ -160,7 +157,9 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
                 final MethodCallExpr object_hashCode = methodCalls.get(0);
                 assertTrue(object_hashCode.hasScope());
                 Expression object_hashCode_scope = object_hashCode.getScope().get();
-                assertEquals("java.lang.Object", object_hashCode_scope.calculateResolvedType().describe());
+                assertEquals(
+                        "java.lang.Object",
+                        object_hashCode_scope.calculateResolvedType().describe());
 
                 assertEquals("int", object_hashCode.resolve().getReturnType().describe());
                 assertEquals("int", object_hashCode.calculateResolvedType().describe());
@@ -172,51 +171,44 @@ UnsolvedSymbolException{context='null', name='We are unable to find the method d
                 assertEquals("K", key_hashCode_scope.calculateResolvedType().describe());
 
                 // These shouldn't pass...
-//                assertThrows(RuntimeException.class, key_hashCode::calculateResolvedType);
-//                assertThrows(UnsolvedSymbolException.class, key_hashCode::resolve);
-
+                //                assertThrows(RuntimeException.class, key_hashCode::calculateResolvedType);
+                //                assertThrows(UnsolvedSymbolException.class, key_hashCode::resolve);
 
                 // throws RuntimeException - stack trace below
                 ResolvedType key_hashCode_resolvedType = ((MethodCallExpr) key_hashCode).calculateResolvedType();
                 /*
-java.lang.RuntimeException: Method 'hashCode' cannot be resolved in context key.hashCode() (line: 3) MethodCallExprContext{wrapped=key.hashCode()}. Parameter types: []
+                java.lang.RuntimeException: Method 'hashCode' cannot be resolved in context key.hashCode() (line: 3) MethodCallExprContext{wrapped=key.hashCode()}. Parameter types: []
 
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(JavaParserFacade.java:586)
-	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:267)
-	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:44)
-	at com.github.javaparser.ast.expr.MethodCallExpr.accept(MethodCallExpr.java:115)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(JavaParserFacade.java:447)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:310)
-	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:292)
-	at com.github.javaparser.symbolsolver.JavaSymbolSolver.calculateType(JavaSymbolSolver.java:250)
-	at com.github.javaparser.ast.expr.Expression.calculateResolvedType(Expression.java:564)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:81)
-	at java.util.ArrayList.forEach(ArrayList.java:1249)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$issue2044$1(Issue2044.java:49)
-                 */
-
+                	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.solveMethodAsUsage(JavaParserFacade.java:586)
+                	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:267)
+                	at com.github.javaparser.symbolsolver.javaparsermodel.TypeExtractor.visit(TypeExtractor.java:44)
+                	at com.github.javaparser.ast.expr.MethodCallExpr.accept(MethodCallExpr.java:115)
+                	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getTypeConcrete(JavaParserFacade.java:447)
+                	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:310)
+                	at com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade.getType(JavaParserFacade.java:292)
+                	at com.github.javaparser.symbolsolver.JavaSymbolSolver.calculateType(JavaSymbolSolver.java:250)
+                	at com.github.javaparser.ast.expr.Expression.calculateResolvedType(Expression.java:564)
+                	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:81)
+                	at java.util.ArrayList.forEach(ArrayList.java:1249)
+                	at com.github.javaparser.symbolsolver.Issue2044.lambda$issue2044$1(Issue2044.java:49)
+                                 */
 
                 // throws UnsolvedSymbolException - stack trace below
                 ResolvedMethodDeclaration key_hashCode_resolved = ((MethodCallExpr) key_hashCode).resolve();
                 /*
-Unsolved symbol : We are unable to find the method declaration corresponding to key.hashCode()
-UnsolvedSymbolException{context='null', name='We are unable to find the method declaration corresponding to key.hashCode()', cause='null'}
+                Unsolved symbol : We are unable to find the method declaration corresponding to key.hashCode()
+                UnsolvedSymbolException{context='null', name='We are unable to find the method declaration corresponding to key.hashCode()', cause='null'}
 
-	at com.github.javaparser.symbolsolver.JavaSymbolSolver.resolveDeclaration(JavaSymbolSolver.java:146)
-	at com.github.javaparser.ast.expr.MethodCallExpr.resolve(MethodCallExpr.java:313)
-	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:101)
-                 */
-
+                	at com.github.javaparser.symbolsolver.JavaSymbolSolver.resolveDeclaration(JavaSymbolSolver.java:146)
+                	at com.github.javaparser.ast.expr.MethodCallExpr.resolve(MethodCallExpr.java:313)
+                	at com.github.javaparser.symbolsolver.Issue2044.lambda$null$0(Issue2044.java:101)
+                                 */
 
                 ResolvedType key_hashCode_resolvedReturnType = key_hashCode_resolved.getReturnType();
                 String key_hashCode_resolvedReturnTypeString = key_hashCode_resolvedReturnType.describe();
 
-
                 assertEquals("int", key_hashCode.resolve().getReturnType().describe());
-
-
             });
         });
     }
-
 }

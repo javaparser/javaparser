@@ -65,7 +65,10 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
     }
 
     @AllFieldsConstructor
-    public WildcardType(final ReferenceType extendedType, final ReferenceType superType, final NodeList<AnnotationExpr> annotations) {
+    public WildcardType(
+            final ReferenceType extendedType,
+            final ReferenceType superType,
+            final NodeList<AnnotationExpr> annotations) {
         this(null, extendedType, superType, annotations);
     }
 
@@ -73,7 +76,11 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public WildcardType(TokenRange tokenRange, ReferenceType extendedType, ReferenceType superType, NodeList<AnnotationExpr> annotations) {
+    public WildcardType(
+            TokenRange tokenRange,
+            ReferenceType extendedType,
+            ReferenceType superType,
+            NodeList<AnnotationExpr> annotations) {
         super(tokenRange, annotations);
         setExtendedType(extendedType);
         setSuperType(superType);
@@ -114,8 +121,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
             return this;
         }
         notifyPropertyChange(ObservableProperty.EXTENDED_TYPE, this.extendedType, extendedType);
-        if (this.extendedType != null)
-            this.extendedType.setParentNode(null);
+        if (this.extendedType != null) this.extendedType.setParentNode(null);
         this.extendedType = extendedType;
         setAsParentNodeOf(extendedType);
         return this;
@@ -133,8 +139,7 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
             return this;
         }
         notifyPropertyChange(ObservableProperty.SUPER_TYPE, this.superType, superType);
-        if (this.superType != null)
-            this.superType.setParentNode(null);
+        if (this.superType != null) this.superType.setParentNode(null);
         this.superType = superType;
         setAsParentNodeOf(superType);
         return this;

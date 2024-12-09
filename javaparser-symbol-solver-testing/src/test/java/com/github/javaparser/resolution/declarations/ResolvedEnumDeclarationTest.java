@@ -21,9 +21,9 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 public interface ResolvedEnumDeclarationTest extends ResolvedReferenceTypeDeclarationTest {
 
@@ -34,5 +34,4 @@ public interface ResolvedEnumDeclarationTest extends ResolvedReferenceTypeDeclar
     default void resolvedEnumShouldBeMarkedAsEnum() {
         assertTrue(createValue().isEnum());
     }
-
 }

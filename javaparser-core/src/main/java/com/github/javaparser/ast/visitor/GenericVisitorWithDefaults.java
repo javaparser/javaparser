@@ -26,11 +26,11 @@ import com.github.javaparser.ast.comments.BlockComment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.comments.LineComment;
 import com.github.javaparser.ast.expr.*;
+import com.github.javaparser.ast.key.*;
+import com.github.javaparser.ast.key.sv.*;
 import com.github.javaparser.ast.modules.*;
 import com.github.javaparser.ast.stmt.*;
 import com.github.javaparser.ast.type.*;
-import com.github.javaparser.ast.key.*;
-import com.github.javaparser.ast.key.sv.*;
 
 /**
  * A visitor that has a return value (R), and has default methods that are used when a specific visit method is not
@@ -538,7 +538,7 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
     }
 
     @Override
-    public R visit(final PatternExpr n, final A arg) {
+    public R visit(final TypePatternExpr n, final A arg) {
         return defaultAction(n, arg);
     }
 
@@ -549,6 +549,11 @@ public abstract class GenericVisitorWithDefaults<R, A> implements GenericVisitor
 
     @Override
     public R visit(final CompactConstructorDeclaration n, final A arg) {
+        return defaultAction(n, arg);
+    }
+
+    @Override
+    public R visit(final RecordPatternExpr n, final A arg) {
         return defaultAction(n, arg);
     }
 

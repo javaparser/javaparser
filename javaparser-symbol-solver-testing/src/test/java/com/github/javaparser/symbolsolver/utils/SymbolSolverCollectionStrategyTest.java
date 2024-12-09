@@ -21,14 +21,15 @@
 
 package com.github.javaparser.symbolsolver.utils;
 
+import static com.github.javaparser.utils.CodeGenerationUtils.classLoaderRoot;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.utils.Log;
 import com.github.javaparser.utils.ProjectRoot;
 import com.github.javaparser.utils.SourceRoot;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,18 +37,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.utils.CodeGenerationUtils.classLoaderRoot;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 class SymbolSolverCollectionStrategyTest {
 
-    private final Path root = classLoaderRoot(SymbolSolverCollectionStrategyTest.class).resolve("../../../javaparser-core").normalize();
+    private final Path root = classLoaderRoot(SymbolSolverCollectionStrategyTest.class)
+            .resolve("../../../javaparser-core")
+            .normalize();
     private final ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(root);
 
     @Test
     void resolveExpressions() throws IOException {
-        SourceRoot sourceRoot = projectRoot.getSourceRoot(root.resolve("src/main/java")).get();
+        SourceRoot sourceRoot =
+                projectRoot.getSourceRoot(root.resolve("src/main/java")).get();
         AtomicInteger unresolved = new AtomicInteger();
         for (ParseResult<CompilationUnit> parseResult : sourceRoot.tryToParse()) {
             parseResult.ifSuccessful(compilationUnit -> {
@@ -58,7 +60,10 @@ class SymbolSolverCollectionStrategyTest {
                         // not supported operation, just skip
                     } catch (Exception e) {
                         unresolved.getAndIncrement();
-                        Log.error(e, "Unable to resolve %s from %s", () -> expr, () -> compilationUnit.getStorage().get().getPath());
+                        Log.error(e, "Unable to resolve %s from %s", () -> expr, () -> compilationUnit
+                                .getStorage()
+                                .get()
+                                .getPath());
                     }
                 }
             });
@@ -66,15 +71,26 @@ class SymbolSolverCollectionStrategyTest {
         // not too many MethodDeclarations should be unresolved
         assertTrue(unresolved.get() < 10);
     }
-    
+
     @Test
     void resolveMultiSourceRoots() {
-        String[] relativeRootDir = {"/src/main/java-templates", "src/main/java", "src/main/javacc-support", "target/generated-sources/javacc", "target/generated-sources/java-templates", "src/main/java-templates"};
-        Path mainDirectory = classLoaderRoot(SymbolSolverCollectionStrategyTest.class).resolve("../../../javaparser-core").normalize();
+        String[] relativeRootDir = {
+            "/src/main/java-templates",
+            "src/main/java",
+            "src/main/javacc-support",
+            "target/generated-sources/javacc",
+            "target/generated-sources/java-templates",
+            "src/main/java-templates"
+        };
+        Path mainDirectory = classLoaderRoot(SymbolSolverCollectionStrategyTest.class)
+                .resolve("../../../javaparser-core")
+                .normalize();
         ProjectRoot projectRoot = new SymbolSolverCollectionStrategy().collect(mainDirectory);
         List<com.github.javaparser.utils.SourceRoot> sourceRoots = projectRoot.getSourceRoots();
         // get all source root directories
-        List<String> roots = projectRoot.getSourceRoots().stream().map(s -> s.getRoot().toString()).collect(Collectors.toList());
+        List<String> roots = projectRoot.getSourceRoots().stream()
+                .map(s -> s.getRoot().toString())
+                .collect(Collectors.toList());
         // verify each member of the list
         Arrays.stream(relativeRootDir).forEach(rrd -> {
             Path p = Paths.get(mainDirectory.toString(), rrd);

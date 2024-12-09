@@ -27,12 +27,11 @@ import com.github.javaparser.resolution.declarations.AssociableToAST;
 import com.github.javaparser.resolution.declarations.ResolvedEnumConstantDeclarationTest;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import java.util.Optional;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
-
-import java.util.Optional;
 
 class JavassistEnumConstantDeclarationTest implements ResolvedEnumConstantDeclarationTest {
 
@@ -57,5 +56,4 @@ class JavassistEnumConstantDeclarationTest implements ResolvedEnumConstantDeclar
     public String getCanonicalNameOfExpectedType(ResolvedValueDeclaration resolvedDeclaration) {
         return "java.time.DayOfWeek";
     }
-
 }

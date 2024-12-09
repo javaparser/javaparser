@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2007-2010 Júlio Vilmar Gesser.
  * Copyright (C) 2011, 2013-2024 The JavaParser Team.
  *
  * This file is part of JavaParser.
@@ -18,26 +17,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
+package com.github.javaparser.ast.validator.postprocessors;
 
-package com.github.javaparser.resolution.declarations;
-
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-public interface ResolvedPatternDeclarationTest extends ResolvedValueDeclarationTest {
-
-    @Override
-    ResolvedPatternDeclaration createValue();
-
-    @Test
-    default void resolvedPatternShouldBeMarkedAsPattern() {
-        assertTrue(createValue().isPattern());
-    }
-
-    @Test
-    default void resolvedPatternShouldHaveAName() {
-        assertTrue(createValue().hasName());
-    }
-
-}
+/**
+ * Processes the generic AST into a Java 21 AST and validates it.
+ */
+public class Java21PostProcessor extends Java20PostProcessor {}

@@ -21,25 +21,24 @@
 
 package com.github.javaparser;
 
-
-import com.github.javaparser.ast.expr.Expression;
-import org.junit.jupiter.api.Test;
-
-import java.lang.reflect.Field;
-import java.util.Iterator;
-
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 import static com.github.javaparser.JavaToken.Category.*;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.github.javaparser.ast.expr.Expression;
+import java.lang.reflect.Field;
+import java.util.Iterator;
+import org.junit.jupiter.api.Test;
+
 class JavaTokenTest {
 
     @Test
     void testAFewTokens() {
         ParseResult<Expression> result = new JavaParser().parse(ParseStart.EXPRESSION, provider("1 +/*2*/1 "));
-        Iterator<JavaToken> iterator = result.getResult().get().getTokenRange().get().iterator();
+        Iterator<JavaToken> iterator =
+                result.getResult().get().getTokenRange().get().iterator();
         assertToken("1", range(1, 1, 1, 1), INTEGER_LITERAL, LITERAL, iterator.next());
         assertToken(" ", range(1, 2, 1, 2), SPACE, WHITESPACE_NO_EOL, iterator.next());
         assertToken("+", range(1, 3, 1, 3), PLUS, OPERATOR, iterator.next());
@@ -55,8 +54,10 @@ class JavaTokenTest {
         assertEquals(range, token.getRange().get());
         assertEquals(kind, token.getKind());
         assertEquals(category, token.getCategory());
-        token.getNextToken().ifPresent(nt -> assertEquals(token, nt.getPreviousToken().get()));
-        token.getPreviousToken().ifPresent(pt -> assertEquals(token, pt.getNextToken().get()));
+        token.getNextToken()
+                .ifPresent(nt -> assertEquals(token, nt.getPreviousToken().get()));
+        token.getPreviousToken()
+                .ifPresent(pt -> assertEquals(token, pt.getNextToken().get()));
         assertTrue(token.getNextToken().isPresent() || token.getPreviousToken().isPresent());
     }
 
@@ -102,22 +103,22 @@ class JavaTokenTest {
             String javaCcTokenName = declaredField.getName();
             Object javaccTokenNumber = declaredField.get(null); // static fields, therefore null is okay
 
-
             // Optional printing -- for debugging purposes.
-//            System.out.println(i + " - " +
-//                    jpTokenName + " (" + jpTokenNumber + ") - " +
-//                    javaCcTokenName + " (" + javaccTokenNumber + ")"
-//            );
+            //            System.out.println(i + " - " +
+            //                    jpTokenName + " (" + jpTokenNumber + ") - " +
+            //                    javaCcTokenName + " (" + javaccTokenNumber + ")"
+            //            );
 
             assertEquals(jpTokenName, javaCcTokenName);
             assertEquals(
-                    javaccTokenNumber, jpTokenNumber,
-                    "Error - Likely need to rerun JP Generators following a grammar change." +
-                            "\nProblem with `" + jpTokenName + "`." +
-                            "\nNote mismatch between:" +
-                            "\n - token #" + javaccTokenNumber + " - GeneratedJavaParserConstants (generated using JavaCC)" +
-                            "\n - token #" + jpTokenNumber + " - JavaToken (generated using JP Generators)."
-            );
+                    javaccTokenNumber,
+                    jpTokenNumber,
+                    "Error - Likely need to rerun JP Generators following a grammar change." + "\nProblem with `"
+                            + jpTokenName + "`." + "\nNote mismatch between:"
+                            + "\n - token #"
+                            + javaccTokenNumber + " - GeneratedJavaParserConstants (generated using JavaCC)"
+                            + "\n - token #"
+                            + jpTokenNumber + " - JavaToken (generated using JP Generators).");
         }
     }
 
@@ -141,7 +142,8 @@ class JavaTokenTest {
         ParseResult<Expression> result = new JavaParser().parse(ParseStart.EXPRESSION, provider("1 +/*2*/3 "));
         TokenRange tokenRange = result.getResult().get().getTokenRange().get();
         Iterator<JavaToken> iterator = tokenRange.iterator();
-        assertToken("", range(1, 10, 1, 10), EOF, WHITESPACE_NO_EOL, iterator.next().findLastToken());
+        assertToken(
+                "", range(1, 10, 1, 10), EOF, WHITESPACE_NO_EOL, iterator.next().findLastToken());
 
         // getEnd token in TokenRange is not the same as the last token from findLastToken()
         // assertEquals(tokenRange.getEnd(), tokenRange.getBegin().findLastToken());
@@ -150,12 +152,17 @@ class JavaTokenTest {
     @Test
     void testFindFirstToken() {
         ParseResult<Expression> result = new JavaParser().parse(ParseStart.EXPRESSION, provider("1 +/*2*/3+4"));
-        Iterator<JavaToken> iterator = result.getResult().get().getTokenRange().get().iterator();
+        Iterator<JavaToken> iterator =
+                result.getResult().get().getTokenRange().get().iterator();
         iterator.next();
         iterator.next();
         iterator.next();
         assertEquals("/*2*/", iterator.next().getText());
-        assertToken("1", range(1, 1, 1, 1), INTEGER_LITERAL, LITERAL, iterator.next().findFirstToken());
+        assertToken(
+                "1",
+                range(1, 1, 1, 1),
+                INTEGER_LITERAL,
+                LITERAL,
+                iterator.next().findFirstToken());
     }
-
 }

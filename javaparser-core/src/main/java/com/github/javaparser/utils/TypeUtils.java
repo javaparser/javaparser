@@ -54,7 +54,10 @@ public class TypeUtils {
             String descriptor = getPrimitiveTypeDescriptor(currentClass);
             stringBuilder.append(descriptor);
         } else {
-            stringBuilder.append("L").append(currentClass.getName().replace(".", "/")).append(";");
+            stringBuilder
+                    .append("L")
+                    .append(currentClass.getName().replace(".", "/"))
+                    .append(";");
         }
     }
 

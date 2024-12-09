@@ -46,7 +46,10 @@ public enum LineSeparator {
     /**
      * This line ending is set to whatever the host system's line separator is
      */
-    SYSTEM(System.getProperty("line.separator"), "SYSTEM : (" + System.getProperty("line.separator").replace("\r", "\\r").replace("\n", "\\n") + ")"),
+    SYSTEM(
+            System.getProperty("line.separator"),
+            "SYSTEM : ("
+                    + System.getProperty("line.separator").replace("\r", "\\r").replace("\n", "\\n") + ")"),
     /**
      * The ARBITRARY line ending can be used where we do not care about the line separator,
      * only that we use the same one consistently
@@ -80,7 +83,8 @@ public enum LineSeparator {
      * @return The number of times that the given needle is found within the haystack.
      */
     private static int count(String haystack, String needle) {
-        // Note that if the needle is multiple characters, e.g. \r\n, the difference in string length will be disproportionately affected.
+        // Note that if the needle is multiple characters, e.g. \r\n, the difference in string length will be
+        // disproportionately affected.
         return (haystack.length() - haystack.replaceAll(needle, "").length()) / needle.length();
     }
 
@@ -122,10 +126,10 @@ public enum LineSeparator {
         if (CR.asRawString().equals(ending)) {
             return Optional.of(CR);
         }
-            if (LF.asRawString().equals(ending)) {
+        if (LF.asRawString().equals(ending)) {
             return Optional.of(LF);
         }
-            if (CRLF.asRawString().equals(ending)) {
+        if (CRLF.asRawString().equals(ending)) {
             return Optional.of(CRLF);
         }
         return Optional.empty();
@@ -135,10 +139,10 @@ public enum LineSeparator {
         if (CR.asEscapedString().equals(ending)) {
             return Optional.of(CR);
         }
-            if (LF.asEscapedString().equals(ending)) {
+        if (LF.asEscapedString().equals(ending)) {
             return Optional.of(LF);
         }
-            if (CRLF.asEscapedString().equals(ending)) {
+        if (CRLF.asEscapedString().equals(ending)) {
             return Optional.of(CRLF);
         }
         return Optional.empty();

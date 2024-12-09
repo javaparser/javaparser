@@ -25,5 +25,4 @@ public interface ResolvedAnnotationMemberDeclarationTest extends ResolvedValueDe
 
     @Override
     ResolvedAnnotationMemberDeclaration createValue();
-
 }

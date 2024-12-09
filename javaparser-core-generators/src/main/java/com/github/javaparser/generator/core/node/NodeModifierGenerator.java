@@ -33,9 +33,8 @@ public class NodeModifierGenerator extends NodeGenerator {
     }
 
     @Override
-    protected void generateNode(BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
-        nodeCoid
-                .setFinal(false)
-                .setPublic(true);
+    protected void generateNode(
+            BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
+        nodeCoid.setFinal(false).setPublic(true);
     }
 }

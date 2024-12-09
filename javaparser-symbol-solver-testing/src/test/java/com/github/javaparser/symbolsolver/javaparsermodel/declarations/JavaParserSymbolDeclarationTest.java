@@ -20,17 +20,18 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.body.VariableDeclarator;
-import com.github.javaparser.ast.expr.PatternExpr;
-import com.github.javaparser.resolution.TypeSolver;
-import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import org.junit.jupiter.api.Test;
-
 import static com.github.javaparser.StaticJavaParser.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.TypePatternExpr;
+import com.github.javaparser.resolution.TypeSolver;
+import com.github.javaparser.resolution.declarations.ResolvedTypePatternDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.junit.jupiter.api.Test;
 
 class JavaParserSymbolDeclarationTest {
 
@@ -59,7 +60,8 @@ class JavaParserSymbolDeclarationTest {
      */
     @Test
     void createdParameterShouldBeMarkedAsParameter() {
-        Parameter parameter = parseParameter("String myStr");;
+        Parameter parameter = parseParameter("String myStr");
+        ;
         ResolvedValueDeclaration parameterDeclaration = JavaParserSymbolDeclaration.parameter(parameter, typeSolver);
 
         assertTrue(parameterDeclaration.isParameter());
@@ -72,24 +74,24 @@ class JavaParserSymbolDeclarationTest {
      */
     @Test
     void createdLocalVariableShouldBeMarkedAsVariable() {
-        VariableDeclarator variableDeclarator = parseVariableDeclarationExpr("int x = 0").getVariable(0);
+        VariableDeclarator variableDeclarator =
+                parseVariableDeclarationExpr("int x = 0").getVariable(0);
         ResolvedValueDeclaration localVar = JavaParserSymbolDeclaration.localVar(variableDeclarator, typeSolver);
 
         assertTrue(localVar.isVariable());
     }
 
     /**
-     * Try to create a pattern variable using {@link JavaParserSymbolDeclaration#patternVar(PatternExpr, TypeSolver)} and check
+     * Try to create a pattern variable using {@link JavaParserSymbolDeclaration#patternVar(TypePatternExpr, TypeSolver)} and check
      * if the returned declaration is marked as a pattern and can be converted to a
-     * {@link com.github.javaparser.resolution.declarations.ResolvedPatternDeclaration} using {@link ResolvedValueDeclaration#asPattern()}.
+     * {@link ResolvedTypePatternDeclaration} using {@link ResolvedValueDeclaration#asTypePattern()}.
      */
     @Test
     void createdPatternVariableShouldBeMarkedAsPatternVar() {
-        PatternExpr patternExpr = new PatternExpr();
-        ResolvedValueDeclaration patternVar = JavaParserSymbolDeclaration.patternVar(patternExpr, typeSolver);
+        TypePatternExpr typePatternExpr = new TypePatternExpr();
+        ResolvedValueDeclaration patternVar = JavaParserSymbolDeclaration.patternVar(typePatternExpr, typeSolver);
 
-        assertTrue(patternVar.isPattern());
-        assertDoesNotThrow(patternVar::asPattern);
+        assertTrue(patternVar.isTypePattern());
+        assertDoesNotThrow(patternVar::asTypePattern);
     }
-
 }

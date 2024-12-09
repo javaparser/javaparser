@@ -21,15 +21,21 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import com.github.javaparser.JavaParserAdapter;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.resolution.Solver;
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
+import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.SymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-class JavaParserFacadeTest {
+class JavaParserFacadeTest extends AbstractResolutionTest {
 
     private final Solver symbolSolver = new SymbolSolver(new ReflectionTypeSolver());
 
@@ -67,7 +73,31 @@ class JavaParserFacadeTest {
      * Enum to be tested in {@link JavaParserFacadeTest#classToResolvedType_givenEnumShouldBeAReflectionEnumDeclaration}.
      */
     private enum TestEnum {
-        A, B;
+        A,
+        B;
     }
 
+    // issue 3939
+    @Test
+    public void checksThatTheBehaviourIsConsistentInTheEventOfAnUnsolvedSymbol() {
+        String code = "import java.util.List;\n"
+                + "import java.util.stream.Collectors;\n"
+                + "\n"
+                + "public class Foo {\n"
+                + "\n"
+                + "    void m(List<Class<?>> classNames) {\n"
+                + "        classNames.stream().map(c -> c.asSubclass(IMutator.class));\n"
+                + "    }\n"
+                + "}";
+        CompilationUnit cu = JavaParserAdapter.of(createParserWithResolver(defaultTypeSolver()))
+                .parse(code);
+        MethodCallExpr expr = cu.findFirst(MethodCallExpr.class).get();
+        // First pass, there must be an UnsolvedSymbolException because the type of the method parameter cannot be
+        // resolved
+        assertThrows(
+                UnsolvedSymbolException.class, () -> expr.getSymbolResolver().calculateType(expr));
+        // Second pass, we always want an exception to ensure consistent behaviour
+        assertThrows(
+                UnsolvedSymbolException.class, () -> expr.getSymbolResolver().calculateType(expr));
+    }
 }

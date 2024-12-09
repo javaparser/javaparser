@@ -20,13 +20,12 @@
 
 package com.github.javaparser.printer.configuration.imports;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class IntelliJImportOrderingStrategyTest {
 
@@ -59,7 +58,9 @@ class IntelliJImportOrderingStrategyTest {
         assertEquals("java.util.List", actual.get(1).get(0).getNameAsString());
 
         assertEquals(1, actual.get(2).size());
-        assertEquals("org.junit.jupiter.api.Assertions.assertEquals", actual.get(2).get(0).getNameAsString());
+        assertEquals(
+                "org.junit.jupiter.api.Assertions.assertEquals",
+                actual.get(2).get(0).getNameAsString());
     }
 
     @Test
@@ -79,5 +80,4 @@ class IntelliJImportOrderingStrategyTest {
         assertEquals(0, actual.get(1).size());
         assertEquals(0, actual.get(2).size());
     }
-
 }

@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -36,13 +39,9 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import com.github.javaparser.symbolsolver.utils.LeanParserConfiguration;
-import org.junit.jupiter.api.Test;
-
 import java.nio.file.Path;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
 
 class VariadicResolutionTest extends AbstractResolutionTest {
 
@@ -68,7 +67,8 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
 
         MethodDeclaration method = Navigator.demandMethod(clazz, "variadicMethod");
-        MethodCallExpr callExpr = Navigator.findMethodCall(method, "variadicMethod").get();
+        MethodCallExpr callExpr =
+                Navigator.findMethodCall(method, "variadicMethod").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
@@ -82,7 +82,8 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "MethodCalls");
 
         MethodDeclaration method = Navigator.demandMethod(clazz, "genericMethodTest");
-        MethodCallExpr callExpr = Navigator.findMethodCall(method, "variadicWithGenericArg").get();
+        MethodCallExpr callExpr =
+                Navigator.findMethodCall(method, "variadicWithGenericArg").get();
 
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
@@ -99,7 +100,8 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         List<MethodCallExpr> calls = method.findAll(MethodCallExpr.class);
 
         Path src = adaptPath("src/test/resources");
-        TypeSolver typeSolver = new CombinedTypeSolver(new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
+        TypeSolver typeSolver = new CombinedTypeSolver(
+                new ReflectionTypeSolver(), new JavaParserTypeSolver(src, new LeanParserConfiguration()));
 
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         MethodUsage call1 = javaParserFacade.solveMethodAsUsage(calls.get(0)); // foobar();
@@ -129,9 +131,17 @@ class VariadicResolutionTest extends AbstractResolutionTest {
         MethodUsage call2 = javaParserFacade.solveMethodAsUsage(calls.get(2));
         MethodUsage call3 = javaParserFacade.solveMethodAsUsage(calls.get(3));
         MethodUsage call4 = javaParserFacade.solveMethodAsUsage(calls.get(4));
-        assertEquals("java.lang.reflect.Constructor", call1.returnType().asReferenceType().getQualifiedName());
-        assertEquals("java.lang.reflect.Constructor", call2.returnType().asReferenceType().getQualifiedName());
-        assertEquals("java.lang.reflect.Constructor", call3.returnType().asReferenceType().getQualifiedName());
-        assertEquals("java.lang.reflect.Constructor", call4.returnType().asReferenceType().getQualifiedName());
+        assertEquals(
+                "java.lang.reflect.Constructor",
+                call1.returnType().asReferenceType().getQualifiedName());
+        assertEquals(
+                "java.lang.reflect.Constructor",
+                call2.returnType().asReferenceType().getQualifiedName());
+        assertEquals(
+                "java.lang.reflect.Constructor",
+                call3.returnType().asReferenceType().getQualifiedName());
+        assertEquals(
+                "java.lang.reflect.Constructor",
+                call4.returnType().asReferenceType().getQualifiedName());
     }
 }

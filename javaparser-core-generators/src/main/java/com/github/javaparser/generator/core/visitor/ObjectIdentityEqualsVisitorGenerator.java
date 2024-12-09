@@ -33,11 +33,18 @@ import com.github.javaparser.utils.SourceRoot;
  */
 public class ObjectIdentityEqualsVisitorGenerator extends VisitorGenerator {
     public ObjectIdentityEqualsVisitorGenerator(SourceRoot sourceRoot) {
-        super(sourceRoot, "com.github.javaparser.ast.visitor", "ObjectIdentityEqualsVisitor", "Boolean", "Visitable", true);
+        super(
+                sourceRoot,
+                "com.github.javaparser.ast.visitor",
+                "ObjectIdentityEqualsVisitor",
+                "Boolean",
+                "Visitable",
+                true);
     }
 
     @Override
-    protected void generateVisitMethodBody(BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
+    protected void generateVisitMethodBody(
+            BaseNodeMetaModel node, MethodDeclaration visitMethod, CompilationUnit compilationUnit) {
         visitMethod.getParameters().forEach(p -> p.setFinal(true));
 
         BlockStmt body = visitMethod.getBody().get();

@@ -21,14 +21,14 @@
 
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.type.PrimitiveType;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.StaticJavaParser.parseVariableDeclarationExpr;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NodeWithVariablesTest {
 
@@ -45,7 +45,8 @@ class NodeWithVariablesTest {
 
     @Test
     void getCommonTypeFailsOnArrayDifferences() {
-        assertThrows(AssertionError.class, () -> parseVariableDeclarationExpr("int a[],b[][]").getCommonType());
+        assertThrows(AssertionError.class, () -> parseVariableDeclarationExpr("int a[],b[][]")
+                .getCommonType());
     }
 
     @Test

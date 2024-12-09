@@ -21,8 +21,6 @@
 
 package com.github.javaparser.symbolsolver.resolution.typeinference;
 
-import java.util.*;
-
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.resolution.MethodUsage;
@@ -36,6 +34,7 @@ import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.*;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.utils.Pair;
+import java.util.*;
 
 /**
  * The term "type" is used loosely in this chapter to include type-like syntax that contains inference variables.
@@ -63,7 +62,7 @@ public class TypeHelper {
             return type.asReferenceType().typeParametersValues().stream().allMatch(it -> isProperType(it));
         }
         if (type instanceof ResolvedWildcard) {
-            ResolvedWildcard wildcard = (ResolvedWildcard)type;
+            ResolvedWildcard wildcard = (ResolvedWildcard) type;
             if (wildcard.isBounded()) {
                 return isProperType(wildcard.getBoundedType());
             }
@@ -98,9 +97,12 @@ public class TypeHelper {
      * @param t
      * @return
      */
-    public static boolean isCompatibleInALooseInvocationContext(TypeSolver typeSolver, Expression expression, ResolvedType t) {
-        //throw new UnsupportedOperationException("Unable to determine if " + expression + " is compatible in a loose invocation context with type " + t);
-        return isCompatibleInALooseInvocationContext(JavaParserFacade.get(typeSolver).getType(expression), t);
+    public static boolean isCompatibleInALooseInvocationContext(
+            TypeSolver typeSolver, Expression expression, ResolvedType t) {
+        // throw new UnsupportedOperationException("Unable to determine if " + expression + " is compatible in a loose
+        // invocation context with type " + t);
+        return isCompatibleInALooseInvocationContext(
+                JavaParserFacade.get(typeSolver).getType(expression), t);
     }
 
     /**
@@ -134,15 +136,19 @@ public class TypeHelper {
 
         // - a boxing conversion (§5.1.7) optionally followed by widening reference conversion
 
-        if (s.isPrimitive() && t.isReferenceType() &&
-                areCompatibleThroughWideningReferenceConversion(toBoxedType(s.asPrimitive()), t)) {
+        if (s.isPrimitive()
+                && t.isReferenceType()
+                && areCompatibleThroughWideningReferenceConversion(toBoxedType(s.asPrimitive()), t)) {
             return true;
         }
 
         // - an unboxing conversion (§5.1.8) optionally followed by a widening primitive conversion
 
-        if (s.isReferenceType() && s.asReferenceType().isUnboxable() && t.isPrimitive() &&
-                areCompatibleThroughWideningPrimitiveConversion(s.asReferenceType().toUnboxedType().get(), t)) {
+        if (s.isReferenceType()
+                && s.asReferenceType().isUnboxable()
+                && t.isPrimitive()
+                && areCompatibleThroughWideningPrimitiveConversion(
+                        s.asReferenceType().toUnboxedType().get(), t)) {
             return true;
         }
 
@@ -154,7 +160,8 @@ public class TypeHelper {
             return true;
         }
 
-        //throw new UnsupportedOperationException("isCompatibleInALooseInvocationContext unable to decide on s=" + s + ", t=" + t);
+        // throw new UnsupportedOperationException("isCompatibleInALooseInvocationContext unable to decide on s=" + s +
+        // ", t=" + t);
         // TODO FIXME
         return t.isAssignableBy(s);
     }
@@ -164,17 +171,20 @@ public class TypeHelper {
     }
 
     // get the resolved boxed type of the specified primitive type
-    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver ) {
-        SymbolReference<ResolvedReferenceTypeDeclaration> typeDeclaration =  typeSolver.tryToSolveType(primitiveType.getBoxTypeQName());
+    public static ResolvedType toBoxedType(ResolvedPrimitiveType primitiveType, TypeSolver typeSolver) {
+        SymbolReference<ResolvedReferenceTypeDeclaration> typeDeclaration =
+                typeSolver.tryToSolveType(primitiveType.getBoxTypeQName());
         return new ReferenceTypeImpl(typeDeclaration.getCorrespondingDeclaration());
     }
 
     public static boolean areCompatibleThroughWideningReferenceConversion(ResolvedType s, ResolvedType t) {
-        Optional<ResolvedPrimitiveType> correspondingPrimitiveTypeForS = Arrays.stream(ResolvedPrimitiveType.values()).filter(pt -> pt.getBoxTypeQName().equals(s.asReferenceType().getQualifiedName())).findFirst();
+        Optional<ResolvedPrimitiveType> correspondingPrimitiveTypeForS = Arrays.stream(ResolvedPrimitiveType.values())
+                .filter(pt -> pt.getBoxTypeQName().equals(s.asReferenceType().getQualifiedName()))
+                .findFirst();
         if (!correspondingPrimitiveTypeForS.isPresent()) {
             return false;
         }
-        throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s="+s+", t=" + t);
+        throw new UnsupportedOperationException("areCompatibleThroughWideningReferenceConversion s=" + s + ", t=" + t);
     }
 
     public static boolean areCompatibleThroughWideningPrimitiveConversion(ResolvedType s, ResolvedType t) {
@@ -204,26 +214,28 @@ public class TypeHelper {
      * any other shared supertype (that is, no other shared supertype is a subtype of the least upper bound).
      */
     public static ResolvedType leastUpperBound(Set<ResolvedType> types) {
-    	LeastUpperBoundLogic logic = LeastUpperBoundLogic.of();
-    	return logic.lub(types);
+        LeastUpperBoundLogic logic = LeastUpperBoundLogic.of();
+        return logic.lub(types);
     }
 
     /**
      * See JLS 15.27.3. Type of a Lambda Expression
      * @return
      */
-    public static Pair<ResolvedType, Boolean> groundTargetTypeOfLambda(LambdaExpr lambdaExpr, ResolvedType T, TypeSolver typeSolver) {
+    public static Pair<ResolvedType, Boolean> groundTargetTypeOfLambda(
+            LambdaExpr lambdaExpr, ResolvedType T, TypeSolver typeSolver) {
         // The ground target type is derived from T as follows:
         //
         boolean used18_5_3 = false;
 
-        boolean wildcardParameterized = T.asReferenceType().typeParametersValues().stream()
-                .anyMatch(tp -> tp.isWildcard());
+        boolean wildcardParameterized =
+                T.asReferenceType().typeParametersValues().stream().anyMatch(tp -> tp.isWildcard());
         if (wildcardParameterized) {
-            // - If T is a wildcard-parameterized functional interface type and the lambda expression is explicitly typed,
+            // - If T is a wildcard-parameterized functional interface type and the lambda expression is explicitly
+            // typed,
             //   then the ground target type is inferred as described in §18.5.3.
 
-            if (ExpressionHelper.isExplicitlyTyped(lambdaExpr)) {
+            if (lambdaExpr.isExplicitlyTyped()) {
                 used18_5_3 = true;
                 throw new UnsupportedOperationException();
             }
@@ -237,8 +249,11 @@ public class TypeHelper {
     /**
      * See JLS 9.9
      */
-    private static ResolvedReferenceType nonWildcardParameterizationOf(ResolvedReferenceType originalType, TypeSolver typeSolver) {
-        ResolvedReferenceTypeDeclaration originalTypeDeclaration = originalType.getTypeDeclaration().orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
+    private static ResolvedReferenceType nonWildcardParameterizationOf(
+            ResolvedReferenceType originalType, TypeSolver typeSolver) {
+        ResolvedReferenceTypeDeclaration originalTypeDeclaration = originalType
+                .getTypeDeclaration()
+                .orElseThrow(() -> new RuntimeException("TypeDeclaration unexpectedly empty."));
 
         List<ResolvedType> TIs = new LinkedList<>();
         List<ResolvedType> AIs = originalType.typeParametersValues();
@@ -249,7 +264,7 @@ public class TypeHelper {
 
         ResolvedReferenceType object = new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());
 
-        for (int i=0;i<AIs.size();i++) {
+        for (int i = 0; i < AIs.size(); i++) {
             ResolvedType Ai = AIs.get(i);
             ResolvedType Ti = null;
 
@@ -289,9 +304,7 @@ public class TypeHelper {
 
                 else if (Ai.isWildcard() && Ai.asWildcard().isLowerBounded()) {
                     Ti = Ai.asWildcard().getBoundedType();
-                }
-
-                else {
+                } else {
                     throw new RuntimeException("This should not happen");
                 }
             }

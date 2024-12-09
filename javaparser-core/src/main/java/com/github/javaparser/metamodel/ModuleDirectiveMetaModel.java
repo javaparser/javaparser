@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.modules.ModuleDirective;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.modules.ModuleDirective;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -39,11 +39,23 @@ public class ModuleDirectiveMetaModel extends NodeMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     ModuleDirectiveMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, ModuleDirective.class, "ModuleDirective", "com.github.javaparser.ast.modules", true, false);
+        super(
+                superBaseNodeMetaModel,
+                ModuleDirective.class,
+                "ModuleDirective",
+                "com.github.javaparser.ast.modules",
+                true,
+                false);
     }
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
-    protected ModuleDirectiveMetaModel(Optional<BaseNodeMetaModel> superNodeMetaModel, Class<? extends Node> type, String name, String packageName, boolean isAbstract, boolean hasWildcard) {
+    protected ModuleDirectiveMetaModel(
+            Optional<BaseNodeMetaModel> superNodeMetaModel,
+            Class<? extends Node> type,
+            String name,
+            String packageName,
+            boolean isAbstract,
+            boolean hasWildcard) {
         super(superNodeMetaModel, type, name, packageName, isAbstract, hasWildcard);
     }
 }

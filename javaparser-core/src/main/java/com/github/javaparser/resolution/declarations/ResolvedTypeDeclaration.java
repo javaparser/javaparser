@@ -40,7 +40,8 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * Get the list of types defined inside the current type.
      */
     default Set<ResolvedReferenceTypeDeclaration> internalTypes() {
-        throw new UnsupportedOperationException("InternalTypes not available for " + this.getClass().getCanonicalName());
+        throw new UnsupportedOperationException(
+                "InternalTypes not available for " + this.getClass().getCanonicalName());
     }
 
     /**
@@ -48,7 +49,9 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * (Does not include internal types inside internal types).
      */
     default ResolvedReferenceTypeDeclaration getInternalType(String name) {
-        Optional<ResolvedReferenceTypeDeclaration> type = this.internalTypes().stream().filter(f -> f.getName().equals(name)).findFirst();
+        Optional<ResolvedReferenceTypeDeclaration> type = this.internalTypes().stream()
+                .filter(f -> f.getName().equals(name))
+                .findFirst();
         return type.orElseThrow(() -> new UnsolvedSymbolException("Internal type not found: " + name));
     }
 
@@ -87,6 +90,13 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      * Is this the declaration of an enum?
      */
     default boolean isEnum() {
+        return false;
+    }
+
+    /**
+     * Is this the declaration of a record class?
+     */
+    default boolean isRecord() {
         return false;
     }
 
@@ -163,6 +173,13 @@ public interface ResolvedTypeDeclaration extends ResolvedDeclaration {
      */
     default ResolvedEnumDeclaration asEnum() {
         throw new UnsupportedOperationException(String.format("%s is not an enum", this));
+    }
+
+    /**
+     * Return this as a RecordDeclaration or throw UnsupportedOperationException.
+     */
+    default ResolvedRecordDeclaration asRecord() {
+        throw new UnsupportedOperationException(String.format("%s is not a record", this));
     }
 
     /**

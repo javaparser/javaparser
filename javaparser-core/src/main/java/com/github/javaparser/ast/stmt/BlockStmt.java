@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.stmt;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -34,7 +36,6 @@ import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * Statements in between { and }.
@@ -88,8 +89,7 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
             return this;
         }
         notifyPropertyChange(ObservableProperty.STATEMENTS, this.statements, statements);
-        if (this.statements != null)
-            this.statements.setParentNode(null);
+        if (this.statements != null) this.statements.setParentNode(null);
         this.statements = statements;
         setAsParentNodeOf(statements);
         return this;

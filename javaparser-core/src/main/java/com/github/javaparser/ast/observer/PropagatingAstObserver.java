@@ -39,12 +39,14 @@ public abstract class PropagatingAstObserver implements AstObserver {
         return new PropagatingAstObserver() {
 
             @Override
-            public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+            public void concretePropertyChange(
+                    Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
                 observer.propertyChange(observedNode, property, oldValue, newValue);
             }
 
             @Override
-            public void concreteListChange(NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
+            public void concreteListChange(
+                    NodeList<?> observedNode, ListChangeType type, int index, Node nodeAddedOrRemoved) {
                 observer.listChange(observedNode, type, index, nodeAddedOrRemoved);
             }
 
@@ -82,7 +84,8 @@ public abstract class PropagatingAstObserver implements AstObserver {
         concreteListReplacement(observedNode, index, oldNode, newNode);
     }
 
-    public void concretePropertyChange(Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
+    public void concretePropertyChange(
+            Node observedNode, ObservableProperty property, Object oldValue, Object newValue) {
         // do nothing
     }
 

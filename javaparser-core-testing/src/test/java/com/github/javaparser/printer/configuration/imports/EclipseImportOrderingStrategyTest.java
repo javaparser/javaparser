@@ -20,13 +20,12 @@
 
 package com.github.javaparser.printer.configuration.imports;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
-import org.junit.jupiter.api.Test;
-
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class EclipseImportOrderingStrategyTest {
 
@@ -59,7 +58,9 @@ class EclipseImportOrderingStrategyTest {
         assertEquals(6, actual.size());
 
         assertEquals(1, actual.get(0).size());
-        assertEquals("org.junit.jupiter.api.Assertions.assertEquals", actual.get(0).get(0).getNameAsString());
+        assertEquals(
+                "org.junit.jupiter.api.Assertions.assertEquals",
+                actual.get(0).get(0).getNameAsString());
 
         assertEquals(1, actual.get(1).size());
         assertEquals("java.util.List", actual.get(1).get(0).getNameAsString());
@@ -97,5 +98,4 @@ class EclipseImportOrderingStrategyTest {
         assertEquals("com.example.B", actual.get(4).get(1).getNameAsString());
         assertEquals(0, actual.get(5).size());
     }
-
 }

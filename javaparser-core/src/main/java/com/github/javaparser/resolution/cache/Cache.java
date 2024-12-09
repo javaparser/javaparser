@@ -17,7 +17,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  */
-
 package com.github.javaparser.resolution.cache;
 
 import java.util.Optional;
@@ -91,13 +90,11 @@ public interface Cache<K, V> {
      * @return {@code True} if is empty.
      */
     boolean isEmpty();
-    
+
     /**
      * Returns a current snapshot of this cache's cumulative statistics, or a set of default values if
      * the cache is not recording statistics. All statistics begin at zero and never decrease over the
      * lifetime of the cache.
-     *
      */
     CacheStats stats();
-
 }

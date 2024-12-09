@@ -21,6 +21,9 @@
 
 package com.github.javaparser.symbolsolver.resolution.typesolvers;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.cache.Cache;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -28,19 +31,15 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.symbolsolver.cache.InMemoryCache;
 import com.github.javaparser.symbolsolver.reflectionmodel.ReflectionClassDeclaration;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver.ExceptionHandlers;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
 class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> {
 
@@ -50,33 +49,27 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
 
     static List<Object[]> parameters() {
         // Why these classes? NFE is a subclass, IOOBE is a superclass and ISE is a class without children (by default)
-        Predicate<Exception> whitelistTestFilter = ExceptionHandlers.getTypeBasedWhitelist(NumberFormatException.class,
-                IndexOutOfBoundsException.class, IllegalStateException.class);
-        Predicate<Exception> blacklistTestFilter = ExceptionHandlers.getTypeBasedBlacklist(NumberFormatException.class,
-                IndexOutOfBoundsException.class, IllegalStateException.class);
+        Predicate<Exception> whitelistTestFilter = ExceptionHandlers.getTypeBasedWhitelist(
+                NumberFormatException.class, IndexOutOfBoundsException.class, IllegalStateException.class);
+        Predicate<Exception> blacklistTestFilter = ExceptionHandlers.getTypeBasedBlacklist(
+                NumberFormatException.class, IndexOutOfBoundsException.class, IllegalStateException.class);
 
         return Arrays.asList(new Object[][] {
-                { new RuntimeException(), ExceptionHandlers.IGNORE_ALL, true }, // 0
-                { new RuntimeException(), ExceptionHandlers.IGNORE_NONE, false }, // 1
-
-                { new RuntimeException(), whitelistTestFilter, false }, // 2
-                { new IllegalStateException(), whitelistTestFilter, true }, // 3
-
-                { new NumberFormatException(), whitelistTestFilter, true }, // 4
-                { new IllegalArgumentException(), whitelistTestFilter, false }, // 5
-
-                { new IndexOutOfBoundsException(), whitelistTestFilter, true }, // 6
-                { new ArrayIndexOutOfBoundsException(), whitelistTestFilter, true }, // 7
-
-                { new RuntimeException(), blacklistTestFilter, true }, // 8
-                { new NullPointerException(), blacklistTestFilter, true }, // 9
-                { new IllegalStateException(), blacklistTestFilter, false }, // 10
-
-                { new NumberFormatException(), blacklistTestFilter, false }, // 11
-                { new IllegalArgumentException(), blacklistTestFilter, true }, // 12
-
-                { new IndexOutOfBoundsException(), blacklistTestFilter, false }, // 13
-                { new ArrayIndexOutOfBoundsException(), blacklistTestFilter, false }, // 14
+            {new RuntimeException(), ExceptionHandlers.IGNORE_ALL, true}, // 0
+            {new RuntimeException(), ExceptionHandlers.IGNORE_NONE, false}, // 1
+            {new RuntimeException(), whitelistTestFilter, false}, // 2
+            {new IllegalStateException(), whitelistTestFilter, true}, // 3
+            {new NumberFormatException(), whitelistTestFilter, true}, // 4
+            {new IllegalArgumentException(), whitelistTestFilter, false}, // 5
+            {new IndexOutOfBoundsException(), whitelistTestFilter, true}, // 6
+            {new ArrayIndexOutOfBoundsException(), whitelistTestFilter, true}, // 7
+            {new RuntimeException(), blacklistTestFilter, true}, // 8
+            {new NullPointerException(), blacklistTestFilter, true}, // 9
+            {new IllegalStateException(), blacklistTestFilter, false}, // 10
+            {new NumberFormatException(), blacklistTestFilter, false}, // 11
+            {new IllegalArgumentException(), blacklistTestFilter, true}, // 12
+            {new IndexOutOfBoundsException(), blacklistTestFilter, false}, // 13
+            {new ArrayIndexOutOfBoundsException(), blacklistTestFilter, false}, // 14
         });
     }
 
@@ -84,13 +77,14 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
     @MethodSource("parameters")
     void testExceptionFilter(Exception toBeThrownException, Predicate<Exception> filter, boolean expectForward) {
         TypeSolver erroringTypeSolver = mock(TypeSolver.class);
-        when(erroringTypeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, erroringTypeSolver));
+        when(erroringTypeSolver.getSolvedJavaLangObject())
+                .thenReturn(new ReflectionClassDeclaration(Object.class, erroringTypeSolver));
         doThrow(toBeThrownException).when(erroringTypeSolver).tryToSolveType(any(String.class));
 
         TypeSolver secondaryTypeSolver = mock(TypeSolver.class);
-        when(secondaryTypeSolver.getSolvedJavaLangObject()).thenReturn(new ReflectionClassDeclaration(Object.class, secondaryTypeSolver));
-        when(secondaryTypeSolver.tryToSolveType(any(String.class)))
-                .thenReturn(SymbolReference.unsolved());
+        when(secondaryTypeSolver.getSolvedJavaLangObject())
+                .thenReturn(new ReflectionClassDeclaration(Object.class, secondaryTypeSolver));
+        when(secondaryTypeSolver.tryToSolveType(any(String.class))).thenReturn(SymbolReference.unsolved());
 
         try {
             new CombinedTypeSolver(filter, erroringTypeSolver, secondaryTypeSolver)
@@ -111,27 +105,26 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
         typeSolverList.add(new ReflectionTypeSolver());
         CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(typeSolverList);
 
-        SymbolReference<ResolvedReferenceTypeDeclaration> resolved = combinedTypeSolver.tryToSolveType(Integer.class.getCanonicalName());
+        SymbolReference<ResolvedReferenceTypeDeclaration> resolved =
+                combinedTypeSolver.tryToSolveType(Integer.class.getCanonicalName());
         assertTrue(resolved.isSolved());
     }
 
     @Test
     public void testConstructorWithArray() {
-        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(
-                new ReflectionTypeSolver()
-        );
+        CombinedTypeSolver combinedTypeSolver = new CombinedTypeSolver(new ReflectionTypeSolver());
 
-        SymbolReference<ResolvedReferenceTypeDeclaration> resolved = combinedTypeSolver.tryToSolveType(Integer.class.getCanonicalName());
+        SymbolReference<ResolvedReferenceTypeDeclaration> resolved =
+                combinedTypeSolver.tryToSolveType(Integer.class.getCanonicalName());
         assertTrue(resolved.isSolved());
     }
 
     @Test
     void testConstructorWithNullCache_ShouldThrowNPE() {
-        List<TypeSolver> childSolvers = Collections.singletonList(
-                new ReflectionTypeSolver()
-        );
-        assertThrows(NullPointerException.class, () ->
-                new CombinedTypeSolver(ExceptionHandlers.IGNORE_NONE, childSolvers, null));
+        List<TypeSolver> childSolvers = Collections.singletonList(new ReflectionTypeSolver());
+        assertThrows(
+                NullPointerException.class,
+                () -> new CombinedTypeSolver(ExceptionHandlers.IGNORE_NONE, childSolvers, null));
     }
 
     /**
@@ -143,9 +136,7 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
     @Test
     void testCacheIsUsed_WhenTypeIsRequested() {
 
-        List<TypeSolver> childSolvers = Collections.singletonList(
-                new ReflectionTypeSolver()
-        );
+        List<TypeSolver> childSolvers = Collections.singletonList(new ReflectionTypeSolver());
         Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> cache = spy(InMemoryCache.create());
         CombinedTypeSolver combinedSolver = new CombinedTypeSolver(ExceptionHandlers.IGNORE_NONE, childSolvers, cache);
         SymbolReference<ResolvedReferenceTypeDeclaration> reference;
@@ -174,9 +165,7 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
      */
     @Test
     void testUserAddsNewTypeSolver_CacheShouldBeReset() {
-        List<TypeSolver> childSolvers = Collections.singletonList(
-                new ReflectionTypeSolver()
-        );
+        List<TypeSolver> childSolvers = Collections.singletonList(new ReflectionTypeSolver());
         Cache<String, SymbolReference<ResolvedReferenceTypeDeclaration>> cache = spy(InMemoryCache.create());
         CombinedTypeSolver combinedSolver = new CombinedTypeSolver(ExceptionHandlers.IGNORE_NONE, childSolvers, cache);
 
@@ -185,5 +174,4 @@ class CombinedTypeSolverTest extends AbstractTypeSolverTest<CombinedTypeSolver> 
         verify(cache).removeAll();
         verifyNoMoreInteractions(cache);
     }
-
 }

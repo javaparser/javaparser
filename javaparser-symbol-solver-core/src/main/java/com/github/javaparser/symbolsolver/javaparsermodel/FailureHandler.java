@@ -22,30 +22,31 @@
 package com.github.javaparser.symbolsolver.javaparsermodel;
 
 import com.github.javaparser.resolution.UnsolvedSymbolException;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 /*
- * This class allows exceptions to be handled either by casting particular exceptions 
+ * This class allows exceptions to be handled either by casting particular exceptions
  * or by throwing new runtime exceptions.
  */
 public class FailureHandler {
 
-    private static final Map<Class<? extends Throwable>, Function<Throwable, ? extends RuntimeException>> FAILURE_CONVERTER = new HashMap<>();
+    private static final Map<Class<? extends Throwable>, Function<Throwable, ? extends RuntimeException>>
+            FAILURE_CONVERTER = new HashMap<>();
+
     static {
-        FAILURE_CONVERTER.put(UnsolvedSymbolException.class,
-                (Throwable th) -> (RuntimeException)th);
+        FAILURE_CONVERTER.put(UnsolvedSymbolException.class, (Throwable th) -> (RuntimeException) th);
     }
 
     public RuntimeException handle(Throwable th) {
         return handle(th, null);
     }
-                                   
+
     public RuntimeException handle(Throwable th, String message) {
         // searching for exact mapping
-        Function<Throwable, ? extends RuntimeException> converter = FAILURE_CONVERTER.get(findRootCause(th).getClass());
+        Function<Throwable, ? extends RuntimeException> converter =
+                FAILURE_CONVERTER.get(findRootCause(th).getClass());
         if (converter != null) {
             return converter.apply(th);
         }
@@ -69,11 +70,9 @@ public class FailureHandler {
     private boolean isRootCause(Throwable th) {
         return th.getCause() == null;
     }
-    
+
     private RuntimeException getRuntimeExceptionFrom(Throwable th, String message) {
-        if (message == null || message.isEmpty())
-            return new RuntimeException(findRootCause(th));
+        if (message == null || message.isEmpty()) return new RuntimeException(findRootCause(th));
         return new RuntimeException(message, findRootCause(th));
     }
-
 }

@@ -35,6 +35,19 @@ jobs:
         ## Different JDK versions have different implementations etc. -- test on all combinations (ideally 8 to latest).
         ### exclude pre-8 (min development version jdk8)
         jdk: [ 8,9,10,11,12,13,14,15,16,17,18 ]
+        # The below configurations are no longer available on github runners and is not supported by the 
+        # setup-java action, nor are they available from the supported distributions.
+        # See https://github.com/actions/setup-java for details
+        exclude:
+          - os: macos-latest
+            jdk: 9
+          - os: macos-latest
+            jdk: 10
+          - os: macos-latest
+            jdk: 12
+          - os: macos-latest
+            jdk: 14
+
     env:
       OS: ${{ matrix.os }}
       JDK: ${{ matrix.jdk }}
@@ -44,7 +57,7 @@ jobs:
     steps:
       ## Checkout the current version of the code from the repo.
       - name: Checkout latest code
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
         with:
           fetch-depth: "0"
 
@@ -63,7 +76,7 @@ jobs:
       ## Use a cache to reduce the build/test times (avoids having to download dependencies on EVERY run).
       ### https://help.github.com/en/actions/language-and-framework-guides/building-and-testing-java-with-maven#caching-dependencies
       - name: Cache Maven packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -83,7 +96,7 @@ jobs:
 
 
       - name: CodeCov - JavaParser Core
-        uses: codecov/codecov-action@v3.1.4
+        uses: codecov/codecov-action@v4.5.0
         timeout-minutes: 10
         with:
           files: javaparser-core-testing/target/site/jacoco/jacoco.xml,javaparser-core-testing-bdd/target/site/jacoco/jacoco.xml
@@ -93,7 +106,7 @@ jobs:
           env_vars: OS,JDK
 
       - name: CodeCov - JavaParser Symbol Solver
-        uses: codecov/codecov-action@v3.1.4
+        uses: codecov/codecov-action@v4.5.0
         timeout-minutes: 10
         with:
           file: javaparser-symbol-solver-testing/target/site/jacoco/jacoco.xml
@@ -101,20 +114,3 @@ jobs:
           verbose: false # optional (default = false):
           flags: javaparser-symbol-solver,AlsoSlowTests,${{ matrix.os }},jdk-${{ matrix.jdk }}
           env_vars: OS,JDK
-
-  # Run checkstyle validations for pipeline
-  checkstyle_check:
-    name: Validate checkstyle
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout latest code
-        uses: actions/checkout@v4.1.1
-        with:
-          fetch-depth: "0"
-      - name: Set up JDK 11
-        uses: actions/setup-java@v4
-        with:
-          java-version: '11'
-          distribution: 'zulu'
-      - name: Validate Project Checkstyle
-        run: ./mvnw -B checkstyle:check

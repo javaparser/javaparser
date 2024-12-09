@@ -21,6 +21,12 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_1_0;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -29,19 +35,14 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.Statement;
 import org.junit.jupiter.api.Test;
 
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_1_0;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.TestUtils.assertNoProblems;
-import static com.github.javaparser.utils.TestUtils.assertProblems;
-
 class Java1_0ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_1_0));
 
     @Test
     void tryWithoutResources() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("try(X x=new Y()){}"));
-        assertProblems(result,
+        assertProblems(
+                result,
                 "(line 1,col 1) Try has no finally and no catch. Pay attention that this feature is supported starting from 'JAVA_7' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.",
                 "(line 1,col 1) Catch with resource is not supported. Pay attention that this feature is supported starting from 'JAVA_7' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
@@ -54,7 +55,8 @@ class Java1_0ValidatorTest {
 
     @Test
     void interfaceUsingImplements() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("interface X implements Y {}"));
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("interface X implements Y {}"));
         assertProblems(result, "(line 1,col 24) An interface cannot implement other interfaces.");
     }
 
@@ -66,7 +68,8 @@ class Java1_0ValidatorTest {
 
     @Test
     void defaultInClass() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X {default void a(){};}"));
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X {default void a(){};}"));
         assertProblems(result, "(line 1,col 10) 'default' is not allowed here.");
     }
 
@@ -79,7 +82,8 @@ class Java1_0ValidatorTest {
     @Test
     void leftHandAssignmentCannotBeEmptyBraces() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("()=3"));
-        assertProblems(result,
+        assertProblems(
+                result,
                 "(line 1,col 1) Illegal left hand side of an assignment.",
                 "(line 1,col 1) Lambdas are not supported. Pay attention that this feature is supported starting from 'JAVA_8' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
@@ -93,19 +97,25 @@ class Java1_0ValidatorTest {
     @Test
     void noInnerClasses() {
         ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X{class Y{}}"));
-        assertProblems(result, "(line 1,col 9) inner classes or interfaces are not supported. Pay attention that this feature is supported starting from 'JAVA_1_1' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        assertProblems(
+                result,
+                "(line 1,col 9) inner classes or interfaces are not supported. Pay attention that this feature is supported starting from 'JAVA_1_1' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
     void noReflection() {
         ParseResult<Expression> result = javaParser.parse(EXPRESSION, provider("Abc.class"));
-        assertProblems(result, "(line 1,col 1) Reflection is not supported. Pay attention that this feature is supported starting from 'JAVA_1_1' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        assertProblems(
+                result,
+                "(line 1,col 1) Reflection is not supported. Pay attention that this feature is supported starting from 'JAVA_1_1' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test
     void noForEach() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("for(X x : xs){}"));
-        assertProblems(result, "(line 1,col 1) For-each loops are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        assertProblems(
+                result,
+                "(line 1,col 1) For-each loops are not supported. Pay attention that this feature is supported starting from 'JAVA_5' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 
     @Test

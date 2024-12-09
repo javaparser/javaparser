@@ -42,7 +42,8 @@ public interface NodeWithJavadoc<N extends Node> {
      * @return The JavadocComment for this node wrapped in an optional as it may be absent.
      */
     default Optional<JavadocComment> getJavadocComment() {
-        return getComment().filter(comment -> comment instanceof JavadocComment).map(comment -> (JavadocComment) comment);
+        return getComment().filter(comment -> comment instanceof JavadocComment).map(comment ->
+                (JavadocComment) comment);
     }
 
     /**

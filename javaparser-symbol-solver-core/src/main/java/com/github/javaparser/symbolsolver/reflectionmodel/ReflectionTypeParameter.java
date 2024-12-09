@@ -28,7 +28,6 @@ import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclar
 import com.github.javaparser.resolution.declarations.ResolvedTypeParametrizable;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.Method;
@@ -70,14 +69,11 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
         if (!getQualifiedName().equals(that.getQualifiedName())) {
             return false;
         }
-        if (declaredOnType() != that.declaredOnType()) {
-            return false;
-        }
-        if (declaredOnMethod() != that.declaredOnMethod()) {
-            return false;
+        if (declaredOnType() == that.declaredOnType()) {
+            return true;
         }
         // TODO check bounds
-        return true;
+        return declaredOnMethod() == that.declaredOnMethod();
     }
 
     @Override
@@ -107,7 +103,7 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
         }
         return ((ResolvedMethodLikeDeclaration) container).getQualifiedSignature();
     }
-    
+
     @Override
     public ResolvedTypeParametrizable getContainer() {
         return this.container;
@@ -115,14 +111,14 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
 
     @Override
     public List<Bound> getBounds() {
-        return Arrays.stream(typeVariable.getBounds()).map((refB) -> Bound.extendsBound(ReflectionFactory.typeUsageFor(refB, typeSolver))).collect(Collectors.toList());
+        return Arrays.stream(typeVariable.getBounds())
+                .map((refB) -> Bound.extendsBound(ReflectionFactory.typeUsageFor(refB, typeSolver)))
+                .collect(Collectors.toList());
     }
 
     @Override
     public String toString() {
-        return "ReflectionTypeParameter{" +
-                "typeVariable=" + typeVariable +
-                '}';
+        return "ReflectionTypeParameter{" + "typeVariable=" + typeVariable + '}';
     }
 
     @Override
@@ -132,7 +128,7 @@ public class ReflectionTypeParameter implements ResolvedTypeParameterDeclaration
         }
         return Optional.empty();
     }
-    
+
     @Override
     public ResolvedReferenceType object() {
         return new ReferenceTypeImpl(typeSolver.getSolvedJavaLangObject());

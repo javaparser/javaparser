@@ -36,33 +36,37 @@ public class Issue1370Test {
 
     @Test
     public void test() {
-        final String source = String.join(System.lineSeparator(),
-                                          "package graph;",
-                                          "class Vertex<Data> {",
-                                          "    private final Data data;",
-                                          "    public Vertex(Data data) { this.data = data; }",
-                                          "    public Data getData() { return this.data; }",
-                                          "}",
-                                          "",
-                                          "public class Application {",
-                                          "    public static void main(String[] args) {",
-                                          "        System.out.println(new Vertex<>(42).getData().equals(42));",
-                                          "    }",
-                                          "}");
+        final String source = String.join(
+                System.lineSeparator(),
+                "package graph;",
+                "class Vertex<Data> {",
+                "    private final Data data;",
+                "    public Vertex(Data data) { this.data = data; }",
+                "    public Data getData() { return this.data; }",
+                "}",
+                "",
+                "public class Application {",
+                "    public static void main(String[] args) {",
+                "        System.out.println(new Vertex<>(42).getData().equals(42));",
+                "    }",
+                "}");
 
         final JavaParserFacade facade = JavaParserFacade.get(new ReflectionTypeSolver(false));
 
-        StaticJavaParser.parse(source).accept(new VoidVisitorAdapter<Void>() {
-            @Override
-            public void visit(final MethodCallExpr n, final Void arg) {
-                super.visit(n, arg);
+        StaticJavaParser.parse(source)
+                .accept(
+                        new VoidVisitorAdapter<Void>() {
+                            @Override
+                            public void visit(final MethodCallExpr n, final Void arg) {
+                                super.visit(n, arg);
 
-                try {
-                    System.out.printf("Node: %s, solved Type: %s%n", n, facade.solve(n));
-                } catch (RuntimeException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, null);
+                                try {
+                                    System.out.printf("Node: %s, solved Type: %s%n", n, facade.solve(n));
+                                } catch (RuntimeException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        null);
     }
 }

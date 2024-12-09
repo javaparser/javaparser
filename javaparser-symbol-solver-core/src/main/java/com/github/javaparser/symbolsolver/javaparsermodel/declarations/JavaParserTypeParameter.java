@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -33,12 +35,8 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
-
 
 /**
  * @author Federico Tomassetti
@@ -69,9 +67,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
         JavaParserTypeParameter that = (JavaParserTypeParameter) o;
 
-        if (wrappedNode != null ? !wrappedNode.equals(that.wrappedNode) : that.wrappedNode != null) return false;
-
-        return true;
+        return wrappedNode != null && wrappedNode.equals(that.wrappedNode);
     }
 
     @Override
@@ -97,7 +93,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         if (container instanceof ResolvedReferenceTypeDeclaration) {
             return ((ResolvedReferenceTypeDeclaration) container).getQualifiedName();
         }
-            if (container instanceof JavaParserConstructorDeclaration) {
+        if (container instanceof JavaParserConstructorDeclaration) {
             return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
         }
         return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
@@ -109,7 +105,7 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
         if (container instanceof ResolvedReferenceTypeDeclaration) {
             return ((ResolvedReferenceTypeDeclaration) container).getId();
         }
-            if (container instanceof JavaParserConstructorDeclaration) {
+        if (container instanceof JavaParserConstructorDeclaration) {
             return ((JavaParserConstructorDeclaration) container).getQualifiedSignature();
         }
         return ((JavaParserMethodDeclaration) container).getQualifiedSignature();
@@ -119,20 +115,31 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     public ResolvedTypeParametrizable getContainer() {
         Node parentNode = demandParentNode(wrappedNode);
         if (parentNode instanceof com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) {
-            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration = (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) parentNode;
+            com.github.javaparser.ast.body.ClassOrInterfaceDeclaration jpTypeDeclaration =
+                    (com.github.javaparser.ast.body.ClassOrInterfaceDeclaration) parentNode;
             return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration);
         }
-        if (parentNode instanceof com.github.javaparser.ast.body.ConstructorDeclaration){
-            com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration = (com.github.javaparser.ast.body.ConstructorDeclaration) parentNode;
-            Optional<ClassOrInterfaceDeclaration> jpTypeDeclaration = jpConstructorDeclaration.findAncestor(com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class);
+        if (parentNode instanceof com.github.javaparser.ast.body.RecordDeclaration) {
+            com.github.javaparser.ast.body.RecordDeclaration jpRecordDeclaration =
+                    (com.github.javaparser.ast.body.RecordDeclaration) parentNode;
+            return JavaParserFacade.get(typeSolver).getTypeDeclaration(jpRecordDeclaration);
+        }
+        if (parentNode instanceof com.github.javaparser.ast.body.ConstructorDeclaration) {
+            com.github.javaparser.ast.body.ConstructorDeclaration jpConstructorDeclaration =
+                    (com.github.javaparser.ast.body.ConstructorDeclaration) parentNode;
+            Optional<ClassOrInterfaceDeclaration> jpTypeDeclaration = jpConstructorDeclaration.findAncestor(
+                    com.github.javaparser.ast.body.ClassOrInterfaceDeclaration.class);
             if (jpTypeDeclaration.isPresent()) {
-                ResolvedReferenceTypeDeclaration typeDeclaration = JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration.get());
+                ResolvedReferenceTypeDeclaration typeDeclaration =
+                        JavaParserFacade.get(typeSolver).getTypeDeclaration(jpTypeDeclaration.get());
                 if (typeDeclaration.isClass()) {
-                    return new JavaParserConstructorDeclaration(typeDeclaration.asClass(), jpConstructorDeclaration, typeSolver);
+                    return new JavaParserConstructorDeclaration(
+                            typeDeclaration.asClass(), jpConstructorDeclaration, typeSolver);
                 }
             }
         } else {
-            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration = (com.github.javaparser.ast.body.MethodDeclaration) parentNode;
+            com.github.javaparser.ast.body.MethodDeclaration jpMethodDeclaration =
+                    (com.github.javaparser.ast.body.MethodDeclaration) parentNode;
             return new JavaParserMethodDeclaration(jpMethodDeclaration, typeSolver);
         }
         throw new UnsupportedOperationException();
@@ -145,7 +152,9 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
 
     @Override
     public List<Bound> getBounds() {
-        return wrappedNode.getTypeBound().stream().map((astB) -> toBound(astB, typeSolver)).collect(Collectors.toList());
+        return wrappedNode.getTypeBound().stream()
+                .map((astB) -> toBound(astB, typeSolver))
+                .collect(Collectors.toList());
     }
 
     private Bound toBound(ClassOrInterfaceType classOrInterfaceType, TypeSolver typeSolver) {
@@ -243,5 +252,4 @@ public class JavaParserTypeParameter extends AbstractTypeDeclaration implements 
     public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
-
 }

@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.nodeTypes;
 
+import static com.github.javaparser.StaticJavaParser.parseStatement;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -27,7 +29,6 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import static com.github.javaparser.StaticJavaParser.parseStatement;
 
 /**
  * A node that contains a list of statements.

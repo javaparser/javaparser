@@ -20,6 +20,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
@@ -30,17 +32,14 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class Issue3272Test {
 
     @Test
     void test0() {
         // Source code
-        String sourceCode = "import java.util.function.Consumer;" +
-                "class A {" +
-                "   Consumer<Integer> consumer = item -> {};" +
-                "}";
+        String sourceCode = "import java.util.function.Consumer;" + "class A {"
+                + "   Consumer<Integer> consumer = item -> {};"
+                + "}";
         // Setup symbol solver
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
@@ -56,13 +55,12 @@ public class Issue3272Test {
     @Test
     void test1() {
         // Source code
-        String sourceCode = "import java.util.function.Consumer;" +
-                "class A {" +
-                "   Consumer<Integer> consumer;" +
-                "   {" +
-                "       consumer = item -> {};" +
-                "   }" +
-                "}";
+        String sourceCode = "import java.util.function.Consumer;" + "class A {"
+                + "   Consumer<Integer> consumer;"
+                + "   {"
+                + "       consumer = item -> {};"
+                + "   }"
+                + "}";
         // Setup symbol solver
         ParserConfiguration configuration = new ParserConfiguration()
                 .setSymbolResolver(new JavaSymbolSolver(new CombinedTypeSolver(new ReflectionTypeSolver())));
@@ -74,5 +72,4 @@ public class Issue3272Test {
         ResolvedType type = expr.calculateResolvedType();
         assertEquals("java.util.function.Consumer<java.lang.Integer>", type.describe());
     }
-
 }

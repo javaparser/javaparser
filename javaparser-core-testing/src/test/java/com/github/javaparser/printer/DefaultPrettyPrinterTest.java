@@ -21,6 +21,14 @@
 
 package com.github.javaparser.printer;
 
+import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.StaticJavaParser.*;
+import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -37,17 +45,8 @@ import com.github.javaparser.printer.configuration.Indentation.IndentType;
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.printer.configuration.imports.EclipseImportOrderingStrategy;
 import com.github.javaparser.printer.configuration.imports.IntelliJImportOrderingStrategy;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import static com.github.javaparser.ParseStart.COMPILATION_UNIT;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_9;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.StaticJavaParser.*;
-import static com.github.javaparser.utils.TestUtils.assertEqualsStringIgnoringEol;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DefaultPrettyPrinterTest {
 
@@ -56,12 +55,12 @@ class DefaultPrettyPrinterTest {
     private final JavaParserAdapter parserAdapter = JavaParserAdapter.of(javaParser);
 
     private final PrinterConfiguration printerConfiguration = new DefaultPrinterConfiguration();
-    
+
     private Printer getDefaultPrinter() {
         PrinterConfiguration configuration = new DefaultPrinterConfiguration();
         return new DefaultPrettyPrinter(configuration);
     }
-    
+
     private Printer getDefaultPrinter(PrinterConfiguration configuration) {
         return new DefaultPrettyPrinter(configuration);
     }
@@ -73,7 +72,8 @@ class DefaultPrettyPrinterTest {
 
     private String prettyPrintVar(String code) {
         CompilationUnit cu = parse(code);
-        return getDefaultPrinter().print(cu.findAll(VariableDeclarationExpr.class).get(0));
+        return getDefaultPrinter()
+                .print(cu.findAll(VariableDeclarationExpr.class).get(0));
     }
 
     @Test
@@ -117,7 +117,8 @@ class DefaultPrettyPrinterTest {
     @Disabled
     private String prettyPrintConfigurable(String code) {
         CompilationUnit cu = parse(code);
-        return getDefaultPrinter().print(cu.findFirst(ClassOrInterfaceDeclaration.class).get().getName());
+        return getDefaultPrinter()
+                .print(cu.findFirst(ClassOrInterfaceDeclaration.class).get().getName());
     }
 
     @Test
@@ -133,63 +134,70 @@ class DefaultPrettyPrinterTest {
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS));
 
-        final String EOL = configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString();
+        final String EOL = configuration
+                .get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER))
+                .get()
+                .asString();
 
         String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
-        String expected = "class Example {" + EOL +
-                "" + EOL +
-                "    void foo(Object arg0, Object arg1) {" + EOL +
-                "        myMethod(1," + EOL +
-                "                 2," + EOL +
-                "                 3," + EOL +
-                "                 5," + EOL +
-                "                 Object.class);" + EOL +
-                "    }" + EOL +
-                "}" + EOL +
-                "";
+        String expected = "class Example {" + EOL + ""
+                + EOL + "    void foo(Object arg0, Object arg1) {"
+                + EOL + "        myMethod(1,"
+                + EOL + "                 2,"
+                + EOL + "                 3,"
+                + EOL + "                 5,"
+                + EOL + "                 Object.class);"
+                + EOL + "    }"
+                + EOL + "}"
+                + EOL + "";
 
         assertEquals(expected, getDefaultPrinter(configuration).print(parse(code)));
     }
 
     @Test
     void prettyColumnAlignParameters_disabled() {
-        
+
         PrinterConfiguration configuration = new DefaultPrinterConfiguration();
-        final String EOL = configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString();
+        final String EOL = configuration
+                .get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER))
+                .get()
+                .asString();
 
         String code = "class Example { void foo(Object arg0,Object arg1){ myMethod(1, 2, 3, 5, Object.class); } }";
-        String expected = "class Example {" + EOL +
-                "" + EOL +
-                "    void foo(Object arg0, Object arg1) {" + EOL +
-                "        myMethod(1, 2, 3, 5, Object.class);" + EOL +
-                "    }" + EOL +
-                "}" + EOL +
-                "";
+        String expected = "class Example {" + EOL + ""
+                + EOL + "    void foo(Object arg0, Object arg1) {"
+                + EOL + "        myMethod(1, 2, 3, 5, Object.class);"
+                + EOL + "    }"
+                + EOL + "}"
+                + EOL + "";
 
         assertEquals(expected, getDefaultPrinter(configuration).print(parse(code)));
     }
 
     @Test
     void prettyAlignMethodCallChains_enabled() {
-        
+
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
 
-        final String EOL = configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString();
+        final String EOL = configuration
+                .get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER))
+                .get()
+                .asString();
 
-        String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
-        String expected = "class Example {" + EOL +
-                "" + EOL +
-                "    void foo() {" + EOL +
-                "        IntStream.range(0, 10)" + EOL +
-                "                 .filter(x -> x % 2 == 0)" + EOL +
-                "                 .map(x -> x * IntStream.of(1, 3, 5, 1)" + EOL +
-                "                                        .sum())" + EOL +
-                "                 .forEach(System.out::println);" + EOL +
-                "    }" + EOL +
-                "}" + EOL +
-                "";
-        
+        String code =
+                "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
+        String expected = "class Example {" + EOL + ""
+                + EOL + "    void foo() {"
+                + EOL + "        IntStream.range(0, 10)"
+                + EOL + "                 .filter(x -> x % 2 == 0)"
+                + EOL + "                 .map(x -> x * IntStream.of(1, 3, 5, 1)"
+                + EOL + "                                        .sum())"
+                + EOL + "                 .forEach(System.out::println);"
+                + EOL + "    }"
+                + EOL + "}"
+                + EOL + "";
+
         String printed = getDefaultPrinter(configuration).print(parse(code));
 
         assertEquals(expected, printed);
@@ -197,18 +205,22 @@ class DefaultPrettyPrinterTest {
 
     @Test
     void prettyAlignMethodCallChains_disabled() {
-        
-        PrinterConfiguration configuration = new DefaultPrinterConfiguration();
-        final String EOL = configuration.get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER)).get().asString();
 
-        String code = "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
-        String expected = "class Example {" + EOL +
-                "" + EOL +
-                "    void foo() {" + EOL +
-                "        IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1, 3, 5, 1).sum()).forEach(System.out::println);" + EOL +
-                "    }" + EOL +
-                "}" + EOL +
-                "";
+        PrinterConfiguration configuration = new DefaultPrinterConfiguration();
+        final String EOL = configuration
+                .get(new DefaultConfigurationOption(ConfigOption.END_OF_LINE_CHARACTER))
+                .get()
+                .asString();
+
+        String code =
+                "class Example { void foo() { IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1,3,5,1).sum()).forEach(System.out::println); } }";
+        String expected = "class Example {" + EOL + ""
+                + EOL + "    void foo() {"
+                + EOL
+                + "        IntStream.range(0, 10).filter(x -> x % 2 == 0).map(x -> x * IntStream.of(1, 3, 5, 1).sum()).forEach(System.out::println);"
+                + EOL + "    }"
+                + EOL + "}"
+                + EOL + "";
 
         assertEquals(expected, getDefaultPrinter(configuration).print(parse(code)));
     }
@@ -222,7 +234,8 @@ class DefaultPrettyPrinterTest {
     @Test
     void enumConstantsVertically() {
         CompilationUnit cu = parse("enum X{A, B, C, D, E, F}");
-        assertEqualsStringIgnoringEol("enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new DefaultPrettyPrinter().print(cu));
+        assertEqualsStringIgnoringEol(
+                "enum X {\n\n    A,\n    B,\n    C,\n    D,\n    E,\n    F\n}\n", new DefaultPrettyPrinter().print(cu));
     }
 
     @Test
@@ -243,74 +256,74 @@ class DefaultPrettyPrinterTest {
     @Test
     void prettyAlignMethodCallChainsIndentsArgumentsWithBlocksCorrectly() {
 
-        CompilationUnit cu = parse("class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
-        
+        CompilationUnit cu = parse(
+                "class Foo { void bar() { a.b.c.d.e; a.b.c().d().e(); a.b.c().d.e(); foo().bar().baz(boo().baa().bee()).bam(); foo().bar().baz(boo().baa().bee()).bam; foo().bar(Long.foo().b.bar(), bam).baz(); foo().bar().baz(foo, () -> { boo().baa().bee(); }).baz(() -> { boo().baa().bee(); }).bam(() -> { boo().baa().bee(); }); } }");
+
         Indentation indentation = new Indentation(IndentType.TABS_WITH_SPACE_ALIGN, 1);
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS))
                 .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, indentation));
         String printed = getDefaultPrinter(configuration).print(cu);
-        
-        assertEqualsStringIgnoringEol("class Foo {\n" +
-                "\n" +
-                "\tvoid bar() {\n" +
-                "\t\ta.b.c.d.e;\n" +
-                "\t\ta.b.c()\n" +
-                "\t\t   .d()\n" +
-                "\t\t   .e();\n" +
-                "\t\ta.b.c().d\n" +
-                "\t\t   .e();\n" +
-                "\t\tfoo().bar()\n" +
-                "\t\t     .baz(boo().baa().bee())\n" +
-                "\t\t     .bam();\n" +
-                "\t\tfoo().bar()\n" +
-                "\t\t     .baz(boo().baa().bee()).bam;\n" +
-                "\t\tfoo().bar(Long.foo().b.bar(),\n" +
-                "\t\t          bam)\n" +
-                "\t\t     .baz();\n" +
-                "\t\tfoo().bar()\n" +
-                "\t\t     .baz(foo,\n" +
-                "\t\t          () -> {\n" +
-                "\t\t          \tboo().baa()\n" +
-                "\t\t          \t     .bee();\n" +
-                "\t\t          })\n" +
-                "\t\t     .baz(() -> {\n" +
-                "\t\t     \tboo().baa()\n" +
-                "\t\t     \t     .bee();\n" +
-                "\t\t     })\n" +
-                "\t\t     .bam(() -> {\n" +
-                "\t\t     \tboo().baa()\n" +
-                "\t\t     \t     .bee();\n" +
-                "\t\t     });\n" +
-                "\t}\n" +
-                "}\n", printed);
+
+        assertEqualsStringIgnoringEol(
+                "class Foo {\n" + "\n"
+                        + "\tvoid bar() {\n"
+                        + "\t\ta.b.c.d.e;\n"
+                        + "\t\ta.b.c()\n"
+                        + "\t\t   .d()\n"
+                        + "\t\t   .e();\n"
+                        + "\t\ta.b.c().d\n"
+                        + "\t\t   .e();\n"
+                        + "\t\tfoo().bar()\n"
+                        + "\t\t     .baz(boo().baa().bee())\n"
+                        + "\t\t     .bam();\n"
+                        + "\t\tfoo().bar()\n"
+                        + "\t\t     .baz(boo().baa().bee()).bam;\n"
+                        + "\t\tfoo().bar(Long.foo().b.bar(),\n"
+                        + "\t\t          bam)\n"
+                        + "\t\t     .baz();\n"
+                        + "\t\tfoo().bar()\n"
+                        + "\t\t     .baz(foo,\n"
+                        + "\t\t          () -> {\n"
+                        + "\t\t          \tboo().baa()\n"
+                        + "\t\t          \t     .bee();\n"
+                        + "\t\t          })\n"
+                        + "\t\t     .baz(() -> {\n"
+                        + "\t\t     \tboo().baa()\n"
+                        + "\t\t     \t     .bee();\n"
+                        + "\t\t     })\n"
+                        + "\t\t     .bam(() -> {\n"
+                        + "\t\t     \tboo().baa()\n"
+                        + "\t\t     \t     .bee();\n"
+                        + "\t\t     });\n"
+                        + "\t}\n"
+                        + "}\n",
+                printed);
     }
 
     @Test
     void noChainsIndentsInIf() {
         Statement cu = parseStatement("if (x.y().z()) { boo().baa().bee(); }");
 
-        PrinterConfiguration configuration = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
+        PrinterConfiguration configuration = new DefaultPrinterConfiguration()
+                .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
         String printed = getDefaultPrinter(configuration).print(cu);
 
-        assertEqualsStringIgnoringEol("if (x.y().z()) {\n" +
-                "    boo().baa()\n" +
-                "         .bee();\n" +
-                "}", printed);
+        assertEqualsStringIgnoringEol("if (x.y().z()) {\n" + "    boo().baa()\n" + "         .bee();\n" + "}", printed);
     }
 
     @Test
     void noChainsIndentsInFor() {
         Statement cu = parseStatement("for(int x=1; x.y().z(); x.z().z()) { boo().baa().bee(); }");
 
-        PrinterConfiguration configuration = new DefaultPrinterConfiguration().addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
+        PrinterConfiguration configuration = new DefaultPrinterConfiguration()
+                .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
         String printed = getDefaultPrinter(configuration).print(cu);
 
-        assertEqualsStringIgnoringEol("for (int x = 1; x.y().z(); x.z().z()) {\n" +
-                "    boo().baa()\n" +
-                "         .bee();\n" +
-                "}", printed);
+        assertEqualsStringIgnoringEol(
+                "for (int x = 1; x.y().z(); x.z().z()) {\n" + "    boo().baa()\n" + "         .bee();\n" + "}",
+                printed);
     }
 
     @Test
@@ -320,222 +333,220 @@ class DefaultPrettyPrinterTest {
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN));
         String printed = getDefaultPrinter(configuration).print(cu);
-        
-        assertEqualsStringIgnoringEol("while (x.y().z()) {\n" +
-                "    boo().baa()\n" +
-                "         .bee();\n" +
-                "}", printed);
+
+        assertEqualsStringIgnoringEol(
+                "while (x.y().z()) {\n" + "    boo().baa()\n" + "         .bee();\n" + "}", printed);
     }
 
     @Test
     void indentWithTabsAsFarAsPossible() {
 
-        CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
-        
-       Indentation indentation = new Indentation(IndentType.TABS, 1);
+        CompilationUnit cu =
+                parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).bam(); } }");
+
+        Indentation indentation = new Indentation(IndentType.TABS, 1);
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS))
                 .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, indentation));
-        
+
         String printed = getDefaultPrinter(configuration).print(cu);
-        
-        assertEqualsStringIgnoringEol("class Foo {\n" +
-                "\n" +
-                "\tvoid bar() {\n" +
-                "\t\tfoo().bar()\n" +
-                "\t\t\t .baz(() -> {\n" +
-                "\t\t\t\t boo().baa()\n" +
-                "\t\t\t\t\t  .bee(a,\n" +
-                "\t\t\t\t\t\t   b,\n" +
-                "\t\t\t\t\t\t   c);\n" +
-                "\t\t\t })\n" +
-                "\t\t\t .bam();\n" +
-                "\t}\n" +
-                "}\n", printed);
+
+        assertEqualsStringIgnoringEol(
+                "class Foo {\n" + "\n"
+                        + "\tvoid bar() {\n"
+                        + "\t\tfoo().bar()\n"
+                        + "\t\t\t .baz(() -> {\n"
+                        + "\t\t\t\t boo().baa()\n"
+                        + "\t\t\t\t\t  .bee(a,\n"
+                        + "\t\t\t\t\t\t   b,\n"
+                        + "\t\t\t\t\t\t   c);\n"
+                        + "\t\t\t })\n"
+                        + "\t\t\t .bam();\n"
+                        + "\t}\n"
+                        + "}\n",
+                printed);
     }
 
     @Test
     void indentWithTabsAlignWithSpaces() {
 
-        CompilationUnit cu = parse("class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
-        
+        CompilationUnit cu = parse(
+                "class Foo { void bar() { foo().bar().baz(() -> { boo().baa().bee(a, b, c); }).baz(() -> { return boo().baa(); }).bam(); } }");
+
         Indentation indentation = new Indentation(IndentType.TABS_WITH_SPACE_ALIGN, 1);
         PrinterConfiguration configuration = new DefaultPrinterConfiguration()
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_FIRST_METHOD_CHAIN))
                 .addOption(new DefaultConfigurationOption(ConfigOption.COLUMN_ALIGN_PARAMETERS))
                 .addOption(new DefaultConfigurationOption(ConfigOption.INDENTATION, indentation));
-        
+
         String printed = getDefaultPrinter(configuration).print(cu);
 
-        assertEqualsStringIgnoringEol("class Foo {\n" +
-                "\n" +
-                "\tvoid bar() {\n" +
-                "\t\tfoo().bar()\n" +
-                "\t\t     .baz(() -> {\n" +
-                "\t\t     \tboo().baa()\n" +
-                "\t\t     \t     .bee(a,\n" +
-                "\t\t     \t          b,\n" +
-                "\t\t     \t          c);\n" +
-                "\t\t     })\n" +
-                "\t\t     .baz(() -> {\n" +
-                "\t\t     \treturn boo().baa();\n" +
-                "\t\t     })\n" +
-                "\t\t     .bam();\n" +
-                "\t}\n" +
-                "}\n", printed);
+        assertEqualsStringIgnoringEol(
+                "class Foo {\n" + "\n"
+                        + "\tvoid bar() {\n"
+                        + "\t\tfoo().bar()\n"
+                        + "\t\t     .baz(() -> {\n"
+                        + "\t\t     \tboo().baa()\n"
+                        + "\t\t     \t     .bee(a,\n"
+                        + "\t\t     \t          b,\n"
+                        + "\t\t     \t          c);\n"
+                        + "\t\t     })\n"
+                        + "\t\t     .baz(() -> {\n"
+                        + "\t\t     \treturn boo().baa();\n"
+                        + "\t\t     })\n"
+                        + "\t\t     .bam();\n"
+                        + "\t}\n"
+                        + "}\n",
+                printed);
     }
 
     @Test
     void printAnnotationsAtPrettyPlaces() {
 
         JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_9));
-        ParseResult<CompilationUnit> parseResult = javaParser.parse(COMPILATION_UNIT, provider("@Documented\n" +
-                "@Repeatable\n" +
-                "package com.github.javaparser;\n" +
-                "\n" +
-                "import java.lang.annotation.Documented;\n" +
-                "import java.lang.annotation.Repeatable;\n" +
-                "\n" +
-                "@Documented\n" +
-                "@Repeatable\n" +
-                "@interface Annotation {\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    String value();\n" +
-                "}\n" +
-                "\n" +
-                "@Documented\n" +
-                "@Repeatable\n" +
-                "class Class<@Documented @Repeatable T> {\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    byte b;\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    Class(@Documented @Repeatable int i) {\n" +
-                "        @Documented\n" +
-                "        @Repeatable\n" +
-                "        short s;\n" +
-                "    }\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    void method(@Documented @Repeatable Class this) {\n" +
-                "        for (@Deprecated int i : arr4[0]) {\n" +
-                "            x--;\n" +
-                "        }\n" +
-                "    }\n" +
-                "\n" +
-                "    void method(@Documented @Repeatable Class this, int i) {\n" +
-                "    }\n" +
-                "}\n" +
-                "\n" +
-                "@Documented\n" +
-                "@Repeatable\n" +
-                "enum Foo {\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    BAR\n" +
-                "}\n" +
-                "@Documented\n" +
-                "@Repeatable\n" +
-                "module foo.bar {\n" +
-                "}\n"));
+        ParseResult<CompilationUnit> parseResult = javaParser.parse(
+                COMPILATION_UNIT,
+                provider("@Documented\n" + "@Repeatable\n"
+                        + "package com.github.javaparser;\n"
+                        + "\n"
+                        + "import java.lang.annotation.Documented;\n"
+                        + "import java.lang.annotation.Repeatable;\n"
+                        + "\n"
+                        + "@Documented\n"
+                        + "@Repeatable\n"
+                        + "@interface Annotation {\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    String value();\n"
+                        + "}\n"
+                        + "\n"
+                        + "@Documented\n"
+                        + "@Repeatable\n"
+                        + "class Class<@Documented @Repeatable T> {\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    byte b;\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    Class(@Documented @Repeatable int i) {\n"
+                        + "        @Documented\n"
+                        + "        @Repeatable\n"
+                        + "        short s;\n"
+                        + "    }\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    void method(@Documented @Repeatable Class this) {\n"
+                        + "        for (@Deprecated int i : arr4[0]) {\n"
+                        + "            x--;\n"
+                        + "        }\n"
+                        + "    }\n"
+                        + "\n"
+                        + "    void method(@Documented @Repeatable Class this, int i) {\n"
+                        + "    }\n"
+                        + "}\n"
+                        + "\n"
+                        + "@Documented\n"
+                        + "@Repeatable\n"
+                        + "enum Foo {\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    BAR\n"
+                        + "}\n"
+                        + "@Documented\n"
+                        + "@Repeatable\n"
+                        + "module foo.bar {\n"
+                        + "}\n"));
         if (!parseResult.isSuccessful()) {
             throw new ParseProblemException(parseResult.getProblems());
         }
         CompilationUnit cu = parseResult.getResult().orElseThrow(AssertionError::new);
         String printed = getDefaultPrinter().print(cu);
 
-        assertEqualsStringIgnoringEol("@Documented\n" +
-                "@Repeatable\n" +
-                "package com.github.javaparser;\n" +
-                "\n" +
-                "import java.lang.annotation.Documented;\n" +
-                "import java.lang.annotation.Repeatable;\n" +
-                "\n" +
-                "@Documented\n" +
-                "@Repeatable\n" +
-                "@interface Annotation {\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    String value();\n" +
-                "}\n" +
-                "\n" +
-                "@Documented\n" +
-                "@Repeatable\n" +
-                "class Class<@Documented @Repeatable T> {\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    byte b;\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    Class(@Documented @Repeatable int i) {\n" +
-                "        @Documented\n" +
-                "        @Repeatable\n" +
-                "        short s;\n" +
-                "    }\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    void method(@Documented @Repeatable Class this) {\n" +
-                "        for (@Deprecated int i : arr4[0]) {\n" +
-                "            x--;\n" +
-                "        }\n" +
-                "    }\n" +
-                "\n" +
-                "    void method(@Documented @Repeatable Class this, int i) {\n" +
-                "    }\n" +
-                "}\n" +
-                "\n" +
-                "@Documented\n" +
-                "@Repeatable\n" +
-                "enum Foo {\n" +
-                "\n" +
-                "    @Documented\n" +
-                "    @Repeatable\n" +
-                "    BAR\n" +
-                "}\n" +
-                "@Documented\n" +
-                "@Repeatable\n" +
-                "module foo.bar {\n" +
-                "}\n", printed);
+        assertEqualsStringIgnoringEol(
+                "@Documented\n" + "@Repeatable\n"
+                        + "package com.github.javaparser;\n"
+                        + "\n"
+                        + "import java.lang.annotation.Documented;\n"
+                        + "import java.lang.annotation.Repeatable;\n"
+                        + "\n"
+                        + "@Documented\n"
+                        + "@Repeatable\n"
+                        + "@interface Annotation {\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    String value();\n"
+                        + "}\n"
+                        + "\n"
+                        + "@Documented\n"
+                        + "@Repeatable\n"
+                        + "class Class<@Documented @Repeatable T> {\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    byte b;\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    Class(@Documented @Repeatable int i) {\n"
+                        + "        @Documented\n"
+                        + "        @Repeatable\n"
+                        + "        short s;\n"
+                        + "    }\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    void method(@Documented @Repeatable Class this) {\n"
+                        + "        for (@Deprecated int i : arr4[0]) {\n"
+                        + "            x--;\n"
+                        + "        }\n"
+                        + "    }\n"
+                        + "\n"
+                        + "    void method(@Documented @Repeatable Class this, int i) {\n"
+                        + "    }\n"
+                        + "}\n"
+                        + "\n"
+                        + "@Documented\n"
+                        + "@Repeatable\n"
+                        + "enum Foo {\n"
+                        + "\n"
+                        + "    @Documented\n"
+                        + "    @Repeatable\n"
+                        + "    BAR\n"
+                        + "}\n"
+                        + "@Documented\n"
+                        + "@Repeatable\n"
+                        + "module foo.bar {\n"
+                        + "}\n",
+                printed);
     }
-    
+
     @Test
     public void testIssue2578() {
-        String code = 
-                "class C{\n" +
-                "  //orphan\n" +
-                "  /*orphan*/\n" +
-                "}";
+        String code = "class C{\n" + "  //orphan\n" + "  /*orphan*/\n" + "}";
         CompilationUnit cu = StaticJavaParser.parse(code);
         TypeDeclaration td = cu.findFirst(TypeDeclaration.class).get();
         assertEquals(2, td.getAllContainedComments().size());
         td.setPublic(true); // --- simple AST change -----
         assertEquals(2, td.getAllContainedComments().size()); // the orphaned comments exist
     }
-    
+
     @Test
     public void testIssue2535() {
 
-        String code = 
-                "public class A {\n" +
-                " public static A m() {\n" +
-                "  System.out.println(\"\");\n" +
-                "  // TODO\n" +
-                "  /* TODO */\n" +
-                "  /** TODO */\n" +
-                " }\n" +
-                "}";
+        String code = "public class A {\n" + " public static A m() {\n"
+                + "  System.out.println(\"\");\n"
+                + "  // TODO\n"
+                + "  /* TODO */\n"
+                + "  /** TODO */\n"
+                + " }\n"
+                + "}";
 
         StaticJavaParser.setConfiguration(new ParserConfiguration());
 
@@ -544,86 +555,81 @@ class DefaultPrettyPrinterTest {
         // default indent is 4 spaces
         assertTrue(cu.toString().contains("        // TODO"));
         assertTrue(cu.toString().contains("        /* TODO */"));
-
     }
-    
+
     @Test
     public void testIndentationWithDefaultSize() {
         Indentation indentation = new Indentation(IndentType.SPACES);
-        assertTrue(indentation.getSize()==4);
+        assertTrue(indentation.getSize() == 4);
         assertEquals("    ", indentation.getIndent());
         // on-the-fly modification
         indentation.setSize(2);
-        assertTrue(indentation.getSize()==2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("  ", indentation.getIndent());
     }
-    
+
     @Test
     public void testIndentationWithCustomSize() {
-        Indentation indentation = new Indentation(IndentType.TABS,2);
-        assertTrue(indentation.getSize()==2);
+        Indentation indentation = new Indentation(IndentType.TABS, 2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("\t\t", indentation.getIndent());
     }
-    
+
     @Test
     public void testIndentationWithOnTheFlyModifcation() {
         Indentation indentation = new Indentation(IndentType.SPACES);
         // on-the-fly modification
         indentation.setSize(2);
-        assertTrue(indentation.getSize()==2);
+        assertTrue(indentation.getSize() == 2);
         assertEquals("  ", indentation.getIndent());
         indentation.setType(IndentType.TABS);
         assertTrue(indentation.getType() == IndentType.TABS);
         assertEquals("\t\t", indentation.getIndent());
     }
-    
+
     @Test
     public void testIssue3317() {
 
-        String code = "public class Test {\n" + 
-                "  protected void someMethod() {\n" + 
-                "    // Before\n" + 
-                "    System.out\n"+
-                "    // Middle Comment\n" + 
-                "    .println(\"\");\n" + 
-                "    // After\n" + 
-                "  }\n" +
-                "}";
-        
-        String expected = "public class Test {\n" + 
-                "\n" + 
-                "    protected void someMethod() {\n" + 
-                "        // Before\n" + 
-                "        System.out.// Middle Comment\n" + 
-                "        println(\"\");\n" + 
-                "        // After\n" + 
-                "    }\n" + 
-                "}\n";
+        String code = "public class Test {\n" + "  protected void someMethod() {\n"
+                + "    // Before\n"
+                + "    System.out\n"
+                + "    // Middle Comment\n"
+                + "    .println(\"\");\n"
+                + "    // After\n"
+                + "  }\n"
+                + "}";
+
+        String expected = "public class Test {\n" + "\n"
+                + "    protected void someMethod() {\n"
+                + "        // Before\n"
+                + "        System.out.// Middle Comment\n"
+                + "        println(\"\");\n"
+                + "        // After\n"
+                + "    }\n"
+                + "}\n";
 
         StaticJavaParser.setConfiguration(new ParserConfiguration());
 
         CompilationUnit cu = StaticJavaParser.parse(code);
-        
-        assertEqualsStringIgnoringEol(expected, cu.toString());
 
+        assertEqualsStringIgnoringEol(expected, cu.toString());
     }
 
     @Test
     void testPrinterWithIntelliJImportOrdering() {
 
-        String expectedCode = "package com.github.javaparser.printer;\n" +
-                            "\n" +
-                            "import com.github.javaparser.ast.Node;\n" +
-                            "\n" +
-                            "import java.util.Optional;\n" +
-                            "import java.util.List;\n" +
-                            "\n" +
-                            "public interface TestClass {\n" +
-                            "\n" +
-                            "    Node getRoot();\n" +
-                            "\n" +
-                            "    List<Node> getChildern();\n" +
-                            "}\n";
+        String expectedCode = "package com.github.javaparser.printer;\n" + "\n"
+                + "import com.github.javaparser.ast.Node;\n"
+                + "\n"
+                + "import java.util.Optional;\n"
+                + "import java.util.List;\n"
+                + "\n"
+                + "public interface TestClass {\n"
+                + "\n"
+                + "    Node getRoot();\n"
+                + "\n"
+                + "    List<Node> getChildern();\n"
+                + "}\n";
 
         IntelliJImportOrderingStrategy strategy = new IntelliJImportOrderingStrategy();
         printerConfiguration.addOption(new DefaultConfigurationOption(ConfigOption.SORT_IMPORTS_STRATEGY, strategy));
@@ -638,19 +644,18 @@ class DefaultPrettyPrinterTest {
     @Test
     void testPrinterWithEclipseImportOrdering() {
 
-        String expectedCode = "package com.github.javaparser.printer;\n" +
-                "\n" +
-                "import java.util.Optional;\n" +
-                "import java.util.List;\n" +
-                "\n" +
-                "import com.github.javaparser.ast.Node;\n" +
-                "\n" +
-                "public interface TestClass {\n" +
-                "\n" +
-                "    Node getRoot();\n" +
-                "\n" +
-                "    List<Node> getChildern();\n" +
-                "}\n";
+        String expectedCode = "package com.github.javaparser.printer;\n" + "\n"
+                + "import java.util.Optional;\n"
+                + "import java.util.List;\n"
+                + "\n"
+                + "import com.github.javaparser.ast.Node;\n"
+                + "\n"
+                + "public interface TestClass {\n"
+                + "\n"
+                + "    Node getRoot();\n"
+                + "\n"
+                + "    List<Node> getChildern();\n"
+                + "}\n";
 
         EclipseImportOrderingStrategy strategy = new EclipseImportOrderingStrategy();
         printerConfiguration.addOption(new DefaultConfigurationOption(ConfigOption.SORT_IMPORTS_STRATEGY, strategy));
@@ -662,4 +667,64 @@ class DefaultPrettyPrinterTest {
         assertEqualsStringIgnoringEol(expectedCode, actualCode);
     }
 
+    @Test
+    void testArrayOfAnnotationsFormat() {
+        String expectedCode = "import io.swagger.v3.oas.annotations.Operation;\n"
+                + "import io.swagger.v3.oas.annotations.Parameter;\n"
+                + "import io.swagger.v3.oas.annotations.responses.ApiResponse;\n"
+                + "import io.swagger.v3.oas.annotations.responses.ApiResponses;\n"
+                + "import org.springframework.http.HttpStatus;\n"
+                + "import org.springframework.http.ResponseEntity;\n"
+                + "import org.springframework.web.bind.annotation.DeleteMapping;\n"
+                + "\n"
+                + "@Deprecated\n"
+                + "public class UserController2 {\n"
+                + "\n"
+                + "    @Operation(summary = \"Delete a user\")\n"
+                + "    @ApiResponses(value = {\n"
+                + "            @ApiResponse(responseCode = \"204\", description = \"OK\"),\n"
+                + "            @ApiResponse(responseCode = \"404\", description = \"Failed\")\n"
+                + "    })\n"
+                + "    @DeleteMapping(\"/{id}\")\n"
+                + "    public ResponseEntity<Void> deleteUser(@Parameter(description = \"ID of the user\", required = true) int id) {\n"
+                + "        return new ResponseEntity<>(HttpStatus.NOT_FOUND);\n"
+                + "    }\n"
+                + "}\n";
+
+        printerConfiguration.addOption(
+                new DefaultConfigurationOption(ConfigOption.INDENT_PRINT_ARRAYS_OF_ANNOTATIONS, true));
+        CompilationUnit cu = parserAdapter.parse(expectedCode);
+        Printer printer = getDefaultPrinter(printerConfiguration);
+        String actualCode = printer.print(cu);
+
+        assertEqualsStringIgnoringEol(expectedCode, actualCode);
+    }
+
+    @Test
+    void testArrayOfAnnotationsDisableFormat() {
+        String expectedCode = "import io.swagger.v3.oas.annotations.Operation;\n"
+                + "import io.swagger.v3.oas.annotations.Parameter;\n"
+                + "import io.swagger.v3.oas.annotations.responses.ApiResponse;\n"
+                + "import io.swagger.v3.oas.annotations.responses.ApiResponses;\n"
+                + "import org.springframework.http.HttpStatus;\n"
+                + "import org.springframework.http.ResponseEntity;\n"
+                + "import org.springframework.web.bind.annotation.DeleteMapping;\n"
+                + "\n"
+                + "@Deprecated\n"
+                + "public class UserController2 {\n"
+                + "\n"
+                + "    @Operation(summary = \"Delete a user\")\n"
+                + "    @ApiResponses(value = { @ApiResponse(responseCode = \"204\", description = \"OK\"), @ApiResponse(responseCode = \"404\", description = \"Failed\") })\n"
+                + "    @DeleteMapping(\"/{id}\")\n"
+                + "    public ResponseEntity<Void> deleteUser(@Parameter(description = \"ID of the user\", required = true) int id) {\n"
+                + "        return new ResponseEntity<>(HttpStatus.NOT_FOUND);\n"
+                + "    }\n"
+                + "}\n";
+
+        CompilationUnit cu = parserAdapter.parse(expectedCode);
+        Printer printer = getDefaultPrinter(printerConfiguration);
+        String actualCode = printer.print(cu);
+
+        assertEqualsStringIgnoringEol(expectedCode, actualCode);
+    }
 }

@@ -21,15 +21,14 @@
 
 package com.github.javaparser.generator.metamodel;
 
-import com.github.javaparser.ast.NodeList;
+import static java.lang.reflect.Modifier.isAbstract;
 
+import com.github.javaparser.ast.NodeList;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Optional;
-
-import static java.lang.reflect.Modifier.isAbstract;
 
 /**
  * A hacky thing that collects flags we need from AST types to generate the metamodel.

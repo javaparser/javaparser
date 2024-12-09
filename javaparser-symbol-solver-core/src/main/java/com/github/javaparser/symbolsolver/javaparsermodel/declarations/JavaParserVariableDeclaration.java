@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver.javaparsermodel.declarations;
 
+import static com.github.javaparser.resolution.Navigator.demandParentNode;
+
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
@@ -28,10 +30,7 @@ import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
-
 import java.util.Optional;
-
-import static com.github.javaparser.resolution.Navigator.demandParentNode;
 
 /**
  * @author Federico Tomassetti
@@ -49,7 +48,8 @@ public class JavaParserVariableDeclaration implements ResolvedValueDeclaration {
         this.variableDeclarator = variableDeclarator;
         this.typeSolver = typeSolver;
         if (!(demandParentNode(variableDeclarator) instanceof VariableDeclarationExpr)) {
-            throw new IllegalStateException(demandParentNode(variableDeclarator).getClass().getCanonicalName());
+            throw new IllegalStateException(
+                    demandParentNode(variableDeclarator).getClass().getCanonicalName());
         }
         this.wrappedNode = (VariableDeclarationExpr) demandParentNode(variableDeclarator);
     }
@@ -91,5 +91,4 @@ public class JavaParserVariableDeclaration implements ResolvedValueDeclaration {
     public Optional<Node> toAst() {
         return Optional.of(wrappedNode);
     }
-
 }

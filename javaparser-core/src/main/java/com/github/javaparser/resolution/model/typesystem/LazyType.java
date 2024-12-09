@@ -22,6 +22,7 @@ package com.github.javaparser.resolution.model.typesystem;
 
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
 import com.github.javaparser.resolution.types.*;
+
 import java.util.Map;
 import java.util.function.Function;
 

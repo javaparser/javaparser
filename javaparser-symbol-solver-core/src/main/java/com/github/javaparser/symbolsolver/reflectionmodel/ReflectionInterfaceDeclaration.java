@@ -39,7 +39,6 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.core.resolution.MethodUsageResolutionCapability;
 import com.github.javaparser.symbolsolver.core.resolution.SymbolResolutionCapability;
 import com.github.javaparser.symbolsolver.logic.AbstractTypeDeclaration;
-
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,8 +47,10 @@ import java.util.stream.Collectors;
  * @author Federico Tomassetti
  */
 public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
-        implements ResolvedInterfaceDeclaration, MethodResolutionCapability, MethodUsageResolutionCapability,
-        SymbolResolutionCapability {
+        implements ResolvedInterfaceDeclaration,
+                MethodResolutionCapability,
+                MethodUsageResolutionCapability,
+                SymbolResolutionCapability {
 
     ///
     /// Fields
@@ -106,16 +107,14 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
 
     @Override
     @Deprecated
-    public SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
-        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly,
-                typeSolver,this, clazz);
+    public SymbolReference<ResolvedMethodDeclaration> solveMethod(
+            String name, List<ResolvedType> parameterTypes, boolean staticOnly) {
+        return ReflectionMethodResolutionLogic.solveMethod(name, parameterTypes, staticOnly, typeSolver, this, clazz);
     }
 
     @Override
     public String toString() {
-        return "ReflectionInterfaceDeclaration{" +
-                "clazz=" + clazz.getCanonicalName() +
-                '}';
+        return "ReflectionInterfaceDeclaration{" + "clazz=" + clazz.getCanonicalName() + '}';
     }
 
     public ResolvedType getUsage(Node node) {
@@ -131,11 +130,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
 
         if (!clazz.getCanonicalName().equals(that.clazz.getCanonicalName())) return false;
 
-        if (!getTypeParameters().equals(that.getTypeParameters())) {
-            return false;
-        }
-
-        return true;
+        return getTypeParameters().equals(that.getTypeParameters());
     }
 
     @Override
@@ -143,10 +138,14 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         return clazz.hashCode();
     }
 
-    public Optional<MethodUsage> solveMethodAsUsage(String name, List<ResolvedType> parameterTypes,
-                                                    Context invokationContext, List<ResolvedType> typeParameterValues) {
-        Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(name, parameterTypes, typeSolver, invokationContext,
-                typeParameterValues, this, clazz);
+    @Override
+    public Optional<MethodUsage> solveMethodAsUsage(
+            String name,
+            List<ResolvedType> parameterTypes,
+            Context invokationContext,
+            List<ResolvedType> typeParameterValues) {
+        Optional<MethodUsage> res = ReflectionMethodResolutionLogic.solveMethodAsUsage(
+                name, parameterTypes, typeSolver, invokationContext, typeParameterValues, this, clazz);
         if (res.isPresent()) {
             // We have to replace method type typeParametersValues here
             InferenceContext inferenceContext = new InferenceContext(typeSolver);
@@ -162,7 +161,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
             }
             try {
                 ResolvedType returnType = inferenceContext.addSingle(methodUsage.returnType());
-                for (int j=0;j<parameters.size();j++) {
+                for (int j = 0; j < parameters.size(); j++) {
                     methodUsage = methodUsage.replaceParamType(j, inferenceContext.resolve(parameters.get(j)));
                 }
                 methodUsage = methodUsage.replaceReturnType(inferenceContext.resolve(returnType));
@@ -193,12 +192,8 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
             }
         }
 
-        if (other.isJavaLangObject()) {
-            // Everything can be assigned to {@code java.lang.Object}
-            return true;
-        }
-
-        return false;
+        // Everything can be assigned to {@code java.lang.Object}
+        return other.isJavaLangObject();
     }
 
     @Override
@@ -220,7 +215,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         if (type instanceof ReferenceTypeImpl) {
             ReferenceTypeImpl otherTypeDeclaration = (ReferenceTypeImpl) type;
-            if(otherTypeDeclaration.getTypeDeclaration().isPresent()) {
+            if (otherTypeDeclaration.getTypeDeclaration().isPresent()) {
                 return otherTypeDeclaration.getTypeDeclaration().get().canBeAssignedTo(this);
             }
         }
@@ -288,7 +283,7 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
         }
         return res;
     }
-    
+
     @Override
     public Optional<ResolvedReferenceTypeDeclaration> containerType() {
         return reflectionClassAdapter.containerType();
@@ -325,5 +320,4 @@ public class ReflectionInterfaceDeclaration extends AbstractTypeDeclaration
     public List<ResolvedConstructorDeclaration> getConstructors() {
         return Collections.emptyList();
     }
-
 }

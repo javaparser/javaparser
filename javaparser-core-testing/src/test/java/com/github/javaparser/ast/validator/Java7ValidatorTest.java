@@ -21,6 +21,12 @@
 
 package com.github.javaparser.ast.validator;
 
+import static com.github.javaparser.ParseStart.*;
+import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_7;
+import static com.github.javaparser.Providers.provider;
+import static com.github.javaparser.utils.TestUtils.assertNoProblems;
+import static com.github.javaparser.utils.TestUtils.assertProblems;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -31,29 +37,24 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.UnionType;
 import com.github.javaparser.ast.validator.language_level_validations.Java7Validator;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.github.javaparser.ParseStart.*;
-import static com.github.javaparser.ParserConfiguration.LanguageLevel.JAVA_7;
-import static com.github.javaparser.Providers.provider;
-import static com.github.javaparser.utils.TestUtils.assertNoProblems;
-import static com.github.javaparser.utils.TestUtils.assertProblems;
+import org.junit.jupiter.api.Test;
 
 class Java7ValidatorTest {
     public static final JavaParser javaParser = new JavaParser(new ParserConfiguration().setLanguageLevel(JAVA_7));
 
     @Test
     void generics() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b = new ArrayList<>();}"));
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("class X<A>{List<String> b = new ArrayList<>();}"));
         assertNoProblems(result);
     }
 
     @Test
     void defaultMethodWithoutBody() {
-        ParseResult<CompilationUnit> result = javaParser.parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
+        ParseResult<CompilationUnit> result =
+                javaParser.parse(COMPILATION_UNIT, provider("interface X {default void a();}"));
         assertProblems(result, "(line 1,col 14) 'default' is not allowed here.");
     }
 
@@ -123,6 +124,8 @@ class Java7ValidatorTest {
     @Test
     void noLambdas() {
         ParseResult<Statement> result = javaParser.parse(STATEMENT, provider("a(() -> 1);"));
-        assertProblems(result, "(line 1,col 3) Lambdas are not supported. Pay attention that this feature is supported starting from 'JAVA_8' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
+        assertProblems(
+                result,
+                "(line 1,col 3) Lambdas are not supported. Pay attention that this feature is supported starting from 'JAVA_8' language level. If you need that feature the language level must be configured in the configuration before parsing the source files.");
     }
 }

@@ -21,6 +21,8 @@
 
 package com.github.javaparser.symbolsolver;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -33,8 +35,6 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class Issue18Test extends AbstractResolutionTest {
 
     @Test
@@ -42,7 +42,8 @@ class Issue18Test extends AbstractResolutionTest {
         CompilationUnit cu = parseSample("Issue18");
         ClassOrInterfaceDeclaration clazz = Navigator.demandClass(cu, "Foo");
         MethodDeclaration methodDeclaration = Navigator.demandMethod(clazz, "bar");
-        ExpressionStmt expr = (ExpressionStmt) methodDeclaration.getBody().get().getStatements().get(1);
+        ExpressionStmt expr = (ExpressionStmt)
+                methodDeclaration.getBody().get().getStatements().get(1);
         TypeSolver typeSolver = new ReflectionTypeSolver();
         JavaParserFacade javaParserFacade = JavaParserFacade.get(typeSolver);
         ResolvedType type = javaParserFacade.getType(expr.getExpression());

@@ -21,9 +21,9 @@
 
 package com.github.javaparser.resolution.declarations;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 public interface ResolvedTypeDeclarationTest extends ResolvedDeclarationTest {
 
@@ -33,46 +33,36 @@ public interface ResolvedTypeDeclarationTest extends ResolvedDeclarationTest {
     @Test
     default void whenDeclarationIsAClassTheCallToTheMethodAsClassShouldNotThrow() {
         ResolvedTypeDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isClass())
-            assertDoesNotThrow(resolvedDeclaration::asClass);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asClass);
+        if (resolvedDeclaration.isClass()) assertDoesNotThrow(resolvedDeclaration::asClass);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asClass);
     }
 
     @Test
     default void whenDeclarationIsAInterfaceTheCallToTheMethodAsInterfaceShouldNotThrow() {
         ResolvedTypeDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isInterface())
-            assertDoesNotThrow(resolvedDeclaration::asInterface);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asInterface);
+        if (resolvedDeclaration.isInterface()) assertDoesNotThrow(resolvedDeclaration::asInterface);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asInterface);
     }
 
     @Test
     default void whenDeclarationIsAEnumTheCallToTheMethodAsEnumShouldNotThrow() {
         ResolvedTypeDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isEnum())
-            assertDoesNotThrow(resolvedDeclaration::asEnum);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asEnum);
+        if (resolvedDeclaration.isEnum()) assertDoesNotThrow(resolvedDeclaration::asEnum);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asEnum);
     }
 
     @Test
     default void whenDeclarationIsATypeParameterTheCallToTheMethodAsTypeParameterShouldNotThrow() {
         ResolvedTypeDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isTypeParameter())
-            assertDoesNotThrow(resolvedDeclaration::asTypeParameter);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asTypeParameter);
+        if (resolvedDeclaration.isTypeParameter()) assertDoesNotThrow(resolvedDeclaration::asTypeParameter);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asTypeParameter);
     }
 
     @Test
     default void whenDeclarationIsAReferenceTypeTheCallToTheMethodAsReferenceTypeShouldNotThrow() {
         ResolvedTypeDeclaration resolvedDeclaration = createValue();
-        if (resolvedDeclaration.isReferenceType())
-            assertDoesNotThrow(resolvedDeclaration::asReferenceType);
-        else
-            assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asReferenceType);
+        if (resolvedDeclaration.isReferenceType()) assertDoesNotThrow(resolvedDeclaration::asReferenceType);
+        else assertThrows(UnsupportedOperationException.class, resolvedDeclaration::asReferenceType);
     }
 
     @Test
@@ -89,5 +79,4 @@ public interface ResolvedTypeDeclarationTest extends ResolvedDeclarationTest {
     default void containerTypeCantBeNull() {
         assertNotNull(createValue().containerType());
     }
-
 }

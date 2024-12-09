@@ -23,6 +23,8 @@ package com.github.javaparser;
 import com.github.javaparser.utils.LineSeparator;
 import static com.github.javaparser.GeneratedJavaParserConstants.*;
 
+import com.github.javaparser.utils.LineSeparator;
+
 /**
  * Complements GeneratedJavaParserConstants
  */
@@ -94,7 +96,7 @@ public class TokenTypes {
      * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.5">The JLS</a>.
      */
     public static JavaToken.Category getCategory(int kind) {
-        switch(kind) {
+        switch (kind) {
             case WINDOWS_EOL:
             case UNIX_EOL:
             case OLD_MAC_EOL:
@@ -172,6 +174,7 @@ public class TokenTypes {
             case PERMITS:
             case SEALED:
             case NON_SEALED:
+            case WHEN:
             case TRANSACTIONBEGIN:
             case TRANSACTIONCOMMIT:
             case TRANSACTIONFINISH:
@@ -303,7 +306,7 @@ public class TokenTypes {
             case RSIGNEDSHIFT:
             case GT:
                 return JavaToken.Category.OPERATOR;
-            // The following are tokens that are only used internally by the lexer
+                // The following are tokens that are only used internally by the lexer
             case ENTER_JAVADOC_COMMENT:
             case ENTER_MULTILINE_COMMENT:
             case COMMENT_CONTENT:
@@ -313,9 +316,10 @@ public class TokenTypes {
             case PART_LETTER:
             case TEXT_BLOCK_CONTENT:
             case ENTER_TEXT_BLOCK:
-                throw new IllegalArgumentException("Token " + kind + " without type");
             default:
-                throw new AssertionError("Unable to categorise token kind " + kind + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
+                throw new AssertionError(
+                        "Unable to categorise token kind " + kind
+                                + " -- has it recently been added to the grammar but not classified within TokenTypes.java, perhaps?");
         }
     }
 }

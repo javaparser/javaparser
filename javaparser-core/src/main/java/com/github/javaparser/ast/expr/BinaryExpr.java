@@ -20,6 +20,8 @@
  */
 package com.github.javaparser.ast.expr;
 
+import static com.github.javaparser.utils.Utils.assertNotNull;
+
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -33,7 +35,6 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Stringable;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
  * An expression with an expression on the left, an expression on the right, and an operator in the middle.
@@ -46,7 +47,6 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 public class BinaryExpr extends Expression {
 
     public enum Operator implements Stringable {
-
         OR("||"),
         AND("&&"),
         BINARY_OR("|"),
@@ -78,7 +78,7 @@ public class BinaryExpr extends Expression {
         }
 
         public Optional<AssignExpr.Operator> toAssignOperator() {
-            switch(this) {
+            switch (this) {
                 case BINARY_OR:
                     return Optional.of(AssignExpr.Operator.BINARY_OR);
                 case BINARY_AND:
@@ -168,8 +168,7 @@ public class BinaryExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LEFT, this.left, left);
-        if (this.left != null)
-            this.left.setParentNode(null);
+        if (this.left != null) this.left.setParentNode(null);
         this.left = left;
         setAsParentNodeOf(left);
         return this;
@@ -193,8 +192,7 @@ public class BinaryExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.RIGHT, this.right, right);
-        if (this.right != null)
-            this.right.setParentNode(null);
+        if (this.right != null) this.right.setParentNode(null);
         this.right = right;
         setAsParentNodeOf(right);
         return this;

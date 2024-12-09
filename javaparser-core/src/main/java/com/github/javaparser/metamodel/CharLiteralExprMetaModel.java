@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import java.util.Optional;
-import com.github.javaparser.ast.expr.CharLiteralExpr;
 import com.github.javaparser.ast.Generated;
+import com.github.javaparser.ast.expr.CharLiteralExpr;
+import java.util.Optional;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,6 +38,12 @@ public class CharLiteralExprMetaModel extends LiteralStringValueExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     CharLiteralExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(superBaseNodeMetaModel, CharLiteralExpr.class, "CharLiteralExpr", "com.github.javaparser.ast.expr", false, false);
+        super(
+                superBaseNodeMetaModel,
+                CharLiteralExpr.class,
+                "CharLiteralExpr",
+                "com.github.javaparser.ast.expr",
+                false,
+                false);
     }
 }

@@ -20,10 +20,10 @@
  */
 package com.github.javaparser.resolution.types;
 
-import java.util.List;
-import java.util.Map;
 import com.github.javaparser.resolution.Context;
 import com.github.javaparser.resolution.declarations.ResolvedTypeParameterDeclaration;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A wildcard can be:
@@ -78,15 +78,11 @@ public class ResolvedWildcard implements ResolvedType {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof ResolvedWildcard))
-            return false;
+        if (this == o) return true;
+        if (!(o instanceof ResolvedWildcard)) return false;
         ResolvedWildcard that = (ResolvedWildcard) o;
-        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null)
-            return false;
-        if (type != that.type)
-            return false;
+        if (boundedType != null ? !boundedType.equals(that.boundedType) : that.boundedType != null) return false;
+        if (type != that.type) return false;
         return true;
     }
 
@@ -102,10 +98,10 @@ public class ResolvedWildcard implements ResolvedType {
         if (type == null) {
             return "?";
         }
-            if (type == BoundType.SUPER) {
+        if (type == BoundType.SUPER) {
             return "? super " + boundedType.describe();
         }
-            if (type == BoundType.EXTENDS) {
+        if (type == BoundType.EXTENDS) {
             return "? extends " + boundedType.describe();
         }
         throw new UnsupportedOperationException();
@@ -133,20 +129,24 @@ public class ResolvedWildcard implements ResolvedType {
     @Override
     public boolean isAssignableBy(ResolvedType other) {
         if (boundedType == null) {
-            // return other.isReferenceType() && other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
+            // return other.isReferenceType() &&
+            // other.asReferenceType().getQualifiedName().equals(Object.class.getCanonicalName());
             return false;
         }
-            if (type == BoundType.SUPER) {
+        if (type == BoundType.SUPER) {
             return boundedType.isAssignableBy(other);
         }
-            if (type == BoundType.EXTENDS) {
+        if (type == BoundType.EXTENDS) {
             return false;
         }
         throw new RuntimeException();
     }
 
     @Override
-    public ResolvedType replaceTypeVariables(ResolvedTypeParameterDeclaration tpToReplace, ResolvedType replaced, Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
+    public ResolvedType replaceTypeVariables(
+            ResolvedTypeParameterDeclaration tpToReplace,
+            ResolvedType replaced,
+            Map<ResolvedTypeParameterDeclaration, ResolvedType> inferredTypes) {
         if (replaced == null) {
             throw new IllegalArgumentException();
         }
@@ -177,8 +177,8 @@ public class ResolvedWildcard implements ResolvedType {
     }
 
     public enum BoundType {
-
-        SUPER, EXTENDS
+        SUPER,
+        EXTENDS
     }
 
     /*

@@ -22,6 +22,7 @@ package com.github.javaparser;
 
 import java.util.Iterator;
 import java.util.Optional;
+
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -50,7 +51,8 @@ public class TokenRange implements Iterable<JavaToken> {
 
     public Optional<Range> toRange() {
         if (begin.hasRange() && end.hasRange()) {
-            return Optional.of(new Range(begin.getRange().get().begin, end.getRange().get().end));
+            return Optional.of(
+                    new Range(begin.getRange().get().begin, end.getRange().get().end));
         }
         return Optional.empty();
     }

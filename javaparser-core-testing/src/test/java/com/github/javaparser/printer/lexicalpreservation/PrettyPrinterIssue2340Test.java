@@ -21,11 +21,11 @@
 
 package com.github.javaparser.printer.lexicalpreservation;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Modifier.Keyword;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
 
@@ -46,7 +46,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGenericVariableDeclarationWithAddedModifierWithAnotherSyntaxe() {
         String def2 = "List <String> i";
@@ -55,7 +55,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGeneric2VariableDeclarationWithAddedModifier() {
         String def2 = "List<List<String>> i";
@@ -64,7 +64,7 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-    
+
     @Test
     void printingGeneric2VariableDeclarationWithAddedModifierWithAnotherSyntaxe() {
         String def2 = "List < List < String > > i";
@@ -73,5 +73,4 @@ class PrettyPrinterIssue2340Test extends AbstractLexicalPreservingTest {
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
     }
-
 }
