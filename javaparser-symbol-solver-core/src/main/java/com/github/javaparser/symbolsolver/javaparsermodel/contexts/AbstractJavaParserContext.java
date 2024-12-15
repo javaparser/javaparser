@@ -171,6 +171,12 @@ public abstract class AbstractJavaParserContext<N extends Node> implements Conte
                     throw new IllegalStateException("Unexpectedly more than one reference in scope");
             }
         }
+        if(parentContext instanceof BlockStmtContext) {
+        	// if parent context is BlockStmtContext, when we call parentContext.solveSymbol(name) we lose the position within the block
+        	// so we pass the current context to the block context
+        	BlockStmtContext context = (BlockStmtContext)parentContext;
+        	parentContext = new BlockStmtContext(context.wrappedNode, context.typeSolver, this);
+        }
 
         return parentContext.solveSymbol(name);
     }

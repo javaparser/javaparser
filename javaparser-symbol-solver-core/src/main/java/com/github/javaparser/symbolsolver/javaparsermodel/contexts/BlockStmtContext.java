@@ -41,8 +41,15 @@ import java.util.Optional;
 
 public class BlockStmtContext extends StatementContext<BlockStmt> {
 
+
+    protected Context originalContext;
     public BlockStmtContext(BlockStmt wrappedNode, TypeSolver typeSolver) {
         super(wrappedNode, typeSolver);
+    }
+    
+    public BlockStmtContext(BlockStmt wrappedNode, TypeSolver typeSolver, Context originalContext) {
+        super(wrappedNode, typeSolver);
+        this.originalContext = originalContext;
     }
 
     @Override
@@ -119,22 +126,44 @@ public class BlockStmtContext extends StatementContext<BlockStmt> {
             // defined in the context of the wrapped node whether it is located before or after the statement that
             // interests us
             // because a variable cannot be (re)defined after having been used
-            wrappedNode
-                    .getStatements()
-                    .getLast()
-                    .ifPresent(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
-            if (!variableDeclarators.isEmpty()) {
-                // FIXME: Work backwards from the current statement, to only consider declarations prior to this
-                // statement.
-                for (VariableDeclarator vd : variableDeclarators) {
-                    if (vd.getNameAsString().equals(name)) {
-                        return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(vd, typeSolver));
+            if(originalContext != null && originalContext instanceof StatementContext) {
+            	// Have access to statement, so we know which variable declarations are not in scope
+            	StatementContext originalStatement = (StatementContext)originalContext;
+            	int position = wrappedNode.getStatements().indexOf(originalStatement.wrappedNode);
+            	if (position == -1) {
+                     throw new IllegalStateException("This node is not a statement within the current BlockStmt");
+                }
+            	Statement stmt = (Statement)originalStatement.wrappedNode;
+                variableDeclarators.addAll(localVariablesExposedToChild(stmt));
+                
+                if (!variableDeclarators.isEmpty()) {
+                    for (VariableDeclarator vd : variableDeclarators) {
+                        if (vd.getNameAsString().equals(name)) {
+                            return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(vd, typeSolver));
+                        }
                     }
                 }
+
+            }
+            else {
+	            wrappedNode
+	                    .getStatements()
+	                    .getLast()
+	                    .ifPresent(stmt -> variableDeclarators.addAll(localVariablesExposedToChild(stmt)));
+	            if (!variableDeclarators.isEmpty()) {
+	                // FIXME: Work backwards from the current statement, to only consider declarations prior to this
+	                // statement.
+	                for (VariableDeclarator vd : variableDeclarators) {
+	                    if (vd.getNameAsString().equals(name)) {
+	                        return SymbolReference.solved(JavaParserSymbolDeclaration.localVar(vd, typeSolver));
+	                    }
+	                }
+	            }
             }
 
             SymbolReference<? extends ResolvedValueDeclaration> resolvedFromPattern =
                     findExposedPatternInParentContext(optionalParent.get().getWrappedNode(), name);
+            
 
             if (resolvedFromPattern.isSolved()) {
                 return resolvedFromPattern;
