@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>javaparser-parent</artifactId>
 		<groupId>org.key-project.proofjava</groupId>
-		<version>3.26.2-K7-SNAPSHOT</version>
+		<version>3.26.3-K7-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
@@ -50,7 +50,7 @@
 			<artifactId>junit-jupiter-engine</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.key-project.proofjava</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>javaparser-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>org.eclipse.parsson</groupId>
 			<artifactId>parsson</artifactId>
-			<version>1.1.5</version>
+			<version>1.1.7</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

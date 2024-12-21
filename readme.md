@@ -78,7 +78,7 @@ There is a separate module for this:
 <dependency>
     <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-core-serialization</artifactId>
-    <version>3.26.2-K7-SNAPSHOT</version>
+    <version>3.26.3-K7-SNAPSHOT</version>
 </dependency>
 ```
 

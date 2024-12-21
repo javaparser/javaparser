@@ -57,9 +57,9 @@ Initial release
 * A lot of new tokens
 
 
-Next Release (Version 3.26.3-snapshot)
+Next Release (Version 3.26.4-snapshot)
 --------------------------------------
-[issues resolved](https://github.com/javaparser/javaparser/milestone/210?closed=1)
+[issues resolved](https://github.com/javaparser/javaparser/milestone/211?closed=1)
 
 ### Added
 ### Changed
@@ -67,6 +67,51 @@ Next Release (Version 3.26.3-snapshot)
 ### Removed
 ### Fixed
 ### Security
+
+Version 3.26.3
+--------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/210?closed=1)
+
+### Changed
+
+* Fixes #4599 making B.class for testing non-empty (PR [#4600](https://github.com/javaparser/javaparser/pull/4600) by [@JiriOndrusek](https://github.com/JiriOndrusek))
+
+### Fixed
+
+* Fix: issue 3990 Local Enum and Interface (Java 16) (PR [#4626](https://github.com/javaparser/javaparser/pull/4626) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix bug in `VisitorSet.toString()` (PR [#4615](https://github.com/javaparser/javaparser/pull/4615) by [@Laughh](https://github.com/Laughh))
+* Fix issue #4607: don't forget to clone guard when cloning stmt.SwitchEntry (PR [#4608](https://github.com/javaparser/javaparser/pull/4608) by [@DaniilSuchkov](https://github.com/DaniilSuchkov))
+* Fixed return within void method (PR [#4587](https://github.com/javaparser/javaparser/pull/4587) by [@Universe-E](https://github.com/Universe-E))
+* Fix: issue 4579 Switch expr and var incompatibility (PR [#4581](https://github.com/javaparser/javaparser/pull/4581) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4568 Resolution of ObjectCreationExprs broken (PR [#4577](https://github.com/javaparser/javaparser/pull/4577) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue 4560 Does not solve String.format on multiline strings (PR [#4561](https://github.com/javaparser/javaparser/pull/4561) by [@jlerbsc](https://github.com/jlerbsc))
+
+
+### Developer Changes
+
+* fix(deps): update byte-buddy.version to v1.15.11 (PR [#4635](https://github.com/javaparser/javaparser/pull/4635) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v5.1.0 (PR [#4629](https://github.com/javaparser/javaparser/pull/4629) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-javadoc-plugin to v3.11.1 (PR [#4605](https://github.com/javaparser/javaparser/pull/4605) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.5.2 (PR [#4604](https://github.com/javaparser/javaparser/pull/4604) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update actions/checkout action to v4.2.2 (PR [#4594](https://github.com/javaparser/javaparser/pull/4594) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update junit5 monorepo to v5.11.3 (PR [#4589](https://github.com/javaparser/javaparser/pull/4589) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency net.bytebuddy:byte-buddy-agent to v1.15.5 (PR [#4586](https://github.com/javaparser/javaparser/pull/4586) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency com.google.guava:guava to v33.3.1-jre (PR [#4558](https://github.com/javaparser/javaparser/pull/4558) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.hamcrest:hamcrest to v3 (PR [#4510](https://github.com/javaparser/javaparser/pull/4510) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### Uncategorised
+
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@DaniilSuchkov](https://github.com/DaniilSuchkov)
+* [@JiriOndrusek](https://github.com/JiriOndrusek)
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@Universe-E](https://github.com/Universe-E)
+* [@Laughh](https://github.com/Laughh)
+
 
 Version 3.26.2
 --------------

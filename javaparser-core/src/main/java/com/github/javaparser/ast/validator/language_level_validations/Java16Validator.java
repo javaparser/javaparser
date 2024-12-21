@@ -35,6 +35,9 @@ public class Java16Validator extends Java15Validator {
         {
             // Records released within Java 16 - https://openjdk.java.net/jeps/395
             remove(noRecordDeclaration);
+            // local interface released within Java 16 -
+            // https://docs.oracle.com/javase/specs/jls/se16/html/jls-14.html#jls-14.3
+            remove(innerClasses);
             add(recordAsTypeIdentifierNotAllowed);
             add(recordDeclarationValidator);
         }
