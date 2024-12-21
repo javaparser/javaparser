@@ -100,7 +100,8 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
             return this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null) this.label.setParentNode(null);
+        if (this.label != null)
+            this.label.setParentNode(null);
         this.label = label;
         setAsParentNodeOf(label);
         return this;

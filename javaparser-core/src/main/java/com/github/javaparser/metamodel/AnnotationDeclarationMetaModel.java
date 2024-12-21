@@ -20,10 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.body.AnnotationDeclaration;
-
 import java.util.Optional;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -39,12 +38,6 @@ public class AnnotationDeclarationMetaModel extends TypeDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     AnnotationDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                AnnotationDeclaration.class,
-                "AnnotationDeclaration",
-                "com.github.javaparser.ast.body",
-                false,
-                false);
+        super(superBaseNodeMetaModel, AnnotationDeclaration.class, "AnnotationDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 }

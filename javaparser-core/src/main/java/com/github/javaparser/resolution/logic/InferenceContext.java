@@ -48,8 +48,7 @@ public class InferenceContext {
 
     private InferenceVariableType inferenceVariableTypeForTp(ResolvedTypeParameterDeclaration tp) {
         if (!inferenceVariableTypeMap.containsKey(tp.getName())) {
-            InferenceVariableType inferenceVariableType =
-                    new InferenceVariableType(nextInferenceVariableId++, typeSolver);
+            InferenceVariableType inferenceVariableType = new InferenceVariableType(nextInferenceVariableId++, typeSolver);
             inferenceVariableTypes.add(inferenceVariableType);
             inferenceVariableType.setCorrespondingTp(tp);
             inferenceVariableTypeMap.put(tp.getName(), inferenceVariableType);
@@ -81,23 +80,11 @@ public class InferenceContext {
                 // Interfaces do not extend the class Object,
                 // which means that if the formal parameter is of type Object,
                 // all types can match including the actual type.
-                List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName)
-                        ? Stream.concat(
-                                        new ArrayList<ResolvedType>(Arrays.asList(actualType)).stream(),
-                                        ancestors.stream()
-                                                .map(ancestor -> ancestor.asReferenceType())
-                                                .collect(Collectors.toList())
-                                                .stream())
-                                .collect(Collectors.toList())
-                        : ancestors.stream()
-                                .filter((a) -> a.getQualifiedName().equals(formalParamTypeQName))
-                                .collect(Collectors.toList());
+                List<ResolvedType> correspondingFormalType = "java.lang.Object".equals(formalParamTypeQName) ? Stream.concat(new ArrayList<ResolvedType>(Arrays.asList(actualType)).stream(), ancestors.stream().map(ancestor -> ancestor.asReferenceType()).collect(Collectors.toList()).stream()).collect(Collectors.toList()) : ancestors.stream().filter((a) -> a.getQualifiedName().equals(formalParamTypeQName)).collect(Collectors.toList());
                 if (correspondingFormalType.isEmpty()) {
                     ancestors = formalTypeAsReference.getAllAncestors();
                     final String actualParamTypeQname = actualTypeAsReference.getQualifiedName();
-                    List<ResolvedType> correspondingActualType = ancestors.stream()
-                            .filter(a -> a.getQualifiedName().equals(actualParamTypeQname))
-                            .collect(Collectors.toList());
+                    List<ResolvedType> correspondingActualType = ancestors.stream().filter(a -> a.getQualifiedName().equals(actualParamTypeQname)).collect(Collectors.toList());
                     if (correspondingActualType.isEmpty()) {
                         throw new ConflictingGenericTypesException(formalType, actualType);
                     }
@@ -112,9 +99,7 @@ public class InferenceContext {
                     } else {
                         int i = 0;
                         for (ResolvedType formalTypeParameter : formalTypeAsReference.typeParametersValues()) {
-                            registerCorrespondance(
-                                    formalTypeParameter,
-                                    actualTypeAsReference.typeParametersValues().get(i));
+                            registerCorrespondance(formalTypeParameter, actualTypeAsReference.typeParametersValues().get(i));
                             i++;
                         }
                     }
@@ -130,18 +115,13 @@ public class InferenceContext {
         } else if (actualType.equals(formalType)) {
             // nothing to do
         } else if (actualType.isArray() && formalType.isArray()) {
-            registerCorrespondance(
-                    formalType.asArrayType().getComponentType(),
-                    actualType.asArrayType().getComponentType());
+            registerCorrespondance(formalType.asArrayType().getComponentType(), actualType.asArrayType().getComponentType());
         } else if (formalType.isWildcard()) {
             // nothing to do
-            if ((actualType instanceof InferenceVariableType)
-                    && formalType.asWildcard().isBounded()) {
-                ((InferenceVariableType) actualType)
-                        .registerEquivalentType(formalType.asWildcard().getBoundedType());
+            if ((actualType instanceof InferenceVariableType) && formalType.asWildcard().isBounded()) {
+                ((InferenceVariableType) actualType).registerEquivalentType(formalType.asWildcard().getBoundedType());
                 if (formalType.asWildcard().getBoundedType() instanceof InferenceVariableType) {
-                    ((InferenceVariableType) formalType.asWildcard().getBoundedType())
-                            .registerEquivalentType(actualType);
+                    ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualType);
                 }
             }
             if (actualType.isWildcard()) {
@@ -149,11 +129,9 @@ public class InferenceContext {
                 ResolvedWildcard actualWildcard = actualType.asWildcard();
                 if (formalWildcard.isBounded() && formalWildcard.getBoundedType() instanceof InferenceVariableType) {
                     if (formalWildcard.isSuper() && actualWildcard.isSuper()) {
-                        ((InferenceVariableType) formalType.asWildcard().getBoundedType())
-                                .registerEquivalentType(actualWildcard.getBoundedType());
+                        ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualWildcard.getBoundedType());
                     } else if (formalWildcard.isExtends() && actualWildcard.isExtends()) {
-                        ((InferenceVariableType) formalType.asWildcard().getBoundedType())
-                                .registerEquivalentType(actualWildcard.getBoundedType());
+                        ((InferenceVariableType) formalType.asWildcard().getBoundedType()).registerEquivalentType(actualWildcard.getBoundedType());
                     }
                 }
             }
@@ -177,15 +155,13 @@ public class InferenceContext {
             if (formalType.isPrimitive()) {
                 // nothing to do
             } else {
-                ResolvedReferenceTypeDeclaration resolvedTypedeclaration =
-                        typeSolver.solveType(actualType.asPrimitive().getBoxTypeQName());
+                ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(actualType.asPrimitive().getBoxTypeQName());
                 registerCorrespondance(formalType, new ReferenceTypeImpl(resolvedTypedeclaration));
             }
         } else if (actualType.isReferenceType()) {
             if (formalType.isPrimitive()) {
                 if (formalType.asPrimitive().getBoxTypeQName().equals(actualType.describe())) {
-                    ResolvedReferenceTypeDeclaration resolvedTypedeclaration =
-                            typeSolver.solveType(formalType.asPrimitive().getBoxTypeQName());
+                    ResolvedReferenceTypeDeclaration resolvedTypedeclaration = typeSolver.solveType(formalType.asPrimitive().getBoxTypeQName());
                     registerCorrespondance(new ReferenceTypeImpl(resolvedTypedeclaration), actualType);
                 } else {
                     // nothing to do
@@ -208,12 +184,10 @@ public class InferenceContext {
     private ResolvedType placeInferenceVariables(ResolvedType type) {
         if (type.isWildcard()) {
             if (type.asWildcard().isExtends()) {
-                return ResolvedWildcard.extendsBound(
-                        placeInferenceVariables(type.asWildcard().getBoundedType()));
+                return ResolvedWildcard.extendsBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
             }
             if (type.asWildcard().isSuper()) {
-                return ResolvedWildcard.superBound(
-                        placeInferenceVariables(type.asWildcard().getBoundedType()));
+                return ResolvedWildcard.superBound(placeInferenceVariables(type.asWildcard().getBoundedType()));
             }
             return type;
         }
@@ -224,15 +198,13 @@ public class InferenceContext {
             return type.asReferenceType().transformTypeParameters(tp -> placeInferenceVariables(tp));
         }
         if (type.isArray()) {
-            return new ResolvedArrayType(
-                    placeInferenceVariables(type.asArrayType().getComponentType()));
+            return new ResolvedArrayType(placeInferenceVariables(type.asArrayType().getComponentType()));
         }
         if (type.isNull() || type.isPrimitive() || type.isVoid()) {
             return type;
         }
         if (type.isConstraint()) {
-            return ResolvedLambdaConstraintType.bound(
-                    placeInferenceVariables(type.asConstraintType().getBound()));
+            return ResolvedLambdaConstraintType.bound(placeInferenceVariables(type.asConstraintType().getBound()));
         }
         if (type instanceof InferenceVariableType) {
             return type;

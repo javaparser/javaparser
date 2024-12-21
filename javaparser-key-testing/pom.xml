@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>javaparser-parent</artifactId>
-        <groupId>com.github.javaparser</groupId>
-        <version>3.25.3-K7-SNAPSHOT</version>
+        <groupId>org.key-project.proofjava</groupId>
+        <version>3.26.2-K7-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -109,13 +109,13 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
+            <groupId>org.key-project.proofjava</groupId>
             <artifactId>javaparser-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
+            <groupId>org.key-project.proofjava</groupId>
             <artifactId>javaparser-symbol-solver-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
@@ -133,6 +133,7 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
+            <version>2.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -58,30 +58,6 @@ public class KeyMetaConstruct extends Statement {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyMetaConstruct() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyMetaConstruct asKeyMetaConstruct() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyMetaConstruct> toKeyMetaConstruct() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyMetaConstruct(Consumer<KeyMetaConstruct> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Node getChild() {
         return child;
@@ -192,5 +168,29 @@ public class KeyMetaConstruct extends Statement {
         setChild(child);
         setSchemas(schemas);
         customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyMetaConstruct() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyMetaConstruct asKeyMetaConstruct() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyMetaConstruct> toKeyMetaConstruct() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyMetaConstruct(Consumer<KeyMetaConstruct> action) {
+        action.accept(this);
     }
 }

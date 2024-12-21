@@ -92,7 +92,8 @@ public class SuperExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_NAME, this.typeName, typeName);
-        if (this.typeName != null) this.typeName.setParentNode(null);
+        if (this.typeName != null)
+            this.typeName.setParentNode(null);
         this.typeName = typeName;
         setAsParentNodeOf(typeName);
         return this;

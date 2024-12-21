@@ -21,7 +21,6 @@
 package com.github.javaparser.utils;
 
 import static java.nio.file.FileVisitResult.*;
-
 import com.github.javaparser.ParserConfiguration;
 import java.io.IOException;
 import java.nio.file.*;

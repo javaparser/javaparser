@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.expr.RecordPatternExpr;
 import java.util.Optional;
+import com.github.javaparser.ast.expr.RecordPatternExpr;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,13 +38,7 @@ public class RecordPatternExprMetaModel extends PatternExprMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     RecordPatternExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                RecordPatternExpr.class,
-                "RecordPatternExpr",
-                "com.github.javaparser.ast.expr",
-                false,
-                false);
+        super(superBaseNodeMetaModel, RecordPatternExpr.class, "RecordPatternExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
     public PropertyMetaModel modifiersPropertyMetaModel;

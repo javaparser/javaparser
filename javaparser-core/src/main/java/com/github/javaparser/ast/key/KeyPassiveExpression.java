@@ -46,30 +46,6 @@ public class KeyPassiveExpression extends Expression {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyPassiveExpression() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyPassiveExpression asKeyPassiveExpression() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyPassiveExpression> toKeyPassiveExpression() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyPassiveExpression(Consumer<KeyPassiveExpression> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpr() {
         return expr;
@@ -112,5 +88,29 @@ public class KeyPassiveExpression extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyPassiveExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.keyPassiveExpressionMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyPassiveExpression() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyPassiveExpression asKeyPassiveExpression() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyPassiveExpression> toKeyPassiveExpression() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyPassiveExpression(Consumer<KeyPassiveExpression> action) {
+        action.accept(this);
     }
 }

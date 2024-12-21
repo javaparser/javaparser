@@ -34,13 +34,19 @@ import java.util.Optional;
  */
 @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
 public enum ObservableProperty {
+
     ANNOTATIONS(Type.MULTIPLE_REFERENCE),
     ANONYMOUS_CLASS_BODY(Type.MULTIPLE_REFERENCE),
     ARGUMENTS(Type.MULTIPLE_REFERENCE),
+    ASSOCIATED_SPECIFICATION_COMMENTS(Type.MULTIPLE_REFERENCE),
     ASTERISK(Type.SINGLE_ATTRIBUTE),
+    BLOCK(Type.SINGLE_REFERENCE),
     BODY(Type.SINGLE_REFERENCE),
+    BRANCHES(Type.MULTIPLE_REFERENCE),
+    CALLEE(Type.SINGLE_REFERENCE),
     CATCH_CLAUSES(Type.MULTIPLE_REFERENCE),
     CHECK(Type.SINGLE_REFERENCE),
+    CHILD(Type.SINGLE_REFERENCE),
     CLASS_BODY(Type.MULTIPLE_REFERENCE),
     CLASS_DECLARATION(Type.SINGLE_REFERENCE),
     COMMENT(Type.SINGLE_REFERENCE),
@@ -48,17 +54,19 @@ public enum ObservableProperty {
     COMPONENT_TYPE(Type.SINGLE_REFERENCE),
     CONDITION(Type.SINGLE_REFERENCE),
     CONTENT(Type.SINGLE_ATTRIBUTE),
+    CONTEXT(Type.SINGLE_REFERENCE),
     DEFAULT(Type.SINGLE_ATTRIBUTE),
     DEFAULT_VALUE(Type.SINGLE_REFERENCE),
     DIMENSION(Type.SINGLE_REFERENCE),
     DIRECTIVES(Type.MULTIPLE_REFERENCE),
     ELEMENTS(Type.MULTIPLE_REFERENCE),
-    TEXT(Type.SINGLE_ATTRIBUTE),
     ELEMENT_TYPE(Type.SINGLE_REFERENCE),
     ELSE_EXPR(Type.SINGLE_REFERENCE),
     ELSE_STMT(Type.SINGLE_REFERENCE),
     ENCLOSING_PARAMETERS(Type.SINGLE_ATTRIBUTE),
     ENTRIES(Type.MULTIPLE_REFERENCE),
+    EXEC_BLOCK(Type.SINGLE_REFERENCE),
+    EXPR(Type.SINGLE_REFERENCE),
     EXPRESSION(Type.SINGLE_REFERENCE),
     EXTENDED_TYPE(Type.SINGLE_REFERENCE),
     EXTENDED_TYPES(Type.MULTIPLE_REFERENCE),
@@ -68,16 +76,20 @@ public enum ObservableProperty {
     IMPLEMENTED_TYPES(Type.MULTIPLE_REFERENCE),
     IMPORTS(Type.MULTIPLE_REFERENCE),
     INDEX(Type.SINGLE_REFERENCE),
+    INDEX_P_V(Type.SINGLE_REFERENCE),
     INITIALIZATION(Type.MULTIPLE_REFERENCE),
     INITIALIZER(Type.SINGLE_REFERENCE),
     INNER(Type.SINGLE_REFERENCE),
+    INSTANCE(Type.SINGLE_REFERENCE),
     INTERFACE(Type.SINGLE_ATTRIBUTE),
     ITERABLE(Type.SINGLE_REFERENCE),
     KEYWORD(Type.SINGLE_ATTRIBUTE),
+    KIND(Type.SINGLE_ATTRIBUTE),
     LABEL(Type.SINGLE_REFERENCE),
     LABELS(Type.MULTIPLE_REFERENCE),
     LEFT(Type.SINGLE_REFERENCE),
     LEVELS(Type.MULTIPLE_REFERENCE),
+    LOWER(Type.SINGLE_REFERENCE),
     MEMBERS(Type.MULTIPLE_REFERENCE),
     MEMBER_VALUE(Type.SINGLE_REFERENCE),
     MESSAGE(Type.SINGLE_REFERENCE),
@@ -92,6 +104,7 @@ public enum ObservableProperty {
     PAIRS(Type.MULTIPLE_REFERENCE),
     PARAMETER(Type.SINGLE_REFERENCE),
     PARAMETERS(Type.MULTIPLE_REFERENCE),
+    PARAM_TYPES(Type.MULTIPLE_REFERENCE),
     PATTERN(Type.SINGLE_REFERENCE),
     PATTERN_LIST(Type.MULTIPLE_REFERENCE),
     PERMITTED_TYPES(Type.MULTIPLE_REFERENCE),
@@ -100,17 +113,22 @@ public enum ObservableProperty {
     RECORD_DECLARATION(Type.SINGLE_REFERENCE),
     RESOURCES(Type.MULTIPLE_REFERENCE),
     RIGHT(Type.SINGLE_REFERENCE),
+    SCHEMAS(Type.MULTIPLE_REFERENCE),
     SCOPE(Type.SINGLE_REFERENCE),
     SELECTOR(Type.SINGLE_REFERENCE),
+    SIGNATURE(Type.SINGLE_REFERENCE),
+    SOURCE(Type.SINGLE_REFERENCE),
     STATEMENT(Type.SINGLE_REFERENCE),
     STATEMENTS(Type.MULTIPLE_REFERENCE),
     STATIC(Type.SINGLE_ATTRIBUTE),
     SUPER_TYPE(Type.SINGLE_REFERENCE),
     TARGET(Type.SINGLE_REFERENCE),
+    TEXT(Type.SINGLE_ATTRIBUTE),
     THEN_EXPR(Type.SINGLE_REFERENCE),
     THEN_STMT(Type.SINGLE_REFERENCE),
     THIS(Type.SINGLE_ATTRIBUTE),
     THROWN_EXCEPTIONS(Type.MULTIPLE_REFERENCE),
+    TR(Type.SINGLE_REFERENCE),
     TRY_BLOCK(Type.SINGLE_REFERENCE),
     TYPE(Type.SINGLE_REFERENCE),
     TYPES(Type.MULTIPLE_REFERENCE),
@@ -119,6 +137,7 @@ public enum ObservableProperty {
     TYPE_NAME(Type.SINGLE_REFERENCE),
     TYPE_PARAMETERS(Type.MULTIPLE_REFERENCE),
     UPDATE(Type.MULTIPLE_REFERENCE),
+    UPPER(Type.SINGLE_REFERENCE),
     VALUE(Type.SINGLE_REFERENCE),
     VALUES(Type.MULTIPLE_REFERENCE),
     VARIABLE(Type.SINGLE_REFERENCE),
@@ -137,13 +156,11 @@ public enum ObservableProperty {
     THEN_BLOCK(Type.SINGLE_ATTRIBUTE, true),
     USING_DIAMOND_OPERATOR(Type.SINGLE_ATTRIBUTE, true),
     RANGE,
-    COMMENTED_NODE,ASSOCIATED_SPECIFICATION_COMMENTS(Type.SINGLE_ATTRIBUTE,false);
+    COMMENTED_NODE;
 
     enum Type {
-        SINGLE_ATTRIBUTE(false, false),
-        SINGLE_REFERENCE(false, true),
-        MULTIPLE_ATTRIBUTE(true, false),
-        MULTIPLE_REFERENCE(true, true);
+
+        SINGLE_ATTRIBUTE(false, false), SINGLE_REFERENCE(false, true), MULTIPLE_ATTRIBUTE(true, false), MULTIPLE_REFERENCE(true, true);
 
         private boolean multiple;
 
@@ -160,9 +177,7 @@ public enum ObservableProperty {
     private boolean derived;
 
     public static ObservableProperty fromCamelCaseName(String camelCaseName) {
-        Optional<ObservableProperty> observableProperty = Arrays.stream(values())
-                .filter(v -> v.camelCaseName().equals(camelCaseName))
-                .findFirst();
+        Optional<ObservableProperty> observableProperty = Arrays.stream(values()).filter(v -> v.camelCaseName().equals(camelCaseName)).findFirst();
         if (observableProperty.isPresent()) {
             return observableProperty.get();
         }
@@ -220,9 +235,7 @@ public enum ObservableProperty {
                 }
                 return null;
             }
-            throw new RuntimeException(String.format(
-                    "Property %s returned %s (%s)",
-                    this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
+            throw new RuntimeException(String.format("Property %s returned %s (%s)", this.name(), rawValue.toString(), rawValue.getClass().getCanonicalName()));
         } catch (ClassCastException e) {
             throw new RuntimeException(e);
         }
@@ -252,10 +265,7 @@ public enum ObservableProperty {
             }
             return null;
         } catch (ClassCastException e) {
-            throw new RuntimeException(
-                    "Unable to get list value for " + this.name() + " from " + node + " (class: "
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
@@ -264,10 +274,7 @@ public enum ObservableProperty {
         try {
             return (Collection) rawValue;
         } catch (ClassCastException e) {
-            throw new RuntimeException(
-                    "Unable to get list value for " + this.name() + " from " + node + " (class: "
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get list value for " + this.name() + " from " + node + " (class: " + node.getClass().getSimpleName() + ")", e);
         }
     }
 
@@ -290,10 +297,7 @@ public enum ObservableProperty {
         try {
             return node.getClass().getMethod(getterName).invoke(node);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(
-                    "Unable to get value for " + this.name() + " from " + node + " ("
-                            + node.getClass().getSimpleName() + ")",
-                    e);
+            throw new RuntimeException("Unable to get value for " + this.name() + " from " + node + " (" + node.getClass().getSimpleName() + ")", e);
         }
     }
 

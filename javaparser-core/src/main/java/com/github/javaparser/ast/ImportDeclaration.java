@@ -22,7 +22,6 @@ package com.github.javaparser.ast;
 
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
@@ -127,7 +126,8 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
             return this;
         }
         notifyPropertyChange(ObservableProperty.NAME, this.name, name);
-        if (this.name != null) this.name.setParentNode(null);
+        if (this.name != null)
+            this.name.setParentNode(null);
         this.name = name;
         setAsParentNodeOf(name);
         return this;

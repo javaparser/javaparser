@@ -49,9 +49,7 @@ public class PrettyPrinter implements Printer {
         this(configuration, PrettyPrintVisitor::new);
     }
 
-    public PrettyPrinter(
-            PrettyPrinterConfiguration configuration,
-            Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory) {
+    public PrettyPrinter(PrettyPrinterConfiguration configuration, Function<PrettyPrinterConfiguration, VoidVisitor<Void>> visitorFactory) {
         this.configuration = configuration;
         this.visitorFactory = visitorFactory;
     }
@@ -68,8 +66,7 @@ public class PrettyPrinter implements Printer {
      */
     public Printer setConfiguration(PrinterConfiguration configuration) {
         if (!(configuration instanceof PrettyPrinterConfiguration))
-            throw new IllegalArgumentException(
-                    "PrettyPrinter must be configured with a PrettyPrinterConfiguration class");
+            throw new IllegalArgumentException("PrettyPrinter must be configured with a PrettyPrinterConfiguration class");
         this.configuration = configuration;
         return this;
     }

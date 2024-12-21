@@ -46,30 +46,6 @@ public class KeyExpressionSV extends Expression {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyExpressionSV() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyExpressionSV asKeyExpressionSV() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyExpressionSV> toKeyExpressionSV() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyExpressionSV(Consumer<KeyExpressionSV> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getText() {
         return text;
@@ -96,5 +72,29 @@ public class KeyExpressionSV extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyExpressionSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyExpressionSVMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyExpressionSV() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyExpressionSV asKeyExpressionSV() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyExpressionSV> toKeyExpressionSV() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyExpressionSV(Consumer<KeyExpressionSV> action) {
+        action.accept(this);
     }
 }

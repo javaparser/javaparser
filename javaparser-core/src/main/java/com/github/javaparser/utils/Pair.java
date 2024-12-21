@@ -21,7 +21,6 @@
 package com.github.javaparser.utils;
 
 import java.util.Objects;
-
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 /**
@@ -43,11 +42,15 @@ public class Pair<A, B> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Pair<?, ?> pair = (Pair<?, ?>) o;
-        if (!Objects.equals(a, pair.a)) return false;
-        if (!Objects.equals(b, pair.b)) return false;
+        if (!Objects.equals(a, pair.a))
+            return false;
+        if (!Objects.equals(b, pair.b))
+            return false;
         return true;
     }
 

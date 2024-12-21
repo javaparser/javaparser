@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -71,7 +70,8 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
     private Type type;
 
     @AllFieldsConstructor
-    public PatternExpr(final Type type) {}
+    public PatternExpr(final Type type) {
+    }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -125,7 +125,8 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE, this.type, type);
-        if (this.type != null) this.type.setParentNode(null);
+        if (this.type != null)
+            this.type.setParentNode(null);
         this.type = type;
         setAsParentNodeOf(type);
         return this;

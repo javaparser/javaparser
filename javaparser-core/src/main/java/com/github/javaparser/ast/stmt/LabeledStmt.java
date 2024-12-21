@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.stmt;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -95,7 +94,8 @@ public class LabeledStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.STATEMENT, this.statement, statement);
-        if (this.statement != null) this.statement.setParentNode(null);
+        if (this.statement != null)
+            this.statement.setParentNode(null);
         this.statement = statement;
         setAsParentNodeOf(statement);
         return this;
@@ -113,7 +113,8 @@ public class LabeledStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.LABEL, this.label, label);
-        if (this.label != null) this.label.setParentNode(null);
+        if (this.label != null)
+            this.label.setParentNode(null);
         this.label = label;
         setAsParentNodeOf(label);
         return this;

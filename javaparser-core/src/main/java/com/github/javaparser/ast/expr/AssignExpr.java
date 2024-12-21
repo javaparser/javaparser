@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -49,6 +48,7 @@ import java.util.function.Consumer;
 public class AssignExpr extends Expression {
 
     public enum Operator implements Stringable {
+
         ASSIGN("="),
         PLUS("+="),
         MINUS("-="),
@@ -73,7 +73,7 @@ public class AssignExpr extends Expression {
         }
 
         public Optional<BinaryExpr.Operator> toBinaryOperator() {
-            switch (this) {
+            switch(this) {
                 case PLUS:
                     return Optional.of(BinaryExpr.Operator.PLUS);
                 case MINUS:
@@ -174,7 +174,8 @@ public class AssignExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.TARGET, this.target, target);
-        if (this.target != null) this.target.setParentNode(null);
+        if (this.target != null)
+            this.target.setParentNode(null);
         this.target = target;
         setAsParentNodeOf(target);
         return this;
@@ -187,7 +188,8 @@ public class AssignExpr extends Expression {
             return this;
         }
         notifyPropertyChange(ObservableProperty.VALUE, this.value, value);
-        if (this.value != null) this.value.setParentNode(null);
+        if (this.value != null)
+            this.value.setParentNode(null);
         this.value = value;
         setAsParentNodeOf(value);
         return this;

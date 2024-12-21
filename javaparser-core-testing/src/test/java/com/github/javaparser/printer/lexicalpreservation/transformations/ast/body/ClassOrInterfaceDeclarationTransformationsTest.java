@@ -83,7 +83,7 @@ class ClassOrInterfaceDeclarationTransformationsTest extends AbstractLexicalPres
     @Test
     void addingTypeParameterAsFirstWhenThereAreSome() {
         ClassOrInterfaceDeclaration cid = consider("class A<U> {}");
-        cid.getTypeParameters().addFirst(new TypeParameter("T", new NodeList<>()));
+        cid.getTypeParameters().addFirstO(new TypeParameter("T", new NodeList<>()));
         assertTransformedToString("class A<T, U> {}", cid);
     }
 

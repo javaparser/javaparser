@@ -46,30 +46,6 @@ public class KeyExecCtxtSV extends Statement {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyExecCtxtSV() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyExecCtxtSV asKeyExecCtxtSV() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyExecCtxtSV> toKeyExecCtxtSV() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyExecCtxtSV(Consumer<KeyExecCtxtSV> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getText() {
         return text;
@@ -96,5 +72,29 @@ public class KeyExecCtxtSV extends Statement {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyExecCtxtSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyExecCtxtSVMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyExecCtxtSV() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyExecCtxtSV asKeyExecCtxtSV() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyExecCtxtSV> toKeyExecCtxtSV() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyExecCtxtSV(Consumer<KeyExecCtxtSV> action) {
+        action.accept(this);
     }
 }

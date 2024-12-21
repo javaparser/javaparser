@@ -40,7 +40,6 @@ import com.github.javaparser.ast.type.TypeParameter;
 import com.github.javaparser.javadoc.Javadoc;
 import com.github.javaparser.quality.NotNull;
 import com.github.javaparser.quality.Preconditions;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -51,8 +50,7 @@ import java.nio.file.Path;
 public final class StaticJavaParser {
 
     // use ThreadLocal to resolve possible concurrency issues.
-    private static final ThreadLocal<ParserConfiguration> localConfiguration =
-            ThreadLocal.withInitial(ParserConfiguration::new);
+    private static final ThreadLocal<ParserConfiguration> localConfiguration = ThreadLocal.withInitial(ParserConfiguration::new);
 
     /**
      * Get the configuration for the parse... methods. Deprecated method.
@@ -122,8 +120,7 @@ public final class StaticJavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public static CompilationUnit parse(@NotNull final File file, @NotNull final Charset encoding)
-            throws FileNotFoundException {
+    public static CompilationUnit parse(@NotNull final File file, @NotNull final Charset encoding) throws FileNotFoundException {
         Preconditions.checkNotNull(file, "Parameter file can't be null.");
         Preconditions.checkNotNull(encoding, "Parameter encoding can't be null.");
         return handleResult(newParser().parse(file, encoding));
@@ -203,8 +200,7 @@ public final class StaticJavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public static CompilationUnit parseResource(@NotNull final String path, @NotNull Charset encoding)
-            throws IOException {
+    public static CompilationUnit parseResource(@NotNull final String path, @NotNull Charset encoding) throws IOException {
         Preconditions.checkNotNull(path, "Parameter path can't be null.");
         Preconditions.checkNotNull(encoding, "Parameter encoding can't be null.");
         return handleResult(newParser().parseResource(path, encoding));
@@ -223,9 +219,7 @@ public final class StaticJavaParser {
      * @deprecated set the encoding in the {@link ParserConfiguration}
      */
     @Deprecated
-    public static CompilationUnit parseResource(
-            @NotNull final ClassLoader classLoader, @NotNull final String path, @NotNull Charset encoding)
-            throws IOException {
+    public static CompilationUnit parseResource(@NotNull final ClassLoader classLoader, @NotNull final String path, @NotNull Charset encoding) throws IOException {
         Preconditions.checkNotNull(classLoader, "Parameter classLoader can't be null.");
         Preconditions.checkNotNull(path, "Parameter path can't be null.");
         Preconditions.checkNotNull(encoding, "Parameter encoding can't be null.");

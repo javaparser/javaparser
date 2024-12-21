@@ -26,5 +26,6 @@ import com.github.javaparser.printer.SourcePrinter;
 public class CsmNone implements CsmElement {
 
     @Override
-    public void prettyPrint(Node node, SourcePrinter printer) {}
+    public void prettyPrint(Node node, SourcePrinter printer) {
+    }
 }

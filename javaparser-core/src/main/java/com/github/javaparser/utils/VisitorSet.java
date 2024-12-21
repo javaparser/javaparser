@@ -58,7 +58,8 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public boolean addAll(Collection<? extends N> col) {
         boolean modified = false;
-        for (N elem : col) if (add(elem)) modified = true;
+        for (N elem : col) if (add(elem))
+            modified = true;
         return modified;
     }
 
@@ -74,7 +75,8 @@ public class VisitorSet<N extends Node> implements Set<N> {
 
     @Override
     public boolean containsAll(Collection<?> col) {
-        for (Object elem : col) if (!contains(elem)) return false;
+        for (Object elem : col) if (!contains(elem))
+            return false;
         return true;
     }
 
@@ -114,7 +116,8 @@ public class VisitorSet<N extends Node> implements Set<N> {
     @Override
     public boolean removeAll(Collection<?> col) {
         boolean modified = false;
-        for (Object elem : col) if (remove(elem)) modified = true;
+        for (Object elem : col) if (remove(elem))
+            modified = true;
         return modified;
     }
 
@@ -133,24 +136,19 @@ public class VisitorSet<N extends Node> implements Set<N> {
 
     @Override
     public Object[] toArray() {
-        return innerSet.stream()
-                .map(facade -> facade.overridden)
-                .collect(Collectors.toList())
-                .toArray();
+        return innerSet.stream().map(facade -> facade.overridden).collect(Collectors.toList()).toArray();
     }
 
     @Override
     public <T> T[] toArray(T[] arr) {
-        return innerSet.stream()
-                .map(facade -> facade.overridden)
-                .collect(Collectors.toList())
-                .toArray(arr);
+        return innerSet.stream().map(facade -> facade.overridden).collect(Collectors.toList()).toArray(arr);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        if (size() == 0) return sb.append("]").toString();
+        if (size() == 0)
+            return sb.append("]").toString();
         for (EqualsHashcodeOverridingFacade facade : innerSet) {
             sb.append(facade.overridden.toString() + ",");
         }

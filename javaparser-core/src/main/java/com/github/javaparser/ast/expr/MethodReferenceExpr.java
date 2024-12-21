@@ -22,7 +22,6 @@ package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -55,10 +54,7 @@ import java.util.function.Consumer;
  *
  * @author Raquel Pau
  */
-public class MethodReferenceExpr extends Expression
-        implements NodeWithTypeArguments<MethodReferenceExpr>,
-                NodeWithIdentifier<MethodReferenceExpr>,
-                Resolvable<ResolvedMethodDeclaration> {
+public class MethodReferenceExpr extends Expression implements NodeWithTypeArguments<MethodReferenceExpr>, NodeWithIdentifier<MethodReferenceExpr>, Resolvable<ResolvedMethodDeclaration> {
 
     private Expression scope;
 
@@ -81,8 +77,7 @@ public class MethodReferenceExpr extends Expression
      * This constructor is used by the parser and is considered private.
      */
     @Generated("com.github.javaparser.generator.core.node.MainConstructorGenerator")
-    public MethodReferenceExpr(
-            TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, String identifier) {
+    public MethodReferenceExpr(TokenRange tokenRange, Expression scope, NodeList<Type> typeArguments, String identifier) {
         super(tokenRange);
         setScope(scope);
         setTypeArguments(typeArguments);
@@ -114,7 +109,8 @@ public class MethodReferenceExpr extends Expression
             return this;
         }
         notifyPropertyChange(ObservableProperty.SCOPE, this.scope, scope);
-        if (this.scope != null) this.scope.setParentNode(null);
+        if (this.scope != null)
+            this.scope.setParentNode(null);
         this.scope = scope;
         setAsParentNodeOf(scope);
         return this;
@@ -137,7 +133,8 @@ public class MethodReferenceExpr extends Expression
             return this;
         }
         notifyPropertyChange(ObservableProperty.TYPE_ARGUMENTS, this.typeArguments, typeArguments);
-        if (this.typeArguments != null) this.typeArguments.setParentNode(null);
+        if (this.typeArguments != null)
+            this.typeArguments.setParentNode(null);
         this.typeArguments = typeArguments;
         setAsParentNodeOf(typeArguments);
         return this;

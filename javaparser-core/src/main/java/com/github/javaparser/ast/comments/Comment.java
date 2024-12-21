@@ -22,7 +22,6 @@ package com.github.javaparser.ast.comments;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -98,8 +97,7 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public LineComment asLineComment() {
-        throw new IllegalStateException(
-                f("%s is not LineComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not LineComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     public Optional<Node> getCommentedNode() {
@@ -182,8 +180,7 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public BlockComment asBlockComment() {
-        throw new IllegalStateException(
-                f("%s is not BlockComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not BlockComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -193,18 +190,20 @@ public abstract class Comment extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public JavadocComment asJavadocComment() {
-        throw new IllegalStateException(
-                f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not JavadocComment, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifBlockComment(Consumer<BlockComment> action) {}
+    public void ifBlockComment(Consumer<BlockComment> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifJavadocComment(Consumer<JavadocComment> action) {}
+    public void ifJavadocComment(Consumer<JavadocComment> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifLineComment(Consumer<LineComment> action) {}
+    public void ifLineComment(Consumer<LineComment> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BlockComment> toBlockComment() {

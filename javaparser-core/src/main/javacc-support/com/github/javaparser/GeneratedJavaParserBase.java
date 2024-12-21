@@ -276,7 +276,7 @@ abstract class GeneratedJavaParserBase {
         if (list == null) {
             list = new NodeList<>();
         }
-        list.addFirst(obj);
+        list.addFirstO(obj);
         return list;
     }
 

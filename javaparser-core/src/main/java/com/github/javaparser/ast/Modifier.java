@@ -27,9 +27,7 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModifierMetaModel;
-
 import java.util.Arrays;
-
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
@@ -98,6 +96,7 @@ public class Modifier extends Node {
      * The Java modifier keywords.
      */
     public enum Keyword {
+
         DEFAULT("default"),
         PUBLIC("public"),
         PROTECTED("protected"),

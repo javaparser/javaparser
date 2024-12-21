@@ -51,30 +51,6 @@ public class KeyExecStatement extends Statement {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyExecStatement() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyExecStatement asKeyExecStatement() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyExecStatement> toKeyExecStatement() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyExecStatement(Consumer<KeyExecStatement> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<KeyCcatchBranch> getBranches() {
         return branches;
@@ -157,5 +133,29 @@ public class KeyExecStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyExecStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keyExecStatementMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyExecStatement() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyExecStatement asKeyExecStatement() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyExecStatement> toKeyExecStatement() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyExecStatement(Consumer<KeyExecStatement> action) {
+        action.accept(this);
     }
 }

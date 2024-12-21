@@ -22,7 +22,6 @@ package com.github.javaparser.ast.type;
 
 import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -41,6 +40,7 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
+import com.github.javaparser.ast.Node;
 
 /**
  * A primitive type.
@@ -85,6 +85,7 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     }
 
     public enum Primitive {
+
         BOOLEAN("Boolean", "Z"),
         CHAR("Character", "C"),
         BYTE("Byte", "B"),

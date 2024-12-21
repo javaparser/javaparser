@@ -22,7 +22,6 @@ package com.github.javaparser.utils;
 
 import static com.github.javaparser.utils.Utils.capitalize;
 import static com.github.javaparser.utils.Utils.decapitalize;
-
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -33,7 +32,8 @@ import java.nio.file.Paths;
  */
 public final class CodeGenerationUtils {
 
-    private CodeGenerationUtils() {}
+    private CodeGenerationUtils() {
+    }
 
     public static String getterName(Class<?> type, String name) {
         if (name.startsWith("is") && boolean.class.equals(type)) {
@@ -131,8 +131,7 @@ public final class CodeGenerationUtils {
      */
     public static Path classLoaderRoot(Class<?> c) {
         try {
-            return Paths.get(
-                    c.getProtectionDomain().getCodeSource().getLocation().toURI());
+            return Paths.get(c.getProtectionDomain().getCodeSource().getLocation().toURI());
         } catch (URISyntaxException e) {
             throw new AssertionError("Bug in JavaParser, please report.", e);
         }

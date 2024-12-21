@@ -55,30 +55,6 @@ public class KeyMetaConstructExpression extends Expression {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyMetaConstructExpression() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyMetaConstructExpression asKeyMetaConstructExpression() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyMetaConstructExpression> toKeyMetaConstructExpression() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyMetaConstructExpression(Consumer<KeyMetaConstructExpression> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getChild() {
         return child;
@@ -137,5 +113,29 @@ public class KeyMetaConstructExpression extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMetaConstructExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMetaConstructExpressionMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyMetaConstructExpression() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyMetaConstructExpression asKeyMetaConstructExpression() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyMetaConstructExpression> toKeyMetaConstructExpression() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyMetaConstructExpression(Consumer<KeyMetaConstructExpression> action) {
+        action.accept(this);
     }
 }

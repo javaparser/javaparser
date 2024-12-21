@@ -35,7 +35,7 @@ Just add the following to your maven configuration or tailor to your own depende
 
 ```xml
 <dependency>
-    <groupId>com.github.javaparser</groupId>
+    <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-symbol-solver-core</artifactId>
     <version>3.26.2-K7-SNAPSHOT</version>
 </dependency>
@@ -57,7 +57,7 @@ Using the dependency above will add both JavaParser and JavaSymbolSolver to your
 
 ```xml
 <dependency>
-    <groupId>com.github.javaparser</groupId>
+    <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-core</artifactId>
     <version>3.25.8</version>
 </dependency>
@@ -76,7 +76,7 @@ There is a separate module for this:
 
 ```xml
 <dependency>
-    <groupId>com.github.javaparser</groupId>
+    <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-core-serialization</artifactId>
     <version>3.26.2-K7-SNAPSHOT</version>
 </dependency>

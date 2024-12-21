@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>javaparser-parent</artifactId>
-        <groupId>com.github.javaparser</groupId>
+        <groupId>org.key-project.proofjava</groupId>
         <version>3.24.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -25,12 +25,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
+            <groupId>org.key-project.proofjava</groupId>
             <artifactId>javaparser-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
+            <groupId>org.key-project.proofjava</groupId>
             <artifactId>javaparser-core-generators</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -40,7 +40,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.javaparser</groupId>
+            <groupId>org.key-project.proofjava</groupId>
             <artifactId>javaparser-symbol-solver-core</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>

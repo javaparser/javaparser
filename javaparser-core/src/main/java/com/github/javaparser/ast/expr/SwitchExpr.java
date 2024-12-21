@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.expr;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -117,7 +116,8 @@ public class SwitchExpr extends Expression implements SwitchNode {
             return this;
         }
         notifyPropertyChange(ObservableProperty.ENTRIES, this.entries, entries);
-        if (this.entries != null) this.entries.setParentNode(null);
+        if (this.entries != null)
+            this.entries.setParentNode(null);
         this.entries = entries;
         setAsParentNodeOf(entries);
         return this;
@@ -130,7 +130,8 @@ public class SwitchExpr extends Expression implements SwitchNode {
             return this;
         }
         notifyPropertyChange(ObservableProperty.SELECTOR, this.selector, selector);
-        if (this.selector != null) this.selector.setParentNode(null);
+        if (this.selector != null)
+            this.selector.setParentNode(null);
         this.selector = selector;
         setAsParentNodeOf(selector);
         return this;

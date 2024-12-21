@@ -11,11 +11,10 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.KeyTransactionStatementMetaModel;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import com.github.javaparser.ast.Node;
 
 public class KeyTransactionStatement extends Statement {
 
@@ -45,10 +44,7 @@ public class KeyTransactionStatement extends Statement {
 
     public enum TransactionType {
 
-        BEGIN("#beginJavaCardTransaction"),
-        COMMIT("#commitJavaCardTransaction"),
-        FINISH("#finishJavaCardTransaction"),
-        ABORT("#abortJavaCardTransaction");
+        BEGIN("#beginJavaCardTransaction"), COMMIT("#commitJavaCardTransaction"), FINISH("#finishJavaCardTransaction"), ABORT("#abortJavaCardTransaction");
 
         public final String symbol;
 
@@ -64,30 +60,6 @@ public class KeyTransactionStatement extends Statement {
             }
             return null;
         }
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyTransactionStatement() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyTransactionStatement asKeyTransactionStatement() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyTransactionStatement> toKeyTransactionStatement() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyTransactionStatement(Consumer<KeyTransactionStatement> action) {
-        action.accept(this);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -126,5 +98,29 @@ public class KeyTransactionStatement extends Statement {
         super(tokenRange);
         setType(type);
         customInitialization();
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyTransactionStatement() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyTransactionStatement asKeyTransactionStatement() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyTransactionStatement> toKeyTransactionStatement() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyTransactionStatement(Consumer<KeyTransactionStatement> action) {
+        action.accept(this);
     }
 }

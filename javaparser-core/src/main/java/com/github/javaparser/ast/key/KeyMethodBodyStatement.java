@@ -57,30 +57,6 @@ public class KeyMethodBodyStatement extends Statement {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyMethodBodyStatement() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyMethodBodyStatement asKeyMethodBodyStatement() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyMethodBodyStatement> toKeyMethodBodyStatement() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyMethodBodyStatement(Consumer<KeyMethodBodyStatement> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Expression getExpr() {
         return expr;
@@ -190,5 +166,29 @@ public class KeyMethodBodyStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyMethodBodyStatement removeName() {
         return setName((Name) null);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyMethodBodyStatement() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyMethodBodyStatement asKeyMethodBodyStatement() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyMethodBodyStatement> toKeyMethodBodyStatement() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyMethodBodyStatement(Consumer<KeyMethodBodyStatement> action) {
+        action.accept(this);
     }
 }

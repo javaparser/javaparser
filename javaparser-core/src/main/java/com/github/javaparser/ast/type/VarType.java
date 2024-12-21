@@ -144,22 +144,16 @@ public class VarType extends Type {
                 if (iterType.isReferenceType()) {
                     // The type of a variable in a for-each loop with an
                     // Iterable with parameter type
-                    List<ResolvedType> parametersType =
-                            iterType.asReferenceType().typeParametersMap().getTypes();
+                    List<ResolvedType> parametersType = iterType.asReferenceType().typeParametersMap().getTypes();
                     if (parametersType.isEmpty()) {
-                        Optional<ResolvedTypeDeclaration> oObjectDeclaration =
-                                context.solveType(JAVA_LANG_OBJECT).getDeclaration();
-                        return oObjectDeclaration
-                                .map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType()))
-                                .orElseThrow(() -> new UnsupportedOperationException());
+                        Optional<ResolvedTypeDeclaration> oObjectDeclaration = context.solveType(JAVA_LANG_OBJECT).getDeclaration();
+                        return oObjectDeclaration.map(decl -> ReferenceTypeImpl.undeterminedParameters(decl.asReferenceType())).orElseThrow(() -> new UnsupportedOperationException());
                     }
                     return parametersType.get(0);
                 }
             }
         }
-        return initializer
-                .map(Expression::calculateResolvedType)
-                .orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
+        return initializer.map(Expression::calculateResolvedType).orElseThrow(() -> new IllegalStateException("Cannot resolve `var` which has no initializer."));
     }
 
     private Optional<ForEachStmt> forEachStmtWithVariableDeclarator(VariableDeclarator variableDeclarator) {
@@ -172,5 +166,17 @@ public class VarType extends Type {
             return Optional.empty();
         }
         return Optional.of((ForEachStmt) node.get());
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<VarType> toVarType() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifVarType(Consumer<VarType> action) {
+        action.accept(this);
     }
 }

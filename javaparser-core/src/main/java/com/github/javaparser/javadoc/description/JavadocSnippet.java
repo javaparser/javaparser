@@ -44,8 +44,10 @@ public class JavadocSnippet implements JavadocDescriptionElement {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         JavadocSnippet that = (JavadocSnippet) o;
         return text.equals(that.text);
     }

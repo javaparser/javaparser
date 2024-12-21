@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.modules;
 
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -108,19 +107,24 @@ public abstract class ModuleDirective extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {}
+    public void ifModuleExportsStmt(Consumer<ModuleExportsDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleOpensStmt(Consumer<ModuleOpensDirective> action) {}
+    public void ifModuleOpensStmt(Consumer<ModuleOpensDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleProvidesStmt(Consumer<ModuleProvidesDirective> action) {}
+    public void ifModuleProvidesStmt(Consumer<ModuleProvidesDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleRequiresStmt(Consumer<ModuleRequiresDirective> action) {}
+    public void ifModuleRequiresStmt(Consumer<ModuleRequiresDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleUsesStmt(Consumer<ModuleUsesDirective> action) {}
+    public void ifModuleUsesStmt(Consumer<ModuleUsesDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ModuleExportsDirective> toModuleExportsStmt() {
@@ -154,9 +158,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleExportsDirective asModuleExportsDirective() {
-        throw new IllegalStateException(f(
-                "%s is not ModuleExportsDirective, it is %s",
-                this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleExportsDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -165,7 +167,8 @@ public abstract class ModuleDirective extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {}
+    public void ifModuleExportsDirective(Consumer<ModuleExportsDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleOpensDirective() {
@@ -174,9 +177,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleOpensDirective asModuleOpensDirective() {
-        throw new IllegalStateException(f(
-                "%s is not ModuleOpensDirective, it is %s",
-                this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleOpensDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -185,7 +186,8 @@ public abstract class ModuleDirective extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleOpensDirective(Consumer<ModuleOpensDirective> action) {}
+    public void ifModuleOpensDirective(Consumer<ModuleOpensDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleProvidesDirective() {
@@ -194,9 +196,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleProvidesDirective asModuleProvidesDirective() {
-        throw new IllegalStateException(f(
-                "%s is not ModuleProvidesDirective, it is %s",
-                this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleProvidesDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -205,7 +205,8 @@ public abstract class ModuleDirective extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleProvidesDirective(Consumer<ModuleProvidesDirective> action) {}
+    public void ifModuleProvidesDirective(Consumer<ModuleProvidesDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleRequiresDirective() {
@@ -214,9 +215,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleRequiresDirective asModuleRequiresDirective() {
-        throw new IllegalStateException(f(
-                "%s is not ModuleRequiresDirective, it is %s",
-                this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleRequiresDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -225,7 +224,8 @@ public abstract class ModuleDirective extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleRequiresDirective(Consumer<ModuleRequiresDirective> action) {}
+    public void ifModuleRequiresDirective(Consumer<ModuleRequiresDirective> action) {
+    }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public boolean isModuleUsesDirective() {
@@ -234,8 +234,7 @@ public abstract class ModuleDirective extends Node {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public ModuleUsesDirective asModuleUsesDirective() {
-        throw new IllegalStateException(f(
-                "%s is not ModuleUsesDirective, it is %s", this, this.getClass().getSimpleName()));
+        throw new IllegalStateException(f("%s is not ModuleUsesDirective, it is %s", this, this.getClass().getSimpleName()));
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
@@ -244,7 +243,8 @@ public abstract class ModuleDirective extends Node {
     }
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifModuleUsesDirective(Consumer<ModuleUsesDirective> action) {}
+    public void ifModuleUsesDirective(Consumer<ModuleUsesDirective> action) {
+    }
 
     @Override
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")

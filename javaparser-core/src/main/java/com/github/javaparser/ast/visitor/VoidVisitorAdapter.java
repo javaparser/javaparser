@@ -1075,6 +1075,7 @@ public abstract class VoidVisitorAdapter<A> implements VoidVisitor<A> {
         n.getModifiers().forEach(p -> p.accept(this, arg));
         n.getPatternList().forEach(p -> p.accept(this, arg));
         n.getType().accept(this, arg);
+        n.getAssociatedSpecificationComments().ifPresent(l -> l.forEach(v -> v.accept(this, arg)));
         n.getComment().ifPresent(l -> l.accept(this, arg));
     }
 }

@@ -52,10 +52,7 @@ public class VarValidator implements TypedValidator<VarType> {
         if (!variableDeclarator.isPresent()) {
             // Java 11's var in lambda's
             if (varAllowedInLambdaParameters) {
-                boolean valid = node.findAncestor(Parameter.class)
-                        .flatMap(Node::getParentNode)
-                        .map((Node p) -> p instanceof LambdaExpr)
-                        .orElse(false);
+                boolean valid = node.findAncestor(Parameter.class).flatMap(Node::getParentNode).map((Node p) -> p instanceof LambdaExpr).orElse(false);
                 if (valid) {
                     return;
                 }
@@ -87,10 +84,7 @@ public class VarValidator implements TypedValidator<VarType> {
                     return;
                 }
                 container.ifPresent(c -> {
-                    boolean positionIsFine = c instanceof ForStmt
-                            || c instanceof ForEachStmt
-                            || c instanceof ExpressionStmt
-                            || c instanceof TryStmt;
+                    boolean positionIsFine = c instanceof ForStmt || c instanceof ForEachStmt || c instanceof ExpressionStmt || c instanceof TryStmt;
                     if (!positionIsFine) {
                         reportIllegalPosition(node, reporter);
                     }

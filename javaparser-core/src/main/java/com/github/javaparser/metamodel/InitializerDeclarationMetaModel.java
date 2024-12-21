@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.body.InitializerDeclaration;
 import java.util.Optional;
+import com.github.javaparser.ast.body.InitializerDeclaration;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,13 +38,7 @@ public class InitializerDeclarationMetaModel extends BodyDeclarationMetaModel {
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     InitializerDeclarationMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                InitializerDeclaration.class,
-                "InitializerDeclaration",
-                "com.github.javaparser.ast.body",
-                false,
-                false);
+        super(superBaseNodeMetaModel, InitializerDeclaration.class, "InitializerDeclaration", "com.github.javaparser.ast.body", false, false);
     }
 
     public PropertyMetaModel bodyPropertyMetaModel;

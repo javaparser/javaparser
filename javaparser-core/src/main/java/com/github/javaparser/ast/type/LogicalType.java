@@ -41,12 +41,10 @@ import com.github.javaparser.resolution.model.SymbolReference;
 import com.github.javaparser.resolution.model.typesystem.ReferenceTypeImpl;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 /**
@@ -159,8 +157,6 @@ public class LogicalType extends ReferenceType implements NodeWithSimpleName<Log
     public LogicalType setAnnotations(NodeList<AnnotationExpr> annotations) {
         return (LogicalType) super.setAnnotations(annotations);
     }
-
-
 
     /*
      * Note that the internal forms of the binary names of object are used.

@@ -52,30 +52,6 @@ public class KeyLoopScopeBlock extends Statement {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyLoopScopeBlock() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyLoopScopeBlock asKeyLoopScopeBlock() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyLoopScopeBlock> toKeyLoopScopeBlock() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyLoopScopeBlock(Consumer<KeyLoopScopeBlock> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public BlockStmt getBlock() {
         return block;
@@ -141,5 +117,29 @@ public class KeyLoopScopeBlock extends Statement {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyLoopScopeBlockMetaModel getMetaModel() {
         return JavaParserMetaModel.keyLoopScopeBlockMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyLoopScopeBlock() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyLoopScopeBlock asKeyLoopScopeBlock() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyLoopScopeBlock> toKeyLoopScopeBlock() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyLoopScopeBlock(Consumer<KeyLoopScopeBlock> action) {
+        action.accept(this);
     }
 }

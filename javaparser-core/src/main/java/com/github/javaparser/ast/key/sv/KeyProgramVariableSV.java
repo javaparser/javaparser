@@ -46,30 +46,6 @@ public class KeyProgramVariableSV extends Expression {
         v.visit(this, arg);
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public boolean isKeyProgramVariableSV() {
-        return true;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public KeyProgramVariableSV asKeyProgramVariableSV() {
-        return this;
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public Optional<KeyProgramVariableSV> toKeyProgramVariableSV() {
-        return Optional.of(this);
-    }
-
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
-    public void ifKeyProgramVariableSV(Consumer<KeyProgramVariableSV> action) {
-        action.accept(this);
-    }
-
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getText() {
         return text;
@@ -96,5 +72,29 @@ public class KeyProgramVariableSV extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyProgramVariableSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyProgramVariableSVMetaModel;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public boolean isKeyProgramVariableSV() {
+        return true;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public KeyProgramVariableSV asKeyProgramVariableSV() {
+        return this;
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public Optional<KeyProgramVariableSV> toKeyProgramVariableSV() {
+        return Optional.of(this);
+    }
+
+    @Override
+    @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
+    public void ifKeyProgramVariableSV(Consumer<KeyProgramVariableSV> action) {
+        action.accept(this);
     }
 }

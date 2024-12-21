@@ -79,7 +79,7 @@ class EnumDeclarationTransformationsTest extends AbstractLexicalPreservingTest {
     @Test
     void addingConstants() {
         EnumDeclaration ed = consider("enum A {" + LineSeparator.SYSTEM + " E1" + LineSeparator.SYSTEM + "}");
-        ed.getEntries().addLast(new EnumConstantDeclaration("E2"));
+        ed.getEntries().addLastO(new EnumConstantDeclaration("E2"));
         assertTransformedToString(
                 "enum A {" + LineSeparator.SYSTEM + " E1," + LineSeparator.SYSTEM + " E2" + LineSeparator.SYSTEM + "}",
                 ed);

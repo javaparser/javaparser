@@ -27,6 +27,5 @@ import java.util.List;
 
 public interface MethodResolutionCapability {
 
-    SymbolReference<ResolvedMethodDeclaration> solveMethod(
-            String name, List<ResolvedType> argumentsTypes, boolean staticOnly);
+    SymbolReference<ResolvedMethodDeclaration> solveMethod(String name, List<ResolvedType> argumentsTypes, boolean staticOnly);
 }

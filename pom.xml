@@ -13,7 +13,7 @@
         <!--<module>javaparser-key-generator</module>-->
     </modules>
 
-    <groupId>com.github.javaparser</groupId>
+    <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
     <version>3.26.2-K7-SNAPSHOT</version>
@@ -156,7 +156,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <byte-buddy.version>1.15.1</byte-buddy.version>
+	    <!--
         <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
+        -->
         <build.timestamp>2024-09-02T00:00:00Z</build.timestamp>
         <!-- Maven Plugins -->
     </properties>
@@ -174,19 +176,10 @@
     </issueManagement>
 
     <distributionManagement>
-        <!-- https://docs.github.com/en/actions/guides/publishing-java-packages-with-maven#publishing-packages-to-the-maven-central-repository -->
-        <!-- https://blog.sonatype.com/what-publishers-need-to-know-about-migrating-from-jcenter-/-bintray-to-the-central-repository -->
-        <!-- New: Publishing directly to Sonatype OSSRH (OSS Repository Hosting), for release to Maven Central -->
-        <!-- URLs available from: https://central.sonatype.org/pages/ossrh-guide.html#accessing-repositories -->
-
         <snapshotRepository>
-            <id>gitlab-maven</id>
-            <url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
-        <repository>
-            <id>gitlab-maven</id>
-            <url>https://git.key-project.org/api/v4/projects/35/packages/maven</url>
-        </repository>
     </distributionManagement>
 
 
@@ -234,6 +227,19 @@
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.4.2</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.7</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+
+
                 <plugin>
                     <!-- See also: https://central.sonatype.org/pages/apache-maven.html#performing-a-release-deployment-with-the-maven-release-plugin -->
                     <!-- Plugin for preparing and performing a release (to ossrh / maven central). -->

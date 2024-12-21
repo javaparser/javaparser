@@ -20,9 +20,9 @@
  */
 package com.github.javaparser.metamodel;
 
-import com.github.javaparser.ast.Generated;
-import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import java.util.Optional;
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.Generated;
 
 /**
  * This file, class, and its contents are completely generated based on:
@@ -38,13 +38,7 @@ public class SingleMemberAnnotationExprMetaModel extends AnnotationExprMetaModel
 
     @Generated("com.github.javaparser.generator.metamodel.NodeMetaModelGenerator")
     SingleMemberAnnotationExprMetaModel(Optional<BaseNodeMetaModel> superBaseNodeMetaModel) {
-        super(
-                superBaseNodeMetaModel,
-                SingleMemberAnnotationExpr.class,
-                "SingleMemberAnnotationExpr",
-                "com.github.javaparser.ast.expr",
-                false,
-                false);
+        super(superBaseNodeMetaModel, SingleMemberAnnotationExpr.class, "SingleMemberAnnotationExpr", "com.github.javaparser.ast.expr", false, false);
     }
 
     public PropertyMetaModel memberValuePropertyMetaModel;

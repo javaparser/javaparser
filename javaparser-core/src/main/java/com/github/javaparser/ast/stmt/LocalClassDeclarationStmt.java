@@ -21,7 +21,6 @@
 package com.github.javaparser.ast.stmt;
 
 import static com.github.javaparser.utils.Utils.assertNotNull;
-
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.AllFieldsConstructor;
 import com.github.javaparser.ast.Generated;
@@ -94,7 +93,8 @@ public class LocalClassDeclarationStmt extends Statement {
             return this;
         }
         notifyPropertyChange(ObservableProperty.CLASS_DECLARATION, this.classDeclaration, classDeclaration);
-        if (this.classDeclaration != null) this.classDeclaration.setParentNode(null);
+        if (this.classDeclaration != null)
+            this.classDeclaration.setParentNode(null);
         this.classDeclaration = classDeclaration;
         setAsParentNodeOf(classDeclaration);
         return this;

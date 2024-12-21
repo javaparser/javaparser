@@ -33,7 +33,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
     void testArrayTypeWithBracketAfterTypeWithoutWhitespace() {
         String def = "int[] i";
         considerVariableDeclaration(def);
-        expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
+        expression.asVariableDeclarationExpr().getModifiers().addFirstO(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int[] i"));
@@ -43,7 +43,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
     void testArrayTypeWithWhitespaceBeforeTypeAndBracket() {
         String def = "int [] i";
         considerVariableDeclaration(def);
-        expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
+        expression.asVariableDeclarationExpr().getModifiers().addFirstO(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int [] i"));
@@ -53,7 +53,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
     void testArrayTypeWithWhitespaceBeforeEachToken() {
         String def = "int [ ] i";
         considerVariableDeclaration(def);
-        expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
+        expression.asVariableDeclarationExpr().getModifiers().addFirstO(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int [ ] i"));
@@ -63,7 +63,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
     void testArrayTypeWithMultipleWhitespaces() {
         String def = "int   [   ]   i";
         considerVariableDeclaration(def);
-        expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
+        expression.asVariableDeclarationExpr().getModifiers().addFirstO(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
                 .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int   [   ]   i"));
