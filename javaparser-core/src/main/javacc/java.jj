@@ -5282,9 +5282,9 @@ TryStmt TryStatement():
     [ resources = ResourceSpecification() ]
     tryBlock = Block()
     ( LOOKAHEAD(3)
-      ["catch"] {catchBegin=token();}
+      "catch" {catchBegin=token();}
       <SVIDENTIFIER>
-      { catchs = add(catchs, new KeyCatchClauseSV(range(catchBegin, token()), token().getText()));}
+      { catchs = add(catchs, new KeyCatchClauseSV(range(catchBegin, token()), token().getText())); }
     |
       LOOKAHEAD(2)
       "catch" {catchBegin=token();}
