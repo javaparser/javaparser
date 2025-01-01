@@ -604,7 +604,12 @@ TOKEN :
   >
 |
   < #DECIMAL_FLOATING_POINT_LITERAL:
-        <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      //weigl: add negative lookahead here because `5..6` are read as to floating numbers
+      // here we just force a following part of the double literal, hence "5." is not valid anymore
+         <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>) (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
+      |  <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>) (["f","F","d","D"])?
+      |  <DECIMAL_LITERAL> "." (<DECIMAL_LITERAL>)? (<DECIMAL_EXPONENT>)? (["f","F","d","D"])
+      //end patch
       | "." <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? (["f","F","d","D"])?
       | <DECIMAL_LITERAL> <DECIMAL_EXPONENT> (["f","F","d","D"])?
       | <DECIMAL_LITERAL> (<DECIMAL_EXPONENT>)? ["f","F","d","D"]
