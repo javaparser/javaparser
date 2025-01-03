@@ -16,7 +16,7 @@
     <groupId>org.key-project.proofjava</groupId>
     <artifactId>javaparser-parent</artifactId>
     <packaging>pom</packaging>
-    <version>3.26.3-K8-SNAPSHOT</version>
+    <version>3.26.3-K9-SNAPSHOT</version>
 
     <name>javaparser-parent</name>
     <url>https://github.com/javaparser</url>
@@ -193,8 +193,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                <!--    <source>${java.version}</source>
+                    <target>${java.version}</target> -->
                     <release>${java.version}</release>
                     <useIncrementalCompilation>false</useIncrementalCompilation>
                 </configuration>
@@ -294,6 +294,7 @@
                             <!-- Ideally we will have perfectly formatted javadoc, but for now just disable it. -->
                             <additionalOption>-Xdoclint:none</additionalOption>
                         </additionalOptions>
+                        <failOnError>false</failOnError>
                     </configuration>
                 </plugin>
                 <plugin>
