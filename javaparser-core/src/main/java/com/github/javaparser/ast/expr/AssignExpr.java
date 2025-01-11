@@ -34,6 +34,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.printer.Stringable;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An assignment expression. It supports the operators that are found the AssignExpr.Operator enum.
@@ -256,5 +258,23 @@ public class AssignExpr extends Expression {
     @Override
     protected boolean isAssignmentContext() {
         return true;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Operator operator() {
+        return Objects.requireNonNull(operator);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression target() {
+        return Objects.requireNonNull(target);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression value() {
+        return Objects.requireNonNull(value);
     }
 }

@@ -15,6 +15,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class KeyExecutionContext extends KeyAbstractExecutionContext {
 
@@ -163,5 +166,23 @@ public class KeyExecutionContext extends KeyAbstractExecutionContext {
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyExecutionContext removeInstance() {
         return setInstance((Expression) null);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type context() {
+        return Objects.requireNonNull(context);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression instance() {
+        return instance;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public KeyMethodSignature signature() {
+        return Objects.requireNonNull(signature);
     }
 }

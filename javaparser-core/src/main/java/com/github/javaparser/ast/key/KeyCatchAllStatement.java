@@ -17,6 +17,8 @@ import com.github.javaparser.metamodel.KeyCatchAllStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.key.sv.*;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyCatchAllStatement extends Statement {
 
@@ -141,5 +143,17 @@ public class KeyCatchAllStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyCatchAllStatementMetaModel getMetaModel() {
         return JavaParserMetaModel.keyCatchAllStatementMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public BlockStmt block() {
+        return Objects.requireNonNull(block);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name label() {
+        return Objects.requireNonNull(label);
     }
 }

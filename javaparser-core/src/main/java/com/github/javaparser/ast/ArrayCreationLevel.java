@@ -34,6 +34,9 @@ import com.github.javaparser.metamodel.ArrayCreationLevelMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * In {@code new int[1][2];} there are two ArrayCreationLevel objects,
@@ -187,5 +190,17 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression dimension() {
+        return dimension;
     }
 }

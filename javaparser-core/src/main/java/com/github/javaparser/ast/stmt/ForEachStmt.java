@@ -39,6 +39,8 @@ import com.github.javaparser.metamodel.ForEachStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A for-each statement.
@@ -233,5 +235,23 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt> 
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ForEachStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.forEachStmtMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Statement body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression iterable() {
+        return Objects.requireNonNull(iterable);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public VariableDeclarationExpr variable() {
+        return Objects.requireNonNull(variable);
     }
 }

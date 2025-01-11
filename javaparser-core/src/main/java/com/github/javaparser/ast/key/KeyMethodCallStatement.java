@@ -17,6 +17,9 @@ import com.github.javaparser.metamodel.KeyMethodCallStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.OptionalProperty;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class KeyMethodCallStatement extends Statement {
 
@@ -189,5 +192,23 @@ public class KeyMethodCallStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public KeyMethodCallStatement removeName() {
         return setName((Name) null);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public BlockStmt block() {
+        return Objects.requireNonNull(block);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public KeyAbstractExecutionContext context() {
+        return Objects.requireNonNull(context);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return name;
     }
 }

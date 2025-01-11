@@ -36,6 +36,8 @@ import com.github.javaparser.metamodel.ExpressionStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Used to wrap an expression so that it can take the place of a statement.
@@ -143,5 +145,11 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ExpressionStmt> toExpressionStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

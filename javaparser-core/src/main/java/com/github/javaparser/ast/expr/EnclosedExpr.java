@@ -33,6 +33,8 @@ import com.github.javaparser.metamodel.EnclosedExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An expression between ( ).
@@ -156,5 +158,11 @@ public class EnclosedExpr extends Expression {
     @Override
     public boolean isPolyExpression() {
         return getInner().isPolyExpression();
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression inner() {
+        return Objects.requireNonNull(inner);
     }
 }

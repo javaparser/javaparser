@@ -37,6 +37,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SwitchStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>The switch statement</h1>
@@ -223,5 +225,17 @@ public class SwitchStmt extends Statement implements SwitchNode {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SwitchStmt> toSwitchStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<SwitchEntry> entries() {
+        return Objects.requireNonNull(entries);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression selector() {
+        return Objects.requireNonNull(selector);
     }
 }

@@ -82,8 +82,9 @@ class CommentsInserter {
         2) be outside all children. They could be preceding nothing, a comment or a child.
            If they preceed a child they are assigned to it, otherwise they remain "orphans"
         */
-        List<Node> children = // Never attribute comments to modifiers.
-        node.getChildNodes().stream().filter(n -> !(n instanceof Modifier)).collect(toList());
+        // Never attribute comments to modifiers.
+        List<Node> // Never attribute comments to modifiers.
+        children = node.getChildNodes().stream().filter(n -> !(n instanceof Modifier)).collect(toList());
         boolean attributeToAnnotation = !(configuration.isIgnoreAnnotationsWhenAttributingComments());
         for (Node child : children) {
             TreeSet<Comment> commentsInsideChild = new TreeSet<>(NODE_BY_BEGIN_POSITION);

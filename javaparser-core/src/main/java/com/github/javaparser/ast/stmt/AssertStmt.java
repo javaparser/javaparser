@@ -36,6 +36,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A usage of the keyword "assert"
@@ -201,5 +204,17 @@ public class AssertStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AssertStmt> toAssertStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression check() {
+        return Objects.requireNonNull(check);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression message() {
+        return message;
     }
 }

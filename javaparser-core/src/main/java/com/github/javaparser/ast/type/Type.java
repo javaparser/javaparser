@@ -38,6 +38,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Base class for types.
@@ -406,5 +408,11 @@ public abstract class Type extends Node implements Resolvable<ResolvedType>, Con
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifVarType(Consumer<VarType> action) {
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
     }
 }

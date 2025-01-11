@@ -74,6 +74,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -1308,5 +1310,17 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
         this.associatedSpecificationComments = associatedSpecificationComments;
         setAsParentNodeOf(associatedSpecificationComments);
         return this;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Comment> associatedSpecificationComments() {
+        return associatedSpecificationComments;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Comment comment() {
+        return comment;
     }
 }

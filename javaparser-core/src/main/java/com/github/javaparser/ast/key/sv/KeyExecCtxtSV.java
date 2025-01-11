@@ -14,6 +14,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyExecCtxtSVMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyExecCtxtSV extends Statement {
 
@@ -96,5 +98,11 @@ public class KeyExecCtxtSV extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyExecCtxtSV(Consumer<KeyExecCtxtSV> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String text() {
+        return Objects.requireNonNull(text);
     }
 }

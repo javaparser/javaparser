@@ -16,6 +16,9 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyContextStatementBlockMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class KeyContextStatementBlock extends Statement {
 
@@ -295,5 +298,35 @@ public class KeyContextStatementBlock extends Statement {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyContextStatementBlockMetaModel getMetaModel() {
         return JavaParserMetaModel.keyContextStatementBlockMetaModel;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public KeyExecCtxtSV context() {
+        return context;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public KeyExpressionSV expression() {
+        return expression;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public KeyMethodSignatureSV signature() {
+        return signature;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Statement> statements() {
+        return Objects.requireNonNull(statements);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public KeyTypeSV tr() {
+        return tr;
     }
 }

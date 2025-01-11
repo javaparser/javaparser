@@ -16,6 +16,8 @@ import com.github.javaparser.metamodel.KeyMetaConstructMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyMetaConstruct extends Statement {
 
@@ -192,5 +194,23 @@ public class KeyMetaConstruct extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyMetaConstruct(Consumer<KeyMetaConstruct> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Node child() {
+        return Objects.requireNonNull(child);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String kind() {
+        return Objects.requireNonNull(kind);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Node> schemas() {
+        return Objects.requireNonNull(schemas);
     }
 }

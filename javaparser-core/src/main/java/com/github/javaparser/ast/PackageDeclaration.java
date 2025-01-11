@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PackageDeclarationMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A package declaration.
@@ -183,5 +185,17 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

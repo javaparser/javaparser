@@ -36,6 +36,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.YieldStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>The yield statement</h1>
@@ -153,5 +155,11 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public YieldStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.yieldStmtMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

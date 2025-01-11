@@ -37,6 +37,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.SynchronizedStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Usage of the synchronized keyword.
@@ -171,5 +173,17 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SynchronizedStmt> toSynchronizedStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public BlockStmt body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

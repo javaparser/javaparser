@@ -15,6 +15,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyMergePointStatement extends Statement {
 
@@ -113,5 +115,11 @@ public class KeyMergePointStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyMergePointStatement(Consumer<KeyMergePointStatement> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expr() {
+        return Objects.requireNonNull(expr);
     }
 }

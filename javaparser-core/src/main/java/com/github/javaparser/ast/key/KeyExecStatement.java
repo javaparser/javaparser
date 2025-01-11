@@ -16,6 +16,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyExecStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyExecStatement extends Statement {
 
@@ -157,5 +159,17 @@ public class KeyExecStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyExecStatement(Consumer<KeyExecStatement> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<KeyCcatchBranch> branches() {
+        return Objects.requireNonNull(branches);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public BlockStmt execBlock() {
+        return Objects.requireNonNull(execBlock);
     }
 }

@@ -35,6 +35,9 @@ import com.github.javaparser.metamodel.NameMetaModel;
 import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A name that may consist of multiple identifiers.
@@ -195,5 +198,17 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
      */
     public boolean isInternal() {
         return getParentNode().filter(parent -> parent instanceof Name).isPresent();
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String identifier() {
+        return Objects.requireNonNull(identifier);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name qualifier() {
+        return qualifier;
     }
 }

@@ -37,6 +37,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleDeclarationMetaModel;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A Java 9 Jigsaw module declaration. {@code @Foo module com.github.abc { requires a.B; }}
@@ -148,9 +150,10 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
         return super.remove(node);
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isOpen() {
-        return isOpen;
+        return Objects.requireNonNull(isOpen);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -229,5 +232,23 @@ public class ModuleDeclaration extends Node implements NodeWithName<ModuleDeclar
     public ModuleDeclaration addDirective(ModuleDirective directive) {
         getDirectives().add(directive);
         return this;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ModuleDirective> directives() {
+        return Objects.requireNonNull(directives);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

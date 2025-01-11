@@ -1857,8 +1857,8 @@ public class DefaultPrettyPrinterVisitor implements VoidVisitor<Void> {
     public void visit(final CatchClause n, final Void arg) {
         printOrphanCommentsBeforeThisChildNode(n);
         printComment(n.getComment(), arg);
-        if(n instanceof KeyCatchClauseSV sv){
-            printer.print(" catch #"+sv.getSchemaVar()+";");
+        if (n instanceof KeyCatchClauseSV sv) {
+            printer.print(" catch #" + sv.getSchemaVar() + ";");
             return;
         }
         printer.print(" catch (");

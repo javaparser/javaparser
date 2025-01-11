@@ -52,6 +52,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A class or an interface type.
@@ -353,5 +356,23 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
             return new ResolvedTypeVariable(typeDeclaration.asTypeParameter());
         }
         return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ClassOrInterfaceType scope() {
+        return scope;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

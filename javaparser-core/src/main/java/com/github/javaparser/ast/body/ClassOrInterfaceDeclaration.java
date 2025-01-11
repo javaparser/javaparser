@@ -43,6 +43,8 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A definition of a class or interface.<br>{@code class X { ... }}<br>{@code interface X { ... }}
@@ -121,9 +123,10 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
         return typeParameters;
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isInterface() {
-        return isInterface;
+        return Objects.requireNonNull(isInterface);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -320,5 +323,29 @@ public class ClassOrInterfaceDeclaration extends TypeDeclaration<ClassOrInterfac
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassOrInterfaceDeclaration> toClassOrInterfaceDeclaration() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ClassOrInterfaceType> extendedTypes() {
+        return Objects.requireNonNull(extendedTypes);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ClassOrInterfaceType> implementedTypes() {
+        return Objects.requireNonNull(implementedTypes);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ClassOrInterfaceType> permittedTypes() {
+        return Objects.requireNonNull(permittedTypes);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<TypeParameter> typeParameters() {
+        return Objects.requireNonNull(typeParameters);
     }
 }

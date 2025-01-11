@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyTransactionStatement extends Statement {
 
@@ -122,5 +124,11 @@ public class KeyTransactionStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyTransactionStatement(Consumer<KeyTransactionStatement> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public TransactionType type() {
+        return Objects.requireNonNull(type);
     }
 }

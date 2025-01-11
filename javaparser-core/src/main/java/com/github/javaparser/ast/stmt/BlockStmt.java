@@ -35,6 +35,8 @@ import com.github.javaparser.metamodel.BlockStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Statements in between { and }.
@@ -159,5 +161,11 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BlockStmt> toBlockStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Statement> statements() {
+        return Objects.requireNonNull(statements);
     }
 }

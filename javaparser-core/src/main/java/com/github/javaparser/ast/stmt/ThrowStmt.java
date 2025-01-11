@@ -36,6 +36,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ThrowStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Usage of the throw statement.
@@ -144,5 +146,11 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ThrowStmt> toThrowStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

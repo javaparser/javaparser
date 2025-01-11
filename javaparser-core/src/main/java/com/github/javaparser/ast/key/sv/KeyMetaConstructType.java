@@ -21,6 +21,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyMetaConstructTypeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyMetaConstructType extends Type {
 
@@ -158,5 +160,17 @@ public class KeyMetaConstructType extends Type {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyMetaConstructType(Consumer<KeyMetaConstructType> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expr() {
+        return Objects.requireNonNull(expr);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String kind() {
+        return Objects.requireNonNull(kind);
     }
 }

@@ -12,6 +12,8 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyCcatchSVMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @author Alexander Weigl
@@ -74,5 +76,11 @@ public class KeyCcatchSV extends KeyCcatchBranch {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyCcatchSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyCcatchSVMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String text() {
+        return Objects.requireNonNull(text);
     }
 }

@@ -39,6 +39,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * The <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4.1-220">receiver parameter</a> feature of Java.
@@ -215,5 +217,23 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

@@ -18,6 +18,9 @@ import com.github.javaparser.metamodel.KeyEscapeExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.OptionalProperty;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class KeyEscapeExpression extends Expression {
 
@@ -168,5 +171,17 @@ public class KeyEscapeExpression extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyEscapeExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.keyEscapeExpressionMetaModel;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Expression> arguments() {
+        return arguments;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name callee() {
+        return Objects.requireNonNull(callee);
     }
 }

@@ -15,6 +15,8 @@ import com.github.javaparser.metamodel.KeYCcatchReturnMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.KeyCcatchReturnMetaModel;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 public class KeyCcatchReturn extends KeyCcatchBranch {
 
@@ -166,5 +168,17 @@ public class KeyCcatchReturn extends KeyCcatchBranch {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyCcatchReturnMetaModel getMetaModel() {
         return JavaParserMetaModel.keyCcatchReturnMetaModel;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public BlockStmt block() {
+        return block;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Parameter parameter() {
+        return parameter;
     }
 }

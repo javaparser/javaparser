@@ -34,6 +34,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LocalRecordDeclarationStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>A record declaration inside a method.</h1>
@@ -142,5 +144,11 @@ public class LocalRecordDeclarationStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LocalRecordDeclarationStmt> toLocalRecordDeclarationStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public RecordDeclaration recordDeclaration() {
+        return Objects.requireNonNull(recordDeclaration);
     }
 }

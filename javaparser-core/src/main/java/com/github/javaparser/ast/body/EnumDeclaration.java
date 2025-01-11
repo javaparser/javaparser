@@ -38,6 +38,8 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedEnumDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * The declaration of an enum.<br>{@code enum X { ... }}
@@ -226,5 +228,17 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnumDeclaration> toEnumDeclaration() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<EnumConstantDeclaration> entries() {
+        return Objects.requireNonNull(entries);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ClassOrInterfaceType> implementedTypes() {
+        return Objects.requireNonNull(implementedTypes);
     }
 }

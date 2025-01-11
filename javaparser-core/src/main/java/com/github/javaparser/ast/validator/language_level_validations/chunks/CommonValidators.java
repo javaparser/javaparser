@@ -59,7 +59,6 @@ public class CommonValidators extends Validators {
             if (target instanceof KeyPassiveExpression) {
                 return;
             }
-
             reporter.report(n.getTarget(), "Illegal left hand side of an assignment.");
         }), new TreeVisitorValidator((node, problemReporter) -> {
             NodeMetaModel mm = node.getMetaModel();

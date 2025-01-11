@@ -41,6 +41,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.LambdaExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>A lambda expression</h1>
@@ -168,9 +170,10 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
         v.visit(this, arg);
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isEnclosingParameters() {
-        return isEnclosingParameters;
+        return Objects.requireNonNull(isEnclosingParameters);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -278,5 +281,17 @@ public class LambdaExpr extends Expression implements NodeWithParameters<LambdaE
      */
     public boolean isExplicitlyTyped() {
         return getParameters().stream().allMatch(p -> !(p.getType().isUnknownType()));
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Statement body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Parameter> parameters() {
+        return Objects.requireNonNull(parameters);
     }
 }

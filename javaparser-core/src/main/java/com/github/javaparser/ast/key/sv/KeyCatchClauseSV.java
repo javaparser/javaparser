@@ -11,6 +11,7 @@ import com.github.javaparser.ast.stmt.CatchClause;
  * @version 1 (10/31/21)
  */
 public class KeyCatchClauseSV extends CatchClause {
+
     private final String schemaVar;
 
     public KeyCatchClauseSV(TokenRange range, String text) {

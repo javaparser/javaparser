@@ -36,6 +36,8 @@ import com.github.javaparser.metamodel.UnaryExprMetaModel;
 import com.github.javaparser.printer.Stringable;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An expression where an operator is applied to a single expression.
@@ -210,5 +212,17 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<UnaryExpr> toUnaryExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Operator operator() {
+        return Objects.requireNonNull(operator);
     }
 }

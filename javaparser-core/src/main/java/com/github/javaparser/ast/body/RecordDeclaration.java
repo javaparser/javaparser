@@ -46,6 +46,9 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>The record declaration</h1>
@@ -387,5 +390,29 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
      */
     public List<CompactConstructorDeclaration> getCompactConstructors() {
         return unmodifiableList(getMembers().stream().filter(m -> m instanceof CompactConstructorDeclaration).map(m -> (CompactConstructorDeclaration) m).collect(toList()));
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ClassOrInterfaceType> implementedTypes() {
+        return Objects.requireNonNull(implementedTypes);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Parameter> parameters() {
+        return Objects.requireNonNull(parameters);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReceiverParameter receiverParameter() {
+        return receiverParameter;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<TypeParameter> typeParameters() {
+        return Objects.requireNonNull(typeParameters);
     }
 }

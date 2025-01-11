@@ -30,6 +30,8 @@ import com.github.javaparser.metamodel.ModifierMetaModel;
 import java.util.Arrays;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A modifier, like private, public, or volatile.
@@ -199,5 +201,11 @@ public class Modifier extends Node {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModifierMetaModel getMetaModel() {
         return JavaParserMetaModel.modifierMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Keyword keyword() {
+        return Objects.requireNonNull(keyword);
     }
 }

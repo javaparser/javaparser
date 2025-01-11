@@ -41,6 +41,9 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
@@ -441,5 +444,41 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
      */
     public boolean isFixedArityMethod() {
         return !isVariableArityMethod();
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Parameter> parameters() {
+        return Objects.requireNonNull(parameters);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReceiverParameter receiverParameter() {
+        return receiverParameter;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ReferenceType> thrownExceptions() {
+        return Objects.requireNonNull(thrownExceptions);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<TypeParameter> typeParameters() {
+        return Objects.requireNonNull(typeParameters);
     }
 }

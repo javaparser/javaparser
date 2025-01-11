@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
@@ -332,5 +334,17 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     public ResolvedType convertToUsage(Context context) {
         return new ResolvedArrayType(getComponentType().convertToUsage(context));
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type componentType() {
+        return Objects.requireNonNull(componentType);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Origin origin() {
+        return Objects.requireNonNull(origin);
     }
 }

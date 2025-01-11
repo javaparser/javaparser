@@ -36,6 +36,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypeExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This class is just instantiated as scopes for MethodReferenceExpr nodes to encapsulate Types.
@@ -145,5 +147,11 @@ public class TypeExpr extends Expression implements NodeWithType<TypeExpr, Type>
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TypeExpr> toTypeExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

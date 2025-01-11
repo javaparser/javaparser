@@ -18,6 +18,8 @@ import com.github.javaparser.metamodel.KeyTypeSVMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.ast.Node;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyTypeSV extends Type {
 
@@ -121,5 +123,11 @@ public class KeyTypeSV extends Type {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyTypeSV(Consumer<KeyTypeSV> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String text() {
+        return Objects.requireNonNull(text);
     }
 }

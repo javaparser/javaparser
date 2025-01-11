@@ -12,6 +12,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @author Alexander Weigl
@@ -74,5 +76,11 @@ public class KeyExecutionContextSV extends KeyAbstractExecutionContext {
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String text() {
+        return Objects.requireNonNull(text);
     }
 }

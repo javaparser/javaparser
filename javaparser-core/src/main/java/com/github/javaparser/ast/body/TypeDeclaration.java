@@ -40,6 +40,8 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A base class for all types of type declarations.
@@ -276,4 +278,22 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     }
 
     public abstract ResolvedReferenceTypeDeclaration resolve();
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<BodyDeclaration<?>> members() {
+        return Objects.requireNonNull(members);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
 }

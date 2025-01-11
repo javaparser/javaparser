@@ -18,6 +18,9 @@ import com.github.javaparser.metamodel.KeyMethodBodyStatementMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
 import com.github.javaparser.metamodel.OptionalProperty;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class KeyMethodBodyStatement extends Statement {
 
@@ -190,5 +193,23 @@ public class KeyMethodBodyStatement extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyMethodBodyStatement(Consumer<KeyMethodBodyStatement> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expr() {
+        return Objects.requireNonNull(expr);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return name;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type source() {
+        return Objects.requireNonNull(source);
     }
 }

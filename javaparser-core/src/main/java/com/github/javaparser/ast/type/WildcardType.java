@@ -39,6 +39,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedWildcard;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A wildcard type argument. Examples:
@@ -279,5 +281,17 @@ public class WildcardType extends Type implements NodeWithAnnotations<WildcardTy
             return ResolvedWildcard.UNBOUNDED;
         }
         throw new UnsupportedOperationException(toString());
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReferenceType extendedType() {
+        return extendedType;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ReferenceType superType() {
+        return superType;
     }
 }

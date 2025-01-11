@@ -39,6 +39,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ParameterMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
@@ -124,9 +126,10 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         return type;
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isVarArgs() {
-        return isVarArgs;
+        return Objects.requireNonNull(isVarArgs);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -341,5 +344,35 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         }
         // Otherwise use the default implementation.
         return NodeWithFinalModifier.super.isFinal();
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type type() {
+        return Objects.requireNonNull(type);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> varArgsAnnotations() {
+        return Objects.requireNonNull(varArgsAnnotations);
     }
 }

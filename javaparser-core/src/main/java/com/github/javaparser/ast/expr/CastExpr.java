@@ -37,6 +37,8 @@ import com.github.javaparser.metamodel.CastExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A typecast. The (long) in {@code (long)15}
@@ -170,5 +172,17 @@ public class CastExpr extends Expression implements NodeWithType<CastExpr, Type>
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<CastExpr> toCastExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

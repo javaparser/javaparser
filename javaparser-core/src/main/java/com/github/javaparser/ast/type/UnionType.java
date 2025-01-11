@@ -43,6 +43,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>The union type</h1>
@@ -201,5 +203,11 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     public ResolvedType convertToUsage(Context context) {
         List<ResolvedType> resolvedElements = getElements().stream().map(el -> el.convertToUsage(context)).collect(Collectors.toList());
         return new ResolvedUnionType(resolvedElements);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ReferenceType> elements() {
+        return Objects.requireNonNull(elements);
     }
 }

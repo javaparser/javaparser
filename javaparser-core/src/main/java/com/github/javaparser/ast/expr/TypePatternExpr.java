@@ -35,6 +35,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.TypePatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>The instanceof statement</h1>
@@ -214,5 +216,17 @@ public class TypePatternExpr extends PatternExpr implements NodeWithSimpleName<T
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifTypePatternExpr(Consumer<TypePatternExpr> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
     }
 }

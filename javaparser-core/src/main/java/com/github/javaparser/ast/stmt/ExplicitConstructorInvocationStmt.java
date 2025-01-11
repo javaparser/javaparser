@@ -42,6 +42,9 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A call to super or this in a constructor or initializer.
@@ -112,9 +115,10 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         return Optional.ofNullable(expression);
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isThis() {
-        return isThis;
+        return Objects.requireNonNull(isThis);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -298,5 +302,23 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ExplicitConstructorInvocationStmt> toExplicitConstructorInvocationStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Expression> arguments() {
+        return Objects.requireNonNull(arguments);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expression() {
+        return expression;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

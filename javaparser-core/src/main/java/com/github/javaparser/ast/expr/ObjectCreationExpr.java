@@ -46,6 +46,9 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A constructor call.
@@ -381,5 +384,35 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Override
     public boolean isPolyExpression() {
         return isUsingDiamondOperator() && (appearsInInvocationContext() || appearsInAssignmentContext());
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<BodyDeclaration<?>> anonymousClassBody() {
+        return anonymousClassBody;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Expression> arguments() {
+        return Objects.requireNonNull(arguments);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression scope() {
+        return scope;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ClassOrInterfaceType type() {
+        return Objects.requireNonNull(type);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

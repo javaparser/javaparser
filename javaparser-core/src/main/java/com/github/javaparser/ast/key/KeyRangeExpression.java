@@ -14,6 +14,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyRangeExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyRangeExpression extends Expression {
 
@@ -138,5 +140,17 @@ public class KeyRangeExpression extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyRangeExpressionMetaModel getMetaModel() {
         return JavaParserMetaModel.keyRangeExpressionMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression lower() {
+        return Objects.requireNonNull(lower);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression upper() {
+        return Objects.requireNonNull(upper);
     }
 }

@@ -37,6 +37,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleExportsDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An exports directive in module-info.java. {@code exports R.S to T1.U1, T2.U2;}
@@ -213,5 +215,17 @@ public class ModuleExportsDirective extends ModuleDirective implements NodeWithN
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleExportsDirectiveMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleExportsDirectiveMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Name> moduleNames() {
+        return Objects.requireNonNull(moduleNames);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

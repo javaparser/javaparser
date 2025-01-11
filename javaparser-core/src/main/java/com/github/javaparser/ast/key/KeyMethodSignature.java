@@ -14,6 +14,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyMethodSignatureMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyMethodSignature extends Node {
 
@@ -131,5 +133,17 @@ public class KeyMethodSignature extends Node {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyMethodSignatureMetaModel getMetaModel() {
         return JavaParserMetaModel.keyMethodSignatureMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Type> paramTypes() {
+        return Objects.requireNonNull(paramTypes);
     }
 }

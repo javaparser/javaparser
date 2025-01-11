@@ -31,6 +31,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.ImportDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An import declaration.
@@ -99,14 +101,16 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     /**
      * Return if the import ends with "*".
      */
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isAsterisk() {
-        return isAsterisk;
+        return Objects.requireNonNull(isAsterisk);
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
-        return isStatic;
+        return Objects.requireNonNull(isStatic);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -166,5 +170,11 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

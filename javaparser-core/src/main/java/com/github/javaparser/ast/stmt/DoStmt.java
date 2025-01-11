@@ -37,6 +37,8 @@ import com.github.javaparser.metamodel.DoStmtMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A do-while.
@@ -171,5 +173,17 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<DoStmt> toDoStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Statement body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression condition() {
+        return Objects.requireNonNull(condition);
     }
 }

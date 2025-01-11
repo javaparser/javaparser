@@ -14,6 +14,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyPassiveExpressionMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyPassiveExpression extends Expression {
 
@@ -112,5 +114,11 @@ public class KeyPassiveExpression extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyPassiveExpression(Consumer<KeyPassiveExpression> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression expr() {
+        return Objects.requireNonNull(expr);
     }
 }

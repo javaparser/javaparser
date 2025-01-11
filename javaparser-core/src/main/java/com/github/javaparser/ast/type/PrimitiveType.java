@@ -41,6 +41,8 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A primitive type.
@@ -265,5 +267,11 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Override
     public ResolvedType convertToUsage(Context context) {
         return ResolvedPrimitiveType.byName(getType().name());
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Primitive type() {
+        return Objects.requireNonNull(type);
     }
 }

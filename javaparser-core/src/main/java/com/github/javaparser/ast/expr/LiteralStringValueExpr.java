@@ -31,6 +31,8 @@ import com.github.javaparser.metamodel.LiteralStringValueExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Any literal value that is stored internally as a String.
@@ -104,5 +106,11 @@ public abstract class LiteralStringValueExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LiteralStringValueExpr> toLiteralStringValueExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String value() {
+        return Objects.requireNonNull(value);
     }
 }

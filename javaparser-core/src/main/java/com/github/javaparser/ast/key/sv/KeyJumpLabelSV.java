@@ -12,6 +12,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyJumpLabelSVMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyJumpLabelSV extends Node {
 
@@ -74,5 +76,11 @@ public class KeyJumpLabelSV extends Node {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public KeyJumpLabelSVMetaModel getMetaModel() {
         return JavaParserMetaModel.keyJumpLabelSVMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public String text() {
+        return Objects.requireNonNull(text);
     }
 }

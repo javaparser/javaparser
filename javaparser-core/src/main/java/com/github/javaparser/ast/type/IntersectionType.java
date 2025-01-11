@@ -41,6 +41,8 @@ import com.github.javaparser.resolution.types.ResolvedIntersectionType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a set of types. A given value of this type has to be assignable to at all of the element types.
@@ -189,5 +191,11 @@ public class IntersectionType extends Type implements NodeWithAnnotations<Inters
     @Override
     public ResolvedType convertToUsage(Context context) {
         throw new UnsupportedOperationException(getClass().getCanonicalName());
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ReferenceType> elements() {
+        return Objects.requireNonNull(elements);
     }
 }

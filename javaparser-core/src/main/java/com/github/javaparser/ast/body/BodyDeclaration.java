@@ -35,6 +35,8 @@ import com.github.javaparser.metamodel.BodyDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Any declaration that can appear between the { and } of a class, interface, enum, or record.
@@ -375,5 +377,11 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<CompactConstructorDeclaration> toCompactConstructorDeclaration() {
         return Optional.empty();
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
     }
 }

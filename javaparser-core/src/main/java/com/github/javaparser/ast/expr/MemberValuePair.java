@@ -32,6 +32,8 @@ import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.MemberValuePairMetaModel;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A value for a member of an annotation.
@@ -146,5 +148,17 @@ public class MemberValuePair extends Node implements NodeWithSimpleName<MemberVa
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression value() {
+        return Objects.requireNonNull(value);
     }
 }

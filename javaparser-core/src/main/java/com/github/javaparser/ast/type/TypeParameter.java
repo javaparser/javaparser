@@ -42,6 +42,8 @@ import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A type parameter. Examples:
@@ -246,5 +248,17 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
     @Override
     public ResolvedType convertToUsage(Context context) {
         throw new UnsupportedOperationException(getClass().getCanonicalName());
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ClassOrInterfaceType> typeBound() {
+        return Objects.requireNonNull(typeBound);
     }
 }

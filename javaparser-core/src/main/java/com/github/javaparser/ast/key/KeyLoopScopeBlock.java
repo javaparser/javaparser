@@ -16,6 +16,8 @@ import com.github.javaparser.ast.visitor.CloneVisitor;
 import com.github.javaparser.metamodel.KeyLoopScopeBlockMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.ast.Generated;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 public class KeyLoopScopeBlock extends Statement {
 
@@ -141,5 +143,17 @@ public class KeyLoopScopeBlock extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifKeyLoopScopeBlock(Consumer<KeyLoopScopeBlock> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public BlockStmt block() {
+        return Objects.requireNonNull(block);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Expression indexPV() {
+        return Objects.requireNonNull(indexPV);
     }
 }

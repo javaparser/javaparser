@@ -59,6 +59,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <p>
@@ -848,5 +850,29 @@ public class CompilationUnit extends Node {
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<ImportDeclaration> imports() {
+        return Objects.requireNonNull(imports);
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public ModuleDeclaration module() {
+        return module;
+    }
+
+    @Nullable()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public PackageDeclaration packageDeclaration() {
+        return packageDeclaration;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<TypeDeclaration<?>> types() {
+        return Objects.requireNonNull(types);
     }
 }

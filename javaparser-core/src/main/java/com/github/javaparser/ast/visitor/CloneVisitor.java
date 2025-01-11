@@ -919,8 +919,7 @@ public class CloneVisitor implements GenericVisitor<Visitable, Object> {
         NodeList<Statement> statements = cloneList(n.getStatements(), arg);
         NodeList<Comment> associatedSpecificationComments = cloneList(n.getAssociatedSpecificationComments().orElse(null), arg);
         Comment comment = cloneNode(n.getComment(), arg);
-        SwitchEntry r =
-                new SwitchEntry(n.getTokenRange().orElse(null), labels, n.getType(), statements, n.isDefault(), guard);
+        SwitchEntry r = new SwitchEntry(n.getTokenRange().orElse(null), labels, n.getType(), statements, n.isDefault(), guard);
         r.setComment(comment);
         n.getOrphanComments().stream().map(Comment::clone).forEach(r::addOrphanComment);
         copyData(n, r);

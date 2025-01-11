@@ -36,6 +36,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleOpensDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An opens directive in module-info.java. {@code opens R.S to T1.U1, T2.U2;}
@@ -207,5 +209,17 @@ public class ModuleOpensDirective extends ModuleDirective implements NodeWithNam
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleOpensDirectiveMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleOpensDirectiveMetaModel;
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Name> moduleNames() {
+        return Objects.requireNonNull(moduleNames);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

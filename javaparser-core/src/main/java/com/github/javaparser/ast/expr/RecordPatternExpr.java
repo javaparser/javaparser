@@ -38,6 +38,8 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.RecordPatternExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>Record Patterns</h1>
@@ -236,5 +238,17 @@ public class RecordPatternExpr extends PatternExpr implements NodeWithFinalModif
         setModifiers(modifiers);
         setPatternList(patternList);
         customInitialization();
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    public NodeList<PatternExpr> patternList() {
+        return Objects.requireNonNull(patternList);
     }
 }
