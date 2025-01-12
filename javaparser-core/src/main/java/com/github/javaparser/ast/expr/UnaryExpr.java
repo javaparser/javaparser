@@ -37,6 +37,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * An expression where an operator is applied to a single expression.
  * It supports the operators that are found in the UnaryExpr.Operator enum.
@@ -210,5 +214,15 @@ public class UnaryExpr extends Expression implements NodeWithExpression<UnaryExp
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<UnaryExpr> toUnaryExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
+    }
+
+    @NonNull()
+    public Operator operator() {
+        return Objects.requireNonNull(operator);
     }
 }

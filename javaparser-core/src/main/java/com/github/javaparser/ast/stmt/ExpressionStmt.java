@@ -37,6 +37,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * Used to wrap an expression so that it can take the place of a statement.
  *
@@ -143,5 +147,10 @@ public class ExpressionStmt extends Statement implements NodeWithExpression<Expr
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ExpressionStmt> toExpressionStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

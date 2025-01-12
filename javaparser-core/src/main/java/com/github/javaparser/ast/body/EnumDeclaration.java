@@ -39,6 +39,10 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * The declaration of an enum.<br>{@code enum X { ... }}
  *
@@ -226,5 +230,15 @@ public class EnumDeclaration extends TypeDeclaration<EnumDeclaration> implements
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnumDeclaration> toEnumDeclaration() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public NodeList<EnumConstantDeclaration> entries() {
+        return Objects.requireNonNull(entries);
+    }
+
+    @NonNull()
+    public NodeList<ClassOrInterfaceType> implementedTypes() {
+        return Objects.requireNonNull(implementedTypes);
     }
 }

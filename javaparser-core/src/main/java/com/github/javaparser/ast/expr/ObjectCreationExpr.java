@@ -47,6 +47,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+
 /**
  * A constructor call.
  * <br>In {@code new HashMap.Entry<String, Long>(15) {public String getKey() {return null;}};}
@@ -381,5 +386,30 @@ public class ObjectCreationExpr extends Expression implements NodeWithTypeArgume
     @Override
     public boolean isPolyExpression() {
         return isUsingDiamondOperator() && (appearsInInvocationContext() || appearsInAssignmentContext());
+    }
+
+    @Nullable()
+    public NodeList<BodyDeclaration<?>> anonymousClassBody() {
+        return anonymousClassBody;
+    }
+
+    @NonNull()
+    public NodeList<Expression> arguments() {
+        return Objects.requireNonNull(arguments);
+    }
+
+    @Nullable()
+    public Expression scope() {
+        return scope;
+    }
+
+    @NonNull()
+    public ClassOrInterfaceType type() {
+        return Objects.requireNonNull(type);
+    }
+
+    @Nullable()
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

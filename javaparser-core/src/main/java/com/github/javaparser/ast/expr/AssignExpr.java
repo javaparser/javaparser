@@ -35,6 +35,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * An assignment expression. It supports the operators that are found the AssignExpr.Operator enum.
  * <br>{@code a=5}
@@ -256,5 +260,20 @@ public class AssignExpr extends Expression {
     @Override
     protected boolean isAssignmentContext() {
         return true;
+    }
+
+    @NonNull()
+    public Operator operator() {
+        return Objects.requireNonNull(operator);
+    }
+
+    @NonNull()
+    public Expression target() {
+        return Objects.requireNonNull(target);
+    }
+
+    @NonNull()
+    public Expression value() {
+        return Objects.requireNonNull(value);
     }
 }

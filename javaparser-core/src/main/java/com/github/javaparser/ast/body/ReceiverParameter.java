@@ -40,6 +40,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ReceiverParameterMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * The <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.4.1-220">receiver parameter</a> feature of Java.
  *
@@ -215,5 +219,20 @@ public class ReceiverParameter extends Node implements NodeWithType<ReceiverPara
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @NonNull()
+    public Name name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

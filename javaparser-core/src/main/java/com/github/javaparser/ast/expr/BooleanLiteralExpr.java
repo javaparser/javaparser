@@ -33,6 +33,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import com.github.javaparser.ast.Node;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * The boolean literals.
  * <br>{@code true}
@@ -132,5 +136,10 @@ public class BooleanLiteralExpr extends LiteralExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BooleanLiteralExpr> toBooleanLiteralExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public boolean value() {
+        return Objects.requireNonNull(value);
     }
 }

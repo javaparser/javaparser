@@ -49,6 +49,11 @@ import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+
 /**
  * The declaration of a variable.<br>In {@code int x = 14, y = 3;} "int x = 14"  and "int y = 3"  are
  * VariableDeclarators.
@@ -279,5 +284,20 @@ public class VariableDeclarator extends Node implements NodeWithType<VariableDec
     @Override
     public ResolvedValueDeclaration resolve() {
         return getSymbolResolver().resolveDeclaration(this, ResolvedValueDeclaration.class);
+    }
+
+    @Nullable()
+    public Expression initializer() {
+        return initializer;
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

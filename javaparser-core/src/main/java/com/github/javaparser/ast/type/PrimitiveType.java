@@ -42,6 +42,10 @@ import static com.github.javaparser.StaticJavaParser.parseClassOrInterfaceType;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.ast.Node;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A primitive type.
  * <br>{@code int}
@@ -265,5 +269,10 @@ public class PrimitiveType extends Type implements NodeWithAnnotations<Primitive
     @Override
     public ResolvedType convertToUsage(Context context) {
         return ResolvedPrimitiveType.byName(getType().name());
+    }
+
+    @NonNull()
+    public Primitive type() {
+        return Objects.requireNonNull(type);
     }
 }

@@ -44,6 +44,11 @@ import com.github.javaparser.metamodel.CallableDeclarationMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * Represents a declaration which is callable eg. a method or a constructor.
  */
@@ -476,5 +481,40 @@ public abstract class CallableDeclaration<T extends CallableDeclaration<?>> exte
      */
     public boolean isFixedArityMethod() {
         return !isVariableArityMethod();
+    }
+
+    @NonNull()
+    public NodeList<JmlContract> contracts() {
+        return Objects.requireNonNull(contracts);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public NodeList<Parameter> parameters() {
+        return Objects.requireNonNull(parameters);
+    }
+
+    @Nullable()
+    public ReceiverParameter receiverParameter() {
+        return receiverParameter;
+    }
+
+    @NonNull()
+    public NodeList<ReferenceType> thrownExceptions() {
+        return Objects.requireNonNull(thrownExceptions);
+    }
+
+    @NonNull()
+    public NodeList<TypeParameter> typeParameters() {
+        return Objects.requireNonNull(typeParameters);
     }
 }

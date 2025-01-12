@@ -43,6 +43,10 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Access of a field of an object or a class.
@@ -277,5 +281,20 @@ public class FieldAccessExpr extends Expression implements NodeWithSimpleName<Fi
      */
     public boolean isTopLevel() {
         return !isInternal();
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public Expression scope() {
+        return Objects.requireNonNull(scope);
+    }
+
+    @Nullable()
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

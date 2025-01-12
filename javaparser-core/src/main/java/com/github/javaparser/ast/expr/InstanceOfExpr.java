@@ -38,6 +38,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>The instanceof statement</h1>
@@ -291,5 +295,20 @@ public class InstanceOfExpr extends Expression implements NodeWithType<InstanceO
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<InstanceOfExpr> toInstanceOfExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
+    }
+
+    @Nullable()
+    public PatternExpr pattern() {
+        return pattern;
+    }
+
+    @NonNull()
+    public ReferenceType type() {
+        return Objects.requireNonNull(type);
     }
 }

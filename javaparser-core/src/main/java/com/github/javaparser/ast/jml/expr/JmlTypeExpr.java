@@ -16,6 +16,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (12/29/21)
@@ -117,5 +121,10 @@ public class JmlTypeExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlTypeExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlTypeExprMetaModel;
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

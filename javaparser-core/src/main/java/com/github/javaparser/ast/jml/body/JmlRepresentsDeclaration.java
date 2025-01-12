@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * REPRESENTS
  * ( expr | id ASSIGN expr | id SUCH_THAT expr)
@@ -227,5 +231,25 @@ public class JmlRepresentsDeclaration extends JmlClassLevelDeclaration<JmlRepres
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;
+    }
+
+    @NonNull()
+    public Expression expr() {
+        return Objects.requireNonNull(expr);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

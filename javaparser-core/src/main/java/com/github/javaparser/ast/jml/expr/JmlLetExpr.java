@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -150,5 +154,15 @@ public class JmlLetExpr extends Expression implements Jmlish {
         setVariables(variables);
         setBody(body);
         customInitialization();
+    }
+
+    @NonNull()
+    public Expression body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    public VariableDeclarationExpr variables() {
+        return Objects.requireNonNull(variables);
     }
 }

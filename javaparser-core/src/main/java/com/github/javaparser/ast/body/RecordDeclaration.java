@@ -47,6 +47,11 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * <h1>The record declaration</h1>
  * <strong>WARNING: This implementation is subject to change.</strong>
@@ -387,5 +392,25 @@ public class RecordDeclaration extends TypeDeclaration<RecordDeclaration> implem
      */
     public List<CompactConstructorDeclaration> getCompactConstructors() {
         return unmodifiableList(getMembers().stream().filter(m -> m instanceof CompactConstructorDeclaration).map(m -> (CompactConstructorDeclaration) m).collect(toList()));
+    }
+
+    @NonNull()
+    public NodeList<ClassOrInterfaceType> implementedTypes() {
+        return Objects.requireNonNull(implementedTypes);
+    }
+
+    @NonNull()
+    public NodeList<Parameter> parameters() {
+        return Objects.requireNonNull(parameters);
+    }
+
+    @Nullable()
+    public ReceiverParameter receiverParameter() {
+        return receiverParameter;
+    }
+
+    @NonNull()
+    public NodeList<TypeParameter> typeParameters() {
+        return Objects.requireNonNull(typeParameters);
     }
 }

@@ -36,6 +36,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleProvidesDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * A provides directive in module-info.java. {@code provides X.Y with Z1.Z2, Z3.Z4;}
@@ -207,5 +210,15 @@ public class ModuleProvidesDirective extends ModuleDirective implements NodeWith
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleProvidesDirectiveMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleProvidesDirectiveMetaModel;
+    }
+
+    @NonNull()
+    public Name name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public NodeList<Name> with() {
+        return Objects.requireNonNull(with);
     }
 }

@@ -8,7 +8,6 @@ import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.GenericVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.metamodel.OptionalProperty;
-import com.github.javaparser.quality.Nullable;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Optional;
@@ -17,6 +16,11 @@ import com.github.javaparser.metamodel.JmlMethodSignatureMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.Generated;
+
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Alexander Weigl
@@ -177,5 +181,20 @@ public class JmlMethodSignature extends Node {
         setName(name);
         setArgumentTypes(argumentTypes);
         customInitialization();
+    }
+
+    @NonNull()
+    public NodeList<Type> argumentTypes() {
+        return Objects.requireNonNull(argumentTypes);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @Nullable()
+    public Type receiver() {
+        return receiver;
     }
 }

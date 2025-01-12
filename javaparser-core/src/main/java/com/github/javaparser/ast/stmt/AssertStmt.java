@@ -37,6 +37,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * A usage of the keyword "assert"
  * <br>In {@code assert dead : "Wasn't expecting to be dead here";} the check is "dead" and the message is the string.
@@ -202,5 +207,15 @@ public class AssertStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AssertStmt> toAssertStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Expression check() {
+        return Objects.requireNonNull(check);
+    }
+
+    @Nullable()
+    public Expression message() {
+        return message;
     }
 }

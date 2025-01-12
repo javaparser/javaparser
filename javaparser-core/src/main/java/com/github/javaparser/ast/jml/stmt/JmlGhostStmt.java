@@ -18,6 +18,10 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (3/26/21)
@@ -200,5 +204,15 @@ public class JmlGhostStmt extends JmlStatement implements NodeWithJmlTags<JmlGho
             }
         }
         return super.remove(node);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @NonNull()
+    public Statement statement() {
+        return Objects.requireNonNull(statement);
     }
 }

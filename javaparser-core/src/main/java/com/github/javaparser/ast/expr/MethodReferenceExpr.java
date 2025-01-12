@@ -43,6 +43,11 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * Method reference expressions introduced in Java 8 specifically designed to simplify lambda Expressions.
  * Note that the field "identifier", indicating the word to the right of the ::, is not always a method name,
@@ -245,5 +250,20 @@ public class MethodReferenceExpr extends Expression implements NodeWithTypeArgum
     @Override
     public boolean isPolyExpression() {
         return true;
+    }
+
+    @NonNull()
+    public String identifier() {
+        return Objects.requireNonNull(identifier);
+    }
+
+    @NonNull()
+    public Expression scope() {
+        return Objects.requireNonNull(scope);
+    }
+
+    @Nullable()
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

@@ -35,6 +35,11 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * In {@code new int[1][2];} there are two ArrayCreationLevel objects,
  * the first one contains the expression "1",
@@ -187,5 +192,15 @@ public class ArrayCreationLevel extends Node implements NodeWithAnnotations<Arra
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @Nullable()
+    public Expression dimension() {
+        return dimension;
     }
 }

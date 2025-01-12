@@ -35,6 +35,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * A continue statement with an optional label;
@@ -176,5 +179,10 @@ public class ContinueStmt extends Statement implements NodeWithOptionalLabel<Con
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ContinueStmt> toContinueStmt() {
         return Optional.of(this);
+    }
+
+    @Nullable()
+    public SimpleName label() {
+        return label;
     }
 }

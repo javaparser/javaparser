@@ -39,6 +39,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * Whenever a SimpleName is used in an expression, it is wrapped in NameExpr.
  * <br>In {@code int x = a + 3;} a is a SimpleName inside a NameExpr.
@@ -168,5 +172,10 @@ public class NameExpr extends Expression implements NodeWithSimpleName<NameExpr>
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<NameExpr> toNameExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
     }
 }

@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (3/11/21)
@@ -166,5 +170,15 @@ public class JmlFieldDeclaration extends JmlClassLevelDeclaration<JmlFieldDeclar
             }
         }
         return super.remove(node);
+    }
+
+    @NonNull()
+    public FieldDeclaration decl() {
+        return Objects.requireNonNull(decl);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
     }
 }

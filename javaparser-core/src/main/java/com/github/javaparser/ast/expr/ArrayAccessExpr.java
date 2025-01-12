@@ -33,6 +33,9 @@ import com.github.javaparser.metamodel.ArrayAccessExprMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * Array brackets [] being used to get a value from an array.
@@ -172,5 +175,15 @@ public class ArrayAccessExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayAccessExpr> toArrayAccessExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Expression index() {
+        return Objects.requireNonNull(index);
+    }
+
+    @NonNull()
+    public Expression name() {
+        return Objects.requireNonNull(name);
     }
 }

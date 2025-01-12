@@ -35,6 +35,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * An annotation that has zero or more key-value pairs.<br>{@code @Mapping(a=5, d=10)}
  *
@@ -178,5 +182,10 @@ public class NormalAnnotationExpr extends AnnotationExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<NormalAnnotationExpr> toNormalAnnotationExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public NodeList<MemberValuePair> pairs() {
+        return Objects.requireNonNull(pairs);
     }
 }

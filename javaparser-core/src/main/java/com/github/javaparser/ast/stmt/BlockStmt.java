@@ -38,6 +38,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * Statements in between { and }.
  *
@@ -203,5 +207,15 @@ public class BlockStmt extends Statement implements NodeWithStatements<BlockStmt
         this.contracts = contracts;
         setAsParentNodeOf(contracts);
         return this;
+    }
+
+    @NonNull()
+    public NodeList<JmlContract> contracts() {
+        return Objects.requireNonNull(contracts);
+    }
+
+    @NonNull()
+    public NodeList<Statement> statements() {
+        return Objects.requireNonNull(statements);
     }
 }

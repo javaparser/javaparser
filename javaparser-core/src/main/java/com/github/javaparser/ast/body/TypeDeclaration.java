@@ -41,6 +41,10 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.toList;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A base class for all types of type declarations.
  *
@@ -277,4 +281,19 @@ public abstract class TypeDeclaration<T extends TypeDeclaration<?>> extends Body
     }
 
     public abstract ResolvedReferenceTypeDeclaration resolve();
+
+    @NonNull()
+    public NodeList<BodyDeclaration<?>> members() {
+        return Objects.requireNonNull(members);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
 }

@@ -39,6 +39,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * An if-then-else statement. The else is optional.
  * <br>In {@code if(a==5) hurray() else boo();} the condition is a==5,
@@ -259,5 +264,20 @@ public class IfStmt extends Statement implements NodeWithCondition<IfStmt> {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<IfStmt> toIfStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Expression condition() {
+        return Objects.requireNonNull(condition);
+    }
+
+    @Nullable()
+    public Statement elseStmt() {
+        return elseStmt;
+    }
+
+    @NonNull()
+    public Statement thenStmt() {
+        return Objects.requireNonNull(thenStmt);
     }
 }

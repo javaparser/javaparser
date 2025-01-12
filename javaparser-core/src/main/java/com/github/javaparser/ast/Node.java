@@ -59,6 +59,7 @@ import com.github.javaparser.printer.configuration.DefaultPrinterConfiguration.C
 import com.github.javaparser.printer.configuration.PrinterConfiguration;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.utils.LineSeparator;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for all nodes of the abstract syntax tree.
@@ -1270,5 +1271,10 @@ public abstract class Node implements Cloneable, HasParentNode<Node>, Visitable,
      */
     private boolean inPhantomNode(Node node, int levels) {
         return node.getParentNode().isPresent() && (isPhantom(node.getParentNode().get()) || inPhantomNode(node.getParentNode().get(), levels - 1));
+    }
+
+    @Nullable()
+    public Comment comment() {
+        return comment;
     }
 }

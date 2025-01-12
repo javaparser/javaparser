@@ -35,6 +35,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * The ternary conditional expression.
  * In {@code b==0?x:y}, b==0 is the condition, x is thenExpr, and y is elseExpr.
@@ -203,5 +207,20 @@ public class ConditionalExpr extends Expression implements NodeWithCondition<Con
     @Override
     public boolean isPolyExpression() {
         return appearsInAssignmentContext() || appearsInInvocationContext();
+    }
+
+    @NonNull()
+    public Expression condition() {
+        return Objects.requireNonNull(condition);
+    }
+
+    @NonNull()
+    public Expression elseExpr() {
+        return Objects.requireNonNull(elseExpr);
+    }
+
+    @NonNull()
+    public Expression thenExpr() {
+        return Objects.requireNonNull(thenExpr);
     }
 }

@@ -43,6 +43,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * A call to super or this in a constructor or initializer.
  * <br>{@code class X { X() { super(15); } }}
@@ -112,9 +117,10 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
         return Optional.ofNullable(expression);
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isThis() {
-        return isThis;
+        return Objects.requireNonNull(isThis);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -298,5 +304,20 @@ public class ExplicitConstructorInvocationStmt extends Statement implements Node
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ExplicitConstructorInvocationStmt> toExplicitConstructorInvocationStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public NodeList<Expression> arguments() {
+        return Objects.requireNonNull(arguments);
+    }
+
+    @Nullable()
+    public Expression expression() {
+        return expression;
+    }
+
+    @Nullable()
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

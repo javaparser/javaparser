@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -135,5 +139,10 @@ public class JmlRefiningStmt extends JmlStatement implements NodeWithJmlTags<Jml
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
     }
 }

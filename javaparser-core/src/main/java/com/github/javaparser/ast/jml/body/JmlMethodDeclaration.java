@@ -19,6 +19,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (4/5/21)
@@ -207,5 +212,20 @@ public class JmlMethodDeclaration extends JmlClassLevelDeclaration<JmlMethodDecl
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;
+    }
+
+    @Nullable()
+    public JmlContract contract() {
+        return contract;
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @NonNull()
+    public MethodDeclaration methodDeclaration() {
+        return Objects.requireNonNull(methodDeclaration);
     }
 }

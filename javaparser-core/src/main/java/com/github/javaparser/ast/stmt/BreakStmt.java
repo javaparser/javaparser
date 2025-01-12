@@ -34,6 +34,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>The break statement</h1>
@@ -188,5 +191,10 @@ public class BreakStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<BreakStmt> toBreakStmt() {
         return Optional.of(this);
+    }
+
+    @Nullable()
+    public SimpleName label() {
+        return label;
     }
 }

@@ -21,6 +21,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -273,5 +277,20 @@ public class JmlExpressionStmt extends JmlStatement implements NodeWithJmlTags<J
             }
         }
         return super.remove(node);
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @NonNull()
+    public JmlStmtKind kind() {
+        return Objects.requireNonNull(kind);
     }
 }

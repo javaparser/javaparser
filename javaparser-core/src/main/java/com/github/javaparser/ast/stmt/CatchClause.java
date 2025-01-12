@@ -35,6 +35,10 @@ import com.github.javaparser.metamodel.CatchClauseMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * The catch part of a try-catch-finally. <br>In {@code try { ... } catch (Exception e) { ... }} the CatchClause
  * is {@code catch (Exception e) { ... }}. Exception e is the parameter. The { ... } is the body.
@@ -153,5 +157,15 @@ public class CatchClause extends Node implements NodeWithBlockStmt<CatchClause> 
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    public BlockStmt body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    public Parameter parameter() {
+        return Objects.requireNonNull(parameter);
     }
 }

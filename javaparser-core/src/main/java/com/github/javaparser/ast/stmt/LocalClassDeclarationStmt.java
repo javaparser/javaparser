@@ -35,6 +35,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * <h1>A class declaration inside a method.</h1>
  * <h2>Java 1.0</h2>
@@ -147,5 +151,10 @@ public class LocalClassDeclarationStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LocalClassDeclarationStmt> toLocalClassDeclarationStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public ClassOrInterfaceDeclaration classDeclaration() {
+        return Objects.requireNonNull(classDeclaration);
     }
 }

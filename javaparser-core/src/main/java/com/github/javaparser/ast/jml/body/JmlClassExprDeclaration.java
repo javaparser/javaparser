@@ -17,6 +17,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -310,5 +315,30 @@ public class JmlClassExprDeclaration extends JmlClassLevelDeclaration<JmlClassEx
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;
+    }
+
+    @NonNull()
+    public Expression invariant() {
+        return Objects.requireNonNull(invariant);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @NonNull()
+    public SimpleName kind() {
+        return Objects.requireNonNull(kind);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @Nullable()
+    public SimpleName name() {
+        return name;
     }
 }

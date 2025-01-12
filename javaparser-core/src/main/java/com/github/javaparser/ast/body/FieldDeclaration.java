@@ -51,6 +51,10 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedFieldDeclaration;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * The declaration of a field in a class. "private static int a=15*15;" in this example: {@code class X { private static
  * int a=15*15; }}
@@ -346,5 +350,15 @@ public class FieldDeclaration extends BodyDeclaration<FieldDeclaration> implemen
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<FieldDeclaration> toFieldDeclaration() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public NodeList<VariableDeclarator> variables() {
+        return Objects.requireNonNull(variables);
     }
 }

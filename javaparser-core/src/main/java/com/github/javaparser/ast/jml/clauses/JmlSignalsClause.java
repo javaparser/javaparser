@@ -16,6 +16,9 @@ import com.github.javaparser.metamodel.JmlSignalsClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * @author Alexander Weigl
@@ -158,5 +161,15 @@ public class JmlSignalsClause extends JmlClause implements MethodContractable, B
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlSignalsClause(Consumer<JmlSignalsClause> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
+    }
+
+    @NonNull()
+    public Parameter parameter() {
+        return Objects.requireNonNull(parameter);
     }
 }

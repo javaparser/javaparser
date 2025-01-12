@@ -32,6 +32,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * An import declaration.
  * <br>{@code import com.github.javaparser.JavaParser;}
@@ -111,14 +115,16 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     /**
      * Return if the import ends with "*".
      */
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isAsterisk() {
-        return isAsterisk;
+        return Objects.requireNonNull(isAsterisk);
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
-        return isStatic;
+        return Objects.requireNonNull(isStatic);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -180,9 +186,10 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         return super.replace(node, replacementNode);
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isJmlModel() {
-        return isJmlModel;
+        return Objects.requireNonNull(isJmlModel);
     }
 
     public void setIsJmlModel(boolean b) {
@@ -197,5 +204,10 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         notifyPropertyChange(ObservableProperty.JML_MODEL, this.isJmlModel, isJmlModel);
         this.isJmlModel = isJmlModel;
         return this;
+    }
+
+    @NonNull()
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

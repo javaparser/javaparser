@@ -16,6 +16,10 @@ import static com.github.javaparser.utils.Utils.assertNotNull;
 import com.github.javaparser.metamodel.JmlClauseIfMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
@@ -172,5 +176,20 @@ public class JmlClauseIf extends JmlClause implements MethodContractable {
         setKind(kind);
         setThen(then);
         customInitialization();
+    }
+
+    @NonNull()
+    public Expression condition() {
+        return Objects.requireNonNull(condition);
+    }
+
+    @NonNull()
+    public JmlClauseKind kind() {
+        return Objects.requireNonNull(kind);
+    }
+
+    @NonNull()
+    public Expression then() {
+        return Objects.requireNonNull(then);
     }
 }

@@ -34,6 +34,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * An expression between ( ).
  * <br>{@code (1+1)}
@@ -156,5 +160,10 @@ public class EnclosedExpr extends Expression {
     @Override
     public boolean isPolyExpression() {
         return getInner().isPolyExpression();
+    }
+
+    @NonNull()
+    public Expression inner() {
+        return Objects.requireNonNull(inner);
     }
 }

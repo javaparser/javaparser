@@ -18,6 +18,10 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Alexander Weigl
@@ -216,5 +220,20 @@ public class JmlMultiExprClause extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlMultiExprClause(Consumer<JmlMultiExprClause> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    public NodeList<Expression> expressions() {
+        return Objects.requireNonNull(expressions);
+    }
+
+    @Nullable()
+    public NodeList<SimpleName> heaps() {
+        return heaps;
+    }
+
+    @NonNull()
+    public JmlClauseKind kind() {
+        return Objects.requireNonNull(kind);
     }
 }

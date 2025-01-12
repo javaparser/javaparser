@@ -37,6 +37,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * Usage of the throw statement.
  * <br>{@code throw new Exception()}
@@ -144,5 +148,10 @@ public class ThrowStmt extends Statement implements NodeWithExpression<ThrowStmt
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ThrowStmt> toThrowStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

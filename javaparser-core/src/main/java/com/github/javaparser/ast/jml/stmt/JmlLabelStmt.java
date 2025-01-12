@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (06.03.22)
@@ -161,5 +165,15 @@ public class JmlLabelStmt extends JmlStatement implements NodeWithJmlTags<JmlLab
             }
         }
         return super.remove(node);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @NonNull()
+    public SimpleName label() {
+        return Objects.requireNonNull(label);
     }
 }

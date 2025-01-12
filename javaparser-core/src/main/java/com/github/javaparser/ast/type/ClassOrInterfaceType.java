@@ -53,6 +53,11 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * A class or an interface type.
  * <br>{@code Object}
@@ -352,5 +357,20 @@ public class ClassOrInterfaceType extends ReferenceType implements NodeWithSimpl
             return new ResolvedTypeVariable(typeDeclaration.asTypeParameter());
         }
         return new ReferenceTypeImpl((ResolvedReferenceTypeDeclaration) typeDeclaration, typeParameters);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @Nullable()
+    public ClassOrInterfaceType scope() {
+        return scope;
+    }
+
+    @Nullable()
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (11/23/21)
@@ -149,5 +153,10 @@ public class JmlDocStmt extends Statement implements JmlDocContainer {
         super(tokenRange);
         setJmlComments(jmlComments);
         customInitialization();
+    }
+
+    @NonNull()
+    public NodeList<JmlDoc> jmlComments() {
+        return Objects.requireNonNull(jmlComments);
     }
 }

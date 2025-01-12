@@ -41,6 +41,10 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A declaration of variables.
  * It is an expression, so it can be put in places like the initializer of a for loop,
@@ -269,5 +273,20 @@ public class VariableDeclarationExpr extends Expression implements NodeWithFinal
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<VariableDeclarationExpr> toVariableDeclarationExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public NodeList<VariableDeclarator> variables() {
+        return Objects.requireNonNull(variables);
     }
 }

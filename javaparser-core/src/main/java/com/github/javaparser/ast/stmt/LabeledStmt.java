@@ -35,6 +35,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A statement that is labeled, like {@code label123: println("continuing");}
  *
@@ -171,5 +175,15 @@ public class LabeledStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<LabeledStmt> toLabeledStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public SimpleName label() {
+        return Objects.requireNonNull(label);
+    }
+
+    @NonNull()
+    public Statement statement() {
+        return Objects.requireNonNull(statement);
     }
 }

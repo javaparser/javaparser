@@ -39,6 +39,10 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * Any declaration that can appear between the { and } of a class, interface, enum, or record.
  *
@@ -582,5 +586,10 @@ public abstract class BodyDeclaration<T extends BodyDeclaration<?>> extends Node
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClassLevelDeclaration(Consumer<JmlClassLevelDeclaration> action) {
+    }
+
+    @NonNull()
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
     }
 }

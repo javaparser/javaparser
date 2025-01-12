@@ -16,6 +16,11 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * @author Alexander Weigl
  * @version 1 (3/14/21)
@@ -341,5 +346,40 @@ public class JmlContract extends Node implements Jmlish, NodeWithModifiers<JmlCo
         setClauses(clauses);
         setSubContracts(subContracts);
         customInitialization();
+    }
+
+    @NonNull()
+    public Behavior behavior() {
+        return Objects.requireNonNull(behavior);
+    }
+
+    @NonNull()
+    public NodeList<JmlClause> clauses() {
+        return Objects.requireNonNull(clauses);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @Nullable()
+    public SimpleName name() {
+        return name;
+    }
+
+    @NonNull()
+    public NodeList<JmlContract> subContracts() {
+        return Objects.requireNonNull(subContracts);
+    }
+
+    @NonNull()
+    public ContractType type() {
+        return Objects.requireNonNull(type);
     }
 }

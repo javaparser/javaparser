@@ -41,6 +41,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A while statement.
  * <br>{@code while(true) { ... }}
@@ -225,5 +229,20 @@ public class WhileStmt extends Statement implements NodeWithBody<WhileStmt>, Nod
         this.contracts = contracts;
         setAsParentNodeOf(contracts);
         return this;
+    }
+
+    @NonNull()
+    public Statement body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    public Expression condition() {
+        return Objects.requireNonNull(condition);
+    }
+
+    @NonNull()
+    public NodeList<JmlContract> contracts() {
+        return Objects.requireNonNull(contracts);
     }
 }

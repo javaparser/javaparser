@@ -33,6 +33,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PackageDeclarationMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A package declaration.
  * <br>{@code package com.github.javaparser.ast;}
@@ -183,5 +187,15 @@ public class PackageDeclaration extends Node implements NodeWithAnnotations<Pack
             return true;
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @NonNull()
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

@@ -45,6 +45,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+
 /**
  * The "int id();" in {@code @interface X { int id(); }}
  * <p>
@@ -283,5 +288,25 @@ public class AnnotationMemberDeclaration extends BodyDeclaration<AnnotationMembe
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<AnnotationMemberDeclaration> toAnnotationMemberDeclaration() {
         return Optional.of(this);
+    }
+
+    @Nullable()
+    public Expression defaultValue() {
+        return defaultValue;
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

@@ -16,6 +16,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * @author Alexander Weigl
  * @version 1 (3/11/21)
@@ -281,5 +286,30 @@ public class JmlClassAccessibleDeclaration extends JmlClassLevelDeclaration<JmlC
         this.jmlTags = jmlTags;
         setAsParentNodeOf(jmlTags);
         return this;
+    }
+
+    @NonNull()
+    public NodeList<Expression> expressions() {
+        return Objects.requireNonNull(expressions);
+    }
+
+    @NonNull()
+    public NodeList<SimpleName> jmlTags() {
+        return Objects.requireNonNull(jmlTags);
+    }
+
+    @Nullable()
+    public Expression measuredBy() {
+        return measuredBy;
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public Expression variable() {
+        return Objects.requireNonNull(variable);
     }
 }

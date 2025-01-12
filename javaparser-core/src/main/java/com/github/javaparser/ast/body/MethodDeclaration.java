@@ -48,6 +48,11 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+
 /**
  * A method declaration. "public int abc() {return 1;}" in this example: {@code class X { public int abc() {return 1;}
  * }}
@@ -382,5 +387,15 @@ public class MethodDeclaration extends CallableDeclaration<MethodDeclaration> im
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<MethodDeclaration> toMethodDeclaration() {
         return Optional.of(this);
+    }
+
+    @Nullable()
+    public BlockStmt body() {
+        return body;
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

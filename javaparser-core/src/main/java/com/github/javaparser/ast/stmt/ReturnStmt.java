@@ -35,6 +35,9 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.ReturnStmtMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * The return statement, with an optional expression to return.
@@ -178,5 +181,10 @@ public class ReturnStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ReturnStmt> toReturnStmt() {
         return Optional.of(this);
+    }
+
+    @Nullable()
+    public Expression expression() {
+        return expression;
     }
 }

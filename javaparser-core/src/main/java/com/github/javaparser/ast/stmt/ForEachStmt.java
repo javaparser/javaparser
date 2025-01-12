@@ -39,6 +39,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A for-each statement.
  * <br>{@code for(Object o: objects) { ... }}
@@ -291,5 +295,25 @@ public class ForEachStmt extends Statement implements NodeWithBody<ForEachStmt>,
         this.contracts = contracts;
         setAsParentNodeOf(contracts);
         return this;
+    }
+
+    @NonNull()
+    public Statement body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    public NodeList<JmlContract> contracts() {
+        return Objects.requireNonNull(contracts);
+    }
+
+    @NonNull()
+    public Expression iterable() {
+        return Objects.requireNonNull(iterable);
+    }
+
+    @NonNull()
+    public VariableDeclarationExpr variable() {
+        return Objects.requireNonNull(variable);
     }
 }

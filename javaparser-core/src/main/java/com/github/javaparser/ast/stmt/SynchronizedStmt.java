@@ -38,6 +38,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * Usage of the synchronized keyword.
  * <br>In {@code synchronized (a123) { ... }} the expression is a123 and { ... } is the body
@@ -171,5 +175,15 @@ public class SynchronizedStmt extends Statement implements NodeWithBlockStmt<Syn
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SynchronizedStmt> toSynchronizedStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public BlockStmt body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

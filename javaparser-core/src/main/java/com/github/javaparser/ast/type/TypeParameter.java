@@ -43,6 +43,10 @@ import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A type parameter. Examples:
  * <br>{@code <}<b>{@code U}</b>{@code > U getU() { ... }}
@@ -246,5 +250,15 @@ public class TypeParameter extends ReferenceType implements NodeWithSimpleName<T
     @Override
     public ResolvedType convertToUsage(Context context) {
         throw new UnsupportedOperationException(getClass().getCanonicalName());
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public NodeList<ClassOrInterfaceType> typeBound() {
+        return Objects.requireNonNull(typeBound);
     }
 }

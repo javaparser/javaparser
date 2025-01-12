@@ -37,6 +37,10 @@ import com.github.javaparser.metamodel.NonEmptyProperty;
 import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * {@code new int[5][4][][]} or {@code new int[][]{{1},{2,3}}}.
@@ -266,5 +270,20 @@ public class ArrayCreationExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ArrayCreationExpr> toArrayCreationExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Type elementType() {
+        return Objects.requireNonNull(elementType);
+    }
+
+    @Nullable()
+    public ArrayInitializerExpr initializer() {
+        return initializer;
+    }
+
+    @NonNull()
+    public NodeList<ArrayCreationLevel> levels() {
+        return Objects.requireNonNull(levels);
     }
 }

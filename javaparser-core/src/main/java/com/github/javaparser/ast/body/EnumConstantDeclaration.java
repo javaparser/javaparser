@@ -43,6 +43,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * One of the values an enum can take. A(1) and B(2) in this example: {@code enum X { A(1), B(2) }}
  *
@@ -235,5 +239,20 @@ public class EnumConstantDeclaration extends BodyDeclaration<EnumConstantDeclara
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<EnumConstantDeclaration> toEnumConstantDeclaration() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public NodeList<Expression> arguments() {
+        return Objects.requireNonNull(arguments);
+    }
+
+    @NonNull()
+    public NodeList<BodyDeclaration<?>> classBody() {
+        return Objects.requireNonNull(classBody);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
     }
 }

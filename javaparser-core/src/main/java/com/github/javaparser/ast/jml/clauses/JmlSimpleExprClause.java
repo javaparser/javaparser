@@ -18,6 +18,10 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Alexander Weigl
@@ -225,5 +229,20 @@ public class JmlSimpleExprClause extends JmlClause implements MethodContractable
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlSimpleExprClause(Consumer<JmlSimpleExprClause> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
+    }
+
+    @Nullable()
+    public NodeList<SimpleName> heaps() {
+        return heaps;
+    }
+
+    @NonNull()
+    public JmlClauseKind kind() {
+        return Objects.requireNonNull(kind);
     }
 }

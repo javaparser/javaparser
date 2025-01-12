@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * 12.5 Set Comprehensions
  * https://www.cs.ucf.edu/~leavens/JML/jmlrefman/jmlrefman_12.html#SEC160
@@ -178,5 +182,15 @@ public class JmlSetComprehensionExpr extends Expression implements Jmlish {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlSetComprehensionExpr(Consumer<JmlSetComprehensionExpr> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    public VariableDeclarator binding() {
+        return Objects.requireNonNull(binding);
+    }
+
+    @NonNull()
+    public Expression predicate() {
+        return Objects.requireNonNull(predicate);
     }
 }

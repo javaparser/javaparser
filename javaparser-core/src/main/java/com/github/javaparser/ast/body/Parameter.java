@@ -40,6 +40,10 @@ import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * The parameters to a method or lambda. Lambda parameters may have inferred types, in that case "type" is UnknownType.
  * <br>Note that <a href="https://en.wikipedia.org/wiki/Parameter_(computer_programming)#Parameters_and_arguments">parameters
@@ -124,9 +128,10 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         return type;
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isVarArgs() {
-        return isVarArgs;
+        return Objects.requireNonNull(isVarArgs);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -341,5 +346,30 @@ public class Parameter extends Node implements NodeWithType<Parameter, Type>, No
         }
         // Otherwise use the default implementation.
         return NodeWithFinalModifier.super.isFinal();
+    }
+
+    @NonNull()
+    public NodeList<AnnotationExpr> annotations() {
+        return Objects.requireNonNull(annotations);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
+    }
+
+    @NonNull()
+    public NodeList<AnnotationExpr> varArgsAnnotations() {
+        return Objects.requireNonNull(varArgsAnnotations);
     }
 }

@@ -41,6 +41,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * <h1>The classic for statement</h1>
  * Examples:
@@ -333,5 +338,30 @@ public class ForStmt extends Statement implements NodeWithBody<ForStmt>, NodeWit
         this.contracts = contracts;
         setAsParentNodeOf(contracts);
         return this;
+    }
+
+    @NonNull()
+    public Statement body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @Nullable()
+    public Expression compare() {
+        return compare;
+    }
+
+    @NonNull()
+    public NodeList<JmlContract> contracts() {
+        return Objects.requireNonNull(contracts);
+    }
+
+    @NonNull()
+    public NodeList<Expression> initialization() {
+        return Objects.requireNonNull(initialization);
+    }
+
+    @NonNull()
+    public NodeList<Expression> update() {
+        return Objects.requireNonNull(update);
     }
 }

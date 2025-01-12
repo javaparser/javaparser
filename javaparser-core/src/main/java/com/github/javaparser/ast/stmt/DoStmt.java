@@ -41,6 +41,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A do-while.
  * <br>{@code do { ... } while ( a==0 );}
@@ -225,5 +229,20 @@ public class DoStmt extends Statement implements NodeWithBody<DoStmt>, NodeWithC
         this.contracts = contracts;
         setAsParentNodeOf(contracts);
         return this;
+    }
+
+    @NonNull()
+    public Statement body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    public Expression condition() {
+        return Objects.requireNonNull(condition);
+    }
+
+    @NonNull()
+    public NodeList<JmlContract> contracts() {
+        return Objects.requireNonNull(contracts);
     }
 }

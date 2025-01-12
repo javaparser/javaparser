@@ -45,6 +45,10 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedType;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A method call on an object or a class. <br>{@code circle.circumference()} <br>In {@code a.<String>bb(15);}, a
@@ -379,5 +383,25 @@ public class MethodCallExpr extends Expression implements NodeWithTypeArguments<
     @Override
     protected boolean isInvocationContext() {
         return true;
+    }
+
+    @NonNull()
+    public NodeList<Expression> arguments() {
+        return Objects.requireNonNull(arguments);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @Nullable()
+    public Expression scope() {
+        return scope;
+    }
+
+    @Nullable()
+    public NodeList<Type> typeArguments() {
+        return typeArguments;
     }
 }

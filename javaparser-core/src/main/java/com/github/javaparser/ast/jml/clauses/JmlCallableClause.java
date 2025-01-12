@@ -16,6 +16,10 @@ import java.util.function.Consumer;
 import com.github.javaparser.ast.observer.ObservableProperty;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/22/21)
@@ -148,5 +152,10 @@ public class JmlCallableClause extends JmlClause {
         super(tokenRange, name);
         setMethodSignatures(methodSignatures);
         customInitialization();
+    }
+
+    @NonNull()
+    public NodeList<JmlMethodSignature> methodSignatures() {
+        return Objects.requireNonNull(methodSignatures);
     }
 }

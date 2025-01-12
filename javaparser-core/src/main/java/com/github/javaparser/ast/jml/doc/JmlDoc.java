@@ -13,6 +13,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.JmlDocMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (11/23/21)
@@ -74,5 +78,10 @@ public class JmlDoc extends Node {
         super(tokenRange);
         setContent(content);
         customInitialization();
+    }
+
+    @NonNull()
+    public JavaToken content() {
+        return Objects.requireNonNull(content);
     }
 }

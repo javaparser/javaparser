@@ -44,6 +44,10 @@ import java.util.stream.Collectors;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import static java.util.stream.Collectors.joining;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * <h1>The union type</h1>
  * Represents a set of types. A given value of this type has to be assignable to at least one of the element types.
@@ -201,5 +205,10 @@ public class UnionType extends Type implements NodeWithAnnotations<UnionType> {
     public ResolvedType convertToUsage(Context context) {
         List<ResolvedType> resolvedElements = getElements().stream().map(el -> el.convertToUsage(context)).collect(Collectors.toList());
         return new ResolvedUnionType(resolvedElements);
+    }
+
+    @NonNull()
+    public NodeList<ReferenceType> elements() {
+        return Objects.requireNonNull(elements);
     }
 }

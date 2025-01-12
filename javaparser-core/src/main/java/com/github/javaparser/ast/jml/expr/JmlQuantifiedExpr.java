@@ -38,6 +38,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * 12.4.24.2 Generalized Quantifiers
  * https://www.cs.ucf.edu/~leavens/JML/jmlrefman/jmlrefman_12.html#SEC163
@@ -291,5 +295,20 @@ public class JmlQuantifiedExpr extends Expression implements Jmlish {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlQuantifiedExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlQuantifiedExprMetaModel;
+    }
+
+    @NonNull()
+    public JmlBinder binder() {
+        return Objects.requireNonNull(binder);
+    }
+
+    @NonNull()
+    public NodeList<Expression> expressions() {
+        return Objects.requireNonNull(expressions);
+    }
+
+    @NonNull()
+    public NodeList<Parameter> variables() {
+        return Objects.requireNonNull(variables);
     }
 }

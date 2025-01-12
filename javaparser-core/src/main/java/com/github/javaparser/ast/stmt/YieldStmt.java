@@ -37,6 +37,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * <h1>The yield statement</h1>
  * <h2>Java 1.0-11</h2>
@@ -153,5 +157,10 @@ public class YieldStmt extends Statement implements NodeWithExpression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public YieldStmtMetaModel getMetaModel() {
         return JavaParserMetaModel.yieldStmtMetaModel;
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
     }
 }

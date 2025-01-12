@@ -36,6 +36,11 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNonEmpty;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * A name that may consist of multiple identifiers.
  * In other words: it.may.contain.dots.
@@ -195,5 +200,15 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
      */
     public boolean isInternal() {
         return getParentNode().filter(parent -> parent instanceof Name).isPresent();
+    }
+
+    @NonNull()
+    public String identifier() {
+        return Objects.requireNonNull(identifier);
+    }
+
+    @Nullable()
+    public Name qualifier() {
+        return qualifier;
     }
 }

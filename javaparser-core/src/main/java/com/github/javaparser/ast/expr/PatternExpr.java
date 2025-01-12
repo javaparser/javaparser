@@ -38,6 +38,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * <h1>Pattern Matching in Java</h1>
  *
@@ -166,5 +170,10 @@ public abstract class PatternExpr extends Expression implements NodeWithType<Pat
         super(tokenRange);
         setType(type);
         customInitialization();
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

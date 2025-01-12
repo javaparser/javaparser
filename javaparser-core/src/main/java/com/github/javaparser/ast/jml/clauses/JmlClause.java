@@ -14,6 +14,9 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import java.util.Optional;
 import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Alexander Weigl
@@ -288,5 +291,10 @@ public abstract class JmlClause extends Node implements Jmlish {
 
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlClauseIf(Consumer<JmlClauseIf> action) {
+    }
+
+    @Nullable()
+    public SimpleName name() {
+        return name;
     }
 }

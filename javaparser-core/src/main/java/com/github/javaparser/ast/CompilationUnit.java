@@ -60,6 +60,9 @@ import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * <p>
  * This class represents the entire compilation unit. Each java file denotes a
@@ -848,5 +851,25 @@ public class CompilationUnit extends Node {
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    public NodeList<ImportDeclaration> imports() {
+        return Objects.requireNonNull(imports);
+    }
+
+    @Nullable()
+    public ModuleDeclaration module() {
+        return module;
+    }
+
+    @Nullable()
+    public PackageDeclaration packageDeclaration() {
+        return packageDeclaration;
+    }
+
+    @NonNull()
+    public NodeList<TypeDeclaration<?>> types() {
+        return Objects.requireNonNull(types);
     }
 }

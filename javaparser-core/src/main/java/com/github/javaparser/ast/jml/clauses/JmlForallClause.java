@@ -15,6 +15,9 @@ import com.github.javaparser.metamodel.JmlForallClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * @author Alexander Weigl
@@ -139,5 +142,10 @@ public class JmlForallClause extends JmlClause implements MethodContractable {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlForallClause(Consumer<JmlForallClause> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    public NodeList<Parameter> boundedVariables() {
+        return Objects.requireNonNull(boundedVariables);
     }
 }

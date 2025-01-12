@@ -44,6 +44,10 @@ import java.util.function.Consumer;
 import static com.github.javaparser.ast.NodeList.nodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * To indicate that a type is an array, it gets wrapped in an ArrayType for every array level it has.
  * So, int[][] becomes ArrayType(ArrayType(int)).
@@ -332,5 +336,15 @@ public class ArrayType extends ReferenceType implements NodeWithAnnotations<Arra
     @Override
     public ResolvedType convertToUsage(Context context) {
         return new ResolvedArrayType(getComponentType().convertToUsage(context));
+    }
+
+    @NonNull()
+    public Type componentType() {
+        return Objects.requireNonNull(componentType);
+    }
+
+    @NonNull()
+    public Origin origin() {
+        return Objects.requireNonNull(origin);
     }
 }

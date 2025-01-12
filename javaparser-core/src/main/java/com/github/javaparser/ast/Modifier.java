@@ -31,6 +31,10 @@ import java.util.Arrays;
 import static com.github.javaparser.ast.NodeList.toNodeList;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A modifier, like private, public, or volatile.
  */
@@ -274,5 +278,10 @@ public class Modifier extends Node {
     public Modifier(TokenRange tokenRange) {
         super(tokenRange);
         customInitialization();
+    }
+
+    @NonNull()
+    public Keyword keyword() {
+        return Objects.requireNonNull(keyword);
     }
 }

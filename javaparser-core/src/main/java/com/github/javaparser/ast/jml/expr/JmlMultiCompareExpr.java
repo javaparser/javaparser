@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -175,5 +179,15 @@ public class JmlMultiCompareExpr extends Expression implements Jmlish {
             }
         }
         return super.replace(node, replacementNode);
+    }
+
+    @NonNull()
+    public NodeList<Expression> expressions() {
+        return Objects.requireNonNull(expressions);
+    }
+
+    @NonNull()
+    public Operators operators() {
+        return Objects.requireNonNull(operators);
     }
 }

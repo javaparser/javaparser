@@ -29,6 +29,7 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 import static com.github.javaparser.utils.Utils.camelCaseToScreaming;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumConstantDeclaration;
@@ -42,6 +43,9 @@ import com.github.javaparser.metamodel.BaseNodeMetaModel;
 import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.github.javaparser.utils.SourceRoot;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import java.util.*;
 
 public class PropertyGenerator extends NodeGenerator {
@@ -58,6 +62,7 @@ public class PropertyGenerator extends NodeGenerator {
             BaseNodeMetaModel nodeMetaModel, CompilationUnit nodeCu, ClassOrInterfaceDeclaration nodeCoid) {
         for (PropertyMetaModel property : nodeMetaModel.getDeclaredPropertyMetaModels()) {
             generateGetter(nodeMetaModel, nodeCoid, property);
+            generateGetterWithAnnot(nodeMetaModel, nodeCoid, property);
             generateSetter(nodeMetaModel, nodeCoid, property);
         }
         nodeMetaModel.getDerivedPropertyMetaModels().forEach(p -> derivedProperties.put(p.getName(), p));
@@ -144,6 +149,30 @@ public class PropertyGenerator extends NodeGenerator {
         } else {
             body.addStatement(f("return %s;", property.getName()));
         }
+        addOrReplaceWhenSameSignature(nodeCoid, getter);
+    }
+
+    // special variant that uses JSpecify rather than optional.
+    private void generateGetterWithAnnot(
+            BaseNodeMetaModel nodeMetaModel, ClassOrInterfaceDeclaration nodeCoid, PropertyMetaModel property) {
+        final MethodDeclaration getter = new MethodDeclaration(
+                createModifierList(Modifier.DefaultKeyword.PUBLIC), parseType(property.getTypeNameForSetter()), property.getName());
+        annotateWhenOverridden(nodeMetaModel, getter);
+        final BlockStmt body = getter.getBody().get();
+        body.getStatements().clear();
+        nodeCoid.findCompilationUnit().get().addImport(Objects.class);
+
+        if (property.isOptional()) {
+            // Ensure imports have been included.
+            nodeCoid.findCompilationUnit().get().addImport(Nullable.class);
+            getter.addAnnotation(Nullable.class);
+            body.addStatement(f("return %s;", property.getName()));
+        } else {
+            nodeCoid.findCompilationUnit().get().addImport(NonNull.class);
+            getter.addAnnotation(NonNull.class);
+            body.addStatement(f("return Objects.requireNonNull(%s);", property.getName()));
+        }
+
         addOrReplaceWhenSameSignature(nodeCoid, getter);
     }
 

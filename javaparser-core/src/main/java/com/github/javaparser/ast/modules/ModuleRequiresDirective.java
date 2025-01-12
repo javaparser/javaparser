@@ -36,6 +36,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleRequiresDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * A require directive in module-info.java. {@code require a.b.C;}
@@ -226,5 +229,15 @@ public class ModuleRequiresDirective extends ModuleDirective implements NodeWith
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleRequiresDirectiveMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleRequiresDirectiveMetaModel;
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

@@ -38,6 +38,11 @@ import com.github.javaparser.metamodel.SwitchEntryMetaModel;
 import java.util.Optional;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+
 /**
  * <h1>One case in a switch statement</h1>
  * The main Javadoc is in {@link SwitchStmt}
@@ -292,9 +297,10 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         return super.replace(node, replacementNode);
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isDefault() {
-        return isDefault;
+        return Objects.requireNonNull(isDefault);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -341,5 +347,25 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         setStatements(statements);
         setDefault(isDefault);
         customInitialization();
+    }
+
+    @Nullable()
+    public Expression guard() {
+        return guard;
+    }
+
+    @NonNull()
+    public NodeList<Expression> labels() {
+        return Objects.requireNonNull(labels);
+    }
+
+    @NonNull()
+    public NodeList<Statement> statements() {
+        return Objects.requireNonNull(statements);
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

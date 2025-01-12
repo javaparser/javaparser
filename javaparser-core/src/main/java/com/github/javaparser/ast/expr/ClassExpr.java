@@ -37,6 +37,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * Defines an expression that accesses the class of a type.
  * <br>{@code Object.class}
@@ -144,5 +148,10 @@ public class ClassExpr extends Expression implements NodeWithType<ClassExpr, Typ
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<ClassExpr> toClassExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Type type() {
+        return Objects.requireNonNull(type);
     }
 }

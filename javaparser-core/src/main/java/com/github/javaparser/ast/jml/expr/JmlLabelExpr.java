@@ -20,6 +20,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (2/21/21)
@@ -238,5 +242,20 @@ public class JmlLabelExpr extends Expression implements Jmlish {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlLabelExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlLabelExprMetaModel;
+    }
+
+    @NonNull()
+    public Expression expression() {
+        return Objects.requireNonNull(expression);
+    }
+
+    @NonNull()
+    public Kind kind() {
+        return Objects.requireNonNull(kind);
+    }
+
+    @NonNull()
+    public SimpleName label() {
+        return Objects.requireNonNull(label);
     }
 }

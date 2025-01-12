@@ -33,6 +33,9 @@ import com.github.javaparser.metamodel.OptionalProperty;
 import com.github.javaparser.metamodel.SuperExprMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * An occurrence of the "super" keyword. <br>
@@ -173,5 +176,10 @@ public class SuperExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.RemoveMethodGenerator")
     public SuperExpr removeTypeName() {
         return setTypeName((Name) null);
+    }
+
+    @Nullable()
+    public Name typeName() {
+        return typeName;
     }
 }

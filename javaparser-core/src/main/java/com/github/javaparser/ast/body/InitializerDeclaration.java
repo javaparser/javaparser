@@ -37,6 +37,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * A (possibly static) initializer body. "static { a=3; }" in this example: {@code class X { static { a=3; }  } }
  *
@@ -85,9 +89,10 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
         return body;
     }
 
+    @NonNull()
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public boolean isStatic() {
-        return isStatic;
+        return Objects.requireNonNull(isStatic);
     }
 
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
@@ -161,5 +166,10 @@ public class InitializerDeclaration extends BodyDeclaration<InitializerDeclarati
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<InitializerDeclaration> toInitializerDeclaration() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public BlockStmt body() {
+        return Objects.requireNonNull(body);
     }
 }

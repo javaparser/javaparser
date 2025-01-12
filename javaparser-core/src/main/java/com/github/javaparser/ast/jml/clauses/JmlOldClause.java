@@ -14,6 +14,9 @@ import com.github.javaparser.metamodel.JmlOldClauseMetaModel;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * @author Alexander Weigl
@@ -126,5 +129,10 @@ public class JmlOldClause extends JmlClause {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public void ifJmlOldClause(Consumer<JmlOldClause> action) {
         action.accept(this);
+    }
+
+    @NonNull()
+    public VariableDeclarationExpr declarations() {
+        return Objects.requireNonNull(declarations);
     }
 }

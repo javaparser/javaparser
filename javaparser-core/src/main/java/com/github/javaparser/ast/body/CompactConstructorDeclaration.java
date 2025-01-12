@@ -41,6 +41,10 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.resolution.Resolvable;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * <h1>The record declaration's constructor</h1>
  * <strong>WARNING: This implementation is subject to change.</strong>
@@ -366,5 +370,30 @@ public class CompactConstructorDeclaration extends BodyDeclaration<CompactConstr
         super(tokenRange, annotations);
         setBody(body);
         customInitialization();
+    }
+
+    @NonNull()
+    public BlockStmt body() {
+        return Objects.requireNonNull(body);
+    }
+
+    @NonNull()
+    public NodeList<Modifier> modifiers() {
+        return Objects.requireNonNull(modifiers);
+    }
+
+    @NonNull()
+    public SimpleName name() {
+        return Objects.requireNonNull(name);
+    }
+
+    @NonNull()
+    public NodeList<ReferenceType> thrownExceptions() {
+        return Objects.requireNonNull(thrownExceptions);
+    }
+
+    @NonNull()
+    public NodeList<TypeParameter> typeParameters() {
+        return Objects.requireNonNull(typeParameters);
     }
 }

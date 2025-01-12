@@ -53,14 +53,14 @@ public class CoreGenerator {
         }
         Log.setAdapter(new Log.StandardOutStandardErrorAdapter());
         final Path root = Paths.get(args[0], "..", "javaparser-core", "src", "main", "java");
-        final SourceRoot sourceRoot = new SourceRoot(root, parserConfiguration)
+        final SourceRoot sourceRoot = new SourceRoot(root.normalize(), parserConfiguration)
                 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
         StaticJavaParser.setConfiguration(parserConfiguration);
 
         final Path generatedJavaCcRoot =
                 Paths.get(args[0], "..", "javaparser-core", "target", "generated-sources", "javacc");
-        final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot, parserConfiguration)
+        final SourceRoot generatedJavaCcSourceRoot = new SourceRoot(generatedJavaCcRoot.normalize(), parserConfiguration)
                 //                .setPrinter(LexicalPreservingPrinter::print)
                 ;
 

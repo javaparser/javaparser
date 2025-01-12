@@ -34,6 +34,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * An annotation that has a single value. <br>{@code @Count(15)}
  *
@@ -140,5 +144,10 @@ public class SingleMemberAnnotationExpr extends AnnotationExpr {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<SingleMemberAnnotationExpr> toSingleMemberAnnotationExpr() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public Expression memberValue() {
+        return Objects.requireNonNull(memberValue);
     }
 }

@@ -35,6 +35,9 @@ import com.github.javaparser.metamodel.JavaParserMetaModel;
 import com.github.javaparser.metamodel.ModuleUsesDirectiveMetaModel;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
 
 /**
  * A uses directive in module-info.java. {@code uses V.W;}
@@ -177,5 +180,10 @@ public class ModuleUsesDirective extends ModuleDirective implements NodeWithName
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public ModuleUsesDirectiveMetaModel getMetaModel() {
         return JavaParserMetaModel.moduleUsesDirectiveMetaModel;
+    }
+
+    @NonNull()
+    public Name name() {
+        return Objects.requireNonNull(name);
     }
 }

@@ -17,6 +17,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /**
  * @author Alexander Weigl
  * @version 1 (7/3/21)
@@ -182,5 +186,20 @@ public class JmlBinaryInfixExpr extends Expression {
     @Generated("com.github.javaparser.generator.core.node.GetMetaModelGenerator")
     public JmlBinaryInfixExprMetaModel getMetaModel() {
         return JavaParserMetaModel.jmlBinaryInfixExprMetaModel;
+    }
+
+    @NonNull()
+    public Expression left() {
+        return Objects.requireNonNull(left);
+    }
+
+    @NonNull()
+    public SimpleName operator() {
+        return Objects.requireNonNull(operator);
+    }
+
+    @NonNull()
+    public Expression right() {
+        return Objects.requireNonNull(right);
     }
 }

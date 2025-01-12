@@ -37,6 +37,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * <h1>The try statement</h1>
  * <h2>Java 1.0-6</h2>
@@ -313,5 +318,25 @@ public class TryStmt extends Statement {
     @Generated("com.github.javaparser.generator.core.node.TypeCastingGenerator")
     public Optional<TryStmt> toTryStmt() {
         return Optional.of(this);
+    }
+
+    @NonNull()
+    public NodeList<CatchClause> catchClauses() {
+        return Objects.requireNonNull(catchClauses);
+    }
+
+    @Nullable()
+    public BlockStmt finallyBlock() {
+        return finallyBlock;
+    }
+
+    @NonNull()
+    public NodeList<Expression> resources() {
+        return Objects.requireNonNull(resources);
+    }
+
+    @NonNull()
+    public BlockStmt tryBlock() {
+        return Objects.requireNonNull(tryBlock);
     }
 }
