@@ -9,6 +9,7 @@
         <module>javaparser-core-serialization</module>
         <module>javaparser-symbol-solver-core</module>
         <module>javaparser-symbol-solver-testing</module>
+        <module>javaparser-jacoco-report</module>
     </modules>
 
     <groupId>com.github.javaparser</groupId>
@@ -148,9 +149,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <byte-buddy.version>1.15.11</byte-buddy.version>
-        <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
         <build.timestamp>2024-12-16T00:00:00Z</build.timestamp>
-        <!-- Maven Plugins -->
+        <jacoco.javaagent/>
     </properties>
 
     <scm>
@@ -261,6 +261,22 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.8.12</version>
+                    <configuration>
+                        <includes>
+                            <include>
+                                com/github/javaparser/**
+                            </include>
+                        </includes>
+                        <propertyName>jacoco.javaagent</propertyName>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>jacoco-initialize</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -289,6 +305,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.5.2</version>
+                    <configuration>
+                        <reportFormat>plain</reportFormat>
+                        <failIfNoTests>true</failIfNoTests>
+                        <argLine>@{jacoco.javaagent}</argLine>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
