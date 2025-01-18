@@ -40,7 +40,7 @@
                             <parallel>methods</parallel>
                             <threadCount>4</threadCount>
                             <!-- Note that <argLine> overwrites, not appends, hence need for `${argLine}` -->
-                            <argLine>-Xms256m -Xmx2g -verbose:gc ${argLine}</argLine>
+                            <argLine>-Xms256m -Xmx2g -verbose:gc @{jacoco.javaagent}</argLine>
                             <reportFormat>plain</reportFormat>
                             <failIfNoTests>true</failIfNoTests>
                         </configuration>
@@ -58,7 +58,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <!-- Note that <argLine> overwrites, not appends, hence need for `${argLine}` -->
-                            <argLine>-Xms256m -Xmx2g -verbose:gc ${argLine}</argLine>
+                            <argLine>-Xms256m -Xmx2g -verbose:gc @{jacoco.javaagent}</argLine>
                             <reportFormat>plain</reportFormat>
                             <failIfNoTests>true</failIfNoTests>
                         </configuration>
@@ -74,94 +74,6 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>jacoco-initialize</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-javaparser-core-classes</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                            <outputDirectory>${basedir}/target/classes</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>../javaparser-core/target/classes</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-javaparser-core-generated-sources</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                            <outputDirectory>${basedir}/target/generated-sources/</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>../javaparser-core/target/generated-sources</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-javaparser-symbol-solver-core-classes</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                            <outputDirectory>${basedir}/target/classes</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>../javaparser-symbol-solver-core/target/classes</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-javaparser-symbol-solver-core-generated-sources</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                            <outputDirectory>${basedir}/target/generated-sources/</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>../javaparser-symbol-solver-core/target/generated-sources</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
