@@ -92,7 +92,11 @@ public class TokenKindGenerator extends Generator {
 
     private void generateValueOfEntry(SwitchStmt valueOfSwitch, String name, IntegerLiteralExpr kind) {
         final SwitchEntry entry = new SwitchEntry(
-                new NodeList<>(kind), SwitchEntry.Type.STATEMENT_GROUP, new NodeList<>(new ReturnStmt(name)), false);
+                new NodeList<>(kind),
+                SwitchEntry.Type.STATEMENT_GROUP,
+                new NodeList<>(new ReturnStmt(name)),
+                false,
+                null);
         valueOfSwitch.getEntries().addFirst(entry);
     }
 

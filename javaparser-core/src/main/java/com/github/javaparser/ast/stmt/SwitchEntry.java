@@ -134,8 +134,9 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
             final NodeList<Expression> labels,
             final Type type,
             final NodeList<Statement> statements,
-            final boolean isDefault) {
-        this(null, labels, type, statements, isDefault, null);
+            final boolean isDefault,
+            final Expression guard) {
+        this(null, labels, type, statements, isDefault, guard);
     }
 
     /**

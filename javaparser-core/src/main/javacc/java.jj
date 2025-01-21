@@ -4414,7 +4414,7 @@ Statement BlockStatement():
 {
     try {
         (
-            LOOKAHEAD( Modifiers() ("class" | "interface") ) // TODO/FIXME: Is this a bug in the grammar? JLS specifies class or enum, not interface.
+            LOOKAHEAD( Modifiers() ("class" | "interface") ) // JLS specifies local class. Since java 16 local enum or interface are allowed.
             modifier = Modifiers()
             typeDecl = ClassOrInterfaceDeclaration(modifier) { ret = new LocalClassDeclarationStmt(range(typeDecl, token()), typeDecl); }
          |
