@@ -27,5 +27,5 @@ public abstract class AbstractClassDeclarationTest extends AbstractTypeDeclarati
         implements ResolvedClassDeclarationTest, MethodResolutionCapabilityTest {
 
     @Override
-    public abstractClassDeclaration createValue();
+    public abstract AbstractClassDeclaration createValue();
 }

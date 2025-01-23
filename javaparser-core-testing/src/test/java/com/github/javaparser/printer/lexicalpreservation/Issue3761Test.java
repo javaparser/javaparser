@@ -40,7 +40,7 @@ public class Issue3761Test extends AbstractLexicalPreservingTest {
         List<Modifier.Keyword> kws =
                 field.getModifiers().stream().map(Modifier::getKeyword).collect(Collectors.toList());
         kws.add(0, Modifier.DefaultKeyword.PROTECTED);
-        field.setModifiers(kws.toArray(new Modifier.Keyword[] {}));
+        field.setModifiers();
 
         String expected = "class C { \r\n" + "    protected static String S = \"s\";\r\n" + "}";
 

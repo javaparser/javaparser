@@ -23,6 +23,8 @@ package com.github.javaparser.symbolsolver.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclarationTest;
 import com.github.javaparser.symbolsolver.AbstractSymbolResolutionTest;
 import org.junit.jupiter.api.Disabled;
@@ -32,7 +34,7 @@ public abstract class AbstractTypeDeclarationTest extends AbstractSymbolResoluti
         implements ResolvedReferenceTypeDeclarationTest {
 
     @Override
-    public abstractTypeDeclaration createValue();
+    public abstract AbstractTypeDeclaration createValue();
 
     /**
      * Should say if an {@link AbstractTypeDeclaration} is functional interface.

@@ -35,7 +35,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(Modifier.DefaultKeyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int[] i"));
     }
 
@@ -45,7 +45,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(Modifier.DefaultKeyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int [] i"));
     }
 
@@ -55,7 +55,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(Modifier.DefaultKeyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int [ ] i"));
     }
 
@@ -65,7 +65,7 @@ public class Issue3358Test extends AbstractLexicalPreservingTest {
         considerVariableDeclaration(def);
         expression.asVariableDeclarationExpr().getModifiers().addFirst(Modifier.privateModifier());
         assertTrue(LexicalPreservingPrinter.getOrCreateNodeText(expression).getElements().stream()
-                .anyMatch(elem -> elem.expand().equals(Keyword.PRIVATE.asString())));
+                .anyMatch(elem -> elem.expand().equals(Modifier.DefaultKeyword.PRIVATE.asString())));
         assertTrue(LexicalPreservingPrinter.print(expression).equals("private int   [   ]   i"));
     }
 

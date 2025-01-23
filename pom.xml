@@ -16,7 +16,7 @@
 	<groupId>io.github.jmltoolkit</groupId>
 	<artifactId>jmlparser-parent</artifactId>
 	<packaging>pom</packaging>
-    <version>3.26.2-b6-SNAPSHOT</version>
+    <version>3.26.2-b7-SNAPSHOT</version>
 
 	<name>jmlparser-parent</name>
 	<url>https://github.com/wadoon/jmlparser</url>
