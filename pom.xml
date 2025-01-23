@@ -145,7 +145,6 @@
         <java.version>17</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <byte-buddy.version>1.15.1</byte-buddy.version>
-        <argLine>-javaagent:'${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar'</argLine>
         <build.timestamp>2024-09-02T00:00:00Z</build.timestamp>
 
         <sonar.organization>wadoon</sonar.organization>
@@ -436,7 +435,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 
 	<profiles>
 		<profile>

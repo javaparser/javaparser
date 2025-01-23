@@ -36,6 +36,12 @@
 			<artifactId>jspecify</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy-agent</artifactId>
+			<version>${byte-buddy.version}</version>
+		</dependency>
 	</dependencies>
 
 	<properties>
