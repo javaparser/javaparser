@@ -29,7 +29,7 @@ import com.github.javaparser.symbolsolver.resolution.AbstractResolutionTest;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import org.junit.jupiter.api.Test;
 
-public class Issue4660Test extends AbstractResolutionTest {
+public class Issue4668Test extends AbstractResolutionTest {
 
 	@Test
     void test() {
