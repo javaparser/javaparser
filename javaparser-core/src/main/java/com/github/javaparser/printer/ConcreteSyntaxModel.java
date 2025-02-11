@@ -346,8 +346,7 @@ public class ConcreteSyntaxModel {
                 Parameter.class,
                 sequence(
                         comment(),
-                        onlineAnnotations(),
-                        modifiers(),
+                        mix(onlineAnnotations(), modifiers()),
                         child(ObservableProperty.TYPE),
                         conditional(
                                 ObservableProperty.VAR_ARGS,
