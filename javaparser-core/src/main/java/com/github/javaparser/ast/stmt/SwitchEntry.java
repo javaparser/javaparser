@@ -205,7 +205,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
         return statements;
     }
@@ -230,7 +230,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
     }
 
     @Override
-	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchEntry setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
         if (statements == this.statements) {
