@@ -4715,16 +4715,12 @@ SwitchEntry SwitchEntry():
      |
         "->"
         (
-            (
-                expr = Expression()
-                {
-                    TokenRange r=range(begin, token());
-                    // expr.getTokenRange() will not be present if storeTokens is false
-                    stmts.add(new ExpressionStmt(expr.getTokenRange().orElse(null), expr));
-                    ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault, guard);
-                }
-                ";"
-            )
+            stmt = SwitchEntryExpression()
+            {
+                TokenRange r=range(begin, token());
+                stmts.add(stmt);
+                ret = new SwitchEntry(r, labels, EXPRESSION, stmts, isDefault, guard);
+            }
          |
             stmt = Block()
             {
@@ -4742,6 +4738,36 @@ SwitchEntry SwitchEntry():
         )
     )
     { return ret; }
+}
+
+/**
+* This method provides special handling for the case
+*
+*<pre>{@code
+*     SwitchRule:
+*         SwitchLabel -> Expression ;
+* }</pre}
+*
+* for switch entries in the JLS. The expression in the entry body is
+* represented as an ExpressionStmt in JavaParser, but the regular
+* StatementExpression() production cannot be used since that only
+* supports a subset of expressions while any expression is supported
+* in the entry body.
+*/
+ExpressionStmt SwitchEntryExpression():
+{
+    Expression expr;
+}
+{
+    expr = Expression()
+    ";"
+    {
+        TokenRange r = expr.getTokenRange().orElse(null);
+        if (r != null) {
+            r = r.withEnd(token());
+        }
+        return new ExpressionStmt(r, expr);
+    }
 }
 
 /**
