@@ -81,6 +81,21 @@ import java.util.Optional;
  * }</pre>
  * Many kinds of expressions are now allowed.
  *
+ * Note (https://github.com/javaparser/javaparser/pull/4679):
+ * The JavaParser representation for SwitchEntry is (slightly) incorrect.
+ * JP Assumes that the body of a SwitchEntry will be a list of statements which was true before switch expressions were added, but is no longer the case for this rule.
+ *
+ * The workaround for this was to wrap the expression in an ExpressionStmt node which works well, but is not entirely correct according to the JLS since the ExpressionStmt in this specific case can contain any expression,
+ * not just those which are legal expression statements according to the JLS, for example below (a lambda is not a valid expression statement, but the below snippet is still legal Java code):
+ * <pre>{@code
+ *      return switch (o) {
+ *          case String s -> (arg) -> System.out.println(arg + s);
+ *          case null, default -> (arg) -> {};
+ *      };
+ * }</pre>
+ * https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.28
+ * https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.8
+ *
  * @author Julio Vilmar Gesser
  * @see SwitchStmt
  * @see com.github.javaparser.ast.expr.SwitchExpr
@@ -189,6 +204,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         return labels;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public NodeList<Statement> getStatements() {
         return statements;
@@ -213,6 +229,7 @@ public class SwitchEntry extends Node implements NodeWithStatements<SwitchEntry>
         return this;
     }
 
+    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public SwitchEntry setStatements(final NodeList<Statement> statements) {
         assertNotNull(statements);
