@@ -20,7 +20,6 @@
  */
 package com.github.javaparser.ast;
 
-import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.utils.Utils.assertNotNull;
 
 import com.github.javaparser.TokenRange;
@@ -57,7 +56,11 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     }
 
     public ImportDeclaration(String name, boolean isStatic, boolean isAsterisk) {
-        this(null, parseName(name), isStatic, isAsterisk);
+        // If the value of the isAsterisk parameter is true, we consider that we deliberately wanted to create an import
+        // declaration of the form ‘x.*’ by specifying only ‘x’.
+        // On the other hand, if the isAsterisk parameter is false, we can check that we haven't tried to directly
+        // create an import declaration of the form ‘x.*’.
+        this(null, getNameFromString(name), isStatic, isAsterisk ? isAsterisk : hasAsterisk(name));
     }
 
     @AllFieldsConstructor
@@ -87,6 +90,37 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     @Generated("com.github.javaparser.generator.core.node.AcceptGenerator")
     public <A> void accept(final VoidVisitor<A> v, final A arg) {
         v.visit(this, arg);
+    }
+
+    /**
+     * Returns true if the specified name is qualified
+     */
+    private static boolean isQualified(String name) {
+        return name != null & name.indexOf(".") >= 0;
+    }
+
+    /**
+     * Returns true if the specified name has an asterisk
+     */
+    private static boolean hasAsterisk(String name) {
+        return name != null & name.endsWith("*");
+    }
+
+    /**
+     * Returns the name of the import.
+     * The name can have a qualifier.
+     * For example, the java.util.Map class would have a qualifier ‘java.util’ and an identifier ‘name’
+     * and the qualifier would have a qualifier ‘java’ and an identifier ‘util’ and so on.
+     */
+    private static Name getNameFromString(String name) {
+        if (!isQualified(name)) {
+            return new Name(name);
+        }
+        if (hasAsterisk(name)) {
+            name = name.substring(0, name.length() - 2);
+        }
+        int lastSeparator = name.lastIndexOf(".");
+        return new Name(getNameFromString(name.substring(0, lastSeparator)), name.substring(lastSeparator + 1));
     }
 
     /**

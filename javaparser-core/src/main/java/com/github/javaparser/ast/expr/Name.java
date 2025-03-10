@@ -119,6 +119,10 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         return identifier;
     }
 
+    public boolean hasQualifier() {
+        return qualifier != null;
+    }
+
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Optional<Name> getQualifier() {
         return Optional.ofNullable(qualifier);

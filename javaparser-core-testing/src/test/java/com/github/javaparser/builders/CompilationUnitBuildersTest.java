@@ -27,6 +27,7 @@ import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
@@ -66,6 +67,17 @@ class CompilationUnitBuildersTest {
                 "import static " + com.github.javaparser.StaticJavaParser.class.getCanonicalName() + ".parseImport;"
                         + LineSeparator.SYSTEM,
                 cu.getImport(2).toString());
+    }
+
+    // issue https://github.com/javaparser/javaparser/issues/4554
+    @Test
+    void testNoRangeWhenCreatedProgramatically() {
+        cu.addImport(Map.class);
+        assertTrue(verifyNoRange(cu.getImports()));
+    }
+
+    private boolean verifyNoRange(List<ImportDeclaration> declarations) {
+        return declarations.stream().noneMatch(decl -> decl.getRange().isPresent());
     }
 
     public class $tartsWith$ {}
