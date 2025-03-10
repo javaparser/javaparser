@@ -126,8 +126,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
     /**
      * Retrieves the name of the import (.* is not included.)
      */
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name getName() {
         return name;
     }
@@ -155,8 +154,7 @@ public class ImportDeclaration extends Node implements NodeWithName<ImportDeclar
         return this;
     }
 
-    @Override
-    @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
+	@Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public ImportDeclaration setName(final Name name) {
         assertNotNull(name);
         if (name == this.name) {

@@ -93,13 +93,11 @@ public class Name extends Node implements NodeWithIdentifier<Name> {
         v.visit(this, arg);
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public String getIdentifier() {
         return identifier;
     }
 
-    @Override
     @Generated("com.github.javaparser.generator.core.node.PropertyGenerator")
     public Name setIdentifier(final String identifier) {
         assertNonEmpty(identifier);
