@@ -24,7 +24,6 @@ import static com.github.javaparser.JavaToken.Kind.EOF;
 import static com.github.javaparser.Providers.UTF8;
 import static com.github.javaparser.Providers.provider;
 import static com.github.javaparser.Range.range;
-import static com.github.javaparser.StaticJavaParser.parseImport;
 import static com.github.javaparser.StaticJavaParser.parseName;
 import static com.github.javaparser.ast.Modifier.createModifierList;
 import static com.github.javaparser.utils.CodeGenerationUtils.subtractPaths;
@@ -434,16 +433,7 @@ public class CompilationUnit extends Node {
         if (name == null) {
             return this;
         }
-        final StringBuilder i = new StringBuilder("import ");
-        if (isStatic) {
-            i.append("static ");
-        }
-        i.append(name);
-        if (isAsterisk) {
-            i.append(".*");
-        }
-        i.append(";");
-        return addImport(parseImport(i.toString()));
+        return addImport(new ImportDeclaration(name, isStatic, isAsterisk));
     }
 
     /**
