@@ -14,14 +14,33 @@ Next Release (Version 3.26.4)
 ----------------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/211?closed=1)
 
-### Added
-### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security
 ### Developer Changes
-* chore(deps): update dependencies
+
+* fix(deps): update byte-buddy.version to v1.17.5 (PR [#4702](https://github.com/javaparser/javaparser/pull/4702) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.puppycrawl.tools:checkstyle to v10.22.0 (PR [#4700](https://github.com/javaparser/javaparser/pull/4700) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-install-plugin to v3.1.4 (PR [#4689](https://github.com/javaparser/javaparser/pull/4689) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update codecov/codecov-action action to v5.4.0 (PR [#4688](https://github.com/javaparser/javaparser/pull/4688) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-deploy-plugin to v3.1.4 (PR [#4687](https://github.com/javaparser/javaparser/pull/4687) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency com.diffplug.spotless:spotless-maven-plugin to v2.44.3 (PR [#4682](https://github.com/javaparser/javaparser/pull/4682) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.apache.maven.plugins:maven-clean-plugin to v3.4.1 (PR [#4681](https://github.com/javaparser/javaparser/pull/4681) by [@renovate[bot]](https://github.com/apps/renovate))
+* chore(deps): update dependency org.assertj:assertj-core to v3.27.2 (PR [#4644](https://github.com/javaparser/javaparser/pull/4644) by [@renovate[bot]](https://github.com/apps/renovate))
+* fix(deps): update dependency com.google.guava:guava to v33.4.0-jre (PR [#4637](https://github.com/javaparser/javaparser/pull/4637) by [@renovate[bot]](https://github.com/apps/renovate))
+
+### Uncategorised
+
+* Fix: issue 4554 Import added through CompilationUnit.addImport should not have a range (PR [#4693](https://github.com/javaparser/javaparser/pull/4693) by [@jlerbsc](https://github.com/jlerbsc))
+* Improving documentation on SwithEntry (PR [#4685](https://github.com/javaparser/javaparser/pull/4685) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix issue 4670 LexicalPreservingPrinter removed incorect token when removing modifier of a Parameter with annotations (PR [#4674](https://github.com/javaparser/javaparser/pull/4674) by [@jlerbsc](https://github.com/jlerbsc))
+* Fix: issue 4668 Issue with FieldAccessExpr resolving for custom class (PR [#4671](https://github.com/javaparser/javaparser/pull/4671) by [@jlerbsc](https://github.com/jlerbsc))
+* #4664 remove misleading javadoc (PR [#4666](https://github.com/javaparser/javaparser/pull/4666) by [@verhasi](https://github.com/verhasi))
+* #4653 use report-aggregate of jacoco instead of report to use the dep… (PR [#4658](https://github.com/javaparser/javaparser/pull/4658) by [@verhasi](https://github.com/verhasi))
+
+### :heart: Contributors
+
+Thank You to all contributors who worked on this release!
+
+* [@jlerbsc](https://github.com/jlerbsc)
+* [@verhasi](https://github.com/verhasi)
 
 Version 3.26.3
 --------------
