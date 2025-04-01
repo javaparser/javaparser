@@ -1,6 +1,17 @@
 
-Next Release (Version 3.26.4-snapshot)
+Next Release (Version 3.26.5-snapshot)
 --------------------------------------
+[issues resolved](https://github.com/javaparser/javaparser/milestone/212?closed=1)
+
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+Next Release (Version 3.26.4)
+----------------------------
 [issues resolved](https://github.com/javaparser/javaparser/milestone/211?closed=1)
 
 ### Added
@@ -9,6 +20,8 @@ Next Release (Version 3.26.4-snapshot)
 ### Removed
 ### Fixed
 ### Security
+### Developer Changes
+* chore(deps): update dependencies
 
 Version 3.26.3
 --------------
